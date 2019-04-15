@@ -455,62 +455,52 @@ public class TbDataReportingModelCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleEqualTo(String value) {
+        public Criteria andModelCycleEqualTo(Byte value) {
             addCriterion("model_cycle =", value, "modelCycle");
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleNotEqualTo(String value) {
+        public Criteria andModelCycleNotEqualTo(Byte value) {
             addCriterion("model_cycle <>", value, "modelCycle");
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleGreaterThan(String value) {
+        public Criteria andModelCycleGreaterThan(Byte value) {
             addCriterion("model_cycle >", value, "modelCycle");
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleGreaterThanOrEqualTo(String value) {
+        public Criteria andModelCycleGreaterThanOrEqualTo(Byte value) {
             addCriterion("model_cycle >=", value, "modelCycle");
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleLessThan(String value) {
+        public Criteria andModelCycleLessThan(Byte value) {
             addCriterion("model_cycle <", value, "modelCycle");
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleLessThanOrEqualTo(String value) {
+        public Criteria andModelCycleLessThanOrEqualTo(Byte value) {
             addCriterion("model_cycle <=", value, "modelCycle");
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleLike(String value) {
-            addCriterion("model_cycle like", value, "modelCycle");
-            return (Criteria) this;
-        }
-
-        public Criteria andModelCycleNotLike(String value) {
-            addCriterion("model_cycle not like", value, "modelCycle");
-            return (Criteria) this;
-        }
-
-        public Criteria andModelCycleIn(List<String> values) {
+        public Criteria andModelCycleIn(List<Byte> values) {
             addCriterion("model_cycle in", values, "modelCycle");
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleNotIn(List<String> values) {
+        public Criteria andModelCycleNotIn(List<Byte> values) {
             addCriterion("model_cycle not in", values, "modelCycle");
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleBetween(String value1, String value2) {
+        public Criteria andModelCycleBetween(Byte value1, Byte value2) {
             addCriterion("model_cycle between", value1, value2, "modelCycle");
             return (Criteria) this;
         }
 
-        public Criteria andModelCycleNotBetween(String value1, String value2) {
+        public Criteria andModelCycleNotBetween(Byte value1, Byte value2) {
             addCriterion("model_cycle not between", value1, value2, "modelCycle");
             return (Criteria) this;
         }

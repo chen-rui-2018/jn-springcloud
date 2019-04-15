@@ -1465,6 +1465,66 @@ public class TbDataReportingTaskCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andRecordStatusIsNull() {
+            addCriterion("record_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIsNotNull() {
+            addCriterion("record_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusEqualTo(Byte value) {
+            addCriterion("record_status =", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotEqualTo(Byte value) {
+            addCriterion("record_status <>", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusGreaterThan(Byte value) {
+            addCriterion("record_status >", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("record_status >=", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusLessThan(Byte value) {
+            addCriterion("record_status <", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("record_status <=", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIn(List<Byte> values) {
+            addCriterion("record_status in", values, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotIn(List<Byte> values) {
+            addCriterion("record_status not in", values, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusBetween(Byte value1, Byte value2) {
+            addCriterion("record_status between", value1, value2, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("record_status not between", value1, value2, "recordStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andTaskBatchIsNull() {
             addCriterion("task_batch is null");
             return (Criteria) this;
@@ -1532,6 +1592,136 @@ public class TbDataReportingTaskCriteria {
 
         public Criteria andTaskBatchNotBetween(String value1, String value2) {
             addCriterion("task_batch not between", value1, value2, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeIsNull() {
+            addCriterion("modified_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeIsNotNull() {
+            addCriterion("modified_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeEqualTo(Date value) {
+            addCriterion("modified_time =", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeNotEqualTo(Date value) {
+            addCriterion("modified_time <>", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeGreaterThan(Date value) {
+            addCriterion("modified_time >", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("modified_time >=", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeLessThan(Date value) {
+            addCriterion("modified_time <", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeLessThanOrEqualTo(Date value) {
+            addCriterion("modified_time <=", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeIn(List<Date> values) {
+            addCriterion("modified_time in", values, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeNotIn(List<Date> values) {
+            addCriterion("modified_time not in", values, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeBetween(Date value1, Date value2) {
+            addCriterion("modified_time between", value1, value2, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
+            addCriterion("modified_time not between", value1, value2, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountIsNull() {
+            addCriterion("modified_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountIsNotNull() {
+            addCriterion("modified_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountEqualTo(String value) {
+            addCriterion("modified_account =", value, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountNotEqualTo(String value) {
+            addCriterion("modified_account <>", value, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountGreaterThan(String value) {
+            addCriterion("modified_account >", value, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("modified_account >=", value, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountLessThan(String value) {
+            addCriterion("modified_account <", value, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountLessThanOrEqualTo(String value) {
+            addCriterion("modified_account <=", value, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountLike(String value) {
+            addCriterion("modified_account like", value, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountNotLike(String value) {
+            addCriterion("modified_account not like", value, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountIn(List<String> values) {
+            addCriterion("modified_account in", values, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountNotIn(List<String> values) {
+            addCriterion("modified_account not in", values, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountBetween(String value1, String value2) {
+            addCriterion("modified_account between", value1, value2, "modifiedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedAccountNotBetween(String value1, String value2) {
+            addCriterion("modified_account not between", value1, value2, "modifiedAccount");
             return (Criteria) this;
         }
     }

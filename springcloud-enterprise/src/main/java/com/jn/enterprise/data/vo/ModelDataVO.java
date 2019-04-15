@@ -1,11 +1,13 @@
 package com.jn.enterprise.data.vo;
 
+import com.jn.enterprise.data.model.CompanyDataModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,16 +22,19 @@ public class ModelDataVO implements Serializable {
     @ApiModelProperty(value = "tab集合",example = "表集合")
     private List<TabVO> tabs ;
 
+    @ApiModelProperty(value = "task",example = "任务信息")
+    private CompanyDataModel taskInfo ;
+
     @ApiModelProperty(value = "模板ID",example = "001")
     private String modelId;
     @ApiModelProperty(value = "模板名称",example = "企业知识产权上报模板")
     private String modelName ;
     @ApiModelProperty(value = "填报类型（0：企业，1：园管委会）",example = "0")
-    private String modelType ;
+    private Byte modelType ;
     @ApiModelProperty(value = "填报群组(企业群组)/园区填报部门",example = "A群组")
     private String modelFormTargetId ;
     @ApiModelProperty(value = "填报周期（1：年，0：月）",example = "1")
-    private String modelCycle ;
+    private Byte modelCycle ;
     @ApiModelProperty(value = "提前预警天数",example = "7")
     private String warningBeforeDays ;
     @ApiModelProperty(value = "预警方式：（0:短信1:邮件2:app）多选，值以逗号隔开",example = "0，1，2")
@@ -39,7 +44,7 @@ public class ModelDataVO implements Serializable {
     @ApiModelProperty(value = "app广告图",example = "red.png")
     private String appAd;
     @ApiModelProperty(value = "状态（0：发布1：暂停2：失效）",example = "0")
-    private String recordStatus ;
+    private Byte recordStatus ;
     @ApiModelProperty(value = "描述",example = "这个模板用于。。。。")
     private String comment ;
     @ApiModelProperty(value = "附件",example = "附件文件上传")
@@ -61,11 +66,13 @@ public class ModelDataVO implements Serializable {
     @ApiModelProperty(value = "创建者账号",example = "zhangsan")
     private String creatorAccount;
     @ApiModelProperty(value = "创建时间",example = "2020-12-21 25：61：61")
-    private String createdTime;
+    private Date createdTime;
     @ApiModelProperty(value = "最新更新者账号",example = "zhangsan")
     private String modifierAccount ;
     @ApiModelProperty(value = "最新更新时间",example = "2020-12-21 25：61：61")
-    private String modifiedTime;
+    private Date modifiedTime;
+
+
 
     public List<TabVO> getTabs() {
         return tabs;
@@ -73,6 +80,14 @@ public class ModelDataVO implements Serializable {
 
     public void setTabs(List<TabVO> tabs) {
         this.tabs = tabs;
+    }
+
+    public CompanyDataModel getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(CompanyDataModel taskInfo) {
+        this.taskInfo = taskInfo;
     }
 
     public String getModelId() {
@@ -91,11 +106,11 @@ public class ModelDataVO implements Serializable {
         this.modelName = modelName;
     }
 
-    public String getModelType() {
+    public Byte getModelType() {
         return modelType;
     }
 
-    public void setModelType(String modelType) {
+    public void setModelType(Byte modelType) {
         this.modelType = modelType;
     }
 
@@ -107,11 +122,11 @@ public class ModelDataVO implements Serializable {
         this.modelFormTargetId = modelFormTargetId;
     }
 
-    public String getModelCycle() {
+    public Byte getModelCycle() {
         return modelCycle;
     }
 
-    public void setModelCycle(String modelCycle) {
+    public void setModelCycle(Byte modelCycle) {
         this.modelCycle = modelCycle;
     }
 
@@ -147,11 +162,11 @@ public class ModelDataVO implements Serializable {
         this.appAd = appAd;
     }
 
-    public String getRecordStatus() {
+    public Byte getRecordStatus() {
         return recordStatus;
     }
 
-    public void setRecordStatus(String recordStatus) {
+    public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
     }
 
@@ -235,11 +250,11 @@ public class ModelDataVO implements Serializable {
         this.creatorAccount = creatorAccount;
     }
 
-    public String getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(String createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -251,11 +266,11 @@ public class ModelDataVO implements Serializable {
         this.modifierAccount = modifierAccount;
     }
 
-    public String getModifiedTime() {
+    public Date getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setModifiedTime(String modifiedTime) {
+    public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
     }
 }

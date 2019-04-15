@@ -20,7 +20,7 @@ public class TbDataReportingModel implements Serializable {
     private String modelFormTargetId;
 
     /*@ApiModelProperty("填报周期（1：年，0：月）")*/
-    private String modelCycle;
+    private Byte modelCycle;
 
     /*@ApiModelProperty("提前预警天数")*/
     private String warningBeforeDays;
@@ -123,12 +123,12 @@ public class TbDataReportingModel implements Serializable {
         this.modelFormTargetId = modelFormTargetId == null ? null : modelFormTargetId.trim();
     }
 
-    public String getModelCycle() {
+    public Byte getModelCycle() {
         return modelCycle;
     }
 
-    public void setModelCycle(String modelCycle) {
-        this.modelCycle = modelCycle == null ? null : modelCycle.trim();
+    public void setModelCycle(Byte modelCycle) {
+        this.modelCycle = modelCycle;
     }
 
     public String getWarningBeforeDays() {

@@ -49,6 +49,9 @@ public class TbDataReportingTarget implements Serializable {
     /*@ApiModelProperty("创建时间")*/
     private Date modifiedTime;
 
+    /*@ApiModelProperty("指标说明")*/
+    private String targetComment;
+
     private static final long serialVersionUID = 1L;
 
     public String getTargetId() {
@@ -171,6 +174,14 @@ public class TbDataReportingTarget implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getTargetComment() {
+        return targetComment;
+    }
+
+    public void setTargetComment(String targetComment) {
+        this.targetComment = targetComment == null ? null : targetComment.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -197,7 +208,8 @@ public class TbDataReportingTarget implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getTargetComment() == null ? other.getTargetComment() == null : this.getTargetComment().equals(other.getTargetComment()));
     }
 
     @Override
@@ -219,6 +231,7 @@ public class TbDataReportingTarget implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getTargetComment() == null) ? 0 : getTargetComment().hashCode());
         return result;
     }
 
@@ -243,6 +256,7 @@ public class TbDataReportingTarget implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", targetComment=").append(targetComment);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

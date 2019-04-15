@@ -36,9 +36,9 @@ public class DataUploadController  extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "数据上报-企业数据上报-获取待填报的表单")
+    @ControllerLog(doAction = "数据上报-企业数据上报-获取待填报/已经填报的表单")
     @GetMapping(path = "/company/getForm")
-    @ApiOperation(value = "获取待填报的表单",notes = "返回表单结构信息")
+    @ApiOperation(value = "获取待填报/已经填报的表单",notes = "返回表单结构信息列表")
     @RequiresPermissions("/data/company/getForm")
     public Result<PaginationData<List<CompanyDataModel>>> getForm(@ModelAttribute CompanyDataParamModel param){
         return new Result();
@@ -50,9 +50,9 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "获取待填报的表单结构",notes = "返回表单的信息结构")
     @RequiresPermissions("/data/company/getFormStruct")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="modelId",value = "模板Id",dataType = "String",paramType = "query",example = "1")
+            @ApiImplicitParam(name="fileId",value = "填报ID",dataType = "String",paramType = "query",example = "1")
     })
-    public Result<ModelDataVO> getFormStruct(String modelId){
+    public Result<ModelDataVO> getFormStruct(String fileId){
         return new Result();
     }
 
@@ -64,7 +64,7 @@ public class DataUploadController  extends BaseController {
         return new Result();
     }
 
-
+    /*
     @ControllerLog(doAction = "数据上报-企业数据上报-获取企业已经填报的表单")
     @GetMapping(path = "/company/getFormed")
     @ApiOperation(value = "获取企业已经填报的表单",notes = "返回企业已经填报的表单")
@@ -72,10 +72,11 @@ public class DataUploadController  extends BaseController {
     public Result<CompanyDataModel> getFormed(){
         return new Result();
     }
+    */
 
     @ControllerLog(doAction = "数据上报-企业数据上报-获取企业已经填报的表单的结构信息和值")
     @GetMapping(path = "/company/getCompanyFormedStruct")
-    @ApiOperation(value = "获取企业已经填报的表单的结构信息和值",notes = "返回企业已经填报的表单的结构信息和值")
+    @ApiOperation(value = "获取企业已经填报的表单的结构信息和值",notes = "返回企业已经填报的表单的结构信息和值，未填报的直接返回空白表单")
     @RequiresPermissions("/data/company/getCompanyFormedStruct")
     @ApiImplicitParams({
             @ApiImplicitParam(name="fileId",value = "填报id",dataType = "String",paramType = "query",example = "1")

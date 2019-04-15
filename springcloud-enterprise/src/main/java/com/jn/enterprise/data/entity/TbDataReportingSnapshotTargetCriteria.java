@@ -1164,6 +1164,76 @@ public class TbDataReportingSnapshotTargetCriteria {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
+
+        public Criteria andTargetCommentIsNull() {
+            addCriterion("target_comment is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentIsNotNull() {
+            addCriterion("target_comment is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentEqualTo(String value) {
+            addCriterion("target_comment =", value, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentNotEqualTo(String value) {
+            addCriterion("target_comment <>", value, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentGreaterThan(String value) {
+            addCriterion("target_comment >", value, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentGreaterThanOrEqualTo(String value) {
+            addCriterion("target_comment >=", value, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentLessThan(String value) {
+            addCriterion("target_comment <", value, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentLessThanOrEqualTo(String value) {
+            addCriterion("target_comment <=", value, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentLike(String value) {
+            addCriterion("target_comment like", value, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentNotLike(String value) {
+            addCriterion("target_comment not like", value, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentIn(List<String> values) {
+            addCriterion("target_comment in", values, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentNotIn(List<String> values) {
+            addCriterion("target_comment not in", values, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentBetween(String value1, String value2) {
+            addCriterion("target_comment between", value1, value2, "targetComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetCommentNotBetween(String value1, String value2) {
+            addCriterion("target_comment not between", value1, value2, "targetComment");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -454,63 +454,63 @@ public class TbDataReportingTargetGroupCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteIsNull() {
-            addCriterion("have_to_write is null");
+        public Criteria andRequireIsNull() {
+            addCriterion("require is null");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteIsNotNull() {
-            addCriterion("have_to_write is not null");
+        public Criteria andRequireIsNotNull() {
+            addCriterion("require is not null");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteEqualTo(Byte value) {
-            addCriterion("have_to_write =", value, "haveToWrite");
+        public Criteria andRequireEqualTo(Byte value) {
+            addCriterion("require =", value, "require");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteNotEqualTo(Byte value) {
-            addCriterion("have_to_write <>", value, "haveToWrite");
+        public Criteria andRequireNotEqualTo(Byte value) {
+            addCriterion("require <>", value, "require");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteGreaterThan(Byte value) {
-            addCriterion("have_to_write >", value, "haveToWrite");
+        public Criteria andRequireGreaterThan(Byte value) {
+            addCriterion("require >", value, "require");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteGreaterThanOrEqualTo(Byte value) {
-            addCriterion("have_to_write >=", value, "haveToWrite");
+        public Criteria andRequireGreaterThanOrEqualTo(Byte value) {
+            addCriterion("require >=", value, "require");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteLessThan(Byte value) {
-            addCriterion("have_to_write <", value, "haveToWrite");
+        public Criteria andRequireLessThan(Byte value) {
+            addCriterion("require <", value, "require");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteLessThanOrEqualTo(Byte value) {
-            addCriterion("have_to_write <=", value, "haveToWrite");
+        public Criteria andRequireLessThanOrEqualTo(Byte value) {
+            addCriterion("require <=", value, "require");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteIn(List<Byte> values) {
-            addCriterion("have_to_write in", values, "haveToWrite");
+        public Criteria andRequireIn(List<Byte> values) {
+            addCriterion("require in", values, "require");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteNotIn(List<Byte> values) {
-            addCriterion("have_to_write not in", values, "haveToWrite");
+        public Criteria andRequireNotIn(List<Byte> values) {
+            addCriterion("require not in", values, "require");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteBetween(Byte value1, Byte value2) {
-            addCriterion("have_to_write between", value1, value2, "haveToWrite");
+        public Criteria andRequireBetween(Byte value1, Byte value2) {
+            addCriterion("require between", value1, value2, "require");
             return (Criteria) this;
         }
 
-        public Criteria andHaveToWriteNotBetween(Byte value1, Byte value2) {
-            addCriterion("have_to_write not between", value1, value2, "haveToWrite");
+        public Criteria andRequireNotBetween(Byte value1, Byte value2) {
+            addCriterion("require not between", value1, value2, "require");
             return (Criteria) this;
         }
 
@@ -641,6 +641,66 @@ public class TbDataReportingTargetGroupCriteria {
 
         public Criteria andChoiceOptionNotBetween(String value1, String value2) {
             addCriterion("choice_option not between", value1, value2, "choiceOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIsNull() {
+            addCriterion("record_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIsNotNull() {
+            addCriterion("record_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusEqualTo(Byte value) {
+            addCriterion("record_status =", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotEqualTo(Byte value) {
+            addCriterion("record_status <>", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusGreaterThan(Byte value) {
+            addCriterion("record_status >", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("record_status >=", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusLessThan(Byte value) {
+            addCriterion("record_status <", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("record_status <=", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIn(List<Byte> values) {
+            addCriterion("record_status in", values, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotIn(List<Byte> values) {
+            addCriterion("record_status not in", values, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusBetween(Byte value1, Byte value2) {
+            addCriterion("record_status between", value1, value2, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("record_status not between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
     }

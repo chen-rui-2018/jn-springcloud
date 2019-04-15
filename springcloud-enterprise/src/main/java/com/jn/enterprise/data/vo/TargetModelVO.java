@@ -1,6 +1,6 @@
 package com.jn.enterprise.data.vo;
 
-import com.jn.enterprise.data.model.InputFormatModel;
+import com.jn.enterprise.data.model.TreeData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -10,23 +10,25 @@ import java.util.List;
 
 /**
  * @author： yangh
- * @date： Created on 2019/4/8 19:12
+ * @date： Created on 2019/4/12 15:31
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "TargetVO",description = "指标信息")
-public class TargetVO implements Serializable {
 
+@ApiModel(value = "TargetModeVO",description = "指标树")
+public class TargetModelVO implements Serializable {
     @ApiModelProperty(value = "指标ID" ,example = "由后端生成")
-    private String targetId;
+    private String id;
     @ApiModelProperty(value = "父节点ID",example = "0001")
-    private String parentId;
+    private String pid;
     @ApiModelProperty(value = "指标顺序",example = "23")
     private String order;
     @ApiModelProperty(value = "指标名称",example = "公司名称")
-    private String targetName ;
+    private String text ;
     @ApiModelProperty(value = "部门ID",example = "001")
     private String departmentId;
+    @ApiModelProperty(value = "状态）",example = "open")
+    private String state;
     @ApiModelProperty(value = "部门名称",example = "招商部")
     private String departmentName;
     @ApiModelProperty(value = "是否支出多行输入（0：是，1：否）",example = "1")
@@ -47,39 +49,24 @@ public class TargetVO implements Serializable {
     private Date modifiedTime ;
     @ApiModelProperty(value = "指标说明",example = "当前指标用于。。。。")
     private String targetCommon ;
-    @ApiModelProperty(value = "tab指标集合所有的指标填写格式",example = "23")
-    private List<InputFormatModel> inputFormatModels;
+    @ApiModelProperty(value = "子节点",example = "1")
+    public List<TargetModelVO> children;
 
-    public List<InputFormatModel> getInputFormatModels() {
-        return inputFormatModels;
+
+    public String getId() {
+        return id;
     }
 
-    public void setInputFormatModels(List<InputFormatModel> inputFormatModels) {
-        this.inputFormatModels = inputFormatModels;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getTargetCommon() {
-        return targetCommon;
+    public String getPid() {
+        return pid;
     }
 
-    public void setTargetCommon(String targetCommon) {
-        this.targetCommon = targetCommon;
-    }
-
-    public String getTargetId() {
-        return targetId;
-    }
-
-    public void setTargetId(String targetId) {
-        this.targetId = targetId;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 
     public String getOrder() {
@@ -90,12 +77,12 @@ public class TargetVO implements Serializable {
         this.order = order;
     }
 
-    public String getTargetName() {
-        return targetName;
+    public String getText() {
+        return text;
     }
 
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getDepartmentId() {
@@ -104,6 +91,14 @@ public class TargetVO implements Serializable {
 
     public void setDepartmentId(String departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getDepartmentName() {
@@ -178,4 +173,19 @@ public class TargetVO implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getTargetCommon() {
+        return targetCommon;
+    }
+
+    public void setTargetCommon(String targetCommon) {
+        this.targetCommon = targetCommon;
+    }
+
+    public List<TargetModelVO> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<TargetModelVO> children) {
+        this.children = children;
+    }
 }

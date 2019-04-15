@@ -23,8 +23,6 @@ public class RelationModel {
     @ApiModelProperty(value = "模板id",example = "001")
     private String modelId;
 
-    @ApiModelProperty(value = "填报格式标识Id",example = "001")
-    private String formId;
 
     @ApiModelProperty(value = "tabId",example = "002")
     private String tabId;
@@ -61,13 +59,6 @@ public class RelationModel {
         this.modelId = modelId;
     }
 
-    public String getFormId() {
-        return formId;
-    }
-
-    public void setFormId(String formId) {
-        this.formId = formId;
-    }
 
     public String getTabId() {
         return tabId;

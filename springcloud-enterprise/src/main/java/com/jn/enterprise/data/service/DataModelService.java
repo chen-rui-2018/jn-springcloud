@@ -1,9 +1,13 @@
 package com.jn.enterprise.data.service;
 
 import com.jn.common.model.Result;
+import com.jn.enterprise.data.model.GroupModel;
+import com.jn.enterprise.data.model.InputFormatModel;
 import com.jn.enterprise.data.model.TreeData;
 import com.jn.enterprise.data.vo.ModelDataVO;
+import com.jn.enterprise.data.vo.TargetModelVO;
 import com.jn.enterprise.data.vo.TargetVO;
+import com.jn.system.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +31,7 @@ public interface DataModelService {
      * 获取指标树
      * @return
      */
-    List<TreeData> getTargetTree();
+    List<TargetModelVO> getTargetTree();
 
 
     /**
@@ -35,14 +39,14 @@ public interface DataModelService {
      * @param targetId
      * @return
      */
-    int invalidTarget(String targetId);
+    int invalidTarget(String targetId,User user);
 
     /**
      * 更新/插入指标
      * @param targetVO
      * @return
      */
-    int updateTarget(TargetVO targetVO);
+    int updateTarget(TargetVO targetVO,User user);
 
 
     /**
@@ -55,11 +59,24 @@ public interface DataModelService {
      * 更新/插入模板
      * @param modelDataVO
      */
-    int updateModel(ModelDataVO modelDataVO);
+    int updateModel(ModelDataVO modelDataVO,User user);
 
     /**
      * 获取模板信息
      * @return
      */
     ModelDataVO getModel(String modelId);
+
+    /**
+     * 获取群组条件
+     * @return
+     */
+    List<GroupModel> getGroupList();
+
+    /**
+     * 通过指标查询填报格式
+     * @param targetList
+     * @return
+     */
+    List<InputFormatModel> getInputFormatByTargetIds(String[] targetList);
 }

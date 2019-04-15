@@ -21,7 +21,7 @@ public class TbDataReportingModelTab implements Serializable {
     /*@ApiModelProperty("表填报列类型（0：累计值；1：本期值）")*/
     private Byte tabClumnType;
 
-    /*@ApiModelProperty("状态（0：有效；1作废）")*/
+    /*@ApiModelProperty("状态（0：无效；1正常）")*/
     private Byte status;
 
     /*@ApiModelProperty("表生成模式（0:普通模板,1：科技园模板）")*/

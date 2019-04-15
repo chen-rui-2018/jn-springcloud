@@ -1,22 +1,19 @@
-package com.jn.enterprise.data.vo;
+package com.jn.enterprise.data.model;
 
-import com.jn.enterprise.data.model.InputFormatModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author： yangh
- * @date： Created on 2019/4/8 19:12
+ * @date： Created on 2019/4/12 11:41
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "TargetVO",description = "指标信息")
-public class TargetVO implements Serializable {
-
+@ApiModel(value = "TargetModel",description = "指标信息")
+public class TargetModel implements Serializable {
     @ApiModelProperty(value = "指标ID" ,example = "由后端生成")
     private String targetId;
     @ApiModelProperty(value = "父节点ID",example = "0001")
@@ -47,24 +44,6 @@ public class TargetVO implements Serializable {
     private Date modifiedTime ;
     @ApiModelProperty(value = "指标说明",example = "当前指标用于。。。。")
     private String targetCommon ;
-    @ApiModelProperty(value = "tab指标集合所有的指标填写格式",example = "23")
-    private List<InputFormatModel> inputFormatModels;
-
-    public List<InputFormatModel> getInputFormatModels() {
-        return inputFormatModels;
-    }
-
-    public void setInputFormatModels(List<InputFormatModel> inputFormatModels) {
-        this.inputFormatModels = inputFormatModels;
-    }
-
-    public String getTargetCommon() {
-        return targetCommon;
-    }
-
-    public void setTargetCommon(String targetCommon) {
-        this.targetCommon = targetCommon;
-    }
 
     public String getTargetId() {
         return targetId;
@@ -178,4 +157,11 @@ public class TargetVO implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getTargetCommon() {
+        return targetCommon;
+    }
+
+    public void setTargetCommon(String targetCommon) {
+        this.targetCommon = targetCommon;
+    }
 }

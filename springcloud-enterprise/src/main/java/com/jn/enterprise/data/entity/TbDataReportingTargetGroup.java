@@ -19,13 +19,16 @@ public class TbDataReportingTargetGroup implements Serializable {
     private String formName;
 
     /*@ApiModelProperty("是否必填（0:否，1：是）")*/
-    private Byte haveToWrite;
+    private Byte require;
 
     /*@ApiModelProperty("填写框的顺序")*/
     private Integer order;
 
     /*@ApiModelProperty("选项值（以逗号隔开）")*/
     private String choiceOption;
+
+    /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
+    private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -69,12 +72,12 @@ public class TbDataReportingTargetGroup implements Serializable {
         this.formName = formName == null ? null : formName.trim();
     }
 
-    public Byte getHaveToWrite() {
-        return haveToWrite;
+    public Byte getRequire() {
+        return require;
     }
 
-    public void setHaveToWrite(Byte haveToWrite) {
-        this.haveToWrite = haveToWrite;
+    public void setRequire(Byte require) {
+        this.require = require;
     }
 
     public Integer getOrder() {
@@ -91,6 +94,14 @@ public class TbDataReportingTargetGroup implements Serializable {
 
     public void setChoiceOption(String choiceOption) {
         this.choiceOption = choiceOption == null ? null : choiceOption.trim();
+    }
+
+    public Byte getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -110,9 +121,10 @@ public class TbDataReportingTargetGroup implements Serializable {
             && (this.getTargetId() == null ? other.getTargetId() == null : this.getTargetId().equals(other.getTargetId()))
             && (this.getFormType() == null ? other.getFormType() == null : this.getFormType().equals(other.getFormType()))
             && (this.getFormName() == null ? other.getFormName() == null : this.getFormName().equals(other.getFormName()))
-            && (this.getHaveToWrite() == null ? other.getHaveToWrite() == null : this.getHaveToWrite().equals(other.getHaveToWrite()))
+            && (this.getRequire() == null ? other.getRequire() == null : this.getRequire().equals(other.getRequire()))
             && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()))
-            && (this.getChoiceOption() == null ? other.getChoiceOption() == null : this.getChoiceOption().equals(other.getChoiceOption()));
+            && (this.getChoiceOption() == null ? other.getChoiceOption() == null : this.getChoiceOption().equals(other.getChoiceOption()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -124,9 +136,10 @@ public class TbDataReportingTargetGroup implements Serializable {
         result = prime * result + ((getTargetId() == null) ? 0 : getTargetId().hashCode());
         result = prime * result + ((getFormType() == null) ? 0 : getFormType().hashCode());
         result = prime * result + ((getFormName() == null) ? 0 : getFormName().hashCode());
-        result = prime * result + ((getHaveToWrite() == null) ? 0 : getHaveToWrite().hashCode());
+        result = prime * result + ((getRequire() == null) ? 0 : getRequire().hashCode());
         result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
         result = prime * result + ((getChoiceOption() == null) ? 0 : getChoiceOption().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -141,9 +154,10 @@ public class TbDataReportingTargetGroup implements Serializable {
         sb.append(", targetId=").append(targetId);
         sb.append(", formType=").append(formType);
         sb.append(", formName=").append(formName);
-        sb.append(", haveToWrite=").append(haveToWrite);
+        sb.append(", require=").append(require);
         sb.append(", order=").append(order);
         sb.append(", choiceOption=").append(choiceOption);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

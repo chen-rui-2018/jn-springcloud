@@ -17,6 +17,7 @@
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="target_comment" jdbcType="VARCHAR" property="targetComment" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -79,7 +80,7 @@
   <sql id="Base_Column_List">
     target_id, id, parent_id, order, target_name, department_id, department_name, is_muilt_row, 
     unit, target_type, record_status, creator_account, created_time, modifier_account, 
-    modified_time
+    modified_time, target_comment
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetCriteria" resultMap="BaseResultMap">
     select
@@ -116,14 +117,14 @@
       order, target_name, department_id, 
       department_name, is_muilt_row, unit, 
       target_type, record_status, creator_account, 
-      created_time, modifier_account, modified_time
-      )
+      created_time, modifier_account, modified_time, 
+      target_comment)
     values (#{targetId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
       #{order,jdbcType=INTEGER}, #{targetName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
       #{departmentName,jdbcType=VARCHAR}, #{isMuiltRow,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, 
       #{targetType,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{targetComment,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
     insert into tb_data_reporting_target
@@ -173,6 +174,9 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="targetComment != null">
+        target_comment,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="targetId != null">
@@ -219,6 +223,9 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="targetComment != null">
+        #{targetComment,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -276,6 +283,9 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.targetComment != null">
+        target_comment = #{record.targetComment,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -297,7 +307,8 @@
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      target_comment = #{record.targetComment,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -347,6 +358,9 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="targetComment != null">
+        target_comment = #{targetComment,jdbcType=VARCHAR},
+      </if>
     </set>
     where target_id = #{targetId,jdbcType=VARCHAR}
   </update>
@@ -365,7 +379,8 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      target_comment = #{targetComment,jdbcType=VARCHAR}
     where target_id = #{targetId,jdbcType=VARCHAR}
   </update>
 </mapper>

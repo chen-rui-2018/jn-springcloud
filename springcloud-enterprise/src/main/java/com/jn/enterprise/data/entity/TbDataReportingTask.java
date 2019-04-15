@@ -67,8 +67,17 @@ public class TbDataReportingTask implements Serializable {
     /*@ApiModelProperty("创建时间")*/
     private Date createTime;
 
+    /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
+    private Byte recordStatus;
+
     /*@ApiModelProperty("")*/
     private String taskBatch;
+
+    /*@ApiModelProperty("更新时间")*/
+    private Date modifiedTime;
+
+    /*@ApiModelProperty("更新人")*/
+    private String modifiedAccount;
 
     private static final long serialVersionUID = 1L;
 
@@ -240,12 +249,36 @@ public class TbDataReportingTask implements Serializable {
         this.createTime = createTime;
     }
 
+    public Byte getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
     public String getTaskBatch() {
         return taskBatch;
     }
 
     public void setTaskBatch(String taskBatch) {
         this.taskBatch = taskBatch == null ? null : taskBatch.trim();
+    }
+
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getModifiedAccount() {
+        return modifiedAccount;
+    }
+
+    public void setModifiedAccount(String modifiedAccount) {
+        this.modifiedAccount = modifiedAccount == null ? null : modifiedAccount.trim();
     }
 
     @Override
@@ -281,7 +314,10 @@ public class TbDataReportingTask implements Serializable {
             && (this.getOverdueDays() == null ? other.getOverdueDays() == null : this.getOverdueDays().equals(other.getOverdueDays()))
             && (this.getExamineComment() == null ? other.getExamineComment() == null : this.getExamineComment().equals(other.getExamineComment()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getTaskBatch() == null ? other.getTaskBatch() == null : this.getTaskBatch().equals(other.getTaskBatch()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getTaskBatch() == null ? other.getTaskBatch() == null : this.getTaskBatch().equals(other.getTaskBatch()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getModifiedAccount() == null ? other.getModifiedAccount() == null : this.getModifiedAccount().equals(other.getModifiedAccount()));
     }
 
     @Override
@@ -309,7 +345,10 @@ public class TbDataReportingTask implements Serializable {
         result = prime * result + ((getOverdueDays() == null) ? 0 : getOverdueDays().hashCode());
         result = prime * result + ((getExamineComment() == null) ? 0 : getExamineComment().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getTaskBatch() == null) ? 0 : getTaskBatch().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getModifiedAccount() == null) ? 0 : getModifiedAccount().hashCode());
         return result;
     }
 
@@ -340,7 +379,10 @@ public class TbDataReportingTask implements Serializable {
         sb.append(", overdueDays=").append(overdueDays);
         sb.append(", examineComment=").append(examineComment);
         sb.append(", createTime=").append(createTime);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", taskBatch=").append(taskBatch);
+        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", modifiedAccount=").append(modifiedAccount);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

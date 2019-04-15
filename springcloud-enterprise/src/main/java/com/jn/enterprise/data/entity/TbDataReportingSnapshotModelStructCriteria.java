@@ -114,52 +114,62 @@ public class TbDataReportingSnapshotModelStructCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Integer value) {
+        public Criteria andIdEqualTo(String value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Integer value) {
+        public Criteria andIdNotEqualTo(String value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Integer value) {
+        public Criteria andIdGreaterThan(String value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Integer value) {
+        public Criteria andIdLessThan(String value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Integer value) {
+        public Criteria andIdLessThanOrEqualTo(String value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Integer> values) {
+        public Criteria andIdLike(String value) {
+            addCriterion("id like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotLike(String value) {
+            addCriterion("id not like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<String> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Integer> values) {
+        public Criteria andIdNotIn(List<String> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Integer value1, Integer value2) {
+        public Criteria andIdBetween(String value1, String value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -371,76 +381,6 @@ public class TbDataReportingSnapshotModelStructCriteria {
 
         public Criteria andModelIdNotBetween(String value1, String value2) {
             addCriterion("model_id not between", value1, value2, "modelId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdIsNull() {
-            addCriterion("form_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdIsNotNull() {
-            addCriterion("form_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdEqualTo(String value) {
-            addCriterion("form_id =", value, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdNotEqualTo(String value) {
-            addCriterion("form_id <>", value, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdGreaterThan(String value) {
-            addCriterion("form_id >", value, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdGreaterThanOrEqualTo(String value) {
-            addCriterion("form_id >=", value, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdLessThan(String value) {
-            addCriterion("form_id <", value, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdLessThanOrEqualTo(String value) {
-            addCriterion("form_id <=", value, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdLike(String value) {
-            addCriterion("form_id like", value, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdNotLike(String value) {
-            addCriterion("form_id not like", value, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdIn(List<String> values) {
-            addCriterion("form_id in", values, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdNotIn(List<String> values) {
-            addCriterion("form_id not in", values, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdBetween(String value1, String value2) {
-            addCriterion("form_id between", value1, value2, "formId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFormIdNotBetween(String value1, String value2) {
-            addCriterion("form_id not between", value1, value2, "formId");
             return (Criteria) this;
         }
 

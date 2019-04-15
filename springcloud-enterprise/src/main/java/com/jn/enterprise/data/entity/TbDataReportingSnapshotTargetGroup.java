@@ -30,6 +30,9 @@ public class TbDataReportingSnapshotTargetGroup implements Serializable {
     /*@ApiModelProperty("选项值（以逗号隔开）")*/
     private String choiceOption;
 
+    /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
+    private Byte recordStatus;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -104,6 +107,14 @@ public class TbDataReportingSnapshotTargetGroup implements Serializable {
         this.choiceOption = choiceOption == null ? null : choiceOption.trim();
     }
 
+    public Byte getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -124,7 +135,8 @@ public class TbDataReportingSnapshotTargetGroup implements Serializable {
             && (this.getFormName() == null ? other.getFormName() == null : this.getFormName().equals(other.getFormName()))
             && (this.getHaveToWrite() == null ? other.getHaveToWrite() == null : this.getHaveToWrite().equals(other.getHaveToWrite()))
             && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()))
-            && (this.getChoiceOption() == null ? other.getChoiceOption() == null : this.getChoiceOption().equals(other.getChoiceOption()));
+            && (this.getChoiceOption() == null ? other.getChoiceOption() == null : this.getChoiceOption().equals(other.getChoiceOption()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -140,6 +152,7 @@ public class TbDataReportingSnapshotTargetGroup implements Serializable {
         result = prime * result + ((getHaveToWrite() == null) ? 0 : getHaveToWrite().hashCode());
         result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
         result = prime * result + ((getChoiceOption() == null) ? 0 : getChoiceOption().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -158,6 +171,7 @@ public class TbDataReportingSnapshotTargetGroup implements Serializable {
         sb.append(", haveToWrite=").append(haveToWrite);
         sb.append(", order=").append(order);
         sb.append(", choiceOption=").append(choiceOption);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

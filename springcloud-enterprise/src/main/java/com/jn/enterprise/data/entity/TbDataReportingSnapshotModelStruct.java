@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class TbDataReportingSnapshotModelStruct implements Serializable {
     /*@ApiModelProperty("")*/
-    private Integer id;
+    private String id;
 
     /*@ApiModelProperty("任务批次")*/
     private String taskBatch;
@@ -15,20 +15,17 @@ public class TbDataReportingSnapshotModelStruct implements Serializable {
     /*@ApiModelProperty("")*/
     private String modelId;
 
-    /*@ApiModelProperty("填报格式标识")*/
-    private String formId;
-
     /*@ApiModelProperty("")*/
     private String tabId;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getTaskBatch() {
@@ -55,14 +52,6 @@ public class TbDataReportingSnapshotModelStruct implements Serializable {
         this.modelId = modelId == null ? null : modelId.trim();
     }
 
-    public String getFormId() {
-        return formId;
-    }
-
-    public void setFormId(String formId) {
-        this.formId = formId == null ? null : formId.trim();
-    }
-
     public String getTabId() {
         return tabId;
     }
@@ -87,7 +76,6 @@ public class TbDataReportingSnapshotModelStruct implements Serializable {
             && (this.getTaskBatch() == null ? other.getTaskBatch() == null : this.getTaskBatch().equals(other.getTaskBatch()))
             && (this.getTargetId() == null ? other.getTargetId() == null : this.getTargetId().equals(other.getTargetId()))
             && (this.getModelId() == null ? other.getModelId() == null : this.getModelId().equals(other.getModelId()))
-            && (this.getFormId() == null ? other.getFormId() == null : this.getFormId().equals(other.getFormId()))
             && (this.getTabId() == null ? other.getTabId() == null : this.getTabId().equals(other.getTabId()));
     }
 
@@ -99,7 +87,6 @@ public class TbDataReportingSnapshotModelStruct implements Serializable {
         result = prime * result + ((getTaskBatch() == null) ? 0 : getTaskBatch().hashCode());
         result = prime * result + ((getTargetId() == null) ? 0 : getTargetId().hashCode());
         result = prime * result + ((getModelId() == null) ? 0 : getModelId().hashCode());
-        result = prime * result + ((getFormId() == null) ? 0 : getFormId().hashCode());
         result = prime * result + ((getTabId() == null) ? 0 : getTabId().hashCode());
         return result;
     }
@@ -114,7 +101,6 @@ public class TbDataReportingSnapshotModelStruct implements Serializable {
         sb.append(", taskBatch=").append(taskBatch);
         sb.append(", targetId=").append(targetId);
         sb.append(", modelId=").append(modelId);
-        sb.append(", formId=").append(formId);
         sb.append(", tabId=").append(tabId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

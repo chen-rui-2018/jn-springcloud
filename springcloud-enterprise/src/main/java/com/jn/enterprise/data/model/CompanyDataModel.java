@@ -20,16 +20,16 @@ public class CompanyDataModel implements Serializable {
     @ApiModelProperty(value = "填报状态",example = "1")
     private String status;
 
-    public String getFileId() {
-        return fileId;
+    public String getFillId() {
+        return fillId;
     }
 
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
+    public void setFillId(String fillId) {
+        this.fillId = fillId;
     }
 
     @ApiModelProperty(value = "填报Id",example = "001")
-    private String fileId;
+    private String fillId;
 
     @ApiModelProperty(value = "账期",example = "201811")
     private String formTime;

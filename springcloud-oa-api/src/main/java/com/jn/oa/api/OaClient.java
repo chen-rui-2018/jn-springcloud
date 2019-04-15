@@ -45,6 +45,7 @@ public interface OaClient {
 
     /**
      * 工作计划提醒功能,每天定时提醒用户
+     *
      * @return
      */
     @RequestMapping(value = "/api/oa/workPlanRemindEveryDay", method = RequestMethod.POST)
@@ -52,9 +53,26 @@ public interface OaClient {
 
     /**
      * 每天凌晨两点自动更新工作计划已延迟状态
+     *
      * @return
      */
     @RequestMapping(value = "/api/oa/updateWorkPlanStatus", method = RequestMethod.POST)
     Result<Boolean> updateWorkPlanStatus();
 
+    /**
+     * 每天自动更新多部门协同状态信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/updateMultiDeptOfficeStatus", method = RequestMethod.POST)
+    Result<Boolean> updateMultiDeptOfficeStatus();
+
+
+    /**
+     * 多部门协同定时提醒功能
+     *
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/multiDeptOfficeStatusRemind", method = RequestMethod.POST)
+    Result<Boolean> multiDeptOfficeStatusRemind();
 }

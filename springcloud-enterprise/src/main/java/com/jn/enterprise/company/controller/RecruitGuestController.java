@@ -30,7 +30,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "用户中心-招聘管理")
+@Api(tags = "用户中心-我的企业-招聘管理")
 @RestController
 @RequestMapping("/guest/RecruitController")
 public class RecruitGuestController extends BaseController {
@@ -42,7 +42,7 @@ public class RecruitGuestController extends BaseController {
     private CompanyService companyService;
 
     @ControllerLog(doAction = "招聘列表")
-    @ApiOperation(value = "招聘列表", notes = "分页查询[默认15条]，日期查询请传开始和结束日期[只传一个忽略]")
+    @ApiOperation(value = "招聘列表（app/pc-招聘列表）", notes = "分页查询[默认15条]，日期查询请传开始和结束日期[只传一个忽略]")
     @RequestMapping(value = "/getRecruitList",method = RequestMethod.GET)
     public Result<PaginationData<List<RecruitVO>>> getRecruitList(@Validated ServiceRecruitParam serviceRecruitParam){
         if(StringUtils.isNotEmpty(serviceRecruitParam.getComId())) {
@@ -52,7 +52,7 @@ public class RecruitGuestController extends BaseController {
     }
 
     @ControllerLog(doAction = "招聘详情")
-    @ApiOperation(value = "招聘详情", notes = "必传招聘ID")
+    @ApiOperation(value = "招聘详情（app/pc-招聘详情）", notes = "必传招聘ID")
     @RequestMapping(value = "/viewRecruitDetails",method = RequestMethod.GET)
     public Result<RecruitDetailsVO> addRecruitClick(@Validated @RequestParam @ApiParam(name="recruitId",value = "招聘ID", required = true) String recruitId){
         Assert.notNull(recruitId, RecruitExceptionEnum.RECRUIT_ID_IS_NULL.getMessage());

@@ -215,7 +215,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public boolean updateCompanyInfo(UserCompanyInfo userCompanyInfo) {
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        example.createCriteria().andAccountEqualTo(userCompanyInfo.getAccount());
+        example.createCriteria().andAccountIn(Arrays.asList(userCompanyInfo.getAccountList()));
         TbUserPerson tbUserPerson=new TbUserPerson();
         tbUserPerson.setCompanyCode(userCompanyInfo.getCompanyCode());
         tbUserPerson.setCompanyName(userCompanyInfo.getCompanyName());
@@ -475,6 +475,40 @@ public class UserInfoServiceImpl implements UserInfoService {
       return  accountLIst;
     }
 
+    @Override
+    @ServiceLog(doAction = "根据查询字段获取用户信息")
+    public PaginationData getUserExtensionBySearchFiled(SearchFiledParam searchFiledParam) {
+        if(searchFiledParam == null){
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.SEARCH_PARAM_NOT_NULL);
+        }
+        com.github.pagehelper.Page<Object> objects = null;
+        //是否分页标识  0：不分页  1：分页
+        String isPage="1";
+        if(isPage.equals(searchFiledParam.getNeedPage())){
+            objects = PageHelper.startPage(searchFiledParam.getPage(),
+                    searchFiledParam.getRows() == 0 ? 15 : searchFiledParam.getRows(), true);
+        }
+        //数据状态正常  0:删除  1：正常
+        byte recordStatus=1;
+        TbUserPersonCriteria example=new TbUserPersonCriteria();
+        TbUserPersonCriteria.Criteria criteria = example.createCriteria();
+        criteria.andRecordStatusEqualTo(recordStatus);
+        if (StringUtils.isNotEmpty(searchFiledParam.getComId())) {
+            criteria.andCompanyCodeEqualTo(searchFiledParam.getComId());
+        }
+        if (StringUtils.isNotEmpty(searchFiledParam.getName())) {
+            criteria.andNameLike("%" + searchFiledParam.getName() + "%");
+        }
+        if (StringUtils.isNotEmpty(searchFiledParam.getPhone())) {
+            criteria.andPhoneEqualTo(searchFiledParam.getPhone());
+        }
+        if (searchFiledParam.getAccountList() != null && !searchFiledParam.getAccountList().isEmpty()) {
+            criteria.andAccountNotIn(searchFiledParam.getAccountList());
+        }
+        example.setOrderByClause("modifier_account DESC");
+        List<TbUserPerson> companyList = tbUserPersonMapper.selectByExample(example);
+        return getPaginationData(objects, companyList);
+    }
 
     private List<TbUserTag> getUserTagList(String[] s,String type,String id,String account,List<TbTagCode> tagCodes){
         List<TbUserTag> tags = new ArrayList<>(8);

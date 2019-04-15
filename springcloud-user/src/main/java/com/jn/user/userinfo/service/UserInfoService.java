@@ -83,4 +83,11 @@ public interface UserInfoService {
      */
     List<String> getAccountList(UserInfoQueryParam param);
 
+    /**
+     * 根据查询字段批量获取用户信息
+     * @param searchFiledParam
+     * @return
+     */
+    PaginationData getUserExtensionBySearchFiled(SearchFiledParam searchFiledParam);
+
 }

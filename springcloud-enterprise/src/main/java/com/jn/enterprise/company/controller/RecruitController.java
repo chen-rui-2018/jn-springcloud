@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "用户中心-招聘管理")
+@Api(tags = "用户中心-我的企业-招聘管理")
 @RestController
 @RequestMapping("/enterprise/RecruitController")
 public class RecruitController extends BaseController {
@@ -42,7 +42,7 @@ public class RecruitController extends BaseController {
     private CompanyService companyService;
 
     @ControllerLog(doAction = "发布招聘信息")
-    @ApiOperation(value = "发布招聘信息", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "发布招聘信息（app/pc-发布招聘）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/publishRecruitInfo",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/RecruitController/publishRecruitInfo")
     public Result<Integer> publishRecruitInfo(@Validated @RequestBody ServiceRecruitPublishParam serviceRecruitPublishParam){
@@ -52,7 +52,7 @@ public class RecruitController extends BaseController {
     }
 
     @ControllerLog(doAction = "编辑招聘信息")
-    @ApiOperation(value = "编辑招聘信息", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "编辑招聘信息（app/pc-编辑招聘）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/editRecruitInfo",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/RecruitController/editRecruitInfo")
     public Result<Integer> editRecruitInfo(@Validated @RequestBody ServiceRecruitEditParam serviceRecruitEditParam){
@@ -65,7 +65,7 @@ public class RecruitController extends BaseController {
     }
 
     @ControllerLog(doAction = "上/下架招聘信息")
-    @ApiOperation(value = "上/下架招聘信息", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "上/下架招聘信息（pc-上下架招聘）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/underRecruit",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/RecruitController/underRecruit")
     public Result<Integer> underRecruit(@Validated @RequestBody ServiceRecruitUnderParam serviceRecruitUnderParam){
@@ -79,7 +79,7 @@ public class RecruitController extends BaseController {
     }
 
     @ControllerLog(doAction = "删除招聘信息")
-    @ApiOperation(value = "删除招聘信息", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "删除招聘信息（pc-删除招聘）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/delRecruit",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/RecruitController/delRecruit")
     public Result<Integer> delRecruit(@Validated @RequestBody @ApiParam(name="recruitId", value = "招聘ID", required = true) String recruitId){

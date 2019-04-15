@@ -10,20 +10,21 @@ import com.jn.park.finance.service.impl.FinanceTypeServiceImpl;
 import com.jn.park.sp.dao.*;
 import com.jn.park.sp.entity.*;
 import com.jn.park.sp.enums.SpStatusEnums;
-import com.jn.park.sp.model.SpDictDepartModel;
-import com.jn.park.sp.model.SpMessageModel;
-import com.jn.park.sp.model.SpPowerBusiMaterialsModel;
-import com.jn.park.sp.model.SpPowerBusiModel;
+import com.jn.park.sp.model.*;
 import com.jn.park.sp.service.SpPowerPortalService;
 import com.jn.park.sp.vo.SpPowerBusiDetailVo;
 import com.jn.park.sp.vo.SpPowerDetailVo;
 import com.jn.park.sp.vo.SpPowerVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,6 +57,11 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     private TbSpMessageMapper tbSpMessageMapper;
     @Autowired
     private CompanyClient companyClient;
+    @Autowired
+    private SpAdDao spAdDao;
+
+    @Value("${ibps.url}")
+    private String ibpsUrl;
 
     /**
      *通过业务id查询业务明细内容
@@ -72,6 +78,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
             return null;
         }
         BeanUtils.copyProperties(tbSpPowerBusiWithBLOBs,spPowerBusiDetailVo);
+        spPowerBusiDetailVo.setFlowPic(spPowerBusiDetailVo.getFlowPic().replace("/ibps/components/upload/ueditor/preview.htm",ibpsUrl+"/ibps/components/upload/ueditor/preview.htm"));
         //通过业务id查询业务对象的办理材料集合
         TbSpPowerBusiMaterialsCriteria tbSpPowerBusiMaterialsCriteria = new TbSpPowerBusiMaterialsCriteria();
         TbSpPowerBusiMaterialsCriteria.Criteria criteria = tbSpPowerBusiMaterialsCriteria.createCriteria();
@@ -86,6 +93,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
             for (TbSpPowerBusiMaterials tbSpPowerBusiMaterial : tbSpPowerBusiMaterials) {
                 SpPowerBusiMaterialsModel spPowerBusiMaterialsModel = new SpPowerBusiMaterialsModel();
                 BeanUtils.copyProperties(tbSpPowerBusiMaterial,spPowerBusiMaterialsModel);
+                String sample = spPowerBusiMaterialsModel.getSample();
+                //拼接附件下载链接
+                Object parse = JSONValue.parse(sample);
+                JSONArray array=(JSONArray)parse;
+                JSONObject obj2=(JSONObject)array.get(0);
+                String spring =(String) obj2.get("id");
+                String fileName =  (String)obj2.get("fileName");
+                String sid = "/components/upload/preview.htm?downloadId=" + spring;
+                spPowerBusiMaterialsModel.setSampleName(fileName);
+                spPowerBusiMaterialsModel.setSample(sid);
                 spPowerBusiMaterialsModelList.add(spPowerBusiMaterialsModel);
             }
             spPowerBusiDetailVo.setMaterialsModelList(spPowerBusiMaterialsModelList);
@@ -202,5 +219,12 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         int insert = tbSpMessageMapper.insert(tbSpMessage);
         logger.info("【添加】添加留言成功,对应ID为{}",tbSpMessage.getId());
         return insert;
+    }
+
+    @Override
+    @ServiceLog(doAction="轮播广告")
+    public List<SpAdModel> getAdvertising() {
+        List<SpAdModel> spAdModelList = spAdDao.getAdvertising();
+        return spAdModelList;
     }
 }

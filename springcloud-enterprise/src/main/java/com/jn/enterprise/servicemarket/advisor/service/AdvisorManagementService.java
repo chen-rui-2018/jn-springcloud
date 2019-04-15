@@ -32,4 +32,12 @@ public interface AdvisorManagementService {
      * @param approvalParam  审批顾问信息入参(顾问账号，审批结果，审批说明)
      */
     int approvalAdvisorInfo(ApprovalParam approvalParam);
+
+    /**
+     * 再次邀请
+     * @param advisorAccount 顾问账号
+     * @param loginAccount  当前登录用户
+     * @return
+     */
+    int inviteAgain(String advisorAccount,String loginAccount);
 }

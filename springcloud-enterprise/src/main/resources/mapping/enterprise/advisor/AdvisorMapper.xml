@@ -102,7 +102,8 @@
                 ,sr.product_id as "productId"                               <!-- 服务产品id-->
                 ,sr.`product_name` AS "productName"				            <!-- 服务产品名称-->
                 ,sp.`picture_url` AS "pictureUrl"				            <!-- 服务产品图片-->
-                ,sr.`evaluator_account` AS "evaluationAccount"			    <!-- 评价人账号-->
+                ,concat_ws('****', substring(sr.`evaluator_account`, 1, 4),
+                substring(sr.`evaluator_account`, 9, 3)) AS "evaluationAccount" <!-- 评价人账号-->
                 ,date_format(sr.`created_time`,'%Y-%m-%d %H:%i:%s') AS "evaluationTime"<!-- 评价时间-->
                 ,sr.`evaluation_desc` AS "evaluationDesc"			        <!-- 评价描述-->
                 ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"	<!-- 评价分数-->

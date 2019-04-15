@@ -2,6 +2,9 @@ package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.org.model.OrgColleagueParam;
+import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
+
+import java.util.List;
 
 /**
  * 机构同事
@@ -28,14 +31,12 @@ public interface OrgColleagueService {
     int setAsContact(String loginAccount,String account);
 
     /**
-     *
-     */
-    /**
      * 取消联系人
+     * @param loginAccount 当前登录用户
      * @param account 取消联系人的账号
      * @return
      */
-    int cancelAsContact(String account);
+    int cancelAsContact(String loginAccount,String account);
 
     /**
      * 删除联系人或顾问
@@ -44,4 +45,12 @@ public interface OrgColleagueService {
      * @return
      */
     int deleteContactOrAdvisor(String loginAccount,String[] accountList);
+
+    /**
+     * 根据指定角色获取用户的角色信息（角色id,角色名称，角色所属用户组id,角色所属用户组名称）
+     * @param accountList 账号集合
+     * @param roleName    指定角色名称（可以是部分名称）
+     * @return
+     */
+    List<UserRoleInfo> getUserRoleInfoList(List<String> accountList, String roleName);
 }

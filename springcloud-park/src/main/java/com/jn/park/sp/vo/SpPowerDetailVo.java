@@ -35,6 +35,12 @@ public class SpPowerDetailVo extends SpPowerVo implements Serializable {
     @ApiModelProperty(value = "权力编码",example = "0100381002")
     private String code;
 
+    @ApiModelProperty(value = "行使层级",example = "省级")
+    private String level;
+
+    @ApiModelProperty(value = "权力来源",example = "法定本级行使")
+    private String comeFrom;
+
     @ApiModelProperty(value = "是否区权(1是，0否)",example = "0")
     private Integer isArea;
 
@@ -135,5 +141,21 @@ public class SpPowerDetailVo extends SpPowerVo implements Serializable {
 
     public void setBusiModelList(List<SpPowerBusiModel> busiModelList) {
         this.busiModelList = busiModelList;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getComeFrom() {
+        return comeFrom;
+    }
+
+    public void setComeFrom(String comeFrom) {
+        this.comeFrom = comeFrom;
     }
 }

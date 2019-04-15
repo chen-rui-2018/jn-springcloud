@@ -71,13 +71,33 @@ public class PointRuleServiceImpl implements PointRuleService {
         for (TbPointRule rule :tbPointRules) {
             PointRuleVO ruleVO = new PointRuleVO();
             BeanUtils.copyProperties(rule,ruleVO);
-            ruleVO.setCreatedTime(DateUtils.formatDate(rule.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
-            ruleVO.setModifiedTime(DateUtils.formatDate(rule.getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            if(null != rule.getCreatedTime()){
+                ruleVO.setCreatedTime(DateUtils.formatDate(rule.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != rule.getModifiedTime()){
+                ruleVO.setModifiedTime(DateUtils.formatDate(rule.getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
             models.add(ruleVO);
         }
 
         PaginationData<List<PointRuleVO>> data = new PaginationData(models, objects.getTotal());
         return data;
+    }
+
+    @Override
+    @ServiceLog(doAction = "查询积分规则列表[前端]")
+    public List<PointRuleVO> getFrontPointRuleList(String ruleType){
+        TbPointRuleCriteria ruleCriteria = new TbPointRuleCriteria();
+        ruleCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andRuleTypeEqualTo(ruleType);
+        List<TbPointRule> tbPointRules = tbPointRuleMapper.selectByExample(ruleCriteria);
+
+        List<PointRuleVO> models = new ArrayList<>(16);
+        for (TbPointRule rule :tbPointRules) {
+            PointRuleVO ruleVO = new PointRuleVO();
+            BeanUtils.copyProperties(rule,ruleVO);
+            models.add(ruleVO);
+        }
+        return models;
     }
 
     @Override
@@ -89,8 +109,12 @@ public class PointRuleServiceImpl implements PointRuleService {
         }
         PointRuleVO pointRuleVO = new PointRuleVO();
         BeanUtils.copyProperties(rule,pointRuleVO);
-        pointRuleVO.setCreatedTime(DateUtils.formatDate(rule.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
-        pointRuleVO.setModifiedTime(DateUtils.formatDate(rule.getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+        if(null != rule.getCreatedTime()){
+            pointRuleVO.setCreatedTime(DateUtils.formatDate(rule.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(null != rule.getModifiedTime()){
+            pointRuleVO.setModifiedTime(DateUtils.formatDate(rule.getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
         return pointRuleVO;
     }
 

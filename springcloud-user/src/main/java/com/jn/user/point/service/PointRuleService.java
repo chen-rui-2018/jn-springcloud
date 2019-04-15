@@ -26,6 +26,13 @@ public interface PointRuleService {
     PaginationData<List<PointRuleVO>> getPointRuleList(PointRuleParam pointRuleParam);
 
     /**
+     * 查询积分规则列表[前端]
+     * @param ruleType
+     * @return
+     */
+    List<PointRuleVO> getFrontPointRuleList(String ruleType);
+
+    /**
      * 获取积分规则详细信息
      * @param ruleId
      * @return

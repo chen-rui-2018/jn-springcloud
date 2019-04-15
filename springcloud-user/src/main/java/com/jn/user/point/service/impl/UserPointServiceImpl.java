@@ -77,6 +77,7 @@ public class UserPointServiceImpl implements UserPointService {
      */
     private final static String POINT_DETAIL_IS_VALID = "1";
     private final static String POINT_DETAIL_IS_INVALID = "-1";
+    private final static String POINT_DETAIL_IS_FREEZE = "0";
     /**
      * 积分周期
      */
@@ -126,7 +127,7 @@ public class UserPointServiceImpl implements UserPointService {
     public PaginationData<List<UserPointDetailVO>> getUserPointDetail(UserPointDetailParam userPointDetailParam){
         Page<Object> objects = PageHelper.startPage(userPointDetailParam.getPage(), userPointDetailParam.getRows() == 0 ? 15 : userPointDetailParam.getRows());
         TbUserPointDetailCriteria detailCriteria = new TbUserPointDetailCriteria();
-        detailCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andUserAccountEqualTo(userPointDetailParam.getUserAccount());
+        detailCriteria.createCriteria().andPointStatusNotEqualTo(POINT_DETAIL_IS_INVALID).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andUserAccountEqualTo(userPointDetailParam.getUserAccount());
         List<TbUserPointDetail> tbUserPointDetails = tbUserPointDetailMapper.selectByExample(detailCriteria);
         List<UserPointDetailVO> detailVOS = new ArrayList<>(16);
         for (TbUserPointDetail pointDetail:tbUserPointDetails) {
@@ -188,15 +189,15 @@ public class UserPointServiceImpl implements UserPointService {
         Boolean b = true;
         for (TbPointRule pointRule:tbPointRules) {
             if(StringUtils.equals(pointIncomeParam.getRuleCode(),pointRule.getRuleCode())){
-                if(StringUtils.equals(pointRule.getIsStatus(),POINT_RULE_STATUS_VALID)){
+                if(!StringUtils.equals(pointRule.getIsStatus(),POINT_RULE_STATUS_VALID)){
                     throw new JnSpringCloudException(UserPointExceptionEnum.POINT_RULE_IS_INVALID);
                 }
-                if(StringUtils.equals(pointRule.getRuleType(),POINT_RULE_INCOME_VALID)){
+                if(!StringUtils.equals(pointRule.getRuleType(),POINT_RULE_INCOME_VALID)){
                     throw new JnSpringCloudException(UserPointExceptionEnum.POINT_RULE_IS_NOT_INCOME);
                 }
                 b = false;
                 UserFunctionPointVO functionPointState = getFunctionPointState(pointIncomeParam.getRuleCode(), pointIncomeParam.getAccount());
-                if(StringUtils.equals(POINT_RULE_CYCLE_STATUS_VALID,pointRule.getCycleStatus()) && (new Integer(functionPointState.getCycleUnitNum()))>=(new Integer(functionPointState.getRuleCompleteNum()))){
+                if(StringUtils.equals(POINT_RULE_CYCLE_STATUS_VALID,pointRule.getCycleStatus()) && (new Integer(functionPointState.getCycleUnitNum()))<=(new Integer(functionPointState.getRuleCompleteNum()))){
                     throw new JnSpringCloudException(UserPointExceptionEnum.POINT_RULE_NO_REMAINING_TIMES,"["+pointRule.getRuleName()+"]当前周期内获取积分已达上限，不能继续获取");
                 }
 
@@ -207,7 +208,7 @@ public class UserPointServiceImpl implements UserPointService {
                 userPointDetail.setId(UUID.randomUUID().toString().replace("-",""));
                 userPointDetail.setUserAccount(pointIncomeParam.getAccount());
                 userPointDetail.setRuleTypeName(pointRule.getRuleName());
-                userPointDetail.setRuleTypeId(pointRule.getRuleId());
+                userPointDetail.setRuleTypeId(pointRule.getRuleCode());
                 userPointDetail.setPointType(POINT_RULE_INCOME_VALID);
                 userPointDetail.setPointNum(pointRule.getIntegralNum());
                 userPointDetail.setPointBalance(userPoint.getPointNum()+pointRule.getIntegralNum());
@@ -264,7 +265,7 @@ public class UserPointServiceImpl implements UserPointService {
                     if(StringUtils.equals(pointRule.getIsStatus(),POINT_RULE_STATUS_VALID)){
                         PointDeductionDetail pointDeductionDetail = new PointDeductionDetail();
                         //计算某个账单能抵扣积分
-                        Double billPoint = paymentBill.getBillAmount() * pointRule.getIncomeScale();
+                        Double billPoint = paymentBill.getBillAmount() * pointRule.getIncomeScale() / 100 ;
                         if(null != pointRule.getIncomeTotal() && billPoint>pointRule.getIncomeTotal()){
                             billPoint = pointRule.getIncomeTotal();
                         }
@@ -324,6 +325,7 @@ public class UserPointServiceImpl implements UserPointService {
             tbUserPointDetail.setPointBalance(deductionDetail.getPointRemainderNum());
             tbUserPointDetail.setPointOrderId(pointOrderPayParam.getOrderId());
             tbUserPointDetail.setCreatorAccount(pointOrderPayParam.getAccount());
+            tbUserPointDetail.setPointStatus(POINT_DETAIL_IS_FREEZE);
             tbUserPointDetail.setCreatedTime(new Date());
             tbUserPointDetail.setRecordStatus(new Byte(RECORD_STATUS_VALID));
             detailList.add(tbUserPointDetail);
@@ -338,24 +340,34 @@ public class UserPointServiceImpl implements UserPointService {
     public Boolean orderPaySuccessPointDeduction(String orderId){
         Result<PayOrderVO> payOrderDetail = payBillClient.getPayOrderDetailByOrderId(orderId);
         Double integralAmount = payOrderDetail.getData().getIntegralAmount();
-        TbUserPoint tbUserPoint = new TbUserPoint();
-        tbUserPoint.setFreezeNum(tbUserPoint.getFreezeNum()-integralAmount);
-        tbUserPoint.setModifierAccount(payOrderDetail.getData().getCreatorAccount());
-        tbUserPoint.setModifiedTime(new Date());
-        TbUserPointCriteria pointCriteria = new TbUserPointCriteria();
-        pointCriteria.createCriteria().andUserAccountEqualTo(payOrderDetail.getData().getCreatorAccount());
-        int i = tbUserPointMapper.updateByExampleSelective(tbUserPoint, pointCriteria);
-        logger.info("支付失败/取消支付，积分退回（回滚）接口：处理用户积分数据响应条数{}",i);
+        if(null !=integralAmount && integralAmount != 0 ){
+            TbUserPointCriteria pointCriteria = new TbUserPointCriteria();
+            pointCriteria.createCriteria().andUserAccountEqualTo(payOrderDetail.getData().getCreatorAccount());
+            List<TbUserPoint> tbUserPoints = tbUserPointMapper.selectByExample(pointCriteria);
+            if(null == tbUserPoints || tbUserPoints.size()==0){
+                throw new JnSpringCloudException(UserPointExceptionEnum.USER_POINT_IS_NOT_EXIST);
+            }
+            TbUserPoint userPoint = tbUserPoints.get(0);
+            TbUserPoint tbUserPoint = new TbUserPoint();
+            tbUserPoint.setPointNum(userPoint.getPointNum()+integralAmount);
+            tbUserPoint.setFreezeNum(userPoint.getFreezeNum()-integralAmount);
+            tbUserPoint.setModifiedTime(new Date());
 
-        TbUserPointDetail tbUserPointDetail = new TbUserPointDetail();
-        tbUserPointDetail.setPointStatus(POINT_DETAIL_IS_VALID);
-        tbUserPointDetail.setModifiedTime(new Date());
-        tbUserPointDetail.setModifierAccount(payOrderDetail.getData().getCreatorAccount());
-        TbUserPointDetailCriteria pointDetailCriteria = new TbUserPointDetailCriteria();
-        pointDetailCriteria.createCriteria().andPointOrderIdEqualTo(orderId);
-        int i1 = tbUserPointDetailMapper.updateByExampleSelective(tbUserPointDetail, pointDetailCriteria);
-        logger.info("支付失败/取消支付，积分退回（回滚）接口：处理用户积分明细数据响应条数{}",i1);
-        return i==1?true:false;
+            int i = tbUserPointMapper.updateByExampleSelective(tbUserPoint, pointCriteria);
+            logger.info("支付失败/取消支付，积分退回（回滚）接口：处理用户积分数据响应条数{}",i);
+
+            TbUserPointDetail tbUserPointDetail = new TbUserPointDetail();
+            tbUserPointDetail.setPointStatus(POINT_DETAIL_IS_VALID);
+            tbUserPointDetail.setModifiedTime(new Date());
+            tbUserPointDetail.setModifierAccount(payOrderDetail.getData().getCreatorAccount());
+            TbUserPointDetailCriteria pointDetailCriteria = new TbUserPointDetailCriteria();
+            pointDetailCriteria.createCriteria().andPointOrderIdEqualTo(orderId);
+            int i1 = tbUserPointDetailMapper.updateByExampleSelective(tbUserPointDetail, pointDetailCriteria);
+            logger.info("支付失败/取消支付，积分退回（回滚）接口：处理用户积分明细数据响应条数{}",i1);
+            return i==1?true:false;
+        }else{
+            return true;
+        }
     }
 
     @ServiceLog(doAction = "支付失败/取消支付，积分退回（回滚）接口")
@@ -363,25 +375,36 @@ public class UserPointServiceImpl implements UserPointService {
     public Boolean orderPayErrorPointReturn(String orderId){
         Result<PayOrderVO> payOrderDetail = payBillClient.getPayOrderDetailByOrderId(orderId);
         Double integralAmount = payOrderDetail.getData().getIntegralAmount();
-        TbUserPoint tbUserPoint = new TbUserPoint();
-        tbUserPoint.setPointNum(tbUserPoint.getPointNum()+integralAmount);
-        tbUserPoint.setFreezeNum(tbUserPoint.getFreezeNum()-integralAmount);
-        tbUserPoint.setModifierAccount(payOrderDetail.getData().getCreatorAccount());
-        tbUserPoint.setModifiedTime(new Date());
-        TbUserPointCriteria pointCriteria = new TbUserPointCriteria();
-        pointCriteria.createCriteria().andUserAccountEqualTo(payOrderDetail.getData().getCreatorAccount());
-        int i = tbUserPointMapper.updateByExampleSelective(tbUserPoint, pointCriteria);
-        logger.info("支付失败/取消支付，积分退回（回滚）接口：处理用户积分数据响应条数{}",i);
+        if(null !=integralAmount && integralAmount != 0 ){
+            TbUserPointCriteria pointCriteria = new TbUserPointCriteria();
+            pointCriteria.createCriteria().andUserAccountEqualTo(payOrderDetail.getData().getCreatorAccount());
 
-        TbUserPointDetail tbUserPointDetail = new TbUserPointDetail();
-        tbUserPointDetail.setPointStatus(POINT_DETAIL_IS_INVALID);
-        tbUserPointDetail.setModifiedTime(new Date());
-        tbUserPointDetail.setModifierAccount(payOrderDetail.getData().getCreatorAccount());
-        TbUserPointDetailCriteria pointDetailCriteria = new TbUserPointDetailCriteria();
-        pointDetailCriteria.createCriteria().andPointOrderIdEqualTo(orderId);
-        int i1 = tbUserPointDetailMapper.updateByExampleSelective(tbUserPointDetail, pointDetailCriteria);
-        logger.info("支付失败/取消支付，积分退回（回滚）接口：处理用户积分明细数据响应条数{}",i1);
-        return i==1?true:false;
+            List<TbUserPoint> tbUserPoints = tbUserPointMapper.selectByExample(pointCriteria);
+            if(null == tbUserPoints || tbUserPoints.size()==0){
+                throw new JnSpringCloudException(UserPointExceptionEnum.USER_POINT_IS_NOT_EXIST);
+            }
+            TbUserPoint userPoint = tbUserPoints.get(0);
+            TbUserPoint tbUserPoint = new TbUserPoint();
+            tbUserPoint.setPointNum(userPoint.getPointNum()+integralAmount);
+            tbUserPoint.setFreezeNum(userPoint.getFreezeNum()-integralAmount);
+            tbUserPoint.setModifierAccount(payOrderDetail.getData().getCreatorAccount());
+            tbUserPoint.setModifiedTime(new Date());
+
+            int i = tbUserPointMapper.updateByExampleSelective(tbUserPoint, pointCriteria);
+            logger.info("支付失败/取消支付，积分退回（回滚）接口：处理用户积分数据响应条数{}",i);
+
+            TbUserPointDetail tbUserPointDetail = new TbUserPointDetail();
+            tbUserPointDetail.setPointStatus(POINT_DETAIL_IS_INVALID);
+            tbUserPointDetail.setModifiedTime(new Date());
+            tbUserPointDetail.setModifierAccount(payOrderDetail.getData().getCreatorAccount());
+            TbUserPointDetailCriteria pointDetailCriteria = new TbUserPointDetailCriteria();
+            pointDetailCriteria.createCriteria().andPointOrderIdEqualTo(orderId);
+            int i1 = tbUserPointDetailMapper.updateByExampleSelective(tbUserPointDetail, pointDetailCriteria);
+            logger.info("支付失败/取消支付，积分退回（回滚）接口：处理用户积分明细数据响应条数{}",i1);
+            return i==1?true:false;
+        }else {
+            return true;
+        }
     }
 
 }

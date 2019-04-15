@@ -22,6 +22,7 @@ public enum UserPointExceptionEnum implements CodeAndMsg {
     USER_POINT_NUM_CHANGE_ERROR("3020509","用户积分余额处理失败"),
     PAY_BILLS_IS_NOT_NULL("3020510","支付账单不能为空"),
     PAY_BILLS_IS_NOT_EXIST("3020511","未查询到有效支付账单"),
+    POINT_RULE_TYPE_IS_NOT_EXIST("3020512","积分类型不能为空"),
     ;
     /**
      * 编码

@@ -26,17 +26,21 @@
     </select>
 
     <insert id="insertPointDetailList" parameterType="java.util.List">
-        insert into tb_service_org_team (id,org_id,con_name,con_position,con_quali,con_time,con_speciality,
+        insert into tb_user_point_detail (id,user_account,rule_type_name,rule_type_id,point_type,
+        point_num,point_balance,point_income_id,point_order_id,point_status,
         created_time,creator_account,modified_time,modifier_account,record_status)
         select A.* from(
         <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
             ( select #{item.id,jdbcType=VARCHAR} as "id"
-            ,#{item.orgId,jdbcType=VARCHAR} as "orgId"
-            ,#{item.conName,jdbcType=VARCHAR} as "conName"
-            ,#{item.conPosition,jdbcType=VARCHAR} as "conPosition"
-            ,#{item.conQuali,jdbcType=VARCHAR} as "conQuali"
-            ,#{item.conTime,jdbcType=DATE} as "conTime"
-            ,#{item.conSpeciality,jdbcType=VARCHAR} as "conSpeciality"
+            ,#{item.userAccount,jdbcType=VARCHAR} as "userAccount"
+            ,#{item.ruleTypeName,jdbcType=VARCHAR} as "ruleTypeName"
+            ,#{item.ruleTypeId,jdbcType=VARCHAR} as "ruleTypeId"
+            ,#{item.pointType,jdbcType=VARCHAR} as "pointType"
+            ,#{item.pointNum,jdbcType=DOUBLE} as "pointNum"
+            ,#{item.pointBalance,jdbcType=DOUBLE} as "pointBalance"
+            ,#{item.pointIncomeId,jdbcType=VARCHAR} as "pointIncomeId"
+            ,#{item.pointOrderId,jdbcType=VARCHAR} as "pointOrderId"
+            ,#{item.pointStatus,jdbcType=VARCHAR} as "pointStatus"
             ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
             ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
             ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"

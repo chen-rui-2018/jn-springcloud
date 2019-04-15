@@ -10,6 +10,7 @@ import com.jn.system.model.User;
 import com.jn.user.enums.UserPointExceptionEnum;
 import com.jn.user.model.PointDeductionParam;
 import com.jn.user.model.PointDeductionVO;
+import com.jn.user.model.PointIncomeParam;
 import com.jn.user.model.PointOrderPayParam;
 import com.jn.user.point.model.*;
 import com.jn.user.point.service.UserPointService;
@@ -18,8 +19,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +33,9 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "积分管理-用户管理")
+@Api(tags = "积分管理-用户积分")
 @RestController
-@RequestMapping("/user/point/")
+@RequestMapping("/user/point")
 public class UserPointController extends BaseController {
 
     @Autowired
@@ -51,6 +54,7 @@ public class UserPointController extends BaseController {
     @ControllerLog(doAction = "查询用户积分余额列表[后台管理员使用]")
     @ApiOperation(value = "查询用户积分余额列表[后台管理员使用]")
     @RequestMapping(value = "/getUserPointList",method = RequestMethod.GET)
+    @RequiresPermissions("/user/point/getUserPointList")
     public Result<PaginationData<List<UserPointVO>>> getUserPointList(UserPointParam userPointParam){
         return new Result<>(pointService.getUserPointList(userPointParam));
     }
@@ -58,6 +62,7 @@ public class UserPointController extends BaseController {
     @ControllerLog(doAction = "查询指定用户积分明细[后台管理员使用]")
     @ApiOperation(value = "查询指定用户积分明细[后台管理员使用]")
     @RequestMapping(value = "/getPointDetailByUserAccount",method = RequestMethod.GET)
+    @RequiresPermissions("/user/point/getPointDetailByUserAccount")
     public Result<PaginationData<List<UserPointDetailVO>>> getPointDetailByUserAccount(UserPointDetailParam userPointDetailParam){
         return new Result<>(pointService.getUserPointDetail(userPointDetailParam));
     }
@@ -103,6 +108,13 @@ public class UserPointController extends BaseController {
         pointDeductionParam.setAccount(user.getAccount());
         pointDeductionParam.setBillIds(billIds);
         return new Result<>(pointService.orderPointDeduction(pointDeductionParam));
+    }
+
+    @ControllerLog(doAction = "积分收入测试")
+    @ApiOperation(value = "积分收入[测试接口]",notes = "积分收入为业务层代码调用，此次仅提供测试入口。前端请忽略该接口")
+    @RequestMapping(value = "/updatePointRuleInfo",method = RequestMethod.POST)
+    public Result<Boolean> userPointIncome(@RequestBody @Validated PointIncomeParam pointIncomeParam){
+        return new Result<>(pointService.userPointIncome(pointIncomeParam));
     }
 
 }

@@ -32,6 +32,7 @@ public enum PayBillExceptionEnum implements CodeAndMsg {
     BILL_PAY_ORDER_IS_NOT_PAYING("6020520","不能取消非支付中订单。"),
     BILL_PAY_ORDER_IS_NOT_EXIT("6020521","支付账单不存在。"),
     BILL_PAY_ORDER_POINT_IS_ERROR("6020522","支付积分处理失败，请稍后重试。"),
+    PAY_ORDER_POINT_IS_NOT_PAYING("6020523","订单状态为非支付中，不能进行操作"),
     ;
     /**
      * 编码

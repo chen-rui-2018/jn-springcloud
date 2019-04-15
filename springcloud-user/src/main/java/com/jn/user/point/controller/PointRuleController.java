@@ -30,7 +30,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "积分管理-积分规则")
+@Api(tags = "积分管理-积分规则[后台]")
 @RestController
 @RequestMapping("/point/rule/")
 public class PointRuleController extends BaseController {

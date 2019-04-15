@@ -1,6 +1,6 @@
 package com.jn.park.parkcode.service.impl;
 
-import com.jn.park.model.ParkCode;
+import com.jn.park.activity.model.ParkCode;
 import com.jn.park.parkcode.dao.TbParkCodeMapper;
 import com.jn.park.parkcode.entity.TbParkCode;
 import com.jn.park.parkcode.entity.TbParkCodeCriteria;

@@ -14,7 +14,7 @@ public class TbServiceOrgTeam implements Serializable {
 
     private String conQuali;
 
-    private Date conTime;
+    private String conTime;
 
     private String conSpeciality;
 
@@ -70,12 +70,12 @@ public class TbServiceOrgTeam implements Serializable {
         this.conQuali = conQuali == null ? null : conQuali.trim();
     }
 
-    public Date getConTime() {
+    public String getConTime() {
         return conTime;
     }
 
-    public void setConTime(Date conTime) {
-        this.conTime = conTime;
+    public void setConTime(String conTime) {
+        this.conTime = conTime == null ? null : conTime.trim();
     }
 
     public String getConSpeciality() {

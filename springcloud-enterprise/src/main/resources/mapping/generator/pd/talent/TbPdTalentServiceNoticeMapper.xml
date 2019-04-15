@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.talent.dao.TbPdTalentServiceNoticeMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="notice_title" jdbcType="VARCHAR" property="noticeTitle" />
+    <result column="range_id" jdbcType="VARCHAR" property="rangeId" />
+    <result column="range_name" jdbcType="VARCHAR" property="rangeName" />
+    <result column="subordinate_platform_id" jdbcType="VARCHAR" property="subordinatePlatformId" />
+    <result column="subordinate_platform_name" jdbcType="VARCHAR" property="subordinatePlatformName" />
+    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+    <result column="time_node" jdbcType="VARCHAR" property="timeNode" />
+    <result column="is_roof_placement" jdbcType="TINYINT" property="isRoofPlacement" />
+    <result column="announcement_content" jdbcType="VARCHAR" property="announcementContent" />
+    <result column="browse_times" jdbcType="INTEGER" property="browseTimes" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, notice_title, range_id, range_name, subordinate_platform_id, subordinate_platform_name, 
+    deadline, time_node, is_roof_placement, announcement_content, browse_times, status, 
+    record_status, creator_account, created_time, modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNoticeCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pd_talent_service_notice
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pd_talent_service_notice
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_pd_talent_service_notice
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNoticeCriteria">
+    delete from tb_pd_talent_service_notice
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_talent_service_notice (notice_title, range_id, range_name, 
+      subordinate_platform_id, subordinate_platform_name, 
+      deadline, time_node, is_roof_placement, 
+      announcement_content, browse_times, status, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{noticeTitle,jdbcType=VARCHAR}, #{rangeId,jdbcType=VARCHAR}, #{rangeName,jdbcType=VARCHAR}, 
+      #{subordinatePlatformId,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
+      #{deadline,jdbcType=TIMESTAMP}, #{timeNode,jdbcType=VARCHAR}, #{isRoofPlacement,jdbcType=TINYINT}, 
+      #{announcementContent,jdbcType=VARCHAR}, #{browseTimes,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_talent_service_notice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="noticeTitle != null">
+        notice_title,
+      </if>
+      <if test="rangeId != null">
+        range_id,
+      </if>
+      <if test="rangeName != null">
+        range_name,
+      </if>
+      <if test="subordinatePlatformId != null">
+        subordinate_platform_id,
+      </if>
+      <if test="subordinatePlatformName != null">
+        subordinate_platform_name,
+      </if>
+      <if test="deadline != null">
+        deadline,
+      </if>
+      <if test="timeNode != null">
+        time_node,
+      </if>
+      <if test="isRoofPlacement != null">
+        is_roof_placement,
+      </if>
+      <if test="announcementContent != null">
+        announcement_content,
+      </if>
+      <if test="browseTimes != null">
+        browse_times,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="noticeTitle != null">
+        #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="rangeId != null">
+        #{rangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="rangeName != null">
+        #{rangeName,jdbcType=VARCHAR},
+      </if>
+      <if test="subordinatePlatformId != null">
+        #{subordinatePlatformId,jdbcType=VARCHAR},
+      </if>
+      <if test="subordinatePlatformName != null">
+        #{subordinatePlatformName,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeNode != null">
+        #{timeNode,jdbcType=VARCHAR},
+      </if>
+      <if test="isRoofPlacement != null">
+        #{isRoofPlacement,jdbcType=TINYINT},
+      </if>
+      <if test="announcementContent != null">
+        #{announcementContent,jdbcType=VARCHAR},
+      </if>
+      <if test="browseTimes != null">
+        #{browseTimes,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNoticeCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pd_talent_service_notice
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pd_talent_service_notice
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeTitle != null">
+        notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rangeId != null">
+        range_id = #{record.rangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rangeName != null">
+        range_name = #{record.rangeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subordinatePlatformId != null">
+        subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subordinatePlatformName != null">
+        subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deadline != null">
+        deadline = #{record.deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.timeNode != null">
+        time_node = #{record.timeNode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isRoofPlacement != null">
+        is_roof_placement = #{record.isRoofPlacement,jdbcType=TINYINT},
+      </if>
+      <if test="record.announcementContent != null">
+        announcement_content = #{record.announcementContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.browseTimes != null">
+        browse_times = #{record.browseTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pd_talent_service_notice
+    set id = #{record.id,jdbcType=VARCHAR},
+      notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
+      range_id = #{record.rangeId,jdbcType=VARCHAR},
+      range_name = #{record.rangeName,jdbcType=VARCHAR},
+      subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
+      subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
+      deadline = #{record.deadline,jdbcType=TIMESTAMP},
+      time_node = #{record.timeNode,jdbcType=VARCHAR},
+      is_roof_placement = #{record.isRoofPlacement,jdbcType=TINYINT},
+      announcement_content = #{record.announcementContent,jdbcType=VARCHAR},
+      browse_times = #{record.browseTimes,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
+    update tb_pd_talent_service_notice
+    <set>
+      <if test="noticeTitle != null">
+        notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="rangeId != null">
+        range_id = #{rangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="rangeName != null">
+        range_name = #{rangeName,jdbcType=VARCHAR},
+      </if>
+      <if test="subordinatePlatformId != null">
+        subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
+      </if>
+      <if test="subordinatePlatformName != null">
+        subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeNode != null">
+        time_node = #{timeNode,jdbcType=VARCHAR},
+      </if>
+      <if test="isRoofPlacement != null">
+        is_roof_placement = #{isRoofPlacement,jdbcType=TINYINT},
+      </if>
+      <if test="announcementContent != null">
+        announcement_content = #{announcementContent,jdbcType=VARCHAR},
+      </if>
+      <if test="browseTimes != null">
+        browse_times = #{browseTimes,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
+    update tb_pd_talent_service_notice
+    set notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      range_id = #{rangeId,jdbcType=VARCHAR},
+      range_name = #{rangeName,jdbcType=VARCHAR},
+      subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
+      subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
+      time_node = #{timeNode,jdbcType=VARCHAR},
+      is_roof_placement = #{isRoofPlacement,jdbcType=TINYINT},
+      announcement_content = #{announcementContent,jdbcType=VARCHAR},
+      browse_times = #{browseTimes,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

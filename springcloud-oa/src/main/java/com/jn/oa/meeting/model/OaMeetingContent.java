@@ -44,6 +44,8 @@ public class OaMeetingContent  implements Serializable {
     private String content;
 
 
+
+
     public String getId() {
         return id;
     }

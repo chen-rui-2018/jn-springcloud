@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingModelDataMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingModelData">
+    <id column="fall_in_form_id" jdbcType="VARCHAR" property="fallInFormId" />
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="target_id" jdbcType="VARCHAR" property="targetId" />
+    <result column="model_id" jdbcType="VARCHAR" property="modelId" />
+    <result column="data" jdbcType="VARCHAR" property="data" />
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="tab_id" jdbcType="VARCHAR" property="tabId" />
+    <result column="fill_id" jdbcType="VARCHAR" property="fillId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fall_in_form_id, id, target_id, model_id, data, form_id, tab_id, fill_id
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelDataCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_data_reporting_model_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_data_reporting_model_data
+    where fall_in_form_id = #{fallInFormId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_data_reporting_model_data
+    where fall_in_form_id = #{fallInFormId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelDataCriteria">
+    delete from tb_data_reporting_model_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelData">
+    insert into tb_data_reporting_model_data (fall_in_form_id, id, target_id, 
+      model_id, data, form_id, 
+      tab_id, fill_id)
+    values (#{fallInFormId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, 
+      #{modelId,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, #{formId,jdbcType=VARCHAR}, 
+      #{tabId,jdbcType=VARCHAR}, #{fillId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelData">
+    insert into tb_data_reporting_model_data
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fallInFormId != null">
+        fall_in_form_id,
+      </if>
+      <if test="id != null">
+        id,
+      </if>
+      <if test="targetId != null">
+        target_id,
+      </if>
+      <if test="modelId != null">
+        model_id,
+      </if>
+      <if test="data != null">
+        data,
+      </if>
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="tabId != null">
+        tab_id,
+      </if>
+      <if test="fillId != null">
+        fill_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fallInFormId != null">
+        #{fallInFormId,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="targetId != null">
+        #{targetId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelId != null">
+        #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="data != null">
+        #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="tabId != null">
+        #{tabId,jdbcType=VARCHAR},
+      </if>
+      <if test="fillId != null">
+        #{fillId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelDataCriteria" resultType="java.lang.Long">
+    select count(*) from tb_data_reporting_model_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_data_reporting_model_data
+    <set>
+      <if test="record.fallInFormId != null">
+        fall_in_form_id = #{record.fallInFormId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.targetId != null">
+        target_id = #{record.targetId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modelId != null">
+        model_id = #{record.modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data != null">
+        data = #{record.data,jdbcType=VARCHAR},
+      </if>
+      <if test="record.formId != null">
+        form_id = #{record.formId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tabId != null">
+        tab_id = #{record.tabId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fillId != null">
+        fill_id = #{record.fillId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_data_reporting_model_data
+    set fall_in_form_id = #{record.fallInFormId,jdbcType=VARCHAR},
+      id = #{record.id,jdbcType=VARCHAR},
+      target_id = #{record.targetId,jdbcType=VARCHAR},
+      model_id = #{record.modelId,jdbcType=VARCHAR},
+      data = #{record.data,jdbcType=VARCHAR},
+      form_id = #{record.formId,jdbcType=VARCHAR},
+      tab_id = #{record.tabId,jdbcType=VARCHAR},
+      fill_id = #{record.fillId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelData">
+    update tb_data_reporting_model_data
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="targetId != null">
+        target_id = #{targetId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelId != null">
+        model_id = #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="data != null">
+        data = #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="formId != null">
+        form_id = #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="tabId != null">
+        tab_id = #{tabId,jdbcType=VARCHAR},
+      </if>
+      <if test="fillId != null">
+        fill_id = #{fillId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fall_in_form_id = #{fallInFormId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelData">
+    update tb_data_reporting_model_data
+    set id = #{id,jdbcType=VARCHAR},
+      target_id = #{targetId,jdbcType=VARCHAR},
+      model_id = #{modelId,jdbcType=VARCHAR},
+      data = #{data,jdbcType=VARCHAR},
+      form_id = #{formId,jdbcType=VARCHAR},
+      tab_id = #{tabId,jdbcType=VARCHAR},
+      fill_id = #{fillId,jdbcType=VARCHAR}
+    where fall_in_form_id = #{fallInFormId,jdbcType=VARCHAR}
+  </update>
+</mapper>

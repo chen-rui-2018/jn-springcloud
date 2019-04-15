@@ -29,8 +29,27 @@ public class FinanceIncomeServiceImpl implements FinanceIncomeService {
 
     @ServiceLog(doAction = "明细,同期对比")
     @Override
-    public List<FinanceIncomePeriodVo> periodContrast(String startTime, String endTime) {
-        return financeIncomeDao.periodContrast(startTime,endTime);
+    public FianceDynamicTableVo<List<FinanceIncomePeriodVo>> periodContrast(String startTime, String endTime) {
+
+        List<FinanceIncomePeriodVo> periodContrastList=financeIncomeDao.periodContrast(startTime,endTime);
+
+        if(null==periodContrastList||periodContrastList.size()<1){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"无数据");
+        }
+        FianceDynamicTableVo<List<FinanceIncomePeriodVo>> vo1=new FianceDynamicTableVo<>();
+        List<String>dynamicHeadList=new ArrayList<>();
+        for (int i=0;i<periodContrastList.size();i++){
+            String mm=periodContrastList.get(i).getIncomeMonth().substring(4);
+            //如果小于10，就截取后一位，把前面的0去掉
+            if(Integer.parseInt(mm) <10){
+                mm=mm.substring(1);
+            }
+            dynamicHeadList.add(String.format("%s月",mm));
+        }
+        vo1.setDynamicHeadList(dynamicHeadList);
+        vo1.setRows(periodContrastList);
+        return vo1;
+        //return financeIncomeDao.periodContrast(startTime,endTime);
     }
 
     @ServiceLog(doAction = "汇总占比")

@@ -28,7 +28,7 @@ public class ServiceCompanyParam extends Page implements Serializable {
     private String checkStatus;
     @ApiModelProperty(value = "企业管理员账号Account",example = "wangsong")
     private String comAdmin;
-    @ApiModelProperty(value = "企业类型",notes = "企业字典表type=3的，即企业类型。数据从【机构字典】接口获取",example = "guoyouqiye")
+    @ApiModelProperty(value = "企业类型",notes = "企业字典表type=3的，即企业类型。数据从【服务超市-机构字典】接口获取(id)",example = "guoyouqiye")
     private String comType;
 
     public String getComName() {

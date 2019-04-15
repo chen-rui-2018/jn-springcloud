@@ -56,8 +56,10 @@ public class AdvisorServiceImplTest {
         advisorListParam.setDomain(domain);
         advisorListParam.setKeyWords(keyWords);
         advisorListParam.setSortTypes(sortTypes);
-        advisorAccount="wangsong";
+        advisorListParam.setOrgId("1001211");
+        advisorAccount="18674398739";
 
+        serviceEvaluationParam.setIsPublicPage("0");
         serviceEvaluationParam.setAdvisorAccount(advisorAccount);
         serviceEvaluationParam.setRatingType("差评");
         serviceEvaluationParam.setNeedPage("0");
@@ -112,15 +114,25 @@ public class AdvisorServiceImplTest {
      */
     @Test
     public void getServiceRatingInfo(){
-        PaginationData pageData = advisorService.getServiceRatingInfo(serviceEvaluationParam);
-        if(pageData.getRows()!=null){
-            List<ServiceRating> serviceRatingList=(List<ServiceRating> )pageData.getRows();
-            for(ServiceRating serviceRating:serviceRatingList){
-                logger.info(serviceRating.toString());
+        try {
+            PaginationData pageData = advisorService.getServiceRatingInfo(serviceEvaluationParam);
+            if(pageData.getRows()!=null){
+                List<ServiceRating> serviceRatingList=(List<ServiceRating> )pageData.getRows();
+                for(ServiceRating serviceRating:serviceRatingList){
+                    logger.info("根据查询条件获取服务评价信息:{}",serviceRating.toString());
+                }
+                assertThat(serviceRatingList.size(), greaterThanOrEqualTo(0));
+            }else{
+                assertThat(pageData,anything());
             }
-            assertThat(serviceRatingList.size(), greaterThanOrEqualTo(0));
-        }else{
-            assertThat(pageData,anything());
+        } catch (JnSpringCloudException e) {
+
+            logger.info("根据查询条件获取服务评价信息失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(AdvisorExceptionEnum.EVALUATION_ID_NOT_NULL.getCode())
+                    )
+            );
         }
 
     }

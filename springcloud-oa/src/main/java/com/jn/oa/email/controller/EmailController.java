@@ -70,7 +70,7 @@ public class EmailController extends BaseController {
     @RequiresPermissions("/oa/email/list")
     @ApiOperation(value = "一键Email列表", notes = "一键Email列表功能")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<PaginationData<List<EmailVO>>> list(@Validated @RequestBody EmailPage emailPage) {
+    public Result<PaginationData<List<EmailVO>>> list(EmailPage emailPage) {
         PaginationData<List<EmailVO>> data = emailService.list(emailPage);
         return new Result(data);
     }

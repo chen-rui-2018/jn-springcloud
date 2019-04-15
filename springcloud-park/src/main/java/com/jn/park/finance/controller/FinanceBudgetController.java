@@ -140,9 +140,10 @@ public class FinanceBudgetController extends FinanceBaseController {
             financeBudgetHistoryVo.setDepartmentId(departmentId);
             financeBudgetHistoryVo.setDepartmentName(departmentName);
             List<FinanceBudgetMoneyModel>moneyModelList=new ArrayList<>();
-            for(int ii=1;ii<monthCount;ii++){
+            for(int ii=1;ii<monthCount+1;ii++){
                 BigDecimal money=new BigDecimal(data.get(ii));
-                moneyModelList.add(new FinanceBudgetMoneyModel(monthList.get(ii),money));
+                int j=ii-1;
+                moneyModelList.add(new FinanceBudgetMoneyModel(monthList.get(j),money));
             }
             financeBudgetHistoryVo.setBudgetMoneyModels(moneyModelList);
             financeBudgetHistoryVoList.add(financeBudgetHistoryVo);

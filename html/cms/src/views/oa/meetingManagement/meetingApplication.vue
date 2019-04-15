@@ -49,11 +49,52 @@
           </el-form-item>
         </div>
         <div style="display:flex">
+          <el-form-item label="组织部门" prop="departmentsId">
+            <el-select
+              v-model="meetingForm.departmentsId"
+              :disabled="lookMeetingroom"
+              filterable
+              placeholder="请选择组织部门"
+              style="width:100%"
+              @change="getUserOfDepartment">
+              <el-option
+                v-for="(item, index) in departmentOptions"
+                :disabled="lookMeetingroom"
+                :key="index"
+                :label="item.label"
+                :value="item.value"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="组织人" prop="organizationalUser">
+            <el-select
+              v-loading="userOfDepartmentOptions.length === 0 && dialogStatus !== '会议申请'"
+              v-model="meetingForm.organizationalUser"
+              :disabled="lookMeetingroom"
+              filterable
+              placeholder="请先选择组织人"
+              style="width:100%">
+              <el-option
+                v-for="(item, index) in userOfDepartmentOptions"
+                :disabled="lookMeetingroom"
+                :key="index"
+                :label="item.label"
+                :value="item.value"/>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div style="display:flex">
           <el-form-item label="会议室" prop="meetingRoomId" class="inline">
             <el-input v-model="meetingroomName" :disabled="lookMeetingroom" placeholder="请选择会议室" @click.native="showMeetingroom()"/>
           </el-form-item>
-          <el-form-item label="参与人员" prop="participantsId">
-            <el-select v-model="meetingForm.participantsId" :disabled="lookMeetingroom" filterable multiple placeholder="请选择参与人员" style="width:100%">
+          <el-form-item label="参与人员" prop="participantsStr">
+            <el-select
+              v-loading="participantsIdOptions.length === 0 && dialogStatus !== '会议申请'"
+              v-model="meetingForm.participantsStr"
+              :disabled="lookMeetingroom"
+              filterable
+              multiple
+              placeholder="请选择参与人员"
+              style="width:100%">
               <el-option
                 v-for="item in participantsIdOptions"
                 :key="item.value"
@@ -61,9 +102,27 @@
                 :value="item.value"/>
           </el-select></el-form-item>
         </div>
-
+        <el-form-item label="会议方案附件" class="inline ueditor">
+          <el-upload
+            v-if="!lookMeetingroom"
+            :on-error="handleError"
+            :disabled="lookMeetingroom"
+            :headers="{token: $store.getters.token}"
+            :on-remove="handleRemove"
+            :before-upload="beforeUpload"
+            :on-success="uploadDone"
+            :on-exceed="handleExceed"
+            :limit="1"
+            :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
+            accept="image/gif,image/jpeg,image/jpg,image/bmp,image/png,.doc,.rar">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传一个附件，附件大小不能超过20M，只支持{{ acceptType.join(',') }}文件类型</div>
+          </el-upload>
+          <el-button v-if="meetingForm.fileUrl" size="small" type="primary" icon="el-icon-download"><a :href="meetingForm.fileUrl" download="" target="_blank">点击下载附件</a></el-button>
+          <div v-if="!meetingForm.fileUrl && dialogStatus !== '会议申请'" class="attachment-tips">暂无附件</div>
+        </el-form-item>
         <el-form-item label="会议内容" prop="oaMeetingContent" class="inline ueditor">
-          <el-input v-model="meetingForm.oaMeetingContent" type="textarea"/>
+          <el-input v-model="meetingForm.oaMeetingContent" :disabled="lookMeetingroom" type="textarea"/>
         </el-form-item>
       </el-form>
       <div class="primaryList">
@@ -96,8 +155,8 @@
 
 <script>
 import {
-  paramApi, api, userAllList, getUserInfo
-} from '@/api/oa/meetingManagement'
+  paramApi, api
+} from '@/api/axios'
 export default {
   data() {
     var checkBuilding = (rule, value, callback) => {
@@ -109,6 +168,7 @@ export default {
       }
     }
     return {
+      baseUrl: process.env.BASE_API,
       startTime: '',
       endTime: '',
       department: '',
@@ -126,6 +186,8 @@ export default {
       meetingroomList: [],
       isDisabled: false,
       participantsIdOptions: [],
+      departmentOptions: [],
+      userOfDepartmentOptions: [],
       lookMeetingroom: false,
       isShow: false,
       config: {
@@ -141,29 +203,35 @@ export default {
         endTime: ''
       },
       startDate: '',
+      tempFileUrl: '',
       meetingForm: {
         title: '',
-        participantsId: [],
+        participantsStr: [],
+        departmentsId: '',
+        organizationalUser: '',
         meetingRoomId: '',
         startTime: '',
         endTime: '',
         oaMeetingContent: '',
+        fileUrl: '',
         id: ''
       },
+      acceptType: ['jpg', 'png', 'rar', 'txt', 'zip', 'doc', 'ppt', 'pptx', 'xls', 'pdf', 'docx', 'xlsx'],
       rules: {
         title: [
           { required: true, message: '请输入会议主题', trigger: 'blur' },
           { validator: checkBuilding, trigger: 'blur' }
         ],
         meetingRoomId: [{ required: true, message: '请选择会议室', trigger: 'change' }],
-        oaMeetingContent: [{ required: true, message: '请输入会议内容', trigger: 'blur' }]
+        oaMeetingContent: [{ required: true, message: '请输入会议内容', trigger: 'blur' }],
+        departmentsId: [{ required: true, message: '请选择组织部门', trigger: 'change' }],
+        organizationalUser: [{ required: true, message: '请选择组织人', trigger: 'change' }],
+        participantsStr: [{ required: true, message: '请选择参与人员', trigger: 'change' }]
       }
-
     }
   },
   created() {
-    this.initList()
-    this.getALLlist()
+    this.init()
   },
   methods: {
     // 取消
@@ -172,7 +240,7 @@ export default {
         this.meetingForm.title = ''
         this.meetingroomName = ''
         this.meetingroomForm.meetingroomId = ''
-        this.meetingForm.participantsId = []
+        this.meetingForm.participantsStr = []
         this.meetingForm.startTime = ''
         this.meetingForm.endTime = ''
         this.endTime = ''
@@ -202,8 +270,8 @@ export default {
     },
     // 获取所有用户
     getALLlist() {
-      userAllList().then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysUser/getUserAll`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           res.data.data.forEach(val => {
             if (val.name !== null) {
               this.participantsIdOptions.push({ value: val.id, label: val.name })
@@ -216,12 +284,37 @@ export default {
         }
       })
     },
+    // 获取组织部门列表
+    getAllDepartment() {
+      api(`${this.GLOBAL.parkUrl}finance/expenses/selectDepartment`, '', 'get').then(({ data }) => {
+        if (data.code === this.GLOBAL.code) {
+          this.departmentOptions = data.data.map(item => ({ value: item.departmentId, label: item.departmentName }))
+        } else {
+          this.$message.error(data.result)
+        }
+      })
+    },
+    // 获取部门下的用户列表
+    getUserOfDepartment() {
+      const query = {
+        departmentId: this.meetingForm.departmentsId,
+        page: 1,
+        rows: 2000
+      }
+      api(`${this.GLOBAL.oaUrl}oa/addressBook/list`, query, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.userOfDepartmentOptions = res.data.data.rows.map(item => ({ value: item.id, label: item.name || item.account }))
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    },
     // 获取登陆用户信息
     getUserInfo() {
-      getUserInfo().then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysUser/getUserInfo`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.userName = res.data.data.name
-          if (res.data.data.sysDepartmentPostVO.length > 0) {
+          if (res.data.data.sysDepartmentPostVO && res.data.data.sysDepartmentPostVO.length > 0) {
             res.data.data.sysDepartmentPostVO.forEach(val => {
               if (val.isDefault === '1') {
                 this.department = val.departmentName
@@ -258,8 +351,8 @@ export default {
         // 调用接口发送请求
         this.listQuery.startTime = this.startDate + ' ' + this.startTime + ':00'
         this.listQuery.endTime = this.startDate + ' ' + this.endTime + ':00'
-        api('oa/oaMeetingRoom/availableList', this.listQuery).then(res => {
-          if (res.data.code === '0000') {
+        api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/availableList`, this.listQuery, 'post').then(res => {
+          if (res.data.code === this.GLOBAL.code) {
             this.meetingroomList = res.data.data.rows
           } else {
             this.$message.error(res.data.result)
@@ -269,8 +362,8 @@ export default {
     },
     // 弹出的选择会议室对话框的查询条件
     handleFilter() {
-      api('oa/oaMeetingRoom/availableList', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/availableList`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.meetingroomList = res.data.data.rows
         } else {
           this.$message.error(res.data.result)
@@ -282,7 +375,6 @@ export default {
       this.isDisabled = true
       this.meetingForm.startTime = this.startDate + ' ' + this.startTime + ':00'
       this.meetingForm.endTime = this.startDate + ' ' + this.endTime + ':00'
-      console.log(this.startDate)
       var today_time = new Date().getTime()
       if (!this.endTime) {
         alert('请选择会议结束时间')
@@ -292,18 +384,24 @@ export default {
         alert('会议开始时间必须大于当前当前时间')
         this.isDisabled = false
         return
-      } else if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
+      } else if (this.meetingForm.participantsStr.length === 0) {
         alert('请选择参会人员')
         this.isDisabled = false
+        return
+      } else if (!this.meetingForm.organizationalUser) {
+        alert('请选择组织人')
         return
       }
       if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
         this.$refs['meetingForm'].validate(valid => {
           if (valid) {
-            if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
-            // 调用接口发送请求
-              api('oa/oaMeeting/update', this.meetingForm).then(res => {
-                if (res.data.code === '0000') {
+            if (this.meetingForm.participantsStr.length > 1 && this.meetingForm.startTime && this.meetingForm.endTime) {
+              // 调用接口发送请求
+              const meetingForm = Object.assign({}, this.meetingForm)
+              meetingForm.participantsStr = meetingForm.participantsStr.join('、')
+              meetingForm.fileUrl = this.tempFileUrl ? this.tempFileUrl : meetingForm.fileUrl
+              api(`${this.GLOBAL.oaUrl}oa/oaMeeting/update`, meetingForm, 'post').then(res => {
+                if (res.data.code === this.GLOBAL.code) {
                   this.$message({
                     message: '会议编辑成功',
                     type: 'success'
@@ -341,18 +439,24 @@ export default {
         alert('会议开始时间必须大于当前当前时间')
         this.isDisabled = false
         return
-      } else if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
+      } else if (this.meetingForm.participantsStr.length === 0) {
         alert('请选择参会人员')
         this.isDisabled = false
+        return
+      } else if (!this.meetingForm.organizationalUser) {
+        alert('请选择组织人')
         return
       }
       if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
         this.$refs['meetingForm'].validate(valid => {
           if (valid) {
-            if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
+            if (this.meetingForm.participantsStr.length > 1 && this.meetingForm.startTime && this.meetingForm.endTime) {
             // 调用接口发送请求
-              api('oa/oaMeeting/add', this.meetingForm).then(res => {
-                if (res.data.code === '0000') {
+              const meetingForm = Object.assign({}, this.meetingForm)
+              meetingForm.participantsStr = meetingForm.participantsStr.join('、')
+              meetingForm.fileUrl = this.tempFileUrl ? this.tempFileUrl : meetingForm.fileUrl
+              api(`${this.GLOBAL.oaUrl}oa/oaMeeting/add`, meetingForm, 'post').then(res => {
+                if (res.data.code === this.GLOBAL.code) {
                   this.$message({
                     message: '会议申请成功',
                     type: 'success'
@@ -376,58 +480,97 @@ export default {
         return
       }
     },
-    initList() {
-      var query = this.$route.query
-      this.pageTitle = query.title
-      if (query.id) {
-        if (query.title === '查看会议') {
-          this.lookMeetingroom = true
-          this.isShow = true
-          this.dialogStatus = '查看会议'
-        }
-        this.meetingForm.id = query.id
-        paramApi('oa/oaMeeting/selectById', query.id, 'id').then(res => {
-          if (res.data.code === '0000') {
-            var data = res.data.data
-            this.meetingForm.title = data.title
-            var dataArr = []
-            data.participantList.forEach(val => {
-              dataArr.push(val.meetingUserId)
-            })
-            this.meetingForm.participantsId = Array.from(new Set(dataArr))
-            this.meetingForm.meetingRoomId = data.meetingRoomId
-            if (data.startTime !== null) {
-              this.startTime = data.startTime.substring(10, 16)
-            }
-            if (data.endTime !== null) {
-              this.endTime = data.endTime.substring(10, 16)
-            }
-            if (data.startDate !== null) {
-              this.startDate = data.startDate.replace(/-/g, '/')
-            }
-            this.meetingForm.oaMeetingContent = data.content
-            if (data.tbOaMeetingRoom !== null) {
-              this.meetingroomName = data.tbOaMeetingRoom.name
-            }
-            if (data.departmentName) {
-              this.department = data.departmentName
-            } else {
-              this.department = '无'
-            }
-            this.userName = data.userName
-            this.oldMeetingTitle = data.title
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      } else {
-        this.getUserInfo()
-        this.dialogStatus = '会议申请'
-        this.meetingroomName = query.name
-        this.meetingForm.meetingRoomId = query.meetId
-        this.startTime = query.currentTime
-        this.startDate = query.currentDate
+    async init() {
+      // 查看和编辑的时候，组织人列表请求需要在initList接口取到组织部门id(departmentsId)后再获取部门下员工列表
+      this.getALLlist()
+      this.getAllDepartment()
+      await this.initList()
+      if (this.meetingForm.departmentsId) {
+        await this.getUserOfDepartment()
       }
+    },
+    initList() {
+      return new Promise((resolve, reject) => {
+        var query = this.$route.query
+        this.pageTitle = query.title
+        if (query.id) {
+          if (query.title === '查看会议') {
+            this.lookMeetingroom = true
+            this.isShow = true
+            this.dialogStatus = '查看会议'
+          }
+          this.meetingForm.id = query.id
+          paramApi(`${this.GLOBAL.oaUrl}oa/oaMeeting/selectById`, query.id, 'id').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
+              var data = res.data.data
+              this.meetingForm.title = data.title
+              this.meetingForm.departmentsId = data.departmentsId
+              this.meetingForm.participantsStr = data.participantsStr.split('、')
+              this.meetingForm.departmentsId = data.organizationalId
+              this.meetingForm.organizationalUser = data.organizationalUserId
+              this.meetingForm.meetingRoomId = data.meetingRoomId
+              this.meetingForm.fileUrl = data.fileUrl
+              if (data.startTime !== null) {
+                this.startTime = data.startTime.substring(10, 16)
+              }
+              console.log(this.startTime)
+              if (data.endTime !== null) {
+                this.endTime = data.endTime.substring(10, 16)
+              }
+              if (data.startDate !== null) {
+                this.startDate = data.startDate.replace(/-/g, '/')
+              }
+              this.meetingForm.oaMeetingContent = data.content
+              if (data.tbOaMeetingRoom !== null) {
+                this.meetingroomName = data.tbOaMeetingRoom.name
+              }
+              if (data.departmentName) {
+                this.department = data.departmentName
+              } else {
+                this.department = '无'
+              }
+              this.userName = data.userName
+              this.oldMeetingTitle = data.title
+              resolve()
+            } else {
+              this.$message.error(res.data.result)
+              reject()
+            }
+          })
+        } else {
+          this.getUserInfo()
+          this.dialogStatus = '会议申请'
+          this.meetingroomName = query.name
+          this.meetingForm.meetingRoomId = query.meetId
+          this.startTime = query.currentTime
+          this.startDate = query.currentDate
+          resolve()
+        }
+      })
+    },
+    uploadDone(res, file, fileList) {
+      this.tempFileUrl = res.data
+    },
+    beforeUpload(file) {
+      // // 判断上传文件类型
+      const isAccept = this.acceptType.indexOf(file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase())
+      if (isAccept < 0) {
+        this.$message.warning(`只支持${this.acceptType.join(',')}文件类型`)
+        return false
+      }
+      if (file.size / 1024 / 1024 > 20) {
+        this.$message.warning('文件不能大于20M')
+        return false
+      }
+    },
+    handleRemove(file, fileList) {
+      this.tempFileUrl = ''
+    },
+    handleError(e) {
+      throw new Error(e)
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`最多只能上传1个附件`)
     }
   }
 }
@@ -512,14 +655,15 @@ export default {
      display: inline-block;
      margin-right: 21px;
      margin-top: 30px;
+     padding: 10px;
     //  box-sizing: border-box;
      img{
        width: 100%;
-       height: 100%;
+       height: 182px;
      }
    }
    .active{
-     border:2px solid blueviolet;
+     border:2px solid rgb(226, 43, 113);
    }
    h3{
      text-align: center;
@@ -532,6 +676,8 @@ export default {
      text-align: center;
      margin-top:20px;
    }
-
+}
+.attachment-tips{
+  font-size: 12px;
 }
 </style>

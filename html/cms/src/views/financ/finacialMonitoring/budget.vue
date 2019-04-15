@@ -22,7 +22,7 @@
           <el-button v-show="status==='1'" type="primary" @click="temporary ">临时预算导入</el-button></el-form-item>
         </div>
         <div >
-          <el-form-item label="数据月份:">
+          <el-form-item label="数据月份:" class="budgetWidth">
             <el-date-picker
               v-model="listQuery.startMonth"
               type="month"
@@ -49,23 +49,20 @@
       <el-table-column label="财务类型" prop="costTypeName" align="center" />
       <el-table-column v-for="(item, index) in tableHeader" :key="index" :label="item" prop="budgetMoneyModels" align="center" min-width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.budgetMoneyModels[index].money }}</span>
+          <span>￥{{ scope.row.budgetMoneyModels[index].money }}元</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isShow" label="录入时间" prop="createdTime" sortable align="center"/>
+      <el-table-column v-if="isShow" label="录入时间" prop="createdTime" min-width="120" sortable align="center"/>
       <el-table-column v-if="isShow" label="录入类型" prop="budgetTypeName" align="center"/>
       <el-table-column label="部门" prop="departmentName" align="center"/>
     </el-table>
-    <!-- 分页 -->
-    <!-- <div class="pagination-container">
-      <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div> -->
     <!-- 点击导入按钮的弹框 -->
     <template v-if="dialogVisible">
       <el-dialog :visible.sync="dialogVisible" title="导入" width="400px" >
         <div style="display:flex;justify-content: space-between;" class="demo">
           <el-button type="success" @click="submit($event)">{{ softtype }}</el-button>
-          <a class="download" href="/static/file/预算录入模板.xlsx">下载模板</a>
+          <a class="download" href="/static/file/budgetTemplate.xlsx" download >下载模板</a>
+          <!-- <a class="download" href="javascript:;" @click="download" >下载模板</a> -->
         </div>
         <div>
           <p>注意:</p>
@@ -98,11 +95,12 @@
 <script>
 // import global from '@/api/global'
 import {
-  api, importBdDeptdoc
-} from '@/api/financ'
+  api, Inventor
+} from '@/api/axios'
 export default {
   data() {
     return {
+      // depOptions: [],
       isShow: false,
       softtype: '',
       departmentId: '',
@@ -190,7 +188,7 @@ export default {
         })
         return false
       }
-      if (this.file.name.substr(this.file.name.lastIndexOf('.')) !== '.xlsx' || this.file.name.substr(this.file.name.lastIndexOf('.')) !== '.xls') {
+      if (this.file.name.substr(this.file.name.lastIndexOf('.')) !== '.xlsx') {
         this.$message({
           message: '文件格式错误,请选择模板文件',
           type: 'error'
@@ -200,7 +198,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
       // 调用导入文件接口
-      importBdDeptdoc(`finance/budget/add?budgetType=${this.listQuery.budgetType}&departmentId=${this.departmentId}&departmentName=${this.departmentName}`, formData, 'post')
+      Inventor(`${this.GLOBAL.parkUrl}finance/budget/add?budgetType=${this.listQuery.budgetType}&departmentId=${this.departmentId}&departmentName=${this.departmentName}`, formData, 'post')
         .then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.$message({
@@ -232,38 +230,26 @@ export default {
     initList() {
       this.listLoading = true
       if (this.status === '1') {
-        api(`finance/budget/selectTotalBudget?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}`, '', 'get').then(res => {
+        api(`${this.GLOBAL.parkUrl}finance/budget/selectTotalBudget?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}`, '', 'get').then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.tableHeader = res.data.data.dynamicHeadList
             this.budgetList = res.data.data.rows
-            // this.total = res.data.data.total
-            // if (this.budgetList.length === 0 && this.total > 0) {
-            //   this.listQuery.page = 1
-            //   this.initList()
-            // }
           } else {
             this.$message.error(res.data.result)
             this.tableHeader = []
             this.budgetList = []
-            // this.total = 0
           }
           this.listLoading = false
         })
       } else {
-        api(`finance/budget/selectBudgetHistory?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}&budgetType=${this.listQuery.budgetType}`, '', 'get').then(res => {
+        api(`${this.GLOBAL.parkUrl}finance/budget/selectBudgetHistory?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}&budgetType=${this.listQuery.budgetType}`, '', 'get').then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.tableHeader = res.data.data.dynamicHeadList
             this.budgetList = res.data.data.rows
-            // this.total = res.data.data.total
-            // if (this.budgetList.length === 0 && this.total > 0) {
-            //   this.listQuery.page = 1
-            //   this.initList()
-            // }
           } else {
             this.$message.error(res.data.result)
             this.tableHeader = []
             this.budgetList = []
-            // this.total = 0
           }
           this.listLoading = false
         })
@@ -271,30 +257,36 @@ export default {
     },
     // 查询数据
     handleFilter() {
-      if (this.listQuery.startMonth === '' || this.listQuery.startMonth === null) {
+      if (this.listQuery.startMonth === '' || this.listQuery.startMonth === undefined) {
         alert('请选择开始日期')
         return false
-      } else if (this.listQuery.endMonth === '' || this.listQuery.endMonth === null) {
+      } else if (this.listQuery.endMonth === '' || this.listQuery.endMonth === undefined) {
         alert('请选择结束日期')
         return false
       }
-      this.listQuery.page = 1
       this.initList()
     },
-    // 分页数更改
-    // handleSizeChange(val) {
-    //   this.listQuery.rows = val
-    //   this.initList()
-    // },
-    // handleCurrentChange(val) {
-    //   this.listQuery.page = val
-    //   this.initList()
-    // },
     // 获取部门信息
     getDepartment() {
-      api('finance/documents/getUserDepartment', '', 'get').then(res => {
-        if (res.data.code === '0000') {
-          this.departmentOptions = res.data.data
+      api(`${this.GLOBAL.parkUrl}finance/documents/getUserDepartment`, '', 'get').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          if (res.data.data) {
+            res.data.data.forEach(val => {
+              if (val.departmentName === '财务部') {
+                api(`${this.GLOBAL.parkUrl}finance/expenses/selectDepartment`, '', 'get').then(res => {
+                  if (res.data.code === this.GLOBAL.code) {
+                    this.departmentOptions = res.data.data
+                  } else {
+                    this.$message.error(res.data.result)
+                  }
+                })
+              } else {
+                this.departmentOptions = res.data.data
+              }
+            })
+          } else {
+            this.departmentOptions = []
+          }
         } else {
           this.$message.error(res.data.result)
         }
@@ -302,8 +294,8 @@ export default {
     },
     // 获取财务类型
     getFinanceType() {
-      api('finance/expenses/selectFinanceType', '', 'get').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.parkUrl}finance/expenses/selectFinanceType`, '', 'get').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.financeTypeOptions = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -323,7 +315,7 @@ export default {
       }
   }
 </style>
-<style>
+<style lang="scss">
 .download{
       display: inline-block;
     line-height: 1;
@@ -350,7 +342,11 @@ export default {
     background-color: rgb(64, 158, 255);
     border-color: rgb(64, 158, 255);
 }
-
+.budgetWidth{
+  .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 204px;
+}
+}
 .demo> a:hover{
   color:#fff !important;
 }

@@ -48,7 +48,9 @@ public class TbServiceRequire implements Serializable {
 
     private String actualLoanAmount;
 
-    private String financingPeriod;
+    private Integer financingPeriodMax;
+
+    private Integer financingPeriodMin;
 
     private String fundsReqDesc;
 
@@ -258,12 +260,20 @@ public class TbServiceRequire implements Serializable {
         this.actualLoanAmount = actualLoanAmount == null ? null : actualLoanAmount.trim();
     }
 
-    public String getFinancingPeriod() {
-        return financingPeriod;
+    public Integer getFinancingPeriodMax() {
+        return financingPeriodMax;
     }
 
-    public void setFinancingPeriod(String financingPeriod) {
-        this.financingPeriod = financingPeriod == null ? null : financingPeriod.trim();
+    public void setFinancingPeriodMax(Integer financingPeriodMax) {
+        this.financingPeriodMax = financingPeriodMax;
+    }
+
+    public Integer getFinancingPeriodMin() {
+        return financingPeriodMin;
+    }
+
+    public void setFinancingPeriodMin(Integer financingPeriodMin) {
+        this.financingPeriodMin = financingPeriodMin;
     }
 
     public String getFundsReqDesc() {
@@ -420,7 +430,8 @@ public class TbServiceRequire implements Serializable {
             && (this.getContractAmount() == null ? other.getContractAmount() == null : this.getContractAmount().equals(other.getContractAmount()))
             && (this.getFinancingAmount() == null ? other.getFinancingAmount() == null : this.getFinancingAmount().equals(other.getFinancingAmount()))
             && (this.getActualLoanAmount() == null ? other.getActualLoanAmount() == null : this.getActualLoanAmount().equals(other.getActualLoanAmount()))
-            && (this.getFinancingPeriod() == null ? other.getFinancingPeriod() == null : this.getFinancingPeriod().equals(other.getFinancingPeriod()))
+            && (this.getFinancingPeriodMax() == null ? other.getFinancingPeriodMax() == null : this.getFinancingPeriodMax().equals(other.getFinancingPeriodMax()))
+            && (this.getFinancingPeriodMin() == null ? other.getFinancingPeriodMin() == null : this.getFinancingPeriodMin().equals(other.getFinancingPeriodMin()))
             && (this.getFundsReqDesc() == null ? other.getFundsReqDesc() == null : this.getFundsReqDesc().equals(other.getFundsReqDesc()))
             && (this.getExpectedDate() == null ? other.getExpectedDate() == null : this.getExpectedDate().equals(other.getExpectedDate()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
@@ -464,7 +475,8 @@ public class TbServiceRequire implements Serializable {
         result = prime * result + ((getContractAmount() == null) ? 0 : getContractAmount().hashCode());
         result = prime * result + ((getFinancingAmount() == null) ? 0 : getFinancingAmount().hashCode());
         result = prime * result + ((getActualLoanAmount() == null) ? 0 : getActualLoanAmount().hashCode());
-        result = prime * result + ((getFinancingPeriod() == null) ? 0 : getFinancingPeriod().hashCode());
+        result = prime * result + ((getFinancingPeriodMax() == null) ? 0 : getFinancingPeriodMax().hashCode());
+        result = prime * result + ((getFinancingPeriodMin() == null) ? 0 : getFinancingPeriodMin().hashCode());
         result = prime * result + ((getFundsReqDesc() == null) ? 0 : getFundsReqDesc().hashCode());
         result = prime * result + ((getExpectedDate() == null) ? 0 : getExpectedDate().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
@@ -511,7 +523,8 @@ public class TbServiceRequire implements Serializable {
         sb.append(", contractAmount=").append(contractAmount);
         sb.append(", financingAmount=").append(financingAmount);
         sb.append(", actualLoanAmount=").append(actualLoanAmount);
-        sb.append(", financingPeriod=").append(financingPeriod);
+        sb.append(", financingPeriodMax=").append(financingPeriodMax);
+        sb.append(", financingPeriodMin=").append(financingPeriodMin);
         sb.append(", fundsReqDesc=").append(fundsReqDesc);
         sb.append(", expectedDate=").append(expectedDate);
         sb.append(", status=").append(status);

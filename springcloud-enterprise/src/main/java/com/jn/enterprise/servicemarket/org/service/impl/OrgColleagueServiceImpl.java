@@ -234,7 +234,8 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
      * @return
      */
     @ServiceLog(doAction = "据指定角色获取用户的角色信息")
-    private List<UserRoleInfo> getUserRoleInfoList(List<String> accountList,String roleName) {
+    @Override
+    public List<UserRoleInfo> getUserRoleInfoList(List<String> accountList,String roleName) {
         Result<List<User>> resultData = systemClient.getUserInfoByAccount(accountList);
         List<User> userInfoList = resultData.getData();
         List<UserRoleInfo> userRoleInfoList=new ArrayList<>(16);

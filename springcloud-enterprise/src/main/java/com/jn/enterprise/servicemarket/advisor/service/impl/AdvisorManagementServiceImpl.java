@@ -18,9 +18,12 @@ import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
+import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
+import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
+import com.sun.deploy.ui.AboutDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -55,6 +58,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @Autowired
     private UserExtensionClient userExtensionClient;
 
+    @Autowired
+    private OrgColleagueService orgColleagueService;
+
+    private static final byte RECORD_STATUS=1;
+
     /**
      * 邀请顾问
      * @param registerAccount   被邀请人手机号或邮箱
@@ -65,6 +73,8 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @ServiceLog(doAction = "邀请顾问")
     @Transactional(rollbackFor = Exception.class)
     public int inviteAdvisor(String registerAccount,String loginAccount) {
+        //判断当前登录用户是否为机构管理员
+        judgeAccountIsOrgManage(loginAccount);
         //1.判断顾问表中是否已存在当前机构和顾问关联的数据（审核状态为非解除状态，非审批不通过状态）
         //通过机构账号从服务机构表获得机构编码和机构名称
         TbServiceOrg serviceOrgInfo = getServiceOrgInfo(loginAccount);
@@ -92,6 +102,22 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             //存在当前机构和顾问关联的数据（审核状态为非解除状态）
             logger.warn("当前被邀请的顾问[{}]已经被邀请，请不要重复邀请！！！",registerAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_IS_EXIT);
+        }
+    }
+
+    /**
+     * 判断登录用户是否为机构管理员
+     * @param loginAccount  登录用户账号
+     */
+    @ServiceLog(doAction = "判断登录用户是否为机构管理员")
+    private void judgeAccountIsOrgManage(String loginAccount) {
+        List<String> accountList=new ArrayList<>(8);
+        accountList.add(loginAccount);
+        String roleName="机构管理员";
+        List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
+        if(userRoleInfoList.isEmpty() || !StringUtils.equals(roleName, userRoleInfoList.get(0).getRoleName())){
+            logger.warn("当前账号:[{}]不是{},不能邀请顾问",loginAccount,roleName);
+            throw new JnSpringCloudException(AdvisorExceptionEnum.ACCOUNT_NOT_ORG_MANAGE);
         }
     }
 
@@ -272,6 +298,41 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     }
 
     /**
+     * 再次邀请
+     * @param advisorAccount 顾问账号
+     * @param loginAccount  当前登录用户账号
+     * @return
+     */
+    @ServiceLog(doAction = "再次邀请")
+    @Override
+    public int inviteAgain(String advisorAccount,String loginAccount) {
+        //判断登录用户是否为机构管理员
+        judgeAccountIsOrgManage(loginAccount);
+        //获取机构信息
+        TbServiceOrg serviceOrgInfo = getServiceOrgInfo(loginAccount);
+        if(serviceOrgInfo==null){
+            logger.warn("当前账号{}在服务机构表中不存在",loginAccount);
+            throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
+        }
+        //判断顾问表中是否已存在当前机构和顾问关联的数据（状态为已拒绝（value="-1"））
+        TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
+        example.createCriteria().andOrgIdEqualTo(serviceOrgInfo.getOrgId())
+                .andAdvisorAccountEqualTo(advisorAccount)
+                .andApprovalStatusEqualTo("-1")
+                .andRecordStatusEqualTo(RECORD_STATUS);
+        long existNum = tbServiceAdvisorMapper.countByExample(example);
+        //没有数据
+        if(existNum==0){
+            logger.warn("再次邀请的顾问：[{}]在系统中审批状态不是“已拒绝”，不能再次邀请",advisorAccount);
+            throw new JnSpringCloudException(AdvisorExceptionEnum.ACCOUNT_STATUS_NOT_REJECTED);
+        }
+        //修改当前邀请顾问的审批状态为未反馈（value="0"）
+        int responseNum = updateApprovalStatus(advisorAccount, "0", "");
+        //3.todo:调用消息接口，向被邀顾问发送短信或邮件（顾问可通过信息中的链接直接跳转到接收机构邀请页面） yangph
+        return responseNum;
+    }
+
+    /**
      * 修改顾问审批状态
      * @param advisorAccount  顾问账号
      * @param approvalStatus  审批状态
@@ -280,7 +341,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      @ServiceLog(doAction = "修改顾问审批状态")
     private int updateApprovalStatus(String advisorAccount,String approvalStatus,String approvalDesc) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount);
+        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount).andRecordStatusEqualTo(RECORD_STATUS);
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
         tbServiceAdvisor.setApprovalStatus(approvalStatus);
         if(StringUtils.isNotBlank(approvalDesc)){

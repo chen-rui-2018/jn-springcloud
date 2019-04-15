@@ -144,6 +144,7 @@ public class ServiceRating implements Serializable {
         this.evaluationTime = evaluationTime;
     }
 
+
     @Override
     public String toString() {
         return "ServiceRating{" +

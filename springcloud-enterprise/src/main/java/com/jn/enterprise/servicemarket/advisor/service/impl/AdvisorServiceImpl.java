@@ -208,13 +208,25 @@ public class AdvisorServiceImpl implements AdvisorService {
     @Override
     public PaginationData getServiceRatingInfo(ServiceEvaluationParam serviceEvaluationParam) {
         //是否公共页面  1：是  0：否
+        Page<Object> objects = evaluationDataProcessing(serviceEvaluationParam);
+        List<ServiceRating> serviceRatingInfo = advisorMapper.getServiceRatingInfo(serviceEvaluationParam);
+        return getEvaluationPaginationData(objects, serviceRatingInfo);
+    }
+
+    /**
+     * 服务评价入参数据处理
+     * @param serviceEvaluationParam
+     * @return
+     */
+    @ServiceLog(doAction = "服务评价入参数据处理")
+    private Page<Object> evaluationDataProcessing(ServiceEvaluationParam serviceEvaluationParam) {
         String isPublicPage="0";
         if(isPublicPage.equals(serviceEvaluationParam.getIsPublicPage()) && StringUtils.isBlank(serviceEvaluationParam.getOrgId())
                 && StringUtils.isBlank(serviceEvaluationParam.getProductId()) && StringUtils.isBlank(serviceEvaluationParam.getAdvisorAccount())){
             logger.warn("根据查询条件获取服务评价信息的机构id,产品id,顾问账号不能都为空");
             throw new JnSpringCloudException(AdvisorExceptionEnum.EVALUATION_ID_NOT_NULL);
         }
-        com.github.pagehelper.Page<Object> objects = null;
+        Page<Object> objects = null;
         //需要分页标识
         String isPage="1";
         if(isPage.equals(serviceEvaluationParam.getNeedPage())){
@@ -235,8 +247,8 @@ public class AdvisorServiceImpl implements AdvisorService {
             //全部
             ratingType="";
         }
-        List<ServiceRating> serviceRatingInfo = advisorMapper.getServiceRatingInfo(serviceEvaluationParam);
-        return getEvaluationPaginationData(objects, serviceRatingInfo);
+        serviceEvaluationParam.setRatingType(ratingType);
+        return objects;
     }
 
     /**
@@ -316,6 +328,18 @@ public class AdvisorServiceImpl implements AdvisorService {
             serviceExperienceList.add(serviceExperience);
         }
         return serviceExperienceList;
+    }
+
+    /**
+     * 服务评价统计信息
+     * @param serviceEvaluationParam
+     * @return
+     */
+    @ServiceLog(doAction = "服务评价统计信息")
+    @Override
+    public EvaluationCountInfo getEvaluationCountInfo(ServiceEvaluationParam serviceEvaluationParam) {
+        evaluationDataProcessing(serviceEvaluationParam);
+        return advisorMapper.getEvaluationInfo(serviceEvaluationParam);
     }
 
     /**

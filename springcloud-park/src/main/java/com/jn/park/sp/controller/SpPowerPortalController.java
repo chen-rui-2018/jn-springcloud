@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.sp.enums.SpPageExceptionEnums;
+import com.jn.park.sp.model.SpAdModel;
 import com.jn.park.sp.model.SpDictDepartModel;
 import com.jn.park.sp.model.SpMessageModel;
 import com.jn.park.sp.service.SpPowerPortalService;
@@ -112,5 +113,14 @@ public class SpPowerPortalController extends BaseController {
             return new Result(integer);
         }
         return new Result("-1","留言失败");
+    }
+
+    @ControllerLog(doAction = "轮播广告")
+    @ApiOperation(value = "轮播广告",notes = "获取最新的5例广告图")
+    @RequestMapping(value = "/SpAdvertising",method = RequestMethod.GET)
+    @RequiresPermissions("/portal/sp/power/SpAdvertising")
+    public Result<List<SpAdModel>> getAdvertising(){
+        List<SpAdModel> spAdModelList = spPowerPortalService.getAdvertising();
+        return new Result<List<SpAdModel>>(spAdModelList);
     }
 }

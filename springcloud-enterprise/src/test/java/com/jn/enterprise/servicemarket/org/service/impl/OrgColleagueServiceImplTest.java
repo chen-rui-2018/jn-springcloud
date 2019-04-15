@@ -7,6 +7,7 @@ import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.org.model.OrgColleagueInfo;
 import com.jn.enterprise.servicemarket.org.model.OrgColleagueParam;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +51,7 @@ public class OrgColleagueServiceImplTest {
     /**
      * 删除顾问或联系人
      */
-    private String[] accountList={"zhangsan","lisi"};
+    private String[] accountList={"18674398739","18565007009"};
 
     @Before
     public void setUp() throws Exception {
@@ -82,9 +83,18 @@ public class OrgColleagueServiceImplTest {
      */
     @Test
     public void setAsContact() {
-        int responseNum = orgColleagueService.setAsContact(loginAccount,account);
-        logger.info("设置为联系人数据响应条数:{}",responseNum);
-        assertThat(responseNum, greaterThanOrEqualTo(0));
+        try {
+            int responseNum = orgColleagueService.setAsContact(loginAccount,account);
+            logger.info("设置为联系人数据响应条数:{}",responseNum);
+            assertThat(responseNum, greaterThanOrEqualTo(0));
+        } catch (JnSpringCloudException e) {
+            logger.warn("设置为联系人失败");
+            assertThat(e.getCode(), Matchers.anyOf(
+                    Matchers.containsString(OrgExceptionEnum.LOGIN_ACCOUNT_NOT_ORG_MANAGE.getCode()),
+                    Matchers.containsString(OrgExceptionEnum.ACCOUNT_NOT_ORG_ADVISOR.getCode()),
+                    Matchers.containsString(OrgExceptionEnum.NETWORK_ANOMALY.getCode())
+            ));
+        }
     }
 
     /**
@@ -92,9 +102,18 @@ public class OrgColleagueServiceImplTest {
      */
     @Test
     public void cancelAsContact() {
-        int responseNum = orgColleagueService.cancelAsContact(account);
-        logger.info("取消联系人数据响应条数:{}",responseNum);
-        assertThat(responseNum, greaterThanOrEqualTo(0));
+        try {
+            int responseNum = orgColleagueService.cancelAsContact(loginAccount,account);
+            logger.info("取消联系人数据响应条数:{}",responseNum);
+            assertThat(responseNum, greaterThanOrEqualTo(0));
+        } catch (JnSpringCloudException e) {
+            logger.warn("取消联系人失败");
+            assertThat(e.getCode(), Matchers.anyOf(
+                    Matchers.containsString(OrgExceptionEnum.LOGIN_ACCOUNT_NOT_ORG_MANAGE.getCode()),
+                    Matchers.containsString(OrgExceptionEnum.ACCOUNT_NOT_ORG_CONTACT.getCode()),
+                    Matchers.containsString(OrgExceptionEnum.NETWORK_ANOMALY.getCode())
+            ));
+        }
     }
 
     /**
@@ -103,11 +122,15 @@ public class OrgColleagueServiceImplTest {
     @Test
     public void deleteContactOrAdvisor() {
         try {
-            int responseNum = orgColleagueService.deleteContactOrAdvisor(account, accountList);
+            int responseNum = orgColleagueService.deleteContactOrAdvisor(loginAccount, accountList);
             logger.info("删除联系人或顾问数据响应条数:{}",responseNum);
         } catch (JnSpringCloudException e) {
             logger.warn("删除联系人或顾问的账号不能为空");
-            assertThat(e.getCode(),equalTo(OrgExceptionEnum.ACCOUNT_NOT_NULL.getCode()));
+            assertThat(e.getCode(), Matchers.anyOf(
+                    Matchers.containsString(OrgExceptionEnum.LOGIN_ACCOUNT_NOT_ORG_MANAGE.getCode()),
+                    Matchers.containsString(OrgExceptionEnum.ACCOUNT_NOT_NULL.getCode()),
+                    Matchers.containsString(OrgExceptionEnum.NETWORK_ANOMALY.getCode())
+            ));
         }
     }
 }

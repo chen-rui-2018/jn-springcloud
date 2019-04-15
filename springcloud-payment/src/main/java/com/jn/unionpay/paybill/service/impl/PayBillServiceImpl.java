@@ -216,6 +216,9 @@ public class PayBillServiceImpl implements PayBillService {
             if(StringUtils.equals(bill.getBillStatus(),PayBillEnum.BILL_ORDER_IS_PAY.getCode())){
                 throw new JnSpringCloudException(PayBillExceptionEnum.PAYMENT_STATUS_IS_PAY,"订单："+bill.getBillNum()+"已支付，请刷新页面重试。");
             }
+            if(StringUtils.equals(bill.getBillStatus(),PayBillEnum.REMIND_IS_NOT_CHECK.getCode())){
+                throw new JnSpringCloudException(PayBillExceptionEnum.PAY_ORDER_POINT_IS_NOT_CHECK,"订单："+bill.getBillNum()+"待审核，无需支付，请刷新页面重试。");
+            }
             BigDecimal decimal = new BigDecimal(bill.getBillAmount());
             totalAmount = totalAmount.add(decimal);
             orderName.append(bill.getBillName()+"、");

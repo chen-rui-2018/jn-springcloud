@@ -28,6 +28,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -265,26 +266,30 @@ public class UserPointServiceImpl implements UserPointService {
                     if(StringUtils.equals(pointRule.getIsStatus(),POINT_RULE_STATUS_VALID)){
                         PointDeductionDetail pointDeductionDetail = new PointDeductionDetail();
                         //计算某个账单能抵扣积分
-                        Double billPoint = paymentBill.getBillAmount() * pointRule.getIncomeScale() / 100 ;
+                        Double billPoint = (new BigDecimal(Double.toString(paymentBill.getBillAmount())).multiply(new BigDecimal(Double.toString(pointRule.getIncomeScale()))).divide(new BigDecimal("100"))).doubleValue() ;
                         if(null != pointRule.getIncomeTotal() && billPoint>pointRule.getIncomeTotal()){
                             billPoint = pointRule.getIncomeTotal();
                         }
                         if(pointNum>billPoint){
-                            pointNum = pointNum - billPoint;
+                            pointNum = (new BigDecimal(Double.toString(pointNum)).subtract(new BigDecimal(Double.toString(billPoint)))).doubleValue() ;
                         }else if(pointNum == 0){
                             break;
                         } else{
                             billPoint = pointNum;
                             pointNum = new Double("0");
                         }
-                        pointDeductionDetail.setDeductionAmount((billPoint*0.1));
+                        BigDecimal b1 = new BigDecimal(Double.toString(billPoint));
+                        BigDecimal b2 = new BigDecimal("0.1");
+                        pointDeductionDetail.setDeductionAmount(b1.multiply(b2).doubleValue());
                         pointDeductionDetail.setPointNum(billPoint);
                         pointDeductionDetail.setRuleTypeId(pointRule.getRuleCode());
                         pointDeductionDetail.setRuleTypeName(pointRule.getRuleName());
                         pointDeductionDetail.setPointRemainderNum(pointNum);
                         pointDeductionDetails.add(pointDeductionDetail);
-                        pointDeductionVO.setDeductionTotalAmount((pointDeductionVO.getDeductionTotalAmount()==null?0:pointDeductionVO.getDeductionTotalAmount())+(billPoint*0.1));
-                        pointDeductionVO.setPointTotalNum((pointDeductionVO.getPointTotalNum()==null?0:pointDeductionVO.getPointTotalNum())+billPoint);
+                        double v = new BigDecimal(pointDeductionVO.getDeductionTotalAmount() == null ? "0" : Double.toString(pointDeductionVO.getDeductionTotalAmount())).add(b1.multiply(b2)).doubleValue();
+                        pointDeductionVO.setDeductionTotalAmount(v);
+                        double v1 = new BigDecimal(pointDeductionVO.getPointTotalNum() == null ? "0" : Double.toString(pointDeductionVO.getPointTotalNum())).add(new BigDecimal(Double.toString(billPoint))).doubleValue();
+                        pointDeductionVO.setPointTotalNum(v1);
                     }else{
                         break;
                     }
@@ -309,8 +314,12 @@ public class UserPointServiceImpl implements UserPointService {
         tbUserPoint.setModifiedTime(new Date());
         tbUserPoint.setModifierAccount(pointOrderPayParam.getAccount());
         // 发起积分扣除时，已在之前校验前处理积分余额，故不再进行二次校验。
-        tbUserPoint.setPointNum(tbUserPoint.getPointNum()-pointOrderPayParam.getPointTotalNum());
-        tbUserPoint.setFreezeNum(tbUserPoint.getFreezeNum()==null?pointOrderPayParam.getPointTotalNum():(pointOrderPayParam.getPointTotalNum()+tbUserPoint.getFreezeNum()));
+        BigDecimal point = new BigDecimal(Double.toString(tbUserPoint.getPointNum()));
+        BigDecimal pointTotal = new BigDecimal(Double.toString(pointOrderPayParam.getPointTotalNum()));
+        BigDecimal userFreeze = new BigDecimal(Double.toString(tbUserPoint.getFreezeNum()));
+        BigDecimal freeze = new BigDecimal(Double.toString(pointOrderPayParam.getPointTotalNum()));
+        tbUserPoint.setPointNum(point.subtract(pointTotal).doubleValue());
+        tbUserPoint.setFreezeNum(tbUserPoint.getFreezeNum()==null?pointOrderPayParam.getPointTotalNum():(userFreeze.add(freeze).doubleValue()));
         int i = tbUserPointMapper.updateByPrimaryKeySelective(tbUserPoint);
         logger.info("支付订单，扣除用户积分成功，扣除积分量{}，响应条数{}",pointOrderPayParam.getPointTotalNum(),i);
 
@@ -339,8 +348,8 @@ public class UserPointServiceImpl implements UserPointService {
     @Override
     public Boolean orderPaySuccessPointDeduction(String orderId){
         Result<PayOrderVO> payOrderDetail = payBillClient.getPayOrderDetailByOrderId(orderId);
-        Double integralAmount = payOrderDetail.getData().getIntegralAmount();
-        if(null !=integralAmount && integralAmount != 0 ){
+        BigDecimal integralAmount = new BigDecimal(Double.toString(payOrderDetail.getData().getIntegralAmount())).multiply(new BigDecimal("10"));
+        if(null !=integralAmount && integralAmount.doubleValue() != 0 ){
             TbUserPointCriteria pointCriteria = new TbUserPointCriteria();
             pointCriteria.createCriteria().andUserAccountEqualTo(payOrderDetail.getData().getCreatorAccount());
             List<TbUserPoint> tbUserPoints = tbUserPointMapper.selectByExample(pointCriteria);
@@ -349,8 +358,8 @@ public class UserPointServiceImpl implements UserPointService {
             }
             TbUserPoint userPoint = tbUserPoints.get(0);
             TbUserPoint tbUserPoint = new TbUserPoint();
-            tbUserPoint.setPointNum(userPoint.getPointNum()+integralAmount);
-            tbUserPoint.setFreezeNum(userPoint.getFreezeNum()-integralAmount);
+            BigDecimal freezeNum = new BigDecimal(Double.toString(userPoint.getFreezeNum()));
+            tbUserPoint.setFreezeNum(freezeNum.subtract(integralAmount).doubleValue());
             tbUserPoint.setModifiedTime(new Date());
 
             int i = tbUserPointMapper.updateByExampleSelective(tbUserPoint, pointCriteria);
@@ -374,8 +383,8 @@ public class UserPointServiceImpl implements UserPointService {
     @Override
     public Boolean orderPayErrorPointReturn(String orderId){
         Result<PayOrderVO> payOrderDetail = payBillClient.getPayOrderDetailByOrderId(orderId);
-        Double integralAmount = payOrderDetail.getData().getIntegralAmount();
-        if(null !=integralAmount && integralAmount != 0 ){
+        BigDecimal integralAmount = new BigDecimal(Double.toString(payOrderDetail.getData().getIntegralAmount())).multiply(new BigDecimal("10"));
+        if(null !=integralAmount && integralAmount.doubleValue() != 0 ){
             TbUserPointCriteria pointCriteria = new TbUserPointCriteria();
             pointCriteria.createCriteria().andUserAccountEqualTo(payOrderDetail.getData().getCreatorAccount());
 
@@ -385,8 +394,8 @@ public class UserPointServiceImpl implements UserPointService {
             }
             TbUserPoint userPoint = tbUserPoints.get(0);
             TbUserPoint tbUserPoint = new TbUserPoint();
-            tbUserPoint.setPointNum(userPoint.getPointNum()+integralAmount);
-            tbUserPoint.setFreezeNum(userPoint.getFreezeNum()-integralAmount);
+            tbUserPoint.setPointNum(new BigDecimal(Double.toString(userPoint.getPointNum())).add(integralAmount).doubleValue());
+            tbUserPoint.setFreezeNum(new BigDecimal(Double.toString(userPoint.getFreezeNum())).subtract(integralAmount).doubleValue());
             tbUserPoint.setModifierAccount(payOrderDetail.getData().getCreatorAccount());
             tbUserPoint.setModifiedTime(new Date());
 

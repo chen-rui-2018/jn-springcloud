@@ -217,8 +217,6 @@
 
         <!-- 项目管理表 -->
         <table tableName="tb_oa_item"/>
-        <!-- 项目历史记录表 -->
-        <table tableName="tb_oa_item_history"/>
         <!-- 工作计划管理表 -->
         <table tableName="tb_oa_work_plan"/>
         <!-- 工作计划管理表 -->

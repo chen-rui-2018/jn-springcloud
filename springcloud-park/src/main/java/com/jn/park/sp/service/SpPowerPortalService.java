@@ -71,4 +71,12 @@ public interface SpPowerPortalService {
      * @return
      */
     List<SpAdModel> getAdvertising();
+
+    /**
+     * 获取在线受理地址
+     *
+     * @param id
+     * @return
+     */
+    String getDealUrl(String id);
 }

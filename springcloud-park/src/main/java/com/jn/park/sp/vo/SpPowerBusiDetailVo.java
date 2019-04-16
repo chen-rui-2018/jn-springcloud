@@ -56,7 +56,8 @@ public class SpPowerBusiDetailVo extends SpPowerBusiModel implements Serializabl
     private String creatorAccount;
 
     @ApiModelProperty("创建时间")
-    private Date createdTime;
+    private String Time;
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -142,12 +143,12 @@ public class SpPowerBusiDetailVo extends SpPowerBusiModel implements Serializabl
         this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreatedTime() {
-        return createdTime;
+    public String getTime() {
+        return Time;
     }
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
+    public void setTime(String time) {
+        Time = time;
     }
 
     public String getSettingBasis() {

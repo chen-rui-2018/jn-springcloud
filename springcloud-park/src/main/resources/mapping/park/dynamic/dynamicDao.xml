@@ -86,6 +86,23 @@
             </constructor>
         </collection>
     </resultMap>
+
+    <!--关注详情动态列表-->
+    <select id="findDynamicByAccount" resultMap = "findDynamicWebListMap">
+        select
+        t1.topic_id as "topicId"
+        ,DATE_FORMAT(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+        ,t1.topic_content as "topicContent"
+        ,t1.creator_account as "creatorAccount"
+        ,(SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id ) AS "commentsNum"
+        ,(SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id ) AS "likeNum"
+        ,t2.img_url as "imgUrl"
+        from tb_gam_topic t1
+        left join tb_file_img t2 on t1.topic_id = t2.topic_id
+        where t1.topic_status = "1" and t1.record_status = 1 and t1.care_account = #{account}
+        order by t1.created_time desc
+    </select>
+
 <!--前台动态详情-->
     <select id="findDynamicWebDetails" resultMap="findDynamicWebListMap">
         select

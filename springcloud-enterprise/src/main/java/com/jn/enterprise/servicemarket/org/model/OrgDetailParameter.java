@@ -105,6 +105,15 @@ public class OrgDetailParameter implements Serializable {
     @ApiModelProperty(value = "法人/负责人",example = "王松")
     private String orgPrincipal;
 
+    @ApiModelProperty(value = "企业工商类型",example = "民营企业/有限责任公司")
+    private String orgBusinType;
+
+    @ApiModelProperty(value = "企业工商经营场所",example = "湖南长沙略略略略略")
+    private String orgBusinAddresse;
+
+    @ApiModelProperty(value = "企业工商经营范围",example = "计算机销售、软件开发及出售、计算机....")
+    private String orgBusinScope;
+
     @ApiModelProperty(value = "机构咨询电话",required = true,example = "800888555")
     @NotNull(message = "机构咨询电话不能为空")
     private String orgPhone;
@@ -374,5 +383,29 @@ public class OrgDetailParameter implements Serializable {
 
     public void setOrgWeb(String orgWeb) {
         this.orgWeb = orgWeb;
+    }
+
+    public String getOrgBusinType() {
+        return orgBusinType;
+    }
+
+    public void setOrgBusinType(String orgBusinType) {
+        this.orgBusinType = orgBusinType;
+    }
+
+    public String getOrgBusinAddresse() {
+        return orgBusinAddresse;
+    }
+
+    public void setOrgBusinAddresse(String orgBusinAddresse) {
+        this.orgBusinAddresse = orgBusinAddresse;
+    }
+
+    public String getOrgBusinScope() {
+        return orgBusinScope;
+    }
+
+    public void setOrgBusinScope(String orgBusinScope) {
+        this.orgBusinScope = orgBusinScope;
     }
 }

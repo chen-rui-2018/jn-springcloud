@@ -5,6 +5,7 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="recruit_no" jdbcType="VARCHAR" property="recruitNo" />
     <result column="com_id" jdbcType="VARCHAR" property="comId" />
+    <result column="com_name" jdbcType="VARCHAR" property="comName" />
     <result column="post" jdbcType="VARCHAR" property="post" />
     <result column="salary" jdbcType="VARCHAR" property="salary" />
     <result column="num" jdbcType="INTEGER" property="num" />
@@ -77,8 +78,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, recruit_no, com_id, post, salary, num, type, details, status, view_count, creator_account, 
-    created_time, modifier_account, modified_time, record_status
+    id, recruit_no, com_id, com_name, post, salary, num, type, details, status, view_count, 
+    creator_account, created_time, modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.company.entity.TbServiceRecruitCriteria" resultMap="BaseResultMap">
     select
@@ -112,17 +113,17 @@
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
     insert into tb_service_recruit (id, recruit_no, com_id, 
-      post, salary, num, 
-      type, details, status, 
-      view_count, creator_account, created_time, 
-      modifier_account, modified_time, record_status
-      )
+      com_name, post, salary, 
+      num, type, details, 
+      status, view_count, creator_account, 
+      created_time, modifier_account, modified_time, 
+      record_status)
     values (#{id,jdbcType=VARCHAR}, #{recruitNo,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, 
-      #{post,jdbcType=VARCHAR}, #{salary,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, 
-      #{type,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{viewCount,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{comName,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR}, #{salary,jdbcType=VARCHAR}, 
+      #{num,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{viewCount,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
     insert into tb_service_recruit
@@ -135,6 +136,9 @@
       </if>
       <if test="comId != null">
         com_id,
+      </if>
+      <if test="comName != null">
+        com_name,
       </if>
       <if test="post != null">
         post,
@@ -182,6 +186,9 @@
       </if>
       <if test="comId != null">
         #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="comName != null">
+        #{comName,jdbcType=VARCHAR},
       </if>
       <if test="post != null">
         #{post,jdbcType=VARCHAR},
@@ -239,6 +246,9 @@
       <if test="record.comId != null">
         com_id = #{record.comId,jdbcType=VARCHAR},
       </if>
+      <if test="record.comName != null">
+        com_name = #{record.comName,jdbcType=VARCHAR},
+      </if>
       <if test="record.post != null">
         post = #{record.post,jdbcType=VARCHAR},
       </if>
@@ -285,6 +295,7 @@
     set id = #{record.id,jdbcType=VARCHAR},
       recruit_no = #{record.recruitNo,jdbcType=VARCHAR},
       com_id = #{record.comId,jdbcType=VARCHAR},
+      com_name = #{record.comName,jdbcType=VARCHAR},
       post = #{record.post,jdbcType=VARCHAR},
       salary = #{record.salary,jdbcType=VARCHAR},
       num = #{record.num,jdbcType=INTEGER},
@@ -309,6 +320,9 @@
       </if>
       <if test="comId != null">
         com_id = #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="comName != null">
+        com_name = #{comName,jdbcType=VARCHAR},
       </if>
       <if test="post != null">
         post = #{post,jdbcType=VARCHAR},
@@ -353,6 +367,7 @@
     update tb_service_recruit
     set recruit_no = #{recruitNo,jdbcType=VARCHAR},
       com_id = #{comId,jdbcType=VARCHAR},
+      com_name = #{comName,jdbcType=VARCHAR},
       post = #{post,jdbcType=VARCHAR},
       salary = #{salary,jdbcType=VARCHAR},
       num = #{num,jdbcType=INTEGER},

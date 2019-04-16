@@ -10,6 +10,8 @@ public class TbServiceRecruit implements Serializable {
 
     private String comId;
 
+    private String comName;
+
     private String post;
 
     private String salary;
@@ -58,6 +60,14 @@ public class TbServiceRecruit implements Serializable {
 
     public void setComId(String comId) {
         this.comId = comId == null ? null : comId.trim();
+    }
+
+    public String getComName() {
+        return comName;
+    }
+
+    public void setComName(String comName) {
+        this.comName = comName == null ? null : comName.trim();
     }
 
     public String getPost() {
@@ -171,6 +181,7 @@ public class TbServiceRecruit implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getRecruitNo() == null ? other.getRecruitNo() == null : this.getRecruitNo().equals(other.getRecruitNo()))
             && (this.getComId() == null ? other.getComId() == null : this.getComId().equals(other.getComId()))
+            && (this.getComName() == null ? other.getComName() == null : this.getComName().equals(other.getComName()))
             && (this.getPost() == null ? other.getPost() == null : this.getPost().equals(other.getPost()))
             && (this.getSalary() == null ? other.getSalary() == null : this.getSalary().equals(other.getSalary()))
             && (this.getNum() == null ? other.getNum() == null : this.getNum().equals(other.getNum()))
@@ -192,6 +203,7 @@ public class TbServiceRecruit implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getRecruitNo() == null) ? 0 : getRecruitNo().hashCode());
         result = prime * result + ((getComId() == null) ? 0 : getComId().hashCode());
+        result = prime * result + ((getComName() == null) ? 0 : getComName().hashCode());
         result = prime * result + ((getPost() == null) ? 0 : getPost().hashCode());
         result = prime * result + ((getSalary() == null) ? 0 : getSalary().hashCode());
         result = prime * result + ((getNum() == null) ? 0 : getNum().hashCode());
@@ -216,6 +228,7 @@ public class TbServiceRecruit implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", recruitNo=").append(recruitNo);
         sb.append(", comId=").append(comId);
+        sb.append(", comName=").append(comName);
         sb.append(", post=").append(post);
         sb.append(", salary=").append(salary);
         sb.append(", num=").append(num);

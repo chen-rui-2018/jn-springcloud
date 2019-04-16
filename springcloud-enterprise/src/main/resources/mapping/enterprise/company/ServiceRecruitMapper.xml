@@ -11,7 +11,7 @@
         a.status AS "status",
         a.view_count AS "viewCount",
         a.created_time AS "createdTime",
-        co.com_name AS "comName",
+        a.com_name AS "comName",
         cd.code_name AS "typeName",
         tsc.code_name AS "salaryName",
         CASE
@@ -21,7 +21,6 @@
     </sql>
 
     <sql id="recruitJoin">
-        LEFT JOIN tb_service_company co ON co.id = a.com_id
         LEFT JOIN tb_service_code cd ON cd.group_id = 'recruitType' AND cd.code_value = a.type
         LEFT JOIN tb_service_code tsc ON tsc.group_id = 'recruitSalary' AND tsc.code_value = a.salary
     </sql>

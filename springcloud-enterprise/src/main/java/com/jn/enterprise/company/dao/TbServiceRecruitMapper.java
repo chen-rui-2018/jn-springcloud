@@ -2,7 +2,6 @@ package com.jn.enterprise.company.dao;
 
 import com.jn.enterprise.company.entity.TbServiceRecruit;
 import com.jn.enterprise.company.entity.TbServiceRecruitCriteria;
-
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

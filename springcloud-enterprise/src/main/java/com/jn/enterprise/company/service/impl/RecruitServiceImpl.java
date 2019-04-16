@@ -6,6 +6,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.dao.ServiceRecruitMapper;
 import com.jn.enterprise.company.dao.TbServiceRecruitMapper;
 import com.jn.enterprise.company.entity.TbServiceRecruit;
@@ -133,13 +134,14 @@ public class RecruitServiceImpl implements RecruitService {
     @Override
     @ServiceLog(doAction = "发布招聘信息")
     @Transactional(rollbackFor = Exception.class)
-    public Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, String comId, User user) {
+    public Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, ServiceCompany company, User user) {
         TbServiceRecruit sr = new TbServiceRecruit();
         BeanUtils.copyProperties(serviceRecruitPublishParam,sr);
 
         sr.setCreatedTime(new Date());
         sr.setCreatorAccount(user.getAccount());
-        sr.setComId(comId);
+        sr.setComId(company.getId());
+        sr.setComName(company.getComName());
         sr.setRecordStatus(new Byte(RECORD_STATUS_VALID));
         sr.setStatus(new Byte(RECORD_STATUS_VALID));
         sr.setViewCount(0);

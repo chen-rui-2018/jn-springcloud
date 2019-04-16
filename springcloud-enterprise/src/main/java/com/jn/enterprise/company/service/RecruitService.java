@@ -1,6 +1,7 @@
 package com.jn.enterprise.company.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.model.ServiceRecruitEditParam;
 import com.jn.enterprise.company.vo.RecruitDetailsVO;
 import com.jn.enterprise.company.entity.TbServiceRecruit;
@@ -45,10 +46,11 @@ public interface RecruitService {
     /**
      * 发布企业招聘信息
      * @param serviceRecruitPublishParam
-     * @param comId 企业ID
+     * @param company 企业对象
+     * @param user 当前用户
      * @return
      */
-    Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, String comId, User user);
+    Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, ServiceCompany company, User user);
 
     /**
      * 编辑企业招聘信息

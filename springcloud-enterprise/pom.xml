@@ -30,6 +30,10 @@
             <artifactId>springcloud-user-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-park-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -64,10 +68,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        service_org
+                        company
                     </contexts>
                     <tableNames>
-                        tb_service_org_team
+                        tb_service_recruit
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

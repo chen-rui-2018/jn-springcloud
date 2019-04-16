@@ -48,7 +48,7 @@ public class RecruitController extends BaseController {
     public Result<Integer> publishRecruitInfo(@Validated @RequestBody ServiceRecruitPublishParam serviceRecruitPublishParam){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        return new Result(recruitService.publishRecruitInfo(serviceRecruitPublishParam, company.getId(), user));
+        return new Result(recruitService.publishRecruitInfo(serviceRecruitPublishParam, company, user));
     }
 
     @ControllerLog(doAction = "编辑招聘信息")
@@ -79,7 +79,7 @@ public class RecruitController extends BaseController {
     }
 
     @ControllerLog(doAction = "删除招聘信息")
-    @ApiOperation(value = "删除招聘信息（pc-删除招聘）", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "删除招聘信息（pc-删除招聘）  ", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/delRecruit",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/RecruitController/delRecruit")
     public Result<Integer> delRecruit(@Validated @RequestBody @ApiParam(name="recruitId", value = "招聘ID", required = true) String recruitId){

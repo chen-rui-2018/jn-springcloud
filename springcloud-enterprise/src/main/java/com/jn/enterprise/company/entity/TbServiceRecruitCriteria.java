@@ -315,6 +315,76 @@ public class TbServiceRecruitCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andComNameIsNull() {
+            addCriterion("com_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameIsNotNull() {
+            addCriterion("com_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameEqualTo(String value) {
+            addCriterion("com_name =", value, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameNotEqualTo(String value) {
+            addCriterion("com_name <>", value, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameGreaterThan(String value) {
+            addCriterion("com_name >", value, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameGreaterThanOrEqualTo(String value) {
+            addCriterion("com_name >=", value, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameLessThan(String value) {
+            addCriterion("com_name <", value, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameLessThanOrEqualTo(String value) {
+            addCriterion("com_name <=", value, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameLike(String value) {
+            addCriterion("com_name like", value, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameNotLike(String value) {
+            addCriterion("com_name not like", value, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameIn(List<String> values) {
+            addCriterion("com_name in", values, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameNotIn(List<String> values) {
+            addCriterion("com_name not in", values, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameBetween(String value1, String value2) {
+            addCriterion("com_name between", value1, value2, "comName");
+            return (Criteria) this;
+        }
+
+        public Criteria andComNameNotBetween(String value1, String value2) {
+            addCriterion("com_name not between", value1, value2, "comName");
+            return (Criteria) this;
+        }
+
         public Criteria andPostIsNull() {
             addCriterion("post is null");
             return (Criteria) this;

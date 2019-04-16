@@ -3,6 +3,7 @@ package com.jn.enterprise.recruit.service.impl;
 import com.jn.SpringCloudEnterpriseApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.dao.ServiceRecruitMapper;
 import com.jn.enterprise.company.dao.TbServiceRecruitMapper;
 import com.jn.enterprise.company.entity.TbServiceRecruit;
@@ -76,6 +77,7 @@ public class RecruitServiceImplTest {
     private String ON_SHEEL = "1";
     private String RECORD_STATUS = "1";
 
+    ServiceCompany company = new ServiceCompany();
     User user = new User();
 
     @Before
@@ -84,6 +86,8 @@ public class RecruitServiceImplTest {
         user.setAccount("wangsong");
         // 企业ID
         comId = "2220112212";
+        company.setId(comId);
+        company.setComName("深圳君南信息系统");
         // 招聘ID
         recruitId = "111111111";
 
@@ -181,7 +185,7 @@ public class RecruitServiceImplTest {
     @Test
     public void publishRecruitInfo() {
         try {
-            recruitService.publishRecruitInfo(serviceRecruitPublishParam, comId, user);
+            recruitService.publishRecruitInfo(serviceRecruitPublishParam, company, user);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("发布招聘失败");

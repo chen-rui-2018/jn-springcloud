@@ -1,6 +1,8 @@
 package com.jn.enterprise.pd.talent.service;
 
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice;
+import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceRange;
+
 import java.util.List;
 
 /**
@@ -19,6 +21,31 @@ public interface TalentNoticeService {
      * @param
      * @return
      */
-    List<TbPdTalentServiceNotice> selectByTalentNoticeList(String rangeName,String sortType);
+    List<TbPdTalentServiceNotice> selectByTalentNoticeList(String rangeId,String sortType);
+
+    /**
+     * 根据ID查询公告详情
+     *
+     * @param
+     * @return
+     */
+    TbPdTalentServiceNotice selectByTalentNotice(String id);
+
+    /**
+     * 查询所属公告类型列表
+     *
+     * @param
+     * @return
+     */
+    List<TbPdTalentServiceRange> selectByTalentRangeList();
+
+    /**
+     * 更新公告访问量（用户点击查看一次公告，访问量加 1)
+     *
+     * @param
+     * @return
+     */
+    void updateTrafficVolume(String id);
+
 
 }

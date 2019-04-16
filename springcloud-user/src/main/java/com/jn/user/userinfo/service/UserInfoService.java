@@ -66,7 +66,6 @@ public interface UserInfoService {
      */
     boolean updateRedisUserInfo(String account);
 
-    
     /**
      * 保存/修改用户信息
      * @param userInfoParam
@@ -76,6 +75,13 @@ public interface UserInfoService {
     int saveOrUpdateUserInfo(UserInfoParam userInfoParam, User user);
 
     /**
+     * 获取用户实名制状态
+     * @param account
+     * @return true表示已实名认证 false表示未实名认证
+     */
+    Boolean getUserRealNameStatus(String account);
+
+        /**
      * 根据条件获取 账号列表
      * @param param
      *

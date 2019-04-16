@@ -538,4 +538,15 @@ public class UserInfoServiceImpl implements UserInfoService {
         return tags;
     }
 
+    @Override
+    @ServiceLog(doAction = "获取用户实名制状态")
+    public Boolean getUserRealNameStatus(String account){
+        UserExtensionInfo userExtension = this.getUserExtension(account);
+        if(null!=userExtension && StringUtils.isNotEmpty(userExtension.getIdCard())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

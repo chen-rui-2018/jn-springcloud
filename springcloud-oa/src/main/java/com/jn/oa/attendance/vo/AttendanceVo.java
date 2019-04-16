@@ -1,4 +1,4 @@
-package com.jn.oa.attendance.model;
+package com.jn.oa.attendance.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 考勤实体
  *
@@ -17,9 +18,10 @@ import java.util.Date;
  * @modified By:
  **/
 @ApiModel(value = "Attendance", description = "考勤实体")
-public class Attendance extends Page implements Serializable  {
+public class AttendanceVo implements Serializable  {
 
     private static final long serialVersionUID = -5671809054725364233L;
+
     @ApiModelProperty(value = "id")
     private String id;
 
@@ -27,6 +29,7 @@ public class Attendance extends Page implements Serializable  {
     private String attendanceUser;
 
     @ApiModelProperty(value = "签到时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date signInAttendanceTime;
 
     @ApiModelProperty(value = "签到考勤平台：1：PC，2：APP，3：钉钉")
@@ -42,6 +45,7 @@ public class Attendance extends Page implements Serializable  {
     private String signInAttendanceIp;
 
     @ApiModelProperty(value = "签退时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date signOutAttendanceTime;
 
     @ApiModelProperty(value = "签退平台")
@@ -68,7 +72,11 @@ public class Attendance extends Page implements Serializable  {
     @ApiModelProperty(value = "最新更新时间")
     private Date modifiedTime;
 
+    @ApiModelProperty(value = "考勤人员用户名")
+    private String userName;
 
+    @ApiModelProperty(value = "考勤人员部门")
+    private String departmentName;
 
     public String getId() {
         return id;
@@ -76,30 +84,6 @@ public class Attendance extends Page implements Serializable  {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getCreatorAccount() {
-        return creatorAccount;
-    }
-
-    public void setCreatorAccount(String creatorAccount) {
-        this.creatorAccount = creatorAccount;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public String getModifierAccount() {
-        return modifierAccount;
-    }
-
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount;
     }
 
     public String getAttendanceUser() {
@@ -110,13 +94,20 @@ public class Attendance extends Page implements Serializable  {
         this.attendanceUser = attendanceUser;
     }
 
-
-    public Date getModifiedTime() {
-        return modifiedTime;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public Date getSignInAttendanceTime() {
@@ -197,5 +188,37 @@ public class Attendance extends Page implements Serializable  {
 
     public void setSignOutAttendanceIp(String signOutAttendanceIp) {
         this.signOutAttendanceIp = signOutAttendanceIp;
+    }
+
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
+
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount;
+    }
+
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 }

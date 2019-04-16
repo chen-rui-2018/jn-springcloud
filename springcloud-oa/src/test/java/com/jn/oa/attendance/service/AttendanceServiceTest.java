@@ -50,7 +50,7 @@ public class AttendanceServiceTest {
         //初始化添加用户
         user = new User();
         user.setAccount("wangsong");
-        user.setId("10001");
+        user.setId("10000");
 
 
         //初始化部门部门id及部门名称

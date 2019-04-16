@@ -263,6 +263,18 @@ public class DynamicServiceImpl implements DynamicService {
         }
         return new PaginationData<>(userInfoList,objects==null?0:objects.getTotal());
     }
+    @ServiceLog(doAction = "根据评用户账号,当前用户动态列表")
+    @Override
+    public PaginationData<List<DynamicWebShow>> findDynamicByAccount(CareDetailsQueryParam param) {
+        int pageNum = param.getPage();
+        int pageSize = param.getRows()==0?15:param.getRows();
+        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(pageNum,pageSize,true);
+        List<DynamicWebShow> dynamicList = dynamicDao.findDynamicByAccount(param.getParamAccount());
+        if(!dynamicList.isEmpty()){
+            dynamicList = improveWebUserInfo(dynamicList);
+        }
+        return new PaginationData<>(dynamicList,objects==null?0:objects.getTotal());
+    }
 
     /**
      * 完善点赞用户信息
@@ -337,6 +349,7 @@ public class DynamicServiceImpl implements DynamicService {
         }
         return dynamicList;
     }
+
     /**
      * 后台列表完善用户信息
      * @return

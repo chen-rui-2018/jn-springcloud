@@ -71,4 +71,11 @@ public interface DynamicDao {
      */
     List<LikedUserInfo> findLikedUserInfoList(@Param("parentId")String parentId);
 
+    /**
+     * 目标动态列表
+     * @param account
+     *  @return
+     */
+    List<DynamicWebShow> findDynamicByAccount(@Param("account") String account);
+
 }

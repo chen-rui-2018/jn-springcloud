@@ -59,6 +59,20 @@
            <!-- 关键词-->
            and (tt.advisorName like '%'||#{domain}||'%' or tt.position like '%'||#{domain}||'%')
        </if>
+       <if test="templateId !=null and templateId!=''">
+           and tt.advisorAccount in (
+           select distinct
+           saa.advisor_account
+           from tb_service_product ssp
+           join tb_service_and_advisor saa
+           on ssp.product_id=saa.product_id
+           join tb_service_advisor tsa
+           on tsa.advisor_account=saa.advisor_account
+           and tsa.approval_status='2'
+           and tsa.record_status='1'
+           where ssp.template_id  =#{templateId}
+           )
+       </if>
        <if test="sortTypes =='integrate'">
            ORDER BY <!-- 综合排序-->
            (tt.evaluationScore * #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} ) DESC <!--综合排序结果值-->

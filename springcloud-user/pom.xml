@@ -23,6 +23,10 @@
         </dependency>
         <dependency>
             <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
             <artifactId>springcloud-user-api</artifactId>
         </dependency>
         <dependency>

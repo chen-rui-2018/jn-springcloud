@@ -22,8 +22,8 @@ public class PaymentBill implements Serializable {
     private String billNum;
     @ApiModelProperty(value = "账单名称")
     private String billName;
-    @ApiModelProperty(value = "账单类型ID"
-            ,notes = "暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费")
+    @ApiModelProperty(value = "账单类型ID[从'查询账单类型数据'接口获取]"
+            ,notes = "[从'查询账单类型数据'接口获取]")
     private String billType;
     @ApiModelProperty(value = "账单类型名称")
     private String billTypeName;

@@ -2,7 +2,9 @@ package com.jn.enterprise.pd.declaration.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeRange;
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage;
+import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformSubordinate;
 import com.jn.enterprise.pd.declaration.service.DeclarationPlatformService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
@@ -41,8 +43,17 @@ public class DeclarationPlatformController extends BaseController {
     @RequiresPermissions("/pd/declaration/list")
     @ApiOperation(value = "申报平台列表", notes = "申报平台列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<List<TbPdDeclarationPlatformManage>> list(@ApiParam(value = "所属平台",required = true,example = "园区本级平台") @RequestParam String subordinatePlatformName) {
+    public Result<List<TbPdDeclarationPlatformManage>> list(@ApiParam(value = "所属平台(1:园区本级平台,2：市级平台，3：省级平台，4：国家级平台)",required = true,example = "1") @RequestParam String subordinatePlatformName) {
         List<TbPdDeclarationPlatformManage> data = declarationPlatformService.selectByDeclarationPlatformList(subordinatePlatformName);
+        return new Result(data);
+    }
+
+    @ControllerLog(doAction = "申报中心所属平台类型列表")
+    @ApiOperation(value = "申报中心所属平台类型列表", notes = "申报中心所属平台类型列表")
+    @RequestMapping(value = "/typeList" ,method = RequestMethod.GET)
+    @RequiresPermissions("/pd/declaration/typeList")
+    public Result<List<TbPdDeclarationPlatformSubordinate>> typeList(){
+        List<TbPdDeclarationPlatformSubordinate> data = declarationPlatformService.selectByPlatformSubordinateList();
         return new Result(data);
     }
 }

@@ -34,6 +34,8 @@ public class TbServiceInvestor implements Serializable {
 
     private String personalProfile;
 
+    private String invesFinanExper;
+
     private String status;
 
     private String approvalStatus;
@@ -170,6 +172,14 @@ public class TbServiceInvestor implements Serializable {
         this.personalProfile = personalProfile == null ? null : personalProfile.trim();
     }
 
+    public String getInvesFinanExper() {
+        return invesFinanExper;
+    }
+
+    public void setInvesFinanExper(String invesFinanExper) {
+        this.invesFinanExper = invesFinanExper == null ? null : invesFinanExper.trim();
+    }
+
     public String getStatus() {
         return status;
     }
@@ -253,6 +263,7 @@ public class TbServiceInvestor implements Serializable {
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getEmail() == null ? other.getEmail() == null : this.getEmail().equals(other.getEmail()))
             && (this.getPersonalProfile() == null ? other.getPersonalProfile() == null : this.getPersonalProfile().equals(other.getPersonalProfile()))
+            && (this.getInvesFinanExper() == null ? other.getInvesFinanExper() == null : this.getInvesFinanExper().equals(other.getInvesFinanExper()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -281,6 +292,7 @@ public class TbServiceInvestor implements Serializable {
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
         result = prime * result + ((getPersonalProfile() == null) ? 0 : getPersonalProfile().hashCode());
+        result = prime * result + ((getInvesFinanExper() == null) ? 0 : getInvesFinanExper().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -312,6 +324,7 @@ public class TbServiceInvestor implements Serializable {
         sb.append(", phone=").append(phone);
         sb.append(", email=").append(email);
         sb.append(", personalProfile=").append(personalProfile);
+        sb.append(", invesFinanExper=").append(invesFinanExper);
         sb.append(", status=").append(status);
         sb.append(", approvalStatus=").append(approvalStatus);
         sb.append(", createdTime=").append(createdTime);

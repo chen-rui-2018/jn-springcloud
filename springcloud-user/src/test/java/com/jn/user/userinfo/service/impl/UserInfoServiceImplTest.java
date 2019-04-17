@@ -63,6 +63,7 @@ public class UserInfoServiceImplTest {
     private CompanyParam companyParam=new CompanyParam();
 
 
+
     @Before
     public void setUp() throws Exception {
         //获取用户扩展信息
@@ -73,7 +74,7 @@ public class UserInfoServiceImplTest {
         accountList.add("account01");
 
         //更新用户所属机构信息
-        userAffiliateInfo.setAccount(account);
+        userAffiliateInfo.setAccountList((String[])accountList.toArray());
         userAffiliateInfo.setAffiliateCode("011111");
         userAffiliateInfo.setAffiliateName("江苏工业园");
 

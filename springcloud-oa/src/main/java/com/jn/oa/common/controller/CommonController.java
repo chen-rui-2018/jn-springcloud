@@ -11,6 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -37,8 +38,8 @@ public class CommonController extends BaseController {
 
     @ControllerLog(doAction = "附件上传")
     @RequiresPermissions("/oa/common/uploadAttachment")
-    @ApiOperation(value = "附件上传", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/uploadAttachment")
+    @ApiOperation(value = "附件上传", notes = "附件上传")
+    @RequestMapping(value = "/uploadAttachment", method = RequestMethod.POST)
     public Result uploadAttachment(HttpServletRequest request) {
         //获取上传文件
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
@@ -49,8 +50,8 @@ public class CommonController extends BaseController {
 
     @ControllerLog(doAction = "附件下载")
     @RequiresPermissions("/oa/common/downLoadAttachment")
-    @ApiOperation(value = "附件下载", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/downLoadAttachment")
+    @ApiOperation(value = "附件下载", notes = "附件下载")
+    @RequestMapping(value ="/downLoadAttachment",method = RequestMethod.GET)
     public ResponseEntity<byte[]> downLoadAttachment(DownAttachment downAttachment, HttpServletResponse response) {
         ResponseEntity<byte[]> attachment = commonService.downLoadAttachment(downAttachment, response);
         return attachment;

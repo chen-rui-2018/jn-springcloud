@@ -15,21 +15,40 @@
         ,(SELECT IFNULL(AVG(t.`attitude_score`), 0) FROM tb_service_rating t
         WHERE t.org_id = a.org_id)  AS "attitudeScore" <!-- 评价得分 -->
         ,(SELECT COUNT(1) FROM tb_service_rating t WHERE t.org_id = a.org_id)  AS "evaluationNum"  <!-- 评价次数 -->
-        from tb_service_org a left join tb_service_org_info i on a.org_id = i.org_id
+        from tb_service_org a left join tb_service_org_info i on a.org_id = i.org_id LEFT JOIN tb_service_org_trait tr ON a.org_id = tr.org_id
         where 1=1 and a.record_status != '0'
 
-        <if test="businessType != null and businessType != ''">
-            and a.business_type = #{businessType}
+        <if test="businessType != null and businessType.length>0">
+            AND a.business_type IN
+            <foreach item="item" index="index" collection="businessType" open="("  close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="businessSType != null and businessSType != ''">
             and a.business_s_type = #{businessSType}
         </if>
+        <if test="templateId != null and templateId != ''">
+            and a.org_id in (
+            select distinct
+            ssp.org_id
+            from tb_service_product ssp
+            where ssp.record_status='1' and ssp.template_id = #{templateId}
+            )
+
+        </if>
         <if test="orgName != null and orgName != ''">
-            and a.org_name = #{orgName}
+            and a.org_name like CONCAT('%', #{orgName}, '%')
         </if>
         <if test="orgBusiness != null and orgBusiness != ''">
             and a.org_business = #{orgBusiness}
         </if>
+        <if test="companyList != null and companyList.size()>0">
+            AND tr.trait_value IN
+            <foreach item="item" index="index" collection="companyList" open="("  close=")" separator=",">
+                #{item}
+          </foreach>
+        </if>
+        GROUP BY a.org_id
         <if test="sortTypes =='popularity'">
             ORDER BY <!-- 人气排序-->
             a.org_show DESC   <!-- 浏览量-->
@@ -41,6 +60,10 @@
         <if test="sortTypes =='serviceNum'">
             ORDER BY <!-- 服务量排序-->
             tt.transactionNum DESC <!-- 累计交易数-->
+        </if>
+        <if test="sortTypes =='attitudeScore'">
+            ORDER BY <!-- 好评排序-->
+            tt.attitudeScore DESC
         </if>
     </select>
 
@@ -59,6 +82,9 @@
         <result column="s_orgSpeciality" jdbcType="VARCHAR" property="orgSpeciality" javaType="java.lang.String"/>
         <result column="s_operateStatus" jdbcType="VARCHAR" property="operateStatus" javaType="java.lang.String"/>
         <result column="s_orgPrincipal" jdbcType="VARCHAR" property="orgPrincipal" javaType="java.lang.String"/>
+        <result column="s_orgBusinType" jdbcType="VARCHAR" property="orgBusinType" javaType="java.lang.String"/>
+        <result column="s_orgBusinAddresse" jdbcType="VARCHAR" property="orgBusinAddresse" javaType="java.lang.String"/>
+        <result column="s_orgBusinScope" jdbcType="VARCHAR" property="orgBusinScope" javaType="java.lang.String"/>
         <result column="s_orgWeb" jdbcType="VARCHAR" property="orgWeb" javaType="java.lang.String"/>
         <result column="s_orgSpeciality" jdbcType="VARCHAR" property="orgSpeciality" javaType="java.lang.String"/>
         <result column="s_professionNum" jdbcType="VARCHAR" property="professionNum" javaType="java.lang.Integer"/>
@@ -116,7 +142,7 @@
     <select id="getServiceOrgDetail" resultMap="queryServiceOrgDetailMap" parameterType="java.lang.String">
         SELECT
           o.org_id AS "s_id",
-          o.business_type AS "s_businessType",
+         (SELECT pre.pre_value FROM tb_service_prefer pre WHERE pre.id = o.business_type )AS "s_businessType",
           o.business_s_type AS "s_businessSType",
           o.org_name AS "s_orgName",
           o.org_business AS "s_orgBusiness",
@@ -129,6 +155,9 @@
           o.org_speciality AS "s_orgSpeciality",
           o.operate_status AS "s_operateStatus",
           o.org_principal AS "s_orgPrincipal",
+          o.org_busin_type AS "s_orgBusinType",
+          o.org_busin_address AS "s_orgBusinAddresse",
+          o.org_busin_scope AS "s_orgBusinScope",
           o.org_code AS "s_orgCode",
           el.staff_count AS "s_staffCount",
           el.profession_num AS "s_professionNum",
@@ -161,7 +190,7 @@
           te.con_name as "te_conName",
           te.con_position as "te_conPosition",
           te.con_quali as "te_conQuali",
-          date_format(te.con_time,'%Y-%m-%d') as "te_conTime",
+          te.con_time as "te_conTime",
           te.con_speciality as "te_conSpeciality"
           ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"		      <!-- 评价分数-->
           ,COUNT(sr.`attitude_score`) AS "evaluationNum"			          <!-- 评价次数-->
@@ -188,6 +217,64 @@
        (select count(t2.org_id) from tb_service_advisor t2 where t2.org_id=#{orgId}) as "advisorNum"
             from tb_service_product t1
                where t1.org_id = #{orgId}
+    </select>
+
+    <!--根据产品查询服务机构统计数据-->
+    <select id="getProductOrgNum" resultType="java.lang.String">
+        SELECT
+          SUM(t.num) AS "orgNum"
+        FROM
+          (SELECT
+            COUNT(org_id) AS 'num'
+          FROM
+            tb_service_product t
+          WHERE t.status = '1'
+            AND t.record_status = '1'
+            AND t.template_id = #{productId}
+          GROUP BY t.org_id) t
+    </select>
+
+    <!--根据业务领域/产品查询评价统计数据-->
+    <select id="getProductRatingNum" resultType="java.lang.String" parameterType="com.jn.enterprise.servicemarket.org.vo.BusinessStatisticalParam">
+        SELECT COUNT(1) FROM tb_service_rating r WHERE r.product_id IN (
+		    SELECT t.product_id FROM tb_service_product t WHERE  t.status = '1' AND t.record_status = '1'
+            <if test="productId != null and productId != ''">
+                and t. template_id= #{productId}
+            </if>
+
+            <if test="businessType != null and businessType != ''">
+                and t.signory_id = #{businessType}
+            </if>
+		    GROUP BY t.product_id
+	    ) AND r.record_status = '1'
+    </select>
+
+    <!--根据产品查询顾问统计数据-->
+    <select id="getProductAdvisorNum" resultType="java.lang.String">
+        select
+        count(sa.advisor_account)
+        from tb_service_product sp
+        join tb_service_and_advisor saa
+            on sp.product_id=saa.product_id
+        join tb_service_advisor sa
+            on sa.advisor_account=saa.advisor_account
+            and sa.approval_status='2'
+            and sa.record_status='1'
+        where sp.template_id  =#{productId}
+    </select>
+
+
+
+    <!--根据产品查询需求(交易量)统计数据-->
+    <select id="getProductNum" resultType="java.lang.String">
+        select
+        count(sr.req_num)
+        from tb_service_product sp
+        left join tb_service_require sr
+            on sp.product_id=sr.product_id
+            and sr.status='2'
+            and sr.record_status='1'
+        where sp.template_id  =#{productId}
     </select>
 
 </mapper>

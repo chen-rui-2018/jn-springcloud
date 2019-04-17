@@ -24,6 +24,9 @@ public class SpPowerBusiMaterialsModel implements Serializable {
     @ApiModelProperty("材料名称")
     private String name;
 
+    @ApiModelProperty("材料样本文本")
+    private String sampleName;
+
     @ApiModelProperty("材料样本")
     private String sample;
 
@@ -112,5 +115,13 @@ public class SpPowerBusiMaterialsModel implements Serializable {
 
     public void setNotice(String notice) {
         this.notice = notice;
+    }
+
+    public String getSampleName() {
+        return sampleName;
+    }
+
+    public void setSampleName(String sampleName) {
+        this.sampleName = sampleName;
     }
 }

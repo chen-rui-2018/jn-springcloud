@@ -11,6 +11,7 @@
     <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
     <result column="time_node" jdbcType="VARCHAR" property="timeNode" />
     <result column="is_roof_placement" jdbcType="TINYINT" property="isRoofPlacement" />
+    <result column="announcement_content" jdbcType="VARCHAR" property="announcementContent" />
     <result column="browse_times" jdbcType="INTEGER" property="browseTimes" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -18,9 +19,6 @@
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
-    <result column="announcement_content" jdbcType="LONGVARBINARY" property="announcementContent" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -82,28 +80,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, notice_title, range_id, range_name, subordinate_platform_id, subordinate_platform_name, 
-    deadline, time_node, is_roof_placement, browse_times, status, record_status, creator_account, 
-    created_time, modifier_account, modified_time
+    deadline, time_node, is_roof_placement, announcement_content, browse_times, status, 
+    record_status, creator_account, created_time, modifier_account, modified_time
   </sql>
-  <sql id="Blob_Column_List">
-    announcement_content
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNoticeCriteria" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from tb_pd_talent_service_notice
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNoticeCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -118,11 +97,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from tb_pd_talent_service_notice
     where id = #{id,jdbcType=VARCHAR}
   </select>
@@ -143,17 +120,15 @@
     insert into tb_pd_talent_service_notice (notice_title, range_id, range_name, 
       subordinate_platform_id, subordinate_platform_name, 
       deadline, time_node, is_roof_placement, 
-      browse_times, status, record_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time, announcement_content
-      )
+      announcement_content, browse_times, status, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
     values (#{noticeTitle,jdbcType=VARCHAR}, #{rangeId,jdbcType=VARCHAR}, #{rangeName,jdbcType=VARCHAR}, 
       #{subordinatePlatformId,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
       #{deadline,jdbcType=TIMESTAMP}, #{timeNode,jdbcType=VARCHAR}, #{isRoofPlacement,jdbcType=TINYINT}, 
-      #{browseTimes,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{announcementContent,jdbcType=LONGVARBINARY}
-      )
+      #{announcementContent,jdbcType=VARCHAR}, #{browseTimes,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
@@ -185,6 +160,9 @@
       <if test="isRoofPlacement != null">
         is_roof_placement,
       </if>
+      <if test="announcementContent != null">
+        announcement_content,
+      </if>
       <if test="browseTimes != null">
         browse_times,
       </if>
@@ -205,9 +183,6 @@
       </if>
       <if test="modifiedTime != null">
         modified_time,
-      </if>
-      <if test="announcementContent != null">
-        announcement_content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -235,6 +210,9 @@
       <if test="isRoofPlacement != null">
         #{isRoofPlacement,jdbcType=TINYINT},
       </if>
+      <if test="announcementContent != null">
+        #{announcementContent,jdbcType=VARCHAR},
+      </if>
       <if test="browseTimes != null">
         #{browseTimes,jdbcType=INTEGER},
       </if>
@@ -255,9 +233,6 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="announcementContent != null">
-        #{announcementContent,jdbcType=LONGVARBINARY},
       </if>
     </trim>
   </insert>
@@ -297,6 +272,9 @@
       <if test="record.isRoofPlacement != null">
         is_roof_placement = #{record.isRoofPlacement,jdbcType=TINYINT},
       </if>
+      <if test="record.announcementContent != null">
+        announcement_content = #{record.announcementContent,jdbcType=VARCHAR},
+      </if>
       <if test="record.browseTimes != null">
         browse_times = #{record.browseTimes,jdbcType=INTEGER},
       </if>
@@ -318,33 +296,7 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.announcementContent != null">
-        announcement_content = #{record.announcementContent,jdbcType=LONGVARBINARY},
-      </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update tb_pd_talent_service_notice
-    set id = #{record.id,jdbcType=VARCHAR},
-      notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
-      range_id = #{record.rangeId,jdbcType=VARCHAR},
-      range_name = #{record.rangeName,jdbcType=VARCHAR},
-      subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
-      subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
-      deadline = #{record.deadline,jdbcType=TIMESTAMP},
-      time_node = #{record.timeNode,jdbcType=VARCHAR},
-      is_roof_placement = #{record.isRoofPlacement,jdbcType=TINYINT},
-      browse_times = #{record.browseTimes,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=TINYINT},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
-      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      announcement_content = #{record.announcementContent,jdbcType=LONGVARBINARY}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -360,6 +312,7 @@
       deadline = #{record.deadline,jdbcType=TIMESTAMP},
       time_node = #{record.timeNode,jdbcType=VARCHAR},
       is_roof_placement = #{record.isRoofPlacement,jdbcType=TINYINT},
+      announcement_content = #{record.announcementContent,jdbcType=VARCHAR},
       browse_times = #{record.browseTimes,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -398,6 +351,9 @@
       <if test="isRoofPlacement != null">
         is_roof_placement = #{isRoofPlacement,jdbcType=TINYINT},
       </if>
+      <if test="announcementContent != null">
+        announcement_content = #{announcementContent,jdbcType=VARCHAR},
+      </if>
       <if test="browseTimes != null">
         browse_times = #{browseTimes,jdbcType=INTEGER},
       </if>
@@ -419,30 +375,7 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="announcementContent != null">
-        announcement_content = #{announcementContent,jdbcType=LONGVARBINARY},
-      </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
-    update tb_pd_talent_service_notice
-    set notice_title = #{noticeTitle,jdbcType=VARCHAR},
-      range_id = #{rangeId,jdbcType=VARCHAR},
-      range_name = #{rangeName,jdbcType=VARCHAR},
-      subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
-      subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
-      deadline = #{deadline,jdbcType=TIMESTAMP},
-      time_node = #{timeNode,jdbcType=VARCHAR},
-      is_roof_placement = #{isRoofPlacement,jdbcType=TINYINT},
-      browse_times = #{browseTimes,jdbcType=INTEGER},
-      status = #{status,jdbcType=TINYINT},
-      record_status = #{recordStatus,jdbcType=TINYINT},
-      creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=TIMESTAMP},
-      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      announcement_content = #{announcementContent,jdbcType=LONGVARBINARY}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
@@ -455,6 +388,7 @@
       deadline = #{deadline,jdbcType=TIMESTAMP},
       time_node = #{timeNode,jdbcType=VARCHAR},
       is_roof_placement = #{isRoofPlacement,jdbcType=TINYINT},
+      announcement_content = #{announcementContent,jdbcType=VARCHAR},
       browse_times = #{browseTimes,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},

@@ -15,9 +15,11 @@ import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.*;
+import com.jn.system.permission.service.SysRoleService;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserAdd;
 import com.jn.system.user.service.SysUserService;
+import com.jn.system.vo.SysUserRoleVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -60,6 +62,9 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Autowired
     private SysDepartmentService sysDepartmentService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
     @Override
     @ControllerLog(doAction = "用户登录")
@@ -173,7 +178,7 @@ public class SystemController extends BaseController implements SystemClient {
      */
     @Override
     @ControllerLog(doAction = "通过用户账号,获取用户信息")
-    public Result<List<User>> getUserInfoByAccount(List<String> accountList) {
+    public Result<List<User>> getUserInfoByAccount(@RequestBody List<String> accountList) {
         List<User> userList = sysUserService.getUserInfoByAccount(accountList);
         return new Result<>(userList);
     }
@@ -181,17 +186,30 @@ public class SystemController extends BaseController implements SystemClient {
     /**
      * 修改用户角色信息
      *
-     * @param user        用户对象,传账号id都可以,都传,优先使用id操作
-     * @param deleRoleIds 删除的角色id集合,不删除集合传空集合
-     * @param addRoleIds  新增的角色id集合,不新增集合传空集合
+     * @param sysUserRoleVO
      * @return
      */
     @Override
-    public Result<Boolean> updateUserRole(@RequestParam("account") User user,
-                                          @RequestParam("groupId") Set<String> deleRoleIds,
-                                          @RequestParam("roleIds") Set<String> addRoleIds) {
-        Boolean result = sysUserService.updateUserRole(user,deleRoleIds,addRoleIds);
+    @ControllerLog(doAction = "修改用户角色信息")
+    public Result<Boolean> updateUserRole(@RequestBody SysUserRoleVO sysUserRoleVO) {
+        User user = sysUserRoleVO.getUser();
+        Set<String> deleRoleIds = sysUserRoleVO.getDeleRoleIds();
+        Set<String> addRoleId = sysUserRoleVO.getAddRoleId();
+        Boolean result = sysUserService.updateUserRole(user, deleRoleIds, addRoleId);
         return new Result(result);
+    }
+
+    /**
+     * 根据角色名称,获取角色信息
+     *
+     * @param roleName 角色名称
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "根据角色名称,获取角色信息")
+    public Result<SysRole> getRoleByName(@RequestParam("roleName") String roleName) {
+        SysRole sysRole = sysRoleService.getRoleByName(roleName);
+        return new Result<SysRole>(sysRole);
     }
 
     @Override

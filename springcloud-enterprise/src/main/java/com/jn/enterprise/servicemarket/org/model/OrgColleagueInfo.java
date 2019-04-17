@@ -94,4 +94,18 @@ public class OrgColleagueInfo extends Page implements Serializable {
     public void setEntryDate(String entryDate) {
         this.entryDate = entryDate;
     }
+
+    @Override
+    public String toString() {
+        return "OrgColleagueInfo{" +
+                "account='" + account + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", graduatedSchool='" + graduatedSchool + '\'' +
+                ", education='" + education + '\'' +
+                ", position='" + position + '\'' +
+                ", orgIdentity='" + orgIdentity + '\'' +
+                ", entryDate='" + entryDate + '\'' +
+                '}';
+    }
 }

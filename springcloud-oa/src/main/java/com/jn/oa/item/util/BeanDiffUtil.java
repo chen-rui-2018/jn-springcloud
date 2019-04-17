@@ -75,7 +75,8 @@ public class BeanDiffUtil {
     }
 
     private static void appendRecode(StringBuffer buffer, WorkPlanPropertiesEnmus enmus, Object newStr, Object oldStr) {
-        buffer.append("修改了").append(enmus.getMessage()).append(",旧值为:")
-                .append(oldStr).append(",新值为:").append(newStr).append(";");
+        buffer.append("<p>修改了&nbsp;&nbsp;<i style=\"color:black;font-weight:600\">").append(enmus.getMessage())
+                .append(" </i>,&nbsp;&nbsp;旧值为:&nbsp;&nbsp;\"").append(oldStr)
+                .append("\",&nbsp;&nbsp;新值为: &nbsp;&nbsp;\"").append(newStr).append("\"。</p>");
     }
 }

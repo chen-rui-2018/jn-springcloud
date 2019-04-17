@@ -1,25 +1,34 @@
-package com.jn.oa.item.entity;
+package com.jn.park.sp.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class TbOaItemHistory implements Serializable {
+public class TbSpAd implements Serializable {
+    /*@ApiModelProperty("主键")*/
     private String id;
 
-    private String itemId;
+    /*@ApiModelProperty("广告图名称")*/
+    private String adName;
 
-    private String remark;
+    /*@ApiModelProperty("广告图地址")*/
+    private String adAddress;
 
-    private String operateReocrd;
+    /*@ApiModelProperty("广告图链接")*/
+    private String adUrl;
 
-    private Byte recordStatus;
+    /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
+    private Integer recordStatus;
 
+    /*@ApiModelProperty("创建者账号")*/
     private String creatorAccount;
 
+    /*@ApiModelProperty("创建时间")*/
     private Date createdTime;
 
+    /*@ApiModelProperty("最新更新者账号")*/
     private String modifierAccount;
 
+    /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
@@ -32,35 +41,35 @@ public class TbOaItemHistory implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getAdName() {
+        return adName;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId == null ? null : itemId.trim();
+    public void setAdName(String adName) {
+        this.adName = adName == null ? null : adName.trim();
     }
 
-    public String getRemark() {
-        return remark;
+    public String getAdAddress() {
+        return adAddress;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+    public void setAdAddress(String adAddress) {
+        this.adAddress = adAddress == null ? null : adAddress.trim();
     }
 
-    public String getOperateReocrd() {
-        return operateReocrd;
+    public String getAdUrl() {
+        return adUrl;
     }
 
-    public void setOperateReocrd(String operateReocrd) {
-        this.operateReocrd = operateReocrd == null ? null : operateReocrd.trim();
+    public void setAdUrl(String adUrl) {
+        this.adUrl = adUrl == null ? null : adUrl.trim();
     }
 
-    public Byte getRecordStatus() {
+    public Integer getRecordStatus() {
         return recordStatus;
     }
 
-    public void setRecordStatus(Byte recordStatus) {
+    public void setRecordStatus(Integer recordStatus) {
         this.recordStatus = recordStatus;
     }
 
@@ -107,11 +116,11 @@ public class TbOaItemHistory implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbOaItemHistory other = (TbOaItemHistory) that;
+        TbSpAd other = (TbSpAd) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getItemId() == null ? other.getItemId() == null : this.getItemId().equals(other.getItemId()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getOperateReocrd() == null ? other.getOperateReocrd() == null : this.getOperateReocrd().equals(other.getOperateReocrd()))
+            && (this.getAdName() == null ? other.getAdName() == null : this.getAdName().equals(other.getAdName()))
+            && (this.getAdAddress() == null ? other.getAdAddress() == null : this.getAdAddress().equals(other.getAdAddress()))
+            && (this.getAdUrl() == null ? other.getAdUrl() == null : this.getAdUrl().equals(other.getAdUrl()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -124,9 +133,9 @@ public class TbOaItemHistory implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getItemId() == null) ? 0 : getItemId().hashCode());
-        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
-        result = prime * result + ((getOperateReocrd() == null) ? 0 : getOperateReocrd().hashCode());
+        result = prime * result + ((getAdName() == null) ? 0 : getAdName().hashCode());
+        result = prime * result + ((getAdAddress() == null) ? 0 : getAdAddress().hashCode());
+        result = prime * result + ((getAdUrl() == null) ? 0 : getAdUrl().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -142,9 +151,9 @@ public class TbOaItemHistory implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", itemId=").append(itemId);
-        sb.append(", remark=").append(remark);
-        sb.append(", operateReocrd=").append(operateReocrd);
+        sb.append(", adName=").append(adName);
+        sb.append(", adAddress=").append(adAddress);
+        sb.append(", adUrl=").append(adUrl);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.oa.item.dao.TbOaItemHistoryMapper">
-  <resultMap id="BaseResultMap" type="com.jn.oa.item.entity.TbOaItemHistory">
+<mapper namespace="com.jn.park.sp.dao.TbSpAdMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.sp.entity.TbSpAd">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="item_id" jdbcType="VARCHAR" property="itemId" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="operate_reocrd" jdbcType="VARCHAR" property="operateReocrd" />
-    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="ad_name" jdbcType="VARCHAR" property="adName" />
+    <result column="ad_address" jdbcType="VARCHAR" property="adAddress" />
+    <result column="ad_url" jdbcType="VARCHAR" property="adUrl" />
+    <result column="record_status" jdbcType="INTEGER" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
@@ -71,16 +71,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, item_id, remark, operate_reocrd, record_status, creator_account, created_time, 
-    modifier_account, modified_time
+    id, ad_name, ad_address, ad_url, record_status, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
-  <select id="selectByExample" parameterType="com.jn.oa.item.entity.TbOaItemHistoryCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.sp.entity.TbSpAdCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_oa_item_history
+    from tb_sp_ad
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,43 +91,43 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_oa_item_history
+    from tb_sp_ad
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_oa_item_history
+    delete from tb_sp_ad
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.oa.item.entity.TbOaItemHistoryCriteria">
-    delete from tb_oa_item_history
+  <delete id="deleteByExample" parameterType="com.jn.park.sp.entity.TbSpAdCriteria">
+    delete from tb_sp_ad
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.oa.item.entity.TbOaItemHistory">
-    insert into tb_oa_item_history (id, item_id, remark, 
-      operate_reocrd, record_status, creator_account, 
+  <insert id="insert" parameterType="com.jn.park.sp.entity.TbSpAd">
+    insert into tb_sp_ad (id, ad_name, ad_address, 
+      ad_url, record_status, creator_account, 
       created_time, modifier_account, modified_time
       )
-    values (#{id,jdbcType=VARCHAR}, #{itemId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{operateReocrd,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{adName,jdbcType=VARCHAR}, #{adAddress,jdbcType=VARCHAR}, 
+      #{adUrl,jdbcType=VARCHAR}, #{recordStatus,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.oa.item.entity.TbOaItemHistory">
-    insert into tb_oa_item_history
+  <insert id="insertSelective" parameterType="com.jn.park.sp.entity.TbSpAd">
+    insert into tb_sp_ad
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="itemId != null">
-        item_id,
+      <if test="adName != null">
+        ad_name,
       </if>
-      <if test="remark != null">
-        remark,
+      <if test="adAddress != null">
+        ad_address,
       </if>
-      <if test="operateReocrd != null">
-        operate_reocrd,
+      <if test="adUrl != null">
+        ad_url,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -149,17 +149,17 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="itemId != null">
-        #{itemId,jdbcType=VARCHAR},
+      <if test="adName != null">
+        #{adName,jdbcType=VARCHAR},
       </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
+      <if test="adAddress != null">
+        #{adAddress,jdbcType=VARCHAR},
       </if>
-      <if test="operateReocrd != null">
-        #{operateReocrd,jdbcType=VARCHAR},
+      <if test="adUrl != null">
+        #{adUrl,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        #{recordStatus,jdbcType=TINYINT},
+        #{recordStatus,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -175,29 +175,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.oa.item.entity.TbOaItemHistoryCriteria" resultType="java.lang.Long">
-    select count(*) from tb_oa_item_history
+  <select id="countByExample" parameterType="com.jn.park.sp.entity.TbSpAdCriteria" resultType="java.lang.Long">
+    select count(*) from tb_sp_ad
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_oa_item_history
+    update tb_sp_ad
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.itemId != null">
-        item_id = #{record.itemId,jdbcType=VARCHAR},
+      <if test="record.adName != null">
+        ad_name = #{record.adName,jdbcType=VARCHAR},
       </if>
-      <if test="record.remark != null">
-        remark = #{record.remark,jdbcType=VARCHAR},
+      <if test="record.adAddress != null">
+        ad_address = #{record.adAddress,jdbcType=VARCHAR},
       </if>
-      <if test="record.operateReocrd != null">
-        operate_reocrd = #{record.operateReocrd,jdbcType=VARCHAR},
+      <if test="record.adUrl != null">
+        ad_url = #{record.adUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=TINYINT},
+        record_status = #{record.recordStatus,jdbcType=INTEGER},
       </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -217,12 +217,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_oa_item_history
+    update tb_sp_ad
     set id = #{record.id,jdbcType=VARCHAR},
-      item_id = #{record.itemId,jdbcType=VARCHAR},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      operate_reocrd = #{record.operateReocrd,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      ad_name = #{record.adName,jdbcType=VARCHAR},
+      ad_address = #{record.adAddress,jdbcType=VARCHAR},
+      ad_url = #{record.adUrl,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=INTEGER},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
@@ -231,20 +231,20 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.oa.item.entity.TbOaItemHistory">
-    update tb_oa_item_history
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.sp.entity.TbSpAd">
+    update tb_sp_ad
     <set>
-      <if test="itemId != null">
-        item_id = #{itemId,jdbcType=VARCHAR},
+      <if test="adName != null">
+        ad_name = #{adName,jdbcType=VARCHAR},
       </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
+      <if test="adAddress != null">
+        ad_address = #{adAddress,jdbcType=VARCHAR},
       </if>
-      <if test="operateReocrd != null">
-        operate_reocrd = #{operateReocrd,jdbcType=VARCHAR},
+      <if test="adUrl != null">
+        ad_url = #{adUrl,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=TINYINT},
+        record_status = #{recordStatus,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -261,12 +261,12 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.oa.item.entity.TbOaItemHistory">
-    update tb_oa_item_history
-    set item_id = #{itemId,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      operate_reocrd = #{operateReocrd,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=TINYINT},
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.sp.entity.TbSpAd">
+    update tb_sp_ad
+    set ad_name = #{adName,jdbcType=VARCHAR},
+      ad_address = #{adAddress,jdbcType=VARCHAR},
+      ad_url = #{adUrl,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=INTEGER},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},

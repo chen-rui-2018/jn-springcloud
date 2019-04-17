@@ -384,9 +384,9 @@ public class InvestorServiceImpl implements InvestorService {
                 //投资人账号
                 eduExp.setInvestorAccount(investorAccount);
                 //开始时间
-                eduExp.setStartTime(DateUtils.parseDate(investorEduExperienceParam.getStartTime()));
+                eduExp.setStartTime(investorEduExperienceParam.getStartTime());
                 //结束时间
-                eduExp.setEndTime(DateUtils.parseDate(investorEduExperienceParam.getEndTime()));
+                eduExp.setEndTime(investorEduExperienceParam.getEndTime());
                 //学校名称
                 eduExp.setSchoolName(investorEduExperienceParam.getSchoolName());
                 //专业名称
@@ -427,9 +427,9 @@ public class InvestorServiceImpl implements InvestorService {
                 //投资人账号
                 workExp.setInvestorAccount(investorAccount);
                 //开始时间
-                workExp.setStartTime(DateUtils.parseDate(investorWorkExperienceParam.getStartTime()));
+                workExp.setStartTime(investorWorkExperienceParam.getStartTime());
                 //结束时间
-                workExp.setEndTime(DateUtils.parseDate(investorWorkExperienceParam.getEndTime()));
+                workExp.setEndTime(investorWorkExperienceParam.getEndTime());
                 //单位名称
                 workExp.setCompanyName(investorWorkExperienceParam.getCompanyName());
                 //职务

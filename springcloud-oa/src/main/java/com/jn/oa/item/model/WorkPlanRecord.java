@@ -17,7 +17,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "WorkPlanAdd", description = "工作计划工作记录添加实体")
+@ApiModel(value = "WorkPlanRecord", description = "工作计划工作记录添加实体")
 public class WorkPlanRecord implements Serializable {
 
     @ApiModelProperty(value = "id")

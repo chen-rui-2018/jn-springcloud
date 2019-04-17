@@ -73,10 +73,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        notice
+                        gamtopic
                     </contexts>
                     <tableNames>
-                        tb_notice_details,tb_notice_info
+                       tb_person_care
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -62,5 +62,14 @@ public class ActivityListController extends BaseController {
         return new Result(activityTypeList);
 
     }
+    @ControllerLog(doAction = "机构详情-活动资讯(活动列表)")
+    @ApiOperation(value = "机构详情-活动资讯(活动列表)" ,notes = "查询活动类型为 机构活动 的活动列表,分页中的'total'值即为活动资讯总数")
+    @RequestMapping(value = "/guest/activity/findOrgActivityList",method = RequestMethod.GET)
+    public Result<PaginationData<List<OrgActivityShow>>> findOrgActivityList(@Validated OrgActivityParam query) {
+        String activityType ="org_activity";
+        PaginationData  activityTypeList = activityService.findOrgActivityList(query,activityType,Boolean.TRUE);
+        return new Result(activityTypeList);
+
+    }
 
 }

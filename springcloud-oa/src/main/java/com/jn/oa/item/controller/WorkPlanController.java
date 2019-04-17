@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.excel.ExcelUtil;
 import com.jn.oa.item.enmus.WorkPlanExceptionEnmus;
+import com.jn.oa.item.entity.TbOaItem;
 import com.jn.oa.item.model.*;
 import com.jn.oa.item.service.WorkPlanService;
 import com.jn.oa.item.vo.WorkPlanVO;
@@ -129,6 +130,15 @@ public class WorkPlanController extends BaseController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         workPlanService.delete(workPlanId, user);
         return new Result();
+    }
+
+    @ControllerLog(doAction = "获取所有项目信息")
+    @RequiresPermissions("/oa/workPlan/getItemAll")
+    @ApiOperation(value = "获取所有项目信息", notes = "获取所有项目信息")
+    @RequestMapping(value = "/getItemAll", method = RequestMethod.GET)
+    public Result<List<TbOaItem>> getItemAll() {
+        List<TbOaItem> itemList = workPlanService.getItemAll();
+        return new Result(itemList);
     }
 
 

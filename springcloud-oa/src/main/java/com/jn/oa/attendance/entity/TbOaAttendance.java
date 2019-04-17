@@ -6,7 +6,7 @@ import java.util.Date;
 public class TbOaAttendance implements Serializable {
     private String id;
 
-    private Date modifiedTime;
+    private String attendanceUser;
 
     private Date signInAttendanceTime;
 
@@ -34,7 +34,7 @@ public class TbOaAttendance implements Serializable {
 
     private String modifierAccount;
 
-    private String attendanceUser;
+    private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,12 +46,12 @@ public class TbOaAttendance implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public Date getModifiedTime() {
-        return modifiedTime;
+    public String getAttendanceUser() {
+        return attendanceUser;
     }
 
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
+    public void setAttendanceUser(String attendanceUser) {
+        this.attendanceUser = attendanceUser == null ? null : attendanceUser.trim();
     }
 
     public Date getSignInAttendanceTime() {
@@ -158,12 +158,12 @@ public class TbOaAttendance implements Serializable {
         this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
-    public String getAttendanceUser() {
-        return attendanceUser;
+    public Date getModifiedTime() {
+        return modifiedTime;
     }
 
-    public void setAttendanceUser(String attendanceUser) {
-        this.attendanceUser = attendanceUser == null ? null : attendanceUser.trim();
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     @Override
@@ -179,7 +179,7 @@ public class TbOaAttendance implements Serializable {
         }
         TbOaAttendance other = (TbOaAttendance) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getAttendanceUser() == null ? other.getAttendanceUser() == null : this.getAttendanceUser().equals(other.getAttendanceUser()))
             && (this.getSignInAttendanceTime() == null ? other.getSignInAttendanceTime() == null : this.getSignInAttendanceTime().equals(other.getSignInAttendanceTime()))
             && (this.getSignInAttendancePlatform() == null ? other.getSignInAttendancePlatform() == null : this.getSignInAttendancePlatform().equals(other.getSignInAttendancePlatform()))
             && (this.getSignInLongitude() == null ? other.getSignInLongitude() == null : this.getSignInLongitude().equals(other.getSignInLongitude()))
@@ -193,7 +193,7 @@ public class TbOaAttendance implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getAttendanceUser() == null ? other.getAttendanceUser() == null : this.getAttendanceUser().equals(other.getAttendanceUser()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
     }
 
     @Override
@@ -201,7 +201,7 @@ public class TbOaAttendance implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getAttendanceUser() == null) ? 0 : getAttendanceUser().hashCode());
         result = prime * result + ((getSignInAttendanceTime() == null) ? 0 : getSignInAttendanceTime().hashCode());
         result = prime * result + ((getSignInAttendancePlatform() == null) ? 0 : getSignInAttendancePlatform().hashCode());
         result = prime * result + ((getSignInLongitude() == null) ? 0 : getSignInLongitude().hashCode());
@@ -215,7 +215,7 @@ public class TbOaAttendance implements Serializable {
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
-        result = prime * result + ((getAttendanceUser() == null) ? 0 : getAttendanceUser().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         return result;
     }
 
@@ -226,7 +226,7 @@ public class TbOaAttendance implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", attendanceUser=").append(attendanceUser);
         sb.append(", signInAttendanceTime=").append(signInAttendanceTime);
         sb.append(", signInAttendancePlatform=").append(signInAttendancePlatform);
         sb.append(", signInLongitude=").append(signInLongitude);
@@ -240,7 +240,7 @@ public class TbOaAttendance implements Serializable {
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
-        sb.append(", attendanceUser=").append(attendanceUser);
+        sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.oa.attendance.dao.TbOaAttendanceMapper">
   <resultMap id="BaseResultMap" type="com.jn.oa.attendance.entity.TbOaAttendance">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="attendance_user" jdbcType="VARCHAR" property="attendanceUser" />
     <result column="sign_in_attendance_time" jdbcType="TIMESTAMP" property="signInAttendanceTime" />
     <result column="sign_in_attendance_platform" jdbcType="VARCHAR" property="signInAttendancePlatform" />
     <result column="sign_in_longitude" jdbcType="VARCHAR" property="signInLongitude" />
@@ -17,7 +17,7 @@
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="attendance_user" jdbcType="VARCHAR" property="attendanceUser" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,10 +78,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, modified_time, sign_in_attendance_time, sign_in_attendance_platform, sign_in_longitude, 
+    id, attendance_user, sign_in_attendance_time, sign_in_attendance_platform, sign_in_longitude, 
     sign_in_latitude, sign_in_attendance_ip, sign_out_attendance_time, sign_out_attendance_platform, 
     sign_out_longitude, sign_out_latitude, sign_out_attendance_ip, creator_account, created_time, 
-    modifier_account, attendance_user
+    modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.attendance.entity.TbOaAttendanceCriteria" resultMap="BaseResultMap">
     select
@@ -114,19 +114,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.oa.attendance.entity.TbOaAttendance">
-    insert into tb_oa_attendance (id, modified_time, sign_in_attendance_time, 
+    insert into tb_oa_attendance (id, attendance_user, sign_in_attendance_time, 
       sign_in_attendance_platform, sign_in_longitude, 
       sign_in_latitude, sign_in_attendance_ip, sign_out_attendance_time, 
       sign_out_attendance_platform, sign_out_longitude, 
       sign_out_latitude, sign_out_attendance_ip, creator_account, 
-      created_time, modifier_account, attendance_user
+      created_time, modifier_account, modified_time
       )
-    values (#{id,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{signInAttendanceTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=VARCHAR}, #{attendanceUser,jdbcType=VARCHAR}, #{signInAttendanceTime,jdbcType=TIMESTAMP}, 
       #{signInAttendancePlatform,jdbcType=VARCHAR}, #{signInLongitude,jdbcType=VARCHAR}, 
       #{signInLatitude,jdbcType=VARCHAR}, #{signInAttendanceIp,jdbcType=VARCHAR}, #{signOutAttendanceTime,jdbcType=TIMESTAMP}, 
       #{signOutAttendancePlatform,jdbcType=VARCHAR}, #{signOutLongitude,jdbcType=VARCHAR}, 
       #{signOutLatitude,jdbcType=VARCHAR}, #{signOutAttendanceIp,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{attendanceUser,jdbcType=VARCHAR}
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.attendance.entity.TbOaAttendance">
@@ -135,8 +135,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="modifiedTime != null">
-        modified_time,
+      <if test="attendanceUser != null">
+        attendance_user,
       </if>
       <if test="signInAttendanceTime != null">
         sign_in_attendance_time,
@@ -177,16 +177,16 @@
       <if test="modifierAccount != null">
         modifier_account,
       </if>
-      <if test="attendanceUser != null">
-        attendance_user,
+      <if test="modifiedTime != null">
+        modified_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="modifiedTime != null">
-        #{modifiedTime,jdbcType=TIMESTAMP},
+      <if test="attendanceUser != null">
+        #{attendanceUser,jdbcType=VARCHAR},
       </if>
       <if test="signInAttendanceTime != null">
         #{signInAttendanceTime,jdbcType=TIMESTAMP},
@@ -227,8 +227,8 @@
       <if test="modifierAccount != null">
         #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="attendanceUser != null">
-        #{attendanceUser,jdbcType=VARCHAR},
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -244,8 +244,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.modifiedTime != null">
-        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      <if test="record.attendanceUser != null">
+        attendance_user = #{record.attendanceUser,jdbcType=VARCHAR},
       </if>
       <if test="record.signInAttendanceTime != null">
         sign_in_attendance_time = #{record.signInAttendanceTime,jdbcType=TIMESTAMP},
@@ -286,8 +286,8 @@
       <if test="record.modifierAccount != null">
         modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.attendanceUser != null">
-        attendance_user = #{record.attendanceUser,jdbcType=VARCHAR},
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -297,7 +297,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_oa_attendance
     set id = #{record.id,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      attendance_user = #{record.attendanceUser,jdbcType=VARCHAR},
       sign_in_attendance_time = #{record.signInAttendanceTime,jdbcType=TIMESTAMP},
       sign_in_attendance_platform = #{record.signInAttendancePlatform,jdbcType=VARCHAR},
       sign_in_longitude = #{record.signInLongitude,jdbcType=VARCHAR},
@@ -311,7 +311,7 @@
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      attendance_user = #{record.attendanceUser,jdbcType=VARCHAR}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -319,8 +319,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.oa.attendance.entity.TbOaAttendance">
     update tb_oa_attendance
     <set>
-      <if test="modifiedTime != null">
-        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      <if test="attendanceUser != null">
+        attendance_user = #{attendanceUser,jdbcType=VARCHAR},
       </if>
       <if test="signInAttendanceTime != null">
         sign_in_attendance_time = #{signInAttendanceTime,jdbcType=TIMESTAMP},
@@ -361,15 +361,15 @@
       <if test="modifierAccount != null">
         modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="attendanceUser != null">
-        attendance_user = #{attendanceUser,jdbcType=VARCHAR},
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.oa.attendance.entity.TbOaAttendance">
     update tb_oa_attendance
-    set modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+    set attendance_user = #{attendanceUser,jdbcType=VARCHAR},
       sign_in_attendance_time = #{signInAttendanceTime,jdbcType=TIMESTAMP},
       sign_in_attendance_platform = #{signInAttendancePlatform,jdbcType=VARCHAR},
       sign_in_longitude = #{signInLongitude,jdbcType=VARCHAR},
@@ -383,7 +383,7 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      attendance_user = #{attendanceUser,jdbcType=VARCHAR}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

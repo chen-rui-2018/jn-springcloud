@@ -175,63 +175,73 @@ public class TbOaAttendanceCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeIsNull() {
-            addCriterion("modified_time is null");
+        public Criteria andAttendanceUserIsNull() {
+            addCriterion("attendance_user is null");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeIsNotNull() {
-            addCriterion("modified_time is not null");
+        public Criteria andAttendanceUserIsNotNull() {
+            addCriterion("attendance_user is not null");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeEqualTo(Date value) {
-            addCriterion("modified_time =", value, "modifiedTime");
+        public Criteria andAttendanceUserEqualTo(String value) {
+            addCriterion("attendance_user =", value, "attendanceUser");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeNotEqualTo(Date value) {
-            addCriterion("modified_time <>", value, "modifiedTime");
+        public Criteria andAttendanceUserNotEqualTo(String value) {
+            addCriterion("attendance_user <>", value, "attendanceUser");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeGreaterThan(Date value) {
-            addCriterion("modified_time >", value, "modifiedTime");
+        public Criteria andAttendanceUserGreaterThan(String value) {
+            addCriterion("attendance_user >", value, "attendanceUser");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("modified_time >=", value, "modifiedTime");
+        public Criteria andAttendanceUserGreaterThanOrEqualTo(String value) {
+            addCriterion("attendance_user >=", value, "attendanceUser");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeLessThan(Date value) {
-            addCriterion("modified_time <", value, "modifiedTime");
+        public Criteria andAttendanceUserLessThan(String value) {
+            addCriterion("attendance_user <", value, "attendanceUser");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeLessThanOrEqualTo(Date value) {
-            addCriterion("modified_time <=", value, "modifiedTime");
+        public Criteria andAttendanceUserLessThanOrEqualTo(String value) {
+            addCriterion("attendance_user <=", value, "attendanceUser");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeIn(List<Date> values) {
-            addCriterion("modified_time in", values, "modifiedTime");
+        public Criteria andAttendanceUserLike(String value) {
+            addCriterion("attendance_user like", value, "attendanceUser");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeNotIn(List<Date> values) {
-            addCriterion("modified_time not in", values, "modifiedTime");
+        public Criteria andAttendanceUserNotLike(String value) {
+            addCriterion("attendance_user not like", value, "attendanceUser");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeBetween(Date value1, Date value2) {
-            addCriterion("modified_time between", value1, value2, "modifiedTime");
+        public Criteria andAttendanceUserIn(List<String> values) {
+            addCriterion("attendance_user in", values, "attendanceUser");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
-            addCriterion("modified_time not between", value1, value2, "modifiedTime");
+        public Criteria andAttendanceUserNotIn(List<String> values) {
+            addCriterion("attendance_user not in", values, "attendanceUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendanceUserBetween(String value1, String value2) {
+            addCriterion("attendance_user between", value1, value2, "attendanceUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendanceUserNotBetween(String value1, String value2) {
+            addCriterion("attendance_user not between", value1, value2, "attendanceUser");
             return (Criteria) this;
         }
 
@@ -1115,73 +1125,63 @@ public class TbOaAttendanceCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserIsNull() {
-            addCriterion("attendance_user is null");
+        public Criteria andModifiedTimeIsNull() {
+            addCriterion("modified_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserIsNotNull() {
-            addCriterion("attendance_user is not null");
+        public Criteria andModifiedTimeIsNotNull() {
+            addCriterion("modified_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserEqualTo(String value) {
-            addCriterion("attendance_user =", value, "attendanceUser");
+        public Criteria andModifiedTimeEqualTo(Date value) {
+            addCriterion("modified_time =", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserNotEqualTo(String value) {
-            addCriterion("attendance_user <>", value, "attendanceUser");
+        public Criteria andModifiedTimeNotEqualTo(Date value) {
+            addCriterion("modified_time <>", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserGreaterThan(String value) {
-            addCriterion("attendance_user >", value, "attendanceUser");
+        public Criteria andModifiedTimeGreaterThan(Date value) {
+            addCriterion("modified_time >", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserGreaterThanOrEqualTo(String value) {
-            addCriterion("attendance_user >=", value, "attendanceUser");
+        public Criteria andModifiedTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("modified_time >=", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserLessThan(String value) {
-            addCriterion("attendance_user <", value, "attendanceUser");
+        public Criteria andModifiedTimeLessThan(Date value) {
+            addCriterion("modified_time <", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserLessThanOrEqualTo(String value) {
-            addCriterion("attendance_user <=", value, "attendanceUser");
+        public Criteria andModifiedTimeLessThanOrEqualTo(Date value) {
+            addCriterion("modified_time <=", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserLike(String value) {
-            addCriterion("attendance_user like", value, "attendanceUser");
+        public Criteria andModifiedTimeIn(List<Date> values) {
+            addCriterion("modified_time in", values, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserNotLike(String value) {
-            addCriterion("attendance_user not like", value, "attendanceUser");
+        public Criteria andModifiedTimeNotIn(List<Date> values) {
+            addCriterion("modified_time not in", values, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserIn(List<String> values) {
-            addCriterion("attendance_user in", values, "attendanceUser");
+        public Criteria andModifiedTimeBetween(Date value1, Date value2) {
+            addCriterion("modified_time between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceUserNotIn(List<String> values) {
-            addCriterion("attendance_user not in", values, "attendanceUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttendanceUserBetween(String value1, String value2) {
-            addCriterion("attendance_user between", value1, value2, "attendanceUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttendanceUserNotBetween(String value1, String value2) {
-            addCriterion("attendance_user not between", value1, value2, "attendanceUser");
+        public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
+            addCriterion("modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
     }

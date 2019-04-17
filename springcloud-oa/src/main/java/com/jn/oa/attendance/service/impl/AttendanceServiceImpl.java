@@ -15,6 +15,9 @@ import com.jn.oa.attendance.model.AttendancePage;
 import com.jn.oa.attendance.service.AttendanceService;
 import com.jn.oa.attendance.vo.AttendanceResultVo;
 import com.jn.oa.attendance.vo.AttendanceVo;
+import com.jn.oa.model.Attendance;
+import com.jn.oa.vo.AttendanceApiVo;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +58,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @ServiceLog(doAction = "考勤签到/签退")
     public AttendanceResultVo attendance(AttendanceAdd  attendanceAdd, User user) {
         TbOaAttendance tbOaAttendance=new TbOaAttendance();
         BeanUtils.copyProperties(attendanceAdd, tbOaAttendance);
@@ -120,6 +124,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询考勤详情")
     public TbOaAttendance getAttendanceById(String attendanceId) {
         return tbOaAttendanceMapper.selectByPrimaryKey(attendanceId);
     }
@@ -131,6 +136,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户id查询考勤详情")
     public List<AttendanceVo> getAttendanceByUserId(String userId) {
 
         AttendancePage attendance=new AttendancePage();
@@ -145,6 +151,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据当前时间查询考勤详情")
     public AttendanceVo selectByUserIdAndCurrentDate(String userId) {
         //查询改用户当天签到列表
         AttendancePage attendance=new AttendancePage();
@@ -164,11 +171,24 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据条件查询考勤列表")
     public PaginationData selectAttendanceListByCondition(AttendancePage  attendancePage) {
 
         Page<Object> objects = PageHelper.startPage(attendancePage.getPage(), attendancePage.getRows());
         return new PaginationData(attendanceMapper.selectAttendanceByCondition(attendancePage)
                 , objects.getTotal());
 
+    }
+
+    /**
+     * OA-API根据条件查询考勤列表
+     *
+     * @param attendance
+     * @return
+     */
+    @Override
+    public List<AttendanceApiVo> selectApiAttendanceListByCondition(Attendance attendance) {
+        logger.info("[考勤管理] 条件查询考勤列表，,userId：{},departmentId：{},startTime：{},endTime：{}", attendance.getUserId(),attendance.getDepartmentId(),attendance.getStartTime(),attendance.getEndTime());
+        return attendanceMapper.selectAttendanceListByCondition(attendance);
     }
 }

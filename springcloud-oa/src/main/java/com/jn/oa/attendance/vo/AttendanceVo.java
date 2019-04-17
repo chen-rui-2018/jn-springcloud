@@ -17,7 +17,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "Attendance", description = "考勤实体")
+@ApiModel(value = "AttendanceVo", description = "考勤实体")
 public class AttendanceVo implements Serializable  {
 
     private static final long serialVersionUID = -5671809054725364233L;

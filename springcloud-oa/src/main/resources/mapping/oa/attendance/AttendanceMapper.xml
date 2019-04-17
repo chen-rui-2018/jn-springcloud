@@ -22,6 +22,15 @@
         <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
 
     </resultMap>
+    <resultMap id="SimpleBaseResultMap" type="com.jn.oa.vo.AttendanceApiVo">
+        <result column="sign_in_attendance_time" jdbcType="TIMESTAMP" property="signInAttendanceTime" />
+        <result column="sign_out_attendance_time" jdbcType="TIMESTAMP" property="signOutAttendanceTime" />
+        <result column="userId" jdbcType="VARCHAR" property="userId" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+        <result column="departmentId" jdbcType="VARCHAR" property="departmentId" />
+    </resultMap>
+
 
     <sql id="Base_Column_List">
     t.id, t.modified_time, t.sign_in_attendance_time, t.sign_in_attendance_platform, t.sign_in_longitude,
@@ -37,29 +46,29 @@
       from tb_oa_attendance t
 
        LEFT JOIN (
-       SELECT
-       t.id,
-       t.name,
-       t.account,
-       tt.department_name,
-       tt.departmentId
-       FROM
-       tb_sys_user t
-       LEFT JOIN (
-       SELECT
-       t1.user_id,
-       t2.department_name,
-       t2.id as departmentId
-       FROM
-       tb_sys_user_department_post t1
-       INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
-       WHERE
-       t1.is_default = 1
-       AND t1.record_status = 1
-       AND t2.record_status = 1
-       ) tt ON t.id = tt.user_id
-       WHERE
-       t.record_status = 1
+           SELECT
+               t.id,
+               t.name,
+               t.account,
+               tt.department_name,
+               tt.departmentId
+           FROM
+              tb_sys_user t
+           LEFT JOIN (
+               SELECT
+                   t1.user_id,
+                   t2.department_name,
+                   t2.id as departmentId
+               FROM
+                  tb_sys_user_department_post t1
+               INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
+               WHERE
+                   t1.is_default = 1
+                   AND t1.record_status = 1
+                   AND t2.record_status = 1
+           ) tt ON t.id = tt.user_id
+           WHERE
+           t.record_status = 1
        ) u ON t.attendance_user = u.id
 
        where
@@ -90,6 +99,62 @@
        </if>
 
    </select>
+
+
+    <select id="selectAttendanceListByCondition" parameterType="com.jn.oa.model.Attendance" resultMap="SimpleBaseResultMap">
+        select
+       t.sign_in_attendance_time,
+       t.sign_out_attendance_time,
+        u.NAME AS userName,
+        u.department_name AS departmentName,
+        u.account,
+        u.id as userId,
+        u.departmentId
+        from tb_oa_attendance t
+
+        LEFT JOIN (
+            SELECT
+                t.id,
+                t.name,
+                t.account,
+                tt.department_name,
+                tt.departmentId
+            FROM
+              tb_sys_user t
+            LEFT JOIN (
+                SELECT
+                    t1.user_id,
+                    t2.department_name,
+                    t2.id as departmentId
+                FROM
+                  tb_sys_user_department_post t1
+                INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
+                WHERE
+                    t1.is_default = 1
+                    AND t1.record_status = 1
+                    AND t2.record_status = 1
+            ) tt ON t.id = tt.user_id
+            WHERE
+            t.record_status = 1
+        ) u ON t.attendance_user = u.id
+
+        where
+        1=1
+
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userId)">
+            and t.attendance_user= #{userId,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+            and u.departmentId= #{departmentId,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime != null">
+            AND  Date(t.sign_in_attendance_time) &gt;= DATE_FORMAT(#{startTime},'%Y-%m-%d')
+        </if>
+        <if test="endTime != null">
+            and   Date( t.sign_in_attendance_time ) &lt;= DATE_FORMAT(#{endTime},'%Y-%m-%d')
+        </if>
+
+    </select>
 
 
 

@@ -5,7 +5,6 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.oa.attendance.entity.TbOaAttendance;
-import com.jn.oa.attendance.model.Attendance;
 import com.jn.oa.attendance.model.AttendanceAdd;
 import com.jn.oa.attendance.model.AttendancePage;
 import com.jn.oa.attendance.service.AttendanceService;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 考勤管理controller

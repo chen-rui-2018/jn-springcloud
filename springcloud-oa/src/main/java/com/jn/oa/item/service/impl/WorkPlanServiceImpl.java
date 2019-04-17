@@ -236,7 +236,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         List<WorkPlanRemindUserVO> workPlanRemindUserVOS = workPlanUserMapper.getRemindWorkPlan();
         for (WorkPlanRemindUserVO workPlanRemindUserVO : workPlanRemindUserVOS) {
             String email = workPlanRemindUserVO.getEmail();
-            if (email != null) {
+            if (StringUtils.isNotBlank(email)) {
                 String userId = workPlanRemindUserVO.getUserId();
                 EmailVo emailVo = new EmailVo();
                 emailVo.setEmail(email);
@@ -333,7 +333,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
 
                 //2.获取对应用户
                 List<String> accountList = workPlanMapper.getUser(workPlanImport1.getUserName(), workPlanImport1.getEmail());
-                String userAccount = null;
+                String userAccount;
                 if (accountList != null && accountList.size() > 0) {
                     userAccount = accountList.get(0);
                 } else {
@@ -518,7 +518,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
     private void insertWorkPlanUser(String workPlanId, String responsibleUserAccount,
                                     User user, StringBuffer userEmails) {
         String account = user.getAccount();
-        if (responsibleUserAccount != null) {
+        if (StringUtils.isNotBlank(responsibleUserAccount)) {
             String[] userAccounts = responsibleUserAccount.split(",");
             for (String userAccount : userAccounts) {
                 //设置工作计划负责人表的属性
@@ -533,7 +533,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
                 tbOaWorkPlanUserMapper.insert(tbOaWorkPlanUser);
 
                 //获取用户账号邮箱
-                if (userEmails != null) {
+                if (StringUtils.isNotBlank(userEmails)) {
                     User user1 = new User();
                     user1.setAccount(userAccount);
                     Result<User> result = systemClient.getUser(user1);
@@ -655,7 +655,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         BeanUtils.copyProperties(workPlanEdit, tbOaWorkPlan);
         String operateDetails = BeanDiffUtil.diff(tbOaWorkPlan, oldTbOaWorkPlan);
         String attachment = workPlanEdit.getAttachment();
-        if (attachment != null) {
+        if (StringUtils.isNotBlank(attachment)) {
             tbOaWorkPlan.setAttachment(oldTbOaWorkPlan.getAttachment());
             setAttachment(attachment, tbOaWorkPlan);
         }
@@ -664,7 +664,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         tbOaWorkPlanMapper.updateByPrimaryKeySelective(tbOaWorkPlan);
 
         //5.添加负责人历史记录信息
-        if (oldResponsibleName != null) {
+        if (StringUtils.isNotBlank(oldResponsibleName)) {
             String newResponsibleName = workPlanMapper.getResponsibleName(workPlanId);
             buffer.append("<p>修改了&nbsp;&nbsp;<i style=\"color:black;font-weight:600\">").append("工作计划负责人")
                     .append(" </i>,&nbsp;&nbsp;旧值为:&nbsp;&nbsp;\"").append(oldResponsibleName)
@@ -1007,7 +1007,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
      */
     private void setAttachment(String attachment, TbOaWorkPlan tbOaWorkPlan) {
         String attachment1 = tbOaWorkPlan.getAttachment();
-        if (attachment1 != null) {
+        if (StringUtils.isNotBlank(attachment1)) {
             //操作原附件字符串
             String subAtt1 = attachment1.substring(0, attachment1.length() - 1);
             //操作信息字符串

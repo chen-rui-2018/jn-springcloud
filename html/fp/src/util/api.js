@@ -23,6 +23,18 @@ export default {
         modifyUserPassword:"springcloud-user/user/center/modifyUserPassword",//修改用户密码
         saveUserInfo:"springcloud-user/guest/userInfo/saveUserInfo",//保存用户资料
         getTagCodeList:"springcloud-user//guest/userTag/getTagCodeList",//获取用户字典列表
+        findHotProducts:"springcloud-enterprise/servicemarket/product/web/findHotProducts",//热门产品
+        selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//顾问领域列表
+        getServiceConsultantList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//机构服务顾问
+        selectTeamList:"springcloud-enterprise/guest/serviceMarket/industryManage/selectIndustryList",//机构领域获取
+        selectServiceOrgList:"springcloud-enterprise/guest/serviceMarket/org/selectServiceOrgList",//服务机构列表获取
+        getServiceRatingInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceRatingInfo",//最新评价
+        getCompassAllCate:"springcloud-park/portal/sp/power/departList",//compassView所有类别
+        getpowerList:"springcloud-park/portal/sp/power/list",//权力清单列表
+        getpowerDetail:"springcloud-park/portal/sp/power/get",//权利明细
+        getseviceDetail:"springcloud-park/portal/sp/power/getBusi",//业务明细（服务详情）
+        message:"springcloud-park/portal/sp/power/SpMessage",//我要留言
+        getplatform:"springcloud-enterprise/pd/declaration/list"
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

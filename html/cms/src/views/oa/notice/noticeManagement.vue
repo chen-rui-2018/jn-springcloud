@@ -223,6 +223,7 @@ export default {
 <style lang="scss">
 .noticeContent{
 .el-dialog{
+
       height: 550px;
       overflow: auto;
     }

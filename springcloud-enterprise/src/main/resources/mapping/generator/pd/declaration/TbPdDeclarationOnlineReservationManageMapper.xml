@@ -120,10 +120,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_pd_declaration_online_reservation_manage (appointment_item_id, appointment_item_name, 
+    insert into tb_pd_declaration_online_reservation_manage (id, appointment_item_id, appointment_item_name, 
       contact_name, contact_phone, email, 
       file_url, remark, time_appointment, 
       declare_enterprise, declare_item, reply_status, 
@@ -131,7 +128,7 @@
       audit_department, declare_type, record_status, 
       creator_account, created_time, modifier_account, 
       modified_time)
-    values (#{appointmentItemId,jdbcType=VARCHAR}, #{appointmentItemName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{appointmentItemId,jdbcType=VARCHAR}, #{appointmentItemName,jdbcType=VARCHAR}, 
       #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{fileUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{timeAppointment,jdbcType=TIMESTAMP}, 
       #{declareEnterprise,jdbcType=VARCHAR}, #{declareItem,jdbcType=VARCHAR}, #{replyStatus,jdbcType=TINYINT}, 
@@ -141,11 +138,11 @@
       #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_pd_declaration_online_reservation_manage
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="appointmentItemId != null">
         appointment_item_id,
       </if>
@@ -211,6 +208,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="appointmentItemId != null">
         #{appointmentItemId,jdbcType=VARCHAR},
       </if>

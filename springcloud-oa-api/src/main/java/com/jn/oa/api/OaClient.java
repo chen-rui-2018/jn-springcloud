@@ -1,11 +1,17 @@
 package com.jn.oa.api;
 
 import com.jn.common.model.Result;
+import com.jn.oa.model.Attendance;
 import com.jn.oa.model.Email;
+import com.jn.oa.model.Leave;
+import com.jn.oa.vo.AttendanceApiVo;
+import com.jn.oa.vo.LeaveApiVo;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 /**
  * oa系统客户端
@@ -75,4 +81,24 @@ public interface OaClient {
      */
     @RequestMapping(value = "/api/oa/multiDeptOfficeStatusRemind", method = RequestMethod.POST)
     Result<Boolean> multiDeptOfficeStatusRemind();
+
+
+    /**
+     * 根据条件查询请假列表
+     * @param leave
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/searchLeaveListByCondition", method = RequestMethod.POST)
+    Result<List<LeaveApiVo>> searchLeaveListByCondition(@RequestBody Leave leave);
+
+    /**
+     *  根据条件查询考勤列表
+     * @param attendance
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/selectAttendanceListByCondition", method = RequestMethod.POST)
+    Result<List<AttendanceApiVo>> selectAttendanceListByCondition(@RequestBody Attendance attendance);
+
+
+
 }

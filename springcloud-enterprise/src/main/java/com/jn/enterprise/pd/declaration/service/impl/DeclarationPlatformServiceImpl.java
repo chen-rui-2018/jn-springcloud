@@ -1,5 +1,8 @@
 package com.jn.enterprise.pd.declaration.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.jn.common.model.PaginationData;
 import com.jn.enterprise.pd.declaration.dao.TbPdDeclarationPlatformManageMapper;
 import com.jn.enterprise.pd.declaration.dao.TbPdDeclarationPlatformSubordinateMapper;
 import com.jn.enterprise.pd.declaration.entity.*;
@@ -32,15 +35,15 @@ public class DeclarationPlatformServiceImpl implements DeclarationPlatformServic
     private TbPdDeclarationPlatformSubordinateMapper tbPdDeclarationPlatformSubordinateMapper;
 
     @Override
-    public List<TbPdDeclarationPlatformManage> selectByDeclarationPlatformList(String subordinatePlatformName) {
+    public PaginationData<List<TbPdDeclarationPlatformManage>> selectByDeclarationPlatformList(String subordinatePlatformName,int page,int rows) {
+        Page<Object> objects = PageHelper.startPage(page, rows);
         TbPdDeclarationPlatformManageCriteria platformManageCriteria = new TbPdDeclarationPlatformManageCriteria();
         platformManageCriteria.setOrderByClause("created_time desc");
         TbPdDeclarationPlatformManageCriteria.Criteria criteria = platformManageCriteria.createCriteria();
         Byte status = Byte.parseByte(DeclaratStatusEnums.RELEASE.getCode());
         criteria.andStatusEqualTo(status);
         criteria.andSubordinatePlatformNameEqualTo(subordinatePlatformName);
-        List<TbPdDeclarationPlatformManage> selectByDeclarationPlatformList = tbPdDeclarationPlatformManageMapper.selectByExample(platformManageCriteria);
-        return selectByDeclarationPlatformList;
+        return new PaginationData(tbPdDeclarationPlatformManageMapper.selectByExample(platformManageCriteria), objects.getTotal());
     }
 
     @Override

@@ -12,8 +12,17 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum ExceptionStatusEnums implements CodeAndMsg {
 
-    NOTICE_ID_NOT_NULL("5011301", "公告ID不能为空");
+    NOTICE_ID_NOT_NULL("5011301", "公告ID不能为空"),
+    ITEMID_NOT_NULL("5011201", "预约项ID不能为空"),
+    ITEMNAME_NOT_NULL("5011202", "预约项名称不能为空"),
+    CONTACTNAME_NOT_NULL("5011203", "姓名不能为空"),
+    CONTACTPHONE_NOT_NULL("5011204", "电话不能为空"),
+    EMAIL_NOT_NULL("5011205", "邮箱不能为空"),
+    DECLAREENTERPRISE_NOT_NULL("5011206", "申报企业不能为空"),
+    DECLAREITEM_NOT_NULL("5011207", "申报项目名称不能为空")
 
+
+    ;
     private String code;
 
     private String message;

@@ -31,6 +31,17 @@ public class ProductQueryConditions implements Serializable {
     private String keyWords;
     @ApiModelProperty(value = "产品类型")
     private String productType;
+    @ApiModelProperty(value = "常规产品id")
+    private String commentProductId;
+
+    public String getCommentProductId() {
+        return commentProductId;
+    }
+
+    public void setCommentProductId(String commentProductId) {
+        this.commentProductId = commentProductId;
+    }
+
     public Float getPopularityWeight() {
         return popularityWeight;
     }

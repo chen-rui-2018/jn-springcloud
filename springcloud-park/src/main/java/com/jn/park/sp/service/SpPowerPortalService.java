@@ -2,6 +2,7 @@ package com.jn.park.sp.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.park.sp.model.SpAdModel;
 import com.jn.park.sp.model.SpDictDepartModel;
 import com.jn.park.sp.model.SpMessageModel;
 import com.jn.park.sp.vo.SpPowerBusiDetailVo;
@@ -64,4 +65,18 @@ public interface SpPowerPortalService {
      */
     Integer SpMessage(SpMessageModel spMessageModel, User user);
 
+    /**
+     * 获取最新的5例广告图
+     *
+     * @return
+     */
+    List<SpAdModel> getAdvertising();
+
+    /**
+     * 获取在线受理地址
+     *
+     * @param id
+     * @return
+     */
+    String getDealUrl(String id);
 }

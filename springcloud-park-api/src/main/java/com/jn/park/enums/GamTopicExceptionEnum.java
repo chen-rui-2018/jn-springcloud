@@ -12,6 +12,8 @@ public enum GamTopicExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("4020901", "网络异常，请稍后重试。"),
     USER_GAM_TOPIC_IS_NOT_EXIST("4020501","话题数据不存在"),
     GAM_TOPIC_IS_NOT_NOW_USER("4020502","不能删除非本人话题"),
+    DYNAMIC_CONTENT_IS_NULL("4020503","动态内容不能为空"),
+    DYNAMIC_IS_NOT_EXIST("4020504","此条动态已不存在"),
     ;
     /**
      * 编码

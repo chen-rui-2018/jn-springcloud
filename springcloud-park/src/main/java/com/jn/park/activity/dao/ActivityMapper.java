@@ -1,10 +1,7 @@
 package com.jn.park.activity.dao;
 
 
-import com.jn.park.activity.model.ActivityContent;
-import com.jn.park.activity.model.ActivityListApply;
-import com.jn.park.activity.model.ActivitySlim;
-import com.jn.park.activity.model.Activity;
+import com.jn.park.activity.model.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -43,4 +40,13 @@ public interface ActivityMapper {
      * @return
      */
     List<ActivityListApply> findActivitySuccessfulRegistration(@Param("account") String account , @Param("applyStatus") String applyStatus);
+
+    /**
+     *查看机构下的活动列表
+     * @param startTime
+     * @param endTime
+     * @param activityType
+     * @return
+     */
+    List<OrgActivityShow> findOrgActivityList(@Param("startTime") String startTime, @Param("endTime") String endTime,@Param("activityType") String activityType);
 }

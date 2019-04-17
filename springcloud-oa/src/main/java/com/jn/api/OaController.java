@@ -7,7 +7,7 @@ import com.jn.oa.email.service.EmailService;
 import com.jn.oa.item.service.WorkPlanService;
 import com.jn.oa.meeting.service.MeetingService;
 import com.jn.oa.model.Email;
-import com.jn.oa.schedule.service.ScheduleService;
+import com.jn.oa.multiDeptOffice.service.MultiDeptOfficeService;
 import com.jn.system.log.annotation.ControllerLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class OaController extends BaseController implements OaClient {
     private WorkPlanService workPlanService;
 
     @Autowired
-    private ScheduleService scheduleService;
+    private MultiDeptOfficeService multiDeptOfficeService;
 
     /**
      * 定时十分钟通知会议申请人
@@ -96,8 +96,33 @@ public class OaController extends BaseController implements OaClient {
      * @return
      */
     @Override
+    @ControllerLog(doAction = "每天陵城两点自动更新工作计划状态")
     public Result<Boolean> updateWorkPlanStatus() {
         workPlanService.updateWorkPlanIsExpire();
+        return new Result<>(true);
+    }
+
+    /**
+     * 每天自动更新多部门协同任务状态
+     *
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "每天自动更新多部门协同任务状态")
+    public Result<Boolean> updateMultiDeptOfficeStatus() {
+        multiDeptOfficeService.updateMultiDeptOfficeStatus();
+        return new Result<>(true);
+    }
+
+    /**
+     * 多部门协同定时提醒功能
+     *
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "多部门协同定时提醒功能")
+    public Result<Boolean> multiDeptOfficeStatusRemind() {
+        multiDeptOfficeService.remind();
         return new Result<>(true);
     }
 

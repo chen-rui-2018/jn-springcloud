@@ -15,6 +15,7 @@ import com.jn.park.sp.vo.SpPowerDetailVo;
 import com.jn.park.sp.vo.SpPowerVo;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -106,7 +107,7 @@ public class SpPowerPortalController extends BaseController {
     @RequestMapping(value = "/getDealUrl",method = RequestMethod.GET)
     @ResponseBody
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id" , value = "业务ID" , example = "559447847364198400")
+            @ApiImplicitParam(name = "id" , value = "权力ID" , example = "559447847364198400")
     })
     public void getDealUrl(HttpServletResponse response,String id){
         Assert.notNull(id,"权力ID不能为空");

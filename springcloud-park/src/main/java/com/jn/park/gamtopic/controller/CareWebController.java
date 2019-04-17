@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.gamtopic.model.CareAddParam;
 import com.jn.park.gamtopic.model.CareDetailsQueryParam;
+import com.jn.park.gamtopic.model.CareUserDetails;
 import com.jn.park.gamtopic.model.CareUserShow;
 import com.jn.park.gamtopic.service.CareService;
 import com.jn.park.gamtopic.vo.CareDetailsVo;
@@ -82,6 +83,14 @@ public class CareWebController extends BaseController {
         User user =(User) SecurityUtils.getSubject().getPrincipal();
         CareDetailsVo vo  = careService.findCareDetails(param,user==null?"":user.getAccount());
         return new Result(vo);
+    }
+    @ControllerLog(doAction = "公司粉丝数(被关注数),关注状态")
+    @ApiOperation(value = "公司粉丝数(被关注数),关注状态",notes = "通过公司账号,查询公司的粉丝数")
+    @RequestMapping(value = "/findCompanyFansNum",method = RequestMethod.GET)
+    public Result<CareUserDetails>  findCompanyCareInfo(@ApiParam(value="公司账号",name="account",required = true ,example = "wangsong") @RequestParam("account") String account){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        CareUserDetails userDetails = careService.findCompanyCareInfo(account,user==null?"":user.getAccount());
+        return new Result(userDetails);
     }
 
 }

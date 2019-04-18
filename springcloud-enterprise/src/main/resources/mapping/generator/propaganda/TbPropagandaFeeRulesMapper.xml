@@ -11,7 +11,7 @@
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules">
-    <result column="pro_fee_rule_name" jdbcType="LONGVARCHAR" property="proFeeRuleName" />
+    <result column="pro_fee_rule_details" jdbcType="LONGVARCHAR" property="proFeeRuleDetails" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,7 +76,7 @@
     modifier_account, record_status
   </sql>
   <sql id="Blob_Column_List">
-    pro_fee_rule_name
+    pro_fee_rule_details
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRulesCriteria" resultMap="ResultMapWithBLOBs">
     select
@@ -117,10 +117,10 @@
   <insert id="insert" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules">
     insert into tb_propaganda_fee_rules (pro_fee_rule_code, propaganda_fee, created_time, 
       creator_account, modified_time, modifier_account, 
-      record_status, pro_fee_rule_name)
+      record_status, pro_fee_rule_details)
     values (#{proFeeRuleCode,jdbcType=VARCHAR}, #{propagandaFee,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{proFeeRuleName,jdbcType=LONGVARCHAR})
+      #{recordStatus,jdbcType=TINYINT}, #{proFeeRuleDetails,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules">
     insert into tb_propaganda_fee_rules
@@ -146,8 +146,8 @@
       <if test="recordStatus != null">
         record_status,
       </if>
-      <if test="proFeeRuleName != null">
-        pro_fee_rule_name,
+      <if test="proFeeRuleDetails != null">
+        pro_fee_rule_details,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -172,8 +172,8 @@
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="proFeeRuleName != null">
-        #{proFeeRuleName,jdbcType=LONGVARCHAR},
+      <if test="proFeeRuleDetails != null">
+        #{proFeeRuleDetails,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -207,8 +207,8 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="record.proFeeRuleName != null">
-        pro_fee_rule_name = #{record.proFeeRuleName,jdbcType=LONGVARCHAR},
+      <if test="record.proFeeRuleDetails != null">
+        pro_fee_rule_details = #{record.proFeeRuleDetails,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -224,7 +224,7 @@
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
-      pro_fee_rule_name = #{record.proFeeRuleName,jdbcType=LONGVARCHAR}
+      pro_fee_rule_details = #{record.proFeeRuleDetails,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

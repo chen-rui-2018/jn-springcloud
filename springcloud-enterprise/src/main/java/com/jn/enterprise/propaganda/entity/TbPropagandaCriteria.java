@@ -175,76 +175,6 @@ public class TbPropagandaCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaIdIsNull() {
-            addCriterion("propaganda_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdIsNotNull() {
-            addCriterion("propaganda_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdEqualTo(String value) {
-            addCriterion("propaganda_id =", value, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdNotEqualTo(String value) {
-            addCriterion("propaganda_id <>", value, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdGreaterThan(String value) {
-            addCriterion("propaganda_id >", value, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdGreaterThanOrEqualTo(String value) {
-            addCriterion("propaganda_id >=", value, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdLessThan(String value) {
-            addCriterion("propaganda_id <", value, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdLessThanOrEqualTo(String value) {
-            addCriterion("propaganda_id <=", value, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdLike(String value) {
-            addCriterion("propaganda_id like", value, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdNotLike(String value) {
-            addCriterion("propaganda_id not like", value, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdIn(List<String> values) {
-            addCriterion("propaganda_id in", values, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdNotIn(List<String> values) {
-            addCriterion("propaganda_id not in", values, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdBetween(String value1, String value2) {
-            addCriterion("propaganda_id between", value1, value2, "propagandaId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropagandaIdNotBetween(String value1, String value2) {
-            addCriterion("propaganda_id not between", value1, value2, "propagandaId");
-            return (Criteria) this;
-        }
-
         public Criteria andPropagandaCodeIsNull() {
             addCriterion("propaganda_code is null");
             return (Criteria) this;
@@ -715,6 +645,76 @@ public class TbPropagandaCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPropagandaAreaUrlIsNull() {
+            addCriterion("propaganda_area_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlIsNotNull() {
+            addCriterion("propaganda_area_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlEqualTo(String value) {
+            addCriterion("propaganda_area_url =", value, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlNotEqualTo(String value) {
+            addCriterion("propaganda_area_url <>", value, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlGreaterThan(String value) {
+            addCriterion("propaganda_area_url >", value, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("propaganda_area_url >=", value, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlLessThan(String value) {
+            addCriterion("propaganda_area_url <", value, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlLessThanOrEqualTo(String value) {
+            addCriterion("propaganda_area_url <=", value, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlLike(String value) {
+            addCriterion("propaganda_area_url like", value, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlNotLike(String value) {
+            addCriterion("propaganda_area_url not like", value, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlIn(List<String> values) {
+            addCriterion("propaganda_area_url in", values, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlNotIn(List<String> values) {
+            addCriterion("propaganda_area_url not in", values, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlBetween(String value1, String value2) {
+            addCriterion("propaganda_area_url between", value1, value2, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaAreaUrlNotBetween(String value1, String value2) {
+            addCriterion("propaganda_area_url not between", value1, value2, "propagandaAreaUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andPosterUrlIsNull() {
             addCriterion("poster_url is null");
             return (Criteria) this;
@@ -982,6 +982,76 @@ public class TbPropagandaCriteria {
 
         public Criteria andOrgIdNotBetween(String value1, String value2) {
             addCriterion("org_id not between", value1, value2, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameIsNull() {
+            addCriterion("org_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameIsNotNull() {
+            addCriterion("org_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameEqualTo(String value) {
+            addCriterion("org_name =", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotEqualTo(String value) {
+            addCriterion("org_name <>", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameGreaterThan(String value) {
+            addCriterion("org_name >", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameGreaterThanOrEqualTo(String value) {
+            addCriterion("org_name >=", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameLessThan(String value) {
+            addCriterion("org_name <", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameLessThanOrEqualTo(String value) {
+            addCriterion("org_name <=", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameLike(String value) {
+            addCriterion("org_name like", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotLike(String value) {
+            addCriterion("org_name not like", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameIn(List<String> values) {
+            addCriterion("org_name in", values, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotIn(List<String> values) {
+            addCriterion("org_name not in", values, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameBetween(String value1, String value2) {
+            addCriterion("org_name between", value1, value2, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotBetween(String value1, String value2) {
+            addCriterion("org_name not between", value1, value2, "orgName");
             return (Criteria) this;
         }
 

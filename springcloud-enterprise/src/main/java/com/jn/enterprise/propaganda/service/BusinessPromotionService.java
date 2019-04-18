@@ -1,5 +1,13 @@
 package com.jn.enterprise.propaganda.service;
 
+import com.jn.common.model.PaginationData;
+import com.jn.enterprise.propaganda.model.BusinessPromotionDetailsParam;
+import com.jn.enterprise.propaganda.model.BusinessPromotionDetailsShow;
+import com.jn.enterprise.propaganda.model.BusinessPromotionListParam;
+import com.jn.enterprise.propaganda.model.PropagandaFeeRulesShow;
+
+import java.util.List;
+
 /**
  * 用户中心--企业宣传
  * @Author: yangph
@@ -8,5 +16,31 @@ package com.jn.enterprise.propaganda.service;
  * @modified By:
  */
 public interface BusinessPromotionService {
+    /**
+     * 企业宣传列表查询
+     * @param businessPromotionListParam
+     * @return
+     */
+    PaginationData getBusinessPromotionList(BusinessPromotionListParam businessPromotionListParam);
 
+    /**
+     * 企业宣传详情
+     * @param propagandaId 宣传id
+     * @return
+     */
+    BusinessPromotionDetailsShow getBusinessPromotionDetails(String propagandaId);
+
+    /**
+     * 发布宣传
+     * @param businessPromotionDetailsParam
+     * @param loginAccount 登录用户账号
+     * @return
+     */
+    int saveBusinessPromotion(BusinessPromotionDetailsParam businessPromotionDetailsParam,String loginAccount);
+
+    /**
+     * 获取宣传费用规则
+     * @return
+     */
+    List<PropagandaFeeRulesShow> getPropagandaFeeRulesList();
 }

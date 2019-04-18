@@ -178,6 +178,7 @@
     </div>
     <fieldset class="fieldest">
       <legend> <strong>历史记录</strong><a
+        v-show="unbtn"
         href="javascript:;"
         class="history_a"
         @click="unfoldText"
@@ -309,9 +310,6 @@ export default {
     this.initList()
   },
   methods: {
-    // submitForm(workForm) {
-    //   console.log(this.workForm)
-    // },
     getFile: function(event) {
       this.file = event.target.files[0]
     },
@@ -335,7 +333,7 @@ export default {
             formData.append('file', this.file)
             // 调用导入文件接口
             Inventor(
-              `${this.GLOBAL.oaUrl}oa/common/uploadAttachment`,
+              `zuul/${this.GLOBAL.oaUrl}oa/common/uploadAttachment`,
               formData,
               'post'
             ).then(res => {
@@ -362,10 +360,7 @@ export default {
       }
       this.workForm.planTime = Number(this.workForm.planTime)
       this.workForm.totalConsumeTime = Number(this.workForm.totalConsumeTime)
-      this.workForm.startTime = this.workForm.startTime + ' 00:00:00'
-      this.workForm.endTime = this.workForm.endTime + ' 00:00:00'
       this.workForm.totalRemainTime = Number(this.workForm.totalRemainTime)
-      console.log(this.workForm)
       api(`${this.GLOBAL.oaUrl}oa/workPlan/update`, this.workForm, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.goBack(this.$route)
@@ -384,7 +379,6 @@ export default {
     // 页面初始化
     initList() {
       var query = this.$route.query
-      console.log(query)
       this.workForm.id = query.id
       api(
         `${this.GLOBAL.oaUrl}oa/workPlan/getWorkPlanById?workPlanId=${
@@ -394,7 +388,6 @@ export default {
         'get'
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
-          console.log(res)
           var data = res.data.data
           this.workForm.demandDescribe = data.demandDescribe
           if (data.endTime) {

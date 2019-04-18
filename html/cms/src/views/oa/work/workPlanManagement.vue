@@ -243,7 +243,7 @@
     <template v-if="startdialogVisible">
       <el-dialog
         :visible.sync="startdialogVisible"
-        :title="'工作计划管理前端  > '+ titleText"
+        :title=" workPlanName+' > '+ titleText"
         class="workContent"
       >
         <el-form
@@ -362,6 +362,7 @@ export default {
   components: { UE },
   data() {
     return {
+      workPlanName: '',
       oaUrl: this.GLOBAL.oaUrl,
       baseUrl: process.env.BASE_API,
       titleText: '',
@@ -499,7 +500,6 @@ export default {
         'get'
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
-          console.log(res)
           this.history = res.data.data.workPlanHistorys
           this.workform.id = res.data.data.id
           if (res.data.data.content) {
@@ -541,6 +541,7 @@ export default {
         if (res.data.code === this.GLOBAL.code) {
           this.history = res.data.data.workPlanHistorys
           this.workform.id = res.data.data.id
+          this.workPlanName = res.data.data.workPlanName
           if (res.data.data.content) {
             this.defaultMsg = res.data.data.content
           }
@@ -590,6 +591,7 @@ export default {
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.history = res.data.data.workPlanHistorys
+          this.workPlanName = res.data.data.workPlanName
           this.workform.totalConsumeTime = res.data.data.totalConsumeTime
           this.workform.totalRemainTime = res.data.data.totalRemainTime
           this.workform.id = res.data.data.id
@@ -617,7 +619,6 @@ export default {
     // 选择更多里面的状态
     checkStatus(val) {
       this.workPlanStatus = ''
-      console.log(val)
       if (val === '4') {
         this.userAccount = ''
         this.workPlanStatus = '4'
@@ -664,14 +665,6 @@ export default {
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.dialogVisible = false
-          // this.markingDialogVisible = true
-          // this.markList = res.data.data
-          // this.markList.forEach((val, index) => {
-          //   this.newArr.push(
-          //     Object.assign({}, val, { indexNum: index })
-          //   )
-          // })
-          // this.getFinanceType()
         } else {
           this.$message.error('导入失败,' + res.data.result)
         }
@@ -782,6 +775,7 @@ export default {
   margin-left: 20px;
   border: 1px solid #f5f5f5;
 }
+.workManagement{
 .fieldest {
   border: 1px solid #e5e5e5;
   margin-top: 15px;
@@ -815,6 +809,7 @@ export default {
       text-align: center;
     }
   }
+}
 }
 .workContent{
 .el-dialog{

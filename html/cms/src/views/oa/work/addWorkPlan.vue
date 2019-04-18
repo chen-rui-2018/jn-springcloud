@@ -159,7 +159,7 @@ export default {
             this.isDisabled = false
             return false
           }
-          this.workform.Uecontent = this.$refs.ue.getUEContent()
+          this.workForm.Uecontent = this.$refs.ue.getUEContent()
           this.workForm.responsibleUserAccount = this.userAccount.join(',')
           api(`${this.GLOBAL.oaUrl}oa/workPlan/add`, this.workForm, 'post').then(res => {
             if (res.data.code === this.GLOBAL.code) {
@@ -177,7 +177,6 @@ export default {
       })
     },
     uploadDone(res, file, fileList) {
-      console.log(res)
       this.workForm.attachment = res.data
     },
     handleRemove(file, fileList) {
@@ -209,7 +208,6 @@ export default {
     //  获取项目
     getItem() {
       api(`${this.GLOBAL.oaUrl}oa/workPlan/getItemAll`, '', 'get').then(res => {
-        console.log(res)
         if (res.data.code === this.GLOBAL.code) {
           this.itemOptions = res.data.data
         } else {

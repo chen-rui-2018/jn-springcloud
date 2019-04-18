@@ -76,15 +76,7 @@
                         parking
                     </contexts>
                     <tableNames>
-                        tb_parking_space,
-                        tb_parking_area,
-                        tb_parking_record,
-                        tb_parking_space_rental,
-                        tb_parking_preferential,
-                        tb_parking_car_info,
-                        tb_parking_service,
-                        tb_parking_violation,
-                        tb_parking_service_type
+                        tb_parking_area
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

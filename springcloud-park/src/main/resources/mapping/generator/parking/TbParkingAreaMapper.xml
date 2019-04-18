@@ -10,6 +10,7 @@
     <result column="leisure_number" jdbcType="VARCHAR" property="leisureNumber" />
     <result column="rent_number" jdbcType="VARCHAR" property="rentNumber" />
     <result column="parking_total" jdbcType="VARCHAR" property="parkingTotal" />
+    <result column="temp_price_depict" jdbcType="VARCHAR" property="tempPriceDepict" />
     <result column="temp_price" jdbcType="DOUBLE" property="tempPrice" />
     <result column="temp_price_total" jdbcType="DOUBLE" property="tempPriceTotal" />
     <result column="rent_price" jdbcType="DOUBLE" property="rentPrice" />
@@ -81,8 +82,8 @@
   </sql>
   <sql id="Base_Column_List">
     area_id, area_name, area_address, longitude, latitude, leisure_number, rent_number, 
-    parking_total, temp_price, temp_price_total, rent_price, area_picture, space_picture, 
-    creator_account, created_time, modifier_account, modified_time, record_status
+    parking_total, temp_price_depict, temp_price, temp_price_total, rent_price, area_picture, 
+    space_picture, creator_account, created_time, modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingAreaCriteria" resultMap="BaseResultMap">
     select
@@ -117,18 +118,18 @@
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingArea">
     insert into tb_parking_area (area_id, area_name, area_address, 
       longitude, latitude, leisure_number, 
-      rent_number, parking_total, temp_price, 
-      temp_price_total, rent_price, area_picture, 
-      space_picture, creator_account, created_time, 
-      modifier_account, modified_time, record_status
-      )
+      rent_number, parking_total, temp_price_depict, 
+      temp_price, temp_price_total, rent_price, 
+      area_picture, space_picture, creator_account, 
+      created_time, modifier_account, modified_time, 
+      record_status)
     values (#{areaId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{areaAddress,jdbcType=VARCHAR}, 
       #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{leisureNumber,jdbcType=VARCHAR}, 
-      #{rentNumber,jdbcType=VARCHAR}, #{parkingTotal,jdbcType=VARCHAR}, #{tempPrice,jdbcType=DOUBLE}, 
-      #{tempPriceTotal,jdbcType=DOUBLE}, #{rentPrice,jdbcType=DOUBLE}, #{areaPicture,jdbcType=VARCHAR}, 
-      #{spacePicture,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{rentNumber,jdbcType=VARCHAR}, #{parkingTotal,jdbcType=VARCHAR}, #{tempPriceDepict,jdbcType=VARCHAR}, 
+      #{tempPrice,jdbcType=DOUBLE}, #{tempPriceTotal,jdbcType=DOUBLE}, #{rentPrice,jdbcType=DOUBLE}, 
+      #{areaPicture,jdbcType=VARCHAR}, #{spacePicture,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingArea">
     insert into tb_parking_area
@@ -156,6 +157,9 @@
       </if>
       <if test="parkingTotal != null">
         parking_total,
+      </if>
+      <if test="tempPriceDepict != null">
+        temp_price_depict,
       </if>
       <if test="tempPrice != null">
         temp_price,
@@ -212,6 +216,9 @@
       </if>
       <if test="parkingTotal != null">
         #{parkingTotal,jdbcType=VARCHAR},
+      </if>
+      <if test="tempPriceDepict != null">
+        #{tempPriceDepict,jdbcType=VARCHAR},
       </if>
       <if test="tempPrice != null">
         #{tempPrice,jdbcType=DOUBLE},
@@ -278,6 +285,9 @@
       <if test="record.parkingTotal != null">
         parking_total = #{record.parkingTotal,jdbcType=VARCHAR},
       </if>
+      <if test="record.tempPriceDepict != null">
+        temp_price_depict = #{record.tempPriceDepict,jdbcType=VARCHAR},
+      </if>
       <if test="record.tempPrice != null">
         temp_price = #{record.tempPrice,jdbcType=DOUBLE},
       </if>
@@ -323,6 +333,7 @@
       leisure_number = #{record.leisureNumber,jdbcType=VARCHAR},
       rent_number = #{record.rentNumber,jdbcType=VARCHAR},
       parking_total = #{record.parkingTotal,jdbcType=VARCHAR},
+      temp_price_depict = #{record.tempPriceDepict,jdbcType=VARCHAR},
       temp_price = #{record.tempPrice,jdbcType=DOUBLE},
       temp_price_total = #{record.tempPriceTotal,jdbcType=DOUBLE},
       rent_price = #{record.rentPrice,jdbcType=DOUBLE},
@@ -360,6 +371,9 @@
       </if>
       <if test="parkingTotal != null">
         parking_total = #{parkingTotal,jdbcType=VARCHAR},
+      </if>
+      <if test="tempPriceDepict != null">
+        temp_price_depict = #{tempPriceDepict,jdbcType=VARCHAR},
       </if>
       <if test="tempPrice != null">
         temp_price = #{tempPrice,jdbcType=DOUBLE},
@@ -403,6 +417,7 @@
       leisure_number = #{leisureNumber,jdbcType=VARCHAR},
       rent_number = #{rentNumber,jdbcType=VARCHAR},
       parking_total = #{parkingTotal,jdbcType=VARCHAR},
+      temp_price_depict = #{tempPriceDepict,jdbcType=VARCHAR},
       temp_price = #{tempPrice,jdbcType=DOUBLE},
       temp_price_total = #{tempPriceTotal,jdbcType=DOUBLE},
       rent_price = #{rentPrice,jdbcType=DOUBLE},

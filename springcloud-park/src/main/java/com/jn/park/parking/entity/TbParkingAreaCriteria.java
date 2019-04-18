@@ -665,6 +665,76 @@ public class TbParkingAreaCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andTempPriceDepictIsNull() {
+            addCriterion("temp_price_depict is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictIsNotNull() {
+            addCriterion("temp_price_depict is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictEqualTo(String value) {
+            addCriterion("temp_price_depict =", value, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictNotEqualTo(String value) {
+            addCriterion("temp_price_depict <>", value, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictGreaterThan(String value) {
+            addCriterion("temp_price_depict >", value, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictGreaterThanOrEqualTo(String value) {
+            addCriterion("temp_price_depict >=", value, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictLessThan(String value) {
+            addCriterion("temp_price_depict <", value, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictLessThanOrEqualTo(String value) {
+            addCriterion("temp_price_depict <=", value, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictLike(String value) {
+            addCriterion("temp_price_depict like", value, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictNotLike(String value) {
+            addCriterion("temp_price_depict not like", value, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictIn(List<String> values) {
+            addCriterion("temp_price_depict in", values, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictNotIn(List<String> values) {
+            addCriterion("temp_price_depict not in", values, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictBetween(String value1, String value2) {
+            addCriterion("temp_price_depict between", value1, value2, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempPriceDepictNotBetween(String value1, String value2) {
+            addCriterion("temp_price_depict not between", value1, value2, "tempPriceDepict");
+            return (Criteria) this;
+        }
+
         public Criteria andTempPriceIsNull() {
             addCriterion("temp_price is null");
             return (Criteria) this;

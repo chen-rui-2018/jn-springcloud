@@ -110,4 +110,10 @@ public interface ActivityService {
      */
     PaginationData findOrgActivityList( OrgActivityParam query,String activityType,boolean needPage);
 
+    /**
+     * 获取有效活动总数
+     * @return
+     */
+    String getActivityNum();
+
 }

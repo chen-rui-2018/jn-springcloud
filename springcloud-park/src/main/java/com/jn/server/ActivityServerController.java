@@ -9,6 +9,7 @@ import com.jn.park.activity.service.ActivityService;
 import com.jn.park.api.ActivityClient;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.ApiOperation;
+import com.jn.user.model.UserInfoQueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,6 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api/activity")
 public class ActivityServerController extends BaseController implements ActivityClient{
     /**
      * 日志组件
@@ -45,5 +45,11 @@ public class ActivityServerController extends BaseController implements Activity
     public Result<PaginationData<List<Activity>>> getActivityList(@RequestBody @Validated ActivityParment activityParment) {
         PaginationData<List<Activity>> paginationData = activityService.selectActivityList(activityParment);
         return new Result<>(paginationData);
+    }
+    
+    @ControllerLog(doAction = "获取有效活动总数")
+    @Override
+    public Result<String> getActivityNum(){
+        return new Result<>(activityService.getActivityNum());
     }
 }

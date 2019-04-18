@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.enums.FinancialProductExceptionEnum;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
@@ -106,17 +107,33 @@ public class FinancialProductServiceImpl implements FinancialProductService {
     @ServiceLog(doAction = "金融产品详情")
     @Override
     public FinancialProductDetails getFinancialProductDetails(String productId) {
-        TbServiceProductCriteria example=new TbServiceProductCriteria();
-        example.createCriteria().andProductIdEqualTo(productId).andStatusEqualTo("1")
-                .andSignoryIdEqualTo(BUSINESS_AREA).andRecordStatusEqualTo(RECORD_STATUS);
-        List<TbServiceProduct> tbServiceProductList = tbServiceProductMapper.selectByExample(example);
-        if(tbServiceProductList.isEmpty()){
+        FinancialProductDetails financialProductDetails = financialProductMapper.getFinancialProductDetails(productId, BUSINESS_AREA);
+        if(financialProductDetails==null){
             return null;
         }
-        TbServiceProduct tbServiceProduct = tbServiceProductList.get(0);
-        FinancialProductDetails financialProductDetails =new FinancialProductDetails();
-        BeanUtils.copyProperties(tbServiceProduct, financialProductDetails);
+        //更新浏览次数
+        updateProductViewNum(productId);
         return financialProductDetails;
+    }
+
+    /**
+     * 更新产品浏览次数
+     * @param productId
+     */
+    @ServiceLog(doAction = "更新产品浏览次数")
+    private void updateProductViewNum(String productId) {
+        TbServiceProductCriteria example=new TbServiceProductCriteria();
+        example.createCriteria().andProductIdEqualTo(productId).andSignoryIdEqualTo(BUSINESS_AREA).andRecordStatusEqualTo(RECORD_STATUS);
+        List<TbServiceProduct> tbServiceProductList = tbServiceProductMapper.selectByExample(example);
+        if(tbServiceProductList.isEmpty()){
+            logger.info("金融产品详情获取失败，当前产品[id:{}]在系统中不存在",productId);
+            throw new JnSpringCloudException(FinancialProductExceptionEnum.PRODUCT_NOT_EXIST);
+        }
+        Integer viewCount = tbServiceProductList.get(0).getViewCount();
+        int viewNum=viewCount==null?0:viewCount+1;
+        TbServiceProduct tbServiceProduct=new TbServiceProduct();
+        tbServiceProduct.setViewCount(viewNum);
+        tbServiceProductMapper.updateByExampleSelective(tbServiceProduct,example );
     }
 
     /**

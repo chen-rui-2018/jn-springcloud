@@ -27,10 +27,13 @@ public class OrgParameter extends Page implements Serializable {
     @ApiModelProperty(value = "机构名称",example = "机构1")
     private String orgName;
 
+    @ApiModelProperty(value = "服务产品标识[常规产品]",example = "568d595476164c92b3d715629bf9ffcc")
+    private String templateId;
+
     @ApiModelProperty(value = "主营业务",example = "商业纠纷")
     private String orgBusiness;
 
-    @ApiModelProperty(value = "排序字段[popularity:人气排序，serviceNum：服务量排序，为空或integrate：综合排序]",example = "integrate")
+    @ApiModelProperty(value = "排序字段[attitudeScore：好评，popularity:人气排序，serviceNum：服务量排序，为空或integrate：综合排序]",example = "integrate")
     private String sortTypes;
 
     @ApiModelProperty(value = "客户偏好-行业领域[数组][企业字典表type=1的，即行业领域类型。数据从【服务超市-机构字典】接口获取(id)]"
@@ -121,5 +124,13 @@ public class OrgParameter extends Page implements Serializable {
 
     public void setCompanyList(List<String> companyList) {
         this.companyList = companyList;
+    }
+
+    public String getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 }

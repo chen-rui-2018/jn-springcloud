@@ -4,20 +4,16 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.model.ServiceOrg;
+import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.org.model.OrgParameter;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
-import com.jn.enterprise.servicemarket.org.vo.MyOrgInfoVo;
-import com.jn.enterprise.servicemarket.org.vo.OrgDetailAndProductVo;
-import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 import com.jn.enterprise.servicemarket.product.model.ProductInquiryInfo;
 import com.jn.enterprise.servicemarket.product.model.WebServiceProductInfo;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.api.UserExtensionClient;
-import com.jn.user.model.UserExtensionInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -57,7 +53,6 @@ public class OrgController extends BaseController {
     @ControllerLog(doAction = "获取服务机构列表")
     @ApiOperation(value = "获取服务机构列表,(pc/app机构列表)")
     @RequestMapping(value = "/selectServiceOrgList",method = RequestMethod.GET)
-    @RequiresPermissions("/serviceMarket/org/selectServiceOrgList")
     public Result<PaginationData<List<ServiceOrg>>> selectServiceOrgList(@Validated OrgParameter orgParameter){
         PaginationData<List<ServiceOrg>> paginationData = orgService.selectServiceOrgList(orgParameter);
         return new Result<>(paginationData);
@@ -66,7 +61,6 @@ public class OrgController extends BaseController {
     @ControllerLog(doAction = "获取服务机构详情")
     @ApiOperation(value = "获取服务机构详情,(pc/app机构详情)", notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage",method = RequestMethod.GET)
-    @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
     public Result<OrgDetailVo> getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367")
                                                        @RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
@@ -74,9 +68,8 @@ public class OrgController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取服务机构详情+产品列表")
-    @ApiOperation(value = "获取服机构信息(pc/app机构信息)",notes = "查询条件orgId")
+    @ApiOperation(value = "获取服机构信息[机构详情+产品列表](pc/app机构信息)",notes = "查询条件orgId")
     @RequestMapping(value = "/getOrgInfoForManage",method = RequestMethod.GET)
-    @RequiresPermissions("/serviceMarket/org/getOrgInfoForManage")
     public Result<OrgDetailAndProductVo> getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367")@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         ProductInquiryInfo info = new ProductInquiryInfo();
@@ -99,6 +92,19 @@ public class OrgController extends BaseController {
 
     }
 
+    @ControllerLog(doAction = "获取服务超市统计数据")
+    @ApiOperation(value = "获取服务超市统计数据",notes = "查询机构、顾问、买家、活动、投资人 统计数据")
+    @RequestMapping(value = "/selectServiceStatisticalNum",method = RequestMethod.GET)
+    public Result<ServiceStatisticalNumVO> selectServiceStatisticalNum(){
+        return new Result<>(orgService.selectServiceStatisticalNum());
+    }
+
+    @ControllerLog(doAction = "根据业务领域查询服务超市统计数据")
+    @ApiOperation(value = "根据业务领域查询服务超市统计数据",notes = "查询机构、顾问、产品、评价、交易量 统计数据。[产品ID和业务领域不能同时为空]")
+    @RequestMapping(value = "/selectBusinessAreaStatisticalNum",method = RequestMethod.GET)
+    public Result<BusinessStatisticalNumVO> selectBusinessAreaStatisticalNum(BusinessStatisticalParam businessStatisticalParam){
+        return new Result<>(orgService.selectBusinessAreaStatisticalNum(businessStatisticalParam));
+    }
 
 
 }

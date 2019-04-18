@@ -50,9 +50,6 @@ public class WorkPlanRecordServiceImpl implements WorkPlanRecordService {
     private WorkPlanRecordMapper workPlanRecordMapper;
 
     @Autowired
-    private TbOaWorkPlanHistoryMapper tbOaWorkPlanHistoryMapper;
-
-    @Autowired
     private TbOaWorkPlanMapper tbOaWorkPlanMapper;
 
     @Autowired
@@ -83,8 +80,8 @@ public class WorkPlanRecordServiceImpl implements WorkPlanRecordService {
 
                 //拼接操作记录
                 String date = DateUtils.formatDate(workPlanRecord.getRecordDate(), "yyyy-MM-dd HH:mm:ss");
-                buffer.append("日期:").append(date).append(",消耗总工时:").append(consumeTime)
-                        .append(",剩余总工时:").append(remainTime).append("。");
+                buffer.append("日期:&nbsp;&nbsp;\"").append(date).append("\",&nbsp;&nbsp;消耗总工时:&nbsp;&nbsp;\"").append(consumeTime)
+                        .append("\",&nbsp;&nbsp;剩余总工时:&nbsp;&nbsp;\"").append(remainTime).append("。");
 
                 //添加历史记录
                 workPlanService.inserWorkPlanHistory(user, workPlanId,
@@ -168,8 +165,9 @@ public class WorkPlanRecordServiceImpl implements WorkPlanRecordService {
 
             //拼接操作细节信息
             String date = DateUtils.formatDate(tbOaWorkPlanRecord.getRecordDate(), "yyyy-MM-dd HH:mm:ss");
-            buffer.append("删除数据:日期:").append(date).append(",消耗总时间:").append(tbOaWorkPlanRecord.getConsumeTime())
-                    .append(",剩余总时间:").append(tbOaWorkPlanRecord.getRemainTime());
+            buffer.append("删除数据:日期:&nbsp;&nbsp;\"").append(date).append("\",&nbsp;&nbsp;消耗总时间:&nbsp;&nbsp;\"")
+                    .append(tbOaWorkPlanRecord.getConsumeTime()).append("\",&nbsp;&nbsp;剩余总时间:&nbsp;&nbsp;\"")
+                    .append(tbOaWorkPlanRecord.getRemainTime());
 
             //添加历史记录
             workPlanService.inserWorkPlanHistory(user, tbOaWorkPlanRecord.getWorkPlanId(),

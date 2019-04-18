@@ -103,7 +103,7 @@ public class ServiceProductWebController  extends BaseController {
     @ApiOperation(value ="机构详情下-服务产品列表",notes = "前端查看机构下的产品列表,包含各统计字段")
     @RequiresPermissions("/servicemarket/product/web/findOrgProductList")
     @RequestMapping(value = "/findOrgCountProductList",method = RequestMethod.GET)
-    public Result<PaginationData<List<ServiceProductManage>>> findOrgCountProductList(OrgCountQueryParam query){
+    public Result<PaginationData<List<OrgCountProductInfo>>> findOrgCountProductList(OrgCountQueryParam query){
         PaginationData data  =  productService.findOrgCountProductList(query,true);
         return  new Result(data);
     }

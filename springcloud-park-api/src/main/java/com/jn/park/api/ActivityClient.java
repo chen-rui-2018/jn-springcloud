@@ -30,4 +30,12 @@ public interface ActivityClient {
     @RequestMapping(value = "/api/activity/getActivityList", method = RequestMethod.POST)
     Result<PaginationData<List<Activity>>> getActivityList(@RequestBody ActivityParment activityParment);
 
+	 /**
+     * 获取有效活动总数
+     * @return
+     */
+    @RequestMapping(value = "/api/activity/getActivityNum", method = RequestMethod.POST)
+    Result<String> getActivityNum();
+
+    
 }

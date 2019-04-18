@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.parking.dao.TbParkingAreaMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingArea">
+    <id column="area_id" jdbcType="VARCHAR" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="area_address" jdbcType="VARCHAR" property="areaAddress" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="leisure_number" jdbcType="VARCHAR" property="leisureNumber" />
+    <result column="rent_number" jdbcType="VARCHAR" property="rentNumber" />
+    <result column="parking_total" jdbcType="VARCHAR" property="parkingTotal" />
+    <result column="temp_price" jdbcType="DOUBLE" property="tempPrice" />
+    <result column="temp_price_total" jdbcType="DOUBLE" property="tempPriceTotal" />
+    <result column="rent_price" jdbcType="DOUBLE" property="rentPrice" />
+    <result column="area_picture" jdbcType="VARCHAR" property="areaPicture" />
+    <result column="space_picture" jdbcType="VARCHAR" property="spacePicture" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    area_id, area_name, area_address, longitude, latitude, leisure_number, rent_number, 
+    parking_total, temp_price, temp_price_total, rent_price, area_picture, space_picture, 
+    creator_account, created_time, modifier_account, modified_time, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingAreaCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_parking_area
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_parking_area
+    where area_id = #{areaId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_parking_area
+    where area_id = #{areaId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.parking.entity.TbParkingAreaCriteria">
+    delete from tb_parking_area
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingArea">
+    insert into tb_parking_area (area_id, area_name, area_address, 
+      longitude, latitude, leisure_number, 
+      rent_number, parking_total, temp_price, 
+      temp_price_total, rent_price, area_picture, 
+      space_picture, creator_account, created_time, 
+      modifier_account, modified_time, record_status
+      )
+    values (#{areaId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{areaAddress,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{leisureNumber,jdbcType=VARCHAR}, 
+      #{rentNumber,jdbcType=VARCHAR}, #{parkingTotal,jdbcType=VARCHAR}, #{tempPrice,jdbcType=DOUBLE}, 
+      #{tempPriceTotal,jdbcType=DOUBLE}, #{rentPrice,jdbcType=DOUBLE}, #{areaPicture,jdbcType=VARCHAR}, 
+      #{spacePicture,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingArea">
+    insert into tb_parking_area
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="areaName != null">
+        area_name,
+      </if>
+      <if test="areaAddress != null">
+        area_address,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="leisureNumber != null">
+        leisure_number,
+      </if>
+      <if test="rentNumber != null">
+        rent_number,
+      </if>
+      <if test="parkingTotal != null">
+        parking_total,
+      </if>
+      <if test="tempPrice != null">
+        temp_price,
+      </if>
+      <if test="tempPriceTotal != null">
+        temp_price_total,
+      </if>
+      <if test="rentPrice != null">
+        rent_price,
+      </if>
+      <if test="areaPicture != null">
+        area_picture,
+      </if>
+      <if test="spacePicture != null">
+        space_picture,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="areaId != null">
+        #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaAddress != null">
+        #{areaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="leisureNumber != null">
+        #{leisureNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="rentNumber != null">
+        #{rentNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingTotal != null">
+        #{parkingTotal,jdbcType=VARCHAR},
+      </if>
+      <if test="tempPrice != null">
+        #{tempPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="tempPriceTotal != null">
+        #{tempPriceTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="rentPrice != null">
+        #{rentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="areaPicture != null">
+        #{areaPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="spacePicture != null">
+        #{spacePicture,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.parking.entity.TbParkingAreaCriteria" resultType="java.lang.Long">
+    select count(*) from tb_parking_area
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_parking_area
+    <set>
+      <if test="record.areaId != null">
+        area_id = #{record.areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaName != null">
+        area_name = #{record.areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaAddress != null">
+        area_address = #{record.areaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.longitude != null">
+        longitude = #{record.longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null">
+        latitude = #{record.latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leisureNumber != null">
+        leisure_number = #{record.leisureNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rentNumber != null">
+        rent_number = #{record.rentNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingTotal != null">
+        parking_total = #{record.parkingTotal,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tempPrice != null">
+        temp_price = #{record.tempPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.tempPriceTotal != null">
+        temp_price_total = #{record.tempPriceTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.rentPrice != null">
+        rent_price = #{record.rentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.areaPicture != null">
+        area_picture = #{record.areaPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spacePicture != null">
+        space_picture = #{record.spacePicture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_parking_area
+    set area_id = #{record.areaId,jdbcType=VARCHAR},
+      area_name = #{record.areaName,jdbcType=VARCHAR},
+      area_address = #{record.areaAddress,jdbcType=VARCHAR},
+      longitude = #{record.longitude,jdbcType=VARCHAR},
+      latitude = #{record.latitude,jdbcType=VARCHAR},
+      leisure_number = #{record.leisureNumber,jdbcType=VARCHAR},
+      rent_number = #{record.rentNumber,jdbcType=VARCHAR},
+      parking_total = #{record.parkingTotal,jdbcType=VARCHAR},
+      temp_price = #{record.tempPrice,jdbcType=DOUBLE},
+      temp_price_total = #{record.tempPriceTotal,jdbcType=DOUBLE},
+      rent_price = #{record.rentPrice,jdbcType=DOUBLE},
+      area_picture = #{record.areaPicture,jdbcType=VARCHAR},
+      space_picture = #{record.spacePicture,jdbcType=VARCHAR},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.parking.entity.TbParkingArea">
+    update tb_parking_area
+    <set>
+      <if test="areaName != null">
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaAddress != null">
+        area_address = #{areaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="leisureNumber != null">
+        leisure_number = #{leisureNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="rentNumber != null">
+        rent_number = #{rentNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingTotal != null">
+        parking_total = #{parkingTotal,jdbcType=VARCHAR},
+      </if>
+      <if test="tempPrice != null">
+        temp_price = #{tempPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="tempPriceTotal != null">
+        temp_price_total = #{tempPriceTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="rentPrice != null">
+        rent_price = #{rentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="areaPicture != null">
+        area_picture = #{areaPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="spacePicture != null">
+        space_picture = #{spacePicture,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where area_id = #{areaId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingArea">
+    update tb_parking_area
+    set area_name = #{areaName,jdbcType=VARCHAR},
+      area_address = #{areaAddress,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      leisure_number = #{leisureNumber,jdbcType=VARCHAR},
+      rent_number = #{rentNumber,jdbcType=VARCHAR},
+      parking_total = #{parkingTotal,jdbcType=VARCHAR},
+      temp_price = #{tempPrice,jdbcType=DOUBLE},
+      temp_price_total = #{tempPriceTotal,jdbcType=DOUBLE},
+      rent_price = #{rentPrice,jdbcType=DOUBLE},
+      area_picture = #{areaPicture,jdbcType=VARCHAR},
+      space_picture = #{spacePicture,jdbcType=VARCHAR},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where area_id = #{areaId,jdbcType=VARCHAR}
+  </update>
+</mapper>

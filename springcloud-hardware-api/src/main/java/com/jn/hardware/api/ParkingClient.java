@@ -1,7 +1,7 @@
 package com.jn.hardware.api;
 
 import com.jn.common.model.Result;
-import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeRequest;
+import com.jn.hardware.model.parking.TemporaryCarParkingFeeRequest;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +19,10 @@ public interface ParkingClient {
 
     /**
      * 获取临停车费用
-     * @param doorTemporaryCarParkingFeeRequest 道尔实体类参数
+     * @param temporaryCarParkingFeeRequest 实体类参数
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/getTemporaryCarParkingFee")
-    Result getTemporaryCarParkingFee(@RequestBody DoorTemporaryCarParkingFeeRequest doorTemporaryCarParkingFeeRequest);
+    Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
 
 }

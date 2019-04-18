@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.jn.common.model.Result;
 import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
+import com.jn.hardware.enums.ParkingCompanyEnum;
 import com.jn.hardware.enums.ParkingExceptionEnum;
+import com.jn.hardware.model.parking.TemporaryCarParkingFeeRequest;
 import com.jn.hardware.model.parking.door.DoorResult;
 import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeRequest;
 import com.jn.hardware.parking.service.ParkingService;
@@ -28,16 +30,20 @@ public class ParkingServiceImpl implements ParkingService {
 
     /**
      * 临停预缴费信息(场内缴费)查询
-     * @param doorTemporaryCarParkingFeeRequest
+     * @param temporaryCarParkingFeeRequest
      * @return
      */
     @Override
-    public Result getTemporaryCarParkingFee(DoorTemporaryCarParkingFeeRequest doorTemporaryCarParkingFeeRequest) {
+    public Result getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
         Result result=new Result();
         String url = "";
-        if(null!=doorTemporaryCarParkingFeeRequest && StringUtils.isNotBlank(doorTemporaryCarParkingFeeRequest.getParkid())) {
+        if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(temporaryCarParkingFeeRequest.getParkingCompanyId())) {
+            result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
+            result.setResult("临停预缴费信息查询必须明确哪个硬件公司(parkingCompanyId).");
+        }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(temporaryCarParkingFeeRequest.getParkingCompanyId())) {
             //调用道尔硬件接口
-            url = String.format(ParkingService.GET_DOOR_TEMPORARYCAR_PARKINGFEE_URL,doorTemporaryCarParkingFeeRequest.getParkid());
+            url = String.format(ParkingService.GET_DOOR_TEMPORARYCAR_PARKINGFEE_URL,temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getParkid()
+            ,temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getParkid(),temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getCarNo());
             String responseString = RestTemplateUtil.get(url);
             DoorResult<DoorTemporaryCarParkingFeeRequest> doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult<DoorTemporaryCarParkingFeeRequest>>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {

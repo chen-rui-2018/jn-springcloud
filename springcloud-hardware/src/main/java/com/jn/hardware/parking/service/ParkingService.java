@@ -1,7 +1,7 @@
 package com.jn.hardware.parking.service;
 
 import com.jn.common.model.Result;
-import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeRequest;
+import com.jn.hardware.model.parking.TemporaryCarParkingFeeRequest;
 
 /**
  * TODO：未添加类描述
@@ -16,12 +16,12 @@ public interface ParkingService {
      * 道尔的临停预缴费信息(场内缴费)
      * todo 后面需写在配置文件中，分了正式和测试地址
      */
-    String GET_DOOR_TEMPORARYCAR_PARKINGFEE_URL = "https://api-dev.drzk.cn/v2/car/temporarycar/parkingfee/parkid/%s";
+    String GET_DOOR_TEMPORARYCAR_PARKINGFEE_URL = "https://api-dev.drzk.cn/v2/car/temporarycar/parkingfee/parkid/%s?parkid=%s&carNo=%s";
     /**
      * 获取临停预缴费信息(场内缴费)
-     * @param doorTemporaryCarParkingFeeRequest
+     * @param temporaryCarParkingFeeRequest
      * @return
      */
-    Result getTemporaryCarParkingFee(DoorTemporaryCarParkingFeeRequest doorTemporaryCarParkingFeeRequest);
+    Result getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
 
 }

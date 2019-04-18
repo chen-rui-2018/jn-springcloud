@@ -3,7 +3,7 @@ package com.jn.hardware.server;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.hardware.api.ParkingClient;
-import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeRequest;
+import com.jn.hardware.model.parking.TemporaryCarParkingFeeRequest;
 import com.jn.hardware.parking.service.ParkingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +24,8 @@ public class ParkingController extends BaseController implements ParkingClient {
     private ParkingService parkingService;
 
     @Override
-    public Result getTemporaryCarParkingFee(@RequestBody DoorTemporaryCarParkingFeeRequest doorTemporaryCarParkingFeeRequest) {
-        parkingService.getTemporaryCarParkingFee(doorTemporaryCarParkingFeeRequest);
+    public Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
+        parkingService.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
         return null;
     }
 }

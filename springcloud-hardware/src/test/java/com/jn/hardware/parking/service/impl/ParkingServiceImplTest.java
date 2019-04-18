@@ -1,6 +1,8 @@
 package com.jn.hardware.parking.service.impl;
 
 import com.jn.common.model.Result;
+import com.jn.hardware.enums.ParkingCompanyEnum;
+import com.jn.hardware.model.parking.TemporaryCarParkingFeeRequest;
 import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeRequest;
 import com.jn.hardware.parking.service.ParkingService;
 import org.junit.Test;
@@ -21,10 +23,13 @@ public class ParkingServiceImplTest {
 
     @Test
     public void getTemporaryCarParkingFee() {
-        DoorTemporaryCarParkingFeeRequest doortemporaryCarParkingFeeRequest = new DoorTemporaryCarParkingFeeRequest();
-        doortemporaryCarParkingFeeRequest.setParkid("1");
-        doortemporaryCarParkingFeeRequest.setCarNo("粤A12345");
-        Result result = parkingService.getTemporaryCarParkingFee(doortemporaryCarParkingFeeRequest);
+        TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest = new TemporaryCarParkingFeeRequest();
+        temporaryCarParkingFeeRequest.setParkingCompanyId(ParkingCompanyEnum.DOOR_COMPANY.getCode());
+        DoorTemporaryCarParkingFeeRequest doorTemporaryCarParkingFeeRequest = new DoorTemporaryCarParkingFeeRequest();
+        doorTemporaryCarParkingFeeRequest.setParkid("1");
+        doorTemporaryCarParkingFeeRequest.setCarNo("粤A12345");
+        temporaryCarParkingFeeRequest.setDoorTemporaryCarParkingFeeRequest(doorTemporaryCarParkingFeeRequest);
+        Result result = parkingService.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
         logger.info("\n查询结果说明：{}",result.getResult());
     }
 }

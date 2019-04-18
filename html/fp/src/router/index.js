@@ -97,5 +97,41 @@ export default new Router({
       meta: {title: '服务超市首页'},
       name:'peoDec'
     },
+    {
+      path: '/compassView',
+      component: resolve => require(['@/views/adminApprove/compassView/compassView'],resolve),
+      meta: {title: '政策指引'},
+      name:'compassView'
+    },
+    {
+      path: '/rightDetail',
+      component: resolve => require(['@/views/adminApprove/compassView/rightDetail'],resolve),
+      meta: {title: '权利详情'},
+      name:'rightDetail'
+    },
+    {
+      path: '/serviceDetail',
+      component: resolve => require(['@/views/adminApprove/compassView/serviceDetail'],resolve),
+      meta: {title: '服务详情'},
+      name:'serviceDetail'
+    },
+    {
+      path: '/declarationCenter',
+      component: resolve => require(['@/views/declarationCenter/declarationCenter'],resolve),
+      meta: {title: '申报中心'},
+      name:'declarationCenter'
+    },
+    {
+      path: '/declarationNoticeDetail',
+      component: resolve => require(['@/views/declarationCenter/declarationNoticeDetail'],resolve),
+      meta: {title: '申报公告详情'},
+      name:'declarationNoticeDetail'
+    },
+    {
+      path: '/declarationPlatform',
+      component: resolve => require(['@/views/declarationCenter/declarationPlatform'],resolve),
+      meta: {title: '申报平台'},
+      name:'declarationPlatform'
+    }
   ]
 })

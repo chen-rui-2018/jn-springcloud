@@ -157,7 +157,7 @@ export default {
       this.listQuery.page = 1
       this.initList()
     },
-    // 项目初始化
+    // 页面初始化
     initList() {
       this.listLoading = true
       api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/list`, this.listQuery, 'post').then(res => {

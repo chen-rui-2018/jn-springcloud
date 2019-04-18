@@ -1,0 +1,321 @@
+<template>
+  <div class="compass_view">
+    <div class="approve_content"><!-- 版心 -->
+      <!-- 面包屑 -->
+      <div class="approve_breadcrumb">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{path: '/compassView'}">
+            <a href="javascript:;">行政审批</a>
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <!-- 所有类别 -->
+      <div class="all_cate clearfix">
+          <div class="fl all" @click="changename('')"><span :class="{'isSlect_all':name===''}">所有类别：</span></div>
+        <ul>
+          <li v-for="(item,index) in allCateList" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
+        </ul>
+      </div>
+      <!-- 直接审批 -->
+      <div>
+        <!-- 标题 -->
+        <div class="direct_approve">
+          <div class="direct_title">直接审批</div>
+          <div class="actiSearch">
+            <input type="text" placeholder="输入要搜索的关键字" v-model="search">
+            <i class="iconfont icon-sousuo" @click="handlesearch"></i>
+          </div>
+        </div>
+        <div class="direct_approve_list">
+            <el-collapse accordion>
+              <el-collapse-item v-for="(poweritem,powerindex) in powerList" :key="powerindex">
+                <template slot="title">
+                  <span></span><span>{{poweritem.name}}</span>
+                </template>
+                  <p v-for="(childsitem,childsindex) in poweritem.childs" :key="childsindex" @click="gotorightdetail(childsitem.id)"><span></span>{{childsitem.name}}</p>
+                  <p v-show="poweritem.childs.length===0">暂无数据</p>
+              </el-collapse-item>
+            </el-collapse>
+        </div>
+      </div>
+      <!-- 分页 -->
+      <div class="paging">
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :page-sizes="[6, 12, 18, 24]"
+          :page-size="100"
+          layout="total,prev, pager, next,sizes"
+          :total="total">
+        </el-pagination>
+      </div>
+    </div><!-- 版心 -->
+  </div>
+</template>
+<script>
+export default {
+  data () {
+    return {
+      total:20,
+      name:'',//类别
+      allCateList:[],
+      powerList:[],
+      search:"",
+      page:1,
+      rows:6,
+      total:0
+    }
+  },
+  created () {
+    this.getAllCate()
+    this.getPowerList()
+  },
+  methods: {
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`);
+      this.rows=val
+      this.getPowerList()
+    },
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+      this.page=val
+      this.getPowerList()
+    },
+    // 所有类别
+    getAllCate(){
+      let _this = this;
+      this.api.get({
+        url: "getCompassAllCate",
+        data: {
+          name:this.name
+         },
+        callback: function(res) {
+          // console.log(res);
+          if (res.code == "0000") {
+            _this.allCateList = res.data;
+          }
+        }
+      });
+    },
+    getPowerList(){
+      let _this = this;
+      this.api.get({
+        url: "getpowerList",
+        data: {
+          departId:this.name,
+          name:this.search,
+          page:this.page,
+          rows:this.rows,
+         },
+        callback: function(res) {
+          // console.log(res);
+          if (res.code == "0000") {
+            _this.powerList = res.data.rows;
+            _this.total=res.data.total
+          }
+        }
+      });
+    },
+    //改变name
+    changename(name){
+      this.name=name
+      this.getPowerList()
+    },
+    //搜索
+    handlesearch(){
+      this.getPowerList()
+    },
+    //跳转到rightdetail
+    gotorightdetail(id){
+      this.$router.push({path:'/rightDetail',query:{id:id}})
+    }
+  }
+}
+</script>
+<style lang="scss">
+  .compass_view{
+    margin-top: 230px;
+    .approve_content{
+      width: 1190px;
+      margin: 0 auto;
+    }
+    // 面包屑
+    .approve_breadcrumb{
+      padding: 15px 0;
+      font-size: 12px;
+      .el-breadcrumb__item:last-child .el-breadcrumb__inner a{
+        color:#00a041;  
+      }
+    }
+    // 所有类别
+    .all_cate{
+      border: 1px solid #eeeeee;
+      padding:16px;
+      font-size: 12px;
+      .all{
+        width:8.3%;
+        border-bottom: 1px solid #eeeeee;
+        padding-bottom: 15px;
+        margin-top: 14px;
+      }
+      .isSlect_all{
+        background: #00a041;
+        border-radius: 5px;
+        color: #fff;
+        padding: 3px 5px;
+      }
+      ul{
+        display: flex;
+        flex-wrap: wrap;
+        padding-bottom: 0;
+        .isSlect_cate{
+          background: #00a041;
+          border-radius: 5px;
+          color:#fff;
+        }
+        li{
+          // width:8.3%;
+          // padding-bottom:16px;
+          line-height: 45px;
+          padding-right: 17px;
+          border-style: solid;
+          border-width: 0 0 1px 0;
+          border-color: #eeeeee;
+          span{
+            padding: 3px 13px;
+          }
+        }
+      }
+    }
+    // 直接审批标题
+    .direct_approve{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid #eeeeee;
+      .direct_title{
+        padding-left: 10px;
+        border-left: 4px solid #00a041;
+        line-height: 1;
+      }
+      .actiSearch {
+        width: 200px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        padding-right: 40px;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        >input {
+          border: 0;
+          width: 80%;
+        }
+        input,
+        textarea,
+        select,
+        button {
+          text-rendering: auto;
+          color: #333;
+          letter-spacing: normal;
+          word-spacing: normal;
+          text-transform: none;
+          text-indent: 0;
+          text-shadow: none;
+          display: inline-block;
+          text-align: start;
+          margin: 0em;
+          font: 400 14px Arial;
+        }
+  
+        >.icon-sousuo {
+          position: relative;
+          top: -30px;
+          right: -120px;
+          cursor: pointer;
+          font-size: 20px;
+          display: inline-block;
+          width: 36px;
+          line-height: 30px;
+          text-align: center;
+          border-left: 1px solid #eee;
+        }
+      }
+    }
+    .direct_approve_list{
+      padding-top:15px;
+      .el-collapse{
+        border-bottom:none;
+        border-top:none;
+      }
+      .el-collapse-item{
+        border: 1px solid #EBEEF5;
+        margin-top: 23px;
+      }
+      .el-collapse-item__header{
+        padding-left: 16px;
+        border-bottom:none;
+        span{
+          font-size: 15px;
+          &:first-child{
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color:#00a041;
+            margin-right: 8px;
+          }
+        }
+      }
+      .el-collapse-item__wrap{
+        // border: 1px solid #EBEEF5;
+        border-top: none;
+        border-bottom:none;
+      }
+      .el-collapse-item__content{
+        margin-left: 34px;
+        padding-bottom:0;
+        p{
+          border-top: 1px solid #eeeeee;
+          height: 40px;
+          line-height: 40px;
+          color:#999999;
+          &:hover{
+            cursor:pointer;
+          }
+          span{
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            line-height: 4px;
+            border-radius: 50%;
+            background-color:#999999;
+            margin-right: 8px;
+            margin-bottom: 3px;
+          }
+        }
+      }
+    }
+    //分页
+    .paging{
+      text-align: center;
+      margin:66px 0 78px 0 ;
+      .el-pagination.is-background .btn-prev,.el-pagination.is-background .btn-next{
+        border: 1px solid #eee;
+        background-color: #fff;
+      }
+      .el-pagination.is-background .el-pager li{
+        background-color: #fff;
+         border: 1px solid #eee;
+      }
+      .el-pagination.is-background .el-pager li:not(.disabled).active{
+        background-color: #00a041;
+        color: #fff;
+      }
+    }
+  }
+</style>
+

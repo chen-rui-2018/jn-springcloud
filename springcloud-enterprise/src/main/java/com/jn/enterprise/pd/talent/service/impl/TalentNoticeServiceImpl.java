@@ -1,5 +1,8 @@
 package com.jn.enterprise.pd.talent.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.jn.common.model.PaginationData;
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage;
 import com.jn.enterprise.pd.declaration.enums.DeclaratStatusEnums;
 import com.jn.enterprise.pd.talent.dao.TbPdTalentServiceNoticeMapper;
@@ -44,7 +47,8 @@ public class TalentNoticeServiceImpl implements TalentNoticeService {
      * @return
      */
     @Override
-    public List<TbPdTalentServiceNotice> selectByTalentNoticeList(String rangeId,String sortType) {
+    public PaginationData<List<TbPdTalentServiceNotice>> selectByTalentNoticeList(String rangeId, String sortType,int page,int rows) {
+        Page<Object> objects = PageHelper.startPage(page, rows);
         TbPdTalentServiceNoticeCriteria noticeCriteria = new TbPdTalentServiceNoticeCriteria();
         if(sortType.equals(SortEnums.RELEASETIME_SORT)){
             noticeCriteria.setOrderByClause("modified_time desc");
@@ -57,8 +61,7 @@ public class TalentNoticeServiceImpl implements TalentNoticeService {
         Byte status = Byte.parseByte(DeclaratStatusEnums.RELEASE.getCode());
         criteria.andStatusEqualTo(status);
         criteria.andRangeIdEqualTo(rangeId);
-        List<TbPdTalentServiceNotice> selectByTalentNoticeList = tbPdTalentServiceNoticeMapper.selectByExample(noticeCriteria);
-        return selectByTalentNoticeList;
+        return new PaginationData(tbPdTalentServiceNoticeMapper.selectByExample(noticeCriteria), objects.getTotal());
     }
 
     /**

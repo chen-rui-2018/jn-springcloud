@@ -18,6 +18,7 @@ import com.jn.oa.item.dao.*;
 import com.jn.oa.item.enmus.WorkPlanExceptionEnmus;
 import com.jn.oa.item.enmus.WorkPlanOperateEnmus;
 import com.jn.oa.item.enmus.WorkPlanStatusEnums;
+import com.jn.oa.item.enmus.WorkPlanTemplateEnums;
 import com.jn.oa.item.entity.*;
 import com.jn.oa.item.model.*;
 import com.jn.oa.item.service.WorkPlanService;
@@ -148,7 +149,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
             String userEmailInfo = userEmails.substring(0, userEmails.length() - 1);
             //为了防止邮件发送失败，导致任务添加失败，使用tryCatch
             try {
-                sendEmail(workPlanAdd, userEmailInfo);
+                sendEmail(workPlanAdd, userEmailInfo, user);
             } catch (Exception e) {
                 logger.error("[工作计划] 任务提醒发送失败,workPlanId:{}", workPlanId);
             }
@@ -157,18 +158,32 @@ public class WorkPlanServiceImpl implements WorkPlanService {
     }
 
     /**
-     * TODO ：添加任务提醒模板邮件
      * 发送任务提醒邮件
      *
-     * @param workPlanAdd
-     * @param userEmailInfo
+     * @param workPlanAdd   工作计划添加实体
+     * @param userEmailInfo 用户邮箱
      */
-    private void sendEmail(WorkPlanAdd workPlanAdd, String userEmailInfo) {
+    private void sendEmail(WorkPlanAdd workPlanAdd, String userEmailInfo, User user) {
         String workPlanId = workPlanAdd.getId();
         EmailVo emailVo = new EmailVo();
         emailVo.setEmail(userEmailInfo);
-        emailVo.setEmailSubject("任务提醒");
-        emailVo.setEmailContent("任务提醒邮件内容，待输入");
+        emailVo.setEmailSubject("[白下智慧园区]工作计划任务提醒");
+        emailVo.setTemplatesName(WorkPlanTemplateEnums.REMIND_TEMPLATE.getCode());
+
+        //对模板数据进行封装
+        Map map = new HashMap();
+        map.put("title", workPlanAdd.getWorkPlanName());
+        map.put("time", DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        if (StringUtils.isNotBlank(user.getName())) {
+            map.put("username", user.getName());
+        } else {
+            map.put("username", user.getAccount());
+        }
+        map.put("content", workPlanAdd.getContent());
+        emailVo.setTemplatesDataMap(map);
+        emailVo.setTemplateFlag(true);
+
+        //发送邮件
         boolean sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
         if (sendStatus) {
             logger.info("[工作计划] 任务提醒发送成功,workPlanId:{}", workPlanId);
@@ -197,7 +212,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         tbOaWorkPlanHistory.setCreatorAccount(user.getAccount());
         tbOaWorkPlanHistory.setRecordStatus(new Byte(OaStatusEnums.EFFECTIVE.getCode()));
         String currentTime = DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss");
-        tbOaWorkPlanHistory.setOperateRecode(currentTime + ",由" + user.getName() + operate + "。");
+        tbOaWorkPlanHistory.setOperateRecode(currentTime + ",由 <strong style=\"color:black\">" + user.getName() + "</strong> " + operate + "。");
         if (StringUtils.isNotBlank(operateDetails)) {
             tbOaWorkPlanHistory.setOperateDetails(operateDetails);
         }
@@ -210,7 +225,6 @@ public class WorkPlanServiceImpl implements WorkPlanService {
     }
 
     /**
-     * TODO ：添加任务提醒模板邮件
      * 工作计划提醒功能
      *
      * @return
@@ -226,8 +240,20 @@ public class WorkPlanServiceImpl implements WorkPlanService {
                 String userId = workPlanRemindUserVO.getUserId();
                 EmailVo emailVo = new EmailVo();
                 emailVo.setEmail(email);
-                emailVo.setEmailSubject("任务提醒");
-                emailVo.setEmailContent("任务提醒,邮件内容,待修改为模板邮件");
+                emailVo.setEmailSubject("[白下智慧园区]工作计划任务提醒");
+                emailVo.setTemplatesName(WorkPlanTemplateEnums.BATCH_REMIND_TEMPLATE.getCode());
+
+                //封装数据
+                Map map = new HashMap();
+                map.put("currentTime", DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                map.put("time", DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+
+                List<WorkPlanRemain> workPlanRemainList = workPlanRemindUserVO.getWorkPlanRemainList();
+                map.put("taskCount", workPlanRemainList.size());
+                map.put("workPlans", workPlanRemainList);
+                emailVo.setTemplatesDataMap(map);
+                emailVo.setTemplateFlag(true);
+
                 boolean sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
                 if (sendStatus) {
                     logger.info("[工作计划] 任务提醒发送成功,userId:{}", userId);
@@ -334,6 +360,20 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         //4.往数据库中批量导入数据
         return insetImportData(tbOaWorkPlanList, tbOaWorkPlanUserList, tbOaWorkPlanHistoryList, buffer);
 
+    }
+
+    /**
+     * 获取所有项目信息
+     *
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "获取所有项目信息")
+    public List<TbOaItem> getItemAll() {
+        TbOaItemCriteria tbOaItemCriteria = new TbOaItemCriteria();
+        tbOaItemCriteria.setOrderByClause("id_ desc");
+        List<TbOaItem> itemList = tbOaItemMapper.selectByExample(tbOaItemCriteria);
+        return itemList;
     }
 
     /**
@@ -586,8 +626,9 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         if (!StringUtils.equals(oldItemId, newItemId)) {
             TbOaItem oldTbOaItem = tbOaItemMapper.selectByPrimaryKey(oldItemId);
             TbOaItem newTbOaItem = tbOaItemMapper.selectByPrimaryKey(newItemId);
-            buffer.append("修改了").append("工作计划所属项目").append(",旧值为:")
-                    .append(oldTbOaItem.getItemName()).append(",新值为:").append(newTbOaItem.getItemName()).append(";");
+            buffer.append("<p>修改了&nbsp;&nbsp;<i style=\"color:black;font-weight:600\">").append("工作计划所属项目")
+                    .append(" </i>,&nbsp;&nbsp;旧值为:&nbsp;&nbsp;\"").append(oldTbOaItem.getItemName())
+                    .append("\",&nbsp;&nbsp;新值为: &nbsp;&nbsp;\"").append(newTbOaItem.getItemName()).append("\"。</p>");
         }
 
         //3.判断是否修改任务负责人
@@ -625,8 +666,9 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         //5.添加负责人历史记录信息
         if (oldResponsibleName != null) {
             String newResponsibleName = workPlanMapper.getResponsibleName(workPlanId);
-            buffer.append("修改了").append("工作计划负责人").append(",旧值为:")
-                    .append(oldResponsibleName).append(",新值为:").append(newResponsibleName).append(";");
+            buffer.append("<p>修改了&nbsp;&nbsp;<i style=\"color:black;font-weight:600\">").append("工作计划负责人")
+                    .append(" </i>,&nbsp;&nbsp;旧值为:&nbsp;&nbsp;\"").append(oldResponsibleName)
+                    .append("\",&nbsp;&nbsp;新值为: &nbsp;&nbsp;\"").append(newResponsibleName).append("\"。</p>");
         }
 
         //6.添加历史记录信息
@@ -700,7 +742,12 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         }
 
         //6.修改工作计划状态属性值
-        tbOaWorkPlan.setWorkPlanStatus(workPlanStatus);
+        if (WorkPlanStatusEnums.RESTART.getCode().equals(workPlanStatus)) {
+            tbOaWorkPlan.setWorkPlanStatus(WorkPlanStatusEnums.DOING.getCode());
+        } else {
+            tbOaWorkPlan.setWorkPlanStatus(workPlanStatus);
+        }
+
         if (StringUtils.isNotBlank(attachment)) {
             //设置附件
             setAttachment(attachment, tbOaWorkPlan);
@@ -852,7 +899,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
      */
     private void updateItemProgress(TbOaWorkPlan tbOaWorkPlan, Integer totalConsumeTime) {
         TbOaItem tbOaItem = tbOaItemMapper.selectByPrimaryKey(tbOaWorkPlan.getItemId());
-        if (tbOaItem == null){
+        if (tbOaItem == null) {
             logger.warn("[工作计划] 导入失败,导入文件为空");
             throw new JnSpringCloudException(WorkPlanExceptionEnmus.ITEM_IS_EXIST);
         }
@@ -868,8 +915,8 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         String progress = numberFormat.format((Double) consumeTime / (Double) totalPlanTime * 100);
-        double pro = Double.parseDouble(progress);
-        if (pro > 100){
+        Double pro = Double.parseDouble(progress.replace(",", ""));
+        if (pro > 100) {
             progress = "100";
         }
         tbOaItem.setItemProgress(progress + "%");

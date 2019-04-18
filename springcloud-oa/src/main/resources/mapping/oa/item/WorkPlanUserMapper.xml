@@ -40,7 +40,7 @@
         SELECT
             t1.id,
             t1.work_plan_name,
-            date_format(t1.plan_end_time,'%Y-%m-%d %H:%i:%s') as "planEndTime" ,
+            date_format(t1.plan_end_time,'%Y-%m-%d') as "planEndTime" ,
             t3.id as userId,
             t3.email
         FROM

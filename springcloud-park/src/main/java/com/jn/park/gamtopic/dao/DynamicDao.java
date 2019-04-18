@@ -74,8 +74,9 @@ public interface DynamicDao {
     /**
      * 目标动态列表
      * @param account
+     * @param currentAccount
      *  @return
      */
-    List<DynamicWebShow> findDynamicByAccount(@Param("account") String account);
+    List<DynamicWebShow> findDynamicByAccount(@Param("account") String account, @Param("currentAccount") String currentAccount);
 
 }

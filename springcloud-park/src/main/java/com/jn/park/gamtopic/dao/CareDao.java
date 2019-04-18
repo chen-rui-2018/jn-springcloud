@@ -34,4 +34,6 @@ public interface CareDao {
      */
     CareUserDetails findCareDetails(@Param("account") String account, @Param("currentAccount")String currentAccount);
 
+
+
 }

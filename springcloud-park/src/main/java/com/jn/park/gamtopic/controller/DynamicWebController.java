@@ -101,7 +101,8 @@ public class DynamicWebController extends BaseController {
     @ApiOperation(value ="当前用户动态列表",notes = "根据评用户账号,当前用户动态列表")
     @RequestMapping(value="/findDynamicByAccount",method = RequestMethod.GET)
     public Result<PaginationData< List<DynamicWebShow>>> findDynamicByAccount(CareDetailsQueryParam param){
-        PaginationData< List<DynamicWebShow>> data = dynamicService.findDynamicByAccount(param);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData< List<DynamicWebShow>> data = dynamicService.findDynamicByAccount(param,user==null?"":user.getAccount());
         return new Result<>(data);
 
     }

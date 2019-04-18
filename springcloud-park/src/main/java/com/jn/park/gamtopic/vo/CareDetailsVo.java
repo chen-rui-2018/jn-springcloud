@@ -17,10 +17,10 @@ import java.util.List;
  */
 @ApiModel(value="CareDetailsVo",description = "个人关注详情")
 public class CareDetailsVo implements Serializable {
-    @ApiModelProperty(value="此用户信息")
+    @ApiModelProperty(value = "此用户信息")
     private CareUserDetails userDetails;
-    @ApiModelProperty(value="此用户动态列表")
-    private PaginationData<List<DynamicWebShow>> dnmamicLixt;
+    @ApiModelProperty(value = "此用户动态列表")
+    private PaginationData<List<DynamicWebShow>> dnmamicList;
 
     public CareUserDetails getUserDetails() {
         return userDetails;
@@ -30,11 +30,11 @@ public class CareDetailsVo implements Serializable {
         this.userDetails = userDetails;
     }
 
-    public PaginationData<List<DynamicWebShow>> getDnmamicLixt() {
-        return dnmamicLixt;
+    public PaginationData<List<DynamicWebShow>> getDnmamicList() {
+        return dnmamicList;
     }
 
-    public void setDnmamicLixt(PaginationData<List<DynamicWebShow>> dnmamicLixt) {
-        this.dnmamicLixt = dnmamicLixt;
+    public void setDnmamicList(PaginationData<List<DynamicWebShow>> dnmamicList) {
+        this.dnmamicList = dnmamicList;
     }
 }

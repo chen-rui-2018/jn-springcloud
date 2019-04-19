@@ -13,8 +13,8 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorDetailsVo", description = "服务顾问详情(后台门户管理)")
-public class AdvisroManagementDetailsVo implements Serializable {
+@ApiModel(value = "AdvisorManagementDetailsVo", description = "服务顾问详情(后台门户管理)")
+public class AdvisorManagementDetailsVo implements Serializable {
     @ApiModelProperty(value = "顾问详情简介)")
     private AdvisorServiceManagementInfo advisorIntroduction;
     @ApiModelProperty(value = "顾问基本信息)")

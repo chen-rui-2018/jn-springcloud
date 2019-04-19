@@ -20,9 +20,10 @@ public interface BusinessPromotionMapper {
     /**
      * 企业宣传列表查询
      * @param businessPromotionListParam
+     * @param creator
      * @return
      */
-    List<BusinessPromotionListShow> getBusinessPromotionList(BusinessPromotionListParam businessPromotionListParam);
+    List<BusinessPromotionListShow> getBusinessPromotionList(@Param("bpp") BusinessPromotionListParam businessPromotionListParam,@Param("creator") String creator);
 
     /**
      * 企业宣传详情

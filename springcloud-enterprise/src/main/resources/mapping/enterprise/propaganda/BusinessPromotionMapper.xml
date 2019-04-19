@@ -5,7 +5,7 @@
     <select id="getBusinessPromotionList" parameterType="com.jn.enterprise.propaganda.model.BusinessPromotionListParam"
             resultType="com.jn.enterprise.propaganda.model.BusinessPromotionListShow">
         select
-          sp.id as "id"
+          sp.id_ as "id"
           ,sp.propaganda_code as "propagandaCode"
           ,sp.propaganda_title as "propagandaTitle"
           ,sp.issue_platform as "issuePlatform"
@@ -15,11 +15,14 @@
           ,sp.propaganda_fee as "propagandaFee"
         from tb_propaganda sp
         where 1=1
-        <if test="approvalStatus !=null and approvalStatus!=''">
-            and sp.approval_status=#{approvalStatus}
+        <if test="bpp.approvalStatus !=null and bpp.approvalStatus!=''">
+            and sp.approval_status=#{bpp.approvalStatus}
         </if>
-        <if test="searchContent !=null and searchContent !='' ">
-            and sp.propaganda_title like concat('%',#{searchContent},'%')
+        <if test="bpp.searchContent !=null and bpp.searchContent !='' ">
+            and sp.propaganda_title like concat('%',#{bpp.searchContent},'%')
+        </if>
+        <if test="creator !=null and creator !=''">
+            and sp.creator_account=#{creator}
         </if>
         and sp.status ='1'
         and sp.record_status=1

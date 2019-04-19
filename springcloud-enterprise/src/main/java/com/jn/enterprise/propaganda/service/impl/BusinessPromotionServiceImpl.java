@@ -17,6 +17,9 @@ import com.jn.enterprise.propaganda.entity.TbPropagandaFeeRulesCriteria;
 import com.jn.enterprise.propaganda.enums.PromotionAreaEnum;
 import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
+import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
+import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -56,6 +59,12 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @Autowired
     private UserExtensionClient userExtensionClient;
 
+    @Autowired
+    private SystemClient systemClient;
+
+    @Autowired
+    private OrgColleagueService orgColleagueService;
+
     /**
      * 数据状态  1：有效  0：无效
      */
@@ -68,18 +77,25 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     /**
      * 企业宣传列表查询
      * @param businessPromotionListParam
+     * @param loginAccount 登录用户账号
      * @return
      */
     @ServiceLog(doAction = "企业宣传列表查询")
     @Override
-    public PaginationData getBusinessPromotionList(BusinessPromotionListParam businessPromotionListParam) {
+    public PaginationData getBusinessPromotionList(BusinessPromotionListParam businessPromotionListParam,String loginAccount) {
+        //判断当前用户是否为超级管理员，超级管理员可查看全部，非超级管理员只能查看自己发布的宣传信息
+        String creator=loginAccount;
+        if(isSuperAdmin(loginAccount)){
+            //超级管理员，查询全部
+            creator="";
+        }
         com.github.pagehelper.Page<Object> objects = null;
         if(StringUtils.isBlank(businessPromotionListParam.getNeedPage())){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;
             objects = PageHelper.startPage(pageNum,pageSize, true);
-            List<BusinessPromotionListShow> resultList = businessPromotionMapper.getBusinessPromotionList(businessPromotionListParam);
+            List<BusinessPromotionListShow> resultList = businessPromotionMapper.getBusinessPromotionList(businessPromotionListParam,creator);
             return  new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
 
         }
@@ -89,8 +105,23 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             objects = PageHelper.startPage(businessPromotionListParam.getPage(),
                     businessPromotionListParam.getRows() == 0 ? 15 : businessPromotionListParam.getRows(), true);
         }
-        List<BusinessPromotionListShow> resultList = businessPromotionMapper.getBusinessPromotionList(businessPromotionListParam);
+        List<BusinessPromotionListShow> resultList = businessPromotionMapper.getBusinessPromotionList(businessPromotionListParam,creator);
         return  new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
+    }
+
+    /**
+     * 判断当前用户是否为超级管理员
+     * @param loginAccount
+     * @return
+     */
+    private boolean isSuperAdmin(String loginAccount) {
+        List<String> accountList=new ArrayList<>(16);
+        accountList.add(loginAccount);
+        List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, "超级管理员");
+        if(roleInfoList.isEmpty()){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -237,5 +268,24 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             resultList.add(propagandaFeeRulesShow);
         }
         return resultList;
+    }
+
+    /**
+     * 获取宣传类型
+     * @param loginAccount 登录用户账号
+     * @return
+     */
+    @ServiceLog(doAction = "获取宣传类型 ")
+    @Override
+    public List<PropagandaTypeShow> getPropagandaTypeList(String loginAccount) {
+        //判断当前用户是否为超级管理员
+        if(isSuperAdmin(loginAccount)){
+            //查询全部用户类型返回
+
+        }else{
+            //获取当前用户的角色
+        }
+
+        return null;
     }
 }

@@ -1,10 +1,7 @@
 package com.jn.enterprise.propaganda.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.propaganda.model.BusinessPromotionDetailsParam;
-import com.jn.enterprise.propaganda.model.BusinessPromotionDetailsShow;
-import com.jn.enterprise.propaganda.model.BusinessPromotionListParam;
-import com.jn.enterprise.propaganda.model.PropagandaFeeRulesShow;
+import com.jn.enterprise.propaganda.model.*;
 
 import java.util.List;
 
@@ -19,9 +16,10 @@ public interface BusinessPromotionService {
     /**
      * 企业宣传列表查询
      * @param businessPromotionListParam
+     * @param loginAccount 登录用户账号
      * @return
      */
-    PaginationData getBusinessPromotionList(BusinessPromotionListParam businessPromotionListParam);
+    PaginationData getBusinessPromotionList(BusinessPromotionListParam businessPromotionListParam,String loginAccount);
 
     /**
      * 企业宣传详情
@@ -43,4 +41,11 @@ public interface BusinessPromotionService {
      * @return
      */
     List<PropagandaFeeRulesShow> getPropagandaFeeRulesList();
+
+    /**
+     * 获取宣传类型
+     * @param loginAccount 登录用户账号
+     * @return
+     */
+    List<PropagandaTypeShow> getPropagandaTypeList(String loginAccount);
 }

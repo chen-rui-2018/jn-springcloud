@@ -4,10 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.enterprise.enums.BusinessPromotionExceptionEnum;
-import com.jn.enterprise.propaganda.model.BusinessPromotionDetailsParam;
-import com.jn.enterprise.propaganda.model.BusinessPromotionDetailsShow;
-import com.jn.enterprise.propaganda.model.BusinessPromotionListParam;
-import com.jn.enterprise.propaganda.model.BusinessPromotionListShow;
+import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -47,7 +44,12 @@ public class BusinessPromotionController extends BaseController {
     @ApiOperation(value = "企业宣传列表查询)")
     @RequestMapping(value = "/getBusinessPromotionList",method = RequestMethod.GET)
     public Result<PaginationData<List<BusinessPromotionListShow>>> getBusinessPromotionList(@Validated BusinessPromotionListParam businessPromotionListParam){
-        return  new Result(businessPromotionService.getBusinessPromotionList(businessPromotionListParam));
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("企业宣传列表查询获取当前登录用户失败");
+            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        return  new Result(businessPromotionService.getBusinessPromotionList(businessPromotionListParam,user.getAccount()));
     }
 
     @ControllerLog(doAction = "企业宣传详情")
@@ -73,5 +75,24 @@ public class BusinessPromotionController extends BaseController {
         return  new Result(responseNum);
     }
 
-    //todo:需要提供宣传类型的接口，需要根据角色来查询 yangph
+    @ControllerLog(doAction = "获取宣传费用规则")
+    @RequiresPermissions("/propaganda/businessPromotionController/getPropagandaFeeRulesList")
+    @ApiOperation(value = "获取宣传费用规则)",notes = "返回值为响应数据条数，正常为1")
+    @RequestMapping(value = "/getPropagandaFeeRulesList",method = RequestMethod.GET)
+    public Result<List<PropagandaFeeRulesShow>> getPropagandaFeeRulesList(){
+        return  new Result(businessPromotionService.getPropagandaFeeRulesList());
+    }
+
+    @ControllerLog(doAction = "获取宣传类型")
+    @RequiresPermissions("/propaganda/businessPromotionController/getPropagandaTypeList")
+    @ApiOperation(value = "获取宣传类型)")
+    @RequestMapping(value = "/getPropagandaTypeList",method = RequestMethod.GET)
+    public Result<List<PropagandaTypeShow>> getPropagandaTypeList(){
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("获取宣传类型获取当前登录用户失败");
+            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        return  new Result(businessPromotionService.getPropagandaTypeList(user.getAccount()));
+    }
 }

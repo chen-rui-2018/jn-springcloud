@@ -6,6 +6,9 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.common.dao.TbServiceCodeMapper;
+import com.jn.enterprise.common.entity.TbServiceCode;
+import com.jn.enterprise.common.entity.TbServiceCodeCriteria;
 import com.jn.enterprise.enums.BusinessPromotionExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.propaganda.dao.BusinessPromotionMapper;
@@ -15,6 +18,7 @@ import com.jn.enterprise.propaganda.entity.TbPropaganda;
 import com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules;
 import com.jn.enterprise.propaganda.entity.TbPropagandaFeeRulesCriteria;
 import com.jn.enterprise.propaganda.enums.PromotionAreaEnum;
+import com.jn.enterprise.propaganda.enums.PropagandaTypeEnum;
 import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
@@ -60,10 +64,11 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     private UserExtensionClient userExtensionClient;
 
     @Autowired
-    private SystemClient systemClient;
+    private TbServiceCodeMapper tbServiceCodeMapper;
 
     @Autowired
     private OrgColleagueService orgColleagueService;
+
 
     /**
      * 数据状态  1：有效  0：无效
@@ -73,6 +78,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
      * 日期格式
      */
     private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
+
 
     /**
      * 企业宣传列表查询
@@ -281,11 +287,50 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         //判断当前用户是否为超级管理员
         if(isSuperAdmin(loginAccount)){
             //查询全部用户类型返回
+            List<TbServiceCode> tbServiceCodeList = getTbServiceCodeList();
+            return setPropagandaTypeShowInfo(tbServiceCodeList);
 
         }else{
-            //获取当前用户的角色
+            //获取当前用户与宣传相关的角色
+            List<String>accountList=new ArrayList<>();
+            accountList.add(loginAccount);
+            List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, "宣传");
         }
 
         return null;
+    }
+
+    /**
+     * 获取
+     * @return
+     */
+    private List<TbServiceCode> getTbServiceCodeList() {
+        TbServiceCodeCriteria example=new TbServiceCodeCriteria();
+        //查询宣传类型全部数据
+        example.createCriteria().andGroupIdEqualTo(PropagandaTypeEnum.PROPAGANDA_TYPE.getCode())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceCode> tbServiceCodeList = tbServiceCodeMapper.selectByExample(example);
+        if(tbServiceCodeList.isEmpty()){
+            logger.warn("获取宣传类型失败，系统中不传在宣传类型");
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_TYPE_NOT_EXIT);
+        }
+        return tbServiceCodeList;
+    }
+
+    /**
+     * 封装处理宣传类型
+     * @param tbServiceCodeList 字典表查询的宣传类型列表
+     * @return
+     */
+    @ServiceLog(doAction = "封装处理宣传类型")
+    private List<PropagandaTypeShow> setPropagandaTypeShowInfo(List<TbServiceCode> tbServiceCodeList) {
+        List<PropagandaTypeShow>resultList=new ArrayList<>(16);
+        for(TbServiceCode tbServiceCode:tbServiceCodeList){
+            PropagandaTypeShow propagandaTypeShow=new PropagandaTypeShow();
+            propagandaTypeShow.setPropagandaTypeCode(tbServiceCode.getCodeValue());
+            propagandaTypeShow.setPropagandaTypeName(tbServiceCode.getCodeName());
+            resultList.add(propagandaTypeShow);
+        }
+        return resultList;
     }
 }

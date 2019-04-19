@@ -47,11 +47,12 @@ public class DeclarationNoticeController extends BaseController {
     @ControllerLog(doAction = "申报中心公告列表")
     @ApiOperation(value = "申报中心公告列表", notes = "申报中心公告列表")
     @RequestMapping(value = "/list" ,method = RequestMethod.GET)
-    public Result<PaginationData<List<TbPdDeclarationNoticeManage>>> list(@ApiParam(value = "所属类型(1:白下高新区，2：秦淮区，3：南京市，4：江苏省，5：国家)",example = "1") @RequestParam String rangeId,
+    public Result<PaginationData<List<TbPdDeclarationNoticeManage>>> list(@ApiParam(value = "所属类型(1:白下高新区，2：秦淮区，3：南京市，4：江苏省，5：国家)",example = "1") @RequestParam(name = "rangeId", required = false) String rangeId,
                                                                           @ApiParam(value = "排序（1：发布时间排序，2：时间节点排序，3：热度排序）",required = true,example = "1") @RequestParam String sortType,
+                                                                          @ApiParam(value = "标题名称",example = "政策") @RequestParam(name = "titleName", required = false) String titleName,
                                                                           @ApiParam(value = "当前页",required = true,example = "1") @RequestParam int page,
                                                                           @ApiParam(value = "每页总数",required = true,example = "8") @RequestParam int rows) {
-        PaginationData<List<TbPdDeclarationNoticeManage>> data = declarationNoticeService.selectByDeclarationNoticeList(rangeId,sortType,page,rows);
+        PaginationData<List<TbPdDeclarationNoticeManage>> data = declarationNoticeService.selectByDeclarationNoticeList(rangeId,sortType,titleName,page,rows);
         return new Result(data);
     }
 

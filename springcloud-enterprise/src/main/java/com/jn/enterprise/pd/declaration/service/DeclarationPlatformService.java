@@ -22,7 +22,7 @@ public interface DeclarationPlatformService {
      *
      * @return
      */
-    PaginationData<List<TbPdDeclarationPlatformManage>> selectByDeclarationPlatformList(String subordinatePlatformName, int page, int rows);
+    PaginationData<List<TbPdDeclarationPlatformManage>> selectByDeclarationPlatformList(String subordinatePlatformName,String platformTitle, int page, int rows);
 
     /**
      * 查询所有平台类型列表

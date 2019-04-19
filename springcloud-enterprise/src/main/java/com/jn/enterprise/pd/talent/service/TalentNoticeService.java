@@ -22,7 +22,7 @@ public interface TalentNoticeService {
      * @param
      * @return
      */
-    PaginationData<List<TbPdTalentServiceNotice>> selectByTalentNoticeList(String rangeId, String sortType,int page,int rows);
+    PaginationData<List<TbPdTalentServiceNotice>> selectByTalentNoticeList(String rangeId, String sortType,String noticeTitle,int page,int rows);
 
     /**
      * 根据ID查询公告详情

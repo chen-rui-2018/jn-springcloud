@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.message.dao.MessageListDao">
+
+
+    <!--消息列表-->
+    <select id="findAll" resultMap="findAllMessageOneSortMap">
+        SELECT
+        t.message_tow_sort as "messageTowSort",
+        #{account} as "account"
+        from
+         tb_message_list t
+        WHERE t.record_status =1
+        AND t.message_one_sort = #{messageTowTort}
+        AND t.message_recipient = #{account}
+        GROUP BY t.message_tow_sort
+    </select>
+
+
+    <resultMap id="findAllMessageOneSortMap" type="com.jn.park.message.model.FindAllMessageListVo">
+        <result column="messageTowSort" jdbcType="INTEGER" property="messageTowSort" />
+        <collection property="messageListModels"
+                    ofType="com.jn.park.message.model.MessageListModel"
+                    select="selectMessageList"
+                    column="{messageTowSort=messageTowSort,account=account}"></collection>
+    </resultMap>
+
+    <select id="selectMessageList" resultMap="findAllMessageList">
+      SELECT
+        t.message_title as "messagetitle",
+        t.message_content as "messagecontent",
+        t.message_connect_name as "messageconnectname",
+        t.message_connect as "messageconnect",
+        t.is_read as "isread",
+        t.message_recipient as "messagerecipient",
+        t.message_sender as "messagesender",
+        t.message_one_sort as "messageonesort",
+        t.message_tow_sort as "messagetowsort",
+        t.created_time as "createdtime",
+        t.creator_account as "creatoraccount"
+        from
+         tb_message_list t
+        WHERE t.record_status = 1
+        AND t.message_tow_sort =#{messageTowSort,jdbcType=INTEGER}
+        AND t.message_recipient=#{account,jdbcType=VARCHAR}
+    </select>
+
+    <resultMap id="findAllMessageList" type="com.jn.park.message.model.MessageListModel">
+        <result column="message_title" jdbcType="VARCHAR" property="messagetitle" />
+        <result column="message_content" jdbcType="VARCHAR" property="messagecontent" />
+        <result column="message_connect_name" jdbcType="VARCHAR" property="messageconnectname" />
+        <result column="message_connect" jdbcType="VARCHAR" property="messageconnect" />
+        <result column="is_read" jdbcType="VARCHAR" property="isread" />
+        <result column="message_recipient" jdbcType="VARCHAR" property="messagerecipient" />
+        <result column="message_sender" jdbcType="VARCHAR" property="messagesender" />
+        <result column="message_one_sort" jdbcType="VARCHAR" property="messageonesort" />
+        <result column="message_tow_sort" jdbcType="VARCHAR" property="messagetowsort" />
+        <result column="created_time" jdbcType="VARCHAR" property="createdtime" />
+        <result column="creator_account" jdbcType="VARCHAR" property="creatoraccount" />
+    </resultMap>
+
+
+    <insert id="addMessage" parameterType="com.jn.park.message.model.addMessageModel">
+        insert into tb_message_list (
+            message_title,
+            message_content,
+            message_connect_name,
+            message_connect,
+            message_recipient,
+            message_sender,
+            message_one_sort,
+            message_tow_sort,
+            creator_account,
+            created_time
+            )
+            values(
+            #{messageTitle},
+            #{messageContent},
+            #{messageConnectName},
+            #{messageConnect},
+            #{messageRecipien},
+            #{messageSender},
+            #{messageOneSort},
+            #{messageTowSort},
+            #{creatorAccount},
+            SYSDATE()
+            )
+
+    </insert>
+
+
+
+</mapper>

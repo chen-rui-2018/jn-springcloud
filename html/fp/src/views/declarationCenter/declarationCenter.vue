@@ -305,7 +305,7 @@ export default {
                 }
                 p:nth-child(1){
                   width:100%;
-                  height: 78px;
+                  height: 88px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 11px 0;
                   margin-top: 0;

@@ -31,8 +31,8 @@ export default new Router({
       name:'forgetPsw'
     },
     {
-      path: '/user',
-      component: resolve => require(['@/views/home'],resolve),
+      path: '/userinfo',
+      component: resolve => require(['@/views/home/userinfo'],resolve),
       name:'user',
       meta: {title: '用户中心'},
       
@@ -162,6 +162,33 @@ export default new Router({
       component: resolve => require(['@/views/talentsService/talentsServiceDetail'],resolve),
       meta: {title: '人才服务详情'},
       name:'talentsServiceDetail'
+    },
+    {
+      path: '/home',
+      component: resolve => require(['@/views/home'],resolve),
+      meta: {title: '用户中心'},  
+      name:'home',
+      redirect:{name:'userCenter'},
+      children:[
+        {
+          path:'/servicemarket/product/userCenter',
+          name:'userCenter',
+          meta: {title: '首页'},  
+          component:resolve => require(['@/views/home/userCenter'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryProduct',
+        name:'ordinaryProduct',
+        meta: {title: '常规服务产品'},  
+        component:resolve => require(['@/views/home/productService/ordinaryProduct'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/productPutaway',
+        name:'productPutaway',
+        meta: {title: '常规产品上架'},
+        component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
+        }
+      ]
     }
   ]
 })

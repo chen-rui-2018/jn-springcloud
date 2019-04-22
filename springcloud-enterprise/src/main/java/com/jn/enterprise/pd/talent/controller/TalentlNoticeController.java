@@ -40,11 +40,13 @@ public class TalentlNoticeController extends BaseController {
     @ControllerLog(doAction = "人才服务-公告列表")
     @ApiOperation(value = "人才服务公告列表", notes = "人才服务公告列表")
     @RequestMapping(value = "/list" ,method = RequestMethod.GET)
-    public Result<List<TbPdTalentServiceNotice>> list(@ApiParam(value = "所属类型(1：人才工作动态，2：人才服务指南，3：人才企业培训，4:人才扶持计划,5:常见问题)",example = "1") @RequestParam String rangeId,
+    public Result<List<TbPdTalentServiceNotice>> list(@ApiParam(value = "所属类型(1：人才工作动态，2：人才服务指南，3：人才企业培训，4:人才扶持计划,5:常见问题)",example = "1")  @RequestParam(name = "rangeId", required = false)  String rangeId,
                                                       @ApiParam(value = "排序（1：发布时间排序，2：时间节点排序，3：热度排序）",required = true,example = "1") @RequestParam String sortType,
+                                                      @ApiParam(value = "公告标题",example = "优惠") @RequestParam(name = "noticeTitle", required = false) String noticeTitle,
                                                       @ApiParam(value = "当前页",required = true,example = "1") @RequestParam int page,
                                                       @ApiParam(value = "每页总数",required = true,example = "8") @RequestParam int rows) {
-        PaginationData<List<TbPdTalentServiceNotice>> data = talentNoticeService.selectByTalentNoticeList(rangeId,sortType,page,rows);
+
+        PaginationData<List<TbPdTalentServiceNotice>> data = talentNoticeService.selectByTalentNoticeList(rangeId,sortType,noticeTitle,page,rows);
         return new Result(data);
     }
 

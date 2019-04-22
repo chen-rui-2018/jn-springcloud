@@ -3,6 +3,7 @@ package com.jn.enterprise.pd.talent.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.StringUtils;
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage;
 import com.jn.enterprise.pd.declaration.enums.DeclaratStatusEnums;
 import com.jn.enterprise.pd.talent.dao.TbPdTalentServiceNoticeMapper;
@@ -47,20 +48,21 @@ public class TalentNoticeServiceImpl implements TalentNoticeService {
      * @return
      */
     @Override
-    public PaginationData<List<TbPdTalentServiceNotice>> selectByTalentNoticeList(String rangeId, String sortType,int page,int rows) {
+    public PaginationData<List<TbPdTalentServiceNotice>> selectByTalentNoticeList(String rangeId, String sortType,String noticeTitle,int page,int rows) {
         Page<Object> objects = PageHelper.startPage(page, rows);
         TbPdTalentServiceNoticeCriteria noticeCriteria = new TbPdTalentServiceNoticeCriteria();
-        if(sortType.equals(SortEnums.RELEASETIME_SORT)){
-            noticeCriteria.setOrderByClause("modified_time desc");
-        }else if(sortType.equals(SortEnums.TIMENODE_SORT)){
-            noticeCriteria.setOrderByClause("deadline desc");
-        }else if(sortType.equals(SortEnums.HEAT_SORT)){
-            noticeCriteria.setOrderByClause("browse_times desc");
+        if(sortType.equals(SortEnums.RELEASETIME_SORT.getCode())){
+            noticeCriteria.setOrderByClause("is_roof_placement asc,modified_time desc");
+        }else if(sortType.equals(SortEnums.TIMENODE_SORT.getCode())){
+            noticeCriteria.setOrderByClause("is_roof_placement asc,deadline desc");
+        }else if(sortType.equals(SortEnums.HEAT_SORT.getCode())){
+            noticeCriteria.setOrderByClause("is_roof_placement asc,browse_times desc");
         }
         TbPdTalentServiceNoticeCriteria.Criteria criteria = noticeCriteria.createCriteria();
         Byte status = Byte.parseByte(DeclaratStatusEnums.RELEASE.getCode());
         criteria.andStatusEqualTo(status);
-        criteria.andRangeIdEqualTo(rangeId);
+        if(StringUtils.isNotEmpty(rangeId)) {  criteria.andRangeIdEqualTo(rangeId);}
+        if(StringUtils.isNotEmpty(noticeTitle)) {  criteria.andNoticeTitleLike('%'+noticeTitle+'%');}
         return new PaginationData(tbPdTalentServiceNoticeMapper.selectByExample(noticeCriteria), objects.getTotal());
     }
 

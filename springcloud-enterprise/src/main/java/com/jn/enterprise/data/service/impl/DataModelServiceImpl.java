@@ -138,8 +138,18 @@ public class DataModelServiceImpl implements DataModelService {
     @Transactional(rollbackFor = Exception.class)
     public int updateTarget(TargetVO target,User user) {
         Integer result = 0;
+        logger.info(target.toString());
         TbDataReportingTarget targetPO = new TbDataReportingTarget();
         BeanUtils.copyProperties(target,targetPO);
+        if(StringUtils.isBlank(String.valueOf(target.getIsMuiltRow()))){
+            throw new JnSpringCloudException(DataUploadExceptionEnum.TARGET_ISMUILTROW_IS_NOT_EXIST);
+        }
+        if(StringUtils.isBlank(String.valueOf(target.getTargetType()))){
+            throw new JnSpringCloudException(DataUploadExceptionEnum.TARGET_TYPE_IS_NOT_EXIST);
+        }
+        if(StringUtils.isBlank(String.valueOf(target.getRecordStatus()))){
+            target.setRecordStatus(Integer.parseInt(DataUploadConstants.VALID));
+        }
         targetPO.setIsMuiltRow(new Byte(target.getIsMuiltRow().toString()));
         targetPO.setTargetType(new Byte(target.getTargetType().toString()));
         targetPO.setRecordStatus(new Byte(target.getRecordStatus().toString()));
@@ -155,9 +165,13 @@ public class DataModelServiceImpl implements DataModelService {
         if(StringUtils.isEmpty(target.getTargetId())){
             String targetId= UUID.randomUUID().toString().replaceAll("-","");
             targetPO.setTargetId(targetId);
+            targetPO.setCreatorAccount(user.getAccount());
+            targetPO.setCreatedTime(new Date());
             result = tbDataReportingTargetMapper.insertSelective(targetPO);
         }else{
             invalidTargetInputFormat(targetPO.getTargetId());
+            targetPO.setModifierAccount(user.getAccount());
+            targetPO.setModifiedTime(new Date());
             result = tbDataReportingTargetMapper.updateByPrimaryKeySelective(targetPO);
         }
 

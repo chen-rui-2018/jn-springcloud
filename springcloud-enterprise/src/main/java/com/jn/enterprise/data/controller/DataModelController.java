@@ -72,7 +72,7 @@ public class DataModelController  extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name="targetId",value = "指标ID",example = "0001",dataType = "String" ,paramType = "query")
     })
-    public Result<Integer> invalidTarget(String targetId){
+    public Result<Integer> invalidTarget(@RequestBody String targetId){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         Integer result = dataModelService.invalidTarget(targetId,user);
         return new Result(result);
@@ -83,7 +83,7 @@ public class DataModelController  extends BaseController {
     @ApiOperation(value = "更新指标信息",notes = "返回更新指标信息的结果,正常返回1")
     @PostMapping(value = "/target/updateTarget")
     @RequiresPermissions("/data/target/updateTarget")
-    public Result<Integer> updateTarget(@ModelAttribute TargetVO target){
+    public Result<Integer> updateTarget(@RequestBody TargetVO target){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         Integer result = dataModelService.updateTarget(target,user);
         return new Result(result);
@@ -105,7 +105,7 @@ public class DataModelController  extends BaseController {
     @ApiOperation(value = "更新模板",notes = "返回更新模板结果,正常返回1")
     @PostMapping(value = "/dataModel/updateModel")
     @RequiresPermissions("/data/dataModel/updateModel")
-    public Result<Integer> updateModel( @ModelAttribute  ModelDataVO param){
+    public Result<Integer> updateModel( @RequestBody  ModelDataVO param){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         Integer integer = dataModelService.updateModel(param,user);
         return new Result(integer);
@@ -113,7 +113,7 @@ public class DataModelController  extends BaseController {
 
     @ControllerLog(doAction = "数据上报-数据模板管理-获取模板信息")
     @ApiOperation(value = "获取模板信息",notes = "返回模板信息")
-    @PostMapping(value = "/dataModel/getModel")
+    @GetMapping(value = "/dataModel/getModel")
     @RequiresPermissions("/data/dataModel/getModel")
     @ApiImplicitParams({
             @ApiImplicitParam(name="modelId",value = "模板id",example = "0",dataType = "String" ,paramType = "query")

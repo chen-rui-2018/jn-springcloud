@@ -145,6 +145,14 @@
         <if test="endTime != null and endTime != ''">
             and ta.acti_start_time &lt;=   concat(#{endTime,jdbcType=VARCHAR}," 23:59:59")
         </if>
+        <if test="timeInterval == 2">
+            and  ta.acti_start_time &gt; date_add(now(), interval -1 week)
+            and ta.acti_start_time &lt; date_add(now(), interval 1 day)
+        </if>
+        <if test="timeInterval == 1">
+            and  ta.acti_start_time  &gt; date_add(now(), interval -1 month )
+            and ta.acti_start_time &lt; date_add(now(), interval 1 day)
+        </if>
         order by ta.acti_start_time desc,  ta.acti_order desc
     </select>
 

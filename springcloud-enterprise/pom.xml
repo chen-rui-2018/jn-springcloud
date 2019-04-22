@@ -68,11 +68,8 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        company
+                        advisor,service_org,service_product,comment,require,businessArea,company,technology,common,pd-enterprise,pd-talent,pd-personnel,pd-declaration,pd-support,data,propaganda,task
                     </contexts>
-                    <tableNames>
-                        tb_service_recruit
-                    </tableNames>
                     <verbose>true</verbose>
                 </configuration>
             </plugin>

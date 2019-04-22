@@ -48,4 +48,26 @@ public interface BusinessPromotionService {
      * @return
      */
     List<PropagandaTypeShow> getPropagandaTypeList(String loginAccount);
+
+    /**
+     * 撤销申请
+     * @param propagandaId    宣传id
+     * @param loginAccount   登录用户账号
+     * @return
+     */
+    int cancelApprove(String propagandaId,String loginAccount);
+
+    /**
+     * 修改企业宣传
+     * @param businessPromotionDetailsParam
+     * @param loginAccount 登录用户账号
+     * @return
+     */
+    int updateBusinessPromotion(BusinessPromotionDetailsParam businessPromotionDetailsParam,String loginAccount);
+
+    /**
+     * 生成订单号
+     * @return
+     */
+    String getOrderNumber();
 }

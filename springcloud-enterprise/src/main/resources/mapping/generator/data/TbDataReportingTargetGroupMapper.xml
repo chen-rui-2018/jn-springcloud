@@ -3,12 +3,11 @@
 <mapper namespace="com.jn.enterprise.data.dao.TbDataReportingTargetGroupMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingTargetGroup">
     <id column="form_id" jdbcType="VARCHAR" property="formId" />
-    <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="target_id" jdbcType="VARCHAR" property="targetId" />
     <result column="form_type" jdbcType="VARCHAR" property="formType" />
     <result column="form_name" jdbcType="VARCHAR" property="formName" />
-    <result column="require" jdbcType="TINYINT" property="require" />
-    <result column="order" jdbcType="INTEGER" property="order" />
+    <result column="required" jdbcType="TINYINT" property="required" />
+    <result column="order_number" jdbcType="INTEGER" property="orderNumber" />
     <result column="choice_option" jdbcType="VARCHAR" property="choiceOption" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
@@ -71,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    form_id, id, target_id, form_type, form_name, require, order, choice_option, record_status
+    form_id, target_id, form_type, form_name, required, order_number, choice_option, 
+    record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetGroupCriteria" resultMap="BaseResultMap">
     select
@@ -104,23 +104,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetGroup">
-    insert into tb_data_reporting_target_group (form_id, id, target_id, 
-      form_type, form_name, require, 
-      order, choice_option, record_status
-      )
-    values (#{formId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, 
-      #{formType,jdbcType=VARCHAR}, #{formName,jdbcType=VARCHAR}, #{require,jdbcType=TINYINT}, 
-      #{order,jdbcType=INTEGER}, #{choiceOption,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
-      )
+    insert into tb_data_reporting_target_group (form_id, target_id, form_type, 
+      form_name, required, order_number, 
+      choice_option, record_status)
+    values (#{formId,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, #{formType,jdbcType=VARCHAR}, 
+      #{formName,jdbcType=VARCHAR}, #{required,jdbcType=TINYINT}, #{orderNumber,jdbcType=INTEGER}, 
+      #{choiceOption,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetGroup">
     insert into tb_data_reporting_target_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="formId != null">
         form_id,
-      </if>
-      <if test="id != null">
-        id,
       </if>
       <if test="targetId != null">
         target_id,
@@ -131,11 +126,11 @@
       <if test="formName != null">
         form_name,
       </if>
-      <if test="require != null">
-        require,
+      <if test="required != null">
+        required,
       </if>
-      <if test="order != null">
-        order,
+      <if test="orderNumber != null">
+        order_number,
       </if>
       <if test="choiceOption != null">
         choice_option,
@@ -148,9 +143,6 @@
       <if test="formId != null">
         #{formId,jdbcType=VARCHAR},
       </if>
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
       <if test="targetId != null">
         #{targetId,jdbcType=VARCHAR},
       </if>
@@ -160,11 +152,11 @@
       <if test="formName != null">
         #{formName,jdbcType=VARCHAR},
       </if>
-      <if test="require != null">
-        #{require,jdbcType=TINYINT},
+      <if test="required != null">
+        #{required,jdbcType=TINYINT},
       </if>
-      <if test="order != null">
-        #{order,jdbcType=INTEGER},
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=INTEGER},
       </if>
       <if test="choiceOption != null">
         #{choiceOption,jdbcType=VARCHAR},
@@ -186,9 +178,6 @@
       <if test="record.formId != null">
         form_id = #{record.formId,jdbcType=VARCHAR},
       </if>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
       <if test="record.targetId != null">
         target_id = #{record.targetId,jdbcType=VARCHAR},
       </if>
@@ -198,11 +187,11 @@
       <if test="record.formName != null">
         form_name = #{record.formName,jdbcType=VARCHAR},
       </if>
-      <if test="record.require != null">
-        require = #{record.require,jdbcType=TINYINT},
+      <if test="record.required != null">
+        required = #{record.required,jdbcType=TINYINT},
       </if>
-      <if test="record.order != null">
-        order = #{record.order,jdbcType=INTEGER},
+      <if test="record.orderNumber != null">
+        order_number = #{record.orderNumber,jdbcType=INTEGER},
       </if>
       <if test="record.choiceOption != null">
         choice_option = #{record.choiceOption,jdbcType=VARCHAR},
@@ -218,12 +207,11 @@
   <update id="updateByExample" parameterType="map">
     update tb_data_reporting_target_group
     set form_id = #{record.formId,jdbcType=VARCHAR},
-      id = #{record.id,jdbcType=VARCHAR},
       target_id = #{record.targetId,jdbcType=VARCHAR},
       form_type = #{record.formType,jdbcType=VARCHAR},
       form_name = #{record.formName,jdbcType=VARCHAR},
-      require = #{record.require,jdbcType=TINYINT},
-      order = #{record.order,jdbcType=INTEGER},
+      required = #{record.required,jdbcType=TINYINT},
+      order_number = #{record.orderNumber,jdbcType=INTEGER},
       choice_option = #{record.choiceOption,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
@@ -233,9 +221,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetGroup">
     update tb_data_reporting_target_group
     <set>
-      <if test="id != null">
-        id = #{id,jdbcType=VARCHAR},
-      </if>
       <if test="targetId != null">
         target_id = #{targetId,jdbcType=VARCHAR},
       </if>
@@ -245,11 +230,11 @@
       <if test="formName != null">
         form_name = #{formName,jdbcType=VARCHAR},
       </if>
-      <if test="require != null">
-        require = #{require,jdbcType=TINYINT},
+      <if test="required != null">
+        required = #{required,jdbcType=TINYINT},
       </if>
-      <if test="order != null">
-        order = #{order,jdbcType=INTEGER},
+      <if test="orderNumber != null">
+        order_number = #{orderNumber,jdbcType=INTEGER},
       </if>
       <if test="choiceOption != null">
         choice_option = #{choiceOption,jdbcType=VARCHAR},
@@ -262,12 +247,11 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetGroup">
     update tb_data_reporting_target_group
-    set id = #{id,jdbcType=VARCHAR},
-      target_id = #{targetId,jdbcType=VARCHAR},
+    set target_id = #{targetId,jdbcType=VARCHAR},
       form_type = #{formType,jdbcType=VARCHAR},
       form_name = #{formName,jdbcType=VARCHAR},
-      require = #{require,jdbcType=TINYINT},
-      order = #{order,jdbcType=INTEGER},
+      required = #{required,jdbcType=TINYINT},
+      order_number = #{orderNumber,jdbcType=INTEGER},
       choice_option = #{choiceOption,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT}
     where form_id = #{formId,jdbcType=VARCHAR}

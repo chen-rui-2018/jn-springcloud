@@ -60,19 +60,37 @@ public class ModelDataVO implements Serializable {
     @ApiModelProperty(value = "部门名称",example ="招商部")
     private String departmentName ;
     @ApiModelProperty(value = "模板顺序",example = "001")
-    private String order ;
+    private Integer orderNumber ;
+
+    public Integer getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
     @ApiModelProperty(value = "任务全部填写完后的提醒人",example = "提醒人账号")
     private String reminder ;
     @ApiModelProperty(value = "创建者账号",example = "zhangsan")
     private String creatorAccount;
-    @ApiModelProperty(value = "创建时间",example = "2020-12-21 25：61：61")
+    @ApiModelProperty(value = "创建时间",example = "2020-12-21")
     private Date createdTime;
     @ApiModelProperty(value = "最新更新者账号",example = "zhangsan")
     private String modifierAccount ;
-    @ApiModelProperty(value = "最新更新时间",example = "2020-12-21 25：61：61")
+    @ApiModelProperty(value = "最新更新时间",example = "2020-12-21")
     private Date modifiedTime;
 
+    @ApiModelProperty(value = "用户权限集合",example = "[001,112]")
+    private List<String> userDepartmentId;
 
+    public List<String> getUserDepartmentId() {
+        return userDepartmentId;
+    }
+
+    public void setUserDepartmentId(List<String> userDepartmentId) {
+        this.userDepartmentId = userDepartmentId;
+    }
 
     public List<TabVO> getTabs() {
         return tabs;
@@ -224,14 +242,6 @@ public class ModelDataVO implements Serializable {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
-    }
-
-    public String getOrder() {
-        return order;
-    }
-
-    public void setOrder(String order) {
-        this.order = order;
     }
 
     public String getReminder() {

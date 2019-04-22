@@ -33,11 +33,16 @@ public class DataUploadConstants {
      * 未上报
      */
     public final static String NOT_FILL="1";
+
+    /**
+     *
+     */
+    public final static String IS_DRAFT="2";
     /**
      * 逾期上报
-     */
-    public final static String FILLED_BUT_OVERDUE="2";
 
+    public final static String FILLED_BUT_OVERDUE="2";
+     */
     //填报周期
     /**
      * 月
@@ -72,5 +77,72 @@ public class DataUploadConstants {
      * tab列类型值的分割符号
      */
     public final static String TAB_COLUMN_SEPARTOR=",";
+
+    /**
+     * 任务是否逾期-是
+     */
+    public final static String TASK_IS_OVERDUE="1";
+    /**
+     * 任务是否逾期-否
+     */
+    public final static String TASK_IS_NOT_OVERDUE="0";
+
+    /**
+     * 广告展示客户端-PC
+     */
+    public final static String AD_DISPLAY_CLIENT_PC="PC";
+    /**
+     * 广告展示客户端-APP
+     */
+    public final static String AD_DISPLAY_CLIENT_APP="APP";
+
+    /**
+     * 0：文本框
+     */
+    public final static String FORM_TYPE_TEXT="0";
+    /**
+     *1：多行文本框
+     */
+    public final static String FORM_TYPE_TEXTAREA="1";
+    /**
+     *2：数字
+     */
+    public final static String FORM_TYPE_TEXTNUMBER="2";
+    /**
+     *3：单选框
+     */
+    public final static String FORM_TYPE_RADIO="3";
+    /**
+     *4：多选框
+     */
+    public final static String FORM_TYPE_CHECK="4";
+    /**
+     * 5：图片上传
+     */
+    public final static String FORM_TYPE_IMAGE="5";
+
+    /**
+     *下月
+     */
+    public final static String DEAD_TYPE_NEXT_MONTH="下月";
+    /**
+     *当月
+     */
+    public final static String DEAD_TYPE_THIS_MONTH="当月";
+
+    /**
+     *APP预警方式
+     */
+    public final static String WARNING_BY_APP="2";
+    /**
+     *邮件预警方式
+     */
+    public final static String WARNING_BY_EMAIL="1";
+    /**
+     * 短信预警方式
+     */
+    public final static String WARNING_BY_SMSTEXT="0";
+
+
 
 }

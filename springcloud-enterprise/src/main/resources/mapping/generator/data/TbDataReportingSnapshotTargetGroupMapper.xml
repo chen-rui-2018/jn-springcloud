@@ -2,14 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.data.dao.TbDataReportingSnapshotTargetGroupMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
-    <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
     <result column="target_id" jdbcType="VARCHAR" property="targetId" />
     <result column="form_id" jdbcType="VARCHAR" property="formId" />
     <result column="form_type" jdbcType="VARCHAR" property="formType" />
     <result column="form_name" jdbcType="VARCHAR" property="formName" />
-    <result column="have_to_write" jdbcType="TINYINT" property="haveToWrite" />
-    <result column="order" jdbcType="INTEGER" property="order" />
+    <result column="required" jdbcType="TINYINT" property="required" />
+    <result column="order_number" jdbcType="INTEGER" property="orderNumber" />
     <result column="choice_option" jdbcType="VARCHAR" property="choiceOption" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
@@ -72,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, task_batch, target_id, form_id, form_type, form_name, have_to_write, order, choice_option, 
+    task_batch, target_id, form_id, form_type, form_name, required, order_number, choice_option, 
     record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroupCriteria" resultMap="BaseResultMap">
@@ -96,21 +95,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
-    insert into tb_data_reporting_snapshot_target_group (id, task_batch, target_id, 
-      form_id, form_type, form_name, 
-      have_to_write, order, choice_option, 
-      record_status)
-    values (#{id,jdbcType=VARCHAR}, #{taskBatch,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, 
-      #{formId,jdbcType=VARCHAR}, #{formType,jdbcType=VARCHAR}, #{formName,jdbcType=VARCHAR}, 
-      #{haveToWrite,jdbcType=TINYINT}, #{order,jdbcType=INTEGER}, #{choiceOption,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+    insert into tb_data_reporting_snapshot_target_group (task_batch, target_id, form_id, 
+      form_type, form_name, required, 
+      order_number, choice_option, record_status
+      )
+    values (#{taskBatch,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, #{formId,jdbcType=VARCHAR}, 
+      #{formType,jdbcType=VARCHAR}, #{formName,jdbcType=VARCHAR}, #{required,jdbcType=TINYINT}, 
+      #{orderNumber,jdbcType=INTEGER}, #{choiceOption,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
     insert into tb_data_reporting_snapshot_target_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="taskBatch != null">
         task_batch,
       </if>
@@ -126,11 +122,11 @@
       <if test="formName != null">
         form_name,
       </if>
-      <if test="haveToWrite != null">
-        have_to_write,
+      <if test="required != null">
+        required,
       </if>
-      <if test="order != null">
-        order,
+      <if test="orderNumber != null">
+        order_number,
       </if>
       <if test="choiceOption != null">
         choice_option,
@@ -140,9 +136,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
       <if test="taskBatch != null">
         #{taskBatch,jdbcType=VARCHAR},
       </if>
@@ -158,11 +151,11 @@
       <if test="formName != null">
         #{formName,jdbcType=VARCHAR},
       </if>
-      <if test="haveToWrite != null">
-        #{haveToWrite,jdbcType=TINYINT},
+      <if test="required != null">
+        #{required,jdbcType=TINYINT},
       </if>
-      <if test="order != null">
-        #{order,jdbcType=INTEGER},
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=INTEGER},
       </if>
       <if test="choiceOption != null">
         #{choiceOption,jdbcType=VARCHAR},
@@ -181,9 +174,6 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_data_reporting_snapshot_target_group
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
       <if test="record.taskBatch != null">
         task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       </if>
@@ -199,11 +189,11 @@
       <if test="record.formName != null">
         form_name = #{record.formName,jdbcType=VARCHAR},
       </if>
-      <if test="record.haveToWrite != null">
-        have_to_write = #{record.haveToWrite,jdbcType=TINYINT},
+      <if test="record.required != null">
+        required = #{record.required,jdbcType=TINYINT},
       </if>
-      <if test="record.order != null">
-        order = #{record.order,jdbcType=INTEGER},
+      <if test="record.orderNumber != null">
+        order_number = #{record.orderNumber,jdbcType=INTEGER},
       </if>
       <if test="record.choiceOption != null">
         choice_option = #{record.choiceOption,jdbcType=VARCHAR},
@@ -218,14 +208,13 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_data_reporting_snapshot_target_group
-    set id = #{record.id,jdbcType=VARCHAR},
-      task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+    set task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       target_id = #{record.targetId,jdbcType=VARCHAR},
       form_id = #{record.formId,jdbcType=VARCHAR},
       form_type = #{record.formType,jdbcType=VARCHAR},
       form_name = #{record.formName,jdbcType=VARCHAR},
-      have_to_write = #{record.haveToWrite,jdbcType=TINYINT},
-      order = #{record.order,jdbcType=INTEGER},
+      required = #{record.required,jdbcType=TINYINT},
+      order_number = #{record.orderNumber,jdbcType=INTEGER},
       choice_option = #{record.choiceOption,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">

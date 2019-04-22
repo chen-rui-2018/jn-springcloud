@@ -6,13 +6,13 @@ public class TbDataReportingModelStruct implements Serializable {
     /*@ApiModelProperty("")*/
     private String id;
 
-    /*@ApiModelProperty("指标表")*/
+    /*@ApiModelProperty("指标ID")*/
     private String targetId;
 
     /*@ApiModelProperty("")*/
     private String modelId;
 
-    /*@ApiModelProperty("")*/
+    /*@ApiModelProperty("tabId")*/
     private String tabId;
 
     private static final long serialVersionUID = 1L;

@@ -32,7 +32,7 @@ public class TabVO implements Serializable {
     @ApiModelProperty(value = "表生成模式（0:普通模板1：科技园模板）" ,example = "1")
     private String tabCreateType;
     @ApiModelProperty(value = "tab表的显示顺序（因为可能会存在一组tabtab1tab2）",example = "23")
-    private String order;
+    private Integer orderNumber;
     @ApiModelProperty(value = "tab指标集合",example = "23")
     private List<TargetModelVO> targetList;
 
@@ -98,12 +98,12 @@ public class TabVO implements Serializable {
         this.tabCreateType = tabCreateType;
     }
 
-    public String getOrder() {
-        return order;
+    public Integer getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrder(String order) {
-        this.order = order;
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public List<TargetModelVO> getTargetList() {

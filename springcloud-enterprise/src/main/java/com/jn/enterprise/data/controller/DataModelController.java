@@ -6,6 +6,7 @@ import com.jn.enterprise.data.model.GroupModel;
 import com.jn.enterprise.data.model.InputFormatModel;
 import com.jn.enterprise.data.model.TreeData;
 import com.jn.enterprise.data.service.DataModelService;
+import com.jn.enterprise.data.service.impl.DataModelServiceImpl;
 import com.jn.enterprise.data.vo.ModelDataVO;
 import com.jn.enterprise.data.vo.TargetModelVO;
 import com.jn.enterprise.data.vo.TargetVO;
@@ -17,6 +18,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +38,7 @@ import java.util.List;
 public class DataModelController  extends BaseController {
     @Autowired
     private DataModelService dataModelService;
+    private static Logger logger = LoggerFactory.getLogger(DataModelController.class);
 
 
 
@@ -101,8 +105,10 @@ public class DataModelController  extends BaseController {
     @ApiOperation(value = "更新模板",notes = "返回更新模板结果,正常返回1")
     @PostMapping(value = "/dataModel/updateModel")
     @RequiresPermissions("/data/dataModel/updateModel")
-    public Result<Integer> updateModel( @ModelAttribute  ModelDataVO param,@RequestParam(value="uploadFiles",required=false)MultipartFile[] uploadFiles){
-        return new Result();
+    public Result<Integer> updateModel( @ModelAttribute  ModelDataVO param){
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        Integer integer = dataModelService.updateModel(param,user);
+        return new Result(integer);
     }
 
     @ControllerLog(doAction = "数据上报-数据模板管理-获取模板信息")

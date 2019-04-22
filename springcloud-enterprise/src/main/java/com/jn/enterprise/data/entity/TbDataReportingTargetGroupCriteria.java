@@ -174,76 +174,6 @@ public class TbDataReportingTargetGroupCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdEqualTo(String value) {
-            addCriterion("id =", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotEqualTo(String value) {
-            addCriterion("id <>", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThan(String value) {
-            addCriterion("id >", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThanOrEqualTo(String value) {
-            addCriterion("id >=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThan(String value) {
-            addCriterion("id <", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThanOrEqualTo(String value) {
-            addCriterion("id <=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLike(String value) {
-            addCriterion("id like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotLike(String value) {
-            addCriterion("id not like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIn(List<String> values) {
-            addCriterion("id in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotIn(List<String> values) {
-            addCriterion("id not in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdBetween(String value1, String value2) {
-            addCriterion("id between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotBetween(String value1, String value2) {
-            addCriterion("id not between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
         public Criteria andTargetIdIsNull() {
             addCriterion("target_id is null");
             return (Criteria) this;
@@ -454,123 +384,123 @@ public class TbDataReportingTargetGroupCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andRequireIsNull() {
-            addCriterion("require is null");
+        public Criteria andRequiredIsNull() {
+            addCriterion("required is null");
             return (Criteria) this;
         }
 
-        public Criteria andRequireIsNotNull() {
-            addCriterion("require is not null");
+        public Criteria andRequiredIsNotNull() {
+            addCriterion("required is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRequireEqualTo(Byte value) {
-            addCriterion("require =", value, "require");
+        public Criteria andRequiredEqualTo(Byte value) {
+            addCriterion("required =", value, "required");
             return (Criteria) this;
         }
 
-        public Criteria andRequireNotEqualTo(Byte value) {
-            addCriterion("require <>", value, "require");
+        public Criteria andRequiredNotEqualTo(Byte value) {
+            addCriterion("required <>", value, "required");
             return (Criteria) this;
         }
 
-        public Criteria andRequireGreaterThan(Byte value) {
-            addCriterion("require >", value, "require");
+        public Criteria andRequiredGreaterThan(Byte value) {
+            addCriterion("required >", value, "required");
             return (Criteria) this;
         }
 
-        public Criteria andRequireGreaterThanOrEqualTo(Byte value) {
-            addCriterion("require >=", value, "require");
+        public Criteria andRequiredGreaterThanOrEqualTo(Byte value) {
+            addCriterion("required >=", value, "required");
             return (Criteria) this;
         }
 
-        public Criteria andRequireLessThan(Byte value) {
-            addCriterion("require <", value, "require");
+        public Criteria andRequiredLessThan(Byte value) {
+            addCriterion("required <", value, "required");
             return (Criteria) this;
         }
 
-        public Criteria andRequireLessThanOrEqualTo(Byte value) {
-            addCriterion("require <=", value, "require");
+        public Criteria andRequiredLessThanOrEqualTo(Byte value) {
+            addCriterion("required <=", value, "required");
             return (Criteria) this;
         }
 
-        public Criteria andRequireIn(List<Byte> values) {
-            addCriterion("require in", values, "require");
+        public Criteria andRequiredIn(List<Byte> values) {
+            addCriterion("required in", values, "required");
             return (Criteria) this;
         }
 
-        public Criteria andRequireNotIn(List<Byte> values) {
-            addCriterion("require not in", values, "require");
+        public Criteria andRequiredNotIn(List<Byte> values) {
+            addCriterion("required not in", values, "required");
             return (Criteria) this;
         }
 
-        public Criteria andRequireBetween(Byte value1, Byte value2) {
-            addCriterion("require between", value1, value2, "require");
+        public Criteria andRequiredBetween(Byte value1, Byte value2) {
+            addCriterion("required between", value1, value2, "required");
             return (Criteria) this;
         }
 
-        public Criteria andRequireNotBetween(Byte value1, Byte value2) {
-            addCriterion("require not between", value1, value2, "require");
+        public Criteria andRequiredNotBetween(Byte value1, Byte value2) {
+            addCriterion("required not between", value1, value2, "required");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIsNull() {
-            addCriterion("order is null");
+        public Criteria andOrderNumberIsNull() {
+            addCriterion("order_number is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIsNotNull() {
-            addCriterion("order is not null");
+        public Criteria andOrderNumberIsNotNull() {
+            addCriterion("order_number is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderEqualTo(Integer value) {
-            addCriterion("order =", value, "order");
+        public Criteria andOrderNumberEqualTo(Integer value) {
+            addCriterion("order_number =", value, "orderNumber");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNotEqualTo(Integer value) {
-            addCriterion("order <>", value, "order");
+        public Criteria andOrderNumberNotEqualTo(Integer value) {
+            addCriterion("order_number <>", value, "orderNumber");
             return (Criteria) this;
         }
 
-        public Criteria andOrderGreaterThan(Integer value) {
-            addCriterion("order >", value, "order");
+        public Criteria andOrderNumberGreaterThan(Integer value) {
+            addCriterion("order_number >", value, "orderNumber");
             return (Criteria) this;
         }
 
-        public Criteria andOrderGreaterThanOrEqualTo(Integer value) {
-            addCriterion("order >=", value, "order");
+        public Criteria andOrderNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("order_number >=", value, "orderNumber");
             return (Criteria) this;
         }
 
-        public Criteria andOrderLessThan(Integer value) {
-            addCriterion("order <", value, "order");
+        public Criteria andOrderNumberLessThan(Integer value) {
+            addCriterion("order_number <", value, "orderNumber");
             return (Criteria) this;
         }
 
-        public Criteria andOrderLessThanOrEqualTo(Integer value) {
-            addCriterion("order <=", value, "order");
+        public Criteria andOrderNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("order_number <=", value, "orderNumber");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIn(List<Integer> values) {
-            addCriterion("order in", values, "order");
+        public Criteria andOrderNumberIn(List<Integer> values) {
+            addCriterion("order_number in", values, "orderNumber");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNotIn(List<Integer> values) {
-            addCriterion("order not in", values, "order");
+        public Criteria andOrderNumberNotIn(List<Integer> values) {
+            addCriterion("order_number not in", values, "orderNumber");
             return (Criteria) this;
         }
 
-        public Criteria andOrderBetween(Integer value1, Integer value2) {
-            addCriterion("order between", value1, value2, "order");
+        public Criteria andOrderNumberBetween(Integer value1, Integer value2) {
+            addCriterion("order_number between", value1, value2, "orderNumber");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNotBetween(Integer value1, Integer value2) {
-            addCriterion("order not between", value1, value2, "order");
+        public Criteria andOrderNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("order_number not between", value1, value2, "orderNumber");
             return (Criteria) this;
         }
 

@@ -914,7 +914,7 @@
         <table tableName="tb_data_reporting_group_company"></table>
         <table tableName="tb_data_reporting_group_struct"></table>
         <table tableName="tb_data_reporting_model"></table>
-        <table tableName="tb_data_reporting_model_data"></table>
+        <table tableName="tb_data_reporting_task_data"></table>
         <table tableName="tb_data_reporting_model_struct"></table>
         <table tableName="tb_data_reporting_model_tab"></table>
         <table tableName="tb_data_reporting_target_group"></table>

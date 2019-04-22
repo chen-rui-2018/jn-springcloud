@@ -3,7 +3,6 @@
 <mapper namespace="com.jn.enterprise.data.dao.TbDataReportingModelMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingModel">
     <id column="model_id" jdbcType="VARCHAR" property="modelId" />
-    <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="model_name" jdbcType="VARCHAR" property="modelName" />
     <result column="model_type" jdbcType="TINYINT" property="modelType" />
     <result column="model_form_target_id" jdbcType="VARCHAR" property="modelFormTargetId" />
@@ -20,7 +19,7 @@
     <result column="filll_in_form_deadline" jdbcType="CHAR" property="filllInFormDeadline" />
     <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
     <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="order" jdbcType="VARCHAR" property="order" />
+    <result column="order_number" jdbcType="INTEGER" property="orderNumber" />
     <result column="reminder" jdbcType="VARCHAR" property="reminder" />
     <result column="remind_status" jdbcType="VARCHAR" property="remindStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -87,9 +86,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    model_id, id, model_name, model_type, model_form_target_id, model_cycle, warning_before_days, 
+    model_id, model_name, model_type, model_form_target_id, model_cycle, warning_before_days, 
     warning_by, pc_ad, app_ad, record_status, comment, group_Id, other_data, task_create_time, 
-    filll_in_form_deadline, department_id, department_name, order, reminder, remind_status, 
+    filll_in_form_deadline, department_id, department_name, order_number, reminder, remind_status, 
     creator_account, created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelCriteria" resultMap="BaseResultMap">
@@ -123,33 +122,30 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
-    insert into tb_data_reporting_model (model_id, id, model_name, 
-      model_type, model_form_target_id, model_cycle, 
-      warning_before_days, warning_by, pc_ad, 
-      app_ad, record_status, comment, 
-      group_Id, other_data, task_create_time, 
-      filll_in_form_deadline, department_id, department_name, 
-      order, reminder, remind_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time)
-    values (#{modelId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, 
-      #{modelType,jdbcType=TINYINT}, #{modelFormTargetId,jdbcType=VARCHAR}, #{modelCycle,jdbcType=TINYINT}, 
-      #{warningBeforeDays,jdbcType=VARCHAR}, #{warningBy,jdbcType=VARCHAR}, #{pcAd,jdbcType=VARCHAR}, 
-      #{appAd,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{comment,jdbcType=VARCHAR}, 
-      #{groupId,jdbcType=VARCHAR}, #{otherData,jdbcType=VARCHAR}, #{taskCreateTime,jdbcType=CHAR}, 
-      #{filllInFormDeadline,jdbcType=CHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
-      #{order,jdbcType=VARCHAR}, #{reminder,jdbcType=VARCHAR}, #{remindStatus,jdbcType=VARCHAR}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_data_reporting_model (model_id, model_name, model_type, 
+      model_form_target_id, model_cycle, warning_before_days, 
+      warning_by, pc_ad, app_ad, 
+      record_status, comment, group_Id, 
+      other_data, task_create_time, filll_in_form_deadline, 
+      department_id, department_name, order_number, 
+      reminder, remind_status, creator_account, 
+      created_time, modifier_account, modified_time
+      )
+    values (#{modelId,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, #{modelType,jdbcType=TINYINT}, 
+      #{modelFormTargetId,jdbcType=VARCHAR}, #{modelCycle,jdbcType=TINYINT}, #{warningBeforeDays,jdbcType=VARCHAR}, 
+      #{warningBy,jdbcType=VARCHAR}, #{pcAd,jdbcType=VARCHAR}, #{appAd,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{comment,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, 
+      #{otherData,jdbcType=VARCHAR}, #{taskCreateTime,jdbcType=CHAR}, #{filllInFormDeadline,jdbcType=CHAR}, 
+      #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{orderNumber,jdbcType=INTEGER}, 
+      #{reminder,jdbcType=VARCHAR}, #{remindStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
     insert into tb_data_reporting_model
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="modelId != null">
         model_id,
-      </if>
-      <if test="id != null">
-        id,
       </if>
       <if test="modelName != null">
         model_name,
@@ -199,8 +195,8 @@
       <if test="departmentName != null">
         department_name,
       </if>
-      <if test="order != null">
-        order,
+      <if test="orderNumber != null">
+        order_number,
       </if>
       <if test="reminder != null">
         reminder,
@@ -224,9 +220,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="modelId != null">
         #{modelId,jdbcType=VARCHAR},
-      </if>
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
       </if>
       <if test="modelName != null">
         #{modelName,jdbcType=VARCHAR},
@@ -276,8 +269,8 @@
       <if test="departmentName != null">
         #{departmentName,jdbcType=VARCHAR},
       </if>
-      <if test="order != null">
-        #{order,jdbcType=VARCHAR},
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=INTEGER},
       </if>
       <if test="reminder != null">
         #{reminder,jdbcType=VARCHAR},
@@ -310,9 +303,6 @@
     <set>
       <if test="record.modelId != null">
         model_id = #{record.modelId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.modelName != null">
         model_name = #{record.modelName,jdbcType=VARCHAR},
@@ -362,8 +352,8 @@
       <if test="record.departmentName != null">
         department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
-      <if test="record.order != null">
-        order = #{record.order,jdbcType=VARCHAR},
+      <if test="record.orderNumber != null">
+        order_number = #{record.orderNumber,jdbcType=INTEGER},
       </if>
       <if test="record.reminder != null">
         reminder = #{record.reminder,jdbcType=VARCHAR},
@@ -391,7 +381,6 @@
   <update id="updateByExample" parameterType="map">
     update tb_data_reporting_model
     set model_id = #{record.modelId,jdbcType=VARCHAR},
-      id = #{record.id,jdbcType=VARCHAR},
       model_name = #{record.modelName,jdbcType=VARCHAR},
       model_type = #{record.modelType,jdbcType=TINYINT},
       model_form_target_id = #{record.modelFormTargetId,jdbcType=VARCHAR},
@@ -408,7 +397,7 @@
       filll_in_form_deadline = #{record.filllInFormDeadline,jdbcType=CHAR},
       department_id = #{record.departmentId,jdbcType=VARCHAR},
       department_name = #{record.departmentName,jdbcType=VARCHAR},
-      order = #{record.order,jdbcType=VARCHAR},
+      order_number = #{record.orderNumber,jdbcType=INTEGER},
       reminder = #{record.reminder,jdbcType=VARCHAR},
       remind_status = #{record.remindStatus,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -422,9 +411,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
     update tb_data_reporting_model
     <set>
-      <if test="id != null">
-        id = #{id,jdbcType=VARCHAR},
-      </if>
       <if test="modelName != null">
         model_name = #{modelName,jdbcType=VARCHAR},
       </if>
@@ -473,8 +459,8 @@
       <if test="departmentName != null">
         department_name = #{departmentName,jdbcType=VARCHAR},
       </if>
-      <if test="order != null">
-        order = #{order,jdbcType=VARCHAR},
+      <if test="orderNumber != null">
+        order_number = #{orderNumber,jdbcType=INTEGER},
       </if>
       <if test="reminder != null">
         reminder = #{reminder,jdbcType=VARCHAR},
@@ -499,8 +485,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
     update tb_data_reporting_model
-    set id = #{id,jdbcType=VARCHAR},
-      model_name = #{modelName,jdbcType=VARCHAR},
+    set model_name = #{modelName,jdbcType=VARCHAR},
       model_type = #{modelType,jdbcType=TINYINT},
       model_form_target_id = #{modelFormTargetId,jdbcType=VARCHAR},
       model_cycle = #{modelCycle,jdbcType=TINYINT},
@@ -516,7 +501,7 @@
       filll_in_form_deadline = #{filllInFormDeadline,jdbcType=CHAR},
       department_id = #{departmentId,jdbcType=VARCHAR},
       department_name = #{departmentName,jdbcType=VARCHAR},
-      order = #{order,jdbcType=VARCHAR},
+      order_number = #{orderNumber,jdbcType=INTEGER},
       reminder = #{reminder,jdbcType=VARCHAR},
       remind_status = #{remindStatus,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

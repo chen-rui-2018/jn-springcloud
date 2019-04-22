@@ -2,6 +2,7 @@ package com.jn.enterprise.data.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class TbDataReportingTaskCriteria {
@@ -105,6 +106,32 @@ public class TbDataReportingTaskCriteria {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value.getTime()), property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
+            if (values == null || values.size() == 0) {
+                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
+            }
+            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
+            Iterator<Date> iter = values.iterator();
+            while (iter.hasNext()) {
+                dateList.add(new java.sql.Date(iter.next().getTime()));
+            }
+            addCriterion(condition, dateList, property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
+        }
+
         public Criteria andFillIdIsNull() {
             addCriterion("fill_id is null");
             return (Criteria) this;
@@ -172,76 +199,6 @@ public class TbDataReportingTaskCriteria {
 
         public Criteria andFillIdNotBetween(String value1, String value2) {
             addCriterion("fill_id not between", value1, value2, "fillId");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdEqualTo(String value) {
-            addCriterion("id =", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotEqualTo(String value) {
-            addCriterion("id <>", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThan(String value) {
-            addCriterion("id >", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThanOrEqualTo(String value) {
-            addCriterion("id >=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThan(String value) {
-            addCriterion("id <", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThanOrEqualTo(String value) {
-            addCriterion("id <=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLike(String value) {
-            addCriterion("id like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotLike(String value) {
-            addCriterion("id not like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIn(List<String> values) {
-            addCriterion("id in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotIn(List<String> values) {
-            addCriterion("id not in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdBetween(String value1, String value2) {
-            addCriterion("id between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotBetween(String value1, String value2) {
-            addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
 
@@ -372,6 +329,76 @@ public class TbDataReportingTaskCriteria {
 
         public Criteria andModelIdNotBetween(String value1, String value2) {
             addCriterion("model_id not between", value1, value2, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchIsNull() {
+            addCriterion("task_batch is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchIsNotNull() {
+            addCriterion("task_batch is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchEqualTo(String value) {
+            addCriterion("task_batch =", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotEqualTo(String value) {
+            addCriterion("task_batch <>", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchGreaterThan(String value) {
+            addCriterion("task_batch >", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchGreaterThanOrEqualTo(String value) {
+            addCriterion("task_batch >=", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchLessThan(String value) {
+            addCriterion("task_batch <", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchLessThanOrEqualTo(String value) {
+            addCriterion("task_batch <=", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchLike(String value) {
+            addCriterion("task_batch like", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotLike(String value) {
+            addCriterion("task_batch not like", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchIn(List<String> values) {
+            addCriterion("task_batch in", values, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotIn(List<String> values) {
+            addCriterion("task_batch not in", values, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchBetween(String value1, String value2) {
+            addCriterion("task_batch between", value1, value2, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotBetween(String value1, String value2) {
+            addCriterion("task_batch not between", value1, value2, "taskBatch");
             return (Criteria) this;
         }
 
@@ -595,123 +622,53 @@ public class TbDataReportingTaskCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineEqualTo(String value) {
-            addCriterion("fill_in_form_deadline =", value, "fillInFormDeadline");
+        public Criteria andFillInFormDeadlineEqualTo(Date value) {
+            addCriterionForJDBCDate("fill_in_form_deadline =", value, "fillInFormDeadline");
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineNotEqualTo(String value) {
-            addCriterion("fill_in_form_deadline <>", value, "fillInFormDeadline");
+        public Criteria andFillInFormDeadlineNotEqualTo(Date value) {
+            addCriterionForJDBCDate("fill_in_form_deadline <>", value, "fillInFormDeadline");
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineGreaterThan(String value) {
-            addCriterion("fill_in_form_deadline >", value, "fillInFormDeadline");
+        public Criteria andFillInFormDeadlineGreaterThan(Date value) {
+            addCriterionForJDBCDate("fill_in_form_deadline >", value, "fillInFormDeadline");
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineGreaterThanOrEqualTo(String value) {
-            addCriterion("fill_in_form_deadline >=", value, "fillInFormDeadline");
+        public Criteria andFillInFormDeadlineGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("fill_in_form_deadline >=", value, "fillInFormDeadline");
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineLessThan(String value) {
-            addCriterion("fill_in_form_deadline <", value, "fillInFormDeadline");
+        public Criteria andFillInFormDeadlineLessThan(Date value) {
+            addCriterionForJDBCDate("fill_in_form_deadline <", value, "fillInFormDeadline");
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineLessThanOrEqualTo(String value) {
-            addCriterion("fill_in_form_deadline <=", value, "fillInFormDeadline");
+        public Criteria andFillInFormDeadlineLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("fill_in_form_deadline <=", value, "fillInFormDeadline");
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineLike(String value) {
-            addCriterion("fill_in_form_deadline like", value, "fillInFormDeadline");
+        public Criteria andFillInFormDeadlineIn(List<Date> values) {
+            addCriterionForJDBCDate("fill_in_form_deadline in", values, "fillInFormDeadline");
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineNotLike(String value) {
-            addCriterion("fill_in_form_deadline not like", value, "fillInFormDeadline");
+        public Criteria andFillInFormDeadlineNotIn(List<Date> values) {
+            addCriterionForJDBCDate("fill_in_form_deadline not in", values, "fillInFormDeadline");
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineIn(List<String> values) {
-            addCriterion("fill_in_form_deadline in", values, "fillInFormDeadline");
+        public Criteria andFillInFormDeadlineBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("fill_in_form_deadline between", value1, value2, "fillInFormDeadline");
             return (Criteria) this;
         }
 
-        public Criteria andFillInFormDeadlineNotIn(List<String> values) {
-            addCriterion("fill_in_form_deadline not in", values, "fillInFormDeadline");
-            return (Criteria) this;
-        }
-
-        public Criteria andFillInFormDeadlineBetween(String value1, String value2) {
-            addCriterion("fill_in_form_deadline between", value1, value2, "fillInFormDeadline");
-            return (Criteria) this;
-        }
-
-        public Criteria andFillInFormDeadlineNotBetween(String value1, String value2) {
-            addCriterion("fill_in_form_deadline not between", value1, value2, "fillInFormDeadline");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeIsNull() {
-            addCriterion("tab_clumn_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeIsNotNull() {
-            addCriterion("tab_clumn_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeEqualTo(Byte value) {
-            addCriterion("tab_clumn_type =", value, "tabClumnType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeNotEqualTo(Byte value) {
-            addCriterion("tab_clumn_type <>", value, "tabClumnType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeGreaterThan(Byte value) {
-            addCriterion("tab_clumn_type >", value, "tabClumnType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("tab_clumn_type >=", value, "tabClumnType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeLessThan(Byte value) {
-            addCriterion("tab_clumn_type <", value, "tabClumnType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeLessThanOrEqualTo(Byte value) {
-            addCriterion("tab_clumn_type <=", value, "tabClumnType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeIn(List<Byte> values) {
-            addCriterion("tab_clumn_type in", values, "tabClumnType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeNotIn(List<Byte> values) {
-            addCriterion("tab_clumn_type not in", values, "tabClumnType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeBetween(Byte value1, Byte value2) {
-            addCriterion("tab_clumn_type between", value1, value2, "tabClumnType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabClumnTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("tab_clumn_type not between", value1, value2, "tabClumnType");
+        public Criteria andFillInFormDeadlineNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("fill_in_form_deadline not between", value1, value2, "fillInFormDeadline");
             return (Criteria) this;
         }
 
@@ -832,66 +789,6 @@ public class TbDataReportingTaskCriteria {
 
         public Criteria andGardenExamineStautsNotBetween(Byte value1, Byte value2) {
             addCriterion("garden_examine_stauts not between", value1, value2, "gardenExamineStauts");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeIsNull() {
-            addCriterion("tab_create_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeIsNotNull() {
-            addCriterion("tab_create_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeEqualTo(Byte value) {
-            addCriterion("tab_create_type =", value, "tabCreateType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeNotEqualTo(Byte value) {
-            addCriterion("tab_create_type <>", value, "tabCreateType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeGreaterThan(Byte value) {
-            addCriterion("tab_create_type >", value, "tabCreateType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("tab_create_type >=", value, "tabCreateType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeLessThan(Byte value) {
-            addCriterion("tab_create_type <", value, "tabCreateType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeLessThanOrEqualTo(Byte value) {
-            addCriterion("tab_create_type <=", value, "tabCreateType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeIn(List<Byte> values) {
-            addCriterion("tab_create_type in", values, "tabCreateType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeNotIn(List<Byte> values) {
-            addCriterion("tab_create_type not in", values, "tabCreateType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeBetween(Byte value1, Byte value2) {
-            addCriterion("tab_create_type between", value1, value2, "tabCreateType");
-            return (Criteria) this;
-        }
-
-        public Criteria andTabCreateTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("tab_create_type not between", value1, value2, "tabCreateType");
             return (Criteria) this;
         }
 
@@ -1522,76 +1419,6 @@ public class TbDataReportingTaskCriteria {
 
         public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("record_status not between", value1, value2, "recordStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchIsNull() {
-            addCriterion("task_batch is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchIsNotNull() {
-            addCriterion("task_batch is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchEqualTo(String value) {
-            addCriterion("task_batch =", value, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchNotEqualTo(String value) {
-            addCriterion("task_batch <>", value, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchGreaterThan(String value) {
-            addCriterion("task_batch >", value, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchGreaterThanOrEqualTo(String value) {
-            addCriterion("task_batch >=", value, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchLessThan(String value) {
-            addCriterion("task_batch <", value, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchLessThanOrEqualTo(String value) {
-            addCriterion("task_batch <=", value, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchLike(String value) {
-            addCriterion("task_batch like", value, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchNotLike(String value) {
-            addCriterion("task_batch not like", value, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchIn(List<String> values) {
-            addCriterion("task_batch in", values, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchNotIn(List<String> values) {
-            addCriterion("task_batch not in", values, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchBetween(String value1, String value2) {
-            addCriterion("task_batch between", value1, value2, "taskBatch");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBatchNotBetween(String value1, String value2) {
-            addCriterion("task_batch not between", value1, value2, "taskBatch");
             return (Criteria) this;
         }
 

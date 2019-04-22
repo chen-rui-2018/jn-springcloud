@@ -27,14 +27,19 @@ public class GetTargetTree {
         List<TargetModelVO> newTreeDataList = new ArrayList<>();
         TargetModelVO tmVO =null;
         for (TbDataReportingTarget target : treeDataList) {
-            if(target.getParentId() .equals("0")) {
+            if(target.getParentId().equals("0")) {
                 tmVO = new TargetModelVO();
                 BeanUtils.copyProperties(target,tmVO);
+
+                tmVO.setIsMuiltRow(target.getIsMuiltRow().toString());
+                tmVO.setTargetType(target.getTargetType().toString());
+                tmVO.setRecordStatus(target.getRecordStatus().toString());
+
                 tmVO.setId(target.getTargetId());
                 tmVO.setPid(target.getParentId());
                 tmVO.setText(target.getTargetName());
                 //获取父节点下的子节点
-                tmVO.setChildren(getChildrenNodeForTarget(target.getParentId(),treeDataList));
+                tmVO.setChildren(getChildrenNodeForTarget(target.getTargetId(),treeDataList));
                 tmVO.setState("open");
                 newTreeDataList.add(tmVO);
             }
@@ -59,11 +64,16 @@ public class GetTargetTree {
             if(t.getParentId().equals(pid)){
                 tmVO = new TargetModelVO();
                 BeanUtils.copyProperties(t,tmVO);
+                tmVO.setIsMuiltRow(t.getIsMuiltRow().toString());
+                tmVO.setTargetType(t.getTargetType().toString());
+                tmVO.setRecordStatus(t.getRecordStatus().toString());
+
+
                 tmVO.setId(t.getTargetId());
                 tmVO.setPid(t.getParentId());
                 tmVO.setText(t.getTargetName());
                 //递归获取子节点下的子节点
-                tmVO.setChildren(getChildrenNodeForTarget(t.getParentId() , treeDataList));
+                tmVO.setChildren(getChildrenNodeForTarget(t.getTargetId() , treeDataList));
                 newTreeDataList.add(tmVO);
             }
         }
@@ -83,11 +93,16 @@ public class GetTargetTree {
             if(target.getParentId() .equals("0")) {
                 tmVO = new TargetModelVO();
                 BeanUtils.copyProperties(target,tmVO);
+                tmVO.setIsMuiltRow(target.getIsMuiltRow().toString());
+                tmVO.setTargetType(target.getTargetType().toString());
+                tmVO.setRecordStatus(target.getRecordStatus().toString());
+
+
                 tmVO.setId(target.getTargetId());
                 tmVO.setPid(target.getParentId());
                 tmVO.setText(target.getTargetName());
                 //获取父节点下的子节点
-                tmVO.setChildren(getChildrenNode(target.getParentId(),treeDataList));
+                tmVO.setChildren(getChildrenNode(target.getTargetId(),treeDataList));
                 tmVO.setState("open");
                 newTreeDataList.add(tmVO);
             }
@@ -112,11 +127,16 @@ public class GetTargetTree {
             if(t.getParentId().equals(pid)){
                 tmVO = new TargetModelVO();
                 BeanUtils.copyProperties(t,tmVO);
+
+                tmVO.setIsMuiltRow(t.getIsMuiltRow().toString());
+                tmVO.setTargetType(t.getTargetType().toString());
+                tmVO.setRecordStatus(t.getRecordStatus().toString());
+
                 tmVO.setId(t.getTargetId());
                 tmVO.setPid(t.getParentId());
                 tmVO.setText(t.getTargetName());
                 //递归获取子节点下的子节点
-                tmVO.setChildren(getChildrenNode(t.getParentId() , treeDataList));
+                tmVO.setChildren(getChildrenNode(t.getTargetId() , treeDataList));
                 newTreeDataList.add(tmVO);
             }
         }

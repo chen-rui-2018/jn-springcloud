@@ -23,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -74,16 +75,34 @@ public class DataModelServiceImpl implements DataModelService {
 
         TargetVO  targetVO = new TargetVO();
         BeanUtils.copyProperties(targetPO,targetVO);
+
+        targetVO.setIsMuiltRow(Integer.parseInt(targetPO.getIsMuiltRow().toString()));
+        targetVO.setTargetType(Integer.parseInt(targetPO.getTargetType().toString()));
+        targetVO.setRecordStatus(Integer.parseInt(targetPO.getRecordStatus().toString()));
+
+
         List<InputFormatModel> listVO = new ArrayList<>();
         InputFormatModel inputFormatModel =null;
 
         for(TbDataReportingTargetGroup t:inputFormatModelList){
             inputFormatModel = new InputFormatModel();
             BeanUtils.copyProperties(t,inputFormatModel);
+            getInputFormatData(inputFormatModel,t);
             listVO.add(inputFormatModel);
         }
         targetVO.setInputFormatModels(listVO);
         return targetVO;
+    }
+
+    /**
+     * 进行类型转换
+     * @param inputFormatModel
+     * @param t
+     */
+    private void getInputFormatData(InputFormatModel inputFormatModel,TbDataReportingTargetGroup t){
+        inputFormatModel.setRequired(t.getRequired().toString());
+        inputFormatModel.setRecordStatus(t.getRecordStatus().toString());
+        inputFormatModel.setOrderNumber(t.getOrderNumber());
     }
 
     @Override
@@ -121,19 +140,19 @@ public class DataModelServiceImpl implements DataModelService {
         Integer result = 0;
         TbDataReportingTarget targetPO = new TbDataReportingTarget();
         BeanUtils.copyProperties(target,targetPO);
+        targetPO.setIsMuiltRow(new Byte(target.getIsMuiltRow().toString()));
+        targetPO.setTargetType(new Byte(target.getTargetType().toString()));
+        targetPO.setRecordStatus(new Byte(target.getRecordStatus().toString()));
+
+        logger.info(targetPO.toString());
         targetPO.setModifiedTime(new Date());
         targetPO.setModifierAccount(user.getAccount());
         List<TbDataReportingTargetGroup>  listInput =new ArrayList<>();
         List<InputFormatModel> inputFormatModelList  = target.getInputFormatModels();
         TbDataReportingTargetGroup tbDataReportingTargetGroup=null;
-        for(InputFormatModel inputFormatModel :inputFormatModelList){
-            tbDataReportingTargetGroup = new TbDataReportingTargetGroup();
-            BeanUtils.copyProperties(inputFormatModel,tbDataReportingTargetGroup);
-            tbDataReportingTargetGroup.setTargetId(target.getTargetId());
-            listInput.add(tbDataReportingTargetGroup);
-        }
 
-        if(StringUtils.isEmpty(targetPO.getTargetId())){
+
+        if(StringUtils.isEmpty(target.getTargetId())){
             String targetId= UUID.randomUUID().toString().replaceAll("-","");
             targetPO.setTargetId(targetId);
             result = tbDataReportingTargetMapper.insertSelective(targetPO);
@@ -141,6 +160,21 @@ public class DataModelServiceImpl implements DataModelService {
             invalidTargetInputFormat(targetPO.getTargetId());
             result = tbDataReportingTargetMapper.updateByPrimaryKeySelective(targetPO);
         }
+
+        for(InputFormatModel inputFormatModel :inputFormatModelList){
+            String formId= UUID.randomUUID().toString().replaceAll("-","");
+
+            tbDataReportingTargetGroup = new TbDataReportingTargetGroup();
+            BeanUtils.copyProperties(inputFormatModel,tbDataReportingTargetGroup);
+            tbDataReportingTargetGroup.setTargetId(targetPO.getTargetId());
+            tbDataReportingTargetGroup.setRequired(new Byte(inputFormatModel.getRequired()));
+            tbDataReportingTargetGroup.setRecordStatus(new Byte(inputFormatModel.getRecordStatus()));
+            tbDataReportingTargetGroup.setOrderNumber(inputFormatModel.getOrderNumber());
+            tbDataReportingTargetGroup.setFormId(formId);
+            logger.info(tbDataReportingTargetGroup.toString());
+            listInput.add(tbDataReportingTargetGroup);
+        }
+
         targetDao.createInputFormater(listInput);
         return result;
     }
@@ -165,16 +199,20 @@ public class DataModelServiceImpl implements DataModelService {
         List<TreeData> treeData = new ArrayList<>();
         TbDataReportingModelCriteria tbDataReportingModelCriteria =new TbDataReportingModelCriteria();
         //0：企业，1：园管委会
-        tbDataReportingModelCriteria.setOrderByClause("`order` asc");
+        tbDataReportingModelCriteria.setOrderByClause("`order_number` asc");
         List<TbDataReportingModel> tbDataReportingModelList = tbDataReportingModelMapper.selectByExample(tbDataReportingModelCriteria);
         TreeData treeDataCompany = new TreeData();
         treeDataCompany.setId("001");
+        treeDataCompany.setText("0");
         treeDataCompany.setText("企业信息上报");
         treeDataCompany.setChildren(getTreeData(tbDataReportingModelList,DataUploadConstants.COMPANY_TYPE));
         TreeData treeDataGarden = new TreeData();
-        treeDataCompany.setId("002");
-        treeDataCompany.setText("园区内部信息上报");
-        treeDataCompany.setChildren(getTreeData(tbDataReportingModelList,DataUploadConstants.GARDEN_TYPE));
+        treeDataGarden.setId("002");
+        treeDataGarden.setText("0");
+        treeDataGarden.setText("园区内部信息上报");
+        treeDataGarden.setChildren(getTreeData(tbDataReportingModelList,DataUploadConstants.GARDEN_TYPE));
+        treeData.add(treeDataCompany);
+        treeData.add(treeDataGarden);
         return treeData;
     }
 
@@ -188,7 +226,7 @@ public class DataModelServiceImpl implements DataModelService {
         TreeData treeData =null;
         List<TreeData> treeDataList = new ArrayList<>();
         for(TbDataReportingModel tbDataReportingModel : tbDataReportingModelList){
-            if(tbDataReportingModel.getModelType().equals(type)){
+            if(tbDataReportingModel.getModelType().toString().equals(type)){
                 treeData = new TreeData();
                 treeData.setId(tbDataReportingModel.getModelId());
                 treeData.setText(tbDataReportingModel.getModelName());
@@ -200,11 +238,16 @@ public class DataModelServiceImpl implements DataModelService {
 
     @Override
     @ServiceLog(doAction = "更新/插入模板信息")
+    @Transactional(rollbackFor = Exception.class)
     public int updateModel(ModelDataVO modelDataVO,User user) {
         Integer result = 0;
         String modleId = modelDataVO.getModelId();
         TbDataReportingModel tbDataReportingModel = new TbDataReportingModel();
         BeanUtils.copyProperties(modelDataVO,tbDataReportingModel);
+        tbDataReportingModel.setModelType(modelDataVO.getModelType());
+        tbDataReportingModel.setModelCycle(modelDataVO.getModelCycle());
+        tbDataReportingModel.setRecordStatus(modelDataVO.getRecordStatus());
+        tbDataReportingModel.setOrderNumber(modelDataVO.getOrderNumber());
         List<TabVO> tabVOList =  modelDataVO.getTabs();
         TbDataReportingModelTab tbDataReportingModelTab=null;
         tbDataReportingModel.setModifiedTime(new Date());
@@ -218,7 +261,6 @@ public class DataModelServiceImpl implements DataModelService {
         }else{
             //作废Tabs
             invalidTabs(modleId);
-            //更新模板的基本信息
             tbDataReportingModelMapper.updateByPrimaryKeySelective(tbDataReportingModel);
         }
 
@@ -228,17 +270,23 @@ public class DataModelServiceImpl implements DataModelService {
         for(TabVO tabVO: tabVOList){
             tbDataReportingModelTab = new TbDataReportingModelTab();
             BeanUtils.copyProperties(tabVO,tbDataReportingModelTab);
+            tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
+            tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
+            tbDataReportingModelTab.setTabCreateType(new Byte(tabVO.getTabCreateType()));
+            tbDataReportingModelTab.setOrderNumber(tabVO.getOrderNumber());
+            //tabId是空的
+            String tabId =UUID.randomUUID().toString().replaceAll("-","");
+            tbDataReportingModelTab.setTabId(tabId);
             tbDataReportingModelTab.setModelId(tbDataReportingModel.getModelId());
             tbDataReportingModelTabList.add(tbDataReportingModelTab);
 
-            List<TargetModelVO>  targetList =tabVO.getTargetList();
-            for(TargetModelVO targetVO:targetList){
-
+            List<InputFormatModel>  imtList =tabVO.getInputList();
+            for(InputFormatModel im:imtList){
                 tbDataReportingModelStruct = new TbDataReportingModelStruct();
                 String uuid =UUID.randomUUID().toString().replaceAll("-","");
                 tbDataReportingModelStruct.setId(uuid);
-                tbDataReportingModelStruct.setTargetId(targetVO.getId());
-                tbDataReportingModelStruct.setTabId(tabVO.getTabId());
+                tbDataReportingModelStruct.setTargetId(im.getTargetId());
+                tbDataReportingModelStruct.setTabId(tabId);
                 tbDataReportingModelStruct.setModelId(tbDataReportingModel.getModelId());
                 tbDataReportingModelStructList.add(tbDataReportingModelStruct);
             }
@@ -252,13 +300,6 @@ public class DataModelServiceImpl implements DataModelService {
         return result;
     }
 
-    /**
-     * 存储广告图片
-     * @return
-     */
-    private String adUrl(){
-        return null;
-    }
 
     /**
      * 作废关联至modelId的tab
@@ -285,13 +326,18 @@ public class DataModelServiceImpl implements DataModelService {
         ModelDataVO modelData = new ModelDataVO();
         TbDataReportingModel modelDataPO =tbDataReportingModelMapper.selectByPrimaryKey(modelId);
         BeanUtils.copyProperties(modelDataPO,modelData);
+        modelData.setModelType(modelDataPO.getModelType());
+        modelData.setModelCycle(modelDataPO.getModelCycle());
+        modelData.setRecordStatus(modelDataPO.getRecordStatus());
+        modelData.setOrderNumber(modelDataPO.getOrderNumber());
+
         if(modelDataPO == null){
             logger.warn("[指标管理-获取模板信息]，模板不存在");
             throw new JnSpringCloudException(DataUploadExceptionEnum.MODEL_IS_NOT_EXIST);
         }
 
         TbDataReportingModelTabCriteria exampleTab =  new TbDataReportingModelTabCriteria();
-        exampleTab.or().andModelIdEqualTo(modelDataPO.getModelId()).andStatusEqualTo(new Byte("0"));
+        exampleTab.or().andModelIdEqualTo(modelDataPO.getModelId()).andStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbDataReportingModelTab> tabPOList = tbDataReportingModelTabMapper.selectByExample(exampleTab);
 
         List<TabVO> tabVOList = new ArrayList<>();
@@ -303,6 +349,13 @@ public class DataModelServiceImpl implements DataModelService {
         for (int tabIndex=0 ,tabSize =tabPOList.size();tabIndex<tabSize;tabIndex++) {
             tabVO = new TabVO();
             BeanUtils.copyProperties(tabPOList.get(tabIndex),tabVO);
+
+            tabVO.setTabClumnType(tabPOList.get(tabIndex).getTabClumnType().toString());
+            tabVO.setStatus(tabPOList.get(tabIndex).getStatus().toString());
+            tabVO.setTabCreateType(tabPOList.get(tabIndex).getTabCreateType().toString());
+            tabVO.setOrderNumber(tabPOList.get(tabIndex).getOrderNumber());
+
+
             listTargetVO = new ArrayList<>();
             //自己写语句
             List<TbDataReportingTarget> targetList = targetDao.getTargetFromTab(tabPOList.get(tabIndex).getTabId());
@@ -311,20 +364,13 @@ public class DataModelServiceImpl implements DataModelService {
                 //inputFormatModelListVO = new ArrayList<>();
                 targetVO = new TargetModelVO();
                 BeanUtils.copyProperties(targetList.get(targetIndex),targetVO);
+                targetVO.setIsMuiltRow(targetList.get(targetIndex).getIsMuiltRow().toString());
+                targetVO.setTargetType(targetList.get(targetIndex).getTargetType().toString());
+                targetVO.setRecordStatus(targetList.get(targetIndex).getRecordStatus().toString());
+
                 targetVO.setId(targetList.get(targetIndex).getTargetId());
                 targetVO.setPid(targetList.get(targetIndex).getParentId());
                 targetVO.setText(targetList.get(targetIndex).getTargetName());
-                /*
-                TbDataReportingTargetGroupCriteria exampleTargetGroup = new TbDataReportingTargetGroupCriteria();
-                exampleTargetGroup.or().andTargetIdEqualTo(targetList.get(targetIndex).getTargetId());
-                List<TbDataReportingTargetGroup> inputFormatModelList = tbDataReportingTargetGroupMapper.selectByExample(exampleTargetGroup);
-                for(TbDataReportingTargetGroup t : inputFormatModelList){
-                    inputFormatModel = new InputFormatModel();
-                    BeanUtils.copyProperties(t,inputFormatModel);
-                    inputFormatModelListVO.add(inputFormatModel);
-                }
-                targetVO.setInputFormatModels(inputFormatModelListVO);
-                */
                 listTargetVO.add(targetVO);
             }
             tabVO.setTargetList(listTargetVO);
@@ -368,8 +414,9 @@ public class DataModelServiceImpl implements DataModelService {
         for(TbDataReportingTargetGroup tgBean:tgList){
             im = new InputFormatModel();
             BeanUtils.copyProperties(tgBean,im);
+            getInputFormatData(im,tgBean);
             imlist.add(im);
         }
-        return null;
+        return imlist;
     }
 }

@@ -4,17 +4,26 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.enterprise.data.model.*;
+import com.jn.enterprise.data.service.DataModelService;
+import com.jn.enterprise.data.service.DataUploadService;
+import com.jn.enterprise.data.service.impl.DataModelServiceImpl;
 import com.jn.enterprise.data.vo.*;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author： yangh
@@ -26,22 +35,41 @@ import java.util.Map;
 @RestController
 @RequestMapping(path="/data")
 public class DataUploadController  extends BaseController {
+
+    @Autowired
+    private DataUploadService uploadService;
+    private static Logger logger = LoggerFactory.getLogger(DataUploadController.class);
+
     /**企业数据上报**/
 
     @ControllerLog(doAction = "数据上报-企业数据上报-页面广告获取")
     @GetMapping(path = "/company/getPcAd")
     @ApiOperation(value = "页面广告获取",notes = "返回广告图片")
     @RequiresPermissions("/data/company/getPcAd")
-    public Result<Map<String,Object>> getPcAd(){
-        return new Result();
+    public Result<Map<String,Set<String>>> getPcAd(){
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        Map<String,Set<String>> result = uploadService.getCompanyAd(user);
+        return new Result(result);
     }
 
-    @ControllerLog(doAction = "数据上报-企业数据上报-获取待填报/已经填报的表单")
+    @ControllerLog(doAction = "数据上报-企业数据上报-获取本月待填报的任务")
     @GetMapping(path = "/company/getForm")
-    @ApiOperation(value = "获取待填报/已经填报的表单",notes = "返回表单结构信息列表")
+    @ApiOperation(value = "获取本月待填报的任务",notes = "返回本月待填报的任务")
     @RequiresPermissions("/data/company/getForm")
     public Result<PaginationData<List<CompanyDataModel>>> getForm(@ModelAttribute CompanyDataParamModel param){
-        return new Result();
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        PaginationData<List<CompanyDataModel>> result = uploadService.getNeedFormList(param,user);
+        return new Result(result);
+    }
+
+    @ControllerLog(doAction = "数据上报-企业数据上报-获取企业填报历史表单列表")
+    @GetMapping(path = "/company/getFormed")
+    @ApiOperation(value = "获取企业填报历史表单列表",notes = "返回企业填报历史表单列表")
+    @RequiresPermissions("/data/company/getFormed")
+    public Result<PaginationData<List<CompanyDataModel>>> getFormed(@ModelAttribute CompanyDataParamModel param){
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        PaginationData<List<CompanyDataModel>> result = uploadService.getFormedHistory(param,user);
+        return new Result(result);
     }
 
 
@@ -53,7 +81,9 @@ public class DataUploadController  extends BaseController {
             @ApiImplicitParam(name="fileId",value = "填报ID",dataType = "String",paramType = "query",example = "1")
     })
     public Result<ModelDataVO> getFormStruct(String fileId){
-        return new Result();
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        ModelDataVO modelDataVO = uploadService.getFormStruct(fileId,user);
+        return new Result(modelDataVO);
     }
 
     @ControllerLog(doAction = "数据上报-企业数据上报-保存企业数据上报信息")
@@ -61,18 +91,12 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "保存企业数据上报信息",notes = "返回成功或失败,正常结果为1")
     @RequiresPermissions("/data/company/saveCompanyFormData")
     public Result<Integer> saveCompanyFormData(@ModelAttribute ModelDataVO data){
-        return new Result();
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        int result = uploadService.saveCompanyFormData(data,user);
+        return new Result(result);
     }
 
-    /*
-    @ControllerLog(doAction = "数据上报-企业数据上报-获取企业已经填报的表单")
-    @GetMapping(path = "/company/getFormed")
-    @ApiOperation(value = "获取企业已经填报的表单",notes = "返回企业已经填报的表单")
-    @RequiresPermissions("/data/company/getFormed")
-    public Result<CompanyDataModel> getFormed(){
-        return new Result();
-    }
-    */
+
 
     @ControllerLog(doAction = "数据上报-企业数据上报-获取企业已经填报的表单的结构信息和值")
     @GetMapping(path = "/company/getCompanyFormedStruct")
@@ -82,8 +106,18 @@ public class DataUploadController  extends BaseController {
             @ApiImplicitParam(name="fileId",value = "填报id",dataType = "String",paramType = "query",example = "1")
     })
     public Result<ModelDataVO> getCompanyFormedStruct(String fileId){
-        return new Result();
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        ModelDataVO result = uploadService.getFormedStruct(user,fileId);
+        return new Result(result);
     }
+
+
+
+
+
+
+
+
 
 
     /**企业上报数据统计**/
@@ -93,6 +127,7 @@ public class DataUploadController  extends BaseController {
     @RequiresPermissions("/data/company/getFormView")
     public Result<PaginationData<List<CompanyDataStatisticsModel>>> getFormView(@ModelAttribute CompanyDataStatisticsParamModel param){
         //fileType=1:企业 2园区
+
         return new Result();
     }
 

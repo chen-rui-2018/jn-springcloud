@@ -7,14 +7,11 @@ public class TbDataReportingTarget implements Serializable {
     /*@ApiModelProperty("指标ID")*/
     private String targetId;
 
-    /*@ApiModelProperty("序列")*/
-    private String id;
-
     /*@ApiModelProperty("父节点ID")*/
     private String parentId;
 
-    /*@ApiModelProperty("指标顺序")*/
-    private Integer order;
+    /*@ApiModelProperty("")*/
+    private Integer orderNumber;
 
     /*@ApiModelProperty("指标名称")*/
     private String targetName;
@@ -62,14 +59,6 @@ public class TbDataReportingTarget implements Serializable {
         this.targetId = targetId == null ? null : targetId.trim();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
-
     public String getParentId() {
         return parentId;
     }
@@ -78,12 +67,12 @@ public class TbDataReportingTarget implements Serializable {
         this.parentId = parentId == null ? null : parentId.trim();
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public String getTargetName() {
@@ -195,9 +184,8 @@ public class TbDataReportingTarget implements Serializable {
         }
         TbDataReportingTarget other = (TbDataReportingTarget) that;
         return (this.getTargetId() == null ? other.getTargetId() == null : this.getTargetId().equals(other.getTargetId()))
-            && (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()))
-            && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()))
+            && (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()))
             && (this.getTargetName() == null ? other.getTargetName() == null : this.getTargetName().equals(other.getTargetName()))
             && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
             && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()))
@@ -217,9 +205,8 @@ public class TbDataReportingTarget implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getTargetId() == null) ? 0 : getTargetId().hashCode());
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getParentId() == null) ? 0 : getParentId().hashCode());
-        result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
+        result = prime * result + ((getOrderNumber() == null) ? 0 : getOrderNumber().hashCode());
         result = prime * result + ((getTargetName() == null) ? 0 : getTargetName().hashCode());
         result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
         result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
@@ -242,9 +229,8 @@ public class TbDataReportingTarget implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", targetId=").append(targetId);
-        sb.append(", id=").append(id);
         sb.append(", parentId=").append(parentId);
-        sb.append(", order=").append(order);
+        sb.append(", orderNumber=").append(orderNumber);
         sb.append(", targetName=").append(targetName);
         sb.append(", departmentId=").append(departmentId);
         sb.append(", departmentName=").append(departmentName);

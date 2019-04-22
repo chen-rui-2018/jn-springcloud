@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -17,12 +18,12 @@ import java.util.List;
 @ApiModel(value = "TargetVO",description = "指标信息")
 public class TargetVO implements Serializable {
 
-    @ApiModelProperty(value = "指标ID" ,example = "由后端生成")
+    @ApiModelProperty(value = "指标ID" ,example = "1000")
     private String targetId;
     @ApiModelProperty(value = "父节点ID",example = "0001")
     private String parentId;
     @ApiModelProperty(value = "指标顺序",example = "23")
-    private String order;
+    private Integer orderNumber;
     @ApiModelProperty(value = "指标名称",example = "公司名称")
     private String targetName ;
     @ApiModelProperty(value = "部门ID",example = "001")
@@ -30,20 +31,20 @@ public class TargetVO implements Serializable {
     @ApiModelProperty(value = "部门名称",example = "招商部")
     private String departmentName;
     @ApiModelProperty(value = "是否支出多行输入（0：是，1：否）",example = "1")
-    private String isMuiltRow ;
+    private Integer isMuiltRow ;
     @ApiModelProperty(value = "指标单位" ,example = "万元")
     private String unit ;
     @ApiModelProperty(value = "指标类型（0：企业指标，1园区指标）",example = "0")
-    private String targetType;
+    private Integer targetType;
     @ApiModelProperty(value = "是否删除（0标记删除，1正常）",example = "1")
-    private String recordStatus ;
+    private Integer recordStatus ;
     @ApiModelProperty(value = "创建者账号",example = "zhangsan")
     private String creatorAccount ;
-    @ApiModelProperty(value = "创建时间",example = "2018-12-21:01:22:61")
+    @ApiModelProperty(value = "创建时间",example = "2018-12-21")
     private Date createdTime;
     @ApiModelProperty(value = "最新更新者账号",example = "lishi")
     private String modifierAccount;
-    @ApiModelProperty(value = "创建时间",example = "2018-12-21:01:22:61")
+    @ApiModelProperty(value = "创建时间",example = "2018-12-21")
     private Date modifiedTime ;
     @ApiModelProperty(value = "指标说明",example = "当前指标用于。。。。")
     private String targetCommon ;
@@ -82,12 +83,28 @@ public class TargetVO implements Serializable {
         this.parentId = parentId;
     }
 
-    public String getOrder() {
-        return order;
+    public Integer getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrder(String order) {
-        this.order = order;
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public Integer getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(Integer targetType) {
+        this.targetType = targetType;
+    }
+
+    public Integer getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Integer recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getTargetName() {
@@ -114,11 +131,11 @@ public class TargetVO implements Serializable {
         this.departmentName = departmentName;
     }
 
-    public String getIsMuiltRow() {
+    public Integer getIsMuiltRow() {
         return isMuiltRow;
     }
 
-    public void setIsMuiltRow(String isMuiltRow) {
+    public void setIsMuiltRow(Integer isMuiltRow) {
         this.isMuiltRow = isMuiltRow;
     }
 
@@ -130,21 +147,6 @@ public class TargetVO implements Serializable {
         this.unit = unit;
     }
 
-    public String getTargetType() {
-        return targetType;
-    }
-
-    public void setTargetType(String targetType) {
-        this.targetType = targetType;
-    }
-
-    public String getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(String recordStatus) {
-        this.recordStatus = recordStatus;
-    }
 
     public String getCreatorAccount() {
         return creatorAccount;

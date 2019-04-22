@@ -22,7 +22,7 @@ public class TargetModelVO implements Serializable {
     @ApiModelProperty(value = "父节点ID",example = "0001")
     private String pid;
     @ApiModelProperty(value = "指标顺序",example = "23")
-    private String order;
+    private String orderNumber;
     @ApiModelProperty(value = "指标名称",example = "公司名称")
     private String text ;
     @ApiModelProperty(value = "部门ID",example = "001")
@@ -41,11 +41,11 @@ public class TargetModelVO implements Serializable {
     private String recordStatus ;
     @ApiModelProperty(value = "创建者账号",example = "zhangsan")
     private String creatorAccount ;
-    @ApiModelProperty(value = "创建时间",example = "2018-12-21:01:22:61")
+    @ApiModelProperty(value = "创建时间",example = "2018-12-21")
     private Date createdTime;
     @ApiModelProperty(value = "最新更新者账号",example = "lishi")
     private String modifierAccount;
-    @ApiModelProperty(value = "创建时间",example = "2018-12-21:01:22:61")
+    @ApiModelProperty(value = "创建时间",example = "2018-12-21")
     private Date modifiedTime ;
     @ApiModelProperty(value = "指标说明",example = "当前指标用于。。。。")
     private String targetCommon ;
@@ -69,12 +69,12 @@ public class TargetModelVO implements Serializable {
         this.pid = pid;
     }
 
-    public String getOrder() {
-        return order;
+    public String getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrder(String order) {
-        this.order = order;
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public String getText() {

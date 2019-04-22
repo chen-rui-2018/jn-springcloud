@@ -3,9 +3,8 @@
 <mapper namespace="com.jn.enterprise.data.dao.TbDataReportingTargetMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingTarget">
     <id column="target_id" jdbcType="VARCHAR" property="targetId" />
-    <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
-    <result column="order" jdbcType="INTEGER" property="order" />
+    <result column="order_number" jdbcType="INTEGER" property="orderNumber" />
     <result column="target_name" jdbcType="VARCHAR" property="targetName" />
     <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
     <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
@@ -78,8 +77,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    target_id, id, parent_id, order, target_name, department_id, department_name, is_muilt_row, 
-    unit, target_type, record_status, creator_account, created_time, modifier_account, 
+    target_id, parent_id, order_number, target_name, department_id, department_name, 
+    is_muilt_row, unit, target_type, record_status, creator_account, created_time, modifier_account, 
     modified_time, target_comment
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetCriteria" resultMap="BaseResultMap">
@@ -113,18 +112,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    insert into tb_data_reporting_target (target_id, id, parent_id, 
-      order, target_name, department_id, 
-      department_name, is_muilt_row, unit, 
-      target_type, record_status, creator_account, 
-      created_time, modifier_account, modified_time, 
-      target_comment)
-    values (#{targetId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
-      #{order,jdbcType=INTEGER}, #{targetName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
-      #{departmentName,jdbcType=VARCHAR}, #{isMuiltRow,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, 
-      #{targetType,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{targetComment,jdbcType=VARCHAR})
+    insert into tb_data_reporting_target (target_id, parent_id, order_number, 
+      target_name, department_id, department_name, 
+      is_muilt_row, unit, target_type, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time, target_comment
+      )
+    values (#{targetId,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{orderNumber,jdbcType=INTEGER}, 
+      #{targetName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
+      #{isMuiltRow,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, #{targetType,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{targetComment,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
     insert into tb_data_reporting_target
@@ -132,14 +131,11 @@
       <if test="targetId != null">
         target_id,
       </if>
-      <if test="id != null">
-        id,
-      </if>
       <if test="parentId != null">
         parent_id,
       </if>
-      <if test="order != null">
-        order,
+      <if test="orderNumber != null">
+        order_number,
       </if>
       <if test="targetName != null">
         target_name,
@@ -182,14 +178,11 @@
       <if test="targetId != null">
         #{targetId,jdbcType=VARCHAR},
       </if>
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
       <if test="parentId != null">
         #{parentId,jdbcType=VARCHAR},
       </if>
-      <if test="order != null">
-        #{order,jdbcType=INTEGER},
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=INTEGER},
       </if>
       <if test="targetName != null">
         #{targetName,jdbcType=VARCHAR},
@@ -241,14 +234,11 @@
       <if test="record.targetId != null">
         target_id = #{record.targetId,jdbcType=VARCHAR},
       </if>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
       <if test="record.parentId != null">
         parent_id = #{record.parentId,jdbcType=VARCHAR},
       </if>
-      <if test="record.order != null">
-        order = #{record.order,jdbcType=INTEGER},
+      <if test="record.orderNumber != null">
+        order_number = #{record.orderNumber,jdbcType=INTEGER},
       </if>
       <if test="record.targetName != null">
         target_name = #{record.targetName,jdbcType=VARCHAR},
@@ -294,9 +284,8 @@
   <update id="updateByExample" parameterType="map">
     update tb_data_reporting_target
     set target_id = #{record.targetId,jdbcType=VARCHAR},
-      id = #{record.id,jdbcType=VARCHAR},
       parent_id = #{record.parentId,jdbcType=VARCHAR},
-      order = #{record.order,jdbcType=INTEGER},
+      order_number = #{record.orderNumber,jdbcType=INTEGER},
       target_name = #{record.targetName,jdbcType=VARCHAR},
       department_id = #{record.departmentId,jdbcType=VARCHAR},
       department_name = #{record.departmentName,jdbcType=VARCHAR},
@@ -316,14 +305,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
     update tb_data_reporting_target
     <set>
-      <if test="id != null">
-        id = #{id,jdbcType=VARCHAR},
-      </if>
       <if test="parentId != null">
         parent_id = #{parentId,jdbcType=VARCHAR},
       </if>
-      <if test="order != null">
-        order = #{order,jdbcType=INTEGER},
+      <if test="orderNumber != null">
+        order_number = #{orderNumber,jdbcType=INTEGER},
       </if>
       <if test="targetName != null">
         target_name = #{targetName,jdbcType=VARCHAR},
@@ -366,9 +352,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
     update tb_data_reporting_target
-    set id = #{id,jdbcType=VARCHAR},
-      parent_id = #{parentId,jdbcType=VARCHAR},
-      order = #{order,jdbcType=INTEGER},
+    set parent_id = #{parentId,jdbcType=VARCHAR},
+      order_number = #{orderNumber,jdbcType=INTEGER},
       target_name = #{targetName,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=VARCHAR},
       department_name = #{departmentName,jdbcType=VARCHAR},

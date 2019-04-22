@@ -9,6 +9,7 @@ import com.jn.enterprise.data.vo.TargetModelVO;
 import com.jn.enterprise.data.vo.TargetVO;
 import com.jn.system.model.User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -58,6 +59,8 @@ public interface DataModelService {
     /**
      * 更新/插入模板
      * @param modelDataVO
+     * @param user
+     * @return
      */
     int updateModel(ModelDataVO modelDataVO,User user);
 

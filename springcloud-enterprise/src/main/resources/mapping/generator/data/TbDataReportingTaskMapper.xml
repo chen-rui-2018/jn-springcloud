@@ -3,17 +3,15 @@
 <mapper namespace="com.jn.enterprise.data.dao.TbDataReportingTaskMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingTask">
     <id column="fill_id" jdbcType="VARCHAR" property="fillId" />
-    <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="file_type" jdbcType="TINYINT" property="fileType" />
     <result column="model_id" jdbcType="VARCHAR" property="modelId" />
+    <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
     <result column="fill_in_form_id" jdbcType="VARCHAR" property="fillInFormId" />
     <result column="fill_in_form_name" jdbcType="VARCHAR" property="fillInFormName" />
     <result column="form_time" jdbcType="CHAR" property="formTime" />
-    <result column="fill_in_form_deadline" jdbcType="CHAR" property="fillInFormDeadline" />
-    <result column="tab_clumn_type" jdbcType="TINYINT" property="tabClumnType" />
+    <result column="fill_in_form_deadline" jdbcType="DATE" property="fillInFormDeadline" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="garden_examine_stauts" jdbcType="TINYINT" property="gardenExamineStauts" />
-    <result column="tab_create_type" jdbcType="TINYINT" property="tabCreateType" />
     <result column="calling_time" jdbcType="TIMESTAMP" property="callingTime" />
     <result column="calling_times" jdbcType="INTEGER" property="callingTimes" />
     <result column="filler" jdbcType="VARCHAR" property="filler" />
@@ -24,7 +22,6 @@
     <result column="examine_comment" jdbcType="VARCHAR" property="examineComment" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modified_account" jdbcType="VARCHAR" property="modifiedAccount" />
   </resultMap>
@@ -87,10 +84,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    fill_id, id, file_type, model_id, fill_in_form_id, fill_in_form_name, form_time, 
-    fill_in_form_deadline, tab_clumn_type, status, garden_examine_stauts, tab_create_type, 
-    calling_time, calling_times, filler, up_time, filler_tel, is_overdue, overdue_days, 
-    examine_comment, create_time, record_status, task_batch, modified_time, modified_account
+    fill_id, file_type, model_id, task_batch, fill_in_form_id, fill_in_form_name, form_time, 
+    fill_in_form_deadline, status, garden_examine_stauts, calling_time, calling_times, 
+    filler, up_time, filler_tel, is_overdue, overdue_days, examine_comment, create_time, 
+    record_status, modified_time, modified_account
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTaskCriteria" resultMap="BaseResultMap">
     select
@@ -123,23 +120,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingTask">
-    insert into tb_data_reporting_task (fill_id, id, file_type, 
-      model_id, fill_in_form_id, fill_in_form_name, 
-      form_time, fill_in_form_deadline, tab_clumn_type, 
-      status, garden_examine_stauts, tab_create_type, 
-      calling_time, calling_times, filler, 
-      up_time, filler_tel, is_overdue, 
-      overdue_days, examine_comment, create_time, 
-      record_status, task_batch, modified_time, 
+    insert into tb_data_reporting_task (fill_id, file_type, model_id, 
+      task_batch, fill_in_form_id, fill_in_form_name, 
+      form_time, fill_in_form_deadline, status, 
+      garden_examine_stauts, calling_time, calling_times, 
+      filler, up_time, filler_tel, 
+      is_overdue, overdue_days, examine_comment, 
+      create_time, record_status, modified_time, 
       modified_account)
-    values (#{fillId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{fileType,jdbcType=TINYINT}, 
-      #{modelId,jdbcType=VARCHAR}, #{fillInFormId,jdbcType=VARCHAR}, #{fillInFormName,jdbcType=VARCHAR}, 
-      #{formTime,jdbcType=CHAR}, #{fillInFormDeadline,jdbcType=CHAR}, #{tabClumnType,jdbcType=TINYINT}, 
-      #{status,jdbcType=TINYINT}, #{gardenExamineStauts,jdbcType=TINYINT}, #{tabCreateType,jdbcType=TINYINT}, 
-      #{callingTime,jdbcType=TIMESTAMP}, #{callingTimes,jdbcType=INTEGER}, #{filler,jdbcType=VARCHAR}, 
-      #{upTime,jdbcType=TIMESTAMP}, #{fillerTel,jdbcType=VARCHAR}, #{isOverdue,jdbcType=TINYINT}, 
-      #{overdueDays,jdbcType=INTEGER}, #{examineComment,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{recordStatus,jdbcType=TINYINT}, #{taskBatch,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+    values (#{fillId,jdbcType=VARCHAR}, #{fileType,jdbcType=TINYINT}, #{modelId,jdbcType=VARCHAR}, 
+      #{taskBatch,jdbcType=VARCHAR}, #{fillInFormId,jdbcType=VARCHAR}, #{fillInFormName,jdbcType=VARCHAR}, 
+      #{formTime,jdbcType=CHAR}, #{fillInFormDeadline,jdbcType=DATE}, #{status,jdbcType=TINYINT}, 
+      #{gardenExamineStauts,jdbcType=TINYINT}, #{callingTime,jdbcType=TIMESTAMP}, #{callingTimes,jdbcType=INTEGER}, 
+      #{filler,jdbcType=VARCHAR}, #{upTime,jdbcType=TIMESTAMP}, #{fillerTel,jdbcType=VARCHAR}, 
+      #{isOverdue,jdbcType=TINYINT}, #{overdueDays,jdbcType=INTEGER}, #{examineComment,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{modifiedAccount,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTask">
@@ -148,14 +143,14 @@
       <if test="fillId != null">
         fill_id,
       </if>
-      <if test="id != null">
-        id,
-      </if>
       <if test="fileType != null">
         file_type,
       </if>
       <if test="modelId != null">
         model_id,
+      </if>
+      <if test="taskBatch != null">
+        task_batch,
       </if>
       <if test="fillInFormId != null">
         fill_in_form_id,
@@ -169,17 +164,11 @@
       <if test="fillInFormDeadline != null">
         fill_in_form_deadline,
       </if>
-      <if test="tabClumnType != null">
-        tab_clumn_type,
-      </if>
       <if test="status != null">
         status,
       </if>
       <if test="gardenExamineStauts != null">
         garden_examine_stauts,
-      </if>
-      <if test="tabCreateType != null">
-        tab_create_type,
       </if>
       <if test="callingTime != null">
         calling_time,
@@ -211,9 +200,6 @@
       <if test="recordStatus != null">
         record_status,
       </if>
-      <if test="taskBatch != null">
-        task_batch,
-      </if>
       <if test="modifiedTime != null">
         modified_time,
       </if>
@@ -225,14 +211,14 @@
       <if test="fillId != null">
         #{fillId,jdbcType=VARCHAR},
       </if>
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
       <if test="fileType != null">
         #{fileType,jdbcType=TINYINT},
       </if>
       <if test="modelId != null">
         #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskBatch != null">
+        #{taskBatch,jdbcType=VARCHAR},
       </if>
       <if test="fillInFormId != null">
         #{fillInFormId,jdbcType=VARCHAR},
@@ -244,19 +230,13 @@
         #{formTime,jdbcType=CHAR},
       </if>
       <if test="fillInFormDeadline != null">
-        #{fillInFormDeadline,jdbcType=CHAR},
-      </if>
-      <if test="tabClumnType != null">
-        #{tabClumnType,jdbcType=TINYINT},
+        #{fillInFormDeadline,jdbcType=DATE},
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
       </if>
       <if test="gardenExamineStauts != null">
         #{gardenExamineStauts,jdbcType=TINYINT},
-      </if>
-      <if test="tabCreateType != null">
-        #{tabCreateType,jdbcType=TINYINT},
       </if>
       <if test="callingTime != null">
         #{callingTime,jdbcType=TIMESTAMP},
@@ -288,9 +268,6 @@
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="taskBatch != null">
-        #{taskBatch,jdbcType=VARCHAR},
-      </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
@@ -311,14 +288,14 @@
       <if test="record.fillId != null">
         fill_id = #{record.fillId,jdbcType=VARCHAR},
       </if>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
       <if test="record.fileType != null">
         file_type = #{record.fileType,jdbcType=TINYINT},
       </if>
       <if test="record.modelId != null">
         model_id = #{record.modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskBatch != null">
+        task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       </if>
       <if test="record.fillInFormId != null">
         fill_in_form_id = #{record.fillInFormId,jdbcType=VARCHAR},
@@ -330,19 +307,13 @@
         form_time = #{record.formTime,jdbcType=CHAR},
       </if>
       <if test="record.fillInFormDeadline != null">
-        fill_in_form_deadline = #{record.fillInFormDeadline,jdbcType=CHAR},
-      </if>
-      <if test="record.tabClumnType != null">
-        tab_clumn_type = #{record.tabClumnType,jdbcType=TINYINT},
+        fill_in_form_deadline = #{record.fillInFormDeadline,jdbcType=DATE},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
       <if test="record.gardenExamineStauts != null">
         garden_examine_stauts = #{record.gardenExamineStauts,jdbcType=TINYINT},
-      </if>
-      <if test="record.tabCreateType != null">
-        tab_create_type = #{record.tabCreateType,jdbcType=TINYINT},
       </if>
       <if test="record.callingTime != null">
         calling_time = #{record.callingTime,jdbcType=TIMESTAMP},
@@ -374,9 +345,6 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="record.taskBatch != null">
-        task_batch = #{record.taskBatch,jdbcType=VARCHAR},
-      </if>
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
@@ -391,17 +359,15 @@
   <update id="updateByExample" parameterType="map">
     update tb_data_reporting_task
     set fill_id = #{record.fillId,jdbcType=VARCHAR},
-      id = #{record.id,jdbcType=VARCHAR},
       file_type = #{record.fileType,jdbcType=TINYINT},
       model_id = #{record.modelId,jdbcType=VARCHAR},
+      task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       fill_in_form_id = #{record.fillInFormId,jdbcType=VARCHAR},
       fill_in_form_name = #{record.fillInFormName,jdbcType=VARCHAR},
       form_time = #{record.formTime,jdbcType=CHAR},
-      fill_in_form_deadline = #{record.fillInFormDeadline,jdbcType=CHAR},
-      tab_clumn_type = #{record.tabClumnType,jdbcType=TINYINT},
+      fill_in_form_deadline = #{record.fillInFormDeadline,jdbcType=DATE},
       status = #{record.status,jdbcType=TINYINT},
       garden_examine_stauts = #{record.gardenExamineStauts,jdbcType=TINYINT},
-      tab_create_type = #{record.tabCreateType,jdbcType=TINYINT},
       calling_time = #{record.callingTime,jdbcType=TIMESTAMP},
       calling_times = #{record.callingTimes,jdbcType=INTEGER},
       filler = #{record.filler,jdbcType=VARCHAR},
@@ -412,7 +378,6 @@
       examine_comment = #{record.examineComment,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
-      task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modified_account = #{record.modifiedAccount,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -422,14 +387,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTask">
     update tb_data_reporting_task
     <set>
-      <if test="id != null">
-        id = #{id,jdbcType=VARCHAR},
-      </if>
       <if test="fileType != null">
         file_type = #{fileType,jdbcType=TINYINT},
       </if>
       <if test="modelId != null">
         model_id = #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskBatch != null">
+        task_batch = #{taskBatch,jdbcType=VARCHAR},
       </if>
       <if test="fillInFormId != null">
         fill_in_form_id = #{fillInFormId,jdbcType=VARCHAR},
@@ -441,19 +406,13 @@
         form_time = #{formTime,jdbcType=CHAR},
       </if>
       <if test="fillInFormDeadline != null">
-        fill_in_form_deadline = #{fillInFormDeadline,jdbcType=CHAR},
-      </if>
-      <if test="tabClumnType != null">
-        tab_clumn_type = #{tabClumnType,jdbcType=TINYINT},
+        fill_in_form_deadline = #{fillInFormDeadline,jdbcType=DATE},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
       <if test="gardenExamineStauts != null">
         garden_examine_stauts = #{gardenExamineStauts,jdbcType=TINYINT},
-      </if>
-      <if test="tabCreateType != null">
-        tab_create_type = #{tabCreateType,jdbcType=TINYINT},
       </if>
       <if test="callingTime != null">
         calling_time = #{callingTime,jdbcType=TIMESTAMP},
@@ -485,9 +444,6 @@
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="taskBatch != null">
-        task_batch = #{taskBatch,jdbcType=VARCHAR},
-      </if>
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
@@ -499,17 +455,15 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingTask">
     update tb_data_reporting_task
-    set id = #{id,jdbcType=VARCHAR},
-      file_type = #{fileType,jdbcType=TINYINT},
+    set file_type = #{fileType,jdbcType=TINYINT},
       model_id = #{modelId,jdbcType=VARCHAR},
+      task_batch = #{taskBatch,jdbcType=VARCHAR},
       fill_in_form_id = #{fillInFormId,jdbcType=VARCHAR},
       fill_in_form_name = #{fillInFormName,jdbcType=VARCHAR},
       form_time = #{formTime,jdbcType=CHAR},
-      fill_in_form_deadline = #{fillInFormDeadline,jdbcType=CHAR},
-      tab_clumn_type = #{tabClumnType,jdbcType=TINYINT},
+      fill_in_form_deadline = #{fillInFormDeadline,jdbcType=DATE},
       status = #{status,jdbcType=TINYINT},
       garden_examine_stauts = #{gardenExamineStauts,jdbcType=TINYINT},
-      tab_create_type = #{tabCreateType,jdbcType=TINYINT},
       calling_time = #{callingTime,jdbcType=TIMESTAMP},
       calling_times = #{callingTimes,jdbcType=INTEGER},
       filler = #{filler,jdbcType=VARCHAR},
@@ -520,7 +474,6 @@
       examine_comment = #{examineComment,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT},
-      task_batch = #{taskBatch,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modified_account = #{modifiedAccount,jdbcType=VARCHAR}
     where fill_id = #{fillId,jdbcType=VARCHAR}

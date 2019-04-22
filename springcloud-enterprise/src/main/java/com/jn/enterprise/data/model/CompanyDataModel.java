@@ -55,6 +55,28 @@ public class CompanyDataModel implements Serializable {
     @ApiModelProperty(value = "是否逾期1：是；0：否",example = "1")
     private String  isOverdue;
 
+    @ApiModelProperty(value = "模板ID",example = "101")
+    private String  modelId;
+
+    @ApiModelProperty(value = "填报周期（1：年，0：月）",example = "1")
+    private Byte modelCycle;
+
+    public Byte getModelCycle() {
+        return modelCycle;
+    }
+
+    public void setModelCycle(Byte modelCycle) {
+        this.modelCycle = modelCycle;
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
+
     public String getModelName() {
         return modelName;
     }

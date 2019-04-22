@@ -11,6 +11,7 @@ import com.jn.common.util.cache.service.Cache;
 import com.jn.enterprise.common.dao.TbServiceCodeMapper;
 import com.jn.enterprise.common.entity.TbServiceCode;
 import com.jn.enterprise.common.entity.TbServiceCodeCriteria;
+import com.jn.enterprise.data.controller.DataModelController;
 import com.jn.enterprise.enums.BusinessPromotionExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.propaganda.dao.BusinessPromotionMapper;
@@ -20,12 +21,15 @@ import com.jn.enterprise.propaganda.entity.TbPropaganda;
 import com.jn.enterprise.propaganda.entity.TbPropagandaCriteria;
 import com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules;
 import com.jn.enterprise.propaganda.entity.TbPropagandaFeeRulesCriteria;
+import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.propaganda.enums.PromotionAreaEnum;
 import com.jn.enterprise.propaganda.enums.PropagandaTypeEnum;
 import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import com.jn.paybill.api.PayBillClient;
+import com.jn.paybill.model.PaymentBillModel;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -35,11 +39,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,12 +81,20 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @Autowired
     private RedisCacheFactory redisCacheFactory;
 
+    @Autowired
+    private PayBillClient payBillClient;
+
+
     @Value(value = "${propaganda.type.expire}")
     private int expire;
     /**
      * 数据状态  1：有效  0：无效
      */
     private static final String STATUS="1";
+    /**
+     * 数据状态  1：有效  0：无效
+     */
+    private static final String INVALID="0";
     /**
      * 日期格式
      */
@@ -186,7 +197,9 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         //失效日期
         tbPropaganda.setInvalidDate(DateUtils.parseDate(businessPromotionDetailsParam.getEffectiveDate()));
         //状态
-        tbPropaganda.setStatus(STATUS);
+        tbPropaganda.setStatus(INVALID);
+        //宣传费用
+        tbPropaganda.setPropagandaFee(Double.valueOf(businessPromotionDetailsParam.getPropagandaFee()));
         //服务机构
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(loginAccount);
         tbPropaganda.setOrgId(userExtension.getData().getAffiliateCode());
@@ -248,7 +261,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             if(StringUtils.equals(pro.getProFeeRuleCode(), bpd.getProFeeRuleCode())){
                 feeCode=false;
                 propagandaFee = pro.getPropagandaFee();
-                if(StringUtils.equals(pro.getPropagandaFee(), bpd.getPropagandaFee())){
+                if(Double.valueOf(pro.getPropagandaFee())==Double.parseDouble(bpd.getPropagandaFee())){
                     feeValue=false;
                 }
                 break;
@@ -380,23 +393,23 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @ServiceLog(doAction = "撤销申请")
     @Override
     public int cancelApprove(String propagandaId, String loginAccount) {
-        //根据宣传id,状态为有效(value="1")，审批状态为未付款（value="-1"）查询系统中是否有当前数据
+        //根据宣传id，审批状态为未付款（value="-1"）查询系统中是否有当前数据
         TbPropagandaCriteria example=new TbPropagandaCriteria();
-        example.createCriteria().andIdEqualTo(propagandaId).andStatusEqualTo(STATUS)
-                .andApprovalStatusEqualTo("-1").andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        example.createCriteria().andIdEqualTo(propagandaId).andApprovalStatusEqualTo("-1")
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         long responseNum = tbPropagandaMapper.countByExample(example);
         if(responseNum==0){
             logger.warn("撤销申请失败,系统中不存在id[{}],状态为有效，审批状态为未付款的数据",propagandaId);
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_INFO_NOT_EXIST);
         }
         TbPropaganda tbPropaganda=new TbPropaganda();
-        //状态设为无效
-        tbPropaganda.setStatus("0");
+        //删除当前数据
+        tbPropaganda.setRecordStatus(Byte.parseByte(INVALID));
         //修改时间
         tbPropaganda.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //修改人
         tbPropaganda.setModifierAccount(loginAccount);
-        return tbPropagandaMapper.updateByExample(tbPropaganda, example);
+        return tbPropagandaMapper.updateByExampleSelective(tbPropaganda, example);
     }
 
     /**
@@ -528,5 +541,67 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     public String getOrderNumber() {
         //AD-(广告)+日期（年月日时分秒）+3位随机数
         return "AD-"+ DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtils.nextInt(999);
+    }
+
+    /**
+     * 修改审批状态
+     * @param propagandaId  宣传id
+     * @param approvalStatus        审批状态 (-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)
+     * @param loginAccount 登录用户账号
+     * @return
+     */
+    @ServiceLog(doAction = "修改审批状态")
+    @Override
+    public int updateApprovalStatus(String propagandaId, String approvalStatus,String loginAccount) {
+        //根据宣传id,是否删除判断宣传信息是否存在
+        TbPropagandaCriteria example=new TbPropagandaCriteria();
+        example.createCriteria().andIdEqualTo(propagandaId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        long existNum = tbPropagandaMapper.countByExample(example);
+        if(existNum==0){
+            logger.warn("修改审批状态失败，当前宣传信息[id:{}]在系统中不存在或已删除",propagandaId);
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_INFO_NOT_EXIST);
+        }
+        //判断状态值是否为系统支持的
+        List<String>statusList= Arrays.asList(ApprovalStatusEnum.UNPAID.getValue(),ApprovalStatusEnum.NOT_APPROVED.getValue()
+                ,ApprovalStatusEnum.APPROVAL.getValue(),ApprovalStatusEnum.APPROVED.getValue(),ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue());
+        if(!statusList.contains(approvalStatus)){
+            logger.warn("修改审批状态失败，status:[{}]不是系统支持的",approvalStatus);
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.STATUS_NOT_SUPPORT);
+        }
+        TbPropaganda tbPropaganda=new TbPropaganda();
+        tbPropaganda.setApprovalStatus(approvalStatus);
+        tbPropaganda.setModifierAccount(loginAccount);
+        tbPropaganda.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+        return tbPropagandaMapper.updateByExampleSelective(tbPropaganda, example);
+    }
+
+    /**
+     * 创建账单
+     * @param orderNum      订单号
+     * @param loginAccount  登录用户账号
+     * @return
+     */
+    @ServiceLog(doAction = "创建账单")
+    @Override
+    public String createBill(String orderNum,String loginAccount){
+        //需要修改，支付接口后期会改掉，当前支付会废弃掉
+        PaymentBillModel paymentBillModel=new PaymentBillModel();
+        paymentBillModel.setBillNum(orderNum);
+        paymentBillModel.setBillName(loginAccount+"的宣传费用");
+        paymentBillModel.setBillType("ad_free");
+        paymentBillModel.setBillObjId(loginAccount);
+        paymentBillModel.setBillObjName(loginAccount);
+        paymentBillModel.setBillAmount(50.00);
+        paymentBillModel.setBillCreateTime(DateUtils.getDate(PATTERN));
+        paymentBillModel.setPayEndTime(DateUtils.getDate(PATTERN));
+        paymentBillModel.setBillCreateAccount(loginAccount);
+        paymentBillModel.setBillRemark("ad_free");
+        Result<String> bill = payBillClient.createBill(paymentBillModel);
+        if(bill==null || bill.getData()==null){
+            logger.warn("创建账单失败，调用账单生成接口返回null");
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.NETWORK_ANOMALY);
+        }
+        return bill.getData();
     }
 }

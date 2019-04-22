@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Author: yangph
@@ -14,6 +13,10 @@ import java.util.Date;
  */
 @ApiModel(value = "BusinessPromotionListShow", description = "企业宣传查询列表出参")
 public class BusinessPromotionListShow implements Serializable {
+    @ApiModelProperty(value = "订单号(已付款的宣传才有订单号)")
+    private String orderNum;
+    @ApiModelProperty(value = "宣传类型")
+    private String propagandaType;
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "宣传编码")
@@ -25,11 +28,27 @@ public class BusinessPromotionListShow implements Serializable {
     @ApiModelProperty(value = "生效日期")
     private String effectiveDate;
     @ApiModelProperty(value = "失效日期")
-    private Date invalidDate;
+    private String invalidDate;
     @ApiModelProperty(value = "宣传海报")
     private String posterUrl;
     @ApiModelProperty(value = "宣传费用")
     private String propagandaFee;
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getPropagandaType() {
+        return propagandaType;
+    }
+
+    public void setPropagandaType(String propagandaType) {
+        this.propagandaType = propagandaType;
+    }
 
     public String getId() {
         return id;
@@ -71,11 +90,11 @@ public class BusinessPromotionListShow implements Serializable {
         this.effectiveDate = effectiveDate;
     }
 
-    public Date getInvalidDate() {
+    public String getInvalidDate() {
         return invalidDate;
     }
 
-    public void setInvalidDate(Date invalidDate) {
+    public void setInvalidDate(String invalidDate) {
         this.invalidDate = invalidDate;
     }
 

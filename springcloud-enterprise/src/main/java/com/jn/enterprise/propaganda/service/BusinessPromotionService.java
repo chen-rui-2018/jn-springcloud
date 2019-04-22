@@ -70,4 +70,21 @@ public interface BusinessPromotionService {
      * @return
      */
     String getOrderNumber();
+
+    /**
+     * 修改审批状态
+     * @param propagandaId  宣传id
+     * @param approvalStatus        审批状态 (-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)
+     * @param loginAccount 登录用户账号
+     * @return
+     */
+    int updateApprovalStatus(String propagandaId,String approvalStatus,String loginAccount);
+
+    /**
+     * 创建账单
+     * @param orderNum      订单号
+     * @param loginAccount  登录用户账号
+     * @return
+     */
+    String createBill(String orderNum,String loginAccount);
 }

@@ -533,7 +533,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
                 tbOaWorkPlanUserMapper.insert(tbOaWorkPlanUser);
 
                 //获取用户账号邮箱
-                if (StringUtils.isNotBlank(userEmails)) {
+                if (userEmails != null) {
                     User user1 = new User();
                     user1.setAccount(userAccount);
                     Result<User> result = systemClient.getUser(user1);

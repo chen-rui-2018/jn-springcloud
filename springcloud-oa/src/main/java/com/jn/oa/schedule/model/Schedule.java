@@ -34,45 +34,35 @@ public class Schedule implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date date;
 
+    @ApiModelProperty(value = "是否全天",required = true,example = "\"1\"")
+    @Pattern(regexp = "^[01]$", message = "只能传值0和1")
+    private String allDay;
+
     @ApiModelProperty(value = "日程内容", example = "提成内容测试")
     private String content;
 
-    @ApiModelProperty(value = "开始时间", required = true, example = "2019-03-22 12:12:12")
+    @ApiModelProperty(value = "开始时间", required = true, example = "2019-03-22 12:12")
     @NotNull(message = "开始时间不能为空")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    private Date start;
 
-    @ApiModelProperty(value = "结束时间", required = true, example = "2019-03-22 13:12:12")
+    @ApiModelProperty(value = "结束时间", required = true, example = "2019-03-22 13:12")
     @NotNull(message = "结束时间不能为空")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    private Date end;
 
-    @ApiModelProperty(value = "提醒时间", required = true, example = "2019-03-22 13:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "提醒时间", required = true, example = "2019-03-22 13:12")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     private Date remindTime;
 
     @ApiModelProperty(value = "是否提醒(1是,0否)", required = true, example = "\"1\"")
-    @Pattern(regexp = "^[01]$", message = "只能传值0和1")
     private String isRemind;
 
-    @ApiModelProperty(value = "微信提醒(1是,0否)", required = true, example = "\"1\"")
-    @Pattern(regexp = "^|[01]$", message = "只能传值0和1")
-    private String wechatRemind;
-
-    @ApiModelProperty(value = "短信提醒(1是,0否)", required = true, example = "\"1\"")
-    @Pattern(regexp = "^|[01]$", message = "只能传值0和1")
-    private String messageRemind;
-
-    @ApiModelProperty(value = "pc端提醒(1是,0否)", required = true, example = "\"1\"")
-    @Pattern(regexp = "^|[01]$", message = "只能传值0和1")
-    private String pcRemind;
-
-    @ApiModelProperty(value = "App端提醒(1是,0否)", required = true, example = "\"1\"")
-    @Pattern(regexp = "^|[01]$", message = "只能传值0和1")
-    private String appRemind;
+    @ApiModelProperty(value = "提醒方式",required = true,example = "\"1\"")
+    private String remindWay;
 
     @ApiModelProperty(value = "备注", example = "日程备注测试")
     private String remark;
@@ -80,21 +70,18 @@ public class Schedule implements Serializable {
     public Schedule() {
     }
 
-    public Schedule(String id, String title, Date date, String content, Date startTime, Date endTime, Date remindTime,
-                    String isRemind, String wechatRemind, String messageRemind, String pcRemind,
-                    String appRemind, String remark) {
+    public Schedule(String id, String title, Date date, String allDay, String content, Date start, Date end,
+                    Date remindTime, String isRemind, String remindWay, String remark) {
         this.id = id;
         this.title = title;
         this.date = date;
+        this.allDay = allDay;
         this.content = content;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.start = start;
+        this.end = end;
         this.remindTime = remindTime;
         this.isRemind = isRemind;
-        this.wechatRemind = wechatRemind;
-        this.messageRemind = messageRemind;
-        this.pcRemind = pcRemind;
-        this.appRemind = appRemind;
+        this.remindWay = remindWay;
         this.remark = remark;
     }
 
@@ -122,6 +109,14 @@ public class Schedule implements Serializable {
         this.date = date;
     }
 
+    public String getAllDay() {
+        return allDay;
+    }
+
+    public void setAllDay(String allDay) {
+        this.allDay = allDay;
+    }
+
     public String getContent() {
         return content;
     }
@@ -130,20 +125,20 @@ public class Schedule implements Serializable {
         this.content = content;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public Date getStart() {
+        return start;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setStart(Date start) {
+        this.start = start;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public Date getEnd() {
+        return end;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setEnd(Date end) {
+        this.end = end;
     }
 
     public Date getRemindTime() {
@@ -162,36 +157,12 @@ public class Schedule implements Serializable {
         this.isRemind = isRemind;
     }
 
-    public String getWechatRemind() {
-        return wechatRemind;
+    public String getRemindWay() {
+        return remindWay;
     }
 
-    public void setWechatRemind(String wechatRemind) {
-        this.wechatRemind = wechatRemind;
-    }
-
-    public String getMessageRemind() {
-        return messageRemind;
-    }
-
-    public void setMessageRemind(String messageRemind) {
-        this.messageRemind = messageRemind;
-    }
-
-    public String getPcRemind() {
-        return pcRemind;
-    }
-
-    public void setPcRemind(String pcRemind) {
-        this.pcRemind = pcRemind;
-    }
-
-    public String getAppRemind() {
-        return appRemind;
-    }
-
-    public void setAppRemind(String appRemind) {
-        this.appRemind = appRemind;
+    public void setRemindWay(String remindWay) {
+        this.remindWay = remindWay;
     }
 
     public String getRemark() {
@@ -208,15 +179,13 @@ public class Schedule implements Serializable {
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", date=" + date +
+                ", allDay='" + allDay + '\'' +
                 ", content='" + content + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
+                ", start=" + start +
+                ", end=" + end +
                 ", remindTime=" + remindTime +
                 ", isRemind='" + isRemind + '\'' +
-                ", wechatRemind='" + wechatRemind + '\'' +
-                ", messageRemind='" + messageRemind + '\'' +
-                ", pcRemind='" + pcRemind + '\'' +
-                ", appRemind='" + appRemind + '\'' +
+                ", remindWay='" + remindWay + '\'' +
                 ", remark='" + remark + '\'' +
                 '}';
     }

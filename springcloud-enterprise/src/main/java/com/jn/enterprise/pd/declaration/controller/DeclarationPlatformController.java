@@ -45,9 +45,10 @@ public class DeclarationPlatformController extends BaseController {
     @ApiOperation(value = "申报平台列表", notes = "申报平台列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public Result<PaginationData<List<TbPdDeclarationPlatformManage>>> list(@ApiParam(value = "所属平台(1:园区本级平台,2：市级平台，3：省级平台，4：国家级平台)",required = true,example = "1") @RequestParam String subordinatePlatformName,
+                                                                            @ApiParam(value = "平台标题",example = "人才") @RequestParam(name = "platformTitle", required = false) String platformTitle,
                                                                             @ApiParam(value = "当前页",required = true,example = "1") @RequestParam int page,
                                                                             @ApiParam(value = "每页总数",required = true,example = "5") @RequestParam int rows) {
-        PaginationData<List<TbPdDeclarationPlatformManage>> data = declarationPlatformService.selectByDeclarationPlatformList(subordinatePlatformName,page,rows);
+        PaginationData<List<TbPdDeclarationPlatformManage>> data = declarationPlatformService.selectByDeclarationPlatformList(subordinatePlatformName,platformTitle,page,rows);
         return new Result(data);
     }
 

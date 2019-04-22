@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface DeclarationNoticeService {
 
-    PaginationData<List<TbPdDeclarationNoticeManage>> selectByDeclarationNoticeList(String rangeId, String sortType, int page, int rows);
+    PaginationData<List<TbPdDeclarationNoticeManage>> selectByDeclarationNoticeList(String rangeId, String sortType,String titleName, int page, int rows);
 
     TbPdDeclarationNoticeManage selectByTalentNotice(String id);
 

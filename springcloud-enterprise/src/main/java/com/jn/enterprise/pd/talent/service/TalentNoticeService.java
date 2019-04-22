@@ -1,5 +1,6 @@
 package com.jn.enterprise.pd.talent.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice;
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceRange;
 
@@ -21,7 +22,7 @@ public interface TalentNoticeService {
      * @param
      * @return
      */
-    List<TbPdTalentServiceNotice> selectByTalentNoticeList(String rangeId,String sortType);
+    PaginationData<List<TbPdTalentServiceNotice>> selectByTalentNoticeList(String rangeId, String sortType,String noticeTitle,int page,int rows);
 
     /**
      * 根据ID查询公告详情

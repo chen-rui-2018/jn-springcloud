@@ -123,9 +123,15 @@ public class CareServiceImpl implements CareService {
         CareDetailsVo vo = new CareDetailsVo();
         CareUserDetails userDetails =  careDao.findCareDetails(param.getParamAccount(),currentAccount);
         vo.setUserDetails(userDetails);
-        PaginationData<List<DynamicWebShow>> dynamicList =  dynamicService.findDynamicByAccount(param);
-
-        return null;
+        PaginationData<List<DynamicWebShow>> dynamicList =  dynamicService.findDynamicByAccount(param,currentAccount);
+        vo.setDnmamicList(dynamicList);
+        return vo;
+    }
+    @ServiceLog(doAction = "企业/个人粉丝数查询")
+    @Override
+    public CareUserDetails findCompanyCareInfo(String account,String currentAccount) {
+        CareUserDetails userDetails =  careDao.findCareDetails(account,currentAccount);
+        return userDetails;
     }
 
 
@@ -134,7 +140,7 @@ public class CareServiceImpl implements CareService {
      * @param showList
      * @return
      */
-    public List<CareUserShow> approvalUserInfo(  List<CareUserShow> showList){
+    private List<CareUserShow> approvalUserInfo(  List<CareUserShow> showList){
         List<String> accountList = new ArrayList<>();
         for(CareUserShow show : showList){
             accountList.add(show.getAccount());

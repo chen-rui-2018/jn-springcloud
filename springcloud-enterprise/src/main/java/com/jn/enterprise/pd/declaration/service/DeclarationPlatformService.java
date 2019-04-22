@@ -1,5 +1,6 @@
 package com.jn.enterprise.pd.declaration.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeRange;
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage;
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformSubordinate;
@@ -21,7 +22,7 @@ public interface DeclarationPlatformService {
      *
      * @return
      */
-    List<TbPdDeclarationPlatformManage> selectByDeclarationPlatformList(String subordinatePlatformName);
+    PaginationData<List<TbPdDeclarationPlatformManage>> selectByDeclarationPlatformList(String subordinatePlatformName,String platformTitle, int page, int rows);
 
     /**
      * 查询所有平台类型列表

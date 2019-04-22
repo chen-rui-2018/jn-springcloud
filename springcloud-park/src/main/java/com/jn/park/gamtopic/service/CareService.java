@@ -5,8 +5,11 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.gamtopic.model.CareAddParam;
 import com.jn.park.gamtopic.model.CareDetailsQueryParam;
+import com.jn.park.gamtopic.model.CareUserDetails;
 import com.jn.park.gamtopic.model.CareUserShow;
 import com.jn.park.gamtopic.vo.CareDetailsVo;
+import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -57,4 +60,11 @@ public interface CareService {
      */
      CareDetailsVo findCareDetails(CareDetailsQueryParam param,String account);
 
+    /**
+     * 公司粉丝数(被关注数)
+     * @param account
+     * @param currentAccount 当前登录账号
+     * @return
+     */
+    CareUserDetails findCompanyCareInfo(String account,String currentAccount);
 }

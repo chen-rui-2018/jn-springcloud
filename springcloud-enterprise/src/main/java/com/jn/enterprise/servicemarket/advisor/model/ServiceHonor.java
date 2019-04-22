@@ -24,6 +24,8 @@ public class ServiceHonor implements Serializable {
     private String certificateType;
     @ApiModelProperty(value = "获得时间")
     private String getTime;
+    @ApiModelProperty(value = "颁发机构/部门")
+    private String issuing_agency;
     @ApiModelProperty(value = "证书证件")
     private String certificatePhoto;
     @ApiModelProperty(value = "创建时间")
@@ -125,6 +127,14 @@ public class ServiceHonor implements Serializable {
 
     public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public String getIssuing_agency() {
+        return issuing_agency;
+    }
+
+    public void setIssuing_agency(String issuing_agency) {
+        this.issuing_agency = issuing_agency;
     }
 
     @Override

@@ -54,8 +54,7 @@ public class FinancialProductController extends BaseController {
 
     @ControllerLog(doAction = "金融产品详情")
     @ApiOperation(value = "金融产品详情")
-    @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductDetails")
-    @RequestMapping(value = "/technologyFinancial/financialProductController/getFinancialProductDetails",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getFinancialProductDetails",method = RequestMethod.GET)
     public Result<FinancialProductDetails> getFinancialProductDetails(@ApiParam(value = "产品id" ,required = true,example = "1234") @RequestParam("productId") String productId){
         Assert.notNull(productId, FinancialProductExceptionEnum.PRODUCT_ID_NOT_NULL.getMessage());
         FinancialProductDetails financialProductDetails = financialProductService.getFinancialProductDetails(productId);

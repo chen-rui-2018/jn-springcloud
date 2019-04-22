@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -78,7 +79,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
             return null;
         }
         BeanUtils.copyProperties(tbSpPowerBusiWithBLOBs,spPowerBusiDetailVo);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(tbSpPowerBusiWithBLOBs.getCreatedTime());
+        spPowerBusiDetailVo.setTime(format);
+
         spPowerBusiDetailVo.setFlowPic(spPowerBusiDetailVo.getFlowPic().replace("/ibps/components/upload/ueditor/preview.htm",ibpsUrl+"/ibps/components/upload/ueditor/preview.htm"));
+        //替换标签,只要纯文本
+        String dealConditions = spPowerBusiDetailVo.getDealConditions();
+        dealConditions = dealConditions.replace("<p><span style=\"color: rgb(50, 50, 50); font-family: &quot;Microsoft Yahei&quot;; font-size: 15px; background-color: rgb(255, 255, 255);\">","");
+        dealConditions = dealConditions.replace("</span></p>","");
+        spPowerBusiDetailVo.setDealConditions(dealConditions);
         //通过业务id查询业务对象的办理材料集合
         TbSpPowerBusiMaterialsCriteria tbSpPowerBusiMaterialsCriteria = new TbSpPowerBusiMaterialsCriteria();
         TbSpPowerBusiMaterialsCriteria.Criteria criteria = tbSpPowerBusiMaterialsCriteria.createCriteria();
@@ -227,4 +237,13 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         List<SpAdModel> spAdModelList = spAdDao.getAdvertising();
         return spAdModelList;
     }
+
+    @Override
+    @ServiceLog(doAction = "获取在线受理地址")
+    public String getDealUrl(String id) {
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = spPowerBusiDao.selectBusiByKey(id);
+        String dealUrl = tbSpPowerBusiWithBLOBs.getDealUrl();
+        return dealUrl;
+    }
+
 }

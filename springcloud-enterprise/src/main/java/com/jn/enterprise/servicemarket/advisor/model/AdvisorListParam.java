@@ -22,6 +22,8 @@ public class AdvisorListParam extends Page implements Serializable {
     private String sortTypes;
     @ApiModelProperty(value = "关键词",example="上海")
     private String keyWords;
+    @ApiModelProperty(value = "产品模板id(根据常规产品类型查询产品关联的顾问)",example="xxx1234")
+    private String templateId;
 
     public String getOrgId() {
         return orgId;
@@ -53,5 +55,13 @@ public class AdvisorListParam extends Page implements Serializable {
 
     public void setKeyWords(String keyWords) {
         this.keyWords = keyWords;
+    }
+
+    public String getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 }

@@ -76,7 +76,7 @@
                         gamtopic
                     </contexts>
                     <tableNames>
-                        tb_gam_topic,tb_person_care
+                       tb_person_care
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

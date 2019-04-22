@@ -1,7 +1,8 @@
 package com.jn.oa.attendance.dao;
-
-import com.jn.oa.attendance.entity.TbOaAttendance;
-import com.jn.oa.attendance.model.Attendance;
+import com.jn.oa.attendance.model.AttendancePage;
+import com.jn.oa.attendance.vo.AttendanceVo;
+import com.jn.oa.model.Attendance;
+import com.jn.oa.vo.AttendanceApiVo;
 
 import java.util.List;
 
@@ -15,5 +16,12 @@ import java.util.List;
  */
 public interface AttendanceMapper {
 
-    List<TbOaAttendance> selectAttendanceByCondition(Attendance attendance);
+    List<AttendanceVo> selectAttendanceByCondition(AttendancePage attendancePage);
+
+    /**
+     * oa-api接口调用查询考勤列表
+     * @param attendance
+     * @return
+     */
+   List<AttendanceApiVo> selectAttendanceListByCondition(Attendance attendance);
 }

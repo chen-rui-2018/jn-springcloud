@@ -1,0 +1,94 @@
+.el-carousel__container{
+  height: 347px;
+}
+.bannerSer{
+  .el-menu--horizontal>.el-submenu .el-submenu__title{
+    color:#fff;
+    background-color:#00a042;
+  }
+  .el-menu--horizontal>.el-submenu .el-submenu__title:hover{
+    background-color: #007f34;
+    color:#fff !important;
+  }
+  .el-menu.el-menu--horizontal{
+    border-bottom:none;
+  }
+  .el-submenu__title{
+    font-size: 16px;
+  }
+  .el-menu--horizontal>.el-submenu:focus .el-submenu__title, .el-menu--horizontal>.el-submenu:hover .el-submenu__title{
+    color:#fff;
+  }
+  .el-menu--horizontal>.el-submenu .el-submenu__icon-arrow{
+    color:transparent;
+  }
+  .el-menu--horizontal>.el-submenu.is-active .el-submenu__title{
+    border-bottom:none;
+  }
+
+}
+.serve_slide{
+  .el-dialog{
+    width: 20%;
+    margin: 0 !important;
+   }
+   .el-dialog__headerbtn{
+    font-size: 25px;
+    color:#00a042;
+   }
+   .el-dialog__body{
+    padding:0; 
+    height: 100vh;
+  }
+}
+.el-menu--popup-bottom-start{
+  margin-top:0;
+}
+.el-menu--popup{
+  border-radius:0;
+  padding:0;
+}
+.el-menu-item:hover{
+  background-color:#00a042 !important;
+}
+.el-menu--horizontal .el-menu .el-submenu__title:hover{
+  background-color:#00a042 !important;
+} 
+.el-menu--horizontal .el-menu .el-menu-item{
+  color:black;
+}
+.el-menu--horizontal .el-menu .el-submenu__title{
+  color:black;
+}
+.service_market{
+  .el-input__inner{
+    border: 1px solid #d9d9d9;
+    background-color: #f5f5f5;
+    color: #ccc;
+  }
+  .el-dialog{
+    width:40%;
+  }
+  .el-dialog--center .el-dialog__body{
+    padding: 25px 25px 22px;
+    border-bottom: 1px solid #dedede;
+  }
+  .el-dialog__footer{
+    padding: 19px 20px 20px;
+  }
+  .el-button--primary{
+    color: #00a041;
+    background-color: #ecfcf2;
+    border-color: #41d787;
+  }
+  .el-button:focus, .el-button:hover{
+    color: #00a041;
+    background-color: #ecfcf2;
+    border-color: #41d787;
+  }
+  .el-button--primary:focus, .el-button--primary:hover{
+    color: #00a041;
+    background-color: #ecfcf2;
+    border-color: #41d787;
+  }
+}

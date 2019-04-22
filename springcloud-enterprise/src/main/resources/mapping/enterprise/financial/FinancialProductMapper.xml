@@ -70,4 +70,80 @@
 
     </select>
 
+    <!--金融产品详情-->
+    <select id="getFinancialProductDetails" resultType="com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductDetails">
+            select
+              sp.product_id  as "productId"
+              ,sp.product_name as "productName"
+              ,sp.serial_number as "serialNumber"
+              ,sp.signory_id as "signoryId"
+              ,sp.signory_name as "signoryName"
+              ,sp.org_id as "orgId"
+              ,sp.org_name as "orgName"
+              ,sp.picture_url as "pictureUrl"
+              ,sp.product_type as "productType"
+              ,sp.status as "status"
+              ,sp.ref_rate_min as "refRateMin"
+              ,sp.ref_rate_max as "refRateMax"
+              ,sp.is_online_loan as "isOnlineLoan"
+              ,sp.is_policy_pro as "isPolicyPro"
+              ,sp.is_general_pro as "isGeneralPro"
+              ,sp.is_rmb as "isRmb"
+              ,sp.loan_category_code as "loanCategoryCode"
+              ,sp.loan_category_name as "loanCategoryName"
+              ,sp.loan_amount_min as "loanAmountMin"
+              ,sp.loan_amount_max as "loanAmountMax"
+              ,sp.loan_term_min as "loanTermMin"
+              ,sp.loan_term_max as "loanTermMax"
+              ,sp.assure_method_code as "assureMethodCode"
+              ,sp.assure_method_name as "assureMethodName"
+              ,sp.product_feature as "productFeature"
+              ,sp.apply_condition as "applyCondition"
+              ,sp.submit_material as "submitMaterial"
+              ,sp.applicable_cust as "applicableCuster"
+              ,sp.view_count as "viewCount"
+              ,count(sr.product_id) as "transactionNum"
+              ,IFNULL(avg(sra.attitude_score),0) as "evaluationScore"
+            from tb_service_product sp
+            left join tb_service_require sr
+            on sp.product_id=sr.product_id
+            and sr.status='2'       <!--已处理-->
+            and sr.handle_result='1'<!--对接成功-->
+            and sr.record_status='1'<!--有效-->
+            left join tb_service_rating  sra
+            on sp.product_id=sra.product_id
+            and sra.record_status='1'
+            where 1=1
+            and sp.signory_id=#{businessArea}
+            and sp.product_id=#{productId}
+            and sp.record_status='1'
+        group by    sp.product_id
+        ,sp.product_name
+        ,sp.serial_number
+        ,sp.signory_id
+        ,sp.signory_name
+        ,sp.org_id
+        ,sp.org_name
+        ,sp.picture_url
+        ,sp.product_type
+        ,sp.status
+        ,sp.ref_rate_min
+        ,sp.ref_rate_max
+        ,sp.is_online_loan
+        ,sp.is_policy_pro
+        ,sp.is_general_pro
+        ,sp.is_rmb
+        ,sp.loan_category_code
+        ,sp.loan_category_name
+        ,sp.loan_amount_min
+        ,sp.loan_amount_max
+        ,sp.loan_term_min
+        ,sp.loan_term_max
+        ,sp.assure_method_code
+        ,sp.assure_method_name
+        ,sp.product_feature
+        ,sp.submit_material
+        ,sp.applicable_cust
+        ,sp.view_count
+    </select>
 </mapper>

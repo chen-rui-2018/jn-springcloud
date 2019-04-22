@@ -58,7 +58,7 @@
       </div>
       <div style="display:flex">
         <el-form-item label="接收人" lass="inline">
-          <div >
+          <div v-show="title!=='一键Email详情'" >
             <span>添加接收人</span>
             <el-select :disabled="title==='一键Email详情'" v-model="userNames" multiple value-key="userId" filterable placeholder="请选择接收人" @change="changeUsername(userNames)">
               <el-option
@@ -91,7 +91,7 @@
           <input type="submit" value="上传" >
         </form> -->
         <el-upload
-          v-if="emailForm.attachment"
+          :on-change="judgeFile"
           :disabled="title==='一键Email详情'"
           :on-error="handleError"
           :on-preview="download"
@@ -104,7 +104,7 @@
           :limit="1"
           :action="baseUrl+'zuul/'+oaUrl+'oa/common/uploadAttachment'">
           <el-button size="small" type="primary">选择文件</el-button>
-          <div slot="tip" class="el-upload__tip">最多只能上传1个附件，附件大小不能超过100M</div>
+          <div slot="tip" class="el-upload__tip">附件大小不能超过50M</div>
         </el-upload>
         <!-- <el-button v-if="title==='一键Email详情'&&emailForm.attachment" size="small" type="primary" icon="el-icon-download"><a :href="emailForm.attachment" download="" target="_blank">点击下载附件</a></el-button> -->
         <div v-if="!emailForm.attachment && title !== '一键Email新增'" class="attachment-tips">暂无附件</div>
@@ -143,6 +143,7 @@ export default {
       }
     }
     return {
+      judge: '',
       sendTime: '',
       statusOptions: [{
         value: '1',
@@ -210,18 +211,19 @@ export default {
     this.getUserInfo()
   },
   methods: {
+    judgeFile() {
+      this.judge = 1
+    },
     uploadDone(res, file, fileList) {
       this.emailForm.attachment = res.data
-      // this.emailForm.attachment.push(res.data)
     },
     beforeUpload(file) {
-      if (file.size / 1024 / 1024 > 100) {
-        this.$message.warning('文件不能大于100M')
+      if (file.size / 1024 / 1024 > 50) {
+        this.$message.warning('附件大小不能超过50M')
         return false
       }
     },
     download(file) {
-      console.log(file)
       api(`${this.GLOBAL.oaUrl}oa/common/downLoadAttachment?title=${file.name}&url=${file.url}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
@@ -309,6 +311,9 @@ export default {
           if (this.emailForm.attachment.length > 0) {
             this.emailForm.attachment = this.emailForm.attachment
           } else {
+            if (this.judge === 1 && this.emailForm.attachment.length === 0) {
+              alert('附件没有上传成功或上传失败')
+            }
             this.emailForm.attachment = this.emailForm.attachment + ''
           }
           // 调用接口发送请求

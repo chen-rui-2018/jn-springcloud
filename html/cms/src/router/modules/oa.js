@@ -19,6 +19,48 @@ const oaRouter = {
       meta: { title: '公告管理', noCache: true }
     },
     {
+      path: 'workPlanManagement',
+      component: () => import('@/views/oa/work/workPlanManagement'),
+      name: 'workPlanManagement',
+      meta: { title: '工作计划管理', noCache: true }
+    },
+    {
+      path: 'addWorkPlan',
+      component: () => import('@/views/oa/work/addWorkPlan'),
+      name: 'addWorkPlan',
+      meta: { title: '新增工作计划', noCache: false }
+    },
+    {
+      path: 'editWorkPlan',
+      component: () => import('@/views/oa/work/editWorkPlan'),
+      name: 'editWorkPlan',
+      meta: { title: '编辑工作计划', noCache: false }
+    },
+    {
+      path: 'workPlanDetails',
+      component: () => import('@/views/oa/work/workPlanDetails'),
+      name: 'workPlanDetails',
+      meta: { title: '工作计划详情', noCache: false }
+    },
+    {
+      path: 'attendanceManagementList',
+      component: () => import('@/views/oa/attendance/attendanceManagementList'),
+      name: 'attendanceManagementList',
+      meta: { title: '考勤管理列表', noCache: false }
+    },
+    {
+      path: 'attendanceSign',
+      component: () => import('@/views/oa/attendance/attendanceSign'),
+      name: 'attendanceSign',
+      meta: { title: '考勤管理', noCache: true }
+    },
+    // {
+    //   path: 'att',
+    //   component: () => import('@/views/components/attendance'),
+    //   name: 'att',
+    //   meta: { title: '考勤', noCache: false }
+    // },
+    {
       path: 'addnoticeManagement',
       component: () => import('@/views/oa/notice/addnoticeManagement'),
       name: 'addnoticeManagement',

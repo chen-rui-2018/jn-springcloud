@@ -14,6 +14,7 @@
     <result column="announcement_content" jdbcType="VARCHAR" property="announcementContent" />
     <result column="browse_times" jdbcType="INTEGER" property="browseTimes" />
     <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -81,7 +82,7 @@
   <sql id="Base_Column_List">
     id, notice_title, range_id, range_name, subordinate_platform_id, subordinate_platform_name, 
     deadline, time_node, is_roof_placement, announcement_content, browse_times, status, 
-    record_status, creator_account, created_time, modifier_account, modified_time
+    file_url, record_status, creator_account, created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNoticeCriteria" resultMap="BaseResultMap">
     select
@@ -114,28 +115,27 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_pd_talent_service_notice (notice_title, range_id, range_name, 
-      subordinate_platform_id, subordinate_platform_name, 
+    insert into tb_pd_talent_service_notice (id, notice_title, range_id, 
+      range_name, subordinate_platform_id, subordinate_platform_name, 
       deadline, time_node, is_roof_placement, 
       announcement_content, browse_times, status, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
-    values (#{noticeTitle,jdbcType=VARCHAR}, #{rangeId,jdbcType=VARCHAR}, #{rangeName,jdbcType=VARCHAR}, 
-      #{subordinatePlatformId,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
+      file_url, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=VARCHAR}, #{rangeId,jdbcType=VARCHAR}, 
+      #{rangeName,jdbcType=VARCHAR}, #{subordinatePlatformId,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
       #{deadline,jdbcType=TIMESTAMP}, #{timeNode,jdbcType=VARCHAR}, #{isRoofPlacement,jdbcType=TINYINT}, 
       #{announcementContent,jdbcType=VARCHAR}, #{browseTimes,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{fileUrl,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_pd_talent_service_notice
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="noticeTitle != null">
         notice_title,
       </if>
@@ -169,6 +169,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
       <if test="recordStatus != null">
         record_status,
       </if>
@@ -186,6 +189,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="noticeTitle != null">
         #{noticeTitle,jdbcType=VARCHAR},
       </if>
@@ -218,6 +224,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
@@ -281,6 +290,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.fileUrl != null">
+        file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
@@ -315,6 +327,7 @@
       announcement_content = #{record.announcementContent,jdbcType=VARCHAR},
       browse_times = #{record.browseTimes,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
+      file_url = #{record.fileUrl,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -360,6 +373,9 @@
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
@@ -391,6 +407,7 @@
       announcement_content = #{announcementContent,jdbcType=VARCHAR},
       browse_times = #{browseTimes,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

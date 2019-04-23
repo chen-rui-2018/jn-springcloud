@@ -99,7 +99,10 @@
         ,t2.img_url as "imgUrl"
         from tb_gam_topic t1
         left join tb_file_img t2 on t1.topic_id = t2.topic_id
-        where t1.topic_status = "1" and t1.record_status = 1 and t1.care_account = #{account}
+        where t1.topic_status = "1" and t1.record_status = 1 and t1.creator_account = #{account}
+        <if test="currentAccount != null and  currentAccount != ''">
+            and t1.topic_type = "1"  or t1.topic_type = "2"
+        </if>
         order by t1.created_time desc
     </select>
 

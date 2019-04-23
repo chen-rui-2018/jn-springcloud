@@ -1,5 +1,5 @@
 <template>
-  <div class="rightDetail">
+  <div class="rightDetail" v-loading="loading">
     <div class="right_content"><!-- 版心 -->
     <!-- 面包屑 -->
       <div class="approve_breadcrumb">
@@ -40,17 +40,17 @@
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="权力基本编码：">
-                      <span class="table_item_cont">{{powerDetail.code}}</span>
+                      <span class="table_item_cont">{{powerDetail.code===null?'暂无':powerDetail.code}}</span>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="实施主体：">
-                      <span class="table_item_cont">{{powerDetail.departName}}</span>
+                      <span class="table_item_cont">{{powerDetail.departName===null?'暂无':powerDetail.departName}}</span>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="行驶层级：">
-                      <span class="table_item_cont">{{powerDetail.level}}</span>
+                      <span class="table_item_cont">{{powerDetail.level===null?'暂无':powerDetail.level}}</span>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_gist">
@@ -65,12 +65,13 @@
                   </div>
                   <div class="baseIfor_table_item full_line">
                     <el-form-item label="权力来源：">
-                      <span class="table_item_cont">{{powerDetail.comeFrom}}</span>
+                      <span class="table_item_cont">{{powerDetail.comeFrom===null?'暂无':powerDetail.level}}</span>
+                      <!-- <span class="table_item_cont"></span> -->
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item full_line">
                     <el-form-item label="备       注：">
-                      <span class="table_item_cont">{{ powerDetail.notes}}</span>
+                      <span class="table_item_cont">{{ powerDetail.notes===null?'暂无':powerDetail.level}}</span>
                     </el-form-item>
                   </div>
                 </el-form>
@@ -87,6 +88,7 @@
                 <el-table-column
                   label="业务序号"
                   width="180"
+                  align="center"
                   >
                   <template slot-scope="scope">
                     <span @click="goservedetail(scope.row.id)">{{scope.row.id}} </span>
@@ -94,6 +96,7 @@
                 </el-table-column>
                 <el-table-column
                   label="业务名称"
+                  align="center"
                   >
                   <template slot-scope="scope">
                     <span @click="goservedetail(scope.row.id)">{{scope.row.name}} </span>
@@ -101,6 +104,7 @@
                 </el-table-column>
                 <el-table-column
                   label="办理机构"
+                  align="center"
                   width="157">
                   <template>
                     <span @click="goservedetail(scope.row.id)">{{ powerDetail.departName}}</span>
@@ -125,7 +129,8 @@ export default {
       clickUnfold:'点击展开',
       approveTableList:[],
       id:'',
-      powerDetail:{}
+      powerDetail:{},
+      loading:true
     }
   },
   filters: {
@@ -166,6 +171,7 @@ export default {
         callback: function(res) {
           console.log(res);
           if (res.code == "0000") {
+            _this.loading=false
             _this.powerDetail=res.data[0];
             _this.approveTableList=_this.powerDetail.busiModelList
             _this.word=_this.powerDetail.settingBasis
@@ -187,6 +193,15 @@ export default {
     .right_content{
       width: 1190px;
       margin: 0 auto;
+    }
+    // 加载动画
+    .el-loading-mask{
+      .el-loading-spinner .path{
+        stroke:#00a041;
+      }
+      .el-loading-spinner{
+        top:30%;
+      }
     }
     .approve_breadcrumb{
       padding: 15px 0;

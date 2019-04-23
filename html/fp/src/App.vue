@@ -2,7 +2,7 @@
   <div id="app">
     <app-header v-if="$route.name=='actiCenter'||$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'||$route.name=='actiManagent'||$route.name=='peoDec'"></app-header>
     <ser-header v-if="$route.name=='actiTrain'||$route.name=='index'"></ser-header>
-    <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'"></adminApprove-header>
+    <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'||$route.name=='declarationCenter'||$route.name=='talentsService'||$route.name=='talentPlatform'||this.$route.name=='familiarProblem'||this.$route.name=='familiarProblemDetail'||this.$route.name=='talentsServiceDetail'"></adminApprove-header>
     <router-view/>
     <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'"></app-footer>
   </div>

@@ -93,7 +93,8 @@ public interface DynamicService {
     /**
      * 根据评用户账号,当前用户动态列表
      * @param param
+     * @param currentAccount
      * @return
      */
-    PaginationData<List<DynamicWebShow>> findDynamicByAccount(CareDetailsQueryParam param);
+    PaginationData<List<DynamicWebShow>> findDynamicByAccount(CareDetailsQueryParam param,String currentAccount);
 }

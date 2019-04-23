@@ -47,7 +47,7 @@ public class TargetVO implements Serializable {
     @ApiModelProperty(value = "创建时间",example = "2018-12-21")
     private Date modifiedTime ;
     @ApiModelProperty(value = "指标说明",example = "当前指标用于。。。。")
-    private String targetCommon ;
+    private String targetComment ;
     @ApiModelProperty(value = "tab指标集合所有的指标填写格式",example = "23")
     private List<InputFormatModel> inputFormatModels;
 
@@ -59,12 +59,12 @@ public class TargetVO implements Serializable {
         this.inputFormatModels = inputFormatModels;
     }
 
-    public String getTargetCommon() {
-        return targetCommon;
+    public String getTargetComment() {
+        return targetComment;
     }
 
-    public void setTargetCommon(String targetCommon) {
-        this.targetCommon = targetCommon;
+    public void setTargetComment(String targetComment) {
+        this.targetComment = targetComment;
     }
 
     public String getTargetId() {

@@ -44,19 +44,17 @@ public interface DataUploadService {
     Map<String, Set<String>> getGardenAd(User user);
     /**
      * 企业本月上报任务获取
-     * @param param
      * @param user
      * @return
      */
-    PaginationData<List<CompanyDataModel>> getNeedFormList(CompanyDataParamModel param,User user);
+    List<CompanyDataModel> getNeedFormList(User user);
 
     /**
      * 园区本月上报任务获取
-     * @param param
      * @param user
      * @return
      */
-    PaginationData<List<CompanyDataModel>> getCurrentMonthTasks(CompanyDataParamModel param,User user);
+    List<CompanyDataModel> getCurrentMonthTasks(User user);
 
 
     /**

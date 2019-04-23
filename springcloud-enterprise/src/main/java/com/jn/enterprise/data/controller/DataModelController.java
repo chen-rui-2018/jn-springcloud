@@ -67,16 +67,15 @@ public class DataModelController  extends BaseController {
 
     @ControllerLog(doAction = "数据上报-指标管理-作废指标")
     @ApiOperation(value = "作废指标",notes = "返回作废指标的结果,正常返回1")
-    @PostMapping(value = "/target/invalidTarget")
+    @GetMapping(value = "/target/invalidTarget")
     @RequiresPermissions("/data/target/invalidTarget")
     @ApiImplicitParams({
             @ApiImplicitParam(name="targetId",value = "指标ID",example = "0001",dataType = "String" ,paramType = "query")
     })
-    public Result<Integer> invalidTarget(@RequestBody String targetId){
+    public Result<Integer> invalidTarget(String targetId){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         Integer result = dataModelService.invalidTarget(targetId,user);
         return new Result(result);
-
     }
 
     @ControllerLog(doAction = "数据上报-指标管理-更新指标信息")

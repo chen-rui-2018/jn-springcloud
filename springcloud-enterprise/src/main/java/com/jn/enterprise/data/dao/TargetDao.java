@@ -69,20 +69,31 @@ public interface TargetDao {
      * 保存数据
      * @param list
      */
-    void saveData(List<TbDataReportingTaskData> list);
+    void saveData(@Param("list") List<TbDataReportingTaskData> list);
 
     /**
      * 获取园区审核数据
      * @param param
      * @return
      */
-    List<GardenCheckModel> getGardenCheckList(GardenCheckParamModel param);
+    List<GardenCheckModel> getGardenCheckList(@Param("param") GardenCheckParamModel param);
 
 
+    /**
+     * 园区该用户的task_Batch获取
+     * @param lastMon
+     * @param lastYear
+     * @param list
+     * @return
+     */
+    List<String> getGardenTaskBatch(@Param("lastMon") String lastMon,@Param("lastYear") String lastYear,@Param("list") List<String> list );
 
-
-
-
+    /**
+     * 获取园区填报任务
+     * @param list
+     * @return
+     */
+    List<CompanyDataModel> getGardenTask(@Param("list") List<String> list);
 
 
 

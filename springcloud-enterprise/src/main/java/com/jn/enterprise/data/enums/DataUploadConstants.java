@@ -1,5 +1,7 @@
 package com.jn.enterprise.data.enums;
 
+import com.jn.common.exception.JnSpringCloudException;
+
 /**
  * @author： yangh
  * @date： Created on 2019/4/11 17:14
@@ -142,7 +144,5 @@ public class DataUploadConstants {
      * 短信预警方式
      */
     public final static String WARNING_BY_SMSTEXT="0";
-
-
 
 }

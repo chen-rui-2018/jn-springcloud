@@ -7,6 +7,9 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
+import com.jn.enterprise.company.entity.TbServiceCompany;
+import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
 import com.jn.enterprise.data.dao.*;
 import com.jn.enterprise.data.entity.*;
 import com.jn.enterprise.data.enums.DataUploadConstants;
@@ -62,6 +65,8 @@ public class DataUploadServiceImpl implements DataUploadService {
     private TbDataReportingSnapshotTargetGroupMapper tbDataReportingSnapshotTargetGroupMapper;
     @Autowired(required = false)
     private TbDataReportingTaskDataMapper TbDataReportingTaskDataMapper;
+    @Autowired(required = false)
+    private TbServiceCompanyMapper tbServiceCompanyMapper;
 
     @Autowired
     private UploadClient uploadClient;
@@ -82,51 +87,86 @@ public class DataUploadServiceImpl implements DataUploadService {
         return getAdsFromTask(user,DataUploadConstants.AD_DISPLAY_CLIENT_PC,DataUploadConstants.COMPANY_TYPE);
     }
 
+    /**
+     * 获取企业的任务批次，归属于当前任务的
+     * @return
+     */
+    private List<String> getCompanyTaskBatches(String lastMon,String lastYear,List<String> fillInFormId){
+        List<String> taskbatch=new ArrayList<>();
+        TbDataReportingTaskCriteria tExample = new TbDataReportingTaskCriteria();
+        tExample.or().andFormTimeEqualTo(lastMon).andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(DataUploadConstants.COMPANY_TYPE));
+        List<TbDataReportingTask> taskList = tbDataReportingTaskMapper.selectByExample(tExample);
+
+
+        tExample.clear();
+        tExample.or().andFormTimeEqualTo(lastYear).andFileTypeEqualTo(new Byte(DataUploadConstants.COMPANY_TYPE));
+        List<TbDataReportingTask> yeartask =tbDataReportingTaskMapper.selectByExample(tExample);
+        taskList.addAll(yeartask);
+
+        for(TbDataReportingTask taskBean: taskList){
+            taskbatch.add(taskBean.getTaskBatch());
+        }
+        return taskbatch;
+
+    }
+
+
+
+
+
+    /**
+     * 获取园区的任务批次，归属于当前任务的
+     * @return
+     */
+    private List<String> getGardenTaskBatches(String lastMon,String lastYear,List<String> fillInFormId){
+        List<String> taskbatch= targetDao.getGardenTaskBatch(lastMon,lastYear,fillInFormId);
+        return taskbatch;
+    }
+
+
     /**广告页面获取方法*/
     /**
      * 园区广告图片，企业广告图片，分为PC和APP
      */
     private Map<String,Set<String>> getAdsFromTask(User user,String type,String fileType){
         Map<String,String> companyInfo  = getCompanyInfoByAccount(user);
+        Map<String ,Set<String>> result = new HashMap<>();
         //账期为上月的任务，所对应的模板的广告连接
         List<String> fillInFormId =getFillId(companyInfo , user);
-
-        String  lastMon=getLastMonth();
-        TbDataReportingTaskCriteria tExample = new TbDataReportingTaskCriteria();
-        tExample.or().andFormTimeEqualTo(lastMon).andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(fileType));
-        List<TbDataReportingTask> taskList = tbDataReportingTaskMapper.selectByExample(tExample);
-
         //查询去年的未填报的任务
         String year = DateUtils.getDate("yyyy-MM-dd").split("-")[0];
-        String lastyear = String.valueOf(Integer.parseInt(year)-1);
-        tExample.clear();
-        tExample.or().andFormTimeEqualTo(lastyear);
-        List<TbDataReportingTask> yeartask =tbDataReportingTaskMapper.selectByExample(tExample);
-        taskList.addAll(yeartask);
+        String lastYear = String.valueOf(Integer.parseInt(year)-1);
+
+        String  lastMon=getLastMonth();
+        String lastMonthFormTime = year+lastMon;
         List<String> taskbatch=new ArrayList<>();
-        for(TbDataReportingTask taskBean: taskList){
-            taskbatch.add(taskBean.getTaskBatch());
+
+        //企业对应的任务批次
+        if(companyInfo !=null && companyInfo.size()>0){
+            taskbatch = getCompanyTaskBatches(lastMonthFormTime,lastYear,fillInFormId);
+        }else{
+        //园区对应的任务批次
+            taskbatch = getGardenTaskBatches(lastMonthFormTime,lastYear,fillInFormId);
         }
 
-        TbDataReportingSnapshotModelCriteria adExample = new TbDataReportingSnapshotModelCriteria();
-        adExample.or().andTaskBatchIn(taskbatch);
+        if(taskbatch!= null && taskbatch.size()>0){
+            TbDataReportingSnapshotModelCriteria adExample = new TbDataReportingSnapshotModelCriteria();
+            adExample.or().andTaskBatchIn(taskbatch);
 
-        List<TbDataReportingSnapshotModel> modelList = tbDataReportingSnapshotModelMapper.selectByExample(adExample);
+            List<TbDataReportingSnapshotModel> modelList = tbDataReportingSnapshotModelMapper.selectByExample(adExample);
 
+            Set<String> urlSet = new HashSet<>();
+            for(TbDataReportingSnapshotModel url :modelList){
+                if(DataUploadConstants.AD_DISPLAY_CLIENT_APP.equals(type)){
+                    urlSet.add(url.getAppAd());
+                }
+                if(DataUploadConstants.AD_DISPLAY_CLIENT_PC.equals(type)){
+                    urlSet.add(url.getPcAd());
+                }
 
-        Set<String> urlSet = new HashSet<>();
-        for(TbDataReportingSnapshotModel url :modelList){
-            if(DataUploadConstants.AD_DISPLAY_CLIENT_APP.equals(type)){
-                urlSet.add(url.getAppAd());
             }
-            if(DataUploadConstants.AD_DISPLAY_CLIENT_PC.equals(type)){
-                urlSet.add(url.getPcAd());
-            }
-
+            result.put("adUrls",urlSet);
         }
-
-        Map<String ,Set<String>> result = new HashMap<>();
-        result.put("adUrls",urlSet);
         return result;
     }
 
@@ -136,26 +176,25 @@ public class DataUploadServiceImpl implements DataUploadService {
     //如果全部到已经填报
     @Override
     @ServiceLog(doAction = "企业待填报数据获取")
-    public PaginationData<List<CompanyDataModel>> getNeedFormList(CompanyDataParamModel param,User user) {
-
-        return getThisMonthTask(param,user,DataUploadConstants.COMPANY_TYPE.getBytes()[0]);
+    public List<CompanyDataModel> getNeedFormList(User user) {
+        return getThisMonthTask(user,DataUploadConstants.COMPANY_TYPE);
     }
 
     @Override
     @ServiceLog(doAction = "园区待填报数据获取")
-    public PaginationData<List<CompanyDataModel>> getCurrentMonthTasks(CompanyDataParamModel param,User user) {
-        return getThisMonthTask(param,user,DataUploadConstants.GARDEN_TYPE.getBytes()[0]);
+    public List<CompanyDataModel> getCurrentMonthTasks(User user) {
+        return getThisMonthTask(user,DataUploadConstants.GARDEN_TYPE);
     }
+
+
 
     /**
      * 园区/企业待上报任务获取
-     * @param param
      * @param user
      * @param type
      * @return
      */
-    private PaginationData<List<CompanyDataModel>> getThisMonthTask(CompanyDataParamModel param,User user,Byte type){
-        Page<Object> objects = PageHelper.startPage(param.getPage(), param.getRows() == 0 ? 15 : param.getRows());
+    private List<CompanyDataModel> getThisMonthTask(User user,String type){
         //账期是上月的，未填报的任务,月任务
         String lastMon = getLastMonth();
         String year = DateUtils.getDate("yyyy-MM-dd").split("-")[0];
@@ -163,17 +202,26 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         //计算本月生成的上月的账期
         List<String> formTimeList = new ArrayList<>();
-        formTimeList.add(lastMon);
+        String lastMonth =  year+lastMon;
+        formTimeList.add(year+lastMon);
         formTimeList.add(lastyear);
         //获取用户信息
         Map<String,String> companyInfo = getCompanyInfoByAccount(user);
         List<String> fillInFormId =getFillId(companyInfo , user);
 
-        List<CompanyDataModel> taskList = targetDao.getThisMonthTask(formTimeList,fillInFormId,type);
+        List<CompanyDataModel> taskList =null;
+        //企业
+        if(companyInfo !=null && companyInfo.size()>0){
+            taskList = targetDao.getThisMonthTask(formTimeList,fillInFormId,new Byte(type));
+        }else{
+        //园区
+            List<String>  taskBatch = getGardenTaskBatches(lastMonth,lastyear,fillInFormId);
+            //
 
-        PaginationData<List<CompanyDataModel>> data = new PaginationData(taskList, objects.getTotal());
+            taskList = targetDao.getGardenTask(taskBatch);
+        }
 
-        return data;
+        return taskList;
     }
 
 
@@ -214,6 +262,11 @@ public class DataUploadServiceImpl implements DataUploadService {
         }else{
             lastMonthStr = String.valueOf(Integer.parseInt(lastMon[1])-1);
         }
+
+        if(Integer.valueOf(lastMonthStr)<9){
+            lastMonthStr="0"+lastMonthStr;
+        }
+
         return lastMonthStr;
     }
 
@@ -654,6 +707,7 @@ public class DataUploadServiceImpl implements DataUploadService {
      * @return
      */
     private int saveDataAsDraft(ModelDataVO data,String fillType,User user){
+
         return 0;
     }
 
@@ -760,13 +814,15 @@ public class DataUploadServiceImpl implements DataUploadService {
     private Map<String,String> getCompanyInfoByAccount(User user){
         Map<String,String> companyInfo = new HashMap<>();
         //获取企业账号
-        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(user.getAccount());
-        if(userExtension==null || userExtension.getData()==null){
+        TbServiceCompanyCriteria exp = new  TbServiceCompanyCriteria();
+        exp.or().andComAdminEqualTo(user.getAccount()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+        List<TbServiceCompany> userExtension =  tbServiceCompanyMapper.selectByExample(exp);
+        if(userExtension==null && userExtension.size()<0){
             companyInfo=null;
         }else{
             logger.info(userExtension.toString());
-            companyInfo.put("companyName",userExtension.getData().getCompanyName());
-            companyInfo.put("companyCode",userExtension.getData().getCompanyCode());
+            companyInfo.put("companyName",userExtension.get(0).getComName());
+            companyInfo.put("companyCode",userExtension.get(0).getId());
         }
 
         return companyInfo;

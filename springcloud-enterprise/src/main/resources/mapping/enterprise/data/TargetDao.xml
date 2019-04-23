@@ -291,24 +291,23 @@
         q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
         ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
         ,q.calling_times ,q.calling_time ,r.model_name ,r.model_cycle
+        ,q.status
         from
         (
-        select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
-        where t.fill_in_form_id in
-        <foreach collection="fillInFormId" index="index" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        and
+            select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
+            where t.fill_in_form_id in
+            <foreach collection="fillInFormId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            and
 
-        t.form_time in
-        <foreach collection="formTimeList" index="index" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        and
-        t.record_status=1
-        and
-        t.file_type=#{fileType}
-        t.status = 1
+            t.form_time in
+            <foreach collection="formTimeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            and t.record_status=1
+            and t.file_type=#{fileType}
+            and (t.status = 1 or t.status =2)
         ) q
         left join (
         select <include refid="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelMapper.Base_Column_List" /> from tb_data_reporting_snapshot_model t
@@ -558,6 +557,73 @@
     </update>
     <!--更新任务状态 nowDate-->
     <select id="getWarningTask" parameterType="java.lang.String" resultType="java.util.List">
+
+    </select>
+
+    <!--获取园区广告-->
+    <select id="getGardenTaskBatch" resultType="java.lang.String">
+
+        select task_batch from
+        tb_data_reporting_snapshot_model
+        where
+        task_batch in
+        (
+            select task_batch from tb_data_reporting_task
+            where form_time=#{lastMon} or form_time=#{lastYear}
+            and file_type=1
+        )
+
+        and model_id in
+        (   select model_id from tb_data_reporting_snapshot_model_struct
+            where target_id in (
+                select target_Id from tb_data_reporting_snapshot_target
+                where record_status=1 and department_id in
+
+                <foreach collection="list" item="o" index="index" open="(" separator=","  close=")">
+                    #{o}
+                </foreach>
+            )
+        )
+    </select>
+
+    <select id="getGardenTask" resultType="com.jn.enterprise.data.model.CompanyDataModel">
+
+        select
+        w.fill_id as fillId
+        ,w.model_id as modelId
+        ,w.fill_in_form_id as fillInFormId
+        ,w.is_overdue as isOverdue
+        ,w.form_time as formTime
+        ,w.filler as filler
+        ,w.filler_tel as filleTel
+        ,w.up_time as upTime
+        ,w.calling_times as callingTimes
+        ,w.calling_time as callingTime
+        ,w.model_name as modelName
+        ,w.model_cycle as modelCycle
+        ,w.status as status
+        from
+
+        (
+            select
+            q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
+            ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
+            ,q.calling_times ,q.calling_time ,r.model_name ,r.model_cycle
+            ,q.status
+            from tb_data_reporting_task q , tb_data_reporting_snapshot_model r
+            where
+            t.task_batch in (
+            <foreach collection="list" item="o" index="index" open="(" separator=","  close=")">
+                #{o}
+            </foreach>
+            )
+            and
+            t.task_batch = r.task_batch
+        ) w
+        order by w.form_time desc
+
+
+
 
     </select>
 

@@ -53,20 +53,20 @@ public class DataUploadController  extends BaseController {
     }
 
     @ControllerLog(doAction = "数据上报-企业数据上报-获取本月待填报的任务")
-    @GetMapping(path = "/company/getForm")
+    @PostMapping(path = "/company/getForm")
     @ApiOperation(value = "获取本月待填报的任务",notes = "返回本月待填报的任务")
     @RequiresPermissions("/data/company/getForm")
-    public Result<PaginationData<List<CompanyDataModel>>> getForm(@ModelAttribute CompanyDataParamModel param){
+    public Result<List<CompanyDataModel>> getForm(){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
-        PaginationData<List<CompanyDataModel>> result = uploadService.getNeedFormList(param,user);
+        List<CompanyDataModel> result = uploadService.getNeedFormList(user);
         return new Result(result);
     }
 
     @ControllerLog(doAction = "数据上报-企业数据上报-获取企业填报历史表单列表")
-    @GetMapping(path = "/company/getFormed")
+    @PostMapping(path = "/company/getFormed")
     @ApiOperation(value = "获取企业填报历史表单列表",notes = "返回企业填报历史表单列表")
     @RequiresPermissions("/data/company/getFormed")
-    public Result<PaginationData<List<CompanyDataModel>>> getFormed(@ModelAttribute CompanyDataParamModel param){
+    public Result<PaginationData<List<CompanyDataModel>>> getFormed(@RequestBody CompanyDataParamModel param){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         PaginationData<List<CompanyDataModel>> result = uploadService.getFormedHistory(param,user);
         return new Result(result);
@@ -90,7 +90,7 @@ public class DataUploadController  extends BaseController {
     @PostMapping(path = "/company/saveCompanyFormData")
     @ApiOperation(value = "保存企业数据上报信息",notes = "返回成功或失败,正常结果为1")
     @RequiresPermissions("/data/company/saveCompanyFormData")
-    public Result<Integer> saveCompanyFormData(@ModelAttribute ModelDataVO data){
+    public Result<Integer> saveCompanyFormData(@RequestBody ModelDataVO data){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         int result = uploadService.saveCompanyFormData(data,user);
         return new Result(result);
@@ -122,20 +122,20 @@ public class DataUploadController  extends BaseController {
 
     /**企业上报数据统计**/
     @ControllerLog(doAction = "数据上报-企业数据上报统计-获取企业数据上报统计表")
-    @GetMapping(path = "/company/getFormView")
+    @PostMapping(path = "/company/getFormView")
     @ApiOperation(value = "获取企业数据上报统计表",notes = "获取企业数据上报统计表")
     @RequiresPermissions("/data/company/getFormView")
-    public Result<PaginationData<List<CompanyDataStatisticsModel>>> getFormView(@ModelAttribute CompanyDataStatisticsParamModel param){
+    public Result<PaginationData<List<CompanyDataStatisticsModel>>> getFormView(@RequestBody CompanyDataStatisticsParamModel param){
         //fileType=1:企业 2园区
 
         return new Result();
     }
 
     @ControllerLog(doAction = "数据上报-企业数据上报统计-获取企业数据上报统计详细列表")
-    @GetMapping(path = "/company/getFormList")
+    @PostMapping(path = "/company/getFormList")
     @ApiOperation(value = "获取企业数据上报统计详细列表",notes = "返回企业数据上报统计详细列表")
     @RequiresPermissions("/data/company/getFormList")
-    public Result<PaginationData<List<CompanyDataModel>>> getFormList(@ModelAttribute CompanyDataParamModel param){
+    public Result<PaginationData<List<CompanyDataModel>>> getFormList(@RequestBody CompanyDataParamModel param){
         //fileType=1:企业 2园区
         return new Result();
     }
@@ -227,25 +227,27 @@ public class DataUploadController  extends BaseController {
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区广告获取")
     @GetMapping(path = "/garden/getAd")
-    @ApiOperation(value = "历史记录详细信息获取",notes = "返回历史记录详细信息")
+    @ApiOperation(value = "园区广告获取",notes = "返回园区广告获取")
     @RequiresPermissions("/data/garden/getAd")
-    public Result<Map<String,Object>> getAd(){
-        return new Result();
+    public Result<Map<String,Set<String>>> getAd(){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new Result(uploadService.getGardenAd(user));
     }
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-本月数据上报")
     @GetMapping(path = "/garden/getCurrentMonthTasks")
     @ApiOperation(value = "园区本月数据上报",notes = "返回园区本月数据上报任务")
     @RequiresPermissions("/data/garden/getCurrentMonthTasks")
-    public Result<PaginationData<List<CompanyDataModel>>> getCurrentMonthTasks(){
-        return new Result();
+    public Result<List<CompanyDataModel>> getCurrentMonthTasks(){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new Result(uploadService.getCurrentMonthTasks(user));
     }
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-本月数据上报保存")
     @PostMapping(path = "/garden/saveTaskData")
     @ApiOperation(value = "园区本月数据上报保存",notes = "返回成功或失败,正常结果为1")
     @RequiresPermissions("/data/garden/saveTaskData")
-    public Result<Integer> saveTaskData(@ModelAttribute ModelDataVO data){
+    public Result<Integer> saveTaskData(@RequestBody ModelDataVO data){
         return new Result();
     }
 
@@ -261,14 +263,14 @@ public class DataUploadController  extends BaseController {
     }
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-数据上报历史记录列表")
-    @GetMapping(path = "/garden/getHostoryTask")
+    @PostMapping(path = "/garden/getHostoryTask")
     @ApiOperation(value = "数据上报历史记录列表",notes = "返回数据上报历史记录列表")
     @RequiresPermissions("/data/garden/getHostoryTask")
     @ApiImplicitParams({
             @ApiImplicitParam(name="modelType",defaultValue = "" ,value = "填报类型",dataType = "String",paramType = "query",example = "填报周期1：年，0：月"),
             @ApiImplicitParam(name="modelName",defaultValue = "" ,value = "填报名称",dataType = "String",paramType = "query",example = "")
     })
-    public Result<PaginationData<List<CompanyDataModel>>> getHostoryTask(@ModelAttribute CompanyDataParamModel param){
+    public Result<PaginationData<List<CompanyDataModel>>> getHostoryTask(@RequestBody CompanyDataParamModel param){
         return new Result();
     }
 
@@ -286,10 +288,10 @@ public class DataUploadController  extends BaseController {
     /**园区上报数据审核**/
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-审核列表")
-    @GetMapping(path = "/garden/getCheckList")
+    @PostMapping(path = "/garden/getCheckList")
     @ApiOperation(value = "审核列表",notes = "返回审核列表")
     @RequiresPermissions("/data/garden/getCheckList")
-    public Result<PaginationData<List<GardenCheckModel>>> getGardenCheckList(@ModelAttribute GardenCheckParamModel param){
+    public Result<PaginationData<List<GardenCheckModel>>> getGardenCheckList(@RequestBody GardenCheckParamModel param){
         return new Result();
     }
 
@@ -322,18 +324,18 @@ public class DataUploadController  extends BaseController {
     /**园区上报数据统计**/
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区内部数据上报列表")
-    @GetMapping(path = "/garden/getStatisticsList")
+    @PostMapping(path = "/garden/getStatisticsList")
     @ApiOperation(value = "园区内部数据上报列表",notes = "返回列表")
     @RequiresPermissions("/data/garden/getStatisticsList")
-    public Result<PaginationData<List<CompanyDataStatisticsModel>>> getStatisticsList(@ModelAttribute CompanyDataStatisticsParamModel param){
+    public Result<PaginationData<List<CompanyDataStatisticsModel>>> getStatisticsList(@RequestBody CompanyDataStatisticsParamModel param){
         return new Result();
     }
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区内部数据列表详情")
-    @GetMapping(path = "/garden/getStatisticsListInfo")
+    @PostMapping(path = "/garden/getStatisticsListInfo")
     @ApiOperation(value = "园区内部数据列表详情",notes = "返回列表详情")
     @RequiresPermissions("/data/garden/getStatisticsListInfo")
-    public Result<PaginationData<List<CompanyDataModel>>> getStatisticsListInfo(@ModelAttribute CompanyDataParamModel param){
+    public Result<PaginationData<List<CompanyDataModel>>> getStatisticsListInfo(@RequestBody CompanyDataParamModel param){
         return new Result();
     }
 

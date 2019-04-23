@@ -180,4 +180,13 @@ public interface SystemClient {
     @RequestMapping(value = "/api/system/getRoleByName", method = RequestMethod.GET)
     Result<SysRole> getRoleByName(@RequestParam("roleName") String roleName);
 
+
+    /**
+     * 调用数据字典接口
+     * @param sysDictInvoke
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getDict", method = RequestMethod.POST)
+    Result getDict(@RequestBody SysDictInvoke sysDictInvoke);
+
 }

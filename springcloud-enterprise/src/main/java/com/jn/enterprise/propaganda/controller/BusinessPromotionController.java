@@ -127,7 +127,25 @@ public class BusinessPromotionController extends BaseController {
         return  new Result(responseNum);
     }
 
-    //修改审批状态的接口
+    @ControllerLog(doAction = "生成订单号")
+    @RequiresPermissions("/propaganda/businessPromotionController/getOrderNumber")
+    @ApiOperation(value = "生成订单号)")
+    @RequestMapping(value = "/getOrderNumber",method = RequestMethod.GET)
+    public Result<String> getOrderNumber(){
+        return  new Result(businessPromotionService.getOrderNumber());
+    }
 
-    //去支付接口
+    @ControllerLog(doAction = "创建账单")
+    @RequiresPermissions("/propaganda/businessPromotionController/createBill")
+    @ApiOperation(value = "创建账单)",notes = "返回账单号，请求成功后，携带账单号跳转至支付方法选择页")
+    @RequestMapping(value = "/createBill",method = RequestMethod.GET)
+    public Result<String> createBill(@ApiParam(value = "订单号(调用生成订单号接口获得)" ,required = true,example = "AD-2019XXX")@RequestParam("orderNum") String orderNum){
+        Assert.notNull(orderNum, BusinessPromotionExceptionEnum.ORDER_NUM_NOT_NULL.getMessage());
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("创建账单获取当前登录用户失败");
+            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        return  new Result(businessPromotionService.createBill(orderNum,user.getAccount()));
+    }
 }

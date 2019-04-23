@@ -17,7 +17,7 @@
     <result column="org_id" jdbcType="VARCHAR" property="orgId" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="pro_fee_rule_code" jdbcType="VARCHAR" property="proFeeRuleCode" />
-    <result column="propaganda_fee" jdbcType="DECIMAL" property="propagandaFee" />
+    <result column="propaganda_fee" jdbcType="DOUBLE" property="propagandaFee" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
     <result column="approval_desc" jdbcType="VARCHAR" property="approvalDesc" />
     <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
@@ -160,7 +160,7 @@
       #{invalidDate,jdbcType=TIMESTAMP}, #{propagandaArea,jdbcType=VARCHAR}, #{propagandaAreaUrl,jdbcType=VARCHAR}, 
       #{posterUrl,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
       #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{proFeeRuleCode,jdbcType=VARCHAR}, 
-      #{propagandaFee,jdbcType=DECIMAL}, #{approvalStatus,jdbcType=VARCHAR}, #{approvalDesc,jdbcType=VARCHAR}, 
+      #{propagandaFee,jdbcType=DOUBLE}, #{approvalStatus,jdbcType=VARCHAR}, #{approvalDesc,jdbcType=VARCHAR}, 
       #{orderCode,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
       #{propagandaDetails,jdbcType=LONGVARCHAR})
@@ -291,7 +291,7 @@
         #{proFeeRuleCode,jdbcType=VARCHAR},
       </if>
       <if test="propagandaFee != null">
-        #{propagandaFee,jdbcType=DECIMAL},
+        #{propagandaFee,jdbcType=DOUBLE},
       </if>
       <if test="approvalStatus != null">
         #{approvalStatus,jdbcType=VARCHAR},
@@ -377,7 +377,7 @@
         pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
       </if>
       <if test="record.propagandaFee != null">
-        propaganda_fee = #{record.propagandaFee,jdbcType=DECIMAL},
+        propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
       </if>
       <if test="record.approvalStatus != null">
         approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
@@ -428,7 +428,7 @@
       org_id = #{record.orgId,jdbcType=VARCHAR},
       org_name = #{record.orgName,jdbcType=VARCHAR},
       pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{record.propagandaFee,jdbcType=DECIMAL},
+      propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
       order_code = #{record.orderCode,jdbcType=VARCHAR},
@@ -459,7 +459,7 @@
       org_id = #{record.orgId,jdbcType=VARCHAR},
       org_name = #{record.orgName,jdbcType=VARCHAR},
       pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{record.propagandaFee,jdbcType=DECIMAL},
+      propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
       order_code = #{record.orderCode,jdbcType=VARCHAR},
@@ -518,7 +518,7 @@
         pro_fee_rule_code = #{proFeeRuleCode,jdbcType=VARCHAR},
       </if>
       <if test="propagandaFee != null">
-        propaganda_fee = #{propagandaFee,jdbcType=DECIMAL},
+        propaganda_fee = #{propagandaFee,jdbcType=DOUBLE},
       </if>
       <if test="approvalStatus != null">
         approval_status = #{approvalStatus,jdbcType=VARCHAR},
@@ -566,7 +566,7 @@
       org_id = #{orgId,jdbcType=VARCHAR},
       org_name = #{orgName,jdbcType=VARCHAR},
       pro_fee_rule_code = #{proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{propagandaFee,jdbcType=DECIMAL},
+      propaganda_fee = #{propagandaFee,jdbcType=DOUBLE},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{approvalDesc,jdbcType=VARCHAR},
       order_code = #{orderCode,jdbcType=VARCHAR},
@@ -594,7 +594,7 @@
       org_id = #{orgId,jdbcType=VARCHAR},
       org_name = #{orgName,jdbcType=VARCHAR},
       pro_fee_rule_code = #{proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{propagandaFee,jdbcType=DECIMAL},
+      propaganda_fee = #{propagandaFee,jdbcType=DOUBLE},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{approvalDesc,jdbcType=VARCHAR},
       order_code = #{orderCode,jdbcType=VARCHAR},

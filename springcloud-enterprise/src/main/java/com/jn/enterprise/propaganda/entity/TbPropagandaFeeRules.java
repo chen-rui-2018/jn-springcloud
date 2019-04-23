@@ -6,7 +6,7 @@ import java.util.Date;
 public class TbPropagandaFeeRules implements Serializable {
     private String proFeeRuleCode;
 
-    private Long propagandaFee;
+    private Double propagandaFee;
 
     private Date createdTime;
 
@@ -30,11 +30,11 @@ public class TbPropagandaFeeRules implements Serializable {
         this.proFeeRuleCode = proFeeRuleCode == null ? null : proFeeRuleCode.trim();
     }
 
-    public Long getPropagandaFee() {
+    public Double getPropagandaFee() {
         return propagandaFee;
     }
 
-    public void setPropagandaFee(Long propagandaFee) {
+    public void setPropagandaFee(Double propagandaFee) {
         this.propagandaFee = propagandaFee;
     }
 

@@ -1,6 +1,5 @@
 package com.jn.oa.item.service;
 
-import com.jn.oa.item.entity.TbOaWorkPlanRecord;
 import com.jn.oa.item.model.WorkPlanRecord;
 import com.jn.system.model.User;
 
@@ -46,5 +45,5 @@ public interface WorkPlanRecordService {
      * @param workPlanId
      * @return
      */
-    List<TbOaWorkPlanRecord> list(String workPlanId);
+    List<WorkPlanRecord> list(String workPlanId);
 }

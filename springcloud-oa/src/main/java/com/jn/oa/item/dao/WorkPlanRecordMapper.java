@@ -28,4 +28,12 @@ public interface WorkPlanRecordMapper {
      * @param workPlanRecordList
      */
     void addBatch(List<WorkPlanRecord> workPlanRecordList);
+
+    /**
+     * 获取工作记录列表
+     *
+     * @param workPlanId
+     * @return
+     */
+    List<WorkPlanRecord> getRecordList(String workPlanId);
 }

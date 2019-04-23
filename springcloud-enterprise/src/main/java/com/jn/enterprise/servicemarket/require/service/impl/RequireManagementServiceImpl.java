@@ -196,8 +196,21 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         tbServiceRequire.setFinancingAmount(requireTechnologyParam.getFinancingAmount());
         //实际贷款金额
         tbServiceRequire.setActualLoanAmount(requireTechnologyParam.getActualLoanAmount());
+        //融资期限没有传值判断标志，默认没有传值
+        boolean flag=true;
         //融资期限
-        tbServiceRequire.setFinancingPeriod(requireTechnologyParam.getFinancingPeriod());
+        if(StringUtils.isNotBlank(requireTechnologyParam.getFinancingPeriodMax())){
+            tbServiceRequire.setFinancingPeriodMax(Integer.parseInt(requireTechnologyParam.getFinancingPeriodMax()));
+            flag=false;
+        }
+        if(StringUtils.isNotBlank(requireTechnologyParam.getFinancingPeriodMin())){
+            tbServiceRequire.setFinancingPeriodMin(Integer.parseInt(requireTechnologyParam.getFinancingPeriodMin()));
+            flag=false;
+        }
+        if(flag){
+            logger.warn("用户提需求(科技金融),融资期限不能为空");
+            throw new JnSpringCloudException(RequireExceptionEnum.FINANCING_PERIOD);
+        }
         //资金需求说明
         tbServiceRequire.setFundsReqDesc(requireTechnologyParam.getFundsReqDesc());
         //资金需求日期
@@ -268,7 +281,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         tbServiceRequire.setReqDetail(requireDetail);
         //需求用户姓名，职务，手机号，邮箱
         tbServiceRequire.setReqName(user.getName());
-        tbServiceRequire.setReqPost(user.getPost());
+        tbServiceRequire.setReqPost(user.getPosition());
         tbServiceRequire.setReqPhone(user.getPhone());
         tbServiceRequire.setReqEmail(user.getEmail());
         //发布日期，发布人

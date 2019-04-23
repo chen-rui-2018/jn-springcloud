@@ -28,7 +28,13 @@ public class EmailSink {
     @StreamListener(MessageSink.EMAIL)
     public void listenEmail(EmailVo emailVo) {
         log.info("收到Email的信息:{}",emailVo.toString()) ;
-        emailService.sendEmail(emailVo);
+        if(emailVo.getTemplateFlag()) {
+            //模板邮件
+            emailService.sendEmailByTemplate(emailVo);
+        }else {
+            //非模板邮件
+            emailService.sendEmail(emailVo);
+        }
         log.info("邮件发送成功,邮件信息:{}",emailVo.toString());
     }
 

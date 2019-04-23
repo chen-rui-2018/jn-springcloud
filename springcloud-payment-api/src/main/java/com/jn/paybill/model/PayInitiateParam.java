@@ -26,6 +26,11 @@ public class PayInitiateParam implements Serializable {
     @ApiModelProperty(value = "支付方式[暂定：0微信1支付宝2银联]",required = true,example = "0")
     private String payMenthed;
 
+    @NotBlank(message = "是否使用积分不能为空")
+    @Pattern(regexp = "^[0,1]$", message = "{usePoints:'是否使用积分只能为[0、1]'}")
+    @ApiModelProperty(value = "是否使用积分[0不使用1使用]",required = true,example = "1")
+    private String usePoints;
+
     public String[] getBillIds() {
         return billIds;
     }
@@ -42,4 +47,11 @@ public class PayInitiateParam implements Serializable {
         this.payMenthed = payMenthed;
     }
 
+    public String getUsePoints() {
+        return usePoints;
+    }
+
+    public void setUsePoints(String usePoints) {
+        this.usePoints = usePoints;
+    }
 }

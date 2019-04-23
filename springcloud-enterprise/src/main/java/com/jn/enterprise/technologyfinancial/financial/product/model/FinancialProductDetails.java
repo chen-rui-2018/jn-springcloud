@@ -68,7 +68,13 @@ public class FinancialProductDetails implements Serializable {
     @ApiModelProperty(value = "提交材料)")
     private String submitMaterial;
     @ApiModelProperty(value = "适用客户)")
-    private String applicableCust;
+    private String applicableCuster;
+    @ApiModelProperty(value = "交易量)")
+    private String transactionNum;
+    @ApiModelProperty(value = "浏览量)")
+    private String viewCount;
+    @ApiModelProperty(value = "评分)")
+    private String evaluationScore;
 
     public String getProductId() {
         return productId;
@@ -286,12 +292,36 @@ public class FinancialProductDetails implements Serializable {
         this.submitMaterial = submitMaterial;
     }
 
-    public String getApplicableCust() {
-        return applicableCust;
+    public String getApplicableCuster() {
+        return applicableCuster;
     }
 
-    public void setApplicableCust(String applicableCust) {
-        this.applicableCust = applicableCust;
+    public void setApplicableCuster(String applicableCuster) {
+        this.applicableCuster = applicableCuster;
+    }
+
+    public String getTransactionNum() {
+        return transactionNum;
+    }
+
+    public void setTransactionNum(String transactionNum) {
+        this.transactionNum = transactionNum;
+    }
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public String getEvaluationScore() {
+        return evaluationScore;
+    }
+
+    public void setEvaluationScore(String evaluationScore) {
+        this.evaluationScore = evaluationScore;
     }
 
     @Override
@@ -324,7 +354,10 @@ public class FinancialProductDetails implements Serializable {
                 ", productFeature='" + productFeature + '\'' +
                 ", applyCondition='" + applyCondition + '\'' +
                 ", submitMaterial='" + submitMaterial + '\'' +
-                ", applicableCust='" + applicableCust + '\'' +
+                ", applicableCuster='" + applicableCuster + '\'' +
+                ", transactionNum='" + transactionNum + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", evaluationScore='" + evaluationScore + '\'' +
                 '}';
     }
 }

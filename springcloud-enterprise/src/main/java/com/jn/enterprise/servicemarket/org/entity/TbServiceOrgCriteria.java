@@ -402,6 +402,426 @@ public class TbServiceOrgCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andOrgCodeIsNull() {
+            addCriterion("org_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeIsNotNull() {
+            addCriterion("org_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeEqualTo(String value) {
+            addCriterion("org_code =", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotEqualTo(String value) {
+            addCriterion("org_code <>", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeGreaterThan(String value) {
+            addCriterion("org_code >", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("org_code >=", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeLessThan(String value) {
+            addCriterion("org_code <", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeLessThanOrEqualTo(String value) {
+            addCriterion("org_code <=", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeLike(String value) {
+            addCriterion("org_code like", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotLike(String value) {
+            addCriterion("org_code not like", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeIn(List<String> values) {
+            addCriterion("org_code in", values, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotIn(List<String> values) {
+            addCriterion("org_code not in", values, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeBetween(String value1, String value2) {
+            addCriterion("org_code between", value1, value2, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotBetween(String value1, String value2) {
+            addCriterion("org_code not between", value1, value2, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusIsNull() {
+            addCriterion("operate_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusIsNotNull() {
+            addCriterion("operate_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusEqualTo(String value) {
+            addCriterion("operate_status =", value, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusNotEqualTo(String value) {
+            addCriterion("operate_status <>", value, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusGreaterThan(String value) {
+            addCriterion("operate_status >", value, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("operate_status >=", value, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusLessThan(String value) {
+            addCriterion("operate_status <", value, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusLessThanOrEqualTo(String value) {
+            addCriterion("operate_status <=", value, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusLike(String value) {
+            addCriterion("operate_status like", value, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusNotLike(String value) {
+            addCriterion("operate_status not like", value, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusIn(List<String> values) {
+            addCriterion("operate_status in", values, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusNotIn(List<String> values) {
+            addCriterion("operate_status not in", values, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusBetween(String value1, String value2) {
+            addCriterion("operate_status between", value1, value2, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateStatusNotBetween(String value1, String value2) {
+            addCriterion("operate_status not between", value1, value2, "operateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalIsNull() {
+            addCriterion("org_principal is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalIsNotNull() {
+            addCriterion("org_principal is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalEqualTo(String value) {
+            addCriterion("org_principal =", value, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalNotEqualTo(String value) {
+            addCriterion("org_principal <>", value, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalGreaterThan(String value) {
+            addCriterion("org_principal >", value, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalGreaterThanOrEqualTo(String value) {
+            addCriterion("org_principal >=", value, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalLessThan(String value) {
+            addCriterion("org_principal <", value, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalLessThanOrEqualTo(String value) {
+            addCriterion("org_principal <=", value, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalLike(String value) {
+            addCriterion("org_principal like", value, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalNotLike(String value) {
+            addCriterion("org_principal not like", value, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalIn(List<String> values) {
+            addCriterion("org_principal in", values, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalNotIn(List<String> values) {
+            addCriterion("org_principal not in", values, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalBetween(String value1, String value2) {
+            addCriterion("org_principal between", value1, value2, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgPrincipalNotBetween(String value1, String value2) {
+            addCriterion("org_principal not between", value1, value2, "orgPrincipal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeIsNull() {
+            addCriterion("org_busin_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeIsNotNull() {
+            addCriterion("org_busin_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeEqualTo(String value) {
+            addCriterion("org_busin_type =", value, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeNotEqualTo(String value) {
+            addCriterion("org_busin_type <>", value, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeGreaterThan(String value) {
+            addCriterion("org_busin_type >", value, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("org_busin_type >=", value, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeLessThan(String value) {
+            addCriterion("org_busin_type <", value, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeLessThanOrEqualTo(String value) {
+            addCriterion("org_busin_type <=", value, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeLike(String value) {
+            addCriterion("org_busin_type like", value, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeNotLike(String value) {
+            addCriterion("org_busin_type not like", value, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeIn(List<String> values) {
+            addCriterion("org_busin_type in", values, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeNotIn(List<String> values) {
+            addCriterion("org_busin_type not in", values, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeBetween(String value1, String value2) {
+            addCriterion("org_busin_type between", value1, value2, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinTypeNotBetween(String value1, String value2) {
+            addCriterion("org_busin_type not between", value1, value2, "orgBusinType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressIsNull() {
+            addCriterion("org_busin_address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressIsNotNull() {
+            addCriterion("org_busin_address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressEqualTo(String value) {
+            addCriterion("org_busin_address =", value, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressNotEqualTo(String value) {
+            addCriterion("org_busin_address <>", value, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressGreaterThan(String value) {
+            addCriterion("org_busin_address >", value, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("org_busin_address >=", value, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressLessThan(String value) {
+            addCriterion("org_busin_address <", value, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressLessThanOrEqualTo(String value) {
+            addCriterion("org_busin_address <=", value, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressLike(String value) {
+            addCriterion("org_busin_address like", value, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressNotLike(String value) {
+            addCriterion("org_busin_address not like", value, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressIn(List<String> values) {
+            addCriterion("org_busin_address in", values, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressNotIn(List<String> values) {
+            addCriterion("org_busin_address not in", values, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressBetween(String value1, String value2) {
+            addCriterion("org_busin_address between", value1, value2, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinAddressNotBetween(String value1, String value2) {
+            addCriterion("org_busin_address not between", value1, value2, "orgBusinAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeIsNull() {
+            addCriterion("org_busin_scope is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeIsNotNull() {
+            addCriterion("org_busin_scope is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeEqualTo(String value) {
+            addCriterion("org_busin_scope =", value, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeNotEqualTo(String value) {
+            addCriterion("org_busin_scope <>", value, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeGreaterThan(String value) {
+            addCriterion("org_busin_scope >", value, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeGreaterThanOrEqualTo(String value) {
+            addCriterion("org_busin_scope >=", value, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeLessThan(String value) {
+            addCriterion("org_busin_scope <", value, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeLessThanOrEqualTo(String value) {
+            addCriterion("org_busin_scope <=", value, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeLike(String value) {
+            addCriterion("org_busin_scope like", value, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeNotLike(String value) {
+            addCriterion("org_busin_scope not like", value, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeIn(List<String> values) {
+            addCriterion("org_busin_scope in", values, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeNotIn(List<String> values) {
+            addCriterion("org_busin_scope not in", values, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeBetween(String value1, String value2) {
+            addCriterion("org_busin_scope between", value1, value2, "orgBusinScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgBusinScopeNotBetween(String value1, String value2) {
+            addCriterion("org_busin_scope not between", value1, value2, "orgBusinScope");
+            return (Criteria) this;
+        }
+
         public Criteria andIsApproveIsNull() {
             addCriterion("is_approve is null");
             return (Criteria) this;
@@ -1539,216 +1959,6 @@ public class TbServiceOrgCriteria {
 
         public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("record_status not between", value1, value2, "recordStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeIsNull() {
-            addCriterion("org_code is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeIsNotNull() {
-            addCriterion("org_code is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeEqualTo(String value) {
-            addCriterion("org_code =", value, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeNotEqualTo(String value) {
-            addCriterion("org_code <>", value, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeGreaterThan(String value) {
-            addCriterion("org_code >", value, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeGreaterThanOrEqualTo(String value) {
-            addCriterion("org_code >=", value, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeLessThan(String value) {
-            addCriterion("org_code <", value, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeLessThanOrEqualTo(String value) {
-            addCriterion("org_code <=", value, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeLike(String value) {
-            addCriterion("org_code like", value, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeNotLike(String value) {
-            addCriterion("org_code not like", value, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeIn(List<String> values) {
-            addCriterion("org_code in", values, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeNotIn(List<String> values) {
-            addCriterion("org_code not in", values, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeBetween(String value1, String value2) {
-            addCriterion("org_code between", value1, value2, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgCodeNotBetween(String value1, String value2) {
-            addCriterion("org_code not between", value1, value2, "orgCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusIsNull() {
-            addCriterion("operate_status is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusIsNotNull() {
-            addCriterion("operate_status is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusEqualTo(String value) {
-            addCriterion("operate_status =", value, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusNotEqualTo(String value) {
-            addCriterion("operate_status <>", value, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusGreaterThan(String value) {
-            addCriterion("operate_status >", value, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusGreaterThanOrEqualTo(String value) {
-            addCriterion("operate_status >=", value, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusLessThan(String value) {
-            addCriterion("operate_status <", value, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusLessThanOrEqualTo(String value) {
-            addCriterion("operate_status <=", value, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusLike(String value) {
-            addCriterion("operate_status like", value, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusNotLike(String value) {
-            addCriterion("operate_status not like", value, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusIn(List<String> values) {
-            addCriterion("operate_status in", values, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusNotIn(List<String> values) {
-            addCriterion("operate_status not in", values, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusBetween(String value1, String value2) {
-            addCriterion("operate_status between", value1, value2, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOperateStatusNotBetween(String value1, String value2) {
-            addCriterion("operate_status not between", value1, value2, "operateStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalIsNull() {
-            addCriterion("org_principal is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalIsNotNull() {
-            addCriterion("org_principal is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalEqualTo(String value) {
-            addCriterion("org_principal =", value, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalNotEqualTo(String value) {
-            addCriterion("org_principal <>", value, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalGreaterThan(String value) {
-            addCriterion("org_principal >", value, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalGreaterThanOrEqualTo(String value) {
-            addCriterion("org_principal >=", value, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalLessThan(String value) {
-            addCriterion("org_principal <", value, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalLessThanOrEqualTo(String value) {
-            addCriterion("org_principal <=", value, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalLike(String value) {
-            addCriterion("org_principal like", value, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalNotLike(String value) {
-            addCriterion("org_principal not like", value, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalIn(List<String> values) {
-            addCriterion("org_principal in", values, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalNotIn(List<String> values) {
-            addCriterion("org_principal not in", values, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalBetween(String value1, String value2) {
-            addCriterion("org_principal between", value1, value2, "orgPrincipal");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgPrincipalNotBetween(String value1, String value2) {
-            addCriterion("org_principal not between", value1, value2, "orgPrincipal");
             return (Criteria) this;
         }
     }

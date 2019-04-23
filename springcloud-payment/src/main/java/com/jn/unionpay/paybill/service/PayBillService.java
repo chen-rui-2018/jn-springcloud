@@ -23,6 +23,12 @@ public interface PayBillService {
      * @return
      */
     PaginationData<List<PaymentBill>> getPaymentBillList(PaymentBillParam paymentBillParam);
+    /**
+     * 根据条件查询账单数据
+     * @param billIds
+     * @return
+     */
+    List<PaymentBill> getPaymentBillListByIds(String[] billIds);
 
     /**
      * 创建缴费账单

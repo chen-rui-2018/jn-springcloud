@@ -2,9 +2,8 @@ package com.jn.enterprise.technologyfinancial.investors.dao;
 
 import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorEduExp;
 import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorEduExpCriteria;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface TbServiceInvestorEduExpMapper {
     long countByExample(TbServiceInvestorEduExpCriteria example);

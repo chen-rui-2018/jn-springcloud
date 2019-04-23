@@ -234,7 +234,7 @@ public class EmailServiceImpl implements EmailService {
      * @throws IOException
      */
     private void downlownAttachment(List<String> fileList, EmailVo emailVo, String attachment) throws IOException {
-        if (attachment != null) {
+        if (StringUtils.isNotBlank(attachment)) {
             ObjectMapper objectMapper = new ObjectMapper();
             List<Map<String, String>> list = objectMapper.readValue(attachment, List.class);
             for (Map<String, String> map : list) {

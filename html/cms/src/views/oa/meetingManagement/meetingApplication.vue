@@ -155,8 +155,8 @@
 
 <script>
 import {
-  paramApi, api, userAllList, getUserInfo, getAllDepartment, userList
-} from '@/api/oa/meetingManagement'
+  paramApi, api
+} from '@/api/axios'
 export default {
   data() {
     var checkBuilding = (rule, value, callback) => {
@@ -270,8 +270,8 @@ export default {
     },
     // 获取所有用户
     getALLlist() {
-      userAllList().then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysUser/getUserAll`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           res.data.data.forEach(val => {
             if (val.name !== null) {
               this.participantsIdOptions.push({ value: val.id, label: val.name })
@@ -286,8 +286,8 @@ export default {
     },
     // 获取组织部门列表
     getAllDepartment() {
-      getAllDepartment().then(({ data }) => {
-        if (data.code === '0000') {
+      api(`${this.GLOBAL.parkUrl}finance/expenses/selectDepartment`, '', 'get').then(({ data }) => {
+        if (data.code === this.GLOBAL.code) {
           this.departmentOptions = data.data.map(item => ({ value: item.departmentId, label: item.departmentName }))
         } else {
           this.$message.error(data.result)
@@ -301,8 +301,8 @@ export default {
         page: 1,
         rows: 2000
       }
-      userList(query).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/addressBook/list`, query, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.userOfDepartmentOptions = res.data.data.rows.map(item => ({ value: item.id, label: item.name || item.account }))
         } else {
           this.$message.error(res.data.result)
@@ -311,8 +311,8 @@ export default {
     },
     // 获取登陆用户信息
     getUserInfo() {
-      getUserInfo().then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysUser/getUserInfo`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.userName = res.data.data.name
           if (res.data.data.sysDepartmentPostVO && res.data.data.sysDepartmentPostVO.length > 0) {
             res.data.data.sysDepartmentPostVO.forEach(val => {
@@ -351,8 +351,8 @@ export default {
         // 调用接口发送请求
         this.listQuery.startTime = this.startDate + ' ' + this.startTime + ':00'
         this.listQuery.endTime = this.startDate + ' ' + this.endTime + ':00'
-        api('oa/oaMeetingRoom/availableList', this.listQuery).then(res => {
-          if (res.data.code === '0000') {
+        api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/availableList`, this.listQuery, 'post').then(res => {
+          if (res.data.code === this.GLOBAL.code) {
             this.meetingroomList = res.data.data.rows
           } else {
             this.$message.error(res.data.result)
@@ -362,8 +362,8 @@ export default {
     },
     // 弹出的选择会议室对话框的查询条件
     handleFilter() {
-      api('oa/oaMeetingRoom/availableList', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/availableList`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.meetingroomList = res.data.data.rows
         } else {
           this.$message.error(res.data.result)
@@ -395,13 +395,13 @@ export default {
       if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
         this.$refs['meetingForm'].validate(valid => {
           if (valid) {
-            if (this.meetingForm.participantsStr.length > 1 && this.meetingForm.startTime && this.meetingForm.endTime) {
+            if (this.meetingForm.participantsStr.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
               // 调用接口发送请求
               const meetingForm = Object.assign({}, this.meetingForm)
               meetingForm.participantsStr = meetingForm.participantsStr.join('、')
               meetingForm.fileUrl = this.tempFileUrl ? this.tempFileUrl : meetingForm.fileUrl
-              api('oa/oaMeeting/update', meetingForm).then(res => {
-                if (res.data.code === '0000') {
+              api(`${this.GLOBAL.oaUrl}oa/oaMeeting/update`, meetingForm, 'post').then(res => {
+                if (res.data.code === this.GLOBAL.code) {
                   this.$message({
                     message: '会议编辑成功',
                     type: 'success'
@@ -450,13 +450,15 @@ export default {
       if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
         this.$refs['meetingForm'].validate(valid => {
           if (valid) {
-            if (this.meetingForm.participantsStr.length > 1 && this.meetingForm.startTime && this.meetingForm.endTime) {
+            alert('123')
+            if (this.meetingForm.participantsStr.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
             // 调用接口发送请求
+              alert('345')
               const meetingForm = Object.assign({}, this.meetingForm)
               meetingForm.participantsStr = meetingForm.participantsStr.join('、')
               meetingForm.fileUrl = this.tempFileUrl ? this.tempFileUrl : meetingForm.fileUrl
-              api('oa/oaMeeting/add', meetingForm).then(res => {
-                if (res.data.code === '0000') {
+              api(`${this.GLOBAL.oaUrl}oa/oaMeeting/add`, meetingForm, 'post').then(res => {
+                if (res.data.code === this.GLOBAL.code) {
                   this.$message({
                     message: '会议申请成功',
                     type: 'success'
@@ -500,8 +502,8 @@ export default {
             this.dialogStatus = '查看会议'
           }
           this.meetingForm.id = query.id
-          paramApi('oa/oaMeeting/selectById', query.id, 'id').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.oaUrl}oa/oaMeeting/selectById`, query.id, 'id').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               var data = res.data.data
               this.meetingForm.title = data.title
               this.meetingForm.departmentsId = data.departmentsId
@@ -513,6 +515,7 @@ export default {
               if (data.startTime !== null) {
                 this.startTime = data.startTime.substring(10, 16)
               }
+              console.log(this.startTime)
               if (data.endTime !== null) {
                 this.endTime = data.endTime.substring(10, 16)
               }
@@ -551,7 +554,7 @@ export default {
       this.tempFileUrl = res.data
     },
     beforeUpload(file) {
-      // 判断上传文件类型
+      // // 判断上传文件类型
       const isAccept = this.acceptType.indexOf(file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase())
       if (isAccept < 0) {
         this.$message.warning(`只支持${this.acceptType.join(',')}文件类型`)
@@ -654,14 +657,15 @@ export default {
      display: inline-block;
      margin-right: 21px;
      margin-top: 30px;
+     padding: 10px;
     //  box-sizing: border-box;
      img{
        width: 100%;
-       height: 100%;
+       height: 182px;
      }
    }
    .active{
-     border:2px solid blueviolet;
+     border:2px solid rgb(226, 43, 113);
    }
    h3{
      text-align: center;

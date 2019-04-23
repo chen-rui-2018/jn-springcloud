@@ -155,7 +155,7 @@ export default {
   methods: {
     // 导出
     handleexcel() {
-      api(`${this.GLOBAL.financUrl}finance/income/exportContrast?year=${this.textYear.slice(0, 4)}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/income/exportContrast?year=${this.textYear.slice(0, 4)}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
     },
@@ -427,7 +427,7 @@ export default {
     },
     // 获取表格数据
     getTableDate() {
-      api(`${this.GLOBAL.financUrl}finance/income/lastYearContrast?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/income/lastYearContrast?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.rows.length > 0) {
             this.incomeList = res.data.data.rows
@@ -445,7 +445,7 @@ export default {
     },
     // 获取汇总信息
     getCollect() {
-      api(`${this.GLOBAL.financUrl}finance/income/summarizingProportion?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/income/summarizingProportion?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.collectPie(res.data.data)
         } else {
@@ -456,7 +456,7 @@ export default {
     },
     // 获取明细， 同期对比
     getPeriodContrast() {
-      api(`${this.GLOBAL.financUrl}finance/income/periodContrast?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/income/periodContrast?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           // myChart.setOption.xAxis.data = res.data
           if (res.data.data.rows.length > 1) {

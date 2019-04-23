@@ -10,7 +10,6 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import 'babel-polyfill'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
 import '@/styles/index.scss' // global css
 // 引入字体图标
 import '@/assets/icon/css/font-awesome.min.css'

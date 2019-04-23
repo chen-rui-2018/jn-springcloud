@@ -178,7 +178,10 @@
            tt.serviceCycle,     <!--服务周期-->
            tt.pictureUrl,       <!--产品图片-->
            tt.serviceDetails,   <!--服务详情-->
-           tt.viewCount,        <!--浏览次数-->
+           (select count(1)  from tb_service_product tp1 where tp1.signory_id = tt.signory_id  and tp1.template_id is not null) as "sameTypeNum",  <!--同类型产品数-->
+           (select count(1)  from tb_service_product tp2 where tp2.signory_id = tt.signory_id  and tp2.product_type = '0' and tp2.template_id is not null) as "commentNum", <!--同类型常规产品数-->
+           (select count(1)  from tb_service_product tp3 where tp3.signory_id = tt.signory_id  and tp3.product_type = '1') as "featureNum",         <!--同类型特色产品数-->
+           tt.viewCount,          <!--浏览次数-->
            tt.transactionsNumber, <!--交易次数-->
            round(tt.attitudeScore,1 )AS "evaluationScore" <!--综合评分-->
         from (
@@ -186,10 +189,11 @@
                 t1.product_id as "productId",
                 t1.product_name as "productName",
                 t1.serial_number as "serialNumber",
+                t1.signory_id as "signory_id",
                 t1.refer_price as "referPrice",
                 t1.service_cycle as "serviceCycle",
                 t1.view_count as "viewCount",
-        t1.picture_url as "pictureUrl",
+                t1.picture_url as "pictureUrl",
                 t2.org_name as "orgName",
                 (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
                 select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = #{productId}
@@ -203,9 +207,8 @@
                 left join  tb_service_require t4 on t1.product_id = t4.product_id
                 left join  tb_service_rating t5 on t5.product_id = t1.product_id
                 where t1.record_status = '1' and  t1.product_id = #{productId} group by t1.product_id,t4.product_id,t5.product_id
-        )tt;
+        )tt
     </select>
-
     <!--web 服务产品列表-->
     <select id = "findWebProductList"  parameterType= "com.jn.enterprise.servicemarket.product.model.ProductQueryConditions" resultType = "com.jn.enterprise.servicemarket.product.model.WebServiceProductInfo">
                 select
@@ -249,7 +252,10 @@
                left join  tb_service_details t3 on t1.product_id = t3.product_id
                left join  tb_service_require t4 on t1.product_id = t4.product_id
                left join  tb_service_rating t5 on t5.product_id = t1.product_id
-               where  t1.record_status = '1' and t1.status = '1'
+               where  t1.record_status = '1' and t1.status = '1' and  t1.signory_id !="technology_finance"
+               <if test="commentProductId != null and  commentProductId !=''">
+                    and  t1.template_id = #{commentProductId}
+               </if>
                <if test="productType != null and  productType !=''">
                    and  t1.product_type = #{productType}
                </if>
@@ -299,7 +305,7 @@ select
 from tb_service_product t1
        left join  tb_service_org t2 on  t2.org_id= t1.org_id
        where  1=1
-       and t1.org_id = #{orgId}
+       and t1.org_id = #{orgId} and  t1.signory_id !="technology_finance"
         <if test = "productType != null and productType != ''">
           and  t1.product_type = #{productType}
         </if>

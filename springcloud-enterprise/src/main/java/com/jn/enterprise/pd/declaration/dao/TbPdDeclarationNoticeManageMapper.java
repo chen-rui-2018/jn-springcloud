@@ -16,21 +16,15 @@ public interface TbPdDeclarationNoticeManageMapper {
 
     int insertSelective(TbPdDeclarationNoticeManage record);
 
-    List<TbPdDeclarationNoticeManage> selectByExampleWithBLOBs(TbPdDeclarationNoticeManageCriteria example);
-
     List<TbPdDeclarationNoticeManage> selectByExample(TbPdDeclarationNoticeManageCriteria example);
 
     TbPdDeclarationNoticeManage selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdDeclarationNoticeManage record, @Param("example") TbPdDeclarationNoticeManageCriteria example);
 
-    int updateByExampleWithBLOBs(@Param("record") TbPdDeclarationNoticeManage record, @Param("example") TbPdDeclarationNoticeManageCriteria example);
-
     int updateByExample(@Param("record") TbPdDeclarationNoticeManage record, @Param("example") TbPdDeclarationNoticeManageCriteria example);
 
     int updateByPrimaryKeySelective(TbPdDeclarationNoticeManage record);
-
-    int updateByPrimaryKeyWithBLOBs(TbPdDeclarationNoticeManage record);
 
     int updateByPrimaryKey(TbPdDeclarationNoticeManage record);
 }

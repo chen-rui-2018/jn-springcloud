@@ -132,10 +132,11 @@ export default {
           childrenShow:false,
         },
         {
-          name: "人才申报",
+          name: "流程系统",
           flag: false,
           // path: "@/../components/userHome",
           // path: "/user/userData",
+          //path: "http://112.94.22.222:2381/ibps",
           hasChildren:true,
           pathName: "userData",
           id: 1,
@@ -143,10 +144,10 @@ export default {
           children: [
 
             {
-              name: "流程系统",
+              name: "人才申报",
               flag: false,
-              path: "http://112.94.22.222:2381",
-              id: 11,
+              path: "http://112.94.22.222:2381/ibps",
+              id: 11
             }
           ]
         }
@@ -168,7 +169,7 @@ export default {
   },
   mounted() {
     // 预先登录模式
-    $('#kskfpt').attr('src', `http://112.94.22.222:2381/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
+    $('#kskfpt').attr('src', `http://112.94.22.222:2381/ibps/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
     this.getUserExtension();
   },
   updated(){

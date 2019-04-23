@@ -25,9 +25,12 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     COMMENT_IS_EXIST("5020513", "该需求已评论，无需再次提交"),
     TEAM_ELEMENTS_IS_EXIST("5020514", "机构团队信息已存在，无需再次添加"),
     SAVE_ORG_BASIC_DATA_ERROR("5020515", "保存服务机构基本信息失败"),
-    SAVE_ORG_LICENSE_DATA_ERROR("5020515", "保存服务机构资质信息失败"),
-    SAVE_ORG_TEAM_DATA_ERROR("5020515", "保存服务机构团队信息失败"),
-    SAVE_ORG_CONTACT_DATA_ERROR("5020515", "保存服务机构联系信息失败"),
+    SAVE_ORG_LICENSE_DATA_ERROR("5020516", "保存服务机构资质信息失败"),
+    SAVE_ORG_TEAM_DATA_ERROR("5020517", "保存服务机构团队信息失败"),
+    SAVE_ORG_CONTACT_DATA_ERROR("5020518", "保存服务机构联系信息失败"),
+    LOGIN_ACCOUNT_NOT_ORG_MANAGE("5020519","当前登录用户不是机构管理员，不能把顾问设为联系人"),
+    ACCOUNT_NOT_ORG_ADVISOR("5020519","设为联系人的账号不是机构顾问"),
+    ACCOUNT_NOT_ORG_CONTACT("5020520","取消联系人的账号不是机构联系人"),
     ;
 
     /**

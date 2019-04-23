@@ -145,18 +145,18 @@ export default new Router({
       meta: {title: '人才服务申报平台'},
       name:'talentPlatform'
     },
-    {
+/*     {
       path: '/familiarProblem',
       component: resolve => require(['@/views/talentsService/familiarProblem'],resolve),
       meta: {title: '常见问题列表'},
       name:'familiarProblem'
-    },
-    {
+    }, */
+  /*   {
       path: '/familiarProblemDetail',
       component: resolve => require(['@/views/talentsService/familiarProblemDetail'],resolve),
       meta: {title: '常见问题详情'},
       name:'familiarProblemDetail'
-    },
+    }, */
     {
       path: '/talentsServiceDetail',
       component: resolve => require(['@/views/talentsService/talentsServiceDetail'],resolve),
@@ -187,6 +187,12 @@ export default new Router({
         name:'productPutaway',
         meta: {title: '常规产品上架'},
         component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryproductDetail',
+        name:'ordinaryproductDetail',
+        meta: {title: '常规产品详情'},
+        component:resolve => require(['@/views/home/productService/ordinaryproductDetail'],resolve)
         }
       ]
     }

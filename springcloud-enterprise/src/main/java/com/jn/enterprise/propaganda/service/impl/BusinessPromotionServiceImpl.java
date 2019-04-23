@@ -393,13 +393,14 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @ServiceLog(doAction = "撤销申请")
     @Override
     public int cancelApprove(String propagandaId, String loginAccount) {
-        //根据宣传id，审批状态为未付款（value="-1"）查询系统中是否有当前数据
+        //根据宣传id，审批状态为未付款（value="-1"）和未审批（value="0"）查询系统中是否有当前数据
+        List<String>statusList=Arrays.asList("-1","0");
         TbPropagandaCriteria example=new TbPropagandaCriteria();
-        example.createCriteria().andIdEqualTo(propagandaId).andApprovalStatusEqualTo("-1")
+        example.createCriteria().andIdEqualTo(propagandaId).andApprovalStatusIn(statusList)
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         long responseNum = tbPropagandaMapper.countByExample(example);
         if(responseNum==0){
-            logger.warn("撤销申请失败,系统中不存在id[{}],状态为有效，审批状态为未付款的数据",propagandaId);
+            logger.warn("撤销申请失败,系统中不存在id[{}],状态为有效，审批状态为未付款、未审批的数据",propagandaId);
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_INFO_NOT_EXIST);
         }
         TbPropaganda tbPropaganda=new TbPropaganda();

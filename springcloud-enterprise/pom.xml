@@ -30,9 +30,17 @@
             <artifactId>springcloud-user-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-park-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -64,9 +72,11 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        data
+                        propaganda
                     </contexts>
                     <tableNames>
+                        tb_propaganda,
+                        tb_propaganda_fee_rules
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

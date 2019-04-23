@@ -357,7 +357,8 @@
                          targetProject="src/main/java">
       <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>
-    <table tableName="tb_gam_topic">
+    <table tableName="tb_gam_topic"/>
+    <table tableName="tb_person_care">
     </table>
   </context>
 
@@ -579,6 +580,8 @@
         <table tableName="tb_sp_power_busi"></table>
         <!--对外行政审批中心-权力清单-服务业务-办理清单-->
         <table tableName="tb_sp_power_busi_materials"></table>
+        <!--对外行政审批中心-行政审批广告-->
+        <table tableName="tb_sp_ad"></table>
     </context>
 
 </generatorConfiguration>

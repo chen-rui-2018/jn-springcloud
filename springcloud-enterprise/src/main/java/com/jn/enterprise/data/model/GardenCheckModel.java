@@ -1,8 +1,11 @@
 package com.jn.enterprise.data.model;
 
+import com.github.pagehelper.PageInfo;
+import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +16,7 @@ import java.util.Date;
  */
 
 @ApiModel(value = "GardenCheckModel",description = "园区审核列表")
-public class GardenCheckModel {
+public class GardenCheckModel implements Serializable{
     @ApiModelProperty(value = "填报状态",example = "0")
     private String status;
 
@@ -37,6 +40,9 @@ public class GardenCheckModel {
 
     @ApiModelProperty(value = "部门名称",example = "招商部")
     private String fillInFormName;
+
+    @ApiModelProperty(value = "任务批次",example = "001")
+    private String taskBatch;
 
     public String getStatus() {
         return status;
@@ -100,5 +106,13 @@ public class GardenCheckModel {
 
     public void setFillInFormName(String fillInFormName) {
         this.fillInFormName = fillInFormName;
+    }
+
+    public String getTaskBatch() {
+        return taskBatch;
+    }
+
+    public void setTaskBatch(String taskBatch) {
+        this.taskBatch = taskBatch;
     }
 }

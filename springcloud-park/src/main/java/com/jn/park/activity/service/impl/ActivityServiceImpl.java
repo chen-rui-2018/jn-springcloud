@@ -69,9 +69,10 @@ public class ActivityServiceImpl implements ActivityService {
      */
     private static final String ACTIVITY_STATE_DRAFT = "1";
     /**
-     * 活动发布 - 报名中
+     * 活动发布 - 2报名中 3已结束
      */
     private static final String ACTIVITY_STATE_PUBLISH = "2";
+    private static final String ACTIVITY_STATE_FINISH = "3";
     /**
      * 正常数据（1：未删除状态）
      */
@@ -511,4 +512,29 @@ public class ActivityServiceImpl implements ActivityService {
 
         return new PaginationData(activityList,objects==null?0:objects.getTotal());
     }
+    @ServiceLog(doAction = "查看机构下的活动列表")
+    @Override
+    public PaginationData findOrgActivityList(OrgActivityParam query, String activityType, boolean needPage) {
+        int pageSize = query.getRows() == 0 ? 15 : query.getRows();
+        int pageNumber = query.getPage();
+        Page<Object> objects = null;
+        if(needPage){
+            objects = PageHelper.startPage(pageNumber,pageSize,true);
+        }
+        List<OrgActivityShow> activityList =  activityMapper.findOrgActivityList(query.getStartTime(),query.getEndTime(),activityType,query.getTimeInterval());
+        return new PaginationData(activityList,objects==null?0:objects.getTotal());
+    }
+
+    @ServiceLog(doAction = "获取有效活动总数")
+    @Override
+    public String getActivityNum(){
+        TbActivityCriteria activityCriteria = new TbActivityCriteria();
+        List<String> sList = new ArrayList<>(16);
+        sList.add(ACTIVITY_STATE_PUBLISH);
+        sList.add(ACTIVITY_STATE_FINISH);
+        activityCriteria.createCriteria().andRecordStatusEqualTo(new Byte(ACTIVITY_STATE_NOT_DELETE)).andActiStatusIn(sList);
+        long activityNum = tbActivityMapper.countByExample(activityCriteria);
+        return activityNum+"";
+    }
+
 }

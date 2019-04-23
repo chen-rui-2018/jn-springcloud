@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.company.dao.StaffMapper">
+
+    <!-- 获取员工列表邀请状态 -->
+    <select id="getStaffStatusList" resultType="com.jn.enterprise.company.model.StaffStatusList">
+        SELECT
+            a.id AS "staffId",
+            a.account AS "account",
+            a.check_time AS "checkTime",
+            CASE
+                WHEN a.invite_status = '6' THEN
+                    CASE
+                        WHEN a.check_status = '0' THEN '待审批'
+                        WHEN a.check_status = '1' THEN '审批通过'
+                        WHEN a.check_status = '-1' THEN '审批未通过'
+                    ELSE a.check_status END
+				ELSE
+				    CASE
+				        WHEN a.invite_status = '5' THEN '已邀请'
+				        WHEN a.invite_status = '7' THEN '已拒绝'
+				    ELSE 'error' END
+            END AS "statusShow"
+        FROM tb_service_company_staff a
+        WHERE a.record_status = '1'
+        AND a.com_id = #{comId}
+        <if test="status != null and status != ''">
+            AND (a.check_status = #{status} OR a.invite_status = #{status})
+        </if>
+        <if test="accountList != null">
+          AND a.account IN 
+          <foreach collection="accountList" item="account" open="(" close=")" separator=",">
+              #{account}
+          </foreach>
+        </if>
+        ORDER BY a.check_time DESC, a.created_time DESC
+    </select>
+
+    <!-- 获取待审核列表 -->
+    <select id="getAuditStatus" resultType="com.jn.enterprise.company.vo.StaffAuditVO">
+        SELECT
+            a.id AS "staffId",
+            a.account AS "account",
+            a.invite_time AS "inviteTime",
+            a.com_id AS "comId",
+            tsc.com_name AS "comName"
+        FROM tb_service_company_staff a
+        LEFT JOIN tb_service_company tsc ON a.com_id = tsc.id
+        WHERE a.record_status = '1'
+        AND a.check_status = '0'
+        AND a.account = #{account}
+        ORDER BY a.invite_time DESC
+    </select>
+
+    <!-- 批量邀请员工 -->
+    <insert id="inviteStaffs" parameterType="java.util.List">
+        INSERT INTO tb_service_company_staff (
+            id,
+            account,
+            com_id,
+            com_name,
+            invite_status,
+            inviter_account,
+            invite_time,
+            created_time,
+            creator_account,
+            record_status
+        ) VALUES
+        <foreach collection="staffList" item="staff" separator="," >
+            (
+                #{staff.id},
+                #{staff.account},
+                #{staff.comId},
+                #{staff.comName},
+                #{staff.inviteStatus},
+                #{staff.inviterAccount},
+                #{staff.inviteTime},
+                #{staff.createdTime},
+                #{staff.creatorAccount},
+                #{staff.recordStatus}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

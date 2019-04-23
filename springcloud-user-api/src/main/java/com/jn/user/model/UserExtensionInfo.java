@@ -46,12 +46,14 @@ public class UserExtensionInfo implements Serializable {
     private String signature;
     @ApiModelProperty(value = "公司")
     private String company;
-    @ApiModelProperty(value = "岗位")
-    private String post;
     @ApiModelProperty(value = "学历")
     private String education;
+    @ApiModelProperty(value = "毕业学校")
+    private String graduatedSchool;
     @ApiModelProperty(value = "头像")
     private String avatar;
+    @ApiModelProperty(value = "职位")
+    private String position;
     @ApiModelProperty(value = "用户类型")
     private String userType;
     @ApiModelProperty(value = "积分")
@@ -195,20 +197,28 @@ public class UserExtensionInfo implements Serializable {
         this.company = company;
     }
 
-    public String getPost() {
-        return post;
-    }
-
-    public void setPost(String post) {
-        this.post = post;
-    }
-
     public String getEducation() {
         return education;
     }
 
     public void setEducation(String education) {
         this.education = education;
+    }
+
+    public String getGraduatedSchool() {
+        return graduatedSchool;
+    }
+
+    public void setGraduatedSchool(String graduatedSchool) {
+        this.graduatedSchool = graduatedSchool;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getAvatar() {
@@ -317,9 +327,10 @@ public class UserExtensionInfo implements Serializable {
                 ", idCard='" + idCard + '\'' +
                 ", signature='" + signature + '\'' +
                 ", company='" + company + '\'' +
-                ", post='" + post + '\'' +
                 ", education='" + education + '\'' +
+                ", graduatedSchool='" + graduatedSchool + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", position='" + position + '\'' +
                 ", userType='" + userType + '\'' +
                 ", point=" + point +
                 ", birthday=" + birthday +

@@ -1,5 +1,5 @@
 <template>
-  <div class="userHome" @click="menuFlag = false">
+  <div class="homePage">
     <div class="header clearfix">
       <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
       <div class="headerRight fr pr">
@@ -22,7 +22,6 @@
           </el-card>
         </div>
       </div>
-
       <div class="nav">
         <transition name="fade">
           <div class="sousuo posA" v-if="sousuo">
@@ -49,46 +48,103 @@
         <iframe id="kskfpt" ref="iframe" src="" width="0" height="0" frameborder="0" scrolling="auto" style="visibility: hidden;"/>
       </div>
     </div>
-    <div class="userContent">
-      <div class="honcontent w">
-        <div class="bread">
-          <span style="color:#666">用户中心</span>
-          /
-          <span style="color:#009f41">{{titleName}}</span>
-          <!-- <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: i.path }" v-for="(i,k) in dataLeft" :key='k'>{{i.name}}</el-breadcrumb-item>
-            <el-breadcrumb-item></el-breadcrumb-item>
-          </el-breadcrumb> -->
+    <div class="homePage_content w">
+      <div class="homePage_typearea">
+        <!-- 面包屑 -->
+        <div class="homePage_breadcrumb">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/' }">用户中心 </el-breadcrumb-item>
+            <el-breadcrumb-item>
+              <a href="javascript:;">{{this.$route.meta.title}}</a>
+            </el-breadcrumb-item>
+          </el-breadcrumb>
         </div>
-        <div class="userCon">
-          <!-- <div class="navList"></div>
-          <div class="navContent"></div> -->
-          <el-container>
-            <el-aside style="width:150px">
-              <ul class="yijiUl">
-                <li :class="{'lick':showNum == i.id,'lihover':i.flag&&!i.hasChildren}" v-for="(i,k) in dataLeft" :key='k' @mouseenter='i.flag=true' @mouseleave='i.flag=false' @click="liCk(i)">
-                  <span class="line" v-if="showNum == i.id"></span>
-                  <!-- <span class="line" v-if="i.flag || $route.name == i.pathName"></span> -->
-                  <span>{{i.name}}</span>
-                  <i class="el-icon-arrow-down" v-if="i.hasChildren&&i.childrenShow==false" style="margin-left:25px"></i>
-                  <i class="el-icon-arrow-up" v-if="i.hasChildren&&i.childrenShow==true" style="margin-left:25px"></i>
-                  <ul class="zhedieUl" v-if="i.childrenShow">
-                    <li :class="{'lick':showNum == item.id,'lihover':item.flag}" v-for="item in i.children" :key="item.id" @mouseenter='item.flag=true' @mouseleave='item.flag=false' @click.stop="ifs(item)">
-                      <span class="line" v-if="showNum == item.id"></span>
-                      <span>{{item.name}}</span>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+        <!-- 主体内容 -->
+        <el-container>
+          <!-- 侧边栏 -->
+          <div class="slider">
+            <el-aside width="135px">
+              <el-menu
+                :default-active="this.$route.path"
+                class="el-menu-vertical-demo"
+                router
+                @open="handleOpen"
+                @close="handleClose"
+                @select="handleSelect"
+                >
+                <el-menu-item index="/servicemarket/product/userCenter">
+                  <span slot="title">首页</span>
+                </el-menu-item>
+                <el-menu-item index="/userinfo">
+                  <span slot="title">用户资料</span>
+                </el-menu-item>
+                <el-menu-item index="/企业">
+                  <span slot="title">我的企业</span>
+                </el-menu-item>
+                <el-menu-item index="/机构">
+                  <span slot="title">我的机构</span>
+                </el-menu-item>
+                <el-submenu index="/认证">
+                  <template slot="title">
+                    <span>角色认证</span>
+                  </template>
+                  <el-menu-item-group>
+                    <el-menu-item index="/servicemarket/product/productService/认证">认证</el-menu-item>
+                    <el-menu-item index="">认证</el-menu-item>
+                  </el-menu-item-group>
+                </el-submenu>
+                <el-submenu index="/加入园区">
+                  <template slot="title">
+                    <span>加入园区</span>
+                  </template>
+                  <el-menu-item-group>
+                    <el-menu-item index="/servicemarket/product/productService/加入园区">加入园区</el-menu-item>
+                    <el-menu-item index="">加入园区</el-menu-item>
+                  </el-menu-item-group>
+                </el-submenu>
+                <el-submenu index="/servicemarket/product/productService">
+                  <template slot="title">
+                    <span>产品管理</span>
+                  </template>
+                  <el-menu-item-group>
+                    <el-menu-item index="/servicemarket/product/productService/ordinaryProduct" style="padding-left: 20px;">常规服务产品</el-menu-item>
+                    <el-menu-item index="" style="padding-left: 20px;">特色服务产品</el-menu-item>
+                  </el-menu-item-group>
+                </el-submenu>
+                <el-submenu index="/需求管理">
+                  <template slot="title">
+                    <span>需求管理</span>
+                  </template>
+                  <el-menu-item-group>
+                    <el-menu-item index="/servicemarket/product/productService/需求管理">需求管理</el-menu-item>
+                    <el-menu-item index="">需求管理</el-menu-item>
+                  </el-menu-item-group>
+                </el-submenu>
+                <el-submenu index="/评价管理">
+                  <template slot="title">
+                    <span>评价管理</span>
+                  </template>
+                  <el-menu-item-group>
+                    <el-menu-item index="/servicemarket/product/productService/评价管理">评价管理</el-menu-item>
+                    <el-menu-item index="">评价管理</el-menu-item>
+                  </el-menu-item-group>
+                </el-submenu>
+                <el-menu-item index="/活动管理">
+                  <span slot="title">活动管理</span>
+                </el-menu-item>
+                <el-menu-item index="/数据上报">
+                  <span slot="title">数据上报</span>
+                </el-menu-item>
+              </el-menu>
             </el-aside>
-            <user-home v-if="showNum == 0" :userData='userData'></user-home>
-            <el-container v-if="iframeShow" style="background:#fff;">
-              <iframe id="live" :src="iframePath" onload="this.height=this.contentWindow.document.body.scrollHeight" width="100%" frameborder="0"></iframe>
-              <!-- <iframe id="live" :src="iframePath" width="100%" height="100%" scrolling="no" frameborder="0" onload="setIframeHeight(this)"></iframe> -->
-            </el-container>
-            <!-- <router-view :userData='userData' /> -->
-          </el-container>
-        </div>
+          </div>
+          <!-- 主体 -->
+          <div class="homePage_main">
+            <el-main>
+                <router-view></router-view>
+            </el-main>
+          </div>
+        </el-container>
       </div>
     </div>
   </div>
@@ -103,15 +159,9 @@ export default {
     return {
       sousuo: false,
       menuFlag: false,
-      zhedieFlag:false,
-      imgUrl: "",
-      titleName:'用户资料',
       userData: {
         avatar:''
       },
-      showNum:0,
-      iframeShow:false,
-      iframePath:'',
       dataTop:[
         {
           name: "用户资料",
@@ -121,37 +171,7 @@ export default {
           id: 0,
         }
       ],
-      dataLeft: [
-        {
-          name: "用户资料",
-          flag: false,
-          hasChildren:false,
-          path: "@/../components/userHome",
-          pathName: "userHome",
-          id: 0,
-          childrenShow:false,
-        },
-        {
-          name: "流程系统",
-          flag: false,
-          // path: "@/../components/userHome",
-          // path: "/user/userData",
-          //path: "http://112.94.22.222:2381",
-          hasChildren:true,
-          pathName: "userData",
-          id: 1,
-          childrenShow:false,
-          children: [
-
-            {
-              name: "人才申报",
-              flag: false,
-              path: "http://112.94.22.222:2381",
-              id: 11
-            }
-          ]
-        }
-      ]
+     
     };
   },
   directives: {
@@ -169,7 +189,7 @@ export default {
   },
   mounted() {
     // 预先登录模式
-    $('#kskfpt').attr('src', `http://112.94.22.222:2381/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
+    $('#kskfpt').attr('src', `http://112.94.22.222:2381/ibps/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
     this.getUserExtension();
   },
   updated(){
@@ -186,17 +206,6 @@ export default {
     }
   },
   methods: {
-    ifs(i){
-      this.iframeShow = true;
-      this.titleName = i.name;
-      this.showNum = i.id;
-      if(i.id ===11){
-        window.open(i.path, '_blank');
-        //window.open (i.path, 'newwindow', 'height=600, width=1000, top=50, left=250, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
-      }else {
-        this.iframePath = i.path;
-      }
-    },
     handleSearch() {},
     loginOut() {
       window.sessionStorage.removeItem("token");
@@ -207,19 +216,6 @@ export default {
         return;
       }
       this.$router.push(`${i.path}?account=${this.$route.query.account}`);
-    },
-    liCk(i) {
-      if (i.id == this.showNum) {
-        return;
-      }
-      if(i.hasChildren){
-        i.childrenShow = !i.childrenShow
-        return
-      }
-      this.iframeShow = false;
-      this.titleName = i.name;
-      this.showNum = i.id
-      // this.$router.push(`${i.path}?account=${this.$route.query.account}`);
     },
     handleChange() {
       // this.sousuo = true;
@@ -239,9 +235,196 @@ export default {
           }
         }
       });
+    },
+    // 导航栏两个
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
+     handleSelect(key, keyPath) {
+      console.log(key, keyPath);
     }
-  }
+}
 };
 </script>
 <style lang="scss">
+  .homePage{
+    background: #f3f3f3;
+    .header {
+      padding: 0px 160px;
+      box-shadow: 0px 12px 12px #e6e6e6;
+      background-color: #fff;
+      color:black;
+      .titleImg {
+        width: 155px;
+        height: 38px;
+        padding:18px 0;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .nav {
+        width: 600px;
+        height: 37.6px;
+        margin: 0 auto;
+         >ul {
+          > li {
+            float: left;
+            color: black;
+            font-size: 14px;
+            text-align: center;
+            line-height: 38px;
+            margin: 0 50px;
+          }
+        }
+        .sousuo {
+          font-size: 18px;
+          // height: 38px;
+          line-height: 38px;
+          // width: 397px;
+          > input {
+            border: none;
+            width: 350px;
+            height: 38px;
+            font-size: 14px;
+          }
+          >input::-webkit-input-placeholder {
+            color: #b7b7b7;
+            font-size: 12px;
+          }
+        }
+      }
+      .headerRight {
+        line-height: 38px;
+        .imgU{
+          width: 74px;
+          height: 74px;
+          display: inline-block;
+          >img{
+           width: 34px;
+           height: 34px;
+            border-radius: 50%;
+          }
+        }
+        .imgU.active{
+          background: #00a040;
+        }
+        .line {
+          height: 10px;
+          display: inline-block;
+          background: #ccc;
+          width: 1px;
+          // margin: 0 10px;
+          margin-left: 10px;
+        }
+        .avaMenu{
+          position: absolute;
+          box-shadow: 2px 2px 5px #eee;
+          background: #fff;
+          z-index: 4;
+          left: 5px;
+          // .avaUL{
+          //   width: 150px;
+          //   >li{
+          //     padding:5px 15px;
+          //     font-size: 13px;
+          //     color:#333;
+          //     cursor: pointer;
+          //   }
+          // }
+          ul{
+            width: 150px;
+            >li{
+              padding:5px 15px;
+              font-size: 13px;
+              color:#333;
+              cursor: pointer;
+              
+            }
+            >li.liActi{
+              background: #00a040;
+              color:#fff;
+            }
+          }
+          .bxcard .el-card__body{
+            padding:0;
+          }
+        }
+      }
+    }
+    .homePage_content{
+      font-size: 13px;
+      color: #333;
+      padding-bottom: 50px;
+      .homePage_typearea{
+        // 面包屑
+        .homePage_breadcrumb{
+          padding: 15px 0;
+          font-size: 12px;
+          .el-breadcrumb__item:last-child .el-breadcrumb__inner a{
+            color:#00a041;  
+          }
+        }
+        // 侧边栏
+        .slider{
+          .el-submenu__title{
+            border-top: 1px solid #eee;
+            // border-bottom: 1px solid #eee;
+          }
+          
+          .el-menu-item.is-active{
+            color:#00a042;
+            background-color:#fff;
+             border-left: 2px solid #00a042;
+            &:hover{
+            color:#fff;
+            background-color: #00a042;
+            border-left: 2px solid #00a042;
+            }
+          }
+          .el-menu-item, .el-submenu__title{
+            height:52px;
+            line-height: 52px;
+            margin-bottom: 9px;
+          }
+          .el-submenu__title:hover{
+            background-color: #00a042;
+            color:#fff;
+          }
+          .el-submenu .el-menu-item{
+            padding:0;
+            min-width:0;
+          }
+          .el-submenu.is-active .el-submenu__title{
+            // border-left: 2px solid #00a042;
+              border-left: 2px solid #00a042;
+          }
+          .el-menu-item-group{
+            background-color: #f7f7f7;
+            .el-menu-item.is-active{
+              border-left: none;
+            }
+            .el-menu-item{
+              background-color: #f7f7f7;
+              margin:0;
+            }
+          }
+          .el-menu-item:hover{
+            color:#fff;
+            background-color: #00a042;
+          }
+        }
+        .homePage_main{
+          flex: 1;
+          .el-main{
+            padding: 0 20px;
+          }
+        }
+      }
+    }
+  }
 </style>
+

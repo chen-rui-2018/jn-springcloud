@@ -1155,6 +1155,76 @@ public class TbServiceInvestorCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andInvesFinanExperIsNull() {
+            addCriterion("inves_finan_exper is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperIsNotNull() {
+            addCriterion("inves_finan_exper is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperEqualTo(String value) {
+            addCriterion("inves_finan_exper =", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperNotEqualTo(String value) {
+            addCriterion("inves_finan_exper <>", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperGreaterThan(String value) {
+            addCriterion("inves_finan_exper >", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperGreaterThanOrEqualTo(String value) {
+            addCriterion("inves_finan_exper >=", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperLessThan(String value) {
+            addCriterion("inves_finan_exper <", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperLessThanOrEqualTo(String value) {
+            addCriterion("inves_finan_exper <=", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperLike(String value) {
+            addCriterion("inves_finan_exper like", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperNotLike(String value) {
+            addCriterion("inves_finan_exper not like", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperIn(List<String> values) {
+            addCriterion("inves_finan_exper in", values, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperNotIn(List<String> values) {
+            addCriterion("inves_finan_exper not in", values, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperBetween(String value1, String value2) {
+            addCriterion("inves_finan_exper between", value1, value2, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperNotBetween(String value1, String value2) {
+            addCriterion("inves_finan_exper not between", value1, value2, "invesFinanExper");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

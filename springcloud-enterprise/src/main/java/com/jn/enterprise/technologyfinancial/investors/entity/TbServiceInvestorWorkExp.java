@@ -8,11 +8,11 @@ public class TbServiceInvestorWorkExp implements Serializable {
 
     private String investorAccount;
 
-    private Date startTime;
+    private String startTime;
+
+    private String endTime;
 
     private String companyName;
-
-    private Date endTime;
 
     private String position;
 
@@ -44,12 +44,20 @@ public class TbServiceInvestorWorkExp implements Serializable {
         this.investorAccount = investorAccount == null ? null : investorAccount.trim();
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime == null ? null : startTime.trim();
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime == null ? null : endTime.trim();
     }
 
     public String getCompanyName() {
@@ -58,14 +66,6 @@ public class TbServiceInvestorWorkExp implements Serializable {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName == null ? null : companyName.trim();
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
     }
 
     public String getPosition() {
@@ -131,8 +131,8 @@ public class TbServiceInvestorWorkExp implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getInvestorAccount() == null ? other.getInvestorAccount() == null : this.getInvestorAccount().equals(other.getInvestorAccount()))
             && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
-            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getEndTime() == null ? other.getEndTime() == null : this.getEndTime().equals(other.getEndTime()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getPosition() == null ? other.getPosition() == null : this.getPosition().equals(other.getPosition()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -148,8 +148,8 @@ public class TbServiceInvestorWorkExp implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getInvestorAccount() == null) ? 0 : getInvestorAccount().hashCode());
         result = prime * result + ((getStartTime() == null) ? 0 : getStartTime().hashCode());
-        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getEndTime() == null) ? 0 : getEndTime().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getPosition() == null) ? 0 : getPosition().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -168,8 +168,8 @@ public class TbServiceInvestorWorkExp implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", investorAccount=").append(investorAccount);
         sb.append(", startTime=").append(startTime);
-        sb.append(", companyName=").append(companyName);
         sb.append(", endTime=").append(endTime);
+        sb.append(", companyName=").append(companyName);
         sb.append(", position=").append(position);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);

@@ -2,11 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelStructMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelStruct">
-    <result column="id" jdbcType="INTEGER" property="id" />
     <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
     <result column="target_id" jdbcType="VARCHAR" property="targetId" />
     <result column="model_id" jdbcType="VARCHAR" property="modelId" />
-    <result column="form_id" jdbcType="VARCHAR" property="formId" />
     <result column="tab_id" jdbcType="VARCHAR" property="tabId" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, task_batch, target_id, model_id, form_id, tab_id
+    task_batch, target_id, model_id, tab_id
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelStructCriteria" resultMap="BaseResultMap">
     select
@@ -91,19 +89,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelStruct">
-    insert into tb_data_reporting_snapshot_model_struct (id, task_batch, target_id, 
-      model_id, form_id, tab_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{taskBatch,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, 
-      #{modelId,jdbcType=VARCHAR}, #{formId,jdbcType=VARCHAR}, #{tabId,jdbcType=VARCHAR}
-      )
+    insert into tb_data_reporting_snapshot_model_struct (task_batch, target_id, model_id, 
+      tab_id)
+    values (#{taskBatch,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, 
+      #{tabId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelStruct">
     insert into tb_data_reporting_snapshot_model_struct
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="taskBatch != null">
         task_batch,
       </if>
@@ -113,17 +106,11 @@
       <if test="modelId != null">
         model_id,
       </if>
-      <if test="formId != null">
-        form_id,
-      </if>
       <if test="tabId != null">
         tab_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="taskBatch != null">
         #{taskBatch,jdbcType=VARCHAR},
       </if>
@@ -132,9 +119,6 @@
       </if>
       <if test="modelId != null">
         #{modelId,jdbcType=VARCHAR},
-      </if>
-      <if test="formId != null">
-        #{formId,jdbcType=VARCHAR},
       </if>
       <if test="tabId != null">
         #{tabId,jdbcType=VARCHAR},
@@ -150,9 +134,6 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_data_reporting_snapshot_model_struct
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
       <if test="record.taskBatch != null">
         task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       </if>
@@ -161,9 +142,6 @@
       </if>
       <if test="record.modelId != null">
         model_id = #{record.modelId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.formId != null">
-        form_id = #{record.formId,jdbcType=VARCHAR},
       </if>
       <if test="record.tabId != null">
         tab_id = #{record.tabId,jdbcType=VARCHAR},
@@ -175,11 +153,9 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_data_reporting_snapshot_model_struct
-    set id = #{record.id,jdbcType=INTEGER},
-      task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+    set task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       target_id = #{record.targetId,jdbcType=VARCHAR},
       model_id = #{record.modelId,jdbcType=VARCHAR},
-      form_id = #{record.formId,jdbcType=VARCHAR},
       tab_id = #{record.tabId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />

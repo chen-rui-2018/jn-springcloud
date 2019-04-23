@@ -8,9 +8,9 @@ public class TbServiceInvestorEduExp implements Serializable {
 
     private String investorAccount;
 
-    private Date startTime;
+    private String startTime;
 
-    private Date endTime;
+    private String endTime;
 
     private String schoolName;
 
@@ -44,20 +44,20 @@ public class TbServiceInvestorEduExp implements Serializable {
         this.investorAccount = investorAccount == null ? null : investorAccount.trim();
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime == null ? null : startTime.trim();
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime == null ? null : endTime.trim();
     }
 
     public String getSchoolName() {

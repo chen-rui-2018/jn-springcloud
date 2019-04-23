@@ -28,5 +28,7 @@ public interface TbServiceCompanyStaffMapper {
 
     int updateByPrimaryKeySelective(StaffCheckCallBackParam record);
 
+    int updateByPrimaryKeySelective(TbServiceCompanyStaff record);
+
     int updateByPrimaryKey(TbServiceCompanyStaff record);
 }

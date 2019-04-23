@@ -585,6 +585,206 @@ public class TbServiceCompanyStaffCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andInviteStatusIsNull() {
+            addCriterion("invite_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusIsNotNull() {
+            addCriterion("invite_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusEqualTo(String value) {
+            addCriterion("invite_status =", value, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusNotEqualTo(String value) {
+            addCriterion("invite_status <>", value, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusGreaterThan(String value) {
+            addCriterion("invite_status >", value, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("invite_status >=", value, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusLessThan(String value) {
+            addCriterion("invite_status <", value, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusLessThanOrEqualTo(String value) {
+            addCriterion("invite_status <=", value, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusLike(String value) {
+            addCriterion("invite_status like", value, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusNotLike(String value) {
+            addCriterion("invite_status not like", value, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusIn(List<String> values) {
+            addCriterion("invite_status in", values, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusNotIn(List<String> values) {
+            addCriterion("invite_status not in", values, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusBetween(String value1, String value2) {
+            addCriterion("invite_status between", value1, value2, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteStatusNotBetween(String value1, String value2) {
+            addCriterion("invite_status not between", value1, value2, "inviteStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountIsNull() {
+            addCriterion("inviter_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountIsNotNull() {
+            addCriterion("inviter_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountEqualTo(String value) {
+            addCriterion("inviter_account =", value, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountNotEqualTo(String value) {
+            addCriterion("inviter_account <>", value, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountGreaterThan(String value) {
+            addCriterion("inviter_account >", value, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("inviter_account >=", value, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountLessThan(String value) {
+            addCriterion("inviter_account <", value, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountLessThanOrEqualTo(String value) {
+            addCriterion("inviter_account <=", value, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountLike(String value) {
+            addCriterion("inviter_account like", value, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountNotLike(String value) {
+            addCriterion("inviter_account not like", value, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountIn(List<String> values) {
+            addCriterion("inviter_account in", values, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountNotIn(List<String> values) {
+            addCriterion("inviter_account not in", values, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountBetween(String value1, String value2) {
+            addCriterion("inviter_account between", value1, value2, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviterAccountNotBetween(String value1, String value2) {
+            addCriterion("inviter_account not between", value1, value2, "inviterAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeIsNull() {
+            addCriterion("invite_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeIsNotNull() {
+            addCriterion("invite_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeEqualTo(Date value) {
+            addCriterion("invite_time =", value, "inviteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeNotEqualTo(Date value) {
+            addCriterion("invite_time <>", value, "inviteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeGreaterThan(Date value) {
+            addCriterion("invite_time >", value, "inviteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("invite_time >=", value, "inviteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeLessThan(Date value) {
+            addCriterion("invite_time <", value, "inviteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeLessThanOrEqualTo(Date value) {
+            addCriterion("invite_time <=", value, "inviteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeIn(List<Date> values) {
+            addCriterion("invite_time in", values, "inviteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeNotIn(List<Date> values) {
+            addCriterion("invite_time not in", values, "inviteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeBetween(Date value1, Date value2) {
+            addCriterion("invite_time between", value1, value2, "inviteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteTimeNotBetween(Date value1, Date value2) {
+            addCriterion("invite_time not between", value1, value2, "inviteTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedTimeIsNull() {
             addCriterion("created_time is null");
             return (Criteria) this;

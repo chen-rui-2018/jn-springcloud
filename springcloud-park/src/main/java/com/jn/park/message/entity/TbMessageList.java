@@ -3,10 +3,12 @@ package com.jn.park.message.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class MessageList implements Serializable {
-    private Integer id;
+public class TbMessageList implements Serializable {
+    private String id;
 
     private String messageTitle;
+
+    private String messageConnectName;
 
     private String messageConnect;
 
@@ -34,12 +36,12 @@ public class MessageList implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getMessageTitle() {
@@ -48,6 +50,14 @@ public class MessageList implements Serializable {
 
     public void setMessageTitle(String messageTitle) {
         this.messageTitle = messageTitle == null ? null : messageTitle.trim();
+    }
+
+    public String getMessageConnectName() {
+        return messageConnectName;
+    }
+
+    public void setMessageConnectName(String messageConnectName) {
+        this.messageConnectName = messageConnectName == null ? null : messageConnectName.trim();
     }
 
     public String getMessageConnect() {
@@ -157,9 +167,10 @@ public class MessageList implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        MessageList other = (MessageList) that;
+        TbMessageList other = (TbMessageList) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getMessageTitle() == null ? other.getMessageTitle() == null : this.getMessageTitle().equals(other.getMessageTitle()))
+            && (this.getMessageConnectName() == null ? other.getMessageConnectName() == null : this.getMessageConnectName().equals(other.getMessageConnectName()))
             && (this.getMessageConnect() == null ? other.getMessageConnect() == null : this.getMessageConnect().equals(other.getMessageConnect()))
             && (this.getIsRead() == null ? other.getIsRead() == null : this.getIsRead().equals(other.getIsRead()))
             && (this.getMessageRecipient() == null ? other.getMessageRecipient() == null : this.getMessageRecipient().equals(other.getMessageRecipient()))
@@ -180,6 +191,7 @@ public class MessageList implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getMessageTitle() == null) ? 0 : getMessageTitle().hashCode());
+        result = prime * result + ((getMessageConnectName() == null) ? 0 : getMessageConnectName().hashCode());
         result = prime * result + ((getMessageConnect() == null) ? 0 : getMessageConnect().hashCode());
         result = prime * result + ((getIsRead() == null) ? 0 : getIsRead().hashCode());
         result = prime * result + ((getMessageRecipient() == null) ? 0 : getMessageRecipient().hashCode());
@@ -203,6 +215,7 @@ public class MessageList implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", messageTitle=").append(messageTitle);
+        sb.append(", messageConnectName=").append(messageConnectName);
         sb.append(", messageConnect=").append(messageConnect);
         sb.append(", isRead=").append(isRead);
         sb.append(", messageRecipient=").append(messageRecipient);

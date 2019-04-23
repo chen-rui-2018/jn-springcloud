@@ -1,6 +1,7 @@
 package com.jn.park.message.dao;
 
 import com.jn.park.message.model.FindAllMessageListVo;
+import com.jn.park.message.model.MessageListModel;
 import com.jn.park.message.model.addMessageModel;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +26,32 @@ public interface MessageListDao {
      * @param addMessageModel
      */
     void addMessage(addMessageModel addMessageModel);
+
+
+    /**
+     * 根据ID查询单个消息
+     * @param id
+     * @return
+     */
+    MessageListModel findByMessage(@Param("id") String id);
+
+
+    /**
+     * 修改消息
+     * @param messageListModel
+     */
+    void  updateMessage(MessageListModel messageListModel);
+
+    /**
+     * 删除消息
+     * @param id
+     */
+    void deleteMessage(@Param("id") String id);
+
+
+    /**
+     * 修改已读状态
+     * @param id
+     */
+    void updateIsReadStatus(@Param("id") String id);
 }

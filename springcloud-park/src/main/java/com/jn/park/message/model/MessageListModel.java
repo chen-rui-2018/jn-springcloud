@@ -16,6 +16,9 @@ public class MessageListModel implements Serializable {
 
     private static final long serialVersionUID = -4762569385979479757L;
 
+    @ApiModelProperty(value = "消息ID")
+    private String id;
+
     @ApiModelProperty(value = "消息标题")
     private String messageTitle;
 
@@ -49,16 +52,16 @@ public class MessageListModel implements Serializable {
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
 
-    public String getMessageConnectName() {
-        return messageConnectName;
-    }
-
-    public void setMessageConnectName(String messageConnectName) {
-        this.messageConnectName = messageConnectName;
-    }
-
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMessageTitle() {
@@ -75,6 +78,14 @@ public class MessageListModel implements Serializable {
 
     public void setMessageContent(String messageContent) {
         this.messageContent = messageContent;
+    }
+
+    public String getMessageConnectName() {
+        return messageConnectName;
+    }
+
+    public void setMessageConnectName(String messageConnectName) {
+        this.messageConnectName = messageConnectName;
     }
 
     public String getMessageConnect() {
@@ -145,7 +156,8 @@ public class MessageListModel implements Serializable {
     @Override
     public String toString() {
         return "MessageListModel{" +
-                "messageTitle='" + messageTitle + '\'' +
+                "id='" + id + '\'' +
+                ", messageTitle='" + messageTitle + '\'' +
                 ", messageContent='" + messageContent + '\'' +
                 ", messageConnectName='" + messageConnectName + '\'' +
                 ", messageConnect='" + messageConnect + '\'' +

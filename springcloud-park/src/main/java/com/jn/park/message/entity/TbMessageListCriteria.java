@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MessageListCriteria {
+public class TbMessageListCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public MessageListCriteria() {
+    public TbMessageListCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -115,52 +115,62 @@ public class MessageListCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Integer value) {
+        public Criteria andIdEqualTo(String value) {
             addCriterion("message.id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Integer value) {
+        public Criteria andIdNotEqualTo(String value) {
             addCriterion("message.id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Integer value) {
+        public Criteria andIdGreaterThan(String value) {
             addCriterion("message.id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
             addCriterion("message.id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Integer value) {
+        public Criteria andIdLessThan(String value) {
             addCriterion("message.id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Integer value) {
+        public Criteria andIdLessThanOrEqualTo(String value) {
             addCriterion("message.id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Integer> values) {
+        public Criteria andIdLike(String value) {
+            addCriterion("message.id like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotLike(String value) {
+            addCriterion("message.id not like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<String> values) {
             addCriterion("message.id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Integer> values) {
+        public Criteria andIdNotIn(List<String> values) {
             addCriterion("message.id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Integer value1, Integer value2) {
+        public Criteria andIdBetween(String value1, String value2) {
             addCriterion("message.id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("message.id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -232,6 +242,76 @@ public class MessageListCriteria {
 
         public Criteria andMessageTitleNotBetween(String value1, String value2) {
             addCriterion("message.message_title not between", value1, value2, "messageTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameIsNull() {
+            addCriterion("message.message_connect_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameIsNotNull() {
+            addCriterion("message.message_connect_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameEqualTo(String value) {
+            addCriterion("message.message_connect_name =", value, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameNotEqualTo(String value) {
+            addCriterion("message.message_connect_name <>", value, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameGreaterThan(String value) {
+            addCriterion("message.message_connect_name >", value, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameGreaterThanOrEqualTo(String value) {
+            addCriterion("message.message_connect_name >=", value, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameLessThan(String value) {
+            addCriterion("message.message_connect_name <", value, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameLessThanOrEqualTo(String value) {
+            addCriterion("message.message_connect_name <=", value, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameLike(String value) {
+            addCriterion("message.message_connect_name like", value, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameNotLike(String value) {
+            addCriterion("message.message_connect_name not like", value, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameIn(List<String> values) {
+            addCriterion("message.message_connect_name in", values, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameNotIn(List<String> values) {
+            addCriterion("message.message_connect_name not in", values, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameBetween(String value1, String value2) {
+            addCriterion("message.message_connect_name between", value1, value2, "messageConnectName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageConnectNameNotBetween(String value1, String value2) {
+            addCriterion("message.message_connect_name not between", value1, value2, "messageConnectName");
             return (Criteria) this;
         }
 

@@ -1,4 +1,4 @@
-package com.jn.system.dict.model;
+package com.jn.system.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,6 +25,12 @@ public class SysDictInvoke implements Serializable {
     private String groupCode;
 
     public SysDictInvoke() {
+    }
+
+    public SysDictInvoke(String moduleCode, String parentGroupCode, String groupCode) {
+        this.moduleCode = moduleCode;
+        this.parentGroupCode = parentGroupCode;
+        this.groupCode = groupCode;
     }
 
     public String getModuleCode() {

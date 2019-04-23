@@ -521,7 +521,7 @@ public class ActivityServiceImpl implements ActivityService {
         if(needPage){
             objects = PageHelper.startPage(pageNumber,pageSize,true);
         }
-        List<OrgActivityShow> activityList =  activityMapper.findOrgActivityList(query.getStartTime(),query.getEndTime(),activityType);
+        List<OrgActivityShow> activityList =  activityMapper.findOrgActivityList(query.getStartTime(),query.getEndTime(),activityType,query.getTimeInterval());
         return new PaginationData(activityList,objects==null?0:objects.getTotal());
     }
 

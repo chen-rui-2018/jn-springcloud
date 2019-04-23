@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "BusinessPromotionDetailsShow", description = "企业宣传详情出参")
 public class BusinessPromotionDetailsShow implements Serializable {
-    @ApiModelProperty(value = "主键id")
+    @ApiModelProperty(value = "宣传id")
     private String id;
     @ApiModelProperty(value = "宣传编码")
     private String propagandaCode;

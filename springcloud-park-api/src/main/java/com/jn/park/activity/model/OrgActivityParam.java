@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -18,6 +19,17 @@ public class OrgActivityParam extends Page implements Serializable {
     private String startTime;
     @ApiModelProperty(value="结束时间  格式:yyyy-MM-dd",example = "2019-04-30")
     private String endTime;
+    @ApiModelProperty(value="时间段: 1: 最近一月,2:最近一周,不传值则返回全部" ,example = "1")
+    @Pattern(regexp = "^[1-2]$",message = "只能为1 或 2 ")
+    private String timeInterval;
+
+    public String getTimeInterval() {
+        return timeInterval;
+    }
+
+    public void setTimeInterval(String timeInterval) {
+        this.timeInterval = timeInterval;
+    }
 
     public String getStartTime() {
         return startTime;

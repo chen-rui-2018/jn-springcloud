@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelTabMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelTab">
-    <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
     <result column="model_id" jdbcType="VARCHAR" property="modelId" />
     <result column="tab_id" jdbcType="VARCHAR" property="tabId" />
@@ -11,7 +10,7 @@
     <result column="tab_clumn_type" jdbcType="TINYINT" property="tabClumnType" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="tab_create_type" jdbcType="TINYINT" property="tabCreateType" />
-    <result column="order" jdbcType="VARCHAR" property="order" />
+    <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, task_batch, model_id, tab_id, tab_name, tab_clumn_target_show, tab_clumn_type, 
-    status, tab_create_type, order
+    task_batch, model_id, tab_id, tab_name, tab_clumn_target_show, tab_clumn_type, status, 
+    tab_create_type, order_number
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelTabCriteria" resultMap="BaseResultMap">
     select
@@ -96,21 +95,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelTab">
-    insert into tb_data_reporting_snapshot_model_tab (id, task_batch, model_id, 
-      tab_id, tab_name, tab_clumn_target_show, 
-      tab_clumn_type, status, tab_create_type, 
-      order)
-    values (#{id,jdbcType=VARCHAR}, #{taskBatch,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, 
-      #{tabId,jdbcType=VARCHAR}, #{tabName,jdbcType=VARCHAR}, #{tabClumnTargetShow,jdbcType=CHAR}, 
-      #{tabClumnType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{tabCreateType,jdbcType=TINYINT}, 
-      #{order,jdbcType=VARCHAR})
+    insert into tb_data_reporting_snapshot_model_tab (task_batch, model_id, tab_id, 
+      tab_name, tab_clumn_target_show, tab_clumn_type, 
+      status, tab_create_type, order_number
+      )
+    values (#{taskBatch,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, #{tabId,jdbcType=VARCHAR}, 
+      #{tabName,jdbcType=VARCHAR}, #{tabClumnTargetShow,jdbcType=CHAR}, #{tabClumnType,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{tabCreateType,jdbcType=TINYINT}, #{orderNumber,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelTab">
     insert into tb_data_reporting_snapshot_model_tab
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="taskBatch != null">
         task_batch,
       </if>
@@ -135,14 +131,11 @@
       <if test="tabCreateType != null">
         tab_create_type,
       </if>
-      <if test="order != null">
-        order,
+      <if test="orderNumber != null">
+        order_number,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
       <if test="taskBatch != null">
         #{taskBatch,jdbcType=VARCHAR},
       </if>
@@ -167,8 +160,8 @@
       <if test="tabCreateType != null">
         #{tabCreateType,jdbcType=TINYINT},
       </if>
-      <if test="order != null">
-        #{order,jdbcType=VARCHAR},
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -181,9 +174,6 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_data_reporting_snapshot_model_tab
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
       <if test="record.taskBatch != null">
         task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       </if>
@@ -208,8 +198,8 @@
       <if test="record.tabCreateType != null">
         tab_create_type = #{record.tabCreateType,jdbcType=TINYINT},
       </if>
-      <if test="record.order != null">
-        order = #{record.order,jdbcType=VARCHAR},
+      <if test="record.orderNumber != null">
+        order_number = #{record.orderNumber,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -218,8 +208,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_data_reporting_snapshot_model_tab
-    set id = #{record.id,jdbcType=VARCHAR},
-      task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+    set task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       model_id = #{record.modelId,jdbcType=VARCHAR},
       tab_id = #{record.tabId,jdbcType=VARCHAR},
       tab_name = #{record.tabName,jdbcType=VARCHAR},
@@ -227,7 +216,7 @@
       tab_clumn_type = #{record.tabClumnType,jdbcType=TINYINT},
       status = #{record.status,jdbcType=TINYINT},
       tab_create_type = #{record.tabCreateType,jdbcType=TINYINT},
-      order = #{record.order,jdbcType=VARCHAR}
+      order_number = #{record.orderNumber,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

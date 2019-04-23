@@ -3,6 +3,7 @@ package com.jn.enterprise.propaganda.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.BusinessPromotionExceptionEnum;
 import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
@@ -72,6 +73,7 @@ public class BusinessPromotionController extends BaseController {
             return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         int responseNum=businessPromotionService.saveBusinessPromotion(businessPromotionDetailsParam,user.getAccount());
+        logger.info("-----发布宣传成功，数据响应条数：{{}}------",responseNum);
         return  new Result(responseNum);
     }
 
@@ -94,5 +96,56 @@ public class BusinessPromotionController extends BaseController {
             return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         return  new Result(businessPromotionService.getPropagandaTypeList(user.getAccount()));
+    }
+
+    @ControllerLog(doAction = "撤销申请")
+    @RequiresPermissions("/propaganda/businessPromotionController/cancelApprove")
+    @ApiOperation(value = "撤销申请)",notes ="propagandaId:宣传id,返回数据响应条数，正常为1" )
+    @RequestMapping(value = "/cancelApprove",method = RequestMethod.POST)
+    public Result<Integer> cancelApprove(@RequestBody String propagandaId){
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("取消申请获取当前登录用户失败");
+            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        return  new Result(businessPromotionService.cancelApprove(propagandaId,user.getAccount()));
+    }
+
+    @ControllerLog(doAction = "修改企业宣传")
+    @RequiresPermissions("/propaganda/businessPromotionController/updateBusinessPromotion")
+    @ApiOperation(value = "修改企业宣传)",notes ="propagandaId:宣传id,返回数据响应条数，正常为1" )
+    @RequestMapping(value = "/updateBusinessPromotion",method = RequestMethod.POST)
+    public Result<Integer> updateBusinessPromotion(@RequestBody @Validated BusinessPromotionDetailsParam businessPromotionDetailsParam){
+        Assert.notNull(businessPromotionDetailsParam.getId(), BusinessPromotionExceptionEnum.PROPAGANDA_ID_NOT_NULL.getMessage());
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("修改企业宣传获取当前登录用户失败");
+            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int responseNum=businessPromotionService.updateBusinessPromotion(businessPromotionDetailsParam,user.getAccount());
+        logger.info("-----修改企业宣传成功，数据响应条数：{{}}------",responseNum);
+        return  new Result(responseNum);
+    }
+
+    @ControllerLog(doAction = "生成订单号")
+    @RequiresPermissions("/propaganda/businessPromotionController/getOrderNumber")
+    @ApiOperation(value = "生成订单号)")
+    @RequestMapping(value = "/getOrderNumber",method = RequestMethod.GET)
+    public Result<String> getOrderNumber(){
+        return  new Result(businessPromotionService.getOrderNumber());
+    }
+
+    @ControllerLog(doAction = "创建账单")
+    @RequiresPermissions("/propaganda/businessPromotionController/createBill")
+    @ApiOperation(value = "创建账单)",notes = "返回账单号，请求成功后，携带账单号跳转至支付方法选择页")
+    @RequestMapping(value = "/createBill",method = RequestMethod.GET)
+    public Result<String> createBill(@ApiParam(value = "订单号(调用生成订单号接口获得)" ,required = true,example = "AD-2019XXX")@RequestParam("orderNum") String orderNum){
+        Assert.notNull(orderNum, BusinessPromotionExceptionEnum.ORDER_NUM_NOT_NULL.getMessage());
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("创建账单获取当前登录用户失败");
+            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        return  new Result(businessPromotionService.createBill(orderNum,user.getAccount()));
     }
 }

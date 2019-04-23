@@ -15,103 +15,34 @@
           >基本信息:</div>
           <el-form-item label="任务名称:" prop="workPlanName">
             <span>{{ workForm.workPlanName }}</span>
-            <!-- <el-input
-              v-model="workForm.workPlanName"
-              placeholder="请输入任务名称"
-            /> -->
+
           </el-form-item>
           <el-form-item label="所属项目:">
             <span>{{ workForm.itemName }}</span>
-            <!-- <el-select
-              v-model="workForm.itemId"
-              clearable
-              placeholder="请选择项目"
-            >
-              <el-option
-                v-for="item in itemOptions"
-                :key="item.id"
-                :label="item.itemName"
-                :value="item.id"
-              />
-            </el-select> -->
           </el-form-item>
           <el-form-item label="负责人:">
             <span>{{ workForm.responsibleUserAccount }}</span>
-            <!-- <el-select
-              v-model="userAccount"
-              multiple
-              style="width: 100%;"
-              clearable
-              filterable
-              placeholder="请选择负责人"
-            >
-              <el-option
-                v-for="item in userOptions"
-                :key="item.userId"
-                :label="item.name"
-                :value="item.account"
-              />
-            </el-select> -->
           </el-form-item>
           <el-form-item label="任务状态:" prop="workPlanStatus">
             <span v-show="workForm.workPlanStatus==='0'">未开始</span>
-            <span v-show="workForm.workPlanStatus==='1'">进行中</span>
-            <span v-show="workForm.workPlanStatus==='2'">已暂停</span>
-            <span v-show="workForm.workPlanStatus==='3'">已完成</span>
-            <!-- <el-select
-              v-model="workForm.workPlanStatus"
-              style="width: 100%;"
-              clearable
-              placeholder="请选择任务状态"
-            >
-              <el-option
-                v-for="item in statusOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select> -->
+            <span v-show="workForm.workPlanStatus==='1'" class="text-red" >进行中</span>
+            <span v-show="workForm.workPlanStatus==='2'" style="color:rgb(248, 180, 102)">已暂停</span>
+            <span v-show="workForm.workPlanStatus==='3'" class="text-green">已完成</span>
           </el-form-item>
           <div style="margin-left:15px;margin-top:20px; font-size: 17px;">工时信息:</div>
           <el-form-item label="预计开始:" prop="planStartTime">
             <span>{{ workForm.planStartTime }}</span>
-            <!-- <el-date-picker
-              v-model="workForm.planStartTime"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期"
-              style="width: 100%;"
-            /> -->
+
           </el-form-item>
           <el-form-item label="截止时间:" prop="planEndTime">
-            <span>{{ workForm.planEndTime }}</span>
-            <!-- <el-date-picker
-              v-model="workForm.planEndTime"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期"
-              style="width: 100%;"
-            /> -->
+            <span :class="workForm.isExpire==='0'?'':'planEndStyle'">{{ workForm.planEndTime }}</span>
+
           </el-form-item>
           <el-form-item label="实际开始:">
             <span>{{ workForm.startTime }}</span>
-            <!-- <el-date-picker
-              v-model="workForm.startTime"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期"
-              style="width: 100%;"
-            /> -->
           </el-form-item>
           <el-form-item label="实际结束:">
             <span>{{ workForm.endTime }}</span>
-            <!-- <el-date-picker
-              v-model="workForm.endTime"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期"
-              style="width: 100%;"
-            /> -->
           </el-form-item>
           <el-form-item label="预计工时:" prop="planTime">
             <span>{{ workForm.planTime }}工时</span>
@@ -130,7 +61,7 @@
       <div class="editWorkPlan-right">
         <fieldset class="fieldest">
           <legend><strong>任务描述</strong></legend>
-          <div class="editor-container" v-html="workForm.Uecontent">
+          <div class="editor-container" v-html="workForm.content">
             <!-- <UE
               ref="ue"
               :default-msg="defaultMsg"
@@ -510,7 +441,8 @@ export default {
       unbtn: true,
       unfold: false,
       workForm: {
-        Uecontent: '',
+        isExpire: '',
+        content: '',
         attachment: '',
         demandDescribe: '',
         endTime: '',
@@ -646,10 +578,6 @@ export default {
     },
     getFile: function(event) {
       this.file = event.target.files[0]
-      if (this.file.size / 1024 / 1024 > 50) {
-        alert('附件大小不能超过50M')
-        return false
-      }
     },
     // 备注提交
     submitRemark() {
@@ -682,24 +610,32 @@ export default {
     },
     // 删除
     handleDelete() {
-      paramApi(
-        `${this.GLOBAL.oaUrl}oa/workPlan/deleteBatch`,
-        this.workForm.id,
-        'workPlanId'
-      ).then(res => {
-        if (res.data.code === this.GLOBAL.code) {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          })
-          this.goBack(this.$route)
-        } else {
-          this.$message({
-            message: '删除失败',
-            type: 'error'
-          })
-        }
+      this.$confirm(`是否删除这条数据, 是否继续?`, '删除提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
+        .then(() => {
+          paramApi(
+            `${this.GLOBAL.oaUrl}oa/workPlan/deleteBatch`,
+            this.workForm.id,
+            'workPlanId'
+          ).then(res => {
+            if (res.data.code === this.GLOBAL.code) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+              this.goBack(this.$route)
+            } else {
+              this.$message({
+                message: '删除失败',
+                type: 'error'
+              })
+            }
+          })
+        })
+        .catch(() => {})
     },
     // 获取时间
     getDate() {
@@ -747,6 +683,11 @@ export default {
           // this.isDisabled = false
           if (this.titleText === '完成') {
             if (this.file.size) {
+              if (this.file.size / 1024 / 1024 > 50) {
+                this.$message.error('附件大小不能超过50M')
+                this.isDisabled = false
+                return false
+              }
               this.newArr = []
               const formData = new FormData()
               formData.append('file', this.file)
@@ -878,6 +819,7 @@ export default {
             this.attachment = JSON.parse(data.attachment)
           }
           this.workForm.startTime = data.startTime
+          this.workForm.isExpire = data.isExpire
           this.workForm.itemName = data.itemName
           this.workForm.planEndTime = data.planEndTime
           this.workForm.planStartTime = data.planStartTime
@@ -892,9 +834,9 @@ export default {
             this.statusText = '继续'
           }
           this.history = data.workPlanHistorys
-          this.workForm.responsibleUserAccount = data.responsibleUserAccount
+          this.workForm.responsibleUserAccount = data.responsibleUserName
           if (data.content) {
-            this.workForm.Uecontent = data.content
+            this.workForm.content = data.content
           }
         } else {
           this.$message.error(res.data.result)
@@ -917,6 +859,11 @@ export default {
 </script>
 
 <style lang="scss">
+.planEndStyle{
+  color:#fff;
+  background: rgb(232, 78, 15);
+  padding: 5px;
+}
  .record{
   //   .el-date-editor.el-input, .el-date-editor.el-input__inner {
   //   width: 100% ;

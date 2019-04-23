@@ -46,10 +46,10 @@
       </div>
       <div class="merge">
         <el-form-item label="开始时间:" prop="planStartTime">
-          <el-date-picker v-model="workForm.planStartTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" style="width: 100%;" />
+          <el-date-picker v-model="workForm.planStartTime" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width: 100%;" />
         </el-form-item>
         <el-form-item label="截止时间:" prop="planEndTime">
-          <el-date-picker v-model="workForm.planEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" style="width: 100%;" />
+          <el-date-picker v-model="workForm.planEndTime" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width: 100%;" />
         </el-form-item>
       </div>
       <el-form-item label="需求描述:" prop="desc">
@@ -116,7 +116,7 @@ export default {
         responsibleUserAccount: '',
         planStartTime: '',
         planEndTime: '',
-        Uecontent: '',
+        content: '',
         demandDescribe: '',
         itemId: '',
         attachment: '',
@@ -155,11 +155,11 @@ export default {
             return
           }
           if (new Date(this.workForm.planStartTime.replace(/-/g, '\/')) > new Date(this.workForm.planEndTime.replace(/-/g, '\/'))) {
-            alert('开始时间必须大于截止时间,请重新选择')
+            alert('截止时间必须大于开始时间,请重新选择')
             this.isDisabled = false
             return false
           }
-          this.workForm.Uecontent = this.$refs.ue.getUEContent()
+          this.workForm.content = this.$refs.ue.getUEContent()
           this.workForm.responsibleUserAccount = this.userAccount.join(',')
           api(`${this.GLOBAL.oaUrl}oa/workPlan/add`, this.workForm, 'post').then(res => {
             if (res.data.code === this.GLOBAL.code) {

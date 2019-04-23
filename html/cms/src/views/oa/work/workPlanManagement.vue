@@ -28,15 +28,16 @@
       >
         <el-option
           v-for="item in options"
-          :key="item.id"
-          :label="item.itemName"
-          :value="item.id"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
           clearable
         />
       </el-select>
       <el-form-item
         label="任务名称:"
         class="workPlanName"
+        min-width="60"
       >
         <el-input
           v-model="listQuery.workPlanName"
@@ -98,14 +99,21 @@
         label="序号"
         align="center"
       />
-      <!-- 表格第二列  姓名 -->
       <el-table-column
+        :show-overflow-tooltip="true"
         label="项目名称"
         align="center"
         prop="itemName"
-      />
+        width="100"
+      >
+        <template slot-scope="scope">
+          {{ scope.row.itemName }}
+        </template>
+      </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         label="任务名称"
+        width="100"
         align="center"
         prop="workPlanName"
       >
@@ -128,7 +136,7 @@
         prop="planEndTime"
       >
         <template slot-scope="scope">
-          <span :class="scope.row.isExpire==='0'?'':'text-red'">{{ scope.row.planEndTime }}</span>
+          <span :class="scope.row.isExpire==='0'?'':'planEndStyle'">{{ scope.row.planEndTime }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -136,12 +144,12 @@
         align="center"
         prop="workPlanStatusMessage"
       >
-        <!-- <template slot-scope="scope">
-          <span v-if="scope.row.workPlanStatus==='1'" >PC</span>
-          <span v-if="scope.row.workPlanStatus==='2'" >App</span>
-          <span v-if="scope.row.workPlanStatus==='3'" >钉钉</span>
-          <span v-if="scope.row.workPlanStatus===null" class="text-red" >未签到</span>
-        </template> -->
+        <template slot-scope="scope">
+          <span v-if="scope.row.workPlanStatusMessage==='未开始'" >未开始</span>
+          <span v-if="scope.row.workPlanStatusMessage==='进行中'" class="text-red" >进行中</span>
+          <span v-if="scope.row.workPlanStatusMessage==='已暂停'" style="color:rgb(248, 180, 102)" >已暂停</span>
+          <span v-if="scope.row.workPlanStatusMessage==='已完成'" class="text-green" >已完成</span>
+        </template>
       </el-table-column>
       <el-table-column
         label="负责人"
@@ -243,7 +251,7 @@
     <template v-if="startdialogVisible">
       <el-dialog
         :visible.sync="startdialogVisible"
-        :title="'工作计划管理前端  > '+ titleText"
+        :title=" workPlanName+' > '+ titleText"
         class="workContent"
       >
         <el-form
@@ -362,6 +370,7 @@ export default {
   components: { UE },
   data() {
     return {
+      workPlanName: '',
       oaUrl: this.GLOBAL.oaUrl,
       baseUrl: process.env.BASE_API,
       titleText: '',
@@ -377,7 +386,7 @@ export default {
         startTime: '',
         totalConsumeTime: '',
         totalRemainTime: '',
-        Uecontent: '',
+        content: '',
         id: '',
         workPlanStatus: '',
         attachment: '',
@@ -499,12 +508,11 @@ export default {
         'get'
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
-          console.log(res)
           this.history = res.data.data.workPlanHistorys
           this.workform.id = res.data.data.id
-          if (res.data.data.content) {
-            this.defaultMsg = res.data.data.content
-          }
+          // if (res.data.data.content) {
+          //   this.defaultMsg = res.data.data.content
+          // }
           this.workform.totalConsumeTime = res.data.data.totalConsumeTime
         } else {
           this.$message.error(res.data.result)
@@ -541,9 +549,10 @@ export default {
         if (res.data.code === this.GLOBAL.code) {
           this.history = res.data.data.workPlanHistorys
           this.workform.id = res.data.data.id
-          if (res.data.data.content) {
-            this.defaultMsg = res.data.data.content
-          }
+          this.workPlanName = res.data.data.workPlanName
+          // if (res.data.data.content) {
+          //   this.defaultMsg = res.data.data.content
+          // }
         } else {
           this.$message.error(res.data.result)
         }
@@ -560,7 +569,7 @@ export default {
       } else if (this.titleText === '完成') {
         this.workform.workPlanStatus = '3'
       }
-      this.workform.Uecontent = this.$refs.ue.getUEContent()
+      this.workform.remark = this.$refs.ue.getUEContent()
       api(
         `${this.GLOBAL.oaUrl}oa/workPlan/updateWorkPlanStatus`,
         this.workform,
@@ -590,13 +599,14 @@ export default {
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.history = res.data.data.workPlanHistorys
+          this.workPlanName = res.data.data.workPlanName
           this.workform.totalConsumeTime = res.data.data.totalConsumeTime
           this.workform.totalRemainTime = res.data.data.totalRemainTime
           this.workform.id = res.data.data.id
           this.workform.workPlanStatus = res.data.data.workPlanStatus
-          if (res.data.data.content) {
-            this.defaultMsg = res.data.data.content
-          }
+          // if (res.data.data.content) {
+          //   this.defaultMsg = res.data.data.content
+          // }
         } else {
           this.$message.error(res.data.result)
         }
@@ -617,7 +627,6 @@ export default {
     // 选择更多里面的状态
     checkStatus(val) {
       this.workPlanStatus = ''
-      console.log(val)
       if (val === '4') {
         this.userAccount = ''
         this.workPlanStatus = '4'
@@ -658,20 +667,12 @@ export default {
       formData.append('file', this.file)
       // 调用导入文件接口
       Inventor(
-        `${this.GLOBAL.oaUrl}oa/common/uploadAttachment`,
+        `zuul/${this.GLOBAL.oaUrl}oa/workPlan/importExcelWorkPlanInfo`,
         formData,
         'post'
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.dialogVisible = false
-          // this.markingDialogVisible = true
-          // this.markList = res.data.data
-          // this.markList.forEach((val, index) => {
-          //   this.newArr.push(
-          //     Object.assign({}, val, { indexNum: index })
-          //   )
-          // })
-          // this.getFinanceType()
         } else {
           this.$message.error('导入失败,' + res.data.result)
         }
@@ -764,6 +765,16 @@ export default {
 </script>
 
 <style lang="scss" >
+.planEndStyle{
+  color:#fff;
+  background: rgb(232, 78, 15);
+  padding: 5px;
+}
+.el-tooltip__popper{
+   text-align: center;
+    max-width: 260px;
+    word-break: break-all;
+}
 .daoru {
   .el-dialog {
     width: 400px;
@@ -782,6 +793,7 @@ export default {
   margin-left: 20px;
   border: 1px solid #f5f5f5;
 }
+.workManagement{
 .fieldest {
   border: 1px solid #e5e5e5;
   margin-top: 15px;
@@ -815,6 +827,7 @@ export default {
       text-align: center;
     }
   }
+}
 }
 .workContent{
 .el-dialog{

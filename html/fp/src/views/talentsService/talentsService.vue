@@ -1,26 +1,26 @@
 <template>
-  <div class="declarationCenter">
-    <div class="declarationCenter_content"><!-- 版心 -->
+  <div class="talentsService">
+    <div class="talentsService_cont">
       <!-- 面包屑 -->
-      <div class="approve_breadcrumb">
+      <div class="talentsService_breadcrumb">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
-            <a href="javascript:;">申报中心</a>
+            <a href="javascript:;">人才服务</a>
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <!-- 申报平台 -->
+       <!-- 申报平台 -->
       <div class="declaration_platform">
         <div class="platform_titile">
           <div>申报平台</div>
-          <div @click="goplatform">MORE <span class="el-icon-arrow-right"></span></div>
+          <div @click="gotalentplatform">MORE <span class="el-icon-arrow-right"></span></div>
         </div>
         <div class="platform_cont">
           <p>
             <span class="iconfont icon-deng"> </span>
-              汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、技术合同登记等业务申报系统。
-            <span @click="goplatform">查看详情<span class="el-icon-d-arrow-right"></span> </span> 
+              汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、 技术合同登记等业务申报系统。
+            <span @click="gotalentplatform">查看详情<span class="el-icon-d-arrow-right"></span> </span> 
           </p>
           <div>
             <img src="@/assets/image/矢量智能对象.png" alt="">
@@ -38,7 +38,7 @@
             <li v-for="(item,index) in 4" :key="index">
               <div class="list_cont">
                 <p><img src="" alt=""> </p>
-                <p>国家千人项目（顶尖人才与创新团队项目）</p>
+                <p>国家千人项目（顶尖人才与创新团队项目）顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目</p>
                 <p><span class="el-icon-location"></span>全国</p>
                 <p>收益：<span>￥365万元</span> </p>
                 <p>价格：面议</p>
@@ -48,8 +48,28 @@
           </ul>
         </div>
       </div>
+      <!-- 常见问题 -->
+      <!-- <div class="familiar_problem">
+        <div class="perennial_titile">
+          <div>常见问题</div>
+          <div @click="gofamiliarProblem">MORE <span class="el-icon-arrow-right"></span></div>
+        </div>
+        <div class="perennial_list">
+          <ul>
+            <li v-for="(familiaritem,familiarindex) in familiarList" :key="familiarindex">
+              <div class="list_cont">
+                <p><img src="" alt=""> </p>
+                <p>{{familiaritem.noticeTitle}} </p>
+                <p>阅读量：{{familiaritem.browseTimes}}次阅读</p>
+                <p>发布日期：{{familiaritem.createdTime|time}}</p>
+              </div>
+              <div class="list_view" @click="gofamiliardetail(familiaritem.id)"><span>查看详情</span> </div>
+            </li>
+          </ul>
+        </div>
+      </div> -->
       <!-- 申报中心列表 -->
-      <div class="declaration_centerList">
+      <div class="talentsService_centerList">
         <div class="declaration_titile">申报中心列表</div>
         <div class="declaration_list">
           <!-- 筛选 -->
@@ -62,17 +82,18 @@
           </div>
           <!-- 内容 -->
           <div class="list_cont">
-            <el-tabs v-model="rangeId" @tab-click="switchto">
-              <el-tab-pane  v-for="(typeitem,typeindex) in typeList" :key="typeindex">
+            <el-tabs v-model="rangeId"  @tab-click="switchto">
+              <el-tab-pane v-for="(typeitem,typeindex) in typeList" :key="typeindex" >
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
-                <div class="lists" v-for="(centeritem,centerindex) in centerList" :key="centerindex" >
+                <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" >
                   <div class="list_cont_left">
-                    <p>【{{centeritem.rangeName}}】{{centeritem.titleName}}</p> 
-                    <p><span>发布日期：{{centeritem.createdTime|time}}</span><span>状态：<span class="fontcolor">{{centeritem.isRoofPlacement|isRoof}}</span></span></p>
-                    <p>最近要求：{{centeritem.timeNode}}</p>
-                    <p>截止时间：<span class="fontcolor">{{centeritem.deadline|time}}</span></p>
+                    <p><span v-show="talentsitem.rangeId!='5'">【{{talentsitem.rangeName}}】</span>{{talentsitem.noticeTitle}}</p>
+                    <!-- <p v-show="talentsitem.rangeId=5">{{talentsitem.noticeTitle}} </p> -->
+                    <p><span>发布日期：{{talentsitem.createdTime|time}}</span><span>状态：<span class="fontcolor">{{talentsitem.isRoofPlacement|isRoof}}</span></span></p>
+                    <p>最近要求：{{talentsitem.timeNode}}</p>
+                    <p>截止时间：<span class="fontcolor">{{talentsitem.deadline|time}}</span></p>
                   </div>
-                  <div class="list_cont_check" @click="gonoticedetail(centeritem.id)"> <span>查看详情</span> </div>
+                  <div class="list_cont_check" @click="gotalentdetail(talentsitem.id)"> <span>查看详情</span> </div>
                 </div>
               </el-tab-pane>
             </el-tabs>
@@ -81,7 +102,7 @@
         </div>
       </div>
       <!-- 分页 -->
-      <div class="paging">
+      <div class="declaration_paging">
         <el-pagination
           background
           @size-change="handleSizeChange"
@@ -92,20 +113,21 @@
           :total="total">
         </el-pagination>
       </div>
-    </div><!-- 版心 -->
+    </div>
   </div>
 </template>
 <script>
 export default {
-    data () {
+   data () {
       return {
         total:1,
         typeList:[],//区类型
-        centerList:[],
+        talentsList:[],
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:4
+        rows:5,
+        familiarList:[],
       }
     },
     filters: {
@@ -118,32 +140,34 @@ export default {
       },
       time(time){
         if(time){
-          // return time.split("T")[0]
           let dateee = new Date(time).toJSON();
-          return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+          return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
+          // return time.split("T")[0]
         }
       }
     },
     created () {
       this.getdeclarationcentertype()//区类型
       this.getdeclarationcenterList()//公告列表获取
+      this.getfamiliarList()//常见问题
     },
     methods: {
       //区类型获取
       getdeclarationcentertype(){
         let _this = this;
         this.api.get({
-          url: "getdeclarationcentertype",
+          url: "gettalentstype",
           data: {
           },
           callback: function(res) {
             if (res.code == "0000") {
-              console.log(res)
+              // console.log(res.data)
+              let list=res.data
               let typelist=[]
-              res.data.forEach((item,index)=>{
+              list.forEach((item,index)=>{
                 typelist.push({
                   id:item.id,
-                  name:item.name
+                  name:item.rangeName
                 })
               })
               typelist.unshift({
@@ -159,7 +183,7 @@ export default {
       getdeclarationcenterList(){
         let _this = this;
         this.api.get({
-          url: "getdeclarationcentertList",
+          url: "gettalentsList",
           data: {
             rangeId:this.rangeId==='0'?'':this.rangeId,
             sortType:this.sortType,
@@ -169,8 +193,27 @@ export default {
           callback: function(res) {
             if (res.code == "0000") {
               // console.log(res)
-              _this.centerList = res.data.rows;
+              _this.talentsList = res.data.rows;
               _this.total=res.data.total
+            }
+          }
+        });
+      },
+      // 常见问题列表获取
+      getfamiliarList(){
+        let _this = this;
+        this.api.get({
+          url: "gettalentsList",
+          data: {
+            rangeId:5,
+            sortType:1,
+            page:1,
+            rows:4
+          },
+          callback: function(res) {
+            if (res.code == "0000") {
+              // console.log(res)
+              _this.familiarList = res.data.rows;
             }
           }
         });
@@ -180,23 +223,34 @@ export default {
         this.sortType=val
         this.getdeclarationcenterList()
       },
-      //切换区
+      // 切换区
       switchto(){
+        // this.rangeId=id
         this.getdeclarationcenterList()
       },
-      goplatform(){
-        this.$router.push({name:'declarationPlatform'})
+      //跳转页面
+      gotalentplatform(){
+        this.$router.push({name:'talentPlatform'})
       },
-      gonoticedetail(id){
-        this.$router.push({path:'/declarationNoticeDetail',query:{id:id}})
+      //跳转页面
+      gotalentdetail(id){
+        this.$router.push({path:'/talentsServiceDetail',query:{id:id}})
       },
+      // 跳转页面
+      // gofamiliardetail(id){
+      //   this.$router.push({path:'/familiarProblemDetail',query:{id:id}})
+      // },
+      // 跳转页面
+      // gofamiliarProblem(){
+      //   this.$router.push({name:'familiarProblem'})
+      // },
+      //翻页
       handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
         this.rows=val
         this.getdeclarationcenterList()
       },
+      //翻页
       handleCurrentChange(val) {
-        // console.log(`当前页: ${val}`);
         this.page=val
         this.getdeclarationcenterList()
       },
@@ -205,13 +259,13 @@ export default {
 </script>
 
 <style lang="scss">
-  .declarationCenter{
+  .talentsService{
     margin-top: 230px;
-    .declarationCenter_content{
+    .talentsService_cont{
       width: 1190px;
       margin: 0 auto;
-      // 面包屑
-      .approve_breadcrumb{
+       // 面包屑
+      .talentsService_breadcrumb{
         padding: 15px 0;
         font-size: 12px;
         .el-breadcrumb__item:last-child .el-breadcrumb__inner a{
@@ -305,7 +359,7 @@ export default {
                 }
                 p:nth-child(1){
                   width:100%;
-                  height: 88px;
+                  height: 78px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 11px 0;
                   margin-top: 0;
@@ -341,8 +395,86 @@ export default {
           }
         }
       }
+      // 常见问题
+      /* .familiar_problem{
+         margin-top: 29px;
+        .perennial_titile{
+          display: flex;
+          justify-content: space-between;
+          div:nth-child(1){
+            padding-left: 10px;
+            border-left: 4px solid #00a041;
+            line-height: 1;
+          }
+          div:nth-child(2){
+            font-size: 12px;
+            color:#00a041;
+          }
+        }
+        .perennial_list{
+          margin-top: 25px;
+          ul{
+            display: flex;
+            li{
+              width:25%;
+              margin-right: 35px;
+              border: solid 1px #eeeeee;
+              transition:all .3s linear;
+              &:hover{
+                box-shadow: 0px 0px 14px 4px rgba(0, 0, 0, 0.09);
+              }
+              &:last-child{
+                margin-right: 0;
+              }
+              .list_cont{
+                padding:0 29px;
+                color:#797979;
+                font-size: 12px;
+                p{
+                  margin-top: 8px; 
+                }
+                p:nth-child(1){
+                  width:100%;
+                  height: 78px;
+                  padding: 11px 0;
+                  margin-top: 0;
+                }
+                p:nth-child(2){
+                  color:black;
+                  font-size: 14px;
+                  margin-top: 3px;
+                  line-height: 24px;
+                  margin-bottom: 14px;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 2;
+                  overflow: hidden;
+                }
+                p:nth-child(3){
+                 border-top: 1px solid #eee;
+                 padding-top: 9px;
+                }
+                p:nth-child(4){
+                 margin-bottom: 10px;
+                }
+              }
+              .list_view{
+                text-align: center;
+                background: #00a041;
+                font-size: 13px;
+                cursor: pointer;
+                span{
+                  display: block;
+                  padding:11px 0;
+                  color:#fff;
+                }
+              }
+            }
+          }
+        }
+      } */
       // 申报中心列表
-      .declaration_centerList{
+      .talentsService_centerList{
         margin-top: 54px;
         .declaration_titile{
           display: flex;
@@ -384,7 +516,7 @@ export default {
               .el-tabs__item.is-active{
                 color: #00a041;
               }
-              .el-tabs__item:hover{
+               .el-tabs__item:hover{
                  color:#00a041;
                }
             }
@@ -434,7 +566,7 @@ export default {
         }
       }
       //分页
-      .paging{
+      .declaration_paging{
         text-align: center;
         margin: 51px 0 76px 0;
         .el-pagination.is-background .btn-prev,.el-pagination.is-background .btn-next{
@@ -444,6 +576,9 @@ export default {
         .el-pagination.is-background .el-pager li{
           background-color: #fff;
           border: 1px solid #eee;
+        }
+        .el-pagination.is-background .el-pager li:not(.disabled):hover{
+          color:#fff;
         }
         .el-pagination.is-background .el-pager li:not(.disabled).active{
           background-color: #00a041;
@@ -455,11 +590,12 @@ export default {
         .el-select .el-input__inner:focus{
           border-color:#00a041;
         }
-        .el-pagination.is-background .el-pager li:not(.disabled):hover{
-          color:#fff;
-          
-        }
+        
       }
     }
   }
+  .el-select-dropdown__item.selected{
+    color:#00a041;
+  }
 </style>
+

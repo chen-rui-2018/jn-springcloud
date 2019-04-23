@@ -70,8 +70,8 @@
           <el-form-item label="预计开始:" prop="planStartTime">
             <el-date-picker
               v-model="workForm.planStartTime"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              type="date"
+              value-format="yyyy-MM-dd"
               placeholder="选择日期"
               style="width: 100%;"
             />
@@ -80,7 +80,7 @@
             <el-date-picker
               v-model="workForm.planEndTime"
               type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd"
               placeholder="选择日期"
               style="width: 100%;"
             />
@@ -88,8 +88,8 @@
           <el-form-item label="实际开始:">
             <el-date-picker
               v-model="workForm.startTime"
-              type="date"
-              value-format="yyyy-MM-dd"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
               placeholder="选择日期"
               style="width: 100%;"
             />
@@ -97,8 +97,8 @@
           <el-form-item label="实际结束:">
             <el-date-picker
               v-model="workForm.endTime"
-              type="date"
-              value-format="yyyy-MM-dd"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
               placeholder="选择日期"
               style="width: 100%;"
             />
@@ -178,6 +178,7 @@
     </div>
     <fieldset class="fieldest">
       <legend> <strong>历史记录</strong><a
+        v-show="unbtn"
         href="javascript:;"
         class="history_a"
         @click="unfoldText"
@@ -309,9 +310,6 @@ export default {
     this.initList()
   },
   methods: {
-    // submitForm(workForm) {
-    //   console.log(this.workForm)
-    // },
     getFile: function(event) {
       this.file = event.target.files[0]
     },
@@ -329,13 +327,18 @@ export default {
             this.isDisabled = false
             return false
           }
-          if (this.file) {
+          if (this.file.size) {
+            if (this.file.size / 1024 / 1024 > 50) {
+              this.$message.error('附件大小不能超过50M')
+              this.isDisabled = false
+              return false
+            }
             this.newArr = []
             const formData = new FormData()
             formData.append('file', this.file)
             // 调用导入文件接口
             Inventor(
-              `${this.GLOBAL.oaUrl}oa/common/uploadAttachment`,
+              `zuul/${this.GLOBAL.oaUrl}oa/common/uploadAttachment`,
               formData,
               'post'
             ).then(res => {
@@ -362,10 +365,7 @@ export default {
       }
       this.workForm.planTime = Number(this.workForm.planTime)
       this.workForm.totalConsumeTime = Number(this.workForm.totalConsumeTime)
-      this.workForm.startTime = this.workForm.startTime + ' 00:00:00'
-      this.workForm.endTime = this.workForm.endTime + ' 00:00:00'
       this.workForm.totalRemainTime = Number(this.workForm.totalRemainTime)
-      console.log(this.workForm)
       api(`${this.GLOBAL.oaUrl}oa/workPlan/update`, this.workForm, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.goBack(this.$route)
@@ -384,7 +384,6 @@ export default {
     // 页面初始化
     initList() {
       var query = this.$route.query
-      console.log(query)
       this.workForm.id = query.id
       api(
         `${this.GLOBAL.oaUrl}oa/workPlan/getWorkPlanById?workPlanId=${
@@ -394,7 +393,6 @@ export default {
         'get'
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
-          console.log(res)
           var data = res.data.data
           this.workForm.demandDescribe = data.demandDescribe
           if (data.endTime) {

@@ -1,12 +1,12 @@
 <template>
-  <div class="declarationPlatform">
-    <div class="declarationPlatform_content"><!-- 版心 -->
-    <!-- 面包屑 -->
-      <div class="approve_breadcrumb">
+  <div class="talentPlatform">
+    <div class="talentPlatform_content"><!-- 版心 -->
+      <!-- 面包屑 -->
+      <div class="talentPlatform_breadcrumb">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
-            <a href="#/declarationCenter">申报中心</a>
+            <a href="#/talentsService">人才服务</a>
           </el-breadcrumb-item>
           <el-breadcrumb-item>
             <a href="javascript:;">申报平台</a>
@@ -18,11 +18,11 @@
         <p><span class="iconfont icon-deng"></span>汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、技术合同登记等业务申报系统。</p>
       </div>
       <!-- 平台列表 -->
-      <div class="platform_list">
+      <div class="talentPlatform_list">
         <div class="platform_recommend">
-          <el-tabs>
+          <el-tabs v-model="subordinatePlatformName" @tab-click="switchtype">
             <el-tab-pane v-for="(typeitem,typeindex) in platformType" :key="typeindex">
-              <span slot="label" @click="switchtype(typeitem.id)">{{typeitem.name}}</span>
+              <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
               <div class="platform_titile"><span></span>平台介绍</div>
               <!-- 表格 -->
               <div class="platform_table">
@@ -59,7 +59,7 @@
         </div>
       </div>
       <!-- 分页 -->
-      <div class="declarationplatform_paging">
+      <div class="talentplatform_paging">
         <el-pagination
           background
           @size-change="handleSizeChange"
@@ -77,7 +77,7 @@
 export default {
   data () {
     return {
-      id:1,
+      subordinatePlatformName:'',
       platformType:[],
       pladformList:[],
       page:1,
@@ -88,22 +88,22 @@ export default {
   filters: {
     
   },
-  created () {
+  mounted () {
     this.getPlatformType()//平台类型
     this.getPlatformList()//列表数据
-     },
+    },
   methods: {
     getPlatformList(){
       let _this = this;
       this.api.get({
         url: "getplatform",
         data: {
-          subordinatePlatformName :this.id,
+          subordinatePlatformName :this.subordinatePlatformName,
           page:this.page,
-          rows:this.rows,
+          rows:this.rows
          },
         callback: function(res) {
-          // console.log(res);
+          console.log(res);
           if (res.code == "0000") {
             _this.pladformList = res.data.rows;
             _this.total=res.data.total
@@ -125,8 +125,7 @@ export default {
       });
     },
     //切换平台
-    switchtype(id){
-      this.id=id
+    switchtype(){
       this.getPlatformList()
     },
     handleSizeChange(val) {
@@ -140,13 +139,14 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
-  .declarationPlatform{
+  .talentPlatform{
     margin-top: 230px;
-    .declarationPlatform_content{
+    .talentPlatform_content{
       width: 1190px;
       margin: 0 auto;
-      .approve_breadcrumb{
+      .talentPlatform_breadcrumb{
         padding: 15px 0;
         font-size: 12px;
         .el-breadcrumb__item:last-child .el-breadcrumb__inner a{
@@ -168,7 +168,7 @@ export default {
         }
       }
       // 业务列表
-      .platform_list{
+      .talentPlatform_list{
         margin-top: 30px;
         .platform_recommend{
           margin-top: 17px;
@@ -255,7 +255,7 @@ export default {
         }
       }
       //分页
-      .declarationplatform_paging{
+      .talentplatform_paging{
         text-align: center;
         margin: 51px 0 76px 0;
         .el-pagination.is-background .btn-prev,.el-pagination.is-background .btn-next{
@@ -265,6 +265,9 @@ export default {
         .el-pagination.is-background .el-pager li{
           background-color: #fff;
           border: 1px solid #eee;
+        }
+        .el-pagination.is-background .el-pager li:not(.disabled):hover{
+          color:#00a041
         }
         .el-pagination.is-background .el-pager li:not(.disabled).active{
           background-color: #00a041;
@@ -276,11 +279,8 @@ export default {
         .el-select .el-input__inner:focus{
           border-color:#00a041;
         }
-        .el-pagination.is-background .el-pager li:not(.disabled):hover{
-          color:#00a041
-        }
+        
       }
     }
   }
 </style>
-

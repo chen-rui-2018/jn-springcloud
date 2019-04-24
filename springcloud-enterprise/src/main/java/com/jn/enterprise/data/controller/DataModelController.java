@@ -2,6 +2,8 @@ package com.jn.enterprise.data.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.enterprise.data.entity.TbDataReportingGardenLinker;
+import com.jn.enterprise.data.model.DataTargetsModelParam;
 import com.jn.enterprise.data.model.GroupModel;
 import com.jn.enterprise.data.model.InputFormatModel;
 import com.jn.enterprise.data.model.TreeData;
@@ -134,13 +136,23 @@ public class DataModelController  extends BaseController {
 
     @ControllerLog(doAction = "数据上报-数据模板管理-预览")
     @ApiOperation(value = "获取指标集合的填报格式",notes = "返回指标集合的填报格式")
-    @GetMapping(value = "/dataModel/getInputFormatByTargetIds")
+    @PostMapping(value = "/dataModel/getInputFormatByTargetIds")
     @RequiresPermissions("/data/dataModel/getInputFormatByTargetIds")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="targetIds",allowMultiple=true,value = "模板id",example = "0",dataType = "String" ,paramType = "query")
-    })
-    public Result<List<InputFormatModel>> getInputFormatByTargetIds(String[] targetIds){
-        List<InputFormatModel> resultList = dataModelService.getInputFormatByTargetIds(targetIds);
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name="targetIds",allowMultiple=true,value = "模板id",example = "0",dataType = "String" ,paramType = "query")
+//    })
+    public Result<List<InputFormatModel>> getInputFormatByTargetIds(@RequestBody DataTargetsModelParam targetIds){
+        List<InputFormatModel> resultList =dataModelService.getInputFormatByTargetIds(targetIds.getTargetIds());
+
+        return new Result(resultList);
+    }
+
+    @ControllerLog(doAction = "数据上报-数据模板管理-获取模板生成的任务全部填完后的提醒人")
+    @ApiOperation(value = "获取提醒人",notes = "返回提醒人")
+    @GetMapping(value = "/dataModel/getWarner")
+    @RequiresPermissions("/data/dataModel/getWarner")
+    public Result<List<TbDataReportingGardenLinker>> getWarner(){
+        List<TbDataReportingGardenLinker> resultList = dataModelService.getWarner();
         return new Result(resultList);
     }
 }

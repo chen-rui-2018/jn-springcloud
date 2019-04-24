@@ -232,7 +232,7 @@ public class DataUploadServiceImpl implements DataUploadService {
     @ServiceLog(doAction = "获取企业填报历史")
     @Override
     public PaginationData<List<CompanyDataModel>> getFormedHistory(CompanyDataParamModel param,User user){
-        return getHistoryList(param,user,DataUploadConstants.COMPANY_TYPE.getBytes()[0]);
+        return getHistoryList(param,user,DataUploadConstants.COMPANY_TYPE);
     }
 
 
@@ -243,7 +243,7 @@ public class DataUploadServiceImpl implements DataUploadService {
     @ServiceLog(doAction = "获取园区填报历史")
     @Override
     public PaginationData<List<CompanyDataModel>> getHostoryTask(CompanyDataParamModel param,User user){
-        return getHistoryList(param,user,DataUploadConstants.GARDEN_TYPE.getBytes()[0]);
+        return getHistoryList(param,user,DataUploadConstants.GARDEN_TYPE);
     }
 
 
@@ -277,7 +277,7 @@ public class DataUploadServiceImpl implements DataUploadService {
      * @param type
      * @return
      */
-    private PaginationData<List<CompanyDataModel>> getHistoryList(CompanyDataParamModel param,User user,Byte type){
+    private PaginationData<List<CompanyDataModel>> getHistoryList(CompanyDataParamModel param,User user,String type){
         //已填报或者 已逾期
 
         Page<Object> objects = PageHelper.startPage(param.getPage(), param.getRows() == 0 ? 15 : param.getRows());
@@ -286,8 +286,16 @@ public class DataUploadServiceImpl implements DataUploadService {
         Map<String,String> companyInfo  = getCompanyInfoByAccount(user);
         List<String> fillInFormId =getFillId(companyInfo , user);
         //园区或者企业类型获取历史
+        List<CompanyDataModel> historyList =null;
+        //企业
+        if(companyInfo!=null && companyInfo.size()>0){
+            historyList = targetDao.getHistoryTaskList(param,fillInFormId,new Byte(type));
+        }else{
+        //园区
+            //查询所有园区的填报历史
+            historyList = targetDao.getHistoryGardenTaskList(param,new Byte(type));
+        }
 
-        List<CompanyDataModel> historyList = targetDao.getHistoryTaskList(param,fillInFormId,type);
         PaginationData<List<CompanyDataModel>> data = new PaginationData(historyList, objects.getTotal());
         return data;
     }
@@ -351,11 +359,11 @@ public class DataUploadServiceImpl implements DataUploadService {
             throw new JnSpringCloudException(DataUploadExceptionEnum.TASK_IS_NOT_EXIST);
         }
 
-        //检测任务是否草稿状态
-        String status = taskList.get(0).getStatus().toString();
-        if(status.equals(DataUploadConstants.IS_DRAFT)){
-
-        }
+//        //检测任务是否草稿状态
+//        String status = taskList.get(0).getStatus().toString();
+//        if(status.equals(DataUploadConstants.IS_DRAFT)){
+//
+//        }
 
         TbDataReportingTask tbDataReportingTask = taskList.get(0);
 
@@ -582,7 +590,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         //获取上期任务填报的账期，已填报的任务
         List<TbDataReportingTask> taskList =  tbDataReportingTaskMapper.selectByExample(example);
-        if(taskList !=null || taskList.size()!=0){
+        if(taskList !=null && taskList.size()!=0){
             TbDataReportingTask concertTask =taskList.get(0);
             //value
             TbDataReportingSnapshotModelTabCriteria exampleTab=new TbDataReportingSnapshotModelTabCriteria();
@@ -817,6 +825,7 @@ public class DataUploadServiceImpl implements DataUploadService {
         TbServiceCompanyCriteria exp = new  TbServiceCompanyCriteria();
         exp.or().andComAdminEqualTo(user.getAccount()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbServiceCompany> userExtension =  tbServiceCompanyMapper.selectByExample(exp);
+
         if(userExtension==null && userExtension.size()<0){
             companyInfo=null;
         }else{

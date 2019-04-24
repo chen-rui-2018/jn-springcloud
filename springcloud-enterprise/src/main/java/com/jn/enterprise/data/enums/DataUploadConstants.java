@@ -62,19 +62,19 @@ public class DataUploadConstants {
     /**
      * 上月填报值
      */
-    public final static Integer LAST_MONTH=0;
+    public final static String LAST_MONTH="0";
     /**
      * 上年同期值
      */
-    public final static Integer THIS_MONTH_LAST_YEAR=1;
+    public final static String THIS_MONTH_LAST_YEAR="1";
     /**
      * 上月上年同期值
      */
-    public final static Integer LAST_MONTH_LAST_YEAR=2;
+    public final static String LAST_MONTH_LAST_YEAR="2";
     /**
      *增幅
      */
-    public final static Integer AMPLIFICATION=3;
+    public final static String AMPLIFICATION="3";
     /**
      * tab列类型值的分割符号
      */

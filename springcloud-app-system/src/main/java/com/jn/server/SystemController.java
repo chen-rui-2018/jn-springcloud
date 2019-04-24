@@ -10,6 +10,8 @@ import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.service.SysDepartmentService;
+import com.jn.system.dict.model.SysDictKeyValue;
+import com.jn.system.dict.service.SysDictService;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -65,6 +67,9 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Autowired
     private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysDictService sysDictService;
 
     @Override
     @ControllerLog(doAction = "用户登录")
@@ -210,6 +215,13 @@ public class SystemController extends BaseController implements SystemClient {
     public Result<SysRole> getRoleByName(@RequestParam("roleName") String roleName) {
         SysRole sysRole = sysRoleService.getRoleByName(roleName);
         return new Result<SysRole>(sysRole);
+    }
+
+    @Override
+    @ControllerLog(doAction = "调用数据字典")
+    public Result getDict(@RequestBody SysDictInvoke sysDictInvoke) {
+        List<SysDictKeyValue> dictList = sysDictService.getDict(sysDictInvoke);
+        return new Result(dictList);
     }
 
     @Override

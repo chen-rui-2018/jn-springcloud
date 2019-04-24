@@ -1,22 +1,33 @@
 package com.jn.enterprise.data.service.impl;
 
+import com.jn.common.channel.MessageSource;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.cache.service.Cache;
+import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
+import com.jn.enterprise.company.entity.TbServiceCompany;
+import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
 import com.jn.enterprise.data.dao.*;
 import com.jn.enterprise.data.entity.*;
 import com.jn.enterprise.data.enums.DataUploadConstants;
+import com.jn.enterprise.data.enums.DataUploadExceptionEnum;
+import com.jn.enterprise.data.model.WarningTaskModel;
 import com.jn.enterprise.data.service.DataTaskTimerService;
 import com.jn.system.log.annotation.ServiceLog;
 import io.swagger.models.auth.In;
 import org.checkerframework.checker.units.qual.A;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+import com.jn.news.vo.SmsTemplateVo;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import javax.xml.ws.BindingType;
+import java.util.*;
 
 /**
  * @author： yangh
@@ -25,7 +36,10 @@ import java.util.UUID;
  * @modified By:
  */
 @Service
+@EnableBinding(value = MessageSource.class)
 public class DataTaskTimerServiceImpl implements DataTaskTimerService {
+    private static Logger logger = LoggerFactory.getLogger(DataTaskTimerServiceImpl.class);
+
     @Autowired(required = false)
     private TbDataReportingModelMapper modelMapper;
     @Autowired(required = false)
@@ -51,6 +65,14 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
     @Autowired(required = false)
     private TargetDao targetDao;
 
+    @Autowired(required = false)
+    private MessageSource messageSource;
+
+    @Autowired(required = false)
+    private TbServiceCompanyMapper tbServiceCompanyMapper;
+
+    @Autowired(required = false)
+    private TbDataReportingGroupCompanyMapper tbDataReportingGroupCompanyMapper;
     @Override
     @ServiceLog(doAction = "创建任务")
     public void createTask() {
@@ -478,20 +500,17 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
     public void taskWarning(){
 
         //获取未填报的任务【1：未填报已逾期，未填报到了提醒日期】
-        List<TbDataReportingTask> taskList = targetDao.getWarningTask(DateUtils.getDate("yyyy-MM-dd"));
+        List<WarningTaskModel> taskList = targetDao.getWarningTask(DateUtils.getDate("yyyy-MM-dd"));
 
-        //查询模板对应的提示方式
-        //TbDataReportingSnapshotModel
         if(taskList != null && taskList.size()>0){
-            TbDataReportingSnapshotModel snapshotModel = snapshotModelMapper.selectByPrimaryKey(taskList.get(0).getTaskBatch());
-            String warningByStr = snapshotModel.getWarningBeforeDays();
-            String[] warningBy=null;
-            if(StringUtils.isNotBlank(warningByStr)){
-                warningBy = warningByStr.split(",");
-            }
-            //短信，APp,邮件 todo
 
-            for(TbDataReportingTask taskBean : taskList){
+            for(WarningTaskModel taskBean : taskList){
+
+                String[] warningBy=null;
+                if(StringUtils.isNotBlank(taskBean.getWarningBy())){
+                    warningBy = taskBean.getWarningBy().split(",");
+                }
+
                 for(String menthod :warningBy){
                     //进行提醒
                     if(DataUploadConstants.WARNING_BY_APP.equals(menthod)){
@@ -501,12 +520,54 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
                     }
                     if(DataUploadConstants.WARNING_BY_SMSTEXT.equals(menthod)){
+                        String phone="";
+                        StringBuilder message =new StringBuilder();
+                        //园区
+                        if(taskBean.getFileType().equals(DataUploadConstants.GARDEN_TYPE)){
 
+                            //
+                            phone ="";
+
+
+                        }else{
+                        //企业,通过企业ID,查询预警人电话
+
+                            TbServiceCompanyCriteria exp = new  TbServiceCompanyCriteria();
+                            exp.or().andIdEqualTo(taskBean.getFillInFormId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+                            List<TbServiceCompany> list =  tbServiceCompanyMapper.selectByExample(exp);
+                            if(list !=null && list.size()>0){
+                                phone  = list.get(0).getOwnerPhone();
+                            }
+
+                        }
+
+                        message.append("任务名称 ：").append(taskBean.getTaskName());
+                        if(taskBean.getInLine() !=0){
+                            message.append(",还有").append(taskBean.getInLine()) .append("天逾期！请尽快填报!");
+                        }else if(taskBean.getOutLine() !=0){
+                            message.append(",已经逾期").append(taskBean.getOutLine()) .append("天！请尽快填报!");
+                        }
+
+                        sendSMS(phone,message.toString());
                     }
                 }
 
             }
         }
+    }
+
+    private void sendSMS(String phone,String message){
+        if(StringUtils.isEmpty(phone)){
+            throw new JnSpringCloudException(DataUploadExceptionEnum.USER_PHONE_IS_NOT_EXIST);
+        }
+        SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
+        smsTemplateVo.setTemplateId("1000");
+        String[] m = {phone};
+        smsTemplateVo.setMobiles(m);
+        String[] t = {message};
+        smsTemplateVo.setContents(t);
+        logger.info("短信发送成功：接收号码：{},验证码：{}",phone,message);
+        messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
 
     }
 }

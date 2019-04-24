@@ -53,7 +53,8 @@ public class DataModelServiceImpl implements DataModelService {
 
     @Autowired(required = false)
     private TbDataReportingGroupStructMapper tbDataReportingGroupStructMapper;
-
+    @Autowired(required = false)
+    private TbDataReportingGardenLinkerMapper tbDataReportingGardenLinkerMapper;
     @Override
     @ServiceLog(doAction = "返回指标的详细信息")
     public TargetVO getTargetInfo(String targetId) {
@@ -280,36 +281,40 @@ public class DataModelServiceImpl implements DataModelService {
 
         List<TbDataReportingModelTab> tbDataReportingModelTabList = new ArrayList<>();
         List<TbDataReportingModelStruct> tbDataReportingModelStructList = new ArrayList<>();
-        TbDataReportingModelStruct tbDataReportingModelStruct =null;
-        for(TabVO tabVO: tabVOList){
-            tbDataReportingModelTab = new TbDataReportingModelTab();
-            BeanUtils.copyProperties(tabVO,tbDataReportingModelTab);
-            tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
-            tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
-            tbDataReportingModelTab.setTabCreateType(new Byte(tabVO.getTabCreateType()));
-            tbDataReportingModelTab.setOrderNumber(tabVO.getOrderNumber());
-            //tabId是空的
-            String tabId =UUID.randomUUID().toString().replaceAll("-","");
-            tbDataReportingModelTab.setTabId(tabId);
-            tbDataReportingModelTab.setModelId(tbDataReportingModel.getModelId());
-            tbDataReportingModelTabList.add(tbDataReportingModelTab);
+        if(tabVOList !=null && tabVOList.size()>0){
 
-            List<InputFormatModel>  imtList =tabVO.getInputList();
-            for(InputFormatModel im:imtList){
-                tbDataReportingModelStruct = new TbDataReportingModelStruct();
-                String uuid =UUID.randomUUID().toString().replaceAll("-","");
-                tbDataReportingModelStruct.setId(uuid);
-                tbDataReportingModelStruct.setTargetId(im.getTargetId());
-                tbDataReportingModelStruct.setTabId(tabId);
-                tbDataReportingModelStruct.setModelId(tbDataReportingModel.getModelId());
-                tbDataReportingModelStructList.add(tbDataReportingModelStruct);
+            TbDataReportingModelStruct tbDataReportingModelStruct =null;
+            for(TabVO tabVO: tabVOList){
+                tbDataReportingModelTab = new TbDataReportingModelTab();
+                BeanUtils.copyProperties(tabVO,tbDataReportingModelTab);
+                tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
+                tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
+                tbDataReportingModelTab.setTabCreateType(new Byte(tabVO.getTabCreateType()));
+                tbDataReportingModelTab.setOrderNumber(tabVO.getOrderNumber());
+                //tabId是空的
+                String tabId =UUID.randomUUID().toString().replaceAll("-","");
+                tbDataReportingModelTab.setTabId(tabId);
+                tbDataReportingModelTab.setModelId(tbDataReportingModel.getModelId());
+                tbDataReportingModelTabList.add(tbDataReportingModelTab);
+
+                List<InputFormatModel>  imtList =tabVO.getInputList();
+                for(InputFormatModel im:imtList){
+                    tbDataReportingModelStruct = new TbDataReportingModelStruct();
+                    String uuid =UUID.randomUUID().toString().replaceAll("-","");
+                    tbDataReportingModelStruct.setId(uuid);
+                    tbDataReportingModelStruct.setTargetId(im.getTargetId());
+                    tbDataReportingModelStruct.setTabId(tabId);
+                    tbDataReportingModelStruct.setModelId(tbDataReportingModel.getModelId());
+                    tbDataReportingModelStructList.add(tbDataReportingModelStruct);
+                }
             }
+
+            //创建模板对应的Tab，保存tab信息
+            targetDao.createTab(tbDataReportingModelTabList);
+            //建立Tab和指标之间的关系
+            targetDao.createRelation(tbDataReportingModelStructList);
         }
 
-        //创建模板对应的Tab，保存tab信息
-        targetDao.createTab(tbDataReportingModelTabList);
-        //建立Tab和指标之间的关系
-        targetDao.createRelation(tbDataReportingModelStructList);
         result=1;
         return result;
     }
@@ -418,19 +423,29 @@ public class DataModelServiceImpl implements DataModelService {
 
     @Override
     @ServiceLog(doAction = "通过指标集合查询填报格式信息")
-    public List<InputFormatModel> getInputFormatByTargetIds(String[] targetList) {
-        List<String> tList = Arrays.asList(targetList);
-        TbDataReportingTargetGroupCriteria example =new TbDataReportingTargetGroupCriteria();
-        example.or().andTargetIdIn(tList);
-        List<TbDataReportingTargetGroup> tgList = tbDataReportingTargetGroupMapper.selectByExample(example);
+    public List<InputFormatModel> getInputFormatByTargetIds(List<String> tList) {
         List<InputFormatModel> imlist = new ArrayList<>();
-        InputFormatModel im =null;
-        for(TbDataReportingTargetGroup tgBean:tgList){
-            im = new InputFormatModel();
-            BeanUtils.copyProperties(tgBean,im);
-            getInputFormatData(im,tgBean);
-            imlist.add(im);
+        if(tList !=null && tList.size()>0){
+            TbDataReportingTargetGroupCriteria example =new TbDataReportingTargetGroupCriteria();
+            example.or().andTargetIdIn(tList);
+            List<TbDataReportingTargetGroup> tgList = tbDataReportingTargetGroupMapper.selectByExample(example);
+            InputFormatModel im =null;
+            for(TbDataReportingTargetGroup tgBean:tgList){
+                im = new InputFormatModel();
+                BeanUtils.copyProperties(tgBean,im);
+                getInputFormatData(im,tgBean);
+                imlist.add(im);
+            }
         }
         return imlist;
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取模板生成的任务全部填报完成后的预警人条件")
+    public List<TbDataReportingGardenLinker> getWarner() {
+        TbDataReportingGardenLinkerCriteria c = new TbDataReportingGardenLinkerCriteria();
+        c.or().andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+        List<TbDataReportingGardenLinker> list =tbDataReportingGardenLinkerMapper.selectByExample(c);
+        return list;
     }
 }

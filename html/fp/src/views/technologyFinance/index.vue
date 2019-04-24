@@ -2,7 +2,7 @@
   <div class="TechnologyFinance">
     <div id="header">
       <div class="headerContainer clearfix">
-        <div class="titleImg fl"><img src="@/../static/img/LOGO.png" alt=""></div>
+        <div class="titleImg fl"><img  class="pointer" src="@/../static/img/LOGO.png"  @click="$router.push({path:'/'})" alt=""></div>
         <div class="menu" style="display:none">
           <i class="el-icon-close"></i>
           <input type="text">
@@ -47,7 +47,7 @@
     <div id="headerW" v-if="headFlag">
       <!-- <el-card> -->
       <div class="headerContainer clearfix">
-        <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
+        <div class="titleImg fl"><img  class="pointer" src="@/../static/img/login-logo.png" @click="$router.push({path:'/'})" alt=""></div>
         <div class="menu" style="display:none">
           <i class="el-icon-close"></i>
           <input type="text">

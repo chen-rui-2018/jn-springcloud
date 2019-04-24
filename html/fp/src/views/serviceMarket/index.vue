@@ -56,7 +56,7 @@
       <div class="new_active" >
         <div class="active_title">
           <span>最新活动</span>
-          <span>MORE<i class="iconfont icon-you"></i></span>
+          <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="active_list">
           <div class="active_btn to_left" @click="prev"><span class="iconfont icon-zuo" ></span></div>
@@ -94,7 +94,7 @@
         <div class="hot_product">
           <div class="hot_titile">
             <span>热门产品</span>
-            <span>MORE<i class="iconfont icon-you"></i></span>
+            <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
           </div>
           <div class="hot_list">
             <ul class="clearfix">
@@ -154,7 +154,7 @@
       <div class="counselor">
         <div class="counselor_title">
           <span>优质顾问</span>
-          <span>MORE<i class="iconfont icon-you"></i></span>
+          <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="conselor_introduce">
           <ul class="conselor_tab clearfix">

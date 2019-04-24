@@ -1,7 +1,7 @@
 <template>
   <div class="userHome" @click="menuFlag = false">
     <div class="header clearfix">
-      <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
+      <div class="titleImg fl"><img class="pointer" src="@/../static/img/login-logo.png" @click="$router.push({path:'/'})" alt=""></div>
       <div class="headerRight fr pr">
         <i class="el-icon-search" v-if="!sousuo" @click="handleChange" style="vertical-align: middle;font-size:18px;color:#666;"></i>
         <i class="el-icon-bell" style="vertical-align: middle;margin-left:20px;font-size:18px;color:#666;"></i>

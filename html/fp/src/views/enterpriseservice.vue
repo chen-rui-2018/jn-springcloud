@@ -889,6 +889,10 @@ export default {
             outline: none;
             width: 97px;
           }
+          >button:hover{
+              color: #fff;
+            background: #00a041;
+          }
           .btn1 {
             color: #fff;
             background: #00a041;

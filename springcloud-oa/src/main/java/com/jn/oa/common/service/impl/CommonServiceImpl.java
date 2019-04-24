@@ -8,10 +8,15 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.down.api.DownLoadClient;
 import com.jn.down.model.DownLoad;
+import com.jn.oa.common.enums.OaAttachmentEnums;
+import com.jn.oa.common.enums.OaExceptionEnums;
 import com.jn.oa.common.model.DownAttachment;
 import com.jn.oa.common.service.CommonService;
 import com.jn.oa.email.enums.EmailExceptionEnums;
+import com.jn.oa.meeting.enums.MeetingQRCodeFileEnums;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.upload.api.UploadClient;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
@@ -43,6 +48,9 @@ public class CommonServiceImpl implements CommonService {
     @Autowired
     private DownLoadClient downLoadClient;
 
+    @Autowired
+    private SystemClient systemClient;
+
     /**
      * 附件批量上传
      *
@@ -68,7 +76,23 @@ public class CommonServiceImpl implements CommonService {
                     String str = DateUtils.formatDate(new Date(), "yyyyMMdd");
                     String fileName = split[0] + str + RandomStringUtils.randomNumeric(4) + "." + split[1];
 
-                    Result<String> result = uploadClient.uploadFile(file, false);
+                    SysDictInvoke sysDictInvoke=new SysDictInvoke();
+                    //数据字典模块编码
+                    sysDictInvoke.setModuleCode(OaAttachmentEnums .COMMON_UPLOAD_MODULE_CODE.getCode());
+                    //数据字典父分组编码
+                    sysDictInvoke.setParentGroupCode(OaAttachmentEnums .COMMON_UPLOAD_PARENT_GROUP_CODE.getCode());
+                    //数据字典分组编码
+                    sysDictInvoke.setGroupCode(OaAttachmentEnums .COMMON_UPLOAD_GROUP_CODE.getCode());
+                    //数据字典key
+                    sysDictInvoke.setKey(OaAttachmentEnums .COMMON_UPLOAD_KEY.getCode());
+
+                    //根据条件查询数据字典的值,查询默认“访客文件组”
+                    Result data=systemClient.selectDictValueByCondition(sysDictInvoke);
+                    if (data == null || data.getData() == null) {
+                        logger.warn("[服务调用] 调用内部服务出现未知错误");
+                        throw new JnSpringCloudException(OaExceptionEnums.CALL_SERVICE_ERROR);
+                    }
+                    Result<String> result = uploadClient.uploadFile(file, false,(String) data.getData());
                     map.put("title", fileName);
                     map.put("url", result.getData());
                     list.add(map);

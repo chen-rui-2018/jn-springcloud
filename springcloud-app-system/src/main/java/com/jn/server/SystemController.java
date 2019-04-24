@@ -8,12 +8,14 @@ import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
+import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.dict.model.SysDictKeyValue;
 import com.jn.system.dict.service.SysDictService;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
+import com.jn.system.file.service.SysFileService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.*;
@@ -67,6 +69,9 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Autowired
     private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysFileService sysFileService;
 
     @Autowired
     private SysDictService sysDictService;
@@ -139,7 +144,7 @@ public class SystemController extends BaseController implements SystemClient {
     public Result addSysUser(@Validated @RequestBody User user) {
         user.setId(UUID.randomUUID().toString());
         user.setPassword(DigestUtils.md5Hex(user.getPassword()));
-        user.setRecordStatus((byte) 1);
+        user.setRecordStatus(Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode()));
         SysUserAdd SysUserAdd = new SysUserAdd();
         BeanUtils.copyProperties(user, SysUserAdd);
         sysUserService.addSysUser(SysUserAdd, new User());
@@ -217,6 +222,20 @@ public class SystemController extends BaseController implements SystemClient {
         return new Result<SysRole>(sysRole);
     }
 
+    /**
+     * 新增文件明细
+     *
+     * @param sysFile
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "更新用户")
+    public Result insertSysFile(@RequestBody SysFile sysFile) {
+        sysFile.setId(UUID.randomUUID().toString());
+        sysFileService.insertSysFile(sysFile);
+        return new Result();
+    }
+
     @Override
     @ControllerLog(doAction = "调用数据字典")
     public Result getDict(@RequestBody SysDictInvoke sysDictInvoke) {
@@ -239,5 +258,18 @@ public class SystemController extends BaseController implements SystemClient {
         sysUserService.updateSysUser(sysUser, new User());
         return new Result();
     }
+
+    /**
+     * 根据条件查询数据字典的值
+     * @param sysDictInvoke
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "根据条件查询数据字典的值")
+    public Result<String> selectDictValueByCondition(@RequestBody SysDictInvoke sysDictInvoke){
+       String data= sysDictService.selectDictValueByCondition(sysDictInvoke);
+        return new Result(data);
+    }
+
 
 }

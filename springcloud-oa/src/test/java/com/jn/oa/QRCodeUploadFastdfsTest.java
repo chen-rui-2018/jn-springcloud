@@ -69,7 +69,7 @@ public class QRCodeUploadFastdfsTest {
         MultipartFile multipartFile = new MockMultipartFile("file",
                 QRCodeFile.getName(), "text/plain", IOUtils.toByteArray(fileInputStream));*/
 
-        Result<String> result = uploadClient.uploadFile(multipartFile, false);
+        Result<String> result = uploadClient.uploadFile(multipartFile, false,null);
         System.out.println("success path: " + result.getData());
     }
 

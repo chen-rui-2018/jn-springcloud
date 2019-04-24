@@ -20,7 +20,9 @@ import com.jn.oa.meeting.model.*;
 import com.jn.oa.meeting.service.MeetingService;
 import com.jn.oa.meeting.vo.OaMeetingParticipantVo;
 import com.jn.oa.meeting.vo.OaMeetingVo;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.upload.api.UploadClient;
@@ -62,12 +64,6 @@ public class MeetingServiceImpl implements MeetingService {
     @Resource
     private TbOaMeetingContentMapper tbOaMeetingContentMapper;
 
-    @Resource
-    private TbOaMeetingParticipantsMapper tbOaMeetingParticipantsMapper;
-
-    @Resource
-    private MeetingParticipantMapper meetingParticipantMapper;
-
     @Autowired
     private UploadClient uploadClient;
 
@@ -76,6 +72,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private SystemClient systemClient;
 
     @Autowired
     public MeetingServiceImpl(ResourceLoader resourceLoader) {
@@ -272,8 +271,27 @@ public class MeetingServiceImpl implements MeetingService {
             //6、File转换为MultipartFile
             MultipartFile multipartFile = MultipartFileUtil.from(ResourceUtils.getFile(outFilePath), null);
 
+            SysDictInvoke sysDictInvoke=new SysDictInvoke();
+            //数据字典模块编码
+            sysDictInvoke.setModuleCode(MeetingQRCodeFileEnums.MEETING_UPLOAD_MODULE_CODE.getCode());
+            //数据字典父分组编码
+            sysDictInvoke.setParentGroupCode(MeetingQRCodeFileEnums.MEETING_UPLOAD_PARENT_GROUP_CODE.getCode());
+            //数据字典分组编码
+            sysDictInvoke.setGroupCode(MeetingQRCodeFileEnums.MEETING_UPLOAD_GROUP_CODE.getCode());
+            //数据字典key
+            sysDictInvoke.setKey(MeetingQRCodeFileEnums.MEETING_UPLOAD_KEY.getCode());
+
+            //根据条件查询数据字典的值,查询默认“访客文件组”
+            Result data=systemClient.selectDictValueByCondition(sysDictInvoke);
+            if (data == null || data.getData() == null) {
+                logger.warn("[服务调用] 调用内部服务出现未知错误");
+                throw new JnSpringCloudException(OaExceptionEnums.CALL_SERVICE_ERROR);
+            }
+           String fileGroupId=(String) data.getData();
+
+
             //7、上传文件至fastdfs
-            Result<String> result = uploadClient.uploadFile(multipartFile, false);
+            Result<String> result = uploadClient.uploadFile(multipartFile, false,fileGroupId);
 
             tbOaMeeting.setSignInQr(result.getData());
         } catch (Exception e) {

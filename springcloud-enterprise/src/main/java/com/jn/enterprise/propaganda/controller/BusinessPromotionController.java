@@ -148,4 +148,19 @@ public class BusinessPromotionController extends BaseController {
         }
         return  new Result(businessPromotionService.createBill(orderNum,user.getAccount()));
     }
+
+    @ControllerLog(doAction = "提交审核")
+    @RequiresPermissions("/propaganda/businessPromotionController/submitAudit")
+    @ApiOperation(value = "修改企业宣传)",notes ="propagandaId:宣传id" )
+    @RequestMapping(value = "/submitAudit",method = RequestMethod.POST)
+    public Result<Integer> submitAudit(@RequestBody String propagandaId){
+        Assert.notNull(propagandaId, BusinessPromotionExceptionEnum.PROPAGANDA_ID_NOT_NULL.getMessage());
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("提交审核获取当前登录用户失败");
+            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        businessPromotionService.submitAudit(propagandaId,user.getAccount());
+        return  new Result();
+    }
 }

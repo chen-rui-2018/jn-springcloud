@@ -36,6 +36,8 @@ public class TbPropaganda implements Serializable {
 
     private Double propagandaFee;
 
+    private String isPay;
+
     private String approvalStatus;
 
     private String approvalDesc;
@@ -184,6 +186,14 @@ public class TbPropaganda implements Serializable {
         this.propagandaFee = propagandaFee;
     }
 
+    public String getIsPay() {
+        return isPay;
+    }
+
+    public void setIsPay(String isPay) {
+        this.isPay = isPay == null ? null : isPay.trim();
+    }
+
     public String getApprovalStatus() {
         return approvalStatus;
     }
@@ -284,6 +294,7 @@ public class TbPropaganda implements Serializable {
             && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
             && (this.getProFeeRuleCode() == null ? other.getProFeeRuleCode() == null : this.getProFeeRuleCode().equals(other.getProFeeRuleCode()))
             && (this.getPropagandaFee() == null ? other.getPropagandaFee() == null : this.getPropagandaFee().equals(other.getPropagandaFee()))
+            && (this.getIsPay() == null ? other.getIsPay() == null : this.getIsPay().equals(other.getIsPay()))
             && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
             && (this.getApprovalDesc() == null ? other.getApprovalDesc() == null : this.getApprovalDesc().equals(other.getApprovalDesc()))
             && (this.getOrderCode() == null ? other.getOrderCode() == null : this.getOrderCode().equals(other.getOrderCode()))
@@ -315,6 +326,7 @@ public class TbPropaganda implements Serializable {
         result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
         result = prime * result + ((getProFeeRuleCode() == null) ? 0 : getProFeeRuleCode().hashCode());
         result = prime * result + ((getPropagandaFee() == null) ? 0 : getPropagandaFee().hashCode());
+        result = prime * result + ((getIsPay() == null) ? 0 : getIsPay().hashCode());
         result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
         result = prime * result + ((getApprovalDesc() == null) ? 0 : getApprovalDesc().hashCode());
         result = prime * result + ((getOrderCode() == null) ? 0 : getOrderCode().hashCode());
@@ -349,6 +361,7 @@ public class TbPropaganda implements Serializable {
         sb.append(", orgName=").append(orgName);
         sb.append(", proFeeRuleCode=").append(proFeeRuleCode);
         sb.append(", propagandaFee=").append(propagandaFee);
+        sb.append(", isPay=").append(isPay);
         sb.append(", approvalStatus=").append(approvalStatus);
         sb.append(", approvalDesc=").append(approvalDesc);
         sb.append(", orderCode=").append(orderCode);

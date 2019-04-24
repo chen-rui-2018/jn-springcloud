@@ -42,6 +42,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-payment-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-news-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -332,7 +332,8 @@
                 <img :src="i.orgLogo" alt="">
               </div>
               <div class="finaDiv1">
-                <div class="finaTit">{{i.orgName}}</div>
+                <!-- <div class="finaTit"></div> -->
+                <!-- <div class="finaTit">{{i.orgName}}</div> -->
                 <div class="finaContent">
                   <p class="finaPhone">电话：
                     <span class="mainColor">{{i.orgPhone}}</span>
@@ -1120,9 +1121,12 @@ export default {
             font-size: 12px;
             border: 1px solid #dedede;
             > .finaInsItem {
-              width: 60%;
-              height: 90px;
-              margin: 10px 44px;
+              // width: 60%;
+              // height: 114px;
+              // margin: 10px 44px;
+                  width: 86%;
+    height: 114px;
+    margin: 15px auto;
               > img {
                 width: 100%;
                 height: 100%;
@@ -1136,12 +1140,13 @@ export default {
               }
               > .finaContent {
                 .finaPhone {
-                  font-size: 13px;
+                  font-size: 15px;
                 }
               }
               .finaAddress {
                 text-indent: -35px;
                 margin-left: 35px;
+                font-size: 15px;
               }
             }
             > .finaPP {

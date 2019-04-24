@@ -18,6 +18,7 @@
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="pro_fee_rule_code" jdbcType="VARCHAR" property="proFeeRuleCode" />
     <result column="propaganda_fee" jdbcType="DOUBLE" property="propagandaFee" />
+    <result column="is_pay" jdbcType="VARCHAR" property="isPay" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
     <result column="approval_desc" jdbcType="VARCHAR" property="approvalDesc" />
     <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
@@ -91,8 +92,8 @@
   <sql id="Base_Column_List">
     id_, propaganda_code, propaganda_title, propaganda_type, issue_platform, effective_date, 
     invalid_date, propaganda_area, propaganda_area_url, poster_url, sort, status, org_id, 
-    org_name, pro_fee_rule_code, propaganda_fee, approval_status, approval_desc, order_code, 
-    created_time, creator_account, modified_time, modifier_account, record_status
+    org_name, pro_fee_rule_code, propaganda_fee, is_pay, approval_status, approval_desc, 
+    order_code, created_time, creator_account, modified_time, modifier_account, record_status
   </sql>
   <sql id="Blob_Column_List">
     propaganda_details
@@ -151,19 +152,19 @@
       invalid_date, propaganda_area, propaganda_area_url, 
       poster_url, sort, status, 
       org_id, org_name, pro_fee_rule_code, 
-      propaganda_fee, approval_status, approval_desc, 
-      order_code, created_time, creator_account, 
-      modified_time, modifier_account, record_status, 
-      propaganda_details)
+      propaganda_fee, is_pay, approval_status, 
+      approval_desc, order_code, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status, propaganda_details)
     values (#{id,jdbcType=VARCHAR}, #{propagandaCode,jdbcType=VARCHAR}, #{propagandaTitle,jdbcType=VARCHAR}, 
       #{propagandaType,jdbcType=VARCHAR}, #{issuePlatform,jdbcType=VARCHAR}, #{effectiveDate,jdbcType=TIMESTAMP}, 
       #{invalidDate,jdbcType=TIMESTAMP}, #{propagandaArea,jdbcType=VARCHAR}, #{propagandaAreaUrl,jdbcType=VARCHAR}, 
       #{posterUrl,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
       #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{proFeeRuleCode,jdbcType=VARCHAR}, 
-      #{propagandaFee,jdbcType=DOUBLE}, #{approvalStatus,jdbcType=VARCHAR}, #{approvalDesc,jdbcType=VARCHAR}, 
-      #{orderCode,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{propagandaDetails,jdbcType=LONGVARCHAR})
+      #{propagandaFee,jdbcType=DOUBLE}, #{isPay,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, 
+      #{approvalDesc,jdbcType=VARCHAR}, #{orderCode,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{propagandaDetails,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.propaganda.entity.TbPropaganda">
     insert into tb_propaganda
@@ -215,6 +216,9 @@
       </if>
       <if test="propagandaFee != null">
         propaganda_fee,
+      </if>
+      <if test="isPay != null">
+        is_pay,
       </if>
       <if test="approvalStatus != null">
         approval_status,
@@ -292,6 +296,9 @@
       </if>
       <if test="propagandaFee != null">
         #{propagandaFee,jdbcType=DOUBLE},
+      </if>
+      <if test="isPay != null">
+        #{isPay,jdbcType=VARCHAR},
       </if>
       <if test="approvalStatus != null">
         #{approvalStatus,jdbcType=VARCHAR},
@@ -379,6 +386,9 @@
       <if test="record.propagandaFee != null">
         propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
       </if>
+      <if test="record.isPay != null">
+        is_pay = #{record.isPay,jdbcType=VARCHAR},
+      </if>
       <if test="record.approvalStatus != null">
         approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       </if>
@@ -429,6 +439,7 @@
       org_name = #{record.orgName,jdbcType=VARCHAR},
       pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
       propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
+      is_pay = #{record.isPay,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
       order_code = #{record.orderCode,jdbcType=VARCHAR},
@@ -460,6 +471,7 @@
       org_name = #{record.orgName,jdbcType=VARCHAR},
       pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
       propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
+      is_pay = #{record.isPay,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
       order_code = #{record.orderCode,jdbcType=VARCHAR},
@@ -520,6 +532,9 @@
       <if test="propagandaFee != null">
         propaganda_fee = #{propagandaFee,jdbcType=DOUBLE},
       </if>
+      <if test="isPay != null">
+        is_pay = #{isPay,jdbcType=VARCHAR},
+      </if>
       <if test="approvalStatus != null">
         approval_status = #{approvalStatus,jdbcType=VARCHAR},
       </if>
@@ -567,6 +582,7 @@
       org_name = #{orgName,jdbcType=VARCHAR},
       pro_fee_rule_code = #{proFeeRuleCode,jdbcType=VARCHAR},
       propaganda_fee = #{propagandaFee,jdbcType=DOUBLE},
+      is_pay = #{isPay,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{approvalDesc,jdbcType=VARCHAR},
       order_code = #{orderCode,jdbcType=VARCHAR},
@@ -595,6 +611,7 @@
       org_name = #{orgName,jdbcType=VARCHAR},
       pro_fee_rule_code = #{proFeeRuleCode,jdbcType=VARCHAR},
       propaganda_fee = #{propagandaFee,jdbcType=DOUBLE},
+      is_pay = #{isPay,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{approvalDesc,jdbcType=VARCHAR},
       order_code = #{orderCode,jdbcType=VARCHAR},

@@ -24,6 +24,7 @@ public enum BusinessPromotionExceptionEnum implements CodeAndMsg {
     UPDATE_NOT_ALLOWED("5020550","当前宣传信息审批状态不允许修改"),
     STATUS_NOT_SUPPORT("5020551","当前状态值不是系统支持的"),
     ORDER_NUM_NOT_NULL("5020552","订单号不能为空"),
+    SUBMIT_AUDIT_NOT_ALLOW("5020553","当前宣传信息不存在或不允许当前操作"),
     ;
 
     /**

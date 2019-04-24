@@ -43,4 +43,13 @@ public class TechnologyInfoNum implements Serializable {
     public void setFinancialOrgNum(long financialOrgNum) {
         this.financialOrgNum = financialOrgNum;
     }
+
+    @Override
+    public String toString() {
+        return "TechnologyInfoNum{" +
+                "investorsNum=" + investorsNum +
+                ", financialProductNum=" + financialProductNum +
+                ", financialOrgNum=" + financialOrgNum +
+                '}';
+    }
 }

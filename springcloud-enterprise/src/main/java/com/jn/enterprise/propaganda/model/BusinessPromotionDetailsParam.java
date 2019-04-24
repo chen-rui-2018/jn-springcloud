@@ -15,6 +15,8 @@ import java.io.Serializable;
  */
 @ApiModel(value = "BusinessPromotionDetailsParam", description = "企业宣传详情入参")
 public class BusinessPromotionDetailsParam implements Serializable {
+    @ApiModelProperty(value = "宣传id(新增时不传，修改时必传)",example="xxx123")
+    private String id;
     @ApiModelProperty(value = "发布平台(1：APP  2:门户  3：其他...)",required = true,example="2")
     @NotNull(message="发布平台不能为空")
     @Pattern(regexp = "^[0-9]$",message = "issuePlatform:只能输入0-9的数字")
@@ -56,6 +58,14 @@ public class BusinessPromotionDetailsParam implements Serializable {
     @NotNull(message="宣传费用不能为空")
     @Pattern(regexp = "^([0-9]*)(\\.[0-9]{0,2})$",message = "issuePlatform:只能输入的数字和小数点")
     private String propagandaFee;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getIssuePlatform() {
         return issuePlatform;

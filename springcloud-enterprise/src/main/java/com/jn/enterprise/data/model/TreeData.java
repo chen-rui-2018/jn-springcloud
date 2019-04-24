@@ -15,8 +15,8 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "TreeData",description = "树")
-public class TreeData extends JsonTreeData implements Serializable {
+@ApiModel(value = "TreeData1",description = "树")
+public class TreeData implements Serializable {
 
     @ApiModelProperty(value = "指标ID",example = "0001")
     private String id;
@@ -26,42 +26,46 @@ public class TreeData extends JsonTreeData implements Serializable {
     private String text;
     @ApiModelProperty(value = "指标状态是否删除（0标记删除，1正常）",example = "0")
     private String state;
+    @ApiModelProperty(value = "子节点",example = "1")
+    public List<TreeData> children;
 
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public void setId(String id) {
         this.id = id;
     }
 
-    @Override
     public String getPid() {
         return pid;
     }
 
-    @Override
     public void setPid(String pid) {
         this.pid = pid;
     }
 
-    @Override
     public String getText() {
         return text;
     }
 
-    @Override
     public void setText(String text) {
         this.text = text;
     }
 
-    public String getStatus() {
+    public String getState() {
         return state;
     }
 
-    public void setStatus(String status) {
-        this.state = status;
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public List<TreeData> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<TreeData> children) {
+        this.children = children;
     }
 }

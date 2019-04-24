@@ -1,6 +1,7 @@
 package com.jn.enterprise.data.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TbDataReportingCreateTaskLogCriteria {
@@ -244,143 +245,73 @@ public class TbDataReportingCreateTaskLogCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNull() {
-            addCriterion("name is null");
+        public Criteria andFormTimeIsNull() {
+            addCriterion("form_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNotNull() {
-            addCriterion("name is not null");
+        public Criteria andFormTimeIsNotNull() {
+            addCriterion("form_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNameEqualTo(String value) {
-            addCriterion("name =", value, "name");
+        public Criteria andFormTimeEqualTo(String value) {
+            addCriterion("form_time =", value, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotEqualTo(String value) {
-            addCriterion("name <>", value, "name");
+        public Criteria andFormTimeNotEqualTo(String value) {
+            addCriterion("form_time <>", value, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThan(String value) {
-            addCriterion("name >", value, "name");
+        public Criteria andFormTimeGreaterThan(String value) {
+            addCriterion("form_time >", value, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("name >=", value, "name");
+        public Criteria andFormTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("form_time >=", value, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThan(String value) {
-            addCriterion("name <", value, "name");
+        public Criteria andFormTimeLessThan(String value) {
+            addCriterion("form_time <", value, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("name <=", value, "name");
+        public Criteria andFormTimeLessThanOrEqualTo(String value) {
+            addCriterion("form_time <=", value, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameLike(String value) {
-            addCriterion("name like", value, "name");
+        public Criteria andFormTimeLike(String value) {
+            addCriterion("form_time like", value, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotLike(String value) {
-            addCriterion("name not like", value, "name");
+        public Criteria andFormTimeNotLike(String value) {
+            addCriterion("form_time not like", value, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameIn(List<String> values) {
-            addCriterion("name in", values, "name");
+        public Criteria andFormTimeIn(List<String> values) {
+            addCriterion("form_time in", values, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotIn(List<String> values) {
-            addCriterion("name not in", values, "name");
+        public Criteria andFormTimeNotIn(List<String> values) {
+            addCriterion("form_time not in", values, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("name between", value1, value2, "name");
+        public Criteria andFormTimeBetween(String value1, String value2) {
+            addCriterion("form_time between", value1, value2, "formTime");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("name not between", value1, value2, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentIsNull() {
-            addCriterion("department is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentIsNotNull() {
-            addCriterion("department is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentEqualTo(String value) {
-            addCriterion("department =", value, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentNotEqualTo(String value) {
-            addCriterion("department <>", value, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentGreaterThan(String value) {
-            addCriterion("department >", value, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentGreaterThanOrEqualTo(String value) {
-            addCriterion("department >=", value, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentLessThan(String value) {
-            addCriterion("department <", value, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentLessThanOrEqualTo(String value) {
-            addCriterion("department <=", value, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentLike(String value) {
-            addCriterion("department like", value, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentNotLike(String value) {
-            addCriterion("department not like", value, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentIn(List<String> values) {
-            addCriterion("department in", values, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentNotIn(List<String> values) {
-            addCriterion("department not in", values, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentBetween(String value1, String value2) {
-            addCriterion("department between", value1, value2, "department");
-            return (Criteria) this;
-        }
-
-        public Criteria andDepartmentNotBetween(String value1, String value2) {
-            addCriterion("department not between", value1, value2, "department");
+        public Criteria andFormTimeNotBetween(String value1, String value2) {
+            addCriterion("form_time not between", value1, value2, "formTime");
             return (Criteria) this;
         }
 
@@ -394,62 +325,52 @@ public class TbDataReportingCreateTaskLogCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeEqualTo(String value) {
+        public Criteria andCreateTimeEqualTo(Date value) {
             addCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeNotEqualTo(String value) {
+        public Criteria andCreateTimeNotEqualTo(Date value) {
             addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeGreaterThan(String value) {
+        public Criteria andCreateTimeGreaterThan(Date value) {
             addCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeGreaterThanOrEqualTo(String value) {
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
             addCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeLessThan(String value) {
+        public Criteria andCreateTimeLessThan(Date value) {
             addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeLessThanOrEqualTo(String value) {
+        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
             addCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeLike(String value) {
-            addCriterion("create_time like", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeNotLike(String value) {
-            addCriterion("create_time not like", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeIn(List<String> values) {
+        public Criteria andCreateTimeIn(List<Date> values) {
             addCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeNotIn(List<String> values) {
+        public Criteria andCreateTimeNotIn(List<Date> values) {
             addCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeBetween(String value1, String value2) {
+        public Criteria andCreateTimeBetween(Date value1, Date value2) {
             addCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeNotBetween(String value1, String value2) {
+        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }

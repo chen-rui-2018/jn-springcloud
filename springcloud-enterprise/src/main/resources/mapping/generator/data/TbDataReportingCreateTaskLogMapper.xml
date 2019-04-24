@@ -4,9 +4,8 @@
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLog">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="model_id" jdbcType="VARCHAR" property="modelId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="department" jdbcType="VARCHAR" property="department" />
-    <result column="create_time" jdbcType="CHAR" property="createTime" />
+    <result column="form_time" jdbcType="CHAR" property="formTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, model_id, name, department, create_time
+    id, model_id, form_time, create_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLogCriteria" resultMap="BaseResultMap">
     select
@@ -100,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLog">
-    insert into tb_data_reporting_create_task_log (id, model_id, name, 
-      department, create_time)
-    values (#{id,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{department,jdbcType=VARCHAR}, #{createTime,jdbcType=CHAR})
+    insert into tb_data_reporting_create_task_log (id, model_id, form_time, 
+      create_time)
+    values (#{id,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, #{formTime,jdbcType=CHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLog">
     insert into tb_data_reporting_create_task_log
@@ -114,11 +113,8 @@
       <if test="modelId != null">
         model_id,
       </if>
-      <if test="name != null">
-        name,
-      </if>
-      <if test="department != null">
-        department,
+      <if test="formTime != null">
+        form_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -131,14 +127,11 @@
       <if test="modelId != null">
         #{modelId,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="department != null">
-        #{department,jdbcType=VARCHAR},
+      <if test="formTime != null">
+        #{formTime,jdbcType=CHAR},
       </if>
       <if test="createTime != null">
-        #{createTime,jdbcType=CHAR},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -157,14 +150,11 @@
       <if test="record.modelId != null">
         model_id = #{record.modelId,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.department != null">
-        department = #{record.department,jdbcType=VARCHAR},
+      <if test="record.formTime != null">
+        form_time = #{record.formTime,jdbcType=CHAR},
       </if>
       <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=CHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -175,9 +165,8 @@
     update tb_data_reporting_create_task_log
     set id = #{record.id,jdbcType=VARCHAR},
       model_id = #{record.modelId,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      department = #{record.department,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=CHAR}
+      form_time = #{record.formTime,jdbcType=CHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -188,14 +177,11 @@
       <if test="modelId != null">
         model_id = #{modelId,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="department != null">
-        department = #{department,jdbcType=VARCHAR},
+      <if test="formTime != null">
+        form_time = #{formTime,jdbcType=CHAR},
       </if>
       <if test="createTime != null">
-        create_time = #{createTime,jdbcType=CHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -203,9 +189,8 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLog">
     update tb_data_reporting_create_task_log
     set model_id = #{modelId,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      department = #{department,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=CHAR}
+      form_time = #{formTime,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -19,7 +19,7 @@ public class CompanyDataParamModel extends Page implements Serializable {
     @ApiModelProperty(value = "公司名称",example = "XXX企业")
     private String fillInFormName;
 
-    @ApiModelProperty(value = "企业填报状态0：已上报；1未上报；2：逾期上报；",example = "1")
+    @ApiModelProperty(value = "企业填报状态0：已上报；1未上报",example = "1")
     private String status;
 
     @ApiModelProperty(value = "账期",example = "201812")
@@ -33,6 +33,12 @@ public class CompanyDataParamModel extends Page implements Serializable {
 
     @ApiModelProperty(value = "截至日期",example = "2018-12-12 12:12:12")
     private Date fillInFormDeadline;
+
+    @ApiModelProperty(value = "任务批次",example = "111")
+    private String taskBatch;
+    @ApiModelProperty(value = "模板id",example = "112")
+    private String modelId;
+
 
     public String getFillInFormName() {
         return fillInFormName;
@@ -82,4 +88,19 @@ public class CompanyDataParamModel extends Page implements Serializable {
         this.fillInFormDeadline = fillInFormDeadline;
     }
 
+    public String getTaskBatch() {
+        return taskBatch;
+    }
+
+    public void setTaskBatch(String taskBatch) {
+        this.taskBatch = taskBatch;
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
 }

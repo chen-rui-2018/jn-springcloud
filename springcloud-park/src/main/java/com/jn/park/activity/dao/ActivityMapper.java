@@ -46,7 +46,8 @@ public interface ActivityMapper {
      * @param startTime
      * @param endTime
      * @param activityType
+     * @param timeInterval
      * @return
      */
-    List<OrgActivityShow> findOrgActivityList(@Param("startTime") String startTime, @Param("endTime") String endTime,@Param("activityType") String activityType);
+    List<OrgActivityShow> findOrgActivityList(@Param("startTime") String startTime, @Param("endTime") String endTime,@Param("activityType") String activityType,@Param("timeInterval") String timeInterval);
 }

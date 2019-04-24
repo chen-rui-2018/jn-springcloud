@@ -8,13 +8,12 @@ import com.jn.enterprise.servicemarket.advisor.service.AcceptOrgInvitationServic
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,10 +35,9 @@ public class AcceptOrgInvitationController extends BaseController {
     private AcceptOrgInvitationService acceptOrgInvitationService;
 
     @ControllerLog(doAction = "接受机构邀请")
-    @ApiOperation(value = "接受机构邀请",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "接受机构邀请",notes = "advisorAccount:顾问账号，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/acceptOrgInvitation",method = RequestMethod.POST)
-    public Result<Integer> acceptOrgInvitation(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong")
-                                                   @RequestParam("advisorAccount") String advisorAccount){
+    public Result<Integer> acceptOrgInvitation(@RequestBody  String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         int responseNum = acceptOrgInvitationService.acceptOrgInvitation(advisorAccount);
         logger.info("------接受机构邀请成功，数据响应条数：{}-------",responseNum);
@@ -47,10 +45,9 @@ public class AcceptOrgInvitationController extends BaseController {
     }
 
     @ControllerLog(doAction = "拒绝邀请")
-    @ApiOperation(value = "拒绝邀请",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "拒绝邀请",notes = "advisorAccount:顾问账号，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/refuseInvitation",method = RequestMethod.POST)
-    public Result refuseInvitation(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong")
-                                       @RequestParam("advisorAccount")  String advisorAccount){
+    public Result refuseInvitation(@RequestBody String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         int responseNum = acceptOrgInvitationService.refuseInvitation(advisorAccount);
         logger.info("------拒绝邀请成功，数据响应条数：{}-------",responseNum);

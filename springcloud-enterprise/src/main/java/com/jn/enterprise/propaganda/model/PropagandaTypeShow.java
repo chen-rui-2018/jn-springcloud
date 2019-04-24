@@ -33,4 +33,12 @@ public class PropagandaTypeShow implements Serializable {
     public void setPropagandaTypeName(String propagandaTypeName) {
         this.propagandaTypeName = propagandaTypeName;
     }
+
+    @Override
+    public String toString() {
+        return "PropagandaTypeShow{" +
+                "propagandaTypeCode='" + propagandaTypeCode + '\'' +
+                ", propagandaTypeName='" + propagandaTypeName + '\'' +
+                '}';
+    }
 }

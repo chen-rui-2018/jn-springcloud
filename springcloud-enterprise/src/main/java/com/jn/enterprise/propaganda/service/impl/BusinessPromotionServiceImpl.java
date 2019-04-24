@@ -33,7 +33,7 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
 import org.apache.commons.lang.math.RandomUtils;
-import org.apache.poi.ss.formula.functions.T;
+import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -627,6 +627,15 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.SUBMIT_AUDIT_NOT_ALLOW);
         }
         TbPropaganda tbPropaganda = tbPropagandaList.get(0);
+        BusinessPromotionWorkFlow bpw=new BusinessPromotionWorkFlow();
+        BeanUtils.copyProperties(tbPropaganda, bpw);
+        List<BusinessPromotionWorkFlow> dataList=new ArrayList();
+        dataList.add(bpw);
         //把bean转化为json
+        String dataToJson = JSONArray.toJSONString(dataList);
+        //流程id
+        String workFlowId="Process_business_promotion";
+        //todo:启动工作流
+
     }
 }

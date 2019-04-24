@@ -147,9 +147,9 @@ public class WorkPlanController extends BaseController {
     @ApiOperation(value = "导出工作计划", notes = "导出工作计划")
     @RequestMapping(value = "/exportExcelWorkPlanInfo", method = RequestMethod.GET)
     public void exportExcelWorkPlanInfo(WorkPlanPage workPlanPage, HttpServletResponse response) {
-        String exportTitle = "项目名称,任务名称,负责人,任务状态,工作计划内容,计划工时,消耗工时,剩余工时," +
+        String exportTitle = "项目名称,任务名称,负责人,任务状态,计划工时,消耗工时,剩余工时," +
                 "预计开始时间,截止时间,实际开始时间,实际截止时间,是否延期";
-        String exportColName = "itemName,workPlanName,responsibleUserName,workPlanStatusMessage,content,planTime," +
+        String exportColName = "itemName,workPlanName,responsibleUserName,workPlanStatusMessage,planTime," +
                 "totalConsumeTime,totalRemainTime,planStartTime,planEndTime,startTime,endTime,isExpireMessage";
         workPlanPage.setPage(1);
         workPlanPage.setRows(200000);

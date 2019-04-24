@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.enterprise.propaganda.dao.TbPropagandaFeeRulesMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules">
     <result column="pro_fee_rule_code" jdbcType="VARCHAR" property="proFeeRuleCode" />
-    <result column="propaganda_fee" jdbcType="DECIMAL" property="propagandaFee" />
+    <result column="propaganda_fee" jdbcType="DOUBLE" property="propagandaFee" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -118,7 +118,7 @@
     insert into tb_propaganda_fee_rules (pro_fee_rule_code, propaganda_fee, created_time, 
       creator_account, modified_time, modifier_account, 
       record_status, pro_fee_rule_details)
-    values (#{proFeeRuleCode,jdbcType=VARCHAR}, #{propagandaFee,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP}, 
+    values (#{proFeeRuleCode,jdbcType=VARCHAR}, #{propagandaFee,jdbcType=DOUBLE}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT}, #{proFeeRuleDetails,jdbcType=LONGVARCHAR})
   </insert>
@@ -155,7 +155,7 @@
         #{proFeeRuleCode,jdbcType=VARCHAR},
       </if>
       <if test="propagandaFee != null">
-        #{propagandaFee,jdbcType=DECIMAL},
+        #{propagandaFee,jdbcType=DOUBLE},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -190,7 +190,7 @@
         pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
       </if>
       <if test="record.propagandaFee != null">
-        propaganda_fee = #{record.propagandaFee,jdbcType=DECIMAL},
+        propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -218,7 +218,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update tb_propaganda_fee_rules
     set pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{record.propagandaFee,jdbcType=DECIMAL},
+      propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -232,7 +232,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_propaganda_fee_rules
     set pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{record.propagandaFee,jdbcType=DECIMAL},
+      propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},

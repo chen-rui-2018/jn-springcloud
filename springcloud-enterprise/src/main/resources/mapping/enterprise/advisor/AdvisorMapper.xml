@@ -57,7 +57,7 @@
        </if>
        <if test="keyWords !=null  and keyWords !=''">
            <!-- 关键词-->
-           and (tt.advisorName like '%'||#{domain}||'%' or tt.position like '%'||#{domain}||'%')
+           and (tt.advisorName like concat('%',#{keyWords},'%') or tt.position like concat('%',#{keyWords},'%'))
        </if>
        <if test="templateId !=null and templateId!=''">
            and tt.advisorAccount in (

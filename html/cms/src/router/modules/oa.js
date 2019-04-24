@@ -19,6 +19,12 @@ const oaRouter = {
       meta: { title: '公告管理', noCache: true }
     },
     {
+      path: 'scheduleManagement',
+      component: () => import('@/views/oa/scheduleManagement'),
+      name: 'scheduleManagement',
+      meta: { title: '日程管理', noCache: true }
+    },
+    {
       path: 'workPlanManagement',
       component: () => import('@/views/oa/work/workPlanManagement'),
       name: 'workPlanManagement',

@@ -86,7 +86,7 @@ public class WorkPlanRecordServiceTest {
 
     @Test
     public void list() {
-        List<TbOaWorkPlanRecord> list = workPlanRecordService.list("10000");
+        List<WorkPlanRecord> list = workPlanRecordService.list("10000");
         Assert.assertThat(list, Matchers.anything());
     }
 }

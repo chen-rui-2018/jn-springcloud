@@ -1135,52 +1135,52 @@ public class TbPropagandaCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeEqualTo(Long value) {
+        public Criteria andPropagandaFeeEqualTo(Double value) {
             addCriterion("propaganda_fee =", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeNotEqualTo(Long value) {
+        public Criteria andPropagandaFeeNotEqualTo(Double value) {
             addCriterion("propaganda_fee <>", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeGreaterThan(Long value) {
+        public Criteria andPropagandaFeeGreaterThan(Double value) {
             addCriterion("propaganda_fee >", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeGreaterThanOrEqualTo(Long value) {
+        public Criteria andPropagandaFeeGreaterThanOrEqualTo(Double value) {
             addCriterion("propaganda_fee >=", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeLessThan(Long value) {
+        public Criteria andPropagandaFeeLessThan(Double value) {
             addCriterion("propaganda_fee <", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeLessThanOrEqualTo(Long value) {
+        public Criteria andPropagandaFeeLessThanOrEqualTo(Double value) {
             addCriterion("propaganda_fee <=", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeIn(List<Long> values) {
+        public Criteria andPropagandaFeeIn(List<Double> values) {
             addCriterion("propaganda_fee in", values, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeNotIn(List<Long> values) {
+        public Criteria andPropagandaFeeNotIn(List<Double> values) {
             addCriterion("propaganda_fee not in", values, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeBetween(Long value1, Long value2) {
+        public Criteria andPropagandaFeeBetween(Double value1, Double value2) {
             addCriterion("propaganda_fee between", value1, value2, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeNotBetween(Long value1, Long value2) {
+        public Criteria andPropagandaFeeNotBetween(Double value1, Double value2) {
             addCriterion("propaganda_fee not between", value1, value2, "propagandaFee");
             return (Criteria) this;
         }

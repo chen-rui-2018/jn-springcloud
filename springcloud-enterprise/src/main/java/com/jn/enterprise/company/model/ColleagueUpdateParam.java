@@ -7,22 +7,14 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 接收邀请入参
+ * 修改同事信息入参
  * @author： huxw
  * @date： Created on 2019-4-11 10:01:42
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "AcceptInviteParam",description = "接收邀请入参")
-public class AcceptInviteParam implements Serializable {
-
-    @ApiModelProperty(value = "账号", notes = "该字段仅为测试字段", required = true)
-    @NotNull(message = "账号不能为空")
-    private String account;
-
-    @ApiModelProperty(value = "企业ID", required = true)
-    @NotNull(message = "企业ID不能为空")
-    private String comId;
+@ApiModel(value = "ColleagueUpdateParam",description = "修改同事信息入参")
+public class ColleagueUpdateParam implements Serializable {
 
     @ApiModelProperty(value = "昵称", required = true)
     @NotNull(message = "昵称不能为空")
@@ -39,22 +31,6 @@ public class AcceptInviteParam implements Serializable {
     @ApiModelProperty(value = "出生年月yyyy-mm-dd", required = true, example = "2019-01-01")
     @NotNull(message = "出生年月不能为空")
     private String birthday;
-
-    public String getComId() {
-        return comId;
-    }
-
-    public void setComId(String comId) {
-        this.comId = comId;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
 
     public String getNickName() {
         return nickName;

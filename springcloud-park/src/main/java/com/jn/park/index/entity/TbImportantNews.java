@@ -1,41 +1,49 @@
-package com.jn.enterprise.company.entity;
+package com.jn.park.index.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class TbServiceRecruit implements Serializable {
+public class TbImportantNews implements Serializable {
+    /*@ApiModelProperty("id")*/
     private String id;
 
-    private String recruitNo;
+    /*@ApiModelProperty("编号")*/
+    private String serialNo;
 
-    private String comId;
+    /*@ApiModelProperty("标题")*/
+    private String title;
 
-    private String comName;
-
-    private String post;
-
-    private String salary;
-
-    private Integer num;
-
-    private String type;
-
+    /*@ApiModelProperty("消息详情")*/
     private String details;
 
-    private Byte status;
+    /*@ApiModelProperty("生效时间")*/
+    private Date startTime;
 
-    private String approvalStatus;
+    /*@ApiModelProperty("失效时间")*/
+    private Date endTime;
 
-    private Integer viewCount;
+    /*@ApiModelProperty("平台类型(0:全部 1:app 2:门户)")*/
+    private String platformType;
 
+    /*@ApiModelProperty("平台名称(全部/APP/门户)")*/
+    private String platformName;
+
+    /*@ApiModelProperty("状态（0无效 1有效）")*/
+    private String status;
+
+    /*@ApiModelProperty("创建人账号")*/
     private String creatorAccount;
 
+    /*@ApiModelProperty("创建时间")*/
     private Date createdTime;
 
+    /*@ApiModelProperty("最新更新者账号")*/
     private String modifierAccount;
 
+    /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
 
+    /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
@@ -48,60 +56,20 @@ public class TbServiceRecruit implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getRecruitNo() {
-        return recruitNo;
+    public String getSerialNo() {
+        return serialNo;
     }
 
-    public void setRecruitNo(String recruitNo) {
-        this.recruitNo = recruitNo == null ? null : recruitNo.trim();
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo == null ? null : serialNo.trim();
     }
 
-    public String getComId() {
-        return comId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setComId(String comId) {
-        this.comId = comId == null ? null : comId.trim();
-    }
-
-    public String getComName() {
-        return comName;
-    }
-
-    public void setComName(String comName) {
-        this.comName = comName == null ? null : comName.trim();
-    }
-
-    public String getPost() {
-        return post;
-    }
-
-    public void setPost(String post) {
-        this.post = post == null ? null : post.trim();
-    }
-
-    public String getSalary() {
-        return salary;
-    }
-
-    public void setSalary(String salary) {
-        this.salary = salary == null ? null : salary.trim();
-    }
-
-    public Integer getNum() {
-        return num;
-    }
-
-    public void setNum(Integer num) {
-        this.num = num;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
     }
 
     public String getDetails() {
@@ -112,28 +80,44 @@ public class TbServiceRecruit implements Serializable {
         this.details = details == null ? null : details.trim();
     }
 
-    public Byte getStatus() {
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getPlatformType() {
+        return platformType;
+    }
+
+    public void setPlatformType(String platformType) {
+        this.platformType = platformType == null ? null : platformType.trim();
+    }
+
+    public String getPlatformName() {
+        return platformName;
+    }
+
+    public void setPlatformName(String platformName) {
+        this.platformName = platformName == null ? null : platformName.trim();
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
-    public String getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus == null ? null : approvalStatus.trim();
-    }
-
-    public Integer getViewCount() {
-        return viewCount;
-    }
-
-    public void setViewCount(Integer viewCount) {
-        this.viewCount = viewCount;
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
     public String getCreatorAccount() {
@@ -187,19 +171,16 @@ public class TbServiceRecruit implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbServiceRecruit other = (TbServiceRecruit) that;
+        TbImportantNews other = (TbImportantNews) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getRecruitNo() == null ? other.getRecruitNo() == null : this.getRecruitNo().equals(other.getRecruitNo()))
-            && (this.getComId() == null ? other.getComId() == null : this.getComId().equals(other.getComId()))
-            && (this.getComName() == null ? other.getComName() == null : this.getComName().equals(other.getComName()))
-            && (this.getPost() == null ? other.getPost() == null : this.getPost().equals(other.getPost()))
-            && (this.getSalary() == null ? other.getSalary() == null : this.getSalary().equals(other.getSalary()))
-            && (this.getNum() == null ? other.getNum() == null : this.getNum().equals(other.getNum()))
-            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getSerialNo() == null ? other.getSerialNo() == null : this.getSerialNo().equals(other.getSerialNo()))
+            && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
             && (this.getDetails() == null ? other.getDetails() == null : this.getDetails().equals(other.getDetails()))
+            && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
+            && (this.getEndTime() == null ? other.getEndTime() == null : this.getEndTime().equals(other.getEndTime()))
+            && (this.getPlatformType() == null ? other.getPlatformType() == null : this.getPlatformType().equals(other.getPlatformType()))
+            && (this.getPlatformName() == null ? other.getPlatformName() == null : this.getPlatformName().equals(other.getPlatformName()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
-            && (this.getViewCount() == null ? other.getViewCount() == null : this.getViewCount().equals(other.getViewCount()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
@@ -212,17 +193,14 @@ public class TbServiceRecruit implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getRecruitNo() == null) ? 0 : getRecruitNo().hashCode());
-        result = prime * result + ((getComId() == null) ? 0 : getComId().hashCode());
-        result = prime * result + ((getComName() == null) ? 0 : getComName().hashCode());
-        result = prime * result + ((getPost() == null) ? 0 : getPost().hashCode());
-        result = prime * result + ((getSalary() == null) ? 0 : getSalary().hashCode());
-        result = prime * result + ((getNum() == null) ? 0 : getNum().hashCode());
-        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+        result = prime * result + ((getSerialNo() == null) ? 0 : getSerialNo().hashCode());
+        result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
         result = prime * result + ((getDetails() == null) ? 0 : getDetails().hashCode());
+        result = prime * result + ((getStartTime() == null) ? 0 : getStartTime().hashCode());
+        result = prime * result + ((getEndTime() == null) ? 0 : getEndTime().hashCode());
+        result = prime * result + ((getPlatformType() == null) ? 0 : getPlatformType().hashCode());
+        result = prime * result + ((getPlatformName() == null) ? 0 : getPlatformName().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
-        result = prime * result + ((getViewCount() == null) ? 0 : getViewCount().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
@@ -238,17 +216,14 @@ public class TbServiceRecruit implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", recruitNo=").append(recruitNo);
-        sb.append(", comId=").append(comId);
-        sb.append(", comName=").append(comName);
-        sb.append(", post=").append(post);
-        sb.append(", salary=").append(salary);
-        sb.append(", num=").append(num);
-        sb.append(", type=").append(type);
+        sb.append(", serialNo=").append(serialNo);
+        sb.append(", title=").append(title);
         sb.append(", details=").append(details);
+        sb.append(", startTime=").append(startTime);
+        sb.append(", endTime=").append(endTime);
+        sb.append(", platformType=").append(platformType);
+        sb.append(", platformName=").append(platformName);
         sb.append(", status=").append(status);
-        sb.append(", approvalStatus=").append(approvalStatus);
-        sb.append(", viewCount=").append(viewCount);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);

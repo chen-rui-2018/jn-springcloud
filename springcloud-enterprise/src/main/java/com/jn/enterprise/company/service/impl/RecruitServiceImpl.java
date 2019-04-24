@@ -82,7 +82,7 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Override
     @ServiceLog(doAction = "查询招聘信息列表")
-    public PaginationData<List<RecruitVO>> getRecruitList(ServiceRecruitParam recruitParam) {
+    public PaginationData<List<RecruitVO>> getRecruitList(ServiceRecruitParam recruitParam, String approvalStatus) {
         // 过滤错误入参
         if (StringUtils.isNotEmpty(recruitParam.getWhereTypes())) {
             recruitParam.setWhereTypes(recruitParam.getWhereTypes().toLowerCase());
@@ -114,6 +114,11 @@ public class RecruitServiceImpl implements RecruitService {
 
         ServiceRecruitSearchParam rp = new ServiceRecruitSearchParam();
         BeanUtils.copyProperties(recruitParam,rp);
+
+        // 如果审核字段不为空，查询指定审批列表
+        if (StringUtils.isNotEmpty(approvalStatus)) {
+            rp.setApprovalStatus(approvalStatus);
+        }
 
         // 复合查询判断并赋值(忽略单一查询)
         if (StringUtils.isNotEmpty(recruitParam.getBeginDate()) && StringUtils.isNotEmpty(recruitParam.getEndDate())) {

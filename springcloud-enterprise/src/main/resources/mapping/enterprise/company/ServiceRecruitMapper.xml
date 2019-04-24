@@ -72,6 +72,9 @@
                 </otherwise>
             </choose>
         </if>
+        <if test="approvalStatus != null and approvalStatus != ''">
+            AND a.approval_status = #{approvalStatus}
+        </if>
         <if test="beginDate != null and endDate != null">
             <![CDATA[
                 AND DATE_FORMAT(#{beginDate},'%Y-%m-%d') <= DATE_FORMAT(a.created_time,'%Y-%m-%d')

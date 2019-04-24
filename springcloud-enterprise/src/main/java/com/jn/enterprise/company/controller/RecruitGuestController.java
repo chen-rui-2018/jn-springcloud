@@ -52,7 +52,7 @@ public class RecruitGuestController extends BaseController {
         if(StringUtils.isNotEmpty(serviceRecruitParam.getComId())) {
             companyService.getCompanyDetailByAccountOrId(serviceRecruitParam.getComId());
         }
-        return new Result(recruitService.getRecruitList(serviceRecruitParam));
+        return new Result(recruitService.getRecruitList(serviceRecruitParam, null));
     }
 
     @ControllerLog(doAction = "招聘列表（前台）")
@@ -64,7 +64,7 @@ public class RecruitGuestController extends BaseController {
 
         //前台查询只能查有效数据
         serviceRecruitParam.setStatus(RecruitDataTypeEnum.ON_SHELVES.getCode());
-        return new Result(recruitService.getRecruitList(serviceRecruitParam));
+        return new Result(recruitService.getRecruitList(serviceRecruitParam, RecruitDataTypeEnum.APPROVAL_STATUS_PASS.getCode()));
     }
 
 

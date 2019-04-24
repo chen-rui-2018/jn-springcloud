@@ -14,7 +14,8 @@ public enum ParkingCompanyEnum implements CodeAndMsg {
 
     DOOR_COMPANY("1", "道尔公司"),
     FUSHI_COMPANY("2", "富士公司"),
-    ALL_COMPANY("9", "全部");
+    ALL_COMPANY("9", "全部"),
+    SIGNATURE_KEY ("SIGNATURE_KEY", "R7ZPB6EEZZZGE762BJC57PW68ZXX3SNH");
 
     private String code;
     private String message;

@@ -3,7 +3,7 @@ package com.jn.hardware.server;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.hardware.api.ParkingClient;
-import com.jn.hardware.model.parking.TemporaryCarParkingFeeRequest;
+import com.jn.hardware.model.parking.*;
 import com.jn.hardware.parking.service.ParkingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +25,44 @@ public class ParkingController extends BaseController implements ParkingClient {
 
     @Override
     public Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
-        parkingService.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
-        return null;
+        return parkingService.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
     }
+
+    @Override
+    public Result savePaymentCarParkingFee(PaymentCarParkingFeeRequest paymentCarParkingFeeRequest) {
+        return  parkingService.savePaymentCarParkingFee(paymentCarParkingFeeRequest);
+    }
+
+    @Override
+    public Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest) {
+
+        return parkingService.saveParkingMonthlyRentCard(parkingMonthlyRentCardRequest);
+    }
+
+    @Override
+    public Result findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
+        return parkingService.findParkingMonthlyRentCard(parkingMonthlyCardInfoRequest);
+    }
+
+    @Override
+    public Result saveMonthlyRentalCardRenewalFee(MonthlyRentalCardRenewalFeeRequset monthlyRentalCardRenewalFeeRequset) {
+        return parkingService.saveMonthlyRentalCardRenewalFee(monthlyRentalCardRenewalFeeRequset);
+    }
+
+    @Override
+    public Result findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
+        return parkingService.findMonthlyRentCardRateInfo(monthyRentalCardRateRequest);
+    }
+
+    @Override
+    public Result cancelMonthlyRentAccount(CancelMonthlyRentAccountRequest cancelMonthlyRentAccountRequest) {
+        return parkingService.cancelMonthlyRentAccount(cancelMonthlyRentAccountRequest);
+    }
+
+    @Override
+    public Result findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
+        return parkingService.findParkingSpaceAmount(parkingSpaceAmountRequest);
+    }
+
+
 }

@@ -1,6 +1,8 @@
 package com.jn.hardware.model.parking;
 
 import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeRequest;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
@@ -12,17 +14,20 @@ import java.io.Serializable;
  * @Version： v1.0
  * @Modified By:
  */
+@ApiModel(value = "TemporaryCarParkingFeeRequest",description = "停车预缴费查询")
 public class TemporaryCarParkingFeeRequest implements Serializable {
     private static final long serialVersionUID = 4156816275095794240L;
 
     /**
-     * 硬件公司ID，取值ParkingCompanyEnum类，没家硬件厂商可能存在多个停车场
+     * 硬件公司ID，取值ParkingCompanyEnum类，每家硬件厂商可能存在多个停车场
      */
+    @ApiModelProperty(value = "硬件公司ID，取值ParkingCompanyEnum类，每家硬件厂商可能存在多个停车场",required = true)
     private String parkingCompanyId;
 
     /**
      * 道尔 查询临停预缴费信息(场内缴费)入参对象
      */
+    @ApiModelProperty(value = "道尔 查询临停预缴费信息(场内缴费)入参对象")
     private DoorTemporaryCarParkingFeeRequest doorTemporaryCarParkingFeeRequest;
 
     public String getParkingCompanyId() {

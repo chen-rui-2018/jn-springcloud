@@ -24,6 +24,4 @@ public class SpringCloudHardwareApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(SpringCloudHardwareApplication.class).web(true).run(args);
     }
-
-
 }

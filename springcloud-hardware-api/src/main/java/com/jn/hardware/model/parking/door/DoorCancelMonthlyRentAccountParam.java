@@ -2,31 +2,25 @@ package com.jn.hardware.model.parking.door;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 
 /**
- * 道尔：
- *      临停预缴费信息(场内缴费)入参
- *
- * @Author： cm
- * @Date： Created on 2019/4/17 16:14
- * @Version： v1.0
- * @Modified By:
+ * @author： chenr
+ * @date： Created on 2019/4/19 14:12
+ * @version： v1.0
+ * @modified By:
  */
-@ApiModel(value = "DoorTemporaryCarParkingFeeRequest",description = "道尔：临停预缴费信息(场内缴费)入参")
-public class DoorTemporaryCarParkingFeeRequest implements Serializable {
-    private static final long serialVersionUID = 4821707076234957782L;
-
-    /**
-     * 车场编号
-     */
+@ApiModel(value = "DoorCancelMonthlyRentAccountParam",description = "道尔:月租销户入参实体bean")
+public class DoorCancelMonthlyRentAccountParam implements Serializable {
+    private static final long serialVersionUID = -4022994872111479691L;
     @ApiModelProperty(value = "车场编号",required = true,example = "100010_0004")
+    @NotBlank(message = "车场编号不能为空")
     private String parkid;
-    /**
-     * 车牌号码
-     */
+
     @ApiModelProperty(value = "车牌号码",required = true,example = "粤Z76760")
+    @NotBlank(message = "车牌号码不能为空")
     private String carNo;
 
     public String getParkid() {
@@ -47,7 +41,7 @@ public class DoorTemporaryCarParkingFeeRequest implements Serializable {
 
     @Override
     public String toString() {
-        return "DoorTemporaryCarParkingFeeRequest{" +
+        return "DoorCancelMonthlyRentlyAccountParam{" +
                 "parkid='" + parkid + '\'' +
                 ", carNo='" + carNo + '\'' +
                 '}';

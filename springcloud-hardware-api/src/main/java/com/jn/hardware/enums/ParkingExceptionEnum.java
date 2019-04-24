@@ -12,7 +12,10 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum ParkingExceptionEnum implements CodeAndMsg {
     MISSING_PARK_ID("1712201", "缺少车场唯一标识。"),
-    DOOR_COMPANY_EXCEPTION("1712201", "调用道尔接口，发生未知异常。")
+    DOOR_COMPANY_EXCEPTION("1712201", "调用道尔接口，发生未知异常。"),
+    DOOR_CAR_IN_PARKING("1712202", "道尔入场消息推送,发生未知异常"),
+    DOOR_CAR_OUT_PARKING("1712203", "道尔出场消息推送,发生未知异常。"),
+    DOOR_CAR_PARKING_SIGNNATURE("1712204", "动态签名验证失败")
     ;
     /**
      * 编码

@@ -1,5 +1,8 @@
 package com.jn.hardware.model.parking.door;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -11,43 +14,53 @@ import java.io.Serializable;
  * @Version： v1.0
  * @Modified By:
  */
+@ApiModel(value = "DoorTemporaryCarParkingFeeResponse",description = "道尔：临停预缴费信息(场内缴费)出参实体")
 public class DoorTemporaryCarParkingFeeResponse implements Serializable {
     private static final long serialVersionUID = 4239028722945707861L;
     /**
      * 车牌号码
      */
+    @ApiModelProperty(value="车牌号码")
     private String carNo;
     /**
      * 卡编号
      */
+    @ApiModelProperty(value="卡编号")
     private String cardNo;
     /**
      * 卡号
      */
+    @ApiModelProperty(value="卡号")
     private String cardId;
     /**
      * 车辆入场时间 格式 yyyy-MM-dd HH:mm:ss
      */
+    @ApiModelProperty(value="车辆入场时间 格式 yyyy-MM-dd HH:mm:ss")
     private String entryTime;
     /**
      * 计费时间 格式 yyyy-MM-dd HH:mm:ss
      */
+    @ApiModelProperty(value="计费时间 格式 yyyy-MM-dd HH:mm:ss")
     private String chargeTime;
     /**
      * 0 临停缴费 1 超时缴费
      */
+    @ApiModelProperty(value="0 临停缴费 1 超时缴费")
     private int paymentType;
     /**
      * 缴费时长 单位：分钟
      */
+    @ApiModelProperty(value=" 缴费时长 单位：分钟")
     private String chargeDuration;
     /**
      * 应收金额 单位：元
      */
+    @ApiModelProperty(value="应收金额 单位：元")
     private float amount;
     /**
      * 优惠金额 单位：元
      */
+    @ApiModelProperty(value="优惠金额 单位：元")
     private float discountAmount;
 
     public String getCarNo() {

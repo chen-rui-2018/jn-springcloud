@@ -73,10 +73,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        gamtopic
+                        index
                     </contexts>
                     <tableNames>
-                       tb_person_care
+                        tb_important_news
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

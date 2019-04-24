@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.company.dao.TbServiceRecruitMapper">
-  <resultMap id="BaseResultMap" type="com.jn.enterprise.company.entity.TbServiceRecruit">
-    <id column="id_" jdbcType="VARCHAR" property="id" />
-    <result column="recruit_no" jdbcType="VARCHAR" property="recruitNo" />
-    <result column="com_id" jdbcType="VARCHAR" property="comId" />
-    <result column="com_name" jdbcType="VARCHAR" property="comName" />
-    <result column="post" jdbcType="VARCHAR" property="post" />
-    <result column="salary" jdbcType="VARCHAR" property="salary" />
-    <result column="num" jdbcType="INTEGER" property="num" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
+<mapper namespace="com.jn.park.index.dao.TbImportantNewsMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.index.entity.TbImportantNews">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="serial_no" jdbcType="VARCHAR" property="serialNo" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="details" jdbcType="VARCHAR" property="details" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
-    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="platform_type" jdbcType="VARCHAR" property="platformType" />
+    <result column="platform_name" jdbcType="VARCHAR" property="platformName" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
@@ -79,16 +76,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id_, recruit_no, com_id, com_name, post, salary, num, type, details, status, approval_status, 
-    view_count, creator_account, created_time, modifier_account, modified_time, record_status
+    id, serial_no, title, details, start_time, end_time, platform_type, platform_name, 
+    status, creator_account, created_time, modifier_account, modified_time, record_status
   </sql>
-  <select id="selectByExample" parameterType="com.jn.enterprise.company.entity.TbServiceRecruitCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.index.entity.TbImportantNewsCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_service_recruit
+    from tb_important_news
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -99,71 +96,60 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_service_recruit
-    where id_ = #{id,jdbcType=VARCHAR}
+    from tb_important_news
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_service_recruit
-    where id_ = #{id,jdbcType=VARCHAR}
+    delete from tb_important_news
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.enterprise.company.entity.TbServiceRecruitCriteria">
-    delete from tb_service_recruit
+  <delete id="deleteByExample" parameterType="com.jn.park.index.entity.TbImportantNewsCriteria">
+    delete from tb_important_news
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
-    insert into tb_service_recruit (id_, recruit_no, com_id, 
-      com_name, post, salary, 
-      num, type, details, 
-      status, approval_status, view_count, 
+  <insert id="insert" parameterType="com.jn.park.index.entity.TbImportantNews">
+    insert into tb_important_news (id, serial_no, title, 
+      details, start_time, end_time, 
+      platform_type, platform_name, status, 
       creator_account, created_time, modifier_account, 
       modified_time, record_status)
-    values (#{id,jdbcType=VARCHAR}, #{recruitNo,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, 
-      #{comName,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR}, #{salary,jdbcType=VARCHAR}, 
-      #{num,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT}, #{approvalStatus,jdbcType=VARCHAR}, #{viewCount,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=VARCHAR}, #{serialNo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{details,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{platformType,jdbcType=VARCHAR}, #{platformName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
-    insert into tb_service_recruit
+  <insert id="insertSelective" parameterType="com.jn.park.index.entity.TbImportantNews">
+    insert into tb_important_news
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        id_,
+        id,
       </if>
-      <if test="recruitNo != null">
-        recruit_no,
+      <if test="serialNo != null">
+        serial_no,
       </if>
-      <if test="comId != null">
-        com_id,
-      </if>
-      <if test="comName != null">
-        com_name,
-      </if>
-      <if test="post != null">
-        post,
-      </if>
-      <if test="salary != null">
-        salary,
-      </if>
-      <if test="num != null">
-        num,
-      </if>
-      <if test="type != null">
-        type,
+      <if test="title != null">
+        title,
       </if>
       <if test="details != null">
         details,
       </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="platformType != null">
+        platform_type,
+      </if>
+      <if test="platformName != null">
+        platform_name,
+      </if>
       <if test="status != null">
         status,
-      </if>
-      <if test="approvalStatus != null">
-        approval_status,
-      </if>
-      <if test="viewCount != null">
-        view_count,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -185,38 +171,29 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="recruitNo != null">
-        #{recruitNo,jdbcType=VARCHAR},
+      <if test="serialNo != null">
+        #{serialNo,jdbcType=VARCHAR},
       </if>
-      <if test="comId != null">
-        #{comId,jdbcType=VARCHAR},
-      </if>
-      <if test="comName != null">
-        #{comName,jdbcType=VARCHAR},
-      </if>
-      <if test="post != null">
-        #{post,jdbcType=VARCHAR},
-      </if>
-      <if test="salary != null">
-        #{salary,jdbcType=VARCHAR},
-      </if>
-      <if test="num != null">
-        #{num,jdbcType=INTEGER},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=VARCHAR},
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
       </if>
       <if test="details != null">
         #{details,jdbcType=VARCHAR},
       </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="platformType != null">
+        #{platformType,jdbcType=VARCHAR},
+      </if>
+      <if test="platformName != null">
+        #{platformName,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="approvalStatus != null">
-        #{approvalStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="viewCount != null">
-        #{viewCount,jdbcType=INTEGER},
+        #{status,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -235,50 +212,41 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.enterprise.company.entity.TbServiceRecruitCriteria" resultType="java.lang.Long">
-    select count(*) from tb_service_recruit
+  <select id="countByExample" parameterType="com.jn.park.index.entity.TbImportantNewsCriteria" resultType="java.lang.Long">
+    select count(*) from tb_important_news
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_service_recruit
+    update tb_important_news
     <set>
       <if test="record.id != null">
-        id_ = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.recruitNo != null">
-        recruit_no = #{record.recruitNo,jdbcType=VARCHAR},
+      <if test="record.serialNo != null">
+        serial_no = #{record.serialNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.comId != null">
-        com_id = #{record.comId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.comName != null">
-        com_name = #{record.comName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.post != null">
-        post = #{record.post,jdbcType=VARCHAR},
-      </if>
-      <if test="record.salary != null">
-        salary = #{record.salary,jdbcType=VARCHAR},
-      </if>
-      <if test="record.num != null">
-        num = #{record.num,jdbcType=INTEGER},
-      </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=VARCHAR},
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
       </if>
       <if test="record.details != null">
         details = #{record.details,jdbcType=VARCHAR},
       </if>
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.platformType != null">
+        platform_type = #{record.platformType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.platformName != null">
+        platform_name = #{record.platformName,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null">
-        status = #{record.status,jdbcType=TINYINT},
-      </if>
-      <if test="record.approvalStatus != null">
-        approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="record.viewCount != null">
-        view_count = #{record.viewCount,jdbcType=INTEGER},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -301,19 +269,16 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_service_recruit
-    set id_ = #{record.id,jdbcType=VARCHAR},
-      recruit_no = #{record.recruitNo,jdbcType=VARCHAR},
-      com_id = #{record.comId,jdbcType=VARCHAR},
-      com_name = #{record.comName,jdbcType=VARCHAR},
-      post = #{record.post,jdbcType=VARCHAR},
-      salary = #{record.salary,jdbcType=VARCHAR},
-      num = #{record.num,jdbcType=INTEGER},
-      type = #{record.type,jdbcType=VARCHAR},
+    update tb_important_news
+    set id = #{record.id,jdbcType=VARCHAR},
+      serial_no = #{record.serialNo,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
       details = #{record.details,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=TINYINT},
-      approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
-      view_count = #{record.viewCount,jdbcType=INTEGER},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      platform_type = #{record.platformType,jdbcType=VARCHAR},
+      platform_name = #{record.platformName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
@@ -323,41 +288,32 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
-    update tb_service_recruit
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.index.entity.TbImportantNews">
+    update tb_important_news
     <set>
-      <if test="recruitNo != null">
-        recruit_no = #{recruitNo,jdbcType=VARCHAR},
+      <if test="serialNo != null">
+        serial_no = #{serialNo,jdbcType=VARCHAR},
       </if>
-      <if test="comId != null">
-        com_id = #{comId,jdbcType=VARCHAR},
-      </if>
-      <if test="comName != null">
-        com_name = #{comName,jdbcType=VARCHAR},
-      </if>
-      <if test="post != null">
-        post = #{post,jdbcType=VARCHAR},
-      </if>
-      <if test="salary != null">
-        salary = #{salary,jdbcType=VARCHAR},
-      </if>
-      <if test="num != null">
-        num = #{num,jdbcType=INTEGER},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=VARCHAR},
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
       </if>
       <if test="details != null">
         details = #{details,jdbcType=VARCHAR},
       </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="platformType != null">
+        platform_type = #{platformType,jdbcType=VARCHAR},
+      </if>
+      <if test="platformName != null">
+        platform_name = #{platformName,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="approvalStatus != null">
-        approval_status = #{approvalStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="viewCount != null">
-        view_count = #{viewCount,jdbcType=INTEGER},
+        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -375,26 +331,23 @@
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
-    where id_ = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
-    update tb_service_recruit
-    set recruit_no = #{recruitNo,jdbcType=VARCHAR},
-      com_id = #{comId,jdbcType=VARCHAR},
-      com_name = #{comName,jdbcType=VARCHAR},
-      post = #{post,jdbcType=VARCHAR},
-      salary = #{salary,jdbcType=VARCHAR},
-      num = #{num,jdbcType=INTEGER},
-      type = #{type,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.index.entity.TbImportantNews">
+    update tb_important_news
+    set serial_no = #{serialNo,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
       details = #{details,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
-      approval_status = #{approvalStatus,jdbcType=VARCHAR},
-      view_count = #{viewCount,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      platform_type = #{platformType,jdbcType=VARCHAR},
+      platform_name = #{platformName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT}
-    where id_ = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

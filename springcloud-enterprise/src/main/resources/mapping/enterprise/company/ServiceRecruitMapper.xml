@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.enterprise.company.dao.ServiceRecruitMapper">
 
     <sql id="recruitFiled">
-        a.id AS "id",
+        a.id_ AS "id",
         a.recruit_no AS "recruitNo",
         a.post AS "post",
         a.num AS "num",
@@ -32,7 +32,7 @@
         FROM tb_service_recruit a
             <include refid="recruitJoin" />
         WHERE a.record_status = 1
-        AND a.id = #{id}
+        AND a.id_ = #{id}
     </select>
 
     <!-- 查询企业招聘信息列表 -->
@@ -92,7 +92,7 @@
     <update id="addRecruitClickById">
         UPDATE tb_service_recruit SET
             view_count = view_count + 1
-        WHERE id = #{id}
+        WHERE id_ = #{id}
     </update>
 
     <!-- 删除企业招聘信息 -->
@@ -101,6 +101,6 @@
             record_status = 0,
             modifier_account = #{account},
             modified_time = #{modifiedTime}
-        WHERE id = #{id}
+        WHERE id_ = #{id}
     </delete>
 </mapper>

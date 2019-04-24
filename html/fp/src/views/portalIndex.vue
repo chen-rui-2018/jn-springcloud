@@ -252,123 +252,126 @@
       <div class="eng mainColor">Popular&nbsp;activities</div>
       <div class="line"></div>
       <div class="acti">
-        <!-- <el-carousel-item v-for="item in 3" :key="item"> -->
-        <ul class="clearfix actiUl">
-          <li>
-            <div class="postImgItem">
-              <img src="@/../static/img/heng1.png" class="postImg" alt="活动海报图片">
-            </div>
-            <div class="actiInfo">
-              <p class="actiNameItem">
-                白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
-              </p>
-              <p class="actiTimer">
-                <i class="el-icon-time"></i>
-                <span>10/17 周日14:00-17:00</span>
-                <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                <!-- <span>周日14：00-17：00</span> -->
-              </p>
-              <p>
-                <i class="el-icon-location-outline"></i>
-                <span>白下高新区管委会161号—A座</span>
-              </p>
-            </div>
-            <div class="actiNum clearfix">
-              <div class="avatar">
-                <ul>
-                  <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                </ul>
-              </div>
-              <i>678/1000名</i>
-              <p class="avaP">
-                <!-- <i class="iconfont icon-xihuan"></i>16 -->
-                <img src="@/../static/img/xin.png" alt="">16
-              </p>
-            </div>
-          </li>
-          <li>
-            <div class="postImgItem postImgItem2">
-              <img src="@/../static/img/dengpao2.png" class="postImg" alt="活动海报图片">
-            </div>
-            <div class="actiInfo">
-              <p class="actiNameItem">
-                白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
-              </p>
-              <p class="actiTimer">
-                <i class="el-icon-time"></i>
-                <span>10/17 周日14:00-17:00</span>
-                <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                <!-- <span>周日14：00-17：00</span> -->
-              </p>
-              <p>
-                <i class="el-icon-location-outline"></i>
-                <span>白下高新区管委会161号—A座</span>
-              </p>
-            </div>
-            <div class="actiNum clearfix">
-              <div class="avatar">
-                <ul>
-                  <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                </ul>
-              </div>
-              <i>678/1000名</i>
-              <p class="avaP">
-                <!-- <i class="iconfont icon-xihuan"></i>16 -->
-                <img src="@/../static/img/xin.png" alt="">16
-              </p>
-            </div>
-          </li>
-          <li>
-            <div class="postImgItem">
-              <img src="@/../static/img/heng3.png" class="postImg" alt="活动海报图片">
-            </div>
-            <div class="actiInfo">
-              <p class="actiNameItem">
-                白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
-              </p>
-              <p class="actiTimer">
-                <i class="el-icon-time"></i>
-                <span>10/17 周日14:00-17:00</span>
-                <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                <!-- <span>周日14：00-17：00</span> -->
-              </p>
-              <p>
-                <i class="el-icon-location-outline"></i>
-                <span>白下高新区管委会161号—A座</span>
-              </p>
-            </div>
-            <div class="actiNum clearfix">
-              <div class="avatar">
-                <ul>
-                  <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                  <li><img src="" alt=""></li>
-                </ul>
-              </div>
-              <i>678/1000名</i>
-              <p class="avaP">
-                <img src="@/../static/img/xin.png" alt="">16
-              </p>
-            </div>
-          </li>
-        </ul>
-        <!-- </el-carousel-item> -->
+        <el-carousel :interval="5000" arrow="always" :autoplay="false">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <ul class="actiUl clearfix">
+              <li>
+                <div class="postImgItem">
+                  <img src="@/../static/img/heng1.png" class="postImg" alt="活动海报图片">
+                </div>
+                <div class="actiInfo">
+                  <p class="actiNameItem">
+                    白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
+                  </p>
+                  <p class="actiTimer">
+                    <i class="el-icon-time"></i>
+                    <span>10/17 周日14:00-17:00</span>
+                    <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
+                    <!-- <span>周日14：00-17：00</span> -->
+                  </p>
+                  <p>
+                    <i class="el-icon-location-outline"></i>
+                    <span>白下高新区管委会161号—A座</span>
+                  </p>
+                </div>
+                <div class="actiNum clearfix">
+                  <div class="avatar">
+                    <ul>
+                      <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                    </ul>
+                  </div>
+                  <i>678/1000名</i>
+                  <p class="avaP">
+                    <!-- <i class="iconfont icon-xihuan"></i>16 -->
+                    <img src="@/../static/img/xin.png" alt="">16
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="postImgItem postImgItem2">
+                  <img src="@/../static/img/dengpao2.png" class="postImg" alt="活动海报图片">
+                </div>
+                <div class="actiInfo">
+                  <p class="actiNameItem">
+                    白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
+                  </p>
+                  <p class="actiTimer">
+                    <i class="el-icon-time"></i>
+                    <span>10/17 周日14:00-17:00</span>
+                    <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
+                    <!-- <span>周日14：00-17：00</span> -->
+                  </p>
+                  <p>
+                    <i class="el-icon-location-outline"></i>
+                    <span>白下高新区管委会161号—A座</span>
+                  </p>
+                </div>
+                <div class="actiNum clearfix">
+                  <div class="avatar">
+                    <ul>
+                      <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                    </ul>
+                  </div>
+                  <i>678/1000名</i>
+                  <p class="avaP">
+                    <!-- <i class="iconfont icon-xihuan"></i>16 -->
+                    <img src="@/../static/img/xin.png" alt="">16
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="postImgItem">
+                  <img src="@/../static/img/heng3.png" class="postImg" alt="活动海报图片">
+                </div>
+                <div class="actiInfo">
+                  <p class="actiNameItem">
+                    白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
+                  </p>
+                  <p class="actiTimer">
+                    <i class="el-icon-time"></i>
+                    <span>10/17 周日14:00-17:00</span>
+                    <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
+                    <!-- <span>周日14：00-17：00</span> -->
+                  </p>
+                  <p>
+                    <i class="el-icon-location-outline"></i>
+                    <span>白下高新区管委会161号—A座</span>
+                  </p>
+                </div>
+                <div class="actiNum clearfix">
+                  <div class="avatar">
+                    <ul>
+                      <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                      <li><img src="" alt=""></li>
+                    </ul>
+                  </div>
+                  <i>678/1000名</i>
+                  <p class="avaP">
+                    <img src="@/../static/img/xin.png" alt="">16
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </el-carousel-item>
+        </el-carousel>
+
         <!-- <i class="iconfont icon-leftarrow pointer"></i>
         <i class="iconfont icon-rightarrow pointer"></i> -->
-        <div class="">了解详情</div>
+        <div class="lejieDel">了解详情</div>
       </div>
     </div>
     <div class="districtGardens w">
@@ -376,7 +379,9 @@
       <div class="eng mainColor">Area&nbsp;more&nbsp;garden</div>
       <div class="line"></div>
       <div class="card pr">
-         <el-carousel-item v-for="item in 3" :key="item">
+        <el-carousel  arrow="always">
+          <el-carousel-item v-for="item in 4" :key="item">
+        <!-- <el-carousel-item v-for="item in 3" :key="item"> -->
         <ul class="cardUl">
           <li>
             <el-card>
@@ -400,7 +405,9 @@
             </el-card>
           </li>
         </ul>
-        </el-carousel-item>
+         </el-carousel-item>
+        </el-carousel>
+        <!-- </el-carousel-item> -->
         <!-- <div class="arrow">
           <div class="arrow1"></div>
           <div class="arrow2"></div>
@@ -580,6 +587,7 @@ export default {
     }
   }
   #qiehuan1 {
+    margin-top: 20px;
     > li {
       display: inline-block;
       width: 190px;
@@ -604,27 +612,26 @@ export default {
         }
       }
     }
-    // >li:hover{
-    //   width: 200px;
-    //   height: 210px;
-    //   padding: 50px 20px;
-    // }
+    >li:hover{
+      transition: 0.3s all;
+      transform: scale(1.1);
+    }
   }
-  .policyGuide{
-    .el-carousel__button{
+  .policyGuide {
+    .el-carousel__button {
       width: 9px;
       height: 9px;
       border-radius: 50%;
     }
-    .el-carousel__arrow{
+    .el-carousel__arrow {
       background: none;
       font-size: 30px;
       top: 40%;
     }
-    .el-carousel__arrow--left{
-      left:64px;
+    .el-carousel__arrow--left {
+      left: 64px;
     }
-    .el-carousel__arrow--right{
+    .el-carousel__arrow--right {
       right: 64px;
     }
   }

@@ -31,10 +31,49 @@ export default new Router({
       name:'forgetPsw'
     },
     {
+      path: '/home',
+      component: resolve => require(['@/views/home'],resolve),
+      meta: {title: '用户中心'},  
+      name:'home',
+      redirect:{name:'userCenter'},
+      children:[
+        {
+          path:'/servicemarket/product/userCenter',
+          name:'userCenter',
+          meta: {title: '首页'},  
+          component:resolve => require(['@/views/home/userCenter'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryProduct',
+        name:'ordinaryProduct',
+        meta: {title: '常规服务产品'},  
+        component:resolve => require(['@/views/home/productService/ordinaryProduct'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/productPutaway',
+        name:'productPutaway',
+        meta: {title: '常规产品上架'},
+        component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryproductDetail',
+        name:'ordinaryproductDetail',
+        meta: {title: '常规产品详情'},
+        component:resolve => require(['@/views/home/productService/ordinaryproductDetail'],resolve)
+        },
+        {
+        path:'/userHome',
+        name:'userHome',
+        meta: {title: '用户资料'},
+        component:resolve => require(['@/views/home/userHome'],resolve)
+        }
+      ]
+    },
+    {
       path: '/userinfo',
       component: resolve => require(['@/views/home/userinfo'],resolve),
       name:'user',
-      meta: {title: '用户中心'},
+      meta: {title: '用户中心1'},
       
     //   children:[
     //     {

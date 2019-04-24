@@ -1553,7 +1553,7 @@ input {
   .districtGardens,
   .enterpriseinfo,.policyCenter,.technologyFinance,.humanResources {
     padding: 50px 0px;
-    border-top: 1px solid #eee;
+    // border-top: 1px solid #eee;
     text-align: center;
     .tuoyuan {
       width: 48px;
@@ -1679,6 +1679,12 @@ input {
       }
     }
   }
+  .technologyFinance{
+    border-top: 1px solid #eee;
+  }
+  .declarationNotice{
+    border-top: 1px solid #eee;
+  }
   .policyGuide,
   .enterprisesPark {
     margin-top: 100px;
@@ -1789,8 +1795,9 @@ input {
         margin: 0 auto;
         > li {
           float: left;
+          // display: inline-block;
           width: 280px;
-          height: 345px;
+          height: 340px;
           border: 1px solid #eee;
           margin-right: 20px;
           margin-bottom: 30px;
@@ -1880,6 +1887,9 @@ input {
             }
           }
         }
+        >li:hover{
+          border:1px solid #00a041;
+        }
         > li:nth-child(3n) {
           margin-right: 0;
         }
@@ -1900,7 +1910,7 @@ input {
         color: #d0d0d0;
         top: 166px;
       }
-      > div {
+      .lejieDel {
         width: 132px;
         margin: 0 auto;
         text-align: center;
@@ -1909,6 +1919,24 @@ input {
         font-size: 14px;
         color: #fff;
         background: #00a041;
+      }
+      .el-carousel__arrow{
+        background: #fff;
+        font-size: 20px;
+        color: #D0D0D0;
+        border:1px solid #D0D0D0;
+      }
+      .el-carousel__arrow--left{
+        left: 75px;
+      }
+      .el-carousel__arrow--right{
+        right:100px;
+      }
+      .el-carousel__indicators{
+        display: none;
+      }
+      .el-carousel{
+        margin-bottom:60px;
       }
     }
   }
@@ -1960,6 +1988,23 @@ input {
           background: url("../../static/img/you2.png") 100% 100% / 100% 100%
             no-repeat;
         }
+      }
+      .el-carousel__arrow{
+        background: none;
+        color: #eee;
+        font-size: 35px;
+      }
+      .el-carousel__arrow--left{
+        left: 105px;
+      }
+      .el-carousel__arrow--right{
+        right: 105px;
+      }
+      .el-carousel__container{
+        height: 430px;
+      }
+      .el-carousel__indicators{
+        display: none;
       }
     }
   }

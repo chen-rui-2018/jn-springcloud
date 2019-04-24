@@ -114,6 +114,8 @@
             <div class="eng mainColor">POLICY&nbsp;CENTER</div>
             <div class="line"></div>
             <div class="paging w pr">
+                <el-carousel :interval="5000" arrow="always">
+                 <el-carousel-item v-for="item in 3" :key="item">
                 <ul class="page1 clearfix">
                     <li>
                         <div class="left1">N</div>
@@ -168,7 +170,9 @@
                         </div>
                     </li>
                 </ul>
-                <ul class="page2">
+                 </el-carousel-item>
+                </el-carousel>
+                <!-- <ul class="page2">
                     <li></li>
                     <li></li>
                     <li></li>
@@ -176,7 +180,7 @@
                 <div class="arrow">
                     <div class="arrow1"></div>
                     <div class="arrow2"></div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="approval">
@@ -192,119 +196,123 @@
             <div class="eng mainColor">Activity&nbsp;center</div>
             <div class="line"></div>
             <div class="acti pr">
-                <ul class="clearfix">
-                    <li>
-                        <div class="postImgItem">
-                            <img src="@/../static/img/heng4.png" class="postImg" alt="活动海报图片">
-                        </div>
-                        <div class="actiInfo">
-                            <p class="actiNameItem">
-                                白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
-                            </p>
-                            <p class="actiTimer">
-                                <i class="el-icon-time"></i>
-                                <span>10/17 周日14:00-17:00</span>
-                                <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                                <!-- <span>周日14：00-17：00</span> -->
-                            </p>
-                            <p>
-                                <i class="el-icon-location-outline"></i>
-                                <span>白下高新区管委会161号—A座</span>
-                            </p>
-                        </div>
-                        <div class="actiNum clearfix">
-                            <div class="avatar">
-                                <ul>
-                                    <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                </ul>
-                            </div>
-                            <i>678/1000名</i>
-                            <p class="avaP">
-                                <img src="@/../static/img/xin.png" alt="">16
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="postImgItem postImgItem2">
-                            <img src="@/../static/img/dengpao2.png" class="postImg" alt="活动海报图片">
-                        </div>
-                        <div class="actiInfo">
-                            <p class="actiNameItem">
-                                白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
-                            </p>
-                            <p class="actiTimer">
-                                <i class="el-icon-time"></i>
-                                <span>10/17 周日14:00-17:00</span>
-                                <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                                <!-- <span>周日14：00-17：00</span> -->
-                            </p>
-                            <p>
-                                <i class="el-icon-location-outline"></i>
-                                <span>白下高新区管委会161号—A座</span>
-                            </p>
-                        </div>
-                        <div class="actiNum clearfix">
-                            <div class="avatar">
-                                <ul>
-                                    <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                </ul>
-                            </div>
-                            <i>678/1000名</i>
-                            <p class="avaP">
-                                <img src="@/../static/img/xin.png" alt="">16
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="postImgItem">
-                            <img src="@/../static/img/heng3.png" class="postImg" alt="活动海报图片">
-                        </div>
-                        <div class="actiInfo">
-                            <p class="actiNameItem">
-                                白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
-                            </p>
-                            <p class="actiTimer">
-                                <i class="el-icon-time"></i>
-                                <span>10/17 周日14:00-17:00</span>
-                                <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                                <!-- <span>周日14：00-17：00</span> -->
-                            </p>
-                            <p>
-                                <i class="el-icon-location-outline"></i>
-                                <span>白下高新区管委会161号—A座</span>
-                            </p>
-                        </div>
-                        <div class="actiNum clearfix">
-                            <div class="avatar">
-                                <ul>
-                                    <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                    <li><img src="" alt=""></li>
-                                </ul>
-                            </div>
-                            <i>678/1000名</i>
-                            <p class="avaP">
-                                <img src="@/../static/img/xin.png" alt="">16
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-                <i class="iconfont icon-leftarrow pointer"></i>
-                <i class="iconfont icon-rightarrow pointer"></i>
-                <div class="">了解详情</div>
+                <el-carousel :interval="5000" arrow="always" :autoplay="false">
+                    <el-carousel-item v-for="item in 4" :key="item">
+                        <ul class="actiUl clearfix">
+                            <li>
+                                <div class="postImgItem">
+                                    <img src="@/../static/img/heng4.png" class="postImg" alt="活动海报图片">
+                                </div>
+                                <div class="actiInfo">
+                                    <p class="actiNameItem">
+                                        白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
+                                    </p>
+                                    <p class="actiTimer">
+                                        <i class="el-icon-time"></i>
+                                        <span>10/17 周日14:00-17:00</span>
+                                        <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
+                                        <!-- <span>周日14：00-17：00</span> -->
+                                    </p>
+                                    <p>
+                                        <i class="el-icon-location-outline"></i>
+                                        <span>白下高新区管委会161号—A座</span>
+                                    </p>
+                                </div>
+                                <div class="actiNum clearfix">
+                                    <div class="avatar">
+                                        <ul>
+                                            <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                        </ul>
+                                    </div>
+                                    <i>678/1000名</i>
+                                    <p class="avaP">
+                                        <img src="@/../static/img/xin.png" alt="">16
+                                    </p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="postImgItem postImgItem2">
+                                    <img src="@/../static/img/dengpao2.png" class="postImg" alt="活动海报图片">
+                                </div>
+                                <div class="actiInfo">
+                                    <p class="actiNameItem">
+                                        白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
+                                    </p>
+                                    <p class="actiTimer">
+                                        <i class="el-icon-time"></i>
+                                        <span>10/17 周日14:00-17:00</span>
+                                        <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
+                                        <!-- <span>周日14：00-17：00</span> -->
+                                    </p>
+                                    <p>
+                                        <i class="el-icon-location-outline"></i>
+                                        <span>白下高新区管委会161号—A座</span>
+                                    </p>
+                                </div>
+                                <div class="actiNum clearfix">
+                                    <div class="avatar">
+                                        <ul>
+                                            <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                        </ul>
+                                    </div>
+                                    <i>678/1000名</i>
+                                    <p class="avaP">
+                                        <img src="@/../static/img/xin.png" alt="">16
+                                    </p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="postImgItem">
+                                    <img src="@/../static/img/heng3.png" class="postImg" alt="活动海报图片">
+                                </div>
+                                <div class="actiInfo">
+                                    <p class="actiNameItem">
+                                        白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
+                                    </p>
+                                    <p class="actiTimer">
+                                        <i class="el-icon-time"></i>
+                                        <span>10/17 周日14:00-17:00</span>
+                                        <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
+                                        <!-- <span>周日14：00-17：00</span> -->
+                                    </p>
+                                    <p>
+                                        <i class="el-icon-location-outline"></i>
+                                        <span>白下高新区管委会161号—A座</span>
+                                    </p>
+                                </div>
+                                <div class="actiNum clearfix">
+                                    <div class="avatar">
+                                        <ul>
+                                            <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                            <li><img src="" alt=""></li>
+                                        </ul>
+                                    </div>
+                                    <i>678/1000名</i>
+                                    <p class="avaP">
+                                        <img src="@/../static/img/xin.png" alt="">16
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </el-carousel-item>
+                </el-carousel>
+                <!-- <i class="iconfont icon-leftarrow pointer"></i>
+                <i class="iconfont icon-rightarrow pointer"></i> -->
+                <div class="lejieDel">了解详情</div>
             </div>
         </div>
         <!-- 科技金融 -->
@@ -501,12 +509,12 @@ export default {
   },
   mounted() {},
   methods: {
-      onchange(){
-          console.log(0)
-      },
-      aa(){
-          console.log(111)
-      },
+    onchange() {
+      console.log(0);
+    },
+    aa() {
+      console.log(111);
+    },
     handleChange() {
       this.sousuo = true;
     }
@@ -517,10 +525,10 @@ export default {
 .enterpriseservice {
   #header #posA {
     > .firstLi {
-        // background: rgba(255, 255, 255, 0.2);
-        background: inherit;
-        color:#fff;
-        border-radius: none;
+      // background: rgba(255, 255, 255, 0.2);
+      background: inherit;
+      color: #fff;
+      border-radius: none;
     }
     .lastLi {
       background: #fff;
@@ -529,10 +537,10 @@ export default {
     }
   }
   .portalIndexImg {
-      .porImg{
-          width: 100%;
-          height: 100%;
-      }
+    .porImg {
+      width: 100%;
+      height: 100%;
+    }
     // .el-carousel__item:nth-child(2n) {
     //   background: url("../../static/img/qiye.png") 100% 100% / 100% 100%
     //     no-repeat;
@@ -551,6 +559,7 @@ export default {
   }
   .policyCenter {
     .paging {
+            .el-carousel{padding: 50px 0;}
       .page1 {
         width: 800px;
         margin: 0 auto;
@@ -633,6 +642,26 @@ export default {
           background: url("../../static/img/you2.png") 100% 100% / 100% 100%
             no-repeat;
         }
+      }
+      .el-carousel__arrow{
+          background: none;
+          color: #eee;
+          font-size: 35px;
+      }
+      .el-carousel__arrow--left{
+          left: 130px;
+      }
+      .el-carousel__arrow--right{
+          right: 130px;
+      }
+      .el-carousel__button{
+          width: 9px;
+          height: 9px;
+          background: #e1e1e1;
+          border-radius: 50%;
+      }
+      .el-carousel__indicator.is-active .el-carousel__button{
+          background: #00a041;
       }
     }
   }

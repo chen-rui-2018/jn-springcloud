@@ -39,11 +39,12 @@
 
 .userHome .header .nav > ul > li {
   float: left;
-  color: #ccc;
+  /* color: #ccc; */
   font-size: 14px;
   text-align: center;
   line-height: 38px;
   margin: 0 50px;
+  padding:19px 0;
 }
 
 .userHome .header .nav .sousuo {

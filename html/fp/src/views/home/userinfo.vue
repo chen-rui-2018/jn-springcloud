@@ -32,7 +32,7 @@
           </div>
 
           <ul class="clearfix posA" v-else>
-            <li>
+            <li @click="$router.push({path:'/'})">
               <a href="javascript:void(0);">首页</a>
             </li>
             <li>
@@ -41,7 +41,7 @@
             <li>
               <a href="javascript:void(0);">智慧党建</a>
             </li>
-            <li>
+            <li @click="$router.push({path:'/enterpriseservice'})"> 
               <a href="javascript:void(0);">企业服务</a>
             </li>
           </ul>

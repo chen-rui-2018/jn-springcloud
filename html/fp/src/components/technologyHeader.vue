@@ -14,9 +14,9 @@
               <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
             </div>
             <div class="navlogin" v-if="this.$route.name!=='actiManagent'">
-              <a>登录</a>
+              <a @click="$router.push({path:'/login'})">登录</a>
               <span class="line">|</span>
-              <a>注册</a>
+              <a @click="$router.push({path:'/register'})">注册</a>
             </div>
             <div class="navlogin" v-if="this.$route.name =='actiManagent'">
               <i class="el-icon-bell"></i>

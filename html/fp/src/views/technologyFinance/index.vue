@@ -13,9 +13,9 @@
             <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
           </div>
           <div class="navlogin">
-            <a>登录</a>
+            <a @click="$router.push({path:'/login'})">登录</a>
             <span class="line">|</span>
-            <a>注册</a>
+            <a @click="$router.push({path:'/register'})">注册</a>
           </div>
         </div>
         <div class="nav">
@@ -58,9 +58,9 @@
             <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
           </div>
           <div class="navlogin">
-            <a>登录</a>
+            <a @click="$router.push({path:'/login'})">登录</a>
             <span class="line">|</span>
-            <a>注册</a>
+            <a @click="$router.push({path:'/register'})">注册</a>
           </div>
         </div>
         <div class="nav">
@@ -160,17 +160,69 @@
               </div>
               <div class="liRight fr">
                 <ul class="clearfix">
-                  <!-- <li v-if="k<4&&k>0" v-for="(i,k) in InvestorInfoList" :key="k">
+                  <li v-if="k<5&&k>0" v-for="(i,k) in InvestorInfoList" :key="k">
                     <div class="intorImgSma">
-                      <img :src="i.avatar" alt="投资人头像">
+                      <img :src="i.avatar" alt="头像">
                     </div>
                     <div class="rightInfo">
                       <span class="color1">{{i.investorName}}/{{i.position}}</span>
                       <p class="color3">{{i.orgName}}</p>
                       <i class="color3">{{i.position}}</i>
                     </div>
+                  </li>
+                  <!-- <li>
+                    <div class="intorImgSma">
+                      <img src="@/../static/img/smallImg.png" alt="">
+                    </div>
+                    <div class="rightInfo">
+                      <span class="color1">郭龙华/总经理</span>
+                      <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
+                      <i class="color3">合伙人</i>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="intorImgSma">
+                      <img src="@/../static/img/smallImg.png" alt="">
+                    </div>
+                    <div class="rightInfo">
+                      <span class="color1">郭龙华/总经理</span>
+                      <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
+                      <i class="color3">合伙人</i>
+                    </div>
                   </li> -->
-                  <li>
+                  <!-- <li class="lastLi mainColor">
+                    <img src="@/../static/img/xiao.png" alt="">
+                    <div class="rightInfo">认证投资人></div>
+                  </li> -->
+                </ul>
+              </div>
+            </li>
+          </ul>
+          <ul class="inverUl inverUl11" v-if="InvestorInfoList.length > 5">
+            <li class="clearfix">
+              <div class="liLeft fl">
+                <div class="intorImgLar">
+                  <img :src="InvestorInfoList[5].avatar" alt="">
+                </div>
+                <div class="leftInfo" v-if="InvestorInfoList.length > 5">
+                  <span class="color1">{{InvestorInfoList[5].investorName}}/{{InvestorInfoList[5].position}}</span>
+                  <p class="color3">{{InvestorInfoList[5].orgName}}</p>
+                  <i class="color3">{{InvestorInfoList[5].position}}</i>
+                </div>
+              </div>
+              <div class="liRight fr">
+                <ul class="clearfix">
+                  <li v-if="k<9&&k>5" v-for="(i,k) in InvestorInfoList" :key="k">
+                    <div class="intorImgSma">
+                      <img :src="i.avatar" alt="头像">
+                    </div>
+                    <div class="rightInfo">
+                      <span class="color1">{{i.investorName}}/{{i.position}}</span>
+                      <p class="color3">{{i.orgName}}</p>
+                      <i class="color3">{{i.position}}</i>
+                    </div>
+                  </li>
+                  <!-- <li>
                     <div class="intorImgSma">
                       <img src="@/../static/img/smallImg.png" alt="">
                     </div>
@@ -189,7 +241,7 @@
                       <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
                       <i class="color3">合伙人</i>
                     </div>
-                  </li>
+                  </li> -->
                   <li class="lastLi mainColor">
                     <img src="@/../static/img/xiao.png" alt="">
                     <div class="rightInfo">认证投资人></div>
@@ -275,7 +327,7 @@
           </div>
                 <!-- <img src="@/../static/img/ins1.png" alt=""> -->
           <ul class="finaInsUl finaUl clearfix" id="finaInsUl">
-            <!-- <li class="finaInsLi" v-for="(i,k) in ServiceOrgList" :key='k'>
+            <li class="finaInsLi pr" v-for="(i,k) in ServiceOrgList" :key='k'>
               <div class="finaInsItem">
                 <img :src="i.orgLogo" alt="">
               </div>
@@ -288,119 +340,35 @@
                   <p class="finaAddress">地址：{{i.orgAddress}}</p>
                 </div>
               </div>
+              <p class="finaPP lejie">
+                <span class="">累计
+                  <i class="mainColor">{{i.transactionNum}}</i>
+                  笔交易
+                </span>
+                <span class="mainColor" style="margin-left:60px">了解详情</span>
+              </p>
+            </li>
+            <!-- <li class="finaInsLi">
+              <div class="finaInsItem">
+                <img src="@/../static/img/ins1.png" alt="">
+              </div>
+              <div class="finaDiv1">
+                <div class="finaTit">苏州中合会计事务所</div>
+                <div class="finaContent">
+                  <p class="finaPhone">电话：
+                    <span class="mainColor">0510-87654321</span>
+                  </p>
+                  <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
+                </div>
+              </div>
               <p class="clearfix finaPP">
                 <span class="fl">累计
-                  <i class="mainColor">{{i.transactionNum}}</i>
+                  <i class="mainColor">35</i>
                   笔交易
                 </span>
                 <span class="mainColor fr">了解详情</span>
               </p>
             </li> -->
-            <li class="finaInsLi">
-              <div class="finaInsItem">
-                <img src="@/../static/img/ins1.png" alt="">
-              </div>
-              <div class="finaDiv1">
-                <div class="finaTit">苏州中合会计事务所</div>
-                <div class="finaContent">
-                  <p class="finaPhone">电话：
-                    <span class="mainColor">0510-87654321</span>
-                  </p>
-                  <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
-                </div>
-              </div>
-              <p class="clearfix finaPP">
-                <span class="fl">累计
-                  <i class="mainColor">35</i>
-                  笔交易
-                </span>
-                <span class="mainColor fr">了解详情</span>
-              </p>
-            </li>
-            <li class="finaInsLi">
-              <div class="finaInsItem">
-                <img src="@/../static/img/ins1.png" alt="">
-              </div>
-              <div class="finaDiv1">
-                <div class="finaTit">苏州中合会计事务所</div>
-                <div class="finaContent">
-                  <p class="finaPhone">电话：
-                    <span class="mainColor">0510-87654321</span>
-                  </p>
-                  <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
-                </div>
-              </div>
-              <p class="clearfix finaPP">
-                <span class="fl">累计
-                  <i class="mainColor">35</i>
-                  笔交易
-                </span>
-                <span class="mainColor fr">了解详情</span>
-              </p>
-            </li>
-            <li class="finaInsLi">
-              <div class="finaInsItem">
-                <img src="@/../static/img/ins1.png" alt="">
-              </div>
-              <div class="finaDiv1">
-                <div class="finaTit">苏州中合会计事务所</div>
-                <div class="finaContent">
-                  <p class="finaPhone">电话：
-                    <span class="mainColor">0510-87654321</span>
-                  </p>
-                  <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
-                </div>
-              </div>
-              <p class="clearfix finaPP">
-                <span class="fl">累计
-                  <i class="mainColor">35</i>
-                  笔交易
-                </span>
-                <span class="mainColor fr">了解详情</span>
-              </p>
-            </li>
-            <li class="finaInsLi">
-              <div class="finaInsItem">
-                <img src="@/../static/img/ins1.png" alt="">
-              </div>
-              <div class="finaDiv1">
-                <div class="finaTit">苏州中合会计事务所</div>
-                <div class="finaContent">
-                  <p class="finaPhone">电话：
-                    <span class="mainColor">0510-87654321</span>
-                  </p>
-                  <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
-                </div>
-              </div>
-              <p class="clearfix finaPP">
-                <span class="fl">累计
-                  <i class="mainColor">35</i>
-                  笔交易
-                </span>
-                <span class="mainColor fr">了解详情</span>
-              </p>
-            </li>
-            <li class="finaInsLi">
-              <div class="finaInsItem">
-                <img src="@/../static/img/ins1.png" alt="">
-              </div>
-              <div class="finaDiv1">
-                <div class="finaTit">苏州中合会计事务所</div>
-                <div class="finaContent">
-                  <p class="finaPhone">电话：
-                    <span class="mainColor">0510-87654321</span>
-                  </p>
-                  <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
-                </div>
-              </div>
-              <p class="clearfix finaPP">
-                <span class="fl">累计
-                  <i class="mainColor">35</i>
-                  笔交易
-                </span>
-                <span class="mainColor fr">了解详情</span>
-              </p>
-            </li>
           </ul>
         </div>
       </div>
@@ -597,7 +565,7 @@ export default {
     },
     //提需求
     raiseDemand(i) {
-      this.financialProVisible = true;
+      // this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
       this.financialProform.financingPeriodMax = "";
@@ -782,6 +750,7 @@ export default {
           font-size: 14px;
           a {
             display: inline-block;
+            cursor: pointer;
           }
           .line {
             display: inline-block;
@@ -881,6 +850,7 @@ export default {
         .navlogin {
           display: inline-block;
           font-size: 14px;
+          cursor: pointer;
           a {
             display: inline-block;
           }
@@ -956,7 +926,7 @@ export default {
             padding: 28px;
             border: 1px solid #dedede;
             // margin-right:16px;
-            width: 35.5%;
+            width: 35.8%;
             .leftInfo {
               display: inline-block;
               vertical-align: top;
@@ -967,7 +937,7 @@ export default {
                 margin-bottom: 6px;
               }
               > span {
-                font-size: 13px;
+                font-size: 15px;
               }
             }
             > .intorImgLar {
@@ -1042,6 +1012,9 @@ export default {
               }
             }
           }
+        }
+        .inverUl11{
+          margin-top: 20px;
         }
         .bannerImg {
           width: 1190px;
@@ -1170,6 +1143,11 @@ export default {
             }
             > .finaPP {
               padding: 10px;
+            }
+            .lejie{
+              position: absolute;
+              bottom:0;
+              width: 91%;
             }
           }
           > .finaInsLi:nth-child(5n) {

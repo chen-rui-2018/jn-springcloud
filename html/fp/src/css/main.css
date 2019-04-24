@@ -2052,7 +2052,6 @@ input {
 .enterpriseservice .districtGardens,
 .enterpriseservice .enterpriseinfo, .enterpriseservice .policyCenter, .enterpriseservice .technologyFinance, .enterpriseservice .humanResources {
   padding: 50px 0px;
-  border-top: 1px solid #eee;
   text-align: center;
 }
 
@@ -2325,6 +2324,14 @@ input {
   background: url("../../static/img/tupian1.png") 100% 100%/100% 100% no-repeat;
 }
 
+.portalIndex .technologyFinance, .enterpriseservice .technologyFinance {
+  border-top: 1px solid #eee;
+}
+
+.portalIndex .declarationNotice, .enterpriseservice .declarationNotice {
+  border-top: 1px solid #eee;
+}
+
 .portalIndex .policyGuide,
 .portalIndex .enterprisesPark, .enterpriseservice .policyGuide,
 .enterpriseservice .enterprisesPark {
@@ -2478,7 +2485,7 @@ input {
 .portalIndex .popularActi .acti .actiUl > li, .enterpriseservice .popularActi .acti .actiUl > li {
   float: left;
   width: 280px;
-  height: 345px;
+  height: 340px;
   border: 1px solid #eee;
   margin-right: 20px;
   margin-bottom: 30px;
@@ -2565,6 +2572,10 @@ input {
   margin: 10px 0 5px 0px;
 }
 
+.portalIndex .popularActi .acti .actiUl > li:hover, .enterpriseservice .popularActi .acti .actiUl > li:hover {
+  border: 1px solid #00a041;
+}
+
 .portalIndex .popularActi .acti .actiUl > li:nth-child(3n), .enterpriseservice .popularActi .acti .actiUl > li:nth-child(3n) {
   margin-right: 0;
 }
@@ -2587,7 +2598,7 @@ input {
   top: 166px;
 }
 
-.portalIndex .popularActi .acti > div, .enterpriseservice .popularActi .acti > div {
+.portalIndex .popularActi .acti .lejieDel, .enterpriseservice .popularActi .acti .lejieDel {
   width: 132px;
   margin: 0 auto;
   text-align: center;
@@ -2596,6 +2607,29 @@ input {
   font-size: 14px;
   color: #fff;
   background: #00a041;
+}
+
+.portalIndex .popularActi .acti .el-carousel__arrow, .enterpriseservice .popularActi .acti .el-carousel__arrow {
+  background: #fff;
+  font-size: 20px;
+  color: #D0D0D0;
+  border: 1px solid #D0D0D0;
+}
+
+.portalIndex .popularActi .acti .el-carousel__arrow--left, .enterpriseservice .popularActi .acti .el-carousel__arrow--left {
+  left: 75px;
+}
+
+.portalIndex .popularActi .acti .el-carousel__arrow--right, .enterpriseservice .popularActi .acti .el-carousel__arrow--right {
+  right: 100px;
+}
+
+.portalIndex .popularActi .acti .el-carousel__indicators, .enterpriseservice .popularActi .acti .el-carousel__indicators {
+  display: none;
+}
+
+.portalIndex .popularActi .acti .el-carousel, .enterpriseservice .popularActi .acti .el-carousel {
+  margin-bottom: 60px;
 }
 
 .portalIndex .districtGardens .card, .enterpriseservice .districtGardens .card {
@@ -2651,6 +2685,28 @@ input {
   right: 100px;
   top: 200px;
   background: url("../../static/img/you2.png") 100% 100%/100% 100% no-repeat;
+}
+
+.portalIndex .districtGardens .card .el-carousel__arrow, .enterpriseservice .districtGardens .card .el-carousel__arrow {
+  background: none;
+  color: #eee;
+  font-size: 35px;
+}
+
+.portalIndex .districtGardens .card .el-carousel__arrow--left, .enterpriseservice .districtGardens .card .el-carousel__arrow--left {
+  left: 105px;
+}
+
+.portalIndex .districtGardens .card .el-carousel__arrow--right, .enterpriseservice .districtGardens .card .el-carousel__arrow--right {
+  right: 105px;
+}
+
+.portalIndex .districtGardens .card .el-carousel__container, .enterpriseservice .districtGardens .card .el-carousel__container {
+  height: 430px;
+}
+
+.portalIndex .districtGardens .card .el-carousel__indicators, .enterpriseservice .districtGardens .card .el-carousel__indicators {
+  display: none;
 }
 
 .portalIndex .enterpriseinfo .enterPriseCon .con1,

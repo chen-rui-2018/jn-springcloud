@@ -1,7 +1,7 @@
 <template>
     <div id="serverHeader">
       <div class="fullNav clearfix">
-          <div class="navLeft fl" @click="isVisibility=true">
+          <div class="navLeft fl pointer" @click="isVisibility=true">
               <i class="iconfont icon-caidan"></i>
               <span>网站导航</span>
           </div>
@@ -12,9 +12,9 @@
               <li class="line"></li>
               <li>关注微信</li>
               <li class="line"></li>
-              <li>登录</li>
+              <li @click="$router.push({path:'/login'})">登录</li>
               <li class="line"></li>
-              <li>注册</li>
+              <li @click="$router.push({path:'/register'})">注册</li>
           </ul>
       </div>
       <div class="headContent">
@@ -51,8 +51,13 @@
                     </el-menu>
                   </div>
                   <div class="bannerUl fr">
-                      <li :class="{'active':flag1==''}" @click="handJump('')">首页</li>
-                      <li v-for="(i,k) in bannerList" :key="k" :class="{'active':flag1==i.name}" @click="handJump(i)">{{i.name}}</li>
+                    <li class="active">首页</li>
+                      <li>服务机构</li>
+                      <li>服务产品</li>
+                      <li>服务顾问</li>
+                      <li>活动培训</li>
+                      <li>关于我们</li>
+                      <!-- <li v-for="(i,k) in bannerList" :key="k" :class="{'active':flag1==i.name}" @click="handJump(i)">{{i.name}}</li> -->
                   </div>
               </div>
           </div>
@@ -61,10 +66,10 @@
       <div class="serve_slide">
         <el-dialog :visible.sync="isVisibility">
           <div class="slide_nav">
-            <p >首页</p>
+            <p @click="$router.push({path:'/'})">首页</p>
             <p>招商引资</p>
             <p>智慧党建</p>
-            <p>秦淮区1+X公共服务平台</p>
+            <p @click="$router.push({path:'/enterpriseservice'})">秦淮区1+X公共服务平台</p>
             <div class="slide_nav_fence">
               <ul>
                 <li>申报中心</li>
@@ -79,7 +84,7 @@
           </div>
 
           <div class="personal_center ">
-            <p>用户中心</p>
+            <p @click="$router.push({path:'/userinfo'})">用户中心</p>
             <p>消息中心</p>
           </div>
         </el-dialog>
@@ -94,12 +99,12 @@ export default {
       activeIndex: '2',
       // activeIndex2: '1',
       isVisibility:false,
-      flag1:'',
+      flag1:'首页',
       bannerList:[
-        // {
-        // name:"首页",
-        // path:"/serMatHp",
-        // },
+        {
+        name:"首页",
+        path:"/serMatHp",
+        },
         {
         name:"服务机构",
         path:"/serverOrg",
@@ -128,15 +133,13 @@ export default {
    this.getIndustryList()
   },
   methods: {
-    handJump(i){
-      this.flag1=i.name;
-      if(this.flag1==''){
-        debugger
-        this.$router.push({ path:'/serMatHp'});
-      } else {
-        this.$router.push({ path: i.path});
-      }
-    },
+    // handJump(i){
+    //   if(this.flag1 == i.name){
+    //     return
+    //   }
+    //   this.flag1=i.name; //首页的话没有i.name
+    //   this.$router.push({ path: i.path});
+    // },
      handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
@@ -280,6 +283,7 @@ export default {
       p{
         padding-bottom: 30px;
         font-size: 18px;
+        cursor: pointer;
       }
       p:nth-child(4){
         padding-bottom:0px;
@@ -288,6 +292,7 @@ export default {
         font-size: 15px;
         li{
           padding-bottom: 8px; 
+          cursor: pointer;
           &:nth-child(1){
             padding-top: 20px;
           }
@@ -298,6 +303,7 @@ export default {
       padding: 30px 20px;
       p{
         padding-bottom: 15px;
+        cursor: pointer;
       }
     }
   }

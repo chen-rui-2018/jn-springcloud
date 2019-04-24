@@ -168,6 +168,7 @@
                 <div v-for="(counselorinfoItem,counselorinfoindex) in counselorList" :key="counselorinfoindex" v-show="counselorinfoindex<2">
                   <a href="javascript:;">
                     <div class="info_img"><img src="../../assets/image/test2.png" alt=""></div>
+                    <!-- <div class="info_img"><img :src="counselorinfoItem.avatar" alt=""></div> -->
                     <div class="info_all">
                       <div class="info_name"><span>{{counselorinfoItem.advisorName}}</span>/<span>{{counselorinfoItem.position}} </span></div>
                       <div class="info_detail">
@@ -179,9 +180,10 @@
                 </div>
               </li>
               <li class="conselor_mid">
-                <div v-for="(counselorinfoItem2,counselorinfoindex2) in counselorList" :key="counselorinfoindex2" class="conselor_mid_list" v-show="counselorinfoindex2>=2">
+                <div v-for="(counselorinfoItem2,counselorinfoindex2) in counselorList" :key="counselorinfoindex2" class="conselor_mid_list" v-show="counselorinfoindex2>=2&&counselorinfoindex2<10">
                   <a href="javascript:;">
                     <div class="info_img"><img src="../../assets/image/test2.png" alt=""></div>
+                    <!-- <div class="info_img"><img :src="counselorinfoItem.avatar" alt=""></div> -->
                     <div class="info_all">
                       <div class="info_name"><span>{{counselorinfoItem2.advisorName}}</span>/<span>{{counselorinfoItem2.position}} </span></div>
                       <div class="info_detail">
@@ -766,7 +768,8 @@ export default {
             // float: left;
             // width: 275px;
             // height: 345px;
-                margin-right: 3%;
+                margin-right: 2%;
+                width: 24%;
           }
               li:last-child{
                 margin-right: 0;
@@ -879,7 +882,7 @@ export default {
                       width: 80%;
                       border-radius: 50%;
                       display: block;
-                      margin: 24px auto;
+                      margin: 20px auto;
                     }
                   }
                   .info_all{
@@ -911,7 +914,7 @@ export default {
                       width: 79%;
                       border-radius: 50%;
                       display: block;
-                      margin: 8px auto;
+                      margin: 6px auto;
                     }
                   }
                   .info_all{

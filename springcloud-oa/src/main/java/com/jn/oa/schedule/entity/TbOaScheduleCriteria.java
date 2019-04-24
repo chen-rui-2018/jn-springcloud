@@ -495,6 +495,146 @@ public class TbOaScheduleCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andAllDayIsNull() {
+            addCriterion("all_day is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayIsNotNull() {
+            addCriterion("all_day is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayEqualTo(String value) {
+            addCriterion("all_day =", value, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayNotEqualTo(String value) {
+            addCriterion("all_day <>", value, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayGreaterThan(String value) {
+            addCriterion("all_day >", value, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayGreaterThanOrEqualTo(String value) {
+            addCriterion("all_day >=", value, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayLessThan(String value) {
+            addCriterion("all_day <", value, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayLessThanOrEqualTo(String value) {
+            addCriterion("all_day <=", value, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayLike(String value) {
+            addCriterion("all_day like", value, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayNotLike(String value) {
+            addCriterion("all_day not like", value, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayIn(List<String> values) {
+            addCriterion("all_day in", values, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayNotIn(List<String> values) {
+            addCriterion("all_day not in", values, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayBetween(String value1, String value2) {
+            addCriterion("all_day between", value1, value2, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllDayNotBetween(String value1, String value2) {
+            addCriterion("all_day not between", value1, value2, "allDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayIsNull() {
+            addCriterion("remind_way is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayIsNotNull() {
+            addCriterion("remind_way is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayEqualTo(String value) {
+            addCriterion("remind_way =", value, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayNotEqualTo(String value) {
+            addCriterion("remind_way <>", value, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayGreaterThan(String value) {
+            addCriterion("remind_way >", value, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayGreaterThanOrEqualTo(String value) {
+            addCriterion("remind_way >=", value, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayLessThan(String value) {
+            addCriterion("remind_way <", value, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayLessThanOrEqualTo(String value) {
+            addCriterion("remind_way <=", value, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayLike(String value) {
+            addCriterion("remind_way like", value, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayNotLike(String value) {
+            addCriterion("remind_way not like", value, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayIn(List<String> values) {
+            addCriterion("remind_way in", values, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayNotIn(List<String> values) {
+            addCriterion("remind_way not in", values, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayBetween(String value1, String value2) {
+            addCriterion("remind_way between", value1, value2, "remindWay");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemindWayNotBetween(String value1, String value2) {
+            addCriterion("remind_way not between", value1, value2, "remindWay");
+            return (Criteria) this;
+        }
+
         public Criteria andIsRemindIsNull() {
             addCriterion("is_remind is null");
             return (Criteria) this;
@@ -705,76 +845,6 @@ public class TbOaScheduleCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPcRemindIsNull() {
-            addCriterion("pc_remind is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindIsNotNull() {
-            addCriterion("pc_remind is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindEqualTo(String value) {
-            addCriterion("pc_remind =", value, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindNotEqualTo(String value) {
-            addCriterion("pc_remind <>", value, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindGreaterThan(String value) {
-            addCriterion("pc_remind >", value, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindGreaterThanOrEqualTo(String value) {
-            addCriterion("pc_remind >=", value, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindLessThan(String value) {
-            addCriterion("pc_remind <", value, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindLessThanOrEqualTo(String value) {
-            addCriterion("pc_remind <=", value, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindLike(String value) {
-            addCriterion("pc_remind like", value, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindNotLike(String value) {
-            addCriterion("pc_remind not like", value, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindIn(List<String> values) {
-            addCriterion("pc_remind in", values, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindNotIn(List<String> values) {
-            addCriterion("pc_remind not in", values, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindBetween(String value1, String value2) {
-            addCriterion("pc_remind between", value1, value2, "pcRemind");
-            return (Criteria) this;
-        }
-
-        public Criteria andPcRemindNotBetween(String value1, String value2) {
-            addCriterion("pc_remind not between", value1, value2, "pcRemind");
-            return (Criteria) this;
-        }
-
         public Criteria andAppRemindIsNull() {
             addCriterion("app_remind is null");
             return (Criteria) this;
@@ -842,6 +912,76 @@ public class TbOaScheduleCriteria {
 
         public Criteria andAppRemindNotBetween(String value1, String value2) {
             addCriterion("app_remind not between", value1, value2, "appRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindIsNull() {
+            addCriterion("pc_remind is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindIsNotNull() {
+            addCriterion("pc_remind is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindEqualTo(String value) {
+            addCriterion("pc_remind =", value, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindNotEqualTo(String value) {
+            addCriterion("pc_remind <>", value, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindGreaterThan(String value) {
+            addCriterion("pc_remind >", value, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindGreaterThanOrEqualTo(String value) {
+            addCriterion("pc_remind >=", value, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindLessThan(String value) {
+            addCriterion("pc_remind <", value, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindLessThanOrEqualTo(String value) {
+            addCriterion("pc_remind <=", value, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindLike(String value) {
+            addCriterion("pc_remind like", value, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindNotLike(String value) {
+            addCriterion("pc_remind not like", value, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindIn(List<String> values) {
+            addCriterion("pc_remind in", values, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindNotIn(List<String> values) {
+            addCriterion("pc_remind not in", values, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindBetween(String value1, String value2) {
+            addCriterion("pc_remind between", value1, value2, "pcRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andPcRemindNotBetween(String value1, String value2) {
+            addCriterion("pc_remind not between", value1, value2, "pcRemind");
             return (Criteria) this;
         }
 

@@ -46,23 +46,13 @@
                             <i class="iconfont icon-menu1"></i> 
                             <span>帮您快速找服务</span>
                           </template>
-                            <el-menu-item  v-for="(item,index) in industryList" :key="index">{{item.preValue}}</el-menu-item>
-                          <!-- <lable v-for="(item,index) in industryList" :key="index">
-                            <el-submenu :index="index">
-                              <template slot="title">选项4</template>
-                              <el-menu-item index="2-4-1">选项1</el-menu-item>
-                            </el-submenu>
-                          </lable> -->
+                            <el-menu-item  v-for="(i,k) in industryList" :key="k">{{i.preValue}}</el-menu-item>
                         </el-submenu>
                     </el-menu>
                   </div>
                   <div class="bannerUl fr">
-                      <li class="active">首页</li>
-                      <li>服务机构</li>
-                      <li>服务产品</li>
-                      <li>服务顾问</li>
-                      <li>活动培训</li>
-                      <li>关于我们</li>
+                      <li :class="{'active':flag1==''}" @click="handJump('')">首页</li>
+                      <li v-for="(i,k) in bannerList" :key="k" :class="{'active':flag1==i.name}" @click="handJump(i)">{{i.name}}</li>
                   </div>
               </div>
           </div>
@@ -102,8 +92,35 @@ export default {
   data() {
     return {
       activeIndex: '2',
-      activeIndex2: '1',
+      // activeIndex2: '1',
       isVisibility:false,
+      flag1:'',
+      bannerList:[
+        // {
+        // name:"首页",
+        // path:"/serMatHp",
+        // },
+        {
+        name:"服务机构",
+        path:"/serverOrg",
+        },
+        {
+        name:"服务产品",
+        path:"/serverPro",
+        },
+        {
+        name:"服务顾问",
+        path:"/serverCon",
+        },
+        {
+        name:"活动培训",
+        path:"/actiTrain",
+        },
+        {
+        name:"关于我们",
+        path:"/aboutUs",
+        }
+      ],
       industryList:[]//快速寻找服务下拉
     };
   },
@@ -111,6 +128,15 @@ export default {
    this.getIndustryList()
   },
   methods: {
+    handJump(i){
+      this.flag1=i.name;
+      if(this.flag1==''){
+        debugger
+        this.$router.push({ path:'/serMatHp'});
+      } else {
+        this.$router.push({ path: i.path});
+      }
+    },
      handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
@@ -164,11 +190,11 @@ export default {
         display: inline-block;
         padding: 20px 0;
         width: 155px;
-        height: 38px;
+        height: 42px;
         > img {
           width: 100%;
           height: 100%;
-          vertical-align: middle;
+          // vertical-align: middle;
         }
       }
       .trainSearch {
@@ -235,11 +261,12 @@ export default {
         > li {
           float: left;
           padding: 0 40px;
+          cursor: pointer;
         }
-        > li:last-child {
-          padding-right: 0;
-        }
-        .active{
+        // > li:last-child {
+        //   padding-right: 0;
+        // }
+        >li.active{
           background-color: #007f34;
         }
       }

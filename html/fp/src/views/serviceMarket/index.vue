@@ -4,12 +4,15 @@
     <div class="navImg"></div>
     <div class="market_content"><!-- 版心 -->
       <div class="market_breadcrumb">
-          <el-breadcrumb separator="/">
+          <!-- <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
             <el-breadcrumb-item>
               <a href="/">服务超市</a>
             </el-breadcrumb-item>
-          </el-breadcrumb>
+          </el-breadcrumb> -->
+          <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务</span>
+          <span>/</span>
+          <span class="mainColor">服务超市</span>
       </div>
       <div class="market_navicon">
         <a href="javascript:;">
@@ -413,7 +416,7 @@ export default {
     getCounselorList(){
       let _this = this;
       this.api.get({
-        url: "getServiceConsultantList",
+        url: "getServiceConList",
         data: {
           domain:this.domain,
           page:1,
@@ -487,7 +490,7 @@ export default {
       margin: 0 auto;
       .market_breadcrumb{
         margin: 15px 0;
-        font-size: 12px;
+        font-size: 16px;
       }
       .market_navicon{
         display: flex;

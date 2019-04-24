@@ -6,7 +6,7 @@
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
-            <a href="#/compassView">申报中心</a>
+            <a href="#/declarationCenter">申报中心</a>
           </el-breadcrumb-item>
           <el-breadcrumb-item>
             <a href="javascript:;">申报平台</a>
@@ -20,33 +20,34 @@
       <!-- 平台列表 -->
       <div class="platform_list">
         <div class="platform_recommend">
-          <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="园区本级平台" name="first">
+          <el-tabs>
+            <el-tab-pane v-for="(typeitem,typeindex) in platformType" :key="typeindex">
+              <span slot="label" @click="switchtype(typeitem.id)">{{typeitem.name}}</span>
               <div class="platform_titile"><span></span>平台介绍</div>
               <!-- 表格 -->
               <div class="platform_table">
                 <div>
-                  <el-form>
-                    <div class="full_line">
+                  <el-form v-for="(item,index) in pladformList" :key="index">
+                    <div class="full_line" >
                       <el-form-item label="平台名称">
-                        <div class="table_item_cont"><span></span> <span class="el-icon-d-arrow-right"></span></div>
+                        <div class="table_item_cont"><span>{{item.platformTitle}}</span> <span class="el-icon-d-arrow-right"></span></div>
                       </el-form-item>
                     </div>
                     <div class="full_line">
                       <el-form-item label="平台功能">
-                        <div class="table_item_cont"></div>
+                        <div class="table_item_cont">{{item.remark}}</div>
                       </el-form-item>
                     </div>
                     <div class="full_line">
                       <el-form-item label="业务咨询">
-                        <div class="table_item_cont"></div>
+                        <div class="table_item_cont" v-html="item.businessConsult"></div>
                       </el-form-item>
                     </div>
                     <div class="full_line">
                       <el-form-item label="系统支持">
-                        <div class="table_item_cont system_support">
-                          <div>邮箱：xxxx@sipac.gov.cn</div>
-                          <div>电话：<span>13866666666</span></div>
+                        <div class="table_item_cont system_support" v-html="item.systemSupport">
+                          <!-- <div>邮箱：xxxx@sipac.gov.cn</div>
+                          <div>电话：<span>13866666666</span></div> -->
                         </div>
                       </el-form-item>
                     </div>
@@ -57,6 +58,18 @@
           </el-tabs>
         </div>
       </div>
+      <!-- 分页 -->
+      <div class="declarationplatform_paging">
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :page-sizes="[6, 12, 18, 24]"
+          :page-size="100"
+          layout="total,prev, pager, next,sizes"
+          :total="total">
+        </el-pagination>
+      </div>
     </div><!-- 版心 -->
   </div>
 </template>
@@ -64,35 +77,65 @@
 export default {
   data () {
     return {
-      activeName: 'first',
       id:1,
-      pladformList:[]
+      platformType:[],
+      pladformList:[],
+      page:1,
+      rows:3,
+      total:0
     }
   },
   filters: {
     
   },
   created () {
-   this.getPlatformList()
-  },
+    this.getPlatformType()//平台类型
+    this.getPlatformList()//列表数据
+     },
   methods: {
     getPlatformList(){
       let _this = this;
       this.api.get({
         url: "getplatform",
         data: {
-          subordinatePlatformName :'园区本级平台'
+          subordinatePlatformName :this.id,
+          page:this.page,
+          rows:this.rows,
          },
         callback: function(res) {
-          console.log(res);
+          // console.log(res);
           if (res.code == "0000") {
-            _this.pladformList = res.data;
+            _this.pladformList = res.data.rows;
+            _this.total=res.data.total
           }
         }
       });
     },
-    handleClick(tab, event) {
-      console.log(tab, event);
+    getPlatformType(){
+      let _this = this;
+      this.api.get({
+        url: "getplatformtype",
+        data: { },
+        callback: function(res) {
+          // console.log(res);
+          if (res.code == "0000") {
+            _this.platformType = res.data;
+          }
+        }
+      });
+    },
+    //切换平台
+    switchtype(id){
+      this.id=id
+      this.getPlatformList()
+    },
+    handleSizeChange(val) {
+      this.rows=val
+      this.getPlatformList()
+    },
+    handleCurrentChange(val) {
+      this.page=val
+      this.getPlatformList()
     }
   }
 }
@@ -138,6 +181,9 @@ export default {
             .el-tabs__item.is-active{
               color: #00a041;
             }
+            .el-tabs__item:hover{
+              color: #00a041;
+            }
           }
           .platform_titile{
             font-size: 13px;
@@ -160,16 +206,19 @@ export default {
             .el-form{
               .full_line{
                 width: 100%;
-                background-color: #f8f8f8;
+                // background-color: #f8f8f8;
+                    /* background-color: #f8f8f8; */
+                border-bottom: 1px solid #eeeeee;
               }
               display: flex;
               flex-wrap: wrap;
               border: 1px solid #eeeeee;
               .el-form-item{
                 margin-bottom:0;
-                border-bottom: 1px solid #eeeeee;
+                // border-bottom: 1px solid #eeeeee;
                 display: flex;
-                height: 98%;
+                height: 100%;
+                background-color: #f8f8f8;
                 .el-form-item__content{
                   line-height: 25px;
                   background: #fff;
@@ -203,6 +252,32 @@ export default {
               
             }
           }
+        }
+      }
+      //分页
+      .declarationplatform_paging{
+        text-align: center;
+        margin: 51px 0 76px 0;
+        .el-pagination.is-background .btn-prev,.el-pagination.is-background .btn-next{
+          border: 1px solid #eee;
+          background-color: #fff;
+        }
+        .el-pagination.is-background .el-pager li{
+          background-color: #fff;
+          border: 1px solid #eee;
+        }
+        .el-pagination.is-background .el-pager li:not(.disabled).active{
+          background-color: #00a041;
+          color: #fff;
+        }
+        .el-pagination__sizes .el-input .el-input__inner:hover{
+          border-color: #00a041;
+        }
+        .el-select .el-input__inner:focus{
+          border-color:#00a041;
+        }
+        .el-pagination.is-background .el-pager li:not(.disabled):hover{
+          color:#00a041
         }
       }
     }

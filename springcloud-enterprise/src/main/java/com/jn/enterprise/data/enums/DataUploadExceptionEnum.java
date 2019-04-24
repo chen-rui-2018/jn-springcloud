@@ -20,6 +20,7 @@ public enum DataUploadExceptionEnum implements CodeAndMsg {
 
     TASK_IS_NOT_EXIST("5030205","任务不存在"),
     TAB_IS_NOT_EXIST("5030207","表单不存在"),
+    USER_PHONE_IS_NOT_EXIST("3020513","用户手机号不存在")
 
 
 

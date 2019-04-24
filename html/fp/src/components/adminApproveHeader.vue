@@ -56,14 +56,14 @@
         </div>
       </div>
       <div id="approveheaderW" v-else>
-        <div class="headerContainer clearfix" >
+        <div class="headerContainer clearfix" :class="{'rightDetail_right':this.$route.name ==='compassView'||this.$route.name ==='declarationCenter'||this.$route.name ==='talentsService'}">
           <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
           <div class="menu" style="display:none">
             <i class="el-icon-close"></i>
             <input type="text">
             <i class="el-icon-search"></i>
           </div>
-          <div class="headerRight fr" :class="{'rightDetail_right':$route.name!=='compassView'}">
+          <div class="headerRight fr" >
             <div class="search" v-if="!sousuo">
               <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
             </div>
@@ -78,14 +78,14 @@
               <img src="" alt="">
             </div>
           </div>
-          <div class="nav" v-if="this.$route.name=='compassView'||this.$route.name=='rightDetail'||this.$route.name=='serviceDetail'||this.$route.name=='declarationNoticeDetail'||this.$route.name=='declarationPlatform'">
+          <div class="nav" v-if="this.$route.name=='compassView'||this.$route.name=='rightDetail'||this.$route.name=='serviceDetail'||this.$route.name=='declarationNoticeDetail'||this.$route.name=='declarationPlatform'||this.$route.name=='declarationCenter'||this.$route.name=='talentsService'||this.$route.name=='talentPlatform'||this.$route.name=='familiarProblem'||this.$route.name=='familiarProblemDetail'||this.$route.name=='talentsServiceDetail'">
             <transition name="fade">
               <div class="sousuo posA" v-if="sousuo">
                 <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
                 <input type="text" v-focus @keyup.enter="handleSearch">
                 <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
               </div>
-              <ul class="posA clearfix" v-else :class="{'rightDetail':this.$route.name!=='compassView'&&this.$route.name!=='declarationPlatform'}">
+              <ul class="posA clearfix" v-else >
                 <li>
                   <a href="javascript:void(0);">首页</a>
                 </li>
@@ -104,7 +104,7 @@
         </div>
       </div>
     </el-card>
-    <div class="banner_box" v-show="this.$route.name=='compassView'||this.$route.name=='declarationPlatform'">
+    <div class="banner_box" v-show="this.$route.name=='compassView'||this.$route.name=='declarationPlatform'||this.$route.name=='declarationCenter'||this.$route.name=='talentsService'||this.$route.name=='talentPlatform'||this.$route.name=='familiarProblem'">
       <el-carousel arrow="always" loop :autoplay="false">
           <el-carousel-item v-for="item in 4" :key="item">
             <img src="@/assets/image/approv.png" alt="">
@@ -141,6 +141,7 @@ export default {
    .el-carousel__item{
     img{
       height: 100%;
+      width: 100%;
     }
   }
   .el-carousel__arrow{
@@ -173,11 +174,7 @@ export default {
     font-weight: bold;
     font-size: 16px;
     box-sizing: border-box;
-    // background-color: #757381;
     .titleImg {
-      // width: 218px;
-      // height: 54px;
-      // margin-left:160px;
       width: 155px;
       height: 38px;
       img {
@@ -262,6 +259,9 @@ export default {
       }
     }
   }
+  .color{
+    color:black;
+  }
 }
 
 #approveheaderW {
@@ -275,7 +275,7 @@ export default {
     width: 100%;
     height: 91px;
     line-height: 91px;
-    color: #fff;
+    // color: #fff;
     font-weight: bold;
     font-size: 16px;
     box-sizing: border-box;
@@ -344,9 +344,7 @@ export default {
         }
       }
     }
-    .rightDetail_right{
-        color:#b2b2b2;
-      }
+    
     .headerRight {
       
       .search {
@@ -375,6 +373,8 @@ export default {
       }
     }
   }
- 
+ .rightDetail_right{
+        color:#fff;
+      }
 }
 </style>

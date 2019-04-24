@@ -30,14 +30,14 @@ public class ScheduleQuery implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date date;
 
-    @ApiModelProperty(value = "时间段查询开始时间", example = "2019-03-22 12:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "时间段查询开始时间", example = "2019-03-22 12:12")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     private Date startTime;
 
-    @ApiModelProperty(value = "时间段查询结束时间", example = "2019-03-22 13:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "时间段查询结束时间", example = "2019-03-22 13:12")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
     private Date endTime;
 
     @ApiModelProperty(value = "用户账号", example = "不用传")

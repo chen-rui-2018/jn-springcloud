@@ -13,6 +13,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 
 /**
@@ -38,6 +39,7 @@ public class MySessionManager extends DefaultWebSessionManager {
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String id = WebUtils.toHttp(request).getHeader(AUTHORIZATION);
         if (StringUtils.isEmpty(id)) {
             String account = com.lc.ibps.auth.client.context.Context.getUsername();
@@ -53,10 +55,13 @@ public class MySessionManager extends DefaultWebSessionManager {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("account", account);
                 Result result = loadBalancerUtils.getClientPostForEntity(SYSTEM_CLIENT, SYSTEM_CLIENT_NOPASSWORDLOGIN_SERVICE, jsonObject.toString());
+                id = result.getData().toString();
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE, REFERENCED_SESSION_ID_SOURCE);
-                request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID, result.getData().toString());
+                request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID, id);
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_IS_VALID, Boolean.TRUE);
-                return result.getData().toString();
+                httpServletResponse.addCookie(new Cookie("shiroSessionId",id));
+                httpServletResponse.addCookie(new Cookie("Admin-Token",id));
+                return id;
             }
             return super.getSessionId(request, response);
         } else {

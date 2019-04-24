@@ -3,7 +3,7 @@
         <div class="portalIndexImg">
             <div id="header">
                 <div class="headerContainer clearfix">
-                    <div class="titleImg fl"><img src="@/../static/img/LOGO1.png" alt=""></div>
+                    <div class="titleImg fl"><img src="@/../static/img/LOGO1.png" class="pointer" alt="" @click="$router.push({path:'/'})"></div>
                     <div class="headerRight fr">
                         <div class="search" v-if="!sousuo">
                             <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
@@ -40,9 +40,10 @@
                     </div>
                 </div>
             </div>
-            <el-carousel :interval="5000" arrow="always" @change="onchange()">
-                <el-carousel-item v-for="item in 4" :key="item">
-                    <h3><img class="porImg" src="@/../static/img/qiye.png" alt="" @click="$router.push({path:'/serMatHp'})"></h3>
+            <el-carousel :interval="5000" arrow="never">
+                <!-- <el-carousel-item v-for="item in 4" :key="item"> -->
+                <el-carousel-item>
+                    <h3><img class="porImg" src="@/../static/img/qiye1.png" alt="" @click="$router.push({path:'/serMatHp'})"></h3>
                 </el-carousel-item>
             </el-carousel>
             <div class="quickEnter">
@@ -115,62 +116,62 @@
             <div class="line"></div>
             <div class="paging w pr">
                 <el-carousel :interval="5000" arrow="always">
-                 <el-carousel-item v-for="item in 3" :key="item">
-                <ul class="page1 clearfix">
-                    <li>
-                        <div class="left1">N</div>
-                        <div class="right1">
-                            <div class="rightTit color1">白下高新区金融扶持政策</div>
-                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                            <div class="liBom clearfix">
-                                <p class="fl color3">
-                                    <i class="el-icon-view"></i>&nbsp;89</p>
-                                <span class="fr mainColor">南京市级</span>
-                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="left1">E</div>
-                        <div class="right1">
-                            <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                            <div class="liBom clearfix">
-                                <p class="fl color3">
-                                    <i class="el-icon-view"></i>&nbsp;89</p>
-                                <span class="fr mainColor">南京市级</span>
-                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="left1">W</div>
-                        <div class="right1">
-                            <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                            <div class="liBom clearfix">
-                                <p class="fl color3">
-                                    <i class="el-icon-view"></i>&nbsp;89</p>
-                                <span class="fr mainColor">南京市级</span>
-                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="left1">S</div>
-                        <div class="right1">
-                            <div class="rightTit color1">关于维护知识产权政策</div>
-                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                            <div class="liBom clearfix">
-                                <p class="fl color3">
-                                    <i class="el-icon-view"></i>&nbsp;89</p>
-                                <span class="fr mainColor">南京市级</span>
-                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                 </el-carousel-item>
+                    <el-carousel-item v-for="item in 3" :key="item">
+                        <ul class="page1 clearfix">
+                            <li>
+                                <div class="left1">N</div>
+                                <div class="right1">
+                                    <div class="rightTit color1">白下高新区金融扶持政策</div>
+                                    <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                    <div class="liBom clearfix">
+                                        <p class="fl color3">
+                                            <i class="el-icon-view"></i>&nbsp;89</p>
+                                        <span class="fr mainColor">南京市级</span>
+                                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="left1">E</div>
+                                <div class="right1">
+                                    <div class="rightTit color1">南京白下高新区税收优惠政策</div>
+                                    <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                    <div class="liBom clearfix">
+                                        <p class="fl color3">
+                                            <i class="el-icon-view"></i>&nbsp;89</p>
+                                        <span class="fr mainColor">南京市级</span>
+                                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="left1">W</div>
+                                <div class="right1">
+                                    <div class="rightTit color1">南京市人民政府人才激励政策...</div>
+                                    <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                    <div class="liBom clearfix">
+                                        <p class="fl color3">
+                                            <i class="el-icon-view"></i>&nbsp;89</p>
+                                        <span class="fr mainColor">南京市级</span>
+                                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="left1">S</div>
+                                <div class="right1">
+                                    <div class="rightTit color1">关于维护知识产权政策</div>
+                                    <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
+                                    <div class="liBom clearfix">
+                                        <p class="fl color3">
+                                            <i class="el-icon-view"></i>&nbsp;89</p>
+                                        <span class="fr mainColor">南京市级</span>
+                                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </el-carousel-item>
                 </el-carousel>
                 <!-- <ul class="page2">
                     <li></li>
@@ -331,7 +332,7 @@
                     <button class="btn2">金融机构</button>
                 </div>
                 <div class="tecnInfo clearfix">
-                    <div class="info1 clearfix">
+                   <!--  <div class="info1 clearfix">
                         <div class="lef1 fl clearfix">
                             <div class="imgItem fl"><img src="@/../static/img/largeImg.png" alt=""></div>
                             <div class="itemInfo fr">
@@ -419,6 +420,39 @@
                                 </div>
                             </li>
                         </ul>
+                    </div> -->
+                    <div id="conselor_info">
+                        <ul>
+                            <li class="conselor_left">
+                                <div v-for="(item,index) in 2" :key="index">
+                                <a href="javascript:;">
+                                    <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
+                                    <div class="info_all">
+                                    <div class="info_name"><span>郭龙华</span>/<span>总经理</span></div>
+                                    <div class="info_detail">
+                                        <p>苏州万隆永鼎会计师事务所有限公司</p>
+                                        <p>合伙人</p>
+                                    </div>
+                                    </div>
+                                </a>
+                                </div>
+                            </li>
+                            <li class="conselor_mid">
+                                <div v-for="(counselorinfoItem2,counselorinfoindex2) in 8" :key="counselorinfoindex2" class="conselor_mid_list">
+                                <a href="javascript:;">
+                                    <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
+                                    <div class="info_all">
+                                    <div class="info_name"><span>郭龙华</span>/<span>总经理</span></div>
+                                    <div class="info_detail">
+                                        <p>苏州万隆永鼎会计师事务所有限公司</p>
+                                        <p>合伙人</p>
+                                    </div>
+                                    </div>
+                                </a>
+                                </div>
+                                
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -435,7 +469,7 @@
                             <button class="btn1">企业招聘</button>
                             <button class="btn2">服务</button>
                         </div>
-                        <div class="chage fr color3">
+                        <div class="chage fr color3 pointer">
                             <img src="@/../static/img/huanyipi.png" alt=""> 换一批
                         </div>
                     </div>
@@ -508,9 +542,9 @@ export default {
     };
   },
   mounted() {
-      this.$router.afterEach((to, from, next) => {
-        window.scrollTo(0, 0)
-    })
+    this.$router.afterEach((to, from, next) => {
+      window.scrollTo(0, 0);
+    });
   },
   methods: {
     onchange() {
@@ -534,6 +568,11 @@ export default {
       color: #fff;
       border-radius: none;
     }
+    > .firstLi:hover {
+      background: #fff;
+      color: #00a041;
+      border-radius: 5px;
+    }
     .lastLi {
       background: #fff;
       color: #00a041;
@@ -541,9 +580,11 @@ export default {
     }
   }
   .portalIndexImg {
+    //   height: 650px;
     .porImg {
       width: 100%;
       height: 100%;
+      height: 650px;
     }
     // .el-carousel__item:nth-child(2n) {
     //   background: url("../../static/img/qiye.png") 100% 100% / 100% 100%
@@ -554,6 +595,9 @@ export default {
     //   background: url("../../static/img/qiye.png") 100% 100% / 100% 100%
     //     no-repeat;
     // }
+    .el-carousel__indicators {
+      display: none;
+    }
   }
   .declarationNotice {
     #li2,
@@ -563,7 +607,9 @@ export default {
   }
   .policyCenter {
     .paging {
-            .el-carousel{padding: 50px 0;}
+      .el-carousel {
+        padding: 50px 0;
+      }
       .page1 {
         width: 800px;
         margin: 0 auto;
@@ -647,25 +693,25 @@ export default {
             no-repeat;
         }
       }
-      .el-carousel__arrow{
-          background: none;
-          color: #eee;
-          font-size: 35px;
+      .el-carousel__arrow {
+        background: none;
+        color: #eee;
+        font-size: 35px;
       }
-      .el-carousel__arrow--left{
-          left: 130px;
+      .el-carousel__arrow--left {
+        left: 130px;
       }
-      .el-carousel__arrow--right{
-          right: 130px;
+      .el-carousel__arrow--right {
+        right: 130px;
       }
-      .el-carousel__button{
-          width: 9px;
-          height: 9px;
-          background: #e1e1e1;
-          border-radius: 50%;
+      .el-carousel__button {
+        width: 9px;
+        height: 9px;
+        background: #e1e1e1;
+        border-radius: 50%;
       }
-      .el-carousel__indicator.is-active .el-carousel__button{
-          background: #00a041;
+      .el-carousel__indicator.is-active .el-carousel__button {
+        background: #00a041;
       }
     }
   }
@@ -704,6 +750,10 @@ export default {
   .technologyFinance {
     #btns {
       margin: 50px 0;
+      > button:hover {
+        color: #fff;
+        background: #00a041;
+      }
       .btn11 {
         border-radius: 0;
       }
@@ -914,6 +964,70 @@ export default {
       }
     }
   }
+  #conselor_info{
+    ul{
+        display: flex;
+        .conselor_left{
+        width: 36%;
+        a{
+            border: 1px solid #dedede;
+            display: flex;
+                margin-top: 20px;
+            .info_img{
+            width:46%;
+            img{
+                width: 80%;
+                border-radius: 50%;
+                display: block;
+                margin: 20px auto;
+            }
+            }
+            .info_all{
+            margin: auto 0;
+            .info_name{
+                padding-bottom: 18px;
+            }
+            .info_detail{
+                font-size: 12px;
+                color: #999;
+            }
+            }
+        }
+        }
+        .conselor_mid{
+        width: 63%;
+        .conselor_mid_list{
+            float: left;
+            width: 50%;
+        }
+        a{
+            border: 1px solid #dedede;
+            display: flex;
+            margin-top: 20px;
+            margin-left: 20px;
+            .info_img{
+            width: 27%;
+            img{
+                width: 79%;
+                border-radius: 50%;
+                display: block;
+                margin: 6px auto;
+            }
+            }
+            .info_all{
+            margin: auto 10px;
+            .info_name{
+                padding-bottom: 18px;
+            }
+            .info_detail{
+                font-size: 12px;
+                color: #999;
+            }
+            }
+        }
+        }
+    }
+    }
 }
 </style>
 

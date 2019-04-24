@@ -479,7 +479,7 @@ input {
 /* 服务超市-服务机构，服务产品 */
 .serverOrg .serverOrgMenu,
 .serverPro .serverOrgMenu,
-.serverCon .serverOrgMenu, .quickSearch .serverOrgMenu, .aboutUs .serverOrgMenu {
+.serverCon .serverOrgMenu, .quickSearch .serverOrgMenu, .aboutUs .serverOrgMenu, .finaInstitution .serverOrgMenu {
   padding: 20px 0;
   font-size: 14px;
   font-weight: bold;
@@ -487,13 +487,13 @@ input {
 
 .serverOrg .serverOrgMenu .agent,
 .serverPro .serverOrgMenu .agent,
-.serverCon .serverOrgMenu .agent, .quickSearch .serverOrgMenu .agent, .aboutUs .serverOrgMenu .agent {
+.serverCon .serverOrgMenu .agent, .quickSearch .serverOrgMenu .agent, .aboutUs .serverOrgMenu .agent, .finaInstitution .serverOrgMenu .agent {
   font-weight: bold;
 }
 
 .serverOrg .serverOrgNav,
 .serverPro .serverOrgNav,
-.serverCon .serverOrgNav, .quickSearch .serverOrgNav, .aboutUs .serverOrgNav {
+.serverCon .serverOrgNav, .quickSearch .serverOrgNav, .aboutUs .serverOrgNav, .finaInstitution .serverOrgNav {
   padding: 0 20px;
   font-size: 13px;
   margin-bottom: 20px;
@@ -502,7 +502,7 @@ input {
 
 .serverOrg .serverOrgNav .nav1,
 .serverPro .serverOrgNav .nav1,
-.serverCon .serverOrgNav .nav1, .quickSearch .serverOrgNav .nav1, .aboutUs .serverOrgNav .nav1 {
+.serverCon .serverOrgNav .nav1, .quickSearch .serverOrgNav .nav1, .aboutUs .serverOrgNav .nav1, .finaInstitution .serverOrgNav .nav1 {
   padding: 15px 0;
   border-bottom: 1px solid #eee;
   color: #666;
@@ -510,7 +510,7 @@ input {
 
 .serverOrg .serverOrgNav .nav1 > img,
 .serverPro .serverOrgNav .nav1 > img,
-.serverCon .serverOrgNav .nav1 > img, .quickSearch .serverOrgNav .nav1 > img, .aboutUs .serverOrgNav .nav1 > img {
+.serverCon .serverOrgNav .nav1 > img, .quickSearch .serverOrgNav .nav1 > img, .aboutUs .serverOrgNav .nav1 > img, .finaInstitution .serverOrgNav .nav1 > img {
   width: 12px;
   height: 15px;
   vertical-align: top;
@@ -518,13 +518,13 @@ input {
 
 .serverOrg .serverOrgNav .nav1 .nav1Tit,
 .serverPro .serverOrgNav .nav1 .nav1Tit,
-.serverCon .serverOrgNav .nav1 .nav1Tit, .quickSearch .serverOrgNav .nav1 .nav1Tit, .aboutUs .serverOrgNav .nav1 .nav1Tit {
+.serverCon .serverOrgNav .nav1 .nav1Tit, .quickSearch .serverOrgNav .nav1 .nav1Tit, .aboutUs .serverOrgNav .nav1 .nav1Tit, .finaInstitution .serverOrgNav .nav1 .nav1Tit {
   margin-top: 5px;
 }
 
 .serverOrg .serverOrgNav .nav1 .nav1Ul,
 .serverPro .serverOrgNav .nav1 .nav1Ul,
-.serverCon .serverOrgNav .nav1 .nav1Ul, .quickSearch .serverOrgNav .nav1 .nav1Ul, .aboutUs .serverOrgNav .nav1 .nav1Ul {
+.serverCon .serverOrgNav .nav1 .nav1Ul, .quickSearch .serverOrgNav .nav1 .nav1Ul, .aboutUs .serverOrgNav .nav1 .nav1Ul, .finaInstitution .serverOrgNav .nav1 .nav1Ul {
   width: 860px;
   overflow: hidden;
   height: 27px;
@@ -532,7 +532,7 @@ input {
 
 .serverOrg .serverOrgNav .nav1 .nav1Ul > li,
 .serverPro .serverOrgNav .nav1 .nav1Ul > li,
-.serverCon .serverOrgNav .nav1 .nav1Ul > li, .quickSearch .serverOrgNav .nav1 .nav1Ul > li, .aboutUs .serverOrgNav .nav1 .nav1Ul > li {
+.serverCon .serverOrgNav .nav1 .nav1Ul > li, .quickSearch .serverOrgNav .nav1 .nav1Ul > li, .aboutUs .serverOrgNav .nav1 .nav1Ul > li, .finaInstitution .serverOrgNav .nav1 .nav1Ul > li {
   float: left;
   margin-left: 20px;
   padding: 5px 10px;
@@ -542,7 +542,7 @@ input {
 
 .serverOrg .serverOrgNav .nav1 .nav1Ul > li.active,
 .serverPro .serverOrgNav .nav1 .nav1Ul > li.active,
-.serverCon .serverOrgNav .nav1 .nav1Ul > li.active, .quickSearch .serverOrgNav .nav1 .nav1Ul > li.active, .aboutUs .serverOrgNav .nav1 .nav1Ul > li.active {
+.serverCon .serverOrgNav .nav1 .nav1Ul > li.active, .quickSearch .serverOrgNav .nav1 .nav1Ul > li.active, .aboutUs .serverOrgNav .nav1 .nav1Ul > li.active, .finaInstitution .serverOrgNav .nav1 .nav1Ul > li.active {
   background: #009f42;
   border-radius: 4px;
   color: #fff;
@@ -550,7 +550,7 @@ input {
 
 .serverOrg .serverOrgNav .nav1 .nav1Ul.sh,
 .serverPro .serverOrgNav .nav1 .nav1Ul.sh,
-.serverCon .serverOrgNav .nav1 .nav1Ul.sh, .quickSearch .serverOrgNav .nav1 .nav1Ul.sh, .aboutUs .serverOrgNav .nav1 .nav1Ul.sh {
+.serverCon .serverOrgNav .nav1 .nav1Ul.sh, .quickSearch .serverOrgNav .nav1 .nav1Ul.sh, .aboutUs .serverOrgNav .nav1 .nav1Ul.sh, .finaInstitution .serverOrgNav .nav1 .nav1Ul.sh {
   overflow: visible;
   height: auto;
 }
@@ -562,40 +562,41 @@ input {
 .serverCon .serverOrgNav .nav1 .el-icon-arrow-down,
 .serverCon .serverOrgNav .nav1 .el-icon-arrow-up, .quickSearch .serverOrgNav .nav1 .el-icon-arrow-down,
 .quickSearch .serverOrgNav .nav1 .el-icon-arrow-up, .aboutUs .serverOrgNav .nav1 .el-icon-arrow-down,
-.aboutUs .serverOrgNav .nav1 .el-icon-arrow-up {
+.aboutUs .serverOrgNav .nav1 .el-icon-arrow-up, .finaInstitution .serverOrgNav .nav1 .el-icon-arrow-down,
+.finaInstitution .serverOrgNav .nav1 .el-icon-arrow-up {
   font-size: 18px;
   color: #999;
 }
 
 .serverOrg .serverOrgNav #nav1,
 .serverPro .serverOrgNav #nav1,
-.serverCon .serverOrgNav #nav1, .quickSearch .serverOrgNav #nav1, .aboutUs .serverOrgNav #nav1 {
+.serverCon .serverOrgNav #nav1, .quickSearch .serverOrgNav #nav1, .aboutUs .serverOrgNav #nav1, .finaInstitution .serverOrgNav #nav1 {
   border: none;
 }
 
 .serverOrg .serverOrgNav .nav2,
 .serverPro .serverOrgNav .nav2,
-.serverCon .serverOrgNav .nav2, .quickSearch .serverOrgNav .nav2, .aboutUs .serverOrgNav .nav2 {
+.serverCon .serverOrgNav .nav2, .quickSearch .serverOrgNav .nav2, .aboutUs .serverOrgNav .nav2, .finaInstitution .serverOrgNav .nav2 {
   border-bottom: none;
 }
 
 .serverOrg .serverOrgFilter,
 .serverPro .serverOrgFilter,
-.serverCon .serverOrgFilter, .quickSearch .serverOrgFilter, .aboutUs .serverOrgFilter {
+.serverCon .serverOrgFilter, .quickSearch .serverOrgFilter, .aboutUs .serverOrgFilter, .finaInstitution .serverOrgFilter {
   padding: 10px;
   font-size: 13px;
 }
 
 .serverOrg .serverOrgFilter .filLeft,
 .serverPro .serverOrgFilter .filLeft,
-.serverCon .serverOrgFilter .filLeft, .quickSearch .serverOrgFilter .filLeft, .aboutUs .serverOrgFilter .filLeft {
+.serverCon .serverOrgFilter .filLeft, .quickSearch .serverOrgFilter .filLeft, .aboutUs .serverOrgFilter .filLeft, .finaInstitution .serverOrgFilter .filLeft {
   margin-top: 10px;
   color: #797979;
 }
 
 .serverOrg .serverOrgFilter .filLeft > span,
 .serverPro .serverOrgFilter .filLeft > span,
-.serverCon .serverOrgFilter .filLeft > span, .quickSearch .serverOrgFilter .filLeft > span, .aboutUs .serverOrgFilter .filLeft > span {
+.serverCon .serverOrgFilter .filLeft > span, .quickSearch .serverOrgFilter .filLeft > span, .aboutUs .serverOrgFilter .filLeft > span, .finaInstitution .serverOrgFilter .filLeft > span {
   margin-right: 20px;
   cursor: pointer;
   color: #999;
@@ -603,13 +604,13 @@ input {
 
 .serverOrg .serverOrgFilter .filLeft > span.active,
 .serverPro .serverOrgFilter .filLeft > span.active,
-.serverCon .serverOrgFilter .filLeft > span.active, .quickSearch .serverOrgFilter .filLeft > span.active, .aboutUs .serverOrgFilter .filLeft > span.active {
+.serverCon .serverOrgFilter .filLeft > span.active, .quickSearch .serverOrgFilter .filLeft > span.active, .aboutUs .serverOrgFilter .filLeft > span.active, .finaInstitution .serverOrgFilter .filLeft > span.active {
   color: #00a041;
 }
 
 .serverOrg .serverOrgFilter .filRight,
 .serverPro .serverOrgFilter .filRight,
-.serverCon .serverOrgFilter .filRight, .quickSearch .serverOrgFilter .filRight, .aboutUs .serverOrgFilter .filRight {
+.serverCon .serverOrgFilter .filRight, .quickSearch .serverOrgFilter .filRight, .aboutUs .serverOrgFilter .filRight, .finaInstitution .serverOrgFilter .filRight {
   width: 200px;
   height: 35px;
   line-height: 35px;
@@ -621,7 +622,7 @@ input {
 
 .serverOrg .serverOrgFilter .filRight > input,
 .serverPro .serverOrgFilter .filRight > input,
-.serverCon .serverOrgFilter .filRight > input, .quickSearch .serverOrgFilter .filRight > input, .aboutUs .serverOrgFilter .filRight > input {
+.serverCon .serverOrgFilter .filRight > input, .quickSearch .serverOrgFilter .filRight > input, .aboutUs .serverOrgFilter .filRight > input, .finaInstitution .serverOrgFilter .filRight > input {
   border: 0;
   height: 100%;
   width: 80%;
@@ -644,7 +645,10 @@ input {
 .quickSearch .serverOrgFilter .filRight button, .aboutUs .serverOrgFilter .filRight input,
 .aboutUs .serverOrgFilter .filRight textarea,
 .aboutUs .serverOrgFilter .filRight select,
-.aboutUs .serverOrgFilter .filRight button {
+.aboutUs .serverOrgFilter .filRight button, .finaInstitution .serverOrgFilter .filRight input,
+.finaInstitution .serverOrgFilter .filRight textarea,
+.finaInstitution .serverOrgFilter .filRight select,
+.finaInstitution .serverOrgFilter .filRight button {
   text-rendering: auto;
   color: #333;
   letter-spacing: normal;
@@ -660,7 +664,7 @@ input {
 
 .serverOrg .serverOrgFilter .filRight > .icon-sousuo,
 .serverPro .serverOrgFilter .filRight > .icon-sousuo,
-.serverCon .serverOrgFilter .filRight > .icon-sousuo, .quickSearch .serverOrgFilter .filRight > .icon-sousuo, .aboutUs .serverOrgFilter .filRight > .icon-sousuo {
+.serverCon .serverOrgFilter .filRight > .icon-sousuo, .quickSearch .serverOrgFilter .filRight > .icon-sousuo, .aboutUs .serverOrgFilter .filRight > .icon-sousuo, .finaInstitution .serverOrgFilter .filRight > .icon-sousuo {
   position: relative;
   top: -36px;
   right: -120px;
@@ -675,41 +679,41 @@ input {
 
 .serverOrg .serverOrgContent,
 .serverPro .serverOrgContent,
-.serverCon .serverOrgContent, .quickSearch .serverOrgContent, .aboutUs .serverOrgContent {
+.serverCon .serverOrgContent, .quickSearch .serverOrgContent, .aboutUs .serverOrgContent, .finaInstitution .serverOrgContent {
   margin-top: 20px;
   margin-bottom: 70px;
 }
 
 .serverOrg .serverOrgContent > ul > li,
 .serverPro .serverOrgContent > ul > li,
-.serverCon .serverOrgContent > ul > li, .quickSearch .serverOrgContent > ul > li, .aboutUs .serverOrgContent > ul > li {
+.serverCon .serverOrgContent > ul > li, .quickSearch .serverOrgContent > ul > li, .aboutUs .serverOrgContent > ul > li, .finaInstitution .serverOrgContent > ul > li {
   padding: 20px 0;
   border-bottom: 1px solid #eee;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgImg,
 .serverPro .serverOrgContent > ul > li .orgImg,
-.serverCon .serverOrgContent > ul > li .orgImg, .quickSearch .serverOrgContent > ul > li .orgImg, .aboutUs .serverOrgContent > ul > li .orgImg {
+.serverCon .serverOrgContent > ul > li .orgImg, .quickSearch .serverOrgContent > ul > li .orgImg, .aboutUs .serverOrgContent > ul > li .orgImg, .finaInstitution .serverOrgContent > ul > li .orgImg {
   width: 200px;
   height: 130px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgImg > img,
 .serverPro .serverOrgContent > ul > li .orgImg > img,
-.serverCon .serverOrgContent > ul > li .orgImg > img, .quickSearch .serverOrgContent > ul > li .orgImg > img, .aboutUs .serverOrgContent > ul > li .orgImg > img {
+.serverCon .serverOrgContent > ul > li .orgImg > img, .quickSearch .serverOrgContent > ul > li .orgImg > img, .aboutUs .serverOrgContent > ul > li .orgImg > img, .finaInstitution .serverOrgContent > ul > li .orgImg > img {
   width: 100%;
   height: 100%;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon,
 .serverPro .serverOrgContent > ul > li .orgCon,
-.serverCon .serverOrgContent > ul > li .orgCon, .quickSearch .serverOrgContent > ul > li .orgCon, .aboutUs .serverOrgContent > ul > li .orgCon {
+.serverCon .serverOrgContent > ul > li .orgCon, .quickSearch .serverOrgContent > ul > li .orgCon, .aboutUs .serverOrgContent > ul > li .orgCon, .finaInstitution .serverOrgContent > ul > li .orgCon {
   margin-left: 20px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conTil,
 .serverPro .serverOrgContent > ul > li .orgCon .conTil,
-.serverCon .serverOrgContent > ul > li .orgCon .conTil, .quickSearch .serverOrgContent > ul > li .orgCon .conTil, .aboutUs .serverOrgContent > ul > li .orgCon .conTil {
+.serverCon .serverOrgContent > ul > li .orgCon .conTil, .quickSearch .serverOrgContent > ul > li .orgCon .conTil, .aboutUs .serverOrgContent > ul > li .orgCon .conTil, .finaInstitution .serverOrgContent > ul > li .orgCon .conTil {
   font-size: 13px;
   color: #222;
   font-weight: bold;
@@ -718,37 +722,37 @@ input {
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent,
 .serverPro .serverOrgContent > ul > li .orgCon .conContent,
-.serverCon .serverOrgContent > ul > li .orgCon .conContent, .quickSearch .serverOrgContent > ul > li .orgCon .conContent, .aboutUs .serverOrgContent > ul > li .orgCon .conContent {
+.serverCon .serverOrgContent > ul > li .orgCon .conContent, .quickSearch .serverOrgContent > ul > li .orgCon .conContent, .aboutUs .serverOrgContent > ul > li .orgCon .conContent, .finaInstitution .serverOrgContent > ul > li .orgCon .conContent {
   font-size: 12px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .left1,
 .serverPro .serverOrgContent > ul > li .orgCon .conContent .left1,
-.serverCon .serverOrgContent > ul > li .orgCon .conContent .left1, .quickSearch .serverOrgContent > ul > li .orgCon .conContent .left1, .aboutUs .serverOrgContent > ul > li .orgCon .conContent .left1 {
+.serverCon .serverOrgContent > ul > li .orgCon .conContent .left1, .quickSearch .serverOrgContent > ul > li .orgCon .conContent .left1, .aboutUs .serverOrgContent > ul > li .orgCon .conContent .left1, .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .left1 {
   width: 300px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .left1 > p,
 .serverPro .serverOrgContent > ul > li .orgCon .conContent .left1 > p,
-.serverCon .serverOrgContent > ul > li .orgCon .conContent .left1 > p, .quickSearch .serverOrgContent > ul > li .orgCon .conContent .left1 > p, .aboutUs .serverOrgContent > ul > li .orgCon .conContent .left1 > p {
+.serverCon .serverOrgContent > ul > li .orgCon .conContent .left1 > p, .quickSearch .serverOrgContent > ul > li .orgCon .conContent .left1 > p, .aboutUs .serverOrgContent > ul > li .orgCon .conContent .left1 > p, .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .left1 > p {
   margin-bottom: 5px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .serverPro .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
-.serverCon .serverOrgContent > ul > li .orgCon .conContent .right1 > p, .quickSearch .serverOrgContent > ul > li .orgCon .conContent .right1 > p, .aboutUs .serverOrgContent > ul > li .orgCon .conContent .right1 > p {
+.serverCon .serverOrgContent > ul > li .orgCon .conContent .right1 > p, .quickSearch .serverOrgContent > ul > li .orgCon .conContent .right1 > p, .aboutUs .serverOrgContent > ul > li .orgCon .conContent .right1 > p, .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .right1 > p {
   margin-bottom: 5px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate,
 .serverPro .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate,
-.serverCon .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate, .quickSearch .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate, .aboutUs .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate {
+.serverCon .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate, .quickSearch .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate, .aboutUs .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate, .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate {
   display: inline-block;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgBtn,
 .serverPro .serverOrgContent > ul > li .orgBtn,
-.serverCon .serverOrgContent > ul > li .orgBtn, .quickSearch .serverOrgContent > ul > li .orgBtn, .aboutUs .serverOrgContent > ul > li .orgBtn {
+.serverCon .serverOrgContent > ul > li .orgBtn, .quickSearch .serverOrgContent > ul > li .orgBtn, .aboutUs .serverOrgContent > ul > li .orgBtn, .finaInstitution .serverOrgContent > ul > li .orgBtn {
   font-size: 13px;
   background: #ecfcf2;
   padding: 6px 20px;
@@ -760,13 +764,13 @@ input {
 
 .serverOrg .serverOrgContent > ul > li:first-child,
 .serverPro .serverOrgContent > ul > li:first-child,
-.serverCon .serverOrgContent > ul > li:first-child, .quickSearch .serverOrgContent > ul > li:first-child, .aboutUs .serverOrgContent > ul > li:first-child {
+.serverCon .serverOrgContent > ul > li:first-child, .quickSearch .serverOrgContent > ul > li:first-child, .aboutUs .serverOrgContent > ul > li:first-child, .finaInstitution .serverOrgContent > ul > li:first-child {
   padding-top: 10px;
 }
 
 .serverOrg .pagination-container,
 .serverPro .pagination-container,
-.serverCon .pagination-container, .quickSearch .pagination-container, .aboutUs .pagination-container {
+.serverCon .pagination-container, .quickSearch .pagination-container, .aboutUs .pagination-container, .finaInstitution .pagination-container {
   margin-bottom: 50px;
 }
 
@@ -775,7 +779,7 @@ input {
 .serverOrgDetail table,
 .serverProDetail table,
 .serverConDetail table,
-.quickSearch table {
+.quickSearch table, .finaInsDetail table {
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -783,28 +787,28 @@ input {
 .serverOrgDetail .el-tabs__item.is-active,
 .serverProDetail .el-tabs__item.is-active,
 .serverConDetail .el-tabs__item.is-active,
-.quickSearch .el-tabs__item.is-active {
+.quickSearch .el-tabs__item.is-active, .finaInsDetail .el-tabs__item.is-active {
   color: #00a041;
 }
 
 .serverOrgDetail .el-tabs__active-bar,
 .serverProDetail .el-tabs__active-bar,
 .serverConDetail .el-tabs__active-bar,
-.quickSearch .el-tabs__active-bar {
+.quickSearch .el-tabs__active-bar, .finaInsDetail .el-tabs__active-bar {
   background: #00a041;
 }
 
 .serverOrgDetail .el-tabs__item:hover,
 .serverProDetail .el-tabs__item:hover,
 .serverConDetail .el-tabs__item:hover,
-.quickSearch .el-tabs__item:hover {
+.quickSearch .el-tabs__item:hover, .finaInsDetail .el-tabs__item:hover {
   color: #00a041;
 }
 
 .serverOrgDetail .serverOrgMenu,
 .serverProDetail .serverOrgMenu,
 .serverConDetail .serverOrgMenu,
-.quickSearch .serverOrgMenu {
+.quickSearch .serverOrgMenu, .finaInsDetail .serverOrgMenu {
   padding: 20px 0;
   font-size: 14px;
   font-weight: bold;
@@ -813,21 +817,21 @@ input {
 .serverOrgDetail .serverOrgMenu .agent,
 .serverProDetail .serverOrgMenu .agent,
 .serverConDetail .serverOrgMenu .agent,
-.quickSearch .serverOrgMenu .agent {
+.quickSearch .serverOrgMenu .agent, .finaInsDetail .serverOrgMenu .agent {
   font-weight: bold;
 }
 
 .serverOrgDetail .agentInfo .el-card__body,
 .serverProDetail .agentInfo .el-card__body,
 .serverConDetail .agentInfo .el-card__body,
-.quickSearch .agentInfo .el-card__body {
+.quickSearch .agentInfo .el-card__body, .finaInsDetail .agentInfo .el-card__body {
   padding: 30px;
 }
 
 .serverOrgDetail .agentInfo .agent1,
 .serverProDetail .agentInfo .agent1,
 .serverConDetail .agentInfo .agent1,
-.quickSearch .agentInfo .agent1 {
+.quickSearch .agentInfo .agent1, .finaInsDetail .agentInfo .agent1 {
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
@@ -835,7 +839,7 @@ input {
 .serverOrgDetail .agentInfo .agent1 .agentTil,
 .serverProDetail .agentInfo .agent1 .agentTil,
 .serverConDetail .agentInfo .agent1 .agentTil,
-.quickSearch .agentInfo .agent1 .agentTil {
+.quickSearch .agentInfo .agent1 .agentTil, .finaInsDetail .agentInfo .agent1 .agentTil {
   color: #333;
   margin-top: 6px;
 }
@@ -843,7 +847,7 @@ input {
 .serverOrgDetail .agentInfo .agent1 .orgBtn,
 .serverProDetail .agentInfo .agent1 .orgBtn,
 .serverConDetail .agentInfo .agent1 .orgBtn,
-.quickSearch .agentInfo .agent1 .orgBtn {
+.quickSearch .agentInfo .agent1 .orgBtn, .finaInsDetail .agentInfo .agent1 .orgBtn {
   font-size: 13px;
   background: #ecfcf2;
   padding: 6px 20px;
@@ -855,7 +859,7 @@ input {
 .serverOrgDetail .agentInfo .agent2,
 .serverProDetail .agentInfo .agent2,
 .serverConDetail .agentInfo .agent2,
-.quickSearch .agentInfo .agent2 {
+.quickSearch .agentInfo .agent2, .finaInsDetail .agentInfo .agent2 {
   margin-top: 20px;
   font-size: 13px;
 }
@@ -863,7 +867,7 @@ input {
 .serverOrgDetail .agentInfo .agent2 .agentImg,
 .serverProDetail .agentInfo .agent2 .agentImg,
 .serverConDetail .agentInfo .agent2 .agentImg,
-.quickSearch .agentInfo .agent2 .agentImg {
+.quickSearch .agentInfo .agent2 .agentImg, .finaInsDetail .agentInfo .agent2 .agentImg {
   width: 150px;
   height: 120px;
 }
@@ -871,7 +875,7 @@ input {
 .serverOrgDetail .agentInfo .agent2 .agentImg > img,
 .serverProDetail .agentInfo .agent2 .agentImg > img,
 .serverConDetail .agentInfo .agent2 .agentImg > img,
-.quickSearch .agentInfo .agent2 .agentImg > img {
+.quickSearch .agentInfo .agent2 .agentImg > img, .finaInsDetail .agentInfo .agent2 .agentImg > img {
   width: 100%;
   height: 100%;
 }
@@ -879,21 +883,21 @@ input {
 .serverOrgDetail .agentInfo .agent2 .agent2Info,
 .serverProDetail .agentInfo .agent2 .agent2Info,
 .serverConDetail .agentInfo .agent2 .agent2Info,
-.quickSearch .agentInfo .agent2 .agent2Info {
+.quickSearch .agentInfo .agent2 .agent2Info, .finaInsDetail .agentInfo .agent2 .agent2Info {
   margin-left: 20px;
 }
 
 .serverOrgDetail .agentInfo .agent2 .agent2Info > p,
 .serverProDetail .agentInfo .agent2 .agent2Info > p,
 .serverConDetail .agentInfo .agent2 .agent2Info > p,
-.quickSearch .agentInfo .agent2 .agent2Info > p {
+.quickSearch .agentInfo .agent2 .agent2Info > p, .finaInsDetail .agentInfo .agent2 .agent2Info > p {
   margin-bottom: 7px;
 }
 
 .serverOrgDetail .agentInfo .agent2 .agent2Info .lastP,
 .serverProDetail .agentInfo .agent2 .agent2Info .lastP,
 .serverConDetail .agentInfo .agent2 .agent2Info .lastP,
-.quickSearch .agentInfo .agent2 .agent2Info .lastP {
+.quickSearch .agentInfo .agent2 .agent2Info .lastP, .finaInsDetail .agentInfo .agent2 .agent2Info .lastP {
   position: absolute;
   margin-top: 20px;
   margin-left: 630px;
@@ -902,21 +906,21 @@ input {
 .serverOrgDetail .agentInfo .agent2 .agent2Info .lastP > span,
 .serverProDetail .agentInfo .agent2 .agent2Info .lastP > span,
 .serverConDetail .agentInfo .agent2 .agent2Info .lastP > span,
-.quickSearch .agentInfo .agent2 .agent2Info .lastP > span {
+.quickSearch .agentInfo .agent2 .agent2Info .lastP > span, .finaInsDetail .agentInfo .agent2 .agent2Info .lastP > span {
   margin-right: 20px;
 }
 
 .serverOrgDetail .agentDel,
 .serverProDetail .agentDel,
 .serverConDetail .agentDel,
-.quickSearch .agentDel {
+.quickSearch .agentDel, .finaInsDetail .agentDel {
   font-size: 14px;
 }
 
 .serverOrgDetail .agentDel .agentDelTit,
 .serverProDetail .agentDel .agentDelTit,
 .serverConDetail .agentDel .agentDelTit,
-.quickSearch .agentDel .agentDelTit {
+.quickSearch .agentDel .agentDelTit, .finaInsDetail .agentDel .agentDelTit {
   padding: 20px 0;
   font-size: 16px;
   color: #333;
@@ -925,14 +929,14 @@ input {
 .serverOrgDetail .agentDel .agentDelCon,
 .serverProDetail .agentDel .agentDelCon,
 .serverConDetail .agentDel .agentDelCon,
-.quickSearch .agentDel .agentDelCon {
+.quickSearch .agentDel .agentDelCon, .finaInsDetail .agentDel .agentDelCon {
   font-size: 12px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .el-tabs__item,
 .serverProDetail .agentDel .agentDelCon .el-tabs__item,
 .serverConDetail .agentDel .agentDelCon .el-tabs__item,
-.quickSearch .agentDel .agentDelCon .el-tabs__item {
+.quickSearch .agentDel .agentDelCon .el-tabs__item, .finaInsDetail .agentDel .agentDelCon .el-tabs__item {
   font-size: 13px;
   color: #333;
 }
@@ -940,7 +944,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon > .shouqi,
 .serverProDetail .agentDel .agentDelCon > .shouqi,
 .serverConDetail .agentDel .agentDelCon > .shouqi,
-.quickSearch .agentDel .agentDelCon > .shouqi {
+.quickSearch .agentDel .agentDelCon > .shouqi, .finaInsDetail .agentDel .agentDelCon > .shouqi {
   position: absolute;
   right: 25px;
   top: 30px;
@@ -952,7 +956,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon > .zhankai,
 .serverProDetail .agentDel .agentDelCon > .zhankai,
 .serverConDetail .agentDel .agentDelCon > .zhankai,
-.quickSearch .agentDel .agentDelCon > .zhankai {
+.quickSearch .agentDel .agentDelCon > .zhankai, .finaInsDetail .agentDel .agentDelCon > .zhankai {
   width: 30px;
 }
 
@@ -971,7 +975,10 @@ input {
 .quickSearch .agentDel .agentDelCon .basicInfo .table-orgspace,
 .quickSearch .agentDel .agentDelCon .businessinfo .table-orgspace,
 .quickSearch .agentDel .agentDelCon .teamInfo .table-orgspace,
-.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace {
+.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace, .finaInsDetail .agentDel .agentDelCon .basicInfo .table-orgspace,
+.finaInsDetail .agentDel .agentDelCon .businessinfo .table-orgspace,
+.finaInsDetail .agentDel .agentDelCon .teamInfo .table-orgspace,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .table-orgspace {
   width: 100%;
 }
 
@@ -990,7 +997,10 @@ input {
 .quickSearch .agentDel .agentDelCon .basicInfo .table-orgspace tr td,
 .quickSearch .agentDel .agentDelCon .businessinfo .table-orgspace tr td,
 .quickSearch .agentDel .agentDelCon .teamInfo .table-orgspace tr td,
-.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace tr td {
+.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace tr td, .finaInsDetail .agentDel .agentDelCon .basicInfo .table-orgspace tr td,
+.finaInsDetail .agentDel .agentDelCon .businessinfo .table-orgspace tr td,
+.finaInsDetail .agentDel .agentDelCon .teamInfo .table-orgspace tr td,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .table-orgspace tr td {
   padding: 0px 14px;
   line-height: 50px;
   font-size: 14px;
@@ -1012,7 +1022,10 @@ input {
 .quickSearch .agentDel .agentDelCon .basicInfo .table-orgspace .table-orgspace-title,
 .quickSearch .agentDel .agentDelCon .businessinfo .table-orgspace .table-orgspace-title,
 .quickSearch .agentDel .agentDelCon .teamInfo .table-orgspace .table-orgspace-title,
-.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace .table-orgspace-title {
+.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace .table-orgspace-title, .finaInsDetail .agentDel .agentDelCon .basicInfo .table-orgspace .table-orgspace-title,
+.finaInsDetail .agentDel .agentDelCon .businessinfo .table-orgspace .table-orgspace-title,
+.finaInsDetail .agentDel .agentDelCon .teamInfo .table-orgspace .table-orgspace-title,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .table-orgspace .table-orgspace-title {
   color: #666;
   background-color: #f8f8f8;
   font-size: 13px;
@@ -1033,7 +1046,10 @@ input {
 .quickSearch .agentDel .agentDelCon .basicInfo .table-orgspace .table-orgspace-detail,
 .quickSearch .agentDel .agentDelCon .businessinfo .table-orgspace .table-orgspace-detail,
 .quickSearch .agentDel .agentDelCon .teamInfo .table-orgspace .table-orgspace-detail,
-.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace .table-orgspace-detail {
+.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace .table-orgspace-detail, .finaInsDetail .agentDel .agentDelCon .basicInfo .table-orgspace .table-orgspace-detail,
+.finaInsDetail .agentDel .agentDelCon .businessinfo .table-orgspace .table-orgspace-detail,
+.finaInsDetail .agentDel .agentDelCon .teamInfo .table-orgspace .table-orgspace-detail,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .table-orgspace .table-orgspace-detail {
   color: #333;
   font-size: 13px;
 }
@@ -1053,7 +1069,10 @@ input {
 .quickSearch .agentDel .agentDelCon .basicInfo .table-orgspace .table-orgspace-col,
 .quickSearch .agentDel .agentDelCon .businessinfo .table-orgspace .table-orgspace-col,
 .quickSearch .agentDel .agentDelCon .teamInfo .table-orgspace .table-orgspace-col,
-.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace .table-orgspace-col {
+.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace .table-orgspace-col, .finaInsDetail .agentDel .agentDelCon .basicInfo .table-orgspace .table-orgspace-col,
+.finaInsDetail .agentDel .agentDelCon .businessinfo .table-orgspace .table-orgspace-col,
+.finaInsDetail .agentDel .agentDelCon .teamInfo .table-orgspace .table-orgspace-col,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .table-orgspace .table-orgspace-col {
   color: #333;
   padding: 10px 0px;
   line-height: 22px;
@@ -1064,28 +1083,28 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .serverProDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .serverConDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
-.quickSearch .agentDel .agentDelCon .businessinfo .table-orgspace-title {
+.quickSearch .agentDel .agentDelCon .businessinfo .table-orgspace-title, .finaInsDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title {
   width: 146px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor,
 .serverProDetail .agentDel .agentDelCon .honor,
 .serverConDetail .agentDel .agentDelCon .honor,
-.quickSearch .agentDel .agentDelCon .honor {
+.quickSearch .agentDel .agentDelCon .honor, .finaInsDetail .agentDel .agentDelCon .honor {
   font-size: 14px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor > ul > li,
 .serverProDetail .agentDel .agentDelCon .honor > ul > li,
 .serverConDetail .agentDel .agentDelCon .honor > ul > li,
-.quickSearch .agentDel .agentDelCon .honor > ul > li {
+.quickSearch .agentDel .agentDelCon .honor > ul > li, .finaInsDetail .agentDel .agentDelCon .honor > ul > li {
   margin-bottom: 20px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor > ul > li .honorImg,
 .serverProDetail .agentDel .agentDelCon .honor > ul > li .honorImg,
 .serverConDetail .agentDel .agentDelCon .honor > ul > li .honorImg,
-.quickSearch .agentDel .agentDelCon .honor > ul > li .honorImg {
+.quickSearch .agentDel .agentDelCon .honor > ul > li .honorImg, .finaInsDetail .agentDel .agentDelCon .honor > ul > li .honorImg {
   width: 130px;
   height: 80px;
   display: inline-block;
@@ -1095,7 +1114,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor > ul > li .honorImg > img,
 .serverProDetail .agentDel .agentDelCon .honor > ul > li .honorImg > img,
 .serverConDetail .agentDel .agentDelCon .honor > ul > li .honorImg > img,
-.quickSearch .agentDel .agentDelCon .honor > ul > li .honorImg > img {
+.quickSearch .agentDel .agentDelCon .honor > ul > li .honorImg > img, .finaInsDetail .agentDel .agentDelCon .honor > ul > li .honorImg > img {
   width: 100%;
   height: 100%;
 }
@@ -1103,7 +1122,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor > ul > li .dataCircle,
 .serverProDetail .agentDel .agentDelCon .honor > ul > li .dataCircle,
 .serverConDetail .agentDel .agentDelCon .honor > ul > li .dataCircle,
-.quickSearch .agentDel .agentDelCon .honor > ul > li .dataCircle {
+.quickSearch .agentDel .agentDelCon .honor > ul > li .dataCircle, .finaInsDetail .agentDel .agentDelCon .honor > ul > li .dataCircle {
   width: 20px;
   height: 20px;
   margin: 0 40px;
@@ -1114,7 +1133,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor > ul > li .dataCircle > img,
 .serverProDetail .agentDel .agentDelCon .honor > ul > li .dataCircle > img,
 .serverConDetail .agentDel .agentDelCon .honor > ul > li .dataCircle > img,
-.quickSearch .agentDel .agentDelCon .honor > ul > li .dataCircle > img {
+.quickSearch .agentDel .agentDelCon .honor > ul > li .dataCircle > img, .finaInsDetail .agentDel .agentDelCon .honor > ul > li .dataCircle > img {
   width: 100%;
   height: 100%;
 }
@@ -1122,7 +1141,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor > ul > li .honorTime,
 .serverProDetail .agentDel .agentDelCon .honor > ul > li .honorTime,
 .serverConDetail .agentDel .agentDelCon .honor > ul > li .honorTime,
-.quickSearch .agentDel .agentDelCon .honor > ul > li .honorTime {
+.quickSearch .agentDel .agentDelCon .honor > ul > li .honorTime, .finaInsDetail .agentDel .agentDelCon .honor > ul > li .honorTime {
   display: inline-block;
   vertical-align: middle;
 }
@@ -1130,7 +1149,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor > ul > li .honorName,
 .serverProDetail .agentDel .agentDelCon .honor > ul > li .honorName,
 .serverConDetail .agentDel .agentDelCon .honor > ul > li .honorName,
-.quickSearch .agentDel .agentDelCon .honor > ul > li .honorName {
+.quickSearch .agentDel .agentDelCon .honor > ul > li .honorName, .finaInsDetail .agentDel .agentDelCon .honor > ul > li .honorName {
   margin-left: 40px;
   display: inline-block;
   vertical-align: middle;
@@ -1139,14 +1158,14 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor > ul > li:last-child,
 .serverProDetail .agentDel .agentDelCon .honor > ul > li:last-child,
 .serverConDetail .agentDel .agentDelCon .honor > ul > li:last-child,
-.quickSearch .agentDel .agentDelCon .honor > ul > li:last-child {
+.quickSearch .agentDel .agentDelCon .honor > ul > li:last-child, .finaInsDetail .agentDel .agentDelCon .honor > ul > li:last-child {
   margin-bottom: 0;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor .dataLeft > div,
 .serverProDetail .agentDel .agentDelCon .honor .dataLeft > div,
 .serverConDetail .agentDel .agentDelCon .honor .dataLeft > div,
-.quickSearch .agentDel .agentDelCon .honor .dataLeft > div {
+.quickSearch .agentDel .agentDelCon .honor .dataLeft > div, .finaInsDetail .agentDel .agentDelCon .honor .dataLeft > div {
   margin-bottom: 20px;
   width: 130px;
   height: 80px;
@@ -1155,7 +1174,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor .dataLeft > div > img,
 .serverProDetail .agentDel .agentDelCon .honor .dataLeft > div > img,
 .serverConDetail .agentDel .agentDelCon .honor .dataLeft > div > img,
-.quickSearch .agentDel .agentDelCon .honor .dataLeft > div > img {
+.quickSearch .agentDel .agentDelCon .honor .dataLeft > div > img, .finaInsDetail .agentDel .agentDelCon .honor .dataLeft > div > img {
   width: 100%;
   height: 100%;
 }
@@ -1163,7 +1182,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor .dataMid,
 .serverProDetail .agentDel .agentDelCon .honor .dataMid,
 .serverConDetail .agentDel .agentDelCon .honor .dataMid,
-.quickSearch .agentDel .agentDelCon .honor .dataMid {
+.quickSearch .agentDel .agentDelCon .honor .dataMid, .finaInsDetail .agentDel .agentDelCon .honor .dataMid {
   margin: 0 50px;
   margin-top: 30px;
 }
@@ -1171,7 +1190,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor .dataMid .dataCircle,
 .serverProDetail .agentDel .agentDelCon .honor .dataMid .dataCircle,
 .serverConDetail .agentDel .agentDelCon .honor .dataMid .dataCircle,
-.quickSearch .agentDel .agentDelCon .honor .dataMid .dataCircle {
+.quickSearch .agentDel .agentDelCon .honor .dataMid .dataCircle, .finaInsDetail .agentDel .agentDelCon .honor .dataMid .dataCircle {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -1182,7 +1201,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor .dataMid .dataLine,
 .serverProDetail .agentDel .agentDelCon .honor .dataMid .dataLine,
 .serverConDetail .agentDel .agentDelCon .honor .dataMid .dataLine,
-.quickSearch .agentDel .agentDelCon .honor .dataMid .dataLine {
+.quickSearch .agentDel .agentDelCon .honor .dataMid .dataLine, .finaInsDetail .agentDel .agentDelCon .honor .dataMid .dataLine {
   width: 2px;
   height: 80px;
   margin-left: 10px;
@@ -1192,7 +1211,7 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor .dataMid2,
 .serverProDetail .agentDel .agentDelCon .honor .dataMid2,
 .serverConDetail .agentDel .agentDelCon .honor .dataMid2,
-.quickSearch .agentDel .agentDelCon .honor .dataMid2 {
+.quickSearch .agentDel .agentDelCon .honor .dataMid2, .finaInsDetail .agentDel .agentDelCon .honor .dataMid2 {
   margin-top: 35px;
   margin-right: 30px;
 }
@@ -1200,35 +1219,35 @@ input {
 .serverOrgDetail .agentDel .agentDelCon .honor .dataMid2 > div,
 .serverProDetail .agentDel .agentDelCon .honor .dataMid2 > div,
 .serverConDetail .agentDel .agentDelCon .honor .dataMid2 > div,
-.quickSearch .agentDel .agentDelCon .honor .dataMid2 > div {
+.quickSearch .agentDel .agentDelCon .honor .dataMid2 > div, .finaInsDetail .agentDel .agentDelCon .honor .dataMid2 > div {
   margin-bottom: 80px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor .dataMid2 > div:last-child,
 .serverProDetail .agentDel .agentDelCon .honor .dataMid2 > div:last-child,
 .serverConDetail .agentDel .agentDelCon .honor .dataMid2 > div:last-child,
-.quickSearch .agentDel .agentDelCon .honor .dataMid2 > div:last-child {
+.quickSearch .agentDel .agentDelCon .honor .dataMid2 > div:last-child, .finaInsDetail .agentDel .agentDelCon .honor .dataMid2 > div:last-child {
   margin-bottom: 0px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor .dataRight,
 .serverProDetail .agentDel .agentDelCon .honor .dataRight,
 .serverConDetail .agentDel .agentDelCon .honor .dataRight,
-.quickSearch .agentDel .agentDelCon .honor .dataRight {
+.quickSearch .agentDel .agentDelCon .honor .dataRight, .finaInsDetail .agentDel .agentDelCon .honor .dataRight {
   margin-top: 30px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor .dataRight > div,
 .serverProDetail .agentDel .agentDelCon .honor .dataRight > div,
 .serverConDetail .agentDel .agentDelCon .honor .dataRight > div,
-.quickSearch .agentDel .agentDelCon .honor .dataRight > div {
+.quickSearch .agentDel .agentDelCon .honor .dataRight > div, .finaInsDetail .agentDel .agentDelCon .honor .dataRight > div {
   margin-bottom: 60px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor .dataRight > div:last-child,
 .serverProDetail .agentDel .agentDelCon .honor .dataRight > div:last-child,
 .serverConDetail .agentDel .agentDelCon .honor .dataRight > div:last-child,
-.quickSearch .agentDel .agentDelCon .honor .dataRight > div:last-child {
+.quickSearch .agentDel .agentDelCon .honor .dataRight > div:last-child, .finaInsDetail .agentDel .agentDelCon .honor .dataRight > div:last-child {
   margin-bottom: 0px;
 }
 
@@ -1239,7 +1258,8 @@ input {
 .serverConDetail .agentDel .agentDelCon .teamInfo .contact-title,
 .serverConDetail .agentDel .agentDelCon .contactInfo .contact-title,
 .quickSearch .agentDel .agentDelCon .teamInfo .contact-title,
-.quickSearch .agentDel .agentDelCon .contactInfo .contact-title {
+.quickSearch .agentDel .agentDelCon .contactInfo .contact-title, .finaInsDetail .agentDel .agentDelCon .teamInfo .contact-title,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .contact-title {
   padding: 0px 0px 16px;
   color: #333;
   font-weight: bold;
@@ -1252,7 +1272,8 @@ input {
 .serverConDetail .agentDel .agentDelCon .teamInfo .mt20,
 .serverConDetail .agentDel .agentDelCon .contactInfo .mt20,
 .quickSearch .agentDel .agentDelCon .teamInfo .mt20,
-.quickSearch .agentDel .agentDelCon .contactInfo .mt20 {
+.quickSearch .agentDel .agentDelCon .contactInfo .mt20, .finaInsDetail .agentDel .agentDelCon .teamInfo .mt20,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .mt20 {
   margin-top: 20px;
 }
 
@@ -1263,7 +1284,8 @@ input {
 .serverConDetail .agentDel .agentDelCon .teamInfo .mr5,
 .serverConDetail .agentDel .agentDelCon .contactInfo .mr5,
 .quickSearch .agentDel .agentDelCon .teamInfo .mr5,
-.quickSearch .agentDel .agentDelCon .contactInfo .mr5 {
+.quickSearch .agentDel .agentDelCon .contactInfo .mr5, .finaInsDetail .agentDel .agentDelCon .teamInfo .mr5,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .mr5 {
   margin-right: 5px;
 }
 
@@ -1274,7 +1296,8 @@ input {
 .serverConDetail .agentDel .agentDelCon .teamInfo .contact-detail-img,
 .serverConDetail .agentDel .agentDelCon .contactInfo .contact-detail-img,
 .quickSearch .agentDel .agentDelCon .teamInfo .contact-detail-img,
-.quickSearch .agentDel .agentDelCon .contactInfo .contact-detail-img {
+.quickSearch .agentDel .agentDelCon .contactInfo .contact-detail-img, .finaInsDetail .agentDel .agentDelCon .teamInfo .contact-detail-img,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .contact-detail-img {
   display: inline-block;
   height: 10px;
   width: 10px;
@@ -1286,14 +1309,14 @@ input {
 .serverOrgDetail .agentCon,
 .serverProDetail .agentCon,
 .serverConDetail .agentCon,
-.quickSearch .agentCon {
+.quickSearch .agentCon, .finaInsDetail .agentCon {
   margin-bottom: 80px;
 }
 
 .serverOrgDetail .agentCon .el-tabs,
 .serverProDetail .agentCon .el-tabs,
 .serverConDetail .agentCon .el-tabs,
-.quickSearch .agentCon .el-tabs {
+.quickSearch .agentCon .el-tabs, .finaInsDetail .agentCon .el-tabs {
   font-size: 13px;
   color: #333;
 }
@@ -1301,7 +1324,7 @@ input {
 .serverOrgDetail .agentCon .el-tabs__item,
 .serverProDetail .agentCon .el-tabs__item,
 .serverConDetail .agentCon .el-tabs__item,
-.quickSearch .agentCon .el-tabs__item {
+.quickSearch .agentCon .el-tabs__item, .finaInsDetail .agentCon .el-tabs__item {
   font-size: 13px;
   color: #333;
 }
@@ -1309,7 +1332,7 @@ input {
 .serverOrgDetail .agentCon .agentFil,
 .serverProDetail .agentCon .agentFil,
 .serverConDetail .agentCon .agentFil,
-.quickSearch .agentCon .agentFil {
+.quickSearch .agentCon .agentFil, .finaInsDetail .agentCon .agentFil {
   font-size: 12px;
   margin-top: 20px;
   color: #999;
@@ -1318,7 +1341,7 @@ input {
 .serverOrgDetail .agentCon .agentFil .select-list,
 .serverProDetail .agentCon .agentFil .select-list,
 .serverConDetail .agentCon .agentFil .select-list,
-.quickSearch .agentCon .agentFil .select-list {
+.quickSearch .agentCon .agentFil .select-list, .finaInsDetail .agentCon .agentFil .select-list {
   padding: 15px;
   color: #666;
   vertical-align: middle;
@@ -1328,21 +1351,21 @@ input {
 .serverOrgDetail .agentCon .agentFil .select-list > li,
 .serverProDetail .agentCon .agentFil .select-list > li,
 .serverConDetail .agentCon .agentFil .select-list > li,
-.quickSearch .agentCon .agentFil .select-list > li {
+.quickSearch .agentCon .agentFil .select-list > li, .finaInsDetail .agentCon .agentFil .select-list > li {
   float: left;
 }
 
 .serverOrgDetail .agentCon .agentFil .select-list > li.active,
 .serverProDetail .agentCon .agentFil .select-list > li.active,
 .serverConDetail .agentCon .agentFil .select-list > li.active,
-.quickSearch .agentCon .agentFil .select-list > li.active {
+.quickSearch .agentCon .agentFil .select-list > li.active, .finaInsDetail .agentCon .agentFil .select-list > li.active {
   color: #00a041;
 }
 
 .serverOrgDetail .agentCon .agentFil .select-list .list-item,
 .serverProDetail .agentCon .agentFil .select-list .list-item,
 .serverConDetail .agentCon .agentFil .select-list .list-item,
-.quickSearch .agentCon .agentFil .select-list .list-item {
+.quickSearch .agentCon .agentFil .select-list .list-item, .finaInsDetail .agentCon .agentFil .select-list .list-item {
   margin-right: 30px;
 }
 
@@ -1357,7 +1380,9 @@ input {
 .serverConDetail .agentCon .serEvaluation,
 .quickSearch .agentCon .serverPro,
 .quickSearch .agentCon .serConsultant,
-.quickSearch .agentCon .serEvaluation {
+.quickSearch .agentCon .serEvaluation, .finaInsDetail .agentCon .serverPro,
+.finaInsDetail .agentCon .serConsultant,
+.finaInsDetail .agentCon .serEvaluation {
   font-size: 13px;
 }
 
@@ -1372,7 +1397,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item {
   padding: 20px 0;
   padding-top: 10px;
   border-bottom: 1px solid #eee;
@@ -1389,7 +1416,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .list-imgleft-container.product,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .list-imgleft-container.product,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .list-imgleft-container.product,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .list-imgleft-container.product,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product {
   width: 198px;
   height: 128px;
   display: inline-block;
@@ -1407,7 +1436,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product > img,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .list-imgleft-container.product > img,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .list-imgleft-container.product > img,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product > img {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product > img, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .list-imgleft-container.product > img,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .list-imgleft-container.product > img,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product > img {
   width: 100%;
   height: 100%;
 }
@@ -1423,7 +1454,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .list-info-middle.inner-product,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .list-info-middle.inner-product,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .list-info-middle.inner-product,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .list-info-middle.inner-product {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .list-info-middle.inner-product, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .list-info-middle.inner-product,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .list-info-middle.inner-product,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .list-info-middle.inner-product {
   width: 820px;
 }
 
@@ -1438,7 +1471,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .list-info-middle,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .list-info-middle,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .list-info-middle,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .list-info-middle {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .list-info-middle, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .list-info-middle,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .list-info-middle,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .list-info-middle {
   margin-left: 20px;
   display: inline-block;
   vertical-align: middle;
@@ -1455,7 +1490,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .top-title.inner-product,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .top-title.inner-product,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .top-title.inner-product,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .top-title.inner-product {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .top-title.inner-product, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .top-title.inner-product,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .top-title.inner-product,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .top-title.inner-product {
   font-size: 14px;
   color: #222;
   cursor: pointer;
@@ -1472,7 +1509,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .top-title,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .top-title,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .top-title,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .top-title {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .top-title, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .top-title,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .top-title,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .top-title {
   margin-bottom: 18px;
   display: inline-block;
   vertical-align: middle;
@@ -1489,7 +1528,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-contact.inner-product,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .detail-contact.inner-product,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .detail-contact.inner-product,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-contact.inner-product {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-contact.inner-product, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .detail-contact.inner-product,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .detail-contact.inner-product,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-contact.inner-product {
   color: #999;
   width: 240px;
 }
@@ -1505,7 +1546,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-contact,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .detail-contact,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .detail-contact,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-contact {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-contact, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .detail-contact,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .detail-contact,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-contact {
   line-height: 22px;
   display: inline-block;
   vertical-align: middle;
@@ -1522,7 +1565,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate.inner-product,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .detail-evaluate.inner-product,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .detail-evaluate.inner-product,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate.inner-product {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate.inner-product, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .detail-evaluate.inner-product,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .detail-evaluate.inner-product,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate.inner-product {
   width: 420px;
   color: #999;
 }
@@ -1538,7 +1583,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .detail-evaluate,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .detail-evaluate,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .detail-evaluate,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .detail-evaluate,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate {
   display: inline-block;
   vertical-align: middle;
 }
@@ -1554,7 +1601,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-count,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .detail-count,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .detail-count,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-count {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .detail-count, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .detail-count,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .detail-count,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-count {
   width: 150px;
   display: inline-block;
   vertical-align: top;
@@ -1571,7 +1620,9 @@ input {
 .serverConDetail .agentCon .serEvaluation .list-imgleft .list-item .orgBtn,
 .quickSearch .agentCon .serverPro .list-imgleft .list-item .orgBtn,
 .quickSearch .agentCon .serConsultant .list-imgleft .list-item .orgBtn,
-.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .orgBtn {
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item .orgBtn, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .orgBtn,
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .orgBtn,
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .orgBtn {
   font-size: 13px;
   background: #ecfcf2;
   padding: 6px 20px;
@@ -1583,7 +1634,7 @@ input {
 .serverOrgDetail .agentCon .serConsultant .list-imgleft-container,
 .serverProDetail .agentCon .serConsultant .list-imgleft-container,
 .serverConDetail .agentCon .serConsultant .list-imgleft-container,
-.quickSearch .agentCon .serConsultant .list-imgleft-container {
+.quickSearch .agentCon .serConsultant .list-imgleft-container, .finaInsDetail .agentCon .serConsultant .list-imgleft-container {
   width: 130px;
   height: 130px;
   display: inline-block;
@@ -1593,7 +1644,7 @@ input {
 .serverOrgDetail .agentCon .serConsultant .list-imgleft-container > img,
 .serverProDetail .agentCon .serConsultant .list-imgleft-container > img,
 .serverConDetail .agentCon .serConsultant .list-imgleft-container > img,
-.quickSearch .agentCon .serConsultant .list-imgleft-container > img {
+.quickSearch .agentCon .serConsultant .list-imgleft-container > img, .finaInsDetail .agentCon .serConsultant .list-imgleft-container > img {
   width: 100%;
   height: 100%;
 }
@@ -1601,14 +1652,14 @@ input {
 .serverOrgDetail .agentCon .serConsultant .detail-contact .text-of,
 .serverProDetail .agentCon .serConsultant .detail-contact .text-of,
 .serverConDetail .agentCon .serConsultant .detail-contact .text-of,
-.quickSearch .agentCon .serConsultant .detail-contact .text-of {
+.quickSearch .agentCon .serConsultant .detail-contact .text-of, .finaInsDetail .agentCon .serConsultant .detail-contact .text-of {
   width: 270px;
 }
 
 .serverOrgDetail .agentCon .serConsultant .text-of,
 .serverProDetail .agentCon .serConsultant .text-of,
 .serverConDetail .agentCon .serConsultant .text-of,
-.quickSearch .agentCon .serConsultant .text-of {
+.quickSearch .agentCon .serConsultant .text-of, .finaInsDetail .agentCon .serConsultant .text-of {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -1617,14 +1668,14 @@ input {
 .serverOrgDetail .agentCon .serConsultant .pt5,
 .serverProDetail .agentCon .serConsultant .pt5,
 .serverConDetail .agentCon .serConsultant .pt5,
-.quickSearch .agentCon .serConsultant .pt5 {
+.quickSearch .agentCon .serConsultant .pt5, .finaInsDetail .agentCon .serConsultant .pt5 {
   padding-top: 5px;
 }
 
 .serverOrgDetail .agentCon .serConsultant .top-title.inner-consultant,
 .serverProDetail .agentCon .serConsultant .top-title.inner-consultant,
 .serverConDetail .agentCon .serConsultant .top-title.inner-consultant,
-.quickSearch .agentCon .serConsultant .top-title.inner-consultant {
+.quickSearch .agentCon .serConsultant .top-title.inner-consultant, .finaInsDetail .agentCon .serConsultant .top-title.inner-consultant {
   font-size: 18px;
   cursor: pointer;
   color: #333;
@@ -1633,7 +1684,7 @@ input {
 .serverOrgDetail .agentCon .serConsultant .top-title,
 .serverProDetail .agentCon .serConsultant .top-title,
 .serverConDetail .agentCon .serConsultant .top-title,
-.quickSearch .agentCon .serConsultant .top-title {
+.quickSearch .agentCon .serConsultant .top-title, .finaInsDetail .agentCon .serConsultant .top-title {
   font-weight: normal;
   margin-bottom: 18px;
   display: inline-block;
@@ -1643,7 +1694,7 @@ input {
 .serverOrgDetail .agentCon .serConsultant .detail-evaluate.inner-consultant,
 .serverProDetail .agentCon .serConsultant .detail-evaluate.inner-consultant,
 .serverConDetail .agentCon .serConsultant .detail-evaluate.inner-consultant,
-.quickSearch .agentCon .serConsultant .detail-evaluate.inner-consultant {
+.quickSearch .agentCon .serConsultant .detail-evaluate.inner-consultant, .finaInsDetail .agentCon .serConsultant .detail-evaluate.inner-consultant {
   width: 440px;
   margin-left: 30px;
 }
@@ -1651,7 +1702,7 @@ input {
 .serverOrgDetail .agentCon .serEvaluation .evaluate-container,
 .serverProDetail .agentCon .serEvaluation .evaluate-container,
 .serverConDetail .agentCon .serEvaluation .evaluate-container,
-.quickSearch .agentCon .serEvaluation .evaluate-container {
+.quickSearch .agentCon .serEvaluation .evaluate-container, .finaInsDetail .agentCon .serEvaluation .evaluate-container {
   display: inline-block;
   max-width: 620px;
   width: auto;
@@ -1666,7 +1717,7 @@ input {
 .serverOrgDetail .agentCon .serEvaluation .arrow-container:before,
 .serverProDetail .agentCon .serEvaluation .arrow-container:before,
 .serverConDetail .agentCon .serEvaluation .arrow-container:before,
-.quickSearch .agentCon .serEvaluation .arrow-container:before {
+.quickSearch .agentCon .serEvaluation .arrow-container:before, .finaInsDetail .agentCon .serEvaluation .arrow-container:before {
   margin-top: -25px;
   border: solid transparent;
   content: " ";
@@ -1682,7 +1733,7 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li,
-.quickSearch .agentCon .actiConsultation .allActiUl > li {
+.quickSearch .agentCon .actiConsultation .allActiUl > li, .finaInsDetail .agentCon .actiConsultation .allActiUl > li {
   float: left;
   width: 280px;
   height: 345px;
@@ -1694,7 +1745,7 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .postImgItem,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .postImgItem,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .postImgItem,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .postImgItem {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .postImgItem, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .postImgItem {
   display: inline-block;
   width: 100%;
   height: 192px;
@@ -1703,7 +1754,7 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .postImgItem .postImg,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .postImgItem .postImg,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .postImgItem .postImg,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .postImgItem .postImg {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .postImgItem .postImg, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .postImgItem .postImg {
   height: 100%;
   width: 100%;
 }
@@ -1711,7 +1762,7 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum {
   padding: 10px;
   border-top: 1px solid #eee;
   color: #999;
@@ -1721,7 +1772,7 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum .avatar {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum .avatar, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar {
   float: left;
   padding-left: 10px;
 }
@@ -1729,14 +1780,14 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul {
   display: inline-block;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li {
   float: left;
   width: 18px;
   height: 18px;
@@ -1748,7 +1799,7 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li img,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li img,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li img,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li img {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li img, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum .avatar > ul li img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -1757,28 +1808,28 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > i,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > i,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > i,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > i {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > i, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > i {
   margin-left: 10px;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > span {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > span, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span {
   float: right;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan {
   margin-right: 5px;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiInfo,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiInfo,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiInfo {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiInfo, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiInfo {
   padding: 10px;
   color: #999;
   font-size: 13px;
@@ -1787,7 +1838,7 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
 }
@@ -1795,7 +1846,7 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer,
 .serverProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer,
 .serverConDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer {
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer, .finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer {
   text-indent: -10px;
   margin: 10px 0 5px 18px;
 }
@@ -1803,7 +1854,7 @@ input {
 .serverOrgDetail .agentCon .actiConsultation .allActiUl li:nth-child(4n),
 .serverProDetail .agentCon .actiConsultation .allActiUl li:nth-child(4n),
 .serverConDetail .agentCon .actiConsultation .allActiUl li:nth-child(4n),
-.quickSearch .agentCon .actiConsultation .allActiUl li:nth-child(4n) {
+.quickSearch .agentCon .actiConsultation .allActiUl li:nth-child(4n), .finaInsDetail .agentCon .actiConsultation .allActiUl li:nth-child(4n) {
   margin-right: 0;
 }
 
@@ -1875,6 +1926,12 @@ input {
   font-size: 14px;
   text-align: center;
   width: 100px;
+}
+
+.portalIndex #header .headerContainer .nav > ul > li:hover, .enterpriseservice #header .headerContainer .nav > ul > li:hover {
+  background: #fff;
+  color: #00a041;
+  border-radius: 5px;
 }
 
 .portalIndex #header .headerContainer .nav > ul > li:first-child, .enterpriseservice #header .headerContainer .nav > ul > li:first-child {
@@ -1965,6 +2022,7 @@ input {
   width: 215px;
   color: #fff;
   text-align: center;
+  cursor: pointer;
   background: rgba(122, 118, 138, 0.1);
 }
 
@@ -1980,6 +2038,10 @@ input {
 .portalIndex .portalIndexImg .quickEnter > ul li > img, .enterpriseservice .portalIndexImg .quickEnter > ul li > img {
   width: 25px;
   height: 8px;
+}
+
+.portalIndex .portalIndexImg .quickEnter > ul li:hover, .enterpriseservice .portalIndexImg .quickEnter > ul li:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .portalIndex .portalIndexImg .el-carousel__item h3, .enterpriseservice .portalIndexImg .el-carousel__item h3 {
@@ -2156,6 +2218,18 @@ input {
   border: 1px solid #c2c2c2;
   color: #999;
   outline: none;
+  cursor: pointer;
+}
+
+.portalIndex .declarationNotice .btns > button:hover,
+.portalIndex .popularActi .btns > button:hover,
+.portalIndex .districtGardens .btns > button:hover,
+.portalIndex .enterpriseinfo .btns > button:hover, .portalIndex .policyCenter .btns > button:hover, .portalIndex .technologyFinance .btns > button:hover, .portalIndex .humanResources .btns > button:hover, .enterpriseservice .declarationNotice .btns > button:hover,
+.enterpriseservice .popularActi .btns > button:hover,
+.enterpriseservice .districtGardens .btns > button:hover,
+.enterpriseservice .enterpriseinfo .btns > button:hover, .enterpriseservice .policyCenter .btns > button:hover, .enterpriseservice .technologyFinance .btns > button:hover, .enterpriseservice .humanResources .btns > button:hover {
+  color: #fff;
+  background: #00a041;
 }
 
 .portalIndex .declarationNotice .btns .btn1,

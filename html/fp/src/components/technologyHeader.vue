@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <div id="headerTech">
         <div class="headerContainer clearfix">
-          <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
+          <div class="titleImg fl"><img src="@/../static/img/login-logo.png" class="pointer" alt="" @click="$router.push({path:'/'})"></div>
           <div class="menu" style="display:none">
             <i class="el-icon-close"></i>
             <input type="text">

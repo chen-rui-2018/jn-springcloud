@@ -52,7 +52,7 @@
       </div> -->
       <div id="headerActi">
         <div class="headerContainer clearfix">
-          <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
+          <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt="" class="pointer" @click="$router.push({path:'/'})"></div>
           <div class="menu" style="display:none">
             <i class="el-icon-close"></i>
             <input type="text">

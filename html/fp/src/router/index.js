@@ -256,5 +256,11 @@ export default new Router({
       meta: {title: '金融机构'},
       name:'finaInstitution'
     },
+    {
+      path: '/finaInsDetail',
+      component: resolve => require(['@/views/technologyFinance/finaInsDetail'],resolve),
+      meta: {title: '金融机构详情'},
+      name:'finaInsDetail'
+    },
   ]
 })

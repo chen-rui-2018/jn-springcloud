@@ -514,7 +514,7 @@ input {
 /* 服务超市-服务机构，服务产品 */
 .serverOrg,
 .serverPro,
-.serverCon,.quickSearch,.aboutUs {
+.serverCon,.quickSearch,.aboutUs,.finaInstitution {
   // .el-rate__icon.el-icon-star-on{
   //   color:#00a041 !important;
   // }
@@ -743,7 +743,7 @@ input {
 .serverOrgDetail,
 .serverProDetail,
 .serverConDetail,
-.quickSearch {
+.quickSearch,.finaInsDetail {
   table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -1387,6 +1387,11 @@ input {
             width: 100px;
             
           }
+          >li:hover{
+            background: #fff;
+            color: #00a041;
+            border-radius: 5px;
+          }
           >li:first-child{
             background: #fff;
             color: #00a041;
@@ -1468,6 +1473,7 @@ input {
           width: 215px;
           color: #fff;
           text-align: center;
+          cursor: pointer;
           background: rgba(122, 118, 138, 0.1);
           > span {
             font-weight: bold;
@@ -1482,6 +1488,9 @@ input {
             height: 8px;
             // color:#00a041;
           }
+        }
+        li:hover{
+          background: rgba(255, 255, 255, 0.2);
         }
       }
     }
@@ -1605,6 +1614,11 @@ input {
         border: 1px solid #c2c2c2;
         color: #999;
         outline: none;
+        cursor: pointer;
+      }
+      >button:hover{
+        color: #fff;
+        background: #00a041;
       }
       .btn1 {
         color: #fff;
@@ -1617,6 +1631,10 @@ input {
         border-bottom-right-radius: 3px;
         border-left: none;
       }
+      // .btn2:hover{
+      //   color: #fff;
+      //   background: #00a041;
+      // }
     }
     .info {
       // width: 1029px;

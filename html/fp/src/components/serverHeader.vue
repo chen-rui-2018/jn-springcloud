@@ -20,7 +20,7 @@
       <div class="headContent">
           <div class="searchNav">
               <div class="trainLogo">
-                  <img src="@/../static/img/greenLogo.png" alt="">
+                  <img src="@/../static/img/greenLogo.png" class="pointer" alt="" @click="$router.push({path:'/'})">
               </div>
               <div class="trainSearch pr">
                   <input type="text" placeholder="请输入搜索关键词">
@@ -69,7 +69,7 @@
             <p @click="$router.push({path:'/'})">首页</p>
             <p>招商引资</p>
             <p>智慧党建</p>
-            <p @click="$router.push({path:'/enterpriseservice'})">秦淮区1+X公共服务平台</p>
+            <p @click="$router.push({path:'/enterpriseservice'})">企业服务</p>
             <div class="slide_nav_fence">
               <ul>
                 <li>申报中心</li>
@@ -173,6 +173,7 @@ export default {
     .navRight {
       > li {
         float: left;
+        cursor: pointer;
       }
       > .line {
         display: inline-block;

@@ -562,6 +562,9 @@ export default {
         }
         .active_list{
           margin-top: 28px;
+          .el-carousel__container{
+            height: 347px;
+          }
           .active_btn{
             width: 34px;
             height: 34px;

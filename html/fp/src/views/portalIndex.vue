@@ -3,7 +3,7 @@
     <div class="portalIndexImg">
       <div id="header">
         <div class="headerContainer clearfix">
-          <div class="titleImg fl"><img src="@/../static/img/LOGO1.png" alt=""></div>
+          <div class="titleImg fl"><img src="@/../static/img/LOGO1.png" class="pointer" alt="" @click="$router.push({path:'/'})"></div>
           <!-- <div class="menu" style="display:none">
             <i class="el-icon-close"></i>
             <input type="text">
@@ -78,7 +78,7 @@
     <div class="parkNotice w clearfix">
       <div class="fl"><img src="@/../static/img/园区公告.png" alt=""></div>
       <span>热烈庆祝XXX公司入驻南京白下高新区XXX园区。为实现共创共收打造良好环境基础实现科技人才的引进与推动时代化做出...</span>
-      <div class="fr">更多&nbsp;&nbsp;
+      <div class="fr pointer">更多&nbsp;&nbsp;
         <i class="iconfont icon-you"></i>
       </div>
     </div>

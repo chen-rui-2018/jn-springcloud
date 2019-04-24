@@ -224,7 +224,11 @@
                     <div class="liveness_detail">
                       <p>{{item.orgName}}</p>
                       <p>{{item.orgSpeciality}}</p>
-                      <p><span class="iconfont icon-xing" v-for="(item,index) in 5" :key="index"></span></p>
+                      <!-- <p><span class="iconfont icon-xing" v-for="(item,index) in 5" :key="index"></span></p> -->
+                      <p>
+                        <el-rate v-model="item.attitudeScore" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
+                        </el-rate>
+                      </p>
                     </div>
                   </a>
                 </li>
@@ -238,7 +242,7 @@
             <ul>
               <li v-for="(item,index) in RatingList" :key="index">
                 <p>{{item.evaluationAccount|hiddentel}} ：@ <span>{{item.orgName}}</span>@{{item.advisorName}}</p>
-                <p>
+                <p>              
                   <span :class="[item.evaluationScore>=1?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span>
                   <span :class="[item.evaluationScore>=2?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
                   <span :class="[item.evaluationScore>=3?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 

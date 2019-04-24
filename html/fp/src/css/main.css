@@ -2091,9 +2091,9 @@ input {
 .enterpriseservice .enterpriseinfo .tit .titImg, .enterpriseservice .policyCenter .tit .titImg, .enterpriseservice .technologyFinance .tit .titImg, .enterpriseservice .humanResources .tit .titImg {
   width: 23px;
   height: 26px;
-  position: absolute;
+  position: fixed;
   right: 0;
-  top: 12%;
+  bottom: 0;
 }
 
 .portalIndex .declarationNotice .tit .titImg > img,

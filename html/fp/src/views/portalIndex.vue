@@ -88,7 +88,7 @@
           <i class="el-icon-arrow-down"></i>
         </div>
         <div class="tit color2 pr">申报公告
-          <div class="titImg">
+          <div class="titImg" @click="onClick">
             <img src="@/../static/img/huidaodingbu.png" alt="">
           </div>
         </div>
@@ -538,7 +538,7 @@
 export default {
   data() {
     return {
-      sousuo: false
+      sousuo: false,
     };
   },
   mounted() {
@@ -548,6 +548,9 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    onClick(){
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    },
     handleScroll() {
       // console.log(this.getScrollTop())HAOhao
       if (

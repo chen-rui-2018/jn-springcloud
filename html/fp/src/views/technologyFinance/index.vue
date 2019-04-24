@@ -488,6 +488,9 @@ export default {
     };
   },
   mounted() {
+    this.$router.afterEach((to, from, next) => {
+        window.scrollTo(0, 0)
+    })
     window.addEventListener("scroll", this.handleScroll, true);
     this.init();
     this.getInvestorInfoList();

@@ -1571,9 +1571,13 @@ input {
       .titImg {
         width: 23px;
         height: 26px;
-        position: absolute;
+        // width: 36px;
+        // height: 36px;
+        // position: absolute;
+        position: fixed;
         right: 0;
-        top: 12%;
+        // top: 12%;
+        bottom: 0;
         > img {
           width: 100%;
           height: 100%;

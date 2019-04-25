@@ -237,7 +237,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     @Override
     public List<UserRoleInfo> getUserRoleInfoList(List<String> accountList,String roleName) {
         Result<List<User>> resultData = systemClient.getUserInfoByAccount(accountList);
-        List<User> userInfoList = resultData.getData();
+        List<User> userInfoList = resultData.getData()==null?Collections.EMPTY_LIST:resultData.getData();
         List<UserRoleInfo> userRoleInfoList=new ArrayList<>(16);
         for(User user:userInfoList){
             UserRoleInfo userRoleInfo=new UserRoleInfo();

@@ -703,5 +703,27 @@
 
     </select>
 
+    <select id="saveFillerList" parameterType="java.util.List">
+        insert into tb_data_reporting_snapshot_target_group
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingGardenFillerMapper.Base_Column_List"/>)
+
+        <foreach collection="fillerList" index="index" item="item"  separator="UNION ALL" >
+            select
+            #{ item.fillId,jdbcType=VARCHAR},
+            #{ item.filler,jdbcType=VARCHAR},
+            #{ item.fillerTel,jdbcType=VARCHAR},
+            #{ item.departmentId,jdbcType=VARCHAR},
+            #{ item.departmentName,jdbcType=VARCHAR},
+            #{ item.status,jdbcType=TINYINT},
+            #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.gardenExamineStauts,jdbcType=TINYINT},
+            #{ item.examineComment,jdbcType=VARCHAR},
+            #{ item.tabId,jdbcType=VARCHAR}
+            FROM DUAL
+        </foreach>
+
+
+    </select>
+
 
 </mapper>

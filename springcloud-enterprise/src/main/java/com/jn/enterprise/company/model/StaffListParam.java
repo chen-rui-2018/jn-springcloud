@@ -27,7 +27,7 @@ public class StaffListParam extends Page implements Serializable {
     private String searchFiled;
 
     @ApiModelProperty(value = "状态（0待审批 -1审核不通过 5已邀请 7已拒绝）[默认全部]")
-    @Pattern(regexp = "^-1|[057]$", message = "状态传值错误")
+    @Pattern(regexp = "^-1|[057]|\\s*$", message = "状态传值错误")
     private String status;
 
     public String getSearchFiled() {

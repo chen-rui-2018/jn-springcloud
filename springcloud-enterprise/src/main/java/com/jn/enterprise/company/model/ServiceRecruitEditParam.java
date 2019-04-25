@@ -15,9 +15,9 @@ import java.io.Serializable;
 @ApiModel(value = "ServiceRecruitEditParam", description = "编辑企业招聘入参")
 public class ServiceRecruitEditParam implements Serializable {
     @ApiModelProperty(value = "招聘id", required = true)
-    @NotNull
+    @NotNull(message = "招聘ID不能为空")
     private String id;
-    @ApiModelProperty(value = "招聘编号", example = "GDNJ-20180707001")
+    @ApiModelProperty(value = "招聘编号", example = "GDNJ-20180707001", notes = "如有需求传入[可忽略]")
     private String recruitNo;
     @ApiModelProperty(value = "招聘岗位", example = "java程序员")
     private String post;

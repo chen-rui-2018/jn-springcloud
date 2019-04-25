@@ -4,12 +4,10 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.common.util.StringUtils;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.ServiceRecruitParam;
 import com.jn.enterprise.company.model.ServiceWebRecruitParam;
-import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.RecruitService;
 import com.jn.enterprise.company.vo.RecruitDetailsVO;
 import com.jn.enterprise.company.vo.RecruitVO;
@@ -41,22 +39,8 @@ public class RecruitGuestController extends BaseController {
     @Autowired
     private RecruitService recruitService;
 
-    @Autowired
-    private CompanyService companyService;
-
-    @ControllerLog(doAction = "招聘列表（后台）")
-    @ApiOperation(value = "招聘列表（后台）", notes = "分页查询[默认15条]，日期查询请传开始和结束日期[只传一个忽略]")
-    @RequestMapping(value = "/getRecruitList",method = RequestMethod.GET)
-    public Result<PaginationData<List<RecruitVO>>> getRecruitList(@Validated ServiceRecruitParam serviceRecruitParam){
-        // 判断企业ID有效性
-        if(StringUtils.isNotEmpty(serviceRecruitParam.getComId())) {
-            companyService.getCompanyDetailByAccountOrId(serviceRecruitParam.getComId());
-        }
-        return new Result(recruitService.getRecruitList(serviceRecruitParam, null));
-    }
-
-    @ControllerLog(doAction = "招聘列表（前台）")
-    @ApiOperation(value = "招聘列表（前台）", notes = "分页查询[默认15条]")
+    @ControllerLog(doAction = "招聘列表（门户首页）")
+    @ApiOperation(value = "招聘列表（门户首页）", notes = "分页查询[默认15条]")
     @RequestMapping(value = "/getWebRecruitList",method = RequestMethod.GET)
     public Result<PaginationData<List<RecruitVO>>> getWebRecruitList(@Validated ServiceWebRecruitParam serviceWebRecruitParam){
         ServiceRecruitParam serviceRecruitParam = new ServiceRecruitParam();
@@ -66,7 +50,6 @@ public class RecruitGuestController extends BaseController {
         serviceRecruitParam.setStatus(RecruitDataTypeEnum.ON_SHELVES.getCode());
         return new Result(recruitService.getRecruitList(serviceRecruitParam, RecruitDataTypeEnum.APPROVAL_STATUS_PASS.getCode()));
     }
-
 
     @ControllerLog(doAction = "招聘详情")
     @ApiOperation(value = "招聘详情（app/pc-招聘详情）", notes = "必传招聘ID")

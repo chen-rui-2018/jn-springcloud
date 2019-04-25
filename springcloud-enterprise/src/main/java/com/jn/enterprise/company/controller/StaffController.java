@@ -4,13 +4,9 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.Assert;
-import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.ReviewStaffParam;
-import com.jn.enterprise.company.model.StaffInviteParam;
 import com.jn.enterprise.company.model.StaffListParam;
-import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.system.log.annotation.ControllerLog;
@@ -19,7 +15,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,9 +34,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/enterprise/StaffController")
 public class StaffController extends BaseController {
-
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private StaffService staffService;

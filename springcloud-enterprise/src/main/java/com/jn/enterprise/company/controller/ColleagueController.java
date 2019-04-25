@@ -10,6 +10,7 @@ import com.jn.enterprise.company.model.ColleagueListParam;
 import com.jn.enterprise.company.model.ColleagueUpdateParam;
 import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.service.impl.StaffServiceImpl;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -20,6 +21,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author： huxw
@@ -42,6 +46,8 @@ import java.util.List;
 @RequestMapping("/enterprise/ColleagueController")
 public class ColleagueController extends BaseController {
 
+    private static Logger logger = LoggerFactory.getLogger(ColleagueController.class);
+
     @Autowired
     private StaffService staffService;
 
@@ -52,7 +58,7 @@ public class ColleagueController extends BaseController {
     @ApiOperation(value = "同事列表（pc/app-同事列表）", notes = "按手机号或名称（模糊查询）[分页查询]")
     @RequestMapping(value = "/getColleagueList",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/ColleagueController/getColleagueList")
-    public Result<PaginationData<List<StaffListVO>>> getColleagueList(@Validated ColleagueListParam colleagueListParam){
+    public Result<Map<String, Object>> getColleagueList(@Validated ColleagueListParam colleagueListParam){
         User user = checkUserValid();
         StaffListParam staffListParam = new StaffListParam();
         BeanUtils.copyProperties(colleagueListParam, staffListParam);
@@ -74,8 +80,9 @@ public class ColleagueController extends BaseController {
     @ApiOperation(value = "设置联系人（pc-设为联系人）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/setContact",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/ColleagueController/setContact")
-    public Result<Integer> setContact(@Validated @NotNull @RequestBody @ApiParam(name="account", value = "员工账号", required = true) String account){
+    public Result<Integer> setContact(@NotNull @RequestBody @ApiParam(name="account", value = "员工账号", required = true) String account){
         User user = checkUserValid();
+        logger.info("[我的同事] 设为联系人账号获取，account：{}", account);
         return new Result(staffService.setOrCancelContact(account, user.getAccount(), true));
     }
 
@@ -83,8 +90,9 @@ public class ColleagueController extends BaseController {
     @ApiOperation(value = "取消联系人（pc-取消联系人）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/cancelContact",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/ColleagueController/cancelContact")
-    public Result<Integer> cancelContact(@Validated @NotNull @RequestBody @ApiParam(name="account", value = "员工账号", required = true) String account){
+    public Result<Integer> cancelContact(@NotNull @RequestBody @ApiParam(name="account", value = "员工账号", required = true) String account){
         User user = checkUserValid();
+        logger.info("[我的同事] 取消联系人账号获取，account：{}", account);
         return new Result(staffService.setOrCancelContact(account, user.getAccount(), false));
     }
 

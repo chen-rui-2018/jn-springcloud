@@ -22,6 +22,7 @@ import com.jn.enterprise.data.vo.ModelDataVO;
 import com.jn.enterprise.data.vo.TabVO;
 import com.jn.enterprise.data.vo.TargetModelVO;
 import com.jn.enterprise.model.ServiceOrg;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysDepartmentPostVO;
@@ -70,6 +71,10 @@ public class DataUploadServiceImpl implements DataUploadService {
 
     @Autowired
     private UploadClient uploadClient;
+
+    @Autowired
+    private SystemClient systemClient;
+
     @Autowired
     private TargetDao targetDao;
 
@@ -335,9 +340,37 @@ public class DataUploadServiceImpl implements DataUploadService {
         String type=DataUploadConstants.NOT_FILL;
         //未填报的不用获取值
         ModelDataVO result =  getModelDataByType(fileId,user,type);
-        result.setUserDepartmentId(getFillId(null,user));
+
+        //园区用户的部门集合
+        List<String> userDepartments = getFillId(null,user);
+
+        //任务的部门权限
+        List <DepartementModel>  departementModelList = targetDao.getDepartmentFromTarget(fileId);
+        Iterator<DepartementModel> iterator =  departementModelList.iterator();
+        while(iterator.hasNext()){
+            DepartementModel depart = iterator.next();
+            if(notExistDepartment(userDepartments,depart.getDepartmentId())){
+                iterator.remove();
+            }
+        }
+        result.setUserDepartmentId(departementModelList);
         return result;
     }
+
+    /**
+     * 检测任务的部门权限不在用户的部门权限中
+     * @return
+     */
+    private boolean notExistDepartment(List<String> userDepartments,String taskTepartment){
+        boolean result=true;
+        for(int index=0,len=userDepartments.size();index<len;index++){
+            if(userDepartments.get(index).equals(taskTepartment)){
+                result =false;
+            }
+        }
+        return result;
+    }
+
 
     /**
      * 通过信息获取模板
@@ -707,6 +740,22 @@ public class DataUploadServiceImpl implements DataUploadService {
         return saveData(data,DataUploadConstants.COMPANY_TYPE,user);
     }
 
+
+
+    @Override
+    @ServiceLog(doAction = "园区填报任务数据进行保存")
+    @Transactional(rollbackFor = Exception.class)
+    public int saveTaskDataAsDraft(ModelDataVO data,User user){
+        return saveDataAsDraft(data,DataUploadConstants.GARDEN_TYPE,user);
+    }
+
+    @Override
+    @ServiceLog(doAction = "企业填报任务数据进行保存")
+    @Transactional(rollbackFor = Exception.class)
+    public int saveCompanyFormDataAsDraft(ModelDataVO data,User user){
+        return saveDataAsDraft(data,DataUploadConstants.COMPANY_TYPE,user);
+    }
+
     /**
      *
      * @param data
@@ -716,30 +765,21 @@ public class DataUploadServiceImpl implements DataUploadService {
      */
     private int saveDataAsDraft(ModelDataVO data,String fillType,User user){
 
-        return 0;
-    }
-
-
-    /**
-     * 保存数据逻辑
-     * @param data
-     * @param fillType
-     * @param user
-     * @return
-     */
-    private int saveData(ModelDataVO data,String fillType,User user) {
+        //保存值
         String fillId = data.getTaskInfo().getFillId();
         String modelId = data.getTaskInfo().getModelId();
-        //通过fillId,查询task_Batch;
-
         //获取出所有的
         List<TbDataReportingTaskData> dataList =null;
         TbDataReportingTaskData dataBean =null;
-        data.getTabs().get(0).getInputList();
+
+        if(data.getTabs() ==null || data.getTabs().size()<0){
+            throw new JnSpringCloudException(DataUploadExceptionEnum.VALUE_NOT_EXIST);
+        }
+
         for(TabVO tabBean: data.getTabs()){
             dataList = new ArrayList<>();
+            //获取前端传入的填写值
             List<InputFormatModel> list = tabBean.getInputList();
-
             for(InputFormatModel ifmBean : list){
                 dataBean.setRowNum(ifmBean.getRowNum());
                 dataBean.setFormId(ifmBean.getFormId());
@@ -753,21 +793,216 @@ public class DataUploadServiceImpl implements DataUploadService {
                 dataList.add(dataBean);
             }
             //数据存储
-            targetDao.saveData(dataList);
+            if(dataList !=null && dataList.size()>0){
+                targetDao.saveData(dataList);
+            }
+
+        }
+
+        //修改任务的状态为草稿
+        TbDataReportingTask  record = new TbDataReportingTask();
+        record.setStatus(new Byte(DataUploadConstants.IS_DRAFT));
+        TbDataReportingTaskCriteria examp = new TbDataReportingTaskCriteria();
+        examp.or().andFillIdEqualTo(fillId);
+        return tbDataReportingTaskMapper.updateByExample(record,examp);
+    }
+
+
+    /**
+     * 保存数据逻辑
+     * @param data
+     * @param fillType
+     * @param user
+     * @return
+     */
+    private int saveData(ModelDataVO data,String fillType,User user) {
+
+        //,String departmentId
+            String departmentId="";
+        //获取出所有的
+        List<TbDataReportingTaskData> dataList =null;
+        TbDataReportingTaskData dataBean =null;
+        data.getTabs().get(0).getInputList();
+        //任务信息准备
+        String fillId = data.getTaskInfo().getFillId();
+        String taskBatch = data.getTaskInfo().getTaskBatch();
+        String modelId = data.getTaskInfo().getModelId();
+        //查询条件准备
+        TbDataReportingSnapshotModelStructCriteria examp  =new TbDataReportingSnapshotModelStructCriteria();
+        TbDataReportingSnapshotTargetGroupCriteria targetGroupExample = new  TbDataReportingSnapshotTargetGroupCriteria();
+
+        for(TabVO tabBean: data.getTabs()){
+            dataList = new ArrayList<>();
+            //获取出模板中,指标Tab标准的填写格式列表
+            examp.clear();
+            examp.or().andModelIdEqualTo(modelId).andTaskBatchEqualTo(taskBatch).andTabIdEqualTo(tabBean.getTabId());
+            List<TbDataReportingSnapshotModelStruct>   modelStructList = tbDataReportingSnapshotModelStructMapper.selectByExample(examp);
+
+            if(modelStructList ==null || modelStructList.size()>0){
+                //抛出异常，传入的信息错误
+                //todo
+            }
+
+            List<String> tgList = new ArrayList<>();
+            for(TbDataReportingSnapshotModelStruct structBean : modelStructList){
+                tgList.add(structBean.getTargetId());
+            }
+
+            List<TbDataReportingSnapshotTargetGroup> snapshotTargetGroupList ;
+            //企业指标
+            if(DataUploadConstants.COMPANY_TYPE.equals(fillType)){
+                targetGroupExample.clear();
+                targetGroupExample.or().andTargetIdIn(tgList).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID)).andTaskBatchEqualTo(taskBatch);
+                snapshotTargetGroupList = tbDataReportingSnapshotTargetGroupMapper.selectByExample(targetGroupExample);
+
+            }else{
+            //园区指标
+                //查询出部门的指标，和公共的(有效的园区)指标
+                /*
+                TbDataReportingSnapshotTargetCriteria targetExample = new  TbDataReportingSnapshotTargetCriteria();
+                TbDataReportingSnapshotTargetCriteria.Criteria te1 =  targetExample.createCriteria().andTaskBatchEqualTo(taskBatch).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
+                        .andTargetIdIn(tgList).andTargetTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE))
+                        .andDepartmentIdIsNull();
+                TbDataReportingSnapshotTargetCriteria.Criteria te2 = targetExample.createCriteria().andTaskBatchEqualTo(taskBatch).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
+                        .andTargetIdIn(tgList).andTargetTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE))
+                        .andDepartmentIdEqualTo(departmentId);
+                targetExample.or(te2);
+                */
+
+                TbDataReportingSnapshotTargetCriteria targetExample = new  TbDataReportingSnapshotTargetCriteria();
+//                targetExample.or().andTaskBatchEqualTo(taskBatch).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
+//                        .andTargetIdIn(tgList).andTargetTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE))
+//                        .andDepartmentIdIsNull();
+                targetExample.or().andTaskBatchEqualTo(taskBatch).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
+                        .andTargetIdIn(tgList).andTargetTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE))
+                        .andDepartmentIdEqualTo(departmentId);
+
+                List<TbDataReportingSnapshotTarget>  snapshotTargetList= tbDataReportingSnapshotTargetMapper.selectByExample(targetExample);
+
+
+                for(TbDataReportingSnapshotTarget targetBean : snapshotTargetList){
+                    tgList.add(targetBean.getTargetId());
+                }
+
+
+                targetGroupExample.clear();
+                targetGroupExample.or().andTargetIdIn(tgList).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+                snapshotTargetGroupList = tbDataReportingSnapshotTargetGroupMapper.selectByExample(targetGroupExample);
+
+            }
+
+            if(snapshotTargetGroupList ==null || snapshotTargetGroupList.size()>0){
+                //抛出异常，传入的信息错误
+                //todo
+            }
+
+            for(TbDataReportingSnapshotTargetGroup snapshotTargetGroup : snapshotTargetGroupList){
+
+                boolean result = checkValue(modelId,tabBean.getTabId(),fillId, snapshotTargetGroup, tabBean.getInputList(),dataList);
+
+                if(result){
+                    //没有找到；前端/或数据被篡改,某些指标填写格式没有被上传。不予保存
+                    //todo
+                }
+            }
+
+            //数据存储
+
+            //是否已经存储了草稿
+            TbDataReportingTask needToSavetask =  tbDataReportingTaskMapper.selectByPrimaryKey(fillId);
+            if(needToSavetask ==null){
+                //todo 任务不存在
+            }
+
+            //任务处于草稿状态
+            if(DataUploadConstants.IS_DRAFT.equals(needToSavetask.getStatus().toString())){
+                //更新这些指标的值
+            }else if(DataUploadConstants.NOT_FILL.equals(needToSavetask.getStatus().toString())){
+                //为填报状态；直接写入数据
+                targetDao.saveData(dataList);
+            }
+
 
         }
 
         //修改改任务的状态为已填报
-        String userName = user.getName();
+        //企业
+        if(DataUploadConstants.COMPANY_TYPE.equals(fillType)){
 
-        String filler = user.getAccount();
-        String fillerTel = user.getPhone();
-        //检测改批次的任务是否已经全部填报完成，
+        }else{
+        // 园区，当前传入的部门，已经填报完毕；按照部门来进行
+        // 将本部门的填报信息写入到填报人的信息表中
+        // 检测其他部门是否已经填报完毕
 
-            //全部填报完成后，进行短信的提醒 todo 给指定人发送短信
+
+        }
+
+        //企业的全部填报完成后，进行短信的提醒 todo 给指定人发送短信
 
         return 1;
     }
+
+    /**
+     * 获取该任务归属于那些部门
+     * @param fillId
+     * @param taskBatch
+     * @param thisDepartmentId
+     * @return
+     */
+    private boolean checkOtherDepartmentTaskIsOver(String fillId,String taskBatch,String thisDepartmentId){
+        boolean result = false;
+
+        //查询出本期的任务，除了当前部门外的其他部门是否都已经全部填报数据；
+
+
+        return result;
+    }
+
+
+
+    /**
+     * 返回true;代表有前端传入的指标填写格式在标准中没有找到；
+     * @return
+     */
+    private boolean checkValue(String modelId,String tabId,String fillId,TbDataReportingSnapshotTargetGroup snapshotTargetGroup, List<InputFormatModel> list,List<TbDataReportingTaskData> dataList){
+        boolean result =true;
+        TbDataReportingTaskData dataBean;
+        //循环校验
+        for(InputFormatModel ifmBean : list){
+            if(snapshotTargetGroup.getFormId().equals(ifmBean.getFormId())){
+
+                if(DataUploadConstants.REQUIRED.equals(snapshotTargetGroup.getRequired().toString()) ){
+                    //是必填
+                    if(StringUtils.isBlank(ifmBean.getValue())){
+                        throw new JnSpringCloudException(DataUploadExceptionEnum.VALUE_NOT_EXIST);
+                    }
+                }
+
+                if(snapshotTargetGroup.getFormType().equals(DataUploadConstants.FORM_TYPE_TEXTNUMBER)){
+                    if(StringUtils.isNumeric(ifmBean.getValue())){
+                        throw new JnSpringCloudException(DataUploadExceptionEnum.VALUE_IS_NUMBER);
+                    }
+                }
+
+                dataBean = new TbDataReportingTaskData();
+                dataBean.setRowNum(ifmBean.getRowNum());
+                dataBean.setFormId(ifmBean.getFormId());
+                dataBean.setTargetId(ifmBean.getTargetId());
+                dataBean.setFillId(fillId);
+                dataBean.setTabId(tabId);
+                dataBean.setModelId(modelId);
+                dataBean.setData(ifmBean.getValue());
+                String uuid=UUID.randomUUID().toString().replaceAll("-","");
+                dataBean.setFallInFormId(uuid);
+                dataList.add(dataBean);
+                result = false;
+                break;
+            }
+        }
+
+        return result;
+    }
+
 
     @Override
     @ServiceLog(doAction = "企业历史填报任务详情")

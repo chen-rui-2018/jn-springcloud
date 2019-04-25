@@ -7,7 +7,7 @@ public class TbDataReportingTask implements Serializable {
     /*@ApiModelProperty("园区工单ID/企业填报ID")*/
     private String fillId;
 
-    /*@ApiModelProperty("填报类型（1：企业；2：园区）")*/
+    /*@ApiModelProperty("填报类型（0：企业，1：园管委会）")*/
     private Byte fileType;
 
     /*@ApiModelProperty("快照表模板ID")*/

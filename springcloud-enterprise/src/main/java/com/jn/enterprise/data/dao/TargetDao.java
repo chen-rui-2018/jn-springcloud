@@ -104,8 +104,11 @@ public interface TargetDao {
      */
     List<CompanyDataModel> getGardenTask(@Param("list") List<String> list);
 
-
-
+    /**
+     *
+     * @return
+     */
+    List <DepartementModel>  getDepartmentFromTarget(@Param("fileId") String fileId);
 
 
 
@@ -151,6 +154,13 @@ public interface TargetDao {
      * @param nowDate
      */
     List<WarningTaskModel> getWarningTask(String nowDate);
+
+
+    /**
+     * 保存园区任务可填报部门的信息
+     * @param fillerList
+     */
+    void saveFillerList(@Param("fillerList") List<TbDataReportingGardenFiller> fillerList);
 
 
 }

@@ -288,7 +288,11 @@ public class DataModelServiceImpl implements DataModelService {
                 tbDataReportingModelTab = new TbDataReportingModelTab();
                 BeanUtils.copyProperties(tabVO,tbDataReportingModelTab);
                 tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
-                tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
+                if(StringUtils.isNotBlank(tabVO.getStatus())){
+                    tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
+                }else{
+                    tbDataReportingModelTab.setStatus(new Byte(DataUploadConstants.VALID));
+                }
                 tbDataReportingModelTab.setTabCreateType(new Byte(tabVO.getTabCreateType()));
                 tbDataReportingModelTab.setOrderNumber(tabVO.getOrderNumber());
                 //tabId是空的
@@ -297,24 +301,33 @@ public class DataModelServiceImpl implements DataModelService {
                 tbDataReportingModelTab.setModelId(tbDataReportingModel.getModelId());
                 tbDataReportingModelTabList.add(tbDataReportingModelTab);
 
-                List<InputFormatModel>  imtList =tabVO.getInputList();
-                for(InputFormatModel im:imtList){
-                    tbDataReportingModelStruct = new TbDataReportingModelStruct();
-                    String uuid =UUID.randomUUID().toString().replaceAll("-","");
-                    tbDataReportingModelStruct.setId(uuid);
-                    tbDataReportingModelStruct.setTargetId(im.getTargetId());
-                    tbDataReportingModelStruct.setTabId(tabId);
-                    tbDataReportingModelStruct.setModelId(tbDataReportingModel.getModelId());
-                    tbDataReportingModelStructList.add(tbDataReportingModelStruct);
+                List<TargetModelVO>  tgList =tabVO.getTargetList();
+
+                if(tgList !=null && tgList.size()>0){
+                    for(TargetModelVO tg : tgList){
+                        tbDataReportingModelStruct = new TbDataReportingModelStruct();
+                        String uuid =UUID.randomUUID().toString().replaceAll("-","");
+                        tbDataReportingModelStruct.setId(uuid);
+                        tbDataReportingModelStruct.setTargetId(tg.getId());
+                        tbDataReportingModelStruct.setTabId(tabId);
+                        tbDataReportingModelStruct.setModelId(tbDataReportingModel.getModelId());
+                        tbDataReportingModelStructList.add(tbDataReportingModelStruct);
+                    }
                 }
+
+
             }
 
             //创建模板对应的Tab，保存tab信息
-            targetDao.createTab(tbDataReportingModelTabList);
-            //建立Tab和指标之间的关系
-            targetDao.createRelation(tbDataReportingModelStructList);
-        }
+            if(tbDataReportingModelTabList != null &&tbDataReportingModelTabList.size()>0){
+                targetDao.createTab(tbDataReportingModelTabList);
+                if(tbDataReportingModelStructList !=null && tbDataReportingModelStructList.size()>0){
+                    //建立Tab和指标之间的关系
+                    targetDao.createRelation(tbDataReportingModelStructList);
+                }
+            }
 
+        }
         result=1;
         return result;
     }

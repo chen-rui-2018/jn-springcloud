@@ -71,7 +71,7 @@ public class BusinessPromotionServiceImplTest {
     @Before
     public void setUp() throws Exception {
         //企业宣传列表查询
-        bpp.setApprovalStatus("-1");
+        bpp.setApprovalStatus("0");
         bpp.setSearchContent("");
         bpp.setPropagandaType("");
         bpp.setNeedPage("1");

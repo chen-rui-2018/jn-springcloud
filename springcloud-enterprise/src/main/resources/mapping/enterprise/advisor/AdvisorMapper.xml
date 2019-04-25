@@ -23,7 +23,7 @@
        FROM
        (
        SELECT
-       sa.`org_id` AS "orgId"			   			                      <!-- 机构id-->
+       sa.`org_id_` AS "orgId"			   			                      <!-- 机构id-->
        ,sa.`org_name` AS "orgName"					                      <!-- 所属机构名称-->
        ,sa.`advisor_account` AS "advisorAccount"  			              <!-- 顾问账号-->
        ,sa.`advisor_name` AS "advisorName"				                  <!-- 顾问名称-->
@@ -44,7 +44,7 @@
        and sa.approval_status='2'            <!--审批通过-->
        and sa.record_status='1'              <!--数据状态为正常数据-->
        GROUP BY
-       sa.`org_id`,sa.`advisor_account`,sa.`advisor_name`,sa.`business_area`,
+       sa.`org_id_`,sa.`advisor_account`,sa.`advisor_name`,sa.`business_area`,
        sa.`avatar`,sa.`position`,sa.working_years,sa.`org_name`,sa.`is_certification`,
        sa.`good_at_business`,sa.`transaction_num`,sa.page_views
        )tt
@@ -65,7 +65,7 @@
            saa.advisor_account
            from tb_service_product ssp
            join tb_service_and_advisor saa
-           on ssp.product_id=saa.product_id
+           on ssp.product_id_=saa.product_id_
            join tb_service_advisor tsa
            on tsa.advisor_account=saa.advisor_account
            and tsa.approval_status='2'
@@ -109,7 +109,7 @@
 	    FROM
 	      (
             SELECT
-                sa.`org_id` AS "orgId"			   			                <!-- 机构id-->
+                sa.`org_id_` AS "orgId"			   			                <!-- 机构id-->
                 ,sa.`org_name` AS "orgName"					                <!-- 所属机构名称-->
                 ,sa.`advisor_account` AS "advisorAccount"  			        <!-- 顾问账号-->
                 ,sa.`advisor_name` AS "advisorName"				            <!-- 顾问名称-->
@@ -128,7 +128,7 @@
             and sa.record_status='1'              <!--数据状态为正常数据-->
             LEFT JOIN tb_service_product sp
             ON sr.`product_id`=sp.`product_id`
-            GROUP BY sa.`org_id`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
+            GROUP BY sa.`org_id_`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
                  sr.product_id,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
                  sr.`created_time`,sr.`evaluation_desc`
           )tt
@@ -170,7 +170,7 @@
         FROM
         (
         SELECT
-        sa.`org_id` AS "orgId"			   			                <!-- 机构id-->
+        sa.`org_id_` AS "orgId"			   			                <!-- 机构id-->
         ,sa.`org_name` AS "orgName"					                <!-- 所属机构名称-->
         ,sa.`advisor_account` AS "advisorAccount"  			        <!-- 顾问账号-->
         ,sa.`advisor_name` AS "advisorName"				            <!-- 顾问名称-->
@@ -189,7 +189,7 @@
         and sa.record_status='1'              <!--数据状态为正常数据-->
         LEFT JOIN tb_service_product sp
         ON sr.`product_id`=sp.`product_id`
-        GROUP BY sa.`org_id`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
+        GROUP BY sa.`org_id_`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
         sr.product_id,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
         sr.`created_time`,sr.`evaluation_desc`
         )tt

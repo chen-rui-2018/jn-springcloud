@@ -6,16 +6,16 @@
         select tt.orgId,tt.orgName,tt.orgLogo,tt.pageviews,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,tt.orgSpeciality,
         tt.orgAddress,tt.transactionNum,tt.attitudeScore,tt.evaluationNum from
         (select
-        a.org_id as "orgId",a.org_name as "orgName",a.org_speciality as "orgSpeciality",
+        a.org_id_ as "orgId",a.org_name as "orgName",a.org_speciality as "orgSpeciality",
         a.org_logo as "orgLogo",a.org_show as "pageviews",
         date_format(a.org_register_time,'%Y-%m-%d') as "orgRegisterTime",
         a.is_approve as "isApprove",a.org_type as "orgType", i.org_phone as "orgPhone",
         CONCAT(i.org_province,i.org_city,i.org_area,i.org_address) as "orgAddress",
-        (select count(1) from tb_service_require t where t.org_id = a.org_id and t.record_status = '1' and t.handle_result = '1' ) as "transactionNum" <!-- 累计交易笔数 -->
+        (select count(1) from tb_service_require t where t.org_id_ = a.org_id_ and t.record_status = '1' and t.handle_result = '1' ) as "transactionNum" <!-- 累计交易笔数 -->
         ,(SELECT IFNULL(AVG(t.`attitude_score`), 0) FROM tb_service_rating t
-        WHERE t.org_id = a.org_id)  AS "attitudeScore" <!-- 评价得分 -->
-        ,(SELECT COUNT(1) FROM tb_service_rating t WHERE t.org_id = a.org_id)  AS "evaluationNum"  <!-- 评价次数 -->
-        from tb_service_org a left join tb_service_org_info i on a.org_id = i.org_id LEFT JOIN tb_service_org_trait tr ON a.org_id = tr.org_id
+        WHERE t.org_id_ = a.org_id_)  AS "attitudeScore" <!-- 评价得分 -->
+        ,(SELECT COUNT(1) FROM tb_service_rating t WHERE t.org_id_ = a.org_id_)  AS "evaluationNum"  <!-- 评价次数 -->
+        from tb_service_org a left join tb_service_org_info i on a.org_id_ = i.org_id_ LEFT JOIN tb_service_org_trait tr ON a.org_id_ = tr.org_id_
         where 1=1 and a.record_status != '0'
 
         <if test="businessType != null and businessType.length>0">
@@ -28,9 +28,9 @@
             and a.business_s_type = #{businessSType}
         </if>
         <if test="templateId != null and templateId != ''">
-            and a.org_id in (
+            and a.org_id_ in (
             select distinct
-            ssp.org_id
+            ssp.org_id_
             from tb_service_product ssp
             where ssp.record_status='1' and ssp.template_id = #{templateId}
             )
@@ -48,7 +48,7 @@
                 #{item}
           </foreach>
         </if>
-        GROUP BY a.org_id
+        GROUP BY a.org_id_
         <if test="sortTypes =='popularity'">
             ORDER BY <!-- 人气排序-->
             a.org_show DESC   <!-- 浏览量-->
@@ -141,7 +141,7 @@
     <!--查看服务商详情-->
     <select id="getServiceOrgDetail" resultMap="queryServiceOrgDetailMap" parameterType="java.lang.String">
         SELECT
-          o.org_id AS "s_id",
+          o.org_id_ AS "s_id",
          (SELECT pre.pre_value FROM tb_service_prefer pre WHERE pre.id = o.business_type )AS "s_businessType",
           o.business_s_type AS "s_businessSType",
           o.org_name AS "s_orgName",
@@ -149,8 +149,8 @@
           o.org_synopsis AS "s_orgSynopsis",
           o.org_status AS "s_orgStatus",
           o.org_show AS "s_orgShow",
-          (select count(1) from tb_service_require tr where tr.org_id = o.org_id and tr.record_status = '1' and tr.handle_result = '1' ) AS "s_transactionCount",
-          (SELECT(SUM(attitude_score) / COUNT(1)) FROM tb_service_rating ra WHERE ra.org_id = o.org_id) AS "s_orgServiceScore",
+          (select count(1) from tb_service_require tr where tr.org_id_ = o.org_id_ and tr.record_status = '1' and tr.handle_result = '1' ) AS "s_transactionCount",
+          (SELECT(SUM(attitude_score) / COUNT(1)) FROM tb_service_rating ra WHERE ra.org_id_ = o.org_id_) AS "s_orgServiceScore",
           o.org_hobby AS "s_orgHobby",
           o.org_speciality AS "s_orgSpeciality",
           o.operate_status AS "s_operateStatus",
@@ -179,14 +179,14 @@
           date_format(o.org_register_time,'%Y-%m-%d')  AS "s_orgRegisterTime",
           o.org_logo AS "s_orgLogo",
           li.id AS "sh_id",
-          li.org_id AS "sh_orgId",
+          li.org_id_ AS "sh_orgId",
           li.cert_name AS "sh_certName",
           li.file_url AS "sh_fileUrl",
           li.is_features "AS sh_isFeatures",
           date_format(li.award_time,'%Y-%m-%d') AS "sh_awardTime",
           li.cert_type AS "sh_certType",
           te.id as "te_id",
-          te.org_id as "te_orgId",
+          te.org_id_ as "te_orgId",
           te.con_name as "te_conName",
           te.con_position as "te_conPosition",
           te.con_quali as "te_conQuali",
@@ -198,25 +198,25 @@
         FROM
           tb_service_org o
           LEFT JOIN tb_service_org_license lic
-            ON o.org_id = lic.org_id and lic.is_features = '1' and lic.record_status = 1
+            ON o.org_id_ = lic.org_id_ and lic.is_features = '1' and lic.record_status = 1
             LEFT JOIN tb_service_org_license li
-            ON o.org_id = li.org_id and li.record_status = 1
+            ON o.org_id_ = li.org_id_ and li.record_status = 1
           LEFT JOIN tb_service_org_element el
-            ON el.org_id = o.org_id and el.record_status = 1
+            ON el.org_id_ = o.org_id_ and el.record_status = 1
           LEFT JOIN tb_service_org_info i
-            ON i.org_id = o.org_id and i.record_status = 1
-          left join tb_service_org_team te on te.org_id = o.org_id and te.record_status = 1
-          LEFT JOIN tb_service_rating sr on o.org_id=sr.org_id
+            ON i.org_id_ = o.org_id_ and i.record_status = 1
+          left join tb_service_org_team te on te.org_id_ = o.org_id_ and te.record_status = 1
+          LEFT JOIN tb_service_rating sr on o.org_id_=sr.org_id_
           left join tb_service_advisor sa
-        on i.org_id=sa.org_id and i.con_name=sa.advisor_name
-        where o.record_status = 1 and o.org_id = #{orgId}
+        on i.org_id_=sa.org_id_ and i.con_name=sa.advisor_name
+        where o.record_status = 1 and o.org_id_ = #{orgId}
     </select>
     <!--机构的顾问数,产品数统计-->
     <select id="getMyOrgInfo" resultType="com.jn.enterprise.servicemarket.org.model.OrgCount">
-        select count(t1.org_id) as "productNum",
-       (select count(t2.org_id) from tb_service_advisor t2 where t2.org_id=#{orgId}) as "advisorNum"
+        select count(t1.org_id_) as "productNum",
+       (select count(t2.org_id_) from tb_service_advisor t2 where t2.org_id_=#{orgId}) as "advisorNum"
             from tb_service_product t1
-               where t1.org_id = #{orgId}
+               where t1.org_id_ = #{orgId}
     </select>
 
     <!--根据产品查询服务机构统计数据-->
@@ -225,13 +225,13 @@
           SUM(t.num) AS "orgNum"
         FROM
           (SELECT
-            COUNT(org_id) AS 'num'
+            COUNT(org_id_) AS 'num'
           FROM
             tb_service_product t
           WHERE t.status = '1'
             AND t.record_status = '1'
             AND t.template_id = #{productId}
-          GROUP BY t.org_id) t
+          GROUP BY t.org_id_) t
     </select>
 
     <!--根据业务领域/产品查询评价统计数据-->

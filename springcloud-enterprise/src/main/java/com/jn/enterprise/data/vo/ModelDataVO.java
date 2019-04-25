@@ -1,6 +1,7 @@
 package com.jn.enterprise.data.vo;
 
 import com.jn.enterprise.data.model.CompanyDataModel;
+import com.jn.enterprise.data.model.DepartementModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -61,15 +62,12 @@ public class ModelDataVO implements Serializable {
     private String departmentName ;
     @ApiModelProperty(value = "模板顺序",example = "001")
     private Integer orderNumber ;
-
     public Integer getOrderNumber() {
         return orderNumber;
     }
-
     public void setOrderNumber(Integer orderNumber) {
         this.orderNumber = orderNumber;
     }
-
     @ApiModelProperty(value = "任务全部填写完后的提醒人",example = "提醒人账号")
     private String reminder ;
     @ApiModelProperty(value = "创建者账号",example = "zhangsan")
@@ -82,13 +80,13 @@ public class ModelDataVO implements Serializable {
     private Date modifiedTime;
 
     @ApiModelProperty(value = "用户权限集合",example = "[001,112]")
-    private List<String> userDepartmentId;
+    private List<DepartementModel> userDepartmentId;
 
-    public List<String> getUserDepartmentId() {
+    public List<DepartementModel> getUserDepartmentId() {
         return userDepartmentId;
     }
 
-    public void setUserDepartmentId(List<String> userDepartmentId) {
+    public void setUserDepartmentId(List<DepartementModel> userDepartmentId) {
         this.userDepartmentId = userDepartmentId;
     }
 

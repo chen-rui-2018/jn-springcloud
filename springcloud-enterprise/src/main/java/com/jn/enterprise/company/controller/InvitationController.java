@@ -58,7 +58,7 @@ public class InvitationController extends BaseController {
     @ApiOperation(value = "批量邀请员工（pc/app-邀请员工）", notes = "企业管理员发送邀请")
     @RequestMapping(value = "/inviteStaff",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/inviteStaff")
-    public Result<Integer> inviteStaff(@Validated @NotNull @RequestBody @ApiParam(name="accounts", value = "受邀请账号数组", required = true, example = "['zhangsan','lisi']") String[] accounts){
+    public Result<Integer> inviteStaff(String[] accounts){
         User user = checkUserValid();
         Integer res = staffService.inviteStaff(accounts, user);
         //TODO 调用消息推送
@@ -70,7 +70,7 @@ public class InvitationController extends BaseController {
     @ApiOperation(value = "再次邀请员工（pc-再次邀请）", notes = "企业管理员再次发送邀请")
     @RequestMapping(value = "/inviteStaffAgain",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/inviteStaffAgain")
-    public Result<Integer> inviteStaffAgain(@Validated @NotNull @RequestBody @ApiParam(name="staffId", value = "员工ID", required = true) String staffId){
+    public Result<Integer> inviteStaffAgain(String staffId){
         User user = checkUserValid();
         Integer res = staffService.inviteStaffAgain(staffId, user.getAccount());
         //TODO 调用消息推送
@@ -93,7 +93,7 @@ public class InvitationController extends BaseController {
     @ApiOperation(value = "拒绝邀请（pc/app-拒绝邀请）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/refuseInvite",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/refuseInvite")
-    public Result<Integer> refuseInvite(@Validated @NotNull @RequestBody @ApiParam(name="staffId", value = "员工ID", required = true) String staffId){
+    public Result<Integer> refuseInvite(String staffId){
         checkUserValid();
         return new Result(staffService.refuseInvite(staffId));
     }

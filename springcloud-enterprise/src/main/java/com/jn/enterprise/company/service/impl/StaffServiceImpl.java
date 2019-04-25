@@ -143,7 +143,15 @@ public class StaffServiceImpl implements StaffService {
      */
     @Override
     @ServiceLog(doAction = "查询同事列表")
-    public PaginationData getColleagueList(StaffListParam staffListParam, String curAccount) {
+    public Map<String, Object> getColleagueList(StaffListParam staffListParam, String curAccount) {
+        Map<String, Object> map = new HashMap<>();
+        boolean isShowFlag = false;
+        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(curAccount);
+        if (company != null) {
+            isShowFlag = true;
+        }
+        map.put("isShow", isShowFlag);
+
         // 获取当前用户扩展信息
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(curAccount);
         if(userExtension == null || userExtension.getData() == null){
@@ -195,8 +203,11 @@ public class StaffServiceImpl implements StaffService {
             if (companyAdmin != null) {
                 dataList.add(0, companyAdmin);
             }
+
         }
-        return new PaginationData(dataList, staffListParam.getNeedPage().equals("1") ? (Integer) maps.get("total") : dataList.size());
+        PaginationData paginationData = new PaginationData(dataList, staffListParam.getNeedPage().equals("1") ? (Integer) maps.get("total") : dataList.size());
+        map.put("data", paginationData);
+        return map;
     }
 
     /**
@@ -366,15 +377,6 @@ public class StaffServiceImpl implements StaffService {
         }
         TbServiceCompanyStaff companyStaff = companyStaffs.get(0);
 
-        String[] accountList = new String[] {companyStaff.getAccount()};
-        UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
-        userCompanyInfo.setAccountList(accountList);
-        userCompanyInfo.setCompanyCode(company.getId());
-        userCompanyInfo.setCompanyName(company.getComName());
-        Result result = userExtensionClient.updateCompanyInfo(userCompanyInfo);
-        checkCallServiceSuccess(result);
-        logger.info("[审核员工] 更新用户扩展信息返回:{}", result.getData());
-
         companyStaff.setCheckStatus(reviewStaffParam.getCheckStatus());
         companyStaff.setCheckAccount(curAccount);
         companyStaff.setModifierAccount(curAccount);
@@ -383,7 +385,7 @@ public class StaffServiceImpl implements StaffService {
         int responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(companyStaff);
         logger.info("[审核员工] 成功审核员工信息 staffId:{}, 响应条数:{}", reviewStaffParam.getStaffId(), responseNums);
 
-        // 审核通过，增加角色
+        // 审核通过，增加角色，修改用户信息
         if (reviewStaffParam.getCheckStatus().equals(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode())) {
             List<String> addRoleIds = new ArrayList<>();
             addRoleIds.add(CompanyDataEnum.COMPANY_STAFF.getCode());
@@ -391,6 +393,15 @@ public class StaffServiceImpl implements StaffService {
             if (addRoleResult) {
                 logger.info("[审核员工] {}增加角色{}成功", companyStaff.getAccount(), CompanyDataEnum.COMPANY_STAFF.getCode());
             }
+
+            String[] accountList = new String[] {companyStaff.getAccount()};
+            UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
+            userCompanyInfo.setAccountList(accountList);
+            userCompanyInfo.setCompanyCode(company.getId());
+            userCompanyInfo.setCompanyName(company.getComName());
+            Result result = userExtensionClient.updateCompanyInfo(userCompanyInfo);
+            checkCallServiceSuccess(result);
+            logger.info("[审核员工] 更新用户扩展信息返回:{}", result.getData());
         }
 
         return responseNums;

@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ServiceRecruitParam", description = "企业招聘入参（前台）")
 public class ServiceWebRecruitParam extends Page implements Serializable {
-    @ApiModelProperty(value = "招聘岗位/企业名称[模糊搜索]", example = "Java程序员/君南")
+    @ApiModelProperty(value = "招聘岗位[模糊搜索]", example = "Java程序员")
     private String searchFiled;
     @ApiModelProperty(value = "招聘类型（请调用[企业服务-公共：码表-数据列表]获取数据，传值为groupId=recruitType）", example = "full_time")
     private String type;

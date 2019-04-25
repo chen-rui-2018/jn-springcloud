@@ -12,7 +12,10 @@
         a.view_count AS "viewCount",
         a.created_time AS "createdTime",
         a.com_name AS "comName",
+        a.approval_status AS "approvalStatus",
+        cd.code_value AS "type",
         cd.code_name AS "typeName",
+        tsc.code_value AS "salary",
         tsc.code_name AS "salaryName",
         CASE
             WHEN a.status = '1' THEN '有效'
@@ -57,7 +60,7 @@
             AND a.type = #{type}
         </if>
         <if test="searchFiled != null and searchFiled != ''">
-            AND ( a.post LIKE CONCAT('%', #{searchFiled}, '%') OR co.com_name LIKE CONCAT('%', #{searchFiled}, '%'))
+            AND ( a.post LIKE CONCAT('%', #{searchFiled}, '%') OR a.com_name LIKE CONCAT('%', #{searchFiled}, '%'))
         </if>
         <if test="whereTypes != null and whereTypes != ''">
             <choose>

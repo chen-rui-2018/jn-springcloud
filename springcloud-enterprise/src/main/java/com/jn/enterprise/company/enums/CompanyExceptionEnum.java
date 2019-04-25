@@ -22,6 +22,7 @@ public enum CompanyExceptionEnum implements CodeAndMsg {
     ACCOUNT_IS_CURRENT_COMPANY_CONTACTS_NOW("5020588","该账号已经是企业联系人"),
     ACCOUNT_IS_NOT_CURRENT_COMPANY_CONTACTS("5020589","该账号不是企业联系人"),
     USER_NOT_INVITE_AGAIN("5020590","员工不符合再次邀请条件"),
+    PARAM_IS_NULL("5020591","请求参数不能为空"),
 
     CALL_SERVICE_ERROR("5020401","调用内部服务出错"),
     ;

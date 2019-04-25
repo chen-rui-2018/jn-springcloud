@@ -386,77 +386,6 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="服务顾问" name="serConsultant" >
-          <div class="serConsultant">
-            <ul class="list-imgleft adviser">
-              <li class="list-item" v-for="(i,k) in serviceConsultant" :key='k'>
-                <!-- 左侧logo begin-->
-                <div class="list-imgleft-container noconsultant">
-                  <img :src="i.avatar" alt="">
-                </div>
-                <!-- 左侧logo end-->
-                <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-consultant">
-                  <!-- 中间上半部分--标题和标签 begin -->
-                  <div class="list-info-top-title">
-                    <!-- 头部 begin -->
-                    <div class="info-top">
-                      <div class="top-title inner-consultant" onclick="window.open('/epservice/techsub/Apps/epssm/index.php?s=/Home/ConsultantSpace/space/id/86c91e1d-b3ce-11e7-9663-000c29881ee3')">
-                        <span>{{i.advisorName}}/{{i.position}}</span>
-                        <div class="icons">
-                          <!-- 是否认证标签 -->
-                        </div>
-                        <div class="clear"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- 中间上半部分--标题和标签 end -->
-                  <!-- 中间下半部分--电话、地址评价和交易 begin -->
-                  <div class="list-info-bottom-detail">
-                    <!-- 所属机构、电话 begin -->
-                    <div class="detail-contact inner-consultant">
-                      <div class="text-of">从业年限：
-                        <font style="color:#ccc;">{{i.workingYears}}</font>
-                      </div>
-                      <div class="search_area pt5 text-of" title="">业务擅长：{{i.goodAtBusiness}}</div>
-                      <div>累计
-                        <span class="mainColor">{{i.transactionNum}}</span>笔交易</div>
-                    </div>
-                    <!-- 地址、电话 end -->
-                    <!-- 评价 begin -->
-                    <div class="detail-evaluate inner-consultant">
-                      <div class="score">
-                        <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
-                        </el-rate>
-                        <span class="c_default b">{{i.evaluationNum}}</span>
-                        <span>条评价</span>
-                      </div>
-                      <div class="links mt5">
-                        <div class="links mt5">
-                          {{i.evaluationScore}}分
-                        </div>
-                      </div>
-                    </div>
-                    <!-- 评价 end -->
-                    <!-- 交易量 begin -->
-                    <!-- <div class="detail-count">
-                      <span>累计交易
-                        <span class="c_default ml5 mr5">19</span>笔</span>
-                    </div> -->
-                    <!-- 交易量 end -->
-                  </div>
-                  <!-- 中间上半部分--电话、地址评价和交易 end -->
-                </div>
-                <!-- 中间信息 end -->
-                <div class="clear"></div>
-              </li>
-            </ul>
-            <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row2" layout="total, sizes, prev, pager, next, jumper" :total="total2">
-              </el-pagination>
-            </div>
-          </div>
-        </el-tab-pane>
         <el-tab-pane label="服务评价" name="serEvaluation" >
           <div class="serEvaluation">
             <ul class="list-imgleft">
@@ -609,7 +538,7 @@ export default {
   mounted() {
     this.initList();
     this.findOrgCountProductList();
-    this.getServiceConList();
+    // this.getServiceConList();
     this.selActiList();
     this.getServiceRatingInfo();
   },
@@ -750,28 +679,6 @@ export default {
             console.log(res);
             _this.serviceRatingList = res.data.rows;
             _this.total4 = res.data.total;
-          } else {
-            _this.$message.error(res.result);
-          }
-        }
-      });
-    },
-    getServiceConList() {
-      //服务顾问
-      let _this = this;
-      this.api.get({
-        url: "getServiceConList",
-        data: {
-          // orgId: _this.$route.query.orgId,
-          orgId: "1001211",
-          page: _this.page2,
-          rows: _this.row2
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            console.log(res);
-            _this.serviceConsultant = res.data.rows;
-            _this.total2 = res.data.total;
           } else {
             _this.$message.error(res.result);
           }

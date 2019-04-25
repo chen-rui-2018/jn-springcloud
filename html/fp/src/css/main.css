@@ -2044,14 +2044,6 @@ input {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.portalIndex .portalIndexImg .el-carousel__item h3, .enterpriseservice .portalIndexImg .el-carousel__item h3 {
-  color: #475669;
-  font-size: 18px;
-  opacity: 0.75;
-  line-height: 300px;
-  margin: 0;
-}
-
 .portalIndex .portalIndexImg .el-carousel__container, .enterpriseservice .portalIndexImg .el-carousel__container {
   height: 650px;
 }

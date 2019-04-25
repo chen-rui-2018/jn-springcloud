@@ -171,6 +171,7 @@ export default {
         font-size: 13px;
         a {
           display: inline-block;
+          cursor: pointer;
         }
         .line {
           display: inline-block;

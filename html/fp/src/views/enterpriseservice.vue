@@ -43,7 +43,7 @@
             <el-carousel :interval="5000" arrow="never">
                 <!-- <el-carousel-item v-for="item in 4" :key="item"> -->
                 <el-carousel-item>
-                    <h3><img class="porImg" src="@/../static/img/qiye1.png" alt="" @click="$router.push({path:'/serMatHp'})"></h3>
+                    <h3><img class="porImg" src="@/../static/img/qiye2.jpg" alt="" @click="$router.push({path:'/serMatHp'})"></h3>
                 </el-carousel-item>
             </el-carousel>
             <div class="quickEnter">
@@ -332,7 +332,7 @@
                     <button class="btn2">金融机构</button>
                 </div>
                 <div class="tecnInfo clearfix">
-                   <!--  <div class="info1 clearfix">
+                    <!--  <div class="info1 clearfix">
                         <div class="lef1 fl clearfix">
                             <div class="imgItem fl"><img src="@/../static/img/largeImg.png" alt=""></div>
                             <div class="itemInfo fr">
@@ -425,32 +425,38 @@
                         <ul>
                             <li class="conselor_left">
                                 <div v-for="(item,index) in 2" :key="index">
-                                <a href="javascript:;">
-                                    <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
-                                    <div class="info_all">
-                                    <div class="info_name"><span>郭龙华</span>/<span>总经理</span></div>
-                                    <div class="info_detail">
-                                        <p>苏州万隆永鼎会计师事务所有限公司</p>
-                                        <p>合伙人</p>
-                                    </div>
-                                    </div>
-                                </a>
+                                    <a href="javascript:;">
+                                        <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
+                                        <div class="info_all">
+                                            <div class="info_name">
+                                                <span>郭龙华</span>/
+                                                <span>总经理</span>
+                                            </div>
+                                            <div class="info_detail">
+                                                <p>苏州万隆永鼎会计师事务所有限公司</p>
+                                                <p>合伙人</p>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
                             </li>
                             <li class="conselor_mid">
                                 <div v-for="(counselorinfoItem2,counselorinfoindex2) in 8" :key="counselorinfoindex2" class="conselor_mid_list">
-                                <a href="javascript:;">
-                                    <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
-                                    <div class="info_all">
-                                    <div class="info_name"><span>郭龙华</span>/<span>总经理</span></div>
-                                    <div class="info_detail">
-                                        <p>苏州万隆永鼎会计师事务所有限公司</p>
-                                        <p>合伙人</p>
-                                    </div>
-                                    </div>
-                                </a>
+                                    <a href="javascript:;">
+                                        <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
+                                        <div class="info_all">
+                                            <div class="info_name">
+                                                <span>郭龙华</span>/
+                                                <span>总经理</span>
+                                            </div>
+                                            <div class="info_detail">
+                                                <p>苏州万隆永鼎会计师事务所有限公司</p>
+                                                <p>合伙人</p>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
-                                
+
                             </li>
                         </ul>
                     </div>
@@ -560,6 +566,17 @@ export default {
 };
 </script>
 <style lang="scss">
+// @keyframes qfe_btt {
+//   0% {
+//     transform: translate(0, 10%);
+//     opacity: 0;
+//   }
+//   100% {
+//     transform: translate(0, 0);
+//     opacity: 1;
+//   }
+// }
+
 .enterpriseservice {
   #header #posA {
     > .firstLi {
@@ -650,6 +667,11 @@ export default {
               }
             }
           }
+        //   .right1:hover {
+        //     background: #ffffff !important;
+        //     animation: qfe_btt 0.7s 1 ease;
+        //     opacity: 1;
+        //   }
         }
         > li:nth-child(2n) {
           margin-right: 0;
@@ -889,8 +911,8 @@ export default {
             outline: none;
             width: 97px;
           }
-          >button:hover{
-              color: #fff;
+          > button:hover {
+            color: #fff;
             background: #00a041;
           }
           .btn1 {
@@ -968,70 +990,70 @@ export default {
       }
     }
   }
-  #conselor_info{
-    ul{
-        display: flex;
-        .conselor_left{
+  #conselor_info {
+    ul {
+      display: flex;
+      .conselor_left {
         width: 36%;
-        a{
-            border: 1px solid #dedede;
-            display: flex;
-                margin-top: 20px;
-            .info_img{
-            width:46%;
-            img{
-                width: 80%;
-                border-radius: 50%;
-                display: block;
-                margin: 20px auto;
+        a {
+          border: 1px solid #dedede;
+          display: flex;
+          margin-top: 20px;
+          .info_img {
+            width: 46%;
+            img {
+              width: 80%;
+              border-radius: 50%;
+              display: block;
+              margin: 20px auto;
             }
-            }
-            .info_all{
+          }
+          .info_all {
             margin: auto 0;
-            .info_name{
-                padding-bottom: 18px;
+            .info_name {
+              padding-bottom: 18px;
             }
-            .info_detail{
-                font-size: 12px;
-                color: #999;
+            .info_detail {
+              font-size: 12px;
+              color: #999;
             }
-            }
+          }
         }
-        }
-        .conselor_mid{
+      }
+      .conselor_mid {
         width: 63%;
-        .conselor_mid_list{
-            float: left;
-            width: 50%;
+        .conselor_mid_list {
+          float: left;
+          width: 50%;
         }
-        a{
-            border: 1px solid #dedede;
-            display: flex;
-            margin-top: 20px;
-            margin-left: 20px;
-            .info_img{
+        a {
+          border: 1px solid #dedede;
+          display: flex;
+          margin-top: 20px;
+          margin-left: 20px;
+          .info_img {
             width: 27%;
-            img{
-                width: 79%;
-                border-radius: 50%;
-                display: block;
-                margin: 6px auto;
+            img {
+              width: 79%;
+              border-radius: 50%;
+              display: block;
+              margin: 6px auto;
             }
-            }
-            .info_all{
+          }
+          .info_all {
             margin: auto 10px;
-            .info_name{
-                padding-bottom: 18px;
+            .info_name {
+              padding-bottom: 18px;
             }
-            .info_detail{
-                font-size: 12px;
-                color: #999;
+            .info_detail {
+              font-size: 12px;
+              color: #999;
             }
-            }
+          }
         }
-        }
+      }
     }
-    }
+  }
 }
 </style>
 

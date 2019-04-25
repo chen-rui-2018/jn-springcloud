@@ -1494,13 +1494,13 @@ input {
         }
       }
     }
-    .el-carousel__item h3 {
-      color: #475669;
-      font-size: 18px;
-      opacity: 0.75;
-      line-height: 300px;
-      margin: 0;
-    }
+    // .el-carousel__item h3 {
+    //   color: #475669;
+    //   font-size: 18px;
+    //   opacity: 0.75;
+    //   line-height: 300px;
+    //   margin: 0;
+    // }
     .el-carousel__container {
       height: 650px;
     }
@@ -1966,6 +1966,7 @@ input {
     .card {
       margin-top: 40px;
       .cardUl {
+        // margin: 50px 0;
         > li {
           display: inline-block;
           margin-right: 30px;

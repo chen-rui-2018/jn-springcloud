@@ -379,33 +379,33 @@
       <div class="eng mainColor">Area&nbsp;more&nbsp;garden</div>
       <div class="line"></div>
       <div class="card pr">
-        <el-carousel  arrow="always">
+        <el-carousel arrow="always">
           <el-carousel-item v-for="item in 4" :key="item">
-        <!-- <el-carousel-item v-for="item in 3" :key="item"> -->
-        <ul class="cardUl">
-          <li>
-            <el-card>
-              <img src="@/../static/img/图层 50.png" alt="">
-              <p class="mainColor">白下高新A园</p>
-              <div>Baixia high-tech zone A</div>
-            </el-card>
-          </li>
-          <li>
-            <el-card>
-              <img src="@/../static/img/图层 49.png" alt="">
-              <p class="mainColor">白下高新A园</p>
-              <div>Baixia high-tech zone A</div>
-            </el-card>
-          </li>
-          <li>
-            <el-card>
-              <img src="@/../static/img/图层 51.png" alt="">
-              <p class="mainColor">白下高新A园</p>
-              <div>Baixia high-tech zone A</div>
-            </el-card>
-          </li>
-        </ul>
-         </el-carousel-item>
+            <!-- <el-carousel-item v-for="item in 3" :key="item"> -->
+            <ul class="cardUl">
+              <li>
+                <el-card>
+                  <img src="@/../static/img/图层 50.png" alt="">
+                  <p class="mainColor">白下高新A园</p>
+                  <div>Baixia high-tech zone A</div>
+                </el-card>
+              </li>
+              <li>
+                <el-card>
+                  <img src="@/../static/img/图层 49.png" alt="">
+                  <p class="mainColor">白下高新A园</p>
+                  <div>Baixia high-tech zone A</div>
+                </el-card>
+              </li>
+              <li>
+                <el-card>
+                  <img src="@/../static/img/图层 51.png" alt="">
+                  <p class="mainColor">白下高新A园</p>
+                  <div>Baixia high-tech zone A</div>
+                </el-card>
+              </li>
+            </ul>
+          </el-carousel-item>
         </el-carousel>
         <!-- </el-carousel-item> -->
         <!-- <div class="arrow">
@@ -538,7 +538,7 @@
 export default {
   data() {
     return {
-      sousuo: false,
+      sousuo: false
     };
   },
   mounted() {
@@ -548,7 +548,7 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-    onClick(){
+    onClick() {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     },
     handleScroll() {
@@ -577,6 +577,16 @@ export default {
 };
 </script>
 <style lang="scss">
+// @keyframes qfyfadeInLeft {
+//   0% {
+//     opacity: 0;
+//     transform: translateY(0);
+//   }
+//   100% {
+//     opacity: 1;
+//     transform: translateY(10%);
+//   }
+// }
 .portalIndex {
   .portalIndexImg {
     .el-carousel__item:nth-child(2n) {
@@ -615,7 +625,7 @@ export default {
         }
       }
     }
-    >li:hover{
+    > li:hover {
       transition: 0.3s all;
       transform: scale(1.1);
     }
@@ -638,6 +648,11 @@ export default {
       right: 64px;
     }
   }
+  // .cardUl{
+  //   >li:hover{
+  //     transition: qfyfadeInLeft .6s 1 ease;
+  //   }
+  // }
 }
 </style>
 

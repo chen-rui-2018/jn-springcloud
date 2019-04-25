@@ -207,6 +207,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         Map<String,Object> map = new HashMap<>(16);
         map.put("name",name);
         map.put("parentId",parentId);
+        map.put("departId",departId);
         map.put("type",type);
         map.put("code",code);
         List<SpPowerVo> spPowerVoList = spPowerDao.findByPage(map);

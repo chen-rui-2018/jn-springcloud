@@ -370,7 +370,7 @@ from tb_service_product t1
             (
         select
         count(tp.product_id) as "featureCount"
-        ,(select count(ta.id) from tb_service_advisor ta where ta.approval_status ="2" and ta.record_status= 1)  as "advisorCount"
+        ,(select count(ta.id_) from tb_service_advisor ta where ta.approval_status ="2" and ta.record_status= 1)  as "advisorCount"
         ,(select count(tr.id) from tb_service_require tr where tr.record_status=1) as "requireCount"
         ,(select count(tra.id)  from tb_service_rating tra where tra.record_status = 1  ) as "commentCount"
         ,(select count(tso.org_id) from tb_service_org tso where tso.record_status=1 and tso.org_status="1")   as "orgCount"

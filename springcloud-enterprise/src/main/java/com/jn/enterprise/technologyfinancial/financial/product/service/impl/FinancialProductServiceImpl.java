@@ -210,7 +210,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
         //状态为审核通过，机构id不为空，
         String status="1";
-        example.createCriteria().andOrgIdIsNotNull().andBusinessSTypeEqualTo(BUSINESS_AREA)
+        example.createCriteria().andOrgIdIsNotNull().andBusinessTypeEqualTo(BUSINESS_AREA)
                 .andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
         return tbServiceOrgMapper.countByExample(example);
     }

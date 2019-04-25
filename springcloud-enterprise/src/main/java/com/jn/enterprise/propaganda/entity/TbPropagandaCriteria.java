@@ -1185,6 +1185,76 @@ public class TbPropagandaCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andIsPayIsNull() {
+            addCriterion("is_pay is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayIsNotNull() {
+            addCriterion("is_pay is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayEqualTo(String value) {
+            addCriterion("is_pay =", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayNotEqualTo(String value) {
+            addCriterion("is_pay <>", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayGreaterThan(String value) {
+            addCriterion("is_pay >", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayGreaterThanOrEqualTo(String value) {
+            addCriterion("is_pay >=", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayLessThan(String value) {
+            addCriterion("is_pay <", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayLessThanOrEqualTo(String value) {
+            addCriterion("is_pay <=", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayLike(String value) {
+            addCriterion("is_pay like", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayNotLike(String value) {
+            addCriterion("is_pay not like", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayIn(List<String> values) {
+            addCriterion("is_pay in", values, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayNotIn(List<String> values) {
+            addCriterion("is_pay not in", values, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayBetween(String value1, String value2) {
+            addCriterion("is_pay between", value1, value2, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayNotBetween(String value1, String value2) {
+            addCriterion("is_pay not between", value1, value2, "isPay");
+            return (Criteria) this;
+        }
+
         public Criteria andApprovalStatusIsNull() {
             addCriterion("approval_status is null");
             return (Criteria) this;

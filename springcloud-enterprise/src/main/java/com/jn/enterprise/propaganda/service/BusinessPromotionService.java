@@ -87,4 +87,11 @@ public interface BusinessPromotionService {
      * @return
      */
     String createBill(String orderNum,String loginAccount);
+
+    /**
+     * 提交审核
+     * @param propagandaId 宣传id
+     * @param loginAccount 登录用户账号
+     */
+    void submitAudit(String propagandaId,String loginAccount);
 }

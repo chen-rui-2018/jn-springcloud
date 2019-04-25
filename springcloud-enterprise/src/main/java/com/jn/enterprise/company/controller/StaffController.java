@@ -1,6 +1,7 @@
 package com.jn.enterprise.company.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
@@ -50,13 +51,8 @@ public class StaffController extends BaseController {
     @RequestMapping(value = "/getStaffList",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/StaffController/getStaffList")
     public Result<PaginationData<List<StaffListVO>>> getStaffList(@Validated StaffListParam staffListParam){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null){
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(),CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
-        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        Assert.notNull(company, CompanyExceptionEnum.USER_IS_NOT_COMPANY_ADMIN.getMessage());
-        return new Result(staffService.getStaffList(staffListParam, company.getId()));
+        User user = checkUserValid();
+        return new Result(staffService.getStaffList(staffListParam, user.getAccount()));
     }
 
     @ControllerLog(doAction = "员工审核")
@@ -64,13 +60,20 @@ public class StaffController extends BaseController {
     @RequestMapping(value = "/reviewStaff",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/StaffController/reviewStaff")
     public Result<Integer> reviewStaff(@Validated @RequestBody ReviewStaffParam reviewStaffParam){
+        User user = checkUserValid();
+        return new Result(staffService.reviewStaff(reviewStaffParam, user.getAccount()));
+    }
+
+    /**
+     * 判断当前账号是否有效
+     * @return
+     */
+    public User checkUserValid() {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(),CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
+            throw new JnSpringCloudException(CompanyExceptionEnum.NETWORK_ANOMALY);
         }
-        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        Assert.notNull(company, CompanyExceptionEnum.USER_IS_NOT_COMPANY_ADMIN.getMessage());
-        return new Result(staffService.reviewStaff(reviewStaffParam, company, user));
+        return user;
     }
 
 }

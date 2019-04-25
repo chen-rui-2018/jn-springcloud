@@ -5,10 +5,8 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.common.util.StringUtils;
 import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
-import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.ServiceRecruitEditParam;
 import com.jn.enterprise.company.model.ServiceRecruitParam;
 import com.jn.enterprise.company.model.ServiceRecruitPublishParam;
@@ -20,7 +18,6 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,11 +90,11 @@ public class RecruitController extends BaseController {
     }
 
     @ControllerLog(doAction = "删除招聘信息")
-    @ApiOperation(value = "删除招聘信息（pc-删除招聘）  ", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "删除招聘信息（pc-删除招聘）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/delRecruit",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/RecruitController/delRecruit")
-    public Result<Integer> delRecruit(@Validated @RequestBody @ApiParam(name="recruitId", value = "招聘ID", required = true) String recruitId){
-        Assert.notNull(recruitId,RecruitExceptionEnum.RECRUIT_ID_IS_NULL.getMessage());
+    public Result<Integer> delRecruit(String recruitId){
+        Assert.notNull(recruitId, CompanyExceptionEnum.PARAM_IS_NULL.getMessage());
         User user = checkUserValid();
 
         // 园区管理员才有删除权限

@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     <id column="id_" jdbcType="VARCHAR" property="id" />
-    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_id_" jdbcType="VARCHAR" property="orgId" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
     <result column="advisor_name" jdbcType="VARCHAR" property="advisorName" />
@@ -91,7 +91,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id_, org_id, org_name, advisor_account, advisor_name, business_area, avatar, position, 
+    id_, org_id_, org_name, advisor_account, advisor_name, business_area, avatar, position, 
     is_certification, phone, contact_email, card_type, card_number, education, graduated_school, 
     personal_profile, working_years, practice_qualification, good_at_business, transaction_num, 
     page_views, is_have_subsidy, approval_status, approval_desc, created_time, creator_account, 
@@ -128,7 +128,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
-    insert into tb_service_advisor (id_, org_id, org_name, 
+    insert into tb_service_advisor (id_, org_id_, org_name, 
       advisor_account, advisor_name, business_area, 
       avatar, position, is_certification, 
       phone, contact_email, card_type, 
@@ -156,7 +156,7 @@
         id_,
       </if>
       <if test="orgId != null">
-        org_id,
+        org_id_,
       </if>
       <if test="orgName != null">
         org_name,
@@ -343,7 +343,7 @@
         id_ = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.orgId != null">
-        org_id = #{record.orgId,jdbcType=VARCHAR},
+        org_id_ = #{record.orgId,jdbcType=VARCHAR},
       </if>
       <if test="record.orgName != null">
         org_name = #{record.orgName,jdbcType=VARCHAR},
@@ -434,7 +434,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_service_advisor
     set id_ = #{record.id,jdbcType=VARCHAR},
-      org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_id_ = #{record.orgId,jdbcType=VARCHAR},
       org_name = #{record.orgName,jdbcType=VARCHAR},
       advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{record.advisorName,jdbcType=VARCHAR},
@@ -470,7 +470,7 @@
     update tb_service_advisor
     <set>
       <if test="orgId != null">
-        org_id = #{orgId,jdbcType=VARCHAR},
+        org_id_ = #{orgId,jdbcType=VARCHAR},
       </if>
       <if test="orgName != null">
         org_name = #{orgName,jdbcType=VARCHAR},
@@ -558,7 +558,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     update tb_service_advisor
-    set org_id = #{orgId,jdbcType=VARCHAR},
+    set org_id_ = #{orgId,jdbcType=VARCHAR},
       org_name = #{orgName,jdbcType=VARCHAR},
       advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{advisorName,jdbcType=VARCHAR},

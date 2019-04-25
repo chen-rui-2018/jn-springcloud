@@ -127,6 +127,25 @@ public interface DataUploadService {
     int saveCompanyFormData(ModelDataVO data,User user);
 
 
+    /**
+     * 企业填报数据保存为草稿
+     * @param data
+     * @param user
+     * @return
+     */
+    int saveTaskDataAsDraft(ModelDataVO data,User user);
+
+    /**
+     * 企业填报数据保存为草稿
+     * @param data
+     * @param user
+     * @return
+     */
+    int saveCompanyFormDataAsDraft(ModelDataVO data,User user);
+
+
+
+
 
     /**园区、企业的数据上报统计接口功能*/
 

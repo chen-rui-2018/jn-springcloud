@@ -145,4 +145,8 @@ public class DataUploadConstants {
      */
     public final static String WARNING_BY_SMSTEXT="0";
 
+    /**
+     *
+     */
+    public final static String  REQUIRED="1";
 }

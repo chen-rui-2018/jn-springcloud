@@ -157,13 +157,11 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                     continue;
                 }
 
-
                 //固化模板
                 boolean result = createHistoryModel(modleBean,taskBatch);
                 if(result){
                     continue;
                 }
-
 
                 //企业任务
                 if(modleBean.getModelType().toString().equals(DataUploadConstants.COMPANY_TYPE) && StringUtils.isNotBlank(modleBean.getGroupId())){
@@ -175,7 +173,9 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
                 }else{
                 //园区任务
+
                     createConcretTaskForGarden(modleBean,taskBatch,formTime,deadLine);
+
                 }
                 //记录日志
                 createLog(modleBean.getModelId(),formTime);
@@ -277,6 +277,13 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
      * @param deadLine
      */
     private void createConcretTaskForGarden(TbDataReportingModel modleBean, String taskBatch,String formTime,Date deadLine){
+
+        TbDataReportingModelTabCriteria exam = new TbDataReportingModelTabCriteria();
+        exam.or().andModelIdEqualTo(modleBean.getModelId()).andStatusEqualTo(new Byte(DataUploadConstants.VALID));
+        List<TbDataReportingModelTab>  tabList = modelTabMapper.selectByExample(exam);
+
+
+        //创建园区任务
         TbDataReportingTask taskBean= new TbDataReportingTask();
         Date creatTime = new Date();
         String id = UUID.randomUUID().toString().replaceAll("-","");
@@ -293,6 +300,67 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
         taskBean.setRecordStatus(new Byte(DataUploadConstants.VALID));
         taskBean.setFillInFormDeadline(deadLine);
         taskMapper.insertSelective(taskBean);
+
+        //创建园区任务的填报权限
+
+        if(tabList !=null && tabList.size()>0){
+
+            for(TbDataReportingModelTab tab : tabList){
+
+                TbDataReportingModelStructCriteria structExam = new TbDataReportingModelStructCriteria();
+                structExam.or().andModelIdEqualTo(modleBean.getModelId()).andTabIdEqualTo(tab.getTabId());
+                List<TbDataReportingModelStruct> structs = modelStructMapper.selectByExample(structExam);
+                List<String> targetStr = new ArrayList<>();
+                if(structs ==null || structs.size()<0){
+                    continue;
+                }
+
+                for(TbDataReportingModelStruct structsBean : structs){
+                    targetStr.add(structsBean.getTargetId());
+                }
+
+                TbDataReportingTargetCriteria tgExamp = new TbDataReportingTargetCriteria();
+                tgExamp.or().andTargetIdIn(targetStr).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
+                        .andDepartmentIdIsNotNull();
+                List<TbDataReportingTarget> tglist = targetMapper.selectByExample(tgExamp);
+
+                Map<String,String> department  =new HashMap<>();
+
+                if(tglist ==null || tglist.size()<0){
+                    continue;
+                }
+
+                List<TbDataReportingGardenFiller> fillerList = new ArrayList<>();
+                TbDataReportingGardenFiller fillerBean ;
+                for(TbDataReportingTarget targetBean : tglist){
+                    if(department.containsKey(targetBean.getDepartmentId())){
+                        continue;
+                    }
+                    //用于存储部门信息,获取唯一的部门
+                    department.put(targetBean.getDepartmentId(),targetBean.getDepartmentName());
+
+                    //当前园区任务的某个tab哪些部门可以填报
+                    fillerBean = new TbDataReportingGardenFiller();
+                    fillerBean.setFillId(id);
+                    fillerBean.setDepartmentId(targetBean.getDepartmentId());
+                    fillerBean.setDepartmentId(targetBean.getDepartmentName());
+                    fillerBean.setTabId(tab.getTabId());
+                    fillerBean.setStatus(new Byte(DataUploadConstants.NOT_FILL));
+                    fillerBean.setRecordStatus(new Byte(DataUploadConstants.VALID));
+                    fillerList.add(fillerBean);
+                }
+
+                if(fillerList == null || fillerList.size()<0){
+                    continue;
+                }
+
+                targetDao.saveFillerList(fillerList);
+            }
+
+            // todo 任务推送
+        }
+
+
     }
 
 

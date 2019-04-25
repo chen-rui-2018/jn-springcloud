@@ -76,26 +76,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        data
+                        advisor
                     </contexts>
                     <tableNames>
-                        tb_data_reporting_create_task_log,
-                        tb_data_reporting_target,
-                        tb_data_reporting_garden_linker,
-                        tb_data_reporting_group_company,
-                        tb_data_reporting_group_struct,
-                        tb_data_reporting_model,
-                        tb_data_reporting_task_data,
-                        tb_data_reporting_model_struct,
-                        tb_data_reporting_model_tab,
-                        tb_data_reporting_target_group,
-                        tb_data_reporting_task,
-                        tb_data_reporting_snapshot_model,
-                        tb_data_reporting_snapshot_model_struct,
-                        tb_data_reporting_snapshot_model_tab,
-                        tb_data_reporting_snapshot_target_group,
-                        tb_data_reporting_snapshot_target,
-                        tb_data_reporting_garden_filler
+                        tb_service_advisor
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

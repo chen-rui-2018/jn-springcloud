@@ -73,7 +73,7 @@ export default new Router({
       path: '/userinfo',
       component: resolve => require(['@/views/home/userinfo'],resolve),
       name:'user',
-      meta: {title: '用户中心1'},
+      meta: {title: '用户中心'},
       
     //   children:[
     //     {
@@ -262,5 +262,87 @@ export default new Router({
       meta: {title: '金融机构详情'},
       name:'finaInsDetail'
     },
+    {
+      path: '/talentsService',
+      component: resolve => require(['@/views/talentsService/talentsService'],resolve),
+      meta: {title: '人才服务首页'},
+      name:'talentsService'
+    },
+    {
+      path: '/talentPlatform',
+      component: resolve => require(['@/views/talentsService/talentPlatform'],resolve),
+      meta: {title: '人才服务申报平台'},
+      name:'talentPlatform'
+    },
+   /*  {
+      path: '/familiarProblem',
+      component: resolve => require(['@/views/talentsService/familiarProblem'],resolve),
+      meta: {title: '常见问题列表'},
+      name:'familiarProblem'
+    }, */
+  /*   {
+      path: '/familiarProblemDetail',
+      component: resolve => require(['@/views/talentsService/familiarProblemDetail'],resolve),
+      meta: {title: '常见问题详情'},
+      name:'familiarProblemDetail'
+    }, */
+    {
+      path: '/talentsServiceDetail',
+      component: resolve => require(['@/views/talentsService/talentsServiceDetail'],resolve),
+      meta: {title: '人才服务详情'},
+      name:'talentsServiceDetail'
+    },
+    {
+      path: '/home',
+      component: resolve => require(['@/views/home'],resolve),
+      meta: {title: '用户中心'},  
+      name:'home',
+      redirect:{name:'userCenter'},
+      children:[
+        {
+          path:'/servicemarket/product/userCenter',
+          name:'userCenter',
+          meta: {title: '首页'},  
+          component:resolve => require(['@/views/home/userCenter'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryProduct',
+        name:'ordinaryProduct',
+        meta: {title: '常规服务产品'},  
+        component:resolve => require(['@/views/home/productService/ordinaryProduct'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/productPutaway',
+        name:'productPutaway',
+        meta: {title: '常规产品上架'},
+        component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryproductDetail',
+        name:'ordinaryproductDetail',
+        meta: {title: '常规产品详情'},
+        component:resolve => require(['@/views/home/productService/ordinaryproductDetail'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/specialproduct',
+        name:'specialproduct',
+        meta: {title: '特色服务产品管理'},
+        component:resolve => require(['@/views/home/productService/specialproduct'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/addScience',
+        name:'addScience',
+        meta: {title: '新增特色产品'},
+        component:resolve => require(['@/views/home/productService/addScience'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/myApply',
+        name:'myApply',
+        meta: {title: '我的申请'},
+        component:resolve => require(['@/views/home/productService/myApply'],resolve)
+        }
+      ]
+    }
+
   ]
 })

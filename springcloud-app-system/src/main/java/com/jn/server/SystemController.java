@@ -6,6 +6,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysStatusEnums;

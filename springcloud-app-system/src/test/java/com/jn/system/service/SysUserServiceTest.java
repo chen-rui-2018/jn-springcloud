@@ -2,6 +2,7 @@ package com.jn.system.service;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.model.SysDepartmentPost;
@@ -73,6 +74,14 @@ public class SysUserServiceTest {
     public void addSysUserTest() {
         try {
             sysUserService.addSysUser(sysUser, user);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
+    }
+    @Test
+    public void Test() {
+        try {
+            System.out.println(EncryptUtil.encryptSha256("123456"));
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }

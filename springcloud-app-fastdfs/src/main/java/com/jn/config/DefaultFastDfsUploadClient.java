@@ -48,7 +48,7 @@ public class DefaultFastDfsUploadClient implements FastDfsUploadClient{
 
     @Override
     public String uploadFile(MultipartFile file, User user,String fileGroupId) throws IOException {
-        if(StringUtils.isNotBlank(fileGroupId)){
+        if(StringUtils.isEmpty(fileGroupId)){
             SysDictInvoke sysDictInvoke=new SysDictInvoke();
             //数据字典模块编码
             sysDictInvoke.setModuleCode(FastDfsSysFileEnum.VISITOR_UPLOAD_MODULE_CODE.getCode());

@@ -51,7 +51,6 @@ public class UploadController {
     public Result<String> uploadByLogin(@RequestParam("file") MultipartFile file,@RequestParam("fileGroupId") String fileGroupId) throws IOException{
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(file,"文件不能为空");
-        Assert.notNull(fileGroupId,"文件组id不能为空");
         String data=fastDfsUploadClient.uploadFile(file,user,fileGroupId);
         return new Result<>(data);
     }

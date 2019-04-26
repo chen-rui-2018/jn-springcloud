@@ -1,8 +1,13 @@
 package com.jn.oa;
 
 import com.google.zxing.WriterException;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.zxing.QRCodeUtils;
+import com.jn.oa.common.enums.OaExceptionEnums;
+import com.jn.oa.meeting.enums.MeetingQRCodeFileEnums;
+import com.jn.system.api.SystemClient;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.upload.api.UploadClient;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;

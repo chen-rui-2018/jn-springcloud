@@ -24,31 +24,31 @@
         tt.evaluationNumber,  <!--评价次数-->
         (select count(*)
          from tb_service_product ta
-         where  ta.record_status = '1' and ta.status = '1' and  ta.product_id in
-               (select t6.product_id from tb_service_and_advisor t6 where t6.advisor_account = #{advisorAccount})
+         where  ta.record_status = '1' and ta.status = '1' and  ta.product_id_ in
+               (select t6.product_id_ from tb_service_and_advisor t6 where t6.advisor_account = #{advisorAccount})
         ) as  "serviceTotal"   <!--全部服务数量-->
         , (select count(*)
          from tb_service_product tb
-         where   tb.record_status = '1' and tb.status = '1' and  tb.product_type ='0' and  tb.product_id in
-               (select t7.product_id from tb_service_and_advisor t7 where t7.advisor_account = #{advisorAccount})
+         where   tb.record_status = '1' and tb.status = '1' and  tb.product_type ='0' and  tb.product_id_ in
+               (select t7.product_id_ from tb_service_and_advisor t7 where t7.advisor_account = #{advisorAccount})
         ) as  "commonTotal"  <!--常规产品数量-->
         ,(select count(*)
          from tb_service_product tc
-         where  tc.record_status = '1' and tc.status = '1' and  tc.product_type ='1' and  tc.product_id in
-               (select t8.product_id from tb_service_and_advisor t8 where t8.advisor_account = #{advisorAccount})
+         where  tc.record_status = '1' and tc.status = '1' and  tc.product_type ='1' and  tc.product_id_ in
+               (select t8.product_id_ from tb_service_and_advisor t8 where t8.advisor_account = #{advisorAccount})
         ) as  "featureTotal" <!--特色产品数量-->
         ,(select count(*) from (
           select
          Round(IFNULL(AVG(ts.`attitude_score`),0),1) AS "attitudeScore"
          from tb_service_product tp
-          left join  tb_service_rating ts on ts.product_id = tp.product_id
-         where  tp.record_status = '1' and tp.status = '1' and  tp.product_id in
-               (select t9.product_id from tb_service_and_advisor t9 where t9.advisor_account =  #{advisorAccount})
-         group by tp.product_id,ts.product_id
+          left join  tb_service_rating ts on ts.product_id_ = tp.product_id_
+         where  tp.record_status = '1' and tp.status = '1' and  tp.product_id_ in
+               (select t9.product_id_ from tb_service_and_advisor t9 where t9.advisor_account =  #{advisorAccount})
+         group by tp.product_id_,ts.product_id_
         )tts  where tts.attitudeScore = 5)as  "praiseTotal" <!--五分产品数量-->
         from (
         select
-        t1.product_id as "productId",
+        t1.product_id_ as "productId",
         t1.product_name as "productName",
         t1.serial_number as "serialNumber",
         t1.product_type as "productType",
@@ -58,19 +58,19 @@
         t1.picture_url as "pictureUrl",
         t2.org_name as "orgName",
         (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
-        select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = t1.product_id
+        select advisor_account from tb_service_and_advisor tsa where  tsa.product_id_ = t1.product_id_
         )) as "advisorName",
-        count(t4.product_id) as "transactionsNumber",
-        count(t5.product_id) as "evaluationNumber",
+        count(t4.product_id_) as "transactionsNumber",
+        count(t5.product_id_) as "evaluationNumber",
         IFNULL(AVG(t5.`attitude_score`),0) AS "attitudeScore"
         from tb_service_product t1
-        left join  tb_service_org t2 on  t2.org_id= t1.org_id
-        left join  tb_service_details t3 on t1.product_id = t3.product_id
-        left join  tb_service_require t4 on t1.product_id = t4.product_id
-        left join  tb_service_rating t5 on t5.product_id = t1.product_id
+        left join  tb_service_org t2 on  t2.org_id_= t1.org_id_
+        left join  tb_service_details t3 on t1.product_id_ = t3.product_id_
+        left join  tb_service_require t4 on t1.product_id_ = t4.product_id_
+        left join  tb_service_rating t5 on t5.product_id_ = t1.product_id_
         where  t1.record_status = '1' and t1.status = '1'
-        and  t1.product_id in (select t6.product_id from tb_service_and_advisor t6 where t6.advisor_account =  #{advisorAccount})
-        group by t1.product_id,t4.product_id,t5.product_id
+        and  t1.product_id_ in (select t6.product_id_ from tb_service_and_advisor t6 where t6.advisor_account =  #{advisorAccount})
+        group by t1.product_id_,t4.product_id_,t5.product_id_
         )tt where 1=1
         <if test ="productType != null and productType!=''">
             and tt.productType = #{productType}

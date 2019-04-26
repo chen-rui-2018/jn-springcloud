@@ -236,8 +236,8 @@
 
     <!--根据业务领域/产品查询评价统计数据-->
     <select id="getProductRatingNum" resultType="java.lang.String" parameterType="com.jn.enterprise.servicemarket.org.vo.BusinessStatisticalParam">
-        SELECT COUNT(1) FROM tb_service_rating r WHERE r.product_id IN (
-		    SELECT t.product_id FROM tb_service_product t WHERE  t.status = '1' AND t.record_status = '1'
+        SELECT COUNT(1) FROM tb_service_rating r WHERE r.product_id_ IN (
+		    SELECT t.product_id_ FROM tb_service_product t WHERE  t.status = '1' AND t.record_status = '1'
             <if test="productId != null and productId != ''">
                 and t. template_id= #{productId}
             </if>

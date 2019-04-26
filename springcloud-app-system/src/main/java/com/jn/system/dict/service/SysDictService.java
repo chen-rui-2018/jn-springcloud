@@ -70,4 +70,12 @@ public interface SysDictService {
      * @return
      */
     List<TbSysDict> sortSearch(SysDictInvoke sysDictInvoke);
+
+
+    /**
+     * 根据条件查询数据字典的值
+     * @param sysDictInvoke
+     * @return
+     */
+    String selectDictValueByCondition(SysDictInvoke sysDictInvoke);
 }

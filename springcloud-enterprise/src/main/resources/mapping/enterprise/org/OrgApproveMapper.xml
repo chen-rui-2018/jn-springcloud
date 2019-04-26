@@ -4,7 +4,7 @@
     <select id="getOrgApplyDetailById" parameterType="java.lang.String"
             resultType="com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo">
             SELECT
-              org.org_id AS "orgId",
+              org.org_id_ AS "orgId",
               org.org_name AS "orgName",
               org.org_code AS "orgCode",
               date_format(org.org_register_time,'%Y-%m-%d') AS "orgRegisterTime",
@@ -26,10 +26,10 @@
             FROM
               tb_service_org org
               LEFT JOIN tb_service_org_element ele
-                ON org.org_id = ele.org_id
+                ON org.org_id_ = ele.org_id_
               LEFT JOIN tb_service_org_info info
-                ON org.org_id = info.org_id
-            where org.org_id = #{orgId}
+                ON org.org_id_ = info.org_id_
+            where org.org_id_ = #{orgId}
             LIMIT 1
     </select>
 

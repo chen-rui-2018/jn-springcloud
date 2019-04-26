@@ -46,7 +46,7 @@ public class SpPowerPortalController extends BaseController {
     })
     public Result<List<SpDictDepartModel>> departList(String name){
         List<SpDictDepartModel> spDictDepartModelList = spPowerPortalService.departList(name);
-        return new Result<List<SpDictDepartModel>>(spDictDepartModelList);
+        return new Result<>(spDictDepartModelList);
     }
 
     @ControllerLog(doAction = "权力清单列表")
@@ -78,7 +78,7 @@ public class SpPowerPortalController extends BaseController {
     public Result<List<SpPowerDetailVo>> get(String id){
         Assert.notNull(id,"权力ID不能为空");
         List<SpPowerDetailVo> spPowerDetailVoList = spPowerPortalService.get(id);
-        return new Result<List<SpPowerDetailVo>>(spPowerDetailVoList);
+        return new Result<>(spPowerDetailVoList);
     }
 
     @ControllerLog(doAction = "业务明细")
@@ -90,7 +90,7 @@ public class SpPowerPortalController extends BaseController {
     public Result<SpPowerBusiDetailVo> getBusi(String id){
         Assert.notNull(id,"业务ID不能为空");
         SpPowerBusiDetailVo spPowerBusiDetailVo = spPowerPortalService.getBusi(id);
-        return new Result<SpPowerBusiDetailVo>(spPowerBusiDetailVo);
+        return new Result<>(spPowerBusiDetailVo);
     }
 
 
@@ -99,7 +99,7 @@ public class SpPowerPortalController extends BaseController {
     @RequestMapping(value = "/SpAdvertising",method = RequestMethod.GET)
     public Result<List<SpAdModel>> getAdvertising(){
         List<SpAdModel> spAdModelList = spPowerPortalService.getAdvertising();
-        return new Result<List<SpAdModel>>(spAdModelList);
+        return new Result<>(spAdModelList);
     }
 
     @ControllerLog(doAction = "获取在线受理地址")

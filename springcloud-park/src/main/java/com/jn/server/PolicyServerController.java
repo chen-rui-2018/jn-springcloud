@@ -33,7 +33,6 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api/policy")
 public class PolicyServerController extends BaseController implements PolicyCenterClient {
     /**
      * 日志组件
@@ -44,8 +43,6 @@ public class PolicyServerController extends BaseController implements PolicyCent
     private PolicyCenterService policyCenterService;
 
     @ControllerLog(doAction = "获取政策中心首页列表")
-    @RequestMapping(value = "/getPolicyList")
-    @ApiOperation(value = "获取政策中心首页列表", notes = "获取政策中心首页列表")
     @Override
     public Result<PaginationData<List<PolicyCenterHomeShow>>> getPolicyList(@RequestBody @Validated PolicyCenterHomeParam policyCenterHomeParam) {
         PaginationData policyCenterList = policyCenterService.getPolicyCenterList(policyCenterHomeParam);

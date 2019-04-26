@@ -36,6 +36,9 @@ public class UserInfoParam implements Serializable {
     @ApiModelProperty(value = "电话号码",example = "110")
     private String phone;
 
+    @ApiModelProperty(value = "出生年月yyyy-mm-dd", example = "2019-01-01")
+    private String birthday;
+
     @ApiModelProperty(value = "性别[0女1男]",required = true,example = "1")
     @NotNull(message = "性别不能为空")
     @Pattern(regexp="^[01]$",message="{sex:'性别只允许为0,1'}")
@@ -49,6 +52,14 @@ public class UserInfoParam implements Serializable {
 
     @ApiModelProperty(value = "职业ID[数组],传“用户标签-获取用户字典表 tagType=1的ID”",example = "['101','102']")
     private String[] jobs;
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
 
     public String getNickName() {
         return nickName;

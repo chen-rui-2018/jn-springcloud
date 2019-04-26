@@ -62,19 +62,19 @@ public class DataUploadConstants {
     /**
      * 上月填报值
      */
-    public final static Integer LAST_MONTH=0;
+    public final static String LAST_MONTH="0";
     /**
      * 上年同期值
      */
-    public final static Integer THIS_MONTH_LAST_YEAR=1;
+    public final static String THIS_MONTH_LAST_YEAR="1";
     /**
      * 上月上年同期值
      */
-    public final static Integer LAST_MONTH_LAST_YEAR=2;
+    public final static String LAST_MONTH_LAST_YEAR="2";
     /**
      *增幅
      */
-    public final static Integer AMPLIFICATION=3;
+    public final static String AMPLIFICATION="3";
     /**
      * tab列类型值的分割符号
      */
@@ -144,5 +144,20 @@ public class DataUploadConstants {
      * 短信预警方式
      */
     public final static String WARNING_BY_SMSTEXT="0";
+
+    /**
+     *是否必填
+     */
+    public final static String  REQUIRED="1";
+
+    /**
+     *模板状态
+     */
+    public final static String  MODEL_STATUS_VALID="0";
+
+    /**
+     * 是否为科技园模板
+     */
+    public final static String  IS_SCIENT_MODEL="1";
 
 }

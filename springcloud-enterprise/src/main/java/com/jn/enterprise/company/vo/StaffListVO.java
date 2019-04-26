@@ -36,6 +36,7 @@ public class StaffListVO implements Serializable {
     private String sex;
     @ApiModelProperty(value = "角色名称")
     private String roleName;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "生日")
     private Date birthday;
     @ApiModelProperty(value = "入驻日期")

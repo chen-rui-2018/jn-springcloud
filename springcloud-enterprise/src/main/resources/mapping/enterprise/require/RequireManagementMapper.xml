@@ -5,11 +5,11 @@
     <select id="getRequireOtherList" resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
         SELECT
             sr.`req_num` AS "reqNum"			                        <!--需求单号-->
-            ,sr.`org_id` AS "orgId"				                        <!--机构id-->
+            ,sr.`org_id_` AS "orgId"				                        <!--机构id-->
             ,sr.`org_name`AS "orgName"			                        <!--机构名称-->
             ,sr.`business_id` AS "businessId"		                    <!--领域id-->
             ,sr.`business_area` AS "businessArea"		                <!--领域名称-->
-            ,sr.`product_id` AS "productId" 		                    <!--产品id-->
+            ,sr.`product_id_` AS "productId" 		                    <!--产品id-->
             ,sr.`product_name` AS "productName"		                    <!--产品名称-->
             ,sr.`advisor_account` AS "advisorAccount"	                <!--顾问账号-->
             ,sr.`advisor_name` AS "advisorName"		                    <!--顾问姓名-->
@@ -31,10 +31,10 @@
         and sr.record_status='1'
         AND sr.issue_account=#{account}           <!--发布人  对他人的需求-->
         <if test="requireOtherParam.intentProduct!=null and requireOtherParam.intentProduct!=''">
-            and (sr.product_id like CONCAT('%', #{requireOtherParam.intentProduct}, '%') or sr.product_name like CONCAT('%', #{requireOtherParam.intentProduct}, '%'))
+            and (sr.product_id_ like CONCAT('%', #{requireOtherParam.intentProduct}, '%') or sr.product_name like CONCAT('%', #{requireOtherParam.intentProduct}, '%'))
         </if>
         <if test="requireOtherParam.intentOrg!=null and requireOtherParam.intentOrg!=''">
-            and (sr.org_id like CONCAT('%', #{requireOtherParam.intentOrg}, '%') or sr.org_name like CONCAT('%', #{requireOtherParam.intentOrg}, '%'))
+            and (sr.org_id_ like CONCAT('%', #{requireOtherParam.intentOrg}, '%') or sr.org_name like CONCAT('%', #{requireOtherParam.intentOrg}, '%'))
         </if>
         <if test="requireOtherParam.handleResult!=null and requireOtherParam.handleResult!=''">
             and sr.handle_result=#{requireOtherParam.handleResult}
@@ -46,11 +46,11 @@
     <select id="getRequireReceivedList" resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
         SELECT
         sr.`req_num` AS "reqNum"			                          <!--需求单号-->
-        ,sr.`org_id` AS "orgId"				                          <!--机构id-->
+        ,sr.`org_id_` AS "orgId"				                          <!--机构id-->
         ,sr.`org_name`AS "orgName"			                          <!--机构名称-->
         ,sr.`business_id` AS "businessId"		                      <!--领域id-->
         ,sr.`business_area` AS "businessArea"		                  <!--领域名称-->
-        ,sr.`product_id` AS "productId" 		                      <!--产品id-->
+        ,sr.`product_id_` AS "productId" 		                      <!--产品id-->
         ,sr.`product_name` AS "productName"		                      <!--产品名称-->
         ,sr.`advisor_account` AS "advisorAccount"	                  <!--顾问账号-->
         ,sr.`advisor_name` AS "advisorName"		                      <!--顾问姓名-->
@@ -70,7 +70,7 @@
         FROM tb_service_require sr
         <if test="orgId==null or orgId==''">          <!--顾问账号  我收到的需求-->
             left join tb_service_and_advisor tsa
-            on sr.product_id=tsa.product_id
+            on sr.product_id_=tsa.product_id_
         </if>
         WHERE 1=1
         and sr.record_status='1'
@@ -78,13 +78,13 @@
             AND tsa.advisor_account=#{account}
         </if>
         <if test="orgId!=null and orgId!=''">          <!--机构账号  我收到的需求 -->
-          and sr.product_id in
+          and sr.product_id_ in
           (
             select
-              sp.product_id
+              sp.product_id_
             from tb_service_product sp
             where 1=1
-            and sp.org_id=#{orgId}
+            and sp.org_id_=#{orgId}
             and sp.record_status='1'                  <!--数据状态为有效-->
             and sp.status='1'                         <!--审核状态为有效-->
           )
@@ -92,7 +92,7 @@
           and sr.advisor_name is null
         </if>
         <if test="requireReceivedParam.intentProduct!=null and requireReceivedParam.intentProduct!=''"> <!--意向产品-->
-            and (sr.product_id like CONCAT('%', #{requireReceivedParam.intentProduct}, '%') or sr.product_name like CONCAT('%', #{requireReceivedParam.intentProduct}, '%'))
+            and (sr.product_id_ like CONCAT('%', #{requireReceivedParam.intentProduct}, '%') or sr.product_name like CONCAT('%', #{requireReceivedParam.intentProduct}, '%'))
         </if>
         <if test="requireReceivedParam.handleResult!=null and requireReceivedParam.handleResult!=''">   <!--对接结果-->
             and sr.handle_result=#{requireReceivedParam.handleResult}
@@ -110,12 +110,12 @@
         sr.req_num AS "reqNum"					                  <!--需求单号-->
         ,sr.`business_id` AS "businessId"				          <!--领域id-->
         ,sr.`business_area` AS "businessArea"			          <!--领域名称-->
-        ,sr.`org_id` AS "orgId"					                  <!--机构id-->
+        ,sr.`org_id_` AS "orgId"					                  <!--机构id-->
         ,sr.`org_name` AS "orgName"					              <!--机构名称-->
         ,IFNULL(sr.`advisor_account`,"未指定") AS"advisorAccount" <!--顾问账号-->
         ,IFNULL(sr.`advisor_name`,"未指定") AS "advisorName"	      <!--顾问名称-->
         ,sr.issue_account AS "issueAccount"				          <!--需求人-->
-        ,sr.`product_id` AS "productId"				              <!--产品id-->
+        ,sr.`product_id_` AS "productId"				              <!--产品id-->
         ,sr.`product_name` AS "productName"				          <!--产品名称-->
         ,CASE sp.product_type
         WHEN '0' THEN "常规服务产品"
@@ -132,7 +132,7 @@
         END AS "handleResult"				 	                  <!--对接结果-->
         FROM tb_service_require sr
         LEFT JOIN tb_service_product sp
-        ON sr.product_id=sp.product_id
+        ON sr.product_id_=sp.product_id_
         where 1=1
         <if test="productType!=null and productType!=''">           <!--产品类型精确搜索-->
             and sp.product_type=#{productType}
@@ -144,7 +144,7 @@
             and sr.business_id=#{businessId}
         </if>
         <if test="serviceOrg!=null and serviceOrg!=''">             <!--服务机构模糊搜索-->
-            and (sr.org_id like  CONCAT('%', #{serviceOrg}, '%') or sr.org_name like CONCAT('%', #{serviceOrg}, '%'))
+            and (sr.org_id_ like  CONCAT('%', #{serviceOrg}, '%') or sr.org_name like CONCAT('%', #{serviceOrg}, '%'))
         </if>
         <if test="requireStartTime!=null and requireStartTime!=''"> <!--需求日期开始时间精确搜索-->
             and date_format(sr.`issue_time`,'%Y%m')&gt;=#{requireStartTime}
@@ -153,7 +153,7 @@
             and date_format(sr.`issue_time`,'%Y%m')&lt;=#{requireEndTime}
         </if>
         <if test="serviceProduct!=null and serviceProduct!=''">     <!--服务产品模糊搜索-->
-            and (sr.product_id like  CONCAT('%', #{serviceProduct}, '%') or sr.product_name like CONCAT('%', #{serviceProduct}, '%'))
+            and (sr.product_id_ like  CONCAT('%', #{serviceProduct}, '%') or sr.product_name like CONCAT('%', #{serviceProduct}, '%'))
         </if>
         ORDER BY sr.`issue_time` DESC
     </select>
@@ -194,7 +194,7 @@
         ,sr.contract_end_page as "contractEndPage"                <!--合同尾页-->
         FROM tb_service_require sr
         LEFT JOIN tb_service_product sp
-        ON sr.product_id=sp.product_id
+        ON sr.product_id_=sp.product_id_
         where 1=1
         and sr.req_num=#{reqNum}
     </select>

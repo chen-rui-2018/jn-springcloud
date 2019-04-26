@@ -62,14 +62,16 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String addServiceProduct(ServiceContent content, String account,String templateId) {
-        //服务产品类型 0 : 常规服务产品 / 1:特色服务产品
-        String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode();
+
+
         //服务产品状态 -1(无效/下架),0(待审核),1(上架/有效/审核通过).2(审核不通过)
         String approvalStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
-        String effectiveStatus = ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode();
+        String status = ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode();
+        // 如果为机构上架(新增)产品需要进行审批,
+        if(StringUtils.isNotBlank(content.getOrgId())){
+            status = approvalStatus;
+        }
 
-        // 如果为特色产品则需要进行审批,
-        String status = content.getProductType().equals(featureType) ?approvalStatus:effectiveStatus;
         //数据记录状态 1 有效 ---- 0 无效/删除
         Byte recordStatus =  new Byte(ProductConstantEnum.RECORD_STATUS_EFFECTIVE.getCode());
 
@@ -213,7 +215,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void productShelf(ProductShelfOperation operation , String account) {
-        productDao.productShelf(operation.getProductId(),operation.getStatus(),account);
+        //如果进行上架操作,则需要进行审核,修改状态为待审核
+        String productStatus = operation.getStatus();
+        if(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode().equals(productStatus)){
+            productStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
+        }
+        productDao.productShelf(operation.getProductId(),productStatus,account);
     }
 
 

@@ -3,16 +3,13 @@ package com.jn.enterprise.data.entity;
 import java.io.Serializable;
 
 public class TbDataReportingSnapshotModelTab implements Serializable {
-    /*@ApiModelProperty("序列")*/
-    private String id;
-
     /*@ApiModelProperty("")*/
     private String taskBatch;
 
-    /*@ApiModelProperty("模板ID")*/
+    /*@ApiModelProperty("快照模板ID")*/
     private String modelId;
 
-    /*@ApiModelProperty("tab_id")*/
+    /*@ApiModelProperty("快照tab_id")*/
     private String tabId;
 
     /*@ApiModelProperty("表名称")*/
@@ -24,24 +21,16 @@ public class TbDataReportingSnapshotModelTab implements Serializable {
     /*@ApiModelProperty("表填报列类型（0：累计值；1：本期值）")*/
     private Byte tabClumnType;
 
-    /*@ApiModelProperty("状态（0：有效；1作废）")*/
+    /*@ApiModelProperty("状态（1：有效；0作废）")*/
     private Byte status;
 
     /*@ApiModelProperty("表生成模式（0:普通模板,1：科技园模板）")*/
     private Byte tabCreateType;
 
     /*@ApiModelProperty("tab表的显示顺序（因为可能会存在一组tab,tab1,tab2）")*/
-    private String order;
+    private String orderNumber;
 
     private static final long serialVersionUID = 1L;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
 
     public String getTaskBatch() {
         return taskBatch;
@@ -107,12 +96,12 @@ public class TbDataReportingSnapshotModelTab implements Serializable {
         this.tabCreateType = tabCreateType;
     }
 
-    public String getOrder() {
-        return order;
+    public String getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrder(String order) {
-        this.order = order == null ? null : order.trim();
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber == null ? null : orderNumber.trim();
     }
 
     @Override
@@ -127,8 +116,7 @@ public class TbDataReportingSnapshotModelTab implements Serializable {
             return false;
         }
         TbDataReportingSnapshotModelTab other = (TbDataReportingSnapshotModelTab) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getTaskBatch() == null ? other.getTaskBatch() == null : this.getTaskBatch().equals(other.getTaskBatch()))
+        return (this.getTaskBatch() == null ? other.getTaskBatch() == null : this.getTaskBatch().equals(other.getTaskBatch()))
             && (this.getModelId() == null ? other.getModelId() == null : this.getModelId().equals(other.getModelId()))
             && (this.getTabId() == null ? other.getTabId() == null : this.getTabId().equals(other.getTabId()))
             && (this.getTabName() == null ? other.getTabName() == null : this.getTabName().equals(other.getTabName()))
@@ -136,14 +124,13 @@ public class TbDataReportingSnapshotModelTab implements Serializable {
             && (this.getTabClumnType() == null ? other.getTabClumnType() == null : this.getTabClumnType().equals(other.getTabClumnType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getTabCreateType() == null ? other.getTabCreateType() == null : this.getTabCreateType().equals(other.getTabCreateType()))
-            && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()));
+            && (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getTaskBatch() == null) ? 0 : getTaskBatch().hashCode());
         result = prime * result + ((getModelId() == null) ? 0 : getModelId().hashCode());
         result = prime * result + ((getTabId() == null) ? 0 : getTabId().hashCode());
@@ -152,7 +139,7 @@ public class TbDataReportingSnapshotModelTab implements Serializable {
         result = prime * result + ((getTabClumnType() == null) ? 0 : getTabClumnType().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getTabCreateType() == null) ? 0 : getTabCreateType().hashCode());
-        result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
+        result = prime * result + ((getOrderNumber() == null) ? 0 : getOrderNumber().hashCode());
         return result;
     }
 
@@ -162,7 +149,6 @@ public class TbDataReportingSnapshotModelTab implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", taskBatch=").append(taskBatch);
         sb.append(", modelId=").append(modelId);
         sb.append(", tabId=").append(tabId);
@@ -171,7 +157,7 @@ public class TbDataReportingSnapshotModelTab implements Serializable {
         sb.append(", tabClumnType=").append(tabClumnType);
         sb.append(", status=").append(status);
         sb.append(", tabCreateType=").append(tabCreateType);
-        sb.append(", order=").append(order);
+        sb.append(", orderNumber=").append(orderNumber);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

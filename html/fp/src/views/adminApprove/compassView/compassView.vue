@@ -1,5 +1,5 @@
 <template>
-  <div class="compass_view">
+  <div class="compass_view" v-loading="loading">
     <div class="approve_content"><!-- 版心 -->
       <!-- 面包屑 -->
       <div class="approve_breadcrumb">
@@ -65,7 +65,8 @@ export default {
       search:"",
       page:1,
       rows:6,
-      total:0
+      total:0,
+      loading:true
     }
   },
   created () {
@@ -112,6 +113,7 @@ export default {
         callback: function(res) {
           // console.log(res);
           if (res.code == "0000") {
+            _this.loading=false
             _this.powerList = res.data.rows;
             _this.total=res.data.total
           }
@@ -140,6 +142,15 @@ export default {
     .approve_content{
       width: 1190px;
       margin: 0 auto;
+    }
+    // 加载动画
+    .el-loading-mask{
+      .el-loading-spinner .path{
+        stroke:#00a041;
+      }
+      .el-loading-spinner{
+        top:30%;
+      }
     }
     // 面包屑
     .approve_breadcrumb{
@@ -185,6 +196,7 @@ export default {
           border-color: #eeeeee;
           span{
             padding: 3px 13px;
+            cursor: pointer;
           }
         }
       }
@@ -304,17 +316,27 @@ export default {
       text-align: center;
       margin:66px 0 78px 0 ;
       .el-pagination.is-background .btn-prev,.el-pagination.is-background .btn-next{
-        border: 1px solid #eee;
-        background-color: #fff;
-      }
-      .el-pagination.is-background .el-pager li{
-        background-color: #fff;
-         border: 1px solid #eee;
-      }
-      .el-pagination.is-background .el-pager li:not(.disabled).active{
-        background-color: #00a041;
-        color: #fff;
-      }
+          border: 1px solid #eee;
+          background-color: #fff;
+        }
+        .el-pagination.is-background .el-pager li{
+          background-color: #fff;
+          border: 1px solid #eee;
+        }
+        .el-pagination.is-background .el-pager li:not(.disabled):hover{
+          color:#00a041;
+        }
+        .el-pagination.is-background .el-pager li:not(.disabled).active{
+          background-color: #00a041;
+          color: #fff;
+        }
+        .el-pagination__sizes .el-input .el-input__inner:hover{
+          border-color: #00a041;
+        }
+        .el-select .el-input__inner:focus{
+          border-color:#00a041;
+        }
+        
     }
   }
 </style>

@@ -4,6 +4,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.oa.common.enums.OaExceptionEnums;
 import com.jn.oa.schedule.enums.ScheduleExceptionEnums;
 import com.jn.oa.schedule.enums.ScheduleRemindEnums;
+import com.jn.oa.schedule.model.Schedule;
 import com.jn.oa.schedule.model.ScheduleEdit;
 import com.jn.oa.schedule.model.ScheduleQuery;
 import com.jn.system.model.User;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -94,25 +96,23 @@ public class ScheduleServiceTest {
         try {
             schedule.setId(scheduleId);
             schedule.setIsRemind(ScheduleRemindEnums.YES.getCode());
-            schedule.setRemindTime(new Date());
+            schedule.setRemindTime(new Date(System.currentTimeMillis() - 120000L));
             scheduleService.addOrUpdate(schedule, false, user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e.getCode(), Matchers.equalTo(ScheduleExceptionEnums.REMIND_METHOD_NOT_EMPTY.getCode()));
         }
 
         //5.测试编辑,定时,正常添加
-        schedule.setAppRemind(ScheduleRemindEnums.YES.getCode());
-        schedule.setPcRemind(ScheduleRemindEnums.YES.getCode());
-        schedule.setWechatRemind(ScheduleRemindEnums.YES.getCode());
-        schedule.setMessageRemind(ScheduleRemindEnums.YES.getCode());
-        schedule.setRemindTime(new Date());
+        String[] remindWay = {"1","2"};
+        schedule.setRemindWay(Arrays.toString(remindWay));
+        schedule.setRemindTime(new Date(System.currentTimeMillis() + 6000L));
         schedule.setStartTime(new Date(System.currentTimeMillis() + 60000L));
         schedule.setEndTime(new Date(System.currentTimeMillis() + 120000L));
         scheduleService.addOrUpdate(schedule, false, user);
     }
 
     @Test
-    public void list(){
+    public void t002_list(){
         ScheduleQuery query = new ScheduleQuery();
         query.setUserAccount(user.getAccount());
         query.setDate(new Date());
@@ -120,6 +120,12 @@ public class ScheduleServiceTest {
         query.setEndTime(new Date(System.currentTimeMillis() + 20000L));
         query.setStartTime(new Date(System.currentTimeMillis() - 20000L));
         scheduleService.list(query);
+    }
+
+    @Test
+    public void t003_getScheduleById(){
+        Schedule schedule = scheduleService.getScheduleById(scheduleId);
+        Assert.assertThat(schedule,Matchers.notNullValue());
     }
 
     @Test

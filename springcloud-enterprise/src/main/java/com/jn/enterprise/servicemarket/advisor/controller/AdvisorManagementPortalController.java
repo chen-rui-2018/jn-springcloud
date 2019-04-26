@@ -10,7 +10,7 @@ import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementPortalPara
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorServiceManagementInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementPortalService;
-import com.jn.enterprise.servicemarket.advisor.vo.AdvisroManagementDetailsVo;
+import com.jn.enterprise.servicemarket.advisor.vo.AdvisorManagementDetailsVo;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,9 +59,9 @@ public class AdvisorManagementPortalController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementPortalController/getAdvisorManagementDetails")
     @ApiOperation(value = "服务顾问详情(后台门户管理)")
     @RequestMapping(value = "/getAdvisorManagementDetails",method = RequestMethod.GET)
-    public Result<AdvisroManagementDetailsVo> getAdvisorManagementDetails(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
+    public Result<AdvisorManagementDetailsVo> getAdvisorManagementDetails(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
-        AdvisroManagementDetailsVo advisorManagementDetails = advisorManagementPortalService.getAdvisorManagementDetails(advisorAccount);
+        AdvisorManagementDetailsVo advisorManagementDetails = advisorManagementPortalService.getAdvisorManagementDetails(advisorAccount);
         return  new Result(advisorManagementDetails);
     }
 

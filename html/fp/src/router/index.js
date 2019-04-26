@@ -31,8 +31,8 @@ export default new Router({
       name:'forgetPsw'
     },
     {
-      path: '/user',
-      component: resolve => require(['@/views/home'],resolve),
+      path: '/userinfo',
+      component: resolve => require(['@/views/home/userinfo'],resolve),
       name:'user',
       meta: {title: '用户中心'},
       
@@ -98,7 +98,7 @@ export default new Router({
       name:'peoDec'
     },
     {
-      path: '/compassView',
+      path: '/sp/power/list',
       component: resolve => require(['@/views/adminApprove/compassView/compassView'],resolve),
       meta: {title: '政策指引'},
       name:'compassView'
@@ -132,6 +132,69 @@ export default new Router({
       component: resolve => require(['@/views/declarationCenter/declarationPlatform'],resolve),
       meta: {title: '申报平台'},
       name:'declarationPlatform'
+    },
+    {
+      path: '/talentsService',
+      component: resolve => require(['@/views/talentsService/talentsService'],resolve),
+      meta: {title: '人才服务首页'},
+      name:'talentsService'
+    },
+    {
+      path: '/talentPlatform',
+      component: resolve => require(['@/views/talentsService/talentPlatform'],resolve),
+      meta: {title: '人才服务申报平台'},
+      name:'talentPlatform'
+    },
+/*     {
+      path: '/familiarProblem',
+      component: resolve => require(['@/views/talentsService/familiarProblem'],resolve),
+      meta: {title: '常见问题列表'},
+      name:'familiarProblem'
+    }, */
+  /*   {
+      path: '/familiarProblemDetail',
+      component: resolve => require(['@/views/talentsService/familiarProblemDetail'],resolve),
+      meta: {title: '常见问题详情'},
+      name:'familiarProblemDetail'
+    }, */
+    {
+      path: '/talentsServiceDetail',
+      component: resolve => require(['@/views/talentsService/talentsServiceDetail'],resolve),
+      meta: {title: '人才服务详情'},
+      name:'talentsServiceDetail'
+    },
+    {
+      path: '/home',
+      component: resolve => require(['@/views/home'],resolve),
+      meta: {title: '用户中心'},  
+      name:'home',
+      redirect:{name:'userCenter'},
+      children:[
+        {
+          path:'/servicemarket/product/userCenter',
+          name:'userCenter',
+          meta: {title: '首页'},  
+          component:resolve => require(['@/views/home/userCenter'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryProduct',
+        name:'ordinaryProduct',
+        meta: {title: '常规服务产品'},  
+        component:resolve => require(['@/views/home/productService/ordinaryProduct'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/productPutaway',
+        name:'productPutaway',
+        meta: {title: '常规产品上架'},
+        component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryproductDetail',
+        name:'ordinaryproductDetail',
+        meta: {title: '常规产品详情'},
+        component:resolve => require(['@/views/home/productService/ordinaryproductDetail'],resolve)
+        }
+      ]
     }
   ]
 })

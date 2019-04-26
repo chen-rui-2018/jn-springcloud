@@ -106,7 +106,7 @@ public class TestController extends BaseController {
     public Result<String> uploadFile() throws IOException {
         File file = new File("D:\\test\\test.png");
         MultipartFile multipartFile = MultipartFileUtil.from(file,null);
-        return uploadClient.uploadFile(multipartFile,Boolean.FALSE);
+        return uploadClient.uploadFile(multipartFile,Boolean.FALSE,null);
     }
 
 

@@ -79,7 +79,7 @@ public class UserInfoServiceImplTest {
         userAffiliateInfo.setAffiliateName("江苏工业园");
 
         //更新用户所属企业信息
-        userCompanyInfo.setAccount(account);
+        userCompanyInfo.setAccountList(new String[]{account});
         userCompanyInfo.setCompanyCode("032222");
         userCompanyInfo.setCompanyName("江苏工业园企业");
 

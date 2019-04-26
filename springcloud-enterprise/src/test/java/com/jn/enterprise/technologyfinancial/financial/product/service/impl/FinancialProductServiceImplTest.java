@@ -213,6 +213,12 @@ public class FinancialProductServiceImplTest {
     @Test
     public void getTechnologyInfoNum() {
         TechnologyInfoNum technologyInfoNum = financialProductService.getTechnologyInfoNum();
+        if(technologyInfoNum!=null){
+            logger.info("科技金融首页投资人数:{}，金融产品数:{}，金融机构数:{}",
+                    technologyInfoNum.getInvestorsNum(),
+                    technologyInfoNum.getFinancialProductNum(),
+                    technologyInfoNum.getFinancialOrgNum());
+        }
         assertThat(technologyInfoNum, anything());
     }
 

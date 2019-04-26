@@ -22,9 +22,7 @@ public class NoticeDetailShow implements Serializable {
     @ApiModelProperty(value="失效时间")
     private String endTime;
     @ApiModelProperty(value="公告内容,页面展示")
-    private String noticeContent;
-    @ApiModelProperty(value="公告详情,用于后台转换")
-    private byte [] noticeDetails;
+    private String noticeDetails;
     @ApiModelProperty(value="发布人名称")
     private String publishName;
     @ApiModelProperty(value="发布时间")
@@ -70,19 +68,11 @@ public class NoticeDetailShow implements Serializable {
         this.endTime = endTime;
     }
 
-    public String getNoticeContent() {
-        return noticeContent;
-    }
-
-    public void setNoticeContent(String noticeContent) {
-        this.noticeContent = noticeContent;
-    }
-
-    public byte[] getNoticeDetails() {
+    public String getNoticeDetails() {
         return noticeDetails;
     }
 
-    public void setNoticeDetails(byte[] noticeDetails) {
+    public void setNoticeDetails(String noticeDetails) {
         this.noticeDetails = noticeDetails;
     }
 

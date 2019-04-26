@@ -3,16 +3,11 @@ package com.jn.enterprise.common.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage;
 import com.jn.enterprise.pd.declaration.service.DeclarationNoticeService;
-import com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListInfo;
-import com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListParam;
 import com.jn.enterprise.technologyfinancial.financial.product.service.FinancialProductService;
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListParam;
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListShow;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
-import com.jn.park.activity.model.Activity;
-import com.jn.park.activity.model.ActivityParment;
+import com.jn.park.activity.model.ActivitySlim;
+import com.jn.park.activity.model.ActivitySlimQuery;
 import com.jn.park.api.ActivityClient;
 import com.jn.park.api.PolicyCenterClient;
 import com.jn.park.api.SpPowerPortalClient;
@@ -22,12 +17,10 @@ import com.jn.park.spPower.model.SpAdModel;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -87,8 +80,8 @@ public class EnterpriseIndexController extends BaseController {
     @ControllerLog(doAction = "活动中心")
     @ApiOperation(value = "活动中心", notes = "活动中心列表")
     @RequestMapping(value = "/getActivityList" ,method = RequestMethod.POST)
-    public Result<PaginationData<List<Activity>>> getActivityList(@Validated ActivityParment activityParment) {
-        return activityClient.getActivityList(activityParment);
+    public Result<PaginationData<List<ActivitySlim>>> getActivityList(@Validated ActivitySlimQuery activitySlimQuery) {
+        return activityClient.getActivityList(activitySlimQuery);
     }
 
     @ControllerLog(doAction = "行政审批")

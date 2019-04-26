@@ -85,8 +85,8 @@ public class WorkPlanRecordController extends BaseController {
     @RequiresPermissions("/oa/workPlanRecord/list")
     @ApiOperation(value = "查看工作记录", notes = "查看工作记录")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result< List<TbOaWorkPlanRecord>> list(@RequestParam("workPlanId") String workPlanId) {
-        List<TbOaWorkPlanRecord> tbOaWorkPlanRecordList = workPlanRecordService.list(workPlanId);
-        return new Result(tbOaWorkPlanRecordList);
+    public Result<List<WorkPlanRecord>> list(@RequestParam("workPlanId") String workPlanId) {
+        List<WorkPlanRecord> workPlanRecordList = workPlanRecordService.list(workPlanId);
+        return new Result(workPlanRecordList);
     }
 }

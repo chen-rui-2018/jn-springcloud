@@ -18,8 +18,17 @@ public class ServiceRecruitSearchParam extends Page implements Serializable {
     private String status;
     private String sortTypes;
     private String whereTypes;
+    private String approvalStatus;
     private Date beginDate;
     private Date endDate;
+
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
 
     public Date getBeginDate() {
         return beginDate;

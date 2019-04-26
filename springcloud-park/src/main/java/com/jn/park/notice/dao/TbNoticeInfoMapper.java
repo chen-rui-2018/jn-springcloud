@@ -10,7 +10,7 @@ public interface TbNoticeInfoMapper {
 
     int deleteByExample(TbNoticeInfoCriteria example);
 
-    int deleteByPrimaryKey(String noticeId);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbNoticeInfo record);
 
@@ -18,7 +18,7 @@ public interface TbNoticeInfoMapper {
 
     List<TbNoticeInfo> selectByExample(TbNoticeInfoCriteria example);
 
-    TbNoticeInfo selectByPrimaryKey(String noticeId);
+    TbNoticeInfo selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbNoticeInfo record, @Param("example") TbNoticeInfoCriteria example);
 

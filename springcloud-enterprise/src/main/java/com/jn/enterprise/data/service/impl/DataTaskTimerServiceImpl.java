@@ -14,6 +14,7 @@ import com.jn.enterprise.data.enums.DataUploadConstants;
 import com.jn.enterprise.data.enums.DataUploadExceptionEnum;
 import com.jn.enterprise.data.model.WarningTaskModel;
 import com.jn.enterprise.data.service.DataTaskTimerService;
+import com.jn.news.vo.EmailVo;
 import com.jn.system.log.annotation.ServiceLog;
 import io.swagger.models.auth.In;
 import org.checkerframework.checker.units.qual.A;
@@ -70,6 +71,8 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
     @Autowired(required = false)
     private TbServiceCompanyMapper tbServiceCompanyMapper;
+    @Autowired(required = false)
+    private TbDataReportingGardenFillerMapper tbDataReportingGardenFillerMapper;
 
     @Autowired(required = false)
     private TbDataReportingGroupCompanyMapper tbDataReportingGroupCompanyMapper;
@@ -78,7 +81,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
     public void createTask() {
         //扫描有效的模板，检测是否到了新建任务的时候
         TbDataReportingModelCriteria modelCri = new TbDataReportingModelCriteria();
-        modelCri.or().andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+        modelCri.or().andRecordStatusEqualTo(new Byte(DataUploadConstants.MODEL_STATUS_VALID));
         List<TbDataReportingModel> modelList = modelMapper.selectByExample(modelCri);
         TbDataReportingGroupCompanyCriteria groupCompanyCriteria =new TbDataReportingGroupCompanyCriteria();
 
@@ -282,7 +285,6 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
         exam.or().andModelIdEqualTo(modleBean.getModelId()).andStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbDataReportingModelTab>  tabList = modelTabMapper.selectByExample(exam);
 
-
         //创建园区任务
         TbDataReportingTask taskBean= new TbDataReportingTask();
         Date creatTime = new Date();
@@ -311,7 +313,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                 structExam.or().andModelIdEqualTo(modleBean.getModelId()).andTabIdEqualTo(tab.getTabId());
                 List<TbDataReportingModelStruct> structs = modelStructMapper.selectByExample(structExam);
                 List<String> targetStr = new ArrayList<>();
-                if(structs ==null || structs.size()<0){
+                if(structs ==null || structs.size()==0){
                     continue;
                 }
 
@@ -326,7 +328,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
                 Map<String,String> department  =new HashMap<>();
 
-                if(tglist ==null || tglist.size()<0){
+                if(tglist ==null || tglist.size()==0){
                     continue;
                 }
 
@@ -343,14 +345,14 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                     fillerBean = new TbDataReportingGardenFiller();
                     fillerBean.setFillId(id);
                     fillerBean.setDepartmentId(targetBean.getDepartmentId());
-                    fillerBean.setDepartmentId(targetBean.getDepartmentName());
+                    fillerBean.setDepartmentName(targetBean.getDepartmentName());
                     fillerBean.setTabId(tab.getTabId());
                     fillerBean.setStatus(new Byte(DataUploadConstants.NOT_FILL));
                     fillerBean.setRecordStatus(new Byte(DataUploadConstants.VALID));
                     fillerList.add(fillerBean);
                 }
 
-                if(fillerList == null || fillerList.size()<0){
+                if(fillerList == null || fillerList.size() ==0){
                     continue;
                 }
 
@@ -582,9 +584,38 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                 for(String menthod :warningBy){
                     //进行提醒
                     if(DataUploadConstants.WARNING_BY_APP.equals(menthod)){
+                        //todo
 
                     }
                     if(DataUploadConstants.WARNING_BY_EMAIL.equals(menthod)){
+
+                        //园区
+                        if(taskBean.getFileType().equals(DataUploadConstants.GARDEN_TYPE)){
+
+                            TbDataReportingGardenFillerCriteria example = new TbDataReportingGardenFillerCriteria();
+                            example.or().andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID)).andFillIdEqualTo(taskBean.getFillId());
+                            List<TbDataReportingGardenFiller> gardenFillers = tbDataReportingGardenFillerMapper.selectByExample(example);
+                            if(gardenFillers !=null && gardenFillers.size() >0){
+                                for(TbDataReportingGardenFiller gardenFiller : gardenFillers){
+                                    //不等于未填报
+                                    if(! gardenFiller.getStatus().toString().equals(DataUploadConstants.FILLED)){
+                                        //对当前的部门进行预警提示
+                                        //获取当前部门预警人的邮箱
+                                        sendEmail();
+                                    }
+                                }
+                            }
+
+                        }else{
+                        //企业
+                            TbServiceCompanyCriteria exp = new  TbServiceCompanyCriteria();
+                            exp.or().andIdEqualTo(taskBean.getFillInFormId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+                            List<TbServiceCompany> list =  tbServiceCompanyMapper.selectByExample(exp);
+                            if(list !=null && list.size()>0){
+                               // phone  = list.get(0).get();
+                            }
+
+                        }
 
                     }
                     if(DataUploadConstants.WARNING_BY_SMSTEXT.equals(menthod)){
@@ -592,14 +623,10 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                         StringBuilder message =new StringBuilder();
                         //园区
                         if(taskBean.getFileType().equals(DataUploadConstants.GARDEN_TYPE)){
-
-                            //
-                            phone ="";
-
+                            //查询电话
 
                         }else{
                         //企业,通过企业ID,查询预警人电话
-
                             TbServiceCompanyCriteria exp = new  TbServiceCompanyCriteria();
                             exp.or().andIdEqualTo(taskBean.getFillInFormId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
                             List<TbServiceCompany> list =  tbServiceCompanyMapper.selectByExample(exp);
@@ -624,6 +651,11 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
         }
     }
 
+    /**
+     * 短信预警
+     * @param phone
+     * @param message
+     */
     private void sendSMS(String phone,String message){
         if(StringUtils.isEmpty(phone)){
             throw new JnSpringCloudException(DataUploadExceptionEnum.USER_PHONE_IS_NOT_EXIST);
@@ -637,5 +669,38 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
         logger.info("短信发送成功：接收号码：{},验证码：{}",phone,message);
         messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
 
+    }
+
+
+
+    /**
+     * 邮件预警
+     */
+    private void sendEmail(){
+        EmailVo emailVo = new EmailVo();
+        emailVo.setEmail("");
+        emailVo.setEmailSubject("[白下智慧园区]数据填报任务提醒");
+        emailVo.setTemplatesName("");
+
+        //对模板数据进行封装
+        Map map = new HashMap();
+        map.put("title", ""); //数据填报任务提醒
+        map.put("time", DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        if (StringUtils.isNotBlank("企业预警人")) {
+            map.put("username", "");
+        } else {
+            map.put("username", "");
+        }
+        map.put("content", ""); //任务名称+账期还有几天逾期
+        emailVo.setTemplatesDataMap(map);
+        emailVo.setTemplateFlag(true);
+
+        //发送邮件
+        boolean sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
+        if (sendStatus) {
+            logger.info("[工作计划] 任务提醒发送成功,workPlanId:{}", "");
+        } else {
+            logger.error("[工作计划] 任务提醒发送失败,workPlanId:{}", "");
+        }
     }
 }

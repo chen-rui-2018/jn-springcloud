@@ -73,10 +73,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        message
+                        connect
                     </contexts>
                     <tableNames>
-                        tb_message_list
+                        tb_service_connect_manage
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

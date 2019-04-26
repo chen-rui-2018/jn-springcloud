@@ -9,6 +9,7 @@ import com.jn.enterprise.company.vo.StaffAuditVO;
 import com.jn.system.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 企业人员Service
@@ -22,51 +23,44 @@ public interface StaffService {
     /**
      * 获取员工列表
      * @param staffListParam 列表查询入参
-     * @param comId 企业ID
      * @return
      */
-    PaginationData getStaffList(StaffListParam staffListParam, String comId);
+    PaginationData getStaffList(StaffListParam staffListParam, String curAccount);
 
     /**
      * 获取同事列表
      * @param staffListParam 列表查询入参
-     * @param comId 企业ID
      * @return
      */
-    PaginationData getColleagueList(StaffListParam staffListParam, String comId);
+    Map<String, Object> getColleagueList(StaffListParam staffListParam, String curAccount);
 
     /**
      * 邀请新成员列表
      * @param staffListParam 列表查询入参
-     * @param comId 企业ID
      * @return
      */
-    PaginationData getInviteStaffList(StaffListParam staffListParam, String comId);
+    PaginationData getInviteStaffList(StaffListParam staffListParam, String curAccount);
 
     /**
      * 邀请员工
      * @param account 受邀请账号
-     * @param company 当前企业
-     * @param user 当前用户
      * @return
      */
-    Integer inviteStaff(String[] account, ServiceCompany company, User user);
+    Integer inviteStaff(String[] account, User user);
 
     /**
      * 再次邀请员工
      * @param staffId 员工ID
      * @return
      */
-    Integer inviteStaffAgain(String staffId);
+    Integer inviteStaffAgain(String staffId, String curAccount);
 
     /**
      * 审核员工申请
      * @param reviewStaffParam 入参
-     * @param company 企业对象
-     * @param user 当前用户
      * @return
      */
-    Integer reviewStaff(ReviewStaffParam reviewStaffParam, ServiceCompany company, User user);
+    Integer reviewStaff(ReviewStaffParam reviewStaffParam, String curAccount);
 
     /**
      * 接受邀请
@@ -84,34 +78,23 @@ public interface StaffService {
 
     /**
      * 获取审核信息
-     * @param account 账号
      * @return
      */
-    List<StaffAuditVO> getAuditStatus(String account);
+    List<StaffAuditVO> getAuditStatus(String curAccount);
 
     /**
      * 批量删除员工
-     * @param accountList 账号列表
-     * @param comId 企业ID
-     * @param curAccount 当前账号
+     * @param accounts 账号列表
      * @return
      */
-    Integer delMoreStaffs(String[] accountList, String comId, String curAccount);
+    Integer delMoreStaffs(String[] accounts, String curAccount);
 
     /**
-     * 设为联系人
+     * 设为/取消联系人
      * @param account 联系人账号
-     * @param comId 企业ID
+     * @param isSet 是否设为联系人
      * @return
      */
-    Integer setContact(String account, String comId);
-
-    /**
-     * 取消联系人
-     * @param account 联系人账号
-     * @param comId 企业ID
-     * @return
-     */
-    Integer cancelContact(String account, String comId);
+    Integer setOrCancelContact(String account, String curAccount, boolean isSet);
 
 }

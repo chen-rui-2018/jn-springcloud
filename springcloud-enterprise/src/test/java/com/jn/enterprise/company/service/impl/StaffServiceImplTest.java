@@ -12,6 +12,8 @@ import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.StaffService;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.system.model.User;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -143,7 +146,7 @@ public class StaffServiceImplTest {
     @Test
     public void getStaffList() {
         try {
-            PaginationData staffList = staffService.getStaffList(staffListParam, company.getId());
+            PaginationData staffList = staffService.getStaffList(staffListParam, user.getAccount());
             List<StaffListVO> dataList = (List<StaffListVO>) staffList.getRows();
             if (dataList != null && !dataList.isEmpty()) {
                 assertThat(dataList.size(), greaterThanOrEqualTo(1));
@@ -163,8 +166,9 @@ public class StaffServiceImplTest {
     @Test
     public void getColleagueList() {
         try {
-            PaginationData staffList = staffService.getColleagueList(colleagueListParam, company.getId());
-            List<StaffListVO> dataList = (List<StaffListVO>) staffList.getRows();
+            Map<String, Object> colleagueList = staffService.getColleagueList(colleagueListParam, user.getAccount());
+            PaginationData paginationData = (PaginationData) colleagueList.get("data");
+            List<StaffListVO> dataList = (List<StaffListVO>) paginationData.getRows();
             if (dataList != null && !dataList.isEmpty()) {
                 assertThat(dataList.size(), greaterThanOrEqualTo(1));
             } else {
@@ -183,7 +187,7 @@ public class StaffServiceImplTest {
     @Test
     public void getInviteStaffList() {
         try {
-            PaginationData staffList = staffService.getInviteStaffList(waitInviteStaffListParam, company.getId());
+            PaginationData staffList = staffService.getInviteStaffList(waitInviteStaffListParam, user.getAccount());
             List<StaffListVO> dataList = (List<StaffListVO>) staffList.getRows();
             if (dataList != null && !dataList.isEmpty()) {
                 assertThat(dataList.size(), greaterThanOrEqualTo(1));
@@ -203,7 +207,7 @@ public class StaffServiceImplTest {
     @Test
     public void inviteStaff() {
         try {
-            staffService.inviteStaff(inviteAccounts, company, user);
+            staffService.inviteStaff(inviteAccounts, user);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("批量邀請失敗");
@@ -219,7 +223,7 @@ public class StaffServiceImplTest {
     @Test
     public void inviteStaffAgain() {
         try {
-            staffService.inviteStaffAgain(inviteStaffAgainStr);
+            staffService.inviteStaffAgain(inviteStaffAgainStr, user.getAccount());
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("再次邀请员工失败");
@@ -235,7 +239,7 @@ public class StaffServiceImplTest {
     @Test
     public void reviewStaff() {
         try {
-            staffService.reviewStaff(reviewStaffParam, company, user);
+            staffService.reviewStaff(reviewStaffParam, user.getAccount());
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("审核员工失败");
@@ -282,7 +286,7 @@ public class StaffServiceImplTest {
     @Test
     public void getAuditStatus() {
         try {
-            staffService.getAuditStatus(getWaitAuditListAccount);
+            staffService.getAuditStatus(user.getAccount());
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("获取待审核列表失败");
@@ -297,7 +301,7 @@ public class StaffServiceImplTest {
     @Test
     public void setContact() {
         try {
-            staffService.setContact(setContactAccount, company.getId());
+            staffService.setOrCancelContact(setContactAccount, user.getAccount(), true);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("设为联系人失败");
@@ -313,7 +317,7 @@ public class StaffServiceImplTest {
     @Test
     public void cancelContact() {
         try {
-            staffService.cancelContact(cancelContactAccount, company.getId());
+            staffService.setOrCancelContact(cancelContactAccount, user.getAccount(), false);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("取消联系人失败");
@@ -329,7 +333,7 @@ public class StaffServiceImplTest {
     @Test
     public void delMoreStaffs() {
         try {
-            staffService.delMoreStaffs(delAccounts, company.getId(), user.getAccount());
+            staffService.delMoreStaffs(delAccounts, user.getAccount());
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("批量删除员工失败");

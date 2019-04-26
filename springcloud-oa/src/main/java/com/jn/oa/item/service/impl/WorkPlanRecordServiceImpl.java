@@ -183,14 +183,8 @@ public class WorkPlanRecordServiceImpl implements WorkPlanRecordService {
      */
     @Override
     @ServiceLog(doAction = "查看工作记录信息")
-    public List<TbOaWorkPlanRecord> list(String workPlanId) {
-        TbOaWorkPlanRecordCriteria tbOaWorkPlanRecordCriteria = new TbOaWorkPlanRecordCriteria();
-        tbOaWorkPlanRecordCriteria.setOrderByClause("created_time asc,sort asc");
-        TbOaWorkPlanRecordCriteria.Criteria criteria = tbOaWorkPlanRecordCriteria.createCriteria();
-        criteria.andWorkPlanIdEqualTo(workPlanId);
-        criteria.andRecordStatusEqualTo(new Byte(OaStatusEnums.EFFECTIVE.getCode()));
-        List<TbOaWorkPlanRecord> tbOaWorkPlanRecordList =
-                tbOaWorkPlanRecordMapper.selectByExample(tbOaWorkPlanRecordCriteria);
-        return tbOaWorkPlanRecordList;
+    public List<WorkPlanRecord> list(String workPlanId) {
+        List<WorkPlanRecord> workPlanRecordList = workPlanRecordMapper.getRecordList(workPlanId);
+        return workPlanRecordList;
     }
 }

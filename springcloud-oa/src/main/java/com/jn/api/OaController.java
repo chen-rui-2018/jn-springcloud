@@ -161,7 +161,7 @@ public class OaController extends BaseController implements OaClient {
      */
     @Override
     @ControllerLog(doAction = "根据条件查询考勤列表")
-    public Result<List<AttendanceApiVo>> selectAttendanceListByCondition(Attendance attendance) {
+    public Result<List<AttendanceApiVo>> selectAttendanceListByCondition(@RequestBody Attendance attendance) {
         List<AttendanceApiVo> result = attendanceService.selectApiAttendanceListByCondition(attendance);
         return new Result(result);
     }

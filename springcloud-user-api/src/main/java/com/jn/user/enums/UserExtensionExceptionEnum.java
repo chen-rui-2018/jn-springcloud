@@ -19,6 +19,7 @@ public enum UserExtensionExceptionEnum implements CodeAndMsg {
     USER_INFO_GET_ERROR("3020507","当前用户信息获取错误， 请重新登录。"),
     USER_DATA_MULTIPLE_ERROR("3020508","用户数据存在多条，请联系管理员"),
     SEARCH_PARAM_NOT_NULL("3020509","查询入参不能为空"),
+    BIRTHDAY_FORMAT_ERROR("3020510","出生年月传参格式错误"),
     ;
     /**
      * 编码

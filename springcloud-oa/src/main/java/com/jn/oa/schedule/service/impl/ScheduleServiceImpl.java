@@ -139,6 +139,22 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleList;
     }
 
+    @Override
+    @ServiceLog(doAction = "查询条件")
+    public Schedule getScheduleById(String id) {
+        TbOaSchedule tbOaSchedule = tbOaScheduleMapper.selectByPrimaryKey(id);
+        if (tbOaSchedule != null &&
+                StringUtils.equals(OaStatusEnums.EFFECTIVE.getCode(), tbOaSchedule.getRecordStatus().toString())) {
+            Schedule schedule = new Schedule();
+            BeanUtils.copyProperties(tbOaSchedule,schedule);
+            schedule.setDate(tbOaSchedule.getStartTime());
+            schedule.setStart(tbOaSchedule.getStartTime());
+            schedule.setEnd(tbOaSchedule.getEndTime());
+            return schedule;
+        }
+        return null;
+    }
+
     /**
      * 修改日程
      *
@@ -169,29 +185,13 @@ public class ScheduleServiceImpl implements ScheduleService {
                             remindTime, tbOaSchedule, delaySendMessageClient);
                 }
             }
-            BeanUtils.copyProperties(schedule, tbOaSchedule);
-        } else {
-            BeanUtils.copyProperties(schedule, tbOaSchedule);
-            setScheduleRemindMethod(tbOaSchedule);
         }
-
+        BeanUtils.copyProperties(schedule, tbOaSchedule);
         //修改数据
         tbOaSchedule.setModifiedTime(new Date());
         tbOaSchedule.setModifierAccount(account);
         tbOaScheduleMapper.updateByPrimaryKeySelective(tbOaSchedule);
         logger.info("[日程管理] 日程修改成功,scheduleId:{}", scheduleId);
-    }
-
-    /**
-     * 当采用不提醒时,设置提醒方式全为否
-     *
-     * @param tbOaSchedule
-     */
-    private void setScheduleRemindMethod(TbOaSchedule tbOaSchedule) {
-        tbOaSchedule.setPcRemind(ScheduleRemindEnums.NO.getCode());
-        tbOaSchedule.setAppRemind(ScheduleRemindEnums.NO.getCode());
-        tbOaSchedule.setWechatRemind(ScheduleRemindEnums.NO.getCode());
-        tbOaSchedule.setMessageRemind(ScheduleRemindEnums.NO.getCode());
     }
 
     /**
@@ -205,16 +205,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         Date remindTime = schedule.getRemindTime();
         Date startTime = schedule.getStartTime();
         Assert.notNull(remindTime, ScheduleExceptionEnums.REMIND_TIME_NOT_NULL.getMessage());
-        //必须要选择一种提醒方式
-        Boolean remindMethod = StringUtils.equals(ScheduleRemindEnums.YES.getCode(), schedule.getAppRemind())
-                || StringUtils.equals(ScheduleRemindEnums.YES.getCode(), schedule.getPcRemind())
-                || StringUtils.equals(ScheduleRemindEnums.YES.getCode(), schedule.getWechatRemind())
-                || StringUtils.equals(ScheduleRemindEnums.YES.getCode(), schedule.getMessageRemind());
-        if (!remindMethod) {
-            logger.warn("[日程管理] 日程修改/添加失败,scheduleId:{}", scheduleId);
-            throw new JnSpringCloudException(ScheduleExceptionEnums.REMIND_METHOD_NOT_EMPTY);
-        }
-        if (startTime.before(remindTime)) {
+        String allDay = schedule.getAllDay();
+        if (StringUtils.equals(ScheduleRemindEnums.NO.getCode(),allDay) && startTime.before(remindTime)) {
             logger.warn("[日程管理] 日程修改/添加失败,scheduleId:{}", scheduleId);
             throw new JnSpringCloudException(ScheduleExceptionEnums.REMIND_TIME_ERROR);
         }
@@ -246,8 +238,6 @@ public class ScheduleServiceImpl implements ScheduleService {
             //设置定时发送
             DelaySendMessageUtil.delaySend(OA_CLIENT, OA_CLIENT_SCHEDULE_REMIND,
                     remindTime, tbOaSchedule, delaySendMessageClient);
-        } else {
-            setScheduleRemindMethod(tbOaSchedule);
         }
 
         //保存数据

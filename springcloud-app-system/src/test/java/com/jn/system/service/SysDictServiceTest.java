@@ -4,7 +4,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dict.entity.TbSysDict;
 import com.jn.system.dict.model.SysDictEdit;
-import com.jn.system.dict.model.SysDictInvoke;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.dict.model.SysDictKeyValue;
 import com.jn.system.dict.model.SysDictPage;
 import com.jn.system.dict.service.SysDictService;

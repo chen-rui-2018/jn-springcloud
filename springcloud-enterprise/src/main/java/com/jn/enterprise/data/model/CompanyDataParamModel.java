@@ -31,7 +31,7 @@ public class CompanyDataParamModel extends Page implements Serializable {
     @ApiModelProperty(value = "填报周期/报表类型(1：年，0：月)",example = "1")
     private String modelCycle;
 
-    @ApiModelProperty(value = "截至日期",example = "2018-12-12 12:12:12")
+    @ApiModelProperty(value = "截至日期",example = "2018-12-12")
     private Date fillInFormDeadline;
 
     @ApiModelProperty(value = "任务批次",example = "111")

@@ -41,7 +41,7 @@ public interface RecruitService {
      * @param recruitParam
      * @return
      */
-    PaginationData<List<RecruitVO>> getRecruitList(ServiceRecruitParam recruitParam);
+    PaginationData<List<RecruitVO>> getRecruitList(ServiceRecruitParam recruitParam, String approvalStatus);
 
     /**
      * 发布企业招聘信息

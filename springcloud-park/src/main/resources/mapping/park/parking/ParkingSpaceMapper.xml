@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.parking.dao.ParkingSpaceMapper">
+
+
+    <!-- 停车位列表 -->
+    <select id="getParkingSpaceList" resultType="com.jn.park.parking.vo.ParkingSpaceVo" parameterType="com.jn.park.parking.model.ParkingSpaceParam">
+        select
+        s.space_id_ as "spaceId"
+        ,s.area_id_ as "areaId"
+        ,s.space_serial as "spaceSerial"
+        ,s.car_license as "carLicense"
+        ,s.space_status as "spaceStatus"
+        ,s.created_time as "createdTime"
+        ,date_format(s.created_time,'%Y-%m-%d') as "createdTime"
+        ,r.name as "name"
+        ,r.phone as "phone"
+        from tb_parking_space s
+        left join tb_parking_area a
+        on s.area_id_ = a.area_id_ left join tb_parking_space_rental r on s.rent_id_ = r.rent_id_
+        where a.record_status='1' and r.record_status = '1'
+        <if test="spaceId !=null and spaceId !='' ">
+            and s.space_id_ = #{spaceId,jdbcType=VARCHAR}
+        </if>
+        <if test="areaId !=null and areaId !='' ">
+            and s.area_id_ = #{areaId,jdbcType=VARCHAR}
+        </if>
+        <if test="areaName !=null and areaName !='' ">
+            and a.area_name = #{areaName,jdbcType=VARCHAR}
+        </if>
+        <if test="spaceSerial !=null and spaceSerial !='' ">
+            and s.space_serial = #{spaceSerial,jdbcType=VARCHAR}
+        </if>
+        <if test="carLicense !=null and carLicense !='' ">
+            and s.car_license = #{carLicense,jdbcType=VARCHAR}
+        </if>
+        <if test="spaceStatus !=null and spaceStatus !='' ">
+            and s.space_status = #{spaceStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="name !=null and name !='' ">
+            and r.name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="phone !=null and phone !='' ">
+            and r.phone = #{phone,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
+    <!-- 停车位列表 -->
+    <select id="getParKingSpaceRentalListByUser" resultType="com.jn.park.parking.vo.ParkingUserSpaceRentalVo">
+        select
+        s.space_id_ as "spaceId"
+        ,s.area_id_ as "areaId"
+        ,s.space_serial as "spaceSerial"
+        ,s.car_license as "carLicense"
+        ,s.space_status as "spaceStatus"
+        ,s.created_time as "createdTime"
+        ,date_format(s.created_time,'%Y-%m-%d') as "createdTime"
+        ,r.name as "name"
+        ,r.phone as "phone"
+        from tb_parking_space_rental r left join tb_parking_space s on r.space_id_ = s.space_id_ left join tb_parking_area a on s.area_id_ = a.area_id_
+        where r.record_status = '1' and approval_status != '-1'
+        <if test="userAccount !=null and userAccount !='' ">
+            and r.account = #{userAccount,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 停车位列表 -->
+    <select id="getParkingSpaceUserCount" resultType="com.jn.park.parking.vo.ParkingSpaceUserCountVo">
+        SELECT tt.* FROM (
+            SELECT
+            (SELECT COUNT(1) FROM tb_parking_space_rental re WHERE re.approval_status = '6' AND re.end_time > NOW() AND re.account = #{userAccount,jdbcType=VARCHAR} ) AS 'spaceTotal',
+            (SELECT COUNT(1) FROM tb_parking_record r WHERE r.parking_status = '1' AND r.record_status = '1' AND r.account = #{userAccount,jdbcType=VARCHAR}) AS 'useSpace'
+            FROM DUAL
+        ) tt
+    </select>
+
+
+
+</mapper>

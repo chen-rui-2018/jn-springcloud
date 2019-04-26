@@ -106,72 +106,142 @@ public class TbParkingRecordCriteria {
         }
 
         public Criteria andParkingIdIsNull() {
-            addCriterion("parking_id is null");
+            addCriterion("parking_id_ is null");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdIsNotNull() {
-            addCriterion("parking_id is not null");
+            addCriterion("parking_id_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdEqualTo(String value) {
-            addCriterion("parking_id =", value, "parkingId");
+            addCriterion("parking_id_ =", value, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdNotEqualTo(String value) {
-            addCriterion("parking_id <>", value, "parkingId");
+            addCriterion("parking_id_ <>", value, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdGreaterThan(String value) {
-            addCriterion("parking_id >", value, "parkingId");
+            addCriterion("parking_id_ >", value, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdGreaterThanOrEqualTo(String value) {
-            addCriterion("parking_id >=", value, "parkingId");
+            addCriterion("parking_id_ >=", value, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdLessThan(String value) {
-            addCriterion("parking_id <", value, "parkingId");
+            addCriterion("parking_id_ <", value, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdLessThanOrEqualTo(String value) {
-            addCriterion("parking_id <=", value, "parkingId");
+            addCriterion("parking_id_ <=", value, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdLike(String value) {
-            addCriterion("parking_id like", value, "parkingId");
+            addCriterion("parking_id_ like", value, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdNotLike(String value) {
-            addCriterion("parking_id not like", value, "parkingId");
+            addCriterion("parking_id_ not like", value, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdIn(List<String> values) {
-            addCriterion("parking_id in", values, "parkingId");
+            addCriterion("parking_id_ in", values, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdNotIn(List<String> values) {
-            addCriterion("parking_id not in", values, "parkingId");
+            addCriterion("parking_id_ not in", values, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdBetween(String value1, String value2) {
-            addCriterion("parking_id between", value1, value2, "parkingId");
+            addCriterion("parking_id_ between", value1, value2, "parkingId");
             return (Criteria) this;
         }
 
         public Criteria andParkingIdNotBetween(String value1, String value2) {
-            addCriterion("parking_id not between", value1, value2, "parkingId");
+            addCriterion("parking_id_ not between", value1, value2, "parkingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdIsNull() {
+            addCriterion("area_id_ is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdIsNotNull() {
+            addCriterion("area_id_ is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdEqualTo(String value) {
+            addCriterion("area_id_ =", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdNotEqualTo(String value) {
+            addCriterion("area_id_ <>", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdGreaterThan(String value) {
+            addCriterion("area_id_ >", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdGreaterThanOrEqualTo(String value) {
+            addCriterion("area_id_ >=", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdLessThan(String value) {
+            addCriterion("area_id_ <", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdLessThanOrEqualTo(String value) {
+            addCriterion("area_id_ <=", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdLike(String value) {
+            addCriterion("area_id_ like", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdNotLike(String value) {
+            addCriterion("area_id_ not like", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdIn(List<String> values) {
+            addCriterion("area_id_ in", values, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdNotIn(List<String> values) {
+            addCriterion("area_id_ not in", values, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdBetween(String value1, String value2) {
+            addCriterion("area_id_ between", value1, value2, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdNotBetween(String value1, String value2) {
+            addCriterion("area_id_ not between", value1, value2, "areaId");
             return (Criteria) this;
         }
 
@@ -582,6 +652,66 @@ public class TbParkingRecordCriteria {
 
         public Criteria andAdmissionTimeNotBetween(Date value1, Date value2) {
             addCriterion("admission_time not between", value1, value2, "admissionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeIsNull() {
+            addCriterion("start_billing_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeIsNotNull() {
+            addCriterion("start_billing_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeEqualTo(Date value) {
+            addCriterion("start_billing_time =", value, "startBillingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeNotEqualTo(Date value) {
+            addCriterion("start_billing_time <>", value, "startBillingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeGreaterThan(Date value) {
+            addCriterion("start_billing_time >", value, "startBillingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("start_billing_time >=", value, "startBillingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeLessThan(Date value) {
+            addCriterion("start_billing_time <", value, "startBillingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeLessThanOrEqualTo(Date value) {
+            addCriterion("start_billing_time <=", value, "startBillingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeIn(List<Date> values) {
+            addCriterion("start_billing_time in", values, "startBillingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeNotIn(List<Date> values) {
+            addCriterion("start_billing_time not in", values, "startBillingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeBetween(Date value1, Date value2) {
+            addCriterion("start_billing_time between", value1, value2, "startBillingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartBillingTimeNotBetween(Date value1, Date value2) {
+            addCriterion("start_billing_time not between", value1, value2, "startBillingTime");
             return (Criteria) this;
         }
 

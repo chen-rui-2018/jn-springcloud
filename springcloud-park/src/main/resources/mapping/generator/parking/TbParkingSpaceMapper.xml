@@ -2,10 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.parking.dao.TbParkingSpaceMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingSpace">
-    <id column="space_id" jdbcType="VARCHAR" property="spaceId" />
-    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <id column="space_id_" jdbcType="VARCHAR" property="spaceId" />
+    <result column="area_id_" jdbcType="VARCHAR" property="areaId" />
     <result column="space_serial" jdbcType="VARCHAR" property="spaceSerial" />
     <result column="car_license" jdbcType="VARCHAR" property="carLicense" />
+    <result column="rent_id_" jdbcType="VARCHAR" property="rentId" />
     <result column="space_status" jdbcType="VARCHAR" property="spaceStatus" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    space_id, area_name, space_serial, car_license, space_status, created_time, creator_account, 
-    modified_time, modifier_account, record_status
+    space_id_, area_id_, space_serial, car_license, rent_id_, space_status, created_time, 
+    creator_account, modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingSpaceCriteria" resultMap="BaseResultMap">
     select
@@ -93,11 +94,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_parking_space
-    where space_id = #{spaceId,jdbcType=VARCHAR}
+    where space_id_ = #{spaceId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_parking_space
-    where space_id = #{spaceId,jdbcType=VARCHAR}
+    where space_id_ = #{spaceId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.parking.entity.TbParkingSpaceCriteria">
     delete from tb_parking_space
@@ -106,29 +107,32 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingSpace">
-    insert into tb_parking_space (space_id, area_name, space_serial, 
-      car_license, space_status, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
-    values (#{spaceId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{spaceSerial,jdbcType=VARCHAR}, 
-      #{carLicense,jdbcType=VARCHAR}, #{spaceStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+    insert into tb_parking_space (space_id_, area_id_, space_serial, 
+      car_license, rent_id_, space_status, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
+    values (#{spaceId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, #{spaceSerial,jdbcType=VARCHAR}, 
+      #{carLicense,jdbcType=VARCHAR}, #{rentId,jdbcType=VARCHAR}, #{spaceStatus,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingSpace">
     insert into tb_parking_space
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="spaceId != null">
-        space_id,
+        space_id_,
       </if>
-      <if test="areaName != null">
-        area_name,
+      <if test="areaId != null">
+        area_id_,
       </if>
       <if test="spaceSerial != null">
         space_serial,
       </if>
       <if test="carLicense != null">
         car_license,
+      </if>
+      <if test="rentId != null">
+        rent_id_,
       </if>
       <if test="spaceStatus != null">
         space_status,
@@ -153,14 +157,17 @@
       <if test="spaceId != null">
         #{spaceId,jdbcType=VARCHAR},
       </if>
-      <if test="areaName != null">
-        #{areaName,jdbcType=VARCHAR},
+      <if test="areaId != null">
+        #{areaId,jdbcType=VARCHAR},
       </if>
       <if test="spaceSerial != null">
         #{spaceSerial,jdbcType=VARCHAR},
       </if>
       <if test="carLicense != null">
         #{carLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="rentId != null">
+        #{rentId,jdbcType=VARCHAR},
       </if>
       <if test="spaceStatus != null">
         #{spaceStatus,jdbcType=VARCHAR},
@@ -192,16 +199,19 @@
     update tb_parking_space
     <set>
       <if test="record.spaceId != null">
-        space_id = #{record.spaceId,jdbcType=VARCHAR},
+        space_id_ = #{record.spaceId,jdbcType=VARCHAR},
       </if>
-      <if test="record.areaName != null">
-        area_name = #{record.areaName,jdbcType=VARCHAR},
+      <if test="record.areaId != null">
+        area_id_ = #{record.areaId,jdbcType=VARCHAR},
       </if>
       <if test="record.spaceSerial != null">
         space_serial = #{record.spaceSerial,jdbcType=VARCHAR},
       </if>
       <if test="record.carLicense != null">
         car_license = #{record.carLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rentId != null">
+        rent_id_ = #{record.rentId,jdbcType=VARCHAR},
       </if>
       <if test="record.spaceStatus != null">
         space_status = #{record.spaceStatus,jdbcType=VARCHAR},
@@ -228,10 +238,11 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_parking_space
-    set space_id = #{record.spaceId,jdbcType=VARCHAR},
-      area_name = #{record.areaName,jdbcType=VARCHAR},
+    set space_id_ = #{record.spaceId,jdbcType=VARCHAR},
+      area_id_ = #{record.areaId,jdbcType=VARCHAR},
       space_serial = #{record.spaceSerial,jdbcType=VARCHAR},
       car_license = #{record.carLicense,jdbcType=VARCHAR},
+      rent_id_ = #{record.rentId,jdbcType=VARCHAR},
       space_status = #{record.spaceStatus,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -245,14 +256,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.parking.entity.TbParkingSpace">
     update tb_parking_space
     <set>
-      <if test="areaName != null">
-        area_name = #{areaName,jdbcType=VARCHAR},
+      <if test="areaId != null">
+        area_id_ = #{areaId,jdbcType=VARCHAR},
       </if>
       <if test="spaceSerial != null">
         space_serial = #{spaceSerial,jdbcType=VARCHAR},
       </if>
       <if test="carLicense != null">
         car_license = #{carLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="rentId != null">
+        rent_id_ = #{rentId,jdbcType=VARCHAR},
       </if>
       <if test="spaceStatus != null">
         space_status = #{spaceStatus,jdbcType=VARCHAR},
@@ -273,19 +287,20 @@
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
-    where space_id = #{spaceId,jdbcType=VARCHAR}
+    where space_id_ = #{spaceId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingSpace">
     update tb_parking_space
-    set area_name = #{areaName,jdbcType=VARCHAR},
+    set area_id_ = #{areaId,jdbcType=VARCHAR},
       space_serial = #{spaceSerial,jdbcType=VARCHAR},
       car_license = #{carLicense,jdbcType=VARCHAR},
+      rent_id_ = #{rentId,jdbcType=VARCHAR},
       space_status = #{spaceStatus,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT}
-    where space_id = #{spaceId,jdbcType=VARCHAR}
+    where space_id_ = #{spaceId,jdbcType=VARCHAR}
   </update>
 </mapper>

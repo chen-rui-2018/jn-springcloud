@@ -106,72 +106,72 @@ public class TbParkingPreferentialCriteria {
         }
 
         public Criteria andPolicyIdIsNull() {
-            addCriterion("policy_id is null");
+            addCriterion("policy_id_ is null");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdIsNotNull() {
-            addCriterion("policy_id is not null");
+            addCriterion("policy_id_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdEqualTo(String value) {
-            addCriterion("policy_id =", value, "policyId");
+            addCriterion("policy_id_ =", value, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdNotEqualTo(String value) {
-            addCriterion("policy_id <>", value, "policyId");
+            addCriterion("policy_id_ <>", value, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdGreaterThan(String value) {
-            addCriterion("policy_id >", value, "policyId");
+            addCriterion("policy_id_ >", value, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdGreaterThanOrEqualTo(String value) {
-            addCriterion("policy_id >=", value, "policyId");
+            addCriterion("policy_id_ >=", value, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdLessThan(String value) {
-            addCriterion("policy_id <", value, "policyId");
+            addCriterion("policy_id_ <", value, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdLessThanOrEqualTo(String value) {
-            addCriterion("policy_id <=", value, "policyId");
+            addCriterion("policy_id_ <=", value, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdLike(String value) {
-            addCriterion("policy_id like", value, "policyId");
+            addCriterion("policy_id_ like", value, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdNotLike(String value) {
-            addCriterion("policy_id not like", value, "policyId");
+            addCriterion("policy_id_ not like", value, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdIn(List<String> values) {
-            addCriterion("policy_id in", values, "policyId");
+            addCriterion("policy_id_ in", values, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdNotIn(List<String> values) {
-            addCriterion("policy_id not in", values, "policyId");
+            addCriterion("policy_id_ not in", values, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdBetween(String value1, String value2) {
-            addCriterion("policy_id between", value1, value2, "policyId");
+            addCriterion("policy_id_ between", value1, value2, "policyId");
             return (Criteria) this;
         }
 
         public Criteria andPolicyIdNotBetween(String value1, String value2) {
-            addCriterion("policy_id not between", value1, value2, "policyId");
+            addCriterion("policy_id_ not between", value1, value2, "policyId");
             return (Criteria) this;
         }
 
@@ -315,6 +315,126 @@ public class TbParkingPreferentialCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andOfferPriceIsNull() {
+            addCriterion("offer_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceIsNotNull() {
+            addCriterion("offer_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceEqualTo(Double value) {
+            addCriterion("offer_price =", value, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceNotEqualTo(Double value) {
+            addCriterion("offer_price <>", value, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceGreaterThan(Double value) {
+            addCriterion("offer_price >", value, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceGreaterThanOrEqualTo(Double value) {
+            addCriterion("offer_price >=", value, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceLessThan(Double value) {
+            addCriterion("offer_price <", value, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceLessThanOrEqualTo(Double value) {
+            addCriterion("offer_price <=", value, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceIn(List<Double> values) {
+            addCriterion("offer_price in", values, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceNotIn(List<Double> values) {
+            addCriterion("offer_price not in", values, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceBetween(Double value1, Double value2) {
+            addCriterion("offer_price between", value1, value2, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferPriceNotBetween(Double value1, Double value2) {
+            addCriterion("offer_price not between", value1, value2, "offerPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioIsNull() {
+            addCriterion("offer_ratio is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioIsNotNull() {
+            addCriterion("offer_ratio is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioEqualTo(Double value) {
+            addCriterion("offer_ratio =", value, "offerRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioNotEqualTo(Double value) {
+            addCriterion("offer_ratio <>", value, "offerRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioGreaterThan(Double value) {
+            addCriterion("offer_ratio >", value, "offerRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioGreaterThanOrEqualTo(Double value) {
+            addCriterion("offer_ratio >=", value, "offerRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioLessThan(Double value) {
+            addCriterion("offer_ratio <", value, "offerRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioLessThanOrEqualTo(Double value) {
+            addCriterion("offer_ratio <=", value, "offerRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioIn(List<Double> values) {
+            addCriterion("offer_ratio in", values, "offerRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioNotIn(List<Double> values) {
+            addCriterion("offer_ratio not in", values, "offerRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioBetween(Double value1, Double value2) {
+            addCriterion("offer_ratio between", value1, value2, "offerRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfferRatioNotBetween(Double value1, Double value2) {
+            addCriterion("offer_ratio not between", value1, value2, "offerRatio");
+            return (Criteria) this;
+        }
+
         public Criteria andPolicyStatusIsNull() {
             addCriterion("policy_status is null");
             return (Criteria) this;
@@ -382,6 +502,66 @@ public class TbParkingPreferentialCriteria {
 
         public Criteria andPolicyStatusNotBetween(String value1, String value2) {
             addCriterion("policy_status not between", value1, value2, "policyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsIsNull() {
+            addCriterion("day_conditions is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsIsNotNull() {
+            addCriterion("day_conditions is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsEqualTo(Integer value) {
+            addCriterion("day_conditions =", value, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsNotEqualTo(Integer value) {
+            addCriterion("day_conditions <>", value, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsGreaterThan(Integer value) {
+            addCriterion("day_conditions >", value, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("day_conditions >=", value, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsLessThan(Integer value) {
+            addCriterion("day_conditions <", value, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsLessThanOrEqualTo(Integer value) {
+            addCriterion("day_conditions <=", value, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsIn(List<Integer> values) {
+            addCriterion("day_conditions in", values, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsNotIn(List<Integer> values) {
+            addCriterion("day_conditions not in", values, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsBetween(Integer value1, Integer value2) {
+            addCriterion("day_conditions between", value1, value2, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayConditionsNotBetween(Integer value1, Integer value2) {
+            addCriterion("day_conditions not between", value1, value2, "dayConditions");
             return (Criteria) this;
         }
 

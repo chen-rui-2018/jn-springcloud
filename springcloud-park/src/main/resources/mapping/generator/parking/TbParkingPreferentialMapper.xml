@@ -2,10 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.parking.dao.TbParkingPreferentialMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingPreferential">
-    <id column="policy_id" jdbcType="VARCHAR" property="policyId" />
+    <id column="policy_id_" jdbcType="VARCHAR" property="policyId" />
     <result column="policy_code" jdbcType="VARCHAR" property="policyCode" />
     <result column="policy_comments" jdbcType="VARCHAR" property="policyComments" />
+    <result column="offer_price" jdbcType="DOUBLE" property="offerPrice" />
+    <result column="offer_ratio" jdbcType="DOUBLE" property="offerRatio" />
     <result column="policy_status" jdbcType="VARCHAR" property="policyStatus" />
+    <result column="day_conditions" jdbcType="INTEGER" property="dayConditions" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
@@ -71,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    policy_id, policy_code, policy_comments, policy_status, creator_account, created_time, 
-    modifier_account, modified_time, record_status
+    policy_id_, policy_code, policy_comments, offer_price, offer_ratio, policy_status, 
+    day_conditions, creator_account, created_time, modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingPreferentialCriteria" resultMap="BaseResultMap">
     select
@@ -92,11 +95,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_parking_preferential
-    where policy_id = #{policyId,jdbcType=VARCHAR}
+    where policy_id_ = #{policyId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_parking_preferential
-    where policy_id = #{policyId,jdbcType=VARCHAR}
+    where policy_id_ = #{policyId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.parking.entity.TbParkingPreferentialCriteria">
     delete from tb_parking_preferential
@@ -105,12 +108,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingPreferential">
-    insert into tb_parking_preferential (policy_id, policy_code, policy_comments, 
-      policy_status, creator_account, created_time, 
+    insert into tb_parking_preferential (policy_id_, policy_code, policy_comments, 
+      offer_price, offer_ratio, policy_status, 
+      day_conditions, creator_account, created_time, 
       modifier_account, modified_time, record_status
       )
     values (#{policyId,jdbcType=VARCHAR}, #{policyCode,jdbcType=VARCHAR}, #{policyComments,jdbcType=VARCHAR}, 
-      #{policyStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{offerPrice,jdbcType=DOUBLE}, #{offerRatio,jdbcType=DOUBLE}, #{policyStatus,jdbcType=VARCHAR}, 
+      #{dayConditions,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
       )
   </insert>
@@ -118,7 +123,7 @@
     insert into tb_parking_preferential
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="policyId != null">
-        policy_id,
+        policy_id_,
       </if>
       <if test="policyCode != null">
         policy_code,
@@ -126,8 +131,17 @@
       <if test="policyComments != null">
         policy_comments,
       </if>
+      <if test="offerPrice != null">
+        offer_price,
+      </if>
+      <if test="offerRatio != null">
+        offer_ratio,
+      </if>
       <if test="policyStatus != null">
         policy_status,
+      </if>
+      <if test="dayConditions != null">
+        day_conditions,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -155,8 +169,17 @@
       <if test="policyComments != null">
         #{policyComments,jdbcType=VARCHAR},
       </if>
+      <if test="offerPrice != null">
+        #{offerPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="offerRatio != null">
+        #{offerRatio,jdbcType=DOUBLE},
+      </if>
       <if test="policyStatus != null">
         #{policyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dayConditions != null">
+        #{dayConditions,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -185,7 +208,7 @@
     update tb_parking_preferential
     <set>
       <if test="record.policyId != null">
-        policy_id = #{record.policyId,jdbcType=VARCHAR},
+        policy_id_ = #{record.policyId,jdbcType=VARCHAR},
       </if>
       <if test="record.policyCode != null">
         policy_code = #{record.policyCode,jdbcType=VARCHAR},
@@ -193,8 +216,17 @@
       <if test="record.policyComments != null">
         policy_comments = #{record.policyComments,jdbcType=VARCHAR},
       </if>
+      <if test="record.offerPrice != null">
+        offer_price = #{record.offerPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.offerRatio != null">
+        offer_ratio = #{record.offerRatio,jdbcType=DOUBLE},
+      </if>
       <if test="record.policyStatus != null">
         policy_status = #{record.policyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dayConditions != null">
+        day_conditions = #{record.dayConditions,jdbcType=INTEGER},
       </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -218,10 +250,13 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_parking_preferential
-    set policy_id = #{record.policyId,jdbcType=VARCHAR},
+    set policy_id_ = #{record.policyId,jdbcType=VARCHAR},
       policy_code = #{record.policyCode,jdbcType=VARCHAR},
       policy_comments = #{record.policyComments,jdbcType=VARCHAR},
+      offer_price = #{record.offerPrice,jdbcType=DOUBLE},
+      offer_ratio = #{record.offerRatio,jdbcType=DOUBLE},
       policy_status = #{record.policyStatus,jdbcType=VARCHAR},
+      day_conditions = #{record.dayConditions,jdbcType=INTEGER},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
@@ -240,8 +275,17 @@
       <if test="policyComments != null">
         policy_comments = #{policyComments,jdbcType=VARCHAR},
       </if>
+      <if test="offerPrice != null">
+        offer_price = #{offerPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="offerRatio != null">
+        offer_ratio = #{offerRatio,jdbcType=DOUBLE},
+      </if>
       <if test="policyStatus != null">
         policy_status = #{policyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dayConditions != null">
+        day_conditions = #{dayConditions,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -259,18 +303,21 @@
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
-    where policy_id = #{policyId,jdbcType=VARCHAR}
+    where policy_id_ = #{policyId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingPreferential">
     update tb_parking_preferential
     set policy_code = #{policyCode,jdbcType=VARCHAR},
       policy_comments = #{policyComments,jdbcType=VARCHAR},
+      offer_price = #{offerPrice,jdbcType=DOUBLE},
+      offer_ratio = #{offerRatio,jdbcType=DOUBLE},
       policy_status = #{policyStatus,jdbcType=VARCHAR},
+      day_conditions = #{dayConditions,jdbcType=INTEGER},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT}
-    where policy_id = #{policyId,jdbcType=VARCHAR}
+    where policy_id_ = #{policyId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.parking.dao.TbParkingCarInfoMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingCarInfo">
-    <id column="car_id" jdbcType="VARCHAR" property="carId" />
+    <id column="car_id_" jdbcType="VARCHAR" property="carId" />
     <result column="car_license" jdbcType="VARCHAR" property="carLicense" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    car_id, car_license, account, name, phone, car_status, space_id, space_serial, creator_account, 
+    car_id_, car_license, account, name, phone, car_status, space_id, space_serial, creator_account, 
     created_time, modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingCarInfoCriteria" resultMap="BaseResultMap">
@@ -96,11 +96,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_parking_car_info
-    where car_id = #{carId,jdbcType=VARCHAR}
+    where car_id_ = #{carId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_parking_car_info
-    where car_id = #{carId,jdbcType=VARCHAR}
+    where car_id_ = #{carId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.parking.entity.TbParkingCarInfoCriteria">
     delete from tb_parking_car_info
@@ -109,7 +109,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingCarInfo">
-    insert into tb_parking_car_info (car_id, car_license, account, 
+    insert into tb_parking_car_info (car_id_, car_license, account, 
       name, phone, car_status, 
       space_id, space_serial, creator_account, 
       created_time, modifier_account, modified_time, 
@@ -124,7 +124,7 @@
     insert into tb_parking_car_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="carId != null">
-        car_id,
+        car_id_,
       </if>
       <if test="carLicense != null">
         car_license,
@@ -215,7 +215,7 @@
     update tb_parking_car_info
     <set>
       <if test="record.carId != null">
-        car_id = #{record.carId,jdbcType=VARCHAR},
+        car_id_ = #{record.carId,jdbcType=VARCHAR},
       </if>
       <if test="record.carLicense != null">
         car_license = #{record.carLicense,jdbcType=VARCHAR},
@@ -260,7 +260,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_parking_car_info
-    set car_id = #{record.carId,jdbcType=VARCHAR},
+    set car_id_ = #{record.carId,jdbcType=VARCHAR},
       car_license = #{record.carLicense,jdbcType=VARCHAR},
       account = #{record.account,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
@@ -317,7 +317,7 @@
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
-    where car_id = #{carId,jdbcType=VARCHAR}
+    where car_id_ = #{carId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingCarInfo">
     update tb_parking_car_info
@@ -333,6 +333,6 @@
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT}
-    where car_id = #{carId,jdbcType=VARCHAR}
+    where car_id_ = #{carId,jdbcType=VARCHAR}
   </update>
 </mapper>

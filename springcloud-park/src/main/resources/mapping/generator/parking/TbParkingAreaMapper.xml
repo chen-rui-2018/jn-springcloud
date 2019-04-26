@@ -2,20 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.parking.dao.TbParkingAreaMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingArea">
-    <id column="area_id" jdbcType="VARCHAR" property="areaId" />
+    <id column="area_id_" jdbcType="VARCHAR" property="areaId" />
     <result column="area_name" jdbcType="VARCHAR" property="areaName" />
     <result column="area_address" jdbcType="VARCHAR" property="areaAddress" />
     <result column="longitude" jdbcType="VARCHAR" property="longitude" />
     <result column="latitude" jdbcType="VARCHAR" property="latitude" />
-    <result column="leisure_number" jdbcType="VARCHAR" property="leisureNumber" />
-    <result column="rent_number" jdbcType="VARCHAR" property="rentNumber" />
-    <result column="parking_total" jdbcType="VARCHAR" property="parkingTotal" />
+    <result column="leisure_number" jdbcType="INTEGER" property="leisureNumber" />
+    <result column="rent_number" jdbcType="INTEGER" property="rentNumber" />
+    <result column="parking_total" jdbcType="INTEGER" property="parkingTotal" />
     <result column="temp_price_depict" jdbcType="VARCHAR" property="tempPriceDepict" />
     <result column="temp_price" jdbcType="DOUBLE" property="tempPrice" />
+    <result column="temp_price_unit" jdbcType="VARCHAR" property="tempPriceUnit" />
     <result column="temp_price_total" jdbcType="DOUBLE" property="tempPriceTotal" />
+    <result column="temp_free_time" jdbcType="INTEGER" property="tempFreeTime" />
     <result column="rent_price" jdbcType="DOUBLE" property="rentPrice" />
     <result column="area_picture" jdbcType="VARCHAR" property="areaPicture" />
     <result column="space_picture" jdbcType="VARCHAR" property="spacePicture" />
+    <result column="gate_factory" jdbcType="VARCHAR" property="gateFactory" />
+    <result column="gate_id" jdbcType="VARCHAR" property="gateId" />
+    <result column="area_status" jdbcType="VARCHAR" property="areaStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
@@ -81,9 +86,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    area_id, area_name, area_address, longitude, latitude, leisure_number, rent_number, 
-    parking_total, temp_price_depict, temp_price, temp_price_total, rent_price, area_picture, 
-    space_picture, creator_account, created_time, modifier_account, modified_time, record_status
+    area_id_, area_name, area_address, longitude, latitude, leisure_number, rent_number, 
+    parking_total, temp_price_depict, temp_price, temp_price_unit, temp_price_total, 
+    temp_free_time, rent_price, area_picture, space_picture, gate_factory, gate_id, area_status, 
+    creator_account, created_time, modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingAreaCriteria" resultMap="BaseResultMap">
     select
@@ -103,11 +109,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_parking_area
-    where area_id = #{areaId,jdbcType=VARCHAR}
+    where area_id_ = #{areaId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_parking_area
-    where area_id = #{areaId,jdbcType=VARCHAR}
+    where area_id_ = #{areaId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.parking.entity.TbParkingAreaCriteria">
     delete from tb_parking_area
@@ -116,26 +122,30 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingArea">
-    insert into tb_parking_area (area_id, area_name, area_address, 
+    insert into tb_parking_area (area_id_, area_name, area_address, 
       longitude, latitude, leisure_number, 
       rent_number, parking_total, temp_price_depict, 
-      temp_price, temp_price_total, rent_price, 
-      area_picture, space_picture, creator_account, 
-      created_time, modifier_account, modified_time, 
-      record_status)
+      temp_price, temp_price_unit, temp_price_total, 
+      temp_free_time, rent_price, area_picture, 
+      space_picture, gate_factory, gate_id, 
+      area_status, creator_account, created_time, 
+      modifier_account, modified_time, record_status
+      )
     values (#{areaId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{areaAddress,jdbcType=VARCHAR}, 
-      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{leisureNumber,jdbcType=VARCHAR}, 
-      #{rentNumber,jdbcType=VARCHAR}, #{parkingTotal,jdbcType=VARCHAR}, #{tempPriceDepict,jdbcType=VARCHAR}, 
-      #{tempPrice,jdbcType=DOUBLE}, #{tempPriceTotal,jdbcType=DOUBLE}, #{rentPrice,jdbcType=DOUBLE}, 
-      #{areaPicture,jdbcType=VARCHAR}, #{spacePicture,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{leisureNumber,jdbcType=INTEGER}, 
+      #{rentNumber,jdbcType=INTEGER}, #{parkingTotal,jdbcType=INTEGER}, #{tempPriceDepict,jdbcType=VARCHAR}, 
+      #{tempPrice,jdbcType=DOUBLE}, #{tempPriceUnit,jdbcType=VARCHAR}, #{tempPriceTotal,jdbcType=DOUBLE}, 
+      #{tempFreeTime,jdbcType=INTEGER}, #{rentPrice,jdbcType=DOUBLE}, #{areaPicture,jdbcType=VARCHAR}, 
+      #{spacePicture,jdbcType=VARCHAR}, #{gateFactory,jdbcType=VARCHAR}, #{gateId,jdbcType=VARCHAR}, 
+      #{areaStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingArea">
     insert into tb_parking_area
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="areaId != null">
-        area_id,
+        area_id_,
       </if>
       <if test="areaName != null">
         area_name,
@@ -164,8 +174,14 @@
       <if test="tempPrice != null">
         temp_price,
       </if>
+      <if test="tempPriceUnit != null">
+        temp_price_unit,
+      </if>
       <if test="tempPriceTotal != null">
         temp_price_total,
+      </if>
+      <if test="tempFreeTime != null">
+        temp_free_time,
       </if>
       <if test="rentPrice != null">
         rent_price,
@@ -175,6 +191,15 @@
       </if>
       <if test="spacePicture != null">
         space_picture,
+      </if>
+      <if test="gateFactory != null">
+        gate_factory,
+      </if>
+      <if test="gateId != null">
+        gate_id,
+      </if>
+      <if test="areaStatus != null">
+        area_status,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -209,13 +234,13 @@
         #{latitude,jdbcType=VARCHAR},
       </if>
       <if test="leisureNumber != null">
-        #{leisureNumber,jdbcType=VARCHAR},
+        #{leisureNumber,jdbcType=INTEGER},
       </if>
       <if test="rentNumber != null">
-        #{rentNumber,jdbcType=VARCHAR},
+        #{rentNumber,jdbcType=INTEGER},
       </if>
       <if test="parkingTotal != null">
-        #{parkingTotal,jdbcType=VARCHAR},
+        #{parkingTotal,jdbcType=INTEGER},
       </if>
       <if test="tempPriceDepict != null">
         #{tempPriceDepict,jdbcType=VARCHAR},
@@ -223,8 +248,14 @@
       <if test="tempPrice != null">
         #{tempPrice,jdbcType=DOUBLE},
       </if>
+      <if test="tempPriceUnit != null">
+        #{tempPriceUnit,jdbcType=VARCHAR},
+      </if>
       <if test="tempPriceTotal != null">
         #{tempPriceTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="tempFreeTime != null">
+        #{tempFreeTime,jdbcType=INTEGER},
       </if>
       <if test="rentPrice != null">
         #{rentPrice,jdbcType=DOUBLE},
@@ -234,6 +265,15 @@
       </if>
       <if test="spacePicture != null">
         #{spacePicture,jdbcType=VARCHAR},
+      </if>
+      <if test="gateFactory != null">
+        #{gateFactory,jdbcType=VARCHAR},
+      </if>
+      <if test="gateId != null">
+        #{gateId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaStatus != null">
+        #{areaStatus,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -262,7 +302,7 @@
     update tb_parking_area
     <set>
       <if test="record.areaId != null">
-        area_id = #{record.areaId,jdbcType=VARCHAR},
+        area_id_ = #{record.areaId,jdbcType=VARCHAR},
       </if>
       <if test="record.areaName != null">
         area_name = #{record.areaName,jdbcType=VARCHAR},
@@ -277,13 +317,13 @@
         latitude = #{record.latitude,jdbcType=VARCHAR},
       </if>
       <if test="record.leisureNumber != null">
-        leisure_number = #{record.leisureNumber,jdbcType=VARCHAR},
+        leisure_number = #{record.leisureNumber,jdbcType=INTEGER},
       </if>
       <if test="record.rentNumber != null">
-        rent_number = #{record.rentNumber,jdbcType=VARCHAR},
+        rent_number = #{record.rentNumber,jdbcType=INTEGER},
       </if>
       <if test="record.parkingTotal != null">
-        parking_total = #{record.parkingTotal,jdbcType=VARCHAR},
+        parking_total = #{record.parkingTotal,jdbcType=INTEGER},
       </if>
       <if test="record.tempPriceDepict != null">
         temp_price_depict = #{record.tempPriceDepict,jdbcType=VARCHAR},
@@ -291,8 +331,14 @@
       <if test="record.tempPrice != null">
         temp_price = #{record.tempPrice,jdbcType=DOUBLE},
       </if>
+      <if test="record.tempPriceUnit != null">
+        temp_price_unit = #{record.tempPriceUnit,jdbcType=VARCHAR},
+      </if>
       <if test="record.tempPriceTotal != null">
         temp_price_total = #{record.tempPriceTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.tempFreeTime != null">
+        temp_free_time = #{record.tempFreeTime,jdbcType=INTEGER},
       </if>
       <if test="record.rentPrice != null">
         rent_price = #{record.rentPrice,jdbcType=DOUBLE},
@@ -302,6 +348,15 @@
       </if>
       <if test="record.spacePicture != null">
         space_picture = #{record.spacePicture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gateFactory != null">
+        gate_factory = #{record.gateFactory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gateId != null">
+        gate_id = #{record.gateId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaStatus != null">
+        area_status = #{record.areaStatus,jdbcType=VARCHAR},
       </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -325,20 +380,25 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_parking_area
-    set area_id = #{record.areaId,jdbcType=VARCHAR},
+    set area_id_ = #{record.areaId,jdbcType=VARCHAR},
       area_name = #{record.areaName,jdbcType=VARCHAR},
       area_address = #{record.areaAddress,jdbcType=VARCHAR},
       longitude = #{record.longitude,jdbcType=VARCHAR},
       latitude = #{record.latitude,jdbcType=VARCHAR},
-      leisure_number = #{record.leisureNumber,jdbcType=VARCHAR},
-      rent_number = #{record.rentNumber,jdbcType=VARCHAR},
-      parking_total = #{record.parkingTotal,jdbcType=VARCHAR},
+      leisure_number = #{record.leisureNumber,jdbcType=INTEGER},
+      rent_number = #{record.rentNumber,jdbcType=INTEGER},
+      parking_total = #{record.parkingTotal,jdbcType=INTEGER},
       temp_price_depict = #{record.tempPriceDepict,jdbcType=VARCHAR},
       temp_price = #{record.tempPrice,jdbcType=DOUBLE},
+      temp_price_unit = #{record.tempPriceUnit,jdbcType=VARCHAR},
       temp_price_total = #{record.tempPriceTotal,jdbcType=DOUBLE},
+      temp_free_time = #{record.tempFreeTime,jdbcType=INTEGER},
       rent_price = #{record.rentPrice,jdbcType=DOUBLE},
       area_picture = #{record.areaPicture,jdbcType=VARCHAR},
       space_picture = #{record.spacePicture,jdbcType=VARCHAR},
+      gate_factory = #{record.gateFactory,jdbcType=VARCHAR},
+      gate_id = #{record.gateId,jdbcType=VARCHAR},
+      area_status = #{record.areaStatus,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
@@ -364,13 +424,13 @@
         latitude = #{latitude,jdbcType=VARCHAR},
       </if>
       <if test="leisureNumber != null">
-        leisure_number = #{leisureNumber,jdbcType=VARCHAR},
+        leisure_number = #{leisureNumber,jdbcType=INTEGER},
       </if>
       <if test="rentNumber != null">
-        rent_number = #{rentNumber,jdbcType=VARCHAR},
+        rent_number = #{rentNumber,jdbcType=INTEGER},
       </if>
       <if test="parkingTotal != null">
-        parking_total = #{parkingTotal,jdbcType=VARCHAR},
+        parking_total = #{parkingTotal,jdbcType=INTEGER},
       </if>
       <if test="tempPriceDepict != null">
         temp_price_depict = #{tempPriceDepict,jdbcType=VARCHAR},
@@ -378,8 +438,14 @@
       <if test="tempPrice != null">
         temp_price = #{tempPrice,jdbcType=DOUBLE},
       </if>
+      <if test="tempPriceUnit != null">
+        temp_price_unit = #{tempPriceUnit,jdbcType=VARCHAR},
+      </if>
       <if test="tempPriceTotal != null">
         temp_price_total = #{tempPriceTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="tempFreeTime != null">
+        temp_free_time = #{tempFreeTime,jdbcType=INTEGER},
       </if>
       <if test="rentPrice != null">
         rent_price = #{rentPrice,jdbcType=DOUBLE},
@@ -389,6 +455,15 @@
       </if>
       <if test="spacePicture != null">
         space_picture = #{spacePicture,jdbcType=VARCHAR},
+      </if>
+      <if test="gateFactory != null">
+        gate_factory = #{gateFactory,jdbcType=VARCHAR},
+      </if>
+      <if test="gateId != null">
+        gate_id = #{gateId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaStatus != null">
+        area_status = #{areaStatus,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -406,7 +481,7 @@
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
-    where area_id = #{areaId,jdbcType=VARCHAR}
+    where area_id_ = #{areaId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingArea">
     update tb_parking_area
@@ -414,20 +489,25 @@
       area_address = #{areaAddress,jdbcType=VARCHAR},
       longitude = #{longitude,jdbcType=VARCHAR},
       latitude = #{latitude,jdbcType=VARCHAR},
-      leisure_number = #{leisureNumber,jdbcType=VARCHAR},
-      rent_number = #{rentNumber,jdbcType=VARCHAR},
-      parking_total = #{parkingTotal,jdbcType=VARCHAR},
+      leisure_number = #{leisureNumber,jdbcType=INTEGER},
+      rent_number = #{rentNumber,jdbcType=INTEGER},
+      parking_total = #{parkingTotal,jdbcType=INTEGER},
       temp_price_depict = #{tempPriceDepict,jdbcType=VARCHAR},
       temp_price = #{tempPrice,jdbcType=DOUBLE},
+      temp_price_unit = #{tempPriceUnit,jdbcType=VARCHAR},
       temp_price_total = #{tempPriceTotal,jdbcType=DOUBLE},
+      temp_free_time = #{tempFreeTime,jdbcType=INTEGER},
       rent_price = #{rentPrice,jdbcType=DOUBLE},
       area_picture = #{areaPicture,jdbcType=VARCHAR},
       space_picture = #{spacePicture,jdbcType=VARCHAR},
+      gate_factory = #{gateFactory,jdbcType=VARCHAR},
+      gate_id = #{gateId,jdbcType=VARCHAR},
+      area_status = #{areaStatus,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT}
-    where area_id = #{areaId,jdbcType=VARCHAR}
+    where area_id_ = #{areaId,jdbcType=VARCHAR}
   </update>
 </mapper>

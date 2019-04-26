@@ -106,72 +106,72 @@ public class TbParkingCarInfoCriteria {
         }
 
         public Criteria andCarIdIsNull() {
-            addCriterion("car_id is null");
+            addCriterion("car_id_ is null");
             return (Criteria) this;
         }
 
         public Criteria andCarIdIsNotNull() {
-            addCriterion("car_id is not null");
+            addCriterion("car_id_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andCarIdEqualTo(String value) {
-            addCriterion("car_id =", value, "carId");
+            addCriterion("car_id_ =", value, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdNotEqualTo(String value) {
-            addCriterion("car_id <>", value, "carId");
+            addCriterion("car_id_ <>", value, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdGreaterThan(String value) {
-            addCriterion("car_id >", value, "carId");
+            addCriterion("car_id_ >", value, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdGreaterThanOrEqualTo(String value) {
-            addCriterion("car_id >=", value, "carId");
+            addCriterion("car_id_ >=", value, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdLessThan(String value) {
-            addCriterion("car_id <", value, "carId");
+            addCriterion("car_id_ <", value, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdLessThanOrEqualTo(String value) {
-            addCriterion("car_id <=", value, "carId");
+            addCriterion("car_id_ <=", value, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdLike(String value) {
-            addCriterion("car_id like", value, "carId");
+            addCriterion("car_id_ like", value, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdNotLike(String value) {
-            addCriterion("car_id not like", value, "carId");
+            addCriterion("car_id_ not like", value, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdIn(List<String> values) {
-            addCriterion("car_id in", values, "carId");
+            addCriterion("car_id_ in", values, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdNotIn(List<String> values) {
-            addCriterion("car_id not in", values, "carId");
+            addCriterion("car_id_ not in", values, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdBetween(String value1, String value2) {
-            addCriterion("car_id between", value1, value2, "carId");
+            addCriterion("car_id_ between", value1, value2, "carId");
             return (Criteria) this;
         }
 
         public Criteria andCarIdNotBetween(String value1, String value2) {
-            addCriterion("car_id not between", value1, value2, "carId");
+            addCriterion("car_id_ not between", value1, value2, "carId");
             return (Criteria) this;
         }
 

@@ -6,7 +6,7 @@ import java.util.Date;
 public class TbPropagandaFeeRules implements Serializable {
     private String proFeeRuleCode;
 
-    private Long propagandaFee;
+    private Double propagandaFee;
 
     private Date createdTime;
 
@@ -18,7 +18,7 @@ public class TbPropagandaFeeRules implements Serializable {
 
     private Byte recordStatus;
 
-    private String proFeeRuleName;
+    private String proFeeRuleDetails;
 
     private static final long serialVersionUID = 1L;
 
@@ -30,11 +30,11 @@ public class TbPropagandaFeeRules implements Serializable {
         this.proFeeRuleCode = proFeeRuleCode == null ? null : proFeeRuleCode.trim();
     }
 
-    public Long getPropagandaFee() {
+    public Double getPropagandaFee() {
         return propagandaFee;
     }
 
-    public void setPropagandaFee(Long propagandaFee) {
+    public void setPropagandaFee(Double propagandaFee) {
         this.propagandaFee = propagandaFee;
     }
 
@@ -78,12 +78,12 @@ public class TbPropagandaFeeRules implements Serializable {
         this.recordStatus = recordStatus;
     }
 
-    public String getProFeeRuleName() {
-        return proFeeRuleName;
+    public String getProFeeRuleDetails() {
+        return proFeeRuleDetails;
     }
 
-    public void setProFeeRuleName(String proFeeRuleName) {
-        this.proFeeRuleName = proFeeRuleName == null ? null : proFeeRuleName.trim();
+    public void setProFeeRuleDetails(String proFeeRuleDetails) {
+        this.proFeeRuleDetails = proFeeRuleDetails == null ? null : proFeeRuleDetails.trim();
     }
 
     @Override
@@ -105,7 +105,7 @@ public class TbPropagandaFeeRules implements Serializable {
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
-            && (this.getProFeeRuleName() == null ? other.getProFeeRuleName() == null : this.getProFeeRuleName().equals(other.getProFeeRuleName()));
+            && (this.getProFeeRuleDetails() == null ? other.getProFeeRuleDetails() == null : this.getProFeeRuleDetails().equals(other.getProFeeRuleDetails()));
     }
 
     @Override
@@ -119,7 +119,7 @@ public class TbPropagandaFeeRules implements Serializable {
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
-        result = prime * result + ((getProFeeRuleName() == null) ? 0 : getProFeeRuleName().hashCode());
+        result = prime * result + ((getProFeeRuleDetails() == null) ? 0 : getProFeeRuleDetails().hashCode());
         return result;
     }
 
@@ -136,7 +136,7 @@ public class TbPropagandaFeeRules implements Serializable {
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
-        sb.append(", proFeeRuleName=").append(proFeeRuleName);
+        sb.append(", proFeeRuleDetails=").append(proFeeRuleDetails);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -2,13 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.parking.dao.TbParkingRecordMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingRecord">
-    <id column="parking_id" jdbcType="VARCHAR" property="parkingId" />
+    <id column="parking_id_" jdbcType="VARCHAR" property="parkingId" />
+    <result column="area_id_" jdbcType="VARCHAR" property="areaId" />
     <result column="area_name" jdbcType="VARCHAR" property="areaName" />
     <result column="car_license" jdbcType="VARCHAR" property="carLicense" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="admission_time" jdbcType="TIMESTAMP" property="admissionTime" />
+    <result column="start_billing_time" jdbcType="TIMESTAMP" property="startBillingTime" />
     <result column="departure_time" jdbcType="TIMESTAMP" property="departureTime" />
     <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
     <result column="parking_status" jdbcType="VARCHAR" property="parkingStatus" />
@@ -85,10 +87,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    parking_id, area_name, car_license, account, name, phone, admission_time, departure_time, 
-    payment_time, parking_status, parking_time, due_money, use_integral, deduction_money, 
-    actual_money, order_bill_num, pay_time, pay_status, creator_account, created_time, 
-    modifier_account, modified_time, record_status
+    parking_id_, area_id_, area_name, car_license, account, name, phone, admission_time, 
+    start_billing_time, departure_time, payment_time, parking_status, parking_time, due_money, 
+    use_integral, deduction_money, actual_money, order_bill_num, pay_time, pay_status, 
+    creator_account, created_time, modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingRecordCriteria" resultMap="BaseResultMap">
     select
@@ -108,11 +110,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_parking_record
-    where parking_id = #{parkingId,jdbcType=VARCHAR}
+    where parking_id_ = #{parkingId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_parking_record
-    where parking_id = #{parkingId,jdbcType=VARCHAR}
+    where parking_id_ = #{parkingId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.parking.entity.TbParkingRecordCriteria">
     delete from tb_parking_record
@@ -121,28 +123,33 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingRecord">
-    insert into tb_parking_record (parking_id, area_name, car_license, 
-      account, name, phone, 
-      admission_time, departure_time, payment_time, 
-      parking_status, parking_time, due_money, 
-      use_integral, deduction_money, actual_money, 
-      order_bill_num, pay_time, pay_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time, record_status)
-    values (#{parkingId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{carLicense,jdbcType=VARCHAR}, 
-      #{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{admissionTime,jdbcType=TIMESTAMP}, #{departureTime,jdbcType=TIMESTAMP}, #{paymentTime,jdbcType=TIMESTAMP}, 
-      #{parkingStatus,jdbcType=VARCHAR}, #{parkingTime,jdbcType=VARCHAR}, #{dueMoney,jdbcType=DOUBLE}, 
-      #{useIntegral,jdbcType=DOUBLE}, #{deductionMoney,jdbcType=DOUBLE}, #{actualMoney,jdbcType=DOUBLE}, 
-      #{orderBillNum,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=VARCHAR}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
+    insert into tb_parking_record (parking_id_, area_id_, area_name, 
+      car_license, account, name, 
+      phone, admission_time, start_billing_time, 
+      departure_time, payment_time, parking_status, 
+      parking_time, due_money, use_integral, 
+      deduction_money, actual_money, order_bill_num, 
+      pay_time, pay_status, creator_account, 
+      created_time, modifier_account, modified_time, 
+      record_status)
+    values (#{parkingId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, 
+      #{carLicense,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{admissionTime,jdbcType=TIMESTAMP}, #{startBillingTime,jdbcType=TIMESTAMP}, 
+      #{departureTime,jdbcType=TIMESTAMP}, #{paymentTime,jdbcType=TIMESTAMP}, #{parkingStatus,jdbcType=VARCHAR}, 
+      #{parkingTime,jdbcType=VARCHAR}, #{dueMoney,jdbcType=DOUBLE}, #{useIntegral,jdbcType=DOUBLE}, 
+      #{deductionMoney,jdbcType=DOUBLE}, #{actualMoney,jdbcType=DOUBLE}, #{orderBillNum,jdbcType=VARCHAR}, 
+      #{payTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingRecord">
     insert into tb_parking_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="parkingId != null">
-        parking_id,
+        parking_id_,
+      </if>
+      <if test="areaId != null">
+        area_id_,
       </if>
       <if test="areaName != null">
         area_name,
@@ -161,6 +168,9 @@
       </if>
       <if test="admissionTime != null">
         admission_time,
+      </if>
+      <if test="startBillingTime != null">
+        start_billing_time,
       </if>
       <if test="departureTime != null">
         departure_time,
@@ -215,6 +225,9 @@
       <if test="parkingId != null">
         #{parkingId,jdbcType=VARCHAR},
       </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=VARCHAR},
+      </if>
       <if test="areaName != null">
         #{areaName,jdbcType=VARCHAR},
       </if>
@@ -232,6 +245,9 @@
       </if>
       <if test="admissionTime != null">
         #{admissionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startBillingTime != null">
+        #{startBillingTime,jdbcType=TIMESTAMP},
       </if>
       <if test="departureTime != null">
         #{departureTime,jdbcType=TIMESTAMP},
@@ -293,7 +309,10 @@
     update tb_parking_record
     <set>
       <if test="record.parkingId != null">
-        parking_id = #{record.parkingId,jdbcType=VARCHAR},
+        parking_id_ = #{record.parkingId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaId != null">
+        area_id_ = #{record.areaId,jdbcType=VARCHAR},
       </if>
       <if test="record.areaName != null">
         area_name = #{record.areaName,jdbcType=VARCHAR},
@@ -312,6 +331,9 @@
       </if>
       <if test="record.admissionTime != null">
         admission_time = #{record.admissionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startBillingTime != null">
+        start_billing_time = #{record.startBillingTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.departureTime != null">
         departure_time = #{record.departureTime,jdbcType=TIMESTAMP},
@@ -368,13 +390,15 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_parking_record
-    set parking_id = #{record.parkingId,jdbcType=VARCHAR},
+    set parking_id_ = #{record.parkingId,jdbcType=VARCHAR},
+      area_id_ = #{record.areaId,jdbcType=VARCHAR},
       area_name = #{record.areaName,jdbcType=VARCHAR},
       car_license = #{record.carLicense,jdbcType=VARCHAR},
       account = #{record.account,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
       admission_time = #{record.admissionTime,jdbcType=TIMESTAMP},
+      start_billing_time = #{record.startBillingTime,jdbcType=TIMESTAMP},
       departure_time = #{record.departureTime,jdbcType=TIMESTAMP},
       payment_time = #{record.paymentTime,jdbcType=TIMESTAMP},
       parking_status = #{record.parkingStatus,jdbcType=VARCHAR},
@@ -398,6 +422,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.parking.entity.TbParkingRecord">
     update tb_parking_record
     <set>
+      <if test="areaId != null">
+        area_id_ = #{areaId,jdbcType=VARCHAR},
+      </if>
       <if test="areaName != null">
         area_name = #{areaName,jdbcType=VARCHAR},
       </if>
@@ -415,6 +442,9 @@
       </if>
       <if test="admissionTime != null">
         admission_time = #{admissionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startBillingTime != null">
+        start_billing_time = #{startBillingTime,jdbcType=TIMESTAMP},
       </if>
       <if test="departureTime != null">
         departure_time = #{departureTime,jdbcType=TIMESTAMP},
@@ -465,16 +495,18 @@
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
-    where parking_id = #{parkingId,jdbcType=VARCHAR}
+    where parking_id_ = #{parkingId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingRecord">
     update tb_parking_record
-    set area_name = #{areaName,jdbcType=VARCHAR},
+    set area_id_ = #{areaId,jdbcType=VARCHAR},
+      area_name = #{areaName,jdbcType=VARCHAR},
       car_license = #{carLicense,jdbcType=VARCHAR},
       account = #{account,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       admission_time = #{admissionTime,jdbcType=TIMESTAMP},
+      start_billing_time = #{startBillingTime,jdbcType=TIMESTAMP},
       departure_time = #{departureTime,jdbcType=TIMESTAMP},
       payment_time = #{paymentTime,jdbcType=TIMESTAMP},
       parking_status = #{parkingStatus,jdbcType=VARCHAR},
@@ -491,6 +523,6 @@
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT}
-    where parking_id = #{parkingId,jdbcType=VARCHAR}
+    where parking_id_ = #{parkingId,jdbcType=VARCHAR}
   </update>
 </mapper>

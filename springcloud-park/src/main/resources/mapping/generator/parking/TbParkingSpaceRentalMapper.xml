@@ -3,11 +3,17 @@
 <mapper namespace="com.jn.park.parking.dao.TbParkingSpaceRentalMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingSpaceRental">
     <id column="rent_id_" jdbcType="VARCHAR" property="rentId" />
+    <result column="area_id_" jdbcType="VARCHAR" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="space_id_" jdbcType="VARCHAR" property="spaceId" />
     <result column="space_serial" jdbcType="VARCHAR" property="spaceSerial" />
+    <result column="parking_info" jdbcType="VARCHAR" property="parkingInfo" />
+    <result column="car_license" jdbcType="VARCHAR" property="carLicense" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="rent_price" jdbcType="VARCHAR" property="rentPrice" />
+    <result column="policy_id_" jdbcType="VARCHAR" property="policyId" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="due_money" jdbcType="DOUBLE" property="dueMoney" />
@@ -84,8 +90,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    rent_id_, space_serial, account, name, phone, rent_price, start_time, end_time, due_money, 
-    deduction_money, actual_money, order_bill_num, approval_account, approval_name, approval_comments, 
+    rent_id_, area_id_, area_name, space_id_, space_serial, parking_info, car_license, 
+    account, name, phone, rent_price, policy_id_, start_time, end_time, due_money, deduction_money, 
+    actual_money, order_bill_num, approval_account, approval_name, approval_comments, 
     approval_status, contract_attachment, created_time, creator_account, modified_time, 
     modifier_account, record_status
   </sql>
@@ -120,16 +127,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingSpaceRental">
-    insert into tb_parking_space_rental (rent_id_, space_serial, account, 
-      name, phone, rent_price, 
+    insert into tb_parking_space_rental (rent_id_, area_id_, area_name, 
+      space_id_, space_serial, parking_info, 
+      car_license, account, name, 
+      phone, rent_price, policy_id_, 
       start_time, end_time, due_money, 
       deduction_money, actual_money, order_bill_num, 
       approval_account, approval_name, approval_comments, 
       approval_status, contract_attachment, created_time, 
       creator_account, modified_time, modifier_account, 
       record_status)
-    values (#{rentId,jdbcType=VARCHAR}, #{spaceSerial,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{rentPrice,jdbcType=VARCHAR}, 
+    values (#{rentId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, 
+      #{spaceId,jdbcType=VARCHAR}, #{spaceSerial,jdbcType=VARCHAR}, #{parkingInfo,jdbcType=VARCHAR}, 
+      #{carLicense,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{rentPrice,jdbcType=VARCHAR}, #{policyId,jdbcType=VARCHAR}, 
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{dueMoney,jdbcType=DOUBLE}, 
       #{deductionMoney,jdbcType=DOUBLE}, #{actualMoney,jdbcType=DOUBLE}, #{orderBillNum,jdbcType=VARCHAR}, 
       #{approvalAccount,jdbcType=VARCHAR}, #{approvalName,jdbcType=VARCHAR}, #{approvalComments,jdbcType=VARCHAR}, 
@@ -143,8 +154,23 @@
       <if test="rentId != null">
         rent_id_,
       </if>
+      <if test="areaId != null">
+        area_id_,
+      </if>
+      <if test="areaName != null">
+        area_name,
+      </if>
+      <if test="spaceId != null">
+        space_id_,
+      </if>
       <if test="spaceSerial != null">
         space_serial,
+      </if>
+      <if test="parkingInfo != null">
+        parking_info,
+      </if>
+      <if test="carLicense != null">
+        car_license,
       </if>
       <if test="account != null">
         account,
@@ -157,6 +183,9 @@
       </if>
       <if test="rentPrice != null">
         rent_price,
+      </if>
+      <if test="policyId != null">
+        policy_id_,
       </if>
       <if test="startTime != null">
         start_time,
@@ -211,8 +240,23 @@
       <if test="rentId != null">
         #{rentId,jdbcType=VARCHAR},
       </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceId != null">
+        #{spaceId,jdbcType=VARCHAR},
+      </if>
       <if test="spaceSerial != null">
         #{spaceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingInfo != null">
+        #{parkingInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="carLicense != null">
+        #{carLicense,jdbcType=VARCHAR},
       </if>
       <if test="account != null">
         #{account,jdbcType=VARCHAR},
@@ -225,6 +269,9 @@
       </if>
       <if test="rentPrice != null">
         #{rentPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="policyId != null">
+        #{policyId,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
@@ -288,8 +335,23 @@
       <if test="record.rentId != null">
         rent_id_ = #{record.rentId,jdbcType=VARCHAR},
       </if>
+      <if test="record.areaId != null">
+        area_id_ = #{record.areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaName != null">
+        area_name = #{record.areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spaceId != null">
+        space_id_ = #{record.spaceId,jdbcType=VARCHAR},
+      </if>
       <if test="record.spaceSerial != null">
         space_serial = #{record.spaceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingInfo != null">
+        parking_info = #{record.parkingInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carLicense != null">
+        car_license = #{record.carLicense,jdbcType=VARCHAR},
       </if>
       <if test="record.account != null">
         account = #{record.account,jdbcType=VARCHAR},
@@ -302,6 +364,9 @@
       </if>
       <if test="record.rentPrice != null">
         rent_price = #{record.rentPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.policyId != null">
+        policy_id_ = #{record.policyId,jdbcType=VARCHAR},
       </if>
       <if test="record.startTime != null">
         start_time = #{record.startTime,jdbcType=TIMESTAMP},
@@ -359,11 +424,17 @@
   <update id="updateByExample" parameterType="map">
     update tb_parking_space_rental
     set rent_id_ = #{record.rentId,jdbcType=VARCHAR},
+      area_id_ = #{record.areaId,jdbcType=VARCHAR},
+      area_name = #{record.areaName,jdbcType=VARCHAR},
+      space_id_ = #{record.spaceId,jdbcType=VARCHAR},
       space_serial = #{record.spaceSerial,jdbcType=VARCHAR},
+      parking_info = #{record.parkingInfo,jdbcType=VARCHAR},
+      car_license = #{record.carLicense,jdbcType=VARCHAR},
       account = #{record.account,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
       rent_price = #{record.rentPrice,jdbcType=VARCHAR},
+      policy_id_ = #{record.policyId,jdbcType=VARCHAR},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       due_money = #{record.dueMoney,jdbcType=DOUBLE},
@@ -387,8 +458,23 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.parking.entity.TbParkingSpaceRental">
     update tb_parking_space_rental
     <set>
+      <if test="areaId != null">
+        area_id_ = #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceId != null">
+        space_id_ = #{spaceId,jdbcType=VARCHAR},
+      </if>
       <if test="spaceSerial != null">
         space_serial = #{spaceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingInfo != null">
+        parking_info = #{parkingInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="carLicense != null">
+        car_license = #{carLicense,jdbcType=VARCHAR},
       </if>
       <if test="account != null">
         account = #{account,jdbcType=VARCHAR},
@@ -401,6 +487,9 @@
       </if>
       <if test="rentPrice != null">
         rent_price = #{rentPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="policyId != null">
+        policy_id_ = #{policyId,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
@@ -455,11 +544,17 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingSpaceRental">
     update tb_parking_space_rental
-    set space_serial = #{spaceSerial,jdbcType=VARCHAR},
+    set area_id_ = #{areaId,jdbcType=VARCHAR},
+      area_name = #{areaName,jdbcType=VARCHAR},
+      space_id_ = #{spaceId,jdbcType=VARCHAR},
+      space_serial = #{spaceSerial,jdbcType=VARCHAR},
+      parking_info = #{parkingInfo,jdbcType=VARCHAR},
+      car_license = #{carLicense,jdbcType=VARCHAR},
       account = #{account,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       rent_price = #{rentPrice,jdbcType=VARCHAR},
+      policy_id_ = #{policyId,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       due_money = #{dueMoney,jdbcType=DOUBLE},

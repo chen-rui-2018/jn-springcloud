@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.parking.dao.ParkingSpaceMapper">
+
+
+    <!-- 车辆列表 -->
+    <select id="getCarInfoList" resultType="com.jn.park.parking.vo.ParkingCarInfoVo" parameterType="com.jn.park.parking.model.ParkingCarInfoParam">
+
+        SELECT tt.* FROM (
+        SELECT i.car_id_ AS 'carId'
+        ,i.car_license AS 'carLicense'
+        ,(SELECT r.parking_status FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY r.created_time
+        DESC LIMIT 0,1 ) AS 'parkingStatus'
+        ,DATE_FORMAT((SELECT r.admission_time FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY
+        r.created_time DESC LIMIT 0,1 ),'%Y-%m-%d %H:%i:%s') AS 'admissiontime'
+        ,DATE_FORMAT((SELECT r.departure_time FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY
+        r.created_time DESC LIMIT 0,1 ),'%Y-%m-%d %H:%i:%s') AS 'departureTime'
+        ,i.name AS 'name'
+        ,i.phone AS 'phone'
+        ,IF((SELECT COUNT(1) FROM tb_parking_space_rental re WHERE re.car_license =i.car_license AND re.approval_status = '6' AND re.end_time > NOW())>0,'1','0') AS 'leaseStatus'
+        ,(SELECT re.rent_id_ FROM tb_parking_space_rental re WHERE re.car_license =i.car_license AND re.approval_status = '6' AND re.end_time > NOW() ORDER BY re.created_time DESC LIMIT 0,1 ) AS 'rentId'
+        ,(SELECT re.parking_info FROM tb_parking_space_rental re WHERE re.car_license =i.car_license AND re.approval_status = '6' AND re.end_time > NOW() ORDER BY re.created_time DESC LIMIT 0,1 ) AS 'parkingInfo'
+
+        FROM tb_parking_car_info i WHERE i.record_status = '1'
+
+        <if test="carId !=null and carId !='' ">
+            and c.car_id_ = #{carId,jdbcType=VARCHAR}
+        </if>
+        <if test="carLicense !=null and carLicense !='' ">
+            and c.car_license = #{carLicense,jdbcType=VARCHAR}
+        </if>
+        <if test="name !=null and name !='' ">
+            and c.name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="phone !=null and phone !='' ">
+            and c.phonel = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="account !=null and account !='' ">
+            and c.phonel = #{account,jdbcType=VARCHAR}
+        </if>
+        ) tt
+        where 1=1
+        <if test="parkingStatus !=null and parkingStatus !='' ">
+            and tt.parkingStatus = #{parkingStatus,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
+
+    <!-- 停辆统计 -->
+    <select id="getUserCarInfoCount" resultType="com.jn.park.parking.vo.ParkingUserCarInfoCountVo">
+        SELECT tt.* FROM (
+            SELECT
+            (SELECT COUNT(1) FROM tb_parking_car_info i WHERE i.record_status = '1' AND i.car_status = '1' AND i.account = #{userAccount,jdbcType=VARCHAR} ) AS 'carTotal',
+            (SELECT COUNT(1) FROM tb_parking_record r WHERE r.parking_status = '1' AND r.record_status = '1' AND r.account = #{userAccount,jdbcType=VARCHAR}) AS 'parkingCarNum'
+            FROM DUAL
+        ) tt
+    </select>
+
+
+
+    <!-- 车辆列表 -->
+    <select id="getCarParkingRecordList" resultType="com.jn.park.parking.vo.ParkingRecordVo">
+
+        SELECT tt.* FROM (
+        SELECT i.car_id_ AS 'carId'
+        ,i.car_license AS 'carLicense'
+        ,(SELECT r.parking_status FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY r.created_time
+        DESC LIMIT 0,1 ) AS 'parkingStatus'
+        ,DATE_FORMAT((SELECT r.admission_time FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY
+        r.created_time DESC LIMIT 0,1 ),'%Y-%m-%d %H:%i:%s') AS 'admissiontime'
+        ,DATE_FORMAT((SELECT r.departure_time FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY
+        r.created_time DESC LIMIT 0,1 ),'%Y-%m-%d %H:%i:%s') AS 'departureTime'
+        ,i.name AS 'name'
+        ,i.phone AS 'phone'
+        ,IF((SELECT COUNT(1) FROM tb_parking_space_rental re WHERE re.car_license =i.car_license AND re.approval_status = '6' AND re.end_time > NOW())>0,'1','0') AS 'leaseStatus'
+        ,(SELECT re.rent_id_ FROM tb_parking_space_rental re WHERE re.car_license =i.car_license AND re.approval_status = '6' AND re.end_time > NOW() ORDER BY re.created_time DESC LIMIT 0,1 ) AS 'rentId'
+        ,(SELECT re.parking_info FROM tb_parking_space_rental re WHERE re.car_license =i.car_license AND re.approval_status = '6' AND re.end_time > NOW() ORDER BY re.created_time DESC LIMIT 0,1 ) AS 'parkingInfo'
+
+        FROM tb_parking_car_info i WHERE i.record_status = '1' and
+
+    </select>
+
+
+</mapper>

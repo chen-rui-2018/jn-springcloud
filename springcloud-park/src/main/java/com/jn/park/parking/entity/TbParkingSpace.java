@@ -7,16 +7,19 @@ public class TbParkingSpace implements Serializable {
     /*@ApiModelProperty("停车位Id")*/
     private String spaceId;
 
-    /*@ApiModelProperty("停车场名称")*/
-    private String areaName;
+    /*@ApiModelProperty("停车场ID")*/
+    private String areaId;
 
     /*@ApiModelProperty("车位编号")*/
     private String spaceSerial;
 
-    /*@ApiModelProperty("当前租赁车牌号")*/
+    /*@ApiModelProperty("当前租赁车牌号[每次车位租赁支付后都会修改该字段，保证该值是最新的]")*/
     private String carLicense;
 
-    /*@ApiModelProperty("车位状态(0未出租,1已出租)")*/
+    /*@ApiModelProperty("最新租赁标识[每次车位租赁支付后都会修改该字段，保证该值是最新的]")*/
+    private String rentId;
+
+    /*@ApiModelProperty("车位状态(1未出租,2已出租,0无效)")*/
     private String spaceStatus;
 
     /*@ApiModelProperty("创建时间")*/
@@ -44,12 +47,12 @@ public class TbParkingSpace implements Serializable {
         this.spaceId = spaceId == null ? null : spaceId.trim();
     }
 
-    public String getAreaName() {
-        return areaName;
+    public String getAreaId() {
+        return areaId;
     }
 
-    public void setAreaName(String areaName) {
-        this.areaName = areaName == null ? null : areaName.trim();
+    public void setAreaId(String areaId) {
+        this.areaId = areaId == null ? null : areaId.trim();
     }
 
     public String getSpaceSerial() {
@@ -66,6 +69,14 @@ public class TbParkingSpace implements Serializable {
 
     public void setCarLicense(String carLicense) {
         this.carLicense = carLicense == null ? null : carLicense.trim();
+    }
+
+    public String getRentId() {
+        return rentId;
+    }
+
+    public void setRentId(String rentId) {
+        this.rentId = rentId == null ? null : rentId.trim();
     }
 
     public String getSpaceStatus() {
@@ -129,9 +140,10 @@ public class TbParkingSpace implements Serializable {
         }
         TbParkingSpace other = (TbParkingSpace) that;
         return (this.getSpaceId() == null ? other.getSpaceId() == null : this.getSpaceId().equals(other.getSpaceId()))
-            && (this.getAreaName() == null ? other.getAreaName() == null : this.getAreaName().equals(other.getAreaName()))
+            && (this.getAreaId() == null ? other.getAreaId() == null : this.getAreaId().equals(other.getAreaId()))
             && (this.getSpaceSerial() == null ? other.getSpaceSerial() == null : this.getSpaceSerial().equals(other.getSpaceSerial()))
             && (this.getCarLicense() == null ? other.getCarLicense() == null : this.getCarLicense().equals(other.getCarLicense()))
+            && (this.getRentId() == null ? other.getRentId() == null : this.getRentId().equals(other.getRentId()))
             && (this.getSpaceStatus() == null ? other.getSpaceStatus() == null : this.getSpaceStatus().equals(other.getSpaceStatus()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -145,9 +157,10 @@ public class TbParkingSpace implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getSpaceId() == null) ? 0 : getSpaceId().hashCode());
-        result = prime * result + ((getAreaName() == null) ? 0 : getAreaName().hashCode());
+        result = prime * result + ((getAreaId() == null) ? 0 : getAreaId().hashCode());
         result = prime * result + ((getSpaceSerial() == null) ? 0 : getSpaceSerial().hashCode());
         result = prime * result + ((getCarLicense() == null) ? 0 : getCarLicense().hashCode());
+        result = prime * result + ((getRentId() == null) ? 0 : getRentId().hashCode());
         result = prime * result + ((getSpaceStatus() == null) ? 0 : getSpaceStatus().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -164,9 +177,10 @@ public class TbParkingSpace implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", spaceId=").append(spaceId);
-        sb.append(", areaName=").append(areaName);
+        sb.append(", areaId=").append(areaId);
         sb.append(", spaceSerial=").append(spaceSerial);
         sb.append(", carLicense=").append(carLicense);
+        sb.append(", rentId=").append(rentId);
         sb.append(", spaceStatus=").append(spaceStatus);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);

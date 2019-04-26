@@ -7,8 +7,23 @@ public class TbParkingSpaceRental implements Serializable {
     /*@ApiModelProperty("出租记录id")*/
     private String rentId;
 
+    /*@ApiModelProperty("停车场标识")*/
+    private String areaId;
+
+    /*@ApiModelProperty("停车场名称")*/
+    private String areaName;
+
+    /*@ApiModelProperty("停车位标识")*/
+    private String spaceId;
+
     /*@ApiModelProperty("车位编号")*/
     private String spaceSerial;
+
+    /*@ApiModelProperty("停车位名称")*/
+    private String parkingInfo;
+
+    /*@ApiModelProperty("车牌号")*/
+    private String carLicense;
 
     /*@ApiModelProperty("车主账号")*/
     private String account;
@@ -22,19 +37,22 @@ public class TbParkingSpaceRental implements Serializable {
     /*@ApiModelProperty("价格(单位元/年)")*/
     private String rentPrice;
 
+    /*@ApiModelProperty("优惠政策标识")*/
+    private String policyId;
+
     /*@ApiModelProperty("开始日期")*/
     private Date startTime;
 
     /*@ApiModelProperty("结束日期")*/
     private Date endTime;
 
-    /*@ApiModelProperty("应缴金额")*/
+    /*@ApiModelProperty("应缴金额[优惠前金额]")*/
     private Double dueMoney;
 
     /*@ApiModelProperty("减免金额")*/
     private Double deductionMoney;
 
-    /*@ApiModelProperty("实缴金额")*/
+    /*@ApiModelProperty("实缴金额[优惠后金额]")*/
     private Double actualMoney;
 
     /*@ApiModelProperty("缴费单号")*/
@@ -49,7 +67,7 @@ public class TbParkingSpaceRental implements Serializable {
     /*@ApiModelProperty("审批意见")*/
     private String approvalComments;
 
-    /*@ApiModelProperty("0-待审核,1审核通过(待缴费),2,审批不通过")*/
+    /*@ApiModelProperty("-1无效,0待审核,1审批中,2审核通过(待缴费),3审批不通过，4待支付，5支付中，6支付成功 7已取消")*/
     private String approvalStatus;
 
     /*@ApiModelProperty("合同下载路径")*/
@@ -80,12 +98,52 @@ public class TbParkingSpaceRental implements Serializable {
         this.rentId = rentId == null ? null : rentId.trim();
     }
 
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId == null ? null : areaId.trim();
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName == null ? null : areaName.trim();
+    }
+
+    public String getSpaceId() {
+        return spaceId;
+    }
+
+    public void setSpaceId(String spaceId) {
+        this.spaceId = spaceId == null ? null : spaceId.trim();
+    }
+
     public String getSpaceSerial() {
         return spaceSerial;
     }
 
     public void setSpaceSerial(String spaceSerial) {
         this.spaceSerial = spaceSerial == null ? null : spaceSerial.trim();
+    }
+
+    public String getParkingInfo() {
+        return parkingInfo;
+    }
+
+    public void setParkingInfo(String parkingInfo) {
+        this.parkingInfo = parkingInfo == null ? null : parkingInfo.trim();
+    }
+
+    public String getCarLicense() {
+        return carLicense;
+    }
+
+    public void setCarLicense(String carLicense) {
+        this.carLicense = carLicense == null ? null : carLicense.trim();
     }
 
     public String getAccount() {
@@ -118,6 +176,14 @@ public class TbParkingSpaceRental implements Serializable {
 
     public void setRentPrice(String rentPrice) {
         this.rentPrice = rentPrice == null ? null : rentPrice.trim();
+    }
+
+    public String getPolicyId() {
+        return policyId;
+    }
+
+    public void setPolicyId(String policyId) {
+        this.policyId = policyId == null ? null : policyId.trim();
     }
 
     public Date getStartTime() {
@@ -261,11 +327,17 @@ public class TbParkingSpaceRental implements Serializable {
         }
         TbParkingSpaceRental other = (TbParkingSpaceRental) that;
         return (this.getRentId() == null ? other.getRentId() == null : this.getRentId().equals(other.getRentId()))
+            && (this.getAreaId() == null ? other.getAreaId() == null : this.getAreaId().equals(other.getAreaId()))
+            && (this.getAreaName() == null ? other.getAreaName() == null : this.getAreaName().equals(other.getAreaName()))
+            && (this.getSpaceId() == null ? other.getSpaceId() == null : this.getSpaceId().equals(other.getSpaceId()))
             && (this.getSpaceSerial() == null ? other.getSpaceSerial() == null : this.getSpaceSerial().equals(other.getSpaceSerial()))
+            && (this.getParkingInfo() == null ? other.getParkingInfo() == null : this.getParkingInfo().equals(other.getParkingInfo()))
+            && (this.getCarLicense() == null ? other.getCarLicense() == null : this.getCarLicense().equals(other.getCarLicense()))
             && (this.getAccount() == null ? other.getAccount() == null : this.getAccount().equals(other.getAccount()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getRentPrice() == null ? other.getRentPrice() == null : this.getRentPrice().equals(other.getRentPrice()))
+            && (this.getPolicyId() == null ? other.getPolicyId() == null : this.getPolicyId().equals(other.getPolicyId()))
             && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
             && (this.getEndTime() == null ? other.getEndTime() == null : this.getEndTime().equals(other.getEndTime()))
             && (this.getDueMoney() == null ? other.getDueMoney() == null : this.getDueMoney().equals(other.getDueMoney()))
@@ -289,11 +361,17 @@ public class TbParkingSpaceRental implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getRentId() == null) ? 0 : getRentId().hashCode());
+        result = prime * result + ((getAreaId() == null) ? 0 : getAreaId().hashCode());
+        result = prime * result + ((getAreaName() == null) ? 0 : getAreaName().hashCode());
+        result = prime * result + ((getSpaceId() == null) ? 0 : getSpaceId().hashCode());
         result = prime * result + ((getSpaceSerial() == null) ? 0 : getSpaceSerial().hashCode());
+        result = prime * result + ((getParkingInfo() == null) ? 0 : getParkingInfo().hashCode());
+        result = prime * result + ((getCarLicense() == null) ? 0 : getCarLicense().hashCode());
         result = prime * result + ((getAccount() == null) ? 0 : getAccount().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getRentPrice() == null) ? 0 : getRentPrice().hashCode());
+        result = prime * result + ((getPolicyId() == null) ? 0 : getPolicyId().hashCode());
         result = prime * result + ((getStartTime() == null) ? 0 : getStartTime().hashCode());
         result = prime * result + ((getEndTime() == null) ? 0 : getEndTime().hashCode());
         result = prime * result + ((getDueMoney() == null) ? 0 : getDueMoney().hashCode());
@@ -320,11 +398,17 @@ public class TbParkingSpaceRental implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", rentId=").append(rentId);
+        sb.append(", areaId=").append(areaId);
+        sb.append(", areaName=").append(areaName);
+        sb.append(", spaceId=").append(spaceId);
         sb.append(", spaceSerial=").append(spaceSerial);
+        sb.append(", parkingInfo=").append(parkingInfo);
+        sb.append(", carLicense=").append(carLicense);
         sb.append(", account=").append(account);
         sb.append(", name=").append(name);
         sb.append(", phone=").append(phone);
         sb.append(", rentPrice=").append(rentPrice);
+        sb.append(", policyId=").append(policyId);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
         sb.append(", dueMoney=").append(dueMoney);

@@ -106,72 +106,72 @@ public class TbParkingViolationCriteria {
         }
 
         public Criteria andReportIdIsNull() {
-            addCriterion("report_id is null");
+            addCriterion("report_id_ is null");
             return (Criteria) this;
         }
 
         public Criteria andReportIdIsNotNull() {
-            addCriterion("report_id is not null");
+            addCriterion("report_id_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andReportIdEqualTo(String value) {
-            addCriterion("report_id =", value, "reportId");
+            addCriterion("report_id_ =", value, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdNotEqualTo(String value) {
-            addCriterion("report_id <>", value, "reportId");
+            addCriterion("report_id_ <>", value, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdGreaterThan(String value) {
-            addCriterion("report_id >", value, "reportId");
+            addCriterion("report_id_ >", value, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdGreaterThanOrEqualTo(String value) {
-            addCriterion("report_id >=", value, "reportId");
+            addCriterion("report_id_ >=", value, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdLessThan(String value) {
-            addCriterion("report_id <", value, "reportId");
+            addCriterion("report_id_ <", value, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdLessThanOrEqualTo(String value) {
-            addCriterion("report_id <=", value, "reportId");
+            addCriterion("report_id_ <=", value, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdLike(String value) {
-            addCriterion("report_id like", value, "reportId");
+            addCriterion("report_id_ like", value, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdNotLike(String value) {
-            addCriterion("report_id not like", value, "reportId");
+            addCriterion("report_id_ not like", value, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdIn(List<String> values) {
-            addCriterion("report_id in", values, "reportId");
+            addCriterion("report_id_ in", values, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdNotIn(List<String> values) {
-            addCriterion("report_id not in", values, "reportId");
+            addCriterion("report_id_ not in", values, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdBetween(String value1, String value2) {
-            addCriterion("report_id between", value1, value2, "reportId");
+            addCriterion("report_id_ between", value1, value2, "reportId");
             return (Criteria) this;
         }
 
         public Criteria andReportIdNotBetween(String value1, String value2) {
-            addCriterion("report_id not between", value1, value2, "reportId");
+            addCriterion("report_id_ not between", value1, value2, "reportId");
             return (Criteria) this;
         }
 

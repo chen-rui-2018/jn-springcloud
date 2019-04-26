@@ -42,6 +42,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-enterprise-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
 
     </dependencies>
     <build>
@@ -76,7 +80,7 @@
                         parking
                     </contexts>
                     <tableNames>
-                        tb_parking_area
+                        tb_parking_record
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

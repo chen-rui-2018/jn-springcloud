@@ -19,7 +19,7 @@ public class TbParkingCarInfo implements Serializable {
     /*@ApiModelProperty("联系方式")*/
     private String phone;
 
-    /*@ApiModelProperty("0出场1入场 2违停")*/
+    /*@ApiModelProperty("1出场2入场 3违停 0无效")*/
     private String carStatus;
 
     /*@ApiModelProperty("车位id")*/

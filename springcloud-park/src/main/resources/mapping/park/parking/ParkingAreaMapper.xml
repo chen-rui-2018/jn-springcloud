@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.parking.dao.ParkingAreaMapper">
+
+    <resultMap id="parkingAreaDetailMap" type="com.jn.park.parking.vo.ParkingAreaDetailVo">
+        <id column="a_areaId" jdbcType="VARCHAR" property="areaId" javaType="java.lang.String"/>
+        <result column="a_areaName" jdbcType="VARCHAR" property="areaName" javaType="java.lang.String"/>
+        <result column="a_areaAddress" jdbcType="VARCHAR" property="areaAddress" javaType="java.lang.String"/>
+        <result column="a_longitude" jdbcType="VARCHAR" property="longitude" javaType="java.lang.String"/>
+        <result column="a_latitude" jdbcType="VARCHAR" property="latitude" javaType="java.lang.String"/>
+        <result column="a_leisureNumber" jdbcType="INTEGER" property="leisureNumber" javaType="java.lang.Integer"/>
+        <result column="a_rentNumber" jdbcType="INTEGER" property="rentNumber" javaType="java.lang.Integer"/>
+        <result column="a_parkingTotal" jdbcType="INTEGER" property="parkingTotal" javaType="java.lang.Integer"/>
+        <result column="a_tempFreeTime" jdbcType="INTEGER" property="tempFreeTime" javaType="java.lang.Integer"/>
+        <result column="a_tempPriceDepict" jdbcType="VARCHAR" property="tempPriceDepict" javaType="java.lang.String"/>
+        <result column="a_tempPrice" jdbcType="DOUBLE" property="tempPrice" javaType="java.lang.Double"/>
+        <result column="a_tempPriceUnit" jdbcType="DOUBLE" property="tempPriceUnit" javaType="java.lang.String"/>
+        <result column="a_tempPriceTotal" jdbcType="DOUBLE" property="tempPriceTotal" javaType="java.lang.Double"/>
+        <result column="a_rentPrice" jdbcType="DOUBLE" property="rentPrice" javaType="java.lang.Double"/>
+        <result column="a_areaPicture" jdbcType="VARCHAR" property="areaPicture" javaType="java.lang.String"/>
+        <result column="a_spacePicture" jdbcType="VARCHAR" property="spacePicture" javaType="java.lang.String"/>
+        <result column="a_gateFactory" jdbcType="VARCHAR" property="gateFactory" javaType="java.lang.String"/>
+        <result column="a_gateId" jdbcType="VARCHAR" property="gateId" javaType="java.lang.String"/>
+            <!-- 执业标签 -->
+            <collection property="serviceType" javaType="java.util.List"
+                        ofType="com.jn.park.parking.vo.ParkingServiceTypeVo">
+                <id column="t_serviceName" property="serviceName" jdbcType="VARCHAR"/>
+                <result column="t_serviceCode" property="serviceCode" jdbcType="VARCHAR"/>
+            </collection>
+    </resultMap>
+    <!-- 停车场详情 -->
+    <select id="getParkingAreaDetailById" resultMap="parkingAreaDetailMap">
+        select
+        a.area_id_ as "a_areaId"
+        ,a.area_name as "a_areaName"
+        ,a.area_address as "a_areaAddress"
+        ,a.longitude as "a_longitude"
+        ,a.latitude as "a_latitude"
+        ,a.leisure_number as "a_leisureNumber"
+        ,a.rent_number as "a_rentNumber"
+        ,a.parking_total as "a_parkingTotal"
+        ,a.temp_free_time as "a_tempFreeTime"
+        ,a.temp_price_depict as "a_tempPriceDepict"
+        ,a.temp_price as "a_tempPrice"
+        ,a.temp_price_unit as "a_tempPriceUnit"
+        ,a.temp_price_total as "a_tempPriceTotal"
+        ,a.rent_price as "a_rentPrice"
+        ,a.area_picture as "a_areaPicture"
+        ,a.space_picture as "a_spacePicture"
+        ,a.gate_factory as "a_gateFactory"
+        ,a.gate_id as "a_gateId"
+        ,ty.service_name as "t_serviceCode"
+        ,ty.service_code as "t_serviceCode"
+        from tb_parking_area a
+        left join tb_parking_service ps
+        on a.area_id_ = ps.parking_id left join tb_parking_service_type ty on ps.server_type_id = ty.id
+        where a.record_status='1' and ty.record_status = '1'
+        and a.area_id_ = #{areaId}
+    </select>
+</mapper>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.data.dao.TbDataReportingGardenFillerMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingGardenFiller">
-    <id column="fill_id" jdbcType="VARCHAR" property="fillId" />
+    <result column="fill_id" jdbcType="VARCHAR" property="fillId" />
     <result column="filler" jdbcType="VARCHAR" property="filler" />
     <result column="filler_tel" jdbcType="VARCHAR" property="fillerTel" />
     <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
@@ -89,16 +89,6 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tb_data_reporting_garden_filler
-    where fill_id = #{fillId,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_data_reporting_garden_filler
-    where fill_id = #{fillId,jdbcType=VARCHAR}
-  </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenFillerCriteria">
     delete from tb_data_reporting_garden_filler
     <if test="_parameter != null">
@@ -241,51 +231,5 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenFiller">
-    update tb_data_reporting_garden_filler
-    <set>
-      <if test="filler != null">
-        filler = #{filler,jdbcType=VARCHAR},
-      </if>
-      <if test="fillerTel != null">
-        filler_tel = #{fillerTel,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentId != null">
-        department_id = #{departmentId,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentName != null">
-        department_name = #{departmentName,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=TINYINT},
-      </if>
-      <if test="gardenExamineStauts != null">
-        garden_examine_stauts = #{gardenExamineStauts,jdbcType=TINYINT},
-      </if>
-      <if test="examineComment != null">
-        examine_comment = #{examineComment,jdbcType=VARCHAR},
-      </if>
-      <if test="tabId != null">
-        tab_id = #{tabId,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where fill_id = #{fillId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenFiller">
-    update tb_data_reporting_garden_filler
-    set filler = #{filler,jdbcType=VARCHAR},
-      filler_tel = #{fillerTel,jdbcType=VARCHAR},
-      department_id = #{departmentId,jdbcType=VARCHAR},
-      department_name = #{departmentName,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
-      record_status = #{recordStatus,jdbcType=TINYINT},
-      garden_examine_stauts = #{gardenExamineStauts,jdbcType=TINYINT},
-      examine_comment = #{examineComment,jdbcType=VARCHAR},
-      tab_id = #{tabId,jdbcType=VARCHAR}
-    where fill_id = #{fillId,jdbcType=VARCHAR}
   </update>
 </mapper>

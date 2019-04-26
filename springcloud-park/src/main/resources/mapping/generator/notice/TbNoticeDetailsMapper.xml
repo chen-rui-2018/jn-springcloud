@@ -2,10 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.notice.dao.TbNoticeDetailsMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.notice.entity.TbNoticeDetails">
-    <id column="notice_id" jdbcType="VARCHAR" property="noticeId" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="notice_id" jdbcType="VARCHAR" property="noticeId" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.notice.entity.TbNoticeDetails">
-    <result column="notice_details" jdbcType="LONGVARBINARY" property="noticeDetails" />
+    <result column="notice_details" jdbcType="LONGVARCHAR" property="noticeDetails" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    notice_id
+    id, notice_id
   </sql>
   <sql id="Blob_Column_List">
     notice_details
@@ -107,11 +108,11 @@
     ,
     <include refid="Blob_Column_List" />
     from tb_notice_details
-    where notice_id = #{noticeId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_notice_details
-    where notice_id = #{noticeId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.notice.entity.TbNoticeDetailsCriteria">
     delete from tb_notice_details
@@ -120,12 +121,17 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.notice.entity.TbNoticeDetails">
-    insert into tb_notice_details (notice_id, notice_details)
-    values (#{noticeId,jdbcType=VARCHAR}, #{noticeDetails,jdbcType=LONGVARBINARY})
+    insert into tb_notice_details (id, notice_id, notice_details
+      )
+    values (#{id,jdbcType=VARCHAR}, #{noticeId,jdbcType=VARCHAR}, #{noticeDetails,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.notice.entity.TbNoticeDetails">
     insert into tb_notice_details
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="noticeId != null">
         notice_id,
       </if>
@@ -134,11 +140,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="noticeId != null">
         #{noticeId,jdbcType=VARCHAR},
       </if>
       <if test="noticeDetails != null">
-        #{noticeDetails,jdbcType=LONGVARBINARY},
+        #{noticeDetails,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -151,11 +160,14 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_notice_details
     <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
       <if test="record.noticeId != null">
         notice_id = #{record.noticeId,jdbcType=VARCHAR},
       </if>
       <if test="record.noticeDetails != null">
-        notice_details = #{record.noticeDetails,jdbcType=LONGVARBINARY},
+        notice_details = #{record.noticeDetails,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -164,15 +176,17 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update tb_notice_details
-    set notice_id = #{record.noticeId,jdbcType=VARCHAR},
-      notice_details = #{record.noticeDetails,jdbcType=LONGVARBINARY}
+    set id = #{record.id,jdbcType=VARCHAR},
+      notice_id = #{record.noticeId,jdbcType=VARCHAR},
+      notice_details = #{record.noticeDetails,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_notice_details
-    set notice_id = #{record.noticeId,jdbcType=VARCHAR}
+    set id = #{record.id,jdbcType=VARCHAR},
+      notice_id = #{record.noticeId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -180,15 +194,24 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.notice.entity.TbNoticeDetails">
     update tb_notice_details
     <set>
+      <if test="noticeId != null">
+        notice_id = #{noticeId,jdbcType=VARCHAR},
+      </if>
       <if test="noticeDetails != null">
-        notice_details = #{noticeDetails,jdbcType=LONGVARBINARY},
+        notice_details = #{noticeDetails,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where notice_id = #{noticeId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.park.notice.entity.TbNoticeDetails">
     update tb_notice_details
-    set notice_details = #{noticeDetails,jdbcType=LONGVARBINARY}
-    where notice_id = #{noticeId,jdbcType=VARCHAR}
+    set notice_id = #{noticeId,jdbcType=VARCHAR},
+      notice_details = #{noticeDetails,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.notice.entity.TbNoticeDetails">
+    update tb_notice_details
+    set notice_id = #{noticeId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

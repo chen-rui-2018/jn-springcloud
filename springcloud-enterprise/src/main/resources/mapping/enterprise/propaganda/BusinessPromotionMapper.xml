@@ -16,20 +16,20 @@
           ,sp.propaganda_fee as "propagandaFee"
         from tb_propaganda sp
         where 1=1
-        <if test="bpp.approvalStatus=='0' and bpp.approvalStatus=='1' and bpp.approvalStatus=='2' and bpp.approvalStatus=='3'">
+        <if test="bpp.approvalStatus==0 or bpp.approvalStatus==1 or  bpp.approvalStatus==2 or bpp.approvalStatus==3 ">
             and sp.approval_status=#{bpp.approvalStatus}
         </if>
-        <if test="bpp.approvalStatus!='4'"><!--未付款-->
+        <if test="bpp.approvalStatus==4"><!--未付款-->
             and sp.approval_status='2'  <!--审批通过-->
             and sp.is_pay='0'           <!--未付款-->
             and sp.status='0'           <!--未上架-->
         </if>
-        <if test="bpp.approvalStatus!='5'"><!--待发布-->
+        <if test="bpp.approvalStatus==5"><!--待发布-->
             and sp.approval_status='2'  <!--审批通过-->
             and sp.is_pay='1'           <!--已付款-->
             and sp.status='0'           <!--未上架-->
         </if>
-        <if test="bpp.approvalStatus!='6'"><!--已发布-->
+        <if test="bpp.approvalStatus==6"><!--已发布-->
             and sp.approval_status='2'  <!--审批通过-->
             and sp.is_pay='1'           <!--已付款-->
             and sp.status='1'           <!--已上架-->

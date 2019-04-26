@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -165,8 +166,9 @@ public class StaffServiceImplTest {
     @Test
     public void getColleagueList() {
         try {
-            PaginationData staffList = staffService.getColleagueList(colleagueListParam, user.getAccount());
-            List<StaffListVO> dataList = (List<StaffListVO>) staffList.getRows();
+            Map<String, Object> colleagueList = staffService.getColleagueList(colleagueListParam, user.getAccount());
+            PaginationData paginationData = (PaginationData) colleagueList.get("data");
+            List<StaffListVO> dataList = (List<StaffListVO>) paginationData.getRows();
             if (dataList != null && !dataList.isEmpty()) {
                 assertThat(dataList.size(), greaterThanOrEqualTo(1));
             } else {

@@ -32,8 +32,9 @@ import com.jn.paybill.model.PaymentBillModel;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
+import org.apache.commons.collections4.list.UnmodifiableList;
 import org.apache.commons.lang.math.RandomUtils;
-import org.apache.poi.ss.formula.functions.T;
+import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -104,6 +105,11 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
      * 宣传类型组名
      */
     private static final String PROPAGANDA_TYPE="propaganda_type";
+
+    /**
+     * 宣传区域组名
+     */
+    private static final String PROPAGANDA_AREA="propagandaArea";
 
     /**
      * 企业宣传列表查询
@@ -325,7 +331,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         example.createCriteria().andProFeeRuleCodeIsNotNull().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbPropagandaFeeRules> tbPropagandaFeeRulesList = tbPropagandaFeeRulesMapper.selectByExample(example);
         if(tbPropagandaFeeRulesList.isEmpty()){
-            logger.warn("获取宣传费用规则失败，系统中不传在宣传费用规则");
+            logger.warn("获取宣传费用规则失败，系统中不存在宣传费用规则");
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_NOT_EXIST);
         }
         List<PropagandaFeeRulesShow> resultList=new ArrayList<>(16);
@@ -627,6 +633,40 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.SUBMIT_AUDIT_NOT_ALLOW);
         }
         TbPropaganda tbPropaganda = tbPropagandaList.get(0);
+        BusinessPromotionWorkFlow bpw=new BusinessPromotionWorkFlow();
+        BeanUtils.copyProperties(tbPropaganda, bpw);
+        List<BusinessPromotionWorkFlow> dataList=new ArrayList();
+        dataList.add(bpw);
         //把bean转化为json
+        String dataToJson = JSONArray.toJSONString(dataList);
+        //流程id
+        String workFlowId="Process_business_promotion";
+        //todo:启动工作流
+
+    }
+
+    /**
+     * 获取宣传区域信息
+     * @return
+     */
+    @ServiceLog(doAction = "获取宣传区域信息")
+    @Override
+    public List<PropagandaAreaShow> getPropagandaAreaList() {
+        TbServiceCodeCriteria example=new TbServiceCodeCriteria();
+        example.createCriteria().andGroupIdEqualTo(PROPAGANDA_AREA).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceCode> tbServiceCodeList = tbServiceCodeMapper.selectByExample(example);
+        if(tbServiceCodeList.isEmpty()){
+            logger.warn("获取宣传区域信息失败，系统中不存在宣传区域信息");
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_AREA_NOT_EXIST);
+        }
+        List<PropagandaAreaShow>resultList=new ArrayList<>(16);
+        for(TbServiceCode tbServiceCode:tbServiceCodeList){
+            PropagandaAreaShow propagandaAreaShow=new PropagandaAreaShow();
+            propagandaAreaShow.setPropagandaArea(tbServiceCode.getCodeName());
+            propagandaAreaShow.setPropagandaAreaUrl(tbServiceCode.getCodeValue());
+            resultList.add(propagandaAreaShow);
+        }
+        //返回只读数据
+        return  new UnmodifiableList<>(resultList);
     }
 }

@@ -9,6 +9,7 @@ import com.jn.enterprise.company.vo.StaffAuditVO;
 import com.jn.system.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 企业人员Service
@@ -31,7 +32,7 @@ public interface StaffService {
      * @param staffListParam 列表查询入参
      * @return
      */
-    PaginationData getColleagueList(StaffListParam staffListParam, String curAccount);
+    Map<String, Object> getColleagueList(StaffListParam staffListParam, String curAccount);
 
     /**
      * 邀请新成员列表

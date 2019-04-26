@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbNoticeInfo implements Serializable {
-    private String noticeId;
+    private String id;
 
     private String noticeSerial;
 
@@ -30,22 +30,22 @@ public class TbNoticeInfo implements Serializable {
 
     private String noticeStatus;
 
+    private String platformType;
+
     private String platformName;
 
     private String sortField;
 
     private Byte recordStatus;
 
-    private String platformType;
-
     private static final long serialVersionUID = 1L;
 
-    public String getNoticeId() {
-        return noticeId;
+    public String getId() {
+        return id;
     }
 
-    public void setNoticeId(String noticeId) {
-        this.noticeId = noticeId == null ? null : noticeId.trim();
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getNoticeSerial() {
@@ -144,6 +144,14 @@ public class TbNoticeInfo implements Serializable {
         this.noticeStatus = noticeStatus == null ? null : noticeStatus.trim();
     }
 
+    public String getPlatformType() {
+        return platformType;
+    }
+
+    public void setPlatformType(String platformType) {
+        this.platformType = platformType == null ? null : platformType.trim();
+    }
+
     public String getPlatformName() {
         return platformName;
     }
@@ -168,14 +176,6 @@ public class TbNoticeInfo implements Serializable {
         this.recordStatus = recordStatus;
     }
 
-    public String getPlatformType() {
-        return platformType;
-    }
-
-    public void setPlatformType(String platformType) {
-        this.platformType = platformType == null ? null : platformType.trim();
-    }
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -188,7 +188,7 @@ public class TbNoticeInfo implements Serializable {
             return false;
         }
         TbNoticeInfo other = (TbNoticeInfo) that;
-        return (this.getNoticeId() == null ? other.getNoticeId() == null : this.getNoticeId().equals(other.getNoticeId()))
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getNoticeSerial() == null ? other.getNoticeSerial() == null : this.getNoticeSerial().equals(other.getNoticeSerial()))
             && (this.getNoticeTitle() == null ? other.getNoticeTitle() == null : this.getNoticeTitle().equals(other.getNoticeTitle()))
             && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
@@ -201,17 +201,17 @@ public class TbNoticeInfo implements Serializable {
             && (this.getHomePopup() == null ? other.getHomePopup() == null : this.getHomePopup().equals(other.getHomePopup()))
             && (this.getHomeShow() == null ? other.getHomeShow() == null : this.getHomeShow().equals(other.getHomeShow()))
             && (this.getNoticeStatus() == null ? other.getNoticeStatus() == null : this.getNoticeStatus().equals(other.getNoticeStatus()))
+            && (this.getPlatformType() == null ? other.getPlatformType() == null : this.getPlatformType().equals(other.getPlatformType()))
             && (this.getPlatformName() == null ? other.getPlatformName() == null : this.getPlatformName().equals(other.getPlatformName()))
             && (this.getSortField() == null ? other.getSortField() == null : this.getSortField().equals(other.getSortField()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
-            && (this.getPlatformType() == null ? other.getPlatformType() == null : this.getPlatformType().equals(other.getPlatformType()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getNoticeId() == null) ? 0 : getNoticeId().hashCode());
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getNoticeSerial() == null) ? 0 : getNoticeSerial().hashCode());
         result = prime * result + ((getNoticeTitle() == null) ? 0 : getNoticeTitle().hashCode());
         result = prime * result + ((getStartTime() == null) ? 0 : getStartTime().hashCode());
@@ -224,10 +224,10 @@ public class TbNoticeInfo implements Serializable {
         result = prime * result + ((getHomePopup() == null) ? 0 : getHomePopup().hashCode());
         result = prime * result + ((getHomeShow() == null) ? 0 : getHomeShow().hashCode());
         result = prime * result + ((getNoticeStatus() == null) ? 0 : getNoticeStatus().hashCode());
+        result = prime * result + ((getPlatformType() == null) ? 0 : getPlatformType().hashCode());
         result = prime * result + ((getPlatformName() == null) ? 0 : getPlatformName().hashCode());
         result = prime * result + ((getSortField() == null) ? 0 : getSortField().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
-        result = prime * result + ((getPlatformType() == null) ? 0 : getPlatformType().hashCode());
         return result;
     }
 
@@ -237,7 +237,7 @@ public class TbNoticeInfo implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", noticeId=").append(noticeId);
+        sb.append(", id=").append(id);
         sb.append(", noticeSerial=").append(noticeSerial);
         sb.append(", noticeTitle=").append(noticeTitle);
         sb.append(", startTime=").append(startTime);
@@ -250,10 +250,10 @@ public class TbNoticeInfo implements Serializable {
         sb.append(", homePopup=").append(homePopup);
         sb.append(", homeShow=").append(homeShow);
         sb.append(", noticeStatus=").append(noticeStatus);
+        sb.append(", platformType=").append(platformType);
         sb.append(", platformName=").append(platformName);
         sb.append(", sortField=").append(sortField);
         sb.append(", recordStatus=").append(recordStatus);
-        sb.append(", platformType=").append(platformType);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

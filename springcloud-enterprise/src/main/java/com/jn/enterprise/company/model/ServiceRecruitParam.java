@@ -11,9 +11,9 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceRecruitParam", description = "企业招聘入参（后台）")
+@ApiModel(value = "ServiceRecruitParam", description = "企业招聘入参（用户中心）")
 public class ServiceRecruitParam extends ServiceWebRecruitParam implements Serializable {
-    @ApiModelProperty(value = "企业ID", example = "2220112212")
+    @ApiModelProperty(value = "企业ID", hidden = true)
     private String comId;
     @ApiModelProperty(value = "状态（1：已上架[默认] 0：已下架 2：全部）", example = "1")
     private String status;

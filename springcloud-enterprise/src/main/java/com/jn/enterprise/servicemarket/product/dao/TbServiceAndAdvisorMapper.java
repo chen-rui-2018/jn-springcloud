@@ -10,21 +10,13 @@ public interface TbServiceAndAdvisorMapper {
 
     int deleteByExample(TbServiceAndAdvisorCriteria example);
 
-    int deleteByPrimaryKey(String productId);
-
     int insert(TbServiceAndAdvisor record);
 
     int insertSelective(TbServiceAndAdvisor record);
 
     List<TbServiceAndAdvisor> selectByExample(TbServiceAndAdvisorCriteria example);
 
-    TbServiceAndAdvisor selectByPrimaryKey(String productId);
-
     int updateByExampleSelective(@Param("record") TbServiceAndAdvisor record, @Param("example") TbServiceAndAdvisorCriteria example);
 
     int updateByExample(@Param("record") TbServiceAndAdvisor record, @Param("example") TbServiceAndAdvisorCriteria example);
-
-    int updateByPrimaryKeySelective(TbServiceAndAdvisor record);
-
-    int updateByPrimaryKey(TbServiceAndAdvisor record);
 }

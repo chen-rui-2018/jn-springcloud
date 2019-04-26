@@ -46,6 +46,7 @@ public class ShiroConfig {
         //authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问
         filterChainDefinitionMap.put("/hystrix.stream", "anon");
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/authLogin", "anon");
         //所有内部提供的api接口不需要拦截
         filterChainDefinitionMap.put("/api/**", "anon");
         filterChainDefinitionMap.put("/metaData/**", "anon");

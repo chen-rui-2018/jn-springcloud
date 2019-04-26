@@ -2,10 +2,14 @@ package com.jn.system.config;
 
 import com.jn.common.model.Result;
 import com.jn.common.util.LoadBalancerUtil;
+import com.jn.system.model.User;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.util.WebUtils;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +24,8 @@ import java.io.Serializable;
  * 自定义sessionId获取，如果请求头中有 Authorization 则其值为sessionId，否则按默认规则从cookie取sessionId
  */
 public class MySessionManager extends DefaultWebSessionManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(MySessionManager.class);
 
     @Autowired
     private LoadBalancerUtil loadBalancerUtils;
@@ -44,14 +50,6 @@ public class MySessionManager extends DefaultWebSessionManager {
         if (StringUtils.isEmpty(id)) {
             String account = com.lc.ibps.auth.client.context.Context.getUsername();
             if (!StringUtils.isEmpty(account)) {
-                Cookie[] cookies = httpServletRequest.getCookies();
-                if (cookies != null) {
-                    for (Cookie cookie : cookies) {
-                        if ("shiroSessionId".equals(cookie.getName())) {
-                            return cookie.getValue();
-                        }
-                    }
-                }
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("account", account);
                 Result result = loadBalancerUtils.getClientPostForEntity(SYSTEM_CLIENT, SYSTEM_CLIENT_NOPASSWORDLOGIN_SERVICE, jsonObject.toString());
@@ -59,8 +57,7 @@ public class MySessionManager extends DefaultWebSessionManager {
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE, REFERENCED_SESSION_ID_SOURCE);
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID, id);
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_IS_VALID, Boolean.TRUE);
-                httpServletResponse.addCookie(new Cookie("shiroSessionId",id));
-                httpServletResponse.addCookie(new Cookie("Admin-Token",id));
+                logger.info("【oauth】 autoLogin user:{},Admin-Token:{}",account,id);
                 return id;
             }
             return super.getSessionId(request, response);

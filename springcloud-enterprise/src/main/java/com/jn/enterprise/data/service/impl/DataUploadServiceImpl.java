@@ -7,6 +7,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.down.api.DownLoadClient;
+import com.jn.down.model.DownLoad;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompany;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
@@ -33,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +74,9 @@ public class DataUploadServiceImpl implements DataUploadService {
 
     @Autowired(required = false)
     private TbDataReportingGardenFillerMapper tbDataReportingGardenFillerMapper;
+
+    @Autowired
+    private DownLoadClient downLoadClient;
 
     @Autowired
     private UploadClient uploadClient;
@@ -752,7 +758,11 @@ public class DataUploadServiceImpl implements DataUploadService {
         //如果是科技园模板
         if(modelTabs.get(0).getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
             //科技园模板开发保存接口出
+            //查询出当前账期的科技园模板
 
+
+
+            //
         }else{
             result = saveData(data,DataUploadConstants.GARDEN_TYPE,user);
         }

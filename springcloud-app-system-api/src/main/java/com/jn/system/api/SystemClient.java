@@ -182,6 +182,22 @@ public interface SystemClient {
 
 
     /**
+     * 新增文件明细
+     *
+     * @param sysFile
+     * @return
+     */
+    @RequestMapping(value = "/api/system/insertSysFile", method = RequestMethod.POST)
+    Result insertSysFile(@RequestBody SysFile sysFile);
+
+    /**
+     * 根据条件查询数据字典的值
+     * @param sysDictInvoke
+     * @return
+     */
+    @RequestMapping(value = "/api/system/selectDictValueByCondition", method = RequestMethod.POST)
+    Result<String> selectDictValueByCondition(@RequestBody SysDictInvoke sysDictInvoke);
+    /**
      * 调用数据字典接口
      * @param sysDictInvoke
      * @return

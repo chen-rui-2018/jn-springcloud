@@ -17,6 +17,9 @@ public class addMessageModel implements Serializable {
 
     private static final long serialVersionUID = 7775713908624163861L;
 
+    @ApiModelProperty("消息id")
+    private String id;
+
     @ApiModelProperty("消息标题")
     private String messageTitle;
 
@@ -47,6 +50,14 @@ public class addMessageModel implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMessageTitle() {
@@ -125,7 +136,8 @@ public class addMessageModel implements Serializable {
     @Override
     public String toString() {
         return "addMessageModel{" +
-                "messageTitle='" + messageTitle + '\'' +
+                "id='" + id + '\'' +
+                ", messageTitle='" + messageTitle + '\'' +
                 ", messageContent='" + messageContent + '\'' +
                 ", messageConnect='" + messageConnect + '\'' +
                 ", messageConnectName='" + messageConnectName + '\'' +

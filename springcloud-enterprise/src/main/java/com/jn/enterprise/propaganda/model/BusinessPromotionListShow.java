@@ -33,6 +33,10 @@ public class BusinessPromotionListShow implements Serializable {
     private String posterUrl;
     @ApiModelProperty(value = "宣传费用")
     private String propagandaFee;
+    @ApiModelProperty(value = "审批状态(-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)")
+    private String approvalStatus;
+    @ApiModelProperty(value = "宣传区域(top:顶部  central:中部  bottom:底部)")
+    private String propagandaArea;
 
     public String getOrderNum() {
         return orderNum;
@@ -114,17 +118,37 @@ public class BusinessPromotionListShow implements Serializable {
         this.propagandaFee = propagandaFee;
     }
 
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    public String getPropagandaArea() {
+        return propagandaArea;
+    }
+
+    public void setPropagandaArea(String propagandaArea) {
+        this.propagandaArea = propagandaArea;
+    }
+
     @Override
     public String toString() {
         return "BusinessPromotionListShow{" +
-                "id='" + id + '\'' +
+                "orderNum='" + orderNum + '\'' +
+                ", propagandaType='" + propagandaType + '\'' +
+                ", id='" + id + '\'' +
                 ", propagandaCode='" + propagandaCode + '\'' +
                 ", propagandaTitle='" + propagandaTitle + '\'' +
                 ", issuePlatform='" + issuePlatform + '\'' +
                 ", effectiveDate='" + effectiveDate + '\'' +
-                ", invalidDate=" + invalidDate +
+                ", invalidDate='" + invalidDate + '\'' +
                 ", posterUrl='" + posterUrl + '\'' +
                 ", propagandaFee='" + propagandaFee + '\'' +
+                ", approvalStatus='" + approvalStatus + '\'' +
+                ", propagandaArea='" + propagandaArea + '\'' +
                 '}';
     }
 }

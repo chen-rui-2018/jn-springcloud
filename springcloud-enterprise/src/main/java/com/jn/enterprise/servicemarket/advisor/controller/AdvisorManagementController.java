@@ -78,7 +78,8 @@ public class AdvisorManagementController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementController/inviteAdvisor")
     @ApiOperation(value = "邀请顾问,(pc/app邀请顾问)",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/inviteAdvisor",method = RequestMethod.POST)
-    public Result<Integer> inviteAdvisor(@ApiParam(value = "注册手机/邮箱" ,required = true,example = "181*****") String registerAccount){
+    public Result<Integer> inviteAdvisor(String registerAccount){
+        Assert.notNull(registerAccount, AdvisorExceptionEnum.REGISTER_ACCOUNT.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.info("邀请顾问获取用户账号失败");

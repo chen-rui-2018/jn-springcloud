@@ -71,12 +71,12 @@ public class BusinessPromotionServiceImplTest {
     @Before
     public void setUp() throws Exception {
         //企业宣传列表查询
-        bpp.setApprovalStatus("0");
+        bpp.setApprovalStatus("");
         bpp.setSearchContent("");
         bpp.setPropagandaType("");
         bpp.setNeedPage("1");
 
-        loginAccount="wangsong";
+        loginAccount="18073856620";
 
         //企业宣传详情
         propagandaId="6307c8ad2117451fb49b1b8e7e370b6c";

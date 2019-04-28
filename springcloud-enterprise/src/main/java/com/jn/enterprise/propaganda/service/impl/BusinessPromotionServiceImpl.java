@@ -154,8 +154,16 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     private boolean isSuperAdmin(String loginAccount) {
         List<String> accountList=new ArrayList<>(16);
         accountList.add(loginAccount);
+        String roleName="超级管理员";
         List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, "超级管理员");
-        return !roleInfoList.isEmpty();
+        if(roleInfoList.isEmpty()){
+            //没有查询到数据 返回false
+            return false;
+        }else if(!roleName.equals(roleInfoList.get(0).getRoleName())){
+            //返回的数据没有角色或者角色不是超级管理员，返回false
+            return false;
+        }
+        return true;
     }
 
     /**

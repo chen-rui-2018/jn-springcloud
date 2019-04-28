@@ -131,15 +131,5 @@
 			<artifactId>ibps-auth-client-filter-other</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>cn.jpush.api</groupId>
-			<artifactId>jpush-client</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>cn.jpush.api</groupId>
-			<artifactId>jiguang-common</artifactId>
-		</dependency>
-
     </dependencies>
 </project>

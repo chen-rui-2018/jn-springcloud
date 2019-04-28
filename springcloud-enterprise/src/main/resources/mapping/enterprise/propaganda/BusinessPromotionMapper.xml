@@ -15,6 +15,7 @@
           ,sp.propaganda_area as "propagandaArea"
           ,sp.poster_url as "posterUrl"
           ,sp.propaganda_fee as "propagandaFee"
+          ,sp.status as "status"
         from tb_propaganda sp
         where 1=1
         <if test="bpp.approvalStatus!=null and bpp.approvalStatus!=''

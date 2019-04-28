@@ -37,6 +37,9 @@ public class BusinessPromotionListShow implements Serializable {
     private String approvalStatus;
     @ApiModelProperty(value = "宣传区域(top:顶部  central:中部  bottom:底部)")
     private String propagandaArea;
+    @ApiModelProperty(value = "数据状态(0:无效/未上架  1:有效/以上架      审批通过，但未上架属于”待发布“，审批通过，已上架属于“已发布”)")
+    private String status;
+
 
     public String getOrderNum() {
         return orderNum;
@@ -134,6 +137,14 @@ public class BusinessPromotionListShow implements Serializable {
         this.propagandaArea = propagandaArea;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "BusinessPromotionListShow{" +
@@ -149,6 +160,7 @@ public class BusinessPromotionListShow implements Serializable {
                 ", propagandaFee='" + propagandaFee + '\'' +
                 ", approvalStatus='" + approvalStatus + '\'' +
                 ", propagandaArea='" + propagandaArea + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

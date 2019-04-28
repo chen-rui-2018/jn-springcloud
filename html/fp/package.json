@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.4.3",
     "axios": "^0.18.0",
     "element-ui": "^2.5.4",
     "vue": "^2.5.2",

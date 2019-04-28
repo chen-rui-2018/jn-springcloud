@@ -1,0 +1,45 @@
+<template>
+  <div class="target-frame">
+    <div class="target-frame-l">
+      <slot name="left"/>
+    </div>
+    <div class="target-frame-r">
+      <slot name="right"/>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style lang="scss" scoped>
+  @import "~@/styles/r-common";
+  .target-frame {
+    $gray: #ebebeb;
+    min-height: 100%;
+    border: 1px solid $gray;
+    @include flex($v: flex-start);
+    background-color: #fff;
+    align-items: stretch;
+    .target-frame-l {
+      min-height: 100%;
+      width: 200px;
+      padding: 15px;
+      flex: none;
+    }
+    .target-frame-r {
+      min-height: 100%;
+      width: 100%;
+      padding: 15px;
+      flex: 1;
+      border-left: 1px solid $gray;
+      .target-row {
+        margin: 5px auto;
+      }
+    }
+    .submit-row {
+      margin: 20px 10px;
+    }
+  }
+</style>

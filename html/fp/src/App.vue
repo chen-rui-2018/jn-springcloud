@@ -1,8 +1,11 @@
 <template>
   <div id="app">
-    <app-header v-if="$route.name=='actiCenter'||$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'||$route.name=='actiManagent'||$route.name=='peoDec'"></app-header>
-    <ser-header v-if="$route.name=='actiTrain'||$route.name=='index'"></ser-header>
-    <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'||$route.name=='declarationCenter'||$route.name=='talentsService'||$route.name=='talentPlatform'||this.$route.name=='familiarProblem'||this.$route.name=='familiarProblemDetail'||this.$route.name=='talentsServiceDetail'"></adminApprove-header>
+    <!-- <app-header v-if="$route.name=='actiCenter'||$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'||$route.name=='actiManagent'||$route.name=='peoDec'"></app-header> -->
+    <!-- <ser-header v-if="$route.name=='actiTrain'||$route.name=='index'"></ser-header>z -->
+    <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'||$route.name=='declarationCenter'||$route.name=='talentsService'||$route.name=='talentPlatform'||$route.name=='talentsServiceDetail'"></adminApprove-header>
+    <app-header v-if="$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'||$route.name=='actiManagent'"></app-header>
+    <ser-header v-if="$route.name=='actiTrain'||$route.name=='serMatHp'||$route.name=='serverOrg'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header>
+    <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'"></technology-Header>
     <router-view/>
     <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'"></app-footer>
   </div>
@@ -13,10 +16,11 @@ import AppHeader from './components/header'
 import AppFooter from './components/footer'
 import SerHeader from './components/serverHeader'
 import adminApproveHeader from './components/adminApproveHeader'
+import TechnologyHeader from './components/technologyHeader'
 import './common/font/font.css'
 export default {
   name: 'App',
-  components:{AppHeader,AppFooter,SerHeader,adminApproveHeader},
+  components:{AppHeader,AppFooter,SerHeader,adminApproveHeader,TechnologyHeader},
   created(){
     // if(sessionStorage.token){
     //     this.api.setToken(sessionStorage.token)      

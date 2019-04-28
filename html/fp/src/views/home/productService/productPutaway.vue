@@ -2,55 +2,54 @@
   <div class="productPutaway">
     <div class="putaway_title">
       <div>常规产品上架</div>
-      <div>返回列表</div>
+      <div @click="this.$router.back(-1)">返回列表</div>
     </div>
     <div class="putaway_main">
       <div class="putaway_form" v-if="territory===1">
         <el-form label-position="right" label-width="100px" >
           <div :model="productDetail" class="">
             <el-form-item label="业务领域：">
-              <span></span>
+              <span>非科技金融</span>
             </el-form-item>
           </div>
           <div>
             <el-form-item label="服务顾问：">
-              <el-select v-model="counselor" placeholder="请选择服务顾问" clearable>
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+              <el-select v-model="advisorAccount" multiple placeholder="请选择">
+                <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
+                </el-option>
               </el-select>
             </el-form-item>
           </div>
           <div>
             <el-form-item label="产品名称：">
-              <el-select v-model="productName" placeholder="请选择产品名称" clearable>
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+              <el-select v-model="templateId" placeholder="请选择产品名称" clearable @change="changeProname">
+                <el-option :label="proitem.productName" :value="proitem.productId" v-for="(proitem,proindex) in productNameList" :key="proindex"></el-option>
               </el-select>
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div class="">
             <el-form-item label="产品编号">
-              <span>55</span>
+              <span>{{productDetail.serialNumber}}</span>
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div>
             <el-form-item label="参考价格：">
-              <span>55</span>
+              <span>{{productDetail.referPrice}} </span>
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div class="">
             <el-form-item label="产品图片：">
-              <img src="@/assets/image/test2.png" alt="">
+              <img :src="productDetail.pictureUrl" alt="">
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div class="">
             <el-form-item label="服务周期：">
-              <span>848</span>
+              <span>{{productDetail.serviceCycle}}</span>
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div class="">
             <el-form-item label="产品描述：">
-              <div>机构接受企业委托，对其核算的研发项目研究开发费用归集明细表进行鉴证，就其研发费用的发生和能否 税前加计扣除进行鉴证，并出具专项鉴证报告</div>
+              <div>{{productDetail.productDetails}}</div>
             </el-form-item>
           </div>
         </el-form>
@@ -147,19 +146,106 @@
           </div>
         </el-form>
       </div>
-      <div class="submit">提交</div>
+      <div class="submit" @click="submit">提交</div>
     </div>
   </div>
 </template>
+
 <script>
 export default {
   data () {
     return {
-      productDetail:{},
-      counselor:{ },//服务顾问
+      productDetail:{},//产品详情
+      counselorList:[],//服务顾问列表
       productName:'',//产品名称
-      territory:0
+      territory:1,
+      productNameList:[],//产品名称列表
+      advisorAccount:'',
+      orgId:'',
+      templateId:''
+      //上架
     }
+  },
+  mounted () {
+    this.orgId=this.$route.query.orgid
+    this.getShelfProductList()
+    this.getServiceConsultantList()
+    // this.getProductDetails()
+  },
+  methods: {
+    //获取产品名称列表
+    getShelfProductList(){
+      let _this = this;
+      this.api.get({
+      url: "getShelfProductList",
+      data: {orgId:this.orgId},
+      callback: function(res) {
+        if (res.code == "0000") {
+            _this.productNameList= res.data
+            _this.templateId=res.data[0].productId
+            _this.$nextTick(()=>{
+            _this.getProductDetails()
+            })
+          }
+        }
+      })
+      
+    },
+  // 获取服务顾问列表
+    getServiceConsultantList(){
+      let _this = this;
+      this.api.get({
+      url: "getServiceConsultantList",
+      data: {orgId:this.orgId},
+      callback: function(res) {
+        if (res.code == "0000") {
+          _this.counselorList= res.data.rows
+          }
+        }
+      })
+    },
+    // 获取服务产品详情、
+    getProductDetails(){
+      let _this = this;
+      this.api.get({
+      url: "findProductDetails",
+      data: {productId:this.templateId},
+      callback: function(res) {
+        if (res.code == "0000") {
+          // console.log(res)
+          _this.productDetail= res.data.info
+          }
+        }
+      })
+    },
+    //改变产品名称
+    changeProname(val){
+      if(this.templateId===null){
+        this.productDetail={}
+      }else{
+        this.getProductDetails()
+      }
+    },
+    //上架
+    submit(){
+      let _this = this
+      _this.templateId.toString()
+      this.api.post({
+      url: "upShelfCommonService",
+      data: {
+        advisorAccount:this.advisorAccount.toString(),
+        orgId:this.orgId,
+        templateId:this.templateId
+      },
+      callback: function(res) {
+        if (res.code == "0000") {
+            _this.$message.success("上架成功")
+            _this.$router.back(-1)
+          }
+        }
+      })
+    }
+  
   }
 }
 </script>

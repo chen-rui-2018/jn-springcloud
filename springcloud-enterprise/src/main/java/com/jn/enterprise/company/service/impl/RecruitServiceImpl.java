@@ -11,6 +11,7 @@ import com.jn.enterprise.company.dao.ServiceRecruitMapper;
 import com.jn.enterprise.company.dao.TbServiceRecruitMapper;
 import com.jn.enterprise.company.entity.TbServiceRecruit;
 import com.jn.enterprise.company.entity.TbServiceRecruitCriteria;
+import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.*;
@@ -82,7 +83,7 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Override
     @ServiceLog(doAction = "查询招聘信息列表")
-    public PaginationData<List<RecruitVO>> getRecruitList(ServiceRecruitParam recruitParam) {
+    public PaginationData<List<RecruitVO>> getRecruitList(ServiceRecruitParam recruitParam, String approvalStatus) {
         // 过滤错误入参
         if (StringUtils.isNotEmpty(recruitParam.getWhereTypes())) {
             recruitParam.setWhereTypes(recruitParam.getWhereTypes().toLowerCase());
@@ -115,6 +116,11 @@ public class RecruitServiceImpl implements RecruitService {
         ServiceRecruitSearchParam rp = new ServiceRecruitSearchParam();
         BeanUtils.copyProperties(recruitParam,rp);
 
+        // 如果审核字段不为空，查询指定审批列表
+        if (StringUtils.isNotEmpty(approvalStatus)) {
+            rp.setApprovalStatus(approvalStatus);
+        }
+
         // 复合查询判断并赋值(忽略单一查询)
         if (StringUtils.isNotEmpty(recruitParam.getBeginDate()) && StringUtils.isNotEmpty(recruitParam.getEndDate())) {
             try {
@@ -142,8 +148,8 @@ public class RecruitServiceImpl implements RecruitService {
         sr.setCreatorAccount(user.getAccount());
         sr.setComId(company.getId());
         sr.setComName(company.getComName());
-        sr.setRecordStatus(new Byte(RECORD_STATUS_VALID));
-        sr.setStatus(new Byte(RECORD_STATUS_VALID));
+        sr.setRecordStatus(new Byte(CompanyDataEnum.RECORD_STATUS_VALID.getCode()));
+        sr.setStatus(new Byte(CompanyDataEnum.RECORD_STATUS_NOT_VALID.getCode()));
         sr.setViewCount(0);
         sr.setId(UUID.randomUUID().toString().replaceAll("-",""));
 

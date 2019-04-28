@@ -47,6 +47,36 @@ public class WebServiceProductInfo implements Serializable {
     private String evaluationNumber;
     @ApiModelProperty(value = "上架此产品的机构数")
     private String upShelfOrgNumber;
+    @ApiModelProperty(value = "同类型产品总数")
+    private String sameTypeNum;
+    @ApiModelProperty(value = "同类型产品常规产品数")
+    private String commentNum;
+    @ApiModelProperty(value = "同类型产品特色产品数")
+    private String featureNum;
+
+    public String getSameTypeNum() {
+        return sameTypeNum;
+    }
+
+    public void setSameTypeNum(String sameTypeNum) {
+        this.sameTypeNum = sameTypeNum;
+    }
+
+    public String getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(String commentNum) {
+        this.commentNum = commentNum;
+    }
+
+    public String getFeatureNum() {
+        return featureNum;
+    }
+
+    public void setFeatureNum(String featureNum) {
+        this.featureNum = featureNum;
+    }
 
     public byte[] getServiceDetails() {
         return serviceDetails;

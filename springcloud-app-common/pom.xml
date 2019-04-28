@@ -106,15 +106,6 @@
 			<groupId>org.codehaus.janino</groupId>
 			<artifactId>janino</artifactId>
 		</dependency>
-		<!-- google二维码生成 -->
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>javase</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>io.github.openfeign.form</groupId>
 			<artifactId>feign-form-spring</artifactId>
@@ -129,10 +120,26 @@
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
 		</dependency>
+
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
         </dependency>
+
+		<dependency>
+			<groupId>com.lc.ibps.auth</groupId>
+			<artifactId>ibps-auth-client-filter-other</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.jpush.api</groupId>
+			<artifactId>jpush-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.jpush.api</groupId>
+			<artifactId>jiguang-common</artifactId>
+		</dependency>
 
     </dependencies>
 </project>

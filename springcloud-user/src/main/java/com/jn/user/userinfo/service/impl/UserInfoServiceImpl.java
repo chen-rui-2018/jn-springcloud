@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.Assert;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -416,6 +418,16 @@ public class UserInfoServiceImpl implements UserInfoService {
         TbUserPerson tbUserPerson = new TbUserPerson();
         BeanUtils.copyProperties(user,tbUserPerson);
         BeanUtils.copyProperties(userInfoParam,tbUserPerson);
+
+        // 出生年月不为空时，判断日期格式
+        if (StringUtils.isNotEmpty(userInfoParam.getBirthday())) {
+            try {
+                tbUserPerson.setBirthday(DateUtils.parseDate(userInfoParam.getBirthday(),"yyyy-MM-dd"));
+            } catch (ParseException e) {
+                throw new JnSpringCloudException(UserExtensionExceptionEnum.BIRTHDAY_FORMAT_ERROR);
+            }
+        }
+
         int a;
         if(null == tbUserPeople || tbUserPeople.size() == 0){
             //新增

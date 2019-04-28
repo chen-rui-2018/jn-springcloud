@@ -59,6 +59,9 @@
         <if test="type != null and type != ''">
             and t.type = #{type}
         </if>
+        <if test="departId != null and departId != ''">
+              and t.depart_id = #{departId}
+        </if>
         <if test="name != null and name != ''">
             and t.name like CONCAT('%',#{name},'%')
         </if>

@@ -10,7 +10,7 @@ public interface TbNoticeDetailsMapper {
 
     int deleteByExample(TbNoticeDetailsCriteria example);
 
-    int deleteByPrimaryKey(String noticeId);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbNoticeDetails record);
 
@@ -20,7 +20,7 @@ public interface TbNoticeDetailsMapper {
 
     List<TbNoticeDetails> selectByExample(TbNoticeDetailsCriteria example);
 
-    TbNoticeDetails selectByPrimaryKey(String noticeId);
+    TbNoticeDetails selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbNoticeDetails record, @Param("example") TbNoticeDetailsCriteria example);
 
@@ -31,4 +31,6 @@ public interface TbNoticeDetailsMapper {
     int updateByPrimaryKeySelective(TbNoticeDetails record);
 
     int updateByPrimaryKeyWithBLOBs(TbNoticeDetails record);
+
+    int updateByPrimaryKey(TbNoticeDetails record);
 }

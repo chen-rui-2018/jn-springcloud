@@ -23,11 +23,11 @@ public class CompanyDataStatisticsModel implements Serializable {
     @ApiModelProperty(value = "账期",example = "201812")
     private String formTime;
 
-    @ApiModelProperty(value = "截至日期",example = "2018-12-12 12：12：12")
+    @ApiModelProperty(value = "截至日期",example = "2018-12-12")
     private Date fillInFormDeadline;
 
     @ApiModelProperty(value = "总数",example = "13")
-    private String all;
+    private String allTotal;
 
     @ApiModelProperty(value = "已上报",example = "12")
     private String upload;
@@ -41,11 +41,17 @@ public class CompanyDataStatisticsModel implements Serializable {
     @ApiModelProperty(value = "上报状态",example = "未上报")
     private String status;
 
-    @ApiModelProperty(value = "最后催报时间",example = "2018-12-21 12:12:12")
+    @ApiModelProperty(value = "最后催报时间",example = "2018-12-21")
     private Date callingTime;
 
     @ApiModelProperty(value = "提前预警天数",example = "7")
     private String  warningBeforeDays;
+
+    @ApiModelProperty(value = "模板Id",example = "001")
+    private String modelId;
+
+    @ApiModelProperty(value = "任务批次",example = "002")
+    private String taskBatch;
 
     public String getModelCycle() {
         return modelCycle;
@@ -79,12 +85,12 @@ public class CompanyDataStatisticsModel implements Serializable {
         this.fillInFormDeadline = fillInFormDeadline;
     }
 
-    public String getAll() {
-        return all;
+    public String getAllTotal() {
+        return allTotal;
     }
 
-    public void setAll(String all) {
-        this.all = all;
+    public void setAllTotal(String allTotal) {
+        this.allTotal = allTotal;
     }
 
     public String getUpload() {
@@ -133,5 +139,21 @@ public class CompanyDataStatisticsModel implements Serializable {
 
     public void setWarningBeforeDays(String warningBeforeDays) {
         this.warningBeforeDays = warningBeforeDays;
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
+
+    public String getTaskBatch() {
+        return taskBatch;
+    }
+
+    public void setTaskBatch(String taskBatch) {
+        this.taskBatch = taskBatch;
     }
 }

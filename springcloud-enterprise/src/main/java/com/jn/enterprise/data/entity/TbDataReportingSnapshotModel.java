@@ -7,10 +7,7 @@ public class TbDataReportingSnapshotModel implements Serializable {
     /*@ApiModelProperty("任务批次")*/
     private String taskBatch;
 
-    /*@ApiModelProperty("")*/
-    private String id;
-
-    /*@ApiModelProperty("模板ID")*/
+    /*@ApiModelProperty("快照表模板ID")*/
     private String modelId;
 
     /*@ApiModelProperty("模板名称")*/
@@ -64,7 +61,7 @@ public class TbDataReportingSnapshotModel implements Serializable {
     private String departmentName;
 
     /*@ApiModelProperty("模板序号")*/
-    private String order;
+    private Integer orderNumber;
 
     /*@ApiModelProperty("任务全部填写完后的提醒人")*/
     private String reminder;
@@ -92,14 +89,6 @@ public class TbDataReportingSnapshotModel implements Serializable {
 
     public void setTaskBatch(String taskBatch) {
         this.taskBatch = taskBatch == null ? null : taskBatch.trim();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
     }
 
     public String getModelId() {
@@ -238,12 +227,12 @@ public class TbDataReportingSnapshotModel implements Serializable {
         this.departmentName = departmentName == null ? null : departmentName.trim();
     }
 
-    public String getOrder() {
-        return order;
+    public Integer getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrder(String order) {
-        this.order = order == null ? null : order.trim();
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public String getReminder() {
@@ -307,7 +296,6 @@ public class TbDataReportingSnapshotModel implements Serializable {
         }
         TbDataReportingSnapshotModel other = (TbDataReportingSnapshotModel) that;
         return (this.getTaskBatch() == null ? other.getTaskBatch() == null : this.getTaskBatch().equals(other.getTaskBatch()))
-            && (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getModelId() == null ? other.getModelId() == null : this.getModelId().equals(other.getModelId()))
             && (this.getModelName() == null ? other.getModelName() == null : this.getModelName().equals(other.getModelName()))
             && (this.getModelType() == null ? other.getModelType() == null : this.getModelType().equals(other.getModelType()))
@@ -325,7 +313,7 @@ public class TbDataReportingSnapshotModel implements Serializable {
             && (this.getFilllInFormDeadline() == null ? other.getFilllInFormDeadline() == null : this.getFilllInFormDeadline().equals(other.getFilllInFormDeadline()))
             && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
             && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()))
-            && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()))
+            && (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()))
             && (this.getReminder() == null ? other.getReminder() == null : this.getReminder().equals(other.getReminder()))
             && (this.getRemindStatus() == null ? other.getRemindStatus() == null : this.getRemindStatus().equals(other.getRemindStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -339,7 +327,6 @@ public class TbDataReportingSnapshotModel implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getTaskBatch() == null) ? 0 : getTaskBatch().hashCode());
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getModelId() == null) ? 0 : getModelId().hashCode());
         result = prime * result + ((getModelName() == null) ? 0 : getModelName().hashCode());
         result = prime * result + ((getModelType() == null) ? 0 : getModelType().hashCode());
@@ -357,7 +344,7 @@ public class TbDataReportingSnapshotModel implements Serializable {
         result = prime * result + ((getFilllInFormDeadline() == null) ? 0 : getFilllInFormDeadline().hashCode());
         result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
         result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
-        result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
+        result = prime * result + ((getOrderNumber() == null) ? 0 : getOrderNumber().hashCode());
         result = prime * result + ((getReminder() == null) ? 0 : getReminder().hashCode());
         result = prime * result + ((getRemindStatus() == null) ? 0 : getRemindStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -374,7 +361,6 @@ public class TbDataReportingSnapshotModel implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", taskBatch=").append(taskBatch);
-        sb.append(", id=").append(id);
         sb.append(", modelId=").append(modelId);
         sb.append(", modelName=").append(modelName);
         sb.append(", modelType=").append(modelType);
@@ -392,7 +378,7 @@ public class TbDataReportingSnapshotModel implements Serializable {
         sb.append(", filllInFormDeadline=").append(filllInFormDeadline);
         sb.append(", departmentId=").append(departmentId);
         sb.append(", departmentName=").append(departmentName);
-        sb.append(", order=").append(order);
+        sb.append(", orderNumber=").append(orderNumber);
         sb.append(", reminder=").append(reminder);
         sb.append(", remindStatus=").append(remindStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

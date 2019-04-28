@@ -48,4 +48,56 @@ public interface BusinessPromotionService {
      * @return
      */
     List<PropagandaTypeShow> getPropagandaTypeList(String loginAccount);
+
+    /**
+     * 撤销申请
+     * @param propagandaId    宣传id
+     * @param loginAccount   登录用户账号
+     * @return
+     */
+    int cancelApprove(String propagandaId,String loginAccount);
+
+    /**
+     * 修改企业宣传
+     * @param businessPromotionDetailsParam
+     * @param loginAccount 登录用户账号
+     * @return
+     */
+    int updateBusinessPromotion(BusinessPromotionDetailsParam businessPromotionDetailsParam,String loginAccount);
+
+    /**
+     * 生成订单号
+     * @return
+     */
+    String getOrderNumber();
+
+    /**
+     * 修改审批状态
+     * @param propagandaId  宣传id
+     * @param approvalStatus        审批状态 (-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)
+     * @param loginAccount 登录用户账号
+     * @return
+     */
+    int updateApprovalStatus(String propagandaId,String approvalStatus,String loginAccount);
+
+    /**
+     * 创建账单
+     * @param orderNum      订单号
+     * @param loginAccount  登录用户账号
+     * @return
+     */
+    String createBill(String orderNum,String loginAccount);
+
+    /**
+     * 提交审核
+     * @param propagandaId 宣传id
+     * @param loginAccount 登录用户账号
+     */
+    void submitAudit(String propagandaId,String loginAccount);
+
+    /**
+     * 获取宣传区域信息
+     * @return
+     */
+    List<PropagandaAreaShow> getPropagandaAreaList();
 }

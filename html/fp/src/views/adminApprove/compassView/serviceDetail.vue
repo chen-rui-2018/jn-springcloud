@@ -72,12 +72,12 @@
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="发布时间：">
-                      <span class="table_item_cont">{{seviceDetail.createdTime}}</span>
+                      <span class="table_item_cont">{{seviceDetail.time|time}}</span>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="受理时间：">
-                      <span class="table_item_cont">{{seviceDetail.dealTime}}</span>
+                      <span class="table_item_cont">{{seviceDetail.dealTime|time}}</span>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
@@ -87,9 +87,9 @@
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="在线受理地址：">
-                        <a :href="seviceDetail.dealUrl" target="_blank">
-                          <div class="onlineaddr">点击查看</div>
-                        </a>
+                      <a :href="dealUrl" target="_blank">
+                        <div class="onlineaddr" @click="handleview">点击查看</div>
+                      </a>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
@@ -119,14 +119,17 @@
                  <el-table
                   :data="seviceDetail.materialsModelList"
                   border
+                  
                   style="width: 100%">
                   <el-table-column
                     prop="name"
                     label="材料名称"
-                    width="163.5">
+                    width="163.5"
+                    align="center">
                   </el-table-column>
                   <el-table-column
                     prop="name"
+                    align="center"
                     label="材料样本"
                     >
                     <template slot-scope="scope">
@@ -136,6 +139,7 @@
                   <el-table-column
                     label="纸质材料（份）"
                     width="163.5"
+                    align="center"
                     >
                     <template slot-scope="scope">
                       <span>{{scope.row.paperQuantity}}(份) </span>
@@ -143,6 +147,7 @@
                   </el-table-column>
                   <el-table-column
                     label="是否需要电子材料"
+                    align="center"
                     width="163.5">
                     <template slot-scope="scope">
                       <span>{{scope.row.isNeedElectronic|idNeed}}</span>
@@ -150,6 +155,7 @@
                   </el-table-column>
                   <el-table-column
                     label="材料必要性"
+                    align="center"
                     width="163.5">
                     <template slot-scope="scope">
                       <span>{{scope.row.isRequired|isRequired}}</span>
@@ -191,7 +197,7 @@
                 </div>
               </template>
               <div class="baseIfor_table">
-                《XXX登记管理办法》第八条 凡经工商登记注册，具有独立法人资格的肥料生产者均可提出肥料登记申请
+                <span>{{seviceDetail.dealConditions}} </span>
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -217,7 +223,6 @@ export default {
       isWord:true,
       clickUnfold:'点击展开',
       seviceTableList:[],
-      
       seviceDetail:{},
       messageVisible:false,
       messageform:{
@@ -228,13 +233,14 @@ export default {
         id:''
       },
       contentPlaceholder:`1、问题描述\n2、诉求目的`,
-      residuenum:500
+      residuenum:500,
+      dealUrl:''
     }
   },
   filters: {
     word(word){
-      if (word.length > 135) {
-          return word.substring(0, 135) + "...";
+      if (word.length > 250) {
+          return word.substring(0, 250) + "...";
         }
     },
     idNeed(val){
@@ -250,7 +256,14 @@ export default {
       }else if(val===0){
         return '不必要'
       }
-    }
+    },
+    time(time){
+        if(time){
+          let dateee = new Date(time).toJSON();
+          return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
+          // return time.split("T")[0]
+        }
+      }
   },
   created () {
     this.messageform.id=this.$route.query.id
@@ -268,9 +281,14 @@ export default {
           console.log(res);
           if (res.code == "0000") {
             _this.seviceDetail = res.data;
+            _this.word=_this.seviceDetail.dealConditions
           }
         }
       });
+    },
+    // 获取在线办理地址
+    handleview(){
+      this.dealUrl=`http://192.168.10.31:1101/springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.messageform.id}`
     },
     counselnum(){
       this.residuenum=500-this.messageform.content.length
@@ -479,6 +497,7 @@ export default {
               //在线地址
               .onlineaddr{
                 color:#00a041;
+                cursor: pointer;
               }
             } 
             .el-form{
@@ -556,6 +575,7 @@ export default {
       .guide_base{
         display: flex;
         align-items: center;
+        margin-top: 10px;
         span{
           font-size: 15px;
           &:first-child{
@@ -573,7 +593,7 @@ export default {
         margin-top: 8px;
         span:nth-child(1){
           line-height: 20px;
-          padding-left: 25px;
+          padding-left: 21px;
         }
         .pack_up{
           float: right;
@@ -587,6 +607,11 @@ export default {
       .el-collapse-item .el-collapse-item__wrap .el-collapse-item__content  {
         border:none;
         // margin-top:10px;
+      }
+      .baseIfor_table{
+        span{
+          padding-left: 21px;
+        }
       }
     }
     //收费标准

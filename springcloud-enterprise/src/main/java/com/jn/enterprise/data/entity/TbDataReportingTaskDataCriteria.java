@@ -3,14 +3,14 @@ package com.jn.enterprise.data.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TbDataReportingModelDataCriteria {
+public class TbDataReportingTaskDataCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TbDataReportingModelDataCriteria() {
+    public TbDataReportingTaskDataCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -171,76 +171,6 @@ public class TbDataReportingModelDataCriteria {
 
         public Criteria andFallInFormIdNotBetween(String value1, String value2) {
             addCriterion("fall_in_form_id not between", value1, value2, "fallInFormId");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdEqualTo(String value) {
-            addCriterion("id =", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotEqualTo(String value) {
-            addCriterion("id <>", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThan(String value) {
-            addCriterion("id >", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThanOrEqualTo(String value) {
-            addCriterion("id >=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThan(String value) {
-            addCriterion("id <", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThanOrEqualTo(String value) {
-            addCriterion("id <=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLike(String value) {
-            addCriterion("id like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotLike(String value) {
-            addCriterion("id not like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIn(List<String> values) {
-            addCriterion("id in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotIn(List<String> values) {
-            addCriterion("id not in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdBetween(String value1, String value2) {
-            addCriterion("id between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotBetween(String value1, String value2) {
-            addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
 
@@ -524,6 +454,76 @@ public class TbDataReportingModelDataCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andFillIdIsNull() {
+            addCriterion("fill_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdIsNotNull() {
+            addCriterion("fill_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdEqualTo(String value) {
+            addCriterion("fill_id =", value, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdNotEqualTo(String value) {
+            addCriterion("fill_id <>", value, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdGreaterThan(String value) {
+            addCriterion("fill_id >", value, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdGreaterThanOrEqualTo(String value) {
+            addCriterion("fill_id >=", value, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdLessThan(String value) {
+            addCriterion("fill_id <", value, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdLessThanOrEqualTo(String value) {
+            addCriterion("fill_id <=", value, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdLike(String value) {
+            addCriterion("fill_id like", value, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdNotLike(String value) {
+            addCriterion("fill_id not like", value, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdIn(List<String> values) {
+            addCriterion("fill_id in", values, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdNotIn(List<String> values) {
+            addCriterion("fill_id not in", values, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdBetween(String value1, String value2) {
+            addCriterion("fill_id between", value1, value2, "fillId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFillIdNotBetween(String value1, String value2) {
+            addCriterion("fill_id not between", value1, value2, "fillId");
+            return (Criteria) this;
+        }
+
         public Criteria andTabIdIsNull() {
             addCriterion("tab_id is null");
             return (Criteria) this;
@@ -594,73 +594,63 @@ public class TbDataReportingModelDataCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andFillIdIsNull() {
-            addCriterion("fill_id is null");
+        public Criteria andRowNumIsNull() {
+            addCriterion("row_num is null");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdIsNotNull() {
-            addCriterion("fill_id is not null");
+        public Criteria andRowNumIsNotNull() {
+            addCriterion("row_num is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdEqualTo(String value) {
-            addCriterion("fill_id =", value, "fillId");
+        public Criteria andRowNumEqualTo(Integer value) {
+            addCriterion("row_num =", value, "rowNum");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdNotEqualTo(String value) {
-            addCriterion("fill_id <>", value, "fillId");
+        public Criteria andRowNumNotEqualTo(Integer value) {
+            addCriterion("row_num <>", value, "rowNum");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdGreaterThan(String value) {
-            addCriterion("fill_id >", value, "fillId");
+        public Criteria andRowNumGreaterThan(Integer value) {
+            addCriterion("row_num >", value, "rowNum");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdGreaterThanOrEqualTo(String value) {
-            addCriterion("fill_id >=", value, "fillId");
+        public Criteria andRowNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("row_num >=", value, "rowNum");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdLessThan(String value) {
-            addCriterion("fill_id <", value, "fillId");
+        public Criteria andRowNumLessThan(Integer value) {
+            addCriterion("row_num <", value, "rowNum");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdLessThanOrEqualTo(String value) {
-            addCriterion("fill_id <=", value, "fillId");
+        public Criteria andRowNumLessThanOrEqualTo(Integer value) {
+            addCriterion("row_num <=", value, "rowNum");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdLike(String value) {
-            addCriterion("fill_id like", value, "fillId");
+        public Criteria andRowNumIn(List<Integer> values) {
+            addCriterion("row_num in", values, "rowNum");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdNotLike(String value) {
-            addCriterion("fill_id not like", value, "fillId");
+        public Criteria andRowNumNotIn(List<Integer> values) {
+            addCriterion("row_num not in", values, "rowNum");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdIn(List<String> values) {
-            addCriterion("fill_id in", values, "fillId");
+        public Criteria andRowNumBetween(Integer value1, Integer value2) {
+            addCriterion("row_num between", value1, value2, "rowNum");
             return (Criteria) this;
         }
 
-        public Criteria andFillIdNotIn(List<String> values) {
-            addCriterion("fill_id not in", values, "fillId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFillIdBetween(String value1, String value2) {
-            addCriterion("fill_id between", value1, value2, "fillId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFillIdNotBetween(String value1, String value2) {
-            addCriterion("fill_id not between", value1, value2, "fillId");
+        public Criteria andRowNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("row_num not between", value1, value2, "rowNum");
             return (Criteria) this;
         }
     }

@@ -1,7 +1,10 @@
 package com.jn.enterprise.data.model;
 
+import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
 
 /**
  * @author： yangh
@@ -10,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @modified By:
  */
 @ApiModel(value = "GardenCheckParamModel",description = "园区审核列表查询参数")
-public class GardenCheckParamModel {
+public class GardenCheckParamModel extends Page implements Serializable {
 
     @ApiModelProperty(value = "填报状态",example = "1")
     private String status;

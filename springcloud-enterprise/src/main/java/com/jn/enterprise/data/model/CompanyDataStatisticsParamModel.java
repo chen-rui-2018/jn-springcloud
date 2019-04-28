@@ -14,13 +14,13 @@ import java.io.Serializable;
  */
 @ApiModel(value = "CompanyDataStatisticsParamModel" ,description = "企业/园区统计数据查询条件")
 public class CompanyDataStatisticsParamModel extends Page implements Serializable {
-    @ApiModelProperty(value = "填报状态（企业状态0：已上报；1未上报；2：逾期上报；",example = "0")
+    @ApiModelProperty(value = "填报状态（企业状态0：已上报；1未上报",example = "0")
     private String status;
 
     @ApiModelProperty(value = "账期",example = "2018")
     private String formTime;
 
-    @ApiModelProperty(value = "模板名称",example = "")
+    @ApiModelProperty(value = "模板名称",example = "XXX模板")
     private String modelName;
 
     @ApiModelProperty(value = "填报周期",example = "1：年，0：月")

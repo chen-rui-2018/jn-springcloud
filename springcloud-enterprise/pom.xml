@@ -38,6 +38,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-news-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -68,8 +76,11 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        advisor,service_org,service_product,comment,require,businessArea,company,technology,common,pd-enterprise,pd-talent,pd-personnel,pd-declaration,pd-support,data,propaganda,task
+                        advisor
                     </contexts>
+                    <tableNames>
+                        tb_service_advisor
+                    </tableNames>
                     <verbose>true</verbose>
                 </configuration>
             </plugin>

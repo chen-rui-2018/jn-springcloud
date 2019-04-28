@@ -3,15 +3,13 @@
 <mapper namespace="com.jn.enterprise.propaganda.dao.TbPropagandaFeeRulesMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules">
     <result column="pro_fee_rule_code" jdbcType="VARCHAR" property="proFeeRuleCode" />
-    <result column="propaganda_fee" jdbcType="DECIMAL" property="propagandaFee" />
+    <result column="pro_fee_rule_details" jdbcType="VARCHAR" property="proFeeRuleDetails" />
+    <result column="propaganda_fee" jdbcType="DOUBLE" property="propagandaFee" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules">
-    <result column="pro_fee_rule_details" jdbcType="LONGVARCHAR" property="proFeeRuleDetails" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,28 +70,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    pro_fee_rule_code, propaganda_fee, created_time, creator_account, modified_time, 
-    modifier_account, record_status
+    pro_fee_rule_code, pro_fee_rule_details, propaganda_fee, created_time, creator_account, 
+    modified_time, modifier_account, record_status
   </sql>
-  <sql id="Blob_Column_List">
-    pro_fee_rule_details
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRulesCriteria" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from tb_propaganda_fee_rules
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRulesCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -115,18 +94,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules">
-    insert into tb_propaganda_fee_rules (pro_fee_rule_code, propaganda_fee, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status, pro_fee_rule_details)
-    values (#{proFeeRuleCode,jdbcType=VARCHAR}, #{propagandaFee,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{proFeeRuleDetails,jdbcType=LONGVARCHAR})
+    insert into tb_propaganda_fee_rules (pro_fee_rule_code, pro_fee_rule_details, 
+      propaganda_fee, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
+    values (#{proFeeRuleCode,jdbcType=VARCHAR}, #{proFeeRuleDetails,jdbcType=VARCHAR}, 
+      #{propagandaFee,jdbcType=DOUBLE}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules">
     insert into tb_propaganda_fee_rules
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="proFeeRuleCode != null">
         pro_fee_rule_code,
+      </if>
+      <if test="proFeeRuleDetails != null">
+        pro_fee_rule_details,
       </if>
       <if test="propagandaFee != null">
         propaganda_fee,
@@ -146,16 +130,16 @@
       <if test="recordStatus != null">
         record_status,
       </if>
-      <if test="proFeeRuleDetails != null">
-        pro_fee_rule_details,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="proFeeRuleCode != null">
         #{proFeeRuleCode,jdbcType=VARCHAR},
       </if>
+      <if test="proFeeRuleDetails != null">
+        #{proFeeRuleDetails,jdbcType=VARCHAR},
+      </if>
       <if test="propagandaFee != null">
-        #{propagandaFee,jdbcType=DECIMAL},
+        #{propagandaFee,jdbcType=DOUBLE},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -172,9 +156,6 @@
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="proFeeRuleDetails != null">
-        #{proFeeRuleDetails,jdbcType=LONGVARCHAR},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaFeeRulesCriteria" resultType="java.lang.Long">
@@ -189,8 +170,11 @@
       <if test="record.proFeeRuleCode != null">
         pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
       </if>
+      <if test="record.proFeeRuleDetails != null">
+        pro_fee_rule_details = #{record.proFeeRuleDetails,jdbcType=VARCHAR},
+      </if>
       <if test="record.propagandaFee != null">
-        propaganda_fee = #{record.propagandaFee,jdbcType=DECIMAL},
+        propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -207,24 +191,7 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="record.proFeeRuleDetails != null">
-        pro_fee_rule_details = #{record.proFeeRuleDetails,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update tb_propaganda_fee_rules
-    set pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{record.propagandaFee,jdbcType=DECIMAL},
-      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
-      pro_fee_rule_details = #{record.proFeeRuleDetails,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -232,7 +199,8 @@
   <update id="updateByExample" parameterType="map">
     update tb_propaganda_fee_rules
     set pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{record.propagandaFee,jdbcType=DECIMAL},
+      pro_fee_rule_details = #{record.proFeeRuleDetails,jdbcType=VARCHAR},
+      propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},

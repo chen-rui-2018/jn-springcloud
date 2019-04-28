@@ -3,7 +3,6 @@
 <mapper namespace="com.jn.enterprise.data.dao.TbDataReportingGroupStructMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingGroupStruct">
     <id column="group_id" jdbcType="VARCHAR" property="groupId" />
-    <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="group_comment" jdbcType="VARCHAR" property="groupComment" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -11,6 +10,7 @@
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="company_ids" jdbcType="VARCHAR" property="companyIds" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    group_id, id, group_name, group_comment, creator_account, create_time, record_status, 
-    modifier_account, modified_time
+    group_id, group_name, group_comment, creator_account, create_time, record_status, 
+    modifier_account, modified_time, company_ids
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingGroupStructCriteria" resultMap="BaseResultMap">
     select
@@ -105,13 +105,13 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingGroupStruct">
-    insert into tb_data_reporting_group_struct (group_id, id, group_name, 
-      group_comment, creator_account, create_time, 
-      record_status, modifier_account, modified_time
+    insert into tb_data_reporting_group_struct (group_id, group_name, group_comment, 
+      creator_account, create_time, record_status, 
+      modifier_account, modified_time, company_ids
       )
-    values (#{groupId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, 
-      #{groupComment,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{recordStatus,jdbcType=TINYINT}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+    values (#{groupId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, #{groupComment,jdbcType=VARCHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{companyIds,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingGroupStruct">
@@ -119,9 +119,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="groupId != null">
         group_id,
-      </if>
-      <if test="id != null">
-        id,
       </if>
       <if test="groupName != null">
         group_name,
@@ -144,13 +141,13 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="companyIds != null">
+        company_ids,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="groupId != null">
         #{groupId,jdbcType=VARCHAR},
-      </if>
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
       </if>
       <if test="groupName != null">
         #{groupName,jdbcType=VARCHAR},
@@ -173,6 +170,9 @@
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="companyIds != null">
+        #{companyIds,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingGroupStructCriteria" resultType="java.lang.Long">
@@ -186,9 +186,6 @@
     <set>
       <if test="record.groupId != null">
         group_id = #{record.groupId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.groupName != null">
         group_name = #{record.groupName,jdbcType=VARCHAR},
@@ -211,6 +208,9 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.companyIds != null">
+        company_ids = #{record.companyIds,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -219,14 +219,14 @@
   <update id="updateByExample" parameterType="map">
     update tb_data_reporting_group_struct
     set group_id = #{record.groupId,jdbcType=VARCHAR},
-      id = #{record.id,jdbcType=VARCHAR},
       group_name = #{record.groupName,jdbcType=VARCHAR},
       group_comment = #{record.groupComment,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      company_ids = #{record.companyIds,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -234,9 +234,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingGroupStruct">
     update tb_data_reporting_group_struct
     <set>
-      <if test="id != null">
-        id = #{id,jdbcType=VARCHAR},
-      </if>
       <if test="groupName != null">
         group_name = #{groupName,jdbcType=VARCHAR},
       </if>
@@ -258,19 +255,22 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="companyIds != null">
+        company_ids = #{companyIds,jdbcType=VARCHAR},
+      </if>
     </set>
     where group_id = #{groupId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingGroupStruct">
     update tb_data_reporting_group_struct
-    set id = #{id,jdbcType=VARCHAR},
-      group_name = #{groupName,jdbcType=VARCHAR},
+    set group_name = #{groupName,jdbcType=VARCHAR},
       group_comment = #{groupComment,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      company_ids = #{companyIds,jdbcType=VARCHAR}
     where group_id = #{groupId,jdbcType=VARCHAR}
   </update>
 </mapper>

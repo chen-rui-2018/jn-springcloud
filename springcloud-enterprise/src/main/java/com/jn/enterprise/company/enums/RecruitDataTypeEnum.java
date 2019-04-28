@@ -21,6 +21,11 @@ public enum RecruitDataTypeEnum implements CodeAndMsg {
     ALL_SHELVES("2","全部"),
     ON_SHELVES("1","已上架"),
     OFF_SHELVES("0","已下架"),
+
+    APPROVAL_STATUS_WAIT("0", "未审批"),
+    APPROVAL_STATUS_ING("1", "审批中"),
+    APPROVAL_STATUS_PASS("2", "审核通过"),
+    APPROVAL_STATUS_NOT_PASS("3", "审核不通过"),
     ;
     /**
      * 编码

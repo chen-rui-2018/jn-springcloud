@@ -24,7 +24,6 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api/sp/power")
 public class SpPowerPortalServerController extends BaseController implements SpPowerPortalClient {
     /**
      * 日志组件
@@ -35,8 +34,6 @@ public class SpPowerPortalServerController extends BaseController implements SpP
     private SpPowerPortalService spPowerPortalService;
 
     @ControllerLog(doAction = "获取行政审批宣传图列表")
-    @ApiOperation(value = "获取行政审批宣传图列表", notes = "获取行政审批宣传图列表")
-    @RequestMapping(value = "/getAdvertising")
     @Override
     public Result<List<SpAdModel>> getAdvertising() {
         return new Result(spPowerPortalService.getAdvertising());

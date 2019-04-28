@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Author: yangph
@@ -14,6 +13,10 @@ import java.util.Date;
  */
 @ApiModel(value = "BusinessPromotionListShow", description = "企业宣传查询列表出参")
 public class BusinessPromotionListShow implements Serializable {
+    @ApiModelProperty(value = "订单号(已付款的宣传才有订单号)")
+    private String orderNum;
+    @ApiModelProperty(value = "宣传类型")
+    private String propagandaType;
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "宣传编码")
@@ -25,11 +28,31 @@ public class BusinessPromotionListShow implements Serializable {
     @ApiModelProperty(value = "生效日期")
     private String effectiveDate;
     @ApiModelProperty(value = "失效日期")
-    private Date invalidDate;
+    private String invalidDate;
     @ApiModelProperty(value = "宣传海报")
     private String posterUrl;
     @ApiModelProperty(value = "宣传费用")
     private String propagandaFee;
+    @ApiModelProperty(value = "审批状态(-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)")
+    private String approvalStatus;
+    @ApiModelProperty(value = "宣传区域(top:顶部  central:中部  bottom:底部)")
+    private String propagandaArea;
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getPropagandaType() {
+        return propagandaType;
+    }
+
+    public void setPropagandaType(String propagandaType) {
+        this.propagandaType = propagandaType;
+    }
 
     public String getId() {
         return id;
@@ -71,11 +94,11 @@ public class BusinessPromotionListShow implements Serializable {
         this.effectiveDate = effectiveDate;
     }
 
-    public Date getInvalidDate() {
+    public String getInvalidDate() {
         return invalidDate;
     }
 
-    public void setInvalidDate(Date invalidDate) {
+    public void setInvalidDate(String invalidDate) {
         this.invalidDate = invalidDate;
     }
 
@@ -95,17 +118,37 @@ public class BusinessPromotionListShow implements Serializable {
         this.propagandaFee = propagandaFee;
     }
 
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    public String getPropagandaArea() {
+        return propagandaArea;
+    }
+
+    public void setPropagandaArea(String propagandaArea) {
+        this.propagandaArea = propagandaArea;
+    }
+
     @Override
     public String toString() {
         return "BusinessPromotionListShow{" +
-                "id='" + id + '\'' +
+                "orderNum='" + orderNum + '\'' +
+                ", propagandaType='" + propagandaType + '\'' +
+                ", id='" + id + '\'' +
                 ", propagandaCode='" + propagandaCode + '\'' +
                 ", propagandaTitle='" + propagandaTitle + '\'' +
                 ", issuePlatform='" + issuePlatform + '\'' +
                 ", effectiveDate='" + effectiveDate + '\'' +
-                ", invalidDate=" + invalidDate +
+                ", invalidDate='" + invalidDate + '\'' +
                 ", posterUrl='" + posterUrl + '\'' +
                 ", propagandaFee='" + propagandaFee + '\'' +
+                ", approvalStatus='" + approvalStatus + '\'' +
+                ", propagandaArea='" + propagandaArea + '\'' +
                 '}';
     }
 }

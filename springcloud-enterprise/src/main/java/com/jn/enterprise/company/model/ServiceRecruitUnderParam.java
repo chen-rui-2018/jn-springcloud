@@ -15,10 +15,10 @@ import java.io.Serializable;
 @ApiModel(value = "ServiceRecruitUnderParam", description = "上/下架招聘信息入参")
 public class ServiceRecruitUnderParam implements Serializable {
     @ApiModelProperty(value = "招聘id", required = true)
-    @NotNull
+    @NotNull(message = "招聘ID不能为空")
     private String id;
     @ApiModelProperty(value = "状态（直接传当前status状态）", required = true)
-    @NotNull
+    @NotNull(message = "状态不能为空")
     private String status;
 
     public String getId() {

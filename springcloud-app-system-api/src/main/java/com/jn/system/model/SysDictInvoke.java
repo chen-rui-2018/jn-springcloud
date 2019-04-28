@@ -1,4 +1,4 @@
-package com.jn.system.dict.model;
+package com.jn.system.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -24,7 +24,24 @@ public class SysDictInvoke implements Serializable {
     @ApiModelProperty(value = "分组编码")
     private String groupCode;
 
+    @ApiModelProperty(value = "数据字典键")
+    private String key;
+
     public SysDictInvoke() {
+    }
+
+     public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+    public SysDictInvoke(String moduleCode, String parentGroupCode, String groupCode, String key) {
+        this.moduleCode = moduleCode;
+        this.parentGroupCode = parentGroupCode;
+        this.groupCode = groupCode;
+        this.key = key;
     }
 
     public String getModuleCode() {

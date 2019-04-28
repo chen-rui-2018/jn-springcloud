@@ -30,5 +30,22 @@
         WHERE
             work_plan_id = #{workPlanId,jdbcType=VARCHAR};
     </update>
+    <select id="getRecordList" resultType="com.jn.oa.item.model.WorkPlanRecord" parameterType="java.lang.String">
+        SELECT
+            id,
+            record_date as recordDate,
+            work_plan_id as workPlanId,
+            consume_time as consumeTime,
+            remain_time as remainTime,
+            remark
+        FROM
+            `tb_oa_work_plan_record`
+        WHERE
+            record_status = '1'
+        AND work_plan_id = #{workPlanId,jdbcType=VARCHAR}
+        ORDER BY
+            created_time ASC,
+            sort ASC
+    </select>
 
 </mapper>

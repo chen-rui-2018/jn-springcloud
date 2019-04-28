@@ -22,7 +22,7 @@ export default {
         getUserPersonInfo:"springcloud-user/user/center/getUserPersonInfo",//根据用户账号获取用户资料信息
         modifyUserPassword:"springcloud-user/user/center/modifyUserPassword",//修改用户密码
         saveUserInfo:"springcloud-user/guest/userInfo/saveUserInfo",//保存用户资料
-        getTagCodeList:"springcloud-user//guest/userTag/getTagCodeList",//获取用户字典列表
+        getTagCodeList:"springcloud-user/guest/userTag/getTagCodeList",//获取用户字典列表
         findHotProducts:"springcloud-enterprise/servicemarket/product/web/findHotProducts",//热门产品
         selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//顾问领域列表
         getServiceConsultantList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//机构服务顾问

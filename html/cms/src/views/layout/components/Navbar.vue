@@ -3,7 +3,6 @@
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
 
     <breadcrumb class="breadcrumb-container" />
-    <a href="http://112.94.22.222:2381/ibps/" target="_blank" style="display:inline-block;margin-left: 20px;">快速开发平台</a>
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <!-- <error-log class="errLog-container right-menu-item"/> -->
@@ -18,7 +17,6 @@
         </div>
       </template>
     </div>
-    <iframe v-show = "false" ref="iframe" frameborder = "0" src="" name="kskfpt" scrolling="auto"/>
   </div>
 </template>
 
@@ -57,7 +55,6 @@ export default {
     // } else {
     //   this.userName = localStorage.getItem('userName')
     // }
-    this.$refs.iframe.contentWindow.location.replace('http://112.94.22.222:2381/ibps/noPasswordLogin.htm?username=' + localStorage.getItem('account') + '&password=123')
   },
   methods: {
     toggleSideBar() {

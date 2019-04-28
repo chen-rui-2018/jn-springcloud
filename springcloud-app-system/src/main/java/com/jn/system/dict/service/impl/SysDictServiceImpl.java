@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
 import com.jn.system.common.enums.SysExceptionEnums;
@@ -279,7 +280,23 @@ public class SysDictServiceImpl implements SysDictService {
         criteria.andModuleCodeEqualTo(sysDictInvoke.getModuleCode());
         criteria.andParentGroupCodeEqualTo(sysDictInvoke.getParentGroupCode());
         criteria.andGroupCodeEqualTo(sysDictInvoke.getGroupCode());
+        if(StringUtils.isNotBlank(sysDictInvoke.getKey())){
+            criteria.andDictKeyEqualTo(sysDictInvoke.getKey());
+        }
         return tbSysDictMapper.selectByExample(tbSysDictCriteria);
+    }
+    /**
+     *根据条件查询数据字典的值
+     * @param sysDictInvoke
+     * @return
+     */
+    @Override
+    public String selectDictValueByCondition(SysDictInvoke sysDictInvoke){
+        List<TbSysDict> tbSysDictList=getTbSysDicts(sysDictInvoke);
+        if(tbSysDictList!=null||tbSysDictList.size()>0){
+            return tbSysDictList.get(0).getDictValue();
+        }
+        return null;
     }
 
 

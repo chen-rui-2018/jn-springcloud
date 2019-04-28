@@ -285,12 +285,29 @@
         ,w.model_name as modelName
         ,w.model_cycle as modelCycle
         ,w.status as status
+        ,w.fill_in_form_deadline as fillInFormDeadline
+        ,w.fill_in_form_name as fillInFormName
+        ,CASE
+
+        WHEN w.is_overdue = 0 THEN
+        datediff( w.fill_in_form_deadline,SYSDATE( ) ) ELSE 0
+        END AS residueDays,
+        CASE
+
+        WHEN w.is_overdue = 1 THEN
+        datediff(  SYSDATE( ),w.fill_in_form_deadline ) ELSE 0
+        END AS overdueDays
+
         from (
         select
         q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
         ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
         ,q.calling_times ,q.calling_time ,r.model_name ,r.model_cycle
         ,q.status
+        ,q.fill_in_form_deadline
+        ,q.fill_in_form_name
+        ,q.overdue_days
+
         from
         (
             select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
@@ -683,6 +700,19 @@
         ,w.model_name as modelName
         ,w.model_cycle as modelCycle
         ,w.status as status
+        ,w.fill_in_form_deadline as fillInFormDeadline
+        ,w.fill_in_form_name as fillInFormName
+
+        ,CASE
+
+        WHEN w.is_overdue = 0 THEN
+        datediff( w.fill_in_form_deadline,SYSDATE( ) ) ELSE 0
+        END AS residueDays,
+        CASE
+
+        WHEN w.is_overdue = 1 THEN
+        datediff(  SYSDATE( ),w.fill_in_form_deadline ) ELSE 0
+        END AS overdueDays
         from
 
         (
@@ -691,6 +721,9 @@
             ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
             ,q.calling_times ,q.calling_time ,r.model_name ,r.model_cycle
             ,q.status
+            ,q.fill_in_form_deadline
+            ,q.fill_in_form_name
+            ,q.overdue_days
             from tb_data_reporting_task q , tb_data_reporting_snapshot_model r
             where
             q.task_batch in
@@ -700,6 +733,9 @@
 
             and
             q.task_batch = r.task_batch
+            and (q.status=1 or q.status=2)
+            and q.record_status=1
+            and q.file_type=1
         ) w
         order by w.form_time desc
 

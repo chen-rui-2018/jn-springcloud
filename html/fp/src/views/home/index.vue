@@ -45,7 +45,6 @@
             </li>
           </ul>
         </transition>
-        <iframe id="kskfpt" ref="iframe" src="" width="0" height="0" frameborder="0" scrolling="auto" style="visibility: hidden;"/>
       </div>
     </div>
     <div class="homePage_content w">
@@ -188,8 +187,6 @@ export default {
     });
   },
   mounted() {
-    // 预先登录模式
-    $('#kskfpt').attr('src', `http://112.94.22.222:2381/ibps/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
     this.getUserExtension();
   },
   updated(){

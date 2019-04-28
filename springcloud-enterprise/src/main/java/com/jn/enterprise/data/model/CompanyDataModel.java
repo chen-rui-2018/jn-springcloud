@@ -18,7 +18,7 @@ public class CompanyDataModel implements Serializable {
     private String fillInFormName;
 
     @ApiModelProperty(value = "填报状态",example = "1")
-    private String status;
+    private Byte status;
 
     public String getFillId() {
         return fillId;
@@ -63,6 +63,65 @@ public class CompanyDataModel implements Serializable {
 
     @ApiModelProperty(value = "任务批次",example = "001")
     private String taskBatch;
+
+    @ApiModelProperty( value="填报类型（0：企业，1：园管委会）", example="0" )
+    private Byte fileType;
+
+    @ApiModelProperty( value="填报对象名称；是园区时，存储部门ID;企业时填写企业ID", example="0001" )
+    private String fillInFormId;
+
+    @ApiModelProperty( value="填报截至时间", example="2018-12-09" )
+    private Date fillInFormDeadline;
+
+    @ApiModelProperty( value="剩余填报天数", example="5" )
+    private Integer residueDays;
+
+    @ApiModelProperty( value="逾期天数", example="5" )
+    private Integer overdueDays;
+
+    public Integer getOverdueDays() {
+        return overdueDays;
+    }
+
+    public void setOverdueDays(Integer overdueDays) {
+        this.overdueDays = overdueDays;
+    }
+
+    public Integer getResidueDays() {
+        return residueDays;
+    }
+
+    public void setResidueDays(Integer residueDays) {
+        this.residueDays = residueDays;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Byte getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(Byte fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getFillInFormId() {
+        return fillInFormId;
+    }
+
+    public void setFillInFormId(String fillInFormId) {
+        this.fillInFormId = fillInFormId;
+    }
+
+    public Date getFillInFormDeadline() {
+        return fillInFormDeadline;
+    }
+
+    public void setFillInFormDeadline(Date fillInFormDeadline) {
+        this.fillInFormDeadline = fillInFormDeadline;
+    }
 
     public String getTaskBatch() {
         return taskBatch;
@@ -112,12 +171,8 @@ public class CompanyDataModel implements Serializable {
         this.fillInFormName = fillInFormName;
     }
 
-    public String getStatus() {
+    public Byte getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getFormTime() {

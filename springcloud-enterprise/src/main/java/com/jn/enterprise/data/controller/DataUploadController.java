@@ -221,8 +221,6 @@ public class DataUploadController  extends BaseController {
     }
 
 
-
-
     /**园区上报数据统计**/
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区广告获取")
@@ -388,12 +386,14 @@ public class DataUploadController  extends BaseController {
             @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
             @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
             @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="fillInFormDeadline",value = "截至日期",dataType = "String",paramType = "query",example = "001")
+            @ApiImplicitParam(name="fillInFormDeadline",value = "截至日期",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001")
 
     })
-    public Result gardenExport(String formTime,String modelName,String modelCycle,String fillInFormDeadline){
+    public Result gardenExport(String formTime,String modelName,String modelCycle,String fillInFormDeadline,String taskBatch){
         return new Result();
     }
+
 
 
 }

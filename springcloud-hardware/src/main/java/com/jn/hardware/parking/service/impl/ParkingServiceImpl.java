@@ -4,12 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.jn.common.model.Result;
 import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
-import com.jn.hardware.enmu.ResponseJsonTest;
 import com.jn.hardware.enums.ParkingCompanyEnum;
 import com.jn.hardware.enums.ParkingExceptionEnum;
 import com.jn.hardware.model.parking.*;
 import com.jn.hardware.model.parking.door.*;
 import com.jn.hardware.parking.service.ParkingService;
+import com.jn.hardware.util.DoorDynamicSignatureUtil;
 import com.jn.hardware.util.JsonStringToObjectUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 /**
  * TODO：未添加类描述
@@ -51,7 +53,9 @@ public class ParkingServiceImpl implements ParkingService {
             //调用道尔硬件接口
             url = String.format(ParkingService.GET_DOOR_TEMPORARYCAR_PARKINGFEE_URL,temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getParkid()
             ,temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getParkid(),temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getCarNo());
-            String responseString = RestTemplateUtil.get(url);
+//            String responseString = RestTemplateUtil.get(url);
+
+            String responseString = DoorDynamicSignatureUtil.sentGet(url,JsonStringToObjectUtil.objectToJson(temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest()));
             DoorResult<DoorTemporaryCarParkingFeeResponse> doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult<DoorTemporaryCarParkingFeeResponse>>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
                 result.setData(doorResult.getBody());

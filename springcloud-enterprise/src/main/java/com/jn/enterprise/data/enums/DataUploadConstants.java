@@ -146,7 +146,18 @@ public class DataUploadConstants {
     public final static String WARNING_BY_SMSTEXT="0";
 
     /**
-     *
+     *是否必填
      */
     public final static String  REQUIRED="1";
+
+    /**
+     *模板状态
+     */
+    public final static String  MODEL_STATUS_VALID="0";
+
+    /**
+     * 是否为科技园模板
+     */
+    public final static String  IS_SCIENT_MODEL="1";
+
 }

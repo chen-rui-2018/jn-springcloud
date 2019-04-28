@@ -71,7 +71,7 @@ public class BusinessPromotionServiceImplTest {
     @Before
     public void setUp() throws Exception {
         //企业宣传列表查询
-        bpp.setApprovalStatus("-1");
+        bpp.setApprovalStatus("0");
         bpp.setSearchContent("");
         bpp.setPropagandaType("");
         bpp.setNeedPage("1");
@@ -327,5 +327,30 @@ public class BusinessPromotionServiceImplTest {
         String bill = businessPromotionService.createBill(orderNum, loginAccount);
         logger.info("------账单号：{}-----",bill);
         assertThat(bill, anything());
+    }
+
+    /**
+     * 获取宣传区域信息
+     */
+    @Test
+    public void getPropagandaAreaList(){
+        try {
+            List<PropagandaAreaShow> propagandaAreaList = businessPromotionService.getPropagandaAreaList();
+            if(propagandaAreaList==null){
+                //ignore
+            }else{
+                for(PropagandaAreaShow ps:propagandaAreaList){
+                    logger.info("获取宣传区域信息：{}",ps.toString());
+                }
+            }
+            assertThat(propagandaAreaList, anything());
+        } catch (JnSpringCloudException e) {
+            logger.warn("获取宣传区域信息失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(BusinessPromotionExceptionEnum.PROPAGANDA_AREA_NOT_EXIST.getCode())
+                    )
+            );
+        }
     }
 }

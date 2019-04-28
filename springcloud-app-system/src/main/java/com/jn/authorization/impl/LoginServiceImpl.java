@@ -2,6 +2,7 @@ package com.jn.authorization.impl;
 
 import com.jn.authorization.LoginService;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.config.MyUsernamePasswordToken;
 import com.jn.system.enums.ShiroExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
@@ -31,7 +32,7 @@ public class LoginServiceImpl implements LoginService {
     public void login(UserLogin user,Boolean isNoPasswordLogin) {
         try {
             Subject userShiro = SecurityUtils.getSubject();
-            MyUsernamePasswordToken token = new MyUsernamePasswordToken(user.getAccount(), DigestUtils.md5Hex(user.getPassword()).toCharArray());
+            MyUsernamePasswordToken token = new MyUsernamePasswordToken(user.getAccount(), EncryptUtil.encryptSha256(user.getPassword()).toCharArray());
             token.setNoPassword(isNoPasswordLogin);
             userShiro.login(token);
         } catch (UnknownAccountException e) {

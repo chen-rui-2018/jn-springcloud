@@ -24,6 +24,16 @@ public class WarningTaskModel implements Serializable {
 
     private String fillInFormId;
 
+    private String fillId;
+
+    public String getFillId() {
+        return fillId;
+    }
+
+    public void setFillId(String fillId) {
+        this.fillId = fillId;
+    }
+
     public String getFillInFormId() {
         return fillInFormId;
     }

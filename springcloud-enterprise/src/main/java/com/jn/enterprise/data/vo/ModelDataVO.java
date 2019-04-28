@@ -1,5 +1,6 @@
 package com.jn.enterprise.data.vo;
 
+import com.jn.enterprise.data.entity.TbDataReportingGardenFiller;
 import com.jn.enterprise.data.model.CompanyDataModel;
 import com.jn.enterprise.data.model.DepartementModel;
 import io.swagger.annotations.Api;
@@ -79,16 +80,17 @@ public class ModelDataVO implements Serializable {
     @ApiModelProperty(value = "最新更新时间",example = "2020-12-21")
     private Date modifiedTime;
 
-    @ApiModelProperty(value = "用户权限集合",example = "[001,112]")
-    private List<DepartementModel> userDepartmentId;
+    @ApiModelProperty(value = "任务的权限集合",example = "")
+    private List<TbDataReportingGardenFiller> gardenFiller;
 
-    public List<DepartementModel> getUserDepartmentId() {
-        return userDepartmentId;
+    public List<TbDataReportingGardenFiller> getGardenFiller() {
+        return gardenFiller;
     }
 
-    public void setUserDepartmentId(List<DepartementModel> userDepartmentId) {
-        this.userDepartmentId = userDepartmentId;
+    public void setGardenFiller(List<TbDataReportingGardenFiller> gardenFiller) {
+        this.gardenFiller = gardenFiller;
     }
+    
 
     public List<TabVO> getTabs() {
         return tabs;

@@ -4,10 +4,10 @@
     <!--金融产品列表查询-->
     <select id="getFinancialProductList" resultType="com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListInfo">
         SELECT
-            sp.`product_id` AS "productId"				        <!--产品id-->
+            sp.`product_id_` AS "productId"				        <!--产品id-->
             ,sp.`product_name` AS "productName"			        <!--产品名称-->
             ,sp.picture_url as "pictureUrl"                     <!--产品图片-->
-            ,sp.`org_id` AS "orgId"					            <!--机构id-->
+            ,sp.`org_id_` AS "orgId"					            <!--机构id-->
             ,sp.`org_name` AS "orgName"				            <!--机构名称-->
             ,sp.`ref_rate_min` AS "refRateMin"			        <!--参考利率最小值-->
             ,sp.`ref_rate_max` AS "refRateMax"			        <!--参考利率最大值-->
@@ -18,19 +18,19 @@
             ,sp.`loan_term_max` AS "loanTermMax"			    <!--贷款期限最大值-->
             ,COUNT(sr.`attitude_score`) AS "ratingNum"		    <!--评价次数-->
             ,IFNULL(AVG(sr.`attitude_score`),0) AS "ratingScore"<!--评价分数-->
-            ,COUNT(sq.`product_id`) AS "transactionNum"		    <!--累计交易数-->
+            ,COUNT(sq.`product_id_`) AS "transactionNum"		    <!--累计交易数-->
         FROM tb_service_product sp 
         LEFT JOIN tb_service_rating sr
-        ON sp.`product_id`=sr.`product_id`
+        ON sp.`product_id_`=sr.`product_id_`
         AND sr.`record_status`='1'
         LEFT JOIN tb_service_require sq
-        ON sp.`product_id`=sq.`product_id`
+        ON sp.`product_id_`=sq.`product_id_`
         AND sq.`status`='2'						                <!--已处理-->
         AND sq.`record_status`='1'
         WHERE 1=1
         AND sp.`record_status`='1'
         AND sp.`status`='1'						                <!--有效-->
-        AND sp.`org_id` IS NOT NULL
+        AND sp.`org_id_` IS NOT NULL
         AND sp.`signory_id`=#{businessAreaId}			        <!--科技金融-->
         <if test="financialParam.loanTermMin !=null and financialParam.loanTermMin !=''">     <!--贷款期限大于等于最小值-->
             and sp.loan_term_min &gt;=#{financialParam.loanTermMin}
@@ -56,9 +56,9 @@
         <if test="financialParam.keyWord !=null and financialParam.keyWord !=''">  <!--关键词-->
             and (sp.product_name like  CONCAT('%', #{financialParam.keyWord}, '%') or sp.org_name like CONCAT('%', #{financialParam.keyWord}, '%'))
         </if>
-        GROUP BY sp.`product_id`
+        GROUP BY sp.`product_id_`
             ,sp.`product_name`
-            ,sp.`org_id`
+            ,sp.`org_id_`
             ,sp.`org_name`
             ,sp.`ref_rate_min`
             ,sp.`ref_rate_max`
@@ -73,12 +73,12 @@
     <!--金融产品详情-->
     <select id="getFinancialProductDetails" resultType="com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductDetails">
             select
-              sp.product_id  as "productId"
+              sp.product_id_  as "productId"
               ,sp.product_name as "productName"
               ,sp.serial_number as "serialNumber"
               ,sp.signory_id as "signoryId"
               ,sp.signory_name as "signoryName"
-              ,sp.org_id as "orgId"
+              ,sp.org_id_ as "orgId"
               ,sp.org_name as "orgName"
               ,sp.picture_url as "pictureUrl"
               ,sp.product_type as "productType"
@@ -102,27 +102,27 @@
               ,sp.submit_material as "submitMaterial"
               ,sp.applicable_cust as "applicableCuster"
               ,sp.view_count as "viewCount"
-              ,count(sr.product_id) as "transactionNum"
+              ,count(sr.product_id_) as "transactionNum"
               ,IFNULL(avg(sra.attitude_score),0) as "evaluationScore"
             from tb_service_product sp
             left join tb_service_require sr
-            on sp.product_id=sr.product_id
+            on sp.product_id_=sr.product_id_
             and sr.status='2'       <!--已处理-->
             and sr.handle_result='1'<!--对接成功-->
             and sr.record_status='1'<!--有效-->
             left join tb_service_rating  sra
-            on sp.product_id=sra.product_id
+            on sp.product_id_=sra.product_id_
             and sra.record_status='1'
             where 1=1
             and sp.signory_id=#{businessArea}
-            and sp.product_id=#{productId}
+            and sp.product_id_=#{productId}
             and sp.record_status='1'
-        group by    sp.product_id
+        group by    sp.product_id_
         ,sp.product_name
         ,sp.serial_number
         ,sp.signory_id
         ,sp.signory_name
-        ,sp.org_id
+        ,sp.org_id_
         ,sp.org_name
         ,sp.picture_url
         ,sp.product_type

@@ -15,11 +15,11 @@ import java.io.Serializable;
 @ApiModel(value = "InvestorWorkExperienceParam", description = "科技金融投资人工作经历入参")
 public class InvestorWorkExperienceParam implements Serializable {
     @ApiModelProperty(value = "开始时间",example = "201903")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{startTime:'开始时间格式错误'}")
     private String startTime;
     @ApiModelProperty(value = "结束时间",example = "201904")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{endTime:'结束时间格式错误'}")
     private String endTime;
     @ApiModelProperty(value = "单位名称",example = "xxx单位")

@@ -107,7 +107,7 @@
                   </template>
                   <el-menu-item-group>
                     <el-menu-item index="/servicemarket/product/productService/ordinaryProduct" style="padding-left: 20px;">常规服务产品</el-menu-item>
-                    <el-menu-item index="" style="padding-left: 20px;">特色服务产品</el-menu-item>
+                    <el-menu-item index="/servicemarket/product/productService/specialproduct" style="padding-left: 20px;">特色服务产品</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
                 <el-submenu index="/需求管理">

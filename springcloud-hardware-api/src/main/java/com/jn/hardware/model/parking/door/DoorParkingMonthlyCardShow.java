@@ -1,36 +1,37 @@
 package com.jn.hardware.model.parking.door;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * 道尔统一返回对象
- *
- * @Author： cm
- * @Date： Created on 2019/4/17 16:50
- * @Version： v1.0
- * @Modified By:
+ * @author： chenr
+ * @date： Created on 2019/4/29 10:54
+ * @version： v1.0
+ * @modified By:
  */
-public class DoorHeadResult<T> implements Serializable {
+@ApiModel(value = "DoorParkingMonthlyCardShow",description = "月租卡信息获取,包含分页信息")
+public class DoorParkingMonthlyCardShow implements Serializable {
 
-    private static final long serialVersionUID = 2781143545628231967L;
-
-    /**
-     * 0 失败 1 成功
-     */
-    private String status="1";
-    /**
-     * 说明信息
-     */
-    private String message="成功";
+    private static final long serialVersionUID = -6397123656605988126L;
+    @ApiModelProperty(value="月租卡信息列表")
+    List<DoorParkingMonthlyCardInfo> cardInfo;
     @ApiModelProperty(value = "当前页码")
     private String pageNo;
     @ApiModelProperty(value = "返回每页行数")
     private String pageSize;
     @ApiModelProperty(value = "记录总行数")
     private String rows;
+
+    public List<DoorParkingMonthlyCardInfo> getCardInfo() {
+        return cardInfo;
+    }
+
+    public void setCardInfo(List<DoorParkingMonthlyCardInfo> cardInfo) {
+        this.cardInfo = cardInfo;
+    }
 
     public String getPageNo() {
         return pageNo;
@@ -56,27 +57,10 @@ public class DoorHeadResult<T> implements Serializable {
         this.rows = rows;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     @Override
     public String toString() {
-        return "DoorHeadResult{" +
-                "status='" + status + '\'' +
-                ", message='" + message + '\'' +
+        return "DoorParkingMonthlyCardShow{" +
+                "cardInfo=" + cardInfo +
                 ", pageNo='" + pageNo + '\'' +
                 ", pageSize='" + pageSize + '\'' +
                 ", rows='" + rows + '\'' +

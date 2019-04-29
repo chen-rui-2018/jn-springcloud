@@ -58,8 +58,6 @@ public class ElectricClientController implements ElectricMeterClient {
     @Override
     public Result<ElectricAccessTokenShow> getElectricMeterAccessToken() {
         ElectricAccessTokenParam electricAccessTokenParam = new ElectricAccessTokenParam();
-        electricAccessTokenParam.setClient_secret(client_secret);
-        electricAccessTokenParam.setClient_id(client_id);
         electricAccessTokenParam.setGrant_type(grant_type);
         electricAccessTokenParam.setUsername(username);
         electricAccessTokenParam.setPassword(password);

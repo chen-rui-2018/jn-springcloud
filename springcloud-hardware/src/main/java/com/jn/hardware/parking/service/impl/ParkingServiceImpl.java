@@ -9,7 +9,6 @@ import com.jn.hardware.enums.ParkingExceptionEnum;
 import com.jn.hardware.model.parking.*;
 import com.jn.hardware.model.parking.door.*;
 import com.jn.hardware.parking.service.ParkingService;
-import com.jn.hardware.util.DoorDynamicSignatureUtil;
 import com.jn.hardware.util.JsonStringToObjectUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public Result getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
+    public Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
         Result result=new Result();
         String url = "";
         if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(temporaryCarParkingFeeRequest.getParkingCompanyId())) {
@@ -53,9 +52,7 @@ public class ParkingServiceImpl implements ParkingService {
             //调用道尔硬件接口
             url = String.format(ParkingService.GET_DOOR_TEMPORARYCAR_PARKINGFEE_URL,temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getParkid()
             ,temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getParkid(),temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getCarNo());
-//            String responseString = RestTemplateUtil.get(url);
-
-            String responseString = DoorDynamicSignatureUtil.sentGet(url,JsonStringToObjectUtil.objectToJson(temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest()));
+            String responseString = RestTemplateUtil.get(url);
             DoorResult<DoorTemporaryCarParkingFeeResponse> doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult<DoorTemporaryCarParkingFeeResponse>>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
                 result.setData(doorResult.getBody());
@@ -155,7 +152,7 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public Result findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
+    public Result<DoorParkingMonthlyCardShow> findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
         Result result=new Result();
         String url = "";
         if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(parkingMonthlyCardInfoRequest.getParkingCompanyId())) {
@@ -173,8 +170,16 @@ public class ParkingServiceImpl implements ParkingService {
             String responseString = RestTemplateUtil.get(url);
             logger.info("responseString"+responseString);
             DoorResult<List<DoorParkingMonthlyCardInfo>> doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult<List<DoorParkingMonthlyCardInfo>>>(){});
+           if(doorResult==null ){
+               doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult>(){});
+           }
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
-                result.setData(doorResult.getBody());
+                DoorParkingMonthlyCardShow  carShow = new  DoorParkingMonthlyCardShow();
+                carShow.setPageNo(doorResult.getHead().getPageNo());
+                carShow.setPageSize(doorResult.getHead().getPageSize());
+                carShow.setRows(doorResult.getHead().getRows());
+                carShow.setCardInfo(doorResult.getBody());
+                result.setData(carShow);
             }else {
                 result.setCode(ParkingExceptionEnum.DOOR_COMPANY_EXCEPTION.getCode());
                 result.setResult(doorResult.getHead().getMessage());
@@ -232,7 +237,7 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public Result findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
+    public Result<DoorMonthlyRentCardRateInfo>  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
         Result result=new Result();
         String url = "";
         if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(monthyRentalCardRateRequest.getParkingCompanyId())) {
@@ -303,7 +308,7 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public Result findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
+    public Result<DoorParkingSpaceAmountShow> findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
         Result result=new Result();
         String url = "";
         if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(parkingSpaceAmountRequest.getParkingCompanyId())) {

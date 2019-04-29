@@ -45,31 +45,30 @@ public class ElectricMeterServiceImplTest {
 
         //获取平台access_token 入参
         electricAccessTokenParam = new ElectricAccessTokenParam();
-        electricAccessTokenParam.setClient_secret("client_leiyou");
-        electricAccessTokenParam.setClient_id("client_api");
         electricAccessTokenParam.setGrant_type("password");
         electricAccessTokenParam.setUsername("18351162350");
-        electricAccessTokenParam.setPassword("18351162350");
+        electricAccessTokenParam.setPassword("{MD5}18351162350");
         electricAccessTokenParam.setScopes("all");
         //根据建筑编号code 获取建筑下的仪表信息入参;
         electricMeterInfoParam = new ElectricMeterInfoParam();
-        electricMeterInfoParam.setCode("10086");
+        electricMeterInfoParam.setCode("320104A001");
         electricMeterInfoParam.setPage(1);
         electricMeterInfoParam.setRows(10);
 
         //仪表状态查询入参 仪表编号
-        code = "100860102";
+        code = "320104A001001006";
         //仪表开关操作入参
         electricMeterSwitchParam= new ElectricMeterSwitchParam();
         electricMeterSwitchParam.setCode(code);
         electricMeterSwitchParam.setFlag("4");
         //仪表数据采集入参
         electricMeterDataCollectionParam = new ElectricMeterDataCollectionParam();
-        electricMeterDataCollectionParam.setCode("100861201");
-        electricMeterDataCollectionParam.setDeviceType("3");
+        electricMeterDataCollectionParam.setCode("320104A001001006");
+        electricMeterDataCollectionParam.setDeviceType("1");
+
         electricMeterDataCollectionParam.setStartTime("2019-04-25 15:06:20");
         electricMeterDataCollectionParam.setPage(1);
-        electricMeterDataCollectionParam.setRows(2);
+        electricMeterDataCollectionParam.setRows(10);
 
     }
 

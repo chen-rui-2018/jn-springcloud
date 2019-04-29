@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,13 +45,23 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
     @Override
     public Result<ElectricAccessTokenShow> getElectricMeterAccessToken(ElectricAccessTokenParam electricAccessTokenParam) {
         Result result= new Result();
+        ElectricResult<ElectricAccessTokenShow> electricResult = new ElectricResult();
         String url = ElectricMeterService.POST_ELECTRIC_ACCESS_TOKEN_URL;
         String jsonData = JsonStringToObjectUtil.objectToJson(electricAccessTokenParam);
         Map<String,String> dynamicHeaders = new HashMap<>(16);
         dynamicHeaders.put("Authorization","Basic ZXN0YXRlOkNSb142JEV0ZXdSMzNORjI=");
         dynamicHeaders.put("Content-Type", "application/json;charset=UTF-8");
-        String resultString =  RestTemplateUtil.post(url,jsonData,dynamicHeaders);
-        ElectricResult<ElectricAccessTokenShow>  electricResult = JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference<ElectricResult<ElectricAccessTokenShow>>(){});
+        MultiValueMap<String,String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.add("grant_type",electricAccessTokenParam.getGrant_type());
+        multiValueMap.add("username",electricAccessTokenParam.getUsername());
+        multiValueMap.add("password",electricAccessTokenParam.getPassword());
+        multiValueMap.add("scopes",electricAccessTokenParam.getScopes());
+        String resultString =  RestTemplateUtil.post(url,multiValueMap,dynamicHeaders);
+        ElectricAccessTokenShow  accessTokenShow = JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference<ElectricAccessTokenShow>(){});
+        if(accessTokenShow ==null){
+            electricResult =  JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference<ElectricResult<ElectricAccessTokenShow>>(){});
+        }
+        electricResult.setData(accessTokenShow);
         //获取token成功
         if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
             redisConfigStorage.setAccessToken(electricResult.getData().getAccess_token(),Integer.valueOf(electricResult.getData().getExpires_in()));
@@ -94,11 +106,16 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
     @Override
     public Result<ElectricMeterInfoShow> getElectricMeterForBuilding(ElectricMeterInfoParam electricMeterInfoParam) {
         Result result= new Result();
+        ElectricResult<ElectricMeterInfoShow> electricResult = new ElectricResult();
         String accessToken = redisConfigStorage.getAccessToken();
         String url = ElectricMeterService.GET_ELECTRIC_METER_INFO_URL;
         url = String.format(url,accessToken,electricMeterInfoParam.getCode(),electricMeterInfoParam.getPage(),electricMeterInfoParam.getRows());
         String electricString = RestTemplateUtil.get(url);
-        ElectricResult<ElectricMeterInfoShow> electricResult = JsonStringToObjectUtil.jsonToObject(electricString, new TypeReference<ElectricResult<ElectricMeterInfoShow>>() {});
+        ElectricMeterInfoShow electricShow = JsonStringToObjectUtil.jsonToObject(electricString, new TypeReference<ElectricMeterInfoShow>() {});
+        if(electricShow == null ){
+            electricResult = JsonStringToObjectUtil.jsonToObject(electricString, new TypeReference<ElectricResult<ElectricMeterInfoShow>>() {});
+        }
+        electricResult.setData(electricShow);
         if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
             result.setData(electricResult.getData());
             logger.info("获取建筑下的仪表信息成功,electricMeter:"+electricString);
@@ -118,11 +135,16 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
     @Override
     public Result<ElectricMeterStatusShow> getElectricMeterStatus(String code) {
         Result result= new Result();
+        ElectricResult<ElectricMeterStatusShow> electricResult = new ElectricResult<>();
         String accessToken = redisConfigStorage.getAccessToken();
         String url = ElectricMeterService.GET_ELECTRIC_METER_STATUS_URL;
         url = String.format(url,accessToken,code);
         String statusString = RestTemplateUtil.get(url);
-        ElectricResult<ElectricMeterStatusShow> electricResult = JsonStringToObjectUtil.jsonToObject(statusString, new TypeReference<ElectricResult<ElectricMeterStatusShow>>() {});
+        ElectricMeterStatusShow show  = JsonStringToObjectUtil.jsonToObject(statusString, new TypeReference<ElectricMeterStatusShow>() {});
+        if(show == null){
+            electricResult = JsonStringToObjectUtil.jsonToObject(statusString, new TypeReference<ElectricResult<ElectricMeterStatusShow>>() {});
+        }
+        electricResult.setData(show);
         if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
             result.setData(electricResult.getData());
             logger.info("仪表开关状态信息获取成功,statusString:"+statusString);

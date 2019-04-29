@@ -2,6 +2,10 @@ package com.jn.hardware.api;
 
 import com.jn.common.model.Result;
 import com.jn.hardware.model.parking.*;
+import com.jn.hardware.model.parking.door.DoorMonthlyRentCardRateInfo;
+import com.jn.hardware.model.parking.door.DoorParkingMonthlyCardShow;
+import com.jn.hardware.model.parking.door.DoorParkingSpaceAmountShow;
+import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeResponse;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +27,7 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/getTemporaryCarParkingFee")
-    Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
+    Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
     /**
      * 缴费信息保存
      * @param paymentCarParkingFeeRequest 实体类参数
@@ -46,7 +50,7 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/findParkingMonthlyRentCard")
-    Result findParkingMonthlyRentCard(@RequestBody ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest);
+    Result<DoorParkingMonthlyCardShow> findParkingMonthlyRentCard(@RequestBody ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest);
 
     /**
      * 保存月租卡续费信息
@@ -61,7 +65,7 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/findMonthlyRentCardRateInfo")
-    Result findMonthlyRentCardRateInfo(@RequestBody MonthyRentalCardRateRequest monthyRentalCardRateRequest);
+    Result<DoorMonthlyRentCardRateInfo>  findMonthlyRentCardRateInfo(@RequestBody MonthyRentalCardRateRequest monthyRentalCardRateRequest);
     /**
      * 月租卡销户操作
      * @param cancelMonthlyRentAccountRequest
@@ -75,6 +79,6 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/findParkingSpaceAmount")
-    Result findParkingSpaceAmount(@RequestBody ParkingSpaceAmountRequest cancelMonthlyRentAccountRequest);
+    Result<DoorParkingSpaceAmountShow> findParkingSpaceAmount(@RequestBody ParkingSpaceAmountRequest cancelMonthlyRentAccountRequest);
 
 }

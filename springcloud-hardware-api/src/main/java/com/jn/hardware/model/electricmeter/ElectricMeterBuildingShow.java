@@ -1,5 +1,6 @@
 package com.jn.hardware.model.electricmeter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "ElectricMeterBuildingShow" ,description = "物业下建筑信息实体")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ElectricMeterBuildingShow implements Serializable {
 
     private static final long serialVersionUID = -7242006126959035088L;
@@ -31,6 +33,8 @@ public class ElectricMeterBuildingShow implements Serializable {
     private String areaName;
     @ApiModelProperty(value = "地址")
     private String address;
+
+
 
     public String getId() {
         return id;

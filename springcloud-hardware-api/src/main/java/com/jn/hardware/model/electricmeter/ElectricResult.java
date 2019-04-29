@@ -1,5 +1,6 @@
 package com.jn.hardware.model.electricmeter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.jn.common.util.GlobalConstants;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,6 +14,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "ElectricResult",description = "电表统一返回对象实体")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ElectricResult<T> implements Serializable {
     @ApiModelProperty(value = "返回结果描述",notes = "成功默认为ok",dataType = "String")
     private String msg = "OK";
@@ -23,29 +25,34 @@ public class ElectricResult<T> implements Serializable {
     public String getCode() {
         return code;
     }
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public T getData() {
         return data;
     }
+
     public void setData(T data) {
         this.data = data;
     }
-    public ElectricResult(String msg, String code, T data) {
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public ElectricResult(String msg, String code, T body) {
         this.msg = msg;
         this.code = code;
-        this.data = data;
+        this.data = body;
     }
     public ElectricResult(String code, String msg){
         this.msg = msg;
         this.code = code;
     }
-    public ElectricResult(T data) {
-        this.data = data;
+    public ElectricResult(T body) {
+        this.data = body;
     }
-    public ElectricResult(){}
+    
+    public ElectricResult(){} 
+    
 
     public String getMsg() {
         return msg;
@@ -60,7 +67,7 @@ public class ElectricResult<T> implements Serializable {
         return "Result{" +
                 "result='" + msg + '\'' +
                 ", code='" + code + '\'' +
-                ", data=" + data +
+                ", body=" + data +
                 '}';
     }
 }

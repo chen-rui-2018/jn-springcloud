@@ -4,6 +4,10 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.hardware.api.ParkingClient;
 import com.jn.hardware.model.parking.*;
+import com.jn.hardware.model.parking.door.DoorMonthlyRentCardRateInfo;
+import com.jn.hardware.model.parking.door.DoorParkingMonthlyCardShow;
+import com.jn.hardware.model.parking.door.DoorParkingSpaceAmountShow;
+import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeResponse;
 import com.jn.hardware.parking.service.ParkingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +28,7 @@ public class ParkingController extends BaseController implements ParkingClient {
     private ParkingService parkingService;
 
     @Override
-    public Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
+    public Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
         return parkingService.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
     }
 
@@ -40,7 +44,7 @@ public class ParkingController extends BaseController implements ParkingClient {
     }
 
     @Override
-    public Result findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
+    public Result<DoorParkingMonthlyCardShow> findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
         return parkingService.findParkingMonthlyRentCard(parkingMonthlyCardInfoRequest);
     }
 
@@ -50,7 +54,7 @@ public class ParkingController extends BaseController implements ParkingClient {
     }
 
     @Override
-    public Result findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
+    public Result<DoorMonthlyRentCardRateInfo>  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
         return parkingService.findMonthlyRentCardRateInfo(monthyRentalCardRateRequest);
     }
 
@@ -60,7 +64,7 @@ public class ParkingController extends BaseController implements ParkingClient {
     }
 
     @Override
-    public Result findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
+    public Result<DoorParkingSpaceAmountShow> findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
         return parkingService.findParkingSpaceAmount(parkingSpaceAmountRequest);
     }
 

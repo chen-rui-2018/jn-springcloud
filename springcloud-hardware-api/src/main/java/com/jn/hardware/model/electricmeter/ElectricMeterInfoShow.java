@@ -1,5 +1,6 @@
 package com.jn.hardware.model.electricmeter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
+
 @ApiModel(value = "ElectricMeterInfoShow",description = "仪表信息查询返回实体")
 public class ElectricMeterInfoShow implements Serializable {
 
@@ -52,7 +54,7 @@ public class ElectricMeterInfoShow implements Serializable {
         return "ElectricMeterInfoShow{" +
                 "total='" + total + '\'' +
                 ", pages='" + pages + '\'' +
-                ", data=" + data +
+//                ", data=" + data +
                 '}';
     }
 }

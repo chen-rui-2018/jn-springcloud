@@ -16,12 +16,7 @@ import java.io.Serializable;
 public class ElectricAccessTokenParam  implements Serializable {
 
     private static final long serialVersionUID = 6138216455570246766L;
-    @ApiModelProperty(value = "接口平台秘钥，取值：“client_leiyou” 不需要",required = true,example = "client_leiyou")
-    @NotBlank(message = "接口平台秘钥不为空")
-    private String  client_secret;
-    @ApiModelProperty(value = "接口平台ID，取值：“client_api” 不需要",required = true,example = "client_api")
-    @NotBlank(message = "接口平台ID不为空")
-    private String  client_id;
+
     @ApiModelProperty(value = "认证类型，取值：“password”",required = true,example = "password")
     @NotBlank(message = "认证类型不能为空")
     private String  grant_type;
@@ -35,21 +30,7 @@ public class ElectricAccessTokenParam  implements Serializable {
     @NotBlank(message = "scopes 领域不能为空")
     private String  scopes;
 
-    public String getClient_secret() {
-        return client_secret;
-    }
 
-    public void setClient_secret(String client_secret) {
-        this.client_secret = client_secret;
-    }
-
-    public String getClient_id() {
-        return client_id;
-    }
-
-    public void setClient_id(String client_id) {
-        this.client_id = client_id;
-    }
 
     public String getGrant_type() {
         return grant_type;
@@ -86,8 +67,6 @@ public class ElectricAccessTokenParam  implements Serializable {
     @Override
     public String toString() {
         return "ElectricAccessTokenParam{" +
-                "client_secret='" + client_secret + '\'' +
-                ", client_id='" + client_id + '\'' +
                 ", grant_type='" + grant_type + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +

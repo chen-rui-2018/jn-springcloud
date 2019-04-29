@@ -2,9 +2,7 @@ package com.jn.hardware.parking.service;
 
 import com.jn.common.model.Result;
 import com.jn.hardware.model.parking.*;
-import com.jn.hardware.model.parking.door.DoorCarInParkingParam;
-import com.jn.hardware.model.parking.door.DoorCarOutParkingParam;
-import com.jn.hardware.model.parking.door.DoorResult;
+import com.jn.hardware.model.parking.door.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -65,7 +63,7 @@ public interface ParkingService {
      * @param temporaryCarParkingFeeRequest
      * @return
      */
-    Result getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
+    Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
 
     /**
      * 保存用户停车缴费信息
@@ -86,7 +84,7 @@ public interface ParkingService {
      * @param parkingMonthlyCardInfoRequest
      * @return
      */
-    Result findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest);
+    Result<DoorParkingMonthlyCardShow> findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest);
 
     /**
      * 月租卡续费信息保存
@@ -100,7 +98,7 @@ public interface ParkingService {
      * @param monthyRentalCardRateRequest
      * @return
      */
-    Result findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest);
+    Result<DoorMonthlyRentCardRateInfo>  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest);
 
     /**
      * 月租卡销户操作
@@ -114,7 +112,7 @@ public interface ParkingService {
      * @param parkingSpaceAmountRequest
      * @return
      */
-    Result findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest);
+    Result<DoorParkingSpaceAmountShow> findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest);
 
     /**
      * 车辆入场记录信息

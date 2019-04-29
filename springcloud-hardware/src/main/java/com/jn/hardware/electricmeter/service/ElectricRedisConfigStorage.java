@@ -34,7 +34,7 @@ public class ElectricRedisConfigStorage {
      */
     public void setAccessToken(String accessToken,int expiresInSeconds) {
         Jedis jedis = jedisFactory.getJedis();
-        jedis.setex(ACCESS_TOKEN_KEY, expiresInSeconds-1000,accessToken);
+        jedis.setex(ACCESS_TOKEN_KEY, expiresInSeconds,accessToken);
     }
 
 }

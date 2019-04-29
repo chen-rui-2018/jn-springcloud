@@ -1,5 +1,6 @@
 package com.jn.hardware.model.electricmeter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @ApiModel(value = "ElectricMeterInfo",description = "仪表基本信息")
 public class ElectricMeterInfo implements Serializable {
 

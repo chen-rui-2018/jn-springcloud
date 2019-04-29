@@ -130,7 +130,8 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                 //企业任务
                 if(StringUtils.isNotBlank(modleBean.getGroupId()) && modleBean.getModelType().toString().equals(DataUploadConstants.COMPANY_TYPE)){
                     groupCompanyCriteria.clear();
-                    groupCompanyCriteria.or().andGroupIdEqualTo(modleBean.getGroupId());
+                    groupCompanyCriteria.or().andGroupIdEqualTo(modleBean.getGroupId())
+                            .andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
                     List<TbDataReportingGroupCompany> fillInFormIdList = groupCompanyMapper.selectByExample(groupCompanyCriteria);
                     //创建任务
                     String date = modleBean.getFilllInFormDeadline();
@@ -179,7 +180,8 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                 //企业任务
                 if(modleBean.getModelType().toString().equals(DataUploadConstants.COMPANY_TYPE) && StringUtils.isNotBlank(modleBean.getGroupId())){
                     groupCompanyCriteria.clear();
-                    groupCompanyCriteria.or().andGroupIdEqualTo(modleBean.getGroupId());
+                    groupCompanyCriteria.or().andGroupIdEqualTo(modleBean.getGroupId())
+                            .andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
                     List<TbDataReportingGroupCompany> fillInFormIdList  = groupCompanyMapper.selectByExample(groupCompanyCriteria);
                     //创建任务
                     createConcretTaskForCompany(modleBean,taskBatch,formTime,fillInFormIdList,deadLine);
@@ -444,7 +446,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
         //tab信息固化
         TbDataReportingModelTabCriteria mtc = new TbDataReportingModelTabCriteria();
-        mtc.or().andModelIdEqualTo(model.getModelId());
+        mtc.or().andModelIdEqualTo(model.getModelId()).andStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbDataReportingModelTab> tabList = modelTabMapper.selectByExample(mtc);
         TbDataReportingSnapshotModelTab tab = null;
         List<String> tabId = new ArrayList<>();
@@ -493,7 +495,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
         //指标固化
         TbDataReportingTargetCriteria targetExample = new TbDataReportingTargetCriteria();
-        targetExample.or().andTargetIdIn(targets);
+        targetExample.or().andTargetIdIn(targets).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbDataReportingTarget> list = targetMapper.selectByExample(targetExample);
         TbDataReportingSnapshotTarget snapshotTarget =null;
         List<TbDataReportingSnapshotTarget> snapshotTargetList = new ArrayList<>();
@@ -509,7 +511,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
         }
         //指标填报格式固化
         TbDataReportingTargetGroupCriteria tgExample = new TbDataReportingTargetGroupCriteria();
-        tgExample.or().andTargetIdIn(targets);
+        tgExample.or().andTargetIdIn(targets).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbDataReportingTargetGroup> targetGroupsList =  targetGroupMapper.selectByExample(tgExample);
         TbDataReportingSnapshotTargetGroup snapshotTargetGroup =null;
         List<TbDataReportingSnapshotTargetGroup> snapshotTargetGroupList = new ArrayList<>();

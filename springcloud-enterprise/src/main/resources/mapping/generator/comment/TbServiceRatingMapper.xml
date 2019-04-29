@@ -3,9 +3,10 @@
 <mapper namespace="com.jn.enterprise.servicemarket.comment.dao.TbServiceRatingMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.comment.entity.TbServiceRating">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="require_id" jdbcType="VARCHAR" property="requireId" />
+    <result column="org_id_" jdbcType="VARCHAR" property="orgId" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
-    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_id_" jdbcType="VARCHAR" property="productId" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
     <result column="advisor_name" jdbcType="VARCHAR" property="advisorName" />
@@ -17,7 +18,6 @@
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="require_id" jdbcType="VARCHAR" property="requireId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,9 +78,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, org_id, org_name, product_id, product_name, advisor_account, advisor_name, evaluator_account, 
-    attitude_score, evaluation_desc, created_time, creator_account, modified_time, modifier_account, 
-    record_status, require_id
+    id, require_id, org_id_, org_name, product_id_, product_name, advisor_account, advisor_name, 
+    evaluator_account, attitude_score, evaluation_desc, created_time, creator_account, 
+    modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.comment.entity.TbServiceRatingCriteria" resultMap="BaseResultMap">
     select
@@ -113,18 +113,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.comment.entity.TbServiceRating">
-    insert into tb_service_rating (id, org_id, org_name, 
-      product_id, product_name, advisor_account, 
-      advisor_name, evaluator_account, attitude_score, 
-      evaluation_desc, created_time, creator_account, 
-      modified_time, modifier_account, record_status, 
-      require_id)
-    values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
-      #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
-      #{advisorName,jdbcType=VARCHAR}, #{evaluatorAccount,jdbcType=VARCHAR}, #{attitudeScore,jdbcType=VARCHAR}, 
-      #{evaluationDesc,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{requireId,jdbcType=VARCHAR})
+    insert into tb_service_rating (id, require_id, org_id_, 
+      org_name, product_id_, product_name, 
+      advisor_account, advisor_name, evaluator_account, 
+      attitude_score, evaluation_desc, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status)
+    values (#{id,jdbcType=VARCHAR}, #{requireId,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, 
+      #{orgName,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{advisorAccount,jdbcType=VARCHAR}, #{advisorName,jdbcType=VARCHAR}, #{evaluatorAccount,jdbcType=VARCHAR}, 
+      #{attitudeScore,jdbcType=VARCHAR}, #{evaluationDesc,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.comment.entity.TbServiceRating">
     insert into tb_service_rating
@@ -132,14 +132,17 @@
       <if test="id != null">
         id,
       </if>
+      <if test="requireId != null">
+        require_id,
+      </if>
       <if test="orgId != null">
-        org_id,
+        org_id_,
       </if>
       <if test="orgName != null">
         org_name,
       </if>
       <if test="productId != null">
-        product_id,
+        product_id_,
       </if>
       <if test="productName != null">
         product_name,
@@ -174,13 +177,13 @@
       <if test="recordStatus != null">
         record_status,
       </if>
-      <if test="requireId != null">
-        require_id,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="requireId != null">
+        #{requireId,jdbcType=VARCHAR},
       </if>
       <if test="orgId != null">
         #{orgId,jdbcType=VARCHAR},
@@ -224,9 +227,6 @@
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="requireId != null">
-        #{requireId,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.enterprise.servicemarket.comment.entity.TbServiceRatingCriteria" resultType="java.lang.Long">
@@ -241,14 +241,17 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
+      <if test="record.requireId != null">
+        require_id = #{record.requireId,jdbcType=VARCHAR},
+      </if>
       <if test="record.orgId != null">
-        org_id = #{record.orgId,jdbcType=VARCHAR},
+        org_id_ = #{record.orgId,jdbcType=VARCHAR},
       </if>
       <if test="record.orgName != null">
         org_name = #{record.orgName,jdbcType=VARCHAR},
       </if>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=VARCHAR},
+        product_id_ = #{record.productId,jdbcType=VARCHAR},
       </if>
       <if test="record.productName != null">
         product_name = #{record.productName,jdbcType=VARCHAR},
@@ -283,9 +286,6 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="record.requireId != null">
-        require_id = #{record.requireId,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -294,9 +294,10 @@
   <update id="updateByExample" parameterType="map">
     update tb_service_rating
     set id = #{record.id,jdbcType=VARCHAR},
-      org_id = #{record.orgId,jdbcType=VARCHAR},
+      require_id = #{record.requireId,jdbcType=VARCHAR},
+      org_id_ = #{record.orgId,jdbcType=VARCHAR},
       org_name = #{record.orgName,jdbcType=VARCHAR},
-      product_id = #{record.productId,jdbcType=VARCHAR},
+      product_id_ = #{record.productId,jdbcType=VARCHAR},
       product_name = #{record.productName,jdbcType=VARCHAR},
       advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{record.advisorName,jdbcType=VARCHAR},
@@ -307,8 +308,7 @@
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
-      require_id = #{record.requireId,jdbcType=VARCHAR}
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -316,14 +316,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.comment.entity.TbServiceRating">
     update tb_service_rating
     <set>
+      <if test="requireId != null">
+        require_id = #{requireId,jdbcType=VARCHAR},
+      </if>
       <if test="orgId != null">
-        org_id = #{orgId,jdbcType=VARCHAR},
+        org_id_ = #{orgId,jdbcType=VARCHAR},
       </if>
       <if test="orgName != null">
         org_name = #{orgName,jdbcType=VARCHAR},
       </if>
       <if test="productId != null">
-        product_id = #{productId,jdbcType=VARCHAR},
+        product_id_ = #{productId,jdbcType=VARCHAR},
       </if>
       <if test="productName != null">
         product_name = #{productName,jdbcType=VARCHAR},
@@ -358,17 +361,15 @@
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="requireId != null">
-        require_id = #{requireId,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.comment.entity.TbServiceRating">
     update tb_service_rating
-    set org_id = #{orgId,jdbcType=VARCHAR},
+    set require_id = #{requireId,jdbcType=VARCHAR},
+      org_id_ = #{orgId,jdbcType=VARCHAR},
       org_name = #{orgName,jdbcType=VARCHAR},
-      product_id = #{productId,jdbcType=VARCHAR},
+      product_id_ = #{productId,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
       advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{advisorName,jdbcType=VARCHAR},
@@ -379,8 +380,7 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=TINYINT},
-      require_id = #{requireId,jdbcType=VARCHAR}
+      record_status = #{recordStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

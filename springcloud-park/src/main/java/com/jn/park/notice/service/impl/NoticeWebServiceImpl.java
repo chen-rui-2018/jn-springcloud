@@ -40,14 +40,14 @@ public class NoticeWebServiceImpl  implements NoticeWebService {
     @Override
     public List<NoticeDetailShow> popupNoticeListForApp() {
         List<NoticeDetailShow> noticeList =  noticeWebDao.popupNoticeListForApp();
-        noticeList = transfromNoticeDetails(noticeList);
+
         return noticeList;
     }
     @ServiceLog(doAction = "门户首页弹出公告列表")
     @Override
     public List<NoticeDetailShow> popupNoticeListForPortal() {
         List<NoticeDetailShow> noticeList =  noticeWebDao.popupNoticeListForPortal();
-        noticeList = transfromNoticeDetails(noticeList);
+
         return noticeList;
     }
     @ServiceLog(doAction = "门户首页展示(轮播)公告列表")
@@ -61,7 +61,7 @@ public class NoticeWebServiceImpl  implements NoticeWebService {
         }
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(pageNum,pageSize==0?pageSize:page.getRows());
         List<NoticeDetailShow> noticeList =  noticeWebDao.showNoticeListForPortal();
-        noticeList = transfromNoticeDetails(noticeList);
+
 
         return new PaginationData(noticeList,objects==null?0:objects.getTotal()) ;
     }
@@ -76,7 +76,7 @@ public class NoticeWebServiceImpl  implements NoticeWebService {
         }
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(pageNum,pageSize==0?pageSize:page.getRows());
         List<NoticeDetailShow> noticeList =  noticeWebDao.showNoticeListForApp();
-        noticeList = transfromNoticeDetails(noticeList);
+
         return  new PaginationData(noticeList,objects==null?0:objects.getTotal());
     }
     @ServiceLog(doAction = "app公告列表")
@@ -90,7 +90,7 @@ public class NoticeWebServiceImpl  implements NoticeWebService {
         }
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(pageNum,pageSize==0?pageSize:page.getRows());
         List<NoticeDetailShow> noticeList =  noticeWebDao.noticeListApp();
-        noticeList = transfromNoticeDetails(noticeList);
+
         return new PaginationData(noticeList,objects==null?0:objects.getTotal());
     }
     @ServiceLog(doAction = "门户公告列表")
@@ -104,7 +104,7 @@ public class NoticeWebServiceImpl  implements NoticeWebService {
         }
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(pageNum,pageSize==0?pageSize:page.getRows());
         List<NoticeDetailShow> noticeList =  noticeWebDao.noticeListPortal();
-        noticeList = transfromNoticeDetails(noticeList);
+
         return new PaginationData(noticeList,objects==null?0:objects.getTotal());
     }
     @ServiceLog(doAction = "公告详情查看")
@@ -114,31 +114,11 @@ public class NoticeWebServiceImpl  implements NoticeWebService {
         if(notice==null){
             throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_NOT_EXIST);
         }
-        List<NoticeDetailShow> noticeList = new ArrayList<>(16);
-        noticeList.add(notice);
-        noticeList = transfromNoticeDetails(noticeList);
-        return noticeList.get(0);
+
+
+        return notice;
     }
 
 
-    /**
-     * 公告内容转换
-     * @param noticeList
-     * @return
-     */
-    private List<NoticeDetailShow> transfromNoticeDetails(List<NoticeDetailShow> noticeList){
-        try{
-            for (NoticeDetailShow show : noticeList){
-                if(show.getNoticeDetails() != null){
-                    show.setNoticeContent(new String(show.getNoticeDetails(),"UTF-8"));
-                    show.setNoticeDetails(null);
-                }
-            }
-        }catch(UnsupportedEncodingException e){
-            e.printStackTrace();
-            logger.info("公告详情byte转换为字符串失败");
-            throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_TRANCE_DETAILS_DEFAULT);
-        }
-        return noticeList;
-    }
+
 }

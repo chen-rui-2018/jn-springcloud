@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Author: yangph
@@ -27,8 +26,8 @@ public class AdvisorManagementShow implements Serializable {
     @ApiModelProperty(value = "学历")
     private String education;
     @ApiModelProperty(value = "入驻日期")
-    private Date createdTime;
-    @ApiModelProperty(value = "邀请状态")
+    private String createdTime;
+    @ApiModelProperty(value = "邀请状态(- 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除)")
     private String approvalStatus;
 
     public String getAdvisorName() {
@@ -79,11 +78,11 @@ public class AdvisorManagementShow implements Serializable {
         this.education = education;
     }
 
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -93,5 +92,19 @@ public class AdvisorManagementShow implements Serializable {
 
     public void setApprovalStatus(String approvalStatus) {
         this.approvalStatus = approvalStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "AdvisorManagementShow{" +
+                "advisorName='" + advisorName + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                ", position='" + position + '\'' +
+                ", workingYears=" + workingYears +
+                ", graduatedSchool='" + graduatedSchool + '\'' +
+                ", education='" + education + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", approvalStatus='" + approvalStatus + '\'' +
+                '}';
     }
 }

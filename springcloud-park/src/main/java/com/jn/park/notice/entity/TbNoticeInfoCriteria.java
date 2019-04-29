@@ -105,73 +105,73 @@ public class TbNoticeInfoCriteria {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andNoticeIdIsNull() {
-            addCriterion("notice_id is null");
+        public Criteria andIdIsNull() {
+            addCriterion("id is null");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdIsNotNull() {
-            addCriterion("notice_id is not null");
+        public Criteria andIdIsNotNull() {
+            addCriterion("id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdEqualTo(String value) {
-            addCriterion("notice_id =", value, "noticeId");
+        public Criteria andIdEqualTo(String value) {
+            addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdNotEqualTo(String value) {
-            addCriterion("notice_id <>", value, "noticeId");
+        public Criteria andIdNotEqualTo(String value) {
+            addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdGreaterThan(String value) {
-            addCriterion("notice_id >", value, "noticeId");
+        public Criteria andIdGreaterThan(String value) {
+            addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdGreaterThanOrEqualTo(String value) {
-            addCriterion("notice_id >=", value, "noticeId");
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
+            addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdLessThan(String value) {
-            addCriterion("notice_id <", value, "noticeId");
+        public Criteria andIdLessThan(String value) {
+            addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdLessThanOrEqualTo(String value) {
-            addCriterion("notice_id <=", value, "noticeId");
+        public Criteria andIdLessThanOrEqualTo(String value) {
+            addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdLike(String value) {
-            addCriterion("notice_id like", value, "noticeId");
+        public Criteria andIdLike(String value) {
+            addCriterion("id like", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdNotLike(String value) {
-            addCriterion("notice_id not like", value, "noticeId");
+        public Criteria andIdNotLike(String value) {
+            addCriterion("id not like", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdIn(List<String> values) {
-            addCriterion("notice_id in", values, "noticeId");
+        public Criteria andIdIn(List<String> values) {
+            addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdNotIn(List<String> values) {
-            addCriterion("notice_id not in", values, "noticeId");
+        public Criteria andIdNotIn(List<String> values) {
+            addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdBetween(String value1, String value2) {
-            addCriterion("notice_id between", value1, value2, "noticeId");
+        public Criteria andIdBetween(String value1, String value2) {
+            addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andNoticeIdNotBetween(String value1, String value2) {
-            addCriterion("notice_id not between", value1, value2, "noticeId");
+        public Criteria andIdNotBetween(String value1, String value2) {
+            addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
 
@@ -975,6 +975,76 @@ public class TbNoticeInfoCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPlatformTypeIsNull() {
+            addCriterion("platform_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeIsNotNull() {
+            addCriterion("platform_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeEqualTo(String value) {
+            addCriterion("platform_type =", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeNotEqualTo(String value) {
+            addCriterion("platform_type <>", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeGreaterThan(String value) {
+            addCriterion("platform_type >", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("platform_type >=", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeLessThan(String value) {
+            addCriterion("platform_type <", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeLessThanOrEqualTo(String value) {
+            addCriterion("platform_type <=", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeLike(String value) {
+            addCriterion("platform_type like", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeNotLike(String value) {
+            addCriterion("platform_type not like", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeIn(List<String> values) {
+            addCriterion("platform_type in", values, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeNotIn(List<String> values) {
+            addCriterion("platform_type not in", values, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeBetween(String value1, String value2) {
+            addCriterion("platform_type between", value1, value2, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeNotBetween(String value1, String value2) {
+            addCriterion("platform_type not between", value1, value2, "platformType");
+            return (Criteria) this;
+        }
+
         public Criteria andPlatformNameIsNull() {
             addCriterion("platform_name is null");
             return (Criteria) this;
@@ -1172,76 +1242,6 @@ public class TbNoticeInfoCriteria {
 
         public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("record_status not between", value1, value2, "recordStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeIsNull() {
-            addCriterion("platform_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeIsNotNull() {
-            addCriterion("platform_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeEqualTo(String value) {
-            addCriterion("platform_type =", value, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeNotEqualTo(String value) {
-            addCriterion("platform_type <>", value, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeGreaterThan(String value) {
-            addCriterion("platform_type >", value, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("platform_type >=", value, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeLessThan(String value) {
-            addCriterion("platform_type <", value, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeLessThanOrEqualTo(String value) {
-            addCriterion("platform_type <=", value, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeLike(String value) {
-            addCriterion("platform_type like", value, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeNotLike(String value) {
-            addCriterion("platform_type not like", value, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeIn(List<String> values) {
-            addCriterion("platform_type in", values, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeNotIn(List<String> values) {
-            addCriterion("platform_type not in", values, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeBetween(String value1, String value2) {
-            addCriterion("platform_type between", value1, value2, "platformType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformTypeNotBetween(String value1, String value2) {
-            addCriterion("platform_type not between", value1, value2, "platformType");
             return (Criteria) this;
         }
     }

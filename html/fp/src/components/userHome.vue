@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header style="height:60px;line-height:60px;font-size:14px;color:#000">
+    <el-header style="height:60px;line-height:60px;font-size:14px;color:#000;display:none">
       <div>修改账号信息</div>
     </el-header>
     <el-main style="padding:0 30px;text-align:left" v-model="userData">
@@ -15,27 +15,7 @@
                     </div>
                 </div>
             </div> -->
-      <div>
-        <div class="mainColor setTit">密码修改</div>
-        <div class="setphone setpw">
-          <div>
-            <span class="textRight">旧密码：</span>
-            <input type="password" class="inputItem" v-model="oldPassword">
-            <div class="tip">设置新密码之前，必须填写旧密码</div>
-          </div>
-          <div>
-            <span class="textRight">新密码：</span>
-            <input type="password" class="inputItem" v-model="newPasswordA">
-            <div class="tip">长度至少是8位</div>
-          </div>
-          <div>
-            <span class="textRight">确认密码：</span>
-            <input type="password" class="inputItem" v-model="newPasswordB">
-            <div class="tip">确认密码和新密码要相同</div>
-          </div>
-          <el-button type="success" class="subBtn" @click="submit()">提&nbsp;&nbsp;交</el-button>
-        </div>
-      </div>
+      
       <div v-if="editFlag">
         <div class="mainColor setTit">个人资料</div>
         <div class="setphone">
@@ -78,7 +58,7 @@
             </template>
             <template v-else><span>无</span></template>
           </div>
-          <el-button type="success" class="editBtn" @click="editFlag=false">编&nbsp;&nbsp;辑</el-button>
+          <el-button type="success" class="editBtn" @click="editClick">编&nbsp;&nbsp;辑</el-button>
         </div>
       </div>
       <div class="editBody" v-else>
@@ -103,11 +83,11 @@
           <div class="setdistance">
             <span class="textRight">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</span>
             <!-- <input type="radio"> -->
-            <i class="iconfont icon-icon_xuanzhong" v-if="sexFlag === 1"></i>
+            <i class="iconfont icon-icon_xuanzhong" v-if="sexFlag == 1"></i>
             <i class="iconfont icon-weixuanzhong-01" v-else @click="sexFlag=1"></i>
 
             <span style="margin-right:20px">男</span>
-            <i class="iconfont icon-icon_xuanzhong" v-if="sexFlag === 0"></i>
+            <i class="iconfont icon-icon_xuanzhong" v-if="sexFlag == 0"></i>
             <i class="iconfont icon-weixuanzhong-01" v-else @click="sexFlag=0"></i>
 
             <span>女</span>
@@ -144,6 +124,27 @@
           <el-button type="success" class="editBtn" @click="cancelEd()">取&nbsp;&nbsp;消</el-button>
         </div>
       </div>
+      <div>
+        <div class="mainColor setTit">密码修改</div>
+        <div class="setphone setpw">
+          <div>
+            <span class="textRight">旧密码：</span>
+            <input type="password" class="inputItem" v-model="oldPassword">
+            <div class="tip">设置新密码之前，必须填写旧密码</div>
+          </div>
+          <div>
+            <span class="textRight">新密码：</span>
+            <input type="password" class="inputItem" v-model="newPassword">
+            <div class="tip">密码至少为字母、数字、符号两种组成的8-16字符</div>
+          </div>
+          <div>
+            <span class="textRight">确认密码：</span>
+            <input type="password" class="inputItem" v-model="newPasswordB">
+            <div class="tip">确认密码和新密码要相同</div>
+          </div>
+          <el-button type="success" class="subBtn" @click="submit()">提&nbsp;&nbsp;交</el-button>
+        </div>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -155,7 +156,7 @@ export default {
     return {
       signature: "",
       oldPassword: "",
-      newPasswordA: "",
+      newPassword: "",
       newPasswordB: "",
       avarUrl: "",
       nickName: "",
@@ -175,6 +176,35 @@ export default {
     this.getTagCodeList();
   },
   methods: {
+    editClick(){
+      this.editFlag=false;
+      this.init();
+    },
+    init(){
+      this.nickName = this.userData.nickName;
+      this.name = this.userData.name;
+      // this.name = this.userData.name;
+      this.sexFlag = this.userData.sex;
+      this.signature = this.userData.signature;
+      this.value11 = [];
+      this.value5 = [];
+      for(let it of this.userData.hobbys){
+        for(let it1 in this.options){
+          if(it == this.options[it1].tagVaule){
+            this.options[it1].flag = true;
+            this.value11.push(this.options[it1].tagId)
+          }
+        }
+      }
+      for(let it of this.userData.jobs){
+        for(let it1 in this.options1){
+          if(it == this.options1[it1].tagVaule){
+            this.value5.push(this.options1[it1].tagId)
+          }
+        }
+      }
+      
+    },
     cancelEd() {
       for(let it of this.options){
         it.flag=false
@@ -206,6 +236,7 @@ export default {
           company: "",
           hobbys: _this.value11,
           jobs: _this.value5,
+          name:_this.name,
           nickName: _this.nickName,
           sex: _this.sexFlag,
           signature: _this.signature
@@ -214,7 +245,7 @@ export default {
           if (res.code == "0000") {
             _this.$message.success("保存成功");
             _this.editFlag = true;
-            _this.cancelEd();
+            // _this.cancelEd();
             bus.$emit('getUserinfoF')
           } else {
             _this.$message.error(res.result);
@@ -265,13 +296,13 @@ export default {
         this.$message.error("请先输入旧密码");
         return;
       }
-      if (!psw.test(this.newPasswordA)) {
+      if (!psw.test(this.newPassword)) {
         this.$message.error(
           "请输入新密码，密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文"
         );
         return;
       }
-      if (this.newPasswordB != this.newPasswordA) {
+      if (this.newPasswordB != this.newPassword) {
         this.$message.error("两次输入的密码不一致");
         return;
       }
@@ -280,8 +311,8 @@ export default {
         url: "modifyUserPassword",
         data: {
           account: _this.$route.query.account,
-          newPasswordA: _this.newPasswordA,
-          newPasswordB: _this.newPasswordB,
+          newPassword: _this.newPassword,
+          // newPasswordB: _this.newPasswordB,
           oldPassword: _this.oldPassword
         },
         // dataFlag: false,
@@ -289,7 +320,7 @@ export default {
           if (res.code == "0000") {
             _this.$message.success("修改密码成功");
             _this.oldPassword = "",
-              _this.newPasswordA = "",
+              _this.newPassword = "",
               _this.newPasswordB = ""
           } else {
             _this.$message.error(res.result);
@@ -399,9 +430,9 @@ export default {
   .infoInput:focus {
     border-color: #00a041;
   }
-  .infoInput:nth-child(2) {
-    margin: 15px 0;
-  }
+  // .infoInput:nth-child(2) {
+  //   margin: 15px 0;
+  // }
   .avatarImg {
     width: 100px;
     height: 100px;

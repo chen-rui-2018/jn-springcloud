@@ -14,12 +14,24 @@ import java.io.Serializable;
  */
 @ApiModel(value = "AdvisorListParam",description = "服务顾问列表查询入参")
 public class AdvisorListParam extends Page implements Serializable {
+    @ApiModelProperty(value = "机构id",example = "xxx123")
+    private String orgId;
     @ApiModelProperty(value = "领域",example = "technology_financial")
     private String domain;
     @ApiModelProperty(value = "排序类型(integrate:综合排序   popularity：人气排序   praise：好评排序   serviceNum：服务量排序)",example="integrate")
     private String sortTypes;
     @ApiModelProperty(value = "关键词",example="上海")
     private String keyWords;
+    @ApiModelProperty(value = "产品模板id(根据常规产品类型查询产品关联的顾问)",example="xxx1234")
+    private String templateId;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
     public String getDomain() {
         return domain;
@@ -43,5 +55,13 @@ public class AdvisorListParam extends Page implements Serializable {
 
     public void setKeyWords(String keyWords) {
         this.keyWords = keyWords;
+    }
+
+    public String getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 }

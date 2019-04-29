@@ -69,15 +69,15 @@ public class ServiceProductWebController  extends BaseController {
     }
 
 
-    @ControllerLog(doAction = "服务超市首页,热门产品")
-    @ApiOperation(value ="服务超市首页,热门产品")
+    @ControllerLog(doAction = "服务超市首页,热门产品(Pc专用)")
+    @ApiOperation(value ="服务超市首页,热门产品(Pc专用)")
     @RequestMapping(value = "/findHotProducts",method = RequestMethod.GET)
-    public Result<PaginationData<List<HotProducts>>> findHotProducts(@RequestBody Page page){
+    public Result<PaginationData<List<HotProducts>>> findHotProducts(Page page){
         PaginationData data = productService.findHotProducts(page);
         return new Result(data);
     }
     @ControllerLog(doAction = "服务产品列表")
-    @ApiOperation(value ="服务产品列表,(pc/app服务产品列表)")
+    @ApiOperation(value ="服务产品列表,(pc/app服务产品列表)(App热门产品,按(服务量-serviceNum)字段进行排序)")
     @RequestMapping(value = "/findProductList",method = RequestMethod.GET)
     public Result<PaginationData<List<WebServiceProductInfo>>> findProductList( ProductInquiryInfo info){
         PaginationData data = productService.findWebProductList(info,true);
@@ -91,12 +91,20 @@ public class ServiceProductWebController  extends BaseController {
         WebServiceProductDetails details = productService.findWebProductDetails(productId);
         return new Result(details);
     }
-    @ControllerLog(doAction = "机构-服务产品列表")
-    @ApiOperation(value ="机构-服务产品列表,(pc/app-产品管理)")
+    @ControllerLog(doAction = "机构(管理)-服务产品列表")
+    @ApiOperation(value ="机构-服务产品列表,(pc/app-产品管理)",notes = "前端查看本机构可管理的产品列表")
     @RequiresPermissions("/servicemarket/product/web/findOrgProductList")
     @RequestMapping(value = "/findOrgProductList",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceProductManage>>> findOrgProductList( OrgProductQuery query){
         PaginationData data  =  productService.findOrgProductList(query,true);
+        return  new Result(data);
+    }
+    @ControllerLog(doAction = "机构详情下-服务产品列表")
+    @ApiOperation(value ="机构详情下-服务产品列表",notes = "前端查看机构下的产品列表,包含各统计字段")
+    @RequiresPermissions("/servicemarket/product/web/findOrgProductList")
+    @RequestMapping(value = "/findOrgCountProductList",method = RequestMethod.GET)
+    public Result<PaginationData<List<OrgCountProductInfo>>> findOrgCountProductList(OrgCountQueryParam query){
+        PaginationData data  =  productService.findOrgCountProductList(query,true);
         return  new Result(data);
     }
     @ControllerLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品,")
@@ -156,10 +164,12 @@ public class ServiceProductWebController  extends BaseController {
     @ControllerLog(doAction = "同类型服务产品列表")
     @ApiOperation(value ="同类型服务产品列表(pc/App服务产品详情下的同类型服务列表)")
     @RequestMapping(value = "/sameTypeProductList",method = RequestMethod.GET)
-    public Result<PaginationData<List<WebServiceProductInfo>>> sameTypeProductList(@ApiParam(name = "signoryId", value = "领域Id", required = true) @RequestParam String  signoryId){
-        Assert.notNull(signoryId, ServiceProductExceptionEnum.SERVICE_PRODUCT_SIGNORY_ID_EMPTY.getMessage());
+    public Result<PaginationData<List<WebServiceProductInfo>>> sameTypeProductList(SameTypeProductParam sameTypeProductParam){
+        Assert.notNull(sameTypeProductParam.getSignoryId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_SIGNORY_ID_EMPTY.getMessage());
         ProductInquiryInfo info = new ProductInquiryInfo();
-        info.setSignoryId(signoryId);
+        info.setSignoryId(sameTypeProductParam.getSignoryId());
+        info.setPage(sameTypeProductParam.getPage());
+        info.setRows(sameTypeProductParam.getRows());
         PaginationData data = productService.findWebProductList(info,true);
         return new Result(data);
     }

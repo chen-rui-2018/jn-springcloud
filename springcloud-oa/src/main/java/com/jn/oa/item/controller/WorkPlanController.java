@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.excel.ExcelUtil;
 import com.jn.oa.item.enmus.WorkPlanExceptionEnmus;
+import com.jn.oa.item.entity.TbOaItem;
 import com.jn.oa.item.model.*;
 import com.jn.oa.item.service.WorkPlanService;
 import com.jn.oa.item.vo.WorkPlanVO;
@@ -131,15 +132,24 @@ public class WorkPlanController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "获取所有项目信息")
+    @RequiresPermissions("/oa/workPlan/getItemAll")
+    @ApiOperation(value = "获取所有项目信息", notes = "获取所有项目信息")
+    @RequestMapping(value = "/getItemAll", method = RequestMethod.GET)
+    public Result<List<TbOaItem>> getItemAll() {
+        List<TbOaItem> itemList = workPlanService.getItemAll();
+        return new Result(itemList);
+    }
+
 
     @ControllerLog(doAction = "导出工作计划")
     @RequiresPermissions("/oa/workPlan/exportExcelWorkPlanInfo")
     @ApiOperation(value = "导出工作计划", notes = "导出工作计划")
     @RequestMapping(value = "/exportExcelWorkPlanInfo", method = RequestMethod.GET)
     public void exportExcelWorkPlanInfo(WorkPlanPage workPlanPage, HttpServletResponse response) {
-        String exportTitle = "项目名称,任务名称,负责人,任务状态,工作计划内容,计划工时,消耗工时,剩余工时," +
+        String exportTitle = "项目名称,任务名称,负责人,任务状态,计划工时,消耗工时,剩余工时," +
                 "预计开始时间,截止时间,实际开始时间,实际截止时间,是否延期";
-        String exportColName = "itemName,workPlanName,responsibleUserName,workPlanStatusMessage,content,planTime," +
+        String exportColName = "itemName,workPlanName,responsibleUserName,workPlanStatusMessage,planTime," +
                 "totalConsumeTime,totalRemainTime,planStartTime,planEndTime,startTime,endTime,isExpireMessage";
         workPlanPage.setPage(1);
         workPlanPage.setRows(200000);

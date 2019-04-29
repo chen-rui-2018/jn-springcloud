@@ -60,8 +60,8 @@
 
 <script>
 import {
-  api, paramApi, getCode
-} from '@/api/oa/meetingManagement'
+  api, paramApi
+} from '@/api/axios'
 import UE from '@/components/ue.vue'
 export default {
   components: { UE },
@@ -148,8 +148,8 @@ export default {
           this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
           this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
           // 调用接口发送请求
-          api('oa/notice/addOrUpdateNotice', this.noticeForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.oaUrl}oa/notice/addOrUpdateNotice`, this.noticeForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -195,8 +195,8 @@ export default {
           // 调用接口发送请求
           this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
           this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
-          api('oa/notice/addOrUpdateNotice', this.noticeForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.oaUrl}oa/notice/addOrUpdateNotice`, this.noticeForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -219,8 +219,8 @@ export default {
       this.noticeForm.workOrderNum = query.workOrderNum
       if (query.id) {
         this.noticeForm.id = query.id
-        paramApi('oa/notice/getNoticeById', query.id, 'noticeId').then(res => {
-          if (res.data.code === '0000') {
+        paramApi(`${this.GLOBAL.oaUrl}oa/notice/getNoticeById`, query.id, 'noticeId').then(res => {
+          if (res.data.code === this.GLOBAL.code) {
             var data = res.data.data
             this.noticeForm.noticeTitle = data.noticeTitle
             this.noticeForm.workOrderNum = data.workOrderNum
@@ -237,8 +237,8 @@ export default {
     },
     // 获取平台类型
     getCode() {
-      getCode(this.code).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysDict/getDict`, this.code, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.codeOptions = res.data.data
         } else {
           this.$message.error(res.data.result)

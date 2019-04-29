@@ -715,6 +715,76 @@ public class TbPdTalentServiceNoticeCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andAnnouncementContentIsNull() {
+            addCriterion("announcement_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentIsNotNull() {
+            addCriterion("announcement_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentEqualTo(String value) {
+            addCriterion("announcement_content =", value, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentNotEqualTo(String value) {
+            addCriterion("announcement_content <>", value, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentGreaterThan(String value) {
+            addCriterion("announcement_content >", value, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentGreaterThanOrEqualTo(String value) {
+            addCriterion("announcement_content >=", value, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentLessThan(String value) {
+            addCriterion("announcement_content <", value, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentLessThanOrEqualTo(String value) {
+            addCriterion("announcement_content <=", value, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentLike(String value) {
+            addCriterion("announcement_content like", value, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentNotLike(String value) {
+            addCriterion("announcement_content not like", value, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentIn(List<String> values) {
+            addCriterion("announcement_content in", values, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentNotIn(List<String> values) {
+            addCriterion("announcement_content not in", values, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentBetween(String value1, String value2) {
+            addCriterion("announcement_content between", value1, value2, "announcementContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnnouncementContentNotBetween(String value1, String value2) {
+            addCriterion("announcement_content not between", value1, value2, "announcementContent");
+            return (Criteria) this;
+        }
+
         public Criteria andBrowseTimesIsNull() {
             addCriterion("browse_times is null");
             return (Criteria) this;
@@ -832,6 +902,76 @@ public class TbPdTalentServiceNoticeCriteria {
 
         public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlIsNull() {
+            addCriterion("file_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlIsNotNull() {
+            addCriterion("file_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlEqualTo(String value) {
+            addCriterion("file_url =", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotEqualTo(String value) {
+            addCriterion("file_url <>", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlGreaterThan(String value) {
+            addCriterion("file_url >", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("file_url >=", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlLessThan(String value) {
+            addCriterion("file_url <", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlLessThanOrEqualTo(String value) {
+            addCriterion("file_url <=", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlLike(String value) {
+            addCriterion("file_url like", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotLike(String value) {
+            addCriterion("file_url not like", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlIn(List<String> values) {
+            addCriterion("file_url in", values, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotIn(List<String> values) {
+            addCriterion("file_url not in", values, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlBetween(String value1, String value2) {
+            addCriterion("file_url between", value1, value2, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotBetween(String value1, String value2) {
+            addCriterion("file_url not between", value1, value2, "fileUrl");
             return (Criteria) this;
         }
 

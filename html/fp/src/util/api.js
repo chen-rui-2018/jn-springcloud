@@ -22,7 +22,29 @@ export default {
         getUserPersonInfo:"springcloud-user/user/center/getUserPersonInfo",//根据用户账号获取用户资料信息
         modifyUserPassword:"springcloud-user/user/center/modifyUserPassword",//修改用户密码
         saveUserInfo:"springcloud-user/guest/userInfo/saveUserInfo",//保存用户资料
-        getTagCodeList:"springcloud-user//guest/userTag/getTagCodeList",//获取用户字典列表
+        getTagCodeList:"springcloud-user/guest/userTag/getTagCodeList",//获取用户字典列表
+        findHotProducts:"springcloud-enterprise/servicemarket/product/web/findHotProducts",//热门产品
+        selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//顾问领域列表
+        getServiceConsultantList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//机构服务顾问
+        selectTeamList:"springcloud-enterprise/guest/serviceMarket/industryManage/selectIndustryList",//机构领域获取
+        selectServiceOrgList:"springcloud-enterprise/guest/serviceMarket/org/selectServiceOrgList",//服务机构列表获取
+        getServiceRatingInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceRatingInfo",//最新评价
+        getCompassAllCate:"springcloud-park/guest/portal/sp/power/departList",//compassView所有类别
+        getpowerList:"springcloud-park/guest/portal/sp/power/list",//权力清单列表
+        getpowerDetail:"springcloud-park/guest/portal/sp/power/get",//权利明细
+        getseviceDetail:"springcloud-park/guest/portal/sp/power/getBusi",//业务明细（服务详情）
+        message:"springcloud-park/portal/sp/power/SpMessage",//我要留言
+        getplatform:"springcloud-enterprise/pd/declaration/list",//申报平台列表数据
+        getplatformtype:"springcloud-enterprise/pd/declaration/typeList",//申报品台类型
+        getdeclarationcentertype:"springcloud-enterprise/guest/pd/declarationNotice/typeList",//申报中心所属类型
+        getdeclarationcentertList:"springcloud-enterprise/guest/pd/declarationNotice/list",//申报中心列表数据 
+        getnoticeDetail:"springcloud-enterprise/guest/pd/declarationNotice/selectByTalentNotice",//申报公告详情
+        addpageviews:"springcloud-enterprise/guest/pd/declarationNotice/trafficVolume",//增加访问量
+        gettalentstype:"springcloud-enterprise/guest/pd/talentNotice/typeList",//人才服务公告所属类型列表
+        gettalentsList:"springcloud-enterprise/guest/pd/talentNotice/list",//人才服务公告列表
+        gettalentDetail:"springcloud-enterprise/guest/pd/talentNotice/selectByTalentNotice",//人才公告详情
+        addtalentviews:"springcloud-enterprise/guest/pd/talentNotice/trafficVolume",//增加人才公告详情访问量
+        appointment:"springcloud-enterprise/pd/online/onlineBooking",//预约申报
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

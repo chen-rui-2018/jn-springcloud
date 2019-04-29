@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.asset.dao.TowerInformationDao">
+    <select id="towerList" parameterType="java.lang.String" resultType="com.jn.park.asset.model.TowerInformationModel">
+        SELECT
+            id,
+            park_id AS parkId,
+            park_name AS parkName,
+            NAME,
+            img_url AS imgUrl,
+            address,
+            introduce
+        FROM
+            tb_tower_information
+        WHERE
+            record_status = 1
+          AND park_id = #{parkId}
+    </select>
+</mapper>

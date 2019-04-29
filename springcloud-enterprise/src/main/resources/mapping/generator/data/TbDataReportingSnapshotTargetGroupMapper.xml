@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingSnapshotTargetGroupMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
+    <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
+    <result column="target_id" jdbcType="VARCHAR" property="targetId" />
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="form_type" jdbcType="VARCHAR" property="formType" />
+    <result column="form_name" jdbcType="VARCHAR" property="formName" />
+    <result column="required" jdbcType="TINYINT" property="required" />
+    <result column="order_number" jdbcType="INTEGER" property="orderNumber" />
+    <result column="choice_option" jdbcType="VARCHAR" property="choiceOption" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    task_batch, target_id, form_id, form_type, form_name, required, order_number, choice_option, 
+    record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroupCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_data_reporting_snapshot_target_group
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroupCriteria">
+    delete from tb_data_reporting_snapshot_target_group
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
+    insert into tb_data_reporting_snapshot_target_group (task_batch, target_id, form_id, 
+      form_type, form_name, required, 
+      order_number, choice_option, record_status
+      )
+    values (#{taskBatch,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, #{formId,jdbcType=VARCHAR}, 
+      #{formType,jdbcType=VARCHAR}, #{formName,jdbcType=VARCHAR}, #{required,jdbcType=TINYINT}, 
+      #{orderNumber,jdbcType=INTEGER}, #{choiceOption,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
+    insert into tb_data_reporting_snapshot_target_group
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskBatch != null">
+        task_batch,
+      </if>
+      <if test="targetId != null">
+        target_id,
+      </if>
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="formType != null">
+        form_type,
+      </if>
+      <if test="formName != null">
+        form_name,
+      </if>
+      <if test="required != null">
+        required,
+      </if>
+      <if test="orderNumber != null">
+        order_number,
+      </if>
+      <if test="choiceOption != null">
+        choice_option,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskBatch != null">
+        #{taskBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="targetId != null">
+        #{targetId,jdbcType=VARCHAR},
+      </if>
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="formType != null">
+        #{formType,jdbcType=VARCHAR},
+      </if>
+      <if test="formName != null">
+        #{formName,jdbcType=VARCHAR},
+      </if>
+      <if test="required != null">
+        #{required,jdbcType=TINYINT},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="choiceOption != null">
+        #{choiceOption,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroupCriteria" resultType="java.lang.Long">
+    select count(*) from tb_data_reporting_snapshot_target_group
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_data_reporting_snapshot_target_group
+    <set>
+      <if test="record.taskBatch != null">
+        task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="record.targetId != null">
+        target_id = #{record.targetId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.formId != null">
+        form_id = #{record.formId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.formType != null">
+        form_type = #{record.formType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.formName != null">
+        form_name = #{record.formName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.required != null">
+        required = #{record.required,jdbcType=TINYINT},
+      </if>
+      <if test="record.orderNumber != null">
+        order_number = #{record.orderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.choiceOption != null">
+        choice_option = #{record.choiceOption,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_data_reporting_snapshot_target_group
+    set task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+      target_id = #{record.targetId,jdbcType=VARCHAR},
+      form_id = #{record.formId,jdbcType=VARCHAR},
+      form_type = #{record.formType,jdbcType=VARCHAR},
+      form_name = #{record.formName,jdbcType=VARCHAR},
+      required = #{record.required,jdbcType=TINYINT},
+      order_number = #{record.orderNumber,jdbcType=INTEGER},
+      choice_option = #{record.choiceOption,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

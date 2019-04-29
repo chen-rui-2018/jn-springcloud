@@ -43,9 +43,9 @@ public class EmailAdd implements Serializable {
     @ApiModelProperty(value = "是否定时发送(1是,0否)", example = "\"0\"")
     private String isDelay;
 
-    @ApiModelProperty(value = "定时发送时间", example = "2019-12-12 12:13:13")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty(value = "定时发送时间", example = "2019-12-12 12:13")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date delaySendTime;
 
     @ApiModelProperty(value = "附件", example = "\"[{\"title\":\"附件\",\"url\":\"https:www.baidu.com\"}]\"")

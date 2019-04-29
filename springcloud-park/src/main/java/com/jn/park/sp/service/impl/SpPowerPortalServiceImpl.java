@@ -4,29 +4,32 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
 import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
 import com.jn.park.finance.service.impl.FinanceTypeServiceImpl;
 import com.jn.park.sp.dao.*;
 import com.jn.park.sp.entity.*;
 import com.jn.park.sp.enums.SpStatusEnums;
-import com.jn.park.sp.model.SpDictDepartModel;
-import com.jn.park.sp.model.SpMessageModel;
-import com.jn.park.sp.model.SpPowerBusiMaterialsModel;
-import com.jn.park.sp.model.SpPowerBusiModel;
+import com.jn.park.sp.model.*;
 import com.jn.park.sp.service.SpPowerPortalService;
 import com.jn.park.sp.vo.SpPowerBusiDetailVo;
 import com.jn.park.sp.vo.SpPowerDetailVo;
 import com.jn.park.sp.vo.SpPowerVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -56,6 +59,11 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     private TbSpMessageMapper tbSpMessageMapper;
     @Autowired
     private CompanyClient companyClient;
+    @Autowired
+    private SpAdDao spAdDao;
+
+    @Value("${ibps.url}")
+    private String ibpsUrl;
 
     /**
      *通过业务id查询业务明细内容
@@ -72,6 +80,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
             return null;
         }
         BeanUtils.copyProperties(tbSpPowerBusiWithBLOBs,spPowerBusiDetailVo);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(tbSpPowerBusiWithBLOBs.getCreatedTime());
+        spPowerBusiDetailVo.setTime(format);
+
+        spPowerBusiDetailVo.setFlowPic(spPowerBusiDetailVo.getFlowPic().replace("/ibps/components/upload/ueditor/preview.htm",ibpsUrl+"/ibps/components/upload/ueditor/preview.htm"));
+        //替换标签,只要纯文本
+        String dealConditions = spPowerBusiDetailVo.getDealConditions();
+        dealConditions = dealConditions.replace("<p><span style=\"color: rgb(50, 50, 50); font-family: &quot;Microsoft Yahei&quot;; font-size: 15px; background-color: rgb(255, 255, 255);\">","");
+        dealConditions = dealConditions.replace("</span></p>","");
+        spPowerBusiDetailVo.setDealConditions(dealConditions);
         //通过业务id查询业务对象的办理材料集合
         TbSpPowerBusiMaterialsCriteria tbSpPowerBusiMaterialsCriteria = new TbSpPowerBusiMaterialsCriteria();
         TbSpPowerBusiMaterialsCriteria.Criteria criteria = tbSpPowerBusiMaterialsCriteria.createCriteria();
@@ -86,6 +104,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
             for (TbSpPowerBusiMaterials tbSpPowerBusiMaterial : tbSpPowerBusiMaterials) {
                 SpPowerBusiMaterialsModel spPowerBusiMaterialsModel = new SpPowerBusiMaterialsModel();
                 BeanUtils.copyProperties(tbSpPowerBusiMaterial,spPowerBusiMaterialsModel);
+                String sample = spPowerBusiMaterialsModel.getSample();
+                //拼接附件下载链接
+                Object parse = JSONValue.parse(sample);
+                JSONArray array=(JSONArray)parse;
+                JSONObject obj2=(JSONObject)array.get(0);
+                String spring =(String) obj2.get("id");
+                String fileName =  (String)obj2.get("fileName");
+                String sid = "/components/upload/preview.htm?downloadId=" + spring;
+                spPowerBusiMaterialsModel.setSampleName(fileName);
+                spPowerBusiMaterialsModel.setSample(sid);
                 spPowerBusiMaterialsModelList.add(spPowerBusiMaterialsModel);
             }
             spPowerBusiDetailVo.setMaterialsModelList(spPowerBusiMaterialsModelList);
@@ -93,6 +121,12 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spPowerBusiDetailVo;
     }
 
+    /**
+     *通过权力id查询权力的明细内容
+     *
+     * @param id
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "通过权力id查询权力的明细内容")
     public List<SpPowerDetailVo> get(String id) {
@@ -113,7 +147,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         List<TbSpPowerBusi> tbSpPowerBusis = tbSpPowerBusiMapper.selectByExample(tbSpPowerBusiCriteria);
         //封装业务列表
         List<SpPowerBusiModel> spPowerBusiModelList = new ArrayList<SpPowerBusiModel>();
-        if (spPowerBusiModelList != null){
+        if (tbSpPowerBusis != null){
             for (TbSpPowerBusi tbSpPowerBusi : tbSpPowerBusis) {
                 SpPowerBusiModel spPowerBusiModel = new SpPowerBusiModel();
                 BeanUtils.copyProperties(tbSpPowerBusi,spPowerBusiModel);
@@ -125,6 +159,11 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spPowerDetailVoList;
     }
 
+    /**
+     * 通过部门名称获取全部的实施部门(模糊查询)
+     * @param name
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "通过部门名称获取全部的实施部门(模糊查询)")
     public List<SpDictDepartModel> departList(String name) {
@@ -150,6 +189,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spDictDepartModelList;
     }
 
+    /**
+     * 返回全部的权力清单(包含孩子)
+     * @param name
+     * @param parentId
+     * @param departId
+     * @param type
+     * @param code
+     * @param page
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "返回全部的权力清单(包含孩子)")
     public PaginationData findByPage(String name, String parentId, String departId, String type, String code, Page page) {
@@ -158,6 +207,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         Map<String,Object> map = new HashMap<>(16);
         map.put("name",name);
         map.put("parentId",parentId);
+        map.put("departId",departId);
         map.put("type",type);
         map.put("code",code);
         List<SpPowerVo> spPowerVoList = spPowerDao.findByPage(map);
@@ -173,6 +223,12 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return data;
     }
 
+    /**
+     * 我要留言
+     * @param spMessageModel
+     * @param user
+     * @return
+     */
     @Override
     @ServiceLog(doAction="我要留言")
     @Transactional(rollbackFor = Exception.class)
@@ -185,15 +241,15 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         //判断企业信息是否为空
         if(data != null){
             //判断企业名称是否为空
-            if (tbSpMessage.getCompanyName() == null || tbSpMessage.getCompanyName() == ""){
+            if(StringUtils.isEmpty(tbSpMessage.getCompanyName())){
                 tbSpMessage.setCompanyName(data.getComName());
             }
             //判断联系人名称是否为空
-            if (tbSpMessage.getConcatName() == null || tbSpMessage.getConcatName() == ""){
+            if (StringUtils.isEmpty(tbSpMessage.getConcatName())){
                 tbSpMessage.setConcatName(data.getContact());
             }
             //判断联系人电话是否为空
-            if (tbSpMessage.getConcatPhone() == null || tbSpMessage.getConcatPhone() == ""){
+            if (StringUtils.isEmpty(tbSpMessage.getConcatPhone())){
                 tbSpMessage.setConcatPhone(data.getConPhone());
             }
         }
@@ -203,4 +259,31 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         logger.info("【添加】添加留言成功,对应ID为{}",tbSpMessage.getId());
         return insert;
     }
+
+    /**
+     * 获取最新的5例广告图
+     *
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction="轮播广告")
+    public List<SpAdModel> getAdvertising() {
+        List<SpAdModel> spAdModelList = spAdDao.getAdvertising();
+        return spAdModelList;
+    }
+
+    /**
+     * 获取在线受理地址
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "获取在线受理地址")
+    public String getDealUrl(String id) {
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = spPowerBusiDao.selectBusiByKey(id);
+        String dealUrl = tbSpPowerBusiWithBLOBs.getDealUrl();
+        return dealUrl;
+    }
+
 }

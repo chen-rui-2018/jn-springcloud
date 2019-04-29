@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.user.point.dao.UserPointMapper">
+    <!--查询用户积分-->
+    <select id="getUserPoint" parameterType="com.jn.user.point.model.UserPointParam" resultType="com.jn.user.point.model.UserPointVO">
+        select p.point_id as "pointId"
+              ,u.account as "userAccount"
+              ,p.point_num as "pointNum"
+              ,p.freeze_num as "freezeNum"
+              ,u.name as "name"
+              ,u.nick_name as "nickName"
+         from tb_user_point p  left join tb_user_person u on  p.user_account = u.account
+         where p.record_status = '1'
+        <if test="pointId !=null and pointId !='' ">
+            and b.point_id = #{pointId,jdbcType=VARCHAR}
+        </if>
+        <if test="userAccount !=null and userAccount !='' ">
+            and u.account = #{userAccount,jdbcType=VARCHAR}
+        </if>
+        <if test="name !=null and name !='' ">
+            and u.name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="nickName !=null and nickName !='' ">
+            and u.nick_name = #{nickName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertPointDetailList" parameterType="java.util.List">
+        insert into tb_user_point_detail (id,user_account,rule_type_name,rule_type_id,point_type,
+        point_num,point_balance,point_income_id,point_order_id,point_status,
+        created_time,creator_account,modified_time,modifier_account,record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as "id"
+            ,#{item.userAccount,jdbcType=VARCHAR} as "userAccount"
+            ,#{item.ruleTypeName,jdbcType=VARCHAR} as "ruleTypeName"
+            ,#{item.ruleTypeId,jdbcType=VARCHAR} as "ruleTypeId"
+            ,#{item.pointType,jdbcType=VARCHAR} as "pointType"
+            ,#{item.pointNum,jdbcType=DOUBLE} as "pointNum"
+            ,#{item.pointBalance,jdbcType=DOUBLE} as "pointBalance"
+            ,#{item.pointIncomeId,jdbcType=VARCHAR} as "pointIncomeId"
+            ,#{item.pointOrderId,jdbcType=VARCHAR} as "pointOrderId"
+            ,#{item.pointStatus,jdbcType=VARCHAR} as "pointStatus"
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as "modifierAccount"
+            ,#{item.recordStatus,jdbcType=TINYINT} as "recordStatus"
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+</mapper>

@@ -53,6 +53,10 @@ public class InvestorAuthenticateParam implements Serializable {
     @NotNull(message = "个人简介不能为空")
     @Size(max=512,message = "个人简介不能超过512个字")
     private String personalProfile;
+    @ApiModelProperty(value = "投融资经历",required = true,example = "融资经历....")
+    @NotNull(message = "投融资经历不能为空")
+    @Size(max=500,message = "投融资经历不能超过500个字")
+    private String invesFinanExper;
     @ApiModelProperty(value = "主投领域",required = true)
     @NotNull(message = "主投领域不能为空")
     private List<InvestorMainArea>investorMainAreaList;
@@ -62,7 +66,7 @@ public class InvestorAuthenticateParam implements Serializable {
     @ApiModelProperty(value = "工作经历")
     private List<InvestorWorkExperienceParam> investorWorkExperienceParamList;
     @ApiModelProperty(value = "教育经历")
-    private List<InvestorEduExperienceParam> investorEduExperienceParamList;
+    private List<InvestorEducationExperienceParam> investorEducationExperienceParamList;
 
     public String getInvestorName() {
         return investorName;
@@ -160,6 +164,14 @@ public class InvestorAuthenticateParam implements Serializable {
         this.personalProfile = personalProfile;
     }
 
+    public String getInvesFinanExper() {
+        return invesFinanExper;
+    }
+
+    public void setInvesFinanExper(String invesFinanExper) {
+        this.invesFinanExper = invesFinanExper;
+    }
+
     public List<InvestorMainArea> getInvestorMainAreaList() {
         return investorMainAreaList;
     }
@@ -184,11 +196,11 @@ public class InvestorAuthenticateParam implements Serializable {
         this.investorWorkExperienceParamList = investorWorkExperienceParamList;
     }
 
-    public List<InvestorEduExperienceParam> getInvestorEduExperienceParamList() {
-        return investorEduExperienceParamList;
+    public List<InvestorEducationExperienceParam> getInvestorEducationExperienceParamList() {
+        return investorEducationExperienceParamList;
     }
 
-    public void setInvestorEduExperienceParamList(List<InvestorEduExperienceParam> investorEduExperienceParamList) {
-        this.investorEduExperienceParamList = investorEduExperienceParamList;
+    public void setInvestorEducationExperienceParamList(List<InvestorEducationExperienceParam> investorEducationExperienceParamList) {
+        this.investorEducationExperienceParamList = investorEducationExperienceParamList;
     }
 }

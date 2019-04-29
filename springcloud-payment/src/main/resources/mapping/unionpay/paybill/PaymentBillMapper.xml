@@ -125,6 +125,12 @@
         <if test="billId !=null and billId !='' ">
             and b.bill_id = #{billId,jdbcType=VARCHAR}
         </if>
+        <if test="billIds !=null and billIds !='[]' and billIds.length > 0 ">
+            and b.bill_id in
+            <foreach item="item" index="index" collection="billIds" open="("  close=")" separator=",">
+              #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
         <if test="billNum !=null and billNum !='' ">
             and b.bill_num = #{billNum,jdbcType=VARCHAR}
         </if>

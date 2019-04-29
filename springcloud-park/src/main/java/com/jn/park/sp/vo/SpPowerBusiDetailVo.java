@@ -40,6 +40,12 @@ public class SpPowerBusiDetailVo extends SpPowerBusiModel implements Serializabl
     @ApiModelProperty("流程图")
     private String flowPic;
 
+    @ApiModelProperty("设定依据")
+    private String settingBasis;
+
+    @ApiModelProperty("办理条件")
+    private String dealConditions;
+
     @ApiModelProperty("收费标准")
     private String feeStandard;
 
@@ -50,7 +56,8 @@ public class SpPowerBusiDetailVo extends SpPowerBusiModel implements Serializabl
     private String creatorAccount;
 
     @ApiModelProperty("创建时间")
-    private Date createdTime;
+    private String Time;
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -136,11 +143,27 @@ public class SpPowerBusiDetailVo extends SpPowerBusiModel implements Serializabl
         this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreatedTime() {
-        return createdTime;
+    public String getTime() {
+        return Time;
     }
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
+    public void setTime(String time) {
+        Time = time;
+    }
+
+    public String getSettingBasis() {
+        return settingBasis;
+    }
+
+    public void setSettingBasis(String settingBasis) {
+        this.settingBasis = settingBasis;
+    }
+
+    public String getDealConditions() {
+        return dealConditions;
+    }
+
+    public void setDealConditions(String dealConditions) {
+        this.dealConditions = dealConditions;
     }
 }

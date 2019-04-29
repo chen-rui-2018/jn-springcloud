@@ -42,18 +42,18 @@ public class WorkPlanAdd implements Serializable {
     @ApiModelProperty(value = "需求描述", required = true,example = "工作计划需求测试")
     private String demandDescribe;
 
-    @ApiModelProperty(value = "计划开始时间(时间统一格式为yyyy-MM-dd HH:mm:ss)",
-            required = true,example = "2019-12-12 12:12:12")
+    @ApiModelProperty(value = "计划开始时间(时间统一格式为yyyy-MM-dd)",
+            required = true,example = "2019-12-12")
     @NotNull(message = "计划开始时间不能为空")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date planStartTime;
 
-    @ApiModelProperty(value = "计划结束时间(时间统一格式为yyyy-MM-dd HH:mm:ss)",
-            required = true,example = "2019-12-13 12:12:12")
+    @ApiModelProperty(value = "计划结束时间(时间统一格式为yyyy-MM-dd)",
+            required = true,example = "2019-12-13")
     @NotNull(message = "计划结束时间不能为空")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date planEndTime;
 
     @ApiModelProperty(value = "计划工时", required = true,example = "10")

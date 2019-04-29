@@ -2,9 +2,8 @@ package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.model.ServiceOrg;
+import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.org.model.*;
-import com.jn.enterprise.servicemarket.org.vo.MyOrgInfoVo;
-import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 
 import java.util.List;
 
@@ -69,4 +68,17 @@ public interface OrgService {
      * @return
      */
     MyOrgInfoVo getMyOrgInfo(String account);
+
+    /**
+     * 查询服务超市统计数据
+     * @return
+     */
+    ServiceStatisticalNumVO selectServiceStatisticalNum();
+
+    /**
+     * 根据业务领域/产品查询服务超市统计数据
+     * @param businessStatisticalParam
+     * @return
+     */
+    BusinessStatisticalNumVO selectBusinessAreaStatisticalNum(BusinessStatisticalParam businessStatisticalParam);
 }

@@ -71,6 +71,7 @@ public class NoticeManageServiceImpl implements NoticeManageService {
         TbNoticeInfo info =  new TbNoticeInfo();
         BeanUtils.copyProperties(param,info);
         //2.补充字段内容
+        info.setId(param.getNoticeId());
         info.setStartTime(DateUtils.parseDate(param.getStartTime(),"yyyy-MM-dd"));
         info.setEndTime(DateUtils.parseDate(param.getEndTime(),"yyyy-MM-dd"));
         info.setCreatedTime(new Date());
@@ -87,15 +88,11 @@ public class NoticeManageServiceImpl implements NoticeManageService {
         if(StringUtils.isNotBlank(param.getNoticeContent())) {
 
                 TbNoticeDetails details = new TbNoticeDetails();
-                details.setNoticeId(info.getNoticeId());
-                details.setNoticeDetails(param.getNoticeContent().getBytes("UTF-8"));
+                details.setNoticeId(info.getId());
+                details.setId((info.getId()));
+                details.setNoticeDetails(param.getNoticeContent());
                 noticeDetailsMapper.insert(details);
         }
-            }catch(UnsupportedEncodingException e){
-                e.printStackTrace();
-                logger.info("公告详情转换为byte失败");
-                throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_TRANCE_DETAILS_DEFAULT);
-
             }catch (ParseException e){
                 e.printStackTrace();
                 logger.info("生效/失效日期格式不规范-转换错误");
@@ -115,9 +112,7 @@ public class NoticeManageServiceImpl implements NoticeManageService {
         Page<Object> objects =  PageHelper.startPage(pageNmu,pageSize==0?15:pageSize,true);
 
         List<NoticeManageShow> noticeList =  noticeInfoDao.findNoticeList(queryParam);
-        if(noticeList != null && noticeList.size()>0){
-            transfromNoticeDetails(noticeList);
-        }
+
         return new PaginationData(noticeList,objects==null?0:objects.getTotal());
     }
     @ServiceLog(doAction = "编辑公告")
@@ -130,7 +125,7 @@ public class NoticeManageServiceImpl implements NoticeManageService {
             TbNoticeInfo info =  new TbNoticeInfo();
             BeanUtils.copyProperties(param,info);
             //2.补充字段内容
-
+            info.setId(param.getNoticeId());
             info.setStartTime(DateUtils.parseDate(param.getStartTime(),"yyyy-MM-dd"));
             info.setEndTime(DateUtils.parseDate(param.getEndTime(),"yyyy-MM-dd"));
             info.setModifiedTime(new Date());
@@ -142,14 +137,11 @@ public class NoticeManageServiceImpl implements NoticeManageService {
             if(StringUtils.isNotBlank(param.getNoticeContent())) {
 
                 TbNoticeDetails details = new TbNoticeDetails();
-                details.setNoticeId(info.getNoticeId());
-                details.setNoticeDetails(param.getNoticeContent().getBytes("UTF-8"));
+                details.setId(info.getId());
+                details.setNoticeId(info.getId());
+                details.setNoticeDetails(param.getNoticeContent());
                 noticeDetailsMapper.updateByPrimaryKeySelective(details);
             }
-        }catch(UnsupportedEncodingException e){
-            e.printStackTrace();
-            logger.info("公告详情转换为byte失败");
-            throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_TRANCE_DETAILS_DEFAULT);
         }catch (ParseException e){
             e.printStackTrace();
             logger.info("生效/失效日期格式不规范-转换错误");
@@ -165,10 +157,7 @@ public class NoticeManageServiceImpl implements NoticeManageService {
         if(noticeDetails == null ){
             throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_NOT_EXIST);
         }
-        List<NoticeManageShow> list= new ArrayList<>();
-        list.add(noticeDetails);
-        list = transfromNoticeDetails(list);
-        return list.get(0);
+        return noticeDetails;
     }
     @ServiceLog(doAction = "公告上下架操作")
     @Override
@@ -194,24 +183,5 @@ public class NoticeManageServiceImpl implements NoticeManageService {
     }
 
 
-    /**
-     * 公告内容转换
-     * @param noticeList
-     * @return
-     */
-    private List<NoticeManageShow> transfromNoticeDetails(List<NoticeManageShow> noticeList){
-        try{
-            for (NoticeManageShow show : noticeList){
-                if(show.getNoticeDetails() != null){
-                    show.setNoticeContent(new String(show.getNoticeDetails(),"UTF-8"));
-                    show.setNoticeDetails(null);
-                }
-            }
-        }catch(UnsupportedEncodingException e){
-            e.printStackTrace();
-            logger.info("公告详情byte转换为字符串失败");
-            throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_TRANCE_DETAILS_DEFAULT);
-        }
-        return noticeList;
-    }
+
 }

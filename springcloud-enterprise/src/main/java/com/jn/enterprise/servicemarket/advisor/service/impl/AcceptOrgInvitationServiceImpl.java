@@ -44,7 +44,6 @@ public class AcceptOrgInvitationServiceImpl  implements AcceptOrgInvitationServi
     }
 
 
-
     /**
      * 拒绝机构邀请
      * @param advisorAccount  顾问账号

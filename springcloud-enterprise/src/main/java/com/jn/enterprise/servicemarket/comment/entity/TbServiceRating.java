@@ -6,6 +6,8 @@ import java.util.Date;
 public class TbServiceRating implements Serializable {
     private String id;
 
+    private String requireId;
+
     private String orgId;
 
     private String orgName;
@@ -34,8 +36,6 @@ public class TbServiceRating implements Serializable {
 
     private Byte recordStatus;
 
-    private String requireId;
-
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -44,6 +44,14 @@ public class TbServiceRating implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getRequireId() {
+        return requireId;
+    }
+
+    public void setRequireId(String requireId) {
+        this.requireId = requireId == null ? null : requireId.trim();
     }
 
     public String getOrgId() {
@@ -158,14 +166,6 @@ public class TbServiceRating implements Serializable {
         this.recordStatus = recordStatus;
     }
 
-    public String getRequireId() {
-        return requireId;
-    }
-
-    public void setRequireId(String requireId) {
-        this.requireId = requireId == null ? null : requireId.trim();
-    }
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -179,6 +179,7 @@ public class TbServiceRating implements Serializable {
         }
         TbServiceRating other = (TbServiceRating) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getRequireId() == null ? other.getRequireId() == null : this.getRequireId().equals(other.getRequireId()))
             && (this.getOrgId() == null ? other.getOrgId() == null : this.getOrgId().equals(other.getOrgId()))
             && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
             && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
@@ -192,8 +193,7 @@ public class TbServiceRating implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
-            && (this.getRequireId() == null ? other.getRequireId() == null : this.getRequireId().equals(other.getRequireId()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -201,6 +201,7 @@ public class TbServiceRating implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getRequireId() == null) ? 0 : getRequireId().hashCode());
         result = prime * result + ((getOrgId() == null) ? 0 : getOrgId().hashCode());
         result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
@@ -215,7 +216,6 @@ public class TbServiceRating implements Serializable {
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
-        result = prime * result + ((getRequireId() == null) ? 0 : getRequireId().hashCode());
         return result;
     }
 
@@ -226,6 +226,7 @@ public class TbServiceRating implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", requireId=").append(requireId);
         sb.append(", orgId=").append(orgId);
         sb.append(", orgName=").append(orgName);
         sb.append(", productId=").append(productId);
@@ -240,7 +241,6 @@ public class TbServiceRating implements Serializable {
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
-        sb.append(", requireId=").append(requireId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

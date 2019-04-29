@@ -6,7 +6,7 @@
         SELECT r.id AS "id",r.org_name AS "orgName",r.advisor_name AS "advisorName",
         r.product_name AS "productName",date_format(re.issue_time,'%Y-%m-%d %H:%i:%S')  AS "issueTime",date_format(re.handle_time,'%Y-%m-%d %H:%i:%S') AS "handleTime",
         date_format(r.created_time,'%Y-%m-%d %H:%i:%S') AS "commentTime",re.is_comment AS "isComment",re.org_telephone as "orgTelephone"
-        FROM tb_service_rating r LEFT JOIN tb_service_require re ON r.require_id = re.id left join tb_service_org o on r.org_id = o.org_id
+        FROM tb_service_rating r LEFT JOIN tb_service_require re ON r.require_id = re.id left join tb_service_org o on r.org_id_ = o.org_id_
         where r.record_status = '1'
         <if test="issueAccount != null and issueAccount != ''">
             and re.issue_account =  #{issueAccount}
@@ -15,7 +15,7 @@
             and ( r.advisor_account = #{account} or o.org_account = #{account} )
         </if>
         <if test="productId != null and productId != ''">
-            and r.product_id =  #{productId}
+            and r.product_id_ =  #{productId}
         </if>
         <if test="advisorId != null and advisorId != ''">
             and re.advisor_account =  #{advisorId}
@@ -32,7 +32,7 @@
                    re.req_email as "reqEmail",re.req_detail as "reqDetail",
                    re.contract_amount as "financingAmount",
                    re.actual_loan_amount as "actualLoanAmount",
-                   re.financing_period as "financingPeriod",
+                   re.financing_period_max as "financingPeriod",
                    re.expected_date as "expectedDate",
                    re.result_detail as "resultDetail",
                    re.is_comment as "isComment",
@@ -41,7 +41,7 @@
                    re.advisor_name as "advisorName", re.product_name as "productName",
                    ra.attitude_score as "attitudeScore", ra.evaluation_desc as "evaluationDesc"
                 from tb_service_require re <!-- 需求表 -->
-                left join tb_service_org_info info on re.org_id = info.org_id
+                left join tb_service_org_info info on re.org_id_ = info.org_id_
                 left join tb_service_rating ra <!-- 评价表 --> on ra.require_id   = re.id
                 where re.record_status = '1' and re.id = #{id};
     </select>

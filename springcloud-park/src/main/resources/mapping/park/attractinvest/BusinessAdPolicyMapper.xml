@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.attractinvest.dao.BusinessAdPolicyMapper">
+    <update id="updateBusinessAdStatus">
+        UPDATE tb_business_ad_policy
+        SET record_status = '0'
+        WHERE
+        record_status = '1'
+        AND end_time <![CDATA[ < ]]> CURRENT_DATE ()
+    </update>
+
+
+    <select id="getBusinessAdPolicy" resultType="com.jn.park.attractinvest.model.BusinessAdPolicy">
+        SELECT
+            id,
+            title,
+            ad_cover as adCover,
+            start_time as startTime,
+            end_time as endTime,
+            sub_title as subTitle,
+            view_count as viewCount
+        FROM
+            `tb_business_ad_policy`
+        WHERE
+            record_status = '1'
+        ORDER BY
+            `id` DESC
+    </select>
+</mapper>

@@ -442,7 +442,7 @@ public class DataModelServiceImpl implements DataModelService {
         List<InputFormatModel> imlist = new ArrayList<>();
         if(tList !=null && tList.size()>0){
             TbDataReportingTargetGroupCriteria example =new TbDataReportingTargetGroupCriteria();
-            example.or().andTargetIdIn(tList);
+            example.or().andTargetIdIn(tList).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
             List<TbDataReportingTargetGroup> tgList = tbDataReportingTargetGroupMapper.selectByExample(example);
             InputFormatModel im =null;
             for(TbDataReportingTargetGroup tgBean:tgList){

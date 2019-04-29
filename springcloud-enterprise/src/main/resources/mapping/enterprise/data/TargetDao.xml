@@ -354,11 +354,18 @@
         ,w.model_name as modelName
         ,w.model_cycle as modelCycle
         ,w.status as status
+
+        ,w.overdue_days as overdueDays
+        ,w.fill_in_form_deadline as fillInFormDeadline
+
         from (
             select
             q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
             ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
             ,q.calling_times ,q.status,q.calling_time ,r.model_name ,r.model_cycle
+            ,q.overdue_days
+            ,q.fill_in_form_deadline
+
             from
             (
             select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
@@ -408,11 +415,15 @@
         ,w.model_name as modelName
         ,w.model_cycle as modelCycle
         ,w.status as status
+        ,w.overdue_days as overdueDays
+        ,w.fill_in_form_deadline as fillInFormDeadline
         from (
         select
         q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
         ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
         ,q.calling_times ,q.status,q.calling_time ,r.model_name ,r.model_cycle
+        ,q.overdue_days
+        ,q.fill_in_form_deadline
         from
         (
         select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
@@ -669,8 +680,22 @@
         </if>
     </select>
 
-    <!--获取园区广告-->
-    <select id="getGardenTaskBatch" resultType="java.lang.String">
+    <!--获取园区本月任务批次号-->
+    <select id="getAllGardenBatch" parameterType="java.lang.String" resultType="java.lang.String">
+        select task_batch from
+        tb_data_reporting_snapshot_model
+        where
+        task_batch in
+        (
+            select task_batch from tb_data_reporting_task
+            where form_time=#{lastMon} or form_time=#{lastYear}
+            and file_type=1
+        )
+        group by task_batch
+    </select>
+
+    <!--获取园区指定部门的任务批次-->
+    <select id="getGardenTaskBatch"  resultType="java.lang.String">
 
         select task_batch from
         tb_data_reporting_snapshot_model

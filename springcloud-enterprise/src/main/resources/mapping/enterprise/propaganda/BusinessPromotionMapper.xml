@@ -16,6 +16,7 @@
           ,sp.poster_url as "posterUrl"
           ,sp.propaganda_fee as "propagandaFee"
           ,sp.status as "status"
+          ,date_format(sp.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
         from tb_propaganda sp
         where 1=1
         <if test="bpp.approvalStatus!=null and bpp.approvalStatus!=''

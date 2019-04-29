@@ -17,6 +17,8 @@ public class PropagandaAreaShow implements Serializable {
     private String propagandaArea;
     @ApiModelProperty(value = "宣传区域url")
     private String propagandaAreaUrl;
+    @ApiModelProperty(value = "宣传区域金额")
+    private String areaAmount;
 
     public String getPropagandaArea() {
         return propagandaArea;
@@ -34,11 +36,20 @@ public class PropagandaAreaShow implements Serializable {
         this.propagandaAreaUrl = propagandaAreaUrl;
     }
 
+    public String getAreaAmount() {
+        return areaAmount;
+    }
+
+    public void setAreaAmount(String areaAmount) {
+        this.areaAmount = areaAmount;
+    }
+
     @Override
     public String toString() {
         return "PropagandaAreaShow{" +
                 "propagandaArea='" + propagandaArea + '\'' +
                 ", propagandaAreaUrl='" + propagandaAreaUrl + '\'' +
+                ", areaAmount='" + areaAmount + '\'' +
                 '}';
     }
 }

@@ -175,6 +175,76 @@ public class TbPropagandaFeeRulesCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andProFeeRuleDetailsIsNull() {
+            addCriterion("pro_fee_rule_details is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsIsNotNull() {
+            addCriterion("pro_fee_rule_details is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsEqualTo(String value) {
+            addCriterion("pro_fee_rule_details =", value, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsNotEqualTo(String value) {
+            addCriterion("pro_fee_rule_details <>", value, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsGreaterThan(String value) {
+            addCriterion("pro_fee_rule_details >", value, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsGreaterThanOrEqualTo(String value) {
+            addCriterion("pro_fee_rule_details >=", value, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsLessThan(String value) {
+            addCriterion("pro_fee_rule_details <", value, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsLessThanOrEqualTo(String value) {
+            addCriterion("pro_fee_rule_details <=", value, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsLike(String value) {
+            addCriterion("pro_fee_rule_details like", value, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsNotLike(String value) {
+            addCriterion("pro_fee_rule_details not like", value, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsIn(List<String> values) {
+            addCriterion("pro_fee_rule_details in", values, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsNotIn(List<String> values) {
+            addCriterion("pro_fee_rule_details not in", values, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsBetween(String value1, String value2) {
+            addCriterion("pro_fee_rule_details between", value1, value2, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProFeeRuleDetailsNotBetween(String value1, String value2) {
+            addCriterion("pro_fee_rule_details not between", value1, value2, "proFeeRuleDetails");
+            return (Criteria) this;
+        }
+
         public Criteria andPropagandaFeeIsNull() {
             addCriterion("propaganda_fee is null");
             return (Criteria) this;
@@ -185,52 +255,52 @@ public class TbPropagandaFeeRulesCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeEqualTo(Long value) {
+        public Criteria andPropagandaFeeEqualTo(Double value) {
             addCriterion("propaganda_fee =", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeNotEqualTo(Long value) {
+        public Criteria andPropagandaFeeNotEqualTo(Double value) {
             addCriterion("propaganda_fee <>", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeGreaterThan(Long value) {
+        public Criteria andPropagandaFeeGreaterThan(Double value) {
             addCriterion("propaganda_fee >", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeGreaterThanOrEqualTo(Long value) {
+        public Criteria andPropagandaFeeGreaterThanOrEqualTo(Double value) {
             addCriterion("propaganda_fee >=", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeLessThan(Long value) {
+        public Criteria andPropagandaFeeLessThan(Double value) {
             addCriterion("propaganda_fee <", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeLessThanOrEqualTo(Long value) {
+        public Criteria andPropagandaFeeLessThanOrEqualTo(Double value) {
             addCriterion("propaganda_fee <=", value, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeIn(List<Long> values) {
+        public Criteria andPropagandaFeeIn(List<Double> values) {
             addCriterion("propaganda_fee in", values, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeNotIn(List<Long> values) {
+        public Criteria andPropagandaFeeNotIn(List<Double> values) {
             addCriterion("propaganda_fee not in", values, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeBetween(Long value1, Long value2) {
+        public Criteria andPropagandaFeeBetween(Double value1, Double value2) {
             addCriterion("propaganda_fee between", value1, value2, "propagandaFee");
             return (Criteria) this;
         }
 
-        public Criteria andPropagandaFeeNotBetween(Long value1, Long value2) {
+        public Criteria andPropagandaFeeNotBetween(Double value1, Double value2) {
             addCriterion("propaganda_fee not between", value1, value2, "propagandaFee");
             return (Criteria) this;
         }

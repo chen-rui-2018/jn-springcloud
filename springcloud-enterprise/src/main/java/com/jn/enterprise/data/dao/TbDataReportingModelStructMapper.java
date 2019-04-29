@@ -10,7 +10,7 @@ public interface TbDataReportingModelStructMapper {
 
     int deleteByExample(TbDataReportingModelStructCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbDataReportingModelStruct record);
 
@@ -18,7 +18,7 @@ public interface TbDataReportingModelStructMapper {
 
     List<TbDataReportingModelStruct> selectByExample(TbDataReportingModelStructCriteria example);
 
-    TbDataReportingModelStruct selectByPrimaryKey(Integer id);
+    TbDataReportingModelStruct selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbDataReportingModelStruct record, @Param("example") TbDataReportingModelStructCriteria example);
 

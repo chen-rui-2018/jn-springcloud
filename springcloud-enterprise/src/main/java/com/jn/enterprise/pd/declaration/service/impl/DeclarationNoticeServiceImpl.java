@@ -3,6 +3,7 @@ package com.jn.enterprise.pd.declaration.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.StringUtils;
 import com.jn.enterprise.pd.declaration.dao.TbPdDeclarationNoticeManageMapper;
 import com.jn.enterprise.pd.declaration.dao.TbPdDeclarationNoticeRangeMapper;
 import com.jn.enterprise.pd.declaration.dao.TbPdDeclarationOnlineReservationManageMapper;
@@ -51,20 +52,21 @@ public class DeclarationNoticeServiceImpl implements DeclarationNoticeService {
      * @return
      */
     @Override
-    public PaginationData<List<TbPdDeclarationNoticeManage>> selectByDeclarationNoticeList(String rangeId, String sortType,int page,int rows) {
+    public PaginationData<List<TbPdDeclarationNoticeManage>> selectByDeclarationNoticeList(String rangeId, String sortType,String titleName,int page,int rows) {
         Page<Object> objects = PageHelper.startPage(page, rows);
         TbPdDeclarationNoticeManageCriteria noticeCriteria = new TbPdDeclarationNoticeManageCriteria();
-        if(sortType.equals(SortEnums.RELEASETIME_SORT)){
-            noticeCriteria.setOrderByClause("modified_time desc");
-        }else if(sortType.equals(SortEnums.TIMENODE_SORT)){
-            noticeCriteria.setOrderByClause("deadline desc");
-        }else if(sortType.equals(SortEnums.HEAT_SORT)){
-            noticeCriteria.setOrderByClause("browse_times desc");
+        if(sortType.equals(SortEnums.RELEASETIME_SORT.getCode())){
+            noticeCriteria.setOrderByClause("is_roof_placement asc,created_time desc");
+        }else if(sortType.equals(SortEnums.TIMENODE_SORT.getCode())){
+            noticeCriteria.setOrderByClause("is_roof_placement asc,deadline desc");
+        }else if(sortType.equals(SortEnums.HEAT_SORT.getCode())){
+            noticeCriteria.setOrderByClause("is_roof_placement asc,browse_times desc");
         }
         TbPdDeclarationNoticeManageCriteria.Criteria criteria = noticeCriteria.createCriteria();
         Byte status = Byte.parseByte(DeclaratStatusEnums.RELEASE.getCode());
         criteria.andStatusEqualTo(status);
-        criteria.andRangeIdEqualTo(rangeId);
+        if(StringUtils.isNotEmpty(rangeId)) {  criteria.andRangeIdEqualTo(rangeId);}
+        if(StringUtils.isNotEmpty(titleName)) {  criteria.andTitleNameLike('%'+titleName+'%');}
         return new PaginationData(tbPdDeclarationNoticeManageMapper.selectByExample(noticeCriteria), objects.getTotal());
     }
 

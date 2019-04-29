@@ -49,7 +49,7 @@ public class FinanceDocumentsImpl implements FinanceDocumentsService {
         Result filepath=null;
         try {
             //不需要token的下载文件的上次方法，为true时则需要token才能下载
-            filepath= uploadClient.uploadFile(file,false);
+            filepath= uploadClient.uploadFile(file,false,null);
         } catch (IOException e) {
             e.printStackTrace();
         }

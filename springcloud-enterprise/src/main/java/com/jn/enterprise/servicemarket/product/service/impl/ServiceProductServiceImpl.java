@@ -13,6 +13,7 @@ import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
 import com.jn.enterprise.servicemarket.product.dao.*;
 import com.jn.enterprise.servicemarket.product.entity.*;
+import com.jn.enterprise.servicemarket.product.enums.ProductConstantEnum;
 import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.enterprise.servicemarket.product.vo.WebServiceProductDetails;
@@ -61,14 +62,20 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String addServiceProduct(ServiceContent content, String account,String templateId) {
-        //服务产品类型 -1(无效/下架),0(待审核),1(上架/有效/审核通过).2(审核不通过)
-        String  productType = "1";
-        // 如果为特色产品则需要进行审批,
-        String status = content.getProductType().equals(productType) ? "0":"1";
-        //数据记录状态
-        Byte recordStatus = 1;
 
-        if(productType.equals(content.getProductType())){
+
+        //服务产品状态 -1(无效/下架),0(待审核),1(上架/有效/审核通过).2(审核不通过)
+        String approvalStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
+        String status = ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode();
+        // 如果为机构上架(新增)产品需要进行审批,
+        if(StringUtils.isNotBlank(content.getOrgId())){
+            status = approvalStatus;
+        }
+
+        //数据记录状态 1 有效 ---- 0 无效/删除
+        Byte recordStatus =  new Byte(ProductConstantEnum.RECORD_STATUS_EFFECTIVE.getCode());
+
+        if(ProductConstantEnum.PRODUCT_FEATURE_TYPE.equals(content.getProductType())){
              if(StringUtils.isBlank(content.getOrgId())){
                 logger.warn("[服务产品新增]，特色服务产品机构id{}不能为空：orgId: {},特色服务产品的机构id不能为空!");
                 throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY);
@@ -193,7 +200,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public void productApproval(ServiceProductApproval approval,String account) {
         //审批不通过时,必须要填写审批意见;
-        String status = "2";
+        String status = ProductConstantEnum.PRODUCT_STATUS_APPROVAL_NOT_PASS.getCode();
         if(status.equals(approval.getStatus())){
             if(StringUtils.isBlank(approval.getApprovalComments())){
                 logger.warn("[审批特色服务产品]，审批意见{}不能为空：approvalComments: {}!审批不通过时,审批意见不能为空");
@@ -208,7 +215,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void productShelf(ProductShelfOperation operation , String account) {
-        productDao.productShelf(operation.getProductId(),operation.getStatus(),account);
+        //如果进行上架操作,则需要进行审核,修改状态为待审核
+        String productStatus = operation.getStatus();
+        if(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode().equals(productStatus)){
+            productStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
+        }
+        productDao.productShelf(operation.getProductId(),productStatus,account);
     }
 
 
@@ -295,7 +307,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         TbServiceProduct product =tbServiceProductMapper.selectByPrimaryKey(productId);
         TbServiceProduct productUpdate = new TbServiceProduct();
 
-        productUpdate.setViewCount(product.getViewCount()+1);
+        productUpdate.setViewCount(product.getViewCount()==null?1:(product.getViewCount()+1));
         productUpdate.setProductId(productId);
         tbServiceProductMapper.updateByPrimaryKeySelective(productUpdate);
         return details;
@@ -374,7 +386,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public void updateFeatureProduct(OrgUpdateFeatureProduct content, String account) {
        //修改后需要进行审核
-        String status = "0";
+        String status = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
         TbServiceProduct tbServiceProduct = new TbServiceProduct();
         BeanUtils.copyProperties(content,tbServiceProduct);
         tbServiceProduct.setModifierAccount(account);
@@ -430,9 +442,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public String getProductSerialNumber(String productType){
         //产品编号
-        String serialNumber = null;
-        String commentsType = "0";
-        String featureType = "1";
+        String serialNumber = "";
+        String commentsType = ProductConstantEnum.PRODUCT_COMMENT_TYPE.getCode();
+        String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getMessage();
         Date date = new Date();
         String dataStr = DateUtils.formatDate(date,"yyyyMMddHHmmss");
         if(productType.equals(featureType)){

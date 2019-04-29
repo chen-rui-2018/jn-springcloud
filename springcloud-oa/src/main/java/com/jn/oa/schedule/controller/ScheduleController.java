@@ -74,4 +74,13 @@ public class ScheduleController implements Serializable {
         List<Schedule> scheduleList = scheduleService.list(shceduleQuery);
         return new Result(scheduleList);
     }
+
+    @ControllerLog(doAction = "查询日程详情")
+    @RequiresPermissions("/oa/schedule/getScheduleById")
+    @ApiOperation(value = "查询日程详情", notes = "根据日程id查询详情")
+    @RequestMapping(value = "/getScheduleById", method = RequestMethod.GET)
+    public Result<Schedule> getScheduleById(String id) {
+        Schedule schedule = scheduleService.getScheduleById(id);
+        return new Result(schedule);
+    }
 }

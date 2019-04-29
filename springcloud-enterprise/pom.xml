@@ -38,6 +38,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-news-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -68,11 +76,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        propaganda
+                        advisor
                     </contexts>
                     <tableNames>
-                        tb_propaganda,
-                        tb_propaganda_fee_rules
+                        tb_service_advisor
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

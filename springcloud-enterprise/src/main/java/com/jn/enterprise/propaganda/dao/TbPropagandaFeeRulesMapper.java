@@ -14,13 +14,9 @@ public interface TbPropagandaFeeRulesMapper {
 
     int insertSelective(TbPropagandaFeeRules record);
 
-    List<TbPropagandaFeeRules> selectByExampleWithBLOBs(TbPropagandaFeeRulesCriteria example);
-
     List<TbPropagandaFeeRules> selectByExample(TbPropagandaFeeRulesCriteria example);
 
     int updateByExampleSelective(@Param("record") TbPropagandaFeeRules record, @Param("example") TbPropagandaFeeRulesCriteria example);
-
-    int updateByExampleWithBLOBs(@Param("record") TbPropagandaFeeRules record, @Param("example") TbPropagandaFeeRulesCriteria example);
 
     int updateByExample(@Param("record") TbPropagandaFeeRules record, @Param("example") TbPropagandaFeeRulesCriteria example);
 }

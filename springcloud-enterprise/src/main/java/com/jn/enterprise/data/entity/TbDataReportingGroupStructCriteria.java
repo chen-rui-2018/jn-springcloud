@@ -175,76 +175,6 @@ public class TbDataReportingGroupStructCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdEqualTo(String value) {
-            addCriterion("id =", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotEqualTo(String value) {
-            addCriterion("id <>", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThan(String value) {
-            addCriterion("id >", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThanOrEqualTo(String value) {
-            addCriterion("id >=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThan(String value) {
-            addCriterion("id <", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThanOrEqualTo(String value) {
-            addCriterion("id <=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLike(String value) {
-            addCriterion("id like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotLike(String value) {
-            addCriterion("id not like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIn(List<String> values) {
-            addCriterion("id in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotIn(List<String> values) {
-            addCriterion("id not in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdBetween(String value1, String value2) {
-            addCriterion("id between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotBetween(String value1, String value2) {
-            addCriterion("id not between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
         public Criteria andGroupNameIsNull() {
             addCriterion("group_name is null");
             return (Criteria) this;
@@ -702,6 +632,76 @@ public class TbDataReportingGroupStructCriteria {
 
         public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsIsNull() {
+            addCriterion("company_ids is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsIsNotNull() {
+            addCriterion("company_ids is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsEqualTo(String value) {
+            addCriterion("company_ids =", value, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsNotEqualTo(String value) {
+            addCriterion("company_ids <>", value, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsGreaterThan(String value) {
+            addCriterion("company_ids >", value, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsGreaterThanOrEqualTo(String value) {
+            addCriterion("company_ids >=", value, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsLessThan(String value) {
+            addCriterion("company_ids <", value, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsLessThanOrEqualTo(String value) {
+            addCriterion("company_ids <=", value, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsLike(String value) {
+            addCriterion("company_ids like", value, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsNotLike(String value) {
+            addCriterion("company_ids not like", value, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsIn(List<String> values) {
+            addCriterion("company_ids in", values, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsNotIn(List<String> values) {
+            addCriterion("company_ids not in", values, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsBetween(String value1, String value2) {
+            addCriterion("company_ids between", value1, value2, "companyIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIdsNotBetween(String value1, String value2) {
+            addCriterion("company_ids not between", value1, value2, "companyIds");
             return (Criteria) this;
         }
     }

@@ -13,6 +13,7 @@ import com.jn.enterprise.servicemarket.product.dao.TbServiceProductAssureTypeMap
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductLoanTypeMapper;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
 import com.jn.enterprise.servicemarket.product.entity.*;
+import com.jn.enterprise.servicemarket.product.enums.ProductConstantEnum;
 import com.jn.enterprise.servicemarket.product.model.CommonServiceShelf;
 import com.jn.enterprise.technologyfinancial.financial.product.dao.FinancialProductMapper;
 import com.jn.enterprise.technologyfinancial.financial.product.model.*;
@@ -210,7 +211,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
         //状态为审核通过，机构id不为空，
         String status="1";
-        example.createCriteria().andOrgIdIsNotNull().andBusinessSTypeEqualTo(BUSINESS_AREA)
+        example.createCriteria().andOrgIdIsNotNull().andBusinessTypeEqualTo(BUSINESS_AREA)
                 .andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
         return tbServiceOrgMapper.countByExample(example);
     }
@@ -253,15 +254,15 @@ public class FinancialProductServiceImpl implements FinancialProductService {
     @Override
     public void addFinancialProduct(FinancialProductAddInfo info,String account) {
         //记录状态
-        Byte recordStatus = 1;
+        Byte recordStatus =  new Byte(ProductConstantEnum.RECORD_STATUS_EFFECTIVE.getCode());
         //产品状态(正常)
-        String normalStatus ="1";
+        String normalStatus =ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode();
         //产品状态(待审核)
-        String approvalStatus ="0";
+        String approvalStatus =ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
         //产品类型(特色产品)
-        String featureType = "1";
+        String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode();
         //如果添加特色产品,常规产品则添加重名校验(上架常规产品则不校验)
-        if(featureType.equals(info.getProductType()) || info.getTemplateId()==null) {
+        if(featureType.equals(info.getProductType()) || info.getTemplateId() ==null) {
             TbServiceProductCriteria criteria = new TbServiceProductCriteria();
             criteria.createCriteria().andProductNameEqualTo(info.getProductName());
             List<TbServiceProduct> productList = tbServiceProductMapper.selectByExample(criteria);
@@ -289,8 +290,8 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         product.setCreatorAccount(account);
         product.setRecordStatus(recordStatus);
         product.setReleaseTime(product.getCreatedTime());
-        //根据类型设置状态,特色产品需要进行审核
-        if(featureType.equals(info.getProductType())){
+        //根据机构上架产品则要进行审核
+        if(StringUtils.isNotBlank(product.getOrgId())){
             product.setStatus(approvalStatus);
         }else{
             product.setStatus(normalStatus);

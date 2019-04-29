@@ -25,11 +25,12 @@ public enum PdStatusEnums implements CodeAndMsg {
 
     @Override
     public String getCode() {
-        return null;
+        return code;
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return message;
     }
 }
+

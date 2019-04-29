@@ -1,14 +1,21 @@
 package com.jn.server;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.park.activity.model.Activity;
+import com.jn.park.activity.model.ActivityParment;
+import com.jn.park.activity.model.ActivitySlim;
+import com.jn.park.activity.model.ActivitySlimQuery;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.api.ActivityClient;
 import com.jn.system.log.annotation.ControllerLog;
+import io.swagger.annotations.ApiOperation;
 import com.jn.user.model.UserInfoQueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +40,12 @@ public class ActivityServerController extends BaseController implements Activity
     @Autowired
     private ActivityService activityService;
 
+    @ControllerLog(doAction = "获取活动列表")
+    @Override
+    public Result<PaginationData<List<ActivitySlim>>> getActivityList(@RequestBody @Validated ActivitySlimQuery activitySlimQuery) {
+        return new Result(activityService.activityListSlim(activitySlimQuery));
+    }
+    
     @ControllerLog(doAction = "获取有效活动总数")
     @Override
     public Result<String> getActivityNum(){

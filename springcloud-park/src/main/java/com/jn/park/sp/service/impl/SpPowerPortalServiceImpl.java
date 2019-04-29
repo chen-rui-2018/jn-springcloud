@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
 import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
 import com.jn.park.finance.service.impl.FinanceTypeServiceImpl;
@@ -120,6 +121,12 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spPowerBusiDetailVo;
     }
 
+    /**
+     *通过权力id查询权力的明细内容
+     *
+     * @param id
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "通过权力id查询权力的明细内容")
     public List<SpPowerDetailVo> get(String id) {
@@ -140,7 +147,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         List<TbSpPowerBusi> tbSpPowerBusis = tbSpPowerBusiMapper.selectByExample(tbSpPowerBusiCriteria);
         //封装业务列表
         List<SpPowerBusiModel> spPowerBusiModelList = new ArrayList<SpPowerBusiModel>();
-        if (spPowerBusiModelList != null){
+        if (tbSpPowerBusis != null){
             for (TbSpPowerBusi tbSpPowerBusi : tbSpPowerBusis) {
                 SpPowerBusiModel spPowerBusiModel = new SpPowerBusiModel();
                 BeanUtils.copyProperties(tbSpPowerBusi,spPowerBusiModel);
@@ -152,6 +159,11 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spPowerDetailVoList;
     }
 
+    /**
+     * 通过部门名称获取全部的实施部门(模糊查询)
+     * @param name
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "通过部门名称获取全部的实施部门(模糊查询)")
     public List<SpDictDepartModel> departList(String name) {
@@ -177,6 +189,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spDictDepartModelList;
     }
 
+    /**
+     * 返回全部的权力清单(包含孩子)
+     * @param name
+     * @param parentId
+     * @param departId
+     * @param type
+     * @param code
+     * @param page
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "返回全部的权力清单(包含孩子)")
     public PaginationData findByPage(String name, String parentId, String departId, String type, String code, Page page) {
@@ -185,6 +207,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         Map<String,Object> map = new HashMap<>(16);
         map.put("name",name);
         map.put("parentId",parentId);
+        map.put("departId",departId);
         map.put("type",type);
         map.put("code",code);
         List<SpPowerVo> spPowerVoList = spPowerDao.findByPage(map);
@@ -200,6 +223,12 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return data;
     }
 
+    /**
+     * 我要留言
+     * @param spMessageModel
+     * @param user
+     * @return
+     */
     @Override
     @ServiceLog(doAction="我要留言")
     @Transactional(rollbackFor = Exception.class)
@@ -212,15 +241,15 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         //判断企业信息是否为空
         if(data != null){
             //判断企业名称是否为空
-            if (tbSpMessage.getCompanyName() == null || tbSpMessage.getCompanyName() == ""){
+            if(StringUtils.isEmpty(tbSpMessage.getCompanyName())){
                 tbSpMessage.setCompanyName(data.getComName());
             }
             //判断联系人名称是否为空
-            if (tbSpMessage.getConcatName() == null || tbSpMessage.getConcatName() == ""){
+            if (StringUtils.isEmpty(tbSpMessage.getConcatName())){
                 tbSpMessage.setConcatName(data.getContact());
             }
             //判断联系人电话是否为空
-            if (tbSpMessage.getConcatPhone() == null || tbSpMessage.getConcatPhone() == ""){
+            if (StringUtils.isEmpty(tbSpMessage.getConcatPhone())){
                 tbSpMessage.setConcatPhone(data.getConPhone());
             }
         }
@@ -231,6 +260,11 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return insert;
     }
 
+    /**
+     * 获取最新的5例广告图
+     *
+     * @return
+     */
     @Override
     @ServiceLog(doAction="轮播广告")
     public List<SpAdModel> getAdvertising() {
@@ -238,6 +272,12 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spAdModelList;
     }
 
+    /**
+     * 获取在线受理地址
+     *
+     * @param id
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "获取在线受理地址")
     public String getDealUrl(String id) {

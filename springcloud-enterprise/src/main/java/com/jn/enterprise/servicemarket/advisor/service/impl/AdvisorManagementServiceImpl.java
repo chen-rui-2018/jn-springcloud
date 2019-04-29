@@ -60,8 +60,15 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
 
     @Autowired
     private OrgColleagueService orgColleagueService;
-
+    /**
+     * 是否删除 0：删除  1：有效
+     */
     private static final byte RECORD_STATUS=1;
+    /**
+     * 日期格式
+     */
+    private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
+
 
     /**
      * 邀请顾问
@@ -244,6 +251,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             }
             AdvisorManagementShow advisorManagementShow=new AdvisorManagementShow();
             BeanUtils.copyProperties(advisor, advisorManagementShow);
+            advisorManagementShow.setCreatedTime(DateUtils.formatDate(advisor.getCreatedTime(),PATTERN));
             resultList.add(advisorManagementShow);
         }
         return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());

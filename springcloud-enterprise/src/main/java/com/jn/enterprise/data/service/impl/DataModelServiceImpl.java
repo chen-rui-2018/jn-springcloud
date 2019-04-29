@@ -271,6 +271,8 @@ public class DataModelServiceImpl implements DataModelService {
             //创建model_id;插入模板基本信息
             String modelId=UUID.randomUUID().toString().replaceAll("-","");
             tbDataReportingModel.setModelId(modelId);
+            tbDataReportingModel.setCreatedTime(new Date());
+            tbDataReportingModel.setCreatorAccount(user.getAccount());
             tbDataReportingModelMapper.insertSelective(tbDataReportingModel);
 
         }else{

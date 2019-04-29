@@ -73,6 +73,12 @@ export default {
         productShelf:"springcloud-enterprise/servicemarket/product/manage/productShelf",//表格常规产品上下架小按钮
         getFinancialProductDetails:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductDetails",//获取科技金融产品详情
         upShelfCommonProduct:"springcloud-enterprise/technologyFinancial/financialProductController/upShelfCommonProduct",//科技金融新增上架
+        // 企业数据上报入口
+        enterpriseGetForm:"springcloud-enterprise/data/company/getForm", // 获取本月待填报的任务
+        enterpriseGetFormed:"springcloud-enterprise/data/company/getFormed", // 获取企业填报历史表单列表
+        enterpriseGetFormStruct:"springcloud-enterprise/data/company/getFormStruct", // 获取待填报的表单结构
+        enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
+        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd" // 页面广告获取
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

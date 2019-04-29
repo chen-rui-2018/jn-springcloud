@@ -1,5 +1,5 @@
 <template>
-  <div class="homePage">
+  <div class="userHome" @click="menuFlag = false">
     <div class="header clearfix">
       <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
       <div class="headerRight fr pr">
@@ -131,14 +131,14 @@
                 <el-menu-item index="/活动管理">
                   <span slot="title">活动管理</span>
                 </el-menu-item>
-                <el-menu-item index="/数据上报">
+                <el-menu-item index="/servicemarket/product/productService/dataReport">
                   <span slot="title">数据上报</span>
                 </el-menu-item>
               </el-menu>
             </el-aside>
           </div>
           <!-- 主体 -->
-          <div class="homePage_main userHome">
+          <div class="homePage_main userHome" >
             <el-main>
                 <router-view :userData='userData'></router-view>
             </el-main>
@@ -170,7 +170,7 @@ export default {
           id: 0,
         }
       ],
-     
+
     };
   },
   directives: {
@@ -340,7 +340,7 @@ export default {
               font-size: 13px;
               color:#333;
               cursor: pointer;
-              
+
             }
             >li.liActi{
               background: #00a040;
@@ -363,7 +363,7 @@ export default {
           padding: 15px 0;
           font-size: 12px;
           .el-breadcrumb__item:last-child .el-breadcrumb__inner a{
-            color:#00a041;  
+            color:#00a041;
           }
         }
         // 侧边栏
@@ -372,7 +372,7 @@ export default {
             border-top: 1px solid #eee;
             // border-bottom: 1px solid #eee;
           }
-          
+
           .el-menu-item.is-active{
             color:#00a042;
             background-color:#fff;
@@ -416,13 +416,17 @@ export default {
           }
         }
         .homePage_main{
-          flex: 1;
           .el-main{
             padding: 0 20px;
           }
         }
       }
     }
+
+  }
+  .homePage_main {
+    flex: 1;
+    width: 100%;
   }
 </style>
 

@@ -5,13 +5,13 @@ import com.github.pagehelper.PageHelper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.zxing.MatrixToImageWriter;
 import com.jn.park.activity.dao.ActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityMapper;
@@ -382,7 +382,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
             //取得输出流
             //写入文件刷新
-            MatrixToImageWriter.writeToStream(bitMatrix, "png", outputStream);
+            MatrixToImageWriter.writeToStream(bitMatrix, "png", outputStream,null);
             outputStream.flush();
             //关闭输出流
             outputStream.close();

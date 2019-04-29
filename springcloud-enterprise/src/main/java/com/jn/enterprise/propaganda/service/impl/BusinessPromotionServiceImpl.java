@@ -154,8 +154,16 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     private boolean isSuperAdmin(String loginAccount) {
         List<String> accountList=new ArrayList<>(16);
         accountList.add(loginAccount);
-        List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, "超级管理员");
-        return !roleInfoList.isEmpty();
+        String roleName="超级管理";
+        List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
+        if(roleInfoList.isEmpty()|| StringUtils.isBlank(roleInfoList.get(0).getRoleName())){
+            //没有查询到数据 返回false
+            return false;
+        }else if(!roleInfoList.get(0).getRoleName().contains(roleName)){
+            //返回的数据没有角色或者角色不包含超级管理，返回false
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -375,7 +383,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             List<String>accountList=new ArrayList<>();
             accountList.add(loginAccount);
             List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, "宣传");
-            if(roleInfoList.isEmpty()){
+            if(roleInfoList.isEmpty()|| StringUtils.isBlank(roleInfoList.get(0).getRoleName())){
                 logger.warn("获取宣传类型失败，当前用户[account:{}]没有企业宣传相关权限",loginAccount);
                 throw new JnSpringCloudException(BusinessPromotionExceptionEnum.ACCOUNT_CAN_NOT_ALLOW_PROPAGANDA);
             }

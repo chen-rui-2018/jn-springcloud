@@ -7,6 +7,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
@@ -59,8 +60,15 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
 
     @Autowired
     private OrgColleagueService orgColleagueService;
-
+    /**
+     * 是否删除 0：删除  1：有效
+     */
     private static final byte RECORD_STATUS=1;
+    /**
+     * 日期格式
+     */
+    private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
+
 
     /**
      * 邀请顾问
@@ -193,22 +201,6 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         if(pageValue.equals(advisorManagementParam.getNeedPage())){
             needPage=true;
         }
-        if(needPage){
-            objects = PageHelper.startPage(advisorManagementParam.getPage(),
-                    advisorManagementParam.getRows() == 0 ? 15 : advisorManagementParam.getRows(), true);
-        }
-        List<AdvisorManagementShow> tbServiceAdvisorList = getTbServiceAdvisors(advisorManagementParam);
-        return new PaginationData(tbServiceAdvisorList, objects == null ? 0 : objects.getTotal());
-    }
-
-
-    /**
-     * 根据查询条件获取顾问信息
-     * @param advisorManagementParam
-     * @return
-     */
-    @ServiceLog(doAction ="根据查询条件获取顾问信息")
-    private List<AdvisorManagementShow> getTbServiceAdvisors(AdvisorManagementParam advisorManagementParam) {
         //审批状态(- 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除)
         //默认值为 1：待审批
         String approvalStatus="1";
@@ -230,9 +222,16 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         //顾问姓名不为空，模糊查询顾问名称
         if(StringUtils.isNotBlank(advisorManagementParam.getAdvisorName())){
-            example.createCriteria().andApprovalStatusEqualTo(approvalStatus).andAdvisorNameLike(advisorManagementParam.getAdvisorName());
+            example.createCriteria().andApprovalStatusEqualTo(approvalStatus)
+                    .andAdvisorNameLike("%"+advisorManagementParam.getAdvisorName()+"%")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         }else{
-            example.createCriteria().andApprovalStatusEqualTo(approvalStatus);
+            example.createCriteria().andApprovalStatusEqualTo(approvalStatus)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }
+        if(needPage){
+            objects = PageHelper.startPage(advisorManagementParam.getPage(),
+                    advisorManagementParam.getRows() == 0 ? 15 : advisorManagementParam.getRows(), true);
         }
         List<TbServiceAdvisor> tbServiceAdvisorList= tbServiceAdvisorMapper.selectByExample(example);
         List<AdvisorManagementShow>resultList=new ArrayList<>(16);
@@ -252,9 +251,10 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             }
             AdvisorManagementShow advisorManagementShow=new AdvisorManagementShow();
             BeanUtils.copyProperties(advisor, advisorManagementShow);
+            advisorManagementShow.setCreatedTime(DateUtils.formatDate(advisor.getCreatedTime(),PATTERN));
             resultList.add(advisorManagementShow);
         }
-        return resultList;
+        return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
     }
 
     /**

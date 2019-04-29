@@ -77,10 +77,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        parking
+                        connect
                     </contexts>
                     <tableNames>
-                        tb_parking_record
+                        tb_service_connect_manage
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

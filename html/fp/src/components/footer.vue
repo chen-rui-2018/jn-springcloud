@@ -121,7 +121,7 @@
         </div>
       </div>
       <div class="footer2">
-        苏ICP备xxxxxx号&nbsp;&nbsp;&copy;版权所有&nbsp;&nbsp;南京白下高新技术产业园区投资发展有限责任公司
+        <div class="w">苏ICP备xxxxxx号&nbsp;&nbsp;&copy;版权所有&nbsp;&nbsp;南京白下高新技术产业园区投资发展有限责任公司</div>
       </div>
     </div>
   </div>
@@ -277,7 +277,7 @@ export default {
       font-size: 12px;
       background-color: #000;
       text-align: left;
-      padding-left: 150px;
+      // padding-left: 160px;
     }
   }
 }

@@ -56,7 +56,7 @@ public class DeclarationNoticeServiceImpl implements DeclarationNoticeService {
         Page<Object> objects = PageHelper.startPage(page, rows);
         TbPdDeclarationNoticeManageCriteria noticeCriteria = new TbPdDeclarationNoticeManageCriteria();
         if(sortType.equals(SortEnums.RELEASETIME_SORT.getCode())){
-            noticeCriteria.setOrderByClause("is_roof_placement asc,modified_time desc");
+            noticeCriteria.setOrderByClause("is_roof_placement asc,created_time desc");
         }else if(sortType.equals(SortEnums.TIMENODE_SORT.getCode())){
             noticeCriteria.setOrderByClause("is_roof_placement asc,deadline desc");
         }else if(sortType.equals(SortEnums.HEAT_SORT.getCode())){

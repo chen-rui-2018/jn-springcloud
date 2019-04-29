@@ -209,7 +209,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         if(taskbatch!= null && taskbatch.size()>0){
             TbDataReportingSnapshotModelCriteria adExample = new TbDataReportingSnapshotModelCriteria();
-            adExample.or().andTaskBatchIn(taskbatch).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+            adExample.or().andTaskBatchIn(taskbatch);
 
             List<TbDataReportingSnapshotModel> modelList = tbDataReportingSnapshotModelMapper.selectByExample(adExample);
 

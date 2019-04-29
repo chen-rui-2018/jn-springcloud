@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.propaganda.dao.BusinessPromotionMapper">
     <!--企业宣传列表查询-->
-    <select id="getBusinessPromotionList" parameterType="com.jn.enterprise.propaganda.model.BusinessPromotionListParam"
-            resultType="com.jn.enterprise.propaganda.model.BusinessPromotionListShow">
+    <select id="getBusinessPromotionList" resultType="com.jn.enterprise.propaganda.model.BusinessPromotionListShow">
         select
           sp.id_ as "id"
           ,sp.propaganda_type as "propagandaType"
@@ -12,11 +11,15 @@
           ,sp.issue_platform as "issuePlatform"
           ,date_format(sp.effective_date,'%Y/%m/%d')as "effectiveDate"
           ,date_format(sp.invalid_date,'%Y/%m/%d')as "invalidDate"
+          ,sp.approval_status as "approvalStatus"
+          ,sp.propaganda_area as "propagandaArea"
           ,sp.poster_url as "posterUrl"
           ,sp.propaganda_fee as "propagandaFee"
+          ,sp.status as "status"
         from tb_propaganda sp
         where 1=1
-        <if test="bpp.approvalStatus==0 or bpp.approvalStatus==1 or  bpp.approvalStatus==2 or bpp.approvalStatus==3 ">
+        <if test="bpp.approvalStatus!=null and bpp.approvalStatus!=''
+                  and (bpp.approvalStatus==0 or bpp.approvalStatus==1 or  bpp.approvalStatus==2 or bpp.approvalStatus==3)">
             and sp.approval_status=#{bpp.approvalStatus}
         </if>
         <if test="bpp.approvalStatus==4"><!--未付款-->

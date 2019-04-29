@@ -201,17 +201,17 @@ public interface DataUploadService {
     /**
      * 企业催报
      * @param taskBatch
-     * @param modelId
+     * @param fillId
      * @return
      */
-    int setStatisticsListUrgeCompany(String taskBatch,String modelId);
+    int setStatisticsListUrgeCompany(String taskBatch,String fillId);
     /**
      * 园区催报
      * @param taskBatch
-     * @param modelId
+     * @param fillId
      * @return
      */
-    int setStatisticsListUrge(String taskBatch,String modelId);
+    int setStatisticsListUrge(String taskBatch,String fillId);
 
     /**
      * 企业数据统计-填报任务详细信息获取

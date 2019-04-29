@@ -89,10 +89,10 @@ public class RequireManagementController extends BaseController {
 
 
     @ControllerLog(doAction = "撤销对他人的需求")
-    @ApiOperation(value = "撤销对他人的需求 (app 需求撤销)",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "撤销对他人的需求 (app 需求撤销)",notes = "reqNum：需求单号，返回数据响应条数，正常情况为1")
     @RequiresPermissions("/serviceMarket/requireManagementController/cancelRequire")
     @RequestMapping(value = "/cancelRequire",method = RequestMethod.POST)
-    public Result<Integer> cancelRequire(@ApiParam(value = "需求单号" ,required = true,example = "123****")@RequestParam("reqNum") String reqNum){
+    public Result<Integer> cancelRequire(String reqNum){
         Assert.notNull(reqNum, RequireExceptionEnum.REQUIRE_NUM_NOT_NULL.getMessage());
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
@@ -134,7 +134,7 @@ public class RequireManagementController extends BaseController {
     @ApiOperation(value = "对接操作",notes = "返回数据响应条数，正常情况为1")
     @RequiresPermissions("/serviceMarket/requireManagementController/handleOperating")
     @RequestMapping(value = "/handleOperating",method = RequestMethod.POST)
-    public Result<Integer> handleOperating(@ApiParam(value = "需求单号" ,required = true,example = "123****")@RequestParam("reqNum") String reqNum){
+    public Result<Integer> handleOperating(String reqNum){
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){

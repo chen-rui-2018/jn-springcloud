@@ -1,14 +1,17 @@
 package com.jn.enterprise.data.service.impl;
 
+import com.alibaba.excel.ExcelReader;
+import com.alibaba.excel.metadata.Sheet;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.enums.CommonExcelExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.excel.ExcelListener;
 import com.jn.down.api.DownLoadClient;
-import com.jn.down.model.DownLoad;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompany;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
@@ -20,25 +23,25 @@ import com.jn.enterprise.data.enums.TabColumnTypeEnum;
 import com.jn.enterprise.data.model.*;
 import com.jn.enterprise.data.service.DataUploadService;
 import com.jn.enterprise.data.tool.GetTargetTree;
+import com.jn.enterprise.data.tool.ScientExcelListener;
 import com.jn.enterprise.data.vo.ModelDataVO;
 import com.jn.enterprise.data.vo.TabVO;
 import com.jn.enterprise.data.vo.TargetModelVO;
-import com.jn.enterprise.model.ServiceOrg;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysDepartmentPostVO;
 import com.jn.upload.api.UploadClient;
 import com.jn.user.api.UserExtensionClient;
-import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -87,11 +90,49 @@ public class DataUploadServiceImpl implements DataUploadService {
     @Autowired
     private TargetDao targetDao;
 
+    /**
+     * 检测任务的类型
+     * @param fillId
+     * @return
+     */
+    private String getTaskType(String fillId){
+        TbDataReportingTask taskBean =  tbDataReportingTaskMapper.selectByPrimaryKey(fillId);
+        if(taskBean == null){
+            throw  new JnSpringCloudException(DataUploadExceptionEnum.TASK_IS_NOT_EXIST);
+        }
+        return taskBean.getFileType().toString();
+    }
+
+    /**
+     * 检测用户是否是企业用户
+     * @param user
+     * @return
+     */
+    private String getUserType(User user){
+        String result="";
+        Map<String,String> info =  getCompanyInfoByAccount(user);
+        if(info==null){
+            result=DataUploadConstants.GARDEN_TYPE;
+        }else{
+            result=DataUploadConstants.COMPANY_TYPE;
+        }
+        return result;
+    }
+
+
 
     @Override
     @ServiceLog(doAction = "企业本月数据上报页面广告获取")
     public Map<String, Set<String>> getCompanyAd(User user) {
-        return getAdsFromTask(user,DataUploadConstants.AD_DISPLAY_CLIENT_PC,DataUploadConstants.COMPANY_TYPE);
+        Map<String,Set<String>> result = null;
+        if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
+            //企业
+            result = getAdsFromTask(user,DataUploadConstants.AD_DISPLAY_CLIENT_PC,DataUploadConstants.COMPANY_TYPE);
+        }else{
+            //园区
+            result = getGardenAd(user);
+        }
+        return result;
     }
 
 
@@ -191,7 +232,16 @@ public class DataUploadServiceImpl implements DataUploadService {
     @Override
     @ServiceLog(doAction = "企业待填报数据获取")
     public List<CompanyDataModel> getNeedFormList(User user) {
-        return getThisMonthTask(user,DataUploadConstants.COMPANY_TYPE);
+        List<CompanyDataModel> result;
+        if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
+            //企业
+            result = getThisMonthTask(user,DataUploadConstants.COMPANY_TYPE);
+        }else{
+            //园区
+            result = getThisMonthTask(user,DataUploadConstants.GARDEN_TYPE);
+        }
+        //return getThisMonthTask(user,DataUploadConstants.COMPANY_TYPE);
+        return result;
     }
 
     @Override
@@ -246,7 +296,17 @@ public class DataUploadServiceImpl implements DataUploadService {
     @ServiceLog(doAction = "获取企业填报历史")
     @Override
     public PaginationData<List<CompanyDataModel>> getFormedHistory(CompanyDataParamModel param,User user){
-        return getHistoryList(param,user,DataUploadConstants.COMPANY_TYPE);
+
+        PaginationData<List<CompanyDataModel>> result;
+        if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
+            //企业
+            result = getHistoryList(param,user,DataUploadConstants.COMPANY_TYPE);;
+        }else{
+            //园区
+            result = getHistoryList(param,user,DataUploadConstants.GARDEN_TYPE);
+        }
+        //return getHistoryList(param,user,DataUploadConstants.COMPANY_TYPE);
+        return result;
     }
 
 
@@ -257,6 +317,7 @@ public class DataUploadServiceImpl implements DataUploadService {
     @ServiceLog(doAction = "获取园区填报历史")
     @Override
     public PaginationData<List<CompanyDataModel>> getHostoryTask(CompanyDataParamModel param,User user){
+
         return getHistoryList(param,user,DataUploadConstants.GARDEN_TYPE);
     }
 
@@ -338,8 +399,19 @@ public class DataUploadServiceImpl implements DataUploadService {
     @ServiceLog(doAction = "企业获取未填的任务的表单")
     public ModelDataVO getFormStruct(String fileId,User user) {
         String type=DataUploadConstants.NOT_FILL;
+
+        ModelDataVO result;
+        if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
+            //企业
+            result = getModelDataByType(fileId,user,type);
+        }else{
+            //园区
+            result = getCurrentMonthForm(fileId,user);
+        }
+
+
         //未填报的不用获取值
-        return getModelDataByType(fileId,user,type);
+        return result;
     }
 
     @Override
@@ -355,12 +427,12 @@ public class DataUploadServiceImpl implements DataUploadService {
         example.or().andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID)).andFillIdEqualTo(fileId);
         List<TbDataReportingGardenFiller> taskAccess = tbDataReportingGardenFillerMapper.selectByExample(example);
 
-
         //园区用户的部门集合
         List<String> userAccess = getFillId(null,user);
 
         //权限集
-        List<TbDataReportingGardenFiller> access = new ArrayList<>();
+        List<GardenFillerAccessModel> access = new ArrayList<>();
+        GardenFillerAccessModel gardenFillerAccessModel =null;
         for(TbDataReportingGardenFiller gardenFiller : taskAccess){
             //默认没有权限
             boolean hasAccess = false;
@@ -371,7 +443,8 @@ public class DataUploadServiceImpl implements DataUploadService {
                 }
             }
             if(hasAccess){
-                access.add(gardenFiller);
+                BeanUtils.copyProperties(gardenFiller,gardenFillerAccessModel);
+                access.add(gardenFillerAccessModel);
             }
         }
         result.setGardenFiller(access);
@@ -429,7 +502,7 @@ public class DataUploadServiceImpl implements DataUploadService {
         TbDataReportingSnapshotModel model = snapshotModelList.get(0);
         //拿出批次号 ， 查询结构信息--tab信息
         TbDataReportingSnapshotModelTabCriteria modelTab =new TbDataReportingSnapshotModelTabCriteria();
-        modelTab.or().andTaskBatchEqualTo(tbDataReportingTask.getTaskBatch());
+        modelTab.or().andTaskBatchEqualTo(tbDataReportingTask.getTaskBatch()).andStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbDataReportingSnapshotModelTab> modelTabList = tbDataReportingSnapshotModelTabMapper.selectByExample(modelTab);
 
         if(modelTabList ==null || modelTabList.size()==0){
@@ -471,8 +544,6 @@ public class DataUploadServiceImpl implements DataUploadService {
             String fillInId=tbDataReportingTask.getFillInFormId();
             String modelId =tbDataReportingTask.getModelId();
             String tabId =tab.getTabId();
-
-
 
             //本期值未填,那增幅列为空
             if(type.equals(DataUploadConstants.NOT_FILL)){
@@ -521,13 +592,13 @@ public class DataUploadServiceImpl implements DataUploadService {
             for(int index=0,size=tabColumnType.length;index<size;index++){
                 List<InputFormatModel> history =  getLastValue(fillInId,modelId,tabId,formTime,modelCycle,tabColumnType[index],inputFormatModelList);
                 if(tabColumnType[index].equals(DataUploadConstants.AMPLIFICATION)){
-                    otherColumn.put(TabColumnTypeEnum.AMPLIFICATION.getDesc(),history);
+                    otherColumn.put(getLastFormTime(modelCycle,formTime,tabColumnType[index]),history);
                 }else if(tabColumnType[index].equals(DataUploadConstants.LAST_MONTH_LAST_YEAR)){
-                    otherColumn.put(TabColumnTypeEnum.LAST_MONTH_LAST_YEAR.getDesc(),history);
+                    otherColumn.put(getLastFormTime(modelCycle,formTime,tabColumnType[index]),history);
                 }else if(tabColumnType[index].equals(DataUploadConstants.LAST_MONTH)){
-                    otherColumn.put(TabColumnTypeEnum.LAST_MONTH.getDesc(),history);
+                    otherColumn.put(getLastFormTime(modelCycle,formTime,tabColumnType[index]),history);
                 }else{
-                    otherColumn.put(TabColumnTypeEnum.THIS_MONTH_LAST_YEAR.getDesc(),history);
+                    otherColumn.put(getLastFormTime(modelCycle,formTime,tabColumnType[index]),history);
                 }
             }
             //设置其他列数据
@@ -760,8 +831,6 @@ public class DataUploadServiceImpl implements DataUploadService {
             //科技园模板开发保存接口出
             //查询出当前账期的科技园模板
 
-
-
             //
         }else{
             result = saveData(data,DataUploadConstants.GARDEN_TYPE,user);
@@ -770,11 +839,67 @@ public class DataUploadServiceImpl implements DataUploadService {
     }
 
 
+    private void importData(MultipartFile multipartFile){
+        //查询出指标，从关系表中，生成树后再变成集合;
+        // targetDao.getTargetFromSicentTab();
+        List<TbDataReportingSnapshotTarget>  list  = new ArrayList<>();
+        List<TbDataReportingTaskData>  insertList =null;
+
+        //读取表头，并生成一种标识集合数据{'企业名称'：0，‘名称’，1}
+        String filename = multipartFile.getOriginalFilename();
+        if (filename == null || (!filename.toLowerCase().endsWith(ExcelTypeEnum.XLS.getValue())  && !filename.toLowerCase().endsWith(ExcelTypeEnum.XLSX.getValue()))) {
+            throw new JnSpringCloudException(CommonExcelExceptionEnum.EXCEL_FORMAT_ERROR);
+        }
+        InputStream inputStream;
+        ScientExcelListener excelListener = new ScientExcelListener();
+        ExcelReader eReader =null;
+        try {
+            inputStream = multipartFile.getInputStream();
+            eReader = new ExcelReader(inputStream, null, excelListener, false);
+        }catch (Exception e){
+            throw  new JnSpringCloudException(DataUploadExceptionEnum.TASK_IS_ERROR);
+        }
+
+        eReader.read();
+
+/*
+        if(sheets == null && sheets.size()==0){
+            //todo 返回文件中无sheet页面的错误
+        }
+
+        for(Sheet sheet : sheets){
+//            if(sheet.get){
+//
+//            }
+        }
+
+
+        List<Object> data = excelListener.getDatas();
+*/
+
+        //通过指标名称来进行数据插入
+        for(TbDataReportingSnapshotTarget targetBean : list){
+            //文件中的列
+//            for(){
+//
+//            }
+        }
+
+    }
+
+
 
     @Override
     @ServiceLog(doAction = "企业填报任务数据进行保存")
     public int saveCompanyFormData(ModelDataVO data,User user){
-        return saveData(data,DataUploadConstants.COMPANY_TYPE,user);
+        int result=0;
+        if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
+            result= saveData(data,DataUploadConstants.COMPANY_TYPE,user);
+        }else{
+            result = saveTaskData(data,user);
+        }
+        //return saveData(data,DataUploadConstants.COMPANY_TYPE,user);
+        return result;
     }
 
 
@@ -790,7 +915,14 @@ public class DataUploadServiceImpl implements DataUploadService {
     @ServiceLog(doAction = "企业填报任务数据进行保存")
     @Transactional(rollbackFor = Exception.class)
     public int saveCompanyFormDataAsDraft(ModelDataVO data,User user){
-        return saveDataAsDraft(data,DataUploadConstants.COMPANY_TYPE,user);
+        int result =0;
+        if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
+            result = saveDataAsDraft(data,DataUploadConstants.COMPANY_TYPE,user);
+        }else{
+            result = saveTaskDataAsDraft(data,user);
+        }
+        //return saveDataAsDraft(data,DataUploadConstants.COMPANY_TYPE,user);
+        return result;
     }
 
     /**
@@ -1084,8 +1216,14 @@ public class DataUploadServiceImpl implements DataUploadService {
     @Override
     @ServiceLog(doAction = "企业历史填报任务详情")
     public ModelDataVO getCompanyFormedStruct(String fileId,User user) {
-
-        return getModelStructByHistoryFillId(fileId,user,DataUploadConstants.COMPANY_TYPE);
+        ModelDataVO result =null;
+        if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
+            result = getModelStructByHistoryFillId(fileId,user,DataUploadConstants.COMPANY_TYPE);
+        }else{
+            result = getGardenFormStruct(fileId,user);
+        }
+        //return getModelStructByHistoryFillId(fileId,user,DataUploadConstants.COMPANY_TYPE);
+        return result;
     }
 
     @Override
@@ -1254,36 +1392,40 @@ public class DataUploadServiceImpl implements DataUploadService {
     /**
      * 企业催报
      * @param taskBatch
-     * @param modelId
+     * @param fillId
      * @return
      */
     @ServiceLog(doAction = "企业催报")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int setStatisticsListUrgeCompany(String taskBatch,String modelId){
+    public int setStatisticsListUrgeCompany(String taskBatch,String fillId){
         int result=0;
         //修改催报次数，最后催报时间，未填报的数据
-        targetDao.updateCalling(taskBatch,modelId,DataUploadConstants.COMPANY_TYPE);
+        //
+        targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.COMPANY_TYPE);
         //调用服务发起通知 todo 发送短信，邮件，app
+        List<WarningTaskModel> warningTaskModels = targetDao.getWarningTask(fillId,taskBatch);
         return result+=1 ;
     }
 
     /**
      * 园区催报
      * @param taskBatch
-     * @param modelId
+     * @param fillId
      * @return
      */
     @ServiceLog(doAction = "园区催报")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int setStatisticsListUrge(String taskBatch,String modelId){
+    public int setStatisticsListUrge(String taskBatch,String fillId){
         int result=0;
         //修改催报次数，最后催报时间，未填报的数据
-        targetDao.updateCalling(taskBatch,modelId,DataUploadConstants.GARDEN_TYPE);
+        targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.GARDEN_TYPE);
         //调用服务发起通知 todo 发送短信，邮件，app
+        List<WarningTaskModel> warningTaskModels = targetDao.getWarningTask(fillId,taskBatch);
         return result+=1 ;
     }
+
 
     @Override
     @ServiceLog(doAction = "企业数据统计-填报任务详细信息获取")
@@ -1299,12 +1441,6 @@ public class DataUploadServiceImpl implements DataUploadService {
         return getModelStructByHistoryFillId(fillId,user,DataUploadConstants.GARDEN_TYPE);
     }
 
-    //几个导出方法 todo
-
-    //科技园数据导入方法
-
-
-
     /**园区上报数据审核**/
 
     @ServiceLog(doAction = "数据上报-园区数据上报统计-审核列表")
@@ -1317,10 +1453,9 @@ public class DataUploadServiceImpl implements DataUploadService {
         return data;
     }
 
-
     @ServiceLog(doAction = "数据上报-园区数据上报统计-审核/详情")
-    public ModelDataVO getCheckOrLookInfo(String fileId,User user){
-        return getModelStructByHistoryFillId(fileId,user,DataUploadConstants.GARDEN_TYPE);
+    public ModelDataVO getCheckOrLookInfo(String fillId,User user){
+        return getModelStructByHistoryFillId(fillId,user,DataUploadConstants.GARDEN_TYPE);
     }
 
 

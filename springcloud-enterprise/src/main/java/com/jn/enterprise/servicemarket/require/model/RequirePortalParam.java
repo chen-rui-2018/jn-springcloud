@@ -27,11 +27,11 @@ public class RequirePortalParam extends Page implements Serializable {
     @ApiModelProperty(value = "服务机构",example = "xxx机构")
     private String serviceOrg;
     @ApiModelProperty(value = "需求日期开始时间",example = "201904")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{requireStartTime:'获得时间格式错误'}")
     private String requireStartTime;
     @ApiModelProperty(value = "需求日期结束时间",example = "201905")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{requireEndTime:'获得时间格式错误'}")
     private String requireEndTime;
     @ApiModelProperty(value = "服务产品",example = "xxx产品")

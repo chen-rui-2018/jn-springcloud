@@ -3,12 +3,12 @@
     <div class="serverOrgMenu">
       <span>首页</span>
       <span>/</span>
-      <span class="mainColor agent">金融机构</span>
+      <span class="mainColor agent">金融产品</span>
     </div>
     <div class="serverOrgNav mainBorder">
       <div v-if="showFlag">
         <div class="nav1 clearfix">
-          <div class="nav1Tit fl">所属行业：</div>
+          <div class="nav1Tit fl">贷款期限：</div>
           <!-- <div class="fl" :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</div> -->
           <ul class="nav1Ul fl clearfix" style="width:auto;">
             <li :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="nav1 clearfix">
-          <div class="nav1Tit fl">发展阶段：</div>
+          <div class="nav1Tit fl">担保方式：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
             <li :class="{'active':filterFlag2 == ''}" @click="handleFilter2('')">不限</li>
           </ul>
@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="nav1 clearfix">
-          <div class="nav1Tit fl">企业性质：</div>
+          <div class="nav1Tit fl">网贷直联：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
             <li :class="{'active':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
           </ul>
@@ -43,6 +43,32 @@
             <li class="wid4" v-for="(i,k) in enterpriseNature" :key='k' @click="handleFilter3(i.id)" :class="{'active':filterFlag3 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid4')">
+            <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
+            <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
+          </div>
+        </div>
+        <div class="nav1 clearfix">
+          <div class="nav1Tit fl">政策性产品：</div>
+          <ul class="nav1Ul fl clearfix" style="width:auto">
+            <li :class="{'active':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
+          </ul>
+          <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
+            <li class="wid5" v-for="(i,k) in enterpriseNature" :key='k' @click="handleFilter3(i.id)" :class="{'active':filterFlag3 == i.id}">{{i.preValue}}</li>
+          </ul>
+          <div class="fr" v-if="widFun('wid5')">
+            <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
+            <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
+          </div>
+        </div>
+        <div class="nav1 clearfix">
+          <div class="nav1Tit fl">贷款额度：</div>
+          <ul class="nav1Ul fl clearfix" style="width:auto">
+            <li :class="{'active':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
+          </ul>
+          <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
+            <li class="wid5" v-for="(i,k) in enterpriseNature" :key='k' @click="handleFilter3(i.id)" :class="{'active':filterFlag3 == i.id}">{{i.preValue}}</li>
+          </ul>
+          <div class="fr" v-if="widFun('wid5')">
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
             <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
           </div>
@@ -189,7 +215,7 @@ export default {
     },
     //跳转详情页
     handleOrgDel(orgId) {
-      this.$router.push({ path: "finaInsDetail", query: { orgId: orgId } });
+      this.$router.push({ path: "serverOrgDetail", query: { orgId: orgId } });
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数

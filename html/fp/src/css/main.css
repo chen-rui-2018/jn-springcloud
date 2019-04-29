@@ -842,6 +842,7 @@ input {
 .quickSearch .agentInfo .agent1 .agentTil, .finaInsDetail .agentInfo .agent1 .agentTil {
   color: #333;
   margin-top: 6px;
+  font-size: 20px;
 }
 
 .serverOrgDetail .agentInfo .agent1 .orgBtn,
@@ -937,7 +938,7 @@ input {
 .serverProDetail .agentDel .agentDelCon .el-tabs__item,
 .serverConDetail .agentDel .agentDelCon .el-tabs__item,
 .quickSearch .agentDel .agentDelCon .el-tabs__item, .finaInsDetail .agentDel .agentDelCon .el-tabs__item {
-  font-size: 13px;
+  font-size: 15px;
   color: #333;
 }
 
@@ -1325,7 +1326,7 @@ input {
 .serverProDetail .agentCon .el-tabs__item,
 .serverConDetail .agentCon .el-tabs__item,
 .quickSearch .agentCon .el-tabs__item, .finaInsDetail .agentCon .el-tabs__item {
-  font-size: 13px;
+  font-size: 15px;
   color: #333;
 }
 
@@ -1333,7 +1334,7 @@ input {
 .serverProDetail .agentCon .agentFil,
 .serverConDetail .agentCon .agentFil,
 .quickSearch .agentCon .agentFil, .finaInsDetail .agentCon .agentFil {
-  font-size: 12px;
+  font-size: 13px;
   margin-top: 20px;
   color: #999;
 }
@@ -1493,7 +1494,7 @@ input {
 .quickSearch .agentCon .serEvaluation .list-imgleft .list-item .top-title.inner-product, .finaInsDetail .agentCon .serverPro .list-imgleft .list-item .top-title.inner-product,
 .finaInsDetail .agentCon .serConsultant .list-imgleft .list-item .top-title.inner-product,
 .finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item .top-title.inner-product {
-  font-size: 14px;
+  font-size: 16px;
   color: #222;
   cursor: pointer;
 }
@@ -1882,14 +1883,13 @@ input {
   border: 1px solid #D9D9D9;
 }
 
-.portalIndex #header, .enterpriseservice #header {
-  position: absolute;
+.portalIndex .header, .enterpriseservice .header {
   background-color: rgba(255, 255, 255, 0.2);
   width: 100%;
   z-index: 3;
 }
 
-.portalIndex #header .headerContainer, .enterpriseservice #header .headerContainer {
+.portalIndex .header .headerContainer, .enterpriseservice .header .headerContainer {
   width: 100%;
   padding: 0 160px;
   height: 65px;
@@ -1900,47 +1900,47 @@ input {
           box-sizing: border-box;
 }
 
-.portalIndex #header .headerContainer .titleImg, .enterpriseservice #header .headerContainer .titleImg {
+.portalIndex .header .headerContainer .titleImg, .enterpriseservice .header .headerContainer .titleImg {
   width: 151px;
   height: 37px;
 }
 
-.portalIndex #header .headerContainer .titleImg img, .enterpriseservice #header .headerContainer .titleImg img {
+.portalIndex .header .headerContainer .titleImg img, .enterpriseservice .header .headerContainer .titleImg img {
   width: 100%;
   height: 100%;
   vertical-align: middle;
 }
 
-.portalIndex #header .headerContainer .nav, .enterpriseservice #header .headerContainer .nav {
+.portalIndex .header .headerContainer .nav, .enterpriseservice .header .headerContainer .nav {
   width: 600px;
   height: 37.6px;
   margin: 0 auto;
 }
 
-.portalIndex #header .headerContainer .nav > ul, .enterpriseservice #header .headerContainer .nav > ul {
+.portalIndex .header .headerContainer .nav > ul, .enterpriseservice .header .headerContainer .nav > ul {
   overflow: hidden;
 }
 
-.portalIndex #header .headerContainer .nav > ul li, .enterpriseservice #header .headerContainer .nav > ul li {
+.portalIndex .header .headerContainer .nav > ul li, .enterpriseservice .header .headerContainer .nav > ul li {
   float: left;
   font-size: 14px;
   text-align: center;
   width: 100px;
 }
 
-.portalIndex #header .headerContainer .nav > ul > li:hover, .enterpriseservice #header .headerContainer .nav > ul > li:hover {
+.portalIndex .header .headerContainer .nav > ul > li:hover, .enterpriseservice .header .headerContainer .nav > ul > li:hover {
   background: #fff;
   color: #00a041;
   border-radius: 5px;
 }
 
-.portalIndex #header .headerContainer .nav > ul > li:first-child, .enterpriseservice #header .headerContainer .nav > ul > li:first-child {
+.portalIndex .header .headerContainer .nav > ul > li:first-child, .enterpriseservice .header .headerContainer .nav > ul > li:first-child {
   background: #fff;
   color: #00a041;
   border-radius: 5px;
 }
 
-.portalIndex #header .headerContainer .nav .posA, .enterpriseservice #header .headerContainer .nav .posA {
+.portalIndex .header .headerContainer .nav .posA, .enterpriseservice .header .headerContainer .nav .posA {
   position: absolute;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -1948,104 +1948,60 @@ input {
   padding: 0;
 }
 
-.portalIndex #header .headerContainer .nav .sousuo, .enterpriseservice #header .headerContainer .nav .sousuo {
+.portalIndex .header .headerContainer .nav .sousuo, .enterpriseservice .header .headerContainer .nav .sousuo {
   font-size: 18px;
   line-height: 48px;
 }
 
-.portalIndex #header .headerContainer .nav .sousuo > input, .enterpriseservice #header .headerContainer .nav .sousuo > input {
+.portalIndex .header .headerContainer .nav .sousuo > input, .enterpriseservice .header .headerContainer .nav .sousuo > input {
   border: none;
   width: 350px;
   height: 38px;
   font-size: 14px;
 }
 
-.portalIndex #header .headerContainer .nav .sousuo > input::-webkit-input-placeholder, .enterpriseservice #header .headerContainer .nav .sousuo > input::-webkit-input-placeholder {
+.portalIndex .header .headerContainer .nav .sousuo > input::-webkit-input-placeholder, .enterpriseservice .header .headerContainer .nav .sousuo > input::-webkit-input-placeholder {
   color: #b7b7b7;
   font-size: 12px;
 }
 
-.portalIndex #header .headerContainer .headerRight .search, .enterpriseservice #header .headerContainer .headerRight .search {
+.portalIndex .header .headerContainer .headerRight .search, .enterpriseservice .header .headerContainer .headerRight .search {
   display: inline-block;
   margin-right: 20px;
   vertical-align: middle;
 }
 
-.portalIndex #header .headerContainer .headerRight .search i, .enterpriseservice #header .headerContainer .headerRight .search i {
+.portalIndex .header .headerContainer .headerRight .search i, .enterpriseservice .header .headerContainer .headerRight .search i {
   width: 20px;
   height: 20px;
 }
 
-.portalIndex #header .headerContainer .headerRight .navlogin, .enterpriseservice #header .headerContainer .headerRight .navlogin {
+.portalIndex .header .headerContainer .headerRight .navlogin, .enterpriseservice .header .headerContainer .headerRight .navlogin {
   display: inline-block;
 }
 
-.portalIndex #header .headerContainer .headerRight .navlogin a, .enterpriseservice #header .headerContainer .headerRight .navlogin a {
+.portalIndex .header .headerContainer .headerRight .navlogin a, .enterpriseservice .header .headerContainer .headerRight .navlogin a {
   display: inline-block;
   font-size: 14px;
   cursor: pointer;
 }
 
-.portalIndex #header .headerContainer .headerRight .navlogin .line, .enterpriseservice #header .headerContainer .headerRight .navlogin .line {
+.portalIndex .header .headerContainer .headerRight .navlogin .line, .enterpriseservice .header .headerContainer .headerRight .navlogin .line {
   display: inline-block;
   height: 12px;
   margin: 0 15px;
 }
 
-.portalIndex #header .headerContainer .headerRight .navlogin > img, .enterpriseservice #header .headerContainer .headerRight .navlogin > img {
+.portalIndex .header .headerContainer .headerRight .navlogin > img, .enterpriseservice .header .headerContainer .headerRight .navlogin > img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
 }
 
 .portalIndex .portalIndexImg, .enterpriseservice .portalIndexImg {
-  height: 650px;
-  position: relative;
-}
-
-.portalIndex .portalIndexImg .quickEnter, .enterpriseservice .portalIndexImg .quickEnter {
-  position: absolute;
-  z-index: 4;
-  bottom: 0;
+  position: fixed;
+  z-index: 99999 !important;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.portalIndex .portalIndexImg .quickEnter > ul, .enterpriseservice .portalIndexImg .quickEnter > ul {
-  width: 900px;
-  margin: 0 auto;
-}
-
-.portalIndex .portalIndexImg .quickEnter > ul li, .enterpriseservice .portalIndexImg .quickEnter > ul li {
-  display: inline-block;
-  padding: 50px 0px;
-  width: 215px;
-  color: #fff;
-  text-align: center;
-  cursor: pointer;
-  background: rgba(122, 118, 138, 0.1);
-}
-
-.portalIndex .portalIndexImg .quickEnter > ul li > span, .enterpriseservice .portalIndexImg .quickEnter > ul li > span {
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.portalIndex .portalIndexImg .quickEnter > ul li > p, .enterpriseservice .portalIndexImg .quickEnter > ul li > p {
-  font-size: 12px;
-}
-
-.portalIndex .portalIndexImg .quickEnter > ul li > img, .enterpriseservice .portalIndexImg .quickEnter > ul li > img {
-  width: 25px;
-  height: 8px;
-}
-
-.portalIndex .portalIndexImg .quickEnter > ul li:hover, .enterpriseservice .portalIndexImg .quickEnter > ul li:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.portalIndex .portalIndexImg .el-carousel__container, .enterpriseservice .portalIndexImg .el-carousel__container {
-  height: 650px;
 }
 
 .portalIndex .portalIndexImg .el-carousel__button, .enterpriseservice .portalIndexImg .el-carousel__button {
@@ -2084,6 +2040,120 @@ input {
   border: 2px solid #fff;
   height: 38px;
   width: 38px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.portalIndex .portalIndexImg .search_box, .enterpriseservice .portalIndexImg .search_box {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.portalIndex .portalIndexImg .search_box .el-input-group, .enterpriseservice .portalIndexImg .search_box .el-input-group {
+  border-radius: 28px;
+  width: 42%;
+  margin: 43px 0;
+  position: relative;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  left: 50%;
+}
+
+.portalIndex .portalIndexImg .search_box .el-input-group .el-input, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input {
+  width: 94px;
+}
+
+.portalIndex .portalIndexImg .search_box .el-input-group .el-input__inner:focus, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input__inner:focus {
+  border-color: #00a041;
+}
+
+.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__append,
+.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__prepend, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__append,
+.enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__prepend {
+  border-radius: 28px;
+}
+
+.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__append, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__append {
+  /* border-top-left-radius: 0;
+      border-bottom-left-radius: 0; */
+  background: #00a041;
+  color: #fff;
+  right: 58px;
+}
+
+.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__append .el-button, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__append .el-button {
+  margin: -10px -10px;
+}
+
+.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__prepend, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__prepend {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: #fff;
+  padding: 0px 17px 0 9px;
+}
+
+.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__prepend input, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__prepend input {
+  color: #666666;
+  text-align: right;
+}
+
+.portalIndex .portalIndexImg .search_box .input-with-select .el-input__inner, .enterpriseservice .portalIndexImg .search_box .input-with-select .el-input__inner {
+  border-top-left-radius: 19px;
+  border-bottom-left-radius: 19px;
+  border: 1px solid #00a041;
+}
+
+.portalIndex .portalIndexImg .searchbox, .enterpriseservice .portalIndexImg .searchbox {
+  background: #fff;
+  -webkit-box-shadow: 0 10px 10px -10px #ccc;
+          box-shadow: 0 10px 10px -10px #ccc;
+}
+
+.portalIndex .banner .quickEnter, .enterpriseservice .banner .quickEnter {
+  position: absolute;
+  z-index: 4;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.portalIndex .banner .quickEnter > ul, .enterpriseservice .banner .quickEnter > ul {
+  padding: 0 300px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.portalIndex .banner .quickEnter > ul li, .enterpriseservice .banner .quickEnter > ul li {
+  padding: 50px 0px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(122, 118, 138, 0.1);
+}
+
+.portalIndex .banner .quickEnter > ul li > span, .enterpriseservice .banner .quickEnter > ul li > span {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.portalIndex .banner .quickEnter > ul li > p, .enterpriseservice .banner .quickEnter > ul li > p {
+  font-size: 12px;
+}
+
+.portalIndex .banner .quickEnter > ul li > img, .enterpriseservice .banner .quickEnter > ul li > img {
+  width: 25px;
+  height: 8px;
+}
+
+.portalIndex .banner .quickEnter > ul li:hover, .enterpriseservice .banner .quickEnter > ul li:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
@@ -2258,124 +2328,59 @@ input {
 .enterpriseservice .enterpriseinfo .info, .enterpriseservice .policyCenter .info, .enterpriseservice .technologyFinance .info, .enterpriseservice .humanResources .info {
   margin-top: 50px;
   margin-left: 200px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
-.portalIndex .declarationNotice .info .left .lf,
-.portalIndex .popularActi .info .left .lf,
-.portalIndex .districtGardens .info .left .lf,
-.portalIndex .enterpriseinfo .info .left .lf, .portalIndex .policyCenter .info .left .lf, .portalIndex .technologyFinance .info .left .lf, .portalIndex .humanResources .info .left .lf, .enterpriseservice .declarationNotice .info .left .lf,
-.enterpriseservice .popularActi .info .left .lf,
-.enterpriseservice .districtGardens .info .left .lf,
-.enterpriseservice .enterpriseinfo .info .left .lf, .enterpriseservice .policyCenter .info .left .lf, .enterpriseservice .technologyFinance .info .left .lf, .enterpriseservice .humanResources .info .left .lf {
-  display: inline-block;
-  vertical-align: top;
-  margin-top: -8px;
+.portalIndex .declarationNotice .info .left,
+.portalIndex .popularActi .info .left,
+.portalIndex .districtGardens .info .left,
+.portalIndex .enterpriseinfo .info .left, .portalIndex .policyCenter .info .left, .portalIndex .technologyFinance .info .left, .portalIndex .humanResources .info .left, .enterpriseservice .declarationNotice .info .left,
+.enterpriseservice .popularActi .info .left,
+.enterpriseservice .districtGardens .info .left,
+.enterpriseservice .enterpriseinfo .info .left, .enterpriseservice .policyCenter .info .left, .enterpriseservice .technologyFinance .info .left, .enterpriseservice .humanResources .info .left {
+  -webkit-box-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
+  margin-right: 40px;
 }
 
-.portalIndex .declarationNotice .info .left .lf .li1,
-.portalIndex .popularActi .info .left .lf .li1,
-.portalIndex .districtGardens .info .left .lf .li1,
-.portalIndex .enterpriseinfo .info .left .lf .li1, .portalIndex .policyCenter .info .left .lf .li1, .portalIndex .technologyFinance .info .left .lf .li1, .portalIndex .humanResources .info .left .lf .li1, .enterpriseservice .declarationNotice .info .left .lf .li1,
-.enterpriseservice .popularActi .info .left .lf .li1,
-.enterpriseservice .districtGardens .info .left .lf .li1,
-.enterpriseservice .enterpriseinfo .info .left .lf .li1, .enterpriseservice .policyCenter .info .left .lf .li1, .enterpriseservice .technologyFinance .info .left .lf .li1, .enterpriseservice .humanResources .info .left .lf .li1 {
-  width: 40px;
-  height: 40px;
-  color: #fff;
-  line-height: 40px;
-  background: url("../../static/img/椭圆2.png") 100% 100%/100% 100% no-repeat;
-}
-
-.portalIndex .declarationNotice .info .left .lf .li2,
-.portalIndex .popularActi .info .left .lf .li2,
-.portalIndex .districtGardens .info .left .lf .li2,
-.portalIndex .enterpriseinfo .info .left .lf .li2, .portalIndex .policyCenter .info .left .lf .li2, .portalIndex .technologyFinance .info .left .lf .li2, .portalIndex .humanResources .info .left .lf .li2, .enterpriseservice .declarationNotice .info .left .lf .li2,
-.enterpriseservice .popularActi .info .left .lf .li2,
-.enterpriseservice .districtGardens .info .left .lf .li2,
-.enterpriseservice .enterpriseinfo .info .left .lf .li2, .enterpriseservice .policyCenter .info .left .lf .li2, .enterpriseservice .technologyFinance .info .left .lf .li2, .enterpriseservice .humanResources .info .left .lf .li2 {
-  width: 1px;
-  height: 122px;
-  background: #d5d5d5;
-  margin-left: 20px;
-}
-
-.portalIndex .declarationNotice .info .left .lf .li3,
-.portalIndex .declarationNotice .info .left .lf .li5,
-.portalIndex .popularActi .info .left .lf .li3,
-.portalIndex .popularActi .info .left .lf .li5,
-.portalIndex .districtGardens .info .left .lf .li3,
-.portalIndex .districtGardens .info .left .lf .li5,
-.portalIndex .enterpriseinfo .info .left .lf .li3,
-.portalIndex .enterpriseinfo .info .left .lf .li5, .portalIndex .policyCenter .info .left .lf .li3,
-.portalIndex .policyCenter .info .left .lf .li5, .portalIndex .technologyFinance .info .left .lf .li3,
-.portalIndex .technologyFinance .info .left .lf .li5, .portalIndex .humanResources .info .left .lf .li3,
-.portalIndex .humanResources .info .left .lf .li5, .enterpriseservice .declarationNotice .info .left .lf .li3,
-.enterpriseservice .declarationNotice .info .left .lf .li5,
-.enterpriseservice .popularActi .info .left .lf .li3,
-.enterpriseservice .popularActi .info .left .lf .li5,
-.enterpriseservice .districtGardens .info .left .lf .li3,
-.enterpriseservice .districtGardens .info .left .lf .li5,
-.enterpriseservice .enterpriseinfo .info .left .lf .li3,
-.enterpriseservice .enterpriseinfo .info .left .lf .li5, .enterpriseservice .policyCenter .info .left .lf .li3,
-.enterpriseservice .policyCenter .info .left .lf .li5, .enterpriseservice .technologyFinance .info .left .lf .li3,
-.enterpriseservice .technologyFinance .info .left .lf .li5, .enterpriseservice .humanResources .info .left .lf .li3,
-.enterpriseservice .humanResources .info .left .lf .li5 {
+.portalIndex .declarationNotice .info .left .aa,
+.portalIndex .popularActi .info .left .aa,
+.portalIndex .districtGardens .info .left .aa,
+.portalIndex .enterpriseinfo .info .left .aa, .portalIndex .policyCenter .info .left .aa, .portalIndex .technologyFinance .info .left .aa, .portalIndex .humanResources .info .left .aa, .enterpriseservice .declarationNotice .info .left .aa,
+.enterpriseservice .popularActi .info .left .aa,
+.enterpriseservice .districtGardens .info .left .aa,
+.enterpriseservice .enterpriseinfo .info .left .aa, .enterpriseservice .policyCenter .info .left .aa, .enterpriseservice .technologyFinance .info .left .aa, .enterpriseservice .humanResources .info .left .aa {
   width: 30px;
   height: 30px;
   border-radius: 50%;
+  text-align: center;
   color: #d9d9d9;
   border: 1px solid #d9d9d9;
   line-height: 30px;
-  margin-left: 4px;
+  margin-right: 20px;
+  z-index: 2;
 }
 
-.portalIndex .declarationNotice .info .left .lf .li4,
-.portalIndex .popularActi .info .left .lf .li4,
-.portalIndex .districtGardens .info .left .lf .li4,
-.portalIndex .enterpriseinfo .info .left .lf .li4, .portalIndex .policyCenter .info .left .lf .li4, .portalIndex .technologyFinance .info .left .lf .li4, .portalIndex .humanResources .info .left .lf .li4, .enterpriseservice .declarationNotice .info .left .lf .li4,
-.enterpriseservice .popularActi .info .left .lf .li4,
-.enterpriseservice .districtGardens .info .left .lf .li4,
-.enterpriseservice .enterpriseinfo .info .left .lf .li4, .enterpriseservice .policyCenter .info .left .lf .li4, .enterpriseservice .technologyFinance .info .left .lf .li4, .enterpriseservice .humanResources .info .left .lf .li4 {
-  width: 1px;
-  height: 28px;
-  background: #d5d5d5;
-  margin-left: 20px;
-}
-
-.portalIndex .declarationNotice .info .left .rt,
-.portalIndex .popularActi .info .left .rt,
-.portalIndex .districtGardens .info .left .rt,
-.portalIndex .enterpriseinfo .info .left .rt, .portalIndex .policyCenter .info .left .rt, .portalIndex .technologyFinance .info .left .rt, .portalIndex .humanResources .info .left .rt, .enterpriseservice .declarationNotice .info .left .rt,
-.enterpriseservice .popularActi .info .left .rt,
-.enterpriseservice .districtGardens .info .left .rt,
-.enterpriseservice .enterpriseinfo .info .left .rt, .enterpriseservice .policyCenter .info .left .rt, .enterpriseservice .technologyFinance .info .left .rt, .enterpriseservice .humanResources .info .left .rt {
-  width: 350px;
-  text-align: left;
-  display: inline-block;
-  margin: 0 50px 0 20px;
-}
-
-.portalIndex .declarationNotice .info .left .rt .t1,
-.portalIndex .popularActi .info .left .rt .t1,
-.portalIndex .districtGardens .info .left .rt .t1,
-.portalIndex .enterpriseinfo .info .left .rt .t1, .portalIndex .policyCenter .info .left .rt .t1, .portalIndex .technologyFinance .info .left .rt .t1, .portalIndex .humanResources .info .left .rt .t1, .enterpriseservice .declarationNotice .info .left .rt .t1,
-.enterpriseservice .popularActi .info .left .rt .t1,
-.enterpriseservice .districtGardens .info .left .rt .t1,
-.enterpriseservice .enterpriseinfo .info .left .rt .t1, .enterpriseservice .policyCenter .info .left .rt .t1, .enterpriseservice .technologyFinance .info .left .rt .t1, .enterpriseservice .humanResources .info .left .rt .t1 {
-  font-size: 13px;
-  margin-bottom: 50px;
-}
-
-.portalIndex .declarationNotice .info .left .rt .t1 > p,
-.portalIndex .popularActi .info .left .rt .t1 > p,
-.portalIndex .districtGardens .info .left .rt .t1 > p,
-.portalIndex .enterpriseinfo .info .left .rt .t1 > p, .portalIndex .policyCenter .info .left .rt .t1 > p, .portalIndex .technologyFinance .info .left .rt .t1 > p, .portalIndex .humanResources .info .left .rt .t1 > p, .enterpriseservice .declarationNotice .info .left .rt .t1 > p,
-.enterpriseservice .popularActi .info .left .rt .t1 > p,
-.enterpriseservice .districtGardens .info .left .rt .t1 > p,
-.enterpriseservice .enterpriseinfo .info .left .rt .t1 > p, .enterpriseservice .policyCenter .info .left .rt .t1 > p, .enterpriseservice .technologyFinance .info .left .rt .t1 > p, .enterpriseservice .humanResources .info .left .rt .t1 > p {
-  color: #919191;
-  font-size: 12px;
-  margin-top: 10px;
+.portalIndex .declarationNotice .info .left .active,
+.portalIndex .popularActi .info .left .active,
+.portalIndex .districtGardens .info .left .active,
+.portalIndex .enterpriseinfo .info .left .active, .portalIndex .policyCenter .info .left .active, .portalIndex .technologyFinance .info .left .active, .portalIndex .humanResources .info .left .active, .enterpriseservice .declarationNotice .info .left .active,
+.enterpriseservice .popularActi .info .left .active,
+.enterpriseservice .districtGardens .info .left .active,
+.enterpriseservice .enterpriseinfo .info .left .active, .enterpriseservice .policyCenter .info .left .active, .enterpriseservice .technologyFinance .info .left .active, .enterpriseservice .humanResources .info .left .active {
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  background: url("../../static/img/椭圆2.png") 100% 100%/100% 100% no-repeat;
+  margin-right: 20px;
+  z-index: 2;
+  border: none;
+  margin-left: -4px;
 }
 
 .portalIndex .declarationNotice .info .right,
@@ -2385,17 +2390,44 @@ input {
 .enterpriseservice .popularActi .info .right,
 .enterpriseservice .districtGardens .info .right,
 .enterpriseservice .enterpriseinfo .info .right, .enterpriseservice .policyCenter .info .right, .enterpriseservice .technologyFinance .info .right, .enterpriseservice .humanResources .info .right {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
   width: 200px;
   height: 200px;
-  background: url("../../static/img/tupian1.png") 100% 100%/100% 100% no-repeat;
+  margin-right: 260px;
+  background: url("../../static/img/tupian1.png") 100% 100%/75% 100% no-repeat;
+}
+
+.portalIndex .declarationNotice .info .el-collapse-item__header,
+.portalIndex .popularActi .info .el-collapse-item__header,
+.portalIndex .districtGardens .info .el-collapse-item__header,
+.portalIndex .enterpriseinfo .info .el-collapse-item__header, .portalIndex .policyCenter .info .el-collapse-item__header, .portalIndex .technologyFinance .info .el-collapse-item__header, .portalIndex .humanResources .info .el-collapse-item__header, .enterpriseservice .declarationNotice .info .el-collapse-item__header,
+.enterpriseservice .popularActi .info .el-collapse-item__header,
+.enterpriseservice .districtGardens .info .el-collapse-item__header,
+.enterpriseservice .enterpriseinfo .info .el-collapse-item__header, .enterpriseservice .policyCenter .info .el-collapse-item__header, .enterpriseservice .technologyFinance .info .el-collapse-item__header, .enterpriseservice .humanResources .info .el-collapse-item__header {
+  font-size: 15px;
+}
+
+.portalIndex .declarationNotice .info .el-collapse-item__content,
+.portalIndex .popularActi .info .el-collapse-item__content,
+.portalIndex .districtGardens .info .el-collapse-item__content,
+.portalIndex .enterpriseinfo .info .el-collapse-item__content, .portalIndex .policyCenter .info .el-collapse-item__content, .portalIndex .technologyFinance .info .el-collapse-item__content, .portalIndex .humanResources .info .el-collapse-item__content, .enterpriseservice .declarationNotice .info .el-collapse-item__content,
+.enterpriseservice .popularActi .info .el-collapse-item__content,
+.enterpriseservice .districtGardens .info .el-collapse-item__content,
+.enterpriseservice .enterpriseinfo .info .el-collapse-item__content, .enterpriseservice .policyCenter .info .el-collapse-item__content, .enterpriseservice .technologyFinance .info .el-collapse-item__content, .enterpriseservice .humanResources .info .el-collapse-item__content {
+  font-size: 13px;
+  color: #999;
+  margin-left: 58px;
 }
 
 .portalIndex .technologyFinance, .enterpriseservice .technologyFinance {
   border-top: 1px solid #eee;
 }
 
-.portalIndex .declarationNotice, .enterpriseservice .declarationNotice {
+.portalIndex .portalNotice, .enterpriseservice .portalNotice {
   border-top: 1px solid #eee;
+  padding-bottom: 0;
 }
 
 .portalIndex .policyGuide,
@@ -2543,6 +2575,18 @@ input {
   text-align: left;
 }
 
+.portalIndex .popularActi .acti .swiper-button-next, .portalIndex .popularActi .acti .swiper-container-rtl .swiper-button-prev, .enterpriseservice .popularActi .acti .swiper-button-next, .enterpriseservice .popularActi .acti .swiper-container-rtl .swiper-button-prev {
+  background-image: none;
+  right: 0;
+  left: auto;
+}
+
+.portalIndex .popularActi .acti .swiper-button-prev, .portalIndex .popularActi .acti .swiper-container-rtl .swiper-button-next, .enterpriseservice .popularActi .acti .swiper-button-prev, .enterpriseservice .popularActi .acti .swiper-container-rtl .swiper-button-next {
+  background-image: none;
+  left: 0px;
+  right: auto;
+}
+
 .portalIndex .popularActi .acti .actiUl, .enterpriseservice .popularActi .acti .actiUl {
   width: 910px;
   margin: 0 auto;
@@ -2551,33 +2595,53 @@ input {
 .portalIndex .popularActi .acti .actiUl > li, .enterpriseservice .popularActi .acti .actiUl > li {
   float: left;
   width: 280px;
-  height: 340px;
   border: 1px solid #eee;
   margin-right: 20px;
   margin-bottom: 30px;
 }
 
-.portalIndex .popularActi .acti .actiUl > li .postImgItem, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem {
+.portalIndex .popularActi .acti .actiUl > li .postImgItem, .portalIndex .popularActi .acti .actiUl > li .postImgItem2, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem2 {
   display: inline-block;
   width: 100%;
   height: 180px;
   padding-top: 12px;
+  position: relative;
 }
 
-.portalIndex .popularActi .acti .actiUl > li .postImgItem .postImg, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem .postImg {
+.portalIndex .popularActi .acti .actiUl > li .postImgItem .postImg, .portalIndex .popularActi .acti .actiUl > li .postImgItem .postImg1, .portalIndex .popularActi .acti .actiUl > li .postImgItem2 .postImg, .portalIndex .popularActi .acti .actiUl > li .postImgItem2 .postImg1, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem .postImg, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem .postImg1, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem2 .postImg, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem2 .postImg1 {
+  position: absolute;
+  left: 0;
+  top: 10px;
   height: 100%;
   width: 100%;
 }
 
-.portalIndex .popularActi .acti .actiUl > li .postImgItem2, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem2 {
-  background: url("../../static/img/tuceng2.png") 100% 100%/100% 94% no-repeat;
-}
-
-.portalIndex .popularActi .acti .actiUl > li .postImgItem2 .postImg, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem2 .postImg {
+.portalIndex .popularActi .acti .actiUl > li .postImgItem2 .postImg1, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem2 .postImg1 {
   height: 50px;
   width: 38px;
   margin-top: 60px;
   margin-left: 120px;
+}
+
+.portalIndex .popularActi .acti .actiUl > li .postImgItem img, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem img {
+  -webkit-transition: all 1s;
+  transition: all 1s;
+}
+
+.portalIndex .popularActi .acti .actiUl > li .postImgItem .postImg, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem .postImg {
+  opacity: 1;
+}
+
+.portalIndex .popularActi .acti .actiUl > li .postImgItem .postImg1, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem .postImg1 {
+  opacity: 0;
+}
+
+.portalIndex .popularActi .acti .actiUl > li .postImgItem .postImg.poIm, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem .postImg.poIm {
+  opacity: 0;
+}
+
+.portalIndex .popularActi .acti .actiUl > li .postImgItem .postImg1.poIm, .enterpriseservice .popularActi .acti .actiUl > li .postImgItem .postImg1.poIm {
+  opacity: 1;
 }
 
 .portalIndex .popularActi .acti .actiUl > li .actiNum, .enterpriseservice .popularActi .acti .actiUl > li .actiNum {
@@ -2646,22 +2710,20 @@ input {
   margin-right: 0;
 }
 
-.portalIndex .popularActi .acti > .icon-leftarrow, .enterpriseservice .popularActi .acti > .icon-leftarrow {
+.portalIndex .popularActi .acti .icon-leftarrow, .enterpriseservice .popularActi .acti .icon-leftarrow {
   position: absolute;
   left: 60px;
   font-size: 34px;
   height: 34px;
   color: #d0d0d0;
-  top: 166px;
 }
 
-.portalIndex .popularActi .acti > .icon-rightarrow, .enterpriseservice .popularActi .acti > .icon-rightarrow {
+.portalIndex .popularActi .acti .icon-rightarrow, .enterpriseservice .popularActi .acti .icon-rightarrow {
   position: absolute;
   right: 80px;
   font-size: 34px;
   height: 34px;
   color: #d0d0d0;
-  top: 166px;
 }
 
 .portalIndex .popularActi .acti .lejieDel, .enterpriseservice .popularActi .acti .lejieDel {
@@ -2723,7 +2785,8 @@ input {
 }
 
 .portalIndex .districtGardens .card .cardUl > li div, .enterpriseservice .districtGardens .card .cardUl > li div {
-  margin-bottom: 20px;
+  padding-bottom: 20px;
+  color: #C4C4C4;
 }
 
 .portalIndex .districtGardens .card .cardUl > li:nth-child(3n), .enterpriseservice .districtGardens .card .cardUl > li:nth-child(3n) {
@@ -2924,32 +2987,172 @@ input {
 .portalIndex .enterprisesPark .enterPark > ul, .enterpriseservice .enterprisesPark .enterPark > ul {
   width: 850px;
   margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .portalIndex .enterprisesPark .enterPark > ul li, .enterpriseservice .enterprisesPark .enterPark > ul li {
-  width: 185px;
-  height: 111px;
-  padding: 50px 0;
+  -webkit-box-flex: 23%;
+      -ms-flex: 23%;
+          flex: 23%;
   margin-bottom: 40px;
-  display: inline-block;
-  margin-right: 30px;
 }
 
-.portalIndex .enterprisesPark .enterPark > ul li > p, .enterpriseservice .enterprisesPark .enterPark > ul li > p {
+.portalIndex .enterprisesPark .enterPark > ul li p, .enterpriseservice .enterprisesPark .enterPark > ul li p {
   margin-top: 20px;
 }
 
-.portalIndex .enterprisesPark .enterPark > ul li > img, .enterpriseservice .enterprisesPark .enterPark > ul li > img {
+.portalIndex .enterprisesPark .enterPark > ul li img, .enterpriseservice .enterprisesPark .enterPark > ul li img {
   width: 50px;
+}
+
+.portalIndex .enterprisesPark .enterPark > ul .li1Div, .enterpriseservice .enterprisesPark .enterPark > ul .li1Div {
+  width: 185px;
+  height: 111px;
+  padding: 50px 0;
 }
 
 .portalIndex .enterprisesPark .enterPark > ul li:nth-child(4n), .enterpriseservice .enterprisesPark .enterPark > ul li:nth-child(4n) {
   margin-right: 0;
 }
 
-.portalIndex .enterprisesPark .enterPark > ul li:hover, .enterpriseservice .enterprisesPark .enterPark > ul li:hover {
+.portalIndex .enterprisesPark .enterPark > ul li .li1Div:hover, .enterpriseservice .enterprisesPark .enterPark > ul li .li1Div:hover {
   background: rgba(255, 255, 255, 0.3);
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  -webkit-transition: all .6s;
+  transition: all .6s;
 }
 
 /* 门户首页、企业服务 */
+/* 动画效果 */
+@-webkit-keyframes bounceInUp {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 3000px, 0);
+    transform: translate3d(0, 3000px, 0);
+  }
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+  }
+  75% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+  }
+  90% {
+    -webkit-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes bounceInUp {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 3000px, 0);
+    transform: translate3d(0, 3000px, 0);
+  }
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+  }
+  75% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+  }
+  90% {
+    -webkit-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@-webkit-keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@-webkit-keyframes fadeInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 动画效果 */
 /*# sourceMappingURL=main.css.map */

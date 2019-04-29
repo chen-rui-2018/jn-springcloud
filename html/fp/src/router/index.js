@@ -343,6 +343,10 @@ export default new Router({
         }
       ]
     }
-
+      path: '/finaPro',
+      component: resolve => require(['@/views/technologyFinance/finaPro'],resolve),
+      meta: {title: '金融产品'},
+      name:'finaPro'
+    },
   ]
 })

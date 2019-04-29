@@ -1,51 +1,67 @@
 <template>
-  <div class="TechnologyFinance">
-    <div id="header">
-      <div class="headerContainer clearfix">
-        <div class="titleImg fl"><img  class="pointer" src="@/../static/img/LOGO.png"  @click="$router.push({path:'/'})" alt=""></div>
-        <div class="menu" style="display:none">
-          <i class="el-icon-close"></i>
-          <input type="text">
-          <i class="el-icon-search"></i>
-        </div>
-        <div class="headerRight fr">
-          <div class="search" v-if="!sousuo">
-            <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
-          </div>
-          <div class="navlogin">
-            <a @click="$router.push({path:'/login'})">登录</a>
-            <span class="line">|</span>
-            <a @click="$router.push({path:'/register'})">注册</a>
-          </div>
-        </div>
-        <div class="nav">
-          <transition name="fade">
-            <div class="sousuo posA" v-if="sousuo">
-              <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-              <input type="text" v-focus @keyup.enter="handleSearch">
-              <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
+  <div ref="box" data-class="left" class="TechnologyFinance">
+    <div class="techHeah">
+        <div id="header" class="header" :class="{'headerw':showFF}">
+          <div class="headerContainer clearfix">
+            <div class="titleImg fl">
+              <img  class="pointer" src="@/../static/img/LOGO1.png" v-if="!showFF"  @click="$router.push({path:'/'})" alt="">
+              <img src="@/../static/img/login-logo.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
+              </div>
+            <div class="menu" style="display:none">
+              <i class="el-icon-close"></i>
+              <input type="text">
+              <i class="el-icon-search"></i>
             </div>
-            <ul class="posA clearfix" v-else>
-              <li>
-                <a href="javascript:void(0);">首页</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">投资人</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">金融产品</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">金融机构</a>
-              </li>
-            </ul>
+            <div class="headerRight fr">
+              <div class="search pointer">
+                <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
+              </div>
+              <div class="navlogin">
+                <a @click="$router.push({path:'/login'})">登录</a>
+                <span class="line">|</span>
+                <a @click="$router.push({path:'/register'})">注册</a>
+              </div>
+            </div>
+            <div class="nav" id="nav">
+              <!-- <transition name="fade"> -->
+                <!-- <div class="sousuo posA" v-if="sousuo">
+                  <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
+                  <input type="text" v-focus @keyup.enter="handleSearch">
+                  <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
+                </div> -->
+                <ul class="posA clearfix">
+                  <li class="posLi1">
+                    <a href="javascript:void(0);">首页</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0);">投资人</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0);">金融产品</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0);">金融机构</a>
+                  </li>
+                </ul>
 
-          </transition>
+              <!-- </transition> -->
+            </div>
+          </div>
         </div>
-      </div>
+        <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
+                <el-collapse-transition>
+                <div v-show="show4">
+                    <div class="transition-box">
+                    <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
+                        <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+                    </el-input>
+                    </div>
+                </div>
+                </el-collapse-transition>
+        </div>
     </div>
-    <div id="headerW" v-if="headFlag">
-      <!-- <el-card> -->
+    
+    <!-- <div id="headerW" v-if="headFlag">
       <div class="headerContainer clearfix">
         <div class="titleImg fl"><img  class="pointer" src="@/../static/img/login-logo.png" @click="$router.push({path:'/'})" alt=""></div>
         <div class="menu" style="display:none">
@@ -88,292 +104,342 @@
           </transition>
         </div>
       </div>
-      <!-- </el-card> -->
+    </div> -->
+    <div class="techCon">
+      <div class="banner pr">
+          <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide" style="width:100%">
+                            <img src="@/../static/img/techBan.png" alt="">
+                        </div>
+                        <div class="swiper-slide" style="width:100%">
+                            <img src="@/../static/img/techBan.png" alt="">
+                        </div>
+                        <div class="swiper-slide" style="width:100%">
+                            <img src="@/../static/img/techBan.png" alt="">
+                        </div>                  
+                    </div>
+                    <!-- 如果需要分页器 -->
+                         <!-- <div class="swiper-pagination"></div> -->
+
+                        <!-- 如果需要导航按钮 -->
+                        <!-- <div class="swiper-button-prev" @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
+                            <i class="iconfont icon-leftarrow pointer" v-show="showBtn"></i>
+                        </div>
+                        <div class="swiper-button-next"  @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
+                            <i class="iconfont icon-rightarrow pointer" v-show="showBtn"></i>
+                        </div> -->
+          </div>
+          <!-- <div class="quickEnter">
+                    <ul>
+                        <li>
+                            <span>人才申报</span>
+                            <p>PEOPLE&nbsp;DECLARE</p>
+                            <img src="@/../static/img/right-arrow.png" alt="">
+                        </li>
+                        <li>
+                            <span>高新企业</span>
+                            <p>HIGH-TECH&nbsp;ENTERPRISE</p>
+                            <img src="@/../static/img/right-arrow.png" alt="">
+                        </li>
+                        <li>
+                            <span>孵化企业</span>
+                            <p>INCUBATION&nbsp;ENTERPRISE</p>
+                            <img src="@/../static/img/right-arrow.png" alt="">
+                        </li>
+                        <li>
+                            <span>行政审批</span>
+                            <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
+                            <img src="@/../static/img/right-arrow.png" alt="">
+                        </li>
+                    </ul>
+          </div> -->
+      </div>
+      <div class="techContent w">
+        <div class="techNav">
+          <!-- <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
+            <el-breadcrumb-item>
+              <a class="mainColor">科技金融</a>
+            </el-breadcrumb-item>
+          </el-breadcrumb> -->
+          <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务</span>
+          <span>/</span>
+          <span class="mainColor">科技金融</span>
+        </div>
+        <div class="techList">
+          <el-card>
+            <ul class="techUl">
+              <li>
+                <img src="@/../static/img/tech1.png" alt="">
+                <div class="liInfo">
+                  <span>投资人</span>
+                  <p class="mainColor">{{investorsNum}}
+                    <span>名</span>
+                  </p>
+                </div>
+              </li>
+              <li>
+                <img src="@/../static/img/tech2.png" alt="">
+                <div class="liInfo">
+                  <span>金融产品</span>
+                  <p class="mainColor">
+                    {{financialProductNum}}
+                    <span>个</span>
+                  </p>
+                </div>
+              </li>
+              <li>
+                <img src="@/../static/img/tech3.png" alt="">
+                <div class="liInfo">
+                  <span>金融机构</span>
+                  <p class="mainColor">
+                    {{financialOrgNum}}
+                    <span>个</span>
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </el-card>
+        </div>
+        <div class="techGroud">
+          <div class="investor">
+            <div class="inverTil clearfix">
+              <p class="fl color1">投资人</p>
+              <span class="fr color3">MORE
+                <i class="el-icon-arrow-right"></i>
+              </span>
+            </div>
+            <ul class="inverUl">
+              <li class="clearfix">
+                <div class="liLeft fl">
+                  <div class="intorImgLar" v-if="InvestorInfoList.length > 0">
+                    <img :src="InvestorInfoList[0].avatar" alt="">
+                  </div>
+                  <div class="leftInfo" v-if="InvestorInfoList.length > 0">
+                    <span class="color1">{{InvestorInfoList[0].investorName}}/{{InvestorInfoList[0].position}}</span>
+                    <p class="color3">{{InvestorInfoList[0].orgName}}</p>
+                    <i class="color3">{{InvestorInfoList[0].position}}</i>
+                  </div>
+                </div>
+                <div class="liRight fr">
+                  <ul class="clearfix">
+                    <li v-if="k<5&&k>0" v-for="(i,k) in InvestorInfoList" :key="k">
+                      <div class="intorImgSma">
+                        <img :src="i.avatar" alt="头像">
+                      </div>
+                      <div class="rightInfo">
+                        <span class="color1">{{i.investorName}}/{{i.position}}</span>
+                        <p class="color3">{{i.orgName}}</p>
+                        <i class="color3">{{i.position}}</i>
+                      </div>
+                    </li>
+                    <!-- <li>
+                      <div class="intorImgSma">
+                        <img src="@/../static/img/smallImg.png" alt="">
+                      </div>
+                      <div class="rightInfo">
+                        <span class="color1">郭龙华/总经理</span>
+                        <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
+                        <i class="color3">合伙人</i>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="intorImgSma">
+                        <img src="@/../static/img/smallImg.png" alt="">
+                      </div>
+                      <div class="rightInfo">
+                        <span class="color1">郭龙华/总经理</span>
+                        <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
+                        <i class="color3">合伙人</i>
+                      </div>
+                    </li> -->
+                    <!-- <li class="lastLi mainColor">
+                      <img src="@/../static/img/xiao.png" alt="">
+                      <div class="rightInfo">认证投资人></div>
+                    </li> -->
+                  </ul>
+                </div>
+              </li>
+            </ul>
+            <ul class="inverUl inverUl11" v-if="InvestorInfoList.length > 5">
+              <li class="clearfix">
+                <div class="liLeft fl">
+                  <div class="intorImgLar">
+                    <img :src="InvestorInfoList[5].avatar" alt="">
+                  </div>
+                  <div class="leftInfo" v-if="InvestorInfoList.length > 5">
+                    <span class="color1">{{InvestorInfoList[5].investorName}}/{{InvestorInfoList[5].position}}</span>
+                    <p class="color3">{{InvestorInfoList[5].orgName}}</p>
+                    <i class="color3">{{InvestorInfoList[5].position}}</i>
+                  </div>
+                </div>
+                <div class="liRight fr">
+                  <ul class="clearfix">
+                    <li v-if="k<9&&k>5" v-for="(i,k) in InvestorInfoList" :key="k">
+                      <div class="intorImgSma">
+                        <img :src="i.avatar" alt="头像">
+                      </div>
+                      <div class="rightInfo">
+                        <span class="color1">{{i.investorName}}/{{i.position}}</span>
+                        <p class="color3">{{i.orgName}}</p>
+                        <i class="color3">{{i.position}}</i>
+                      </div>
+                    </li>
+                    <!-- <li>
+                      <div class="intorImgSma">
+                        <img src="@/../static/img/smallImg.png" alt="">
+                      </div>
+                      <div class="rightInfo">
+                        <span class="color1">郭龙华/总经理</span>
+                        <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
+                        <i class="color3">合伙人</i>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="intorImgSma">
+                        <img src="@/../static/img/smallImg.png" alt="">
+                      </div>
+                      <div class="rightInfo">
+                        <span class="color1">郭龙华/总经理</span>
+                        <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
+                        <i class="color3">合伙人</i>
+                      </div>
+                    </li> -->
+                    <li class="lastLi mainColor">
+                      <img src="@/../static/img/xiao.png" alt="">
+                      <div class="rightInfo">认证投资人></div>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+            <div class="bannerImg">
+              <img src="@/../static/img/smallBanner.png" alt="">
+            </div>
+          </div>
+          <div class="investor financialPro pr">
+            <div class="inverTil clearfix">
+              <p class="fl color1">金融产品</p>
+              <span class="fr color3">MORE
+                <i class="el-icon-arrow-right"></i>
+              </span>
+            </div>
+            <i class="iconfont icon-leftarrow pointer" @click="leftPage"></i>
+            <i class="iconfont icon-rightarrow pointer" @click="rightPage"></i>
+            <ul class="finaUl clearfix">
+              <li class="mainBorder" v-if="k<8" v-for="(i,k) in FinancialProList" :key="k">
+                <!-- <img src="@/../static/img/midBan.png" alt=""> -->
+                <div class="finaProItem">
+                  <img :src="i.pictureUrl" alt="">
+                </div>
+                <div class="finaDiv1">
+                  <div class="finaTit">{{i.productName}}</div>
+                  <div class="finaContent">
+                    <p>服务机构：{{i.orgName}}</p>
+                    <p>参考利率范围：
+                      <span class="mainColor">{{i.refRateMin}}%—{{i.refRateMax}}%</span>
+                    </p>
+                    <p>贷款期限：{{i.loanTermMin}}个月—{{i.loanTermMax}}个月</p>
+                    <p>担保方式：{{i.assureMethodName}}</p>
+                  </div>
+                </div>
+                <p class="clearfix finaPP">
+                  <span class="fl">贷款额度：
+                    <i class="mainColor">{{i.loanAmountMin}}万元-{{i.loanAmountMax}}万元</i>
+                  </span>
+                  <span class="mainColor fr" @click="raiseDemand(i)">提需求</span>
+                </p>
+              </li>
+              <!-- <li class="mainBorder">
+                <div class="finaProItem">
+                  <img src="@/../static/img/midBan.png" alt="">
+                </div>
+                <div class="finaDiv1">
+                  <div class="finaTit">货币基金</div>
+                  <div class="finaContent">
+                    <p>服务机构：中国民生银行（华夏路支行）</p>
+                    <p>参考利率范围：
+                      <span class="mainColor">2%——8%</span>
+                    </p>
+                    <p>贷款期限：6个月以下</p>
+                    <p>担保方式：担保人/不动产</p>
+                  </div>
+                </div>
+                <p class="clearfix finaPP">
+                  <span class="fl">贷款额度：
+                    <i class="mainColor">10_100W</i>
+                  </span>
+                  <span class="mainColor fr" @click="raiseDemand">提需求</span>
+                </p>
+              </li> -->
+              <!-- <li class="finaLastLi  mainBorder">
+                <img src="@/../static/img/da.png" alt="">
+                <div class="rightInfo" @click="raiseDemand">提需求></div>
+              </li> -->
+            </ul>
+            <div class="bannerImg">
+              <img src="@/../static/img/smallBanner.png" alt="">
+            </div>
+          </div>
+          <div class="investor financialPro financialIns">
+            <div class="inverTil clearfix">
+              <p class="fl color1">金融机构</p>
+              <span class="fr color3">MORE
+                <i class="el-icon-arrow-right"></i>
+              </span>
+            </div>
+                  <!-- <img src="@/../static/img/ins1.png" alt=""> -->
+            <ul class="finaInsUl finaUl clearfix" id="finaInsUl">
+              <li class="finaInsLi pr" v-for="(i,k) in ServiceOrgList" :key='k'>
+                <div class="finaInsItem">
+                  <img :src="i.orgLogo" alt="">
+                </div>
+                <div class="finaDiv1">
+                  <!-- <div class="finaTit"></div> -->
+                  <!-- <div class="finaTit">{{i.orgName}}</div> -->
+                  <div class="finaContent">
+                    <p class="finaPhone">电话：
+                      <span class="mainColor">{{i.orgPhone}}</span>
+                    </p>
+                    <p class="finaAddress">地址：{{i.orgAddress}}</p>
+                  </div>
+                </div>
+                <p class="finaPP lejie">
+                  <span class="">累计
+                    <i class="mainColor">{{i.transactionNum}}</i>
+                    笔交易
+                  </span>
+                  <span class="mainColor" style="margin-left:60px">了解详情</span>
+                </p>
+              </li>
+              <!-- <li class="finaInsLi">
+                <div class="finaInsItem">
+                  <img src="@/../static/img/ins1.png" alt="">
+                </div>
+                <div class="finaDiv1">
+                  <div class="finaTit">苏州中合会计事务所</div>
+                  <div class="finaContent">
+                    <p class="finaPhone">电话：
+                      <span class="mainColor">0510-87654321</span>
+                    </p>
+                    <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
+                  </div>
+                </div>
+                <p class="clearfix finaPP">
+                  <span class="fl">累计
+                    <i class="mainColor">35</i>
+                    笔交易
+                  </span>
+                  <span class="mainColor fr">了解详情</span>
+                </p>
+              </li> -->
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="techImg"></div>
-    <div class="techContent w">
-      <div class="techNav">
-        <!-- <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
-          <el-breadcrumb-item>
-            <a class="mainColor">科技金融</a>
-          </el-breadcrumb-item>
-        </el-breadcrumb> -->
-        <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务</span>
-        <span>/</span>
-        <span class="mainColor">科技金融</span>
-      </div>
-      <div class="techList">
-        <el-card>
-          <ul class="techUl">
-            <li>
-              <img src="@/../static/img/tech1.png" alt="">
-              <div class="liInfo">
-                <span>投资人</span>
-                <p class="mainColor">{{investorsNum}}
-                  <span>名</span>
-                </p>
-              </div>
-            </li>
-            <li>
-              <img src="@/../static/img/tech2.png" alt="">
-              <div class="liInfo">
-                <span>金融产品</span>
-                <p class="mainColor">
-                  {{financialProductNum}}
-                  <span>个</span>
-                </p>
-              </div>
-            </li>
-            <li>
-              <img src="@/../static/img/tech3.png" alt="">
-              <div class="liInfo">
-                <span>金融机构</span>
-                <p class="mainColor">
-                  {{financialOrgNum}}
-                  <span>个</span>
-                </p>
-              </div>
-            </li>
-          </ul>
-        </el-card>
-      </div>
-      <div class="techGroud">
-        <div class="investor">
-          <div class="inverTil clearfix">
-            <p class="fl color1">投资人</p>
-            <span class="fr color3">MORE
-              <i class="el-icon-arrow-right"></i>
-            </span>
-          </div>
-          <ul class="inverUl">
-            <li class="clearfix">
-              <div class="liLeft fl">
-                <div class="intorImgLar" v-if="InvestorInfoList.length > 0">
-                  <img :src="InvestorInfoList[0].avatar" alt="">
-                </div>
-                <div class="leftInfo" v-if="InvestorInfoList.length > 0">
-                  <span class="color1">{{InvestorInfoList[0].investorName}}/{{InvestorInfoList[0].position}}</span>
-                  <p class="color3">{{InvestorInfoList[0].orgName}}</p>
-                  <i class="color3">{{InvestorInfoList[0].position}}</i>
-                </div>
-              </div>
-              <div class="liRight fr">
-                <ul class="clearfix">
-                  <li v-if="k<5&&k>0" v-for="(i,k) in InvestorInfoList" :key="k">
-                    <div class="intorImgSma">
-                      <img :src="i.avatar" alt="头像">
-                    </div>
-                    <div class="rightInfo">
-                      <span class="color1">{{i.investorName}}/{{i.position}}</span>
-                      <p class="color3">{{i.orgName}}</p>
-                      <i class="color3">{{i.position}}</i>
-                    </div>
-                  </li>
-                  <!-- <li>
-                    <div class="intorImgSma">
-                      <img src="@/../static/img/smallImg.png" alt="">
-                    </div>
-                    <div class="rightInfo">
-                      <span class="color1">郭龙华/总经理</span>
-                      <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
-                      <i class="color3">合伙人</i>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="intorImgSma">
-                      <img src="@/../static/img/smallImg.png" alt="">
-                    </div>
-                    <div class="rightInfo">
-                      <span class="color1">郭龙华/总经理</span>
-                      <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
-                      <i class="color3">合伙人</i>
-                    </div>
-                  </li> -->
-                  <!-- <li class="lastLi mainColor">
-                    <img src="@/../static/img/xiao.png" alt="">
-                    <div class="rightInfo">认证投资人></div>
-                  </li> -->
-                </ul>
-              </div>
-            </li>
-          </ul>
-          <ul class="inverUl inverUl11" v-if="InvestorInfoList.length > 5">
-            <li class="clearfix">
-              <div class="liLeft fl">
-                <div class="intorImgLar">
-                  <img :src="InvestorInfoList[5].avatar" alt="">
-                </div>
-                <div class="leftInfo" v-if="InvestorInfoList.length > 5">
-                  <span class="color1">{{InvestorInfoList[5].investorName}}/{{InvestorInfoList[5].position}}</span>
-                  <p class="color3">{{InvestorInfoList[5].orgName}}</p>
-                  <i class="color3">{{InvestorInfoList[5].position}}</i>
-                </div>
-              </div>
-              <div class="liRight fr">
-                <ul class="clearfix">
-                  <li v-if="k<9&&k>5" v-for="(i,k) in InvestorInfoList" :key="k">
-                    <div class="intorImgSma">
-                      <img :src="i.avatar" alt="头像">
-                    </div>
-                    <div class="rightInfo">
-                      <span class="color1">{{i.investorName}}/{{i.position}}</span>
-                      <p class="color3">{{i.orgName}}</p>
-                      <i class="color3">{{i.position}}</i>
-                    </div>
-                  </li>
-                  <!-- <li>
-                    <div class="intorImgSma">
-                      <img src="@/../static/img/smallImg.png" alt="">
-                    </div>
-                    <div class="rightInfo">
-                      <span class="color1">郭龙华/总经理</span>
-                      <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
-                      <i class="color3">合伙人</i>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="intorImgSma">
-                      <img src="@/../static/img/smallImg.png" alt="">
-                    </div>
-                    <div class="rightInfo">
-                      <span class="color1">郭龙华/总经理</span>
-                      <p class="color3">苏州万隆永鼎会计事务所有限公司</p>
-                      <i class="color3">合伙人</i>
-                    </div>
-                  </li> -->
-                  <li class="lastLi mainColor">
-                    <img src="@/../static/img/xiao.png" alt="">
-                    <div class="rightInfo">认证投资人></div>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-          <div class="bannerImg">
-            <img src="@/../static/img/smallBanner.png" alt="">
-          </div>
-        </div>
-        <div class="investor financialPro pr">
-          <div class="inverTil clearfix">
-            <p class="fl color1">金融产品</p>
-            <span class="fr color3">MORE
-              <i class="el-icon-arrow-right"></i>
-            </span>
-          </div>
-          <i class="iconfont icon-leftarrow pointer" @click="leftPage"></i>
-          <i class="iconfont icon-rightarrow pointer" @click="rightPage"></i>
-          <ul class="finaUl clearfix">
-            <li class="mainBorder" v-if="k<8" v-for="(i,k) in FinancialProList" :key="k">
-              <!-- <img src="@/../static/img/midBan.png" alt=""> -->
-              <div class="finaProItem">
-                <img :src="i.pictureUrl" alt="">
-              </div>
-              <div class="finaDiv1">
-                <div class="finaTit">{{i.productName}}</div>
-                <div class="finaContent">
-                  <p>服务机构：{{i.orgName}}</p>
-                  <p>参考利率范围：
-                    <span class="mainColor">{{i.refRateMin}}%—{{i.refRateMax}}%</span>
-                  </p>
-                  <p>贷款期限：{{i.loanTermMin}}个月—{{i.loanTermMax}}个月</p>
-                  <p>担保方式：{{i.assureMethodName}}</p>
-                </div>
-              </div>
-              <p class="clearfix finaPP">
-                <span class="fl">贷款额度：
-                  <i class="mainColor">{{i.loanAmountMin}}万元-{{i.loanAmountMax}}万元</i>
-                </span>
-                <span class="mainColor fr" @click="raiseDemand(i)">提需求</span>
-              </p>
-            </li>
-            <!-- <li class="mainBorder">
-              <div class="finaProItem">
-                <img src="@/../static/img/midBan.png" alt="">
-              </div>
-              <div class="finaDiv1">
-                <div class="finaTit">货币基金</div>
-                <div class="finaContent">
-                  <p>服务机构：中国民生银行（华夏路支行）</p>
-                  <p>参考利率范围：
-                    <span class="mainColor">2%——8%</span>
-                  </p>
-                  <p>贷款期限：6个月以下</p>
-                  <p>担保方式：担保人/不动产</p>
-                </div>
-              </div>
-              <p class="clearfix finaPP">
-                <span class="fl">贷款额度：
-                  <i class="mainColor">10_100W</i>
-                </span>
-                <span class="mainColor fr" @click="raiseDemand">提需求</span>
-              </p>
-            </li> -->
-            <!-- <li class="finaLastLi  mainBorder">
-              <img src="@/../static/img/da.png" alt="">
-              <div class="rightInfo" @click="raiseDemand">提需求></div>
-            </li> -->
-          </ul>
-          <div class="bannerImg">
-            <img src="@/../static/img/smallBanner.png" alt="">
-          </div>
-        </div>
-        <div class="investor financialPro financialIns">
-          <div class="inverTil clearfix">
-            <p class="fl color1">金融机构</p>
-            <span class="fr color3">MORE
-              <i class="el-icon-arrow-right"></i>
-            </span>
-          </div>
-                <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-          <ul class="finaInsUl finaUl clearfix" id="finaInsUl">
-            <li class="finaInsLi pr" v-for="(i,k) in ServiceOrgList" :key='k'>
-              <div class="finaInsItem">
-                <img :src="i.orgLogo" alt="">
-              </div>
-              <div class="finaDiv1">
-                <!-- <div class="finaTit"></div> -->
-                <!-- <div class="finaTit">{{i.orgName}}</div> -->
-                <div class="finaContent">
-                  <p class="finaPhone">电话：
-                    <span class="mainColor">{{i.orgPhone}}</span>
-                  </p>
-                  <p class="finaAddress">地址：{{i.orgAddress}}</p>
-                </div>
-              </div>
-              <p class="finaPP lejie">
-                <span class="">累计
-                  <i class="mainColor">{{i.transactionNum}}</i>
-                  笔交易
-                </span>
-                <span class="mainColor" style="margin-left:60px">了解详情</span>
-              </p>
-            </li>
-            <!-- <li class="finaInsLi">
-              <div class="finaInsItem">
-                <img src="@/../static/img/ins1.png" alt="">
-              </div>
-              <div class="finaDiv1">
-                <div class="finaTit">苏州中合会计事务所</div>
-                <div class="finaContent">
-                  <p class="finaPhone">电话：
-                    <span class="mainColor">0510-87654321</span>
-                  </p>
-                  <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
-                </div>
-              </div>
-              <p class="clearfix finaPP">
-                <span class="fl">累计
-                  <i class="mainColor">35</i>
-                  笔交易
-                </span>
-                <span class="mainColor fr">了解详情</span>
-              </p>
-            </li> -->
-          </ul>
-        </div>
-      </div>
-    </div>
+    
     <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
       <el-dialog :visible.sync="financialProVisible" width="600px">
@@ -406,10 +472,13 @@
   </div>
 </template>
 <script>
+import swiper from "swiper";
 export default {
   data() {
     return {
       sousuo: false,
+      showFF:false,
+      show4:false,
       headFlag: false,
       financialOrgNum: "",
       financialProductNum: "",
@@ -489,6 +558,9 @@ export default {
     };
   },
   mounted() {
+    this.techInit()
+    console.dir(this.$refs.box)
+  
     this.$router.afterEach((to, from, next) => {
         window.scrollTo(0, 0)
     })
@@ -503,6 +575,27 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+     techInit() {
+      var mySwiper = new swiper(".swiper-container", {
+        direction: "horizontal", // 垂直切换选项
+        loop: true, // 循环模式选项
+
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination"
+        },
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        },
+
+        // 如果需要滚动条
+        scrollbar: {
+          el: ".swiper-scrollbar"
+        }
+      });
+    },
     //金融产品左翻页
     leftPage() {
       if (this.page <= 1) {
@@ -513,13 +606,23 @@ export default {
       this.getFinancialProList();
     },
     handleScroll() {
-      // console.log(this.getScrollTop())HAOhao
+      const osTop = document.documentElement.scrollTop || document.documentElement.scrollTop
+      // console.dir(this.$refs)
+      for (const key in this.$refs) {
+        if (osTop >= this.$refs[key].scrollTop) {
+          // console.dir(node.scrollTop)
+          const name = this.$refs[key].dataset.class
+          this.$refs[key].classList.add(name)
+        }
+      }
+      // console.log(this.getScrollTop())
       if (
         this.getScrollTop() > document.getElementById("header").clientHeight
       ) {
-        this.headFlag = true;
+        this.showFF = true;
+        this.show4 = false;
       } else {
-        this.headFlag = false;
+        this.showFF = false;
       }
     },
     getScrollTop() {
@@ -580,7 +683,7 @@ export default {
       this.financialProform.productName = i.productName;
     },
     handleChange() {
-      this.sousuo = true;
+      // this.sousuo = true;
     },
     //投资人列表
     getInvestorInfoList() {
@@ -680,18 +783,25 @@ export default {
 </script>
 <style lang="scss">
 .TechnologyFinance {
-  #header {
+  .techHeah{
     position: fixed;
-    padding: 0 160px;
-    background-color: #e9a536;
-    width: 84%;
+    z-index: 99999 !important;
+    width: 100%;
+   .header {
+    // position: fixed;
+    // padding: 0 160px;
+    // background-color: #e9a536;
+    // width: 84%;
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 100%;
+    z-index: 3;
     .headerContainer {
-      // position: relative;
+      padding: 0 160px;
       width: 100%;
       height: 65px;
       line-height: 65px;
       color: #fff;
-      font-weight: bold;
+      // font-weight: bold;
       font-size: 16px;
       box-sizing: border-box;
       .titleImg {
@@ -715,8 +825,14 @@ export default {
             font-size: 14px;
             text-align: center;
             // line-height: 52px;
-            margin: 0 50px;
+            padding: 0 38px;
+            // width: 100px;
           }
+        }
+        .posLi1{
+          background: #fff;
+           color: #00a041;
+          border-radius: 5px;
         }
         .posA {
           position: absolute;
@@ -769,115 +885,94 @@ export default {
         }
       }
     }
-  }
-  #headerW {
-    position: fixed;
-    background-color: #fff;
-    padding: 0 160px;
-    width: 84%;
-    z-index: 3;
-    border: 1px solid #ebeef5;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    .el-card__body {
-      padding: 0px;
-    }
-    // box-shadow: 2px 2px 2px #ccc;
-    .headerContainer {
-      // position: relative;
-      width: 100%;
-      height: 65px;
-      line-height: 65px;
+   }
+   .headerw{
+      background: #fff;
+      border: 1px solid #eee;
+      box-shadow:0 10px 10px -10px #ccc;
       color: #666;
-      font-weight: bold;
-      font-size: 16px;
-      box-sizing: border-box;
-      // background-color: #757381;
-
-      .titleImg {
-        // width: 218px;
-        // height: 54px;
-        // margin-left:160px;
-        width: 151px;
-        height: 37px;
-        img {
-          width: 100%;
-          height: 100%;
-          vertical-align: middle;
-        }
-      }
-      .nav {
-        width: 600px;
-        height: 37.6px;
-        margin: 0 auto;
-        > ul {
-          overflow: hidden;
-          li {
-            float: left;
-            // color: #ccc;
-            font-size: 14px;
-            text-align: center;
-            // line-height: 52px;
-            margin: 0 50px;
+      #nav,.headerRight{
+        color: #666;
+        li{
+          a{
+            color:#666;
           }
         }
-        .posA {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
-          // padding: 20px 0;
-        }
-        .sousuo {
-          font-size: 18px;
-          line-height: 48px;
-          > input {
-            border: none;
-            width: 350px;
-            height: 38px;
-            font-size: 14px;
-          }
-          > input::-webkit-input-placeholder {
-            color: #b7b7b7;
-            font-size: 12px;
+        li:nth-child(1){
+          background: none;
+          border-radius: none;
+          a{
+            color:#00a041;
           }
         }
-      }
-      .headerRight {
-        .search {
-          display: inline-block;
-          margin-right: 20px;
-          vertical-align: middle;
-          i {
-            width: 20px;
-            height: 20px;
-          }
+        li:hover{
+          background: none;
+          color: #00a041;
         }
-        .navlogin {
-          display: inline-block;
-          font-size: 14px;
-          cursor: pointer;
-          a {
-            display: inline-block;
-          }
-          .line {
-            display: inline-block;
-            height: 12px;
-            margin: 0 15px;
-          }
-          > img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-          }
+         li:hover a{
+            color:#00a041;
         }
       }
     }
+    .search_box {
+      background: rgba(0, 0, 0, 0.3);
+      // text-align: center;
+      .el-input-group {
+        border-radius: 28px;
+        width: 42%;
+        margin: 43px 0;
+        position: relative;
+        transform: translateX(-50%);
+        left: 50%;
+        .el-input {
+          width: 94px;
+        }
+        .el-input__inner:focus {
+          border-color: #00a041;
+        }
+        .el-input-group__append,
+        .el-input-group__prepend {
+          border-radius: 28px;
+        }
+        .el-input-group__append {
+          /* border-top-left-radius: 0;
+      border-bottom-left-radius: 0; */
+          background: #00a041;
+          color: #fff;
+          right: 58px;
+          .el-button {
+            margin: -10px -10px;
+          }
+        }
+        .el-input-group__prepend {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          background-color: #fff;
+          padding: 0px 17px 0 9px;
+          input {
+            color: #666666;
+            text-align: right;
+          }
+        }
+        
+      }
+      .input-with-select .el-input__inner{
+          border-top-left-radius: 19px;
+          border-bottom-left-radius: 19px;
+          border: 1px solid #00a041;
+        }
+    }
+    .searchbox{
+      background: #fff;
+      box-shadow:0 10px 10px -10px #ccc;
+    }
   }
-  .techImg {
-    height: 454px;
-    background: url("../../../static/img/techbanner.png") 100% 100% / 100% 100%
-      no-repeat;
-    // margin-top: -91px;
-  }
+   .techCon{}
+  // .techImg {
+  //   height: 454px;
+  //   background: url("../../../static/img/techbanner.png") 100% 100% / 100% 100%
+  //     no-repeat;
+  // }
   .techContent {
     // width: 1190px;
     // margin: 0 auto;
@@ -888,14 +983,16 @@ export default {
     .techList {
       width: 100%;
       .techUl {
-        padding: 10px 60px;
+        padding: 0 20px;
         display: flex;
         justify-content: space-between;
         > li {
           > img {
             display: inline-block;
-            width: 90px;
-            height: 68px;
+            // width: 90px;
+            // height: 68px;
+            width: 100px;
+            height: 80px;
           }
           .liInfo {
             display: inline-block;
@@ -907,6 +1004,9 @@ export default {
             > p {
               font-size: 30px;
               margin-top: 5px;
+              >span{
+                font-size: 22px;
+              }
             }
           }
         }

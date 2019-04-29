@@ -1003,6 +1003,8 @@
         </table>
         <table tableName="tb_propaganda_fee_rules">
         </table>
+        <table tableName="tb_propaganda_area_info">
+        </table>
     </context>
     <!--事项任务-->
     <context id="task">

@@ -26,6 +26,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- 视频安防 -->
+        <dependency>
+            <groupId>artemis</groupId>
+            <artifactId>http-client</artifactId>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

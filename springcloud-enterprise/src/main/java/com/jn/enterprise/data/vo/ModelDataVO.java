@@ -3,6 +3,7 @@ package com.jn.enterprise.data.vo;
 import com.jn.enterprise.data.entity.TbDataReportingGardenFiller;
 import com.jn.enterprise.data.model.CompanyDataModel;
 import com.jn.enterprise.data.model.DepartementModel;
+import com.jn.enterprise.data.model.GardenFillerAccessModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -81,13 +82,13 @@ public class ModelDataVO implements Serializable {
     private Date modifiedTime;
 
     @ApiModelProperty(value = "任务的权限集合",example = "")
-    private List<TbDataReportingGardenFiller> gardenFiller;
+    private List<GardenFillerAccessModel> gardenFiller;
 
-    public List<TbDataReportingGardenFiller> getGardenFiller() {
+    public List<GardenFillerAccessModel> getGardenFiller() {
         return gardenFiller;
     }
 
-    public void setGardenFiller(List<TbDataReportingGardenFiller> gardenFiller) {
+    public void setGardenFiller(List<GardenFillerAccessModel> gardenFiller) {
         this.gardenFiller = gardenFiller;
     }
     

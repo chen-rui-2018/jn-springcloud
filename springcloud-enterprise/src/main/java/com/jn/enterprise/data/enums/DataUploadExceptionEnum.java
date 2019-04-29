@@ -24,7 +24,9 @@ public enum DataUploadExceptionEnum implements CodeAndMsg {
     VALUE_NOT_EXIST("5030209","填报值不存在"),
     VALUE_IS_NUMBER("5030210","填报值需要数值类型"),
     TASK_IS_ERROR("5030211","任务信息错误"),
-    INPUT_IS_ERROR("5030212","填报信息错误")
+    INPUT_IS_ERROR("5030212","填报信息错误"),
+    EXCEL_NO_DATA("5030213","excel文件没有数据")
+
     ;
     private String  code;
 

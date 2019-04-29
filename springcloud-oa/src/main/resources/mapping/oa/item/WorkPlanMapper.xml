@@ -105,6 +105,9 @@
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(workPlanStatus)">
                 and t.work_plan_status = #{workPlanStatus,jdbcType=VARCHAR}
             </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isExpire)">
+                and t.is_expire = #{isExpire,jdbcType=VARCHAR}
+            </if>
         </where>
         ORDER BY t.created_time DESC ,t.id DESC
     </select>

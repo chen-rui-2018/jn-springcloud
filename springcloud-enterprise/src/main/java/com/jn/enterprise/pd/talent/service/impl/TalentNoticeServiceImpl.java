@@ -52,7 +52,7 @@ public class TalentNoticeServiceImpl implements TalentNoticeService {
         Page<Object> objects = PageHelper.startPage(page, rows);
         TbPdTalentServiceNoticeCriteria noticeCriteria = new TbPdTalentServiceNoticeCriteria();
         if(sortType.equals(SortEnums.RELEASETIME_SORT.getCode())){
-            noticeCriteria.setOrderByClause("is_roof_placement asc,modified_time desc");
+            noticeCriteria.setOrderByClause("is_roof_placement asc,created_time desc");
         }else if(sortType.equals(SortEnums.TIMENODE_SORT.getCode())){
             noticeCriteria.setOrderByClause("is_roof_placement asc,deadline desc");
         }else if(sortType.equals(SortEnums.HEAT_SORT.getCode())){

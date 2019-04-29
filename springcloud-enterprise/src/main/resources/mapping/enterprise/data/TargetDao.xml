@@ -155,8 +155,12 @@
         ,
         t.calling_time = SYSDATE()
         where
-        t.task_batch=#{taskBatch} and t.model_id=#{modelId}
+        t.task_batch=#{taskBatch}
+        <if test="fillId !=null">
+            and w.fill_id = #{fillId}
+        </if>
         and t.file_type =#{fileType}
+        and t.is_overdue=1
     </update>
 
 
@@ -253,7 +257,7 @@
     </select>
 
     <insert id="saveData" parameterType="java.util.List">
-        insert into Tb_Data_Reporting_Model_Data
+        insert into Tb_Data_Reporting_task_Data
         (<include refid="com.jn.enterprise.data.dao.TbDataReportingTaskDataMapper.Base_Column_List"/>)
         <foreach collection="list" index="index" item="item" separator="UNION ALL">
             select
@@ -615,7 +619,7 @@
     </insert>
 
     <!--更新任务状态 nowDate-->
-    <update id="updateTask" parameterType="java.lang.String">
+    <update id="updateTask">
         <!--未填报的/处于填报状态的，更新逾期以及逾期天数-->
         update tb_data_reporting_task t
         set
@@ -629,7 +633,7 @@
         and ceiling( datediff(SYSDATE(),t.fill_in_form_deadline) ) &gt;
         (select warning_before_days from tb_data_reporting_snapshot_model p where p.task_batch = t.task_batch)
     </update>
-    <!--更新任务状态 nowDate-->
+    <!--获取需要进行预警的任务-->
     <select id="getWarningTask" resultType="com.jn.enterprise.data.model.WarningTaskModel">
         SELECT
         p.model_name modelName,
@@ -655,7 +659,14 @@
         tb_data_reporting_snapshot_model p
         WHERE
         t.STATUS != 0
+        and t.record_status=1
         AND p.task_batch = t.task_batch
+        <if test="fillId !=null">
+            and t.fill_id =#{fillId}
+        </if>
+        <if test="taskBatch !=null">
+            and t.task_batch =#{taskBatch}
+        </if>
     </select>
 
     <!--获取园区广告-->
@@ -689,7 +700,6 @@
         select
         w.fill_id as fillId
         ,w.model_id as modelId
-        ,w.fill_in_form_id as fillInFormId
         ,w.is_overdue as isOverdue
         ,w.form_time as formTime
         ,w.filler as filler
@@ -701,7 +711,6 @@
         ,w.model_cycle as modelCycle
         ,w.status as status
         ,w.fill_in_form_deadline as fillInFormDeadline
-        ,w.fill_in_form_name as fillInFormName
 
         ,CASE
 

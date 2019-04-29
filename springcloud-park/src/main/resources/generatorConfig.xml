@@ -636,6 +636,8 @@
 
     <!--重要消息表-->
     <table tableName="tb_important_news"></table>
+    <!-- 园区成果表 -->
+    <table tableName="tb_achievement"></table>
   </context>
 
   <!--XQ00008资产管理子系统-->

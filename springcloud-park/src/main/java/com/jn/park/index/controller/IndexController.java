@@ -6,7 +6,6 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.park.activity.model.ActivitySlimQuery;
-import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.index.enums.IndexDataEnum;
 import com.jn.park.index.enums.IndexExceptionEnum;
@@ -15,7 +14,6 @@ import com.jn.park.index.model.ServiceSearchParam;
 import com.jn.park.index.service.IndexService;
 import com.jn.park.policy.model.PolicyCenterHomeParam;
 import com.jn.park.policy.service.PolicyCenterService;
-import com.jn.park.policy.service.PolicyGuideService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -105,6 +103,13 @@ public class IndexController extends BaseController {
     @RequestMapping(value = "/getImportantNewsList",method = RequestMethod.GET)
     public Result<List<ImportantNews>> getImportantNewsList() {
         return new Result(indexService.getImportantNewsList());
+    }
+
+    @ControllerLog(doAction = "门户首页-成果展览")
+    @ApiOperation(value = "门户首页-成果展览", notes = "获取园区成果列表")
+    @RequestMapping(value = "/getAchievementList",method = RequestMethod.GET)
+    public Result<List<String>> getAchievementList() {
+        return new Result(indexService.getAchievementList());
     }
 
     @ControllerLog(doAction = "推荐-行政审批")

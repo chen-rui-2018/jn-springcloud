@@ -77,16 +77,16 @@
 
     <update id="updateDeadline" parameterType="java.lang.String">
       update tb_data_reporting_task t set
-      t.fill_in_form_deadline=DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%'),
+      t.fill_in_form_deadline=str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s'),
       t.is_overdue=
         <!--已上报，未逾期，如果截至日期大于填报日期；截至日期小于填报日期为逾期-->
         case when t.status= 0 and t.is_overdue= 0 then
-        (case when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt;= t.up_time then 0
+        (case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt;= t.up_time then 0
         else 1 end)
         <!--已上报，已逾期，如果截至日期大于填报日期就修改为未逾期；截至日期小于填报日期为逾期-->
         when t.status= 0 and t.is_overdue= 1 then
         (
-            case when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt;=  t.up_time then 0
+            case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt;=  t.up_time then 0
             else 1 end
         )
         <!--未上报，未逾期，如果新的截至日期大于旧的截至日期为未逾期，新的截至日期大于今日日期，且新的截至日期小于旧的
@@ -94,9 +94,9 @@
         ；截至日期小于填报日期为逾期-->
         when t.status= 1 and t.is_overdue= 0 then
         (
-        case when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt; t.fill_in_form_deadline  then 0
-        when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt; DATE_FORMAT(SYSDATE(),'Y%-d%-m% H%-i%-s%')
-            and  DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &lt;  t.fill_in_form_deadline
+        case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; t.fill_in_form_deadline  then 0
+        when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; SYSDATE()
+            and  str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &lt;  t.fill_in_form_deadline
         then 0
         else 1 end
         )
@@ -104,42 +104,41 @@
         <!--未上报，已逾期，如果新的截至日期大于今天日期：为未逾期；新的截至日期小于今日日期为逾期-->
         else
         (
-        case when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt; DATE_FORMAT(SYSDATE(),'Y%-d%-m% H%-i%-s%')  then 0
+        case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; SYSDATE()  then 0
         else 1 end
         )
         end
-
        ,
-      t.overdue_day=(
+      t.overdue_days=(
 
         <!--已上报，未逾期，如果截至日期大于填报日期；截至日期小于填报日期为逾期-->
         case when t.status= 0 and t.is_overdue= 0 then
-        (case when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt;= t.up_time then 0
-        else ceiling(datediff(t.up_time,DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%'))) end)
+        (case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt;= t.up_time then 0
+        else ceiling(datediff(t.up_time,str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s'))) end)
 
         <!--已上报，已逾期，如果截至日期大于填报日期就修改为未逾期；截至日期小于填报日期为逾期-->
         when t.status= 0 and t.is_overdue= 1 then
-        (case when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt;= t.up_time then 0
-        else ceiling(datediff(t.up_time,DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%'))) end)
+        (case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt;= t.up_time then 0
+        else ceiling(datediff(t.up_time,str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s'))) end)
 
         <!--未上报，未逾期，如果新的截至日期大于旧的截至日期为未逾期，新的截至日期大于今日日期，且新的截至日期小于旧的
         截至日期时，为任务原来的状态；今日日期>新的截至日期为逾期
         ；截至日期小于填报日期为逾期-->
         when t.status= 1 and t.is_overdue= 0 then
         (
-        case when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt; t.fill_in_form_deadline  then 0
+        case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; t.fill_in_form_deadline  then 0
 
-        when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt; DATE_FORMAT(SYSDATE(),'Y%-d%-m% H%-i%-s%')
-        and  DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &lt;  t.fill_in_form_deadline
+        when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; SYSDATE()
+        and  str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &lt;  t.fill_in_form_deadline
         then 0
-        else ceiling(datediff(DATE_FORMAT(SYSDATE(),'Y%-d%-m% H%-i%-s%'),DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%')))  end
+        else ceiling(datediff(SYSDATE(),str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s')))  end
         )
 
         <!--未上报，已逾期，如果新的截至日期大于今天日期：为未逾期；新的截至日期小于今日日期为逾期-->
         else
         (
-        case when DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%') &gt; DATE_FORMAT(SYSDATE(),'Y%-d%-m% H%-i%-s%')  then 0
-        else ceiling(datediff(DATE_FORMAT(SYSDATE(),'Y%-d%-m% H%-i%-s%'),DATE_FORMAT(#{dealLine},'Y%-d%-m% H%-i%-s%'))) end
+        case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; SYSDATE()  then 0
+        else ceiling(datediff(SYSDATE(),str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s'))) end
         )
         end
 
@@ -154,10 +153,14 @@
         t.calling_times = case when t.calling_times is null then 1
         else t.calling_times+1 end
         ,
-        t.calling_time = DATE_FORMAT(SYSDATE(),'Y%-d%-m% H%-i%-s%')
+        t.calling_time = SYSDATE()
         where
-        t.task_batch=#{taskBatch} and t.model_id=#{modelId}
+        t.task_batch=#{taskBatch}
+        <if test="fillId !=null">
+            and w.fill_id = #{fillId}
+        </if>
         and t.file_type =#{fileType}
+        and t.is_overdue=1
     </update>
 
 
@@ -197,7 +200,7 @@
             when u.total &gt; 0 then '逾期未上报'
             when r.total &gt; 0 then '待上报'
             when y.total &gt;0 then '逾期上报'
-            when r.total=0  and d.overdue=0 and u.total = 0 then '已完成'
+            when r.total=0  and d.total=0 and u.total = 0 then '已完成'
             else '未知状态' end
             ) as status
             from tb_data_reporting_snapshot_model t
@@ -224,13 +227,13 @@
             left join(
               <!--未上报，未逾期-->
               select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
-              and  k.status='1'  and k.is_overdue='0'   and k.file_type=#{fileType} group by k.task_batch,k.model_id
+              and  k.status='1' and k.status=2  and k.is_overdue='0'   and k.file_type=#{fileType} group by k.task_batch,k.model_id
             ) r on t.model_id=r.model_id and t.task_batch = r.task_batch
 
             left join(
             <!--未上报,已逾期-->
-            select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
-            and  k.status='1'  and k.is_overdue='1'   and k.file_type=#{fileType} group by k.task_batch,k.model_id
+            select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status=1
+            and  k.status=1 and k.status=2  and k.is_overdue=1   and k.file_type=#{fileType} group by k.task_batch,k.model_id
             ) v on t.model_id=v.model_id and t.task_batch = v.task_batch
           ) d
 
@@ -241,7 +244,7 @@
         </if>
 
         <if test="param.modelName !=null">
-            and model_name like '%'||#{param.modelName}||'%'
+            and model_name like CONCAT('%', #{param.modelName}, '%')
         </if>
 
         <if test="param.status !=null">
@@ -254,7 +257,7 @@
     </select>
 
     <insert id="saveData" parameterType="java.util.List">
-        insert into Tb_Data_Reporting_Model_Data
+        insert into Tb_Data_Reporting_task_Data
         (<include refid="com.jn.enterprise.data.dao.TbDataReportingTaskDataMapper.Base_Column_List"/>)
         <foreach collection="list" index="index" item="item" separator="UNION ALL">
             select
@@ -286,12 +289,29 @@
         ,w.model_name as modelName
         ,w.model_cycle as modelCycle
         ,w.status as status
+        ,w.fill_in_form_deadline as fillInFormDeadline
+        ,w.fill_in_form_name as fillInFormName
+        ,CASE
+
+        WHEN w.is_overdue = 0 THEN
+        datediff( w.fill_in_form_deadline,SYSDATE( ) ) ELSE 0
+        END AS residueDays,
+        CASE
+
+        WHEN w.is_overdue = 1 THEN
+        datediff(  SYSDATE( ),w.fill_in_form_deadline ) ELSE 0
+        END AS overdueDays
+
         from (
         select
         q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
         ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
         ,q.calling_times ,q.calling_time ,r.model_name ,r.model_cycle
         ,q.status
+        ,q.fill_in_form_deadline
+        ,q.fill_in_form_name
+        ,q.overdue_days
+
         from
         (
             select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
@@ -334,11 +354,18 @@
         ,w.model_name as modelName
         ,w.model_cycle as modelCycle
         ,w.status as status
+
+        ,w.overdue_days as overdueDays
+        ,w.fill_in_form_deadline as fillInFormDeadline
+
         from (
             select
             q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
             ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
-            ,q.calling_times ,q.calling_time ,r.model_name ,r.model_cycle
+            ,q.calling_times ,q.status,q.calling_time ,r.model_name ,r.model_cycle
+            ,q.overdue_days
+            ,q.fill_in_form_deadline
+
             from
             (
             select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
@@ -360,7 +387,8 @@
         where 1=1
         <!--条件-->
         <if test="param.modelName !=null">
-          and w.model_name like '%'|#{aram.modelName}|'%'
+            and w.model_name like CONCAT('%', #{param.modelName}, '%')
+
         </if>
 
         <if test="param.modelCycle !=null">
@@ -371,10 +399,65 @@
         order by w.form_time desc
     </select>
 
-    <!--查询审核数据列表-->
-    <select id="getGardenCheckList" resultType="java.util.List" parameterType="com.jn.enterprise.data.model.GardenCheckParamModel">
+
+    <select id="getHistoryGardenTaskList" resultType="com.jn.enterprise.data.model.CompanyDataModel">
         select
-        w.modle_id as modleId
+        w.fill_id as fillId
+        ,w.model_id as modelId
+        ,w.fill_in_form_id as fillInFormId
+        ,w.is_overdue as isOverdue
+        ,w.form_time as formTime
+        ,w.filler as filler
+        ,w.filler_tel as filleTel
+        ,w.up_time as upTime
+        ,w.calling_times as callingTimes
+        ,w.calling_time as callingTime
+        ,w.model_name as modelName
+        ,w.model_cycle as modelCycle
+        ,w.status as status
+        ,w.overdue_days as overdueDays
+        ,w.fill_in_form_deadline as fillInFormDeadline
+        from (
+        select
+        q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
+        ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
+        ,q.calling_times ,q.status,q.calling_time ,r.model_name ,r.model_cycle
+        ,q.overdue_days
+        ,q.fill_in_form_deadline
+        from
+        (
+        select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
+
+        where t.record_status=1
+        and
+        t.file_type=#{fileType}
+
+        ) q
+        left join (
+        select <include refid="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelMapper.Base_Column_List" /> from tb_data_reporting_snapshot_model t
+        ) r on r.task_batch = q.task_batch
+
+        ) w
+        where 1=1
+        <!--条件-->
+        <if test="param.modelName !=null">
+            and w.model_name like CONCAT('%', #{param.modelName}, '%')
+
+        </if>
+
+        <if test="param.modelCycle !=null">
+            and w.model_cycle = #{param.modelCycle}
+        </if>
+        <!--已填报，或以已逾期的为历史数据-->
+        and (w.is_overdue=1 or w.status=0)
+        order by w.form_time desc
+
+    </select>
+
+    <!--查询审核数据列表-->
+    <select id="getGardenCheckList" resultType="com.jn.enterprise.data.model.GardenCheckModel" parameterType="com.jn.enterprise.data.model.GardenCheckParamModel">
+        select
+        w.model_id as modleId
         ,w.model_name as modelName
         ,w.garden_examine_stauts as status
         ,w.form_time as formTime
@@ -384,32 +467,35 @@
         ,w.up_time as upTime
         ,w.fill_in_form_name as fillInFormName
         ,w.task_batch as taskBatch
+        ,w.model_cycle as modelCycle
         from (
-            select
-                t.modle_id
-                ,p.model_name
-                ,t.garden_examine_stauts
-                ,t.form_time
-                ,t.fill_id
-                ,t.filler
-                ,t.filler_tel
-                ,t.up_time
-                ,t.fill_in_form_name
-                ,t.task_batch
-            from tb_data_reporting_task t
-            left join (select
-                modle_id,
-                model_name,
-                task_batch
-                from tb_data_reporting_snapshot_model
-            ) p on t.task_batch = p.task_batch and t.model_id = p.modle_id
-            where t.status = 0 and t.file_type=2
+        select
+        t.model_id
+        ,p.model_name
+        ,t.garden_examine_stauts
+        ,t.form_time
+        ,t.fill_id
+        ,t.filler
+        ,t.filler_tel
+        ,t.up_time
+        ,t.fill_in_form_name
+        ,t.task_batch
+        ,p.model_cycle
+        from tb_data_reporting_task t
+        left join (select
+        model_id,
+        model_name,
+        task_batch,
+        model_cycle
+        from tb_data_reporting_snapshot_model
+        ) p on t.task_batch = p.task_batch and t.model_id = p.model_id
+        where t.status = 0 and t.file_type=2
         ) w
 
         where 1=1
         <!--条件-->
         <if test="param.modelName !=null">
-            and w.model_name like '%'|#{aram.modelName}|'%'
+            and w.model_name like CONCAT('%', #{param.modelName}, '%')
         </if>
 
         <if test="param.fillId !=null">
@@ -544,24 +630,72 @@
     </insert>
 
     <!--更新任务状态 nowDate-->
-    <update id="updateTask" parameterType="java.lang.String">
-        <!--未填报的/处于填报状态的有没有逾期以及逾期天数-->
+    <update id="updateTask">
+        <!--未填报的/处于填报状态的，更新逾期以及逾期天数-->
         update tb_data_reporting_task t
         set
         t.is_overdue=1,
-        t.overdue_day=ceiling(
-        datediff(DATE_FORMAT(SYSDATE(),'Y%-d%-m% H%-i%-s%'),t.fill_in_form_deadline)
+        t.overdue_days=ceiling(
+        datediff(SYSDATE(),t.fill_in_form_deadline)- (select warning_before_days from tb_data_reporting_snapshot_model p where p.task_batch = t.task_batch)
         )
-        where t.status !=1
-        and t.fill_in_form_deadline &lt; DATE_FORMAT(SYSDATE(),'Y%-d%-m% H%-i%-s%')
-    </update>
-    <!--更新任务状态 nowDate-->
-    <select id="getWarningTask" parameterType="java.lang.String" resultType="java.util.List">
+        where t.status !=0
+        and t.fill_in_form_deadline &lt; SYSDATE()
 
+        and ceiling( datediff(SYSDATE(),t.fill_in_form_deadline) ) &gt;
+        (select warning_before_days from tb_data_reporting_snapshot_model p where p.task_batch = t.task_batch)
+    </update>
+    <!--获取需要进行预警的任务-->
+    <select id="getWarningTask" resultType="com.jn.enterprise.data.model.WarningTaskModel">
+        SELECT
+        p.model_name modelName,
+        CASE
+        WHEN ceiling( datediff(  t.fill_in_form_deadline,SYSDATE( ) ) ) &lt; p.warning_before_days  and
+        ceiling( datediff(  t.fill_in_form_deadline,SYSDATE( ) ) ) &gt; 0
+
+        THEN
+        ceiling( datediff(t.fill_in_form_deadline , SYSDATE() ) ) ELSE 0
+        END AS inLine,
+
+        CASE
+        WHEN ceiling( datediff( SYSDATE( ), t.fill_in_form_deadline ) ) &gt; p.warning_before_days THEN
+        ceiling( datediff( SYSDATE( ), t.fill_in_form_deadline ) ) ELSE 0
+        END AS outLine,
+        t.form_time as formTime,
+        p.warning_by warningBy,
+        t.file_type fileType,
+        t.fill_in_form_id fillInFormId,
+        t.fill_id
+        FROM
+        tb_data_reporting_task t,
+        tb_data_reporting_snapshot_model p
+        WHERE
+        t.STATUS != 0
+        and t.record_status=1
+        AND p.task_batch = t.task_batch
+        <if test="fillId !=null">
+            and t.fill_id =#{fillId}
+        </if>
+        <if test="taskBatch !=null">
+            and t.task_batch =#{taskBatch}
+        </if>
     </select>
 
-    <!--获取园区广告-->
-    <select id="getGardenTaskBatch" resultType="java.lang.String">
+    <!--获取园区本月任务批次号-->
+    <select id="getAllGardenBatch" parameterType="java.lang.String" resultType="java.lang.String">
+        select task_batch from
+        tb_data_reporting_snapshot_model
+        where
+        task_batch in
+        (
+            select task_batch from tb_data_reporting_task
+            where form_time=#{lastMon} or form_time=#{lastYear}
+            and file_type=1
+        )
+        group by task_batch
+    </select>
+
+    <!--获取园区指定部门的任务批次-->
+    <select id="getGardenTaskBatch"  resultType="java.lang.String">
 
         select task_batch from
         tb_data_reporting_snapshot_model
@@ -591,7 +725,6 @@
         select
         w.fill_id as fillId
         ,w.model_id as modelId
-        ,w.fill_in_form_id as fillInFormId
         ,w.is_overdue as isOverdue
         ,w.form_time as formTime
         ,w.filler as filler
@@ -602,6 +735,18 @@
         ,w.model_name as modelName
         ,w.model_cycle as modelCycle
         ,w.status as status
+        ,w.fill_in_form_deadline as fillInFormDeadline
+
+        ,CASE
+
+        WHEN w.is_overdue = 0 THEN
+        datediff( w.fill_in_form_deadline,SYSDATE( ) ) ELSE 0
+        END AS residueDays,
+        CASE
+
+        WHEN w.is_overdue = 1 THEN
+        datediff(  SYSDATE( ),w.fill_in_form_deadline ) ELSE 0
+        END AS overdueDays
         from
 
         (
@@ -610,22 +755,58 @@
             ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
             ,q.calling_times ,q.calling_time ,r.model_name ,r.model_cycle
             ,q.status
+            ,q.fill_in_form_deadline
+            ,q.fill_in_form_name
+            ,q.overdue_days
             from tb_data_reporting_task q , tb_data_reporting_snapshot_model r
             where
-            t.task_batch in (
+            q.task_batch in
             <foreach collection="list" item="o" index="index" open="(" separator=","  close=")">
                 #{o}
             </foreach>
-            )
+
             and
-            t.task_batch = r.task_batch
+            q.task_batch = r.task_batch
+            and (q.status=1 or q.status=2)
+            and q.record_status=1
+            and q.file_type=1
         ) w
         order by w.form_time desc
 
+    </select>
 
+    <select id="saveFillerList" parameterType="java.util.List">
+        insert into Tb_Data_Reporting_Garden_Filler
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingGardenFillerMapper.Base_Column_List"/>)
 
+        <foreach collection="fillerList" index="index" item="item"  separator="UNION ALL" >
+            select
+            #{ item.fillId,jdbcType=VARCHAR},
+            #{ item.filler,jdbcType=VARCHAR},
+            #{ item.fillerTel,jdbcType=VARCHAR},
+            #{ item.departmentId,jdbcType=VARCHAR},
+            #{ item.departmentName,jdbcType=VARCHAR},
+            #{ item.status,jdbcType=TINYINT},
+            #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.gardenExamineStauts,jdbcType=TINYINT},
+            #{ item.examineComment,jdbcType=VARCHAR},
+            #{ item.tabId,jdbcType=VARCHAR}
+            FROM DUAL
+        </foreach>
 
     </select>
+
+    <!--
+    <select id="getDepartmentFromTarget" resultType="com.jn.enterprise.data.model.DepartementModel">
+          select
+          department_id as departmentId
+          ,department_name as departmentName
+          from tb_data_reporting_snapshot_target
+          where target_type=1 and target_id in (
+            select target_id from tb_data_reporting_snapshot_model_struct
+          ) group by department_id,department_name
+    </select>
+    -->
 
 
 </mapper>

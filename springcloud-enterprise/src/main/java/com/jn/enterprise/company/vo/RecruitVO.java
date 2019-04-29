@@ -27,13 +27,43 @@ public class RecruitVO implements Serializable {
     private String comName;
     @ApiModelProperty(value = "招聘类型名称")
     private String typeName;
+    @ApiModelProperty(value = "招聘类型")
+    private String type;
     @ApiModelProperty(value = "薪资待遇名称")
     private String salaryName;
+    @ApiModelProperty(value = "薪资待遇")
+    private String salary;
+    @ApiModelProperty(value = "审批状态（0未审批 1审批中 2审批通过 3未通过审批）")
+    private String approvalStatus;
     @ApiModelProperty(value = "发布时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createdTime;
 
     private static final long serialVersionUID = 1L;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
+    }
+
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
 
     public String getStatus() {
         return status;

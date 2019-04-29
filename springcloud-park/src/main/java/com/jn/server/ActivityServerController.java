@@ -5,6 +5,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.activity.model.Activity;
 import com.jn.park.activity.model.ActivityParment;
+import com.jn.park.activity.model.ActivitySlim;
+import com.jn.park.activity.model.ActivitySlimQuery;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.api.ActivityClient;
 import com.jn.system.log.annotation.ControllerLog;
@@ -39,12 +41,9 @@ public class ActivityServerController extends BaseController implements Activity
     private ActivityService activityService;
 
     @ControllerLog(doAction = "获取活动列表")
-    @ApiOperation(value = "获取活动列表",httpMethod = "POST",response = Result.class)
-    @RequestMapping(value = "/getActivityList")
     @Override
-    public Result<PaginationData<List<Activity>>> getActivityList(@RequestBody @Validated ActivityParment activityParment) {
-        PaginationData<List<Activity>> paginationData = activityService.selectActivityList(activityParment);
-        return new Result<>(paginationData);
+    public Result<PaginationData<List<ActivitySlim>>> getActivityList(@RequestBody @Validated ActivitySlimQuery activitySlimQuery) {
+        return new Result(activityService.activityListSlim(activitySlimQuery));
     }
     
     @ControllerLog(doAction = "获取有效活动总数")

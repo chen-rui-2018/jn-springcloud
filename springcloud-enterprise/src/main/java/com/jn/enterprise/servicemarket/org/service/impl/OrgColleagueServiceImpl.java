@@ -80,15 +80,6 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     @ServiceLog(doAction = "机构同事列表查询")
     @Override
     public PaginationData getOrgColleagueList(String account, OrgColleagueParam orgColleagueParam) {
-        com.github.pagehelper.Page<Object> objects = null;
-        //分页标识
-        String isPage="1";
-        //是否分页标识
-        boolean needPage=false;
-        if(orgColleagueParam != null && orgColleagueParam.getNeedPage()!=null
-                && isPage.equals(orgColleagueParam.getNeedPage())){
-            needPage=true;
-        }
         //根据用户账号获取用户所属机构编码
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
         if(userExtension==null || userExtension.getData()==null){
@@ -101,6 +92,15 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         //所属机构入参
         AffiliateParam affiliateParam=new AffiliateParam();
         affiliateParam.setAffiliateCode(affiliateCode);
+        com.github.pagehelper.Page<Object> objects = null;
+        //分页标识
+        String isPage="1";
+        //是否分页标识
+        boolean needPage=false;
+        if(orgColleagueParam != null && orgColleagueParam.getNeedPage()!=null
+                && isPage.equals(orgColleagueParam.getNeedPage())){
+            needPage=true;
+        }
         if(needPage) {
             objects = PageHelper.startPage(orgColleagueParam.getPage(),
                     orgColleagueParam.getRows() == 0 ? 15 : orgColleagueParam.getRows(), true);
@@ -118,6 +118,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         Map<String,Object> pageData = (Map<String,Object>)userExtensionByAffiliateCode.getData();
         List<UserExtensionInfo> userExtensionInfoList=new ArrayList<>(16);
         List userList=(List)pageData.get("rows");
+        Integer total=(Integer) pageData.get("total");
         ObjectMapper objectMapper = new ObjectMapper();
         for(int i=0;i<userList.size();i++){
             UserExtensionInfo userExtensionInfo = objectMapper.convertValue(userList.get(i), UserExtensionInfo.class);
@@ -144,7 +145,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
             setUserEducationInfo(tbServiceAdvisorList, extensionInfo, orgColleagueInfo);
             orgColleagueInfoList.add(orgColleagueInfo);
         }
-        return new PaginationData(orgColleagueInfoList,objects == null ? 0 : objects.getTotal());
+        return new PaginationData(orgColleagueInfoList,total==null ? 0 :total.intValue());
     }
 
     /**
@@ -237,7 +238,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     @Override
     public List<UserRoleInfo> getUserRoleInfoList(List<String> accountList,String roleName) {
         Result<List<User>> resultData = systemClient.getUserInfoByAccount(accountList);
-        List<User> userInfoList = resultData.getData();
+        List<User> userInfoList = resultData.getData()==null?Collections.EMPTY_LIST:resultData.getData();
         List<UserRoleInfo> userRoleInfoList=new ArrayList<>(16);
         for(User user:userInfoList){
             UserRoleInfo userRoleInfo=new UserRoleInfo();

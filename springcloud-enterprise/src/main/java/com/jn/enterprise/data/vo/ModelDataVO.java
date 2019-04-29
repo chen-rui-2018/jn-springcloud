@@ -1,6 +1,9 @@
 package com.jn.enterprise.data.vo;
 
+import com.jn.enterprise.data.entity.TbDataReportingGardenFiller;
 import com.jn.enterprise.data.model.CompanyDataModel;
+import com.jn.enterprise.data.model.DepartementModel;
+import com.jn.enterprise.data.model.GardenFillerAccessModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -61,15 +64,12 @@ public class ModelDataVO implements Serializable {
     private String departmentName ;
     @ApiModelProperty(value = "模板顺序",example = "001")
     private Integer orderNumber ;
-
     public Integer getOrderNumber() {
         return orderNumber;
     }
-
     public void setOrderNumber(Integer orderNumber) {
         this.orderNumber = orderNumber;
     }
-
     @ApiModelProperty(value = "任务全部填写完后的提醒人",example = "提醒人账号")
     private String reminder ;
     @ApiModelProperty(value = "创建者账号",example = "zhangsan")
@@ -81,16 +81,17 @@ public class ModelDataVO implements Serializable {
     @ApiModelProperty(value = "最新更新时间",example = "2020-12-21")
     private Date modifiedTime;
 
-    @ApiModelProperty(value = "用户权限集合",example = "[001,112]")
-    private List<String> userDepartmentId;
+    @ApiModelProperty(value = "任务的权限集合",example = "")
+    private List<GardenFillerAccessModel> gardenFiller;
 
-    public List<String> getUserDepartmentId() {
-        return userDepartmentId;
+    public List<GardenFillerAccessModel> getGardenFiller() {
+        return gardenFiller;
     }
 
-    public void setUserDepartmentId(List<String> userDepartmentId) {
-        this.userDepartmentId = userDepartmentId;
+    public void setGardenFiller(List<GardenFillerAccessModel> gardenFiller) {
+        this.gardenFiller = gardenFiller;
     }
+    
 
     public List<TabVO> getTabs() {
         return tabs;

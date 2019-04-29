@@ -38,6 +38,15 @@ public interface TargetDao {
     List<CompanyDataModel> getHistoryTaskList(@Param("param") CompanyDataParamModel param,@Param("fillInFormId") List<String> fillInFormId,@Param("fileType") Byte fileType);
 
     /**
+     * 查询园区上报历史
+     * @param param
+     * @return
+     */
+    List<CompanyDataModel> getHistoryGardenTaskList(@Param("param") CompanyDataParamModel param,@Param("fileType") Byte fileType);
+
+
+
+    /**
      * 查询本月需要填写的任务列表
      * @param formTimeList
      * @param fillInFormId
@@ -96,7 +105,17 @@ public interface TargetDao {
     List<CompanyDataModel> getGardenTask(@Param("list") List<String> list);
 
 
+    /**
+     * 获取整个园区的任务批次，用于获取广告
+     */
 
+    List<String> getAllGardenBatch(@Param("lastMon") String lastMon,@Param("lastYear") String lastYear);
+
+    /**
+     *
+     * @return
+     */
+    List <DepartementModel>  getDepartmentFromTarget(@Param("fileId") String fileId);
 
 
 
@@ -133,15 +152,20 @@ public interface TargetDao {
 
     /**
      * 更新任务状态
-     * @param nowDate
      */
-    void updateTask(String nowDate);
+    void updateTask();
 
     /**
      * 预警任务获取
-     * @param nowDate
      */
-    List<TbDataReportingTask> getWarningTask(String nowDate);
+    List<WarningTaskModel> getWarningTask(@Param("fillId") String fillId,@Param("taskBatch") String taskBatch);
+
+
+    /**
+     * 保存园区任务可填报部门的信息
+     * @param fillerList
+     */
+    void saveFillerList(@Param("fillerList") List<TbDataReportingGardenFiller> fillerList);
 
 
 }

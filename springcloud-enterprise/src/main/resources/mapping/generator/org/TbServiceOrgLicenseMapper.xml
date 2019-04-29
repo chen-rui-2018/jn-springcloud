@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.TbServiceOrgLicenseMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgLicense">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_id_" jdbcType="VARCHAR" property="orgId" />
     <result column="cert_name" jdbcType="VARCHAR" property="certName" />
     <result column="award_time" jdbcType="TIMESTAMP" property="awardTime" />
     <result column="award_depart" jdbcType="VARCHAR" property="awardDepart" />
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, org_id, cert_name, award_time, award_depart, is_features, file_url, cert_type, 
+    id, org_id_, cert_name, award_time, award_depart, is_features, file_url, cert_type, 
     created_time, creator_account, modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgLicenseCriteria" resultMap="BaseResultMap">
@@ -109,7 +109,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgLicense">
-    insert into tb_service_org_license (id, org_id, cert_name, 
+    insert into tb_service_org_license (id, org_id_, cert_name, 
       award_time, award_depart, is_features, 
       file_url, cert_type, created_time, 
       creator_account, modified_time, modifier_account, 
@@ -127,7 +127,7 @@
         id,
       </if>
       <if test="orgId != null">
-        org_id,
+        org_id_,
       </if>
       <if test="certName != null">
         cert_name,
@@ -218,7 +218,7 @@
         id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.orgId != null">
-        org_id = #{record.orgId,jdbcType=VARCHAR},
+        org_id_ = #{record.orgId,jdbcType=VARCHAR},
       </if>
       <if test="record.certName != null">
         cert_name = #{record.certName,jdbcType=VARCHAR},
@@ -261,7 +261,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_service_org_license
     set id = #{record.id,jdbcType=VARCHAR},
-      org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_id_ = #{record.orgId,jdbcType=VARCHAR},
       cert_name = #{record.certName,jdbcType=VARCHAR},
       award_time = #{record.awardTime,jdbcType=TIMESTAMP},
       award_depart = #{record.awardDepart,jdbcType=VARCHAR},
@@ -281,7 +281,7 @@
     update tb_service_org_license
     <set>
       <if test="orgId != null">
-        org_id = #{orgId,jdbcType=VARCHAR},
+        org_id_ = #{orgId,jdbcType=VARCHAR},
       </if>
       <if test="certName != null">
         cert_name = #{certName,jdbcType=VARCHAR},
@@ -321,7 +321,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgLicense">
     update tb_service_org_license
-    set org_id = #{orgId,jdbcType=VARCHAR},
+    set org_id_ = #{orgId,jdbcType=VARCHAR},
       cert_name = #{certName,jdbcType=VARCHAR},
       award_time = #{awardTime,jdbcType=TIMESTAMP},
       award_depart = #{awardDepart,jdbcType=VARCHAR},

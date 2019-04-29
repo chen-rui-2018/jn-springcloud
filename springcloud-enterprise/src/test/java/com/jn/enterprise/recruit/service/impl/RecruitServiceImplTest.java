@@ -101,8 +101,6 @@ public class RecruitServiceImplTest {
         serviceRecruitPublishParam.setNum(20);
         // 岗位
         serviceRecruitPublishParam.setPost("JUNIT测试工程师");
-        // 招聘编码
-        serviceRecruitPublishParam.setRecruitNo("JN_JUNIT_TEST_20111111");
         // 薪资待遇
         serviceRecruitPublishParam.setSalary("face_face");
         // 类型
@@ -163,7 +161,7 @@ public class RecruitServiceImplTest {
     @Test
     public void getRecruitList() {
         try {
-            PaginationData<List<RecruitVO>> recruitList = recruitService.getRecruitList(serviceRecruitParam);
+            PaginationData<List<RecruitVO>> recruitList = recruitService.getRecruitList(serviceRecruitParam, null);
             if (recruitList.getRows() != null && recruitList.getRows().size() > 0) {
                 assertThat(recruitList.getRows().size(), greaterThanOrEqualTo(1));
             } else {

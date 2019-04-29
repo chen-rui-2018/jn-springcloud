@@ -3,6 +3,7 @@ package com.jn.system.dict.service;
 import com.jn.common.model.PaginationData;
 import com.jn.system.dict.entity.TbSysDict;
 import com.jn.system.dict.model.*;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
 
 import java.util.List;
@@ -69,4 +70,12 @@ public interface SysDictService {
      * @return
      */
     List<TbSysDict> sortSearch(SysDictInvoke sysDictInvoke);
+
+
+    /**
+     * 根据条件查询数据字典的值
+     * @param sysDictInvoke
+     * @return
+     */
+    String selectDictValueByCondition(SysDictInvoke sysDictInvoke);
 }

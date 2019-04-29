@@ -1,6 +1,7 @@
 package com.jn.enterprise.data.service;
 
 import com.jn.common.model.Result;
+import com.jn.enterprise.data.entity.TbDataReportingGardenLinker;
 import com.jn.enterprise.data.model.GroupModel;
 import com.jn.enterprise.data.model.InputFormatModel;
 import com.jn.enterprise.data.model.TreeData;
@@ -81,5 +82,11 @@ public interface DataModelService {
      * @param targetList
      * @return
      */
-    List<InputFormatModel> getInputFormatByTargetIds(String[] targetList);
+    List<InputFormatModel> getInputFormatByTargetIds(List<String> targetList);
+
+    /**
+     * 获取模板生成的任务全部填报完成后的预警人条件
+     * @return
+     */
+    List<TbDataReportingGardenLinker> getWarner();
 }

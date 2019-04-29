@@ -31,7 +31,7 @@
           </div>
 
           <ul class="clearfix posA" v-else>
-            <li>
+            <li @click="$router.push({path:'/'})">
               <a href="javascript:void(0);">首页</a>
             </li>
             <li>
@@ -40,12 +40,11 @@
             <li>
               <a href="javascript:void(0);">智慧党建</a>
             </li>
-            <li>
+            <li @click="$router.push({path:'/enterpriseservice'})">
               <a href="javascript:void(0);">企业服务</a>
             </li>
           </ul>
         </transition>
-        <iframe id="kskfpt" ref="iframe" src="" width="0" height="0" frameborder="0" scrolling="auto" style="visibility: hidden;"/>
       </div>
     </div>
     <div class="homePage_content w">
@@ -53,7 +52,7 @@
         <!-- 面包屑 -->
         <div class="homePage_breadcrumb">
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">用户中心 </el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">用户中心 </el-breadcrumb-item>
             <el-breadcrumb-item>
               <a href="javascript:;">{{this.$route.meta.title}}</a>
             </el-breadcrumb-item>
@@ -75,7 +74,7 @@
                 <el-menu-item index="/servicemarket/product/userCenter">
                   <span slot="title">首页</span>
                 </el-menu-item>
-                <el-menu-item index="/userinfo">
+                <el-menu-item index="/userHome">
                   <span slot="title">用户资料</span>
                 </el-menu-item>
                 <el-menu-item index="/企业">
@@ -139,9 +138,9 @@
             </el-aside>
           </div>
           <!-- 主体 -->
-          <div class="homePage_main">
+          <div class="homePage_main userHome">
             <el-main>
-                <router-view></router-view>
+                <router-view :userData='userData'></router-view>
             </el-main>
           </div>
         </el-container>
@@ -188,8 +187,6 @@ export default {
     });
   },
   mounted() {
-    // 预先登录模式
-    $('#kskfpt').attr('src', `http://112.94.22.222:2381/ibps/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
     this.getUserExtension();
   },
   updated(){
@@ -278,6 +275,7 @@ export default {
             text-align: center;
             line-height: 38px;
             margin: 0 50px;
+                padding: 19px 0;
           }
         }
         .sousuo {

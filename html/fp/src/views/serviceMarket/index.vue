@@ -4,12 +4,15 @@
     <div class="navImg"></div>
     <div class="market_content"><!-- 版心 -->
       <div class="market_breadcrumb">
-          <el-breadcrumb separator="/">
+          <!-- <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
             <el-breadcrumb-item>
               <a href="/">服务超市</a>
             </el-breadcrumb-item>
-          </el-breadcrumb>
+          </el-breadcrumb> -->
+          <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务</span>
+          <span>/</span>
+          <span class="mainColor">服务超市</span>
       </div>
       <div class="market_navicon">
         <a href="javascript:;">
@@ -53,7 +56,7 @@
       <div class="new_active" >
         <div class="active_title">
           <span>最新活动</span>
-          <span>MORE<i class="iconfont icon-you"></i></span>
+          <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="active_list">
           <div class="active_btn to_left" @click="prev"><span class="iconfont icon-zuo" ></span></div>
@@ -91,7 +94,7 @@
         <div class="hot_product">
           <div class="hot_titile">
             <span>热门产品</span>
-            <span>MORE<i class="iconfont icon-you"></i></span>
+            <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
           </div>
           <div class="hot_list">
             <ul class="clearfix">
@@ -151,7 +154,7 @@
       <div class="counselor">
         <div class="counselor_title">
           <span>优质顾问</span>
-          <span>MORE<i class="iconfont icon-you"></i></span>
+          <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="conselor_introduce">
           <ul class="conselor_tab clearfix">
@@ -165,6 +168,7 @@
                 <div v-for="(counselorinfoItem,counselorinfoindex) in counselorList" :key="counselorinfoindex" v-show="counselorinfoindex<2">
                   <a href="javascript:;">
                     <div class="info_img"><img src="../../assets/image/test2.png" alt=""></div>
+                    <!-- <div class="info_img"><img :src="counselorinfoItem.avatar" alt=""></div> -->
                     <div class="info_all">
                       <div class="info_name"><span>{{counselorinfoItem.advisorName}}</span>/<span>{{counselorinfoItem.position}} </span></div>
                       <div class="info_detail">
@@ -176,9 +180,10 @@
                 </div>
               </li>
               <li class="conselor_mid">
-                <div v-for="(counselorinfoItem2,counselorinfoindex2) in counselorList" :key="counselorinfoindex2" class="conselor_mid_list" v-show="counselorinfoindex2>=2">
+                <div v-for="(counselorinfoItem2,counselorinfoindex2) in counselorList" :key="counselorinfoindex2" class="conselor_mid_list" v-show="counselorinfoindex2>=2&&counselorinfoindex2<10">
                   <a href="javascript:;">
                     <div class="info_img"><img src="../../assets/image/test2.png" alt=""></div>
+                    <!-- <div class="info_img"><img :src="counselorinfoItem.avatar" alt=""></div> -->
                     <div class="info_all">
                       <div class="info_name"><span>{{counselorinfoItem2.advisorName}}</span>/<span>{{counselorinfoItem2.position}} </span></div>
                       <div class="info_detail">
@@ -219,7 +224,11 @@
                     <div class="liveness_detail">
                       <p>{{item.orgName}}</p>
                       <p>{{item.orgSpeciality}}</p>
-                      <p><span class="iconfont icon-xing" v-for="(item,index) in 5" :key="index"></span></p>
+                      <!-- <p><span class="iconfont icon-xing" v-for="(item,index) in 5" :key="index"></span></p> -->
+                      <p>
+                        <el-rate v-model="item.attitudeScore" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
+                        </el-rate>
+                      </p>
                     </div>
                   </a>
                 </li>
@@ -233,7 +242,7 @@
             <ul>
               <li v-for="(item,index) in RatingList" :key="index">
                 <p>{{item.evaluationAccount|hiddentel}} ：@ <span>{{item.orgName}}</span>@{{item.advisorName}}</p>
-                <p>
+                <p>              
                   <span :class="[item.evaluationScore>=1?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span>
                   <span :class="[item.evaluationScore>=2?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
                   <span :class="[item.evaluationScore>=3?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
@@ -413,7 +422,7 @@ export default {
     getCounselorList(){
       let _this = this;
       this.api.get({
-        url: "getServiceConsultantList",
+        url: "getServiceConList",
         data: {
           domain:this.domain,
           page:1,
@@ -487,7 +496,7 @@ export default {
       margin: 0 auto;
       .market_breadcrumb{
         margin: 15px 0;
-        font-size: 12px;
+        font-size: 16px;
       }
       .market_navicon{
         display: flex;
@@ -553,6 +562,9 @@ export default {
         }
         .active_list{
           margin-top: 28px;
+          .el-carousel__container{
+            height: 347px;
+          }
           .active_btn{
             width: 34px;
             height: 34px;
@@ -763,7 +775,8 @@ export default {
             // float: left;
             // width: 275px;
             // height: 345px;
-                margin-right: 3%;
+                margin-right: 2%;
+                width: 24%;
           }
               li:last-child{
                 margin-right: 0;
@@ -876,7 +889,7 @@ export default {
                       width: 80%;
                       border-radius: 50%;
                       display: block;
-                      margin: 24px auto;
+                      margin: 20px auto;
                     }
                   }
                   .info_all{
@@ -908,7 +921,7 @@ export default {
                       width: 79%;
                       border-radius: 50%;
                       display: block;
-                      margin: 8px auto;
+                      margin: 6px auto;
                     }
                   }
                   .info_all{

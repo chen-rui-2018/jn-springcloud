@@ -16,7 +16,7 @@ import java.io.Serializable;
 @ApiModel(value = "AcceptInviteParam",description = "接收邀请入参")
 public class AcceptInviteParam implements Serializable {
 
-    @ApiModelProperty(value = "账号", required = true)
+    @ApiModelProperty(value = "账号", notes = "该字段仅为测试字段", required = true)
     @NotNull(message = "账号不能为空")
     private String account;
 

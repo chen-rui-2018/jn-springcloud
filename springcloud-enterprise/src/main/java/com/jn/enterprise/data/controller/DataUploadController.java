@@ -112,6 +112,16 @@ public class DataUploadController  extends BaseController {
     }
 
 
+    @ControllerLog(doAction = "数据上报-企业数据上报-保存企业数据上报保存为草稿")
+    @PostMapping(path = "/company/saveCompanyFormDataIsDraft")
+    @ApiOperation(value = "保存企业数据上报保存为草稿",notes = "返回成功或失败,正常结果为1")
+    @RequiresPermissions("/data/company/saveCompanyFormDataIsDraft")
+    public Result<Integer> saveCompanyFormDataIsDraft(@RequestBody ModelDataVO data){
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        int result = uploadService.saveCompanyFormDataAsDraft(data,user);
+        return new Result(result);
+    }
+
 
 
 
@@ -146,12 +156,10 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果,正常结果为1")
     @RequiresPermissions("/data/company/setStatisticsListUrgeCompany")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001")
-
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="fillId",value = "填报Id",dataType = "String",paramType = "query",example = "001")
     })
-    public Result<Integer> setStatisticsListUrgeCompany(String formTime,String modelName,String modelCycle){
+    public Result<Integer> setStatisticsListUrgeCompany(String taskBatch,String fillId){
         return new Result();
     }
 
@@ -160,13 +168,12 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "数据列表修改截至日期",notes = "返回修改截至日期的结果，正常结果为1")
     @RequiresPermissions("/data/company/setDeadlineCompany")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="fillInFormDeadline",value = "截至日期",dataType = "String",paramType = "query",example = "001")
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="modelId",value = "模板ID",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="newDeadLine",value = "新的截至日期",dataType = "String",paramType = "query",example = "001")
 
     })
-    public Result<Integer> setDeadlineCompany(String formTime,String modelName,String modelCycle){
+    public Result<Integer> setDeadlineCompany(String taskBatch,String modelId,String newDeadLine){
         return new Result();
     }
 
@@ -246,6 +253,7 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "园区本月数据上报保存",notes = "返回成功或失败,正常结果为1")
     @RequiresPermissions("/data/garden/saveTaskData")
     public Result<Integer> saveTaskData(@RequestBody ModelDataVO data){
+
         return new Result();
     }
 
@@ -342,27 +350,26 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果,正常结果为1")
     @RequiresPermissions("/data/garden/setStatisticsListUrge")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001")
-
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="fillId",value = "填报Id",dataType = "String",paramType = "query",example = "001")
     })
-    public Result<Integer> setStatisticsListUrge(String formTime,String modelName,String modelCycle){
+    public Result<Integer> setStatisticsListUrge(String taskBatch,String fillId){
         return new Result();
     }
+
+
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区内部数据列表修改截至日期")
     @GetMapping(path = "/garden/setDeadline")
     @ApiOperation(value = "园区内部数据列表修改截至日期",notes = "返回修改截至日期的结果,正常结果为1")
     @RequiresPermissions("/data/garden/setDeadline")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="fillInFormDeadline",value = "截至日期",dataType = "String",paramType = "query",example = "001")
-
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="newDeadLine",value = "新的截至日期",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="modelId",value = "模板ID",dataType = "String",paramType = "query",example = "001")
     })
-    public Result<Integer> setDeadline(String formTime,String modelName,String modelCycle){
+
+    public Result<Integer> setDeadline(String taskBatch,String newDeadLine,String modelId){
         return new Result();
     }
 

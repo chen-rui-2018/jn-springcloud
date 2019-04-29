@@ -145,15 +145,13 @@ public interface TargetDao {
 
     /**
      * 更新任务状态
-     * @param nowDate
      */
-    void updateTask(String nowDate);
+    void updateTask();
 
     /**
      * 预警任务获取
-     * @param nowDate
      */
-    List<WarningTaskModel> getWarningTask(String nowDate);
+    List<WarningTaskModel> getWarningTask(@Param("fillId") String fillId,@Param("taskBatch") String taskBatch);
 
 
     /**

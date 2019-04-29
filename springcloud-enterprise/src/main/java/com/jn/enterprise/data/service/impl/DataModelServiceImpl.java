@@ -271,6 +271,8 @@ public class DataModelServiceImpl implements DataModelService {
             //创建model_id;插入模板基本信息
             String modelId=UUID.randomUUID().toString().replaceAll("-","");
             tbDataReportingModel.setModelId(modelId);
+            tbDataReportingModel.setCreatedTime(new Date());
+            tbDataReportingModel.setCreatorAccount(user.getAccount());
             tbDataReportingModelMapper.insertSelective(tbDataReportingModel);
 
         }else{
@@ -440,7 +442,7 @@ public class DataModelServiceImpl implements DataModelService {
         List<InputFormatModel> imlist = new ArrayList<>();
         if(tList !=null && tList.size()>0){
             TbDataReportingTargetGroupCriteria example =new TbDataReportingTargetGroupCriteria();
-            example.or().andTargetIdIn(tList);
+            example.or().andTargetIdIn(tList).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
             List<TbDataReportingTargetGroup> tgList = tbDataReportingTargetGroupMapper.selectByExample(example);
             InputFormatModel im =null;
             for(TbDataReportingTargetGroup tgBean:tgList){

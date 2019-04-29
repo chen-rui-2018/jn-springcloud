@@ -99,7 +99,7 @@ public class AdvisorManagementServiceImplTest {
             List<TbServiceAdvisor> list= (List<TbServiceAdvisor>)paginationData.getRows();
             if(list!=null){
                 for(TbServiceAdvisor advisor:list){
-                    logger.info(advisor.toString());
+                    logger.info("顾问管理{}",advisor.toString());
                 }
                 assertThat(list.size(),greaterThanOrEqualTo(0));
             }else{

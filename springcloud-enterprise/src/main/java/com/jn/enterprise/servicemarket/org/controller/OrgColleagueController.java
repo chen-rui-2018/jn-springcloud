@@ -12,13 +12,11 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,10 +57,10 @@ public class OrgColleagueController extends BaseController {
     }
 
     @ControllerLog(doAction = "设置为联系人")
-    @ApiOperation(value = "设置为联系人",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "设置为联系人",notes = "account：设置为联系人的账号，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/setAsContact",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/setAsContact")
-    public Result setAsContact(@ApiParam(value = "设置为联系人的账号" ,required = true,example = "wangsong")String account){
+    public Result setAsContact(String account){
         Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
@@ -76,10 +74,10 @@ public class OrgColleagueController extends BaseController {
     }
 
     @ControllerLog(doAction = "取消联系人")
-    @ApiOperation(value = "取消联系人",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "取消联系人",notes = "account：取消联系人的账号，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/cancelAsContact",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/cancelAsContact")
-    public Result cancelAsContact(@ApiParam(value = "取消联系人的账号" ,required = true,example = "wangsong")String account){
+    public Result cancelAsContact(String account){
         Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
@@ -93,10 +91,10 @@ public class OrgColleagueController extends BaseController {
     }
 
     @ControllerLog(doAction = "删除联系人或顾问")
-    @ApiOperation(value = "删除联系人或顾问(pc/app删除顾问操作)",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "删除联系人或顾问(pc/app删除顾问操作)",notes = "accountList：删除联系人或顾问的账号，支持多个，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/deleteContactOrAdvisor",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/deleteContactOrAdvisor")
-    public Result deleteContactOrAdvisor(@ApiParam(value = "删除联系人或顾问的账号,已数组传递" ,required = true,example = "['wangsong','zhaoliu']")@RequestBody String[] accountList){
+    public Result deleteContactOrAdvisor(String[] accountList){
         Assert.notNull(accountList, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();

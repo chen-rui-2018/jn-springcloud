@@ -71,12 +71,12 @@ public class BusinessPromotionServiceImplTest {
     @Before
     public void setUp() throws Exception {
         //企业宣传列表查询
-        bpp.setApprovalStatus("0");
+        bpp.setApprovalStatus("");
         bpp.setSearchContent("");
         bpp.setPropagandaType("");
         bpp.setNeedPage("1");
 
-        loginAccount="wangsong";
+        loginAccount="18073856620";
 
         //企业宣传详情
         propagandaId="6307c8ad2117451fb49b1b8e7e370b6c";
@@ -109,7 +109,6 @@ public class BusinessPromotionServiceImplTest {
         bpdp.setIssuePlatform("1");
         bpdp.setPropagandaType("app_start_promotion");
         bpdp.setEffectiveDate("2019-04-27");
-        bpdp.setInvalidDate("2019-05-28");
         bpdp.setPropagandaTitle("App启动宣传测试");
         bpdp.setPropagandaDetails("宣传详情是APP启动测试");
         bpdp.setPropagandaArea("central");
@@ -123,7 +122,6 @@ public class BusinessPromotionServiceImplTest {
         businessParam.setIssuePlatform("2");
         businessParam.setPropagandaType("home_promotion");
         businessParam.setEffectiveDate("2019-04-24");
-        businessParam.setInvalidDate("2019-05-30");
         businessParam.setPropagandaTitle("首页宣传测试");
         businessParam.setPropagandaDetails("宣传详情是首页宣传");
         businessParam.setPropagandaArea("bottom");

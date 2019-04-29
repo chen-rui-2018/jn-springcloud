@@ -33,7 +33,7 @@ public class ServiceHonorParam implements Serializable {
     @NotNull(message="证书类型不能为空")
     private String certificateCode;
     @ApiModelProperty(value = "颁发/获得时间",example = "201903")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{getTime:'颁发/获得时间格式错误'}")
     private String getTime;
     @ApiModelProperty(value = "证书证件",example = "xxx/photo.jpg")

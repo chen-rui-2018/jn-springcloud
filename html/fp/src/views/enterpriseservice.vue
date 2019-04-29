@@ -1,12 +1,15 @@
 <template>
     <div class="enterpriseservice">
         <div class="portalIndexImg">
-            <div id="header">
+            <div id="poheader" class="header" :class="{'headerw':showFF}">
                 <div class="headerContainer clearfix">
-                    <div class="titleImg fl"><img src="@/../static/img/LOGO1.png" class="pointer" alt="" @click="$router.push({path:'/'})"></div>
+                    <div class="titleImg fl">
+                        <img src="@/../static/img/LOGO1.png" v-if="!showFF"  class="pointer" alt="" @click="$router.push({path:'/'})">
+                        <img src="@/../static/img/login-logo.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
+                        </div>
                     <div class="headerRight fr">
-                        <div class="search" v-if="!sousuo">
-                            <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
+                        <div class="search pointer" >
+                            <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
                         </div>
                         <div class="navlogin">
                             <a @click="$router.push({path:'/login'})">登录</a>
@@ -14,14 +17,14 @@
                             <a @click="$router.push({path:'/register'})">注册</a>
                         </div>
                     </div>
-                    <div class="nav">
-                        <transition name="fade">
-                            <div class="sousuo posA" v-if="sousuo">
+                    <div class="nav" id="nav">
+                        <!-- <transition name="fade"> -->
+                            <!-- <div class="sousuo posA" v-if="sousuo">
                                 <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
                                 <input type="text" v-focus @keyup.enter="handleSearch">
                                 <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-                            </div>
-                            <ul class="posA clearfix" id="posA" v-else>
+                            </div> -->
+                            <ul class="posA clearfix" id="posA">
                                 <li class="firstLi" @click="$router.push({path:'/'})">
                                     <a href="javascript:void(0);">首页</a>
                                 </li>
@@ -36,303 +39,484 @@
                                 </li>
                             </ul>
 
-                        </transition>
+                        <!-- </transition> -->
                     </div>
                 </div>
             </div>
-            <el-carousel :interval="5000" arrow="never">
-                <!-- <el-carousel-item v-for="item in 4" :key="item"> -->
-                <el-carousel-item>
-                    <h3><img class="porImg" src="@/../static/img/qiye2.jpg" alt="" @click="$router.push({path:'/serMatHp'})"></h3>
-                </el-carousel-item>
-            </el-carousel>
-            <div class="quickEnter">
-                <ul>
-                    <li>
-                        <span>人才申报</span>
-                        <p>PEOPLE&nbsp;DECLARE</p>
-                        <img src="@/../static/img/right-arrow.png" alt="">
-                    </li>
-                    <li>
-                        <span>高新企业</span>
-                        <p>HIGH-TECH&nbsp;ENTERPRISE</p>
-                        <img src="@/../static/img/right-arrow.png" alt="">
-                    </li>
-                    <li>
-                        <span>孵化企业</span>
-                        <p>INCUBATION&nbsp;ENTERPRISE</p>
-                        <img src="@/../static/img/right-arrow.png" alt="">
-                    </li>
-                    <li>
-                        <span>行政审批</span>
-                        <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
-                        <img src="@/../static/img/right-arrow.png" alt="">
-                    </li>
-                </ul>
+            <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
+                <el-collapse-transition>
+                <div v-show="show4">
+                    <div class="transition-box">
+                    <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
+                        <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+                    </el-input>
+                    </div>
+                </div>
+                </el-collapse-transition>
             </div>
         </div>
-        <div class="declarationNotice w pr">
-            <div class="tit color2 pr">申报中心
-            </div>
-            <div class="eng mainColor">DECLARE&nbsp;CENTER</div>
-            <div class="line"></div>
-            <div class="info clearfix">
-                <div class="left fl">
-                    <div class="lf">
-                        <ul>
-                            <li class="li1">01</li>
-                            <li class="li2" id="li2"></li>
-                            <li class="li3">02</li>
-                            <li class="li4" id="li4"></li>
-                            <li class="li5">03</li>
-                        </ul>
+        <div class="enterpriseCon">
+            <div class="banner pr">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide" style="width:100%">
+                            <img src="@/../static/img/banner11.png" alt="" @click="$router.push({path:'/serMatHp'})">
+                        </div>
+                        <div class="swiper-slide" style="width:100%">
+                            <img src="@/../static/img/banner11.png" alt="" @click="$router.push({path:'/serMatHp'})">
+                        </div>
+                        <div class="swiper-slide" style="width:100%">
+                            <img src="@/../static/img/banner11.png" alt="" @click="$router.push({path:'/serMatHp'})">
+                        </div>                  
                     </div>
-                    <div class="rt">
-                        <ul>
-                            <li class="t1 color1">关于高新技术企业认定的申报及专项投资申报
-                                <p>申报截止时间：2019-03-26</p>
-                            </li>
-                            <li class="t1 color1">申报高新技术产品认定,是国家高新技术企业认定的加分项。
-                                <p>申报截止时间：2019-03-26</p>
-                            </li>
-                            <li class="t1 color1">南京市人民政府关于高新区企业资质荣誉申请...
-                                <p>申报截止时间：2019-03-26</p>
-                            </li>
-                        </ul>
+                    <!-- 如果需要分页器 -->
+                         <div class="swiper-pagination"></div>
+
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev" @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
+                            <i class="iconfont icon-leftarrow pointer" v-show="showBtn"></i>
+                        </div>
+                        <div class="swiper-button-next"  @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
+                            <i class="iconfont icon-rightarrow pointer" v-show="showBtn"></i>
+                        </div>
+                </div>
+                <div class="quickEnter">
+                    <ul>
+                        <li>
+                            <span>人才申报</span>
+                            <p>PEOPLE&nbsp;DECLARE</p>
+                            <img src="@/../static/img/right-arrow.png" alt="">
+                        </li>
+                        <li>
+                            <span>高新企业</span>
+                            <p>HIGH-TECH&nbsp;ENTERPRISE</p>
+                            <img src="@/../static/img/right-arrow.png" alt="">
+                        </li>
+                        <li>
+                            <span>孵化企业</span>
+                            <p>INCUBATION&nbsp;ENTERPRISE</p>
+                            <img src="@/../static/img/right-arrow.png" alt="">
+                        </li>
+                        <li>
+                            <span>行政审批</span>
+                            <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
+                            <img src="@/../static/img/right-arrow.png" alt="">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="declarationNotice w pr" ref="declarationNotice" data-class="bottom">
+                <div ref="deNotice1" data-class="bottom">
+                    <div class="tit color2 pr">申报中心
+                    </div>
+                    <div class="eng mainColor">Declare&nbsp;center</div>
+                    <div class="line"></div>
+                </div>
+                <div ref="deNotice2" data-class="bottom1">
+                    <div class="info clearfix">
+                        <div class="left fl pr">
+                            <el-collapse accordion v-model="activeNames" @change="handleChange11">
+                                <el-collapse-item name='1'>
+                                    <template slot="title">
+                                        <div class="li1 aa" :class="{'active':sw=='1'}">01</div>
+                                        <span class="color1">关于高新技术企业认定的申报及专项投资申报</span>
+                                    </template>
+                                    <p>申报截止时间：2019-03-26</p>
+                                    <!-- <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div> -->
+                                </el-collapse-item>
+                                <el-collapse-item name='2'>
+                                    <template slot="title">
+                                        <div class="li3 aa" :class="{'active':sw=='2'}">02</div>申报高新技术产品认定,是国家高新技术企业认定的加分项。
+                                    </template>
+                                    <p>申报截止时间：2019-03-26</p>
+                                </el-collapse-item>
+                                <el-collapse-item name='3'>
+                                    <template slot="title">
+                                        <div class="li5 aa" :class="{'active':sw=='3'}">03</div>南京市人民政府关于高新区企业资质荣誉申请...
+                                    </template>
+                                    <p>申报截止时间：2019-03-26</p>
+                                </el-collapse-item>
+                            </el-collapse>
+                        </div>
+                        <div class="right fl"></div>
+                    </div>
+                    <div class="pagination-container">
+                        <el-pagination background layout="prev, pager, next" :total="30">
+                        </el-pagination>
                     </div>
                 </div>
-                <div class="right fl"></div>
 
             </div>
-            <div class="pagination-container">
-                <el-pagination background layout="prev, pager, next" :total="30">
-                </el-pagination>
+            <div class="policyCenter w" ref="policyCenter" data-class="bottom1">
+                <div ref="poCenter1" data-class="bottom">
+                    <div class="tit color2 pr">政策中心
+                    </div>
+                    <div class="eng mainColor">Policy&nbsp;center</div>
+                    <div class="line"></div>
+                </div>
+                <div class="paging w pr" ref="poCenter2" data-class="bottom">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <ul class="page1 clearfix" ref="poCenter3" data-class="bottom">
+                                    <li ref="li11" data-class="left">
+                                        <div class="left1">N</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">白下高新区金融扶持政策</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li ref="li22" data-class="right">
+                                        <div class="left1">E</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">南京白下高新区税收优惠政策</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li ref="li33" data-class="left">
+                                        <div class="left1">W</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">南京市人民政府人才激励政策...</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li ref="li44" data-class="right">
+                                        <div class="left1">S</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">关于维护知识产权政策</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="swiper-slide">
+                                <ul class="page1 clearfix">
+                                    <li>
+                                        <div class="left1">N</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">白下高新区金融扶持政策</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li >
+                                        <div class="left1">E</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">南京白下高新区税收优惠政策</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="left1">W</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">南京市人民政府人才激励政策...</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li >
+                                        <div class="left1">S</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">关于维护知识产权政策</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="swiper-slide">
+                                <ul class="page1 clearfix">
+                                    <li>
+                                        <div class="left1">N</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">白下高新区金融扶持政策</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li >
+                                        <div class="left1">E</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">南京白下高新区税收优惠政策</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="left1">W</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">南京市人民政府人才激励政策...</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li >
+                                        <div class="left1">S</div>
+                                        <div class="right1">
+                                            <div class="rightTit color1">关于维护知识产权政策</div>
+                                            <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
+                                            <div class="liBom clearfix">
+                                                <p class="fl color3">
+                                                    <i class="el-icon-view"></i>&nbsp;89</p>
+                                                <span class="fr mainColor">南京市级</span>
+                                                <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="policyCenter w">
-            <div class="tit color2 pr">政策中心
+            <div class="approval" ref="approval" data-class="bottom">
+                <div class="approvalInfo w" ref="approval1" data-class="bottom1">
+                    <div class="approTit">行政审批</div>
+                    <div class="approEng">Administrative&nbsp;approval</div>
+                    <div class="line"></div>
+                    <div class="approDel">了解详情&nbsp;&nbsp;<img src="@/../static/img/xiala.png" alt=""><img src="@/../static/img/xiala.png" alt=""></div>
+                </div>
             </div>
-            <div class="eng mainColor">POLICY&nbsp;CENTER</div>
-            <div class="line"></div>
-            <div class="paging w pr">
-                <el-carousel :interval="5000" arrow="always">
-                    <el-carousel-item v-for="item in 3" :key="item">
-                        <ul class="page1 clearfix">
-                            <li>
-                                <div class="left1">N</div>
-                                <div class="right1">
-                                    <div class="rightTit color1">白下高新区金融扶持政策</div>
-                                    <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                                    <div class="liBom clearfix">
-                                        <p class="fl color3">
-                                            <i class="el-icon-view"></i>&nbsp;89</p>
-                                        <span class="fr mainColor">南京市级</span>
-                                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="left1">E</div>
-                                <div class="right1">
-                                    <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                                    <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                                    <div class="liBom clearfix">
-                                        <p class="fl color3">
-                                            <i class="el-icon-view"></i>&nbsp;89</p>
-                                        <span class="fr mainColor">南京市级</span>
-                                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="left1">W</div>
-                                <div class="right1">
-                                    <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                                    <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                                    <div class="liBom clearfix">
-                                        <p class="fl color3">
-                                            <i class="el-icon-view"></i>&nbsp;89</p>
-                                        <span class="fr mainColor">南京市级</span>
-                                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="left1">S</div>
-                                <div class="right1">
-                                    <div class="rightTit color1">关于维护知识产权政策</div>
-                                    <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                                    <div class="liBom clearfix">
-                                        <p class="fl color3">
-                                            <i class="el-icon-view"></i>&nbsp;89</p>
-                                        <span class="fr mainColor">南京市级</span>
-                                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </el-carousel-item>
-                </el-carousel>
-                <!-- <ul class="page2">
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-                <div class="arrow">
-                    <div class="arrow1"></div>
-                    <div class="arrow2"></div>
-                </div> -->
-            </div>
-        </div>
-        <div class="approval">
-            <div class="approvalInfo w">
-                <div class="approTit">行政审批</div>
-                <div class="approEng">Administrative&nbsp;approval</div>
-                <div class="line"></div>
-                <div class="approDel">了解详情&nbsp;&nbsp;<img src="@/../static/img/xiala.png" alt=""><img src="@/../static/img/xiala.png" alt=""></div>
-            </div>
-        </div>
-        <div class="popularActi w">
-            <div class="tit color2">活动中心</div>
-            <div class="eng mainColor">Activity&nbsp;center</div>
-            <div class="line"></div>
-            <div class="acti pr">
-                <el-carousel :interval="5000" arrow="always" :autoplay="false">
-                    <el-carousel-item v-for="item in 4" :key="item">
-                        <ul class="actiUl clearfix">
-                            <li>
-                                <div class="postImgItem">
-                                    <img src="@/../static/img/heng4.png" class="postImg" alt="活动海报图片">
-                                </div>
-                                <div class="actiInfo">
-                                    <p class="actiNameItem">
-                                        白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
-                                    </p>
-                                    <p class="actiTimer">
-                                        <i class="el-icon-time"></i>
-                                        <span>10/17 周日14:00-17:00</span>
-                                        <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                                        <!-- <span>周日14：00-17：00</span> -->
-                                    </p>
-                                    <p>
-                                        <i class="el-icon-location-outline"></i>
-                                        <span>白下高新区管委会161号—A座</span>
-                                    </p>
-                                </div>
-                                <div class="actiNum clearfix">
-                                    <div class="avatar">
-                                        <ul>
-                                            <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                        </ul>
-                                    </div>
-                                    <i>678/1000名</i>
-                                    <p class="avaP">
-                                        <img src="@/../static/img/xin.png" alt="">16
-                                    </p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="postImgItem postImgItem2">
-                                    <img src="@/../static/img/dengpao2.png" class="postImg" alt="活动海报图片">
-                                </div>
-                                <div class="actiInfo">
-                                    <p class="actiNameItem">
-                                        白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
-                                    </p>
-                                    <p class="actiTimer">
-                                        <i class="el-icon-time"></i>
-                                        <span>10/17 周日14:00-17:00</span>
-                                        <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                                        <!-- <span>周日14：00-17：00</span> -->
-                                    </p>
-                                    <p>
-                                        <i class="el-icon-location-outline"></i>
-                                        <span>白下高新区管委会161号—A座</span>
-                                    </p>
-                                </div>
-                                <div class="actiNum clearfix">
-                                    <div class="avatar">
-                                        <ul>
-                                            <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                        </ul>
-                                    </div>
-                                    <i>678/1000名</i>
-                                    <p class="avaP">
-                                        <img src="@/../static/img/xin.png" alt="">16
-                                    </p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="postImgItem">
-                                    <img src="@/../static/img/heng3.png" class="postImg" alt="活动海报图片">
-                                </div>
-                                <div class="actiInfo">
-                                    <p class="actiNameItem">
-                                        白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
-                                    </p>
-                                    <p class="actiTimer">
-                                        <i class="el-icon-time"></i>
-                                        <span>10/17 周日14:00-17:00</span>
-                                        <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                                        <!-- <span>周日14：00-17：00</span> -->
-                                    </p>
-                                    <p>
-                                        <i class="el-icon-location-outline"></i>
-                                        <span>白下高新区管委会161号—A座</span>
-                                    </p>
-                                </div>
-                                <div class="actiNum clearfix">
-                                    <div class="avatar">
-                                        <ul>
-                                            <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                        </ul>
-                                    </div>
-                                    <i>678/1000名</i>
-                                    <p class="avaP">
-                                        <img src="@/../static/img/xin.png" alt="">16
-                                    </p>
-                                </div>
-                            </li>
-                        </ul>
-                    </el-carousel-item>
-                </el-carousel>
-                <!-- <i class="iconfont icon-leftarrow pointer"></i>
+            <div class="popularActi w" ref="popularActi" data-class="bottom">
+                <div ref="acti11" data-class="bottom">
+                    <div class="tit color2">活动中心</div>
+                    <div class="eng mainColor">Activity&nbsp;center</div>
+                    <div class="line"></div>
+                </div>
+                <div class="acti pr" ref="acti22" data-class="bottom1">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" style="width:100%">
+                                <ul class="actiUl clearfix">
+                                    <li>
+                                        <!-- <div class="postImgItem" >
+                                            <img src="@/../static/img/heng1.png" class="postImg" v-if="show1" @mouseenter.stop="show1=!show1" alt="活动海报图片">
+                                            <img src="@/../static/img/组 40.png" class="postImg" v-else @mouseleave.stop="show1=!show1" alt="活动海报图片">
+                                        </div> -->
+                                        <div class="postImgItem" @mouseenter.stop="show1=!show1,show11=!show11" @mouseleave.stop="show1=!show1,show11=!show11">
+                                            <img src="@/../static/img/heng1.png" :class="{'poIm':show1}" class="postImg" alt="活动海报图片">
+                                            <img src="@/../static/img/组 40.png" :class="{'poIm':show11}" class="postImg1" alt="活动海报图片">
+                                        </div>
+                                        <div class="actiInfo">
+                                            <p class="actiNameItem">
+                                                白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
+                                            </p>
+                                            <p class="actiTimer">
+                                                <i class="el-icon-time"></i>
+                                                <span>10/17 周日14:00-17:00</span>
+                                                <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
+                                                <!-- <span>周日14：00-17：00</span> -->
+                                            </p>
+                                            <p>
+                                                <i class="el-icon-location-outline"></i>
+                                                <span>白下高新区管委会161号—A座</span>
+                                            </p>
+                                        </div>
+                                        <div class="actiNum clearfix">
+                                            <div class="avatar">
+                                                <ul>
+                                                    <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                </ul>
+                                            </div>
+                                            <i>678/1000名</i>
+                                            <p class="avaP">
+                                                <!-- <i class="iconfont icon-xihuan"></i>16 -->
+                                                <img src="@/../static/img/xin.png" alt="">16
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <!-- <div class="postImgItem" >
+                                            <img src="@/../static/img/heng1.png" class="postImg" v-if="show2" @mouseenter.stop="show2=!show2" alt="活动海报图片">
+                                            <img src="@/../static/img/组 40.png" class="postImg" v-else @mouseleave.stop="show2=!show2" alt="活动海报图片">
+                                        </div> -->
+                                        <div class="postImgItem" @mouseenter.stop="show2=!show2,show22=!show22" @mouseleave.stop="show2=!show2,show22=!show22">
+                                            <img src="@/../static/img/heng1.png" :class="{'poIm':show2}" class="postImg" alt="活动海报图片">
+                                            <img src="@/../static/img/组 40.png" :class="{'poIm':show22}" class="postImg1" alt="活动海报图片">
+                                        </div>
+                                        <div class="actiInfo">
+                                            <p class="actiNameItem">
+                                                白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
+                                            </p>
+                                            <p class="actiTimer">
+                                                <i class="el-icon-time"></i>
+                                                <span>10/17 周日14:00-17:00</span>
+                                                <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
+                                                <!-- <span>周日14：00-17：00</span> -->
+                                            </p>
+                                            <p>
+                                                <i class="el-icon-location-outline"></i>
+                                                <span>白下高新区管委会161号—A座</span>
+                                            </p>
+                                        </div>
+                                        <div class="actiNum clearfix">
+                                            <div class="avatar">
+                                                <ul>
+                                                    <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                </ul>
+                                            </div>
+                                            <i>678/1000名</i>
+                                            <p class="avaP">
+                                                <!-- <i class="iconfont icon-xihuan"></i>16 -->
+                                                <img src="@/../static/img/xin.png" alt="">16
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <!-- <div class="postImgItem" >
+                                            <img src="@/../static/img/heng3.png" class="postImg" v-if="show3" @mouseenter.stop="show3=!show3" alt="活动海报图片">
+                                            <img src="@/../static/img/组 40.png" class="postImg" v-else @mouseleave.stop="show3=!show3" alt="活动海报图片">
+                                        </div> -->
+                                        <div class="postImgItem" @mouseenter.stop="show3=!show3,show33=!show33" @mouseleave.stop="show3=!show3,show33=!show33">
+                                            <img src="@/../static/img/heng1.png" :class="{'poIm':show3}" class="postImg" alt="活动海报图片">
+                                            <img src="@/../static/img/组 40.png" :class="{'poIm':show33}" class="postImg1" alt="活动海报图片">
+                                        </div>
+                                        <div class="actiInfo">
+                                            <p class="actiNameItem">
+                                                白下高新科技园区国庆红歌唱响比赛， 大型主题活动即将开始
+                                            </p>
+                                            <p class="actiTimer">
+                                                <i class="el-icon-time"></i>
+                                                <span>10/17 周日14:00-17:00</span>
+                                                <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
+                                                <!-- <span>周日14：00-17：00</span> -->
+                                            </p>
+                                            <p>
+                                                <i class="el-icon-location-outline"></i>
+                                                <span>白下高新区管委会161号—A座</span>
+                                            </p>
+                                        </div>
+                                        <div class="actiNum clearfix">
+                                            <div class="avatar">
+                                                <ul>
+                                                    <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                    <li><img src="" alt=""></li>
+                                                </ul>
+                                            </div>
+                                            <i>678/1000名</i>
+                                            <p class="avaP">
+                                                <img src="@/../static/img/xin.png" alt="">16
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- 如果需要分页器 -->
+                        <div class="swiper-pagination" style="display:none"></div>
+
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev">
+                            <i class="iconfont icon-leftarrow pointer"></i>
+                        </div>
+                        <div class="swiper-button-next">
+                            <i class="iconfont icon-rightarrow pointer"></i>
+                        </div>
+                    </div>
+                    <!-- <i class="iconfont icon-leftarrow pointer"></i>
                 <i class="iconfont icon-rightarrow pointer"></i> -->
-                <div class="lejieDel">了解详情</div>
+                    <div class="lejieDel">了解详情</div>
+                </div>
             </div>
-        </div>
-        <!-- 科技金融 -->
-        <div class="technologyFinance pr">
-            <div class="w">
+            <!-- 科技金融 -->
+            <div class="technologyFinance pr" ref="technologyFinance" data-class="bottom">
                 <div class="tuoyuan">
                     <i class="el-icon-arrow-down"></i>
                 </div>
-                <div class="tit color2 pr pointer" @click="$router.push({path:'/tfindex'})">科技金融
-                </div>
-                <div class="eng mainColor pointer" @click="$router.push({path:'/tfindex'})">SCIENCE&nbsp;AND&nbsp;FINACIAL</div>
-                <div class="line"></div>
-                <div class="btns" id="btns">
-                    <button class="btn1">投资人</button>
-                    <button class="btn2 btn11">金融产品</button>
-                    <button class="btn2">金融机构</button>
-                </div>
-                <div class="tecnInfo clearfix">
-                    <!--  <div class="info1 clearfix">
+                <div class="w" ref="tech" data-class="bottom">
+
+                    <div ref="tech1" data-class="bottom">
+                        <div class="tit color2 pr pointer" @click="$router.push({path:'/tfindex'})">科技金融
+                        </div>
+                        <div class="eng mainColor pointer" @click="$router.push({path:'/tfindex'})">Science&nbsp;and&nbsp;finacial</div>
+                        <div class="line"></div>
+                    </div>
+                    <div ref="tech2" data-class="bottom1">
+                        <div class="btns" id="btns">
+                            <button class="btn1">投资人</button>
+                            <button class="btn2 btn11">金融产品</button>
+                            <button class="btn2">金融机构</button>
+                        </div>
+                        <div class="tecnInfo clearfix">
+                            <!--  <div class="info1 clearfix">
                         <div class="lef1 fl clearfix">
                             <div class="imgItem fl"><img src="@/../static/img/largeImg.png" alt=""></div>
                             <div class="itemInfo fr">
@@ -421,138 +605,235 @@
                             </li>
                         </ul>
                     </div> -->
-                    <div id="conselor_info">
-                        <ul>
-                            <li class="conselor_left">
-                                <div v-for="(item,index) in 2" :key="index">
-                                    <a href="javascript:;">
-                                        <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
-                                        <div class="info_all">
-                                            <div class="info_name">
-                                                <span>郭龙华</span>/
-                                                <span>总经理</span>
-                                            </div>
-                                            <div class="info_detail">
-                                                <p>苏州万隆永鼎会计师事务所有限公司</p>
-                                                <p>合伙人</p>
-                                            </div>
+                            <div id="conselor_info">
+                                <ul>
+                                    <li class="conselor_left">
+                                        <div v-for="(item,index) in 2" :key="index">
+                                            <a href="javascript:;">
+                                                <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
+                                                <div class="info_all">
+                                                    <div class="info_name">
+                                                        <span>郭龙华</span>/
+                                                        <span>总经理</span>
+                                                    </div>
+                                                    <div class="info_detail">
+                                                        <p>苏州万隆永鼎会计师事务所有限公司</p>
+                                                        <p>合伙人</p>
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
-                                    </a>
-                                </div>
-                            </li>
-                            <li class="conselor_mid">
-                                <div v-for="(counselorinfoItem2,counselorinfoindex2) in 8" :key="counselorinfoindex2" class="conselor_mid_list">
-                                    <a href="javascript:;">
-                                        <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
-                                        <div class="info_all">
-                                            <div class="info_name">
-                                                <span>郭龙华</span>/
-                                                <span>总经理</span>
-                                            </div>
-                                            <div class="info_detail">
-                                                <p>苏州万隆永鼎会计师事务所有限公司</p>
-                                                <p>合伙人</p>
-                                            </div>
+                                    </li>
+                                    <li class="conselor_mid">
+                                        <div v-for="(counselorinfoItem2,counselorinfoindex2) in 8" :key="counselorinfoindex2" class="conselor_mid_list">
+                                            <a href="javascript:;">
+                                                <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
+                                                <div class="info_all">
+                                                    <div class="info_name">
+                                                        <span>郭龙华</span>/
+                                                        <span>总经理</span>
+                                                    </div>
+                                                    <div class="info_detail">
+                                                        <p>苏州万隆永鼎会计师事务所有限公司</p>
+                                                        <p>合伙人</p>
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
-                                    </a>
-                                </div>
 
-                            </li>
-                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="humanResources">
-            <div class="tit pr">人力资源
-            </div>
-            <div class="eng">THE&nbsp;HUMAN&nbsp;RESOURCES</div>
-            <div class="line"></div>
-            <div class="humanResInfo w">
-                <el-card>
-                    <div class="infoTit clearfix">
-                        <div class="btn fl">
-                            <button class="btn1">企业招聘</button>
-                            <button class="btn2">服务</button>
-                        </div>
-                        <div class="chage fr color3 pointer">
-                            <img src="@/../static/img/huanyipi.png" alt=""> 换一批
-                        </div>
+            <div class="humanResources" ref="humanResources" data-class="bottom">
+                <div ref="human1" data-class="bottom">
+                    <div class="tit pr">人力资源
                     </div>
-                    <ul class="infoCon">
-                        <li class="clearfix">
-                            <div class="con1 fl mainBorder">
-                                <img src="@/../static/img/图层 54.png" alt="">
+                    <div class="eng">The&nbsp;humen&nbsp;resources</div>
+                    <div class="line"></div>
+                </div>
+                <div class="humanResInfo w" ref="human2" data-class="bottom1">
+                    <el-card>
+                        <div class="infoTit clearfix">
+                            <div class="btn fl">
+                                <button class="btn1">企业招聘</button>
+                                <button class="btn2">服务</button>
                             </div>
-                            <div class="con2 fl">
-                                <p class="color4">招聘岗位：人力专员</p>
-                                <p>招聘企业： 苏宁易购</p>
-                                <p>招聘人数: 3人</p>
-                                <p>薪资待遇：
-                                    <span class="mainColor">面议</span>
-                                </p>
-                                <p>发布时间: 2018-10-17 14:02:58</p>
+                            <div class="chage fr color3 pointer">
+                                <img src="@/../static/img/huanyipi.png" alt=""> 换一批
                             </div>
-                            <div class="con3 fr">
-                                <button class="btn1">在线联系</button>
-                                <button class="btn2">了解详情</button>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <div class="con1 fl mainBorder">
-                                <img src="@/../static/img/图层 54.png" alt="">
-                            </div>
-                            <div class="con2 fl">
-                                <p class="color4">招聘岗位：人力专员</p>
-                                <p>招聘企业： 苏宁易购</p>
-                                <p>招聘人数: 3人</p>
-                                <p>薪资待遇：
-                                    <span class="mainColor">面议</span>
-                                </p>
-                                <p>发布时间: 2018-10-17 14:02:58</p>
-                            </div>
-                            <div class="con3 fr">
-                                <button class="btn1">在线联系</button>
-                                <button class="btn2">了解详情</button>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <div class="con1 fl mainBorder">
-                                <img src="@/../static/img/图层 54.png" alt="">
-                            </div>
-                            <div class="con2 fl">
-                                <p class="color4">招聘岗位：人力专员</p>
-                                <p>招聘企业： 苏宁易购</p>
-                                <p>招聘人数: 3人</p>
-                                <p>薪资待遇：
-                                    <span class="mainColor">面议</span>
-                                </p>
-                                <p>发布时间: 2018-10-17 14:02:58</p>
-                            </div>
-                            <div class="con3 fr">
-                                <button class="btn1">在线联系</button>
-                                <button class="btn2">了解详情</button>
-                            </div>
-                        </li>
-                    </ul>
-                </el-card>
+                        </div>
+                        <ul class="infoCon" ref="human3" data-class="bottom1">
+                            <li class="clearfix">
+                                <div class="con1 fl mainBorder">
+                                    <img src="@/../static/img/图层 54.png" alt="">
+                                </div>
+                                <div class="con2 fl">
+                                    <p class="color4">招聘岗位：人力专员</p>
+                                    <p>招聘企业： 苏宁易购</p>
+                                    <p>招聘人数: 3人</p>
+                                    <p>薪资待遇：
+                                        <span class="mainColor">面议</span>
+                                    </p>
+                                    <p>发布时间: 2018-10-17 14:02:58</p>
+                                </div>
+                                <div class="con3 fr">
+                                    <button class="btn1">在线联系</button>
+                                    <button class="btn2">了解详情</button>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <div class="con1 fl mainBorder">
+                                    <img src="@/../static/img/图层 54.png" alt="">
+                                </div>
+                                <div class="con2 fl">
+                                    <p class="color4">招聘岗位：人力专员</p>
+                                    <p>招聘企业： 苏宁易购</p>
+                                    <p>招聘人数: 3人</p>
+                                    <p>薪资待遇：
+                                        <span class="mainColor">面议</span>
+                                    </p>
+                                    <p>发布时间: 2018-10-17 14:02:58</p>
+                                </div>
+                                <div class="con3 fr">
+                                    <button class="btn1">在线联系</button>
+                                    <button class="btn2">了解详情</button>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <div class="con1 fl mainBorder">
+                                    <img src="@/../static/img/图层 54.png" alt="">
+                                </div>
+                                <div class="con2 fl">
+                                    <p class="color4">招聘岗位：人力专员</p>
+                                    <p>招聘企业： 苏宁易购</p>
+                                    <p>招聘人数: 3人</p>
+                                    <p>薪资待遇：
+                                        <span class="mainColor">面议</span>
+                                    </p>
+                                    <p>发布时间: 2018-10-17 14:02:58</p>
+                                </div>
+                                <div class="con3 fr">
+                                    <button class="btn1">在线联系</button>
+                                    <button class="btn2">了解详情</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </el-card>
+                </div>
             </div>
+
         </div>
     </div>
 </template>
 <script>
+import swiper from "swiper";
 export default {
   data() {
     return {
-      sousuo: false
+      showFF: false,
+      show1: false,
+      show11: false,
+      show22: false,
+      show33: false,
+      show2: false,
+      show3: false,
+      show4: false,
+      activeNames: ["1"],
+      searchData:'',
+      showBtn:false,
+      sw:'1',
     };
   },
   mounted() {
     this.$router.afterEach((to, from, next) => {
       window.scrollTo(0, 0);
     });
+    this.init();
+    window.addEventListener("scroll", this.handleScroll, true);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+     handleChange11(val) {
+        console.log(val);
+        if(val=='2'){
+            this.sw='2'
+        } else if(val=='3'){
+            this.sw='3'
+        } else{
+            this.sw='1'
+        }
+      },
+    getElementLeft(element) {
+      var top = element.offsetTop;
+      var curEle = element.offsetParent;
+
+      while (curEle !== null) {
+        top += curEle.offsetTop;
+        curEle = curEle.offsetParent;
+      }
+      return top;
+    },
+    handleScroll() {
+      const osTop =
+        document.documentElement.scrollTop ||
+        document.documentElement.scrollTop;
+      for (const key in this.$refs) {
+        const top = this.getElementLeft(this.$refs[key]);
+        // console.dir(top);
+        if (osTop + innerHeight + 300 >= top + 100) {
+          const name = this.$refs[key].dataset.class;
+          this.$refs[key].classList.add(name);
+        }
+      }
+      if (
+        this.getScrollTop() > document.getElementById("poheader").clientHeight
+      ) {
+        this.showFF = true;
+      } else {
+        this.showFF = false;
+      }
+       if (
+        this.getScrollTop() > document.getElementById("search_box").clientHeight
+      ) {
+        this.show4 = false;
+      } 
+    },
+    getScrollTop() {
+      var scroll_top = 0;
+      if (document.documentElement && document.documentElement.scrollTop) {
+        scroll_top = document.documentElement.scrollTop;
+      } else if (document.body) {
+        scroll_top = document.body.scrollTop;
+      }
+      return scroll_top;
+    },
+    init() {
+      var mySwiper = new swiper(".swiper-container", {
+        direction: "horizontal", // 垂直切换选项
+        loop: true, // 循环模式选项
+
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination"
+        },
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        },
+
+        // 如果需要滚动条
+        scrollbar: {
+          el: ".swiper-scrollbar"
+        }
+      });
+    },
     onchange() {
       console.log(0);
     },
@@ -560,7 +841,7 @@ export default {
       console.log(111);
     },
     handleChange() {
-      this.sousuo = true;
+    //   this.sousuo = true;
     }
   }
 };
@@ -578,54 +859,213 @@ export default {
 // }
 
 .enterpriseservice {
-  #header #posA {
-    > .firstLi {
-      // background: rgba(255, 255, 255, 0.2);
-      background: inherit;
-      color: #fff;
-      border-radius: none;
+  .declarationNotice,
+  .policyCenter,
+  .approval,
+  .popularActi,
+  .technologyFinance,
+  .humanResources,
+  .humanResInfo {
+    opacity: 0;
+  }
+  .bottom {
+    animation: fadeInUp 2s ease forwards;
+  }
+  .bottom1 {
+    animation: fadeInUp 2s ease 0.5s forwards;
+  }
+  .bottom2 {
+    animation: fadeInUp 2s ease 1s forwards;
+  }
+  .left {
+    animation: fadeInLeft 3s ease .5s forwards;
+  }
+  .right {
+    animation: fadeInRight 3s ease .5s forwards;
+  }
+  .swiper-container {
+    width: 100%;
+  }
+ 
+  .portalIndexImg {
+      color:#fff;
+    .swiper-slide {
+      > img {
+        width: 100%;
+        vertical-align: middle;
+      }
     }
-    > .firstLi:hover {
+    .headerw{
       background: #fff;
-      color: #00a041;
-      border-radius: 5px;
+      // box-shadow: 0 2px 12px 0px rgba(0, 0, 0, 0.3);
+      border: 1px solid #eee;
+      box-shadow:0 10px 10px -10px #ccc;
+      color: #666;
+      #nav,.headerRight{
+        color: #666;
+        li{
+          a{
+            color:#666;
+          }
+        }
+        li:nth-child(4){
+          background: none;
+          border-radius: none;
+          a{
+            color:#00a041;
+          }
+        }
+        li:hover{
+          background: none;
+          color: #00a041;
+        }
+         li:hover a{
+            color:#00a041;
+        }
+      }
     }
-    .lastLi {
-      background: #fff;
-      color: #00a041;
-      border-radius: 5px;
+     #posA {
+      li{
+          color:#fff;
+      }
+        > .firstLi {
+        // background: rgba(255, 255, 255, 0.2);
+        background: inherit;
+        border-radius: none;
+        }
+        > li:hover {
+        background: #fff;
+        color: #00a041;
+        border-radius: 5px;
+        }
+        .lastLi {
+        background: #fff;
+        color: #00a041;
+        border-radius: 5px;
+        }
     }
   }
-  .portalIndexImg {
-    //   height: 650px;
-    .porImg {
-      width: 100%;
-      height: 100%;
-      height: 650px;
+  .enterpriseCon{
+      .banner{
+     .swiper-wrapper {
+      .swiper-slide {
+        width: 100%;
+      }
+      img {
+        width: 100%;
+        vertical-align: middle;
+      }
     }
-    // .el-carousel__item:nth-child(2n) {
-    //   background: url("../../static/img/qiye.png") 100% 100% / 100% 100%
-    //     no-repeat;
-    // }
-
-    // .el-carousel__item:nth-child(2n + 1) {
-    //   background: url("../../static/img/qiye.png") 100% 100% / 100% 100%
-    //     no-repeat;
-    // }
-    .el-carousel__indicators {
-      display: none;
+    .swiper-button-prev,
+    .swiper-button-next {
+      background: none;
+      width: 34px;
+      height: 34px;
+      color: #fff;
+      font-size: 60px;
+      .icon-leftarrow,
+      .icon-rightarrow {
+        font-size: 45px;
+      }
     }
+    .swiper-button-prev {
+      left: 60px;
+    }
+    .swiper-button-next {
+      right: 60px;
+    }
+    .swiper-pagination {
+      bottom: 40%;
+      left: 92%;
+      .swiper-pagination-bullet {
+        display: block;
+        margin-bottom: 10px;
+        opacity: 1;
+        background: #ccc;
+      }
+      .swiper-pagination-bullet-active {
+        background: #fff;
+        height: 50px;
+        border-radius: 4px;
+      }
+    }
+   }
   }
   .declarationNotice {
     #li2,
     #li4 {
       height: 64px;
     }
+    .li5,
+    .li1,
+    .li3 {
+      z-index: 3;
+    }
+    .pagination-container {
+      margin-top: 50px;
+    }
+    .left {
+      text-align: left;
+      .leftLine {
+        position: absolute;
+        width: 2px;
+        height: 67%;
+        background: #ccc;
+        top: 14%;
+        left: 20px;
+      }
+      .leftLine.act {
+        height: 50%;
+      }
+      .el-collapse,
+      .el-collapse-item__header,
+      .el-collapse-item__wrap {
+        border: none;
+      }
+      .el-collapse-item__wrap {
+        // text-indent: 3.5em;
+      }
+      .el-collapse-item__arrow {
+        display: none;
+      }
+    }
+  }
+  .popularActi {
+    .swiper-button-prev,
+    .swiper-button-next {
+      width: 34px;
+      height: 34px;
+    }
   }
   .policyCenter {
     .paging {
-      .el-carousel {
-        padding: 50px 0;
+      .swiper-container {
+        padding: 40px 0;
+      }
+      .swiper-button-prev,
+      .swiper-button-next {
+        width: 17px;
+        height: 31px;
+      }
+      .swiper-pagination-bullet {
+        background: #999;
+      }
+      .swiper-pagination-bullet-active {
+        background: #00a041;
+      }
+      .swiper-button-prev,
+      .swiper-container-rtl .swiper-button-next {
+        background: url("../../static/img/zuo2.png") 100% 100% / 100% 100%
+          no-repeat;
+        left: 135px;
+        right: auto;
+      }
+      .swiper-button-next,
+      .swiper-container-rtl .swiper-button-prev {
+        background: url("../../static/img/you2.png") 100% 100% / 100% 100%
+          no-repeat;
+        right: 135px;
+        left: auto;
       }
       .page1 {
         width: 800px;
@@ -667,14 +1107,17 @@ export default {
               }
             }
           }
-        //   .right1:hover {
-        //     background: #ffffff !important;
-        //     animation: qfe_btt 0.7s 1 ease;
-        //     opacity: 1;
-        //   }
+          //   .right1:hover {
+          //     background: #ffffff !important;
+          //     animation: qfe_btt 0.7s 1 ease;
+          //     opacity: 1;
+          //   }
         }
         > li:nth-child(2n) {
           margin-right: 0;
+        }
+        >li:hover{
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .2);
         }
       }
       > .page2 {
@@ -715,26 +1158,26 @@ export default {
             no-repeat;
         }
       }
-      .el-carousel__arrow {
-        background: none;
-        color: #eee;
-        font-size: 35px;
-      }
-      .el-carousel__arrow--left {
-        left: 130px;
-      }
-      .el-carousel__arrow--right {
-        right: 130px;
-      }
-      .el-carousel__button {
-        width: 9px;
-        height: 9px;
-        background: #e1e1e1;
-        border-radius: 50%;
-      }
-      .el-carousel__indicator.is-active .el-carousel__button {
-        background: #00a041;
-      }
+      //   .el-carousel__arrow {
+      //     background: none;
+      //     color: #eee;
+      //     font-size: 35px;
+      //   }
+      //   .el-carousel__arrow--left {
+      //     left: 130px;
+      //   }
+      //   .el-carousel__arrow--right {
+      //     right: 130px;
+      //   }
+      //   .el-carousel__button {
+      //     width: 9px;
+      //     height: 9px;
+      //     background: #e1e1e1;
+      //     border-radius: 50%;
+      //   }
+      //   .el-carousel__indicator.is-active .el-carousel__button {
+      //     background: #00a041;
+      //   }
     }
   }
   .approval {
@@ -750,6 +1193,7 @@ export default {
       }
       .approEng {
         font-size: 43px;
+        font-weight: 100;
       }
       .line {
         width: 33px;
@@ -1051,6 +1495,12 @@ export default {
             }
           }
         }
+      }
+      a {
+        transition: all 0.6s;
+      }
+      a:hover {
+        box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.1);
       }
     }
   }

@@ -139,10 +139,10 @@ export default {
       serverAgent: [],
       sortTypes: "",
       keyW: "",
-      businessType: [],
-      industrySector:[],
-      developmentStage:[],
-      companyNature:[],
+      businessType: "",
+      industrySector:"",
+      developmentStage:"",
+      companyNature:"",
       colorFlag: "",
       filterFlag1: "",
       filterFlag2: "",
@@ -186,30 +186,26 @@ export default {
     },
     //领域搜索
     handleFilter(i) {
-      this.businessType=`[${i}]`,
-      // this.businessType.push(i);
-      // console.log(this.businessType)
+      this.businessType=`${i}`,
       this.filterFlag = i;
       this.initList();
     },
     handleFilter1(i) {
-      this.industrySector=`[${i}]`,
+      this.industrySector=`${i}`,
       // this.industrySector=[]
       // this.industrySector.push(i);
       this.filterFlag1 = i;
       this.initList();
     },
     handleFilter2(i) {
-      this.developmentStage=`[${i}]`,
+      this.developmentStage=`${i}`,
       // this.developmentStage=[]
       // this.developmentStage.push(i);
       this.filterFlag2 = i;
       this.initList();
     },
-    handleFilter3(i) {
-      // this.companyNature=[],
-      // this.companyNature.push(i);
-      this.companyNature=`[${i}]`
+    handleFilter3(i) {  
+      this.companyNature=`${i}`
       this.filterFlag3 = i;
       this.initList();
     },

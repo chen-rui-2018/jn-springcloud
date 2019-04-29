@@ -1024,7 +1024,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             examp.or().andModelIdEqualTo(modelId).andTaskBatchEqualTo(taskBatch).andTabIdEqualTo(tabBean.getTabId());
             List<TbDataReportingSnapshotModelStruct>   modelStructList = tbDataReportingSnapshotModelStructMapper.selectByExample(examp);
 
-            if(modelStructList ==null || modelStructList.size()>0){
+            if(modelStructList ==null || modelStructList.size()==0){
                 //抛出异常，传入的信息错误
                 throw new JnSpringCloudException(DataUploadExceptionEnum.TASK_IS_ERROR);
             }
@@ -1063,7 +1063,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
             }
 
-            if(snapshotTargetGroupList ==null || snapshotTargetGroupList.size()>0){
+            if(snapshotTargetGroupList ==null || snapshotTargetGroupList.size()==0){
                 //抛出异常，传入的信息错误
                 throw new JnSpringCloudException(DataUploadExceptionEnum.TASK_IS_ERROR);
             }
@@ -1188,7 +1188,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                 }
 
                 if(snapshotTargetGroup.getFormType().equals(DataUploadConstants.FORM_TYPE_TEXTNUMBER)){
-                    if(StringUtils.isNumeric(ifmBean.getValue())){
+                    if(! StringUtils.isNumeric(ifmBean.getValue())){
                         throw new JnSpringCloudException(DataUploadExceptionEnum.VALUE_IS_NUMBER);
                     }
                 }
@@ -1205,7 +1205,6 @@ public class DataUploadServiceImpl implements DataUploadService {
                 dataBean.setFallInFormId(uuid);
                 dataList.add(dataBean);
                 result = false;
-                break;
             }
         }
 

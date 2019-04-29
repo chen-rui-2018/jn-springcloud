@@ -257,7 +257,7 @@
     </select>
 
     <insert id="saveData" parameterType="java.util.List">
-        insert into Tb_Data_Reporting_Model_Data
+        insert into Tb_Data_Reporting_task_Data
         (<include refid="com.jn.enterprise.data.dao.TbDataReportingTaskDataMapper.Base_Column_List"/>)
         <foreach collection="list" index="index" item="item" separator="UNION ALL">
             select

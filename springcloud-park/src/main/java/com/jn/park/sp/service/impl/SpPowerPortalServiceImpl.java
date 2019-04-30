@@ -337,11 +337,13 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     }
 
     @Override
-    public void pushPowerBusiBatch(String powerBusiIds,ServiceCompanyParam serviceCompanyParam,String userId){
+    public Integer pushPowerBusiBatch(String powerBusiIds,ServiceCompanyParam serviceCompanyParam,String userId){
         String[] powerBusiIdArr=powerBusiIds.split(",");
+        int count=0;
         for(int i=0;i<powerBusiIdArr.length;i++){
-            this.pushPowerBusi(powerBusiIdArr[i],serviceCompanyParam,userId);
+            count+=this.pushPowerBusi(powerBusiIdArr[i],serviceCompanyParam,userId);
         }
+        return count;
     }
 
     /**

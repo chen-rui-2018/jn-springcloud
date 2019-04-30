@@ -12,7 +12,6 @@
 <!--      </div>-->
 <!--    </div>-->
     <div class="en-body">
-
       <el-tabs type="border-card">
         <el-tab-pane label="本月上报数据">
           <div v-if="willFillList.length === 0">暂无数据</div>
@@ -44,8 +43,9 @@
         <el-tab-pane label="历史上报数据">
           <div>
             <el-button v-for="(item, index) in reportType" :key="index" :type="filledType === index ? 'primary' : ''" size="mini" @click="filledTypeChange(item.data, index)">{{ item.name }}</el-button>
+            <div></div>
           </div>
-          <div v-if="filledList.length === 0">暂无数据</div>
+          <div v-if="filledList.length === 0" style="padding: 10px">暂无数据</div>
           <div v-else>
             <div class="en-card-bg">
               <div class="en-card" :class="formatReported(item).class" v-for="(item, index) in filledList" :key="index">
@@ -208,15 +208,12 @@
         this.getFilledData()
       },
       toFillData(item) {
-        const statusObj = this.formatReported(item)
-        if (statusObj.title === '我要补报') {
-          this.$router.push({
-            path:'/servicemarket/product/productService/dataReportEntrance',
-            query:{
-              id: item.fillId
-            }
-          })
-        }
+        this.$router.push({
+          path:'/servicemarket/product/productService/dataReportEntrance',
+          query:{
+            id: item.fillId
+          }
+        })
       },
       formatReported(item) {
         const status = item.status

@@ -11,7 +11,7 @@
       <el-tab-pane v-for="(form, index) in formDataListTitle" :key="index" :label="form.departmentName">
         <el-tabs type="border-card">
           <el-tab-pane v-for="(tab, tabIndex) in formData.tabs" :key="tabIndex" :label="tab.tabName">
-            <tree-table :modelType="formData.modelType" :data="tab.targetList" :columns="tab.columns" border expand-all/>
+            <tree-table :isReported="formData.taskInfo.status" :modelType="formData.modelType" :data="tab.targetList" :columns="tab.columns" border expand-all/>
           </el-tab-pane>
         </el-tabs>
       </el-tab-pane>

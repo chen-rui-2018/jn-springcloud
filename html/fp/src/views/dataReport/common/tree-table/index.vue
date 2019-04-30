@@ -27,25 +27,25 @@
               <el-row v-if="item.formType === '0'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-input :disabled="modelType === 1 && !scope.row['hasJurisdiction']" v-model="item.value" class="target-input"/>
+                  <el-input :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" class="target-input"/>
                 </el-col>
               </el-row>
               <el-row v-if="item.formType === '1'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-input :disabled="modelType === 1 && !scope.row['hasJurisdiction']" v-model="item.value" type="textarea"/>
+                  <el-input :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" type="textarea"/>
                 </el-col>
               </el-row>
               <el-row v-else-if="item.formType === '2'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-input-number :disabled="modelType === 1 && !scope.row['hasJurisdiction']" :min="0" v-model="item.value" class="target-input"/>
+                  <el-input-number :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" :min="0" v-model="item.value" class="target-input"/>
                 </el-col>
               </el-row>
               <el-row v-else-if="item.formType === '3'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-radio-group v-model="item.value" :disabled="modelType === 1 && !scope.row['hasJurisdiction']" @change="change">
+                  <el-radio-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" @change="change">
                     <el-radio v-for="name in item.choiceOption.split(',')" :key="name" :label="name">{{ name }}</el-radio>
                   </el-radio-group>
                 </el-col>
@@ -53,7 +53,7 @@
               <el-row v-else-if="item.formType === '4'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-checkbox-group v-model="item.value" :disabled="modelType === 1 && !scope.row['hasJurisdiction']" @change="change">
+                  <el-checkbox-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" @change="change">
                     <el-checkbox v-for="name in item.choiceOption.split(',')" :key="name" :label="name">{{ name }}</el-checkbox>
                   </el-checkbox-group>
                 </el-col>
@@ -62,7 +62,7 @@
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
                   <el-upload
-                    :disabled="modelType === 1 && !scope.row['hasJurisdiction']"
+                    :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
                     :on-error="handleError"
                     :headers="headers"
                     :on-remove="(file, fileList) => { return handleRemove(file, fileList, item)}"
@@ -71,6 +71,7 @@
                     :on-exceed="handleExceed"
                     :limit="1"
                     :action="api.host+'springcloud-app-fastdfs/upload/fastUpload'"
+                    :file-list="[{ name: item.value, url: item.value }]"
                     list-type="picture">
                     <el-button size="small" type="primary">点击上传</el-button>
                     <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过20M</div>
@@ -100,6 +101,10 @@ export default {
     modelType: {
       type: Number,
       required: true
+    },
+    isReported: {
+      type: Number,
+      required: false
     },
     data: {
       type: [Array, Object],

@@ -189,7 +189,8 @@ public class BusinessPromotionServiceImplTest {
                             Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR.getCode()),
                             Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR.getCode()),
                             Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_NOT_EXIST.getCode()),
-                            Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_IS_EXIST.getCode())
+                            Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_IS_EXIST.getCode()),
+                            Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_NOT_RIGHT.getCode())
                     )
             );
         }
@@ -283,7 +284,8 @@ public class BusinessPromotionServiceImplTest {
                             Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR.getCode()),
                             Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR.getCode()),
                             Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_NOT_EXIST.getCode()),
-                            Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_IS_EXIST.getCode())
+                            Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_IS_EXIST.getCode()),
+                            Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_NOT_RIGHT.getCode())
                     )
             );
         }

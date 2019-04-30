@@ -1,7 +1,6 @@
 package com.jn.enterprise.servicemarket.advisor.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 
@@ -42,7 +41,7 @@ public interface AdvisorService {
      * @param advisorAccount 顾问账号
      * @return
      */
-    TbServiceAdvisor getAdvisorInfoByAccount(String advisorAccount);
+    AdvisorServiceInfo getAdvisorInfoByAccount(String advisorAccount);
 
     /**
      * 获取顾问荣誉资质信息

@@ -4,11 +4,10 @@ import com.jn.SpringCloudEnterpriseApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.*;
-import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
+import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -192,7 +191,7 @@ public class AdvisorServiceImplTest {
     @Test
     public void getAdvisorInfoByAccount(){
         try {
-            TbServiceAdvisor advisorInfoByAccount = advisorService.getAdvisorInfoByAccount(advisorAccount);
+            AdvisorServiceInfo advisorInfoByAccount = advisorService.getAdvisorInfoByAccount(advisorAccount);
             assertThat(advisorInfoByAccount, notNullValue());
         } catch (JnSpringCloudException e) {
             logger.info("根据顾问账号获取顾问基本信息失败");

@@ -311,7 +311,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         }
         if(feeValue){
             logger.warn("校验发布宣传的参数,传递的宣传费用[{}]与系统计算前费用规则[{}]对应的费用{{}}不匹配",bpd.getPropagandaFee(),bpd.getProFeeRuleCode(),totalAmount);
-            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR);
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_NOT_RIGHT);
         }
     }
 

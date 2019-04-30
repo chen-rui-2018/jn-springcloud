@@ -703,4 +703,22 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         //返回只读数据
         return  new UnmodifiableList<>(resultList);
     }
+
+    /**
+     * 门户各首页企业宣传列表查询
+     * @param businessHomePageParam
+     * @param loginAccount
+     * @return
+     */
+    @ServiceLog(doAction = "门户各首页企业宣传列表查询")
+    @Override
+    public PaginationData getBusinessPromotionList(BusinessHomePageParam businessHomePageParam, String loginAccount) {
+        BusinessPromotionListParam bpb=new BusinessPromotionListParam();
+        BeanUtils.copyProperties(businessHomePageParam, bpb);
+        //审批状态（0：未审批  1：审批中   2：审批通过   3：审批不通过，4：未付款  5：待发布  6：已发布)）
+        //门户首页查询都是已发布的宣传信息
+        String hasBeenPublish="6";
+        bpb.setApprovalStatus(hasBeenPublish);
+        return getBusinessPromotionList(bpb,loginAccount);
+    }
 }

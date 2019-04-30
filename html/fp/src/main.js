@@ -4,7 +4,7 @@ import "@babel/polyfill";
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-// import './assets/iconfont/iconfont.css'
+import './assets/iconfont/iconfont.css'
 import 'swiper/dist/css/swiper.css'
 // import animate from 'animate.css'
 import ElementUI from 'element-ui'

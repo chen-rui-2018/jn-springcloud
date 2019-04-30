@@ -1,14 +1,23 @@
 package com.jn.park.notice.entity;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 public class TbNoticeDetails implements Serializable {
+    private String id;
+
     private String noticeId;
 
-    private byte[] noticeDetails;
+    private String noticeDetails;
 
     private static final long serialVersionUID = 1L;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
 
     public String getNoticeId() {
         return noticeId;
@@ -18,12 +27,12 @@ public class TbNoticeDetails implements Serializable {
         this.noticeId = noticeId == null ? null : noticeId.trim();
     }
 
-    public byte[] getNoticeDetails() {
+    public String getNoticeDetails() {
         return noticeDetails;
     }
 
-    public void setNoticeDetails(byte[] noticeDetails) {
-        this.noticeDetails = noticeDetails;
+    public void setNoticeDetails(String noticeDetails) {
+        this.noticeDetails = noticeDetails == null ? null : noticeDetails.trim();
     }
 
     @Override
@@ -38,16 +47,18 @@ public class TbNoticeDetails implements Serializable {
             return false;
         }
         TbNoticeDetails other = (TbNoticeDetails) that;
-        return (this.getNoticeId() == null ? other.getNoticeId() == null : this.getNoticeId().equals(other.getNoticeId()))
-            && (Arrays.equals(this.getNoticeDetails(), other.getNoticeDetails()));
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getNoticeId() == null ? other.getNoticeId() == null : this.getNoticeId().equals(other.getNoticeId()))
+            && (this.getNoticeDetails() == null ? other.getNoticeDetails() == null : this.getNoticeDetails().equals(other.getNoticeDetails()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getNoticeId() == null) ? 0 : getNoticeId().hashCode());
-        result = prime * result + (Arrays.hashCode(getNoticeDetails()));
+        result = prime * result + ((getNoticeDetails() == null) ? 0 : getNoticeDetails().hashCode());
         return result;
     }
 
@@ -57,6 +68,7 @@ public class TbNoticeDetails implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
         sb.append(", noticeId=").append(noticeId);
         sb.append(", noticeDetails=").append(noticeDetails);
         sb.append(", serialVersionUID=").append(serialVersionUID);

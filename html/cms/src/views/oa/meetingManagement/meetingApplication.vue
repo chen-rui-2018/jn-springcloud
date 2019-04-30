@@ -395,7 +395,7 @@ export default {
       if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
         this.$refs['meetingForm'].validate(valid => {
           if (valid) {
-            if (this.meetingForm.participantsStr.length > 1 && this.meetingForm.startTime && this.meetingForm.endTime) {
+            if (this.meetingForm.participantsStr.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
               // 调用接口发送请求
               const meetingForm = Object.assign({}, this.meetingForm)
               meetingForm.participantsStr = meetingForm.participantsStr.join('、')
@@ -450,7 +450,7 @@ export default {
       if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
         this.$refs['meetingForm'].validate(valid => {
           if (valid) {
-            if (this.meetingForm.participantsStr.length > 1 && this.meetingForm.startTime && this.meetingForm.endTime) {
+            if (this.meetingForm.participantsStr.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
             // 调用接口发送请求
               const meetingForm = Object.assign({}, this.meetingForm)
               meetingForm.participantsStr = meetingForm.participantsStr.join('、')

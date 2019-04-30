@@ -1,68 +1,162 @@
 <template>
     <div id="serverHeader">
-        <div class="fullNav clearfix">
-            <div class="navLeft fl">
-                <i class="iconfont icon-caidan"></i>
-                <span>网站导航</span>
+      <div class="fullNav clearfix">
+          <div class="navLeft fl pointer" @click="isVisibility=true">
+              <i class="iconfont icon-caidan"></i>
+              <span>网站导航</span>
+          </div>
+          <ul class="navRight fr">
+              <li>联系客服</li>
+              <li class="line"></li>
+              <li>下载APP</li>
+              <li class="line"></li>
+              <li>关注微信</li>
+              <li class="line"></li>
+              <li @click="$router.push({path:'/login'})">登录</li>
+              <li class="line"></li>
+              <li @click="$router.push({path:'/register'})">注册</li>
+          </ul>
+      </div>
+      <div class="headContent">
+          <div class="searchNav">
+              <div class="trainLogo">
+                  <img src="@/../static/img/greenLogo.png" class="pointer" alt="" @click="$router.push({path:'/'})">
+              </div>
+              <div class="trainSearch pr">
+                  <input type="text" placeholder="请输入搜索关键词">
+                  <div class="iconSearch">
+                      <i class="el-icon-search" style="font-size:20px;"></i>
+                      <span>搜索</span>
+                  </div>
+                  <!-- <el-button type="primary" icon="el-icon-search" style="background:#00a042;height:40px;font-size:20px;line-height:40px;">搜索</el-button> -->
+                  <div class="keyWord">
+                      <span>机构</span>
+                      <span>产品</span>
+                      <span>顾问</span>
+                      <span>活动</span>
+                  </div>
+              </div>
+          </div>
+          <div class="bannerNav">
+              <div class="w clearfix">
+                  <div class="bannerSer fl">
+                    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                        <el-submenu index="2">
+                          <template slot="title">
+                            <i class="iconfont icon-menu1"></i> 
+                            <span>帮您快速找服务</span>
+                          </template>
+                            <el-menu-item  v-for="(i,k) in industryList" :key="k">{{i.preValue}}</el-menu-item>
+                        </el-submenu>
+                    </el-menu>
+                  </div>
+                  <div class="bannerUl fr">
+                    <li class="active">首页</li>
+                      <li>服务机构</li>
+                      <li>服务产品</li>
+                      <li>服务顾问</li>
+                      <li>活动培训</li>
+                      <li>关于我们</li>
+                      <!-- <li v-for="(i,k) in bannerList" :key="k" :class="{'active':flag1==i.name}" @click="handJump(i)">{{i.name}}</li> -->
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- 网站导航侧边 -->
+      <div class="serve_slide">
+        <el-dialog :visible.sync="isVisibility">
+          <div class="slide_nav">
+            <p @click="$router.push({path:'/'})">首页</p>
+            <p>招商引资</p>
+            <p>智慧党建</p>
+            <p @click="$router.push({path:'/enterpriseservice'})">企业服务</p>
+            <div class="slide_nav_fence">
+              <ul>
+                <li>申报中心</li>
+                <li>政策中心</li>
+                <li>行政中心</li>
+                <li>活动中心</li>
+                <li>科技金融</li>
+                <li>人力资源</li>
+                <li>服务超市</li>
+              </ul>
             </div>
-            <ul class="navRight fr">
-                <li>联系客服</li>
-                <li class="line"></li>
-                <li>下载APP</li>
-                <li class="line"></li>
-                <li>关注微信</li>
-                <li class="line"></li>
-                <li>登录</li>
-                <li class="line"></li>
-                <li>注册</li>
-            </ul>
-        </div>
-        <div class="headContent">
-            <div class="searchNav">
-                <div class="trainLogo">
-                    <img src="@/../static/img/greenLogo.png" alt="">
-                </div>
-                <div class="trainSearch pr">
-                    <input type="text" placeholder="请输入搜索关键词">
-                    <div class="iconSearch">
-                        <i class="el-icon-search" style="font-size:20px;"></i>
-                        <span>搜索</span>
-                    </div>
-                    <!-- <el-button type="primary" icon="el-icon-search" style="background:#00a042;height:40px;font-size:20px;line-height:40px;">搜索</el-button> -->
-                    <div class="keyWord">
-                        <span>机构</span>
-                        <span>产品</span>
-                        <span>顾问</span>
-                        <span>活动</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bannerNav">
-                <div class="w clearfix">
-                    <div class="bannerSer fl">
-                        <i class="iconfont icon-menu1"></i>
-                        <span>帮您快速找服务</span>
-                    </div>
-                    <div class="bannerUl fr">
-                        <li>首页</li>
-                        <li>服务机构</li>
-                        <li>服务产品</li>
-                        <li>服务顾问</li>
-                        <li>活动培训</li>
-                        <li>关于我们</li>
-                    </div>
-                </div>
-            </div>
-        </div>
+          </div>
+
+          <div class="personal_center ">
+            <p @click="$router.push({path:'/userinfo'})">用户中心</p>
+            <p>消息中心</p>
+          </div>
+        </el-dialog>
+      </div>
     </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      activeIndex: '2',
+      // activeIndex2: '1',
+      isVisibility:false,
+      flag1:'首页',
+      bannerList:[
+        {
+        name:"首页",
+        path:"/serMatHp",
+        },
+        {
+        name:"服务机构",
+        path:"/serverOrg",
+        },
+        {
+        name:"服务产品",
+        path:"/serverPro",
+        },
+        {
+        name:"服务顾问",
+        path:"/serverCon",
+        },
+        {
+        name:"活动培训",
+        path:"/actiTrain",
+        },
+        {
+        name:"关于我们",
+        path:"/aboutUs",
+        }
+      ],
+      industryList:[]//快速寻找服务下拉
+    };
   },
-  methods: {}
+  mounted(){
+   this.getIndustryList()
+  },
+  methods: {
+    // handJump(i){
+    //   if(this.flag1 == i.name){
+    //     return
+    //   }
+    //   this.flag1=i.name; //首页的话没有i.name
+    //   this.$router.push({ path: i.path});
+    // },
+     handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      getIndustryList(){
+      let _this = this;
+      this.api.get({
+        url: "selectIndustryList",
+        data: { },
+        callback: function(res) {
+          // console.log(res);
+          if (res.code == "0000") {
+            _this.industryList = res.data.rows;
+          }
+        }
+      });
+    },
+  }
 };
 </script>
 
@@ -79,6 +173,7 @@ export default {
     .navRight {
       > li {
         float: left;
+        cursor: pointer;
       }
       > .line {
         display: inline-block;
@@ -98,9 +193,12 @@ export default {
       .trainLogo {
         display: inline-block;
         padding: 20px 0;
-        width: 218px;
-        height: 54px;
+        width: 155px;
+        height: 42px;
         > img {
+          width: 100%;
+          height: 100%;
+          // vertical-align: middle;
         }
       }
       .trainSearch {
@@ -150,7 +248,7 @@ export default {
     .bannerNav {
       width: 100%;
       color: #fff;
-      padding: 20px 0;
+      // padding: 20px 0;
       background-color: #00a042;
       font-size: 16px;
       .bannerSer {
@@ -158,19 +256,58 @@ export default {
         .icon-menu1 {
           font-size: 18px;
           margin-right: 20px;
+          color: #fff;
         }
       }
       .bannerUl {
         list-style: none;
+        line-height: 60px;
         > li {
           float: left;
           padding: 0 40px;
+          cursor: pointer;
         }
-        > li:last-child {
-          padding-right: 0;
+        // > li:last-child {
+        //   padding-right: 0;
+        // }
+        >li.active{
+          background-color: #007f34;
         }
       }
     }
   }
+  .serve_slide{
+    .slide_nav{
+      color:#00a042;
+      border-bottom: 1px solid #00a042;
+      padding: 20px;
+      p{
+        padding-bottom: 30px;
+        font-size: 18px;
+        cursor: pointer;
+      }
+      p:nth-child(4){
+        padding-bottom:0px;
+      }
+      .slide_nav_fence{
+        font-size: 15px;
+        li{
+          padding-bottom: 8px; 
+          cursor: pointer;
+          &:nth-child(1){
+            padding-top: 20px;
+          }
+        }
+      }
+    }
+    .personal_center{
+      padding: 30px 20px;
+      p{
+        padding-bottom: 15px;
+        cursor: pointer;
+      }
+    }
+  }
 }
+
 </style>

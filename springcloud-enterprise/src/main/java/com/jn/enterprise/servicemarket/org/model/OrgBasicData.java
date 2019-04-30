@@ -64,6 +64,18 @@ public class OrgBasicData implements Serializable {
             ,notes = "企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)")
     private String[] companyNature;
 
+    @ApiModelProperty(value = "法人/负责人",example = "王松")
+    private String orgPrincipal;
+
+    @ApiModelProperty(value = "企业工商类型",example = "民营企业/有限责任公司")
+    private String orgBusinType;
+
+    @ApiModelProperty(value = "企业工商经营场所",example = "湖南长沙略略略略略")
+    private String orgBusinAddresse;
+
+    @ApiModelProperty(value = "企业工商经营范围",example = "计算机销售、软件开发及出售、计算机....")
+    private String orgBusinScope;
+
     public String getOrgId() {
         return orgId;
     }
@@ -150,5 +162,37 @@ public class OrgBasicData implements Serializable {
 
     public void setCompanyNature(String[] companyNature) {
         this.companyNature = companyNature;
+    }
+
+    public String getOrgPrincipal() {
+        return orgPrincipal;
+    }
+
+    public void setOrgPrincipal(String orgPrincipal) {
+        this.orgPrincipal = orgPrincipal;
+    }
+
+    public String getOrgBusinType() {
+        return orgBusinType;
+    }
+
+    public void setOrgBusinType(String orgBusinType) {
+        this.orgBusinType = orgBusinType;
+    }
+
+    public String getOrgBusinAddresse() {
+        return orgBusinAddresse;
+    }
+
+    public void setOrgBusinAddresse(String orgBusinAddresse) {
+        this.orgBusinAddresse = orgBusinAddresse;
+    }
+
+    public String getOrgBusinScope() {
+        return orgBusinScope;
+    }
+
+    public void setOrgBusinScope(String orgBusinScope) {
+        this.orgBusinScope = orgBusinScope;
     }
 }

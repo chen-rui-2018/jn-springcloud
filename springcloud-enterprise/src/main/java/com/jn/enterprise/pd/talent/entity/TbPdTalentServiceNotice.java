@@ -40,6 +40,9 @@ public class TbPdTalentServiceNotice implements Serializable {
     /*@ApiModelProperty("状态（1;草稿，2：已发布，3：已下架）")*/
     private Byte status;
 
+    /*@ApiModelProperty("附件地址")*/
+    private String fileUrl;
+
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
 
@@ -153,6 +156,14 @@ public class TbPdTalentServiceNotice implements Serializable {
         this.status = status;
     }
 
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
+    }
+
     public Byte getRecordStatus() {
         return recordStatus;
     }
@@ -217,6 +228,7 @@ public class TbPdTalentServiceNotice implements Serializable {
             && (this.getAnnouncementContent() == null ? other.getAnnouncementContent() == null : this.getAnnouncementContent().equals(other.getAnnouncementContent()))
             && (this.getBrowseTimes() == null ? other.getBrowseTimes() == null : this.getBrowseTimes().equals(other.getBrowseTimes()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getFileUrl() == null ? other.getFileUrl() == null : this.getFileUrl().equals(other.getFileUrl()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -240,6 +252,7 @@ public class TbPdTalentServiceNotice implements Serializable {
         result = prime * result + ((getAnnouncementContent() == null) ? 0 : getAnnouncementContent().hashCode());
         result = prime * result + ((getBrowseTimes() == null) ? 0 : getBrowseTimes().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getFileUrl() == null) ? 0 : getFileUrl().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -266,6 +279,7 @@ public class TbPdTalentServiceNotice implements Serializable {
         sb.append(", announcementContent=").append(announcementContent);
         sb.append(", browseTimes=").append(browseTimes);
         sb.append(", status=").append(status);
+        sb.append(", fileUrl=").append(fileUrl);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

@@ -32,9 +32,7 @@ public class NoticeManageShow implements Serializable {
     @ApiModelProperty(value="平台类型(全部/App/门户)")
     private String platformName;
     @ApiModelProperty(value="公告内容,页面展示")
-    private String noticeContent;
-    @ApiModelProperty(value="公告详情,用于后台转换")
-    private byte [] noticeDetails;
+    private String  noticeDetails;
     @ApiModelProperty(value="排序字段,用于公告的默认,1,2,3,4")
     private String sortField;
     @ApiModelProperty(value="发布人名称")
@@ -132,19 +130,11 @@ public class NoticeManageShow implements Serializable {
         this.platformName = platformName;
     }
 
-    public String getNoticeContent() {
-        return noticeContent;
-    }
-
-    public void setNoticeContent(String noticeContent) {
-        this.noticeContent = noticeContent;
-    }
-
-    public byte[] getNoticeDetails() {
+    public String getNoticeDetails() {
         return noticeDetails;
     }
 
-    public void setNoticeDetails(byte[] noticeDetails) {
+    public void setNoticeDetails(String noticeDetails) {
         this.noticeDetails = noticeDetails;
     }
 

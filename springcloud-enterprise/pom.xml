@@ -30,9 +30,21 @@
             <artifactId>springcloud-user-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-park-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-news-api</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -64,10 +76,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        service_org
+                        propaganda
                     </contexts>
                     <tableNames>
-                        tb_service_org_team
+                        tb_propaganda_area_info
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

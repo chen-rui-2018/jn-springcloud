@@ -56,8 +56,9 @@ public class AdvisorServiceImplTest {
         advisorListParam.setDomain(domain);
         advisorListParam.setKeyWords(keyWords);
         advisorListParam.setSortTypes(sortTypes);
-        advisorListParam.setOrgId("1001211");
-        advisorAccount="wangsong";
+        advisorListParam.setTemplateId("6fda8a513cd64070925625521fa6a53a");
+        //advisorListParam.setOrgId("1001211");
+        //advisorAccount="wangsong";
 
         serviceEvaluationParam.setIsPublicPage("0");
         serviceEvaluationParam.setAdvisorAccount(advisorAccount);
@@ -74,7 +75,7 @@ public class AdvisorServiceImplTest {
         List<AdvisorListInfo> list= (List<AdvisorListInfo>)paginationData.getRows();
         if(list!=null){
             for(AdvisorListInfo advisorListInfo:list){
-                logger.info(advisorListInfo.toString());
+                logger.info("服务顾问列表查询{}",advisorListInfo.toString());
             }
             assertThat(list.size(),greaterThanOrEqualTo(0));
         }else{

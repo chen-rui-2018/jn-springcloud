@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.TbServiceOrgElementMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElement">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_id_" jdbcType="VARCHAR" property="orgId" />
     <result column="staff_count" jdbcType="INTEGER" property="staffCount" />
     <result column="profession_num" jdbcType="INTEGER" property="professionNum" />
     <result column="bachelor_num" jdbcType="INTEGER" property="bachelorNum" />
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, org_id, staff_count, profession_num, bachelor_num, master_num, doctor_num, returnee_num, 
+    id, org_id_, staff_count, profession_num, bachelor_num, master_num, doctor_num, returnee_num, 
     created_time, creator_account, modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElementCriteria" resultMap="BaseResultMap">
@@ -109,7 +109,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElement">
-    insert into tb_service_org_element (id, org_id, staff_count, 
+    insert into tb_service_org_element (id, org_id_, staff_count, 
       profession_num, bachelor_num, master_num, 
       doctor_num, returnee_num, created_time, 
       creator_account, modified_time, modifier_account, 
@@ -127,7 +127,7 @@
         id,
       </if>
       <if test="orgId != null">
-        org_id,
+        org_id_,
       </if>
       <if test="staffCount != null">
         staff_count,
@@ -218,7 +218,7 @@
         id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.orgId != null">
-        org_id = #{record.orgId,jdbcType=VARCHAR},
+        org_id_ = #{record.orgId,jdbcType=VARCHAR},
       </if>
       <if test="record.staffCount != null">
         staff_count = #{record.staffCount,jdbcType=INTEGER},
@@ -261,7 +261,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_service_org_element
     set id = #{record.id,jdbcType=VARCHAR},
-      org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_id_ = #{record.orgId,jdbcType=VARCHAR},
       staff_count = #{record.staffCount,jdbcType=INTEGER},
       profession_num = #{record.professionNum,jdbcType=INTEGER},
       bachelor_num = #{record.bachelorNum,jdbcType=INTEGER},
@@ -281,7 +281,7 @@
     update tb_service_org_element
     <set>
       <if test="orgId != null">
-        org_id = #{orgId,jdbcType=VARCHAR},
+        org_id_ = #{orgId,jdbcType=VARCHAR},
       </if>
       <if test="staffCount != null">
         staff_count = #{staffCount,jdbcType=INTEGER},
@@ -321,7 +321,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElement">
     update tb_service_org_element
-    set org_id = #{orgId,jdbcType=VARCHAR},
+    set org_id_ = #{orgId,jdbcType=VARCHAR},
       staff_count = #{staffCount,jdbcType=INTEGER},
       profession_num = #{professionNum,jdbcType=INTEGER},
       bachelor_num = #{bachelorNum,jdbcType=INTEGER},

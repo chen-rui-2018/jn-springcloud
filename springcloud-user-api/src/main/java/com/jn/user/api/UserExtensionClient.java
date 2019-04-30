@@ -7,7 +7,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -86,4 +85,21 @@ public interface UserExtensionClient {
      */
     @RequestMapping(value = "/api/user/getAccountList", method = RequestMethod.POST)
     Result<List<String>> getAccountList(@RequestBody  UserInfoQueryParam param);
+
+    /**
+     * 保存/修改用户信息
+     * @param userInfoParam
+     * @return
+     */
+    @RequestMapping(value = "/api/user/saveOrUpdateUserInfo", method = RequestMethod.POST)
+    Result saveOrUpdateUserInfo(@RequestBody @Validated UserInfo userInfoParam);
+
+    /**
+     * 根据查询字段批量获取用户信息
+     * @param searchFiledParam
+     * @return
+     */
+    @RequestMapping(value = "/api/user/getUserExtensionBySearchFiled", method = RequestMethod.POST)
+    Result getUserExtensionBySearchFiled(@RequestBody @Validated SearchFiledParam searchFiledParam);
+
 }

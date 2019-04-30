@@ -7,8 +7,13 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
+import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.model.ServiceOrg;
+import com.jn.enterprise.servicemarket.org.vo.*;
+import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
@@ -16,8 +21,14 @@ import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
-import com.jn.enterprise.servicemarket.org.vo.MyOrgInfoVo;
-import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
+import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
+import com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria;
+import com.jn.enterprise.servicemarket.require.dao.TbServiceRequireMapper;
+import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
+import com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria;
+import com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapper;
+import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria;
+import com.jn.park.api.ActivityClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -66,12 +77,36 @@ public class OrgServiceImpl implements OrgService {
     private UserExtensionClient userClient;
     @Autowired
     private TbServicePreferMapper tbServicePreferMapper;
+    @Autowired
+    private TbServiceCompanyMapper tbServiceCompanyMapper;
+    @Autowired
+    private TbServiceAdvisorMapper tbServiceAdvisorMapper;
+    @Autowired
+    private TbServiceInvestorMapper tbServiceInvestorMapper;
+    @Autowired
+    private ActivityClient activityClient;
+    @Autowired
+    private TbServiceProductMapper tbServiceProductMapper;
+    @Autowired
+    private TbServiceRequireMapper tbServiceRequireMapper;
 
     /**
      * 数据状态 1:有效
      */
     private final static String RECORD_STATUS_VALID = "1";
-    
+    /**
+     * 机构、企业、投资人审核通过{有效}
+     */
+    private final static String STATUS_EFFECTIVE = "1";
+    /**
+     * 顾问审核通过
+     */
+    private final static String ADVISOR_STATUS_EFFECTIVE = "2";
+    /**
+     * 需求对接成功
+     */
+    private final static String REQUIRE_HANDLE_RESULT_SUCCESS = "1";
+
     @ServiceLog(doAction = "查询服务机构列表")
     @Override
     public PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParameter){
@@ -293,6 +328,7 @@ public class OrgServiceImpl implements OrgService {
             return tbServiceOrgInfoMapper.insertSelective(tbServiceOrgInfo);
         }
     }
+
     @ServiceLog(doAction = "我的机构,机构信息")
     @Override
     public MyOrgInfoVo getMyOrgInfo(String account) {
@@ -315,5 +351,77 @@ public class OrgServiceImpl implements OrgService {
         return myOrgInfoVo;
     }
 
+    @ServiceLog(doAction = "查询服务超市统计数据")
+    @Override
+    public ServiceStatisticalNumVO selectServiceStatisticalNum(){
+        ServiceStatisticalNumVO serviceStatisticalNumVO = new ServiceStatisticalNumVO();
+        TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
+        orgCriteria.createCriteria().andOrgStatusEqualTo(STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        long orgNum = tbServiceOrgMapper.countByExample(orgCriteria);
+        serviceStatisticalNumVO.setOrgNum(orgNum+"");
+
+        TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
+        companyCriteria.createCriteria().andCheckStatusEqualTo(STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        long companyNum = tbServiceCompanyMapper.countByExample(companyCriteria);
+        serviceStatisticalNumVO.setCompanyNum(companyNum+"");
+
+        TbServiceAdvisorCriteria advisorCriteria = new TbServiceAdvisorCriteria();
+        advisorCriteria.createCriteria().andApprovalStatusEqualTo(ADVISOR_STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        long advisorNum = tbServiceAdvisorMapper.countByExample(advisorCriteria);
+        serviceStatisticalNumVO.setAdvisorNum(advisorNum+"");
+
+        TbServiceInvestorCriteria investorCriteria = new TbServiceInvestorCriteria();
+        investorCriteria.createCriteria().andApprovalStatusEqualTo(STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        long inverstorNum = tbServiceInvestorMapper.countByExample(investorCriteria);
+        serviceStatisticalNumVO.setInvestorNum(inverstorNum+"");
+
+        serviceStatisticalNumVO.setActivityNum(activityClient.getActivityNum().getData());
+
+        return serviceStatisticalNumVO;
+    }
+
+    @ServiceLog(doAction = "根据业务领域/产品查询服务超市统计数据")
+    @Override
+    public BusinessStatisticalNumVO selectBusinessAreaStatisticalNum(BusinessStatisticalParam businessStatisticalParam){
+        BusinessStatisticalNumVO businessStatisticalNumVO = new BusinessStatisticalNumVO();
+        String businessType = businessStatisticalParam.getBusinessType();
+        String productId = businessStatisticalParam.getProductId();
+
+        TbServiceProductCriteria productCriteria = new TbServiceProductCriteria();
+        TbServiceProductCriteria.Criteria productCriteriac = productCriteria.createCriteria().andStatusEqualTo(STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+
+        if(StringUtils.isNotEmpty(businessType)){
+
+            //机构数
+            TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
+            orgCriteria.createCriteria().andBusinessTypeLike("%"+businessType+"%").andOrgStatusEqualTo(STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            long orgNum = tbServiceOrgMapper.countByExample(orgCriteria);
+            businessStatisticalNumVO.setOrgNum(orgNum+"");
+            productCriteriac.andSignoryIdEqualTo(businessType);
+
+            //顾问数
+            TbServiceAdvisorCriteria advisorCriteria = new TbServiceAdvisorCriteria();
+            advisorCriteria.createCriteria().andBusinessAreaLike("%"+businessType+"%").andApprovalStatusEqualTo(ADVISOR_STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            long advisorNum = tbServiceAdvisorMapper.countByExample(advisorCriteria);
+            businessStatisticalNumVO.setAdvisorNum(advisorNum +"");
+
+            //交易量
+            TbServiceRequireCriteria requireCriteria = new TbServiceRequireCriteria();
+            requireCriteria.createCriteria().andHandleResultEqualTo(REQUIRE_HANDLE_RESULT_SUCCESS).andBusinessIdEqualTo(businessType).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            long requireNum = tbServiceRequireMapper.countByExample(requireCriteria);
+            businessStatisticalNumVO.setTransactionNum(requireNum+"");
+        }else if(StringUtils.isNotEmpty(productId)){
+            productCriteriac.andTemplateIdEqualTo(productId);
+            businessStatisticalNumVO.setOrgNum(orgMapper.getProductOrgNum(productId));
+            businessStatisticalNumVO.setAdvisorNum(orgMapper.getProductAdvisorNum(productId));
+            businessStatisticalNumVO.setTransactionNum(orgMapper.getProductNum(productId));
+        }
+        String productRatingNum = orgMapper.getProductRatingNum(businessStatisticalParam);
+
+        long productNum = tbServiceProductMapper.countByExample(productCriteria);
+        businessStatisticalNumVO.setProductNum(productNum+"");
+        businessStatisticalNumVO.setEvaluateNum(productRatingNum);
+        return businessStatisticalNumVO;
+    }
 
 }

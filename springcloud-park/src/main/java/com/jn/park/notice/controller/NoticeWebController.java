@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Api(tags = "对外公告-前端展示(app/门户)")
 @RestController
-@RequestMapping(value = "park/notice/web")
+@RequestMapping(value = "guest/park/notice/web")
 public class NoticeWebController extends BaseController {
     /**
      * 日志组件

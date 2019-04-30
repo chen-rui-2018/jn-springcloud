@@ -12,26 +12,30 @@
 <!--      </div>-->
 <!--    </div>-->
     <div class="en-body">
+
       <el-tabs type="border-card">
         <el-tab-pane label="本月上报数据">
-          <div class="en-card-bg">
-            <div class="en-card" v-for="(item, index) in willFillList">
-              <div class="en-card-t">{{ item.modelName }}</div>
-              <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
-              <div class="tc" v-if="item.isOverdue === '0'">
-                还有
-                <span class="en-warning">{{ item.residueDays }}天</span>
-                逾期
-              </div>
-              <div class="tc" v-else>
-                已经逾期
-                <span class="en-warning">{{ item.overdueDays }}天</span>
-              </div>
-              <div class="en-tips">{{ item.fillInFormDeadline | formatDate }}</div>
-              <div class="en-card-b">
-                <div class="en-card-b-c" @click="toFillData(item.fillId)">我要上报</div>
-                <div class="en-card-b-r">
-                  <i class="el-icon-time"></i>
+          <div v-if="willFillList.length === 0">暂无数据</div>
+          <div v-else>
+            <div class="en-card-bg">
+              <div class="en-card" v-for="(item, index) in willFillList">
+                <div class="en-card-t">{{ item.modelName }}</div>
+                <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
+                <div class="tc" v-if="item.isOverdue === '0'">
+                  还有
+                  <span class="en-warning">{{ item.residueDays }}天</span>
+                  逾期
+                </div>
+                <div class="tc" v-else>
+                  已经逾期
+                  <span class="en-warning">{{ item.overdueDays }}天</span>
+                </div>
+                <div class="en-tips">{{ item.fillInFormDeadline | formatDate }}</div>
+                <div class="en-card-b">
+                  <div class="en-card-b-c" @click="toFillData(item.fillId)">我要上报</div>
+                  <div class="en-card-b-r">
+                    <i class="el-icon-time"></i>
+                  </div>
                 </div>
               </div>
             </div>
@@ -41,23 +45,49 @@
           <div>
             <el-button v-for="(item, index) in reportType" :key="index" :type="filledType === index ? 'primary' : ''" size="mini" @click="filledTypeChange(item.data, index)">{{ item.name }}</el-button>
           </div>
-          <div class="en-card-bg">
-            <div class="en-card" v-for="(item, index) in filledList" :key="index">
-              <div class="en-card-t">{{ item.modelName }}</div>
-              <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
-              <div class="tc">
-                逾期
-                <span class="en-warning">{{ item.overdueDays }}天</span>
-              </div>
-              <div class="en-tips">{{ item.fillInFormDeadline | formatDate }}</div>
-              <div class="en-card-b">
-                <div class="en-card-b-c" @click="toFillData(item.fillId)">我要上报</div>
-                <div class="en-card-b-r">
-                  <i class="el-icon-time"></i>
+          <div v-if="filledList.length === 0">暂无数据</div>
+          <div v-else>
+            <div class="en-card-bg">
+              <div class="en-card" :class="formatReported(item).class" v-for="(item, index) in filledList" :key="index">
+                <div class="en-card-t">{{ item.modelName }}</div>
+                <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
+                <div class="tc" v-if="formatReported(item).title === '我已上报'">
+                  <span>已于</span>
+                  <span class="en-success">{{ item.upTime | getDate }}</span>
+                  <span>填期</span>
+                </div>
+                <div class="tc" v-else-if="formatReported(item).title === '我要补报'">
+                  <span>已逾期</span>
+                  <span class="en-warning">{{ item.overdueDays }}</span>
+                  <span>天</span>
+                </div>
+                <div class="tc" v-else>
+                  <span class="en-warning">逾期</span>
+                  <span>已补报</span>
+                </div>
+                <div class="en-tips" v-if="item.status === 1">{{ item.fillInFormDeadline | formatDate }}</div>
+                <div class="en-tips" v-else>感谢您对园区工作的支持</div>
+                <div class="en-card-b">
+                  <div class="en-card-b-c" @click="toFillData(item)">{{ formatReported(item).title }}</div>
+                  <div class="en-card-b-r">
+                    <i class="el-icon-success" v-if="formatReported(item).title === '我已上报'"></i>
+                    <i class="el-icon-time" v-else-if="formatReported(item).title === '我要补报'"></i>
+                    <i class="el-icon-info" v-else-if="formatReported(item).title === '我已补报'"></i>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <div class="filled-pagination">
+            <el-pagination
+              background
+              :page-size="filledData.rows"
+              layout="prev, pager, next"
+              :total="filledListTotal"
+              @current-change="filledDataChange">
+            </el-pagination>
+          </div>
+
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -97,6 +127,7 @@
         }],
         willFillList: [], // 要填表的列表
         filledList: [], // 填报的历史列表
+        filledListTotal: 0, // 历史填报总条数
         filledData: {
           modelCycle: null, // 填报周期/报表类型(1：年，0：月)
           page: 1,
@@ -105,13 +136,22 @@
       }
     },
     filters: {
+      getDate(str) {
+        const date = new Date(str)
+        const y = date.getFullYear()
+        let m = date.getMonth() + 1
+        m = m > 10 ? m : '0' + m
+        let d = date.getDate()
+        d = d > 10 ? d : '0' + d
+        return y + '/'+ m + '/' + d
+      },
       formatDate(time) {
         const date = new Date(time)
         const y = date.getFullYear()
         const m = date.getMonth() + 1
         const d = date.getDate()
         return `上报截止日期：${y}年${m}月${d}号`
-      },
+      }
     },
     methods: {
       init() {
@@ -156,19 +196,48 @@
           callback(res) {
             if (res.code === "0000") {
               _this.filledList = res.data.rows
+              _this.filledListTotal = res.data.total
             } else {
               _this.$message.error(res.result)
             }
           }
         })
       },
-      toFillData(id) {
-        this.$router.push({
-          path:'/servicemarket/product/productService/dataReportEntrance',
-          query:{
-            id: id
+      filledDataChange(page) {
+        this.filledData.page = page
+        this.getFilledData()
+      },
+      toFillData(item) {
+        const statusObj = this.formatReported(item)
+        if (statusObj.title === '我要补报') {
+          this.$router.push({
+            path:'/servicemarket/product/productService/dataReportEntrance',
+            query:{
+              id: item.fillId
+            }
+          })
+        }
+      },
+      formatReported(item) {
+        const status = item.status
+        if (status === 0) {
+          if (item.isOverdue === '0') {
+            return {
+              title: '我已上报',
+              class: 'en-success'
+            }
+          } else {
+            return {
+              title: '我已补报',
+              class: 'en-info'
+            }
           }
-        })
+        } else if (status === 1){
+          return {
+            title: '我要补报',
+            class: 'en-warning'
+          }
+        }
       },
       formatYearMonth(data) {
         if (data.modelCycle === 0) {
@@ -204,6 +273,9 @@
   @import "~@/css/r-common";
   .report-entrance {
     $primary-color: #409EFF;
+    $success-color: #00a041;
+    $warning-color: #FF2222;
+    $info-color: #ebebeb;
     .en-card-bg {
       @include flex($h: flex-start, $v: flex-start);
       padding: 15px 0;
@@ -219,6 +291,30 @@
       background-color: #fff;
       overflow: hidden;
       margin-right: 15px;
+      &.en-success {
+        .en-card-m .en-card-m-l {
+          color: $success-color;
+        }
+        .en-card-b {
+          background-color: $success-color;
+        }
+      }
+      &.en-warning {
+        .en-card-m .en-card-m-l {
+          color: $warning-color;
+        }
+        .en-card-b {
+          background-color: $warning-color;
+        }
+      }
+      &.en-info {
+        .en-card-m .en-card-m-l {
+          color: $info-color;
+        }
+        .en-card-b {
+          background-color: $info-color;
+        }
+      }
       .en-card-t {
         padding: 10px;
         text-align: center;
@@ -251,7 +347,10 @@
         }
       }
       .en-warning {
-        color: #FF2222;
+        color: $warning-color;
+      }
+      .en-success {
+        color: $success-color;
       }
       .en-tips {
         font-size: 12px;
@@ -266,6 +365,13 @@
       img {
         /*width: 100%;*/
       }
+    }
+    .el-pagination.is-background .el-pager li:not(.disabled).active {
+      background-color: #409EFF;
+    }
+    .filled-pagination {
+      margin: 20px auto;
+      text-align: right;
     }
   }
 </style>

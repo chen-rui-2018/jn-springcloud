@@ -38,7 +38,7 @@ export default {
         getplatform:"springcloud-enterprise/pd/declaration/list",//申报平台列表数据
         getplatformtype:"springcloud-enterprise/pd/declaration/typeList",//申报品台类型
         getdeclarationcentertype:"springcloud-enterprise/guest/pd/declarationNotice/typeList",//申报中心所属类型
-        getdeclarationcentertList:"springcloud-enterprise/guest/pd/declarationNotice/list",//申报中心列表数据 
+        getdeclarationcentertList:"springcloud-enterprise/guest/pd/declarationNotice/list",//申报中心列表数据
         getnoticeDetail:"springcloud-enterprise/guest/pd/declarationNotice/selectByTalentNotice",//申报公告详情
         addpageviews:"springcloud-enterprise/guest/pd/declarationNotice/trafficVolume",//增加访问量
         gettalentstype:"springcloud-enterprise/guest/pd/talentNotice/typeList",//人才服务公告所属类型列表
@@ -49,7 +49,7 @@ export default {
         getTechnologyInfoNum:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getTechnologyInfoNum",//科技金融首页投资人数，金融产品数，金融机构数
         getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",//投资人列表查询
         getFinancialProList:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductList",//金融产品列表查询
-        
+
         getActivityDetailsFm:"springcloud-enterprise/guest/serviceMarket/org/getActivityDetailsForManage",//获取服务机构详情
         findOrgProductList:"springcloud-enterprise/servicemarket/product/web/findOrgProductList",//机构-服务产品列表
         findOrgCountProductList:"springcloud-enterprise/servicemarket/product/web/findOrgCountProductList",//机构详情下-服务产品列表
@@ -78,7 +78,9 @@ export default {
         enterpriseGetFormed:"springcloud-enterprise/data/company/getFormed", // 获取企业填报历史表单列表
         enterpriseGetFormStruct:"springcloud-enterprise/data/company/getFormStruct", // 获取待填报的表单结构
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
+        enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd" // 页面广告获取
+
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

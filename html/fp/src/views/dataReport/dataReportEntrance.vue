@@ -17,12 +17,12 @@
       </el-tab-pane>
     </el-tabs>
     <div class="btn-row">
-      <el-button size="small" type="primary">保存为草稿</el-button>
-      <el-button size="small" type="primary" @click="submit">提交</el-button>
+      <el-button size="small" type="primary" @click="submitForDraft">保存为草稿</el-button>
+      <el-button size="small" type="primary" @click="submitForDone">提交</el-button>
       <el-button size="small" type="primary" v-if="formData.otherData">
         <a :href="formData.otherData" download="" target="_blank">点击下载附件</a>
       </el-button>
-      <el-button size="small" type="primary">返回</el-button>
+      <el-button @click="$router.back()" size="small" type="primary">返回</el-button>
     </div>
   </div>
 </template>
@@ -105,11 +105,12 @@
         if (tab.otherColumn) {
           for (const key in tab.otherColumn) {
             let text
-            if (this.formData.taskInfo.modelCycle === '0') {
-              text = tab.otherColumn[key].substring(0, 4) + '年' + tab.otherColumn[key].substring(4, 6) + '月'
-            } else {
-              text = tab.otherColumn[key] + '年'
+            if (key.length === 6) {
+              text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
+            } else{
+              text = key + '年'
             }
+            console.dir(key)
             tab.columns.push({
               text: text,
               value: key,
@@ -150,7 +151,6 @@
         for (const target of treeData) {
           for (const key in otherColumn){
             if (otherColumn[key]) {
-              console.dir(otherColumn[key])
               for(const column of otherColumn[key]) {
                 if (target.id === column.targetId) {
                   target.key = column.value
@@ -193,31 +193,66 @@
           }
         }
       },
+      submitForDone() {
+        const _this = this
+        this.submit()
+          .then(formData => {
+            this.api.post({
+              url: 'enterpriseSaveCompanyFormData',
+              data: formData,
+              callback(res) {
+                if (res.code === "0000") {
+                  _this.$message.success('保存成功')
+                } else {
+                  _this.$message.error('保存失败')
+                }
+              }
+            })
+          })
+      },
+      submitForDraft() {
+        const _this = this
+        this.submit()
+          .then(formData => {
+            this.api.post({
+              url: 'enterpriseSaveCompanyFormDataIsDraft',
+              data: formData,
+              callback(res) {
+                if (res.code === "0000") {
+                  _this.$message.success('保存成功')
+                } else {
+                  _this.$message.error('保存失败')
+                }
+              }
+            })
+          })
+      },
       submit() {
-        this.formData.tabs.forEach(item => {
-          this.setOrder(item.targetList)
-        })
-        const formData = this.partDeepClone(this.formData, ['tabs'])
-        // 先克隆提交表单对象
-        formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'columns']))
-        // 把填报格式是多选的value把数组转成字符串
-        formData.tabs.forEach((item, index) => {
-          for (const list of item.inputList) {
-            if (list.formType === '4') {
-              list.value = list.value.join('，')
+        return new Promise((resolve, reject) => {
+          this.formData.tabs.forEach(item => {
+            item.inputList.some(input => {
+              if ((input.required && !value) || (input.required && value.length === 0)) {
+                this.$message.warning(`${input.formName}要求必填，请填写后提交`)
+                return true
+              }
+            })
+          })
+          this.formData.tabs.forEach(item => {
+            this.setOrder(item.targetList)
+          })
+          const formData = this.partDeepClone(this.formData, ['tabs'])
+          // 先克隆提交表单对象
+          formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'columns']))
+          // 把填报格式是多选的value把数组转成字符串
+          formData.tabs.forEach((item, index) => {
+            for (const list of item.inputList) {
+              if (list.formType === '4') {
+                list.value = list.value.join(',')
+              }
             }
-          }
-        })
-        this.api.post({
-          url: 'enterpriseSaveCompanyFormData',
-          data: formData,
-          callback(res) {
-            if (res.code === "0000") {
-
-            } else {
-
-            }
-          }
+          })
+          console.dir(JSON.stringify(formData))
+          resolve(formData)
         })
       },
       setOrder(tree) {
@@ -253,9 +288,8 @@
                 if ( _this.formData.modelType === 1) {
                   _this.formDataListTitle = _this.formData.gardenFiller
                   for (const tab of  _this.formData.tabs) {
-                    for (const item of  _this.formDataListTitle) {
-                      _this.formatTreeJurisdiction(tab.targetList, item.departmentId)
-                    }
+                    const departmentId = _this.formDataListTitle[0].departmentId
+                    _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
                 }
                 resolve()

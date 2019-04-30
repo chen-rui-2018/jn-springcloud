@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="formatData" :row-style="showRow" v-bind="$attrs">
+  <el-table :data="formatData" :row-key="getRowKeys" :row-style="showRow" v-bind="$attrs">
     <el-table-column v-if="columns.length===0" width="150">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
@@ -27,34 +27,34 @@
               <el-row v-if="item.formType === '0'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-input :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" class="target-input"/>
+                  <el-input :disabled="modelType === 1 && !scope.row['hasJurisdiction']" v-model="item.value" class="target-input"/>
                 </el-col>
               </el-row>
               <el-row v-if="item.formType === '1'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-input :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" type="textarea"/>
+                  <el-input :disabled="modelType === 1 && !scope.row['hasJurisdiction']" v-model="item.value" type="textarea"/>
                 </el-col>
               </el-row>
               <el-row v-else-if="item.formType === '2'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-input-number :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" :min="0" v-model="item.value" class="target-input"/>
+                  <el-input-number :disabled="modelType === 1 && !scope.row['hasJurisdiction']" :min="0" v-model="item.value" class="target-input"/>
                 </el-col>
               </el-row>
               <el-row v-else-if="item.formType === '3'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-radio-group v-model="item.value" :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" @change="change">
-                    <el-radio v-for="name in item.choiceOption.split('，')" :key="name" :label="name">{{ name }}</el-radio>
+                  <el-radio-group v-model="item.value" :disabled="modelType === 1 && !scope.row['hasJurisdiction']" @change="change">
+                    <el-radio v-for="name in item.choiceOption.split(',')" :key="name" :label="name">{{ name }}</el-radio>
                   </el-radio-group>
                 </el-col>
               </el-row>
               <el-row v-else-if="item.formType === '4'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-checkbox-group v-model="item.value" :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" @change="change">
-                    <el-checkbox v-for="name in item.choiceOption.split('，')" :key="name" :label="name">{{ name }}</el-checkbox>
+                  <el-checkbox-group v-model="item.value" :disabled="modelType === 1 && !scope.row['hasJurisdiction']" @change="change">
+                    <el-checkbox v-for="name in item.choiceOption.split(',')" :key="name" :label="name">{{ name }}</el-checkbox>
                   </el-checkbox-group>
                 </el-col>
               </el-row>
@@ -62,7 +62,7 @@
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
                   <el-upload
-                    :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
+                    :disabled="modelType === 1 && !scope.row['hasJurisdiction']"
                     :on-error="handleError"
                     :headers="headers"
                     :on-remove="(file, fileList) => { return handleRemove(file, fileList, item)}"
@@ -128,7 +128,10 @@ export default {
     return {
       headers: {
         token: sessionStorage.token
-      }
+      },
+      getRowKeys(row) {
+        return row.id;
+      },
     }
   },
   computed: {

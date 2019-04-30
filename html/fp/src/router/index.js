@@ -307,20 +307,20 @@ export default new Router({
     {
       path: '/home',
       component: resolve => require(['@/views/home'],resolve),
-      meta: {title: '用户中心'},  
+      meta: {title: '用户中心'},
       name:'home',
       redirect:{name:'userCenter'},
       children:[
         {
           path:'/servicemarket/product/userCenter',
           name:'userCenter',
-          meta: {title: '首页'},  
+          meta: {title: '首页'},
           component:resolve => require(['@/views/home/userCenter'],resolve)
         },
         {
         path:'/servicemarket/product/productService/ordinaryProduct',
         name:'ordinaryProduct',
-        meta: {title: '常规服务产品'},  
+        meta: {title: '常规服务产品'},
         component:resolve => require(['@/views/home/productService/ordinaryProduct'],resolve)
         },
         {
@@ -354,11 +354,12 @@ export default new Router({
         component:resolve => require(['@/views/home/productService/myApply'],resolve)
         }
       ]
-    },{
+    },
+    {
       path: '/finaPro',
       component: resolve => require(['@/views/technologyFinance/finaPro'],resolve),
       meta: {title: '金融产品'},
       name:'finaPro'
-    },
+    }
   ]
 })

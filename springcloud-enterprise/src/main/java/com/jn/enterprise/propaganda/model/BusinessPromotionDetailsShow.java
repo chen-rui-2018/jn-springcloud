@@ -23,6 +23,8 @@ public class BusinessPromotionDetailsShow implements Serializable {
     private String effectiveDate;
     @ApiModelProperty(value = "失效日期")
     private String invalidDate;
+    @ApiModelProperty(value = "宣传类型(返回的是宣传类型接口的code值)")
+    private String propagandaType;
     @ApiModelProperty(value = "宣传产品/宣传标题")
     private String propagandaTitle;
     @ApiModelProperty(value = "宣传详情")
@@ -124,6 +126,14 @@ public class BusinessPromotionDetailsShow implements Serializable {
         this.propagandaFee = propagandaFee;
     }
 
+    public String getPropagandaType() {
+        return propagandaType;
+    }
+
+    public void setPropagandaType(String propagandaType) {
+        this.propagandaType = propagandaType;
+    }
+
     @Override
     public String toString() {
         return "BusinessPromotionDetailsShow{" +
@@ -131,7 +141,8 @@ public class BusinessPromotionDetailsShow implements Serializable {
                 ", propagandaCode='" + propagandaCode + '\'' +
                 ", issuePlatform='" + issuePlatform + '\'' +
                 ", effectiveDate='" + effectiveDate + '\'' +
-                ", invalidDate=" + invalidDate +
+                ", invalidDate='" + invalidDate + '\'' +
+                ", propagandaType='" + propagandaType + '\'' +
                 ", propagandaTitle='" + propagandaTitle + '\'' +
                 ", propagandaDetails='" + propagandaDetails + '\'' +
                 ", propagandaArea='" + propagandaArea + '\'' +

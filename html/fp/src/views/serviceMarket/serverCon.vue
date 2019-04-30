@@ -52,7 +52,7 @@
                             </div>
                             <div class="right1 fl">
                                 <p>
-                                    <el-rate v-model="i.integratedSort" disabled text-color="#00a041" score-template="{value}">
+                                    <el-rate :model="parseInt(i.integratedSort)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                                     </el-rate>
                                     <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
                                     <p>{{i.integratedSort}}分</p>

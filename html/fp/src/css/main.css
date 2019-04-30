@@ -2013,7 +2013,7 @@ input {
 
 .portalIndex .portalIndexImg, .enterpriseservice .portalIndexImg {
   position: fixed;
-  z-index: 99999 !important;
+  z-index: 99;
   width: 100%;
 }
 

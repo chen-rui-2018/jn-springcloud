@@ -278,61 +278,6 @@
                         <div class="swiper-button-prev"></div>
                         <div class="swiper-button-next"></div>
                     </div>
-                    <!-- <ul class="qiehuan1">
-            <li>
-              <p class="liTit">白下高新区金融扶持政策</p>
-              <p class="liInfo">
-                中央政府发布国发5号文，进一步 扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....
-              </p>
-              <div class="liBom clearfix">
-                <p class="fl"><i class="el-icon-view"></i>&nbsp;89</p>
-                <span class="fr">南京市级</span>
-                <i class="fr">财政引导</i>
-              </div>
-            </li>
-            <li>
-              <p class="liTit">白下高新区金融扶持政策</p>
-              <p class="liInfo">
-                中央政府发布国发5号文，进一步 扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....
-              </p>
-              <div class="liBom clearfix">
-                <p class="fl"><i class="el-icon-view"></i>&nbsp;89</p>
-                <span class="fr">南京市级</span>
-                <i class="fr">财政引导</i>
-              </div>
-            </li>
-            <li>
-              <p class="liTit">白下高新区金融扶持政策</p>
-              <p class="liInfo">
-                中央政府发布国发5号文，进一步 扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....
-              </p>
-              <div class="liBom clearfix">
-                <p class="fl"><i class="el-icon-view"></i>&nbsp;89</p>
-                <span class="fr">南京市级</span>
-                <i class="fr">财政引导</i>
-              </div>
-            </li>
-            <li>
-              <p class="liTit">白下高新区金融扶持政策</p>
-              <p class="liInfo">
-                中央政府发布国发5号文，进一步 扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....
-              </p>
-              <div class="liBom clearfix">
-                <p class="fl"><i class="el-icon-view"></i>&nbsp;89</p>
-                <span class="fr">南京市级</span>
-                <i class="fr">财政引导</i>
-              </div>
-            </li>
-          </ul> -->
-                    <!-- <ul class="qiehuan2 clearfix">
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul> -->
-                    <!-- <div class="arrow">
-            <div class="arrow1"></div>
-            <div class="arrow2"></div>
-          </div> -->
                 </div>
             </div>
             <div class="popularActi w" ref="popularActi" data-class="bottom1">
@@ -825,7 +770,8 @@ export default {
 }
 
 .portalIndex {
-  #pn2,
+ 
+.portalCon{
   .portalNotice,
   .policyGuide,
   .popularActi,
@@ -833,6 +779,7 @@ export default {
   .enterpriseinfo,
   .enterprisesPark {
     opacity: 0;
+   }
   }
   .enterPark {
     li {
@@ -868,7 +815,7 @@ export default {
   }
   .portalIndexImg {
     position: fixed;
-    z-index: 99999 !important;
+    z-index: 99;
     width: 100%;
     .headerw {
       background: #fff;

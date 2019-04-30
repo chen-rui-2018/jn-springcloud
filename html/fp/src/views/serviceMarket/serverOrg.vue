@@ -242,7 +242,6 @@ export default {
           sortTypes: _this.sortTypes,
           orgName: _this.keyW
         }
-        console.log(data)
       this.api.get({
         url: "selectServiceOrgList",
         data: data,
@@ -252,7 +251,7 @@ export default {
             _this.serverAgent = res.data.rows;
             for (let it in _this.serverAgent) {
               _this.serverAgent[it].attitudeScore =
-                _this.serverAgent[it].attitudeScore * 1;
+              _this.serverAgent[it].attitudeScore * 1;
             }
             _this.total = res.data.total;
           } else {

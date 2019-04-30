@@ -17,7 +17,10 @@
           ,sp.propaganda_fee as "propagandaFee"
           ,sp.status as "status"
           ,date_format(sp.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+          ,sc.code_name as "propagandaTypeName"
         from tb_propaganda sp
+        left join tb_service_code sc
+        on sp.propaganda_type=sc.code_value
         where 1=1
         <if test="bpp.approvalStatus!=null and bpp.approvalStatus!=''
                   and (bpp.approvalStatus==0 or bpp.approvalStatus==1 or  bpp.approvalStatus==2 or bpp.approvalStatus==3)">
@@ -73,7 +76,10 @@
         ,sp.propaganda_area_url as "propagandaAreaUrl"
         ,sp.poster_url as "posterUrl"
         ,sp.propaganda_fee as "propagandaFee"
+        ,sc.code_name as "propagandaTypeName"
         from tb_propaganda sp
+        left join tb_service_code sc
+        on sp.propaganda_type=sc.code_value
         where 1=1
         and sp.id_=#{propagandaId}
         and sp.record_status=1

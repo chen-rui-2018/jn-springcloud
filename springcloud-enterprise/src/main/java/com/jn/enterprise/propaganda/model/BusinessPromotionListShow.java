@@ -17,6 +17,8 @@ public class BusinessPromotionListShow implements Serializable {
     private String orderNum;
     @ApiModelProperty(value = "宣传类型")
     private String propagandaType;
+    @ApiModelProperty(value = "宣传类型名称")
+    private String propagandaTypeName;
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "宣传编码")
@@ -57,6 +59,14 @@ public class BusinessPromotionListShow implements Serializable {
 
     public void setPropagandaType(String propagandaType) {
         this.propagandaType = propagandaType;
+    }
+
+    public String getPropagandaTypeName() {
+        return propagandaTypeName;
+    }
+
+    public void setPropagandaTypeName(String propagandaTypeName) {
+        this.propagandaTypeName = propagandaTypeName;
     }
 
     public String getId() {

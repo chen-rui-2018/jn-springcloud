@@ -54,7 +54,7 @@ public class BusinessPromotionDetailsParam implements Serializable {
     private String proFeeRuleCode;
     @ApiModelProperty(value = "宣传费用(基础费用*宣传时间+宣传区域对应金额)",required = true,example = "50")
     @NotNull(message="宣传费用不能为空")
-    @Pattern(regexp = "^([0-9]*)(\\.[0-9]{0,2})$",message = "issuePlatform:只能输入的数字和小数点")
+    @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "propagandaFee:只能输入的数字和小数点")
     private String propagandaFee;
 
     public String getId() {

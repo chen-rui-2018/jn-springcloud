@@ -705,7 +705,7 @@ export default {
   },
   mounted() {
     this.swiperinit();
-    window.addEventListener("scroll", this.handleScroll, true);
+    window.addEventListener("scroll", this.handleScroll);
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
@@ -763,7 +763,7 @@ export default {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     },
     getElementLeft(element) {
-      var top = element.offsetTop||document.offsetTop;
+      var top = element.offsetTop;
       var curEle = element.offsetParent;
 
       while (curEle !== null) {

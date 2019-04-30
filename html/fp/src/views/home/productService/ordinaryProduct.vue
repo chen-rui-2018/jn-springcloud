@@ -1,8 +1,8 @@
 <template>
-  <div class="ordinaryProduct">
+  <div class="ordinaryProduct"  v-loading="loading">
     <div class="ordinary_title">
       <div>常规服务产品</div>
-      <div @click="goputaway">常规产品上架</div>
+      <div @click="goputaway('')">常规产品上架</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -17,7 +17,7 @@
           <el-table-column prop="orgName" label="服务机构" align="center"> </el-table-column>
           <el-table-column prop="signoryName" label="业务领域" align="center"> </el-table-column>
           <el-table-column prop="advisorName" label="服务顾问" align="center"> </el-table-column>
-          <el-table-column prop="releaseTime" label="发布日期" align="center"> </el-table-column>
+          <el-table-column prop="releaseTime" label="发布日期" align="center" width="180"> </el-table-column>
           <el-table-column label="发布状态" align="center"> 
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.status|publishstatus }}</span>
@@ -31,10 +31,10 @@
           <el-table-column label="操作" align="center" width="180" >
             <template slot-scope="scope">
               <div class="ordinarybth" >
-                <span>编辑</span>
+                <span v-show="scope.row.status!='1'" @click="goputaway(scope.row.productId)">编辑</span>
                 <span>详情</span>
-                <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'"  @click="handledow('-1')">下架</span>
-                <span v-else @click="handleup('1')">上架</span>
+                <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'"  @click="handleshelf('-1',scope.row.productId)">下架</span>
+                <span v-else @click="handleshelf('1',scope.row.productId)">上架</span>
               </div>
             </template>
           </el-table-column>
@@ -59,6 +59,7 @@
 export default {
   data () {
     return {
+      loading:false,
       total:0,
       sendData:{
         keyWords:'',
@@ -69,7 +70,7 @@ export default {
         rows:8
       },
       orgProductList:[],
-      territory:''
+      territory:0,
     }
   },
   filters: {
@@ -92,7 +93,6 @@ export default {
   },
   mounted () {
     this.getOrgId()
-    this.getOrgProductList()
   },
   methods: {
     // 获取当前登录id
@@ -104,6 +104,9 @@ export default {
       callback: function(res) {
         if (res.code == "0000") {
           _this.sendData.orgId= res.data.id
+          _this.$nextTick(()=>{
+            _this.getOrgProductList()
+            })
           }
         }
       })
@@ -117,24 +120,37 @@ export default {
       callback: function(res) {
         if (res.code == "0000") {
           console.log(res)
+          _this.loading=false
           _this.orgProductList= res.data.rows
+          _this.total=res.data.total
           }
         }
       })
     },
-    goputaway(){
-      this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId}})
+    //去新增
+    goputaway(productId){
+      //territory为0是科技金融，为1是非科技金融
+      // console.log(productId)
+      if(this.territory===0){
+        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:0,productId:productId}})
+      }else if(territory===1){
+        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:1,productId:productId}})
+      }
     },
-    // 上架
-    handledow(status){
+    // 下架
+    handleshelf(status,productId){
       let _this = this;
-      this.api.get({
+      this.api.post({
       url: "productShelf",
-      data: {status:status},
+      data: {
+        status:status,
+        productId:productId
+        },
       callback: function(res) {
         if (res.code == "0000") {
-           _this.$message.success("上架成功")
-            console.log(res)
+           _this.$message.success("成功")
+           _this.getOrgProductList()
+            // console.log(res)
           }
         }
       })
@@ -170,6 +186,7 @@ export default {
         border: solid 2px #41d787;
         padding:8px 11px;
         font-size: 12px;
+        color:#00a041;
         cursor: pointer;
       }
     }

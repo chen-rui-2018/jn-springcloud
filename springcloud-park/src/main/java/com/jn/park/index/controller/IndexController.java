@@ -123,9 +123,7 @@ public class IndexController extends BaseController {
     @ControllerLog(doAction = "推荐-行政审批详情")
     @ApiOperation(value = "推荐-行政审批详情（APP）", notes = "获取行政审批详情")
     @RequestMapping(value = "/getAdministrativeApprovalDetails",method = RequestMethod.GET)
-    public Result getAdministrativeApprovalDetails(@ApiParam(value ="行政审批ID", required = true, example = "")
-                                                       @NotBlank(message = "行政审批ID不能为空")
-                                                       @RequestParam(value = "approvalId") String approvalId) {
+    public Result getAdministrativeApprovalDetails(@RequestParam String approvalId) {
         // TODO 调行政审批详情接口
         return new Result();
     }
@@ -141,9 +139,7 @@ public class IndexController extends BaseController {
     @ControllerLog(doAction = "人才申报详情")
     @ApiOperation(value = "人才申报详情（PC/APP）", notes = "获取人才申报详情")
     @RequestMapping(value = "/getPersonnelDeclareDetails",method = RequestMethod.GET)
-    public Result getPersonnelDeclareDetails(@ApiParam(value ="人才申报ID", required = true, example = "")
-                                                 @NotBlank(message = "人才申报ID不能为空")
-                                                 @RequestParam(value = "perDeclareId") String perDeclareId) {
+    public Result getPersonnelDeclareDetails(@RequestParam String perDeclareId) {
         // TODO 调人才申报列表接口
         return new Result();
     }
@@ -205,9 +201,7 @@ public class IndexController extends BaseController {
     @ControllerLog(doAction = "资讯详情")
     @ApiOperation(value = "资讯详情", notes = "获取资讯详情数据")
     @RequestMapping(value = "/getNewsDetails", method = RequestMethod.GET)
-    public Result  getInformationDetails(@ApiParam(value ="资讯ID", required = true)
-                                         @NotBlank(message = "资讯ID不能为空")
-                                         @RequestParam(value = "newsId") String newsId) {
+    public Result  getInformationDetails(@RequestParam String newsId) {
         // TODO 调用资讯详情接口
         return new Result();
     }

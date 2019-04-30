@@ -400,6 +400,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             for (TbUserPerson userPerson : userPersonList) {
                 UserExtensionInfo userExtensionInfo = new UserExtensionInfo();
                 BeanUtils.copyProperties(userPerson, userExtensionInfo);
+                getUserHobbyAndJobs(userExtensionInfo);
                 resultList.add(userExtensionInfo);
             }
             return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());

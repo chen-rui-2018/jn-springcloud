@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "企业服务")
+@Api(tags = "企业服务", hidden = true)
 @RestController
 @RequestMapping("/enterprise/company")
 public class CompanyEditController extends BaseController {

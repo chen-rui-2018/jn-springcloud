@@ -54,8 +54,6 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     @Autowired
     private SpPowerDao spPowerDao;
     @Autowired
-    private SpPowerBusiDao spPowerBusiDao;
-    @Autowired
     private TbSpMessageMapper tbSpMessageMapper;
     @Autowired
     private CompanyClient companyClient;
@@ -75,7 +73,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     public SpPowerBusiDetailVo getBusi(String id) {
         SpPowerBusiDetailVo spPowerBusiDetailVo = new SpPowerBusiDetailVo();
         //通过业务id查询业务内容
-        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = spPowerBusiDao.selectBusiByKey(id);
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = tbSpPowerBusiMapper.selectByPrimaryKey(id);
         if (tbSpPowerBusiWithBLOBs == null){
             return null;
         }
@@ -281,9 +279,15 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     @Override
     @ServiceLog(doAction = "获取在线受理地址")
     public String getDealUrl(String id) {
-        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = spPowerBusiDao.selectBusiByKey(id);
-        String dealUrl = tbSpPowerBusiWithBLOBs.getDealUrl();
-        return dealUrl;
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs =tbSpPowerBusiMapper.selectByPrimaryKey(id);
+        if((new Byte("1").equals(tbSpPowerBusiWithBLOBs.getRecordStatus()))){
+            return tbSpPowerBusiWithBLOBs.getDealUrl();
+        }
+        return null;
     }
 
+    @Override
+    public void pushPowerBusi(String powerBusiId,String userId){
+        //todo 调用推送接口
+    }
 }

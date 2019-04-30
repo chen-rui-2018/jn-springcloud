@@ -79,4 +79,10 @@ public interface SpPowerPortalService {
      * @return
      */
     String getDealUrl(String id);
+
+    /**
+     * 把行政审批指南推送给全部企业
+     * @param powerBusiId
+     */
+    void pushPowerBusi(String powerBusiId,String userId);
 }

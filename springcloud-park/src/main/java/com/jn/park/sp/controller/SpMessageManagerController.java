@@ -7,6 +7,8 @@ import com.jn.park.sp.service.SpPowerPortalService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -24,10 +26,10 @@ import java.util.UUID;
 * @version： v1.0
 * @modified By:
 */
-@Api(tags = "对外行政审批中心-我要留言")
+@Api(tags = "对外行政审批中心-后台管理")
 @RestController
 @RequestMapping("/portal/sp/power")
-public class SpMessageController extends BaseController {
+public class SpMessageManagerController extends BaseController {
     @Autowired
     private SpPowerPortalService spPowerPortalService;
 
@@ -46,4 +48,17 @@ public class SpMessageController extends BaseController {
         return new Result("-1","留言失败");
     }
 
+    @ControllerLog(doAction = "把行政审批指南推送给全部企业")
+    @ApiOperation(value = "把行政审批指南推送给全部企业", notes = "把行政审批指南推送给全部企业")
+    @RequestMapping(value = "/pushPowerBusi",method = RequestMethod.POST)
+    @RequiresPermissions("/portal/sp/power/pushPowerBusi")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "powerBusiId",value = "业务ID",example = "559447847364198400")
+    })
+    public Result pushPowerBusi( String  powerBusiId){
+        //获取登录信息
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        spPowerPortalService.pushPowerBusi(powerBusiId,user.getId());
+        return new Result("推送成功");
+    }
 }

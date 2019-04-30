@@ -2,7 +2,7 @@
   <div class="ordinaryProduct"  v-loading="loading">
     <div class="ordinary_title">
       <div>常规服务产品</div>
-      <div @click="goputaway">常规产品上架</div>
+      <div @click="goputaway('')">常规产品上架</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -31,7 +31,7 @@
           <el-table-column label="操作" align="center" width="180" >
             <template slot-scope="scope">
               <div class="ordinarybth" >
-                <span>编辑</span>
+                <span v-show="scope.row.status!='1'" @click="goputaway(scope.row.productId)">编辑</span>
                 <span>详情</span>
                 <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'"  @click="handleshelf('-1',scope.row.productId)">下架</span>
                 <span v-else @click="handleshelf('1',scope.row.productId)">上架</span>
@@ -93,7 +93,6 @@ export default {
   },
   mounted () {
     this.getOrgId()
-    this.getOrgProductList()
   },
   methods: {
     // 获取当前登录id
@@ -129,12 +128,13 @@ export default {
       })
     },
     //去新增
-    goputaway(){
+    goputaway(productId){
       //territory为0是科技金融，为1是非科技金融
+      // console.log(productId)
       if(this.territory===0){
-        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:0}})
+        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:0,productId:productId}})
       }else if(territory===1){
-        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:1}})
+        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:1,productId:productId}})
       }
     },
     // 下架

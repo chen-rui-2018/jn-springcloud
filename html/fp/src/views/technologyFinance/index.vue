@@ -477,6 +477,7 @@ export default {
   data() {
     return {
       sousuo: false,
+      searchData:'',
       showFF:false,
       show4:false,
       headFlag: false,

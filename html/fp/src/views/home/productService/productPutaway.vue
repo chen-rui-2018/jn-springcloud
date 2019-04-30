@@ -158,26 +158,35 @@ export default {
       productDetail:{},//产品详情
       counselorList:[],//服务顾问列表
       productName:'',//产品名称
-      territory:0,
+      territory:'',
       productNameList:[],//产品名称列表
       advisorAccount:'',
       orgId:'',
-      templateId:0
+      templateId:''
       //上架
     }
   },
   mounted () {
-    this.orgId=this.$route.query.orgid
     this.territory=this.$route.query.territory
-    if(this.territory==='0'){
+    this.templateId=this.$route.query.productId
+    if(this.territory===0){
       this.orgId='285bfb89580a422ea927200f5d7accc4'
-      this.getShelfProductList()
-    }else if(this.territory==='1'){
-      this.getShelfProductList()
-      this.getServiceConsultantList()
-      this.getProductDetails()
+     /*  if(this.templateId){
+        this.getProductDetails()
+      }elses{} */
+      // this.$nextTick(()=>{
+        this.getShelfProductList()
+      // })
+    }else if(this.territory===1){
+      this.orgId=this.$route.query.orgid
+      this.$nextTick(()=>{
+        this.getShelfProductList()
+        this.getServiceConsultantList()
+        this.getProductDetails()
+      })
     }
   },
+  //territory为0是科技金融，为1是非科技金融
   methods: {
     // 获取产品名称列表公用
     getShelfProductList(){
@@ -191,10 +200,10 @@ export default {
           if(res.data.length!=0){
             _this.productNameList= res.data
             _this.templateId=res.data[0].productId
-            if(_this.territory==='0'){
+            if(_this.territory===0){
               //调用科技金融接口
                 _this.getFinancialProductDetails()
-              }else if(_this.territory==='1'){
+              }else if(_this.territory===1){
                 _this.$nextTick(()=>{
                 _this.getProductDetails()
                 })
@@ -248,20 +257,20 @@ export default {
     },
     //改变产品名称
     changeProname(val){
-      if(this.templateId===null){
+      if(this.templateId===''){
         this.productDetail={}
       }else{
-        if(this.territory==='0'){
-              //调用科技金融接口
-        }else if(this.territory==='1'){
+        if(this.territory===0){
+          //调用科技金融接口
+          this.getFinancialProductDetails()
+        }else if(this.territory===1){
           this.getProductDetails()
         }
-        
       }
     },
     //上架
     submit(){
-      if(this.territory==='0'){
+      if(this.territory===0){
         let _this = this
         this.api.post({
         url: "upShelfCommonProduct",
@@ -272,11 +281,11 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
               _this.$message.success("上架成功")
-              // _this.$router.back(-1)
+              _this.$router.back(-1)
             }
           }
         })
-      }else if(this.territory==='1'){
+      }else if(this.territory===1){
         let _this = this
         _this.templateId.toString()
         this.api.post({
@@ -300,6 +309,9 @@ export default {
 }
 </script>
 <style lang="scss">
+    .el-select-dropdown__item.selected{
+      color:#00a041;
+    }
   .productPutaway{
     width: 100%;
     // 大标题
@@ -349,6 +361,9 @@ export default {
         }
         .el-form-item{
           margin-bottom: 14px;
+        }
+        input:focus{
+          border-color:#00a041;
         }
       }
       .submit{

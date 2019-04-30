@@ -9,11 +9,12 @@ import 'swiper/dist/css/swiper.css'
 import animate from 'animate.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import VueAwesomeSwiper from 'vue-awesome-swiper'
-
+// import VueAwesomeSwiper from 'vue-awesome-swiper'
+// import swiper from 'swiper'
+import 'swiper/dist/css/swiper.css'
 
 Vue.use(ElementUI)
-Vue.use(VueAwesomeSwiper, /* { default global options } */)
+// Vue.use(VueAwesomeSwiper, /* { default global options } */)
 
 import api from '@/util/api'
 Vue.prototype.api = api

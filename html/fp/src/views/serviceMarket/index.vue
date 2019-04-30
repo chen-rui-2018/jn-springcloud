@@ -405,8 +405,7 @@ export default {
     //最新评价
     this.getRatingList()
     this.selectIndustryProductList()
-    window.addEventListener('scroll', this.handleScroll,true)
-   
+    window.addEventListener('scroll', this.handleScroll)
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
@@ -418,8 +417,6 @@ export default {
       } else {
         this.show3 = false
       }
-      
-      console.dir(this.show3)
     },
     changeselectShow(val){
       this.sekectShow=val
@@ -480,21 +477,17 @@ export default {
     },
     // 屏幕滚动
     handleScroll(){
-      
       const osTop =
-        document.documentElement.scrollTop ||
-        document.documentElement.scrollTop;
+      window.pageYOffset ||
+        document.documentElement.scrollTop || document.body.scrollTop;
       for (const key in this.$refs) {
         const top = this.getElementLeft(this.$refs[key]);
-        // console.dir(top);
         if (osTop + innerHeight + 300 >= top + 100) {
           const name = this.$refs[key].dataset.class;
           this.$refs[key].classList.add(name);
         }
       }
-      // console.log(this.$refs.headContent.offsetHeight)
-      // console.log(this.$refs.banner.offsetHeight-this.$refs.headContent.offsetHeight)
-      if (osTop>this.$refs.banner.offsetHeight-this.$refs.headContent.offsetHeight) {
+      if (osTop>this.$refs.headContent.offsetHeight) {
       this.isActClass=true
       }else{
         this.isActClass=false
@@ -508,7 +501,6 @@ export default {
     getElementLeft(element) {
       var top = element.offsetTop;
       var curEle = element.offsetParent;
-
       while (curEle !== null) {
         top += curEle.offsetTop;
         curEle = curEle.offsetParent;

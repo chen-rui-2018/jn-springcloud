@@ -354,7 +354,7 @@ export default new Router({
         component:resolve => require(['@/views/home/productService/myApply'],resolve)
         }
       ]
-    }
+    },{
       path: '/finaPro',
       component: resolve => require(['@/views/technologyFinance/finaPro'],resolve),
       meta: {title: '金融产品'},

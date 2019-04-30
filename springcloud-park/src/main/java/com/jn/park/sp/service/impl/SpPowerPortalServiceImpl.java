@@ -1,12 +1,17 @@
 package com.jn.park.sp.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.jn.common.channel.MessageSource;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
+import com.jn.company.model.ServiceCompanyParam;
+import com.jn.news.vo.EmailVo;
+import com.jn.news.vo.SmsTemplateVo;
 import com.jn.park.finance.service.impl.FinanceTypeServiceImpl;
 import com.jn.park.sp.dao.*;
 import com.jn.park.sp.entity.*;
@@ -16,8 +21,12 @@ import com.jn.park.sp.service.SpPowerPortalService;
 import com.jn.park.sp.vo.SpPowerBusiDetailVo;
 import com.jn.park.sp.vo.SpPowerDetailVo;
 import com.jn.park.sp.vo.SpPowerVo;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDictKeyValue;
+import org.checkerframework.checker.units.qual.A;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -26,6 +35,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +52,7 @@ import java.util.*;
  * @modified By:
  */
 @Service
+@EnableBinding(value = MessageSource.class)
 public class SpPowerPortalServiceImpl implements SpPowerPortalService {
 
     private static Logger logger = LoggerFactory.getLogger(FinanceTypeServiceImpl.class);
@@ -54,13 +66,15 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     @Autowired
     private SpPowerDao spPowerDao;
     @Autowired
-    private SpPowerBusiDao spPowerBusiDao;
-    @Autowired
     private TbSpMessageMapper tbSpMessageMapper;
     @Autowired
     private CompanyClient companyClient;
     @Autowired
     private SpAdDao spAdDao;
+    @Autowired(required = false)
+    private MessageSource messageSource;
+    @Autowired
+    private SystemClient systemClient;
 
     @Value("${ibps.url}")
     private String ibpsUrl;
@@ -75,7 +89,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     public SpPowerBusiDetailVo getBusi(String id) {
         SpPowerBusiDetailVo spPowerBusiDetailVo = new SpPowerBusiDetailVo();
         //通过业务id查询业务内容
-        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = spPowerBusiDao.selectBusiByKey(id);
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = tbSpPowerBusiMapper.selectByPrimaryKey(id);
         if (tbSpPowerBusiWithBLOBs == null){
             return null;
         }
@@ -281,9 +295,67 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     @Override
     @ServiceLog(doAction = "获取在线受理地址")
     public String getDealUrl(String id) {
-        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = spPowerBusiDao.selectBusiByKey(id);
-        String dealUrl = tbSpPowerBusiWithBLOBs.getDealUrl();
-        return dealUrl;
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs =tbSpPowerBusiMapper.selectByPrimaryKey(id);
+        if((new Byte("1").equals(tbSpPowerBusiWithBLOBs.getRecordStatus()))){
+            return tbSpPowerBusiWithBLOBs.getDealUrl();
+        }
+        return null;
     }
 
+    private Integer pushPowerBusi(String powerBusiId,ServiceCompanyParam serviceCompanyParam,String userId){
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs=tbSpPowerBusiMapper.selectByPrimaryKey(powerBusiId);
+        if(tbSpPowerBusiWithBLOBs==null||!tbSpPowerBusiWithBLOBs.getRecordStatus().equals(new Byte("1"))){
+            throw new JnSpringCloudException(new Result("-1","审批指南内容不存在"));
+        }
+        //所有企业
+        serviceCompanyParam.setRows(99999999);//不分页
+        Result<PaginationData<List<ServiceCompany>>> serviceCompany= companyClient.getCompanyList(serviceCompanyParam);
+        int count=0;
+        for(ServiceCompany e:serviceCompany.getData().getRows()){
+            if(StringUtils.isBlank(e.getComAdmin())){
+                logger.info("企业【{}】还未指定管理员",e.getComName());
+                continue;
+            }
+            EmailVo emailVo = new EmailVo();
+            User user=new User();
+            user.setAccount(e.getComAdmin());
+            Result<User> userResult=systemClient.getUser(user);
+            if(userResult.getData()==null||StringUtils.isBlank(userResult.getData().getEmail())){
+                logger.info("未找到管理员【{}】邮箱",e.getComAdmin());
+                continue;
+            }
+            emailVo.setEmail(userResult.getData().getEmail());
+            emailVo.setEmailSubject(tbSpPowerBusiWithBLOBs.getName());
+            String url=getPortalUrl()+"serviceDetail?id="+tbSpPowerBusiWithBLOBs.getId();
+            emailVo.setEmailContent(String.format("%s，您好，审批指南明细内容请点击 <a href='%s'>%s</a>",e.getContact(),url,tbSpPowerBusiWithBLOBs.getName()));
+            logger.info("推送成功：接收邮箱：{},用户ID:{},邮件主题：{}，邮件内容：{}",emailVo.getEmail(),user.getId(),emailVo.getEmailSubject(),emailVo.getEmailContent());
+            boolean sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
+            count++;
+        }
+        logger.info("成功向{}个企业推送了【{}】",serviceCompany.getData().getRows().size(),tbSpPowerBusiWithBLOBs.getName());
+        return count;
+    }
+
+    @Override
+    public void pushPowerBusiBatch(String powerBusiIds,ServiceCompanyParam serviceCompanyParam,String userId){
+        String[] powerBusiIdArr=powerBusiIds.split(",");
+        for(int i=0;i<powerBusiIdArr.length;i++){
+            this.pushPowerBusi(powerBusiIdArr[i],serviceCompanyParam,userId);
+        }
+    }
+
+    /**
+     * 获取门户URL
+     * @return
+     */
+    private String getPortalUrl(){
+        SysDictInvoke sysDictInvoke=new SysDictInvoke();
+        sysDictInvoke.setKey("portal_url");
+        sysDictInvoke.setGroupCode("portal_url");
+        Result<List<SysDictKeyValue>> sysDictKeyValueList= systemClient.getDict(new SysDictInvoke("common","portal_url","portal_url","portal_url"));
+        if(sysDictKeyValueList.getData()!=null&&sysDictKeyValueList.getData().size()==1){
+            return sysDictKeyValueList.getData().get(0).getLable();
+        }
+        throw new JnSpringCloudException(new Result("-1","portal_url未配置"));
+    }
 }

@@ -31,7 +31,7 @@
           </div>
 
           <ul class="clearfix posA" v-else>
-            <li>
+            <li @click="$router.push({path:'/'})">
               <a href="javascript:void(0);">首页</a>
             </li>
             <li>
@@ -40,7 +40,7 @@
             <li>
               <a href="javascript:void(0);">智慧党建</a>
             </li>
-            <li>
+            <li @click="$router.push({path:'/enterpriseservice'})">
               <a href="javascript:void(0);">企业服务</a>
             </li>
           </ul>
@@ -52,7 +52,7 @@
         <!-- 面包屑 -->
         <div class="homePage_breadcrumb">
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">用户中心 </el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">用户中心 </el-breadcrumb-item>
             <el-breadcrumb-item>
               <a href="javascript:;">{{this.$route.meta.title}}</a>
             </el-breadcrumb-item>
@@ -74,7 +74,7 @@
                 <el-menu-item index="/servicemarket/product/userCenter">
                   <span slot="title">首页</span>
                 </el-menu-item>
-                <el-menu-item index="/userinfo">
+                <el-menu-item index="/userHome">
                   <span slot="title">用户资料</span>
                 </el-menu-item>
                 <el-menu-item index="/企业">
@@ -107,7 +107,7 @@
                   </template>
                   <el-menu-item-group>
                     <el-menu-item index="/servicemarket/product/productService/ordinaryProduct" style="padding-left: 20px;">常规服务产品</el-menu-item>
-                    <el-menu-item index="" style="padding-left: 20px;">特色服务产品</el-menu-item>
+                    <el-menu-item index="/servicemarket/product/productService/specialproduct" style="padding-left: 20px;">特色服务产品</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
                 <el-submenu index="/需求管理">
@@ -131,16 +131,16 @@
                 <el-menu-item index="/活动管理">
                   <span slot="title">活动管理</span>
                 </el-menu-item>
-                <el-menu-item index="/数据上报">
+                <el-menu-item index="/servicemarket/product/productService/dataReport">
                   <span slot="title">数据上报</span>
                 </el-menu-item>
               </el-menu>
             </el-aside>
           </div>
           <!-- 主体 -->
-          <div class="homePage_main">
+          <div class="homePage_main userHome">
             <el-main>
-                <router-view></router-view>
+                <router-view :userData='userData'></router-view>
             </el-main>
           </div>
         </el-container>
@@ -170,7 +170,7 @@ export default {
           id: 0,
         }
       ],
-     
+
     };
   },
   directives: {
@@ -275,6 +275,7 @@ export default {
             text-align: center;
             line-height: 38px;
             margin: 0 50px;
+                padding: 19px 0;
           }
         }
         .sousuo {
@@ -339,7 +340,7 @@ export default {
               font-size: 13px;
               color:#333;
               cursor: pointer;
-              
+
             }
             >li.liActi{
               background: #00a040;
@@ -362,7 +363,7 @@ export default {
           padding: 15px 0;
           font-size: 12px;
           .el-breadcrumb__item:last-child .el-breadcrumb__inner a{
-            color:#00a041;  
+            color:#00a041;
           }
         }
         // 侧边栏
@@ -371,7 +372,7 @@ export default {
             border-top: 1px solid #eee;
             // border-bottom: 1px solid #eee;
           }
-          
+
           .el-menu-item.is-active{
             color:#00a042;
             background-color:#fff;
@@ -421,6 +422,10 @@ export default {
           }
         }
       }
+    }
+    .homePage_main {
+      flex: 1;
+      width: 100%;
     }
   }
 </style>

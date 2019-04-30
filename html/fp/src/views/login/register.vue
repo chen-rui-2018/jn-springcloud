@@ -30,7 +30,7 @@
       </div>
       <el-button type="success" plain style="width:100%;height:35px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;line-height: 5px;" @click="registerForm">注册</el-button>
       <div class="regFoot pr">
-        <!-- <div @click="$router.push({path:'/userData'})">返回首页</div> -->
+        <div @click="$router.push({path:'/'})">返回首页</div>
         <span>我已有账号，
           <i style="color:#00a041;font-size:13px;cursor: pointer;" @click="handleLogin">直接登录</i>
         </span>
@@ -57,7 +57,7 @@ export default {
   created() {},
   methods: {
     handleLogin() {
-      this.$router.push({ path: "/" });
+      this.$router.push({ path: "/login" });
     },
     registerForm() {
       let phone = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;

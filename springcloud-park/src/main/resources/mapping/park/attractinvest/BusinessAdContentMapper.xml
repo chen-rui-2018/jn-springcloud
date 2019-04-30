@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.attractinvest.dao.BusinessAdContentMapper">
+    <update id="updateBusinessAdStatus">
+        UPDATE tb_business_ad_content
+        SET record_status = '0'
+        WHERE
+        record_status = '1'
+        AND end_time <![CDATA[ < ]]> CURRENT_DATE ()
+    </update>
+
+    <select id="getBusinessAdContent" resultType="com.jn.park.attractinvest.model.BusinessAdContent"
+            parameterType="com.jn.park.attractinvest.model.BusinessAdPage">
+        SELECT
+            id,
+            title,
+            ad_cover as adCover,
+            ad_flag as adFlag,
+            start_time as startTime,
+            end_time as endTime,
+            sub_title as subTitle,
+            park
+        FROM
+            `tb_business_ad_content`
+        WHERE
+            record_status = '1'
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(parkId)">
+            and park = #{parkId,jdbcType=VARCHAR}
+        </if>
+        ORDER BY
+            `id` DESC
+    </select>
+</mapper>

@@ -104,6 +104,13 @@ public interface TargetDao {
      */
     List<CompanyDataModel> getGardenTask(@Param("list") List<String> list);
 
+
+    /**
+     * 获取整个园区的任务批次，用于获取广告
+     */
+
+    List<String> getAllGardenBatch(@Param("lastMon") String lastMon,@Param("lastYear") String lastYear);
+
     /**
      *
      * @return

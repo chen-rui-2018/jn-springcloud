@@ -42,6 +42,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-enterprise-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-news-api</artifactId>
+        </dependency>
 
     </dependencies>
     <build>
@@ -73,10 +77,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        index
+                        connect
                     </contexts>
                     <tableNames>
-                        tb_achievement
+                        tb_service_connect_manage
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -26,9 +26,10 @@ export default {
         findHotProducts:"springcloud-enterprise/servicemarket/product/web/findHotProducts",//热门产品
         selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//顾问领域列表
         getServiceConsultantList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//机构服务顾问
-        selectTeamList:"springcloud-enterprise/guest/serviceMarket/industryManage/selectIndustryList",//机构领域获取
+        selectTeamList:"springcloud-enterprise/guest/serviceMarket/industryManage/selectIndustryList",//机构字典
         selectServiceOrgList:"springcloud-enterprise/guest/serviceMarket/org/selectServiceOrgList",//服务机构列表获取
         getServiceRatingInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceRatingInfo",//最新评价
+        selectIndustryProductList:"springcloud-enterprise/guest/serviceMarket/industryManage/selectIndustryProductList",// 服务超市侧边导航
         getCompassAllCate:"springcloud-park/guest/portal/sp/power/departList",//compassView所有类别
         getpowerList:"springcloud-park/guest/portal/sp/power/list",//权力清单列表
         getpowerDetail:"springcloud-park/guest/portal/sp/power/get",//权利明细
@@ -45,6 +46,39 @@ export default {
         gettalentDetail:"springcloud-enterprise/guest/pd/talentNotice/selectByTalentNotice",//人才公告详情
         addtalentviews:"springcloud-enterprise/guest/pd/talentNotice/trafficVolume",//增加人才公告详情访问量
         appointment:"springcloud-enterprise/pd/online/onlineBooking",//预约申报
+        getTechnologyInfoNum:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getTechnologyInfoNum",//科技金融首页投资人数，金融产品数，金融机构数
+        getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",//投资人列表查询
+        getFinancialProList:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductList",//金融产品列表查询
+        
+        getActivityDetailsFm:"springcloud-enterprise/guest/serviceMarket/org/getActivityDetailsForManage",//获取服务机构详情
+        findOrgProductList:"springcloud-enterprise/servicemarket/product/web/findOrgProductList",//机构-服务产品列表
+        findOrgCountProductList:"springcloud-enterprise/servicemarket/product/web/findOrgCountProductList",//机构详情下-服务产品列表
+        findProductList:"springcloud-enterprise/servicemarket/product/web/findProductList",//服务产品列表
+        findProductDetails:"springcloud-enterprise/servicemarket/product/web/findProductDetails",//服务产品详情
+        sameTypeProductList:"springcloud-enterprise/servicemarket/product/web/sameTypeProductList",//服务产品详情下的同类型服务列表
+        getServiceConList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//服务顾问列表
+        getEvaluationCountInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getEvaluationCountInfo",//服务评价统计信息
+        // selActiList:"springcloud-park/activity/selectActivityList",//获取活动资讯
+        selActiList:"springcloud-park/guest/activity/findOrgActivityList",//获取活动资讯
+        userDemandTechnology:"springcloud-enterprise/serviceMarket/requireManagementController/userDemandTechnology",//用户提需求(科技金融)
+        userDemand:"springcloud-enterprise/serviceMarket/requireManagementController/userDemand",// 用户提需求(非科技金融)(pc/app新增需求)
+        getServiceAdvisorInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceAdvisorInfo",// 服务顾问详情
+        advisorProductList:"springcloud-enterprise/servicemarket/product/web/advisorProductList",// 服务顾问-服务产品列表
+        getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",// 科技金融-投资人列表
+        getInvestorMainArea:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainArea",// 科技金融-查询投资人主投领域
+        getInvestorInfoDetails:"springcloud-enterprise/technologyFinancial/investorController/getInvestorInfoDetails",// 投资人详情/投资人查看
+        getOrgProductList:"springcloud-enterprise/servicemarket/product/web/findOrgProductList",//机构-服务产品列表
+        getShelfProductList:"springcloud-enterprise/servicemarket/product/web/findShelfProductList",//常规-通过id获取产品名称列表
+        upShelfCommonService:"springcloud-enterprise/servicemarket/product/web/upShelfCommonService",//常规产品上架大按钮
+        productShelf:"springcloud-enterprise/servicemarket/product/manage/productShelf",//表格常规产品上下架小按钮
+        getFinancialProductDetails:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductDetails",//获取科技金融产品详情
+        upShelfCommonProduct:"springcloud-enterprise/technologyFinancial/financialProductController/upShelfCommonProduct",//科技金融新增上架
+        // 企业数据上报入口
+        enterpriseGetForm:"springcloud-enterprise/data/company/getForm", // 获取本月待填报的任务
+        enterpriseGetFormed:"springcloud-enterprise/data/company/getFormed", // 获取企业填报历史表单列表
+        enterpriseGetFormStruct:"springcloud-enterprise/data/company/getFormStruct", // 获取待填报的表单结构
+        enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
+        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd" // 页面广告获取
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

@@ -261,14 +261,14 @@
         (<include refid="com.jn.enterprise.data.dao.TbDataReportingTaskDataMapper.Base_Column_List"/>)
         <foreach collection="list" index="index" item="item" separator="UNION ALL">
             select
-            #{item.fallInFormId,jdbcType=VARCHAR},
-            #{item.targetId,jdbcType=VARCHAR},
-            #{item.modelId,jdbcType=VARCHAR},
-            #{item.data,jdbcType=VARCHAR},
-            #{item.formId,jdbcType=VARCHAR},
-            #{item.tabId,jdbcType=VARCHAR},
-            #{item.fillId,jdbcType=VARCHAR},
-            #{item.rowNum,jdbcType=INTEGER}
+            #{ item.fallInFormId,jdbcType=VARCHAR},
+            #{ item.targetId,jdbcType=VARCHAR},
+            #{ item.modelId,jdbcType=VARCHAR},
+            #{ item.data,jdbcType=VARCHAR},
+            #{ item.formId,jdbcType=VARCHAR},
+            #{ item.fillId,jdbcType=VARCHAR},
+            #{ item.tabId,jdbcType=VARCHAR},
+            #{ item.rowNum,jdbcType=INTEGER}
             from dual
         </foreach>
     </insert>
@@ -807,6 +807,58 @@
           ) group by department_id,department_name
     </select>
     -->
+
+    <select id="getTargetByFillId" parameterType="java.lang.String" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTarget">
+        SELECT
+
+        *
+         from
+        tb_data_reporting_snapshot_model_struct
+        <!--
+        <include refid="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetMapper.Base_Column_List" />
+        FROM
+        tb_data_reporting_snapshot_target
+        WHERE
+        target_id IN (
+        SELECT
+        target_id
+        FROM
+        tb_data_reporting_snapshot_model_struct t,
+        ( SELECT * FROM tb_data_reporting_snapshot_model_tab WHERE task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 ) AND tab_create_type = 1 ) c
+        WHERE
+        t.task_batch = c.task_batch
+        AND t.model_id = c.model_id
+        AND t.tab_id = c.tab_id
+        )
+        AND task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 )
+        AND record_status = 1
+        -->
+    </select>
+
+    <select id="getTargetGroupByFillId" parameterType="java.lang.String" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
+        SELECT
+         * from tb_data_reporting_snapshot_target_group
+
+        <!--
+        <include refid="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroupMapper.Base_Column_List" />
+        FROM
+        tb_data_reporting_snapshot_target_group
+        WHERE
+        target_id IN (
+        SELECT
+        target_id
+        FROM
+        tb_data_reporting_snapshot_model_struct t,
+        ( SELECT * FROM tb_data_reporting_snapshot_model_tab WHERE task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 ) AND tab_create_type = 1 ) c
+        WHERE
+        t.task_batch = c.task_batch
+        AND t.model_id = c.model_id
+        AND t.tab_id = c.tab_id
+        )
+        AND task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 )
+        AND record_status = 1
+        -->
+    </select>
 
 
 </mapper>

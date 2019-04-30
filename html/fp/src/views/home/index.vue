@@ -1,5 +1,5 @@
 <template>
-  <div class="userHome" @click="menuFlag = false">
+  <div class="homePage">
     <div class="header clearfix">
       <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
       <div class="headerRight fr pr">
@@ -138,7 +138,7 @@
             </el-aside>
           </div>
           <!-- 主体 -->
-          <div class="homePage_main userHome" >
+          <div class="homePage_main userHome">
             <el-main>
                 <router-view :userData='userData'></router-view>
             </el-main>
@@ -416,17 +416,17 @@ export default {
           }
         }
         .homePage_main{
+          flex: 1;
           .el-main{
             padding: 0 20px;
           }
         }
       }
     }
-
-  }
-  .homePage_main {
-    flex: 1;
-    width: 100%;
+    .homePage_main {
+      flex: 1;
+      width: 100%;
+    }
   }
 </style>
 

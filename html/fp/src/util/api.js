@@ -67,6 +67,7 @@ export default {
         getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",// 科技金融-投资人列表
         getInvestorMainArea:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainArea",// 科技金融-查询投资人主投领域
         getInvestorInfoDetails:"springcloud-enterprise/technologyFinancial/investorController/getInvestorInfoDetails",// 投资人详情/投资人查看
+
         getOrgProductList:"springcloud-enterprise/servicemarket/product/web/findOrgProductList",//机构-服务产品列表
         getShelfProductList:"springcloud-enterprise/servicemarket/product/web/findShelfProductList",//常规-通过id获取产品名称列表
         upShelfCommonService:"springcloud-enterprise/servicemarket/product/web/upShelfCommonService",//常规产品上架大按钮
@@ -80,6 +81,49 @@ export default {
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd" // 页面广告获取
+
+        getMyBusiness:"springcloud-enterprise/guest/company/getCompanyDetailByNowAccount",//获取当前用户企业信息
+        getUserAccount:"springcloud-app-system/system/sysUser/getUserInfo",//获取用户账号
+        postJob:"springcloud-enterprise/enterprise/RecruitController/publishRecruitInfo",//发布招聘
+        getInviteStaffList:"springcloud-enterprise/enterprise/InvitationController/getInviteStaffList",//获取邀请员工的资料
+        getCompensation:"springcloud-enterprise/guest/CommonController/getServiceCodeList",//获取薪资待遇
+        getInviteType:"springcloud-enterprise/guest/CommonController/getServiceCodeList",//获取招聘类型
+        getStaffList:"springcloud-enterprise/enterprise/StaffController/getStaffList",//获取员工管理列表
+        getWebRecruitList:"springcloud-enterprise/enterprise/RecruitController/getRecruitList",//获取招聘管理列表
+        underRecruit:"springcloud-enterprise/enterprise/RecruitController/underRecruit",//上下架招聘
+        getRecruitDetails:"springcloud-enterprise/guest/RecruitController/viewRecruitDetails",//获取招聘详情
+        editRecruitDetails:"springcloud-enterprise/enterprise/RecruitController/editRecruitInfo",//编辑招聘信息
+        getColleagueList:"springcloud-enterprise/enterprise/ColleagueController/getColleagueList",//获取企业同事列表
+        delColleague:"springcloud-enterprise/enterprise/ColleagueController/delColleague",//删除企业同事
+        cancelContact:"springcloud-enterprise/enterprise/ColleagueController/cancelContact",//取消联系人
+        setContact:"springcloud-enterprise/enterprise/ColleagueController/setContact",//设为联系人
+        reviewStaff:"springcloud-enterprise/enterprise/StaffController/reviewStaff",//同意邀请员工
+        inviteStaffAgain:"springcloud-enterprise/enterprise/InvitationController/inviteStaffAgain",//再次邀请员工
+        inviteStaff:"springcloud-enterprise/enterprise/InvitationController/inviteStaff",//邀请员工
+        getBusinessPromotionList:"springcloud-enterprise/propaganda/businessPromotionController/getBusinessPromotionList",//获取企业宣传列表
+        getPropagandaFeeRulesList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaFeeRulesList",//获取企业宣传费用规则
+        saveBusinessPromotion:"springcloud-enterprise/propaganda/businessPromotionController/saveBusinessPromotion",//发布企业宣传
+        getPropagandaTypeList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaTypeList",//获取企业宣传类型
+        getPropagandaAreaList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaAreaList",//获取企业宣传区域信息
+        getBusinessPromotionDetails:"springcloud-enterprise/propaganda/businessPromotionController/getBusinessPromotionDetails",//获取企业宣传详情
+        cancelApprove:"springcloud-enterprise/propaganda/businessPromotionController/cancelApprove",//撤消企业申请
+        //我的机构
+        inviteAdvisor:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAdvisor",//邀请顾问
+        advisorDetails:"springcloud-enterprise/serviceMarket/advisorManagementController/advisorDetails",//获取邀请顾问的资料
+        getAdvisorManagementInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/getAdvisorManagementInfo",//获取顾问管理列表
+        inviteAgain:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAgain",//再次邀请顾问
+        cancelAsContact:"springcloud-enterprise/serviceMarket/orgColleagueController/cancelAsContact",//机构同事取消联系人
+        setAsContact:"springcloud-enterprise/serviceMarket/orgColleagueController/setAsContact",//机构同事设为联系人
+        deleteContactOrAdvisor:"springcloud-enterprise/serviceMarket/orgColleagueController/deleteContactOrAdvisor",//机构同事删除联系人
+        getOrgColleagueList:"springcloud-enterprise/serviceMarket/orgColleagueController/getOrgColleagueList",//获取机构同事列表
+        getMyOrgInfo:"springcloud-enterprise/guest/serviceMarket/org/getMyOrgInfo",//获取我的机构信息
+        approvalAdvisorInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/approvalAdvisorInfo",//审批顾问填写信息
+        echoUserInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/echoUserInfo",//获取顾问信息
+        saveOrUpdateAdvisorBaseInfo:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorBaseInfo",//保存顾问基本信息
+        getCertificateTypeList:"springcloud-enterprise/serviceMarket/advisorEditController/getCertificateTypeList",//获取指定证书类型
+        saveOrUpdateAdvisorHonor:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor",//新增顾问荣誉资质信息
+
+
 
     },
     setToken: function (obj) {   //设置token在请求头上面
@@ -276,5 +320,15 @@ export default {
 		mm = mm < 10 ? '0' + mm : mm;
 		ss = ss < 10 ? '0' + ss : ss;
 		return yyyy + '-' + MM + '-' + dd;
-	}
+    },
+    getCurrentTime() {//获取当前时间
+	var date = new Date();
+	var seperator1 = "-";
+	var seperator2 = ":";
+	var month = date.getMonth() + 1<10? "0"+(date.getMonth() + 1):date.getMonth() + 1;
+	var strDate = date.getDate()<10? "0" + date.getDate():date.getDate();
+	var currentdate = date.getFullYear() + seperator1  + month  + seperator1  + strDate
+	return currentdate;
+}
+
 }

@@ -744,6 +744,14 @@ export default {
       //   ) {
       //     this.show4 = false;
       //   }
+      // console.log(this.getScrollTop())HAOhao
+      // if (
+      //   this.getScrollTop() > document.getElementById("header").clientHeight
+      // ) {
+      //   this.headFlag = true;
+      // } else {
+      //   this.headFlag = false;
+      // }
     },
     getScrollTop() {
       var scroll_top = 0;
@@ -1132,5 +1140,4 @@ export default {
   }
 }
 </style>
-  
   

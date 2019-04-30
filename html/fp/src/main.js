@@ -10,6 +10,8 @@ import 'swiper/dist/css/swiper.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 // import VueAwesomeSwiper from 'vue-awesome-swiper'
+=======
+import '@/css/theme.css'
 
 Vue.use(ElementUI)
 // Vue.use(VueAwesomeSwiper, /* { default global options } */)

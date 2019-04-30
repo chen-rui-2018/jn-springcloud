@@ -209,7 +209,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         if(taskbatch!= null && taskbatch.size()>0){
             TbDataReportingSnapshotModelCriteria adExample = new TbDataReportingSnapshotModelCriteria();
-            adExample.or().andTaskBatchIn(taskbatch).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+            adExample.or().andTaskBatchIn(taskbatch);
 
             List<TbDataReportingSnapshotModel> modelList = tbDataReportingSnapshotModelMapper.selectByExample(adExample);
 
@@ -448,6 +448,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                 }
             }
             if(hasAccess){
+                gardenFillerAccessModel = new GardenFillerAccessModel();
                 BeanUtils.copyProperties(gardenFiller,gardenFillerAccessModel);
                 access.add(gardenFillerAccessModel);
             }
@@ -498,7 +499,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         //拿出批次号 ， 查询结构信息--模板信息
         TbDataReportingSnapshotModelCriteria snapshotModelCriteria =new TbDataReportingSnapshotModelCriteria();
-        snapshotModelCriteria.or().andTaskBatchEqualTo(tbDataReportingTask.getTaskBatch()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+        snapshotModelCriteria.or().andTaskBatchEqualTo(tbDataReportingTask.getTaskBatch());
         List<TbDataReportingSnapshotModel>  snapshotModelList = tbDataReportingSnapshotModelMapper.selectByExample(snapshotModelCriteria);
         if(snapshotModelList ==null || snapshotModelList.size()==0){
             logger.warn("填报任务的模板未找到！！");
@@ -711,9 +712,15 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         //
         TbDataReportingTaskCriteria example = new TbDataReportingTaskCriteria();
-
-        example.or().andFillInFormIdEqualTo(companyId).andModelIdEqualTo(modelId).andFormTimeEqualTo(formTimeBefore).andStatusEqualTo(new Byte(DataUploadConstants.FILLED))
-                .andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+        if(StringUtils.isNotBlank(companyId)){
+            //有公司的ID为企业任务
+            example.or().andFillInFormIdEqualTo(companyId).andModelIdEqualTo(modelId).andFormTimeEqualTo(formTimeBefore).andStatusEqualTo(new Byte(DataUploadConstants.FILLED))
+                    .andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+        }else{
+            //园区任务
+            example.or().andFillInFormIdIsNull().andModelIdEqualTo(modelId).andFormTimeEqualTo(formTimeBefore).andStatusEqualTo(new Byte(DataUploadConstants.FILLED))
+                    .andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+        }
 
         //获取上期任务填报的账期，已填报的任务
         List<TbDataReportingTask> taskList =  tbDataReportingTaskMapper.selectByExample(example);

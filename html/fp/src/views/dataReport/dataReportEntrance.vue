@@ -191,7 +191,11 @@
           for (const item of formModels) {
             if (target.id === item.targetId) {
               if (item.formType === '2') {
-                item.value = null
+                if (item.value) {
+                  item.value = Number(item.value)
+                } else {
+                  item.value = null
+                }
               } else if (item.formType === '4') {
                 if (item.value) {
                   item.value = item.value.split(',')

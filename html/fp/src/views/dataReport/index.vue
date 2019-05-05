@@ -21,22 +21,24 @@
                    v-for="(item, index) in willFillList"
                    class="en-card"
                    @click="toFillData(item)">
-                <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
-                <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
-                <div class="tc" v-if="item.isOverdue === '0'">
-                  还有
-                  <span class="en-warning">{{ item.residueDays }}天</span>
-                  逾期
-                </div>
-                <div class="tc" v-else>
-                  已经逾期
-                  <span class="en-warning">{{ item.overdueDays }}天</span>
-                </div>
-                <div class="en-tips">{{ item.fillInFormDeadline | formatDate }}</div>
-                <div class="en-card-b">
-                  <div class="en-card-b-c">我要上报</div>
-                  <div class="en-card-b-r">
-                    <i class="el-icon-time"></i>
+                <div class="card-cell">
+                  <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
+                  <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
+                  <div class="tc" v-if="item.isOverdue === '0'">
+                    还有
+                    <span class="en-warning">{{ item.residueDays }}天</span>
+                    逾期
+                  </div>
+                  <div class="tc" v-else>
+                    已经逾期
+                    <span class="en-warning">{{ item.overdueDays }}天</span>
+                  </div>
+                  <div class="en-tips">{{ item.fillInFormDeadline | formatDate }}</div>
+                  <div class="en-card-b">
+                    <div class="en-card-b-c">我要上报</div>
+                    <div class="en-card-b-r">
+                      <i class="el-icon-time"></i>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -66,33 +68,35 @@
                    :key="index"
                    class="en-card"
                    @click="toFillData(item)">
-                <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
-                <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
-                <div class="tc" v-if="formatReported(item).title === '我已上报'">
-                  <span>已于</span>
-                  <span class="en-success">{{ item.upTime | getDate }}</span>
-                  <span>填期</span>
-                </div>
-                <div class="tc" v-else-if="formatReported(item).title === '我要补报'">
-                  <span>已逾期</span>
-                  <span class="en-warning">{{ item.overdueDays }}</span>
-                  <span>天</span>
-                </div>
-                <div class="tc" v-else>
-                  <span class="en-warning">逾期</span>
-                  <span>已补报</span>
-                </div>
-                <div class="en-tips" v-if="item.status === 1">{{ item.fillInFormDeadline | formatDate }}</div>
-                <div class="en-tips" v-else>感谢您对园区工作的支持</div>
-                <div class="en-card-b">
-                  <div class="en-card-b-c">{{ formatReported(item).title }}</div>
-                  <div class="en-card-b-r">
-                    <i class="el-icon-success" v-if="formatReported(item).title === '我已上报'"></i>
-                    <i class="el-icon-time" v-else-if="formatReported(item).title === '我要补报'"></i>
-                    <i class="el-icon-info" v-else-if="formatReported(item).title === '我已补报'"></i>
+                <div class="card-cell">
+                  <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
+                  <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
+                  <div class="tc" v-if="formatReported(item).title === '我已上报'">
+                    <span>已于</span>
+                    <span class="en-success">{{ item.upTime | getDate }}</span>
+                    <span>填期</span>
+                  </div>
+                  <div class="tc" v-else-if="formatReported(item).title === '我要补报'">
+                    <span>已逾期</span>
+                    <span class="en-warning">{{ item.overdueDays }}</span>
+                    <span>天</span>
+                  </div>
+                  <div class="tc" v-else>
+                    <span class="en-warning">逾期</span>
+                    <span>已补报</span>
+                  </div>
+                  <div class="en-tips" v-if="item.status === 1">{{ item.fillInFormDeadline | formatDate }}</div>
+                  <div class="en-tips" v-else>感谢您对园区工作的支持</div>
+                  <div class="en-card-b">
+                    <div class="en-card-b-c">{{ formatReported(item).title }}</div>
+                    <div class="en-card-b-r">
+                      <i class="el-icon-success" v-if="formatReported(item).title === '我已上报'"></i>
+                      <i class="el-icon-time" v-else-if="formatReported(item).title === '我要补报'"></i>
+                      <i class="el-icon-info" v-else-if="formatReported(item).title === '我已补报'"></i>
+                    </div>
                   </div>
                 </div>
-              </div>
+                </div>
             </div>
           </div>
           <div class="filled-pagination">
@@ -299,8 +303,9 @@
     $warning-color: #FF2222;
     $info-color: #ebebeb;
     .en-card-bg {
-      @include flex($h: flex-start, $v: flex-start);
+      flex-wrap: wrap;
       padding: 15px 0;
+      @include flex($h: flex-start, $v: flex-start);
     }
     .tab-btns {
       margin: 25px auto 10px;
@@ -309,20 +314,27 @@
       @include flex($h:space-between);
     }
     .en-card {
-      width: 220px;
-      border-radius: 4px;
+      width: 25%;
+      min-width: 220px;
+      padding: 15px;
       font-size: 14px;
-      background-color: #fff;
-      overflow: hidden;
-      margin-right: 15px;
-      transform: translateY(0);
-      transition: .2s ease-in;
+      background-color: #f5f5f5;
+      box-sizing: border-box;
       cursor: pointer;
-      &:hover {
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        transform: translateY(-6px);
-        transition: .2s ease-out;
+      .card-cell {
+        width: 100%;
+        border-radius: 4px;
+        overflow: hidden;
+        background-color: #fff;
+        transform: translateY(0);
+        transition: .2s ease-in;
+        &:hover {
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+          transform: translateY(-6px);
+          transition: .2s ease-out;
+        }
       }
+
       &.en-success {
         .en-card-m .en-card-m-l {
           color: $success-color;

@@ -22,6 +22,8 @@ public class ServiceHonor implements Serializable {
     private String certificateName;
     @ApiModelProperty(value = "证书类型")
     private String certificateType;
+    @ApiModelProperty(value = "证书类型名称")
+    private String certificateTypeName;
     @ApiModelProperty(value = "获得时间")
     private String getTime;
     @ApiModelProperty(value = "颁发机构/部门")
@@ -39,6 +41,13 @@ public class ServiceHonor implements Serializable {
     @ApiModelProperty(value = "记录状态")
     private Byte recordStatus;
 
+    public String getCertificateTypeName() {
+        return certificateTypeName;
+    }
+
+    public void setCertificateTypeName(String certificateTypeName) {
+        this.certificateTypeName = certificateTypeName;
+    }
 
     public String getId() {
         return id;

@@ -12,6 +12,7 @@ import com.jn.enterprise.servicemarket.advisor.entity.*;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceRatingTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.*;
+import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -71,6 +73,8 @@ public class AdvisorServiceImpl implements AdvisorService {
     @Autowired
     private IndustryService industryService;
 
+    @Autowired
+    private AdvisorEditService advisorEditService;
 
     /**
      * 服务顾问列表查询
@@ -364,9 +368,17 @@ public class AdvisorServiceImpl implements AdvisorService {
         if(tbServiceHonorList.isEmpty()){
             return serviceHonorList;
         }
+        List<AdvisorCertificateTypeShow> certificateTypeList = advisorEditService.getCertificateTypeList("");
+        List<AdvisorCertificateTypeShow>resultList=certificateTypeList==null? Collections.EMPTY_LIST:certificateTypeList;
         for(TbServiceHonor tbServiceHonor:tbServiceHonorList){
             ServiceHonor serviceHonor=new ServiceHonor();
             BeanUtils.copyProperties(tbServiceHonor, serviceHonor);
+            for(AdvisorCertificateTypeShow act:resultList){
+                if(StringUtils.equals(tbServiceHonor.getCertificateType(),act.getCertificateCode())){
+                    serviceHonor.setCertificateTypeName(act.getCertificateName());
+                    break;
+                }
+            }
             serviceHonorList.add(serviceHonor);
         }
         return serviceHonorList;

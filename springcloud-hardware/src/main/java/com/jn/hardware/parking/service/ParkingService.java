@@ -63,7 +63,7 @@ public interface ParkingService {
      * @param temporaryCarParkingFeeRequest
      * @return
      */
-    Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
+    Result getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
 
     /**
      * 保存用户停车缴费信息
@@ -84,7 +84,7 @@ public interface ParkingService {
      * @param parkingMonthlyCardInfoRequest
      * @return
      */
-    Result<DoorParkingMonthlyCardShow> findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest);
+    Result findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest);
 
     /**
      * 月租卡续费信息保存
@@ -98,7 +98,7 @@ public interface ParkingService {
      * @param monthyRentalCardRateRequest
      * @return
      */
-    Result<DoorMonthlyRentCardRateInfo>  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest);
+    Result  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest);
 
     /**
      * 月租卡销户操作
@@ -112,7 +112,7 @@ public interface ParkingService {
      * @param parkingSpaceAmountRequest
      * @return
      */
-    Result<DoorParkingSpaceAmountShow> findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest);
+    Result findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest);
 
     /**
      * 车辆入场记录信息

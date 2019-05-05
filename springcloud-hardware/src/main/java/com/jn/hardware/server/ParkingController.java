@@ -28,7 +28,7 @@ public class ParkingController extends BaseController implements ParkingClient {
     private ParkingService parkingService;
 
     @Override
-    public Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
+    public Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
         return parkingService.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
     }
 
@@ -44,7 +44,7 @@ public class ParkingController extends BaseController implements ParkingClient {
     }
 
     @Override
-    public Result<DoorParkingMonthlyCardShow> findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
+    public Result findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
         return parkingService.findParkingMonthlyRentCard(parkingMonthlyCardInfoRequest);
     }
 
@@ -54,7 +54,7 @@ public class ParkingController extends BaseController implements ParkingClient {
     }
 
     @Override
-    public Result<DoorMonthlyRentCardRateInfo>  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
+    public Result  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
         return parkingService.findMonthlyRentCardRateInfo(monthyRentalCardRateRequest);
     }
 
@@ -64,7 +64,7 @@ public class ParkingController extends BaseController implements ParkingClient {
     }
 
     @Override
-    public Result<DoorParkingSpaceAmountShow> findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
+    public Result findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
         return parkingService.findParkingSpaceAmount(parkingSpaceAmountRequest);
     }
 

@@ -27,7 +27,7 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/getTemporaryCarParkingFee")
-    Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
+    Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
     /**
      * 缴费信息保存
      * @param paymentCarParkingFeeRequest 实体类参数
@@ -50,7 +50,7 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/findParkingMonthlyRentCard")
-    Result<DoorParkingMonthlyCardShow> findParkingMonthlyRentCard(@RequestBody ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest);
+    Result findParkingMonthlyRentCard(@RequestBody ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest);
 
     /**
      * 保存月租卡续费信息
@@ -65,7 +65,7 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/findMonthlyRentCardRateInfo")
-    Result<DoorMonthlyRentCardRateInfo>  findMonthlyRentCardRateInfo(@RequestBody MonthyRentalCardRateRequest monthyRentalCardRateRequest);
+    Result  findMonthlyRentCardRateInfo(@RequestBody MonthyRentalCardRateRequest monthyRentalCardRateRequest);
     /**
      * 月租卡销户操作
      * @param cancelMonthlyRentAccountRequest
@@ -79,6 +79,6 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/findParkingSpaceAmount")
-    Result<DoorParkingSpaceAmountShow> findParkingSpaceAmount(@RequestBody ParkingSpaceAmountRequest cancelMonthlyRentAccountRequest);
+    Result findParkingSpaceAmount(@RequestBody ParkingSpaceAmountRequest cancelMonthlyRentAccountRequest);
 
 }

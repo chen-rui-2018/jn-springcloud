@@ -26,7 +26,7 @@ public class PaymentCarParkingFeeRequest implements Serializable {
      * 道尔: 下发预缴费到车场信息
      */
     @ApiModelProperty(value = "道尔 下发(保存)预缴费到车场信息入参对象")
-    private DoorPaymentCarParkingFeeRequest DoorPaymentCarParkingFeeRequest;
+    private DoorPaymentCarParkingFeeRequest doorPaymentCarParkingFeeRequest;
 
     public String getParkingCompanyId() {
         return parkingCompanyId;
@@ -37,18 +37,18 @@ public class PaymentCarParkingFeeRequest implements Serializable {
     }
 
     public DoorPaymentCarParkingFeeRequest getDoorPaymentCarParkingFeeRequest() {
-        return DoorPaymentCarParkingFeeRequest;
+        return doorPaymentCarParkingFeeRequest;
     }
 
     public void setDoorPaymentCarParkingFeeRequest(DoorPaymentCarParkingFeeRequest doorPaymentCarParkingFeeRequest) {
-        DoorPaymentCarParkingFeeRequest = doorPaymentCarParkingFeeRequest;
+        doorPaymentCarParkingFeeRequest = doorPaymentCarParkingFeeRequest;
     }
 
     @Override
     public String toString() {
         return "PaymentCarParkingFeeRequest{" +
                 "parkingCompanyId='" + parkingCompanyId + '\'' +
-                ", DoorPaymentCarParkingFeeRequest=" + DoorPaymentCarParkingFeeRequest +
+                ", doorPaymentCarParkingFeeRequest=" + doorPaymentCarParkingFeeRequest +
                 '}';
     }
 }

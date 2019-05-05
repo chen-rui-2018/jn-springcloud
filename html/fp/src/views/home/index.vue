@@ -140,7 +140,10 @@
           <!-- 主体 -->
           <div class="homePage_main userHome">
             <el-main>
-                <router-view :userData='userData'></router-view>
+              <keep-alive>
+                <router-view v-if="$route.meta.keepAlive" :userData="userData"></router-view>
+              </keep-alive>
+              <router-view v-if="!$route.meta.keepAlive" :userData="userData"></router-view>
             </el-main>
           </div>
         </el-container>

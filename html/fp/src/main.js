@@ -8,7 +8,7 @@ import './assets/iconfont/iconfont.css'
 import 'swiper/dist/css/swiper.css'
 // import animate from 'animate.css'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import '@/css/theme.scss'
 // import VueAwesomeSwiper from 'vue-awesome-swiper'
 import '@/css/theme.css'
 
@@ -17,7 +17,6 @@ Vue.use(ElementUI)
 
 import api from '@/util/api'
 Vue.prototype.api = api
-
 
 Vue.config.productionTip = false
 

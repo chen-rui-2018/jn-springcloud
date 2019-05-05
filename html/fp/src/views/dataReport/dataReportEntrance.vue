@@ -7,10 +7,20 @@
 <!--        </div>-->
 <!--      </div>-->
     </div>
-    <el-tabs type="border-card" @tab-click="changeDepartment">
-      <el-tab-pane v-for="(form, index) in formDataListTitle" :key="index" :label="form.departmentName">
+    <el-tabs
+      type="border-card"
+      @tab-click="changeDepartment">
+      <el-tab-pane
+        v-for="(form, index) in formDataListTitle"
+        :key="index"
+        v-loading="loadingFormData"
+        :label="form.departmentName">
         <el-tabs type="border-card">
-          <el-tab-pane v-for="(tab, tabIndex) in formData.tabs" :key="tabIndex" :label="tab.tabName">
+          <el-tab-pane
+            v-for="(tab, tabIndex) in formData.tabs"
+            :key="tabIndex"
+            :label="tab.tabName"
+            v-loading="loadingTab">
             <tree-table :isReported="formData.taskInfo.status" :modelType="formData.modelType" :data="tab.targetList" :columns="tab.columns" border expand-all/>
           </el-tab-pane>
         </el-tabs>
@@ -42,6 +52,8 @@
     },
     data() {
       return {
+        loadingFormData: true,
+        loadingTab: true,
         formDataListTitle: [{
           name: '企业',
           id: ''
@@ -66,7 +78,10 @@
       init() {
         this.getData()
           .then(() => {
-            this.formatFormData()
+            return this.formatFormData()
+          })
+          .then(() => {
+            this.loadingTab = false
           })
         this.getPcAd()
           .then(() => {
@@ -77,11 +92,13 @@
           })
       },
       formatFormData() {
-        for (const tab of this.formData.tabs) {
-          this.formatInputFormatModel(tab)
-          this.formatColumn(tab)
-          this.formatTreeOtherColumnData(tab)
-        }
+        return new Promise(resolve => {
+          for (const tab of this.formData.tabs) {
+            this.formatInputFormatModel(tab)
+            this.formatColumn(tab)
+            this.formatTreeOtherColumnData(tab)
+          }
+        })
       },
       formatInputFormatModel(tab) {
         this.treeMerge(tab.inputList, tab.targetList)
@@ -110,7 +127,6 @@
             } else{
               text = key + '年'
             }
-            console.dir(key)
             tab.columns.push({
               text: text,
               value: key,
@@ -122,6 +138,7 @@
       changeDepartment(el) {
         const index = Number(el.index)
         const departmentId = this.formDataListTitle[index].departmentId
+        this.formData.departmentId = departmentId
         this.getDepartmentJurisdiction(departmentId)
       },
       getDepartmentJurisdiction(departmentId) {
@@ -176,7 +193,13 @@
               if (item.formType === '2') {
                 item.value = null
               } else if (item.formType === '4') {
-                item.value = []
+                if (item.value) {
+                  item.value = item.value.split(',')
+                } else {
+                  item.value = []
+                }
+              }else if (item.formType === '5') {
+                item.fileList = item.value ? [{ name: item.value, url: item.value }] : []
               }
               target.inputFormatModel[0].push(item)
             }
@@ -186,7 +209,6 @@
             list.sort((a, b) => {
               return a['rowNum'] - b['rowNum']
             })
-            // this.ascArr(list, 'rowNum')
           }
           if (target.hasOwnProperty('children') && target.children.length > 0) {
             this.treeMerge(formModels, target.children)
@@ -214,6 +236,7 @@
         const _this = this
         this.submit()
           .then(formData => {
+            console.dir(JSON.stringify(formData))
             this.api.post({
               url: 'enterpriseSaveCompanyFormDataIsDraft',
               data: formData,
@@ -251,7 +274,7 @@
               }
             }
           })
-          console.dir(JSON.stringify(formData))
+          // console.dir(JSON.stringify(formData))
           resolve(formData)
         })
       },
@@ -273,6 +296,8 @@
       },
       getData() {
         return new Promise((resolve, reject) => {
+          this.loadingFormData = true
+          this.loadingTab = true
           const _this = this
           this.api.get({
             url: `enterpriseGetFormStruct`,
@@ -286,12 +311,14 @@
                   return a['orderNumber'] - b['orderNumber']
                 })
                 if ( _this.formData.modelType === 1) {
+                  _this.loadingFormData = false
                   _this.formDataListTitle = _this.formData.gardenFiller
                   for (const tab of  _this.formData.tabs) {
                     const departmentId = _this.formDataListTitle[0].departmentId
                     _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
                 }
+                _this.formData.departmentId = _this.formDataListTitle[0].departmentId
                 resolve()
               } else {
                 _this.$message.error(res.result)

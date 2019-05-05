@@ -12,13 +12,16 @@
 <!--      </div>-->
 <!--    </div>-->
     <div class="en-body">
-      <el-tabs type="border-card">
+      <el-tabs type="border-card" style="background-color: #f5f5f5">
         <el-tab-pane label="本月上报数据">
-          <div v-if="willFillList.length === 0">暂无数据</div>
+          <div v-if="willFillList.length === 0" class="no-data">暂无数据</div>
           <div v-else>
             <div class="en-card-bg">
-              <div class="en-card" v-for="(item, index) in willFillList">
-                <div class="en-card-t">{{ item.modelName }}</div>
+              <div
+                   v-for="(item, index) in willFillList"
+                   class="en-card"
+                   @click="toFillData(item)">
+                <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
                 <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
                 <div class="tc" v-if="item.isOverdue === '0'">
                   还有
@@ -31,7 +34,7 @@
                 </div>
                 <div class="en-tips">{{ item.fillInFormDeadline | formatDate }}</div>
                 <div class="en-card-b">
-                  <div class="en-card-b-c" @click="toFillData(item.fillId)">我要上报</div>
+                  <div class="en-card-b-c">我要上报</div>
                   <div class="en-card-b-r">
                     <i class="el-icon-time"></i>
                   </div>
@@ -41,15 +44,29 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="历史上报数据">
-          <div>
-            <el-button v-for="(item, index) in reportType" :key="index" :type="filledType === index ? 'primary' : ''" size="mini" @click="filledTypeChange(item.data, index)">{{ item.name }}</el-button>
-            <div></div>
+          <div class="search-row">
+            <div>
+              <el-button v-for="(item, index) in reportType" :key="index" :type="filledType === index ? 'primary' : ''" size="mini" @click="filledTypeChange(item.data, index)">{{ item.name }}</el-button>
+            </div>
+            <div>
+              <el-input
+                v-model="searchFilled"
+                placeholder="请输入内容"
+                prefix-icon="el-icon-search">
+              </el-input>
+            </div>
           </div>
-          <div v-if="filledList.length === 0" style="padding: 10px">暂无数据</div>
+          <div v-if="filledList.length === 0" style="padding: 10px" class="no-data">暂无数据</div>
+          <div v-if="filledListSearchResult.length === 0 && filledList.length > 0" style="padding: 10px" class="no-data">暂无筛选结果，换个搜索条件试试吧</div>
           <div v-else>
             <div class="en-card-bg">
-              <div class="en-card" :class="formatReported(item).class" v-for="(item, index) in filledList" :key="index">
-                <div class="en-card-t">{{ item.modelName }}</div>
+              <div
+                   v-for="(item, index) in filledListSearchResult"
+                   :class="formatReported(item).class"
+                   :key="index"
+                   class="en-card"
+                   @click="toFillData(item)">
+                <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
                 <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
                 <div class="tc" v-if="formatReported(item).title === '我已上报'">
                   <span>已于</span>
@@ -68,7 +85,7 @@
                 <div class="en-tips" v-if="item.status === 1">{{ item.fillInFormDeadline | formatDate }}</div>
                 <div class="en-tips" v-else>感谢您对园区工作的支持</div>
                 <div class="en-card-b">
-                  <div class="en-card-b-c" @click="toFillData(item)">{{ formatReported(item).title }}</div>
+                  <div class="en-card-b-c">{{ formatReported(item).title }}</div>
                   <div class="en-card-b-r">
                     <i class="el-icon-success" v-if="formatReported(item).title === '我已上报'"></i>
                     <i class="el-icon-time" v-else-if="formatReported(item).title === '我要补报'"></i>
@@ -103,6 +120,7 @@
     },
     data() {
       return {
+        searchFilled: '',
         adUrls: [],
         filledType: 0,
         reportType: [{
@@ -111,7 +129,6 @@
             modelCycle: null,
             page: 1
           }
-
         },{
           name: '年报',
           data: {
@@ -133,6 +150,14 @@
           page: 1,
           rows: 20
         },
+      }
+    },
+    computed: {
+      filledListSearchResult() {
+        if (this.searchFilled === '') {
+          return this.filledList
+        }
+        return this.filledList.filter(item => item.modelName.indexOf(this.searchFilled) > -1)
       }
     },
     filters: {
@@ -280,20 +305,33 @@
     .tab-btns {
       margin: 25px auto 10px;
     }
+    .search-row {
+      @include flex($h:space-between);
+    }
     .en-card {
       width: 220px;
       border-radius: 4px;
       font-size: 14px;
-      box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, 0.1);
       background-color: #fff;
       overflow: hidden;
       margin-right: 15px;
+      transform: translateY(0);
+      transition: .2s ease-in;
+      cursor: pointer;
+      &:hover {
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        transform: translateY(-6px);
+        transition: .2s ease-out;
+      }
       &.en-success {
         .en-card-m .en-card-m-l {
           color: $success-color;
         }
         .en-card-b {
           background-color: $success-color;
+          &:hover {
+            opacity: .9;
+          }
         }
       }
       &.en-warning {
@@ -314,6 +352,9 @@
       }
       .en-card-t {
         padding: 10px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
         text-align: center;
       }
       .en-card-m {
@@ -335,7 +376,6 @@
         .en-card-b-c {
           width: 50%;
           text-align: center;
-          cursor: pointer;
         }
         .en-card-b-r {
           width: 25%;
@@ -363,12 +403,14 @@
         /*width: 100%;*/
       }
     }
-    .el-pagination.is-background .el-pager li:not(.disabled).active {
-      background-color: #409EFF;
-    }
     .filled-pagination {
       margin: 20px auto;
       text-align: right;
+    }
+    .no-data {
+      @include flex-center;
+      font-size: 16px;
+      height: 400px;
     }
   }
 </style>

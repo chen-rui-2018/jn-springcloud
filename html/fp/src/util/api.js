@@ -80,7 +80,7 @@ export default {
         enterpriseGetFormStruct:"springcloud-enterprise/data/company/getFormStruct", // 获取待填报的表单结构
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
-        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd" // 页面广告获取
+        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
 
         getMyBusiness:"springcloud-enterprise/guest/company/getCompanyDetailByNowAccount",//获取当前用户企业信息
         getUserAccount:"springcloud-app-system/system/sysUser/getUserInfo",//获取用户账号

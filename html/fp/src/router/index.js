@@ -38,74 +38,23 @@ export default new Router({
       name:'forgetPsw'
     },
     {
-      path: '/home',
-      component: resolve => require(['@/views/home'],resolve),
-      meta: {title: '用户中心'},
-      name:'home',
-      redirect:{name:'userCenter'},
-      children:[
-        {
-          path:'/servicemarket/product/userCenter',
-          name:'userCenter',
-          meta: {title: '首页'},
-          component:resolve => require(['@/views/home/userCenter'],resolve)
-        },
-        {
-        path:'/servicemarket/product/productService/ordinaryProduct',
-        name:'ordinaryProduct',
-        meta: {title: '常规服务产品'},
-        component:resolve => require(['@/views/home/productService/ordinaryProduct'],resolve)
-        },
-        {
-        path:'/servicemarket/product/productService/productPutaway',
-        name:'productPutaway',
-        meta: {title: '常规产品上架'},
-        component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
-        },
-        {
-          path:'/servicemarket/product/productService/dataReport',
-          name:'dataReport',
-          meta: {title: '企业数据上报入口'},
-          component:resolve => require(['@/views/dataReport'],resolve)
-        },
-        {
-          path:'/servicemarket/product/productService/dataReportEntrance',
-          name:'dataReportEntrance',
-          meta: {title: '企业数据上报'},
-          component:resolve => require(['@/views/dataReport/dataReportEntrance'],resolve)
-        },
-        {
-        path:'/servicemarket/product/productService/ordinaryproductDetail',
-        name:'ordinaryproductDetail',
-        meta: {title: '常规产品详情'},
-        component:resolve => require(['@/views/home/productService/ordinaryproductDetail'],resolve)
-        },
-        {
-        path:'/userHome',
-        name:'userHome',
-        meta: {title: '用户资料'},
-        component:resolve => require(['@/views/home/userHome'],resolve)
-        }
-      ]
-    },
-    {
       path: '/userinfo',
       component: resolve => require(['@/views/home/userinfo'],resolve),
       name:'user',
       meta: {title: '用户中心'},
 
-      children:[
+      // children:[
       //   {
       //   path:'/user/userHome',
       //   name:'userHome',
       //   component:resolve => require(['@/views/home/userHome'],resolve)
       // },
-        {
-        path:'/user/userData',
-        name:'userData',
-        component:resolve => require(['@/views/home/userData'],resolve),
-      },
-    ]
+    //     {
+    //     path:'/user/userData',
+    //     name:'userData',
+    //     component:resolve => require(['@/views/home/userData'],resolve),
+    //   },
+    // ]
     },
     {
       path: '/',
@@ -321,6 +270,12 @@ export default new Router({
       redirect:{name:'userCenter'},
       children:[
         {
+              path:'/userHome',
+              name:'userHome',
+              meta: {title: '用户资料'},
+              component:resolve => require(['@/views/home/userHome'],resolve)
+              },
+        {
           path:'/servicemarket/product/userCenter',
           name:'userCenter',
           meta: {title: '首页'},
@@ -337,6 +292,18 @@ export default new Router({
         name:'productPutaway',
         meta: {title: '常规产品上架'},
         component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
+        },
+        {
+          path:'/servicemarket/product/productService/dataReport',
+          name:'dataReport',
+          meta: {title: '企业数据上报入口'},
+          component:resolve => require(['@/views/dataReport'],resolve)
+        },
+        {
+          path:'/servicemarket/product/productService/dataReportEntrance',
+          name:'dataReportEntrance',
+          meta: {title: '企业数据上报'},
+          component:resolve => require(['@/views/dataReport/dataReportEntrance'],resolve)
         },
         {
         path:'/servicemarket/product/productService/ordinaryproductDetail',
@@ -361,15 +328,13 @@ export default new Router({
         name:'myApply',
         meta: {title: '我的申请'},
         component:resolve => require(['@/views/home/productService/myApply'],resolve)
-        }
-      ]
     },
     {
       path: '/finaPro',
       component: resolve => require(['@/views/technologyFinance/finaPro'],resolve),
       meta: {title: '金融产品'},
       name:'finaPro'
-}，
+},
 {
         path:'/myBusiness/index',
         name:'business',

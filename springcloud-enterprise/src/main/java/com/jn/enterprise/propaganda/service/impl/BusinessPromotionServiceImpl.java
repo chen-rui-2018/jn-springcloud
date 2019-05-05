@@ -442,7 +442,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_INFO_NOT_EXIST);
         }
         TbPropaganda tbPropaganda=new TbPropaganda();
-        //删除当前数据
+        //逻辑删除当前数据
         tbPropaganda.setRecordStatus(Byte.parseByte(INVALID));
         //修改时间
         tbPropaganda.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));

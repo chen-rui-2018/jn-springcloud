@@ -168,4 +168,22 @@ public interface TargetDao {
     void saveFillerList(@Param("fillerList") List<TbDataReportingGardenFiller> fillerList);
 
 
+    /**
+     * 通过任务ID查询指标
+     * @return
+     */
+    List<TbDataReportingSnapshotTarget> getTargetByFillId (@Param("fillId") String fillId);
+
+    /**
+     * 通过任务ID查询填报格式
+     * @param fillId
+     * @return
+     */
+
+    List<TbDataReportingSnapshotTargetGroup> getTargetGroupByFillId (@Param("fillId") String fillId);
+
+
+
+
+
 }

@@ -1,4 +1,4 @@
-package com.jn.system.dict.model;
+package com.jn.system.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

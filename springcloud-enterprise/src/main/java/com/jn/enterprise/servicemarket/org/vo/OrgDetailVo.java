@@ -22,6 +22,8 @@ public class OrgDetailVo implements Serializable {
 
     @ApiModelProperty("一级业务领域")
     private String businessType;
+    @ApiModelProperty("一级业务领域名称")
+    private String businessTypeName;
 
     @ApiModelProperty("二级业务领域")
     private String businessSType;
@@ -433,5 +435,13 @@ public class OrgDetailVo implements Serializable {
 
     public void setOrgBusinScope(String orgBusinScope) {
         this.orgBusinScope = orgBusinScope;
+    }
+
+    public String getBusinessTypeName() {
+        return businessTypeName;
+    }
+
+    public void setBusinessTypeName(String businessTypeName) {
+        this.businessTypeName = businessTypeName;
     }
 }

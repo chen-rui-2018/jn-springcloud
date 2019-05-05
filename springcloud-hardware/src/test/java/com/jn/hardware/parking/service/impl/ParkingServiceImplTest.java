@@ -36,6 +36,7 @@ public class ParkingServiceImplTest {
         doorTemporaryCarParkingFeeRequest.setParkid("100010_0004");
         doorTemporaryCarParkingFeeRequest.setCarNo("粤B7PU23");
         temporaryCarParkingFeeRequest.setDoorTemporaryCarParkingFeeRequest(doorTemporaryCarParkingFeeRequest);
+        logger.info("\n查询临时停车缴费信息,入参：{}",temporaryCarParkingFeeRequest);
         Result result = parkingService.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
         logger.info("\n查询结果说明：{}",result.getResult());
     }
@@ -53,8 +54,8 @@ public class ParkingServiceImplTest {
         doorPaymentCarParkingFeeRequest.setCarNo("粤B7PU23");
         doorPaymentCarParkingFeeRequest.setCardNo("");
         doorPaymentCarParkingFeeRequest.setCardId("");
-        doorPaymentCarParkingFeeRequest.setEntryTime("2019-04-018 08:45:36");
-        doorPaymentCarParkingFeeRequest.setPayTime("2019-04-018 18:45:36");
+        doorPaymentCarParkingFeeRequest.setEntryTime("2019-04-18 08:45:36");
+        doorPaymentCarParkingFeeRequest.setPayTime("2019-04-18 18:45:36");
         doorPaymentCarParkingFeeRequest.setChargeDuration("600");
         doorPaymentCarParkingFeeRequest.setAmount("100");
         doorPaymentCarParkingFeeRequest.setPurchaseAmount("70");
@@ -63,6 +64,7 @@ public class ParkingServiceImplTest {
         doorPaymentCarParkingFeeRequest.setPaymentTnx(Long.toString(time));
         doorPaymentCarParkingFeeRequest.setOperator("wangsong");
         doorPaymentCarParkingFeeRequest.setChannelId("123");
+        logger.info("\n保存缴费,入参：{}",doorPaymentCarParkingFeeRequest);
         paymentCarParkingFeeRequest.setDoorPaymentCarParkingFeeRequest(doorPaymentCarParkingFeeRequest);
         Result result = parkingService.savePaymentCarParkingFee(paymentCarParkingFeeRequest);
         logger.info("\n保存缴费,结果说明：{}",result.getResult());

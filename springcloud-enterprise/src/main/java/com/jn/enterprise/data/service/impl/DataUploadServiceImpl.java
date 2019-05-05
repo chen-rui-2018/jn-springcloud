@@ -549,6 +549,12 @@ public class DataUploadServiceImpl implements DataUploadService {
             List<InputFormatModel> inputFormatModelList = getInputFormatModelList(iList);
 
             BeanUtils.copyProperties(tab,tabVO);
+            if(! tab.getTabCreateType().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                tabVO.setTabClumnType(tab.getTabClumnType().toString());
+                tabVO.setTabCreateType(tab.getTabCreateType().toString());
+            }
+            tabVO.setStatus(tab.getStatus().toString());
+
             String fillInId=tbDataReportingTask.getFillInFormId();
             String modelId =tbDataReportingTask.getModelId();
             String tabId =tab.getTabId();
@@ -848,7 +854,6 @@ public class DataUploadServiceImpl implements DataUploadService {
         if(modelTabs.get(0).getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
             //科技园模板开发保存接口出
             //查询出当前账期的科技园模板
-
             //
         }else{
             result = saveData(data,DataUploadConstants.GARDEN_TYPE,user);
@@ -865,6 +870,9 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         String formTime="";
         String fillId="";
+        String modelId="";
+
+
         //读取表头，并生成一种标识集合数据{'企业名称'：0，‘名称’，1}
         String filename = multipartFile.getOriginalFilename();
         if (filename == null || (!filename.toLowerCase().endsWith(ExcelTypeEnum.XLS.getValue())  && !filename.toLowerCase().endsWith(ExcelTypeEnum.XLSX.getValue()))) {
@@ -912,28 +920,77 @@ public class DataUploadServiceImpl implements DataUploadService {
 //                if(){
 //
 //                }
+                //当前正在处理的指标的名称
                 String targetName = title[index];
-                //返回需要保存的对象
+                //当前的值
+                content=currentData[index];
+
+
+
+                TbDataReportingSnapshotTarget currentTarget  = findTarget(targetName,targetList);
+                TbDataReportingSnapshotTargetGroup currentTargetGroups =null;
+                //如果不是指标，就在填报格式中查找
+                if(currentTarget ==null){
+                    currentTargetGroups = findTargetGroups(targetName,targetGroupsList);
+                    if(currentTargetGroups==null){
+                        // todo 传了一个，模板中没有维护的指标。
+                    }
+                }
+
+                //查询出该指标的填报格式ID,一个指标只有一个填报格式的时候，指标的名称和填报格式的名称是同一个
+                currentTargetGroups = findTargetGroupsByTargetId(currentTarget.getTargetId(),targetGroupsList);
+
+                if(targetGroupsList ==null ){
+                    // todo 该指标不存在填报格式
+                }
+
+                //以指标的的内容组合值
                 taskData = new TbDataReportingTaskData();
                 taskData.setTabId(tabId);
-                taskData.setFillId("");
-                taskData.setTargetId("");
+                taskData.setFillId(fillId);
+                taskData.setTargetId(currentTarget.getTargetId());
                 taskData.setFallInFormId(UUID.randomUUID().toString().replaceAll("-",""));
-                taskData.setData("");
+                taskData.setData(content);
                 taskData.setRowNum(0);
-                taskData.setModelId("");
-                taskData.setFormId("");
+                taskData.setModelId(modelId);
+                taskData.setFormId(currentTargetGroups.getFormId());
                 saveData.add(taskData);
+
                 if(saveData.size()>500){
                     //调用数据库接口保存数据
+                    targetDao.saveData(saveData);
                     saveData = new ArrayList<>();
 
                 }
             }
+
+            //最后处理本条数据的缴纳税额
+
+
+        }
+
+        //写入最后的数据
+        if(saveData.size()>0){
+            targetDao.saveData(saveData);
         }
 
 
     }
+
+    private TbDataReportingSnapshotTarget findTarget(String targetName,List<TbDataReportingSnapshotTarget> targetList){
+        return new TbDataReportingSnapshotTarget();
+    }
+
+    private TbDataReportingSnapshotTargetGroup findTargetGroups(String targetName,List<TbDataReportingSnapshotTargetGroup> targetList){
+        return new TbDataReportingSnapshotTargetGroup();
+    }
+
+    private TbDataReportingSnapshotTargetGroup findTargetGroupsByTargetId(String targetId,List<TbDataReportingSnapshotTargetGroup> targetList){
+        return new TbDataReportingSnapshotTargetGroup();
+    }
+
+
+
 
 
     /**
@@ -1569,8 +1626,15 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         //调用服务发起通知 todo 发送短信，邮件，app
         List<WarningTaskModel> warningTaskModels = targetDao.getWarningTask(fillId,taskBatch);
+
+
+
+
+
+
         return result+=1 ;
     }
+
 
     /**
      * 园区催报

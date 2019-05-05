@@ -167,77 +167,76 @@
     <select id="getStatisticsModel" parameterType="com.jn.enterprise.data.model.CompanyDataStatisticsParamModel" resultType="com.jn.enterprise.data.model.CompanyDataStatisticsModel">
 
         select
-         d.task_batch as taskBatch
+        d.task_batch as taskBatch
         ,d.model_id as modelId
-        ,d.noUpload as noUpload
-        ,d.overdue as overdue
-		,d.upload as upload
-		,d.allTotal as allTotal
-		,d.model_name as modelName
-		,d.model_cycle as modelCycle
-		,d.form_time as formTime
-		,d.fill_in_form_deadline as fillInFormDeadline
-		,d.calling_time as callingTime
-		,d.warning_before_days as warningBeforeDays
+        ,d.overdue_notfilled   as noUpload
+        ,d.overdue   as overdue
+        ,d.upload  as upload
+        ,d.allTotal  as allTotal
+        ,d.model_name as modelName
+        ,d.model_cycle as modelCycle
+        ,d.form_time as formTime
+        ,d.fill_in_form_deadline as fillInFormDeadline
+        ,d.calling_time as callingTime
+        ,d.warning_before_days as warningBeforeDays
         ,status as status
-		from (
-            select
-             p.task_batch
-            ,p.model_id
-            ,r.total as noUpload <!--未上报，未逾期-->
-            ,y.total as overdue <!--已上报，已经逾期-->
-            ,u.total as upload <!--已上报，未逾期-->
-            ,o.total as allTotal
-            ,v.total as overdue_notfilled <!--未上报,已逾期-->
-            ,t.model_name
-            ,t.model_cycle
-            ,p.form_time
-            ,p.fill_in_form_deadline
-            ,p.calling_time
-            ,t.warning_before_days
-            ,(
-            case
-            when u.total &gt; 0 then '逾期未上报'
-            when r.total &gt; 0 then '待上报'
-            when y.total &gt;0 then '逾期上报'
-            when r.total=0  and d.total=0 and u.total = 0 then '已完成'
-            else '未知状态' end
-            ) as status
-            from tb_data_reporting_snapshot_model t
-            left join (
-            select k.task_batch,k.model_id,k.form_time,k.fill_in_form_deadline , max(k.calling_time) as calling_time  from  tb_data_reporting_task k
-            where k.record_status='1' and k.file_type=#{fileType} group by k.task_batch,k.model_id,k.form_time,k.fill_in_form_deadline
+        from (
+        select
+        p.task_batch
+        ,p.model_id
+        ,case when r.total is null then 0 else r.total end  as noUpload
+        ,case when y.total is null then 0 else y.total end  as overdue
+        ,case when u.total is null then 0 else u.total end  as upload
+        ,case when o.total is null then 0 else o.total end  as allTotal
+        ,case when v.total is null then 0 else v.total end  as overdue_notfilled
+        ,t.model_name
+        ,t.model_cycle
+        ,p.form_time
+        ,p.fill_in_form_deadline
+        ,p.calling_time
+        ,t.warning_before_days
+        ,(
+        case
+        when v.total > 0  then '逾期未上报'
+        when r.total > 0 then '待上报'
+        when y.total > 0 then '逾期上报'
+        when (r.total=0 or r.total is null)  and (y.total=0 or y.total is null) and (u.total  = 0 or u.total is null) then '已完成'
+        else '未知状态' end
+        ) as status
+        from tb_data_reporting_snapshot_model t
+        left join (
+        select k.task_batch,k.model_id,k.form_time,k.fill_in_form_deadline , max(k.calling_time) as calling_time  from  tb_data_reporting_task k
+        where k.record_status='1' and k.file_type='0' group by k.task_batch,k.model_id,k.form_time,k.fill_in_form_deadline
 
-            ) p on t.model_id=p.model_id and t.task_batch = p.task_batch
-            and t.task_batch = p.task_batch
-            left join (
-              select count(*) as total,task_batch ,model_id from tb_data_reporting_task k
-              where k.record_status='1'  and k.file_type=#{fileType} group by k.task_batch,k.model_id
-            ) o on t.model_id=o.model_id and t.task_batch = o.task_batch
-            left join(
-              <!--已上报，未逾期-->
-              select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
-              and  k.status='0' and k.is_overdue='0'  and k.file_type=#{fileType}  group by k.task_batch,k.model_id
-            ) u on t.model_id=u.model_id and t.task_batch = u.task_batch
-            left join(
-              <!--已上报，已经逾期-->
-              select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
-              and  k.status='0' and k.is_overdue='1'  and k.file_type=#{fileType} group by k.task_batch,k.model_id
-            ) y on t.model_id=y.model_id and t.task_batch = y.task_batch
-            left join(
-              <!--未上报，未逾期-->
-              select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
-              and  k.status='1' and k.status=2  and k.is_overdue='0'   and k.file_type=#{fileType} group by k.task_batch,k.model_id
-            ) r on t.model_id=r.model_id and t.task_batch = r.task_batch
+        ) p on t.model_id=p.model_id and t.task_batch = p.task_batch
+        and t.task_batch = p.task_batch
+        left join (
+        select count(*) as total,task_batch ,model_id from tb_data_reporting_task k
+        where k.record_status='1'  and k.file_type='0' group by k.task_batch,k.model_id
+        ) o on t.model_id=o.model_id and t.task_batch = o.task_batch
+        left join(
+        select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
+        and  k.status='0' and k.is_overdue='0'  and k.file_type='0'  group by k.task_batch,k.model_id
+        ) u on t.model_id=u.model_id and t.task_batch = u.task_batch
+        left join(
+        select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
+        and  k.status='0' and k.is_overdue='1'  and k.file_type='0' group by k.task_batch,k.model_id
+        ) y on t.model_id=y.model_id and t.task_batch = y.task_batch
 
-            left join(
-            <!--未上报,已逾期-->
-            select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status=1
-            and  k.status=1 and k.status=2  and k.is_overdue=1   and k.file_type=#{fileType} group by k.task_batch,k.model_id
-            ) v on t.model_id=v.model_id and t.task_batch = v.task_batch
-          ) d
+        left join(
+        select  count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
+        and  (k.status='1' or k.status='2' ) and k.is_overdue='0'   and k.file_type='0' group by k.task_batch,k.model_id
+        ) r on t.model_id=r.model_id and t.task_batch = r.task_batch
+
+        left join(
+        select count(*) as  total,task_batch ,model_id from tb_data_reporting_task k where k.record_status=1
+        and  (k.status='1' or k.status='2')  and k.is_overdue='1'  and k.file_type='0' group by k.task_batch,k.model_id
+        ) v on t.model_id=v.model_id and t.task_batch = v.task_batch
+        ) d
 
         where 1=1
+        and task_batch is not null
+        and model_id is not null
 
         <if test="param.modelCycle !=null">
             and model_cycle=#{param.modelCycle}

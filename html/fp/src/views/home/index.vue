@@ -77,10 +77,10 @@
                 <el-menu-item index="/userHome">
                   <span slot="title">用户资料</span>
                 </el-menu-item>
-                <el-menu-item index="/企业">
+                <el-menu-item index="/myBusiness/index">
                   <span slot="title">我的企业</span>
                 </el-menu-item>
-                <el-menu-item index="/机构">
+                <el-menu-item index="/myBody/index">
                   <span slot="title">我的机构</span>
                 </el-menu-item>
                 <el-submenu index="/认证">
@@ -88,7 +88,7 @@
                     <span>角色认证</span>
                   </template>
                   <el-menu-item-group>
-                    <el-menu-item index="/servicemarket/product/productService/认证">认证</el-menu-item>
+                    <el-menu-item index="/roleCertifications/investorCertification">投资人认证</el-menu-item>
                     <el-menu-item index="">认证</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
@@ -140,7 +140,10 @@
           <!-- 主体 -->
           <div class="homePage_main userHome">
             <el-main>
-                <router-view :userData='userData'></router-view>
+              <keep-alive>
+                <router-view v-if="$route.meta.keepAlive" :userData="userData"></router-view>
+              </keep-alive>
+              <router-view v-if="!$route.meta.keepAlive" :userData="userData"></router-view>
             </el-main>
           </div>
         </el-container>
@@ -429,4 +432,3 @@ export default {
     }
   }
 </style>
-

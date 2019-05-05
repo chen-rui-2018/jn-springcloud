@@ -39,7 +39,7 @@
       </transition>
     </div>
      <!-- 网站导航侧边 -->
-      <div class="serve_slide" v-if="$route.name=='serMatHp'">
+      <div class="serve_slide" v-if="$route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice'">
         <el-dialog :visible.sync="isVisibility">
           <div class="slide_nav">
             <p @click="$router.push({path:'/'})">首页</p>
@@ -100,7 +100,7 @@ export default {
   },
   created(){
     // if(sessionStorage.token){
-    //     this.api.setToken(sessionStorage.token)      
+    //     this.api.setToken(sessionStorage.token)
     // }
     this.init()
   },
@@ -263,4 +263,15 @@ export default {
       }
     }
   }
+ .el-pagination{
+   margin-top:15px;
+ }
+ /* .el-menu-item-group__title {
+  padding-left: 30px;
+  text-align: left;
+}
+.el-submenu__title{
+  padding-left: 50px;
+} */
+
 </style>

@@ -810,12 +810,22 @@
 
     <select id="getTargetByFillId" parameterType="java.lang.String" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTarget">
         SELECT
-
-        *
-         from
-        tb_data_reporting_snapshot_model_struct
-        <!--
-        <include refid="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetMapper.Base_Column_List" />
+        task_batch as taskBatch
+        ,target_id as targetId
+        ,parent_id as parentId
+        ,order_number as orderNumber
+        ,target_name as targetName
+        ,department_id as departmentId
+        ,department_name as departmentName
+        ,is_muilt_row as isMuiltRow
+        ,unit as unit
+        ,target_type as targetType
+        ,record_status as  recordStatus
+        ,creator_account as creatorAccount
+        ,created_time as createdTime
+        ,modifier_account as modifierAccount
+        ,modified_time as modifiedTime
+        ,target_comment as targetComment
         FROM
         tb_data_reporting_snapshot_target
         WHERE
@@ -832,15 +842,19 @@
         )
         AND task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 )
         AND record_status = 1
-        -->
     </select>
 
     <select id="getTargetGroupByFillId" parameterType="java.lang.String" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
         SELECT
-         * from tb_data_reporting_snapshot_target_group
-
-        <!--
-        <include refid="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroupMapper.Base_Column_List" />
+        task_batch as taskBatch
+        ,target_id as targetId
+        ,form_id as formId
+        ,form_type as formType
+        ,form_name as formName
+        ,required as required
+        ,order_number as orderNumber
+        ,choice_option as choiceOption
+        ,record_status as recordStatus
         FROM
         tb_data_reporting_snapshot_target_group
         WHERE
@@ -857,7 +871,6 @@
         )
         AND task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 )
         AND record_status = 1
-        -->
     </select>
 
 

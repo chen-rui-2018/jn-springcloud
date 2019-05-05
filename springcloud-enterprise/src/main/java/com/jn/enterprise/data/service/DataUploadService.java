@@ -204,7 +204,7 @@ public interface DataUploadService {
      * @param fillId
      * @return
      */
-    int setStatisticsListUrgeCompany(String taskBatch,String fillId);
+    int setStatisticsListUrgeCompany(String taskBatch,String fillId,User user);
     /**
      * 园区催报
      * @param taskBatch

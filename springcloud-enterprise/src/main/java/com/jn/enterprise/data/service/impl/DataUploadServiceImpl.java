@@ -1087,7 +1087,6 @@ public class DataUploadServiceImpl implements DataUploadService {
     private int saveDataAsDraft(ModelDataVO data,String fillType,User user){
         int result=0;
         //保存值
-        String departmentId="";
         String fillId = data.getTaskInfo().getFillId();
         String modelId = data.getTaskInfo().getModelId();
         //获取出所有的
@@ -1103,6 +1102,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             //获取前端传入的填写值
             List<InputFormatModel> list = tabBean.getInputList();
             for(InputFormatModel ifmBean : list){
+                dataBean = new TbDataReportingTaskData();
                 dataBean.setRowNum(ifmBean.getRowNum());
                 dataBean.setFormId(ifmBean.getFormId());
                 dataBean.setTargetId(ifmBean.getTargetId());
@@ -1138,7 +1138,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             gardenFiller.setFiller(user.getAccount());
             gardenFiller.setFiller(user.getPhone());
             TbDataReportingGardenFillerCriteria gardenFillerCriteria =new TbDataReportingGardenFillerCriteria();
-            gardenFillerCriteria.or().andDepartmentIdEqualTo(departmentId).andFillerEqualTo(fillId);
+            gardenFillerCriteria.or().andDepartmentIdEqualTo(data.getDepartmentId()).andFillerEqualTo(fillId);
             tbDataReportingGardenFillerMapper.updateByExampleSelective(gardenFiller,gardenFillerCriteria);
         }
         return result++;
@@ -1156,7 +1156,7 @@ public class DataUploadServiceImpl implements DataUploadService {
     private int saveData(ModelDataVO data,String fillType,User user) {
 
         int saveDataResult=1;
-        String departmentId="";
+        String departmentId=data.getDepartmentId();
         //获取出所有的
         List<TbDataReportingTaskData> dataList =null;
         TbDataReportingTaskData dataBean =null;
@@ -1267,6 +1267,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             taskUpdate.setStatus(new Byte(DataUploadConstants.FILLED));
             taskUpdate.setFiller(user.getAccount());
             taskUpdate.setFiller(user.getPhone());
+            taskUpdate.setUpTime(new Date());
             TbDataReportingTaskCriteria taskUpdateExamp = new TbDataReportingTaskCriteria();
             taskUpdateExamp.or().andFillIdEqualTo(fillId);
             tbDataReportingTaskMapper.updateByExampleSelective(taskUpdate,taskUpdateExamp);
@@ -1299,6 +1300,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             if(notFillList == null || notFillList.size()==0){
                 TbDataReportingTask taskUpdate = new TbDataReportingTask();
                 taskUpdate.setStatus(new Byte(DataUploadConstants.FILLED));
+                taskUpdate.setUpTime(new Date());
                 TbDataReportingTaskCriteria taskUpdateExamp = new TbDataReportingTaskCriteria();
                 taskUpdateExamp.or().andFillIdEqualTo(fillId);
                 tbDataReportingTaskMapper.updateByExampleSelective(taskUpdate,taskUpdateExamp);
@@ -1554,11 +1556,17 @@ public class DataUploadServiceImpl implements DataUploadService {
     @ServiceLog(doAction = "企业催报")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int setStatisticsListUrgeCompany(String taskBatch,String fillId){
+    public int setStatisticsListUrgeCompany(String taskBatch,String fillId,User user){
         int result=0;
         //修改催报次数，最后催报时间，未填报的数据
-        //
-        targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.COMPANY_TYPE);
+        if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
+            //企业
+            targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.COMPANY_TYPE);
+        }else{
+            //园区
+            targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.COMPANY_TYPE);
+        }
+
         //调用服务发起通知 todo 发送短信，邮件，app
         List<WarningTaskModel> warningTaskModels = targetDao.getWarningTask(fillId,taskBatch);
         return result+=1 ;

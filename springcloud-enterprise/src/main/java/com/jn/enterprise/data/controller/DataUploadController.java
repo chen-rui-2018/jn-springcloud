@@ -160,7 +160,9 @@ public class DataUploadController  extends BaseController {
             @ApiImplicitParam(name="fillId",value = "填报Id",dataType = "String",paramType = "query",example = "001")
     })
     public Result<Integer> setStatisticsListUrgeCompany(String taskBatch,String fillId){
-        return new Result();
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        Integer num = uploadService.setStatisticsListUrgeCompany(taskBatch,fillId,user);
+        return new Result(num);
     }
 
     @ControllerLog(doAction = "数据上报-企业数据上报统计-数据列表修改截至日期")

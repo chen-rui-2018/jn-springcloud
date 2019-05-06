@@ -16,25 +16,25 @@ import java.io.Serializable;
  */
 @ApiModel(value = "FinancialProductListParam", description = "金融产品列表查询入参")
 public class FinancialProductListParam extends Page implements Serializable {
-    @ApiModelProperty(value = "贷款期限最小值(3个月及以下  6个月及以下  12个月及以下  36个月及以下,值为空  36个月以上，值不为空))",example = "3")
-    @Pattern(regexp = "^[0-9]*$", message = "{loanTermMin:'默认值只允许为数字}")
+    @ApiModelProperty(value = "贷款期限最小值(3个月及以下  6个月及以下  12个月及以下  36个月及以下,值为空  36个月以上，值不为空))，不限传空",example = "3")
+    @Pattern(regexp = "^([0-9]*)|(\\s+)$", message = "{loanTermMin:'默认值只允许为数字}")
     private String loanTermMin;
-    @ApiModelProperty(value = "贷款期限最大值(3个月及以下  6个月及以下  12个月及以下  36个月及以下，值不为空  36个月以上，值为空))",example = "6")
-    @Pattern(regexp = "^[0-9]*$", message = "{loanTermMax:'默认值只允许为数字}")
+    @ApiModelProperty(value = "贷款期限最大值(3个月及以下  6个月及以下  12个月及以下  36个月及以下，值不为空  36个月以上，值为空)不限传空)",example = "6")
+    @Pattern(regexp = "^([0-9]*)|(\\s+)$", message = "{loanTermMax:'默认值只允许为数字}")
     private String loanTermMax;
     @ApiModelProperty(value = "担保方式编码（mortgage：抵押 ...）)",example = "mortgage")
     private String assureMethodCode;
-    @ApiModelProperty(value = "网贷直联(0:否  1:是))",example = "0")
-    @Pattern(regexp = "^[01]$", message = "{onlineLoan:'默认值只允许为0,1'}")
+    @ApiModelProperty(value = "网贷直联(0:否  1:是)，不限传空)",example = "0")
+    @Pattern(regexp = "^[01]|(\\s+)$", message = "{onlineLoan:'默认值只允许为0,1'}")
     private String onlineLoan;
-    @ApiModelProperty(value = "政策性产品(0:否  1:是))",example = "1")
-    @Pattern(regexp = "^[01]$", message = "{policyProduct:'默认值只允许为0,1'}")
+    @ApiModelProperty(value = "政策性产品(0:否  1:是)，不限传空)",example = "1")
+    @Pattern(regexp = "^[01]|(\\s+)$", message = "{policyProduct:'默认值只允许为0,1'}")
     private String policyProduct;
-    @ApiModelProperty(value = "贷款额度最小值(100万及以下  200万及以下  300万及以下  500万及以下  1000万及以下，值为空   1000万及以上，值不为空))",example = "1100")
-    @Pattern(regexp = "^[0-9]*$", message = "{loanAmountMin:'默认值只允许为数字}")
+    @ApiModelProperty(value = "贷款额度最小值(100万及以下  200万及以下  300万及以下  500万及以下  1000万及以下，值为空   1000万及以上，值不为空))，不限传空",example = "1100")
+    @Pattern(regexp = "^[0-9]*|(\\s+)$", message = "{loanAmountMin:'默认值只允许为数字}")
     private String loanAmountMin;
-    @ApiModelProperty(value = "贷款额度最小值(100万及以下  200万及以下  300万及以下  500万及以下  1000万及以下，值不为空   1000万及以上，值为空))",example = "300")
-    @Pattern(regexp = "^[0-9]*$", message = "{loanAmountMax:'默认值只允许为数字}")
+    @ApiModelProperty(value = "贷款额度最小值(100万及以下  200万及以下  300万及以下  500万及以下  1000万及以下，值不为空   1000万及以上，值为空))，不限传空",example = "300")
+    @Pattern(regexp = "^[0-9]*|(\\s+)$", message = "{loanAmountMax:'默认值只允许为数字}")
     private String loanAmountMax;
     @ApiModelProperty(value = "关键词)",example = "测试")
     private String keyWord;

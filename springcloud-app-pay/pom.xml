@@ -18,6 +18,7 @@
         <module>xxpay-dal</module>
         <module>xxpay-mgr</module>
         <module>xxpay-shop</module>
+        <module>xxpay-web-api</module>
     </modules>
 
     <parent>

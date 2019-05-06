@@ -230,10 +230,9 @@ public interface DataUploadService {
     /**
      * 科技园导入
      * @param multipartFile
-     * @param dataVO
      * @return
      */
-    int importData(MultipartFile multipartFile, ModelDataVO dataVO);
+    int importData(MultipartFile multipartFile, String formTime,String fillId,String modelId);
 
     /**
      * 科技园查询接口

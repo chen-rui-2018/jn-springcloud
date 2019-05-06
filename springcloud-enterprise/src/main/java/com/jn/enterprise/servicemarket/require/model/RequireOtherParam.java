@@ -21,7 +21,7 @@ public class RequireOtherParam extends Page implements Serializable {
     @ApiModelProperty(value = "意向机构",example = "xxx机构")
     private String intentOrg;
     @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)",example = "1")
-    @Pattern(regexp = "^[1234]$", message = "{对接结果:'默认值只允许为1,2,3,4'}")
+    @Pattern(regexp = "^[1234]|(\\s*)$", message = "{对接结果:'默认值只允许为1,2,3,4'}")
     private String handleResult;
     @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")

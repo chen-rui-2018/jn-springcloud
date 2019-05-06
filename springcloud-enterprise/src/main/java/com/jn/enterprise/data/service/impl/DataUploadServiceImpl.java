@@ -561,7 +561,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             List<InputFormatModel> inputFormatModelList = getInputFormatModelList(iList);
 
             BeanUtils.copyProperties(tab,tabVO);
-            if(! tab.getTabCreateType().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+            if(! tab.getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
                 tabVO.setTabClumnType(tab.getTabClumnType().toString());
                 tabVO.setTabCreateType(tab.getTabCreateType().toString());
             }
@@ -749,7 +749,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             exampleTab.or().andTaskBatchEqualTo(concertTask.getTaskBatch()).andModelIdEqualTo(modelId).andTabIdEqualTo(tabId)
                     .andStatusEqualTo(new Byte(DataUploadConstants.VALID));
             List<TbDataReportingSnapshotModelTab> tabList = tbDataReportingSnapshotModelTabMapper.selectByExample(exampleTab);
-            if(tabList !=null || tabList.size()!=0){
+            if(tabList !=null && tabList.size() >0){
                 TbDataReportingSnapshotModelTab tab = tabList.get(0);
                 //获取一个Tab的值
                 TbDataReportingTaskDataCriteria tabData = new TbDataReportingTaskDataCriteria();

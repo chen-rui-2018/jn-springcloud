@@ -705,6 +705,66 @@ public class TbParkingAreaCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andTempNumberIsNull() {
+            addCriterion("temp_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberIsNotNull() {
+            addCriterion("temp_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberEqualTo(Integer value) {
+            addCriterion("temp_number =", value, "tempNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberNotEqualTo(Integer value) {
+            addCriterion("temp_number <>", value, "tempNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberGreaterThan(Integer value) {
+            addCriterion("temp_number >", value, "tempNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("temp_number >=", value, "tempNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberLessThan(Integer value) {
+            addCriterion("temp_number <", value, "tempNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("temp_number <=", value, "tempNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberIn(List<Integer> values) {
+            addCriterion("temp_number in", values, "tempNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberNotIn(List<Integer> values) {
+            addCriterion("temp_number not in", values, "tempNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberBetween(Integer value1, Integer value2) {
+            addCriterion("temp_number between", value1, value2, "tempNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTempNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("temp_number not between", value1, value2, "tempNumber");
+            return (Criteria) this;
+        }
+
         public Criteria andTempPriceIsNull() {
             addCriterion("temp_price is null");
             return (Criteria) this;

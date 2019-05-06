@@ -1,7 +1,11 @@
 package com.jn.park.parking.dao;
 
+import com.jn.park.parking.model.ParkingAreaParam;
 import com.jn.park.parking.vo.ParkingAreaDetailVo;
+import com.jn.park.parking.vo.ParkingAreaVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author： jiangyl
@@ -17,5 +21,12 @@ public interface ParkingAreaMapper {
      * @return
      */
     ParkingAreaDetailVo getParkingAreaDetailById(@Param(value = "areaId")String areaId);
+
+    /**
+     * 前端查询停车场列表
+     * @param parkingAreaParam
+     * @return
+     */
+    List<ParkingAreaVo> getParkingAreaList(ParkingAreaParam parkingAreaParam);
 
 }

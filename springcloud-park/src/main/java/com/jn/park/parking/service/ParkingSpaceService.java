@@ -75,6 +75,7 @@ public interface ParkingSpaceService {
     /**
      * 租车位费用计算接口
      * @param parkingSpaceAmountModel
+     * @param account
      * @return
      */
     ParkingSpaceAmountVo applyParkingSpaceAmount(ParkingSpaceAmountModel parkingSpaceAmountModel,String account);

@@ -8,17 +8,18 @@
         select
         s.space_id_ as "spaceId"
         ,s.area_id_ as "areaId"
+        ,a.area_name as "areaName"
         ,s.space_serial as "spaceSerial"
         ,s.car_license as "carLicense"
+        ,s.rent_id_ as "rentId"
         ,s.space_status as "spaceStatus"
-        ,s.created_time as "createdTime"
         ,date_format(s.created_time,'%Y-%m-%d') as "createdTime"
         ,r.name as "name"
         ,r.phone as "phone"
         from tb_parking_space s
         left join tb_parking_area a
         on s.area_id_ = a.area_id_ left join tb_parking_space_rental r on s.rent_id_ = r.rent_id_
-        where a.record_status='1' and r.record_status = '1'
+        where s.record_status='1'
         <if test="spaceId !=null and spaceId !='' ">
             and s.space_id_ = #{spaceId,jdbcType=VARCHAR}
         </if>
@@ -46,20 +47,21 @@
     </select>
 
 
-    <!-- 停车位列表 -->
+    <!-- 当前用户停车位列表 -->
     <select id="getParKingSpaceRentalListByUser" resultType="com.jn.park.parking.vo.ParkingUserSpaceRentalVo">
         select
-        s.space_id_ as "spaceId"
-        ,s.area_id_ as "areaId"
-        ,s.space_serial as "spaceSerial"
-        ,s.car_license as "carLicense"
-        ,s.space_status as "spaceStatus"
-        ,s.created_time as "createdTime"
-        ,date_format(s.created_time,'%Y-%m-%d') as "createdTime"
+        r.rent_id_ as "rentId"
+        ,r.space_id_ as "spaceId"
+        ,r.area_id_ as "areaId"
+        ,r.space_serial as "spaceSerial"
+        ,a.area_name AS "areaName"
+        ,r.car_license as "carLicense"
+        ,r.approval_status as "approvalStatus"
+        ,date_format(r.created_time,'%Y-%m-%d') as "createdTime"
         ,r.name as "name"
         ,r.phone as "phone"
-        from tb_parking_space_rental r left join tb_parking_space s on r.space_id_ = s.space_id_ left join tb_parking_area a on s.area_id_ = a.area_id_
-        where r.record_status = '1' and approval_status != '-1'
+        from tb_parking_space_rental r  left join tb_parking_area a on r.area_id_ = a.area_id_
+        where r.record_status = '1' and r.approval_status != '-1'
         <if test="userAccount !=null and userAccount !='' ">
             and r.account = #{userAccount,jdbcType=VARCHAR}
         </if>

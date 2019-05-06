@@ -8,10 +8,7 @@ import com.jn.park.parking.model.ParkingCarInfoModel;
 import com.jn.park.parking.model.ParkingCarInfoParam;
 import com.jn.park.parking.model.ParkingRecordParam;
 import com.jn.park.parking.service.ParkingCarInfoService;
-import com.jn.park.parking.vo.ParkingCarInfoVo;
-import com.jn.park.parking.vo.ParkingRecordDetailVo;
-import com.jn.park.parking.vo.ParkingRecordVo;
-import com.jn.park.parking.vo.ParkingSpaceUserCountVo;
+import com.jn.park.parking.vo.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -57,7 +54,7 @@ public class ParkingCarInfoController extends BaseController {
     @ControllerLog(doAction = " 查询当前用户车辆统计数据")
     @ApiOperation(value = "查询当前用户车辆统计数据[前端用户]", notes = "查询当前用户车辆统计数据")
     @RequestMapping(value = "/getUserCarInfoCount",method = RequestMethod.GET)
-    public Result<ParkingSpaceUserCountVo> getUserCarInfoCount(){
+    public Result<ParkingUserCarInfoCountVo> getUserCarInfoCount(){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(parkingCarInfoService.getUserCarInfoCount(user.getAccount()));
     }

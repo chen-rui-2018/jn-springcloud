@@ -610,7 +610,6 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         paymentBillModel.setBillObjId(loginAccount);
         paymentBillModel.setBillObjName(loginAccount);
         paymentBillModel.setBillAmount(50.00);
-        paymentBillModel.setBillCreateTime(DateUtils.getDate(PATTERN));
         paymentBillModel.setPayEndTime(DateUtils.getDate(PATTERN));
         paymentBillModel.setBillCreateAccount(loginAccount);
         paymentBillModel.setBillRemark("ad_free");

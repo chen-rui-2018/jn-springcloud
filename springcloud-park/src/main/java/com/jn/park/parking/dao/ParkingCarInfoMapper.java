@@ -4,6 +4,7 @@ import com.jn.park.parking.model.ParkingCarInfoParam;
 import com.jn.park.parking.vo.ParkingAreaDetailVo;
 import com.jn.park.parking.vo.ParkingCarInfoVo;
 import com.jn.park.parking.vo.ParkingSpaceUserCountVo;
+import com.jn.park.parking.vo.ParkingUserCarInfoCountVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,6 +29,6 @@ public interface ParkingCarInfoMapper {
      * @param userAccount
      * @return
      */
-    ParkingSpaceUserCountVo getUserCarInfoCount(@Param(value = "userAccount") String userAccount);
+    ParkingUserCarInfoCountVo getUserCarInfoCount(@Param(value = "userAccount") String userAccount);
 
 }

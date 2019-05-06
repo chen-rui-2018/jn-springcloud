@@ -22,8 +22,16 @@ public class ParkingUserSpaceRentalVo implements Serializable {
     private String spaceSerial;
     @ApiModelProperty(value = "停车场名称",example = "白下园区5号停车场")
     private String areaName;
+    @ApiModelProperty(value = "车牌号",example = "苏A00001")
+    private String carLicense;
     @ApiModelProperty(value = "车位状态[0待审核,1审批中,2审核通过(待缴费),3审批不通过，4待支付，5支付中，6支付成功，7已取消]",example = "0")
     private String approvalStatus;
+    @ApiModelProperty(value = "创建时间",example = "2019-01-01 10:10:10")
+    private String createdTime;
+    @ApiModelProperty(value = "姓名",example = "王五")
+    private String name;
+    @ApiModelProperty(value = "电话",example = "18100001111")
+    private String phone;
 
     public String getRentId() {
         return rentId;
@@ -63,5 +71,37 @@ public class ParkingUserSpaceRentalVo implements Serializable {
 
     public void setApprovalStatus(String approvalStatus) {
         this.approvalStatus = approvalStatus;
+    }
+
+    public String getCarLicense() {
+        return carLicense;
+    }
+
+    public void setCarLicense(String carLicense) {
+        this.carLicense = carLicense;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

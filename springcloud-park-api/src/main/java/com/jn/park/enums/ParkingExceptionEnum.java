@@ -27,6 +27,7 @@ public enum ParkingExceptionEnum implements CodeAndMsg {
     PARKING_CAR_NOT_EXIT_EFFECTIVE_DATA("4020213","不存在有效停车数据"),
     PARKING_RECODE_IS_NOT_EXIST("40202014","停车记录不存在"),
     PARKING_MONTHLY_NOT_PAYMENT("40202015","月租卡不需要缴费"),
+    LAT_LONG_IS_NOT_NULL("40202016","经纬度不能为空"),
 
     ;
 

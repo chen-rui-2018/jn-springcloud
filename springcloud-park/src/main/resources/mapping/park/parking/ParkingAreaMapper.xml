@@ -11,6 +11,7 @@
         <result column="a_leisureNumber" jdbcType="INTEGER" property="leisureNumber" javaType="java.lang.Integer"/>
         <result column="a_rentNumber" jdbcType="INTEGER" property="rentNumber" javaType="java.lang.Integer"/>
         <result column="a_parkingTotal" jdbcType="INTEGER" property="parkingTotal" javaType="java.lang.Integer"/>
+        <result column="a_tempNumber" jdbcType="INTEGER" property="tempNumber" javaType="java.lang.Integer"/>
         <result column="a_tempFreeTime" jdbcType="INTEGER" property="tempFreeTime" javaType="java.lang.Integer"/>
         <result column="a_tempPriceDepict" jdbcType="VARCHAR" property="tempPriceDepict" javaType="java.lang.String"/>
         <result column="a_tempPrice" jdbcType="DOUBLE" property="tempPrice" javaType="java.lang.Double"/>
@@ -24,37 +25,99 @@
             <!-- 执业标签 -->
             <collection property="serviceType" javaType="java.util.List"
                         ofType="com.jn.park.parking.vo.ParkingServiceTypeVo">
-                <id column="t_serviceName" property="serviceName" jdbcType="VARCHAR"/>
+                <id column="t_id" property="id" jdbcType="VARCHAR"/>
+                <result column="t_serviceName" property="serviceName" jdbcType="VARCHAR"/>
                 <result column="t_serviceCode" property="serviceCode" jdbcType="VARCHAR"/>
             </collection>
     </resultMap>
     <!-- 停车场详情 -->
     <select id="getParkingAreaDetailById" resultMap="parkingAreaDetailMap">
-        select
-        a.area_id_ as "a_areaId"
-        ,a.area_name as "a_areaName"
-        ,a.area_address as "a_areaAddress"
-        ,a.longitude as "a_longitude"
-        ,a.latitude as "a_latitude"
-        ,a.leisure_number as "a_leisureNumber"
-        ,a.rent_number as "a_rentNumber"
-        ,a.parking_total as "a_parkingTotal"
-        ,a.temp_free_time as "a_tempFreeTime"
-        ,a.temp_price_depict as "a_tempPriceDepict"
-        ,a.temp_price as "a_tempPrice"
-        ,a.temp_price_unit as "a_tempPriceUnit"
-        ,a.temp_price_total as "a_tempPriceTotal"
-        ,a.rent_price as "a_rentPrice"
-        ,a.area_picture as "a_areaPicture"
-        ,a.space_picture as "a_spacePicture"
-        ,a.gate_factory as "a_gateFactory"
-        ,a.gate_id as "a_gateId"
-        ,ty.service_name as "t_serviceCode"
-        ,ty.service_code as "t_serviceCode"
-        from tb_parking_area a
-        left join tb_parking_service ps
-        on a.area_id_ = ps.parking_id left join tb_parking_service_type ty on ps.server_type_id = ty.id
-        where a.record_status='1' and ty.record_status = '1'
+         SELECT
+        a.area_id_ AS "a_areaId"
+        ,a.area_name AS "a_areaName"
+        ,a.area_address AS "a_areaAddress"
+        ,a.longitude AS "a_longitude"
+        ,a.latitude AS "a_latitude"
+        ,a.leisure_number AS "a_leisureNumber"
+        ,a.rent_number AS "a_rentNumber"
+        ,a.parking_total AS "a_parkingTotal"
+        ,a.temp_number AS "a_tempNumber"
+        ,a.temp_free_time AS "a_tempFreeTime"
+        ,a.temp_price_depict AS "a_tempPriceDepict"
+        ,a.temp_price AS "a_tempPrice"
+        ,a.temp_price_unit AS "a_tempPriceUnit"
+        ,a.temp_price_total AS "a_tempPriceTotal"
+        ,a.rent_price AS "a_rentPrice"
+        ,a.area_picture AS "a_areaPicture"
+        ,a.space_picture AS "a_spacePicture"
+        ,a.gate_factory AS "a_gateFactory"
+        ,a.gate_id AS "a_gateId"
+        ,ty.id_ AS "t_id"
+        ,ty.service_name AS "t_serviceName"
+        ,ty.service_code AS "t_serviceCode"
+        FROM tb_parking_area a
+        LEFT JOIN tb_parking_service ps
+        ON a.area_id_ = ps.parking_id LEFT JOIN tb_parking_service_type ty ON ps.server_type_id = ty.id_  AND ty.record_status = '1'
+        WHERE a.record_status='1'
         and a.area_id_ = #{areaId}
     </select>
+
+
+    <!-- 停车场列表 -->
+    <select id="getParkingAreaList" resultType="com.jn.park.parking.vo.ParkingAreaVo" parameterType="com.jn.park.parking.model.ParkingAreaParam">
+       select t.* from (
+        select
+        a.area_id_ as "areaId"
+        ,a.area_name as "areaName"
+        ,a.area_address as "areaAddress"
+        ,a.longitude as "longitude"
+        ,a.latitude as "latitude"
+        ,a.leisure_number as "leisureNumber"
+        ,a.rent_number as "rentNumber"
+        ,a.temp_number as "tempNumber"
+
+        ,ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        CONVERT(#{latitude,jdbcType=VARCHAR},DECIMAL) * PI() / 180 - a.latitude * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(CONVERT(#{latitude,jdbcType=VARCHAR},DECIMAL) * PI() / 180) * COS(a.latitude * PI() / 180) * POW(
+        SIN(
+        (
+        CONVERT(#{longitude,jdbcType=VARCHAR},DECIMAL) * PI() / 180 - a.longitude * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        ) AS "distance"
+        ,a.parking_total as "parkingTotal"
+        ,a.temp_price_depict as "tempPriceDepict"
+        ,a.temp_price as "tempPrice"
+        ,a.temp_price_unit as "tempPriceUnit"
+        ,a.temp_price_total as "tempPriceTotal"
+        ,a.temp_free_time as "tempFreeTime"
+        ,a.rent_price as "rentPrice"
+        ,a.area_picture as "areaPicture"
+        ,a.space_picture as "spacePicture"
+        ,a.gate_factory as "gateFactory"
+        ,a.gate_id as "gateId"
+        from tb_parking_area a
+        where a.record_status = '1' and area_status = '1'
+
+        <if test="areaName !=null and areaName !='' ">
+            and a.area_name = #{areaName,jdbcType=VARCHAR}
+        </if>
+        <if test="areaAddress !=null and areaAddress !='' ">
+            and a.area_address = #{areaAddress,jdbcType=VARCHAR}
+        </if>
+       )t order by  t.distance
+    </select>
+
 </mapper>

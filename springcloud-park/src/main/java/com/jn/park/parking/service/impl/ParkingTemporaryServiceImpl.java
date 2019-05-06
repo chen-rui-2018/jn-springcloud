@@ -110,11 +110,12 @@ public class ParkingTemporaryServiceImpl implements ParkingTemporaryService {
     @Override
     public Double calculateParkingAmount(TbParkingRecord parkingRecord){
         Date nowDate = new Date();
-        long times= (nowDate.getTime() - parkingRecord.getDepartureTime().getTime())/(1000* 60);
+        long times= (nowDate.getTime() - parkingRecord.getAdmissionTime().getTime())/(1000* 60);
         TbParkingArea tbParkingArea = tbParkingAreaMapper.selectByPrimaryKey(parkingRecord.getAreaId());
-        if(times > tbParkingArea.getTempFreeTime() || parkingRecord.getStartBillingTime()!=null){
+        if(times > (tbParkingArea.getTempFreeTime()==null?0:tbParkingArea.getTempFreeTime()) ||
+                (parkingRecord.getStartBillingTime()!=null && parkingRecord.getStartBillingTime().getTime()>(tbParkingArea.getTempFreeTime()==null?0:tbParkingArea.getTempFreeTime()))){
             if(parkingRecord.getStartBillingTime()!=null){
-                times = times - tbParkingArea.getTempFreeTime();
+                times = parkingRecord.getStartBillingTime().getTime() - (tbParkingArea.getTempFreeTime()==null?0:tbParkingArea.getTempFreeTime()) ;
             }
             int unit = new Integer(tbParkingArea.getTempPriceUnit());
             //获取计费时长

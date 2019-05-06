@@ -18,7 +18,7 @@ import java.util.List;
 public interface ParkingSpaceMapper {
 
     /**
-     * 根据停车场ID查询停车场数据详情
+     * 查询停车位列表
      * @param parkingSpaceParam
      * @return
      */

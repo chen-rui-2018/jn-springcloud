@@ -60,7 +60,7 @@ public class ParkingSpaceController extends BaseController {
     public Result<ParkingSpaceDetailVo> getParkingSpaceDetailById(
             @ApiParam(name="spaceId",value = "停车位ID",required = true,example = "51we20***")
             @RequestParam(value = "spaceId") String spaceId){
-        Assert.notNull(spaceId, ParkingExceptionEnum.PARKING_AREA_ID_IS_NOT_NULL.getMessage());
+        Assert.notNull(spaceId, ParkingExceptionEnum.PARKING_SPACE_ID_IS_NOT_NULL.getMessage());
         return new Result<>(parkingSpaceService.getParkingSpaceDetailById(spaceId));
     }
 
@@ -92,7 +92,7 @@ public class ParkingSpaceController extends BaseController {
     @ControllerLog(doAction = "生成支付账单")
     @ApiOperation(value = "生成支付账单", notes = "点击去支付，调用该接口生成账单号。前端接收到账单号后，携带账单号调用统一缴费服务‘/guest/pay/bill/startPayment统一缴费--发起支付’支付")
     @RequestMapping(value = "/createParkingSpaceBill",method = RequestMethod.POST)
-    public Result<String> createParkingSpaceBill( @ApiParam(name="rentId",value = "租赁ID",required = true,example = "51we20***") @RequestBody String rentId){
+    public Result<String> createParkingSpaceBill(String rentId){
         Assert.notNull(rentId, ParkingExceptionEnum.REND_ID_IS_NOT_NULL.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(parkingSpaceService.createParkingSpaceBill(rentId,user));

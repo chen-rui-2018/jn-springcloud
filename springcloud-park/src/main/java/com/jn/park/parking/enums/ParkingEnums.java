@@ -40,6 +40,7 @@ public enum ParkingEnums implements CodeAndMsg {
     PARKING_PAYMENT_IS_NOT_PAY("3","缴费金额为0无需支付"),
     CAR_IS_IN_PARKING("1","车辆已入场"),
     CAR_IS_NOT_IN_PARKING("0","车辆已离场"),
+    PARKING_SPACE_RENTAL_IS_PAYED("6","租赁服务已支付"),
 
 
 

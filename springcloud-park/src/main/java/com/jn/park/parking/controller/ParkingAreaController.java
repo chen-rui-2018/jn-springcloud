@@ -37,7 +37,14 @@ public class ParkingAreaController extends BaseController {
     private ParkingAreaService parkingAreaService;
 
     @ControllerLog(doAction = " 查询停车场列表")
-    @ApiOperation(value = "查询停车场列表[前端用户/后台管理公用]", notes = "前端查询停车场列表信息")
+    @ApiOperation(value = "查询停车场列表[后台管理]", notes = "后台查询停车场列表信息")
+    @RequestMapping(value = "/getParkingAreaListForAdmin",method = RequestMethod.GET)
+    public Result<PaginationData<List<ParkingAreaVo>>> getParkingAreaListForAdmin(ParkingAreaParam parkingAreaParam){
+        return new Result<>(parkingAreaService.getParkingAreaListForAdmin(parkingAreaParam));
+    }
+
+    @ControllerLog(doAction = "前台查询停车场列表")
+    @ApiOperation(value = "查询停车场列表[前台用户]", notes = "前台查询停车场列表信息")
     @RequestMapping(value = "/getParkingAreaList",method = RequestMethod.GET)
     public Result<PaginationData<List<ParkingAreaVo>>> getParkingAreaList(ParkingAreaParam parkingAreaParam){
         return new Result<>(parkingAreaService.getParkingAreaList(parkingAreaParam));

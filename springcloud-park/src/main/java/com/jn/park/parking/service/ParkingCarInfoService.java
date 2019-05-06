@@ -40,7 +40,7 @@ public interface ParkingCarInfoService {
      * @param userAccount
      * @return
      */
-    ParkingSpaceUserCountVo getUserCarInfoCount(String userAccount);
+    ParkingUserCarInfoCountVo getUserCarInfoCount(String userAccount);
 
     /**
      * 新增用户车辆

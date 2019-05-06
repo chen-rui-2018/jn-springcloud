@@ -26,8 +26,8 @@ public class ParkingViolationModel implements Serializable {
     @ApiModelProperty(value = "违停地址",example = "南京市白下高新区金融中心裙楼")
     private String parkingAddress;
 
-    @ApiModelProperty(value = "违停图片",example = "违停图片")
-    private List<FileImg> fileImgs;
+    @ApiModelProperty(value = "违停图片", required = true)
+    private List<FileImg> fileImages;
 
     public String getCarLicense() {
         return carLicense;
@@ -53,11 +53,11 @@ public class ParkingViolationModel implements Serializable {
         this.parkingAddress = parkingAddress;
     }
 
-    public List<FileImg> getFileImgs() {
-        return fileImgs;
+    public List<FileImg> getFileImages() {
+        return fileImages;
     }
 
-    public void setFileImgs(List<FileImg> fileImgs) {
-        this.fileImgs = fileImgs;
+    public void setFileImages(List<FileImg> fileImages) {
+        this.fileImages = fileImages;
     }
 }

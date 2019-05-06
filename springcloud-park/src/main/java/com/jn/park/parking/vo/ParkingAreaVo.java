@@ -30,6 +30,8 @@ public class ParkingAreaVo implements Serializable {
     private Integer rentNumber;
     @ApiModelProperty(value = "车位总数",example = "647")
     private Integer parkingTotal;
+    @ApiModelProperty(value = "临时车个数",example = "100")
+    private Integer tempNumber;
     @ApiModelProperty(value = "临时车价格描述",example = "15分钟内免费，半小时内首付2.5，之后每小时加上5元，24小时120元封顶，再次进场重新计费")
     private String tempPriceDepict;
     @ApiModelProperty(value = "临时车价格( 单位:元)",example = "5.0")
@@ -44,6 +46,8 @@ public class ParkingAreaVo implements Serializable {
     private Double rentPrice;
     @ApiModelProperty(value = "停车场图片",example = "**/**.png")
     private String areaPicture;
+    @ApiModelProperty(value = "与当前位置距离",example = "15")
+    private String distance;
     @ApiModelProperty(value = "停车位分布图",example = "**/**.png")
     private String spacePicture;
     @ApiModelProperty(value = "道闸厂家名称",example = "道尔")
@@ -77,6 +81,14 @@ public class ParkingAreaVo implements Serializable {
 
     public String getLongitude() {
         return longitude;
+    }
+
+    public Integer getTempNumber() {
+        return tempNumber;
+    }
+
+    public void setTempNumber(Integer tempNumber) {
+        this.tempNumber = tempNumber;
     }
 
     public void setLongitude(String longitude) {
@@ -193,5 +205,13 @@ public class ParkingAreaVo implements Serializable {
 
     public void setGateId(String gateId) {
         this.gateId = gateId;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
     }
 }

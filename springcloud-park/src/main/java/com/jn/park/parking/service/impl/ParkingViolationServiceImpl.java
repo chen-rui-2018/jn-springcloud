@@ -52,7 +52,7 @@ public class ParkingViolationServiceImpl implements ParkingViolationService {
         }
         tbParkingViolation.setParkingAddress(parkingViolationModel.getParkingAddress());
         tbParkingViolation.setCarPhone(parkingViolationModel.getCarPhone());
-        int i = fileImgService.saveFileImgList(parkingViolationModel.getFileImgs(), account, tbParkingViolation.getReportId());
+        int i = fileImgService.saveFileImgList(parkingViolationModel.getFileImages(), account, tbParkingViolation.getReportId());
         logger.info("保存用户违停数据响应条数{}",i);
         //TODO 调用消息发送接口
 

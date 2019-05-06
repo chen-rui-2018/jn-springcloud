@@ -2,8 +2,10 @@ package com.jn.park.parking.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
+import com.jn.park.enums.ParkingExceptionEnum;
 import com.jn.park.parking.dao.ParkingAreaMapper;
 import com.jn.park.parking.dao.TbParkingAreaMapper;
 import com.jn.park.parking.dao.TbParkingServiceTypeMapper;
@@ -48,8 +50,8 @@ public class ParkingAreaServiceImpl implements ParkingAreaService {
     private TbParkingServiceTypeMapper tbParkingServiceTypeMapper;
 
     @Override
-    @ServiceLog(doAction = "查询停车场列表")
-    public PaginationData<List<ParkingAreaVo>> getParkingAreaList(ParkingAreaParam parkingAreaParam) {
+    @ServiceLog(doAction = "查询停车场列表[后台管理]")
+    public PaginationData<List<ParkingAreaVo>> getParkingAreaListForAdmin(ParkingAreaParam parkingAreaParam) {
         Page<Object> objects = null;
         if (StringUtils.isNotEmpty(parkingAreaParam.getNeedPage()) && StringUtils.equals(ParkingEnums.NEED_PAGE.getCode(), parkingAreaParam.getNeedPage())) {
             objects = PageHelper.startPage(parkingAreaParam.getPage(), parkingAreaParam.getRows() == 0 ? 15 : parkingAreaParam.getRows());
@@ -73,6 +75,21 @@ public class ParkingAreaServiceImpl implements ParkingAreaService {
         return data;
     }
 
+    @Override
+    @ServiceLog(doAction = "查询停车场列表[前端]")
+    public PaginationData<List<ParkingAreaVo>> getParkingAreaList(ParkingAreaParam parkingAreaParam) {
+        Page<Object> objects = null;
+        if (StringUtils.isNotEmpty(parkingAreaParam.getNeedPage()) && StringUtils.equals(ParkingEnums.NEED_PAGE.getCode(), parkingAreaParam.getNeedPage())) {
+            objects = PageHelper.startPage(parkingAreaParam.getPage(), parkingAreaParam.getRows() == 0 ? 15 : parkingAreaParam.getRows());
+        }
+        if(StringUtils.isEmpty(parkingAreaParam.getLatitude())||StringUtils.isEmpty(parkingAreaParam.getLongitude())){
+            throw new JnSpringCloudException(ParkingExceptionEnum.LAT_LONG_IS_NOT_NULL);
+        }
+        List<ParkingAreaVo> parkingAreaList = parkingAreaMapper.getParkingAreaList(parkingAreaParam);
+        PaginationData<List<ParkingAreaVo>> data = new PaginationData(parkingAreaList, null == objects ? parkingAreaList.size() : objects.getTotal());
+        return data;
+    }
+
     @ServiceLog(doAction = "根据ID获取停车场详情")
     @Override
     public ParkingAreaDetailVo getParkingAreaDetailById(String areaId) {
@@ -81,7 +98,7 @@ public class ParkingAreaServiceImpl implements ParkingAreaService {
 
     @ServiceLog(doAction = "查询停车场服务数据列表")
     @Override
-    public List<ParkingServiceTypeVo> getParkingServiceTypeList() {
+        public List<ParkingServiceTypeVo> getParkingServiceTypeList() {
         TbParkingServiceTypeCriteria tbParkingServiceTypeCriteria = new TbParkingServiceTypeCriteria();
         tbParkingServiceTypeCriteria.createCriteria().andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
         List<TbParkingServiceType> tbParkingServiceTypes = tbParkingServiceTypeMapper.selectByExample(tbParkingServiceTypeCriteria);

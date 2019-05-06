@@ -19,10 +19,7 @@ import com.jn.park.parking.model.ParkingRecordParam;
 import com.jn.park.parking.model.ParkingRecordRampParam;
 import com.jn.park.parking.service.ParkingCarInfoService;
 import com.jn.park.parking.service.ParkingServerService;
-import com.jn.park.parking.vo.ParkingCarInfoVo;
-import com.jn.park.parking.vo.ParkingRecordDetailVo;
-import com.jn.park.parking.vo.ParkingRecordVo;
-import com.jn.park.parking.vo.ParkingSpaceUserCountVo;
+import com.jn.park.parking.vo.*;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
@@ -86,7 +83,7 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
 
     @ServiceLog(doAction = "查询当前用户车辆统计数据")
     @Override
-    public ParkingSpaceUserCountVo getUserCarInfoCount(@Param(value = "userAccount") String userAccount) {
+    public ParkingUserCarInfoCountVo getUserCarInfoCount(@Param(value = "userAccount") String userAccount) {
         if (StringUtils.isEmpty(userAccount)) {
             throw new JnSpringCloudException(ParkingExceptionEnum.USER_LOGIN_INVALID);
         }
@@ -109,6 +106,7 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
         tbParkingCarInfo.setAccount(user.getAccount());
         tbParkingCarInfo.setCreatorAccount(user.getAccount());
         tbParkingCarInfo.setCreatedTime(new Date());
+        tbParkingCarInfo.setRecordStatus(new Byte(ParkingEnums.EFFECTIVE.getCode()));
         int insert = tbParkingCarInfoMapper.insert(tbParkingCarInfo);
         return insert + "";
     }
@@ -120,7 +118,7 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
         if (null == tbParkingCarInfo) {
             throw new JnSpringCloudException(ParkingExceptionEnum.USER_CAR_IS_NOT_EXIT);
         }
-        if (StringUtils.equals(tbParkingCarInfo.getAccount(), account)) {
+        if (!StringUtils.equals(tbParkingCarInfo.getAccount(), account)) {
             throw new JnSpringCloudException(ParkingExceptionEnum.USER_CAR_CANT_DELETE_OTHER_CAR);
         }
         tbParkingCarInfo.setCarStatus(ParkingEnums.PARKING_USER_CAR_INFO_DELETED.getCode());
@@ -137,7 +135,7 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
         ParkingCarInfoParam parkingCarInfoParam = new ParkingCarInfoParam();
         parkingCarInfoParam.setCarLicense(carLicense);
         List<ParkingCarInfoVo> carInfoList = parkingCarInfoMapper.getCarInfoList(parkingCarInfoParam);
-        if (null == carInfoList) {
+        if (null == carInfoList || carInfoList.size() == 0) {
             return null;
         }
         return carInfoList.get(0);
@@ -174,10 +172,10 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
             tbParkingRecords) {
             ParkingRecordVo parkingRecordVo = new ParkingRecordVo();
             BeanUtils.copyProperties(parkingRecord,parkingRecordVo);
-            parkingRecordVo.setAdmissionTime(DateUtils.formatDate(parkingRecord.getAdmissionTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()));
-            parkingRecordVo.setDepartureTime(DateUtils.formatDate(parkingRecord.getDepartureTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()));
-            parkingRecordVo.setPaymentTime(DateUtils.formatDate(parkingRecord.getPaymentTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()));
-            parkingRecordVo.setPayTime(DateUtils.formatDate(parkingRecord.getPayTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()));
+            parkingRecordVo.setAdmissionTime((null == parkingRecord.getAdmissionTime())?null:DateUtils.formatDate(parkingRecord.getAdmissionTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()));
+            parkingRecordVo.setDepartureTime((null == parkingRecord.getDepartureTime())?null:DateUtils.formatDate(parkingRecord.getDepartureTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()));
+            parkingRecordVo.setPaymentTime((null == parkingRecord.getPaymentTime())?null:DateUtils.formatDate(parkingRecord.getPaymentTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()));
+            parkingRecordVo.setPayTime((null == parkingRecord.getPayTime())?null:DateUtils.formatDate(parkingRecord.getPayTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()));
             if(StringUtils.isEmpty(parkingRecord.getParkingTime())){
                 if(null == parkingRecord.getDepartureTime() ){
                     parkingRecordVo.setParkingTime(getTimeDifference(parkingRecord.getAdmissionTime(),new Date()));

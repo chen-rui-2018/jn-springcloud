@@ -12,7 +12,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ParkingAreaVo",description = "停车场详情")
+@ApiModel(value = "ParkingAreaDetailVo",description = "停车场详情")
 public class ParkingAreaDetailVo implements Serializable {
 
     @ApiModelProperty(value = "停车场ID",example = "1ww2324***")
@@ -31,6 +31,8 @@ public class ParkingAreaDetailVo implements Serializable {
     private Integer rentNumber;
     @ApiModelProperty(value = "车位总数",example = "647")
     private Integer parkingTotal;
+    @ApiModelProperty(value = "临时车位数",example = "10")
+    private Integer tempNumber;
     @ApiModelProperty(value = "临时车价格描述",example = "15分钟内免费，半小时内首付2.5，之后每小时加上5元，24小时120元封顶，再次进场重新计费")
     private String tempPriceDepict;
     @ApiModelProperty(value = "临时车价格( 单位:元)",example = "5.0")
@@ -120,6 +122,14 @@ public class ParkingAreaDetailVo implements Serializable {
 
     public String getTempPriceDepict() {
         return tempPriceDepict;
+    }
+
+    public Integer getTempNumber() {
+        return tempNumber;
+    }
+
+    public void setTempNumber(Integer tempNumber) {
+        this.tempNumber = tempNumber;
     }
 
     public void setTempPriceDepict(String tempPriceDepict) {

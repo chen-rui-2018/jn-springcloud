@@ -28,11 +28,13 @@ public class ParkingCarInfoVo implements Serializable {
     @ApiModelProperty(value = "月租车租赁标识（点击‘已绑定车位’携带该参数跳转至车位明细）",example = "32ew3***")
     private String rentId;
     @ApiModelProperty(value = "入场时间",example = "201-01-01 10:00:14")
-    private String admissiontime;
+    private String admissionTime;
     @ApiModelProperty(value = "出场时间",example = "201-01-01 18:04:14")
     private String departureTime;
     @ApiModelProperty(value = "车辆状态[ 停车状态：1-入场,0离场  ]",example = "1")
     private String parkingStatus;
+    @ApiModelProperty(value = "车辆入场名称",example = "白下高新1号停车场")
+    private String parkingName;
     @ApiModelProperty(value = "月租停车位信息",example = "白下高新金融中心裙楼A0001")
     private String parkingInfo;
 
@@ -92,12 +94,12 @@ public class ParkingCarInfoVo implements Serializable {
         this.account = account;
     }
 
-    public String getAdmissiontime() {
-        return admissiontime;
+    public String getAdmissionTime() {
+        return admissionTime;
     }
 
-    public void setAdmissiontime(String admissiontime) {
-        this.admissiontime = admissiontime;
+    public void setAdmissionTime(String admissionTime) {
+        this.admissionTime = admissionTime;
     }
 
     public String getDepartureTime() {
@@ -122,5 +124,13 @@ public class ParkingCarInfoVo implements Serializable {
 
     public void setParkingInfo(String parkingInfo) {
         this.parkingInfo = parkingInfo;
+    }
+
+    public String getParkingName() {
+        return parkingName;
+    }
+
+    public void setParkingName(String parkingName) {
+        this.parkingName = parkingName;
     }
 }

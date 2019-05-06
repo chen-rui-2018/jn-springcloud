@@ -14,11 +14,11 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ParkingSpaceAmountModel",description = "租车位价格计算")
 public class ParkingSpaceAmountModel implements Serializable {
-    @ApiModelProperty(value = "停车场ID",required = true,example = "82uew3***")
+    @ApiModelProperty(value = "停车场ID",required = true,example = "24518153833")
     @NotNull(message = "停车场ID不能为空")
     private String areaId;
 
-    @ApiModelProperty(value = "优惠标识",example = "82uew3***")
+    @ApiModelProperty(value = "优惠标识",example = "we23eew32452r2")
     private String policyId;
 
     @ApiModelProperty(value = "租赁开始时间[yyyy-MM-dd]",required = true,example = "2019-01-01")

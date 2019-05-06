@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.park.parking.dao.ParkingSpaceMapper">
+<mapper namespace="com.jn.park.parking.dao.ParkingCarInfoMapper">
 
 
     <!-- 车辆列表 -->
@@ -9,10 +9,12 @@
         SELECT tt.* FROM (
         SELECT i.car_id_ AS 'carId'
         ,i.car_license AS 'carLicense'
-        ,(SELECT r.parking_status FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY r.created_time
+        ,(SELECT IF( r.parking_status IS NULL,'0',r.parking_status) FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY r.created_time
         DESC LIMIT 0,1 ) AS 'parkingStatus'
+        ,(SELECT a.area_name FROM tb_parking_record r LEFT JOIN tb_parking_area a ON r.area_id_ = a.area_id_ WHERE r.car_license =i.car_license ORDER BY r.created_time
+        DESC LIMIT 0,1 ) AS 'parkingName'
         ,DATE_FORMAT((SELECT r.admission_time FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY
-        r.created_time DESC LIMIT 0,1 ),'%Y-%m-%d %H:%i:%s') AS 'admissiontime'
+        r.created_time DESC LIMIT 0,1 ),'%Y-%m-%d %H:%i:%s') AS 'admissionTime'
         ,DATE_FORMAT((SELECT r.departure_time FROM tb_parking_record r WHERE r.car_license =i.car_license ORDER BY
         r.created_time DESC LIMIT 0,1 ),'%Y-%m-%d %H:%i:%s') AS 'departureTime'
         ,i.name AS 'name'
@@ -21,22 +23,22 @@
         ,(SELECT re.rent_id_ FROM tb_parking_space_rental re WHERE re.car_license =i.car_license AND re.approval_status = '6' AND re.end_time > NOW() ORDER BY re.created_time DESC LIMIT 0,1 ) AS 'rentId'
         ,(SELECT re.parking_info FROM tb_parking_space_rental re WHERE re.car_license =i.car_license AND re.approval_status = '6' AND re.end_time > NOW() ORDER BY re.created_time DESC LIMIT 0,1 ) AS 'parkingInfo'
 
-        FROM tb_parking_car_info i WHERE i.record_status = '1'
+        FROM tb_parking_car_info i WHERE i.record_status = '1' and i.car_status = '1'
 
         <if test="carId !=null and carId !='' ">
-            and c.car_id_ = #{carId,jdbcType=VARCHAR}
+            and i.car_id_ = #{carId,jdbcType=VARCHAR}
         </if>
         <if test="carLicense !=null and carLicense !='' ">
-            and c.car_license = #{carLicense,jdbcType=VARCHAR}
+            and i.car_license = #{carLicense,jdbcType=VARCHAR}
         </if>
         <if test="name !=null and name !='' ">
-            and c.name = #{name,jdbcType=VARCHAR}
+            and i.name = #{name,jdbcType=VARCHAR}
         </if>
         <if test="phone !=null and phone !='' ">
-            and c.phonel = #{phone,jdbcType=VARCHAR}
+            and i.phone = #{phone,jdbcType=VARCHAR}
         </if>
         <if test="account !=null and account !='' ">
-            and c.phonel = #{account,jdbcType=VARCHAR}
+            and i.account = #{account,jdbcType=VARCHAR}
         </if>
         ) tt
         where 1=1

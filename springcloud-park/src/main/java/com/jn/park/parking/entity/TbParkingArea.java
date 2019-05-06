@@ -19,7 +19,7 @@ public class TbParkingArea implements Serializable {
     /*@ApiModelProperty("纬度")*/
     private String latitude;
 
-    /*@ApiModelProperty("停车场空闲车位数")*/
+    /*@ApiModelProperty("停车场空闲月租车位数")*/
     private Integer leisureNumber;
 
     /*@ApiModelProperty("已出租车位数")*/
@@ -30,6 +30,9 @@ public class TbParkingArea implements Serializable {
 
     /*@ApiModelProperty("临时车价格描述")*/
     private String tempPriceDepict;
+
+    /*@ApiModelProperty("临时车个数")*/
+    private Integer tempNumber;
 
     /*@ApiModelProperty("临时车价格(单位:元)")*/
     private Double tempPrice;
@@ -148,6 +151,14 @@ public class TbParkingArea implements Serializable {
 
     public void setTempPriceDepict(String tempPriceDepict) {
         this.tempPriceDepict = tempPriceDepict == null ? null : tempPriceDepict.trim();
+    }
+
+    public Integer getTempNumber() {
+        return tempNumber;
+    }
+
+    public void setTempNumber(Integer tempNumber) {
+        this.tempNumber = tempNumber;
     }
 
     public Double getTempPrice() {
@@ -291,6 +302,7 @@ public class TbParkingArea implements Serializable {
             && (this.getRentNumber() == null ? other.getRentNumber() == null : this.getRentNumber().equals(other.getRentNumber()))
             && (this.getParkingTotal() == null ? other.getParkingTotal() == null : this.getParkingTotal().equals(other.getParkingTotal()))
             && (this.getTempPriceDepict() == null ? other.getTempPriceDepict() == null : this.getTempPriceDepict().equals(other.getTempPriceDepict()))
+            && (this.getTempNumber() == null ? other.getTempNumber() == null : this.getTempNumber().equals(other.getTempNumber()))
             && (this.getTempPrice() == null ? other.getTempPrice() == null : this.getTempPrice().equals(other.getTempPrice()))
             && (this.getTempPriceUnit() == null ? other.getTempPriceUnit() == null : this.getTempPriceUnit().equals(other.getTempPriceUnit()))
             && (this.getTempPriceTotal() == null ? other.getTempPriceTotal() == null : this.getTempPriceTotal().equals(other.getTempPriceTotal()))
@@ -321,6 +333,7 @@ public class TbParkingArea implements Serializable {
         result = prime * result + ((getRentNumber() == null) ? 0 : getRentNumber().hashCode());
         result = prime * result + ((getParkingTotal() == null) ? 0 : getParkingTotal().hashCode());
         result = prime * result + ((getTempPriceDepict() == null) ? 0 : getTempPriceDepict().hashCode());
+        result = prime * result + ((getTempNumber() == null) ? 0 : getTempNumber().hashCode());
         result = prime * result + ((getTempPrice() == null) ? 0 : getTempPrice().hashCode());
         result = prime * result + ((getTempPriceUnit() == null) ? 0 : getTempPriceUnit().hashCode());
         result = prime * result + ((getTempPriceTotal() == null) ? 0 : getTempPriceTotal().hashCode());
@@ -354,6 +367,7 @@ public class TbParkingArea implements Serializable {
         sb.append(", rentNumber=").append(rentNumber);
         sb.append(", parkingTotal=").append(parkingTotal);
         sb.append(", tempPriceDepict=").append(tempPriceDepict);
+        sb.append(", tempNumber=").append(tempNumber);
         sb.append(", tempPrice=").append(tempPrice);
         sb.append(", tempPriceUnit=").append(tempPriceUnit);
         sb.append(", tempPriceTotal=").append(tempPriceTotal);

@@ -19,7 +19,14 @@ import java.util.List;
 public interface ParkingAreaService{
 
     /**
-     * 查询停车场列表
+     * 查询停车场列表[后台管理]
+     * @param parkingAreaParam
+     * @return
+     */
+    PaginationData<List<ParkingAreaVo>> getParkingAreaListForAdmin(ParkingAreaParam parkingAreaParam);
+
+    /**
+     * 查询停车场列表[前端]
      * @param parkingAreaParam
      * @return
      */

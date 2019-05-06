@@ -14,21 +14,21 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ParkingSpaceApplyModel",description = "租车位申请")
 public class ParkingSpaceApplyModel implements Serializable {
-    @ApiModelProperty(value = "车位ID",required = true,example = "82uew2***")
+    @ApiModelProperty(value = "车位ID",required = true,example = "5215015316325")
     private String spaceId;
 
-    @ApiModelProperty(value = "车位编码",required = true,example = "A0515")
+    @ApiModelProperty(value = "车位编码",required = true,example = "A0005")
     @NotNull(message = "车位编码不能为空")
     private String spaceSerial;
 
-    @ApiModelProperty(value = "停车场ID",required = true,example = "82uew3***")
+    @ApiModelProperty(value = "停车场ID",required = true,example = "24518153811")
     @NotNull(message = "停车场ID不能为空")
     private String areaId;
-    @ApiModelProperty(value = "停车场名称",required = true,example = "白下智慧园区金融中心停车场")
+    @ApiModelProperty(value = "停车场名称",required = true,example = "白下高新智慧园区1号停车场")
     @NotNull(message = "停车场名称不能为空")
     private String areaName;
 
-    @ApiModelProperty(value = "优惠标识",example = "82uew3***")
+    @ApiModelProperty(value = "优惠标识",example = "we23eew32452r2")
     private String policyId;
 
     @ApiModelProperty(value = "车牌号",required = true,example = "苏A00001")

@@ -39,7 +39,7 @@ public class ParkingPreferentailController extends BaseController {
     private ParkingPreferentailService parkingPreferentailService;
 
     @ControllerLog(doAction = " 查询优惠政策")
-    @ApiOperation(value = "查询优惠政策")
+    @ApiOperation(value = "查询月卡优惠政策",notes = "优惠金额计算逻辑复杂，前端若不计算金额，则选择对应政策后调用‘租车位费用计算接口[前端用户]’接口，展示后台返回的金额数据")
     @RequestMapping(value = "/getParkingPreferentialList",method = RequestMethod.GET)
     public Result<List<ParkingPreferentialVo>> getParkingPreferentialList(){
         return new Result<>(parkingPreferentailService.getParkingPreferentialList());

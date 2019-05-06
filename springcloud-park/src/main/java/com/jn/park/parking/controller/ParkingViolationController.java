@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +41,7 @@ public class ParkingViolationController extends BaseController {
     @ControllerLog(doAction = " 违停上报")
     @ApiOperation(value = "违停上报", notes = "违停上报需要园区管理员权限")
     @RequestMapping(value = "/saveParkingViolation",method = RequestMethod.POST)
+    @RequiresPermissions("/user/parking/violation/saveParkingViolation")
     public Result<String> saveParkingViolation(@Validated @RequestBody ParkingViolationModel parkingViolationModel){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(parkingViolationService.saveParkingViolation(parkingViolationModel,user.getAccount()));

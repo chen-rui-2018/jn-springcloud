@@ -38,6 +38,7 @@ public class ParkingPreferentailServiceImpl implements ParkingPreferentailServic
                 tbParkingPreferentials) {
             ParkingPreferentialVo vo = new ParkingPreferentialVo();
             BeanUtils.copyProperties(preFerential,vo);
+            parkingPreferentialVos.add(vo);
         }
         return parkingPreferentialVos;
     }

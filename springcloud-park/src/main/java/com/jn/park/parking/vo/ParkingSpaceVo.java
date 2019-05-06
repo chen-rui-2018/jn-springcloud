@@ -20,6 +20,9 @@ public class ParkingSpaceVo implements Serializable {
     @ApiModelProperty(value = "停车场ID",example = "e2ew3***")
     private String areaId;
 
+    @ApiModelProperty(value = "停车场名称",example = "白下1号停车场")
+    private String areaName;
+
     @ApiModelProperty(value = "停车位编号",example = "A00001")
     private String spaceSerial;
 
@@ -75,6 +78,14 @@ public class ParkingSpaceVo implements Serializable {
 
     public String getAreaId() {
         return areaId;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public void setAreaId(String areaId) {

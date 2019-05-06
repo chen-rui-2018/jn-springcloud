@@ -155,10 +155,11 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
 
         ParkingSpaceAmountVo parkingSpaceAmountVo = this.applyParkingSpaceAmount(parkingSpaceAmountModel, user.getAccount());
         TbParkingSpaceRental tbParkingSpaceRental = new TbParkingSpaceRental();
-        BeanUtils.copyProperties(tbParkingSpaceRental, parkingSpaceApplyModel);
-        BeanUtils.copyProperties(tbParkingSpaceRental, parkingSpaceAmountVo);
+        BeanUtils.copyProperties(parkingSpaceApplyModel,tbParkingSpaceRental);
+        BeanUtils.copyProperties(parkingSpaceAmountVo,tbParkingSpaceRental);
         String rentId = UUID.randomUUID().toString().replaceAll("-", "");
         tbParkingSpaceRental.setRentId(rentId);
+        tbParkingSpaceRental.setAccount(user.getAccount());
         try {
             tbParkingSpaceRental.setStartTime(DateUtils.parseDate(parkingSpaceApplyModel.getStartTime(), ParkingEnums.DATE_TIME_FORMAT_DATE.getCode()));
             tbParkingSpaceRental.setEndTime(DateUtils.parseDate(parkingSpaceApplyModel.getEndTime(), ParkingEnums.DATE_TIME_FORMAT_DATE.getCode()));
@@ -183,7 +184,7 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
         List<TbParkingCarInfo> tbParkingCarInfos = tbParkingCarInfoMapper.selectByExample(carInfoCriteria);
         if(null == tbParkingCarInfos || tbParkingCarInfos.size() == 0 ){
             ParkingCarInfoModel parkingCarInfoModel = new ParkingCarInfoModel();
-            parkingCarInfoModel.setCarIicense(parkingSpaceApplyModel.getCarLicense());
+            parkingCarInfoModel.setCarLicense(parkingSpaceApplyModel.getCarLicense());
             parkingCarInfoModel.setName(tbParkingSpaceRental.getName());
             parkingCarInfoModel.setPhone(tbParkingSpaceRental.getPhone());
             String s = parkingCarInfoService.saveCarInfo(parkingCarInfoModel, user);
@@ -216,7 +217,7 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
             throw new JnSpringCloudException(ParkingExceptionEnum.DAY_INTERVAL_ERROR);
         }
         //计算应缴金额
-        double dueMoney = new BigDecimal(365).divide(new BigDecimal(dayInterval)).multiply(new BigDecimal(Double.toString(parkingAreaDetailById.getRentPrice()))).doubleValue();
+        double dueMoney = new BigDecimal(dayInterval).multiply(new BigDecimal(Double.toString(parkingAreaDetailById.getRentPrice()))).divide(new BigDecimal(365),2,BigDecimal.ROUND_HALF_UP).doubleValue();
         parkingSpaceAmountVo.setDueMoney(dueMoney);
 
         if (StringUtils.isNotEmpty(parkingSpaceAmountModel.getPolicyId())) {
@@ -226,26 +227,27 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
             }
             //获取用户已租天数
             TbParkingSpaceRentalCriteria parkingSpaceRentalCriteria = new TbParkingSpaceRentalCriteria();
-            parkingSpaceRentalCriteria.createCriteria().andApprovalStatusEqualTo("6").andAccountEqualTo(account).andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
+            parkingSpaceRentalCriteria.createCriteria().andApprovalStatusEqualTo(ParkingEnums.PARKING_SPACE_RENTAL_IS_PAYED.getCode()).andAccountEqualTo(account).andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
             List<TbParkingSpaceRental> tbParkingSpaceRentals = tbParkingSpaceRentalMapper.selectByExample(parkingSpaceRentalCriteria);
             int applyDay = 0;
             for (TbParkingSpaceRental parkingSpaceRental : tbParkingSpaceRentals) {
                 applyDay += getDayInterval(parkingSpaceRental.getStartTime(), parkingSpaceRental.getEndTime());
             }
 
-            if (null == tbParkingPreferential.getDayConditions() || applyDay > tbParkingPreferential.getDayConditions()) {
+            if (null == tbParkingPreferential.getDayConditions() || (applyDay+dayInterval) > tbParkingPreferential.getDayConditions()) {
+                logger.info("满足优惠条件，开始计算优惠金额，优惠政策{}，用户已租天数{}，本次租赁天数{}。", tbParkingPreferential.getPolicyCode(),applyDay, dayInterval);
                 if (null != tbParkingPreferential.getOfferPrice() && 0 != tbParkingPreferential.getOfferPrice()) {
                     //减免固定金额
                     parkingSpaceAmountVo.setDeductionMoney(tbParkingPreferential.getOfferPrice());
                     parkingSpaceAmountVo.setActualAoney(new BigDecimal(Double.toString(dueMoney)).subtract(new BigDecimal(Double.toString(tbParkingPreferential.getOfferPrice()))).doubleValue());
                 } else {
                     //按比例减免
-                    BigDecimal divide = new BigDecimal(dueMoney).multiply(new BigDecimal(Double.toString(tbParkingPreferential.getOfferRatio()))).divide(new BigDecimal("100"));
+                    BigDecimal divide = new BigDecimal(dueMoney).multiply(new BigDecimal(Double.toString(tbParkingPreferential.getOfferRatio()))).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
                     parkingSpaceAmountVo.setDeductionMoney(divide.doubleValue());
                     parkingSpaceAmountVo.setActualAoney(new BigDecimal(Double.toString(dueMoney)).subtract(divide).doubleValue());
                 }
             } else {
-                logger.info("不满足优惠条件，按原件计算，优惠政策{}，用户已租天数{}，本次租赁天数{}。", tbParkingPreferential.getPolicyCode(), 0, dayInterval);
+                logger.info("不满足优惠条件，按原价计算，优惠政策{}，用户已租天数{}，本次租赁天数{}。", tbParkingPreferential.getPolicyCode(),applyDay, dayInterval);
                 parkingSpaceAmountVo.setDeductionMoney(new Double(0));
                 parkingSpaceAmountVo.setActualAoney(dueMoney);
             }

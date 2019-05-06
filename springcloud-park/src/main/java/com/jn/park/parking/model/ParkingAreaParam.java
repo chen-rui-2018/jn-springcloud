@@ -20,6 +20,12 @@ public class ParkingAreaParam extends Page implements Serializable {
     @ApiModelProperty(value = "停车场地址[模糊查询]",example = "文轩路")
     private String areaAddress;
 
+    @ApiModelProperty(value = "经度[排序条件]",example = "118.245616")
+    private String longitude;
+
+    @ApiModelProperty(value = "纬度[排序条件]",example = "45.548156")
+    private String latitude;
+
     @ApiModelProperty(value = "是否需要分页 0不需要1需要",required = true,example = "1")
     private String needPage;
 
@@ -45,5 +51,21 @@ public class ParkingAreaParam extends Page implements Serializable {
 
     public void setNeedPage(String needPage) {
         this.needPage = needPage;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 }

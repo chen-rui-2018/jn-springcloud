@@ -41,7 +41,7 @@ public class PaymentCarParkingFeeRequest implements Serializable {
     }
 
     public void setDoorPaymentCarParkingFeeRequest(DoorPaymentCarParkingFeeRequest doorPaymentCarParkingFeeRequest) {
-        doorPaymentCarParkingFeeRequest = doorPaymentCarParkingFeeRequest;
+        this.doorPaymentCarParkingFeeRequest = doorPaymentCarParkingFeeRequest;
     }
 
     @Override

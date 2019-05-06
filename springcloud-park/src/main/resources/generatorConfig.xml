@@ -690,6 +690,16 @@
 
       <!--楼宇管理-楼宇信息-->
       <table tableName="tb_tower_information"></table>
+      <!--物品租赁-物品信息-->
+      <table tableName="tb_asset_article_lease"></table>
+      <!--物品租赁-物品租赁订单-->
+      <table tableName="tb_asset_article_lease_orders"></table>
+      <!--资产管理-资产信息-->
+      <table tableName="tb_asset_information"></table>
+      <!--维保管理-维保信息-->
+      <table tableName="tb_asset_maintain_manage"></table>
+      <!--维保管理-维保信息记录-->
+      <table tableName="tb_asset_maintain_record"></table>
     </context>
 
 </generatorConfiguration>

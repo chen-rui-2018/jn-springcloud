@@ -3,6 +3,9 @@ package com.jn.park.parking.entity;
 import java.io.Serializable;
 
 public class TbParkingService implements Serializable {
+    /*@ApiModelProperty("ID")*/
+    private String id;
+
     /*@ApiModelProperty("停车场id")*/
     private String parkingId;
 
@@ -10,6 +13,14 @@ public class TbParkingService implements Serializable {
     private String serverTypeId;
 
     private static final long serialVersionUID = 1L;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
 
     public String getParkingId() {
         return parkingId;
@@ -39,7 +50,8 @@ public class TbParkingService implements Serializable {
             return false;
         }
         TbParkingService other = (TbParkingService) that;
-        return (this.getParkingId() == null ? other.getParkingId() == null : this.getParkingId().equals(other.getParkingId()))
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getParkingId() == null ? other.getParkingId() == null : this.getParkingId().equals(other.getParkingId()))
             && (this.getServerTypeId() == null ? other.getServerTypeId() == null : this.getServerTypeId().equals(other.getServerTypeId()));
     }
 
@@ -47,6 +59,7 @@ public class TbParkingService implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getParkingId() == null) ? 0 : getParkingId().hashCode());
         result = prime * result + ((getServerTypeId() == null) ? 0 : getServerTypeId().hashCode());
         return result;
@@ -58,6 +71,7 @@ public class TbParkingService implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
         sb.append(", parkingId=").append(parkingId);
         sb.append(", serverTypeId=").append(serverTypeId);
         sb.append(", serialVersionUID=").append(serialVersionUID);

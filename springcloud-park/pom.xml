@@ -80,7 +80,7 @@
                         parking
                     </contexts>
                     <tableNames>
-                        tb_parking_preferential_area
+                        tb_parking_service
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

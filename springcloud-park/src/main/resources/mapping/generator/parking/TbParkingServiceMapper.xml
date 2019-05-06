@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.parking.dao.TbParkingServiceMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingService">
+    <result column="id_" jdbcType="VARCHAR" property="id" />
     <result column="parking_id" jdbcType="VARCHAR" property="parkingId" />
     <result column="server_type_id" jdbcType="VARCHAR" property="serverTypeId" />
   </resultMap>
@@ -64,7 +65,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    parking_id, server_type_id
+    id_, parking_id, server_type_id
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingServiceCriteria" resultMap="BaseResultMap">
     select
@@ -87,12 +88,17 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingService">
-    insert into tb_parking_service (parking_id, server_type_id)
-    values (#{parkingId,jdbcType=VARCHAR}, #{serverTypeId,jdbcType=VARCHAR})
+    insert into tb_parking_service (id_, parking_id, server_type_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{parkingId,jdbcType=VARCHAR}, #{serverTypeId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingService">
     insert into tb_parking_service
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id_,
+      </if>
       <if test="parkingId != null">
         parking_id,
       </if>
@@ -101,6 +107,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="parkingId != null">
         #{parkingId,jdbcType=VARCHAR},
       </if>
@@ -118,6 +127,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_parking_service
     <set>
+      <if test="record.id != null">
+        id_ = #{record.id,jdbcType=VARCHAR},
+      </if>
       <if test="record.parkingId != null">
         parking_id = #{record.parkingId,jdbcType=VARCHAR},
       </if>
@@ -131,7 +143,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_parking_service
-    set parking_id = #{record.parkingId,jdbcType=VARCHAR},
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      parking_id = #{record.parkingId,jdbcType=VARCHAR},
       server_type_id = #{record.serverTypeId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />

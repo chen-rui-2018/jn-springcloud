@@ -5,16 +5,14 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.enterprise.data.enums.DataUploadConstants;
-import com.jn.enterprise.data.model.CompanyDataModel;
-import com.jn.enterprise.data.model.CompanyDataParamModel;
-import com.jn.enterprise.data.model.CompanyDataStatisticsModel;
-import com.jn.enterprise.data.model.CompanyDataStatisticsParamModel;
+import com.jn.enterprise.data.model.*;
 import com.jn.enterprise.data.vo.ModelDataVO;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -229,5 +227,26 @@ public interface DataUploadService {
      */
     ModelDataVO getStruct(User user,String fillId);
 
+    /**
+     * 科技园导入
+     * @param multipartFile
+     * @param dataVO
+     * @return
+     */
+    int importData(MultipartFile multipartFile, ModelDataVO dataVO);
+
+    /**
+     * 科技园查询接口
+     * @param param
+     * @return
+     */
+    PaginationData<Map<String,List<ScientModel>>> getImportData(ScientLookupParamModel param);
+
+    /**
+     * 科技园表头获取接口
+     * @param fillId
+     * @return
+     */
+    Map<String,Object> getScientTabHeader(String fillId);
 
 }

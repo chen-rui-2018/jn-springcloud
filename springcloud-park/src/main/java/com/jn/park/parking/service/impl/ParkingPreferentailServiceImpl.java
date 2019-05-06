@@ -1,7 +1,10 @@
 package com.jn.park.parking.service.impl;
 
+import com.jn.park.parking.dao.TbParkingPreferentialAreaMapper;
 import com.jn.park.parking.dao.TbParkingPreferentialMapper;
 import com.jn.park.parking.entity.TbParkingPreferential;
+import com.jn.park.parking.entity.TbParkingPreferentialArea;
+import com.jn.park.parking.entity.TbParkingPreferentialAreaCriteria;
 import com.jn.park.parking.entity.TbParkingPreferentialCriteria;
 import com.jn.park.parking.enums.ParkingEnums;
 import com.jn.park.parking.service.ParkingPreferentailService;
@@ -25,6 +28,8 @@ public class ParkingPreferentailServiceImpl implements ParkingPreferentailServic
 
     @Autowired
     private TbParkingPreferentialMapper tbParkingPreferentialMapper;
+    @Autowired
+    private TbParkingPreferentialAreaMapper tbParkingPreferentialAreaMapper;
 
     @ServiceLog(doAction = "前端查询优惠政策列表")
     @Override
@@ -43,7 +48,32 @@ public class ParkingPreferentailServiceImpl implements ParkingPreferentailServic
         return parkingPreferentialVos;
     }
 
+    @ServiceLog(doAction = "查询某个停车场优惠政策")
+    @Override
+    public List<ParkingPreferentialVo> getParkingPreferentialListForArea(String areaId){
+        TbParkingPreferentialAreaCriteria areaCriteria = new TbParkingPreferentialAreaCriteria();
+        areaCriteria.createCriteria().andAreaIdEqualTo(areaId).andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
+        List<TbParkingPreferentialArea> tbParkingPreferentialAreas = tbParkingPreferentialAreaMapper.selectByExample(areaCriteria);
+        List<String> sList = new ArrayList<>(16);
+        for (TbParkingPreferentialArea area:tbParkingPreferentialAreas
+             ) {
+            sList.add(area.getPolicyId());
+        }
+        List<ParkingPreferentialVo> parkingPreferentialVos = new ArrayList<>(16);
+        if(null == tbParkingPreferentialAreas || tbParkingPreferentialAreas.size() == 0){
+            return parkingPreferentialVos;
+        }
+        TbParkingPreferentialCriteria parkingPreferentialCriteria = new TbParkingPreferentialCriteria();
+        parkingPreferentialCriteria.createCriteria().andPolicyIdIn(sList).andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
+        List<TbParkingPreferential> tbParkingPreferentials = tbParkingPreferentialMapper.selectByExample(parkingPreferentialCriteria);
 
-
+        for (TbParkingPreferential preFerential:
+                tbParkingPreferentials) {
+            ParkingPreferentialVo vo = new ParkingPreferentialVo();
+            BeanUtils.copyProperties(preFerential,vo);
+            parkingPreferentialVos.add(vo);
+        }
+        return parkingPreferentialVos;
+    }
 
 }

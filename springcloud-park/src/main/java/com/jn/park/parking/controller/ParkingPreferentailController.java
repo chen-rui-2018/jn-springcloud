@@ -38,12 +38,24 @@ public class ParkingPreferentailController extends BaseController {
     @Autowired
     private ParkingPreferentailService parkingPreferentailService;
 
-    @ControllerLog(doAction = " 查询优惠政策")
-    @ApiOperation(value = "查询月卡优惠政策",notes = "优惠金额计算逻辑复杂，前端若不计算金额，则选择对应政策后调用‘租车位费用计算接口[前端用户]’接口，展示后台返回的金额数据")
+    @ControllerLog(doAction = " 查询所有优惠政策")
+    @ApiOperation(value = "查询所有优惠政策",notes = "优惠金额计算逻辑复杂，前端若不计算金额，则选择对应政策后调用‘租车位费用计算接口[前端用户]’接口，展示后台返回的金额数据")
     @RequestMapping(value = "/getParkingPreferentialList",method = RequestMethod.GET)
     public Result<List<ParkingPreferentialVo>> getParkingPreferentialList(){
         return new Result<>(parkingPreferentailService.getParkingPreferentialList());
     }
+
+
+    @ControllerLog(doAction = " 查询某个停车场优惠政策")
+    @ApiOperation(value = "查询某个停车场优惠政策",notes = "优惠金额计算逻辑复杂，前端若不计算金额，则选择对应政策后调用‘租车位费用计算接口[前端用户]’接口，展示后台返回的金额数据")
+    @RequestMapping(value = "/getParkingPreferentialListForArea",method = RequestMethod.GET)
+    public Result<List<ParkingPreferentialVo>> getParkingPreferentialListForArea(
+            @ApiParam(name="areaId",value = "停车场ID",required = true,example = "51we20***")
+            @RequestParam(value = "areaId") String areaId){
+        Assert.notNull(areaId, ParkingExceptionEnum.PARKING_AREA_ID_IS_NOT_NULL.getMessage());
+        return new Result<>(parkingPreferentailService.getParkingPreferentialListForArea(areaId));
+    }
+
 
 
 }

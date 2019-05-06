@@ -756,6 +756,8 @@
     <table tableName="tb_parking_violation"></table>
     <!--智慧停车-停车场服务-->
     <table tableName="tb_parking_service_type"></table>
+    <!--智慧停车-停车优惠政策-->
+    <table tableName="tb_parking_preferential_area"></table>
   </context>
   
 </generatorConfiguration>

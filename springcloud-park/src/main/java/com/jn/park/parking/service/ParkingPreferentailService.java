@@ -24,4 +24,11 @@ public interface ParkingPreferentailService {
      * @return
      */
     List<ParkingPreferentialVo> getParkingPreferentialList();
+
+    /**
+     * 查询某个停车场优惠政策
+     * @param areaId
+     * @return
+     */
+    List<ParkingPreferentialVo> getParkingPreferentialListForArea(String areaId);
 }

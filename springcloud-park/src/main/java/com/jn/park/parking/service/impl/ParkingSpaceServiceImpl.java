@@ -67,6 +67,8 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
     private ParkingCarInfoService parkingCarInfoService;
     @Autowired
     private PayBillClient payBillClient;
+    @Autowired
+    private TbParkingPreferentialAreaMapper tbParkingPreferentialAreaMapper;
 
     @ServiceLog(doAction = "查询停车位列表")
     @Override
@@ -221,10 +223,15 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
         parkingSpaceAmountVo.setDueMoney(dueMoney);
 
         if (StringUtils.isNotEmpty(parkingSpaceAmountModel.getPolicyId())) {
-            TbParkingPreferential tbParkingPreferential = tbParkingPreferentialMapper.selectByPrimaryKey(parkingSpaceAmountModel.getPolicyId());
-            if (null == tbParkingPreferential) {
+            //校验当前停车场是否具有某个优惠数据
+            TbParkingPreferentialAreaCriteria areaCriteria = new TbParkingPreferentialAreaCriteria();
+            areaCriteria.createCriteria().andAreaIdEqualTo(parkingSpaceAmountModel.getAreaId()).andPolicyIdEqualTo(parkingSpaceAmountModel.getPolicyId()).andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
+            List<TbParkingPreferentialArea> tbParkingPreferentialAreas = tbParkingPreferentialAreaMapper.selectByExample(areaCriteria);
+            if (null == tbParkingPreferentialAreas || tbParkingPreferentialAreas.size()==0) {
                 throw new JnSpringCloudException(ParkingExceptionEnum.PARKING_PREFERENTIAL_IS_NOT_EXIST);
             }
+
+            TbParkingPreferential tbParkingPreferential = tbParkingPreferentialMapper.selectByPrimaryKey(parkingSpaceAmountModel.getPolicyId());
             //获取用户已租天数
             TbParkingSpaceRentalCriteria parkingSpaceRentalCriteria = new TbParkingSpaceRentalCriteria();
             parkingSpaceRentalCriteria.createCriteria().andApprovalStatusEqualTo(ParkingEnums.PARKING_SPACE_RENTAL_IS_PAYED.getCode()).andAccountEqualTo(account).andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
@@ -273,14 +280,10 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
         can1.setTime(startTime);
         Calendar can2 = Calendar.getInstance();
         can2.setTime(endTime);
-        //拿出两个年份
         int year1 = can1.get(Calendar.YEAR);
         int year2 = can2.get(Calendar.YEAR);
         //天数
         Calendar can = null;
-        //如果can1 < can2
-        //减去小的时间在这一年已经过了的天数
-        //加上大的时间已过的天数
         if (can1.before(can2)) {
             days -= can1.get(Calendar.DAY_OF_YEAR);
             days += can2.get(Calendar.DAY_OF_YEAR);

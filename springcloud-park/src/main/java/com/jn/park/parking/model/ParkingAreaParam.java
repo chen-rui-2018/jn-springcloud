@@ -20,10 +20,10 @@ public class ParkingAreaParam extends Page implements Serializable {
     @ApiModelProperty(value = "停车场地址[模糊查询]",example = "文轩路")
     private String areaAddress;
 
-    @ApiModelProperty(value = "经度[排序条件]",example = "118.245616")
+    @ApiModelProperty(value = "经度[排序条件][APP必传-当前经纬度]",example = "118.245616")
     private String longitude;
 
-    @ApiModelProperty(value = "纬度[排序条件]",example = "45.548156")
+    @ApiModelProperty(value = "纬度[排序条件][APP必传-当前经纬度]",example = "45.548156")
     private String latitude;
 
     @ApiModelProperty(value = "是否需要分页 0不需要1需要",required = true,example = "1")

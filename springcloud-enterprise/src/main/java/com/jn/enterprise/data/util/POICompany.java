@@ -129,66 +129,68 @@ public class POICompany {
 
     //测试数据
 
-    public static void main(String[] args) {
+//
+//    public static void main(String[] args) {
+//
+//
+//        CompanyTree p = new CompanyTree();
+//        p.setTarget_id("-1");
+//        p.setTarget_name("指标一");
+//        p.setParent_id("0");
+//
+//        CompanyTree companyTree2 = new CompanyTree();
+//        companyTree2.setDATA("dasd;dasdsa;adasd;asd");
+//        companyTree2.setForm_name("填报格式");
+//        companyTree2.setTarget_id("10");
+//        companyTree2.setParent_id("-1");
+//        companyTree2.setSum_val("1000");
+//        companyTree2.setTarget_name("1");
+//        companyTree2.setUnit("dsda");
+//
+//        CompanyTree companyTree1 = new CompanyTree();
+//        companyTree1.setDATA("dasd;dasdsa;adasd;asd");
+//        companyTree1.setTarget_id("10");
+//        companyTree1.setForm_name("填报格式");
+//        companyTree1.setParent_id("-1");
+//        companyTree1.setSum_val("1000");
+//        companyTree1.setTarget_name("11");
+//        companyTree1.setUnit("dsda");
+//
+//        CompanyTree p1 = new CompanyTree();
+//        p1.setTarget_id("-11");
+//        p1.setTarget_name("指标二");
+//        p1.setParent_id("0");
+//
+//        CompanyTree companyTree3 = new CompanyTree();
+//        companyTree3.setDATA("dasd;dasdsa;adasd;asd");
+//        companyTree3.setTarget_id("10");
+//        companyTree3.setForm_name("填报格式");
+//        companyTree3.setParent_id("-11");
+//        companyTree3.setSum_val("1000");
+//        companyTree3.setTarget_name("rwewe");
+//        companyTree3.setUnit("dsda");
+//        CompanyTree companyTree4 = new CompanyTree();
+//        companyTree4.setDATA("dasd;dasdsa;adasd;asd");
+//        companyTree4.setTarget_id("10");
+//        companyTree4.setForm_name("填报格式");
+//        companyTree4.setParent_id("-11");
+//        companyTree4.setSum_val("1000");
+//        companyTree4.setTarget_name("rwewe");
+//        companyTree4.setUnit("dsda");
+//
+//        ArrayList<CompanyTree> objects = new ArrayList<>();
+//        objects.add(p);
+//        objects.add(p1);
+//        objects.add(companyTree1);
+//        objects.add(companyTree2);
+//        objects.add(companyTree3);
+//        objects.add(companyTree4);
+//        String name = "测试";
+//        getTable(objects,name);
+//
+//
+//    }
 
-
-        CompanyTree p = new CompanyTree();
-        p.setTarget_id("-1");
-        p.setTarget_name("指标一");
-        p.setParent_id("0");
-
-        CompanyTree companyTree2 = new CompanyTree();
-        companyTree2.setDATA("dasd;dasdsa;adasd;asd");
-        companyTree2.setForm_name("填报格式");
-        companyTree2.setTarget_id("10");
-        companyTree2.setParent_id("-1");
-        companyTree2.setSum_val("1000");
-        companyTree2.setTarget_name("1");
-        companyTree2.setUnit("dsda");
-
-        CompanyTree companyTree1 = new CompanyTree();
-        companyTree1.setDATA("dasd;dasdsa;adasd;asd");
-        companyTree1.setTarget_id("10");
-        companyTree1.setForm_name("填报格式");
-        companyTree1.setParent_id("-1");
-        companyTree1.setSum_val("1000");
-        companyTree1.setTarget_name("11");
-        companyTree1.setUnit("dsda");
-
-        CompanyTree p1 = new CompanyTree();
-        p1.setTarget_id("-11");
-        p1.setTarget_name("指标二");
-        p1.setParent_id("0");
-
-        CompanyTree companyTree3 = new CompanyTree();
-        companyTree3.setDATA("dasd;dasdsa;adasd;asd");
-        companyTree3.setTarget_id("10");
-        companyTree3.setForm_name("填报格式");
-        companyTree3.setParent_id("-11");
-        companyTree3.setSum_val("1000");
-        companyTree3.setTarget_name("rwewe");
-        companyTree3.setUnit("dsda");
-        CompanyTree companyTree4 = new CompanyTree();
-        companyTree4.setDATA("dasd;dasdsa;adasd;asd");
-        companyTree4.setTarget_id("10");
-        companyTree4.setForm_name("填报格式");
-        companyTree4.setParent_id("-11");
-        companyTree4.setSum_val("1000");
-        companyTree4.setTarget_name("rwewe");
-        companyTree4.setUnit("dsda");
-
-        ArrayList<CompanyTree> objects = new ArrayList<>();
-        objects.add(p);
-        objects.add(p1);
-        objects.add(companyTree1);
-        objects.add(companyTree2);
-        objects.add(companyTree3);
-        objects.add(companyTree4);
-        String name = "测试";
-        getTable(objects,name);
-
-
-    }
 
 
 

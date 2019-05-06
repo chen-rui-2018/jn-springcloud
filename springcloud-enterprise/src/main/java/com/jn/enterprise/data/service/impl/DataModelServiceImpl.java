@@ -289,7 +289,15 @@ public class DataModelServiceImpl implements DataModelService {
             for(TabVO tabVO: tabVOList){
                 tbDataReportingModelTab = new TbDataReportingModelTab();
                 BeanUtils.copyProperties(tabVO,tbDataReportingModelTab);
-                tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
+                if(tabVO.getTabCreateType().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                    //科技园模板单独处理
+                    tbDataReportingModelTab.setTabClumnType(null);
+                    tbDataReportingModelTab.setTabClumnTargetShow("");
+
+                }else{
+                    tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
+                }
+
                 if(StringUtils.isNotBlank(tabVO.getStatus())){
                     tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
                 }else{

@@ -431,7 +431,7 @@ public class DataUploadController  extends BaseController {
 
     @ControllerLog(doAction = "数据上报-园区数据上报-科技园查询表头")
     @GetMapping(path = "/garden/getScientTabHeader")
-    @ApiOperation(value = "科技园模板查询数据接口",notes = "返回数据")
+    @ApiOperation(value = "科技园查询表头",notes = "返回数据")
     @RequiresPermissions("/data/garden/getScientTabHeader")
     @ApiImplicitParams({
             @ApiImplicitParam(name="fillId",value = "任务Id",dataType = "String",paramType = "query",example = "001")

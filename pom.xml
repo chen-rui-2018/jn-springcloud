@@ -139,6 +139,11 @@
 				<artifactId>springcloud-oa-api</artifactId>
 				<version>1.0.0-RELEASE</version>
 			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>xxpay-web-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.apache.commons</groupId>

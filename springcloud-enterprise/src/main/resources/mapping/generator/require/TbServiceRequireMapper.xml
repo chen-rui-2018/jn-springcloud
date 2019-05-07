@@ -6,9 +6,9 @@
     <result column="req_num" jdbcType="VARCHAR" property="reqNum" />
     <result column="business_id" jdbcType="VARCHAR" property="businessId" />
     <result column="business_area" jdbcType="VARCHAR" property="businessArea" />
-    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_id_" jdbcType="VARCHAR" property="productId" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
-    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_id_" jdbcType="VARCHAR" property="orgId" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
     <result column="advisor_name" jdbcType="VARCHAR" property="advisorName" />
@@ -101,7 +101,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, req_num, business_id, business_area, product_id, product_name, org_id, org_name, 
+    id, req_num, business_id, business_area, product_id_, product_name, org_id_, org_name, 
     advisor_account, advisor_name, org_telephone, org_email, req_detail, req_name, req_post, 
     req_phone, req_email, issue_time, issue_account, contract_amount, financing_amount, 
     actual_loan_amount, financing_period_max, financing_period_min, funds_req_desc, expected_date, 
@@ -141,8 +141,8 @@
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.require.entity.TbServiceRequire">
     insert into tb_service_require (id, req_num, business_id, 
-      business_area, product_id, product_name, 
-      org_id, org_name, advisor_account, 
+      business_area, product_id_, product_name, 
+      org_id_, org_name, advisor_account, 
       advisor_name, org_telephone, org_email, 
       req_detail, req_name, req_post, 
       req_phone, req_email, issue_time, 
@@ -185,13 +185,13 @@
         business_area,
       </if>
       <if test="productId != null">
-        product_id,
+        product_id_,
       </if>
       <if test="productName != null">
         product_name,
       </if>
       <if test="orgId != null">
-        org_id,
+        org_id_,
       </if>
       <if test="orgName != null">
         org_name,
@@ -432,13 +432,13 @@
         business_area = #{record.businessArea,jdbcType=VARCHAR},
       </if>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=VARCHAR},
+        product_id_ = #{record.productId,jdbcType=VARCHAR},
       </if>
       <if test="record.productName != null">
         product_name = #{record.productName,jdbcType=VARCHAR},
       </if>
       <if test="record.orgId != null">
-        org_id = #{record.orgId,jdbcType=VARCHAR},
+        org_id_ = #{record.orgId,jdbcType=VARCHAR},
       </if>
       <if test="record.orgName != null">
         org_name = #{record.orgName,jdbcType=VARCHAR},
@@ -547,9 +547,9 @@
       req_num = #{record.reqNum,jdbcType=VARCHAR},
       business_id = #{record.businessId,jdbcType=VARCHAR},
       business_area = #{record.businessArea,jdbcType=VARCHAR},
-      product_id = #{record.productId,jdbcType=VARCHAR},
+      product_id_ = #{record.productId,jdbcType=VARCHAR},
       product_name = #{record.productName,jdbcType=VARCHAR},
-      org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_id_ = #{record.orgId,jdbcType=VARCHAR},
       org_name = #{record.orgName,jdbcType=VARCHAR},
       advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{record.advisorName,jdbcType=VARCHAR},
@@ -599,13 +599,13 @@
         business_area = #{businessArea,jdbcType=VARCHAR},
       </if>
       <if test="productId != null">
-        product_id = #{productId,jdbcType=VARCHAR},
+        product_id_ = #{productId,jdbcType=VARCHAR},
       </if>
       <if test="productName != null">
         product_name = #{productName,jdbcType=VARCHAR},
       </if>
       <if test="orgId != null">
-        org_id = #{orgId,jdbcType=VARCHAR},
+        org_id_ = #{orgId,jdbcType=VARCHAR},
       </if>
       <if test="orgName != null">
         org_name = #{orgName,jdbcType=VARCHAR},
@@ -711,9 +711,9 @@
     set req_num = #{reqNum,jdbcType=VARCHAR},
       business_id = #{businessId,jdbcType=VARCHAR},
       business_area = #{businessArea,jdbcType=VARCHAR},
-      product_id = #{productId,jdbcType=VARCHAR},
+      product_id_ = #{productId,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
-      org_id = #{orgId,jdbcType=VARCHAR},
+      org_id_ = #{orgId,jdbcType=VARCHAR},
       org_name = #{orgName,jdbcType=VARCHAR},
       advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{advisorName,jdbcType=VARCHAR},

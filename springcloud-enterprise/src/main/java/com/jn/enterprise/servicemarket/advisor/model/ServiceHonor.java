@@ -22,10 +22,12 @@ public class ServiceHonor implements Serializable {
     private String certificateName;
     @ApiModelProperty(value = "证书类型")
     private String certificateType;
+    @ApiModelProperty(value = "证书类型名称")
+    private String certificateTypeName;
     @ApiModelProperty(value = "获得时间")
     private String getTime;
     @ApiModelProperty(value = "颁发机构/部门")
-    private String issuing_agency;
+    private String issuingAgency;
     @ApiModelProperty(value = "证书证件")
     private String certificatePhoto;
     @ApiModelProperty(value = "创建时间")
@@ -39,7 +41,13 @@ public class ServiceHonor implements Serializable {
     @ApiModelProperty(value = "记录状态")
     private Byte recordStatus;
 
-    private static final long serialVersionUID = 1L;
+    public String getCertificateTypeName() {
+        return certificateTypeName;
+    }
+
+    public void setCertificateTypeName(String certificateTypeName) {
+        this.certificateTypeName = certificateTypeName;
+    }
 
     public String getId() {
         return id;
@@ -129,12 +137,12 @@ public class ServiceHonor implements Serializable {
         this.recordStatus = recordStatus;
     }
 
-    public String getIssuing_agency() {
-        return issuing_agency;
+    public String getIssuingAgency() {
+        return issuingAgency;
     }
 
-    public void setIssuing_agency(String issuing_agency) {
-        this.issuing_agency = issuing_agency;
+    public void setIssuingAgency(String issuingAgency) {
+        this.issuingAgency = issuingAgency;
     }
 
     @Override
@@ -145,6 +153,7 @@ public class ServiceHonor implements Serializable {
                 ", certificateName='" + certificateName + '\'' +
                 ", certificateType='" + certificateType + '\'' +
                 ", getTime='" + getTime + '\'' +
+                ", issuingAgency='" + issuingAgency + '\'' +
                 ", certificatePhoto='" + certificatePhoto + '\'' +
                 ", createdTime=" + createdTime +
                 ", creatorAccount='" + creatorAccount + '\'' +

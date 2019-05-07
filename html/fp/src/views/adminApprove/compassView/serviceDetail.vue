@@ -1,5 +1,5 @@
 <template>
-  <div class="serviceDetail">
+  <div class="serviceDetail"  v-loading="loading">
     <div class="right_content"><!-- 版心 -->
     <!-- 面包屑 -->
       <div class="approve_breadcrumb">
@@ -23,17 +23,17 @@
       <!-- 我要留言弹窗 -->
       <div class="message">
         <el-dialog title="我要留言" :visible.sync="messageVisible" width="616px" >
-          <el-form :model="messageform" label-position="left" label-width="100px">
-            <el-form-item label="企业名称：" > 
+          <el-form :model="messageform" label-position="left" label-width="100px" :rules="rules" >
+            <el-form-item label="企业名称：" prop="firmName" > 
               <el-input v-model="messageform.firmName" placeholder="请输入内容   默认填入当前企业名称"></el-input>
             </el-form-item>
-            <el-form-item label="联系人：">
+            <el-form-item label="联系人：" prop="linkman">
               <el-input v-model="messageform.linkman" placeholder="请输入内容   默认填入企业联系人姓名"></el-input>
             </el-form-item>
-            <el-form-item label="联系电话：">
-              <el-input v-model="messageform.linkPhone" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
+            <el-form-item label="联系电话：" prop="linkPhone">
+              <el-input v-model.number="messageform.linkPhone" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
             </el-form-item>
-            <el-form-item label="咨询内容：">
+            <el-form-item label="咨询内容："  prop="content">
               <div class="content_textarea">
                 <textarea v-model="messageform.content" :placeholder="contentPlaceholder" maxlength="500" onchange="this.value=this.value.substring(0, 500)" onkeydown="this.value=this.value.substring(0, 500)" onkeyup="this.value=this.value.substring(0, 500)" 
                 @input="counselnum">
@@ -214,6 +214,7 @@
 export default {
   data () {
     return {
+      loading:true,
       isUnfold1:'收起',
       isUnfold2:'收起',
       isUnfold3:'收起',
@@ -234,7 +235,23 @@ export default {
       },
       contentPlaceholder:`1、问题描述\n2、诉求目的`,
       residuenum:500,
-      dealUrl:''
+      dealUrl:'',
+      rules:{
+        firmName:[
+          { required: true, message: '企业名称不能为空'}
+        ],
+        linkman:[
+          { required: true, message: '联系人不能为空'}
+        ],
+        linkPhone:[
+          { required: true, message: '联系电话不能为空'},
+          { type: 'number', message: '年龄必须为数字值'}
+        ],
+        content:[
+          { required: true, message: '内容不能为空'}
+        ],
+       
+      }
     }
   },
   filters: {
@@ -280,6 +297,7 @@ export default {
         callback: function(res) {
           console.log(res);
           if (res.code == "0000") {
+            _this.loading=false
             _this.seviceDetail = res.data;
             _this.word=_this.seviceDetail.dealConditions
           }
@@ -326,6 +344,9 @@ export default {
         .el-form-item__content{
           line-height: 1;
         }
+      }
+      input:focus{
+        border-color:#00a041; 
       }
       .content_textarea{
             // border: 1px solid #DCDFE6;

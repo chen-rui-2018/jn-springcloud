@@ -50,6 +50,8 @@ public class TbSpPowerBusiWithBLOBs extends TbSpPowerBusi implements Serializabl
             && (this.getDealLimitDays() == null ? other.getDealLimitDays() == null : this.getDealLimitDays().equals(other.getDealLimitDays()))
             && (this.getFlowPic() == null ? other.getFlowPic() == null : this.getFlowPic().equals(other.getFlowPic()))
             && (this.getFeeStandard() == null ? other.getFeeStandard() == null : this.getFeeStandard().equals(other.getFeeStandard()))
+            && (this.getIsContactOnline() == null ? other.getIsContactOnline() == null : this.getIsContactOnline().equals(other.getIsContactOnline()))
+            && (this.getContactQqGroup() == null ? other.getContactQqGroup() == null : this.getContactQqGroup().equals(other.getContactQqGroup()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -74,6 +76,8 @@ public class TbSpPowerBusiWithBLOBs extends TbSpPowerBusi implements Serializabl
         result = prime * result + ((getDealLimitDays() == null) ? 0 : getDealLimitDays().hashCode());
         result = prime * result + ((getFlowPic() == null) ? 0 : getFlowPic().hashCode());
         result = prime * result + ((getFeeStandard() == null) ? 0 : getFeeStandard().hashCode());
+        result = prime * result + ((getIsContactOnline() == null) ? 0 : getIsContactOnline().hashCode());
+        result = prime * result + ((getContactQqGroup() == null) ? 0 : getContactQqGroup().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());

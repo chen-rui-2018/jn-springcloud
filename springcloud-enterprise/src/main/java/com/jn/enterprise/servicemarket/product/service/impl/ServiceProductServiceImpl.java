@@ -112,12 +112,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         if (StringUtils.isNotBlank(content.getProductDetails())) {
             TbServiceDetails details = new TbServiceDetails();
             details.setProductId(content.getProductId());
-            try{
-                details.setServiceDetails(content.getProductDetails().getBytes("UTF-8"));
-            }catch(UnsupportedEncodingException e){
-                e.printStackTrace();
-                logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
-            }
+
+                details.setServiceDetails(content.getProductDetails());
+
             tbServiceDetailsMapper.insertSelective(details);
         }
         //保存顾问和服务间关系
@@ -266,12 +263,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             TbServiceDetailsCriteria criteria = new TbServiceDetailsCriteria();
             criteria.createCriteria().andProductIdEqualTo(content.getProductId());
             TbServiceDetails details = new TbServiceDetails();
-            try{
-                details.setServiceDetails(content.getProductDetails().getBytes("UTF-8"));
-            }catch(UnsupportedEncodingException e){
-                e.printStackTrace();
-                logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
-            }
+
+                details.setServiceDetails(content.getProductDetails());
+
             tbServiceDetailsMapper.updateByExample(details,criteria);
         }
     }
@@ -399,6 +393,16 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         // 更新顾问信息
         if(StringUtils.isNotBlank(content.getAdvisorAccount())){
             addAdvisor(content.getAdvisorAccount(),content.getProductId());
+        }
+        //更新详情信息
+        if(StringUtils.isNotBlank(content.getProductDetails())){
+            TbServiceDetails details = new TbServiceDetails();
+            details.setServiceDetails(content.getProductDetails());
+            details.setProductId(content.getProductId());
+            TbServiceDetailsCriteria criteria = new TbServiceDetailsCriteria();
+            criteria.createCriteria().andProductIdEqualTo(content.getProductId());
+            tbServiceDetailsMapper.deleteByExample(criteria);
+            tbServiceDetailsMapper.insertSelective(details);
         }
     }
     @ServiceLog(doAction = "顾问-服务产品列表")

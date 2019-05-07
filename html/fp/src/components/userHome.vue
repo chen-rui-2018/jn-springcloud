@@ -188,17 +188,17 @@ export default {
       this.signature = this.userData.signature;
       this.value11 = [];
       this.value5 = [];
-      for(let it of this.userData.hobbys){
+      for(let it in this.userData.hobbys){
         for(let it1 in this.options){
-          if(it == this.options[it1].tagVaule){
+          if(this.userData.hobbys[it] == this.options[it1].tagVaule){
             this.options[it1].flag = true;
             this.value11.push(this.options[it1].tagId)
           }
         }
       }
-      for(let it of this.userData.jobs){
+      for(let it in this.userData.jobs){
         for(let it1 in this.options1){
-          if(it == this.options1[it1].tagVaule){
+          if(this.userData.jobs[it] == this.options1[it1].tagVaule){
             this.value5.push(this.options1[it1].tagId)
           }
         }

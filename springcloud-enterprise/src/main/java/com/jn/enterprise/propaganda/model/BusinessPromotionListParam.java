@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "BusinessPromotionListParam", description = "企业宣传查询列表入参")
 public class BusinessPromotionListParam extends Page implements Serializable {
-    @ApiModelProperty(value = "宣传类型",example = "xxx123")
+    @ApiModelProperty(value = "宣传类型",example = "business_promotion")
     private String propagandaType;
     @ApiModelProperty(value = "数据状态（0：失效  1：有效  不传查询全部）",example = "1")
     @Pattern(regexp = "^[01]$", message = "{^[01]$:'默认值只允许为0,1'}")

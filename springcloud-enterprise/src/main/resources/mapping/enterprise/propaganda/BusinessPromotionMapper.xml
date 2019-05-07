@@ -16,7 +16,11 @@
           ,sp.poster_url as "posterUrl"
           ,sp.propaganda_fee as "propagandaFee"
           ,sp.status as "status"
+          ,date_format(sp.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+          ,sc.code_name as "propagandaTypeName"
         from tb_propaganda sp
+        left join tb_service_code sc
+        on sp.propaganda_type=sc.code_value
         where 1=1
         <if test="bpp.approvalStatus!=null and bpp.approvalStatus!=''
                   and (bpp.approvalStatus==0 or bpp.approvalStatus==1 or  bpp.approvalStatus==2 or bpp.approvalStatus==3)">
@@ -65,13 +69,17 @@
          end as "issuePlatform"
         ,date_format(sp.effective_date,'%Y/%m/%d')as "effectiveDate"
         ,date_format(sp.invalid_date,'%Y/%m/%d')as "invalidDate"
+        ,sp.propaganda_type as "propagandaType"
         ,sp.propaganda_title as "propagandaTitle"
         ,sp.propaganda_details as "propagandaDetails"
         ,sp.propaganda_area as "propagandaArea"
         ,sp.propaganda_area_url as "propagandaAreaUrl"
         ,sp.poster_url as "posterUrl"
         ,sp.propaganda_fee as "propagandaFee"
+        ,sc.code_name as "propagandaTypeName"
         from tb_propaganda sp
+        left join tb_service_code sc
+        on sp.propaganda_type=sc.code_value
         where 1=1
         and sp.id_=#{propagandaId}
         and sp.record_status=1

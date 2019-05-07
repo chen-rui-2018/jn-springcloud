@@ -1,0 +1,49 @@
+.fs-12 {
+  font-size: 12px;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
+.tc {
+  text-align: center;
+}
+
+.tl {
+  text-align: left;
+}
+
+.tr {
+  text-align: right;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.flex-center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.bg-gray {
+  background-color: #ebebeb;
+}
+
+.mg-v-20 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+/*# sourceMappingURL=r-common.css.map */

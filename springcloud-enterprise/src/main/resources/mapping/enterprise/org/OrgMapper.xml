@@ -16,7 +16,7 @@
         WHERE t.org_id_ = a.org_id_)  AS "attitudeScore" <!-- 评价得分 -->
         ,(SELECT COUNT(1) FROM tb_service_rating t WHERE t.org_id_ = a.org_id_)  AS "evaluationNum"  <!-- 评价次数 -->
         from tb_service_org a left join tb_service_org_info i on a.org_id_ = i.org_id_ LEFT JOIN tb_service_org_trait tr ON a.org_id_ = tr.org_id_
-        where 1=1 and a.record_status != '0' a.org_status = '1'
+        where 1=1 and a.record_status != '0' and  a.org_status = '1'
 
         <if test="businessType != null and businessType.length>0">
             AND a.business_type IN
@@ -70,6 +70,7 @@
     <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.org.vo.OrgDetailVo">
         <id column="s_id" jdbcType="VARCHAR" property="orgId" javaType="java.lang.String"/>
         <result column="s_businessType" jdbcType="VARCHAR" property="businessType" javaType="java.lang.String"/>
+        <result column="s_businessTypeName" jdbcType="VARCHAR" property="businessTypeName" javaType="java.lang.String"/>
         <result column="s_businessSType" jdbcType="VARCHAR" property="businessSType" javaType="java.lang.String"/>
         <result column="s_orgName" jdbcType="VARCHAR" property="orgName" javaType="java.lang.String"/>
         <result column="s_orgBusiness" jdbcType="VARCHAR" property="orgBusiness" javaType="java.lang.String"/>
@@ -142,7 +143,8 @@
     <select id="getServiceOrgDetail" resultMap="queryServiceOrgDetailMap" parameterType="java.lang.String">
         SELECT
           o.org_id_ AS "s_id",
-         (SELECT pre.pre_value FROM tb_service_prefer pre WHERE pre.id = o.business_type )AS "s_businessType",
+          o.business_type AS "s_businessType",
+         (SELECT pre.pre_value FROM tb_service_prefer pre WHERE pre.id = o.business_type )AS "s_businessTypeName",
           o.business_s_type AS "s_businessSType",
           o.org_name AS "s_orgName",
           o.org_business AS "s_orgBusiness",

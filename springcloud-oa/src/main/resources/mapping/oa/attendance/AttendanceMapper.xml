@@ -98,6 +98,8 @@
         and   Date( t.sign_in_attendance_time ) &lt;= #{endTime}
        </if>
 
+       order by t.sign_in_attendance_time desc
+
    </select>
 
 
@@ -153,6 +155,7 @@
         <if test="endTime != null">
             and   Date( t.sign_in_attendance_time ) &lt;= DATE_FORMAT(#{endTime},'%Y-%m-%d')
         </if>
+        order by t.sign_in_attendance_time desc
 
     </select>
 

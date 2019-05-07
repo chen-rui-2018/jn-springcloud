@@ -13,6 +13,8 @@
     <result column="deal_limit_days" jdbcType="TINYINT" property="dealLimitDays" />
     <result column="flow_pic" jdbcType="VARCHAR" property="flowPic" />
     <result column="fee_standard" jdbcType="VARCHAR" property="feeStandard" />
+    <result column="is_contact_online" jdbcType="VARCHAR" property="isContactOnline" />
+    <result column="contact_qq_group" jdbcType="VARCHAR" property="contactQqGroup" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -83,8 +85,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, power_id, power_name, name, deal_time, deal_address, deal_url, link_phone, deal_limit_days, 
-    flow_pic, fee_standard, record_status, creator_account, created_time, modifier_account, 
-    modified_time
+    flow_pic, fee_standard, is_contact_online, contact_qq_group, record_status, creator_account, 
+    created_time, modifier_account, modified_time
   </sql>
   <sql id="Blob_Column_List">
     setting_basis, deal_conditions
@@ -141,17 +143,17 @@
     insert into tb_sp_power_busi (id, power_id, power_name, 
       name, deal_time, deal_address, 
       deal_url, link_phone, deal_limit_days, 
-      flow_pic, fee_standard, record_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time, setting_basis, deal_conditions
-      )
+      flow_pic, fee_standard, is_contact_online, 
+      contact_qq_group, record_status, creator_account, 
+      created_time, modifier_account, modified_time, 
+      setting_basis, deal_conditions)
     values (#{id,jdbcType=VARCHAR}, #{powerId,jdbcType=VARCHAR}, #{powerName,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{dealTime,jdbcType=VARCHAR}, #{dealAddress,jdbcType=VARCHAR}, 
       #{dealUrl,jdbcType=VARCHAR}, #{linkPhone,jdbcType=VARCHAR}, #{dealLimitDays,jdbcType=TINYINT}, 
-      #{flowPic,jdbcType=VARCHAR}, #{feeStandard,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{settingBasis,jdbcType=LONGVARCHAR}, #{dealConditions,jdbcType=LONGVARCHAR}
-      )
+      #{flowPic,jdbcType=VARCHAR}, #{feeStandard,jdbcType=VARCHAR}, #{isContactOnline,jdbcType=VARCHAR}, 
+      #{contactQqGroup,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{settingBasis,jdbcType=LONGVARCHAR}, #{dealConditions,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.sp.entity.TbSpPowerBusiWithBLOBs">
     insert into tb_sp_power_busi
@@ -188,6 +190,12 @@
       </if>
       <if test="feeStandard != null">
         fee_standard,
+      </if>
+      <if test="isContactOnline != null">
+        is_contact_online,
+      </if>
+      <if test="contactQqGroup != null">
+        contact_qq_group,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -244,6 +252,12 @@
       </if>
       <if test="feeStandard != null">
         #{feeStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="isContactOnline != null">
+        #{isContactOnline,jdbcType=VARCHAR},
+      </if>
+      <if test="contactQqGroup != null">
+        #{contactQqGroup,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
@@ -310,6 +324,12 @@
       <if test="record.feeStandard != null">
         fee_standard = #{record.feeStandard,jdbcType=VARCHAR},
       </if>
+      <if test="record.isContactOnline != null">
+        is_contact_online = #{record.isContactOnline,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactQqGroup != null">
+        contact_qq_group = #{record.contactQqGroup,jdbcType=VARCHAR},
+      </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
@@ -349,6 +369,8 @@
       deal_limit_days = #{record.dealLimitDays,jdbcType=TINYINT},
       flow_pic = #{record.flowPic,jdbcType=VARCHAR},
       fee_standard = #{record.feeStandard,jdbcType=VARCHAR},
+      is_contact_online = #{record.isContactOnline,jdbcType=VARCHAR},
+      contact_qq_group = #{record.contactQqGroup,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -373,6 +395,8 @@
       deal_limit_days = #{record.dealLimitDays,jdbcType=TINYINT},
       flow_pic = #{record.flowPic,jdbcType=VARCHAR},
       fee_standard = #{record.feeStandard,jdbcType=VARCHAR},
+      is_contact_online = #{record.isContactOnline,jdbcType=VARCHAR},
+      contact_qq_group = #{record.contactQqGroup,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -415,6 +439,12 @@
       <if test="feeStandard != null">
         fee_standard = #{feeStandard,jdbcType=VARCHAR},
       </if>
+      <if test="isContactOnline != null">
+        is_contact_online = #{isContactOnline,jdbcType=VARCHAR},
+      </if>
+      <if test="contactQqGroup != null">
+        contact_qq_group = #{contactQqGroup,jdbcType=VARCHAR},
+      </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
@@ -451,6 +481,8 @@
       deal_limit_days = #{dealLimitDays,jdbcType=TINYINT},
       flow_pic = #{flowPic,jdbcType=VARCHAR},
       fee_standard = #{feeStandard,jdbcType=VARCHAR},
+      is_contact_online = #{isContactOnline,jdbcType=VARCHAR},
+      contact_qq_group = #{contactQqGroup,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -472,6 +504,8 @@
       deal_limit_days = #{dealLimitDays,jdbcType=TINYINT},
       flow_pic = #{flowPic,jdbcType=VARCHAR},
       fee_standard = #{feeStandard,jdbcType=VARCHAR},
+      is_contact_online = #{isContactOnline,jdbcType=VARCHAR},
+      contact_qq_group = #{contactQqGroup,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

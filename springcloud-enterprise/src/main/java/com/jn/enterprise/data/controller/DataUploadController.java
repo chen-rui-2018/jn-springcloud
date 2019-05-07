@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -160,7 +161,9 @@ public class DataUploadController  extends BaseController {
             @ApiImplicitParam(name="fillId",value = "填报Id",dataType = "String",paramType = "query",example = "001")
     })
     public Result<Integer> setStatisticsListUrgeCompany(String taskBatch,String fillId){
-        return new Result();
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        Integer num = uploadService.setStatisticsListUrgeCompany(taskBatch,fillId,user);
+        return new Result(num);
     }
 
     @ControllerLog(doAction = "数据上报-企业数据上报统计-数据列表修改截至日期")
@@ -401,6 +404,36 @@ public class DataUploadController  extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "数据上报-园区数据上报-科技园导入接口")
+    @GetMapping(path = "/garden/importData")
+    @ApiOperation(value = "科技园导入接口",notes = "返回excel文件")
+    @RequiresPermissions("/data/garden/importData")
+    public Result importData(ModelDataVO dataVO, MultipartFile file){
+        Integer result = uploadService.importData(file,dataVO);
+        return new Result(result);
+    }
 
+
+    @ControllerLog(doAction = "数据上报-园区数据上报-科技园数据查询接口")
+    @PostMapping(path = "/garden/getImportData")
+    @ApiOperation(value = "科技园模板查询数据接口",notes = "返回数据")
+    @RequiresPermissions("/data/garden/getImportData")
+    public Result<PaginationData<Map<String,List<ScientModel>>>> getImportData(@RequestBody ScientLookupParamModel paramModel){
+        PaginationData<Map<String,List<ScientModel>>> result = uploadService.getImportData(paramModel);
+        return new Result(result);
+    }
+
+    @ControllerLog(doAction = "数据上报-园区数据上报-科技园查询表头")
+    @GetMapping(path = "/garden/getScientTabHeader")
+    @ApiOperation(value = "科技园模板查询数据接口",notes = "返回数据")
+    @RequiresPermissions("/data/garden/getScientTabHeader")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="fillId",value = "任务Id",dataType = "String",paramType = "query",example = "001")
+
+    })
+    public Result<Map<String,Object>> getScientTabHeader(String fillId){
+        Map<String,Object> result = uploadService.getScientTabHeader(fillId);
+        return new Result(result);
+    }
 
 }

@@ -24,7 +24,13 @@ public enum DataUploadExceptionEnum implements CodeAndMsg {
     VALUE_NOT_EXIST("5030209","填报值不存在"),
     VALUE_IS_NUMBER("5030210","填报值需要数值类型"),
     TASK_IS_ERROR("5030211","任务信息错误"),
-    INPUT_IS_ERROR("5030212","填报信息错误")
+    INPUT_IS_ERROR("5030212","填报信息错误"),
+    EXCEL_NO_DATA("5030213","excel文件没有数据"),
+    EXCEL_TARGET_ISNOT_EXIST("5030214","该指标不存在填报格式"),
+    NO_TARGET_LIKE_IN_EXCEL("5030215","Excel文件中，包含了一个模板中没有维护的指标"),
+    NO_TAXI_PERSON_TARGET("5030216","EXCEL文件中没有纳税人名称列"),
+    NO_TAXI_TARGET("5030217","科技园模板中没有维护缴纳税收总额指标")
+
     ;
     private String  code;
 

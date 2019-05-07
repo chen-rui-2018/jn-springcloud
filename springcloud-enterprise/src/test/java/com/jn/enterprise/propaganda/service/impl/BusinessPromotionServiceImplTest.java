@@ -71,15 +71,15 @@ public class BusinessPromotionServiceImplTest {
     @Before
     public void setUp() throws Exception {
         //企业宣传列表查询
-        bpp.setApprovalStatus("0");
+        bpp.setApprovalStatus("");
         bpp.setSearchContent("");
         bpp.setPropagandaType("");
         bpp.setNeedPage("1");
 
-        loginAccount="wangsong";
+        loginAccount="18073856620";
 
         //企业宣传详情
-        propagandaId="6307c8ad2117451fb49b1b8e7e370b6c";
+        propagandaId="ab6338bf0ca446deb00a8fcf760bcf27";
 
         //发布宣传
         /*bpdp.setIssuePlatform("2");
@@ -94,43 +94,43 @@ public class BusinessPromotionServiceImplTest {
         bpdp.setProFeeRuleCode("business_promotion");
         bpdp.setPropagandaFee("100");*/
 
-        /*bpdp.setIssuePlatform("1");
+        bpdp.setIssuePlatform("1");
         bpdp.setPropagandaType("investment_promotion");
         bpdp.setEffectiveDate("2019-04-23");
-        bpdp.setInvalidDate("2019-05-25");
+        bpdp.setPropagandaTime("3");
         bpdp.setPropagandaTitle("招商宣传测试");
         bpdp.setPropagandaDetails("宣传详情是招商测试");
-        bpdp.setPropagandaArea("bottom");
+        bpdp.setPropagandaArea("top");
         bpdp.setPropagandaAreaUrl("123/bottom.jpg");
         bpdp.setPosterUrl("zhaoshang.jpg");
         bpdp.setProFeeRuleCode("investment_promotion");
-        bpdp.setPropagandaFee("178.66");*/
+        bpdp.setPropagandaFee("635.98");
 
-        bpdp.setIssuePlatform("1");
+        /*bpdp.setIssuePlatform("1");
         bpdp.setPropagandaType("app_start_promotion");
         bpdp.setEffectiveDate("2019-04-27");
-        bpdp.setInvalidDate("2019-05-28");
+        bpdp.setPropagandaTime("3");
         bpdp.setPropagandaTitle("App启动宣传测试");
         bpdp.setPropagandaDetails("宣传详情是APP启动测试");
         bpdp.setPropagandaArea("central");
         bpdp.setPropagandaAreaUrl("1253/central.jpg");
         bpdp.setPosterUrl("qidong.jpg");
         bpdp.setProFeeRuleCode("app_start_promotion");
-        bpdp.setPropagandaFee("168.88");
+        bpdp.setPropagandaFee("556.64");*/
 
         //修改企业宣传
         businessParam.setId(propagandaId);
         businessParam.setIssuePlatform("2");
         businessParam.setPropagandaType("home_promotion");
-        businessParam.setEffectiveDate("2019-04-24");
-        businessParam.setInvalidDate("2019-05-30");
+        businessParam.setEffectiveDate("2019-04-29");
+        businessParam.setPropagandaTime("3");
         businessParam.setPropagandaTitle("首页宣传测试");
         businessParam.setPropagandaDetails("宣传详情是首页宣传");
         businessParam.setPropagandaArea("bottom");
         businessParam.setPropagandaAreaUrl("12323/bottom.jpg");
         businessParam.setPosterUrl("shouye.jpg");
         businessParam.setProFeeRuleCode("home_promotion");
-        businessParam.setPropagandaFee("200");
+        businessParam.setPropagandaFee("600");
 
         //修改审批状态
         status="0";
@@ -189,7 +189,8 @@ public class BusinessPromotionServiceImplTest {
                             Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR.getCode()),
                             Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR.getCode()),
                             Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_NOT_EXIST.getCode()),
-                            Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_IS_EXIST.getCode())
+                            Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_IS_EXIST.getCode()),
+                            Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_NOT_RIGHT.getCode())
                     )
             );
         }
@@ -283,7 +284,8 @@ public class BusinessPromotionServiceImplTest {
                             Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR.getCode()),
                             Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR.getCode()),
                             Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_NOT_EXIST.getCode()),
-                            Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_IS_EXIST.getCode())
+                            Matchers.containsString(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_TYPE_IS_EXIST.getCode()),
+                            Matchers.containsString(BusinessPromotionExceptionEnum.PROMOTION_FEE_NOT_RIGHT.getCode())
                     )
             );
         }

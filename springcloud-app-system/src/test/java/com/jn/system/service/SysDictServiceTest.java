@@ -5,7 +5,7 @@ import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dict.entity.TbSysDict;
 import com.jn.system.dict.model.SysDictEdit;
 import com.jn.system.model.SysDictInvoke;
-import com.jn.system.dict.model.SysDictKeyValue;
+import com.jn.system.vo.SysDictKeyValue;
 import com.jn.system.dict.model.SysDictPage;
 import com.jn.system.dict.service.SysDictService;
 import com.jn.system.model.User;

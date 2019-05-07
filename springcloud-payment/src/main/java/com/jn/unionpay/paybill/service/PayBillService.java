@@ -31,7 +31,7 @@ public interface PayBillService {
     List<PaymentBill> getPaymentBillListByIds(String[] billIds);
 
     /**
-     * 创建缴费账单
+     * 创建缴费账单,返回账单ID
      * @param paymentBillModel
      * @return 返回账单ID
      */
@@ -88,6 +88,13 @@ public interface PayBillService {
      * @return
      */
     PayOrderVO getPayOrderDetail(String orderId);
+
+    /**
+     * 通过账单号取消账单及生成的订单
+     * @param payBillCancelParam
+     * @return
+     */
+    Boolean cancelPayBillByBillNum(PayBillCancelParam payBillCancelParam);
 
 
 }

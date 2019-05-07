@@ -3,11 +3,14 @@ package com.jn.authorization.controller;
 import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.UserLogin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController extends BaseController {
 
+    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+
     @Autowired
     private LoginService loginService;
 
@@ -42,6 +47,22 @@ public class LoginController extends BaseController {
     @RequestMapping(value = "/logoutJSON")
     public Result logoutJSON() {
         loginService.logoutJSON();
+        return new Result();
+    }
+
+    @ControllerLog(doAction = "authLogin")
+    @ApiOperation(value = "authLogin", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/authLogin")
+    public Result authLogin() {
+        String account = com.lc.ibps.auth.client.context.Context.getUsername();
+        logger.info("用户：{}，进行authLogin获取token",account);
+        if (StringUtils.isNotBlank(account)) {
+            UserLogin userLogin = new UserLogin();
+            userLogin.setAccount(account);
+            userLogin.setPassword("");
+            loginService.login(userLogin, Boolean.TRUE);
+            return new Result(SecurityUtils.getSubject().getSession().getId());
+        }
         return new Result();
     }
 

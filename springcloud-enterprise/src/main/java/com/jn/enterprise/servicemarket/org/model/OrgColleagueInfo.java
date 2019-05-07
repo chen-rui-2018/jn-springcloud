@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.org.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -13,7 +12,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "OrgColleagueInfo", description = "机构同事列表展示")
-public class OrgColleagueInfo extends Page implements Serializable {
+public class OrgColleagueInfo implements Serializable {
     @ApiModelProperty(value = "账号")
     private String account;
     @ApiModelProperty(value = "联系手机")

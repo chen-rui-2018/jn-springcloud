@@ -6,13 +6,11 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
-import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.service.SysDepartmentService;
-import com.jn.system.dict.model.SysDictKeyValue;
 import com.jn.system.dict.service.SysDictService;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
@@ -24,6 +22,7 @@ import com.jn.system.permission.service.SysRoleService;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserAdd;
 import com.jn.system.user.service.SysUserService;
+import com.jn.system.vo.SysDictKeyValue;
 import com.jn.system.vo.SysUserRoleVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
@@ -239,7 +238,7 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Override
     @ControllerLog(doAction = "调用数据字典")
-    public Result getDict(@RequestBody SysDictInvoke sysDictInvoke) {
+    public Result<List<SysDictKeyValue>> getDict(@RequestBody SysDictInvoke sysDictInvoke) {
         List<SysDictKeyValue> dictList = sysDictService.getDict(sysDictInvoke);
         return new Result(dictList);
     }

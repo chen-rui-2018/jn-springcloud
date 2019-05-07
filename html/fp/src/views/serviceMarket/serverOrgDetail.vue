@@ -262,13 +262,13 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')">
+          <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')" v-if="serverPro.length>0">
             <a href="javascript:;" data="%">全部({{serverPro[0].serviceTotal}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag1=='0'}" @click="screenPro('0')">
+          <li class="list-item " :class="{'active':flag1=='0'}" @click="screenPro('0')" v-if="serverPro.length>0">
             <a href="javascript:;" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag1=='1'}" @click="screenPro('1')">
+          <li class="list-item " :class="{'active':flag1=='1'}" @click="screenPro('1')" v-if="serverPro.length>0">
             <a href="javascript:;" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
           </li>
         </ul>
@@ -310,7 +310,7 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag4==''}" @click="screenActi('0')">
+          <li class="list-item current" :class="{'active':flag4=='0'}" @click="screenActi('0')">
             <a href="javascript:;">全部({{serverActiList[0].actiNum}})</a>
           </li>
           <li class="list-item " :class="{'active':flag4=='1'}" @click="screenActi('1')">
@@ -323,7 +323,7 @@
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleSerpro">
         <el-tab-pane name="serverPro" >
-          <span slot="label">服务产品({{total1}})</span>
+          <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
           <div class="serverPro">
             <ul class="list-imgleft">
               <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>
@@ -361,7 +361,9 @@
                     <!-- 评价 begin -->
                     <div class="detail-evaluate inner-product">
                       <div class="score">
-                        <el-rate v-model="i.evaluationScore" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                        <!-- <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                      </el-rate> -->
+                        <el-rate v-model="i.evaluationScore" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
                       </el-rate>
                         <span class="c_default b">{{i.evaluationNumber}}</span>
                         <span>条评价</span>
@@ -375,7 +377,7 @@
                     <div class="detail-count">
                       <!-- <span>累计
                         <span class="c_default ml5 mr5">40</span>笔交易</span> -->
-                      <div class="orgBtn fr mainColor">提需求</div>
+                      <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
                     </div>
                     <!-- 交易量 end -->
                   </div>
@@ -432,7 +434,7 @@
                     <!-- 评价 begin -->
                     <div class="detail-evaluate inner-consultant">
                       <div class="score">
-                        <el-rate v-model="i.evaluationScore" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                        <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                       </el-rate>
                         <span class="c_default b">{{i.evaluationNum}}</span>
                         <span>条评价</span>
@@ -464,7 +466,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="serEvaluation" >
-          <span slot="label">服务评价({{total4}})</span>
+          <span slot="label">服务评价({{evaCount.evaluationTotal}})</span>
           <div class="serEvaluation">
             <ul class="list-imgleft">
               <li class="list-item pr" v-for="(i,k) in serviceRatingList" :key='k'>
@@ -505,7 +507,7 @@
                       <div class="score">
                         <!-- <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                         </el-rate> -->
-                        <el-rate v-model="i.evaluationScore" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                        <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                       </el-rate>
                         <span class="c_default b">1</span>
                         <span>条评价</span>
@@ -573,13 +575,26 @@
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row3" layout="total, sizes, prev, pager, next, jumper" :total="total3">
+              <el-pagination background @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage1" :page-sizes="[8, 12, 16, 20]" :page-size="row3" layout="total, sizes, prev, pager, next, jumper" :total="total3">
               </el-pagination>
             </div>
           </div>
         </el-tab-pane>
       </el-tabs>
     </div>
+     <!-- 提需求弹框 -->
+      <template v-if="serverOrgVisible">
+            <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh">
+                <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+                    <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+                        <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+                    </el-form-item>
+                </el-form>
+                <div class="demandLine"></div>
+                <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+                <div class="demandDia" @click="demandDia()">提交需求</div>
+            </el-dialog>
+      </template>
   </div>
 </template>
 <script>
@@ -590,6 +605,12 @@ export default {
       activeName: "baseInfo",
       activeName1: "serverPro",
       serverOrgDetailList: {},
+      serverOrgVisible:false,
+      serverProform: {
+        requireDetail: "",
+        productId: "",
+        productName: ""
+      },
       flag1:"",
       flag2:"",
       flag3:"",
@@ -608,7 +629,7 @@ export default {
       page2: 1,
       total2: 0,
       serverActiList: [],
-      row3: 5,
+      row3: 8,
       page3: 1,
       total3: 0,
       serviceRatingList: [],
@@ -630,6 +651,31 @@ export default {
     this.getEvaluationCountInfo()
   },
   methods: {
+     demandRaise(i) { //提需求
+      this.serverOrgVisible = true;
+      this.serverProform.requireDetail = "";
+      this.serverProform.productId = i.productId;
+      this.serverProform.productName = i.productName;
+    },
+     demandDia() {
+      let _this = this;
+      this.api.post({
+        url: "userDemand",
+        data: {
+          productId: _this.serverProform.productId,
+          productName: _this.serverProform.productName,
+          requireDetail: _this.serverProform.requireDetail
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.$message.success("提交需求成功");
+            _this.serverOrgVisible = false;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
      screenPro(i){ //服务产品筛选
         this.productType=i,
         this.flag1=i,
@@ -655,28 +701,27 @@ export default {
         this.selActiList()
     },
     handleSerpro(tab, event) {
-      console.log(tab.label)
       if(tab.name=='serConsultant'){
-         this.getServiceConList()
+        //  this.getServiceConList()
          this.showFlag2=true
          this.showFlag1=false
          this.showFlag3=false
          this.showFlag4=false
       } else if(tab.name=='serEvaluation'){
-        this.getServiceRatingInfo()
-        this.getEvaluationCountInfo()
+        // this.getServiceRatingInfo()
+        // this.getEvaluationCountInfo()
          this.showFlag2=false
          this.showFlag1=false
          this.showFlag3=true
          this.showFlag4=false
       } else if(tab.name=='actiConsultation'){
-        this.selActiList()
+        // this.selActiList()
         this.showFlag2=false
          this.showFlag1=false
          this.showFlag3=false
          this.showFlag4=true
       } else{
-        this.findOrgCountProductList()
+        // this.findOrgCountProductList()
          this.showFlag2=false
          this.showFlag1=true
          this.showFlag3=false
@@ -742,8 +787,8 @@ export default {
       this.api.get({
         url: "getEvaluationCountInfo",
         data: {
-          // orgId: _this.$route.query.orgId,
-          orgId: "1001211",
+          orgId: _this.$route.query.orgId,
+          // orgId: "1001211",
           needPage: 1,
           isPublicPage: 0,
           page: _this.page4,
@@ -751,7 +796,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.evaCount = res.data;
           } else {
             _this.$message.error(res.result);
@@ -768,11 +812,10 @@ export default {
           // actiType: "org_activity",
           page: _this.page3,
           rows: _this.row3,
-          timeInterval:'1',
+          timeInterval:'0',
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serverActiList = res.data.rows;
             _this.total3 = res.data.total;
           } else {
@@ -787,8 +830,8 @@ export default {
       this.api.get({
         url: "getServiceRatingInfo",
         data: {
-          // orgId: _this.$route.query.orgId,
-          orgId: "1001211",
+          orgId: _this.$route.query.orgId,
+          // orgId: "1001211",
           needPage: 1,
           isPublicPage: 0,
           page: _this.page4,
@@ -797,7 +840,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serviceRatingList = res.data.rows;
             _this.total4 = res.data.total;
           } else {
@@ -812,15 +854,14 @@ export default {
       this.api.get({
         url: "getServiceConList",
         data: {
-          // orgId: _this.$route.query.orgId,
-          orgId: "1001211",
+          orgId: _this.$route.query.orgId,
+          // orgId: "1001211",
           page: _this.page2,
           rows: _this.row2,
           sortTypes:_this.sortTypes,
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serviceConsultant = res.data.rows;
             _this.total2 = res.data.total;
           } else {
@@ -842,7 +883,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
           } else {
@@ -860,7 +900,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serverOrgDetailList = res.data;
           } else {
             _this.$message.error(res.result);
@@ -880,6 +919,37 @@ export default {
     .pagination-container {
       margin-top: 30px;
     }
+  }
+  .el-textarea__inner:focus {
+    outline: 0;
+    border-color: #00a041;
+}
+  .serverTip {
+    display: inline-block;
+    font-size: 12px;
+  }
+  .demandDia {
+    display: inline-block;
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+    margin-left: 20px;
+    font-size: 12px;
+  }
+  .demandLine {
+    height: 1px;
+    width: 530px;
+    position: relative;
+    left: -20px;
+    background: #eee;
+    margin-bottom: 20px;
+    margin-top: 10px;
   }
 }
 </style>

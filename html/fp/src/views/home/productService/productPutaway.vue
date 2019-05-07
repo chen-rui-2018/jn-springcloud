@@ -1,8 +1,8 @@
 <template>
-  <div class="productPutaway">
+  <div class="productPutaway"  >
     <div class="putaway_title">
       <div>常规产品上架</div>
-      <div @click="this.$router.back(-1)">返回列表</div>
+      <div @click="$router.go(-1)">返回列表</div>
     </div>
     <div class="putaway_main">
       <div class="putaway_form" v-if="territory===1">
@@ -58,90 +58,89 @@
         <el-form label-position="right" label-width="150px" >
           <div :model="productDetail" class="">
             <el-form-item label="业务领域：">
-              <span></span>
+              <span>{{productDetail.signoryName}} </span>
             </el-form-item>
           </div>
            <div>
             <el-form-item label="产品名称：">
-              <el-select v-model="productName" placeholder="请选择产品名称" clearable>
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+              <el-select v-model="templateId" placeholder="请选择产品名称" clearable @change="changeProname">
+                <el-option :label="proitem.productName" :value="proitem.productId" v-for="(proitem,proindex) in productNameList" :key="proindex"></el-option>
               </el-select>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="产品编号：">
-              <span>55</span>
+              <span>{{productDetail.serialNumber}}</span>
             </el-form-item>
           </div>
          <div :model="productDetail" class="">
             <el-form-item label="参考利率范围：">
-              <span>55</span>
+              <span>{{productDetail.refRateMin}}-{{productDetail.refRateMax}} </span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否网贷直联：">
-              <span>55</span>
+              <span>{{productDetail.isOnlineLoan}} </span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否政策性产品：">
-              <span>55</span>
+              <span>{{productDetail.isPolicyPro}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* 是否通用产品：">
-              <span>55</span>
+            <el-form-item label="是否通用产品：">
+              <span>{{productDetail.isGeneralPro}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* 是否人民币：">
-              <span>55</span>
+            <el-form-item label="是否人民币：">
+              <span>{{productDetail.isRmb}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* 贷款类别：">
-              <span>55</span>
+            <el-form-item label="贷款类别：">
+              <span>{{productDetail.loanCategoryName}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* * 贷款期限：">
-              <span>55</span>
+            <el-form-item label="贷款期限：">
+              <span>{{productDetail.loanTermMin}}-{{productDetail.loanTermMax}} </span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* 担保方式：">
-              <span>55</span>
+            <el-form-item label="担保方式：">
+              <span>{{productDetail.assureMethodName}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否政策性产品：">
-              <span>55</span>
+              <span>{{productDetail.isPolicyPro}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="产品图片：">
-              <img src="@/assets/image/test2.png" alt="">
+              <img :src="productDetail.pictureUrl" alt="">
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="产品特点：">
-              <span>848</span>
+              <span>{{productDetail.productFeature}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="申请条件：">
-              <div>机构接受企业委托，对其核算的研发项目研究开发费用归集明细表进行鉴证，就其研发费用的发生和能否 税前加计扣除进行鉴证，并出具专项鉴证报告</div>
+              <div>{{productDetail.applyCondition}}</div>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="提交材料：">
-              <span>848</span>
+              <span>{{productDetail.submitMaterial}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="产品特点：">
-              <span>848</span>
+              <span>{{productDetail.productFeature}}</span>
             </el-form-item>
           </div>
         </el-form>
@@ -155,10 +154,11 @@
 export default {
   data () {
     return {
+      // loading:true,
       productDetail:{},//产品详情
       counselorList:[],//服务顾问列表
       productName:'',//产品名称
-      territory:1,
+      territory:'',
       productNameList:[],//产品名称列表
       advisorAccount:'',
       orgId:'',
@@ -167,13 +167,28 @@ export default {
     }
   },
   mounted () {
-    this.orgId=this.$route.query.orgid
-    this.getShelfProductList()
-    this.getServiceConsultantList()
-    // this.getProductDetails()
+    this.territory=this.$route.query.territory
+    this.templateId=this.$route.query.productId
+    if(this.territory===0){
+      this.orgId='285bfb89580a422ea927200f5d7accc4'
+     /*  if(this.templateId){
+        this.getProductDetails()
+      }elses{} */
+      // this.$nextTick(()=>{
+        this.getShelfProductList()
+      // })
+    }else if(this.territory===1){
+      this.orgId=this.$route.query.orgid
+      this.$nextTick(()=>{
+        this.getShelfProductList()
+        this.getServiceConsultantList()
+        this.getProductDetails()
+      })
+    }
   },
+  //territory为0是科技金融，为1是非科技金融
   methods: {
-    //获取产品名称列表
+    // 获取产品名称列表公用
     getShelfProductList(){
       let _this = this;
       this.api.get({
@@ -181,17 +196,25 @@ export default {
       data: {orgId:this.orgId},
       callback: function(res) {
         if (res.code == "0000") {
+          // console.log(res)
+          if(res.data.length!=0){
             _this.productNameList= res.data
             _this.templateId=res.data[0].productId
-            _this.$nextTick(()=>{
-            _this.getProductDetails()
-            })
+            if(_this.territory===0){
+              //调用科技金融接口
+                _this.getFinancialProductDetails()
+              }else if(_this.territory===1){
+                _this.$nextTick(()=>{
+                _this.getProductDetails()
+                })
+              }
+            }
           }
         }
       })
       
     },
-  // 获取服务顾问列表
+    // 获取服务顾问列表（非科技金融）
     getServiceConsultantList(){
       let _this = this;
       this.api.get({
@@ -204,7 +227,7 @@ export default {
         }
       })
     },
-    // 获取服务产品详情、
+    // 获取服务产品详情（非科技金融）
     getProductDetails(){
       let _this = this;
       this.api.get({
@@ -218,38 +241,77 @@ export default {
         }
       })
     },
+    // 获取服务产品详情（科技金融）
+    getFinancialProductDetails(){
+      let _this = this;
+      this.api.get({
+      url: "getFinancialProductDetails",
+      data: {productId:this.templateId},
+      callback: function(res) {
+        if (res.code == "0000") {
+          // console.log(res)
+          _this.productDetail= res.data
+          }
+        }
+      })
+    },
     //改变产品名称
     changeProname(val){
-      if(this.templateId===null){
+      if(this.templateId===''){
         this.productDetail={}
       }else{
-        this.getProductDetails()
+        if(this.territory===0){
+          //调用科技金融接口
+          this.getFinancialProductDetails()
+        }else if(this.territory===1){
+          this.getProductDetails()
+        }
       }
     },
     //上架
     submit(){
-      let _this = this
-      _this.templateId.toString()
-      this.api.post({
-      url: "upShelfCommonService",
-      data: {
-        advisorAccount:this.advisorAccount.toString(),
-        orgId:this.orgId,
-        templateId:this.templateId
-      },
-      callback: function(res) {
-        if (res.code == "0000") {
-            _this.$message.success("上架成功")
-            _this.$router.back(-1)
+      if(this.territory===0){
+        let _this = this
+        this.api.post({
+        url: "upShelfCommonProduct",
+        data: {
+          orgId:this.orgId,
+          templateId:this.templateId
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+              _this.$message.success("上架成功")
+              _this.$router.back(-1)
+            }
           }
-        }
-      })
+        })
+      }else if(this.territory===1){
+        let _this = this
+        _this.templateId.toString()
+        this.api.post({
+        url: "upShelfCommonService",
+        data: {
+          advisorAccount:this.advisorAccount.toString(),
+          orgId:this.orgId,
+          templateId:this.templateId
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+              _this.$message.success("上架成功")
+              _this.$router.back(-1)
+            }
+          }
+        })
+      }
     }
   
   }
 }
 </script>
 <style lang="scss">
+    .el-select-dropdown__item.selected{
+      color:#00a041;
+    }
   .productPutaway{
     width: 100%;
     // 大标题
@@ -299,6 +361,9 @@ export default {
         }
         .el-form-item{
           margin-bottom: 14px;
+        }
+        input:focus{
+          border-color:#00a041;
         }
       }
       .submit{

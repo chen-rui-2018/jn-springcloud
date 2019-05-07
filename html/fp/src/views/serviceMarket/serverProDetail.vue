@@ -10,7 +10,7 @@
             <el-card>
                 <div class="agent1 clearfix">
                     <div class="agentTil fl">{{proDelInfo.productName}}</div>
-                    <div class="orgBtn fr mainColor">提需求</div>
+                    <div class="orgBtn fr mainColor" @click="demandRaise('')">提需求</div>
                 </div>
                 <div class="agent2 clearfix color2">
                     <div class="agentImg mainBorder fl">
@@ -100,7 +100,7 @@
             </div>
             <el-tabs v-model="activeName1" @tab-click="handleClick">
                 <el-tab-pane name="samePro">
-                    <span slot="label">同类产品()</span>
+                    <span slot="label">同类产品({{total1}})</span>
                     <div class="serverPro">
                         <ul class="list-imgleft">
                             <li class="list-item pr" v-for="(i,k) in sameTypeProList" :key='k'>
@@ -139,7 +139,7 @@
                                         <!-- 评价 begin -->
                                         <div class="detail-evaluate inner-product">
                                             <div class="score">
-                                                <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
+                                                <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                                                 </el-rate>
                                                 <span class="c_default b">{{i.evaluationNumber}}</span>
                                                 <span>条评价</span>
@@ -165,7 +165,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane name="relateEva">
-                    <span slot="label">相关评价()</span>
+                    <span slot="label">相关评价({{total4}})</span>
                     <div class="serEvaluation">
                         <ul class="list-imgleft">
                             <li class="list-item pr" v-for="(i,k) in serviceRatingList" :key='k'>
@@ -204,7 +204,7 @@
                                         <!-- 评价 begin -->
                                         <div class="detail-evaluate inner-product">
                                             <div class="score">
-                                                <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
+                                                <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                                                 </el-rate>
                                                 <span class="c_default b">1</span>
                                                 <span>条评价</span>
@@ -227,48 +227,6 @@
                                 </div>
                                 <!-- 中间信息 end -->
                                 <div class="clear"></div>
-                            </li>
-                            <li class="list-item pr">
-                                <div class="list-item-date"></div>
-                                <div class="list-imgleft-container product nopic">
-                                    <img src="" alt="">
-                                </div>
-                                <div class="list-info-middle inner-product">
-                                    <div class="list-info-top-title">
-                                        <div class="info-top">
-                                            <div class="top-title inner-product">
-                                                <span>1111</span>
-                                                <div class="clear"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="list-info-bottom-detail clearfix">
-                                        <div class="detail-contact inner-product">
-                                            <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务顾问：</div>
-                                            <span class="evaluate-container">
-                                                <span class="arrow-container">333</span>
-                                            </span>
-                                        </div>
-                                        <div class="detail-evaluate inner-product">
-                                            <div class="score">
-                                                <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
-                                                </el-rate>
-                                                <span class="c_default b">1</span>
-                                                <span>条评价</span>
-                                            </div>
-                                            <div class="links mt5">
-                                                分
-                                            </div>
-                                        </div>
-                                        <div class="detail-count" clearfix>
-                                            <div class="list-item-info fr">
-                                                <p>账号</p>
-                                                <p>时间</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class="clear"></div> -->
                             </li>
                         </ul>
                         <div class="pagination-container">
@@ -326,7 +284,7 @@ export default {
   mounted() {
     this.findProductDetails();
     this.sameTypeProductList();
-    // this.getServiceRatingInfo();
+    this.getServiceRatingInfo();
   },
   methods: {
     screenPro(i){
@@ -343,8 +301,14 @@ export default {
     },
     demandRaise(i) {
       this.serverProVisible = true;
-      this.serverProform.productId = i.productId;
-      this.serverProform.productName = i.productName;
+      if(i==''){
+       this.serverProform.productId = proDelInfo.productId;
+       this.serverProform.productName = proDelInfo.productName;
+      } else{
+         this.serverProform.productId = i.productId;
+        this.serverProform.productName = i.productName;
+      }
+     
     },
     demandDia() {
       let _this = this;
@@ -357,8 +321,15 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.$message.success("提交需求成功");
-            _this.serverProVisible = false;
+            if(_this.serverProform.requireDetail==''){
+                // _this.$message.error("您还没填写需求");
+                _this.serverProVisible = false;
+                return
+              } else{
+               _this.$message.success("提交需求成功");
+               _this.serverProVisible = false;
+              }
+            
           } else {
             _this.$message.error(res.result);
           }
@@ -366,8 +337,6 @@ export default {
       });
     },
     handleClick(tab, event) {
-    //   console.log(tab);
-    //   console.log(event);
       if(tab.name=='relateEva'){
         this.showFlag=false
         this.getServiceRatingInfo();
@@ -405,7 +374,7 @@ export default {
       this.api.get({
         url: "getEvaluationCountInfo",
         data: {
-          advisorAccount: _this.$route.query.advisorAccount,
+          productId: _this.$route.query.productId,
           needPage: 1,
           isPublicPage: 0,
         },
@@ -535,6 +504,10 @@ export default {
       }
     }
   }
+   .el-textarea__inner:focus {
+    outline: 0;
+    border-color: #00a041;
+   }
   .serverTip {
     display: inline-block;
     font-size: 12px;

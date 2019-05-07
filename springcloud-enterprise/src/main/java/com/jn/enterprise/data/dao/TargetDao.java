@@ -168,4 +168,82 @@ public interface TargetDao {
     void saveFillerList(@Param("fillerList") List<TbDataReportingGardenFiller> fillerList);
 
 
+    /**
+     * 通过任务ID查询指标
+     * @return
+     */
+    List<TbDataReportingSnapshotTarget> getTargetByFillId (@Param("fillId") String fillId);
+
+    /**
+     * 通过任务ID查询填报格式
+     * @param fillId
+     * @return
+     */
+
+    List<TbDataReportingSnapshotTargetGroup> getTargetGroupByFillId (@Param("fillId") String fillId);
+
+
+
+
+    /**
+     * 检测本次任务中是否存在缴纳税收总额字段
+     * @param fillId
+     * @return
+     */
+    List<TbDataReportingSnapshotTargetGroup>  checkIsHaveTaxiProperty(@Param("fillId") String fillId);
+
+    /**
+     * 将缴纳税收总额更新到科技园任务中
+     * @param data 值
+     * @param fillId 科技园模板任务Id
+     * @param formId 填报格式Id
+     * @param targetId 指标Id
+     * @param companyName 企业名称
+     */
+    int  updateTaxiToScientTarget(@Param("data") String data,@Param("fillId") String fillId,@Param("formId") String formId,@Param("targetId") String targetId,@Param("companyName") String  companyName);
+
+    /**
+     * 通过科技园任务Id,查询出纳税总额的指标Id,和填报格式Id
+     * @return
+     */
+    List<TbDataReportingSnapshotTargetGroup>  getScientTaxiTargetByFillId(@Param("fillId") String fillId);
+
+    /**
+     * 检测科技园任务是否已经导入
+     * @param formTime
+     * @return
+     */
+    List<TbDataReportingTask>  checkThisFormTimeScientIsImport(@Param("formTime") String formTime);
+
+    /**
+     * 科技园查询接口-分组企业
+     * @param companyName
+     * @param fillId
+     * @return
+     */
+    List<String> getCompanyList(@Param("companyName") String companyName,@Param("fillId") String fillId);
+
+    /**
+     * 科技园查询接口-按照企业进行查询
+     * @param companyName
+     * @param fillId
+     * @return
+     */
+    List<ScientModel> getValues(@Param("companyName") String companyName,@Param("fillId") String fillId);
+
+    /**
+     * 科技园表头指标获取
+     * @param fillId
+     * @return
+     */
+    List<TbDataReportingSnapshotTarget> getScientTabHeaderTarget(@Param("fillId") String fillId);
+
+    /**
+     * 科技园表头填报格式获取
+     * @param fillId
+     * @return
+     */
+    List<TbDataReportingSnapshotTargetGroup> getScientTabHeaderTargetGroup(@Param("fillId") String fillId);
+
+
 }

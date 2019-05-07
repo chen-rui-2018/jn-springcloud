@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "RequireInfoList", description = "需求管理列表信息（后台门户管理）")
-public class RequirePortalInfoList extends Page implements Serializable {
+public class RequirePortalInfoList  implements Serializable {
     @ApiModelProperty(value = "需求单号")
     private String reqNum;
     @ApiModelProperty(value = "企业名称")

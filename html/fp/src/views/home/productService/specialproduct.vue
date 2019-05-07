@@ -60,6 +60,9 @@ export default {
       status:''
     }
   },
+  mounted () {
+    
+  },
   methods: {
     switchto(){
 

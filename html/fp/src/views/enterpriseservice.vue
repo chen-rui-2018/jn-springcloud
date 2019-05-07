@@ -753,13 +753,13 @@ export default {
       window.scrollTo(0, 0);
     });
     this.init();
-    window.addEventListener("scroll", this.handleScroll, true);
+    window.addEventListener("scroll", this.handleScroll);
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-     handleChange11(val) {
+    handleChange11(val) {
         console.log(val);
         if(val=='2'){
             this.sw='2'

@@ -76,10 +76,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        propaganda
+                        service_product
                     </contexts>
                     <tableNames>
-                        tb_propaganda_area_info
+                        tb_service_and_advisor
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -30,9 +30,7 @@ import com.jn.paybill.model.PaymentBillModel;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
-import com.sun.org.apache.xpath.internal.operations.Equals;
 import io.swagger.models.auth.In;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import org.apache.commons.collections4.list.UnmodifiableList;
 import org.apache.commons.lang.math.RandomUtils;
 import org.json.simple.JSONArray;
@@ -44,11 +42,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.*;
 
 /**
  * 用户中心--企业宣传
@@ -165,11 +159,10 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         if(roleInfoList.isEmpty()|| StringUtils.isBlank(roleInfoList.get(0).getRoleName())){
             //没有查询到数据 返回false
             return false;
-        }else if(!roleInfoList.get(0).getRoleName().contains(roleName)){
-            //返回的数据没有角色或者角色不包含超级管理，返回false
-            return false;
         }
-        return true;
+        //返回的数据没有角色或者角色不包含超级管理，返回false，否则返回true
+        return roleInfoList.get(0).getRoleName().contains(roleName);
+
     }
 
     /**
@@ -200,24 +193,25 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
 
     /**
      * 保存宣传信息
-     * @param businessPromotionDetailsParam
+     * @param bpd
      * @param loginAccount
      * @return
      */
     @ServiceLog(doAction = "保存宣传信息")
-    private int savePropagandaInfo(BusinessPromotionDetailsParam businessPromotionDetailsParam, String loginAccount) {
+    private int savePropagandaInfo(BusinessPromotionDetailsParam bpd, String loginAccount) {
         TbPropaganda tbPropaganda=new TbPropaganda();
-        BeanUtils.copyProperties(businessPromotionDetailsParam, tbPropaganda);
+        BeanUtils.copyProperties(bpd, tbPropaganda);
         //主键id
         tbPropaganda.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         //宣传编码
         tbPropaganda.setPropagandaCode(getPropagandaCode());
         //生效日期
-        tbPropaganda.setEffectiveDate(DateUtils.parseDate(businessPromotionDetailsParam.getEffectiveDate()));
+        Date now=DateUtils.parseDate(bpd.getEffectiveDate());
+        tbPropaganda.setEffectiveDate(now);
         //失效日期
-        tbPropaganda.setInvalidDate(DateUtils.parseDate(businessPromotionDetailsParam.getEffectiveDate()));
+        tbPropaganda.setInvalidDate(getCurrentTimeSpecifiedDate(now, Integer.parseInt(bpd.getPropagandaTime())));
         //宣传费用
-        tbPropaganda.setPropagandaFee(Double.valueOf(businessPromotionDetailsParam.getPropagandaFee()));
+        tbPropaganda.setPropagandaFee(Double.valueOf(bpd.getPropagandaFee()));
         //服务机构
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(loginAccount);
         tbPropaganda.setOrgId(userExtension.getData().getAffiliateCode());
@@ -235,6 +229,19 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         //是否删除
         tbPropaganda.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
         return tbPropagandaMapper.insert(tbPropaganda);
+    }
+
+    /**
+     * 获取当前时间指定月份后的日期
+     * @param now  当前时间
+     * @param month 指定月份  month=6，表示当前日期6个月后的日期
+     * @return
+     */
+    private Date getCurrentTimeSpecifiedDate(Date now,int month) {
+        Calendar lastedDate=Calendar.getInstance();
+        lastedDate.setTime(now);
+        lastedDate.add(Calendar.MONTH, month);
+        return lastedDate.getTime();
     }
 
     /**
@@ -269,32 +276,30 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         boolean feeCode=true;
         //基本宣传费用校验标志
         boolean feeValue=true;
+        //基本金额
         String propagandaFee="";
+        String totalAmount="";
         //获取区域信息，得到区域金额
         List<PropagandaAreaShow> propagandaAreaList = getPropagandaAreaList();
-        BigDecimal areaAmount=new BigDecimal(0.0);
+        BigDecimal areaAmount=BigDecimal.valueOf(0.0);
         for(PropagandaAreaShow propagandaAreaShow:propagandaAreaList){
-            if(PromotionAreaEnum.AREA_TOP.getCode().equals(propagandaAreaShow.getPropagandaArea())){
+            if(StringUtils.equals(bpd.getPropagandaArea(),propagandaAreaShow.getPropagandaArea())){
                 areaAmount=new BigDecimal(propagandaAreaShow.getAreaAmount());
                 break;
-            }else if(PromotionAreaEnum.AREA_CENTRAL.getCode().equals(propagandaAreaShow.getPropagandaArea())){
-                areaAmount=new BigDecimal(propagandaAreaShow.getAreaAmount());
-                break;
-            }else if(PromotionAreaEnum.AREA_BOTTOM.getCode().equals(propagandaAreaShow.getPropagandaArea())){
-                areaAmount=new BigDecimal(propagandaAreaShow.getAreaAmount());
-                break;
-            }else{
-                //ignore
             }
         }
         for (PropagandaFeeRulesShow pro:propagandaFeeRulesList) {
             if(StringUtils.equals(pro.getProFeeRuleCode(), bpd.getProFeeRuleCode())){
                 feeCode=false;
                 propagandaFee = pro.getPropagandaFee();
-                BigDecimal totalFee = new BigDecimal(pro.getPropagandaFee());
+                //总金额 把基本金额转换为bigDecimal进行运算
+                BigDecimal totalFee = new BigDecimal(propagandaFee);
+                //宣传时间
                 BigDecimal selectTime=new BigDecimal(bpd.getPropagandaTime());
+                //总金额=基本金额*宣传时间+宣传区域金额
                 totalFee=totalFee.multiply(selectTime).add(areaAmount);
-                if(Double.valueOf(pro.getPropagandaFee())==Double.parseDouble(totalFee.toString())){
+                totalAmount=totalFee.toString();
+                if(Double.valueOf(bpd.getPropagandaFee())==Double.parseDouble(totalFee.toString())){
                     feeValue=false;
                 }
                 break;
@@ -305,8 +310,8 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR);
         }
         if(feeValue){
-            logger.warn("校验发布宣传的参数,传递的宣传费用[{}]与系统中当前费用规则[{}]对应的费用{{}}不匹配",bpd.getPropagandaFee(),bpd.getProFeeRuleCode(),propagandaFee);
-            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR);
+            logger.warn("校验发布宣传的参数,传递的宣传费用[{}]与系统计算前费用规则[{}]对应的费用{{}}不匹配",bpd.getPropagandaFee(),bpd.getProFeeRuleCode(),totalAmount);
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_NOT_RIGHT);
         }
     }
 
@@ -437,7 +442,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_INFO_NOT_EXIST);
         }
         TbPropaganda tbPropaganda=new TbPropaganda();
-        //删除当前数据
+        //逻辑删除当前数据
         tbPropaganda.setRecordStatus(Byte.parseByte(INVALID));
         //修改时间
         tbPropaganda.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
@@ -476,7 +481,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         approvalStatus.add("0");
         approvalStatus.add("3");
         example.createCriteria().andIdEqualTo(propagandaId).andApprovalStatusIn(approvalStatus)
-        .andStatusEqualTo(STATUS).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         long existNum = tbPropagandaMapper.countByExample(example);
         if(existNum==0){
             logger.warn("修改企业宣传失败，当前宣传信息审批状态不允许修改");
@@ -486,21 +491,24 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
 
     /***
      * 修改宣传信息
-     * @param businessPromotionDetailsParam
+     * @param bpd
      * @param loginAccount
      * @return
      */
     @ServiceLog(doAction = "修改宣传信息")
-    private int updatePropagandaInfo(BusinessPromotionDetailsParam businessPromotionDetailsParam, String loginAccount) {
+    private int updatePropagandaInfo(BusinessPromotionDetailsParam bpd, String loginAccount) {
         TbPropagandaCriteria example=new TbPropagandaCriteria();
-        example.createCriteria().andIdEqualTo(businessPromotionDetailsParam.getId())
+        example.createCriteria().andIdEqualTo(bpd.getId())
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         TbPropaganda tbPropaganda=new TbPropaganda();
-        BeanUtils.copyProperties(businessPromotionDetailsParam,tbPropaganda);
+        BeanUtils.copyProperties(bpd,tbPropaganda);
         //生效日期
-        tbPropaganda.setEffectiveDate(DateUtils.parseDate(businessPromotionDetailsParam.getEffectiveDate()));
+        Date now=DateUtils.parseDate(bpd.getEffectiveDate());
+        tbPropaganda.setEffectiveDate(now);
         //失效日期
-        tbPropaganda.setInvalidDate(DateUtils.parseDate(businessPromotionDetailsParam.getEffectiveDate()));
+        tbPropaganda.setInvalidDate(getCurrentTimeSpecifiedDate(now, Integer.parseInt(bpd.getPropagandaTime())));
+        //费用
+        tbPropaganda.setPropagandaFee(Double.valueOf(bpd.getPropagandaFee()));
         //审批状态 (-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)
         tbPropaganda.setStatus("0");
         //修改时间
@@ -627,7 +635,6 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         paymentBillModel.setBillObjId(loginAccount);
         paymentBillModel.setBillObjName(loginAccount);
         paymentBillModel.setBillAmount(50.00);
-        paymentBillModel.setBillCreateTime(DateUtils.getDate(PATTERN));
         paymentBillModel.setPayEndTime(DateUtils.getDate(PATTERN));
         paymentBillModel.setBillCreateAccount(loginAccount);
         paymentBillModel.setBillRemark("ad_free");
@@ -694,5 +701,23 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         }
         //返回只读数据
         return  new UnmodifiableList<>(resultList);
+    }
+
+    /**
+     * 门户各首页企业宣传列表查询
+     * @param businessHomePageParam
+     * @param loginAccount
+     * @return
+     */
+    @ServiceLog(doAction = "门户各首页企业宣传列表查询")
+    @Override
+    public PaginationData getBusinessPromotionList(BusinessHomePageParam businessHomePageParam, String loginAccount) {
+        BusinessPromotionListParam bpb=new BusinessPromotionListParam();
+        BeanUtils.copyProperties(businessHomePageParam, bpb);
+        //审批状态（0：未审批  1：审批中   2：审批通过   3：审批不通过，4：未付款  5：待发布  6：已发布)）
+        //门户首页查询都是已发布的宣传信息
+        String hasBeenPublish="6";
+        bpb.setApprovalStatus(hasBeenPublish);
+        return getBusinessPromotionList(bpb,loginAccount);
     }
 }

@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.require.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +14,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "RequireTechnologyParam", description = "需求管理（科技金融提需求入参）")
-public class RequireTechnologyParam extends Page implements Serializable {
+public class RequireTechnologyParam implements Serializable {
     @ApiModelProperty(value = "产品Id",required = true,example = "xxx1234")
     @NotNull(message = "产品Id不能为空")
     private String productId;
@@ -32,10 +31,10 @@ public class RequireTechnologyParam extends Page implements Serializable {
     @Pattern(regexp ="[0-9]*",message = "实际贷款金额只能输入数字")
     private String actualLoanAmount;
     @ApiModelProperty(value = "融资期限最小值(3个月及以下  6个月及以下  12个月及以下  36个月及以下,值为空  36个月以上，值不为空))",example = "3")
-    @Pattern(regexp = "^[0-9]*$", message = "{loanTermMin:'默认值只允许为数字}")
+    @Pattern(regexp = "^[0-9]*|(\\s+)$", message = "{loanTermMin:'默认值只允许为数字}")
     private String financingPeriodMin;
     @ApiModelProperty(value = "融资期限最大值(3个月及以下  6个月及以下  12个月及以下  36个月及以下，值不为空  36个月以上，值为空))",example = "6")
-    @Pattern(regexp = "^[0-9]*$", message = "{loanTermMax:'默认值只允许为数字}")
+    @Pattern(regexp = "^[0-9]*|(\\s+)$", message = "{loanTermMax:'默认值只允许为数字}")
     private String financingPeriodMax;
     @ApiModelProperty(value = "资金需求日期",required = true,example = "2019-03-22")
     @NotNull(message = "资金需求日期不能为空")

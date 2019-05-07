@@ -37,7 +37,7 @@ public class PayBillServerController extends BaseController implements PayBillCl
     }
 
     @ControllerLog(doAction = "创建账单")
-    @ApiOperation(value = "创建账单", httpMethod = "POST")
+    @ApiOperation(value = "创建账单,返回账单ID", httpMethod = "POST")
     @RequestMapping(value = "/createBill")
     @Override
     public Result<String> createBill(@RequestBody PaymentBillModel paymentBillModel){
@@ -81,11 +81,19 @@ public class PayBillServerController extends BaseController implements PayBillCl
     }
 
 
-    @ControllerLog(doAction = "获取账单详情")
-    @ApiOperation(value = "获取账单详情", httpMethod = "POST")
+    @ControllerLog(doAction = "获取订单详情")
+    @ApiOperation(value = "获取订单详情", httpMethod = "POST")
     @RequestMapping(value = "/getPayOrderDetailByOrderId")
     @Override
     public Result<PayOrderVO> getPayOrderDetailByOrderId(@RequestBody String orderId){
         return new Result<>(payBillService.getPayOrderDetail(orderId));
+    }
+
+    @ControllerLog(doAction = "通过账单号取消账单及生成的订单")
+    @ApiOperation(value = "通过账单号取消账单及生成的订单", httpMethod = "POST")
+    @RequestMapping(value = "/cancelPayBillByBillNum")
+    @Override
+    public Result<Boolean> cancelPayBillByBillNum(@RequestBody PayBillCancelParam payBillCancelParam){
+        return new Result<>(payBillService.cancelPayBillByBillNum(payBillCancelParam));
     }
 }

@@ -5,6 +5,13 @@ Vue.use(Router)
 
 export default new Router({
   // mode: 'history', // require service support 去掉url中的#
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  },
   routes: [
     {
       path: '/login',
@@ -31,56 +38,17 @@ export default new Router({
       name:'forgetPsw'
     },
     {
-      path: '/home',
-      component: resolve => require(['@/views/home'],resolve),
-      meta: {title: '用户中心'},  
-      name:'home',
-      redirect:{name:'userCenter'},
-      children:[
-        {
-          path:'/servicemarket/product/userCenter',
-          name:'userCenter',
-          meta: {title: '首页'},  
-          component:resolve => require(['@/views/home/userCenter'],resolve)
-        },
-        {
-        path:'/servicemarket/product/productService/ordinaryProduct',
-        name:'ordinaryProduct',
-        meta: {title: '常规服务产品'},  
-        component:resolve => require(['@/views/home/productService/ordinaryProduct'],resolve)
-        },
-        {
-        path:'/servicemarket/product/productService/productPutaway',
-        name:'productPutaway',
-        meta: {title: '常规产品上架'},
-        component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
-        },
-        {
-        path:'/servicemarket/product/productService/ordinaryproductDetail',
-        name:'ordinaryproductDetail',
-        meta: {title: '常规产品详情'},
-        component:resolve => require(['@/views/home/productService/ordinaryproductDetail'],resolve)
-        },
-        {
-        path:'/userHome',
-        name:'userHome',
-        meta: {title: '用户资料'},
-        component:resolve => require(['@/views/home/userHome'],resolve)
-        }
-      ]
-    },
-    {
       path: '/userinfo',
       component: resolve => require(['@/views/home/userinfo'],resolve),
       name:'user',
       meta: {title: '用户中心'},
-      
-    //   children:[
-    //     {
-    //     path:'/user/userHome',
-    //     name:'userHome',
-    //     component:resolve => require(['@/views/home/userHome'],resolve)
-    //   },
+
+      // children:[
+      //   {
+      //   path:'/user/userHome',
+      //   name:'userHome',
+      //   component:resolve => require(['@/views/home/userHome'],resolve)
+      // },
     //     {
     //     path:'/user/userData',
     //     name:'userData',
@@ -233,6 +201,7 @@ export default new Router({
       name:'declarationPlatform'
     },
     {
+
       path: '/tfindex',
       component: resolve => require(['@/views/technologyFinance'],resolve),
       meta: {title: '科技金融首页'},
@@ -275,6 +244,7 @@ export default new Router({
       name:'talentPlatform'
     },
    /*  {
+/*     {
       path: '/familiarProblem',
       component: resolve => require(['@/views/talentsService/familiarProblem'],resolve),
       meta: {title: '常见问题列表'},
@@ -295,20 +265,26 @@ export default new Router({
     {
       path: '/home',
       component: resolve => require(['@/views/home'],resolve),
-      meta: {title: '用户中心'},  
+      meta: {title: '用户中心'},
       name:'home',
       redirect:{name:'userCenter'},
       children:[
         {
+              path:'/userHome',
+              name:'userHome',
+              meta: {title: '用户资料'},
+              component:resolve => require(['@/views/home/userHome'],resolve)
+              },
+        {
           path:'/servicemarket/product/userCenter',
           name:'userCenter',
-          meta: {title: '首页'},  
+          meta: {title: '首页'},
           component:resolve => require(['@/views/home/userCenter'],resolve)
         },
         {
         path:'/servicemarket/product/productService/ordinaryProduct',
         name:'ordinaryProduct',
-        meta: {title: '常规服务产品'},  
+        meta: {title: '常规服务产品'},
         component:resolve => require(['@/views/home/productService/ordinaryProduct'],resolve)
         },
         {
@@ -316,6 +292,18 @@ export default new Router({
         name:'productPutaway',
         meta: {title: '常规产品上架'},
         component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
+        },
+        {
+          path:'/servicemarket/product/productService/dataReport',
+          name:'dataReport',
+          meta: {title: '企业数据上报入口'},
+          component:resolve => require(['@/views/dataReport'],resolve)
+        },
+        {
+          path:'/servicemarket/product/productService/dataReportEntrance',
+          name:'dataReportEntrance',
+          meta: {title: '企业数据上报'},
+          component:resolve => require(['@/views/dataReport/dataReportEntrance'],resolve)
         },
         {
         path:'/servicemarket/product/productService/ordinaryproductDetail',
@@ -340,13 +328,134 @@ export default new Router({
         name:'myApply',
         meta: {title: '我的申请'},
         component:resolve => require(['@/views/home/productService/myApply'],resolve)
-        }
-      ]
-    }
+    },
+    {
       path: '/finaPro',
       component: resolve => require(['@/views/technologyFinance/finaPro'],resolve),
       meta: {title: '金融产品'},
       name:'finaPro'
-    },
+},
+{
+        path:'/myBusiness/index',
+        name:'business',
+        meta: {title: '我的企业'},
+        component:resolve => require(['@/views/home/myBusiness/index'],resolve)
+        },
+        {
+          path:'/myBusiness/editBusiness',
+          name:'editBusiness',
+          meta: {title: '编辑企业'},
+          component:resolve => require(['@/views/home/myBusiness/editBusiness'],resolve)
+          },
+        {
+          path:'/myBusiness/recruitmentManagement',
+          name:'recruitmentManagement',
+          meta: {title: '招聘管理'},
+          component:resolve => require(['@/views/home/myBusiness/recruitmentManagement'],resolve)
+        },
+        {
+           path:'/myBusiness/postJob',
+          name:'postJob',
+          meta: {title: '发布招聘'},
+          component:resolve => require(['@/views/home/myBusiness/postJob'],resolve)
+        },
+        {
+          path:'/myBusiness/editRecruit',
+         name:'editRecruit',
+         meta: {title: '编辑招聘'},
+         component:resolve => require(['@/views/home/myBusiness/editRecruit'],resolve)
+       },
+        {
+          path:'/myBusiness/staffManagement',
+          name:'staffManagement',
+          meta: {title: '员工管理'},
+          component:resolve => require(['@/views/home/myBusiness/staffManagement'],resolve)
+        },
+        {
+          path:'/myBusiness/InviteEmployees',
+          name:'InviteEmployees',
+          meta: {title: '邀请员工'},
+          component:resolve => require(['@/views/home/myBusiness/InviteEmployees'],resolve)
+        },
+        {
+          path:'/myBusiness/enterprisePropaganda',
+          name:'enterprisePropaganda',
+          meta: {title: '企业宣传'},
+          component:resolve => require(['@/views/home/myBusiness/enterprisePropaganda'],resolve)
+        } ,
+        {
+          path:'/myBusiness/publishingPropaganda',
+          name:'publishingPropaganda',
+          meta: {title: '发布宣传'},
+          component:resolve => require(['@/views/home/myBusiness/publishingPropaganda'],resolve)
+        } ,
+        {
+          path:'/myBusiness/propagandaDetails',
+          name:'propagandaDetails',
+          meta: {title: '宣传详情'},
+          component:resolve => require(['@/views/home/myBusiness/propagandaDetails'],resolve)
+        } ,
+        {
+          path:'/myBusiness/publicityExpense',
+          name:'publicityExpense',
+          meta: {title: '宣传费用规则'},
+          component:resolve => require(['@/views/home/myBusiness/publicityExpense'],resolve)
+        } ,
+        {
+          path:'/myBusiness/colleagueList',
+          name:'colleagueList',
+          meta: {title: '企业同事'},
+          component:resolve => require(['@/views/home/myBusiness/colleagueList'],resolve)
+        },
+        {
+          path:'/myBody/index',
+          name:'myBody',
+          meta: {title: '我的机构'},
+          component:resolve => require(['@/views/home/myBody/index'],resolve)
+        },
+        {
+          path:'/myBody/counselorManagement',
+          name:'counselorManagement',
+          meta: {title: '顾问管理'},
+          component:resolve => require(['@/views/home/myBody/counselorManagement'],resolve)
+        },
+        {
+          path:'/myBody/inviteAdviser',
+          name:'inviteAdviser',
+          meta: {title: '邀请顾问'},
+          component:resolve => require(['@/views/home/myBody/inviteAdviser'],resolve)
+        },
+        {
+          path:'/myBody/advisoryDetails',
+          name:'advisoryDetails',
+          meta: {title: '顾问详情'},
+          component:resolve => require(['@/views/home/myBody/advisoryDetails'],resolve)
+        },
+        {
+          path:'/myBody/approveAdvisory',
+          name:'approveAdvisory',
+          meta: {title: '审批顾问'},
+          component:resolve => require(['@/views/home/myBody/approveAdvisory'],resolve)
+        },
+        {
+          path:'/myBody/acceptInvitation',
+          name:'acceptInvitation ',
+          meta: {title: '接受结构邀请'},
+          component:resolve => require(['@/views/home/myBody/acceptInvitation'],resolve)
+        },
+        {
+          path:'/myBody/agencyColleaguesList',
+          name:'agencyColleaguesList',
+          meta: {title: '机构同事'},
+          component:resolve => require(['@/views/home/myBody/agencyColleaguesList'],resolve)
+        },
+        {
+          path:'/roleCertifications/investorCertification',
+          name:'investorCertification',
+          meta: {title: '投资人认证'},
+          component:resolve => require(['@/views/home/roleCertifications/investorCertification'],resolve)
+        }
+      ]
+    }
   ]
 })

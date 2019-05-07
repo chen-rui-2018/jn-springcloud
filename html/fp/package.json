@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
+    "animate.css": "^3.7.0",
     "axios": "^0.18.0",
     "element-ui": "^2.5.4",
     "swiper": "^4.5.0",

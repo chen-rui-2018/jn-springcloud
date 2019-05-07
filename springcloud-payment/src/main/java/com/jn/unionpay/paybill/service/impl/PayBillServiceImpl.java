@@ -126,7 +126,7 @@ public class PayBillServiceImpl implements PayBillService {
         BeanUtils.copyProperties(paymentBillModel,tbPaymentBill);
         tbPaymentBill.setBillId(UUID.randomUUID().toString().replaceAll("-",""));
         try{
-            tbPaymentBill.setBillCreateTime(DateUtils.parseDate(paymentBillModel.getBillCreateTime(),TIME_FORMAT));
+            tbPaymentBill.setBillCreateTime(new Date());
             tbPaymentBill.setPayEndTime(DateUtils.parseDate(paymentBillModel.getPayEndTime(),TIME_FORMAT));
         }catch (ParseException e){
             logger.error("创建缴费账单：参数时间转换错误。{}",e.getMessage(),e);
@@ -401,7 +401,7 @@ public class PayBillServiceImpl implements PayBillService {
     public PaginationData<List<PayOrderModel>> getPayOrderForUser(com.jn.common.model.Page page, String account){
         Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows(), true);
         TbPaymentOrderCriteria orderCriteria = new TbPaymentOrderCriteria();
-        orderCriteria.createCriteria().andCreatorAccountEqualTo(account).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
+        orderCriteria.createCriteria().andCreatorAccountEqualTo(account).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode())).andOrderStatusNotEqualTo(PayBillEnum.PAYMENT_ORDER_IS_DELETE.getCode());
         List<TbPaymentOrder> tbPaymentOrders = tbPaymentOrderMapper.selectByExample(orderCriteria);
         List<PayOrderModel> orderModels = new ArrayList<>(16);
         for (TbPaymentOrder order : tbPaymentOrders) {
@@ -457,5 +457,30 @@ public class PayBillServiceImpl implements PayBillService {
         return payOrderVO;
     }
 
+    @ServiceLog(doAction = "通过账单号取消账单及生成的订单")
+    @Override
+    public Boolean cancelPayBillByBillNum(PayBillCancelParam payBillCancelParam){
+
+        TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
+        billCriteria.createCriteria().andBillNumEqualTo(payBillCancelParam.getBillId()).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
+        List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
+        if(null == tbPaymentBills && tbPaymentBills.size() != 0){
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_IS_NOT_EXIT);
+        }
+        TbPaymentBill tbPaymentBill = tbPaymentBills.get(0);
+        tbPaymentBill.setBillStatus(PayBillEnum.PAYMENT_BILL_IS_DELETE.getCode());
+        tbPaymentBill.setModifiedTime(new Date());
+        tbPaymentBill.setModifierAccount(payBillCancelParam.getAccount());
+        int i = tbPaymentBillMapper.updateByExampleSelective(tbPaymentBill, billCriteria);
+        logger.info("逻辑删除账单{}",payBillCancelParam.getBillId());
+
+        TbPaymentOrder tbPaymentOrder = new TbPaymentOrder();
+        tbPaymentOrder.setOrderStatus(PayBillEnum.PAYMENT_ORDER_IS_DELETE.getCode());
+        tbPaymentOrder.setModifierAccount(payBillCancelParam.getAccount());
+        tbPaymentOrder.setModifiedTime(new Date());
+        tbPaymentOrder.setId(tbPaymentBill.getOrderId());
+        int i1 = tbPaymentOrderMapper.updateByPrimaryKeySelective(tbPaymentOrder);
+        return i1==1?true:false;
+    }
 
 }

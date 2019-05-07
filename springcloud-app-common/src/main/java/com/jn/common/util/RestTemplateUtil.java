@@ -1,5 +1,6 @@
 package com.jn.common.util;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -108,6 +109,24 @@ public class RestTemplateUtil {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, setHeaders(headers, dynamicHeaders));
         String data = restTemplate.postForObject(url, request, String.class);
         return data;
+    }
+
+    /**
+     * RestTemplateUtil application/x-www-form-urlencoded
+     *
+     * @param url            请求地址
+     * @param method         method
+     * @param map            请求参数
+     * @param dynamicHeaders 动态头部
+     * @return
+     */
+    public static JSONObject request(String url, HttpMethod method, MultiValueMap<String, String> map, Map<String, String> dynamicHeaders) {
+        restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, setHeaders(headers, dynamicHeaders));
+        ResponseEntity<JSONObject> response = restTemplate.exchange(url, method, request, JSONObject.class);
+        return response.getBody();
     }
 
     /**

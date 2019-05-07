@@ -37,9 +37,10 @@ public interface ActivityMapper {
      * 查询用户已报名的活动列表
      * @param account
      * @param applyStatus
+     * @param actiName
      * @return
      */
-    List<ActivityListApply> findActivitySuccessfulRegistration(@Param("account") String account , @Param("applyStatus") String applyStatus);
+    List<ActivityListApply> findActivitySuccessfulRegistration(@Param("account") String account , @Param("applyStatus") String applyStatus,@Param("actiName") String actiName);
 
     /**
      *查看机构下的活动列表

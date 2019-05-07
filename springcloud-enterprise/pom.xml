@@ -79,7 +79,7 @@
                         service_product
                     </contexts>
                     <tableNames>
-                        tb_service_details
+                        tb_service_and_advisor
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -12,6 +12,12 @@
     <artifactId>xxpay-web-api</artifactId>
     <packaging>jar</packaging>
     <description>支付能提供</description>
-    
+    <dependencies>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-common</artifactId>
+        </dependency>
+    </dependencies>
+
 
 </project>

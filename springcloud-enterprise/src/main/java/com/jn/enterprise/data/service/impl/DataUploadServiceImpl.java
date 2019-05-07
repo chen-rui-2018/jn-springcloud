@@ -1005,6 +1005,7 @@ public class DataUploadServiceImpl implements DataUploadService {
         taskCriteria.or().andFillIdEqualTo(fillId);
         TbDataReportingTask taskRecord =new TbDataReportingTask();
         taskRecord.setStatus(new Byte(DataUploadConstants.FILLED));
+        taskRecord.setUpTime(new Date());
         tbDataReportingTaskMapper.updateByExampleSelective(taskRecord,taskCriteria);
         return result+1;
     }
@@ -2052,7 +2053,7 @@ public class DataUploadServiceImpl implements DataUploadService {
         companyList = data.getRows();
         if(companyList!=null && companyList.size()>0){
             for(int index=0,len=companyList.size();index<len;index++  ){
-                List<ScientModel> dataset =  targetDao.getValues(param.getCompanyName(),param.getFillId());
+                List<ScientModel> dataset =  targetDao.getValues(companyList.get(index),param.getFillId());
                 result.put(companyList.get(index),dataset);
             }
         }

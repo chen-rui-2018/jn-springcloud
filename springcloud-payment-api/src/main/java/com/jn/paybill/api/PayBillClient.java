@@ -30,7 +30,7 @@ public interface PayBillClient {
 
 
     /**
-     * 创建账单
+     * 创建账单,返回账单ID
      * @param paymentBillModel
      * @return
      */
@@ -76,5 +76,13 @@ public interface PayBillClient {
      */
     @RequestMapping(value = "/api/pay/bill/getPaymentBillListByIds", method = RequestMethod.POST)
     Result<List<PaymentBill>> getPaymentBillListByIds(@RequestBody String[] billIds);
+
+    /**
+     * 根据账单号取消账单及生成的订单
+     * @param payBillCancelParam
+     * @return true取消成功 false取消失败
+     */
+    @RequestMapping(value = "/api/pay/bill/cancelPayBillByBillNum", method = RequestMethod.POST)
+    Result<Boolean> cancelPayBillByBillNum(@RequestBody PayBillCancelParam payBillCancelParam);
 
 }

@@ -225,6 +225,8 @@
 
         <table tableName="tb_service_product">
         </table>
+        <table tableName="tb_service_details">
+    </table>
 
         <table tableName="tb_service_product_loan_type">
         </table>

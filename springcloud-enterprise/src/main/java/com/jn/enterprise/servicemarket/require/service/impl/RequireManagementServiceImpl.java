@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.enums.RequireExceptionEnum;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgInfoMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgInfo;
@@ -323,10 +324,8 @@ public class RequireManagementServiceImpl implements RequireManagementService {
      */
     @ServiceLog(doAction = "根据机构id获取机构地址信息")
     private List<TbServiceOrgInfo> getTbServiceOrgInfoList(String orgId) {
-        //数据状态  0：删除  1：有效
-        byte recordStatus=1;
         TbServiceOrgInfoCriteria example=new TbServiceOrgInfoCriteria();
-        example.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(recordStatus);
+        example.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         return tbServiceOrgInfoMapper.selectByExample(example);
     }
 

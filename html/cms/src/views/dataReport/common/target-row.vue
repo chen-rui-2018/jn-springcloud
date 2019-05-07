@@ -37,7 +37,7 @@ export default {
       color: #A8A8A8;
     }
     .row-r {
-      flex: 1;
+      width: calc(100% - 160px);
       padding: 20px;
       font-size: 14px;
       background-color: #fff;

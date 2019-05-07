@@ -317,7 +317,7 @@ export default {
           }
           > p {
             color: #999;
-            height: 20px;
+            line-height: 20px;
           }
         }
         .liArea {

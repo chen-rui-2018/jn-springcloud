@@ -205,7 +205,7 @@
                                         <!-- 评价 end -->
                                         <!-- 交易量 begin -->
                                         <div class="detail-count">
-                                            <div class="orgBtn fr mainColor">提需求</div>
+                                            <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
                                         </div>
                                         <!-- 交易量 end -->
                                     </div>
@@ -333,15 +333,52 @@ export default {
       productType:'',
       ratingType:'',
       showFlag:true,
+       serverProform: {
+        requireDetail: "",
+        productId: "",
+        productName: ""
+      },
     };
   },
   mounted() {
     this.initList();
     this.advisorProductList();
-    // this.getServiceRatingInfo();
-    // this.getEvaluationCountInfo()
+    this.getServiceRatingInfo();
+    this.getEvaluationCountInfo()
   },
   methods: {
+    demandRaise(i) {
+      this.serverConVisible = true;
+      this.serverProform.productId = i.productId;
+      this.serverProform.productName = i.productName;
+     
+    },
+    demandDia() {
+      let _this = this;
+      this.api.post({
+        url: "userDemand",
+        data: {
+          productId: _this.serverProform.productId,
+          productName: _this.serverProform.productName,
+          requireDetail: _this.serverProform.requireDetail
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            if(_this.serverProform.requireDetail==''){
+                // _this.$message.error("您还没填写需求");
+                _this.serverConVisible = false;
+                return
+              } else{
+               _this.$message.success("提交需求成功");
+               _this.serverConVisible = false;
+              }
+            
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
     handleZk() {
       this.zankaiFlag = true;
     },
@@ -383,8 +420,6 @@ export default {
       this.getServiceRatingInfo();
     },
     handleClick(tab, event) {
-    //   console.log(tab);
-    //   console.log(event);
       if(tab.name=='serEvaluation'){
         this.showFlag=false
         this.getServiceRatingInfo();
@@ -406,7 +441,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.EvaluationCountInfo = res.data;
+            _this.evaluationCountInfo = res.data;
           } else {
             _this.$message.error(res.result);
           }
@@ -602,6 +637,37 @@ export default {
         }
       }
     }
+  }
+  .el-textarea__inner:focus {
+    outline: 0;
+    border-color: #00a041;
+   }
+    .serverTip {
+    display: inline-block;
+    font-size: 12px;
+  }
+  .demandDia {
+    display: inline-block;
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+    margin-left: 20px;
+    font-size: 12px;
+  }
+  .demandLine {
+    height: 1px;
+    width: 530px;
+    position: relative;
+    left: -20px;
+    background: #eee;
+    margin-bottom: 20px;
+    margin-top: 10px;
   }
 }
 </style>

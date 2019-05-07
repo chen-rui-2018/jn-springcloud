@@ -8,16 +8,6 @@
     <description>支付平台</description>
 
     <modules>
-        <module>xxpay-server</module>
-        <module>xxpay-config</module>
-        <module>xxpay-service</module>
-        <module>xxpay-web</module>
-        <module>xxpay-gateway</module>
-
-        <module>xxpay-common</module>
-        <module>xxpay-dal</module>
-        <module>xxpay-mgr</module>
-        <module>xxpay-shop</module>
         <module>xxpay-web-api</module>
     </modules>
 
@@ -35,11 +25,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.jn</groupId>
-            <artifactId>xxpay-common</artifactId>
-            <version>1.0.0-RELEASE</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>

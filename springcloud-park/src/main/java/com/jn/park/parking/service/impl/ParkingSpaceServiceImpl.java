@@ -246,21 +246,21 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
                 if (null != tbParkingPreferential.getOfferPrice() && 0 != tbParkingPreferential.getOfferPrice()) {
                     //减免固定金额
                     parkingSpaceAmountVo.setDeductionMoney(tbParkingPreferential.getOfferPrice());
-                    parkingSpaceAmountVo.setActualAoney(new BigDecimal(Double.toString(dueMoney)).subtract(new BigDecimal(Double.toString(tbParkingPreferential.getOfferPrice()))).doubleValue());
+                    parkingSpaceAmountVo.setActualMoney(new BigDecimal(Double.toString(dueMoney)).subtract(new BigDecimal(Double.toString(tbParkingPreferential.getOfferPrice()))).doubleValue());
                 } else {
                     //按比例减免
                     BigDecimal divide = new BigDecimal(dueMoney).multiply(new BigDecimal(Double.toString(tbParkingPreferential.getOfferRatio()))).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
                     parkingSpaceAmountVo.setDeductionMoney(divide.doubleValue());
-                    parkingSpaceAmountVo.setActualAoney(new BigDecimal(Double.toString(dueMoney)).subtract(divide).doubleValue());
+                    parkingSpaceAmountVo.setActualMoney(new BigDecimal(Double.toString(dueMoney)).subtract(divide).doubleValue());
                 }
             } else {
                 logger.info("不满足优惠条件，按原价计算，优惠政策{}，用户已租天数{}，本次租赁天数{}。", tbParkingPreferential.getPolicyCode(),applyDay, dayInterval);
                 parkingSpaceAmountVo.setDeductionMoney(new Double(0));
-                parkingSpaceAmountVo.setActualAoney(dueMoney);
+                parkingSpaceAmountVo.setActualMoney(dueMoney);
             }
         } else {
             parkingSpaceAmountVo.setDeductionMoney(new Double(0));
-            parkingSpaceAmountVo.setActualAoney(dueMoney);
+            parkingSpaceAmountVo.setActualMoney(dueMoney);
         }
         return parkingSpaceAmountVo;
     }

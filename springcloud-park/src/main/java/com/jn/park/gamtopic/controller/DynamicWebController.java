@@ -60,6 +60,14 @@ public class DynamicWebController extends BaseController {
         PaginationData data = dynamicService.findDynamicWebList(page,user==null? "" : user.getAccount());
         return new Result<>(data);
     }
+    @ControllerLog(doAction = "关注的用户动态列表")
+    @ApiOperation(value ="关注的用户动态列表",notes = "返回用户关注的用户的动态列表")
+    @RequestMapping(value="/findCareDynamicList",method = RequestMethod.GET)
+    public Result<PaginationData<List<DynamicWebShow>>> findCareDynamicList(Page page){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData data = dynamicService.findCareDynamicList(page,user==null? "" : user.getAccount());
+        return new Result<>(data);
+    }
     @ControllerLog(doAction = "动态详情")
     @ApiOperation(value ="动态详情",notes = "动态内容加评论信息")
     @RequestMapping(value="/findDynamicDetails",method = RequestMethod.GET)

@@ -36,7 +36,7 @@ public class ParkingSpaceAmountVo implements Serializable {
     private Double deductionMoney;
 
     @ApiModelProperty(value = "实缴金额[优惠后金额]",example = "2200")
-    private Double actualAoney;
+    private Double actualMoney;
 
     public String getAreaId() {
         return areaId;
@@ -94,11 +94,11 @@ public class ParkingSpaceAmountVo implements Serializable {
         this.deductionMoney = deductionMoney;
     }
 
-    public Double getActualAoney() {
-        return actualAoney;
+    public Double getActualMoney() {
+        return actualMoney;
     }
 
-    public void setActualAoney(Double actualAoney) {
-        this.actualAoney = actualAoney;
+    public void setActualMoney(Double actualMoney) {
+        this.actualMoney = actualMoney;
     }
 }

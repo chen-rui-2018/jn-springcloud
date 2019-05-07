@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.require.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +14,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "HandleRequireParam", description = "对接需求入参")
-public class HandleRequireParam extends Page implements Serializable {
+public class HandleRequireParam implements Serializable {
     @ApiModelProperty(value = "需求单号",required = true,example = "xq-0001")
     @NotNull(message = "需求单号不能为空")
     private String reqNum;

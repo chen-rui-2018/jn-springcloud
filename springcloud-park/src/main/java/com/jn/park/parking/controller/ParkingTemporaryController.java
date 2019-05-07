@@ -4,9 +4,11 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.park.parking.model.ParkingCarJoinParam;
 import com.jn.park.parking.model.ParkingCarLeaveParam;
+import com.jn.park.parking.service.ParkingCarInfoService;
 import com.jn.park.parking.service.ParkingTemporaryService;
 import com.jn.park.parking.vo.ParkingCarLeaveVo;
 import com.jn.park.parking.vo.ParkingCarPayVo;
+import com.jn.park.parking.vo.ParkingRecordDetailVo;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +29,8 @@ public class ParkingTemporaryController extends BaseController {
 
     @Autowired
     private ParkingTemporaryService parkingTemporaryService;
+    @Autowired
+    private ParkingCarInfoService parkingCarInfoService;
 
     @ControllerLog(doAction = " 车辆入场接口")
     @ApiOperation(value = "车辆入场接口[提供给swagger仅供测试，前台请忽略该接口]", notes = "[提供给swagger仅供测试，前台请忽略该接口]")
@@ -40,6 +44,13 @@ public class ParkingTemporaryController extends BaseController {
     @RequestMapping(value = "/carLeaveParking",method = RequestMethod.POST)
     public Result<ParkingCarLeaveVo> carLeaveParking(ParkingCarLeaveParam parkingCarLeaveParam){
         return new Result<>(parkingTemporaryService.carLeaveParking(parkingCarLeaveParam));
+    }
+
+    @ControllerLog(doAction = "临停缴费查询停车信息详情")
+    @ApiOperation(value = "临停缴费查询停车信息详情", notes = "临停缴费查询停车信息详情,返回空则表示未查询到相关数据")
+    @RequestMapping(value = "/getCarTempParkingDetail",method = RequestMethod.GET)
+    public Result<ParkingRecordDetailVo> getCarTempParkingDetail(String carLicense){
+        return new Result<>(parkingCarInfoService.getCarTempParkingDetail(carLicense));
     }
 
     @ControllerLog(doAction = " 临停缴费账单创建")

@@ -32,9 +32,10 @@ public interface DynamicDao {
     /**
      * 查询前台动态列表
      * @param accountList
+     * @param currentAccount 当前登录用户账号
      * @return
      */
-    List<DynamicWebShow> findDynamicWebList( @Param("accountList") List<String> accountList);
+    List<DynamicWebShow> findDynamicWebList( @Param("accountList") List<String> accountList,@Param("currentAccount") String currentAccount);
 
     /**
      * 获取动态详情
@@ -78,5 +79,12 @@ public interface DynamicDao {
      *  @return
      */
     List<DynamicWebShow> findDynamicByAccount(@Param("account") String account, @Param("currentAccount") String currentAccount);
+
+    /**
+     * 用户关注的动态列表
+     * @param account
+     * @return
+     */
+    List<DynamicWebShow> findCareDynamicList(@Param("account") String account);
 
 }

@@ -289,7 +289,7 @@ public class DataModelServiceImpl implements DataModelService {
             for(TabVO tabVO: tabVOList){
                 tbDataReportingModelTab = new TbDataReportingModelTab();
                 BeanUtils.copyProperties(tabVO,tbDataReportingModelTab);
-                if(tabVO.getTabCreateType().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                if(tabVO.getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
                     //科技园模板单独处理
                     tbDataReportingModelTab.setTabClumnType(null);
                     tbDataReportingModelTab.setTabClumnTargetShow("");
@@ -392,8 +392,11 @@ public class DataModelServiceImpl implements DataModelService {
             tabVO = new TabVO();
             BeanUtils.copyProperties(tabPOList.get(tabIndex),tabVO);
             if(tabPOList.get(tabIndex).getTabCreateType().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                tabVO.setTabClumnType(null);
+            }else{
                 tabVO.setTabClumnType(tabPOList.get(tabIndex).getTabClumnType().toString());
             }
+            tabVO.setTabCreateType(tabPOList.get(tabIndex).getTabCreateType().toString());
 
             tabVO.setStatus(tabPOList.get(tabIndex).getStatus().toString());
 

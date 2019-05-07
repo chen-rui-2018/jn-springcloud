@@ -13,6 +13,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.excel.ExcelListener;
+import com.jn.common.util.excel.ExcelUtil;
 import com.jn.down.api.DownLoadClient;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompany;
@@ -177,7 +178,6 @@ public class DataUploadServiceImpl implements DataUploadService {
         return taskbatch;
 
     }
-
 
 
 
@@ -561,7 +561,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             List<InputFormatModel> inputFormatModelList = getInputFormatModelList(iList);
 
             BeanUtils.copyProperties(tab,tabVO);
-            if(! tab.getTabCreateType().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+            if(! tab.getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
                 tabVO.setTabClumnType(tab.getTabClumnType().toString());
                 tabVO.setTabCreateType(tab.getTabCreateType().toString());
             }
@@ -749,7 +749,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             exampleTab.or().andTaskBatchEqualTo(concertTask.getTaskBatch()).andModelIdEqualTo(modelId).andTabIdEqualTo(tabId)
                     .andStatusEqualTo(new Byte(DataUploadConstants.VALID));
             List<TbDataReportingSnapshotModelTab> tabList = tbDataReportingSnapshotModelTabMapper.selectByExample(exampleTab);
-            if(tabList !=null || tabList.size()!=0){
+            if(tabList !=null && tabList.size() >0){
                 TbDataReportingSnapshotModelTab tab = tabList.get(0);
                 //获取一个Tab的值
                 TbDataReportingTaskDataCriteria tabData = new TbDataReportingTaskDataCriteria();
@@ -875,31 +875,14 @@ public class DataUploadServiceImpl implements DataUploadService {
      */
     @Override
     @ServiceLog(doAction = "科技园导入")
-    public int importData(MultipartFile multipartFile,ModelDataVO dataVO){
+    public int importData(MultipartFile multipartFile,String formTime,String fillId,String modelId){
         int result=0;
 
-        String formTime=dataVO.getTaskInfo().getFormTime();
-        String fillId=dataVO.getTaskInfo().getFillId();
-        String modelId=dataVO.getTaskInfo().getModelId();
+//        String formTime=dataVO.getTaskInfo().getFormTime();
+//        String fillId=dataVO.getTaskInfo().getFillId();
+//        String modelId=dataVO.getTaskInfo().getModelId();
         //读取表头，并生成一种标识集合数据{'企业名称'：0，‘名称’，1}
-        String filename = multipartFile.getOriginalFilename();
-        if (filename == null || (!filename.toLowerCase().endsWith(ExcelTypeEnum.XLS.getValue())  && !filename.toLowerCase().endsWith(ExcelTypeEnum.XLSX.getValue()))) {
-            throw new JnSpringCloudException(CommonExcelExceptionEnum.EXCEL_FORMAT_ERROR);
-        }
-        InputStream inputStream;
-        ExcelListener excelListener = new ExcelListener();
-        ExcelReader eReader =null;
-        try {
-            inputStream = multipartFile.getInputStream();
-            eReader = new ExcelReader(inputStream, null, excelListener, false);
-            eReader.read();
-        }catch (Exception e){
-            throw  new JnSpringCloudException(DataUploadExceptionEnum.TASK_IS_ERROR);
-        }
-        List<Object> dataList = excelListener.getDatas();
-        if(dataList ==null || dataList.size()==0){
-            throw new JnSpringCloudException(DataUploadExceptionEnum.EXCEL_NO_DATA);
-        }
+        List<Object> dataList = ExcelUtil.readExcel(multipartFile,null);
 
         //获取标题头
         Object oTitle = dataList.get(0);
@@ -947,9 +930,9 @@ public class DataUploadServiceImpl implements DataUploadService {
 
             for(int pos=0,length=currentData.length;pos<length;pos++){
                 //当前正在处理的指标的名称
-                String targetName = title[index];
+                String targetName = title[pos];
                 //当前的值
-                content=currentData[index];
+                content=currentData[pos];
                 //通过名称来查找，其在数据库中的指标Id和填报格式Id
                 TbDataReportingSnapshotTarget currentTarget  = findTarget(targetName,targetList);
 
@@ -967,6 +950,10 @@ public class DataUploadServiceImpl implements DataUploadService {
                         //传了一个，模板中没有维护的指标。
                         throw new JnSpringCloudException(DataUploadExceptionEnum.NO_TARGET_LIKE_IN_EXCEL);
                     }
+                }else{
+                    //查询出该指标的填报格式ID,一个指标只有一个填报格式的时候，指标的名称和填报格式的名称是同一个
+                    currentTargetGroups = findTargetGroupsByTargetId(currentTarget.getTargetId(),targetGroupsList);
+
                 }
 
                 //以指标的的内容组合值
@@ -1001,7 +988,6 @@ public class DataUploadServiceImpl implements DataUploadService {
             taskData.setRowNum(0);
             taskData.setModelId(modelId);
             taskData.setFormId(sicentTarget.get(0).getFormId());
-            saveData.add(taskData);
             if(taskData !=null){
                 saveData.add(taskData);
             }
@@ -1019,8 +1005,9 @@ public class DataUploadServiceImpl implements DataUploadService {
         taskCriteria.or().andFillIdEqualTo(fillId);
         TbDataReportingTask taskRecord =new TbDataReportingTask();
         taskRecord.setStatus(new Byte(DataUploadConstants.FILLED));
+        taskRecord.setUpTime(new Date());
         tbDataReportingTaskMapper.updateByExampleSelective(taskRecord,taskCriteria);
-        return result++;
+        return result+1;
     }
 
     /**
@@ -1124,13 +1111,13 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         //如果‘缴纳税收总额’不是指标，那就去填报格式中寻找
         List<TbDataReportingTaskData> taskDataList;
-        if(snapshotTargets ==null && snapshotTargets.size()==0 ){
+        if(snapshotTargets ==null || snapshotTargets.size()==0 ){
             TbDataReportingSnapshotTargetGroupCriteria targetGroupCriteriaCriteria = new TbDataReportingSnapshotTargetGroupCriteria();
             targetGroupCriteriaCriteria.or().andTargetIdIn(targets).andTaskBatchEqualTo(taskBatch).andFormNameEqualTo(targetName)
                     .andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
             List<TbDataReportingSnapshotTargetGroup> snapshotTargetGroups = tbDataReportingSnapshotTargetGroupMapper.selectByExample(targetGroupCriteriaCriteria);
 
-            if(snapshotTargetGroups ==null && snapshotTargetGroups.size()==0){
+            if(snapshotTargetGroups ==null || snapshotTargetGroups.size()==0){
                 return new HashMap<>();
             }
             taxiTargetGroup =snapshotTargetGroups.get(0);
@@ -2066,7 +2053,7 @@ public class DataUploadServiceImpl implements DataUploadService {
         companyList = data.getRows();
         if(companyList!=null && companyList.size()>0){
             for(int index=0,len=companyList.size();index<len;index++  ){
-                List<ScientModel> dataset =  targetDao.getValues(param.getCompanyName(),param.getFillId());
+                List<ScientModel> dataset =  targetDao.getValues(companyList.get(index),param.getFillId());
                 result.put(companyList.get(index),dataset);
             }
         }

@@ -46,6 +46,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-news-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
 
     </dependencies>
     <build>
@@ -77,10 +81,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        connect
+                        parking
                     </contexts>
                     <tableNames>
-                        tb_service_connect_manage
+                        tb_parking_service
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

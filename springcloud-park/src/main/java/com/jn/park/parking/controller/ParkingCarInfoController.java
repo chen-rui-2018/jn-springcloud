@@ -84,11 +84,5 @@ public class ParkingCarInfoController extends BaseController {
         return new Result<>(parkingCarInfoService.getCarParkingRecordList(parkingRecordParam));
     }
 
-    @ControllerLog(doAction = "临停缴费查询停车信息详情")
-    @ApiOperation(value = "临停缴费查询停车信息详情", notes = "临停缴费查询停车信息详情")
-    @RequestMapping(value = "/getCarTempParkingDetail",method = RequestMethod.GET)
-    public Result<ParkingRecordDetailVo> getCarTempParkingDetail(String carLicense){
-        return new Result<>(parkingCarInfoService.getCarTempParkingDetail(carLicense));
-    }
 
 }

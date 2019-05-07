@@ -99,6 +99,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         tbServiceProduct.setCreatorAccount(account);
         tbServiceProduct.setStatus(status);
         tbServiceProduct.setRecordStatus(recordStatus);
+        tbServiceProduct.setProductDetails(content.getProductDetails());
         //设置机构名称
         if (StringUtils.isNotBlank(content.getOrgId())){
             TbServiceOrg org= tbServiceOrgMapper.selectByPrimaryKey(content.getOrgId());
@@ -108,15 +109,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         }
         //保存服务产品的基本信息
         tbServiceProductMapper.insertSelective(tbServiceProduct);
-        //服务产品描述不为空则 插入详情;
-        if (StringUtils.isNotBlank(content.getProductDetails())) {
-            TbServiceDetails details = new TbServiceDetails();
-            details.setProductId(content.getProductId());
 
-                details.setServiceDetails(content.getProductDetails());
-
-            tbServiceDetailsMapper.insertSelective(details);
-        }
         //保存顾问和服务间关系
         if(StringUtils.isNotBlank(content.getAdvisorAccount())){
             addAdvisor(content.getAdvisorAccount(),content.getProductId());
@@ -177,7 +170,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         if(detail!=null){
             ServiceContent content= detail.getContent();
             if (content!=null){
-                 content.setProductDetails(checkServiceDetails(content.getServiceDetails()));
+                 content.setProductDetails(content.getServiceDetails());
                  content.setServiceDetails(null);
                  content.setServiceDetails(null);
                  detail.setContent(content);
@@ -258,16 +251,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         BeanUtils.copyProperties(content,product);
         product.setModifierAccount(account);
         product.setModifiedTime(new Date());
+        product.setProductDetails(content.getProductDetails());
         tbServiceProductMapper.updateByPrimaryKeySelective(product);
-        if (StringUtils.isNotBlank(content.getProductDetails())){
-            TbServiceDetailsCriteria criteria = new TbServiceDetailsCriteria();
-            criteria.createCriteria().andProductIdEqualTo(content.getProductId());
-            TbServiceDetails details = new TbServiceDetails();
 
-                details.setServiceDetails(content.getProductDetails());
-
-            tbServiceDetailsMapper.updateByExample(details,criteria);
-        }
     }
     @ServiceLog(doAction = "服务超市首页,热门服务产品列表")
     @Override
@@ -289,7 +275,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             return null;
         }
         //产品详情
-        info.setProductDetails(checkServiceDetails(info.getServiceDetails()));
+        info.setProductDetails(info.getServiceDetails());
         info.setServiceDetails(null);
         ProductQueryConditions conditions = new ProductQueryConditions();
         conditions.setSignoryId(info.getSignoryId());
@@ -348,7 +334,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public WebServiceProductInfo findShelfProductInfo(String productId)  {
         WebServiceProductInfo data =   productDao.findShelfProductInfo(productId);
-        data.setProductDetails(checkServiceDetails(data.getServiceDetails()));
+        data.setProductDetails(data.getServiceDetails());
         data.setServiceDetails(null);
         return data;
     }
@@ -383,6 +369,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         TbServiceProduct tbServiceProduct = new TbServiceProduct();
         BeanUtils.copyProperties(content,tbServiceProduct);
         tbServiceProduct.setModifierAccount(account);
+        tbServiceProduct.setProductDetails(content.getProductDetails());
         tbServiceProduct.setModifiedTime(new Date());
         if (content.getReferPrice() != null) {
             checkReferPrice(content.getReferPrice());
@@ -392,16 +379,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         if(StringUtils.isNotBlank(content.getAdvisorAccount())){
             addAdvisor(content.getAdvisorAccount(),content.getProductId());
         }
-        //更新详情信息
-        if(StringUtils.isNotBlank(content.getProductDetails())){
-            TbServiceDetails details = new TbServiceDetails();
-            details.setServiceDetails(content.getProductDetails());
-            details.setProductId(content.getProductId());
-            TbServiceDetailsCriteria criteria = new TbServiceDetailsCriteria();
-            criteria.createCriteria().andProductIdEqualTo(content.getProductId());
-            tbServiceDetailsMapper.deleteByExample(criteria);
-            tbServiceDetailsMapper.insertSelective(details);
-        }
+
     }
     @ServiceLog(doAction = "顾问-服务产品列表")
     @Override
@@ -435,7 +413,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public UpdateCommonProductShow modifyCommonServiceShow(String productId) {
         UpdateCommonProductShow show = productDao.modifyCommonServiceShow(productId);
-        show.setProductDetails(checkServiceDetails(show.getServiceDetails()));
+        show.setProductDetails(show.getServiceDetails());
         show.setServiceDetails(null);
         return  show;
     }
@@ -531,21 +509,5 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         advisorDao.addServiceAdvisor(advisorList);
     }
 
-    /**
-     * 产品详情转换
-     * @param serviceDetails
-     * @return
-     */
-     private String  checkServiceDetails(byte [] serviceDetails){
-        String productDetails =null;
-         if(serviceDetails != null) {
-             try {
-              productDetails = new String(serviceDetails, "UTF-8");
-             } catch (UnsupportedEncodingException e) {
-                 e.printStackTrace();
-                 logger.info("服务产品详情描述,不支持的字符集" + e.getMessage());
-             }
-         }
-        return productDetails;
-    }
+
 }

@@ -42,7 +42,7 @@ public class ServiceContent  implements Serializable {
     @ApiModelProperty(value = "服务产品顾问账号")
     private String advisorAccount;
     @ApiModelProperty(value = "服务产品的详情存入数据库时,后台转换使用")
-    private byte[] serviceDetails;
+    private String  serviceDetails;
     @ApiModelProperty(value = "服务产品详情")
     private String productDetails;
 
@@ -136,11 +136,11 @@ public class ServiceContent  implements Serializable {
         this.advisorAccount = advisorAccount;
     }
 
-    public byte[] getServiceDetails() {
+    public String getServiceDetails() {
         return serviceDetails;
     }
 
-    public void setServiceDetails(byte[] serviceDetails) {
+    public void setServiceDetails(String serviceDetails) {
         this.serviceDetails = serviceDetails;
     }
 

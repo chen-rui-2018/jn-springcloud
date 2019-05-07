@@ -102,12 +102,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @ServiceLog(doAction = "获取评价页详情")
     public RatingDetail getRatingCommentDetail(String id){
-        //通过ID查询对应需求
-        TbServiceRequire serviceRequire = requireMapper.selectByPrimaryKey(id);
-        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(serviceRequire.getIssueAccount());
-        String companyName = userExtension.getData().getCompanyCode();
         RatingDetail ratingDetail = commentMapper.getRatingCommentDetail(id);
-        ratingDetail.setCompanyName(companyName);
         return ratingDetail;
     }
 

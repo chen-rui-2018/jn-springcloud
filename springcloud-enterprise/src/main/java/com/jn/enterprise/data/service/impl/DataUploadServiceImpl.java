@@ -930,7 +930,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
             for(int pos=0,length=currentData.length;pos<length;pos++){
                 //当前正在处理的指标的名称
-                String targetName = title[pos];
+                String targetName = title[pos].trim();
                 //当前的值
                 content=currentData[pos];
                 //通过名称来查找，其在数据库中的指标Id和填报格式Id
@@ -960,7 +960,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                 taskData = new TbDataReportingTaskData();
                 taskData.setTabId(companyName);
                 taskData.setFillId(fillId);
-                taskData.setTargetId(currentTarget.getTargetId());
+                taskData.setTargetId(currentTargetGroups.getTargetId());
                 taskData.setFallInFormId(UUID.randomUUID().toString().replaceAll("-",""));
                 taskData.setData(content);
                 taskData.setRowNum(0);
@@ -1029,7 +1029,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
     /**
      * 查询出填报格式
-     * @param targetName
+     * @param targetName`
      * @param targetList
      * @return
      */
@@ -1060,6 +1060,7 @@ public class DataUploadServiceImpl implements DataUploadService {
         }
         return result;
     }
+
 
 
 
@@ -1164,6 +1165,9 @@ public class DataUploadServiceImpl implements DataUploadService {
         title = title.substring(1,title.length()-1);
         //标题的集合
         String[] titles = title.split(",");
+        for(int i=0;i<titles.length;i++){
+            titles[i] = titles[i].trim();
+        }
         return titles;
     }
 

@@ -46,4 +46,10 @@ public interface AdvisorEditService {
      * @return
      */
     List<AdvisorCertificateTypeShow> getCertificateTypeList(String certificateType);
+
+    /**
+     * 判断当前登录用户是否为顾问
+     * @param loginAccount  用户账号
+     */
+    void currentUserIsAdvisor(String loginAccount);
 }

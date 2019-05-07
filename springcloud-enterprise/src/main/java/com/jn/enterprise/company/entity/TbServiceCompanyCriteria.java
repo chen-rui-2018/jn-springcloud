@@ -1816,6 +1816,76 @@ public class TbServiceCompanyCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPropagandaPictureIsNull() {
+            addCriterion("propaganda_picture is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureIsNotNull() {
+            addCriterion("propaganda_picture is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureEqualTo(String value) {
+            addCriterion("propaganda_picture =", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureNotEqualTo(String value) {
+            addCriterion("propaganda_picture <>", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureGreaterThan(String value) {
+            addCriterion("propaganda_picture >", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureGreaterThanOrEqualTo(String value) {
+            addCriterion("propaganda_picture >=", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureLessThan(String value) {
+            addCriterion("propaganda_picture <", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureLessThanOrEqualTo(String value) {
+            addCriterion("propaganda_picture <=", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureLike(String value) {
+            addCriterion("propaganda_picture like", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureNotLike(String value) {
+            addCriterion("propaganda_picture not like", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureIn(List<String> values) {
+            addCriterion("propaganda_picture in", values, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureNotIn(List<String> values) {
+            addCriterion("propaganda_picture not in", values, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureBetween(String value1, String value2) {
+            addCriterion("propaganda_picture between", value1, value2, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureNotBetween(String value1, String value2) {
+            addCriterion("propaganda_picture not between", value1, value2, "propagandaPicture");
+            return (Criteria) this;
+        }
+
         public Criteria andLicStarttimeIsNull() {
             addCriterion("lic_starttime is null");
             return (Criteria) this;
@@ -3663,6 +3733,76 @@ public class TbServiceCompanyCriteria {
 
         public Criteria andComSourceNotBetween(String value1, String value2) {
             addCriterion("com_source not between", value1, value2, "comSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkIsNull() {
+            addCriterion("affiliated_park is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkIsNotNull() {
+            addCriterion("affiliated_park is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkEqualTo(String value) {
+            addCriterion("affiliated_park =", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkNotEqualTo(String value) {
+            addCriterion("affiliated_park <>", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkGreaterThan(String value) {
+            addCriterion("affiliated_park >", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkGreaterThanOrEqualTo(String value) {
+            addCriterion("affiliated_park >=", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkLessThan(String value) {
+            addCriterion("affiliated_park <", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkLessThanOrEqualTo(String value) {
+            addCriterion("affiliated_park <=", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkLike(String value) {
+            addCriterion("affiliated_park like", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkNotLike(String value) {
+            addCriterion("affiliated_park not like", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkIn(List<String> values) {
+            addCriterion("affiliated_park in", values, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkNotIn(List<String> values) {
+            addCriterion("affiliated_park not in", values, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkBetween(String value1, String value2) {
+            addCriterion("affiliated_park between", value1, value2, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkNotBetween(String value1, String value2) {
+            addCriterion("affiliated_park not between", value1, value2, "affiliatedPark");
             return (Criteria) this;
         }
 

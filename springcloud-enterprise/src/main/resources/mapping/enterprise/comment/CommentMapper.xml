@@ -14,11 +14,11 @@
         <if test="account != null and account != ''">
             and ( r.advisor_account = #{account} or o.org_account = #{account} )
         </if>
-        <if test="productId != null and productId != ''">
-            and r.product_id_ =  #{productId}
+        <if test="productName != null and productName != ''">
+            and r.product_name like CONCAT('%', #{searchCode}, '%')
         </if>
-        <if test="advisorId != null and advisorId != ''">
-            and re.advisor_account =  #{advisorId}
+        <if test="advisorName != null and advisorName != ''">
+            and re.advisor_name like CONCAT('%', #{advisorName}, '%')
         </if>
     </select>
 
@@ -36,6 +36,7 @@
                    re.expected_date as "expectedDate",
                    re.result_detail as "resultDetail",
                    re.is_comment as "isComment",
+                   re.funds_req_desc as "fundsReqDesc"
                    info.con_name as "conName",info.con_phone as "conPhone",
                    info.con_email as "conEmail",re.org_name as "orgName",
                    re.advisor_name as "advisorName", re.product_name as "productName",

@@ -25,9 +25,10 @@ public interface AdvisorService {
     /**
      * 根据顾问账号获取顾问详情
      * @param advisorAccount 顾问账号
+     * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      * @return
      */
-    AdvisorDetailsVo getServiceAdvisorInfo(String advisorAccount);
+    AdvisorDetailsVo getServiceAdvisorInfo(String advisorAccount,String approvalStatus);
 
     /**
      * 根据查询条件获取服务评价信息
@@ -39,9 +40,10 @@ public interface AdvisorService {
     /**
      * 根据顾问账号获取顾问基本信息
      * @param advisorAccount 顾问账号
+     * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      * @return
      */
-    AdvisorServiceInfo getAdvisorInfoByAccount(String advisorAccount);
+    AdvisorServiceInfo getAdvisorInfoByAccount(String advisorAccount,String approvalStatus);
 
     /**
      * 获取顾问荣誉资质信息

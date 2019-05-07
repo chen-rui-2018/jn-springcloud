@@ -188,6 +188,7 @@ export default {
     >span{
       font-size: 12px;
       color:rgb(78, 173, 241);
+      cursor: pointer;
     }
     >div{
       margin-top:5px;

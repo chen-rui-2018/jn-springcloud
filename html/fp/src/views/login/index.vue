@@ -57,6 +57,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             sessionStorage.token = res.data;
+            sessionStorage.setItem("account",_this.loginform.account);
             // _this.api.setToken(res.data);
             _this.$router.push({
               path: "/userinfo",

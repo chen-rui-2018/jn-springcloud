@@ -1,11 +1,14 @@
 package com.jn.enterprise.data.vo;
 
+import com.jn.enterprise.data.model.CompanyTree;
 import com.jn.enterprise.data.model.InputFormatModel;
+import com.jn.enterprise.data.util.POICompany;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -179,5 +182,10 @@ public class TargetVO implements Serializable {
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
     }
+
+
+
+
+
 
 }

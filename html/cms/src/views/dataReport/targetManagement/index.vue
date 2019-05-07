@@ -23,12 +23,17 @@
       </div>
       <div v-show="menuVisible">
         <ul id="menu" :style="menuStyle" class="menu">
-          <li class="menu__item" @click="isAddCardPing = true">新建指标</li>
+          <li class="menu__item" @click="selectTarget">新建指标</li>
         </ul>
       </div>
     </div>
     <div class="target-management-r">
-      <el-form ref="formData" :model="formData" :rules="rules" label-width="0.1px">
+      <el-form
+        v-loading="loadingTarget"
+        ref="formData"
+        :model="formData"
+        :rules="rules"
+        label-width="0.1px">
         <target-row class="target-row" title="指标名称">
           <el-form-item :style="{margin: 0}" prop="targetName">
             <el-input v-model="formData.targetName" placeholder="请输入" style="width: 200px"/>
@@ -70,14 +75,14 @@
                 <el-input v-model="inputFormatModel.formName" placeholder="指标名称"/>
               </el-form-item>
             </el-col>
-            <el-col v-if="inputFormatModel.formType === 3 || inputFormatModel.formType === 4" :span="10">
+            <el-col v-if="inputFormatModel.formType === '3' || inputFormatModel.formType === '4'" :span="10">
               <el-form-item
                 :style="{margin: 0}"
                 :rules="{
                   required: inputFormatModel.formType === 3 || inputFormatModel.formType === 4, message: '请填写指标名称', trigger: 'blur'
                 }"
                 :prop="'inputFormatModels.' + index + '.choiceOption'">
-                <el-input v-model="inputFormatModel.choiceOption" placeholder="候选值，中文逗号隔开，如：男,女"/>
+                <el-input v-model="inputFormatModel.choiceOption" placeholder="候选值，英文逗号隔开，如：男,女"/>
               </el-form-item>
             </el-col>
             排序
@@ -121,9 +126,9 @@
         </target-row>
         <target-row class="target-row" title="指标分类">
           <el-form-item :style="{margin: 0}" prop="targetType">
-            <el-radio-group v-model="formData.targetType">
-              <el-radio :disabled="!!currentTarget && addingSonTarget && formData.targetType !== '0'" label="0">企业指标</el-radio>
-              <el-radio :disabled="!!currentTarget && addingSonTarget && formData.targetType !== '1'" label="1">园区指标</el-radio>
+            <el-radio-group v-model="formData.targetType" @change="targetTypeChange">
+              <el-radio :disabled="(formData.parentId !== '0' && formData.targetType !== '0') || (!!formData.targetId && formData.targetType !== '0')" label="0">企业指标</el-radio>
+              <el-radio :disabled="(formData.parentId !== '0' && formData.targetType !== '1') || (!!formData.targetId && formData.targetType !== '1')" label="1">园区指标</el-radio>
             </el-radio-group>
           </el-form-item>
         </target-row>
@@ -183,12 +188,11 @@ export default {
       }
     }
     return {
+      loadingTarget: false,
       menuStyle: {},
       menuVisible: false,
-      isAddCardPing: false,
       targetTreeData: [],
       currentTarget: '',
-      addingSonTarget: '',
       originalInputFormatModels: {
         formId: '0',
         formType: '',
@@ -272,7 +276,7 @@ export default {
           { required: true, type: 'number', message: '请输入数字', trigger: 'blur' }
         ],
         unit: [
-          { required: true, message: '请输入指标单位', trigger: 'blur' }
+          { required: false, message: '请输入指标单位', trigger: 'blur' }
         ],
         targetType: [
           { required: true, message: '请输入指标分类', trigger: 'change' }
@@ -340,6 +344,7 @@ export default {
               this.getData()
               this.submitting = false
               this.resetForm('formData')
+              this.formData = deepClone(this.originFormData)
               this.$message.success('保存成功')
             } else {
               this.$message.error('提交失败')
@@ -375,7 +380,6 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
-      this.addingSonTarget = false
     },
     // 获取组织部门列表
     getAllDepartment() {
@@ -402,33 +406,38 @@ export default {
         left: MouseEvent.clientX + 'px',
         top: MouseEvent.clientY + 'px'
       }
-      // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
-      document.addEventListener('click', this.selectTarget)
+      // 给整个document添加监听鼠标事件，点击任何位置执行cancelSelectTarget方法
+      document.addEventListener('click', this.cancelSelectTarget)
     },
     selectTarget() {
       // 取消鼠标监听事件 菜单栏
       this.menuVisible = false
+      this.resetForm('formData')
       this.formData = deepClone(this.originFormData)
       if (this.currentTarget) {
-        this.addingSonTarget = true
         this.formData.parentId = this.currentTarget.id
         this.formData.targetType = this.currentTarget.targetType
         this.parentName = this.currentTarget.text
       } else {
         this.currentTarget = ''
         this.parentName = ''
-        this.addingSonTarget = false
       }
       // 要及时关掉监听，不关掉的是一个坑，虽然前台显示的时候没有啥毛病，加一个alert你就知道了
-      document.removeEventListener('click', this.selectTarget)
+      document.removeEventListener('click', this.cancelSelectTarget)
+    },
+    cancelSelectTarget() {
+      //  隐藏菜单栏
+      this.menuVisible = false
     },
     nodeClick(node) {
+      //  隐藏菜单栏
+      this.menuVisible = false
+      this.loadingTarget = true
       const id = node.id
       if (this.formData.targetId === id) {
         return
       }
       this.currentTarget = ''
-      this.addingSonTarget = false
       this.parentName = node.text
       this.formData.parentId = id
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/target/getTargetInfo`, { targetId: id }).then(data => {
@@ -439,11 +448,16 @@ export default {
               formData[key] = data.data[key]
             }
           }
+          formData.inputFormatModels.forEach(item => { item.required = !!item.required })
           formData.targetType = formData.targetType.toString()
         } else {
           this.$message.error(data.result)
         }
+        this.loadingTarget = false
       })
+    },
+    targetTypeChange() {
+      this.formData.departmentId = ''
     }
   }
 }
@@ -515,6 +529,17 @@ export default {
         background-color: #409EFF;
         color: white;
       }
+    }
+  }
+</style>
+<style lang="scss">
+  .target-management {
+    .el-tree-node__content {
+      height: auto;
+      padding: 2px;
+    }
+    .el-tree-node {
+      white-space: normal;
     }
   }
 </style>

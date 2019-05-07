@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="formatData" :row-style="showRow" v-bind="$attrs">
+  <el-table :data="formatData" :row-key="getRowKeys" :row-style="showRow" v-bind="$attrs">
     <el-table-column v-if="columns.length===0" width="150">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
@@ -27,34 +27,34 @@
               <el-row v-if="item.formType === '0'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-input :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" class="target-input"/>
+                  <el-input :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" class="target-input"/>
                 </el-col>
               </el-row>
               <el-row v-if="item.formType === '1'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-input :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" type="textarea"/>
+                  <el-input :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" type="textarea"/>
                 </el-col>
               </el-row>
               <el-row v-else-if="item.formType === '2'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-input-number :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" :min="0" v-model="item.value" class="target-input"/>
+                  <el-input-number :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" :min="0" v-model="item.value" class="target-input"/>
                 </el-col>
               </el-row>
               <el-row v-else-if="item.formType === '3'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-radio-group v-model="item.value" :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" @change="change">
-                    <el-radio v-for="name in item.choiceOption.split('，')" :key="name" :label="name">{{ name }}</el-radio>
+                  <el-radio-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" @change="change">
+                    <el-radio v-for="name in item.choiceOption.split(',')" :key="name" :label="name" :name="name"/>
                   </el-radio-group>
                 </el-col>
               </el-row>
               <el-row v-else-if="item.formType === '4'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-checkbox-group v-model="item.value" :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" @change="change">
-                    <el-checkbox v-for="name in item.choiceOption.split('，')" :key="name" :label="name">{{ name }}</el-checkbox>
+                  <el-checkbox-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" @change="change">
+                    <el-checkbox v-for="name in item.choiceOption.split(',')" :key="name" :label="name" :name="name"/>
                   </el-checkbox-group>
                 </el-col>
               </el-row>
@@ -62,7 +62,7 @@
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
                   <el-upload
-                    :disabled="modelType === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
+                    :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
                     :on-error="handleError"
                     :headers="headers"
                     :on-remove="(file, fileList) => { return handleRemove(file, fileList, item)}"
@@ -71,15 +71,17 @@
                     :on-exceed="handleExceed"
                     :limit="1"
                     :action="api.host+'springcloud-app-fastdfs/upload/fastUpload'"
+                    :file-list="item.fileList"
                     list-type="picture">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过20M</div>
+                    <el-button size="small" type="primary" v-if="isReported !== 0">点击上传</el-button>
+                    <div v-if="isReported === 0 && item.fileList.length === 0">暂无附件</div>
+                    <div slot="tip" class="el-upload__tip" v-if="isReported !== 0">只能上传jpg/png文件，且不超过20M</div>
                   </el-upload>
                 </el-col>
               </el-row>
             </el-col>
-            <el-col v-if="scope.row.isMuiltRow === '0'" :span="6" style="text-align: right">
-              <el-button size="mini" type="primary" icon="el-icon-plus" @click="addMultipleForm(scope.row['inputFormatModel'])"/>
+            <el-col v-if="scope.row.isMuiltRow === '0' && (isReported === 1 && modelType === 0 || (isReported === 1 && modelType === 1 && scope.row['hasJurisdiction']))" :span="6" style="text-align: right">
+              <el-button size="mini" type="primary" icon="el-icon-plus" @click="addMultipleForm(scope.row['inputFormatModel'], index)"/>
               <el-button v-if="index !== 0" size="mini" type="warning" icon="el-icon-minus" @click="deleteMultipleForm(scope.row['inputFormatModel'], index)"/>
             </el-col>
           </el-row>
@@ -100,6 +102,10 @@ export default {
     modelType: {
       type: Number,
       required: true
+    },
+    isReported: {
+      type: Number,
+      required: false
     },
     data: {
       type: [Array, Object],
@@ -128,7 +134,10 @@ export default {
     return {
       headers: {
         token: sessionStorage.token
-      }
+      },
+      getRowKeys(row) {
+        return row.id;
+      },
     }
   },
   computed: {
@@ -149,7 +158,7 @@ export default {
     change(value) {
       console.dir(value)
     },
-    addMultipleForm(form) {
+    addMultipleForm(form, index) {
       // 动态添加多行
       const row = deepClone(form[0])
       for (const item of row) {
@@ -164,8 +173,7 @@ export default {
             item.value = ''
         }
       }
-      console.dir(row)
-      form.push(row)
+      form.splice(index + 1, 0, row)
     },
     deleteMultipleForm(form, index) {
       if (form.length === 1) {

@@ -7,22 +7,32 @@
 <!--        </div>-->
 <!--      </div>-->
     </div>
-    <el-tabs type="border-card" @tab-click="changeDepartment">
-      <el-tab-pane v-for="(form, index) in formDataListTitle" :key="index" :label="form.departmentName">
+    <el-tabs
+      type="border-card"
+      @tab-click="changeDepartment">
+      <el-tab-pane
+        v-for="(form, index) in formDataListTitle"
+        :key="index"
+        v-loading="loadingFormData"
+        :label="form.departmentName">
         <el-tabs type="border-card">
-          <el-tab-pane v-for="(tab, tabIndex) in formData.tabs" :key="tabIndex" :label="tab.tabName">
-            <tree-table :modelType="formData.modelType" :data="tab.targetList" :columns="tab.columns" border expand-all/>
+          <el-tab-pane
+            v-for="(tab, tabIndex) in formData.tabs"
+            :key="tabIndex"
+            :label="tab.tabName"
+            v-loading="loadingTab">
+            <tree-table :isReported="formData.taskInfo.status" :modelType="formData.modelType" :data="tab.targetList" :columns="tab.columns" border expand-all/>
           </el-tab-pane>
         </el-tabs>
       </el-tab-pane>
     </el-tabs>
     <div class="btn-row">
-      <el-button size="small" type="primary">保存为草稿</el-button>
-      <el-button size="small" type="primary" @click="submit">提交</el-button>
+      <el-button size="small" type="primary" @click="submitForDraft">保存为草稿</el-button>
+      <el-button size="small" type="primary" @click="submitForDone">提交</el-button>
       <el-button size="small" type="primary" v-if="formData.otherData">
         <a :href="formData.otherData" download="" target="_blank">点击下载附件</a>
       </el-button>
-      <el-button size="small" type="primary">返回</el-button>
+      <el-button @click="$router.back()" size="small" type="primary">返回</el-button>
     </div>
   </div>
 </template>
@@ -42,6 +52,8 @@
     },
     data() {
       return {
+        loadingFormData: true,
+        loadingTab: true,
         formDataListTitle: [{
           name: '企业',
           id: ''
@@ -66,7 +78,10 @@
       init() {
         this.getData()
           .then(() => {
-            this.formatFormData()
+            return this.formatFormData()
+          })
+          .then(() => {
+            this.loadingTab = false
           })
         this.getPcAd()
           .then(() => {
@@ -77,11 +92,13 @@
           })
       },
       formatFormData() {
-        for (const tab of this.formData.tabs) {
-          this.formatInputFormatModel(tab)
-          this.formatColumn(tab)
-          this.formatTreeOtherColumnData(tab)
-        }
+        return new Promise(resolve => {
+          for (const tab of this.formData.tabs) {
+            this.formatInputFormatModel(tab)
+            this.formatColumn(tab)
+            this.formatTreeOtherColumnData(tab)
+          }
+        })
       },
       formatInputFormatModel(tab) {
         this.treeMerge(tab.inputList, tab.targetList)
@@ -105,10 +122,10 @@
         if (tab.otherColumn) {
           for (const key in tab.otherColumn) {
             let text
-            if (this.formData.taskInfo.modelCycle === '0') {
-              text = tab.otherColumn[key].substring(0, 4) + '年' + tab.otherColumn[key].substring(4, 6) + '月'
-            } else {
-              text = tab.otherColumn[key] + '年'
+            if (key.length === 6) {
+              text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
+            } else{
+              text = key + '年'
             }
             tab.columns.push({
               text: text,
@@ -121,6 +138,7 @@
       changeDepartment(el) {
         const index = Number(el.index)
         const departmentId = this.formDataListTitle[index].departmentId
+        this.formData.departmentId = departmentId
         this.getDepartmentJurisdiction(departmentId)
       },
       getDepartmentJurisdiction(departmentId) {
@@ -150,7 +168,6 @@
         for (const target of treeData) {
           for (const key in otherColumn){
             if (otherColumn[key]) {
-              console.dir(otherColumn[key])
               for(const column of otherColumn[key]) {
                 if (target.id === column.targetId) {
                   target.key = column.value
@@ -174,9 +191,19 @@
           for (const item of formModels) {
             if (target.id === item.targetId) {
               if (item.formType === '2') {
-                item.value = null
+                if (item.value) {
+                  item.value = Number(item.value)
+                } else {
+                  item.value = null
+                }
               } else if (item.formType === '4') {
-                item.value = []
+                if (item.value) {
+                  item.value = item.value.split(',')
+                } else {
+                  item.value = []
+                }
+              }else if (item.formType === '5') {
+                item.fileList = item.value ? [{ name: item.value, url: item.value }] : []
               }
               target.inputFormatModel[0].push(item)
             }
@@ -186,38 +213,73 @@
             list.sort((a, b) => {
               return a['rowNum'] - b['rowNum']
             })
-            // this.ascArr(list, 'rowNum')
           }
           if (target.hasOwnProperty('children') && target.children.length > 0) {
             this.treeMerge(formModels, target.children)
           }
         }
       },
+      submitForDone() {
+        const _this = this
+        this.submit()
+          .then(formData => {
+            this.api.post({
+              url: 'enterpriseSaveCompanyFormData',
+              data: formData,
+              callback(res) {
+                if (res.code === "0000") {
+                  _this.$message.success('保存成功')
+                } else {
+                  _this.$message.error('保存失败')
+                }
+              }
+            })
+          })
+      },
+      submitForDraft() {
+        const _this = this
+        this.submit()
+          .then(formData => {
+            console.dir(JSON.stringify(formData))
+            this.api.post({
+              url: 'enterpriseSaveCompanyFormDataIsDraft',
+              data: formData,
+              callback(res) {
+                if (res.code === "0000") {
+                  _this.$message.success('保存成功')
+                } else {
+                  _this.$message.error('保存失败')
+                }
+              }
+            })
+          })
+      },
       submit() {
-        this.formData.tabs.forEach(item => {
-          this.setOrder(item.targetList)
-        })
-        const formData = this.partDeepClone(this.formData, ['tabs'])
-        // 先克隆提交表单对象
-        formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'columns']))
-        // 把填报格式是多选的value把数组转成字符串
-        formData.tabs.forEach((item, index) => {
-          for (const list of item.inputList) {
-            if (list.formType === '4') {
-              list.value = list.value.join('，')
+        return new Promise((resolve, reject) => {
+          this.formData.tabs.forEach(item => {
+            item.inputList.some(input => {
+              if ((input.required && !value) || (input.required && value.length === 0)) {
+                this.$message.warning(`${input.formName}要求必填，请填写后提交`)
+                return true
+              }
+            })
+          })
+          this.formData.tabs.forEach(item => {
+            this.setOrder(item.targetList)
+          })
+          const formData = this.partDeepClone(this.formData, ['tabs'])
+          // 先克隆提交表单对象
+          formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'columns']))
+          // 把填报格式是多选的value把数组转成字符串
+          formData.tabs.forEach((item, index) => {
+            for (const list of item.inputList) {
+              if (list.formType === '4') {
+                list.value = list.value.join(',')
+              }
             }
-          }
-        })
-        this.api.post({
-          url: 'enterpriseSaveCompanyFormData',
-          data: formData,
-          callback(res) {
-            if (res.code === "0000") {
-
-            } else {
-
-            }
-          }
+          })
+          // console.dir(JSON.stringify(formData))
+          resolve(formData)
         })
       },
       setOrder(tree) {
@@ -238,6 +300,8 @@
       },
       getData() {
         return new Promise((resolve, reject) => {
+          this.loadingFormData = true
+          this.loadingTab = true
           const _this = this
           this.api.get({
             url: `enterpriseGetFormStruct`,
@@ -251,13 +315,14 @@
                   return a['orderNumber'] - b['orderNumber']
                 })
                 if ( _this.formData.modelType === 1) {
+                  _this.loadingFormData = false
                   _this.formDataListTitle = _this.formData.gardenFiller
                   for (const tab of  _this.formData.tabs) {
-                    for (const item of  _this.formDataListTitle) {
-                      _this.formatTreeJurisdiction(tab.targetList, item.departmentId)
-                    }
+                    const departmentId = _this.formDataListTitle[0].departmentId
+                    _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
                 }
+                _this.formData.departmentId = _this.formDataListTitle[0].departmentId
                 resolve()
               } else {
                 _this.$message.error(res.result)

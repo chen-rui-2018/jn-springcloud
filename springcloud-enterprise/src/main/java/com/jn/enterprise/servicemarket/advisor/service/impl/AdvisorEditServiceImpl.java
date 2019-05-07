@@ -237,6 +237,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             }
             TbServiceHonor tbServiceHonor=tbServiceHonorList.get(0);
             BeanUtils.copyProperties(serviceHonorParam, tbServiceHonor);
+            //证书类型
+            tbServiceHonor.setCertificateType(serviceHonorParam.getCertificateCode());
             //修改时间
             tbServiceHonor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //修改人
@@ -246,6 +248,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //没有主键id，新增
             TbServiceHonor tbServiceHonor=new TbServiceHonor();
             BeanUtils.copyProperties(serviceHonorParam, tbServiceHonor);
+            //证书类型
+            tbServiceHonor.setCertificateType(serviceHonorParam.getCertificateCode());
             //主键id
             tbServiceHonor.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             //创建时间

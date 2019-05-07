@@ -1,5 +1,7 @@
 package com.jn.pay.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 
 /**
@@ -18,26 +20,33 @@ public class RefundOrderReq implements Serializable {
      * 缴费类型
      * （详情请查看 MchPayTypeEnum 枚举类）
      * */
+    @NotBlank(message = "缴费类型不能为空！")
     private String payType;
     /**
-     * 支付订单号
+     * 支付订单号(支付系统返回的订单号)
      */
+    @NotBlank(message = "支付订单号(支付系统返回的订单号)不能为空！")
     private String payOrderId;
     /**
      * 商户支付订单号
      */
+    @NotBlank(message = "商户支付订单号不能为空！")
     private String mchOrderNo;
     /**
      * 商户退款单号
      */
+    @NotBlank(message = "商户退款单号不能为空！")
     private String mchRefundNo;
     /**
      * 渠道ID
+     * 根据ChannelIdEnum枚举类获取
      */
+    @NotBlank(message = "渠道ID不能为空！")
     private String channelId;
     /**
      * 退款金额,单位分
      */
+    @NotBlank(message = "支付金额不能为空！")
     private Long amount;
     /**
      * 客户端IP
@@ -50,10 +59,12 @@ public class RefundOrderReq implements Serializable {
     /**
      * 退款结果回调URL
      */
+    @NotBlank(message = "退款结果回调URL不能为空！")
     private String notifyUrl;
     /**
      * 渠道用户标识,如微信openId,支付宝账号
      */
+    @NotBlank(message = "渠道用户标识不能为空！")
     private String channelUser;
     /**
      * 用户姓名
@@ -73,8 +84,21 @@ public class RefundOrderReq implements Serializable {
     private String param2;
     /**
      * 特定渠道发起时额外参数
+     *    当请求参数channelId = WX_JSAPI （微信公众号支付）时，openId参数必填，对应用户所在微信公众号的openId。
+     * 如：{"openId":"o2RvowBf7sOVJf8kJksUEMceaDqo"}
+     *
+     *    当请求参数channelId = WX_NATIVE （微信原生扫码支付）时，productId参数必填，对应业务系统定义的商品ID。
+     * 如：{"productId":"120989823"}
+     *
+     *    当请求参数channelId = ALIPAY_WAP （支付宝WAP支付）时，可传参数ali_show_url，表示用户付款中途退出返回商户网站的地址。不传默认地址为：www.xxpay.org。
+     * 如：{"ali_show_url":"http://www.xiaoshuding.com"}
+     *
+     *    当请求参数channelId = ALIPAY_PC （支付宝PC支付）时，可传参数qr_pay_mode、qrcode_width。
+     * 如： {"qr_pay_mode":"4", "qrcode_width":"200"}
+     * qr_pay_mode：扫码支付的方式，支持前置模式和跳转模式(4：直接显示二维码，2：跳转模式)默认为4。
+     * qrcode_width：当qr_pay_mode=4时，该参数生效，表示二维码宽度。
      */
-    private String extra;
+    private String extra = "{}";
 
 
     public String getPayType() {

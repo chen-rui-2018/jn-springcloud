@@ -1,5 +1,7 @@
 package com.jn.pay.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 
 /**
@@ -16,8 +18,9 @@ public class PayOrderQueryReq implements Serializable  {
 
     /**
      * 缴费类型
-     * （详情请查看 MchPayTypeEnum 枚举类）
+     * （详情请查看 PayTypeEnum 枚举类）
      * */
+    @NotBlank(message = "缴费类型不能为空！")
     private String payType;
     /**
      * 支付中心生成的订单号，与mchOrderNo二者传一即可

@@ -1,5 +1,8 @@
 package com.jn.pay.model;
 
+import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 
 /**
@@ -16,56 +19,100 @@ public class PayOrderReq implements Serializable  {
 
     /**
      * 缴费类型
-     * （详情请查看 MchPayTypeEnum 枚举类）
+     * （详情请查看 PayTypeEnum 枚举类）
      * */
+    @ApiModelProperty("缴费类型")
+    @NotBlank(message = "缴费类型不能为空！")
     private String payType;
+
     /**
      * 商户订单号
      */
+    @ApiModelProperty("商户订单号")
+    @NotBlank(message = "商户订单号不能为空！")
     private String mchOrderNo;
+
     /**
      * 渠道ID
+     * 根据ChannelIdEnum枚举类获取
      */
+    @ApiModelProperty("渠道ID,根据ChannelIdEnum枚举类获取")
+    @NotBlank(message = "渠道ID不能为空！")
     private String channelId;
+
     /**
      * 支付金额,单位分
      */
+    @ApiModelProperty("支付金额,单位分")
+    @NotBlank(message = "支付金额不能为空！")
     private Long amount;
+
     /**
      * 客户端IP
-     *
-     * @mbggenerated
+     * 如：192.168.10.01
      */
+    @ApiModelProperty("客户端IP")
     private String clientIp;
+
     /**
      * 设备
+     * 如：web
      */
+    @ApiModelProperty("设备")
     private String device;
+
     /**
+     * 回调地址
      * 支付系统回调通知业务系统地址
      */
+    @ApiModelProperty("支付系统回调通知业务系统地址")
+    @NotBlank(message = "回调地址不能为空！")
     private String notifyUrl;
+
     /**
      * 商品标题
      */
+    @ApiModelProperty("商品标题")
+    @NotBlank(message = "商品标题不能为空！")
     private String subject;
+
     /**
      * 商品描述信息
      */
+    @ApiModelProperty("商品描述信息")
+    @NotBlank(message = "商品描述信息不能为空！")
     private String body;
+
     /**
      * 扩展参数1
      */
+    @ApiModelProperty("扩展参数1,回调业务系统时原样返回")
     private String param1;
 
     /**
      * 扩展参数2
      */
+    @ApiModelProperty("扩展参数2,回调业务系统时原样返回")
     private String param2;
+
     /**
      * 特定渠道发起时额外参数
+     *    当请求参数channelId = WX_JSAPI （微信公众号支付）时，openId参数必填，对应用户所在微信公众号的openId。
+     * 如：{"openId":"o2RvowBf7sOVJf8kJksUEMceaDqo"}
+     *
+     *    当请求参数channelId = WX_NATIVE （微信原生扫码支付）时，productId参数必填，对应业务系统定义的商品ID。
+     * 如：{"productId":"120989823"}
+     *
+     *    当请求参数channelId = ALIPAY_WAP （支付宝WAP支付）时，可传参数ali_show_url，表示用户付款中途退出返回商户网站的地址。不传默认地址为：www.xxpay.org。
+     * 如：{"ali_show_url":"http://www.xiaoshuding.com"}
+     *
+     *    当请求参数channelId = ALIPAY_PC （支付宝PC支付）时，可传参数qr_pay_mode、qrcode_width。
+     * 如： {"qr_pay_mode":"4", "qrcode_width":"200"}
+     * qr_pay_mode：扫码支付的方式，支持前置模式和跳转模式(4：直接显示二维码，2：跳转模式)默认为4。
+     * qrcode_width：当qr_pay_mode=4时，该参数生效，表示二维码宽度。
      */
-    private String extra;
+    @ApiModelProperty(value = "特定渠道发起时额外参数 如：当channelId = ALIPAY_PC 返回{\"qr_pay_mode\":\"4\", \"qrcode_width\":\"200\"}",example = "{\"qr_pay_mode\":\"4\", \"qrcode_width\":\"200\"}")
+    private String extra = "{}";
 
     @Override
     public String toString() {

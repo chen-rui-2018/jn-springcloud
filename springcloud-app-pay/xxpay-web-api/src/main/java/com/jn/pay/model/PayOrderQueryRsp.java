@@ -281,31 +281,5 @@ public class PayOrderQueryRsp implements Serializable  {
         this.device = device;
     }
 
-    @Override
-    public String toString() {
-        return "PayOrderQueryRsp{" +
-                "payOrderId='" + payOrderId + '\'' +
-                ", mchOrderNo='" + mchOrderNo + '\'' +
-                ", mchId='" + mchId + '\'' +
-                ", channelMchId='" + channelMchId + '\'' +
-                ", channelOrderNo='" + channelOrderNo + '\'' +
-                ", channelId='" + channelId + '\'' +
-                ", currency='" + currency + '\'' +
-                ", amount=" + amount +
-                ", notifyUrl='" + notifyUrl + '\'' +
-                ", subject='" + subject + '\'' +
-                ", body='" + body + '\'' +
-                ", status=" + status +
-                ", extra='" + extra + '\'' +
-                ", createTime=" + createTime +
-                ", paySuccTime=" + paySuccTime +
-                ", updateTime=" + updateTime +
-                ", lastNotifyTime=" + lastNotifyTime +
-                ", notifyCount=" + notifyCount +
-                ", param1='" + param1 + '\'' +
-                ", param2='" + param2 + '\'' +
-                ", clientIp='" + clientIp + '\'' +
-                ", device='" + device + '\'' +
-                '}';
-    }
+
 }

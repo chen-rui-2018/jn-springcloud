@@ -36,6 +36,7 @@
                    re.expected_date as "expectedDate",
                    re.result_detail as "resultDetail",
                    re.is_comment as "isComment",
+                   re.funds_req_desc as "fundsReqDesc"
                    info.con_name as "conName",info.con_phone as "conPhone",
                    info.con_email as "conEmail",re.org_name as "orgName",
                    re.advisor_name as "advisorName", re.product_name as "productName",

@@ -26,6 +26,18 @@ public class ParkingRecordDetailVo implements Serializable {
     private String admissionTime;
     @ApiModelProperty(value = "离场时间 yyyy-MM-dd HH:mm:ss",example = "2019-01-24 10:00:10")
     private String departureTime;
+    @ApiModelProperty(value = "临时车价格描述",example = "5元/30分钟，15分钟内免费")
+    private String tempPriceDepict;
+    @ApiModelProperty(value = "临时车价格(单位:元)",example = "5")
+    private Double tempPrice;
+    @ApiModelProperty(value = "临时车计费周期(单位:分钟)",example = "30")
+    private String tempPriceUnit;
+    @ApiModelProperty(value = "临时车每天价格上限[为空/0则没有上线]",example = "50")
+    private Double tempPriceTotal;
+    @ApiModelProperty(value = "应缴金额[计费金额 元]",example = "12")
+    private Double parkingAmount;
+    @ApiModelProperty(value = "停车时长",example = "1小时20分钟")
+    private String parkingTime;
 
     public String getParkingId() {
         return parkingId;
@@ -73,5 +85,53 @@ public class ParkingRecordDetailVo implements Serializable {
 
     public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
+    }
+
+    public String getTempPriceDepict() {
+        return tempPriceDepict;
+    }
+
+    public void setTempPriceDepict(String tempPriceDepict) {
+        this.tempPriceDepict = tempPriceDepict;
+    }
+
+    public Double getTempPrice() {
+        return tempPrice;
+    }
+
+    public void setTempPrice(Double tempPrice) {
+        this.tempPrice = tempPrice;
+    }
+
+    public String getTempPriceUnit() {
+        return tempPriceUnit;
+    }
+
+    public void setTempPriceUnit(String tempPriceUnit) {
+        this.tempPriceUnit = tempPriceUnit;
+    }
+
+    public Double getTempPriceTotal() {
+        return tempPriceTotal;
+    }
+
+    public void setTempPriceTotal(Double tempPriceTotal) {
+        this.tempPriceTotal = tempPriceTotal;
+    }
+
+    public Double getParkingAmount() {
+        return parkingAmount;
+    }
+
+    public void setParkingAmount(Double parkingAmount) {
+        this.parkingAmount = parkingAmount;
+    }
+
+    public String getParkingTime() {
+        return parkingTime;
+    }
+
+    public void setParkingTime(String parkingTime) {
+        this.parkingTime = parkingTime;
     }
 }

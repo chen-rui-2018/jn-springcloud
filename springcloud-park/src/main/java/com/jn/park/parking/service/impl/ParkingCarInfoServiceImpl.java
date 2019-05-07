@@ -19,6 +19,7 @@ import com.jn.park.parking.model.ParkingRecordParam;
 import com.jn.park.parking.model.ParkingRecordRampParam;
 import com.jn.park.parking.service.ParkingCarInfoService;
 import com.jn.park.parking.service.ParkingServerService;
+import com.jn.park.parking.service.ParkingTemporaryService;
 import com.jn.park.parking.vo.*;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -57,6 +58,8 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
     private ParkingServerService parkingServerService;
     @Autowired
     private TbParkingAreaMapper tbParkingAreaMapper;
+    @Autowired
+    private ParkingTemporaryService parkingTemporaryService;
 
     @ServiceLog(doAction = "查询车辆列表")
     @Override
@@ -190,7 +193,6 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
         if(null != parkingByCarLicense){
             if(null == tbParkingRecords || tbParkingRecords.size()==0 || StringUtils.equals(parkingByCarLicense.getAdmissionTime()
                     ,DateUtils.formatDate(tbParkingRecords.get(0).getAdmissionTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()))){
-                //TODO 说明匝道系统存在的数据业务系统尚未同步。同步入库
                 ParkingRecordVo parkingRecordVo = new ParkingRecordVo();
                 BeanUtils.copyProperties(parkingByCarLicense,parkingRecordVo);
                 try{
@@ -253,9 +255,13 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
             BeanUtils.copyProperties(parkingRecords.get(0),parkingRecordDetailVo);
             parkingRecordDetailVo.setAdmissionTime(DateUtils.formatDate(parkingRecords.get(0).getAdmissionTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()));
         }else{
+            //数据库无数据，调用道闸接口查询，避免数据遗落
             ParkingRecordRampParam parkingByCarLicense = parkingServerService.getParkingByCarLicense(carLicense);
             gateId = parkingByCarLicense.getGateId();
             BeanUtils.copyProperties(parkingByCarLicense,parkingRecordDetailVo);
+        }
+        if(StringUtils.isEmpty(areaId)&&StringUtils.isEmpty(gateId)){
+            throw new JnSpringCloudException(ParkingExceptionEnum.PARKING_RECODE_IS_NOT_EXIST);
         }
 
         TbParkingAreaCriteria areaCriteria = new TbParkingAreaCriteria();
@@ -268,7 +274,21 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
             parkingRecordDetailVo.setAreaName(tbParkingAreas.get(0).getAreaName());
             parkingRecordDetailVo.setAreaAddress(tbParkingAreas.get(0).getAreaAddress());
         }
+
+        if(null!=parkingRecords&&parkingRecords.size()>0 && null!=parkingRecords.get(0).getStartBillingTime() && DateUtils.addMinutes(parkingRecords.get(0).getCreatedTime(), 15).after(new Date())){
+            //说明用户已缴费，且当前未满15分钟，不返回对应的停车记录
+            throw new JnSpringCloudException(ParkingExceptionEnum.PARKING_CAR_IS_PAYMENT);
+        }
+        Double aDouble = parkingTemporaryService.calculateParkingAmount(parkingRecords.get(0));
+        parkingRecordDetailVo.setParkingAmount(aDouble);
+        try{
+            String timeDifference = getTimeDifference(DateUtils.parseDate(parkingRecordDetailVo.getAdmissionTime(), ParkingEnums.DATE_TIME_FORMAT.getCode()), new Date());
+            parkingRecordDetailVo.setParkingTime(timeDifference);
+        }catch (ParseException e){
+            logger.error("停车时间计算转换异常",e);
+        }
         return parkingRecordDetailVo;
     }
+
 
 }

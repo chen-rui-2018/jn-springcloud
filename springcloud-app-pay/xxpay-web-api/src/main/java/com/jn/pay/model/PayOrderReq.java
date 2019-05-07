@@ -112,7 +112,8 @@ public class PayOrderReq implements Serializable  {
      * qrcode_width：当qr_pay_mode=4时，该参数生效，表示二维码宽度。
      */
     @ApiModelProperty(value = "特定渠道发起时额外参数 如：当channelId = ALIPAY_PC 返回{\"qr_pay_mode\":\"4\", \"qrcode_width\":\"200\"}",example = "{\"qr_pay_mode\":\"4\", \"qrcode_width\":\"200\"}")
-    private String extra = "{}";
+    private String extra;
+
 
     @Override
     public String toString() {

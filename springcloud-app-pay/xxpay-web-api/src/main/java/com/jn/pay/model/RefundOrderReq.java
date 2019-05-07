@@ -98,7 +98,7 @@ public class RefundOrderReq implements Serializable {
      * qr_pay_mode：扫码支付的方式，支持前置模式和跳转模式(4：直接显示二维码，2：跳转模式)默认为4。
      * qrcode_width：当qr_pay_mode=4时，该参数生效，表示二维码宽度。
      */
-    private String extra = "{}";
+    private String extra ;
 
 
     public String getPayType() {

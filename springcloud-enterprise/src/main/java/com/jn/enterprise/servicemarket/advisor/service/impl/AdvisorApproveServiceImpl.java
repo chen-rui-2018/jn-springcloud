@@ -44,7 +44,7 @@ public class AdvisorApproveServiceImpl implements AdvisorApproveService {
     @Override
     public List<OrgInfoShow> selectOrgInfo(String orgName) {
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
-        example.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andOrgNameLike(orgName).andOrgStatusEqualTo("1").andRecordStatusEqualTo(RECORD_STATUS);
         List<TbServiceOrg> tbServiceOrgList = tbServiceOrgMapper.selectByExample(example);
         if(tbServiceOrgList.isEmpty()){
             return null;

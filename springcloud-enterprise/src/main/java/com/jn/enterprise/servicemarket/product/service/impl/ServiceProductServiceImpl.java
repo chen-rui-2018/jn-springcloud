@@ -379,13 +379,11 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFeatureProduct(OrgUpdateFeatureProduct content, String account) {
-       //修改后需要进行审核
-        String status = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
+
         TbServiceProduct tbServiceProduct = new TbServiceProduct();
         BeanUtils.copyProperties(content,tbServiceProduct);
         tbServiceProduct.setModifierAccount(account);
         tbServiceProduct.setModifiedTime(new Date());
-        tbServiceProduct.setStatus(status);
         if (content.getReferPrice() != null) {
             checkReferPrice(content.getReferPrice());
         }
@@ -523,7 +521,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         String [] accounts = account.split(",");
         List<TbServiceAndAdvisor> advisorList = new ArrayList<>();
         for(String advisorAccount : accounts){
+            String uuid= UUID.randomUUID().toString().replaceAll("-","");
             TbServiceAndAdvisor advisor = new TbServiceAndAdvisor();
+            advisor.setId(uuid);
             advisor.setProductId(productId);
             advisor.setAdvisorAccount(advisorAccount);
             advisorList.add(advisor);

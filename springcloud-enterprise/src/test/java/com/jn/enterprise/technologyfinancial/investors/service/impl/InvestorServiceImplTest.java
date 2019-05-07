@@ -106,15 +106,15 @@ public class InvestorServiceImplTest {
 
         //投资人认证信息
         //投资人姓名
-        investorAuthenticateParam.setInvestorName("王松");
-        investorAuthenticateParam.setAvatar("投资人1.jpg");
+        investorAuthenticateParam.setInvestorName("王松1");
+        investorAuthenticateParam.setAvatar("http://112.94.22.222:2020/group2/M00/00/29/wKgKFFyxkm2AO6P-AAM-qTwsdxc559.png");
         investorAuthenticateParam.setSex("1");
         investorAuthenticateParam.setOrgId("040e6f1a459e49989fd6db3dc2dfd6a4");
-        investorAuthenticateParam.setOrgName("湖南鑫欧宇");
+        investorAuthenticateParam.setOrgName("江苏鑫欧宇");
         investorAuthenticateParam.setPosition("律师顾问");
         investorAuthenticateParam.setAddressProvince("湖南省");
-        investorAuthenticateParam.setAddressCity("长沙市");
-        investorAuthenticateParam.setAddressArea("岳麓区");
+        investorAuthenticateParam.setAddressCity("苏州市");
+        investorAuthenticateParam.setAddressArea("白下区");
         investorAuthenticateParam.setPhone("18674398766");
         investorAuthenticateParam.setEmail("123456@163.com");
         investorAuthenticateParam.setInvesFinanExper("59595融资");
@@ -138,12 +138,12 @@ public class InvestorServiceImplTest {
         //工作经历
         investorWorkExperienceParam1.setStartTime("201409");
         investorWorkExperienceParam1.setEndTime("201806");
-        investorWorkExperienceParam1.setCompanyName("湖南律师事务所");
+        investorWorkExperienceParam1.setCompanyName("江苏律师事务所");
         investorWorkExperienceParam1.setPosition("高级律师");
         investorWorkExperienceParamList.add(investorWorkExperienceParam1);
         investorWorkExperienceParam2.setStartTime("201807");
         investorWorkExperienceParam2.setEndTime("201903");
-        investorWorkExperienceParam2.setCompanyName("长沙高新律师事务所");
+        investorWorkExperienceParam2.setCompanyName("江苏高新律师事务所");
         investorWorkExperienceParam2.setPosition("主任律师");
         investorWorkExperienceParamList.add(investorWorkExperienceParam2);
         investorAuthenticateParam.setInvestorWorkExperienceParamList(investorWorkExperienceParamList);

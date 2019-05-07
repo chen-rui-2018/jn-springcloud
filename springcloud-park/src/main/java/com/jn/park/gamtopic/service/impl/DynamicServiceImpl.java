@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -176,12 +177,25 @@ public class DynamicServiceImpl implements DynamicService {
             accountList =null;
         }
         Page<Object> objects = PageHelper.startPage(pageNum,pageSize,true);
-        List<DynamicWebShow> dynamicWebList =   dynamicDao.findDynamicWebList(accountList);
+        List<DynamicWebShow> dynamicWebList =   dynamicDao.findDynamicWebList(accountList,account);
         if(!dynamicWebList.isEmpty()) {
             dynamicWebList = improveWebUserInfo(dynamicWebList);
         }
         return new PaginationData<>(dynamicWebList,objects==null?0:objects.getTotal() );
     }
+    @ServiceLog(doAction = "查找前台用户关注的用户的动态列表")
+    @Override
+    public PaginationData<List<DynamicWebShow>> findCareDynamicList(com.jn.common.model.Page page, String account) {
+        int pageNum = page.getPage();
+        int pageSize = page.getRows()==0?15:page.getRows();
+        Page<Object> objects = PageHelper.startPage(pageNum,pageSize,true);
+        List<DynamicWebShow> dynamicWebList =   dynamicDao.findCareDynamicList(account);
+        if(!dynamicWebList.isEmpty()) {
+            dynamicWebList = improveWebUserInfo(dynamicWebList);
+        }
+        return new PaginationData<>(dynamicWebList,objects==null?0:objects.getTotal() );
+    }
+
     @ServiceLog(doAction = "查找前台动态详情+评论列表")
     @Override
     public DynamicWebDetailsVo findDynamicWebDetails(String dynamicId) {
@@ -347,6 +361,11 @@ public class DynamicServiceImpl implements DynamicService {
                         show.setAvatar(user.getAvatar());
                         show.setNickName(user.getNickName());
                         show.setCompanyName(user.getCompanyName());
+                        if(StringUtils.isNotBlank(show.getImgString())){
+                            String imgs = show.getImgString();
+                            show.setImgList(Arrays.asList(imgs.split(",")));
+                            show.setImgString("");
+                        }
                     }
                 }
             }

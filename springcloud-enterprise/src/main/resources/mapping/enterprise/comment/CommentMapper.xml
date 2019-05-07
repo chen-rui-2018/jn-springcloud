@@ -14,11 +14,11 @@
         <if test="account != null and account != ''">
             and ( r.advisor_account = #{account} or o.org_account = #{account} )
         </if>
-        <if test="productId != null and productId != ''">
-            and r.product_id_ =  #{productId}
+        <if test="productName != null and productName != ''">
+            and r.product_name like CONCAT('%', #{searchCode}, '%')
         </if>
-        <if test="advisorId != null and advisorId != ''">
-            and re.advisor_account =  #{advisorId}
+        <if test="advisorName != null and advisorName != ''">
+            and re.advisor_name like CONCAT('%', #{advisorName}, '%')
         </if>
     </select>
 

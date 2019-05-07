@@ -14,12 +14,15 @@ import com.jn.enterprise.servicemarket.comment.entity.TbServiceRating;
 import com.jn.enterprise.servicemarket.comment.model.*;
 import com.jn.enterprise.servicemarket.comment.service.CommentService;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
+import com.jn.enterprise.servicemarket.product.entity.TbServiceProduct;
 import com.jn.enterprise.servicemarket.require.dao.TbServiceRequireMapper;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,7 @@ import java.util.List;
  */
 @Service
 public class CommentServiceImpl implements CommentService {
+    private static Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     @Autowired
     private TbServiceRequireMapper requireMapper;
@@ -59,14 +63,14 @@ public class CommentServiceImpl implements CommentService {
         Page<Object> objects = PageHelper.startPage(ratingParameter.getPage(), ratingParameter.getRows() == 0 ? 15 : ratingParameter.getRows());
         TbServiceRequireCriteria requireCriteria = new TbServiceRequireCriteria();
         TbServiceRequireCriteria.Criteria criteria = requireCriteria.createCriteria();
-        if(StringUtils.isNotEmpty(ratingParameter.getOrgId())){
-            criteria.andOrgIdEqualTo(ratingParameter.getOrgId());
+        if(StringUtils.isNotEmpty(ratingParameter.getOrgName())){
+            criteria.andOrgNameLike("%"+ratingParameter.getOrgName()+"%");
         }
         if(StringUtils.isNotEmpty(ratingParameter.getAdvisorAccount())){
             criteria.andAdvisorAccountEqualTo(ratingParameter.getAdvisorAccount());
         }
-        if(StringUtils.isNotEmpty(ratingParameter.getProductId())){
-            criteria.andProductIdEqualTo(ratingParameter.getProductId());
+        if(StringUtils.isNotEmpty(ratingParameter.getProductName())){
+            criteria.andProductNameLike("%"+ratingParameter.getProductName()+"%");
         }
         // 对他人评价，发布人为自己。
         criteria.andHandleResultEqualTo(REAUIRE_HANDLE_SUCCESS).andIssueAccountEqualTo(userAccount);
@@ -78,6 +82,7 @@ public class CommentServiceImpl implements CommentService {
             rating.setIssueTime(serviceRequire.getIssueTime()==null?"":(DateUtils.formatDate(serviceRequire.getIssueTime(),"yyyy-MM-dd HH:mm:ss")));
             rating.setCommentTime(serviceRequire.getCommentTime()==null?"":(DateUtils.formatDate(serviceRequire.getCommentTime(),"yyyy-MM-dd HH:mm:ss")));
             rating.setHandleTime(serviceRequire.getHandleTime()==null?"":(DateUtils.formatDate(serviceRequire.getHandleTime(),"yyyy-MM-dd HH:mm:ss")));
+            rating.setBusinessId(serviceRequire.getBusinessId());
             ratings.add(rating);
         }
         PaginationData data = new PaginationData(ratings, objects.getTotal());
@@ -124,6 +129,13 @@ public class CommentServiceImpl implements CommentService {
         tbServiceRating.setCreatorAccount(account);
         tbServiceRating.setRequireId(commentParameter.getId());
         BeanUtils.copyProperties(commentParameter,tbServiceRating);
+
+        TbServiceRequire tbServiceRequire = new TbServiceRequire();
+        tbServiceRequire.setId(commentParameter.getId());
+        tbServiceRequire.setIsComment("1");
+        tbServiceRequire.setCommentTime(new Date());
+        int i = requireMapper.updateByPrimaryKeySelective(tbServiceRequire);
+        logger.info("提交评论，修改需求表评论状态，需求iD：{}，响应条数：{}",commentParameter.getId(),i);
         int insert = tbServiceRatingMapper.insert(tbServiceRating);
         return insert==1?true:false;
     }

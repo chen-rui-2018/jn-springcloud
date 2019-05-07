@@ -14,7 +14,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "RequireOtherDetails", description = "对他人的需求详情")
-public class RequireOtherDetails extends Page implements Serializable {
+public class RequireOtherDetails implements Serializable {
     @ApiModelProperty(value = "企业名称")
     private String companyName;
     @ApiModelProperty(value = "需求单号")

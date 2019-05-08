@@ -1,13 +1,10 @@
 package com.jn.enterprise.company.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 编辑企业入参Bean
@@ -74,7 +71,7 @@ public class CompanyUpdateParam implements Serializable {
     private String induType;
 
     @NotNull(message = "企业领域代码不能为空")
-    @ApiModelProperty(value = "企业领域代码",example = "qilydm")
+    @ApiModelProperty(value = "企业领域代码", required = true,example = "qilydm")
     private String induCode;
 
     @NotNull(message = "三证一体或营业执照照片不能为空")
@@ -134,7 +131,7 @@ public class CompanyUpdateParam implements Serializable {
     private String recordStatus;
 
     @NotNull(message = "验证码不能为空")
-    @ApiModelProperty(value = "验证码",required = true,example = "1234")
+    @ApiModelProperty(value = "验证码",required = true,example = "123456")
     private String checkCode;
 
     public String getCheckStatus() {

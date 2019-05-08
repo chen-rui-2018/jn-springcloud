@@ -8,17 +8,23 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.enums.CompanyExceptionEnum;
 import com.jn.company.model.CompanyProImg;
+import com.jn.company.model.IBPSResult;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
 import com.jn.enterprise.company.entity.*;
+import com.jn.enterprise.company.enums.CompanyDataEnum;
+import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
+import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,6 +56,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private CompanyMapper companyMapper;
+
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
     /**
      * 数据状态 1有效
@@ -184,9 +194,39 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    @ServiceLog(doAction = "根据企业ID查询最后一条修改数据")
-    public TbServiceCompanyModify getLastModify(String comId) {
-        return companyMapper.getLastModify(comId);
+    @ServiceLog(doAction = "编辑企业信息")
+    public Integer updateCompanyInfo(CompanyUpdateParam companyUpdateParam, String account, String phone) {
+        // 判断当前用户是否为企业管理员
+        ServiceCompany company = getCompanyDetailByAccountOrId(account);
+
+        String code = (String)userExtensionClient.getSendCodeByPhone(phone).getData();
+        if(!StringUtils.equals(code,companyUpdateParam.getCheckCode())){
+            //验证码有误
+            throw new JnSpringCloudException(JoinParkExceptionEnum.MESSAGE_CODE_IS_WRONG);
+        }
+
+        // 如果有数据且正在审核中抛出异常
+        TbServiceCompanyModify companyModify = companyMapper.getLastModify(company.getId());
+        if (companyModify != null && companyModify.getCheckStatus().equals(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode())) {
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.COMPANY_CHECK_ING);
+        }
+
+        // 封装ibps数据
+        companyUpdateParam.setCheckStatus(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode());
+        companyUpdateParam.setComId(company.getId());
+        companyUpdateParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        companyUpdateParam.setCreatorAccount(account);
+        companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
+
+        IBPSResult ibpsResult = IBPSUtils.sendRequest("574913700364812288", account, companyUpdateParam);
+
+        // ibps启动流程失败
+        if (ibpsResult == null || ibpsResult.getState().equals("-1")) {
+            logger.warn("[编辑企业信息] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.COMPANY_CHECK_ERROR);
+        }
+        logger.info("[编辑企业信息] " + ibpsResult.getMessage());
+        return 1;
     }
 
 }

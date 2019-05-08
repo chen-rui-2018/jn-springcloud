@@ -4,6 +4,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.enterprise.company.entity.TbServiceCompanyModify;
+import com.jn.enterprise.company.model.CompanyUpdateParam;
 
 import java.util.List;
 
@@ -31,12 +32,13 @@ public interface CompanyService {
      */
     ServiceCompany getCompanyDetailByAccountOrId(String account);
 
-
     /**
-     * 根据企业ID查询最后一条修改数据
-     * @param comId 企业ID
+     * 编辑企业信息
+     * @param companyUpdateParam 企业信息入参
+     * @param account 当前用户账号
+     * @param phone 当前用户手机
      * @return
      */
-    TbServiceCompanyModify getLastModify(String comId);
+    Integer updateCompanyInfo(CompanyUpdateParam companyUpdateParam, String account, String phone);
 
 }

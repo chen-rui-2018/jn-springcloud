@@ -50,6 +50,8 @@
         <module>springcloud-wechat-miniprogram</module>
         <module>springcloud-wechat-miniprogram-api</module>
 
+		<module>springcloud-app-pay</module>
+
 	</modules>
 
 	<properties>
@@ -135,6 +137,11 @@
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-oa-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>xxpay-web-api</artifactId>
 				<version>1.0.0-RELEASE</version>
 			</dependency>
 

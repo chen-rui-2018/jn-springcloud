@@ -88,7 +88,7 @@ public class AdvisorServiceImplTest {
     @Test
     public void getServiceAdvisorInfo(){
         try {
-            AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
+            AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount,"2");
             if(advisorDetailsVo!=null){
                 logger.info(advisorDetailsVo.getAdvisorServiceInfo().toString());
                 logger.info("总评价数{}",advisorDetailsVo.getEvaluationTotal()+"");
@@ -191,7 +191,7 @@ public class AdvisorServiceImplTest {
     @Test
     public void getAdvisorInfoByAccount(){
         try {
-            AdvisorServiceInfo advisorInfoByAccount = advisorService.getAdvisorInfoByAccount(advisorAccount);
+            AdvisorServiceInfo advisorInfoByAccount = advisorService.getAdvisorInfoByAccount(advisorAccount,"2");
             assertThat(advisorInfoByAccount, notNullValue());
         } catch (JnSpringCloudException e) {
             logger.info("根据顾问账号获取顾问基本信息失败");

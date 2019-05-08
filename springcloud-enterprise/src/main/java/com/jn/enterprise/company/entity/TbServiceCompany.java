@@ -55,6 +55,8 @@ public class TbServiceCompany implements Serializable {
 
     private String businessLicense;
 
+    private String propagandaPicture;
+
     private Date licStarttime;
 
     private Date licEndtime;
@@ -108,6 +110,8 @@ public class TbServiceCompany implements Serializable {
     private Date checkTime;
 
     private String comSource;
+
+    private String affiliatedPark;
 
     private String creatorAccount;
 
@@ -319,6 +323,14 @@ public class TbServiceCompany implements Serializable {
 
     public void setBusinessLicense(String businessLicense) {
         this.businessLicense = businessLicense == null ? null : businessLicense.trim();
+    }
+
+    public String getPropagandaPicture() {
+        return propagandaPicture;
+    }
+
+    public void setPropagandaPicture(String propagandaPicture) {
+        this.propagandaPicture = propagandaPicture == null ? null : propagandaPicture.trim();
     }
 
     public Date getLicStarttime() {
@@ -537,6 +549,14 @@ public class TbServiceCompany implements Serializable {
         this.comSource = comSource == null ? null : comSource.trim();
     }
 
+    public String getAffiliatedPark() {
+        return affiliatedPark;
+    }
+
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark == null ? null : affiliatedPark.trim();
+    }
+
     public String getCreatorAccount() {
         return creatorAccount;
     }
@@ -614,6 +634,7 @@ public class TbServiceCompany implements Serializable {
             && (this.getInduType() == null ? other.getInduType() == null : this.getInduType().equals(other.getInduType()))
             && (this.getInduCode() == null ? other.getInduCode() == null : this.getInduCode().equals(other.getInduCode()))
             && (this.getBusinessLicense() == null ? other.getBusinessLicense() == null : this.getBusinessLicense().equals(other.getBusinessLicense()))
+            && (this.getPropagandaPicture() == null ? other.getPropagandaPicture() == null : this.getPropagandaPicture().equals(other.getPropagandaPicture()))
             && (this.getLicStarttime() == null ? other.getLicStarttime() == null : this.getLicStarttime().equals(other.getLicStarttime()))
             && (this.getLicEndtime() == null ? other.getLicEndtime() == null : this.getLicEndtime().equals(other.getLicEndtime()))
             && (this.getRegisterType() == null ? other.getRegisterType() == null : this.getRegisterType().equals(other.getRegisterType()))
@@ -641,6 +662,7 @@ public class TbServiceCompany implements Serializable {
             && (this.getCheckStatus() == null ? other.getCheckStatus() == null : this.getCheckStatus().equals(other.getCheckStatus()))
             && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
             && (this.getComSource() == null ? other.getComSource() == null : this.getComSource().equals(other.getComSource()))
+            && (this.getAffiliatedPark() == null ? other.getAffiliatedPark() == null : this.getAffiliatedPark().equals(other.getAffiliatedPark()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -677,6 +699,7 @@ public class TbServiceCompany implements Serializable {
         result = prime * result + ((getInduType() == null) ? 0 : getInduType().hashCode());
         result = prime * result + ((getInduCode() == null) ? 0 : getInduCode().hashCode());
         result = prime * result + ((getBusinessLicense() == null) ? 0 : getBusinessLicense().hashCode());
+        result = prime * result + ((getPropagandaPicture() == null) ? 0 : getPropagandaPicture().hashCode());
         result = prime * result + ((getLicStarttime() == null) ? 0 : getLicStarttime().hashCode());
         result = prime * result + ((getLicEndtime() == null) ? 0 : getLicEndtime().hashCode());
         result = prime * result + ((getRegisterType() == null) ? 0 : getRegisterType().hashCode());
@@ -704,6 +727,7 @@ public class TbServiceCompany implements Serializable {
         result = prime * result + ((getCheckStatus() == null) ? 0 : getCheckStatus().hashCode());
         result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
         result = prime * result + ((getComSource() == null) ? 0 : getComSource().hashCode());
+        result = prime * result + ((getAffiliatedPark() == null) ? 0 : getAffiliatedPark().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -743,6 +767,7 @@ public class TbServiceCompany implements Serializable {
         sb.append(", induType=").append(induType);
         sb.append(", induCode=").append(induCode);
         sb.append(", businessLicense=").append(businessLicense);
+        sb.append(", propagandaPicture=").append(propagandaPicture);
         sb.append(", licStarttime=").append(licStarttime);
         sb.append(", licEndtime=").append(licEndtime);
         sb.append(", registerType=").append(registerType);
@@ -770,6 +795,7 @@ public class TbServiceCompany implements Serializable {
         sb.append(", checkStatus=").append(checkStatus);
         sb.append(", checkTime=").append(checkTime);
         sb.append(", comSource=").append(comSource);
+        sb.append(", affiliatedPark=").append(affiliatedPark);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", createdTime=").append(createdTime);

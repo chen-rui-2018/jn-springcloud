@@ -6,7 +6,6 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.park.activity.model.ActivitySlimQuery;
-import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.index.enums.IndexDataEnum;
 import com.jn.park.index.enums.IndexExceptionEnum;
@@ -15,7 +14,6 @@ import com.jn.park.index.model.ServiceSearchParam;
 import com.jn.park.index.service.IndexService;
 import com.jn.park.policy.model.PolicyCenterHomeParam;
 import com.jn.park.policy.service.PolicyCenterService;
-import com.jn.park.policy.service.PolicyGuideService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -107,6 +105,13 @@ public class IndexController extends BaseController {
         return new Result(indexService.getImportantNewsList());
     }
 
+    @ControllerLog(doAction = "门户首页-成果展览")
+    @ApiOperation(value = "门户首页-成果展览", notes = "获取园区成果列表")
+    @RequestMapping(value = "/getAchievementList",method = RequestMethod.GET)
+    public Result<List<String>> getAchievementList() {
+        return new Result(indexService.getAchievementList());
+    }
+
     @ControllerLog(doAction = "推荐-行政审批")
     @ApiOperation(value = "推荐-行政审批（APP）", notes = "获取行政审批列表")
     @RequestMapping(value = "/getAdministrativeApprovalList",method = RequestMethod.GET)
@@ -118,9 +123,7 @@ public class IndexController extends BaseController {
     @ControllerLog(doAction = "推荐-行政审批详情")
     @ApiOperation(value = "推荐-行政审批详情（APP）", notes = "获取行政审批详情")
     @RequestMapping(value = "/getAdministrativeApprovalDetails",method = RequestMethod.GET)
-    public Result getAdministrativeApprovalDetails(@ApiParam(value ="行政审批ID", required = true, example = "")
-                                                       @NotBlank(message = "行政审批ID不能为空")
-                                                       @RequestParam(value = "approvalId") String approvalId) {
+    public Result getAdministrativeApprovalDetails(@RequestParam String approvalId) {
         // TODO 调行政审批详情接口
         return new Result();
     }
@@ -136,9 +139,7 @@ public class IndexController extends BaseController {
     @ControllerLog(doAction = "人才申报详情")
     @ApiOperation(value = "人才申报详情（PC/APP）", notes = "获取人才申报详情")
     @RequestMapping(value = "/getPersonnelDeclareDetails",method = RequestMethod.GET)
-    public Result getPersonnelDeclareDetails(@ApiParam(value ="人才申报ID", required = true, example = "")
-                                                 @NotBlank(message = "人才申报ID不能为空")
-                                                 @RequestParam(value = "perDeclareId") String perDeclareId) {
+    public Result getPersonnelDeclareDetails(@RequestParam String perDeclareId) {
         // TODO 调人才申报列表接口
         return new Result();
     }
@@ -200,9 +201,7 @@ public class IndexController extends BaseController {
     @ControllerLog(doAction = "资讯详情")
     @ApiOperation(value = "资讯详情", notes = "获取资讯详情数据")
     @RequestMapping(value = "/getNewsDetails", method = RequestMethod.GET)
-    public Result  getInformationDetails(@ApiParam(value ="资讯ID", required = true)
-                                         @NotBlank(message = "资讯ID不能为空")
-                                         @RequestParam(value = "newsId") String newsId) {
+    public Result  getInformationDetails(@RequestParam String newsId) {
         // TODO 调用资讯详情接口
         return new Result();
     }

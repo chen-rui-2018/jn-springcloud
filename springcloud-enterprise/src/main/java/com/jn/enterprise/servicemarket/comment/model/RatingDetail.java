@@ -49,6 +49,8 @@ public class RatingDetail {
     private String financingPeriod;
     @ApiModelProperty(value = "[科技金融]资金需求日期")
     private String expectedDate;
+    @ApiModelProperty(value = "[科技金融]资金需求说明")
+    private String fundsReqDesc;
     @ApiModelProperty(value = "结果描述")
     private String resultDetail;
     @ApiModelProperty(value = "是否已点评0否1是")
@@ -240,5 +242,13 @@ public class RatingDetail {
 
     public void setEvaluationDesc(String evaluationDesc) {
         this.evaluationDesc = evaluationDesc;
+    }
+
+    public String getFundsReqDesc() {
+        return fundsReqDesc;
+    }
+
+    public void setFundsReqDesc(String fundsReqDesc) {
+        this.fundsReqDesc = fundsReqDesc;
     }
 }

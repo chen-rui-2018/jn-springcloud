@@ -10,11 +10,12 @@ import com.jn.common.api.CodeAndMsg;
  * @modified By:
  */
 public enum ApprovalTypeEnum implements CodeAndMsg {
-    PENDING("pending","待审批"),
-    APPROVAL_NOT_PASSED("approvalNotPassed","审批不通过"),
-    NO_FEEDBACK("noFeedBack","未反馈"),
-    REJECTED("rejected","已拒绝"),
-    APPROVED("approved","审批通过"),
+    PENDING("pending","1","待审批"),
+    APPROVAL_NOT_PASSED("approvalNotPassed","3","审批不通过"),
+    NO_FEEDBACK("noFeedBack","0","未反馈"),
+    REJECTED("rejected","-1","已拒绝"),
+    APPROVED("approved","2","审批通过"),
+    HAS_BEEN_LIFTED("hasBeenLifted","4","已解除");
     ;
 
     /**
@@ -22,12 +23,18 @@ public enum ApprovalTypeEnum implements CodeAndMsg {
      */
     private String code;
     /**
+     * 状态值
+     */
+    private String value;
+    /**
      * 信息
      */
     private String message;
 
-    ApprovalTypeEnum(String code, String message) {
+
+    ApprovalTypeEnum(String code, String value, String message) {
         this.code = code;
+        this.value = value;
         this.message = message;
     }
 

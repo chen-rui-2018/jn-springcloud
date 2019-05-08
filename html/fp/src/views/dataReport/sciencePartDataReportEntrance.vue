@@ -1,30 +1,33 @@
 <template>
     <div class="science-part">
-      <el-row class="search-row" type="flex" align="middle">
-        <el-col :span="12">
-          <span>账期：</span>
-          <el-date-picker
-            v-model="queryParams.formTime"
-            type="date"
-            placeholder="选择日期"
-            style="width: 160px;margin-right: 10px"
-            disabled
-            clearable
-          ></el-date-picker>
-          <span>纳税人名称：</span>
-          <el-input v-model="queryParams.companyName" style="width: 160px" placeholder="请输入内容" clearable></el-input>
-        </el-col>
-        <el-col :span="12" class="tr">
+      <div class="search-row">
+        <div class="search-row-cell">
+          <div class="search-row-cell-form">
+            <span>账期：</span>
+            <el-date-picker
+              v-model="queryParams.formTime"
+              type="date"
+              placeholder="选择日期"
+              style="width: 160px;margin-right: 10px"
+              disabled
+              clearable
+            ></el-date-picker>
+          </div>
+          <div class="search-row-cell-form">
+            <span>纳税人名称：</span>
+            <el-input v-model="queryParams.companyName" style="width: 160px" placeholder="请输入内容" clearable></el-input>
+          </div>
+        </div>
+        <div class="search-row-cell tr">
           <el-button type="primary" size="small" @click="queryData">查询</el-button>
-          <span></span>
           <el-button type="primary" size="small">下载模板</el-button>
           <el-button :disabled="tableData.length > 0" type="primary" size="small" style="position: relative">
             <span>导入</span>
             <input v-if="tableData.length === 0" type="file" class="upload-file" @change="upload"/>
           </el-button>
           <el-button type="primary" size="small">导出</el-button>
-        </el-col>
-      </el-row>
+        </div>
+      </div>
       <el-table
         :data="tableData"
         stripe
@@ -288,6 +291,10 @@ export default {
   .search-row {
     background-color: #f5f5f5;
     padding: 10px;
+    .search-row-cell {
+      @include flex($h: flex-start);
+      flex-wrap: wrap;
+    }
   }
   .science-part-pagination {
     padding: 20px;
@@ -307,6 +314,10 @@ export default {
     z-index: 1;
     cursor: pointer;
   }
+  .search-row {
+    @include flex($h:space-between);
+    flex-wrap: wrap;
+  }
 }
 </style>
 <style lang="scss">
@@ -314,6 +325,25 @@ export default {
     .science-part-table-header {
       background-color: #00a041;
       color: #333;
+    }
+  }
+  .isMobile {
+    .en-card {
+      width: 50%;
+      padding: 4px;
+    }
+    .search-row {
+      padding: 0 10px;
+    }
+    .search-row-cell {
+      margin-top: 10px;
+      .search-row-cell-form{
+        width: 100%;
+        margin-top: 10px;
+        &:first-of-type {
+          margin-top: 0;
+        }
+      }
     }
   }
 </style>

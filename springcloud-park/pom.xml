@@ -50,6 +50,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-payment-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-hardware-api</artifactId>
+        </dependency>
 
     </dependencies>
     <build>

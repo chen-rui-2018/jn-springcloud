@@ -29,6 +29,8 @@ public enum ParkingExceptionEnum implements CodeAndMsg {
     PARKING_MONTHLY_NOT_PAYMENT("40202015","月租卡不需要缴费"),
     LAT_LONG_IS_NOT_NULL("40202016","经纬度不能为空"),
     PARKING_CAR_IS_PAYMENT("40202017","已缴费请离场，超时将重新计费"),
+    PARKING_INFO_IS_NOT_NULL("40202018","停车数据不能为空"),
+    REND_ID_IS_NOT_EXIT("4020219","租赁记录不存在"),
 
     ;
 

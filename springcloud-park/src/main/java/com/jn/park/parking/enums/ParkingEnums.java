@@ -25,7 +25,7 @@ public enum ParkingEnums implements CodeAndMsg {
     DATE_TIME_FORMAT_DATE("yyyy-MM-dd","时间格式 yyyy-MM-dd"),
     DATE_TIME_FORMAT_DATE_NUM("yyyyMMddHHmmss","时间格式 yyyyMMddHHmmss"),
     PARKING_USER_APPLY_WAIT_CHECK("0","车位申请待审核"),
-    PARKING_USER_APPLY_PAYED("4","车位已支付"),
+    PARKING_USER_APPLY_PAYED("6","车位已支付"),
     PARKING_BILL_IS_WAIT_PAY("1","车位申请待审核"),
     PARKING_MONTH_BILL_TYPE("parking_month","停车月卡缴费类型"),
     PARKING_MONTH_BILL_TYPE_NAME("停车缴费月卡","停车缴费月卡"),

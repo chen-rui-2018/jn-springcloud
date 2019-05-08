@@ -79,7 +79,9 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
         LeaseOrdersModel leaseOrdersModel = assetArticleLeaseOrdersDao.getPayOrders(id);
         try {
           if (leaseOrdersModel != null){
+              //账单类型
               leaseOrdersModel.setOrdersType(OrdersTypeEnums.ARTICLE.getMessage());
+              //计算最迟缴费时间
               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
               String createTime = sdf.format(leaseOrdersModel.getCreateTime());
               leaseOrdersModel.setTime(createTime);

@@ -22,7 +22,7 @@
     <result column="is_overdue" jdbcType="INTEGER" property="isOverdue" />
     <result column="apply_time" jdbcType="DATE" property="applyTime" />
     <result column="start_time" jdbcType="DATE" property="startTime" />
-    <result column="current_time" jdbcType="DATE" property="currentTime" />
+    <result column="current_time_" jdbcType="DATE" property="currentTime" />
     <result column="end_time" jdbcType="DATE" property="endTime" />
     <result column="payment_status" jdbcType="TINYINT" property="paymentStatus" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -92,7 +92,7 @@
   <sql id="Base_Column_List">
     id, asset_number, name, type_id, asset_type, specification, qr_code, lease_enterprise, 
     contact_name, contact_phone, lease_cash, lease_price, lease_time, img_url, article_introduction, 
-    article_status, is_lease, is_overdue, apply_time, start_time, current_time, end_time, 
+    article_status, is_lease, is_overdue, apply_time, start_time, current_time_, end_time, 
     payment_status, record_status, creator_account, create_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseCriteria" resultMap="BaseResultMap">
@@ -132,7 +132,7 @@
       contact_phone, lease_cash, lease_price, 
       lease_time, img_url, article_introduction, 
       article_status, is_lease, is_overdue, 
-      apply_time, start_time, current_time, 
+      apply_time, start_time, current_time_, 
       end_time, payment_status, record_status, 
       creator_account, create_time, modifier_account, 
       modified_time)
@@ -211,7 +211,7 @@
         start_time,
       </if>
       <if test="currentTime != null">
-        current_time,
+        current_time_,
       </if>
       <if test="endTime != null">
         end_time,
@@ -392,7 +392,7 @@
         start_time = #{record.startTime,jdbcType=DATE},
       </if>
       <if test="record.currentTime != null">
-        current_time = #{record.currentTime,jdbcType=DATE},
+        current_time_ = #{record.currentTime,jdbcType=DATE},
       </if>
       <if test="record.endTime != null">
         end_time = #{record.endTime,jdbcType=DATE},
@@ -442,7 +442,7 @@
       is_overdue = #{record.isOverdue,jdbcType=INTEGER},
       apply_time = #{record.applyTime,jdbcType=DATE},
       start_time = #{record.startTime,jdbcType=DATE},
-      current_time = #{record.currentTime,jdbcType=DATE},
+      current_time_ = #{record.currentTime,jdbcType=DATE},
       end_time = #{record.endTime,jdbcType=DATE},
       payment_status = #{record.paymentStatus,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -515,7 +515,7 @@
         start_time = #{startTime,jdbcType=DATE},
       </if>
       <if test="currentTime != null">
-        current_time = #{currentTime,jdbcType=DATE},
+        current_time_ = #{currentTime,jdbcType=DATE},
       </if>
       <if test="endTime != null">
         end_time = #{endTime,jdbcType=DATE},
@@ -562,7 +562,7 @@
       is_overdue = #{isOverdue,jdbcType=INTEGER},
       apply_time = #{applyTime,jdbcType=DATE},
       start_time = #{startTime,jdbcType=DATE},
-      current_time = #{currentTime,jdbcType=DATE},
+      current_time_ = #{currentTime,jdbcType=DATE},
       end_time = #{endTime,jdbcType=DATE},
       payment_status = #{paymentStatus,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},

@@ -116,7 +116,7 @@ public class AssetArticleLeaseController {
 
 
     @ControllerLog(doAction = "物品租赁历史列表")
-    @ApiOperation(value = "物品租赁历史列表")
+    @ApiOperation(value = "物品租赁历史列表",notes = "获取物品租赁历史列表")
     @GetMapping(value = "/LeaseOrdersList")
     public Result<PaginationData<List<AssetArticleLeaseOrdersModel>>> getArticleLeaseOrdersList(Page page){
         if (page.getPage() > 0 && page.getRows() > 0){

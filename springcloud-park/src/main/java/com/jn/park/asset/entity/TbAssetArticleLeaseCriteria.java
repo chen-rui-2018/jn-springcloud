@@ -1474,62 +1474,62 @@ public class TbAssetArticleLeaseCriteria {
         }
 
         public Criteria andCurrentTimeIsNull() {
-            addCriterion("current_time is null");
+            addCriterion("current_time_ is null");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeIsNotNull() {
-            addCriterion("current_time is not null");
+            addCriterion("current_time_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeEqualTo(Date value) {
-            addCriterionForJDBCDate("current_time =", value, "currentTime");
+            addCriterionForJDBCDate("current_time_ =", value, "currentTime");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeNotEqualTo(Date value) {
-            addCriterionForJDBCDate("current_time <>", value, "currentTime");
+            addCriterionForJDBCDate("current_time_ <>", value, "currentTime");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeGreaterThan(Date value) {
-            addCriterionForJDBCDate("current_time >", value, "currentTime");
+            addCriterionForJDBCDate("current_time_ >", value, "currentTime");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("current_time >=", value, "currentTime");
+            addCriterionForJDBCDate("current_time_ >=", value, "currentTime");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeLessThan(Date value) {
-            addCriterionForJDBCDate("current_time <", value, "currentTime");
+            addCriterionForJDBCDate("current_time_ <", value, "currentTime");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("current_time <=", value, "currentTime");
+            addCriterionForJDBCDate("current_time_ <=", value, "currentTime");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeIn(List<Date> values) {
-            addCriterionForJDBCDate("current_time in", values, "currentTime");
+            addCriterionForJDBCDate("current_time_ in", values, "currentTime");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeNotIn(List<Date> values) {
-            addCriterionForJDBCDate("current_time not in", values, "currentTime");
+            addCriterionForJDBCDate("current_time_ not in", values, "currentTime");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("current_time between", value1, value2, "currentTime");
+            addCriterionForJDBCDate("current_time_ between", value1, value2, "currentTime");
             return (Criteria) this;
         }
 
         public Criteria andCurrentTimeNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("current_time not between", value1, value2, "currentTime");
+            addCriterionForJDBCDate("current_time_ not between", value1, value2, "currentTime");
             return (Criteria) this;
         }
 

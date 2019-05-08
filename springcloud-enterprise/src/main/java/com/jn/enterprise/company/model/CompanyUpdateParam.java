@@ -124,9 +124,11 @@ public class CompanyUpdateParam implements Serializable {
     @ApiModelProperty(value = "创建者账号", hidden = true)
     private String creatorAccount;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "审核状态", hidden = true)
+    private String checkStatus;
+
     @ApiModelProperty(value = "创建时间", hidden = true)
-    private Date createdTime;
+    private String createdTime;
 
     @ApiModelProperty(value = "是否删除（0标记删除，1正常）", hidden = true)
     private String recordStatus;
@@ -134,6 +136,14 @@ public class CompanyUpdateParam implements Serializable {
     @NotNull(message = "验证码不能为空")
     @ApiModelProperty(value = "验证码",required = true,example = "1234")
     private String checkCode;
+
+    public String getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(String checkStatus) {
+        this.checkStatus = checkStatus;
+    }
 
     public String getId() {
         return id;
@@ -359,11 +369,11 @@ public class CompanyUpdateParam implements Serializable {
         this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 

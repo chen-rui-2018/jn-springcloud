@@ -21,9 +21,9 @@ public class IBPSUtils {
 
     public static IBPSResult sendRequest(String bpmnDefId, String account, Object object) {
         Gson gson = new Gson();
+        String jsonStr = gson.toJson(object);
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("bpmnDefId",bpmnDefId);
-        String jsonStr = gson.toJson(object);
         map.add("data",jsonStr);
         JSONObject request = CallOtherSwaggerUtils.request(account, IBPS_REQUEST_URL, HttpMethod.POST, map);
         return gson.fromJson(request.toString(), IBPSResult.class);

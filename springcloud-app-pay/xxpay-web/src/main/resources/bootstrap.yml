@@ -8,17 +8,37 @@ eureka:
   instance:
     prefer-ip-address: true
 
+ribbon:
+  ConnectTimeout: 1000
+  MaxAutoRetriesNextServer: 1
+  MaxAutoRetries: 0
+  ReadTimeout: 20000
 spring:
   application:
     name: xxpay-web
-  cloud:
-    config:
-      discovery:
-        enabled: true
-        serviceId: springcloud-app-config
-      label: master
-      profile: master
-
+    cloud:
+      config:
+        discovery:
+          enabled: true
+          serviceId: springcloud-app-config
+        label: master
+        profile: master
+  rabbitmq:
+    port: 5672
+    host: 192.168.10.12
+    password: guest
+    username: guest
+  redis:
+    password: jn@yyt2018
+    port: 6379
+    host: 192.168.10.252
+  sleuth:
+    scheduled:
+      enabled: 'false'
+shiro:
+  redis:
+    session: 600000
+    cache: 600000
 hystrix:
   command:
     default:

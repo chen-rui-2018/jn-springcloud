@@ -8,6 +8,7 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
+import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.common.dao.TbServiceCodeMapper;
 import com.jn.enterprise.common.entity.TbServiceCode;
 import com.jn.enterprise.common.entity.TbServiceCodeCriteria;
@@ -25,21 +26,21 @@ import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.paybill.api.PayBillClient;
 import com.jn.paybill.model.PaymentBillModel;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
-import io.swagger.models.auth.In;
 import org.apache.commons.collections4.list.UnmodifiableList;
 import org.apache.commons.lang.math.RandomUtils;
-import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -218,6 +219,8 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         tbPropaganda.setOrgName(userExtension.getData().getAffiliateName());
         //审批状态 (-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)
         tbPropaganda.setApprovalStatus("0");
+        //排序
+        tbPropaganda.setSort(1);
         //是否付款 0:未付款   1：已付款
         tbPropaganda.setIsPay("0");
         //状态 1:有效/上架   0：失效/下架
@@ -653,7 +656,8 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
      */
     @ServiceLog(doAction = "提交审核")
     @Override
-    public void submitAudit(String propagandaId, String loginAccount) {
+    @Transactional(rollbackFor = Exception.class)
+    public IBPSResult submitAudit(String propagandaId, String loginAccount) {
         //根据宣传id,状态（value="0"），审批状态（value="0"）,是否删除（value="1"）查询宣传信息
         TbPropagandaCriteria example=new TbPropagandaCriteria();
         example.createCriteria().andIdEqualTo(propagandaId).andStatusEqualTo(INVALID)
@@ -667,14 +671,37 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         TbPropaganda tbPropaganda = tbPropagandaList.get(0);
         BusinessPromotionWorkFlow bpw=new BusinessPromotionWorkFlow();
         BeanUtils.copyProperties(tbPropaganda, bpw);
-        List<BusinessPromotionWorkFlow> dataList=new ArrayList();
-        dataList.add(bpw);
-        //把bean转化为json
-        String dataToJson = JSONArray.toJSONString(dataList);
-        //流程id
-        String workFlowId="Process_business_promotion";
-        //todo:启动工作流
-
+        //审批状态为待审批
+        if(tbPropaganda.getEffectiveDate()!=null){
+            //生效时间
+            bpw.setEffectiveDate(DateUtils.formatDate(tbPropaganda.getEffectiveDate(), PATTERN));
+        }
+        if(tbPropaganda.getInvalidDate()!=null){
+            //失效时间
+            bpw.setInvalidDate(DateUtils.formatDate(tbPropaganda.getInvalidDate(), PATTERN));
+        }
+        if(tbPropaganda.getCreatedTime()!=null){
+            //创建时间
+            bpw.setCreatedTime(DateUtils.formatDate(tbPropaganda.getCreatedTime(), PATTERN));
+        }
+        if(tbPropaganda.getModifiedTime()!=null){
+            //修改时间
+            bpw.setModifiedTime(DateUtils.formatDate(tbPropaganda.getModifiedTime(), PATTERN));
+        }
+        //流程id，每个流程的id是固定的
+        String processId="575715552383729664";
+        //启动工作流
+        IBPSResult ibpsResult = IBPSUtils.sendRequest(processId, loginAccount, bpw);
+        String okStatus="200";
+        //启动工作流成功
+        if(okStatus.equals(ibpsResult.getState())){
+            logger.info("宣传编码为：[{}]的宣传信息审批流程启动成功,流程实例id为：[{}]",tbPropaganda.getPropagandaCode(),ibpsResult.getData());
+            //逻辑删除数据表中的数据（传递的数据）
+            tbPropaganda=new TbPropaganda();
+            tbPropaganda.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+            tbPropagandaMapper.updateByExampleSelective(tbPropaganda, example);
+        }
+        return ibpsResult;
     }
 
     /**

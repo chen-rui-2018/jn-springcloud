@@ -119,7 +119,7 @@ input {
 
   .actiNav {
     margin: 20px 0;
-    font-size: 16px;
+    font-size: 13px;
 
     a:last-child {
       color: #00a041;
@@ -514,11 +514,11 @@ input {
 /* 服务超市-服务机构，服务产品 */
 .serverOrg,
 .serverPro,
-.serverCon,.quickSearch,.aboutUs,.finaInstitution {
+.serverCon,.quickSearch,.aboutUs,.finaInstitution,.finaPro {
   // .el-rate__icon.el-icon-star-on{
   //   color:#00a041 !important;
   // }
-  padding-top: 65px;
+  // padding-top: 65px;
   .serverOrgMenu {
     padding: 20px 0;
     font-size: 13px;
@@ -682,7 +682,7 @@ input {
           margin-left: 20px;
 
           .conTil {
-            font-size: 13px;
+            font-size: 15px;
             color: #222;
             font-weight: bold;
             margin-bottom: 40px;
@@ -744,7 +744,7 @@ input {
 .serverOrgDetail,
 .serverProDetail,
 .serverConDetail,
-.quickSearch,.finaInsDetail {
+.quickSearch,.finaInsDetail,.finaProDetail {
   padding-top: 65px;
   table {
     border-collapse: collapse;
@@ -1502,8 +1502,8 @@ input {
         width: 42%;
         margin: 43px 0;
         position: relative;
-    transform: translateX(-50%);
-    left: 50%;
+        transform: translateX(-50%);
+        left: 50%;
         .el-input {
           width: 94px;
         }

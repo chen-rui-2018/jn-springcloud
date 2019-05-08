@@ -15,6 +15,7 @@ export default {
         CancelLike:"springcloud-park/activity/activityLike/cancelLike",//取消点赞
         commentActivity:"springcloud-park/comment/review/commentActivity",//活动评论/回复
         activityApplyInfo:"springcloud-park/activity/activityApply/activityApplyInfo",//报名人资料
+        findActivityRegistration:"springcloud-park/guest/activity/findActivityRegistration",//用户中心-已报名活动列表
         getUserCode:"springcloud-user/guest/userJoin/getUserCode",//获取短信验证码[当前用户]
         getCode:"springcloud-user/guest/userJoin/getCode",//获取短信验证码
         addUser:"springcloud-user/guest/userJoin/addUser",//用户注册
@@ -49,6 +50,7 @@ export default {
         getTechnologyInfoNum:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getTechnologyInfoNum",//科技金融首页投资人数，金融产品数，金融机构数
         getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",//投资人列表查询
         getFinancialProList:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductList",//金融产品列表查询
+        getAssureType:"springcloud-enterprise//technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
 
         getActivityDetailsFm:"springcloud-enterprise/guest/serviceMarket/org/getActivityDetailsForManage",//获取服务机构详情
         findOrgProductList:"springcloud-enterprise/servicemarket/product/web/findOrgProductList",//机构-服务产品列表
@@ -80,6 +82,7 @@ export default {
         enterpriseGetFormStruct:"springcloud-enterprise/data/company/getFormStruct", // 获取待填报的表单结构
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
+
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
 
         getMyBusiness:"springcloud-enterprise/guest/company/getCompanyDetailByNowAccount",//获取当前用户企业信息
@@ -123,6 +126,12 @@ export default {
         getCertificateTypeList:"springcloud-enterprise/serviceMarket/advisorEditController/getCertificateTypeList",//获取指定证书类型
         saveOrUpdateAdvisorHonor:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor",//新增顾问荣誉资质信息
 
+
+
+        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd",// 页面广告获取
+        selectCompany:"springcloud-enterprise/guest/userUpgrade/selectCompany", // 查询公司列表
+        changeToStaff:"springcloud-enterprise/guest/userUpgrade/changeToStaff", // 升级员工
+        changeToCompany:"springcloud-enterprise/guest/userUpgrade/changeToCompany", // 升级员工
 
 
     },

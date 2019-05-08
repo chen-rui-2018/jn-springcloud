@@ -97,8 +97,8 @@
                     <span>加入园区</span>
                   </template>
                   <el-menu-item-group>
-                    <el-menu-item index="/servicemarket/product/productService/加入园区">加入园区</el-menu-item>
-                    <el-menu-item index="">加入园区</el-menu-item>
+                    <el-menu-item index="/upgradeStaff">升级员工</el-menu-item>
+                    <el-menu-item index="/upgradeEnterprise">升级企业</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
                 <el-submenu index="/servicemarket/product/productService">
@@ -128,12 +128,22 @@
                     <el-menu-item index="">评价管理</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
-                <el-menu-item index="/活动管理">
+                <el-menu-item index="/actiManagent">
                   <span slot="title">活动管理</span>
                 </el-menu-item>
                 <el-menu-item index="/servicemarket/product/productService/dataReport">
                   <span slot="title">数据上报</span>
                 </el-menu-item>
+
+                <el-submenu index="/流程系统">
+                  <template slot="title">
+                    <span>流程系统</span>
+                  </template>
+                  <el-menu-item-group>
+                    <el-menu-item index="/iframe?ph=http://112.94.22.222:2381/ibps" style="padding-left: 20px;">人才申报</el-menu-item>
+                  </el-menu-item-group>
+                </el-submenu>
+
               </el-menu>
             </el-aside>
           </div>
@@ -191,6 +201,7 @@ export default {
   },
   mounted() {
     this.getUserExtension();
+    
   },
   updated(){
     try {
@@ -432,3 +443,4 @@ export default {
     }
   }
 </style>
+

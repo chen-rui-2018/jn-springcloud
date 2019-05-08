@@ -10,6 +10,11 @@ export default new Router({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld
+    },
+    {
+      path: '/actiDetail',
+      name: 'actiDetail',
+      component: () => import('@/views/actiDetail')
     }
   ]
 })

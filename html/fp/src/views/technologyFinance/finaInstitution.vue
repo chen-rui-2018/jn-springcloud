@@ -74,7 +74,7 @@
     <div class="serverOrgContent">
       <ul>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg mainBorder fl" @click="handleOrgDel(i.orgId)">
+          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.orgLogo" alt="">
           </div>
@@ -107,7 +107,7 @@
       </ul>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -267,4 +267,7 @@ export default {
 };
 </script>
 <style lang="scss">
+.finaInstitution{
+  padding-top:65px;
+}
 </style>

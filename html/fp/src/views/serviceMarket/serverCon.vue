@@ -36,7 +36,7 @@
             <ul>
                 <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
                 <li class="clearfix" v-for="(i,k) in serverConList" :key='k'>
-                    <div class="orgImg mainBorder fl" @click="handleConDel(i.orgId,i.advisorAccount)">
+                    <div class="orgImg fl" @click="handleConDel(i.orgId,i.advisorAccount)">
                         <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                         <img :src="i.avatar" alt="">
                     </div>
@@ -52,10 +52,10 @@
                             </div>
                             <div class="right1 fl">
                                 <p>
-                                    <el-rate :model="parseInt(i.integratedSort)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                                    <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                                     </el-rate>
                                     <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
-                                    <p>{{i.integratedSort}}分</p>
+                                    <p>{{i.evaluationScore}}分</p>
                             </div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
             </ul>
         </div>
         <div class="pagination-container">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
             </el-pagination>
         </div>
     </div>
@@ -187,10 +187,8 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .serverCon{
-    // .el-rate__icon{
-    //     color:#00a041 !important;
-    // }
+    padding-top:65px;
 }
 </style>

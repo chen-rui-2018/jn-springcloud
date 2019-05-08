@@ -584,8 +584,112 @@
         <table tableName="tb_sp_ad"></table>
     </context>
 
-    <!--首页-->
-  <context id="index">
+
+  <context id="message">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.message.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.message"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.message.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <table tableName="tb_message_list" alias="message">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+  </context>
+
+  <!--服务链接管理-->
+  <context id="connect">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.connect.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.connect"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.connect.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <table tableName="tb_service_connect_manage" alias="connect">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+  </context>
+
+
+
+  <!--XQ00050智慧停车-->
+  <context id="parking">
     <!-- 实现Serializable接口 -->
     <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
     <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
@@ -615,27 +719,45 @@
     </javaTypeResolver>
 
     <!-- 生成模型的包名和位置 -->
-    <javaModelGenerator targetPackage="com.jn.park.index.entity"
+    <javaModelGenerator targetPackage="com.jn.park.parking.entity"
                         targetProject="src/main/java">
       <property name="enableSubPackages" value="true"/>
       <property name="trimStrings" value="true"/>
     </javaModelGenerator>
 
     <!-- 生成映射文件的包名和位置 -->
-    <sqlMapGenerator targetPackage="mapping.generator.index"
+    <sqlMapGenerator targetPackage="mapping.generator.parking"
                      targetProject="src/main/resources">
       <property name="enableSubPackages" value="true"/>
     </sqlMapGenerator>
 
     <!-- 生成Mapper 接口的包名和位置-->
     <javaClientGenerator type="XMLMAPPER"
-                         targetPackage="com.jn.park.index.dao"
+                         targetPackage="com.jn.park.parking.dao"
                          targetProject="src/main/java">
       <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>
 
-    <!--重要消息表-->
-    <table tableName="tb_important_news"></table>
+    <!--智慧停车-停车位-->
+    <table tableName="tb_parking_space"  ></table>
+    <!--智慧停车-停车场-->
+    <table tableName="tb_parking_area" ></table>
+    <!--智慧停车-停车记录-->
+    <table tableName="tb_parking_record"></table>
+    <!--智慧停车-车位出租记录-->
+    <table tableName="tb_parking_space_rental"></table>
+    <!--智慧停车-停车优惠政策-->
+    <table tableName="tb_parking_preferential"></table>
+    <!--智慧停车-车辆信息-->
+    <table tableName="tb_parking_car_info"></table>
+    <!--智慧停车-车场服务关联表-->
+    <table tableName="tb_parking_service"></table>
+    <!--智慧停车-违停上报-->
+    <table tableName="tb_parking_violation"></table>
+    <!--智慧停车-停车场服务-->
+    <table tableName="tb_parking_service_type"></table>
+    <!--智慧停车-停车优惠政策-->
+    <table tableName="tb_parking_preferential_area"></table>
   </context>
 
   <!--XQ00008资产管理子系统-->
@@ -690,6 +812,20 @@
 
       <!--楼宇管理-楼宇信息-->
       <table tableName="tb_tower_information"></table>
+      <!--物品租赁-物品信息-->
+      <table tableName="tb_asset_article_lease"></table>
+      <!--物品租赁-物品租赁订单-->
+      <table tableName="tb_asset_article_lease_orders"></table>
+      <!--资产管理-资产信息-->
+      <table tableName="tb_asset_information"></table>
+      <!--维保管理-维保信息-->
+      <table tableName="tb_asset_maintain_manage"></table>
+      <!--维保管理-维保信息记录-->
+      <table tableName="tb_asset_maintain_record"></table>
+      <!--房间管理-房间信息-->
+      <table tableName="tb_room_information"></table>
+      <!--房间管理-房间订单-->
+      <table tableName="tb_room_orders"></table>
     </context>
-
+  
 </generatorConfiguration>

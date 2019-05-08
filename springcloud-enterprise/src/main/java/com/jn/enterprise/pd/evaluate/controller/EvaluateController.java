@@ -23,7 +23,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "项目申报-常年申报评测")
+@Api(tags = "项目申报-常年申报评测(外部)")
 @RestController
 @RequestMapping("/pd/evaluate")
 public class EvaluateController {

@@ -100,4 +100,12 @@ public interface BusinessPromotionService {
      * @return
      */
     List<PropagandaAreaShow> getPropagandaAreaList();
+
+    /**
+     *门户各首页企业宣传列表查询
+     * @param businessHomePageParam
+     * @param loginAccount
+     * @return
+     */
+    PaginationData getBusinessPromotionList(BusinessHomePageParam businessHomePageParam,String loginAccount);
 }

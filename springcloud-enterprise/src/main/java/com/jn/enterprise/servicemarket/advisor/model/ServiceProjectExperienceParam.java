@@ -28,11 +28,11 @@ public class ServiceProjectExperienceParam  implements Serializable {
     @NotNull(message="项目名称不能为空")
     private String projectName;
     @ApiModelProperty(value = "项目开始时间",example = "201903")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{projectTime:'项目开始时间格式错误'}")
     private String projectTime;
     @ApiModelProperty(value = "项目结束时间",example = "201904")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{projectEndTime:'项目结束时间格式错误'}")
     private String projectEndTime;
     @ApiModelProperty(value = "个人职责",example = "主要从事xxx...")

@@ -90,6 +90,10 @@
 			<groupId>com.spring4all</groupId>
 			<artifactId>swagger-spring-boot-starter</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>de.codecentric</groupId>
@@ -130,6 +134,7 @@
 			<groupId>com.lc.ibps.auth</groupId>
 			<artifactId>ibps-auth-client-filter-other</artifactId>
 		</dependency>
+
 
     </dependencies>
 </project>

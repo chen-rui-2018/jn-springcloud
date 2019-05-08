@@ -420,8 +420,16 @@ export default {
       }
     }
   }
-  .pagination-container {
-    width: 500px;
+//   .pagination-container {
+//     width: 500px;
+//   }
+  .allActiUl{
+      >li{
+          img{
+              width: 280px;
+              height: 200px;
+          }
+      }
   }
 }
 </style>

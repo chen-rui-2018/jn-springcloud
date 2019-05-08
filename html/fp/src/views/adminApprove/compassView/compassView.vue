@@ -123,10 +123,12 @@ export default {
     //改变name
     changename(name){
       this.name=name
+      this.loading=true
       this.getPowerList()
     },
     //搜索
     handlesearch(){
+      this.loading=true
       this.getPowerList()
     },
     //跳转到rightdetail

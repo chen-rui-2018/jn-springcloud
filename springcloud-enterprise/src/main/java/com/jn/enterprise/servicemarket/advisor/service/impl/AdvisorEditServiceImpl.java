@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
 import com.jn.enterprise.servicemarket.advisor.model.*;
@@ -237,6 +238,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             }
             TbServiceHonor tbServiceHonor=tbServiceHonorList.get(0);
             BeanUtils.copyProperties(serviceHonorParam, tbServiceHonor);
+            //证书类型
+            tbServiceHonor.setCertificateType(serviceHonorParam.getCertificateCode());
             //修改时间
             tbServiceHonor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //修改人
@@ -246,6 +249,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //没有主键id，新增
             TbServiceHonor tbServiceHonor=new TbServiceHonor();
             BeanUtils.copyProperties(serviceHonorParam, tbServiceHonor);
+            //证书类型
+            tbServiceHonor.setCertificateType(serviceHonorParam.getCertificateCode());
             //主键id
             tbServiceHonor.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             //创建时间
@@ -285,6 +290,25 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             resultList.add(advisorCertificateTypeShow);
         }
         return resultList;
+    }
+
+    /**
+     * 判断当前登录用户是否为顾问
+     * @param loginAccount  用户账号
+     */
+    @ServiceLog(doAction = "判断当前登录用户是否为顾问")
+    @Override
+    public void currentUserIsAdvisor(String loginAccount) {
+        TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
+        //审核状态( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
+        String approvalStatus="2";
+        example.createCriteria().andAdvisorAccountEqualTo(loginAccount).andApprovalStatusEqualTo(approvalStatus)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        long existNum = tbServiceAdvisorMapper.countByExample(example);
+        if(existNum>0){
+            logger.warn("当前用户[{}]已经是审批通过的机构顾问，不允许编辑顾问信息",loginAccount);
+            throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_HAS_EXIST);
+        }
     }
 
     /**

@@ -37,6 +37,12 @@ public class TbSpPowerBusi implements Serializable {
     /*@ApiModelProperty("收费标准")*/
     private String feeStandard;
 
+    /*@ApiModelProperty("受理方式：在线留言（2不支持，1支持）")*/
+    private String isContactOnline;
+
+    /*@ApiModelProperty("受理方式：QQ群受理（填写了Q群号码代表支持Q群受理）")*/
+    private String contactQqGroup;
+
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
 
@@ -142,6 +148,22 @@ public class TbSpPowerBusi implements Serializable {
         this.feeStandard = feeStandard == null ? null : feeStandard.trim();
     }
 
+    public String getIsContactOnline() {
+        return isContactOnline;
+    }
+
+    public void setIsContactOnline(String isContactOnline) {
+        this.isContactOnline = isContactOnline == null ? null : isContactOnline.trim();
+    }
+
+    public String getContactQqGroup() {
+        return contactQqGroup;
+    }
+
+    public void setContactQqGroup(String contactQqGroup) {
+        this.contactQqGroup = contactQqGroup == null ? null : contactQqGroup.trim();
+    }
+
     public Byte getRecordStatus() {
         return recordStatus;
     }
@@ -205,6 +227,8 @@ public class TbSpPowerBusi implements Serializable {
             && (this.getDealLimitDays() == null ? other.getDealLimitDays() == null : this.getDealLimitDays().equals(other.getDealLimitDays()))
             && (this.getFlowPic() == null ? other.getFlowPic() == null : this.getFlowPic().equals(other.getFlowPic()))
             && (this.getFeeStandard() == null ? other.getFeeStandard() == null : this.getFeeStandard().equals(other.getFeeStandard()))
+            && (this.getIsContactOnline() == null ? other.getIsContactOnline() == null : this.getIsContactOnline().equals(other.getIsContactOnline()))
+            && (this.getContactQqGroup() == null ? other.getContactQqGroup() == null : this.getContactQqGroup().equals(other.getContactQqGroup()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -227,6 +251,8 @@ public class TbSpPowerBusi implements Serializable {
         result = prime * result + ((getDealLimitDays() == null) ? 0 : getDealLimitDays().hashCode());
         result = prime * result + ((getFlowPic() == null) ? 0 : getFlowPic().hashCode());
         result = prime * result + ((getFeeStandard() == null) ? 0 : getFeeStandard().hashCode());
+        result = prime * result + ((getIsContactOnline() == null) ? 0 : getIsContactOnline().hashCode());
+        result = prime * result + ((getContactQqGroup() == null) ? 0 : getContactQqGroup().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -252,6 +278,8 @@ public class TbSpPowerBusi implements Serializable {
         sb.append(", dealLimitDays=").append(dealLimitDays);
         sb.append(", flowPic=").append(flowPic);
         sb.append(", feeStandard=").append(feeStandard);
+        sb.append(", isContactOnline=").append(isContactOnline);
+        sb.append(", contactQqGroup=").append(contactQqGroup);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

@@ -15,10 +15,10 @@ import io.swagger.annotations.ApiModelProperty;
 public class ReceiveRatingParameter extends Page {
     @ApiModelProperty(value = "需求提出人",example = "wangsong")
     private String issueAccount;
-    @ApiModelProperty(value = "服务产品Id",example = "3677b55f9bd647ee950fe71b079f1e69")
-    private String productId;
-    @ApiModelProperty(value = "顾问Id",example = "41da7180518e4546b7f96fc02db08be3")
-    private String advisorId;
+    @ApiModelProperty(value = "服务产品名称[模糊搜索]",example = "代理记账")
+    private String productName;
+    @ApiModelProperty(value = "顾问名称[模糊搜索]",example = "战三")
+    private String advisorName;
     @ApiModelProperty("当前用户[前台请忽略此参数]")
     private String account;
 
@@ -30,20 +30,20 @@ public class ReceiveRatingParameter extends Page {
         this.issueAccount = issueAccount;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getAdvisorId() {
-        return advisorId;
+    public String getAdvisorName() {
+        return advisorName;
     }
 
-    public void setAdvisorId(String advisorId) {
-        this.advisorId = advisorId;
+    public void setAdvisorName(String advisorName) {
+        this.advisorName = advisorName;
     }
 
     public String getAccount() {

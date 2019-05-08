@@ -55,6 +55,14 @@ public interface DynamicService {
     PaginationData<List<DynamicWebShow>> findDynamicWebList(Page page, String account);
 
     /**
+     * 获取当前用户的关注用户动态列表
+     * @param page
+     * @param account
+     * @return
+     */
+    PaginationData<List<DynamicWebShow>> findCareDynamicList(Page page,String account);
+
+    /**
      * 前台动态详情+评论列表
      * @param dynamicId
      * @return
@@ -97,4 +105,5 @@ public interface DynamicService {
      * @return
      */
     PaginationData<List<DynamicWebShow>> findDynamicByAccount(CareDetailsQueryParam param,String currentAccount);
+
 }

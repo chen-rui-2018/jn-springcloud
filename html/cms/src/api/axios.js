@@ -26,6 +26,44 @@ export function paramApi(url, query, parameter) {
     data: param
   })
 }
+
+/**
+ * get 请求方法
+ * @param url
+ * @param params
+ * @return {Promise}
+ */
+export function get(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    request.get(url, {
+      params: params
+    })
+      .then(response => {
+        resolve(response.data)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+/**
+ * post 请求方法
+ * @param url
+ * @param data
+ * @return {Promise}
+ */
+export function post(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    request.post(url, data)
+      .then(response => {
+        resolve(response.data)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
 // 导出功能
 // export function exportExcel(query) {
 //   return request({

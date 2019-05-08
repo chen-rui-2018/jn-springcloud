@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.talent.dao.TbPdPerennialDeclarationMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.talent.entity.TbPdPerennialDeclaration">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="policy_type" jdbcType="VARCHAR" property="policyType" />
+    <result column="zone_application" jdbcType="VARCHAR" property="zoneApplication" />
+    <result column="deadline" jdbcType="VARCHAR" property="deadline" />
+    <result column="price" jdbcType="VARCHAR" property="price" />
+    <result column="profit" jdbcType="VARCHAR" property="profit" />
+    <result column="picture_address" jdbcType="VARCHAR" property="pictureAddress" />
+    <result column="link_address" jdbcType="VARCHAR" property="linkAddress" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, title, policy_type, zone_application, deadline, price, profit, picture_address, 
+    link_address, created_time, creator_account, modified_time, modifier_account, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pd.talent.entity.TbPdPerennialDeclarationCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pd_perennial_declaration
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pd_perennial_declaration
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_pd_perennial_declaration
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.talent.entity.TbPdPerennialDeclarationCriteria">
+    delete from tb_pd_perennial_declaration
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.pd.talent.entity.TbPdPerennialDeclaration">
+    insert into tb_pd_perennial_declaration (id, title, policy_type, 
+      zone_application, deadline, price, 
+      profit, picture_address, link_address, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
+    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{policyType,jdbcType=VARCHAR}, 
+      #{zoneApplication,jdbcType=VARCHAR}, #{deadline,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, 
+      #{profit,jdbcType=VARCHAR}, #{pictureAddress,jdbcType=VARCHAR}, #{linkAddress,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.pd.talent.entity.TbPdPerennialDeclaration">
+    insert into tb_pd_perennial_declaration
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="policyType != null">
+        policy_type,
+      </if>
+      <if test="zoneApplication != null">
+        zone_application,
+      </if>
+      <if test="deadline != null">
+        deadline,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="profit != null">
+        profit,
+      </if>
+      <if test="pictureAddress != null">
+        picture_address,
+      </if>
+      <if test="linkAddress != null">
+        link_address,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="policyType != null">
+        #{policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneApplication != null">
+        #{zoneApplication,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="profit != null">
+        #{profit,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureAddress != null">
+        #{pictureAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="linkAddress != null">
+        #{linkAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.pd.talent.entity.TbPdPerennialDeclarationCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pd_perennial_declaration
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pd_perennial_declaration
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.policyType != null">
+        policy_type = #{record.policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zoneApplication != null">
+        zone_application = #{record.zoneApplication,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deadline != null">
+        deadline = #{record.deadline,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profit != null">
+        profit = #{record.profit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pictureAddress != null">
+        picture_address = #{record.pictureAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkAddress != null">
+        link_address = #{record.linkAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pd_perennial_declaration
+    set id = #{record.id,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      policy_type = #{record.policyType,jdbcType=VARCHAR},
+      zone_application = #{record.zoneApplication,jdbcType=VARCHAR},
+      deadline = #{record.deadline,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=VARCHAR},
+      profit = #{record.profit,jdbcType=VARCHAR},
+      picture_address = #{record.pictureAddress,jdbcType=VARCHAR},
+      link_address = #{record.linkAddress,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pd.talent.entity.TbPdPerennialDeclaration">
+    update tb_pd_perennial_declaration
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="policyType != null">
+        policy_type = #{policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneApplication != null">
+        zone_application = #{zoneApplication,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="profit != null">
+        profit = #{profit,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureAddress != null">
+        picture_address = #{pictureAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="linkAddress != null">
+        link_address = #{linkAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.talent.entity.TbPdPerennialDeclaration">
+    update tb_pd_perennial_declaration
+    set title = #{title,jdbcType=VARCHAR},
+      policy_type = #{policyType,jdbcType=VARCHAR},
+      zone_application = #{zoneApplication,jdbcType=VARCHAR},
+      deadline = #{deadline,jdbcType=VARCHAR},
+      price = #{price,jdbcType=VARCHAR},
+      profit = #{profit,jdbcType=VARCHAR},
+      picture_address = #{pictureAddress,jdbcType=VARCHAR},
+      link_address = #{linkAddress,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

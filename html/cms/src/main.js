@@ -33,6 +33,11 @@ import './mock' // simulation data
 import * as filters from './filters' // global filters
 // 挂载全局变量
 Vue.prototype.GLOBAL = global
+
+// 引入http
+import { get, post } from '@/api/axios'
+Vue.prototype.$_get = get
+Vue.prototype.$_post = post
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
   // i18n: (key, value) => i18n.t(key, value)

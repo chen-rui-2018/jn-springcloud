@@ -112,4 +112,10 @@ public class IndustryServiceImpl implements IndustryService {
         return dictionaries;
     }
 
+    @Override
+    @ServiceLog(doAction = "获取业务领域-二级菜单")
+    public List<IndustryDictionaryProduct> selectIndustryProductList(){
+        return industryMapper.selectIndustryProductList();
+    }
+
 }

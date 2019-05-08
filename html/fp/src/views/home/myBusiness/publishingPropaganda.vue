@@ -1,0 +1,359 @@
+<template>
+  <div class="publishingProduct">
+    <div class="ordinary_title">
+      <div>发布宣传</div>
+    </div>
+    <div class="ordinary_content">
+       <el-form :model="publicityForm" :rules="rules" ref="publicityForm" label-width="124px" class="postJobInfo">
+  <el-form-item label="发布平台:" prop="issuePlatform">
+     <el-select v-model="publicityForm.issuePlatform" placeholder="请选择发布平台" clearable class="filter-item" >
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+  </el-form-item>
+  <el-form-item label="生效日期:" prop="effectiveDate">
+     <el-date-picker
+      v-model="publicityForm.effectiveDate"
+        value-format="yyyy-MM-dd"
+      type="date"
+      placeholder="选择日期">
+    </el-date-picker>
+  </el-form-item>
+  <el-form-item label="失效日期:" prop="invalidDate">
+     <el-date-picker
+      v-model="publicityForm.invalidDate"
+        value-format="yyyy-MM-dd"
+      type="date"
+      placeholder="选择日期">
+    </el-date-picker>
+  </el-form-item>
+  <el-form-item label="宣传产品:" prop="propagandaTitle">
+    <el-input v-model="publicityForm.propagandaTitle"></el-input>
+  </el-form-item>
+   <el-form-item label="宣传类型:" prop="propagandaType">
+     <el-select v-model="publicityForm.propagandaType" placeholder="请选择宣传类型" clearable class="filter-item" @change="selecteStatus">
+            <el-option v-for="item in propagandaTypeOptions" :key="item.propagandaTypeCode" :label="item.propagandaTypeName" :value="item.propagandaTypeCode" />
+          </el-select>
+  </el-form-item>
+  <el-form-item label="宣传详情:" prop="propagandaDetails">
+    <el-input type="textarea" v-model="publicityForm.propagandaDetails"  placeholder="宣传详情宣传详情"></el-input>
+  </el-form-item>
+  <el-form-item label="宣传海报:">
+<el-upload
+ action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+ :headers="headers"
+ :on-exceed="handleExceed"
+            :limit="1"
+  list-type="picture-card"
+  :on-success="handleAvatarSuccess"
+  :before-upload="beforeAvatarUpload"
+  :on-preview="handlePictureCardPreview"
+  :on-remove="handleRemove">
+  <i class="el-icon-plus"></i>
+</el-upload>
+<el-dialog :visible.sync="dialogVisible">
+  <img width="100%" :src="dialogImageUrl" alt="">
+</el-dialog>
+  </el-form-item>
+   <el-form-item label="宣传区域:" class="propagandaAreaUrl" prop="propagandaAreaUrl">
+    <div  :class="{'propagandaAreaActive':idx==index}" v-for="(item ,idx) in propagandaAreaArr" :key="idx" @click="getPropagandaAreaUrl(item,idx)"> <img :src="item.propagandaAreaUrl" alt=""></div>
+  </el-form-item>
+   <el-form-item label="宣传费用（元）:" >
+       <span class="propagandaFeeStyle">{{publicityForm.propagandaFee}}</span>
+       <div @click="toPublicityExpense">宣传费用规则</div>
+  </el-form-item>
+ <div class="business_footer" :disabled="isDisabled" @click="submitForm('publicityForm')">
+        提交申请
+  </div>
+</el-form>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data () {
+    return {
+      index:0,
+       headers: {
+        token: sessionStorage.token
+      },
+      isDisabled:false,
+      propagandaAreaArr:[],
+      propagandaTypeOptions:[],
+      propagandaFeeOptions:[],
+      statusOptions:[
+        {
+          value: '1',
+          label: 'App'
+        }, {
+          value: '2',
+          label: '门户'
+        }, {
+          value: '3',
+          label: '其它'
+        }
+      ],
+      currentTime:'',
+      proFeeRuleDetails:'',
+      dialogImageUrl:'',
+         dialogVisible: false,
+        publicityForm: {
+          issuePlatform:'',
+          effectiveDate:'',
+          invalidDate:'',
+          propagandaTitle:'',
+          propagandaArea:'',
+          propagandaAreaUrl:'',
+          proFeeRuleCode:'',
+          propagandaType:'',
+          id:'',
+          posterUrl:''
+        },
+        rules: {
+          issuePlatform: [
+            { required: true, message: '请选择发布平台', trigger: 'change' }
+          ],
+          effectiveDate: [
+            { required: true, message: '请选择生效日期', trigger: 'change' }
+          ],
+          invalidDate: [
+            { required: true, message: '请选择失效日期', trigger: 'change' }
+          ],
+          propagandaTitle: [
+            { required: true, message: '请输入产品名称', trigger: 'blur' }
+          ],
+          propagandaType: [
+            {  required: true, message: '请选择宣传类型', trigger: 'change' }
+          ],
+          propagandaDetails: [
+            { required: true, message: '请填写宣传详情', trigger: 'blur' }
+          ]
+        }
+    }
+  },
+  mounted () {
+     this.initList()
+  },
+  methods: {
+    initList(){
+ this.getPropagandaTypeList()
+    this.getPropagandaFeeRulesList()
+    this.getPropagandaAreaList()
+    this.currentTime=this.api.getCurrentTime()
+    console.log(this.currentTime)
+    },
+    // 获取选中的区域信息
+    getPropagandaAreaUrl(item,idx){
+       this.publicityForm.propagandaArea=item.propagandaArea
+       this.publicityForm.propagandaAreaUrl=item.propagandaAreaUrl
+       this.index = idx
+    },
+    // 获取选中的宣传类型
+    selecteStatus(value) {
+      for (let i = 0; i < this.propagandaFeeOptions.length; i++) {
+       if(value===this.propagandaFeeOptions[i].proFeeRuleCode){
+         this.publicityForm.proFeeRuleCode=this.propagandaFeeOptions[i].proFeeRuleCode
+         this.publicityForm.propagandaFee=this.propagandaFeeOptions[i].propagandaFee
+         this.proFeeRuleDetails=this.propagandaFeeOptions[i].proFeeRuleDetails
+         return
+       }
+      }
+    },
+    // 获取宣传类型
+    getPropagandaTypeList(){
+      this.api.get({
+     url:'getPropagandaTypeList',
+    //  data:this.publicityForm,
+     callback:(res=>{
+         console.log(res)
+         if(res.code==='0000'){
+           this.propagandaTypeOptions=res.data
+         }
+     })
+ })
+    },
+      // 获取宣传区域信息
+    getPropagandaAreaList(){
+      this.api.get({
+     url:'getPropagandaAreaList',
+    //  data:this.publicityForm,
+     callback:(res=>{
+         console.log(res)
+         if(res.code==='0000'){
+           this.propagandaAreaArr=res.data
+         }
+     })
+ })
+    },
+     // 获取宣传费用规则
+    getPropagandaFeeRulesList(){
+      this.api.get({
+     url:'getPropagandaFeeRulesList',
+    //  data:this.publicityForm,
+     callback:(res=>{
+         console.log(res)
+         if(res.code==='0000'){
+           this.propagandaFeeOptions=res.data
+         }
+     })
+ })
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`只能上传一张海报图片`)
+    },
+     handleRemove(file, fileList) {
+        this.dialogImageUrl=''
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+        handleAvatarSuccess(res, file) {
+        this.publicityForm.posterUrl = res.data;
+      },
+      beforeAvatarUpload(file) {
+        const isLt2M = file.size / 1024 / 1024 < 5;
+         const isJPG = file.type === 'image/jpeg'||file.type === 'image/png'
+        if (!isLt2M) {
+          this.$message.error('上传图片大小不能超过 5MB!');
+        }
+         if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG、png 格式!');
+        }
+      return isJPG && isLt2M;
+      },
+    toPublicityExpense(){
+      if(!this.publicityForm.propagandaType){
+        this.$message.error('请先选择宣传类型')
+        return
+      }
+
+      this.$router.push({name:'publicityExpense',query:{proFeeRuleDetails:this.proFeeRuleDetails}})
+    },
+     submitForm(publicityForm) {
+       this.isDisabled=true
+        this.$refs[publicityForm].validate((valid) => {
+          if (valid) {
+console.log(this.publicityForm)
+if(new Date(this.publicityForm.effectiveDate)<= new Date(this.currentTime)){
+   this.$message.error('生效日期必须大于当前日期,请重新选择')
+  this.isDisabled=false
+  return
+}
+ if(new Date(this.publicityForm.effectiveDate)>= new Date(this.publicityForm.invalidDate)){
+  this.$message.error('失效日期必须大于生效日期,请重新选择')
+  this.isDisabled=false
+  return
+}
+if(!this.publicityForm.posterUrl){
+  this.$message.error('请选择海报图片')
+  this.isDisabled=false
+  return
+}
+if(!this.publicityForm.propagandaAreaUrl){
+  this.$message.error('请选择宣传区域')
+  this.isDisabled=false
+  return
+}
+ this.api.post({
+     url:'saveBusinessPromotion',
+     data:this.publicityForm,
+     callback:(res=>{
+         console.log(res)
+           if(res.code==='0000'){
+                       this.$message({
+                message: '发布成功',
+                type: 'success'
+              })
+               this.$router.push({name:'enterprisePropaganda'})
+                   }else{
+                        this.$message.error('发布失败')
+                   }
+     })
+ })
+
+          }
+        });
+      },
+  }
+}
+</script>
+
+<style lang="scss">
+.propagandaAreaActive{
+  border:2px solid green;
+}
+.propagandaAreaUrl{
+
+div{
+  >div{
+
+  display:inline-block;
+  margin-right:46px;
+  width:85px;
+  height:85px;
+  cursor:pointer;
+  img{
+    height:100%;
+    width:100%;
+  }
+  }
+}
+}
+.propagandaFeeStyle{
+   display:inline-block;
+}
+  .publishingProduct{
+    width: 100%;
+    .ordinary_title{
+      background-color: #fff;
+
+      padding:24px 28px;
+      font-size: 13px;
+      border-radius: 5px;
+    }
+    .el-upload-list--picture-card .el-upload-list__item{
+      width: 85px;
+      height: 85px;
+    }
+    .el-upload--picture-card{
+        width: 85px;
+      height: 85px;
+      line-height: 85px;
+    }
+    .ordinary_content{
+        margin-top:14px;
+        background: #fff;
+        padding:36px 0px;
+        .postJobInfo{
+            width: 54%;
+            margin: 0 auto;
+
+            .el-date-editor.el-input, .el-date-editor.el-input__inner{
+                width: 266px;
+            }
+            .el-input{
+               width: 266px;
+            }
+             .el-textarea__inner{
+                 width: 348px;
+                min-height: 100px !important;
+                background: #fff;
+            }
+        }
+         .business_footer {
+    margin: 0 auto;
+    margin-top: 58px;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    height: 29px;
+    line-height: 29px;
+    width: 90px;
+    color: #41d787;
+    background: rgba(236, 252, 242, 1);
+    border: 1px solid rgba(65, 215, 135, 1);
+    margin-bottom: 17px;
+  }
+    }
+  }
+</style>

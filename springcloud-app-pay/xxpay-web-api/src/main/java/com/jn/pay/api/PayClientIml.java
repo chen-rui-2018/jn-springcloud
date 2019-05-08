@@ -3,6 +3,7 @@ package com.jn.pay.api;
 import com.jn.common.model.Result;
 import com.jn.pay.model.*;
 import com.jn.pay.model.alipay.AlipayWapPayRsp;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @Modified By:
  */
 //TODO 后期将会删除,目前只是为了让业务系统测试
+@Service
 public class PayClientIml implements PayClient {
 
 

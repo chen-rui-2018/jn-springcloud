@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @Version： v1.0
  * @Modified By:
  */
-@FeignClient("springcloud-app-pay")
 public interface PayClient {
 
     /**

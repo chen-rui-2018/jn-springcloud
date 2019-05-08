@@ -4,6 +4,7 @@ import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.UserLogin;
 import io.swagger.annotations.Api;
@@ -51,11 +52,12 @@ public class LoginController extends BaseController {
     }
 
     @ControllerLog(doAction = "authLogin")
-    @ApiOperation(value = "authLogin", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "authLogin",
+            notes = "ibps oauth 自动登录使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/authLogin")
     public Result authLogin() {
         String account = com.lc.ibps.auth.client.context.Context.getUsername();
-        logger.info("用户：{}，进行authLogin获取token",account);
+        logger.info("用户：{}，进行authLogin获取token", account);
         if (StringUtils.isNotBlank(account)) {
             UserLogin userLogin = new UserLogin();
             userLogin.setAccount(account);
@@ -65,5 +67,19 @@ public class LoginController extends BaseController {
         }
         return new Result();
     }
+
+    @ControllerLog(doAction = "noPwdLogin")
+    @ApiOperation(value = "noPwdLogin",
+            notes = "ibps 调用 swagger接口，登录鉴权", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/noPwdLogin")
+    public Result noPwdLogin(@RequestBody @Validated UserLogin userLogin) {
+        if (userLogin.getPassword().equals(EncryptUtil.encryptSha256(userLogin.getAccount()))) {
+            userLogin.setPassword("");
+            loginService.login(userLogin, Boolean.TRUE);
+            return new Result(SecurityUtils.getSubject().getSession().getId());
+        }
+        return new Result();
+    }
+
 
 }

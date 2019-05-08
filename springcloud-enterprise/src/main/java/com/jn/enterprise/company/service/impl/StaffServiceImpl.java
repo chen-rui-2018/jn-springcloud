@@ -19,6 +19,7 @@ import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
 import com.jn.enterprise.company.vo.StaffAuditVO;
 import com.jn.enterprise.company.vo.StaffListVO;
+import com.jn.enterprise.company.vo.UserExtensionInfoVO;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
@@ -145,10 +146,10 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "查询同事列表")
     public Map<String, Object> getColleagueList(StaffListParam staffListParam, String curAccount) {
         Map<String, Object> map = new HashMap<>();
-        boolean isShowFlag = false;
+        String isShowFlag = "1";
         ServiceCompany company = companyService.getCompanyDetailByAccountOrId(curAccount);
         if (company != null) {
-            isShowFlag = true;
+            isShowFlag = "0";
         }
         map.put("isShow", isShowFlag);
 
@@ -221,7 +222,7 @@ public class StaffServiceImpl implements StaffService {
         String comId = checkAccountIsCompanyAdmin(curAccount).getId();
 
         // 返回数据集合
-        List<StaffListVO> dataList = new ArrayList<>(16);
+        List<UserExtensionInfoVO> dataList = new ArrayList<>(16);
 
         // 账号集合
         List<String> accountList = new ArrayList<>(16);
@@ -269,11 +270,9 @@ public class StaffServiceImpl implements StaffService {
                     }
                 }
                 if (isFlag) {
-                    StaffListVO staff = new StaffListVO();
-                    BeanUtils.copyProperties(uei, staff);
-                    staff.setStaffId(uei.getId());
-                    staff.setCheckTime(uei.getModifiedTime());
-                    dataList.add(staff);
+                    UserExtensionInfoVO userExtensionInfoVO = new UserExtensionInfoVO();
+                    BeanUtils.copyProperties(uei, userExtensionInfoVO);
+                    dataList.add(userExtensionInfoVO);
                 }
             }
         } catch (JnSpringCloudException e) {

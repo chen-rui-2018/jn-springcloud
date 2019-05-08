@@ -63,7 +63,7 @@ public class StaffController extends BaseController {
     public User checkUserValid() {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
-            throw new JnSpringCloudException(CompanyExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
         }
         return user;
     }

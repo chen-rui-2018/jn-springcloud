@@ -1,16 +1,31 @@
+server:
+  port: 3010
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://springcloud:springcloud@localhost:1025/eureka/
+  instance:
+    prefer-ip-address: true
+
 spring:
   application:
     name: xxpay-web
   cloud:
     config:
       discovery:
-        enabled: true            # 默认false，设为true表示使用注册中心中的configserver配置而不自己配置configserver的uri
-        serviceId: xxpay-config  # 指定config server在服务发现中的serviceId，默认为：configserver
-      fail-fast: true
-      password: xxpay
-      username: user
+        enabled: true
+        serviceId: springcloud-app-config
+      label: master
+      profile: master
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:2000/eureka/
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+logging:
+  file: ./log/xxpay-web.log

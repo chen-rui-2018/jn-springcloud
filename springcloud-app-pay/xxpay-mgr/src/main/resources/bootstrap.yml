@@ -1,13 +1,3 @@
-ali:
-  notify_url: http://8ufttg.natappfree.cc/pay/aliPayNotifyRes.htm
-  return_url: http://www.baidu.com
-cert:
-  root:
-    path: /Users/dingzhiwei/java/tmp/cert
-wx:
-  notify_url: http://xxpay.ngrok.cc/notify/pay/wxPayNotifyRes.htm
-
-
 eureka:
   client:
     serviceUrl:
@@ -16,7 +6,7 @@ eureka:
     prefer-ip-address: true
 spring:
   application:
-    name: xxpay-service
+    name: xxpay-mgr
   cloud:
     config:
       discovery:
@@ -26,4 +16,4 @@ spring:
       profile: master
 
 server:
-  port: 3000
+  port: 8092

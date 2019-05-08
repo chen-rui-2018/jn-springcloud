@@ -700,6 +700,10 @@
       <table tableName="tb_asset_maintain_manage"></table>
       <!--维保管理-维保信息记录-->
       <table tableName="tb_asset_maintain_record"></table>
+      <!--房间管理-房间信息-->
+      <table tableName="tb_room_information"></table>
+      <!--房间管理-房间订单-->
+      <table tableName="tb_room_orders"></table>
     </context>
 
 </generatorConfiguration>

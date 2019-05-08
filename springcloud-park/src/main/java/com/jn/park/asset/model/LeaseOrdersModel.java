@@ -3,6 +3,7 @@ package com.jn.park.asset.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 
 /**
@@ -43,10 +44,10 @@ public class LeaseOrdersModel implements Serializable {
     private String specification;
 
     @ApiModelProperty(value = "单价",example = "200.00")
-    private String leasePrice;
+    private BigDecimal leasePrice;
 
     @ApiModelProperty(value = "押金",example = "100.00")
-    private String leaseCash;
+    private BigDecimal leaseCash;
 
     @ApiModelProperty(value = "开始时间",example = "2019-05-01")
     private Date startTime;
@@ -129,19 +130,19 @@ public class LeaseOrdersModel implements Serializable {
         this.specification = specification;
     }
 
-    public String getLeasePrice() {
+    public BigDecimal getLeasePrice() {
         return leasePrice;
     }
 
-    public void setLeasePrice(String leasePrice) {
+    public void setLeasePrice(BigDecimal leasePrice) {
         this.leasePrice = leasePrice;
     }
 
-    public String getLeaseCash() {
+    public BigDecimal getLeaseCash() {
         return leaseCash;
     }
 
-    public void setLeaseCash(String leaseCash) {
+    public void setLeaseCash(BigDecimal leaseCash) {
         this.leaseCash = leaseCash;
     }
 

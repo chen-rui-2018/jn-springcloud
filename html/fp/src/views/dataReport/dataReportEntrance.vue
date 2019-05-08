@@ -27,8 +27,8 @@
       </el-tab-pane>
     </el-tabs>
     <div class="btn-row">
-      <el-button size="small" type="primary" @click="submitForDraft">保存为草稿</el-button>
-      <el-button size="small" type="primary" :disabled="submitting" @click="submitForDone">提交</el-button>
+      <el-button size="small" type="primary" :disabled="formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDraft">保存为草稿</el-button>
+      <el-button size="small" type="primary" :disabled="submitting || formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDone">提交</el-button>
       <el-button size="small" type="primary" v-if="formData.otherData">
         <a :href="formData.otherData" download="" target="_blank">点击下载附件</a>
       </el-button>
@@ -117,7 +117,6 @@
             // 把otherColumns的对象根据指标id挂载到树形指标上面
             this.formatTreeOtherColumnData(tab)
           }
-          console.dir(this.formData)
         })
       },
       formatInputFormatModel(tab) {
@@ -194,10 +193,14 @@
         // 其他表格列的值（上期值比对）挂载到树形指标，跟着指标循环的时候显示
         for (const target of treeData) {
           for (const key in otherColumn){
+            this.$set(target, key, [])
             if (otherColumn[key]) {
               for(const column of otherColumn[key]) {
                 if (target.id === column.targetId) {
-                  target[key] = column.value || ''
+                  target[key].push({
+                    value: column.value || '-',
+                    label: column.formName
+                  })
                 }
               }
             }

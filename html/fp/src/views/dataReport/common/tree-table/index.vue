@@ -96,6 +96,12 @@
                 </el-col>
               </el-row>
             </div>
+            <div v-else-if="typeof scope.row[column.value] === 'object' && column.value !== 'inputFormatModel'" class="target-row">
+              <div v-for="(item, index) in scope.row[column.value]" :key="index" class="other-column">
+                <span v-if="item.label">{{ item.label + '：' + item.value}}</span>
+                <span v-else>{{ item.value }}</span>
+              </div>
+            </div>
             <span v-else>{{ scope.row[column.value] }}</span>
           </div>
         </div>
@@ -355,6 +361,9 @@ export default {
 
     .target-input {
       width: 160px;
+    }
+    .other-column {
+      padding: 10px;
     }
   }
 </style>

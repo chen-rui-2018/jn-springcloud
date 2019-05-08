@@ -1816,6 +1816,76 @@ public class TbServiceCompanyCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPropagandaPictureIsNull() {
+            addCriterion("propaganda_picture is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureIsNotNull() {
+            addCriterion("propaganda_picture is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureEqualTo(String value) {
+            addCriterion("propaganda_picture =", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureNotEqualTo(String value) {
+            addCriterion("propaganda_picture <>", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureGreaterThan(String value) {
+            addCriterion("propaganda_picture >", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureGreaterThanOrEqualTo(String value) {
+            addCriterion("propaganda_picture >=", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureLessThan(String value) {
+            addCriterion("propaganda_picture <", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureLessThanOrEqualTo(String value) {
+            addCriterion("propaganda_picture <=", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureLike(String value) {
+            addCriterion("propaganda_picture like", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureNotLike(String value) {
+            addCriterion("propaganda_picture not like", value, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureIn(List<String> values) {
+            addCriterion("propaganda_picture in", values, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureNotIn(List<String> values) {
+            addCriterion("propaganda_picture not in", values, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureBetween(String value1, String value2) {
+            addCriterion("propaganda_picture between", value1, value2, "propagandaPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaPictureNotBetween(String value1, String value2) {
+            addCriterion("propaganda_picture not between", value1, value2, "propagandaPicture");
+            return (Criteria) this;
+        }
+
         public Criteria andLicStarttimeIsNull() {
             addCriterion("lic_starttime is null");
             return (Criteria) this;

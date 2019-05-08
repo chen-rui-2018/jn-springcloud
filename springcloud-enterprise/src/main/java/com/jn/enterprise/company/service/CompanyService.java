@@ -3,6 +3,7 @@ package com.jn.enterprise.company.service;
 import com.jn.common.model.PaginationData;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
+import com.jn.enterprise.company.entity.TbServiceCompanyModify;
 
 import java.util.List;
 
@@ -29,5 +30,13 @@ public interface CompanyService {
      * @return
      */
     ServiceCompany getCompanyDetailByAccountOrId(String account);
+
+
+    /**
+     * 根据企业ID查询最后一条修改数据
+     * @param comId 企业ID
+     * @return
+     */
+    TbServiceCompanyModify getLastModify(String comId);
 
 }

@@ -10,12 +10,10 @@ import com.jn.company.enums.CompanyExceptionEnum;
 import com.jn.company.model.CompanyProImg;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
+import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
-import com.jn.enterprise.company.entity.TbServiceCompany;
-import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
-import com.jn.enterprise.company.entity.TbServiceCompanyProImg;
-import com.jn.enterprise.company.entity.TbServiceCompanyProImgCriteria;
+import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
@@ -48,6 +46,10 @@ public class CompanyServiceImpl implements CompanyService {
     private TbServicePreferMapper tbServicePreferMapper;
     @Autowired
     private TbServiceCompanyProImgMapper tbServiceCompanyProImgMapper;
+
+    @Autowired
+    private CompanyMapper companyMapper;
+
     /**
      * 数据状态 1有效
      */
@@ -179,6 +181,12 @@ public class CompanyServiceImpl implements CompanyService {
         }
         company.setProImgs(imgs);
         return company;
+    }
+
+    @Override
+    @ServiceLog(doAction = "根据企业ID查询最后一条修改数据")
+    public TbServiceCompanyModify getLastModify(String comId) {
+        return companyMapper.getLastModify(comId);
     }
 
 }

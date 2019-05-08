@@ -111,6 +111,8 @@ public class TbServiceCompany implements Serializable {
 
     private String comSource;
 
+    private String affiliatedPark;
+
     private String creatorAccount;
 
     private String modifierAccount;
@@ -547,6 +549,14 @@ public class TbServiceCompany implements Serializable {
         this.comSource = comSource == null ? null : comSource.trim();
     }
 
+    public String getAffiliatedPark() {
+        return affiliatedPark;
+    }
+
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark == null ? null : affiliatedPark.trim();
+    }
+
     public String getCreatorAccount() {
         return creatorAccount;
     }
@@ -652,6 +662,7 @@ public class TbServiceCompany implements Serializable {
             && (this.getCheckStatus() == null ? other.getCheckStatus() == null : this.getCheckStatus().equals(other.getCheckStatus()))
             && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
             && (this.getComSource() == null ? other.getComSource() == null : this.getComSource().equals(other.getComSource()))
+            && (this.getAffiliatedPark() == null ? other.getAffiliatedPark() == null : this.getAffiliatedPark().equals(other.getAffiliatedPark()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -716,6 +727,7 @@ public class TbServiceCompany implements Serializable {
         result = prime * result + ((getCheckStatus() == null) ? 0 : getCheckStatus().hashCode());
         result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
         result = prime * result + ((getComSource() == null) ? 0 : getComSource().hashCode());
+        result = prime * result + ((getAffiliatedPark() == null) ? 0 : getAffiliatedPark().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -783,6 +795,7 @@ public class TbServiceCompany implements Serializable {
         sb.append(", checkStatus=").append(checkStatus);
         sb.append(", checkTime=").append(checkTime);
         sb.append(", comSource=").append(comSource);
+        sb.append(", affiliatedPark=").append(affiliatedPark);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", createdTime=").append(createdTime);

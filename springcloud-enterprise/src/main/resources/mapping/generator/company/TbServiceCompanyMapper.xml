@@ -55,6 +55,7 @@
     <result column="check_status" jdbcType="VARCHAR" property="checkStatus" />
     <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
     <result column="com_source" jdbcType="VARCHAR" property="comSource" />
+    <result column="affiliated_park" jdbcType="VARCHAR" property="affiliatedPark" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -127,8 +128,8 @@
     org_code, main_products, business_scope, contact, con_phone, con_wechat, con_qq, 
     con_address, postcode, com_address, com_tele, com_web, com_server, com_demand, addr_park, 
     com_synopsis, park_build_id, park_build_name, credit_points, com_type, is_join_activity, 
-    check_status, check_time, com_source, creator_account, modifier_account, created_time, 
-    modified_time, record_status
+    check_status, check_time, com_source, affiliated_park, creator_account, modifier_account, 
+    created_time, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyCriteria" resultMap="BaseResultMap">
     select
@@ -178,9 +179,9 @@
       com_demand, addr_park, com_synopsis, 
       park_build_id, park_build_name, credit_points, 
       com_type, is_join_activity, check_status, 
-      check_time, com_source, creator_account, 
-      modifier_account, created_time, modified_time, 
-      record_status)
+      check_time, com_source, affiliated_park, 
+      creator_account, modifier_account, created_time, 
+      modified_time, record_status)
     values (#{id,jdbcType=VARCHAR}, #{comName,jdbcType=VARCHAR}, #{comNameShort,jdbcType=VARCHAR}, 
       #{avatar,jdbcType=VARCHAR}, #{comAdmin,jdbcType=VARCHAR}, #{unifyCode,jdbcType=VARCHAR}, 
       #{owners,jdbcType=VARCHAR}, #{ownerLaw,jdbcType=VARCHAR}, #{ownerId,jdbcType=VARCHAR}, 
@@ -198,9 +199,9 @@
       #{comDemand,jdbcType=VARCHAR}, #{addrPark,jdbcType=VARCHAR}, #{comSynopsis,jdbcType=VARCHAR}, 
       #{parkBuildId,jdbcType=VARCHAR}, #{parkBuildName,jdbcType=VARCHAR}, #{creditPoints,jdbcType=DECIMAL}, 
       #{comType,jdbcType=VARCHAR}, #{isJoinActivity,jdbcType=VARCHAR}, #{checkStatus,jdbcType=VARCHAR}, 
-      #{checkTime,jdbcType=TIMESTAMP}, #{comSource,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{checkTime,jdbcType=TIMESTAMP}, #{comSource,jdbcType=VARCHAR}, #{affiliatedPark,jdbcType=VARCHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.company.entity.TbServiceCompany">
     insert into tb_service_company
@@ -363,6 +364,9 @@
       </if>
       <if test="comSource != null">
         com_source,
+      </if>
+      <if test="affiliatedPark != null">
+        affiliated_park,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -539,6 +543,9 @@
       </if>
       <if test="comSource != null">
         #{comSource,jdbcType=VARCHAR},
+      </if>
+      <if test="affiliatedPark != null">
+        #{affiliatedPark,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -725,6 +732,9 @@
       <if test="record.comSource != null">
         com_source = #{record.comSource,jdbcType=VARCHAR},
       </if>
+      <if test="record.affiliatedPark != null">
+        affiliated_park = #{record.affiliatedPark,jdbcType=VARCHAR},
+      </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -800,6 +810,7 @@
       check_status = #{record.checkStatus,jdbcType=VARCHAR},
       check_time = #{record.checkTime,jdbcType=TIMESTAMP},
       com_source = #{record.comSource,jdbcType=VARCHAR},
+      affiliated_park = #{record.affiliatedPark,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -968,6 +979,9 @@
       <if test="comSource != null">
         com_source = #{comSource,jdbcType=VARCHAR},
       </if>
+      <if test="affiliatedPark != null">
+        affiliated_park = #{affiliatedPark,jdbcType=VARCHAR},
+      </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -1040,6 +1054,7 @@
       check_status = #{checkStatus,jdbcType=VARCHAR},
       check_time = #{checkTime,jdbcType=TIMESTAMP},
       com_source = #{comSource,jdbcType=VARCHAR},
+      affiliated_park = #{affiliatedPark,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

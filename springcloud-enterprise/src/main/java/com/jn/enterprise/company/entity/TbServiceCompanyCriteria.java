@@ -3736,6 +3736,76 @@ public class TbServiceCompanyCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andAffiliatedParkIsNull() {
+            addCriterion("affiliated_park is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkIsNotNull() {
+            addCriterion("affiliated_park is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkEqualTo(String value) {
+            addCriterion("affiliated_park =", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkNotEqualTo(String value) {
+            addCriterion("affiliated_park <>", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkGreaterThan(String value) {
+            addCriterion("affiliated_park >", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkGreaterThanOrEqualTo(String value) {
+            addCriterion("affiliated_park >=", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkLessThan(String value) {
+            addCriterion("affiliated_park <", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkLessThanOrEqualTo(String value) {
+            addCriterion("affiliated_park <=", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkLike(String value) {
+            addCriterion("affiliated_park like", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkNotLike(String value) {
+            addCriterion("affiliated_park not like", value, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkIn(List<String> values) {
+            addCriterion("affiliated_park in", values, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkNotIn(List<String> values) {
+            addCriterion("affiliated_park not in", values, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkBetween(String value1, String value2) {
+            addCriterion("affiliated_park between", value1, value2, "affiliatedPark");
+            return (Criteria) this;
+        }
+
+        public Criteria andAffiliatedParkNotBetween(String value1, String value2) {
+            addCriterion("affiliated_park not between", value1, value2, "affiliatedPark");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatorAccountIsNull() {
             addCriterion("creator_account is null");
             return (Criteria) this;

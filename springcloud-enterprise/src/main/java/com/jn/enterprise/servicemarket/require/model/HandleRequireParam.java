@@ -21,7 +21,8 @@ public class HandleRequireParam implements Serializable {
     @ApiModelProperty(value = "合同总金额",example = "10")
     @Pattern(regexp ="[0-9]*",message = "合同总金额只能输入数字")
     private String contractAmount;
-    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)")
+    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销)",example = "1")
+    @Pattern(regexp = "^[123]|(\\s*)$", message = "{对接结果:'默认值只允许为1,2,3'}")
     private String handleResult;
     @ApiModelProperty(value = "结果描述",example = "xxx描述")
     private String resultDetail;

@@ -79,7 +79,7 @@
                         company
                     </contexts>
                     <tableNames>
-                        tb_service_company_modify
+                        tb_service_company
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

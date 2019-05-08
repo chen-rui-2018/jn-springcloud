@@ -1048,4 +1048,21 @@
         and record_status='1'
     </select>
 
+    <select id="getExcel" resultType="com.jn.enterprise.data.model.CompanyTree">
+        select
+        task_batch taskbatch,
+        model_id modelid,
+        tab_id tabid,
+        tab_name tabname,
+        target_id targetid,
+        target_name targetname,
+        parent_id parentid,
+        form_id formid,
+        form_name formname,
+        unit unit,
+        DATA DATA,
+        sum_val sumval
+         from view_data_model_data_sum
+        where task_batch=#{taskbatch} and model_id=#{modelid}
+    </select>
 </mapper>

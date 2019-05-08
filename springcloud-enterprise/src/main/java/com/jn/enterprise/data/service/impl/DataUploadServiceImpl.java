@@ -618,7 +618,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             for(int index=0,size=tabColumnType.length;index<size;index++){
                 List<InputFormatModel> history =  getLastValue(fillInId,modelId,tabId,formTime,modelCycle,tabColumnType[index],inputFormatModelList);
                 if(tabColumnType[index].equals(DataUploadConstants.AMPLIFICATION)){
-                    otherColumn.put(getLastFormTime(modelCycle,formTime,tabColumnType[index]),history);
+                    otherColumn.put("增幅",history);
                 }else if(tabColumnType[index].equals(DataUploadConstants.LAST_MONTH_LAST_YEAR)){
                     otherColumn.put(getLastFormTime(modelCycle,formTime,tabColumnType[index]),history);
                 }else if(tabColumnType[index].equals(DataUploadConstants.LAST_MONTH)){
@@ -793,7 +793,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                                                 if(dValue>0){
                                                     //大于等于零
                                                     dValue = dValue * 100;
-                                                    value = String.valueOf(dValue).substring(0,4)+"%";
+                                                    value = String.valueOf(dValue).substring(0,3)+"%";
                                                 }else if(dValue==0){
                                                     value="0%";
                                                 }else{
@@ -933,6 +933,11 @@ public class DataUploadServiceImpl implements DataUploadService {
                 String targetName = title[pos].trim();
                 //当前的值
                 content=currentData[pos];
+
+                if("null".equals(content)){
+                    content = "";
+                }
+
                 //通过名称来查找，其在数据库中的指标Id和填报格式Id
                 TbDataReportingSnapshotTarget currentTarget  = findTarget(targetName,targetList);
 

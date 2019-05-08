@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceRatingTypeEnum;
@@ -105,14 +106,15 @@ public class AdvisorServiceImpl implements AdvisorService {
     /**
      * 根据顾问账号获取顾问详情
      * @param advisorAccount 顾问账号
+     * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      * @return
      */
     @ServiceLog(doAction = "根据顾问账号获取顾问详情")
     @Override
-    public AdvisorDetailsVo getServiceAdvisorInfo(String advisorAccount) {
+    public AdvisorDetailsVo getServiceAdvisorInfo(String advisorAccount,String approvalStatus) {
         AdvisorDetailsVo advisorDetailsVo=new AdvisorDetailsVo();
         //1.获取用户基本信息
-        AdvisorServiceInfo advisorServiceInfo= getAdvisorInfoByAccount(advisorAccount);
+        AdvisorServiceInfo advisorServiceInfo= getAdvisorInfoByAccount(advisorAccount,approvalStatus);
         //设置顾问基础信息
         advisorDetailsVo.setAdvisorServiceInfo(advisorServiceInfo);
         //创建顾问详情简介对象
@@ -387,15 +389,14 @@ public class AdvisorServiceImpl implements AdvisorService {
     /**
      * 根据顾问账号获取顾问基本信息
      * @param advisorAccount 顾问账号
+     * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      */
     @ServiceLog(doAction = "根据顾问账号获取顾问基本信息")
     @Override
-    public AdvisorServiceInfo getAdvisorInfoByAccount(String advisorAccount) {
+    public AdvisorServiceInfo getAdvisorInfoByAccount(String advisorAccount,String approvalStatus) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        //数据删除状态  0；删除   1：有效
-        byte recordStatus=1;
-        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount)
-                .andRecordStatusEqualTo(recordStatus);
+        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount).andApprovalStatusEqualTo(approvalStatus)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceAdvisor> tbServiceAdvisors = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisors.isEmpty()){
             logger.warn("当前顾问[{}]信息不存在",advisorAccount);
@@ -407,21 +408,23 @@ public class AdvisorServiceImpl implements AdvisorService {
         //领域类型[0业务领域1行业领域2发展阶段3企业性质]
         industryDictParameter.setPreType("0");
         List<IndustryDictionary> industryDictionaryList = industryService.getIndustryDictionary(industryDictParameter);
-        String []businessAreaArray=tbServiceAdvisor.getBusinessArea().split(",");
-        StringBuilder businessAreaBul=new StringBuilder();
-        for(IndustryDictionary industryDictionary:industryDictionaryList){
-            for(String businessArea:businessAreaArray){
-                if(StringUtils.equals(industryDictionary.getId(), businessArea)){
-                    businessAreaBul.append(industryDictionary.getPreValue());
-                    businessAreaBul.append(",");
-                    break;
-                }
-            }
-        }
-        int length = businessAreaBul.length()-1;
         AdvisorServiceInfo advisorServiceInfo=new AdvisorServiceInfo();
         BeanUtils.copyProperties(tbServiceAdvisor, advisorServiceInfo);
-        advisorServiceInfo.setBusinessAreaName(businessAreaBul.toString().substring(0, length));
+        if(tbServiceAdvisor.getBusinessArea()!=null){
+            String []businessAreaArray=tbServiceAdvisor.getBusinessArea().split(",");
+            StringBuilder businessAreaBul=new StringBuilder();
+            for(IndustryDictionary industryDictionary:industryDictionaryList){
+                for(String businessArea:businessAreaArray){
+                    if(StringUtils.equals(industryDictionary.getId(), businessArea)){
+                        businessAreaBul.append(industryDictionary.getPreValue());
+                        businessAreaBul.append(",");
+                        break;
+                    }
+                }
+            }
+            int length = businessAreaBul.length()-1;
+            advisorServiceInfo.setBusinessAreaName(businessAreaBul.toString().substring(0, length));
+        }
         return advisorServiceInfo;
     }
 }

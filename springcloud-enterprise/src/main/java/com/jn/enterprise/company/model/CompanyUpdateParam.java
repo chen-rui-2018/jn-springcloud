@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 编辑企业入参Bean
@@ -16,6 +15,13 @@ import java.util.List;
  */
 @ApiModel(value = "CompanyUpdateParam",description = "编辑企业入参")
 public class CompanyUpdateParam implements Serializable {
+
+    @ApiModelProperty(value = "ID", hidden = true)
+    private String id;
+
+    @ApiModelProperty(value = "企业ID", hidden = true)
+    private String comId;
+
     @NotNull(message = "企业名称不能为空")
     @ApiModelProperty(value = "企业名称", required = true, example = "深圳腾讯")
     private String comName;
@@ -24,36 +30,25 @@ public class CompanyUpdateParam implements Serializable {
     @ApiModelProperty(value = "企业简称", required = true, example = "腾讯")
     private String comNameShort;
 
-    @NotNull(message = "企业领域不能为空")
-    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=1返回的ID]", required = true,notes = "传机构字典接口入参preType=1返回的ID",example = "shengwuyiyao")
-    private String induType;
+    @NotNull(message = "企业logo不能为空")
+    @ApiModelProperty(value = "企业logo",required = true,example = "**/**/**,jpg")
+    private String avatar;
+
+    @NotNull(message = "统一社会信用代码不能为空")
+    @ApiModelProperty(value = "统一社会信用代码",required = true,example = "1000")
+    private String unifyCode;
 
     @NotNull(message = "企业法人不能为空")
     @ApiModelProperty(value = "企业法人", required = true, example = "李薇薇")
     private String ownerLaw;
 
-    @NotNull(message = "公司联系电话不能为空")
-    @ApiModelProperty(value = "公司联系电话",required = true, example = "010-12812025")
-    private String conPhone;
+    @NotNull(message = "法人联系电话不能为空")
+    @ApiModelProperty(value = "法人联系电话",required = true, example = "010-12812025")
+    private String ownerPhone;
 
-    @NotNull(message = "注册时间不能为空")
-    @ApiModelProperty(value = "注册时间yyyy-MM-dd",required = true,example = "2018-01-01")
-    private String foundingTime;
-
-    @NotNull(message = "落地时间不能为空")
-    @ApiModelProperty(value = "落地时间yyyy-MM-dd",required = true,example = "2018-01-01")
-    private String runTime;
-
-    @NotNull(message = "公司注册地址不能为空")
-    @ApiModelProperty(value = "公司注册地址",required = true,example = "XX省XX市XXX")
-    private String comAddress;
-
-    @NotNull(message = "实际经营地址不能为空")
-    @ApiModelProperty(value = "实际经营地址（园区地址）",required = true,example = "XX省XX市XXX")
-    private String addrPark;
-
-    @ApiModelProperty(value = "固定电话",example = "010-111111")
-    private String comTele;
+    @NotNull(message = "企业性质不能为空")
+    @ApiModelProperty(value = "企业性质[多个用,分隔][传机构字典接口入参preType=3返回的ID]",required = true,notes = "传机构字典接口入参preType=3返回的ID",example = "guoyouqiye,minyingqiye")
+    private String comProperty;
 
     @NotNull(message = "注册资金不能为空")
     @ApiModelProperty(value = "注册资金（万元）",required = true,example = "500")
@@ -63,21 +58,43 @@ public class CompanyUpdateParam implements Serializable {
     @ApiModelProperty(value = "企业规模（万元）", required = true)
     private Long comScale;
 
-    @NotNull(message = "统一社会信用代码不能为空")
-    @ApiModelProperty(value = "统一社会信用代码",required = true,example = "1000")
-    private String unifyCode;
+    @NotNull(message = "注册时间不能为空")
+    @ApiModelProperty(value = "注册时间yyyy-MM-dd",required = true,example = "2018-01-01")
+    private String foundingTime;
 
-    @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[多个用,分隔][传机构字典接口入参preType=3返回的ID]",required = true,notes = "传机构字典接口入参preType=3返回的ID",example = "guoyouqiye,minyingqiye")
-    private String comProperty;
+    @NotNull(message = "落地时间不能为空")
+    @ApiModelProperty(value = "落地时间yyyy-MM-dd",required = true,example = "2018-01-01")
+    private String runTime;
 
-    @NotNull(message = "所属园区不能为空")
-    @ApiModelProperty(value = "所属园区",required = true,example = "xx高新园区")
-    private String affiliatedPark;
+    @NotNull(message = "企业领域不能为空")
+    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=1返回的ID]", required = true,notes = "传机构字典接口入参preType=1返回的ID",example = "shengwuyiyao")
+    private String induType;
 
-    @NotNull(message = "企业来源不能为空")
-    @ApiModelProperty(value = "企业来源 [1人才企业2招商企业]",notes = "1人才企业2招商企业",required = true,example = "1")
-    private String comSource;
+    @NotNull(message = "企业领域代码不能为空")
+    @ApiModelProperty(value = "企业领域代码", required = true,example = "qilydm")
+    private String induCode;
+
+    @NotNull(message = "三证一体或营业执照照片不能为空")
+    @ApiModelProperty(value = "三证一体或营业执照照片", required = true)
+    private String businessLicense;
+
+    @NotNull(message = "公司宣传图片不能为空")
+    @ApiModelProperty(value = "公司宣传图片（多个,分隔）", required = true, example = "xxx,xxx,xxx")
+    private String propagandaPicture;
+
+    @ApiModelProperty(value = "主要产品",example = "计算机软件开发。。。")
+    private String mainProducts;
+
+    @NotNull(message = "公司注册地址不能为空")
+    @ApiModelProperty(value = "公司注册地址",required = true,example = "XX省XX市XXX")
+    private String comAddress;
+
+    @ApiModelProperty(value = "固定电话",example = "010-111111")
+    private String comTele;
+
+    @NotNull(message = "企业官网地址不能为空")
+    @ApiModelProperty(value = "企业官网地址",required = true, example = "www.baidu.com")
+    private String comWeb;
 
     @ApiModelProperty(value = "我的服务",example = "***服务")
     private String comServer;
@@ -85,32 +102,61 @@ public class CompanyUpdateParam implements Serializable {
     @ApiModelProperty(value = "我的需求",example = "***需求")
     private String comDemand;
 
-    @NotNull(message = "企业官网地址不能为空")
-    @ApiModelProperty(value = "企业官网地址",required = true, example = "www.baidu.com")
-    private String comWeb;
-
-    @NotNull(message = "企业logo不能为空")
-    @ApiModelProperty(value = "企业logo",required = true,example = "**/**/**,jpg")
-    private String avatar;
-
-    @NotNull(message = "三证一体或营业执照照片不能为空")
-    @ApiModelProperty(value = "三证一体或营业执照照片", required = true)
-    private String businessLicense;
-
-    @NotNull(message = "公司宣传图片不能为空")
-    @ApiModelProperty(value = "公司宣传图片", required = true)
-    private List<CompanyProImgParam> imgParams;
+    @NotNull(message = "实际经营地址不能为空")
+    @ApiModelProperty(value = "实际经营地址（园区地址）",required = true,example = "XX省XX市XXX")
+    private String addrPark;
 
     @NotNull(message = "公司简介不能为空")
     @ApiModelProperty(value = "公司简介", required = true)
-    private String comDetails;
+    private String comSynopsis;
 
-    @ApiModelProperty(value = "主要产品",example = "计算机软件开发。。。")
-    private String mainProducts;
+    @NotNull(message = "企业来源不能为空")
+    @ApiModelProperty(value = "企业来源 [1人才企业2招商企业]",notes = "1人才企业2招商企业",required = true,example = "1")
+    private String comSource;
+
+    @NotNull(message = "所属园区不能为空")
+    @ApiModelProperty(value = "所属园区", required = true, example = "xx高新园区")
+    private String affiliatedPark;
+
+    @ApiModelProperty(value = "创建者账号", hidden = true)
+    private String creatorAccount;
+
+    @ApiModelProperty(value = "审核状态", hidden = true)
+    private String checkStatus;
+
+    @ApiModelProperty(value = "创建时间", hidden = true)
+    private String createdTime;
+
+    @ApiModelProperty(value = "是否删除（0标记删除，1正常）", hidden = true)
+    private String recordStatus;
 
     @NotNull(message = "验证码不能为空")
-    @ApiModelProperty(value = "验证码",required = true,example = "1234")
+    @ApiModelProperty(value = "验证码",required = true,example = "123456")
     private String checkCode;
+
+    public String getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(String checkStatus) {
+        this.checkStatus = checkStatus;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getComId() {
+        return comId;
+    }
+
+    public void setComId(String comId) {
+        this.comId = comId;
+    }
 
     public String getComName() {
         return comName;
@@ -128,12 +174,20 @@ public class CompanyUpdateParam implements Serializable {
         this.comNameShort = comNameShort;
     }
 
-    public String getInduType() {
-        return induType;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setInduType(String induType) {
-        this.induType = induType;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getUnifyCode() {
+        return unifyCode;
+    }
+
+    public void setUnifyCode(String unifyCode) {
+        this.unifyCode = unifyCode;
     }
 
     public String getOwnerLaw() {
@@ -144,52 +198,20 @@ public class CompanyUpdateParam implements Serializable {
         this.ownerLaw = ownerLaw;
     }
 
-    public String getConPhone() {
-        return conPhone;
+    public String getOwnerPhone() {
+        return ownerPhone;
     }
 
-    public void setConPhone(String conPhone) {
-        this.conPhone = conPhone;
+    public void setOwnerPhone(String ownerPhone) {
+        this.ownerPhone = ownerPhone;
     }
 
-    public String getFoundingTime() {
-        return foundingTime;
+    public String getComProperty() {
+        return comProperty;
     }
 
-    public void setFoundingTime(String foundingTime) {
-        this.foundingTime = foundingTime;
-    }
-
-    public String getRunTime() {
-        return runTime;
-    }
-
-    public void setRunTime(String runTime) {
-        this.runTime = runTime;
-    }
-
-    public String getComAddress() {
-        return comAddress;
-    }
-
-    public void setComAddress(String comAddress) {
-        this.comAddress = comAddress;
-    }
-
-    public String getAddrPark() {
-        return addrPark;
-    }
-
-    public void setAddrPark(String addrPark) {
-        this.addrPark = addrPark;
-    }
-
-    public String getComTele() {
-        return comTele;
-    }
-
-    public void setComTele(String comTele) {
-        this.comTele = comTele;
+    public void setComProperty(String comProperty) {
+        this.comProperty = comProperty;
     }
 
     public Long getRegCapital() {
@@ -208,36 +230,84 @@ public class CompanyUpdateParam implements Serializable {
         this.comScale = comScale;
     }
 
-    public String getUnifyCode() {
-        return unifyCode;
+    public String getFoundingTime() {
+        return foundingTime;
     }
 
-    public void setUnifyCode(String unifyCode) {
-        this.unifyCode = unifyCode;
+    public void setFoundingTime(String foundingTime) {
+        this.foundingTime = foundingTime;
     }
 
-    public String getComProperty() {
-        return comProperty;
+    public String getRunTime() {
+        return runTime;
     }
 
-    public void setComProperty(String comProperty) {
-        this.comProperty = comProperty;
+    public void setRunTime(String runTime) {
+        this.runTime = runTime;
     }
 
-    public String getAffiliatedPark() {
-        return affiliatedPark;
+    public String getInduType() {
+        return induType;
     }
 
-    public void setAffiliatedPark(String affiliatedPark) {
-        this.affiliatedPark = affiliatedPark;
+    public void setInduType(String induType) {
+        this.induType = induType;
     }
 
-    public String getComSource() {
-        return comSource;
+    public String getInduCode() {
+        return induCode;
     }
 
-    public void setComSource(String comSource) {
-        this.comSource = comSource;
+    public void setInduCode(String induCode) {
+        this.induCode = induCode;
+    }
+
+    public String getBusinessLicense() {
+        return businessLicense;
+    }
+
+    public void setBusinessLicense(String businessLicense) {
+        this.businessLicense = businessLicense;
+    }
+
+    public String getPropagandaPicture() {
+        return propagandaPicture;
+    }
+
+    public void setPropagandaPicture(String propagandaPicture) {
+        this.propagandaPicture = propagandaPicture;
+    }
+
+    public String getMainProducts() {
+        return mainProducts;
+    }
+
+    public void setMainProducts(String mainProducts) {
+        this.mainProducts = mainProducts;
+    }
+
+    public String getComAddress() {
+        return comAddress;
+    }
+
+    public void setComAddress(String comAddress) {
+        this.comAddress = comAddress;
+    }
+
+    public String getComTele() {
+        return comTele;
+    }
+
+    public void setComTele(String comTele) {
+        this.comTele = comTele;
+    }
+
+    public String getComWeb() {
+        return comWeb;
+    }
+
+    public void setComWeb(String comWeb) {
+        this.comWeb = comWeb;
     }
 
     public String getComServer() {
@@ -256,52 +326,60 @@ public class CompanyUpdateParam implements Serializable {
         this.comDemand = comDemand;
     }
 
-    public String getComWeb() {
-        return comWeb;
+    public String getAddrPark() {
+        return addrPark;
     }
 
-    public void setComWeb(String comWeb) {
-        this.comWeb = comWeb;
+    public void setAddrPark(String addrPark) {
+        this.addrPark = addrPark;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getComSynopsis() {
+        return comSynopsis;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setComSynopsis(String comSynopsis) {
+        this.comSynopsis = comSynopsis;
     }
 
-    public String getBusinessLicense() {
-        return businessLicense;
+    public String getAffiliatedPark() {
+        return affiliatedPark;
     }
 
-    public void setBusinessLicense(String businessLicense) {
-        this.businessLicense = businessLicense;
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark;
     }
 
-    public List<CompanyProImgParam> getImgParams() {
-        return imgParams;
+    public String getComSource() {
+        return comSource;
     }
 
-    public void setImgParams(List<CompanyProImgParam> imgParams) {
-        this.imgParams = imgParams;
+    public void setComSource(String comSource) {
+        this.comSource = comSource;
     }
 
-    public String getComDetails() {
-        return comDetails;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setComDetails(String comDetails) {
-        this.comDetails = comDetails;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public String getMainProducts() {
-        return mainProducts;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setMainProducts(String mainProducts) {
-        this.mainProducts = mainProducts;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(String recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getCheckCode() {

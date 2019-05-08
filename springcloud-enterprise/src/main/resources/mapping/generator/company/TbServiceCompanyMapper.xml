@@ -27,6 +27,7 @@
     <result column="indu_type" jdbcType="VARCHAR" property="induType" />
     <result column="indu_code" jdbcType="VARCHAR" property="induCode" />
     <result column="business_license" jdbcType="VARCHAR" property="businessLicense" />
+    <result column="propaganda_picture" jdbcType="VARCHAR" property="propagandaPicture" />
     <result column="lic_starttime" jdbcType="TIMESTAMP" property="licStarttime" />
     <result column="lic_endtime" jdbcType="TIMESTAMP" property="licEndtime" />
     <result column="register_type" jdbcType="VARCHAR" property="registerType" />
@@ -54,6 +55,7 @@
     <result column="check_status" jdbcType="VARCHAR" property="checkStatus" />
     <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
     <result column="com_source" jdbcType="VARCHAR" property="comSource" />
+    <result column="affiliated_park" jdbcType="VARCHAR" property="affiliatedPark" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -122,12 +124,12 @@
     id, com_name, com_name_short, avatar, com_admin, unify_code, owners, owner_law, owner_id, 
     owner_phone, owner_wechat, owner_qq, bank_name, bank_account, products, material, 
     com_property, reg_capital, add_capital, com_scale, founding_time, run_time, indu_type, 
-    indu_code, business_license, lic_starttime, lic_endtime, register_type, org_code, 
-    main_products, business_scope, contact, con_phone, con_wechat, con_qq, con_address, 
-    postcode, com_address, com_tele, com_web, com_server, com_demand, addr_park, com_synopsis, 
-    park_build_id, park_build_name, credit_points, com_type, is_join_activity, check_status, 
-    check_time, com_source, creator_account, modifier_account, created_time, modified_time, 
-    record_status
+    indu_code, business_license, propaganda_picture, lic_starttime, lic_endtime, register_type, 
+    org_code, main_products, business_scope, contact, con_phone, con_wechat, con_qq, 
+    con_address, postcode, com_address, com_tele, com_web, com_server, com_demand, addr_park, 
+    com_synopsis, park_build_id, park_build_name, credit_points, com_type, is_join_activity, 
+    check_status, check_time, com_source, affiliated_park, creator_account, modifier_account, 
+    created_time, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyCriteria" resultMap="BaseResultMap">
     select
@@ -168,18 +170,18 @@
       material, com_property, reg_capital, 
       add_capital, com_scale, founding_time, 
       run_time, indu_type, indu_code, 
-      business_license, lic_starttime, lic_endtime, 
-      register_type, org_code, main_products, 
-      business_scope, contact, con_phone, 
-      con_wechat, con_qq, con_address, 
-      postcode, com_address, com_tele, 
-      com_web, com_server, com_demand, 
-      addr_park, com_synopsis, park_build_id, 
-      park_build_name, credit_points, com_type, 
-      is_join_activity, check_status, check_time, 
-      com_source, creator_account, modifier_account, 
-      created_time, modified_time, record_status
-      )
+      business_license, propaganda_picture, lic_starttime, 
+      lic_endtime, register_type, org_code, 
+      main_products, business_scope, contact, 
+      con_phone, con_wechat, con_qq, 
+      con_address, postcode, com_address, 
+      com_tele, com_web, com_server, 
+      com_demand, addr_park, com_synopsis, 
+      park_build_id, park_build_name, credit_points, 
+      com_type, is_join_activity, check_status, 
+      check_time, com_source, affiliated_park, 
+      creator_account, modifier_account, created_time, 
+      modified_time, record_status)
     values (#{id,jdbcType=VARCHAR}, #{comName,jdbcType=VARCHAR}, #{comNameShort,jdbcType=VARCHAR}, 
       #{avatar,jdbcType=VARCHAR}, #{comAdmin,jdbcType=VARCHAR}, #{unifyCode,jdbcType=VARCHAR}, 
       #{owners,jdbcType=VARCHAR}, #{ownerLaw,jdbcType=VARCHAR}, #{ownerId,jdbcType=VARCHAR}, 
@@ -188,18 +190,18 @@
       #{material,jdbcType=VARCHAR}, #{comProperty,jdbcType=VARCHAR}, #{regCapital,jdbcType=DECIMAL}, 
       #{addCapital,jdbcType=VARCHAR}, #{comScale,jdbcType=DECIMAL}, #{foundingTime,jdbcType=TIMESTAMP}, 
       #{runTime,jdbcType=TIMESTAMP}, #{induType,jdbcType=VARCHAR}, #{induCode,jdbcType=VARCHAR}, 
-      #{businessLicense,jdbcType=VARCHAR}, #{licStarttime,jdbcType=TIMESTAMP}, #{licEndtime,jdbcType=TIMESTAMP}, 
-      #{registerType,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, #{mainProducts,jdbcType=VARCHAR}, 
-      #{businessScope,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{conPhone,jdbcType=VARCHAR}, 
-      #{conWechat,jdbcType=VARCHAR}, #{conQq,jdbcType=VARCHAR}, #{conAddress,jdbcType=VARCHAR}, 
-      #{postcode,jdbcType=VARCHAR}, #{comAddress,jdbcType=VARCHAR}, #{comTele,jdbcType=VARCHAR}, 
-      #{comWeb,jdbcType=VARCHAR}, #{comServer,jdbcType=VARCHAR}, #{comDemand,jdbcType=VARCHAR}, 
-      #{addrPark,jdbcType=VARCHAR}, #{comSynopsis,jdbcType=VARCHAR}, #{parkBuildId,jdbcType=VARCHAR}, 
-      #{parkBuildName,jdbcType=VARCHAR}, #{creditPoints,jdbcType=DECIMAL}, #{comType,jdbcType=VARCHAR}, 
-      #{isJoinActivity,jdbcType=VARCHAR}, #{checkStatus,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, 
-      #{comSource,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{businessLicense,jdbcType=VARCHAR}, #{propagandaPicture,jdbcType=VARCHAR}, #{licStarttime,jdbcType=TIMESTAMP}, 
+      #{licEndtime,jdbcType=TIMESTAMP}, #{registerType,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, 
+      #{mainProducts,jdbcType=VARCHAR}, #{businessScope,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, 
+      #{conPhone,jdbcType=VARCHAR}, #{conWechat,jdbcType=VARCHAR}, #{conQq,jdbcType=VARCHAR}, 
+      #{conAddress,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, #{comAddress,jdbcType=VARCHAR}, 
+      #{comTele,jdbcType=VARCHAR}, #{comWeb,jdbcType=VARCHAR}, #{comServer,jdbcType=VARCHAR}, 
+      #{comDemand,jdbcType=VARCHAR}, #{addrPark,jdbcType=VARCHAR}, #{comSynopsis,jdbcType=VARCHAR}, 
+      #{parkBuildId,jdbcType=VARCHAR}, #{parkBuildName,jdbcType=VARCHAR}, #{creditPoints,jdbcType=DECIMAL}, 
+      #{comType,jdbcType=VARCHAR}, #{isJoinActivity,jdbcType=VARCHAR}, #{checkStatus,jdbcType=VARCHAR}, 
+      #{checkTime,jdbcType=TIMESTAMP}, #{comSource,jdbcType=VARCHAR}, #{affiliatedPark,jdbcType=VARCHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.company.entity.TbServiceCompany">
     insert into tb_service_company
@@ -278,6 +280,9 @@
       </if>
       <if test="businessLicense != null">
         business_license,
+      </if>
+      <if test="propagandaPicture != null">
+        propaganda_picture,
       </if>
       <if test="licStarttime != null">
         lic_starttime,
@@ -359,6 +364,9 @@
       </if>
       <if test="comSource != null">
         com_source,
+      </if>
+      <if test="affiliatedPark != null">
+        affiliated_park,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -452,6 +460,9 @@
       <if test="businessLicense != null">
         #{businessLicense,jdbcType=VARCHAR},
       </if>
+      <if test="propagandaPicture != null">
+        #{propagandaPicture,jdbcType=VARCHAR},
+      </if>
       <if test="licStarttime != null">
         #{licStarttime,jdbcType=TIMESTAMP},
       </if>
@@ -532,6 +543,9 @@
       </if>
       <if test="comSource != null">
         #{comSource,jdbcType=VARCHAR},
+      </if>
+      <if test="affiliatedPark != null">
+        #{affiliatedPark,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -634,6 +648,9 @@
       <if test="record.businessLicense != null">
         business_license = #{record.businessLicense,jdbcType=VARCHAR},
       </if>
+      <if test="record.propagandaPicture != null">
+        propaganda_picture = #{record.propagandaPicture,jdbcType=VARCHAR},
+      </if>
       <if test="record.licStarttime != null">
         lic_starttime = #{record.licStarttime,jdbcType=TIMESTAMP},
       </if>
@@ -715,6 +732,9 @@
       <if test="record.comSource != null">
         com_source = #{record.comSource,jdbcType=VARCHAR},
       </if>
+      <if test="record.affiliatedPark != null">
+        affiliated_park = #{record.affiliatedPark,jdbcType=VARCHAR},
+      </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -762,6 +782,7 @@
       indu_type = #{record.induType,jdbcType=VARCHAR},
       indu_code = #{record.induCode,jdbcType=VARCHAR},
       business_license = #{record.businessLicense,jdbcType=VARCHAR},
+      propaganda_picture = #{record.propagandaPicture,jdbcType=VARCHAR},
       lic_starttime = #{record.licStarttime,jdbcType=TIMESTAMP},
       lic_endtime = #{record.licEndtime,jdbcType=TIMESTAMP},
       register_type = #{record.registerType,jdbcType=VARCHAR},
@@ -789,6 +810,7 @@
       check_status = #{record.checkStatus,jdbcType=VARCHAR},
       check_time = #{record.checkTime,jdbcType=TIMESTAMP},
       com_source = #{record.comSource,jdbcType=VARCHAR},
+      affiliated_park = #{record.affiliatedPark,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -873,6 +895,9 @@
       <if test="businessLicense != null">
         business_license = #{businessLicense,jdbcType=VARCHAR},
       </if>
+      <if test="propagandaPicture != null">
+        propaganda_picture = #{propagandaPicture,jdbcType=VARCHAR},
+      </if>
       <if test="licStarttime != null">
         lic_starttime = #{licStarttime,jdbcType=TIMESTAMP},
       </if>
@@ -954,6 +979,9 @@
       <if test="comSource != null">
         com_source = #{comSource,jdbcType=VARCHAR},
       </if>
+      <if test="affiliatedPark != null">
+        affiliated_park = #{affiliatedPark,jdbcType=VARCHAR},
+      </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -998,6 +1026,7 @@
       indu_type = #{induType,jdbcType=VARCHAR},
       indu_code = #{induCode,jdbcType=VARCHAR},
       business_license = #{businessLicense,jdbcType=VARCHAR},
+      propaganda_picture = #{propagandaPicture,jdbcType=VARCHAR},
       lic_starttime = #{licStarttime,jdbcType=TIMESTAMP},
       lic_endtime = #{licEndtime,jdbcType=TIMESTAMP},
       register_type = #{registerType,jdbcType=VARCHAR},
@@ -1025,6 +1054,7 @@
       check_status = #{checkStatus,jdbcType=VARCHAR},
       check_time = #{checkTime,jdbcType=TIMESTAMP},
       com_source = #{comSource,jdbcType=VARCHAR},
+      affiliated_park = #{affiliatedPark,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

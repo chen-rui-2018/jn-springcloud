@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementParam;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementShow;
 import com.jn.enterprise.servicemarket.advisor.model.ApprovalParam;
@@ -106,7 +107,7 @@ public class AdvisorManagementController extends BaseController {
     @RequestMapping(value = "/advisorDetails",method = RequestMethod.GET)
     public Result<AdvisorDetailsVo> advisorDetails(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
-        AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
+        AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount, ApprovalStatusEnum.APPROVED.getValue());
         return  new Result(advisorDetailsVo);
     }
 

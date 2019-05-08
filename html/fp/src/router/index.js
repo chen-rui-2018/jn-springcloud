@@ -38,7 +38,6 @@ export default new Router({
       name:'forgetPsw'
     },
     {
-
       path: '/home',
       component: resolve => require(['@/views/home'],resolve),
       meta: {title: '用户中心'},
@@ -66,14 +65,14 @@ export default new Router({
         {
           path:'/servicemarket/product/productService/dataReport',
           name:'dataReport',
-          meta: {title: '企业数据上报入口'},
+          meta: {title: '企业数据上报入口', keepAlive: true},
           component:resolve => require(['@/views/dataReport'],resolve)
         },
         {
-          path:'/servicemarket/product/productService/dataReportEntrance',
-          name:'dataReportEntrance',
-          meta: {title: '企业数据上报'},
-          component:resolve => require(['@/views/dataReport/dataReportEntrance'],resolve)
+          path:'/servicemarket/product/productService/report',
+          name:'dataReportCommonEntrance',
+          meta: {title: '数据上报'},
+          component:resolve => require(['@/views/dataReport/report'],resolve)
         },
         {
         path:'/servicemarket/product/productService/ordinaryproductDetail',
@@ -527,7 +526,6 @@ export default new Router({
           component:resolve => require(['@/views/home/roleCertifications/investorCertification'],resolve)
         }
       ]
-    }
     },
     {
       path: '/finaProDetail',

@@ -39,7 +39,9 @@ i {
 input {
   outline-style: none;
 }
-
+img {
+  vertical-align: middle;
+}
 .clearfix:after {
   /*正常浏览器 清除浮动*/
   clear: both;
@@ -367,7 +369,7 @@ input {
               margin-right: 5px;
             }
          }
-         
+
         }
 
         .actiInfo {
@@ -1388,7 +1390,7 @@ input {
             // line-height: 52px;
             // padding: 0 50px;
             width: 100px;
-            
+
           }
           >li:hover{
             background: #fff;
@@ -1459,7 +1461,7 @@ input {
     z-index: 99;
     width: 100%;
     // background: url("../../static/img/c11.png") 100% 100% / 100% 100% no-repeat;
-    
+
     .el-carousel__button {
       width: 10px;
       height: 10px;
@@ -1534,7 +1536,7 @@ input {
             text-align: right;
           }
         }
-        
+
       }
       .input-with-select .el-input__inner{
           border-top-left-radius: 19px;
@@ -1597,7 +1599,7 @@ input {
       margin-left: 20px;
     }
   }
- 
+
   .declarationNotice,
   .popularActi,
   .districtGardens,
@@ -1956,7 +1958,7 @@ input {
               height: 100%;
               width: 100%;
             }
-            
+
           }
           .postImgItem2 {
             // background: url("../../static/img/tuceng2.png") 100% 100% / 100% 94%

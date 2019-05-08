@@ -84,6 +84,13 @@ export default {
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
 
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
+        enterpriseGetScientTabHeader:"springcloud-enterprise/data/garden/getScientTabHeader", // 科技园模板表头查询接口
+        enterpriseGetImportData:"springcloud-enterprise/data/garden/getImportData", // 科技园模板查询数据接口
+        enterpriseImportData:"springcloud-enterprise/data/garden/importData", // 科技园导入接口
+
+
+
+
 
         getMyBusiness:"springcloud-enterprise/guest/company/getCompanyDetailByNowAccount",//获取当前用户企业信息
         getUserAccount:"springcloud-app-system/system/sysUser/getUserInfo",//获取用户账号
@@ -127,13 +134,10 @@ export default {
         saveOrUpdateAdvisorHonor:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor",//新增顾问荣誉资质信息
 
 
-
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd",// 页面广告获取
         selectCompany:"springcloud-enterprise/guest/userUpgrade/selectCompany", // 查询公司列表
         changeToStaff:"springcloud-enterprise/guest/userUpgrade/changeToStaff", // 升级员工
         changeToCompany:"springcloud-enterprise/guest/userUpgrade/changeToCompany", // 升级员工
-
-
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {
@@ -200,6 +204,7 @@ export default {
         if (!url) {
             return alert("未获取到有效的URL");
         };
+        let headerType = url.headerType
         if(typeof url === "object"){
             data = url.data;
             callback = url.callback;
@@ -215,17 +220,19 @@ export default {
         }
 
         if(!data) data = {}
+
         if(dataFlag){
-            var querystring = require('querystring');
-            var params = querystring.stringify(data);
-            var headerSS = 'application/x-www-form-urlencoded'
+          var querystring = require('querystring');
+          var params = querystring.stringify(data);
+          var headerSS = 'application/x-www-form-urlencoded'
         }else{
-            var params = JSON.stringify(data);
-            var headerSS = 'application/json;charset=UTF-8'
+          var params = JSON.stringify(data);
+          var headerSS = 'application/json;charset=UTF-8'
         }
-        axios.post(this.host + url, params,{
+
+        axios.post(this.host + url, headerType ? data : params,{
             headers: {
-                'Content-Type':headerSS,
+                'Content-Type': headerType ? headerType : headerSS,
                 'token':sessionStorage.token || ''
             }
         })

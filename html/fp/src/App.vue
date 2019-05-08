@@ -77,7 +77,7 @@
     <!-- <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'"></technology-Header> -->
 
     <router-view class="routView"/>
-    <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'"></app-footer>
+    <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& !isMobile"></app-footer>
   </div>
 </template>
 
@@ -88,11 +88,13 @@ import SerHeader from './components/serverHeader'
 import adminApproveHeader from './components/adminApproveHeader'
 import TechnologyHeader from './components/technologyHeader'
 import './common/font/font.css'
+import { isMobile } from '@/util'
 export default {
   name: 'App',
   components:{AppHeader,AppFooter,SerHeader,adminApproveHeader,TechnologyHeader},
   data () {
     return {
+      isMobile: isMobile(),
       show:false,
       isVisibility:false,
       telShow:false
@@ -181,7 +183,7 @@ export default {
       top:60%;
       z-index:100;
       ul{
-        
+
         bottom: 40px;
         float: right;
         li{
@@ -216,7 +218,7 @@ export default {
             } */
           }
           .weixin:hover{
-            
+
           }
         }
       }
@@ -242,7 +244,7 @@ export default {
       .slide_nav_fence{
         font-size: 14px;
         li{
-          padding-bottom: 8px; 
+          padding-bottom: 8px;
           cursor: pointer;
           &:nth-child(1){
             padding-top: 20px;

@@ -1,6 +1,6 @@
 <template>
   <div class="homePage">
-    <div class="header clearfix">
+    <div class="header clearfix" v-if="!isMobile">
       <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
       <div class="headerRight fr pr">
         <i class="el-icon-search" v-if="!sousuo" @click="handleChange" style="vertical-align: middle;font-size:18px;color:#666;"></i>
@@ -47,10 +47,10 @@
         </transition>
       </div>
     </div>
-    <div class="homePage_content w">
+    <div class="homePage_content" :class="{'w': !isMobile}">
       <div class="homePage_typearea">
         <!-- 面包屑 -->
-        <div class="homePage_breadcrumb">
+        <div class="homePage_breadcrumb" v-if="!isMobile">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }">用户中心 </el-breadcrumb-item>
             <el-breadcrumb-item>
@@ -61,7 +61,7 @@
         <!-- 主体内容 -->
         <el-container>
           <!-- 侧边栏 -->
-          <div class="slider">
+          <div class="slider" v-if="!isMobile">
             <el-aside width="135px">
               <el-menu
                 :default-active="this.$route.path"
@@ -149,7 +149,7 @@
           </div>
           <!-- 主体 -->
           <div class="homePage_main userHome">
-            <el-main>
+            <el-main :class="{'isMobile': isMobile}">
               <keep-alive>
                 <router-view v-if="$route.meta.keepAlive" :userData="userData"></router-view>
               </keep-alive>
@@ -163,12 +163,14 @@
 </template>
 <script>
 import $ from 'jquery'
+import { isMobile } from '@/util'
 import bus from "@/util/bus";
 import UserHome from '@/components/userHome'
 export default {
   components:{UserHome},
   data() {
     return {
+      isMobile: isMobile(),
       sousuo: false,
       menuFlag: false,
       userData: {
@@ -431,8 +433,11 @@ export default {
         }
         .homePage_main{
           flex: 1;
-          .el-main{
+          .el-main {
             padding: 0 20px;
+          }
+          .el-main.isMobile{
+            padding: 0;
           }
         }
       }
@@ -440,6 +445,11 @@ export default {
     .homePage_main {
       flex: 1;
       width: 100%;
+    }
+    .isMobile {
+      .el-tabs--border-card > .el-tabs__content {
+        padding: 0;
+      }
     }
   }
 </style>

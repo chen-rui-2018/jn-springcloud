@@ -1,7 +1,6 @@
 package org.xxpay.dal.dao.plugin;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -71,25 +70,6 @@ public class DruidDataSourceConfig implements EnvironmentAware {
         druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty("maxPoolPreparedStatementPerConnectionSize")));
         druidDataSource.setFilters(propertyResolver.getProperty("filters"));
         return druidDataSource;
-    }
-
-    @Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource());
-        //mybatis分页
-        PageHelper pageHelper = new PageHelper();
-        Properties props = new Properties();
-        props.setProperty("dialect", "mysql");
-        props.setProperty("reasonable", "true");
-        props.setProperty("supportMethodsArguments", "true");
-        props.setProperty("returnPageInfo", "check");
-        props.setProperty("params", "count=countSql");
-        pageHelper.setProperties(props); //添加插件
-        sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageHelper});
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:org/xxpay/dal/dao/mapper/*.xml"));
-        return sqlSessionFactoryBean.getObject();
     }
 
     @Bean

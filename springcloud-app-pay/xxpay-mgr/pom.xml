@@ -27,6 +27,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.jn</groupId>
+			<artifactId>xxpay-web-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jn</groupId>
 			<artifactId>xxpay-dal</artifactId>
 			<version>1.0.0-RELEASE</version>
 		</dependency>

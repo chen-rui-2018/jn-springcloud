@@ -27,6 +27,8 @@ public class TbPayBill implements Serializable {
 
     private String acBookType;
 
+    private String orderNumber;
+
     private Date createdTime;
 
     private String creatorAccount;
@@ -135,6 +137,14 @@ public class TbPayBill implements Serializable {
         this.acBookType = acBookType == null ? null : acBookType.trim();
     }
 
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber == null ? null : orderNumber.trim();
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -230,6 +240,7 @@ public class TbPayBill implements Serializable {
             && (this.getPaymentState() == null ? other.getPaymentState() == null : this.getPaymentState().equals(other.getPaymentState()))
             && (this.getPaymentType() == null ? other.getPaymentType() == null : this.getPaymentType().equals(other.getPaymentType()))
             && (this.getAcBookType() == null ? other.getAcBookType() == null : this.getAcBookType().equals(other.getAcBookType()))
+            && (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -256,6 +267,7 @@ public class TbPayBill implements Serializable {
         result = prime * result + ((getPaymentState() == null) ? 0 : getPaymentState().hashCode());
         result = prime * result + ((getPaymentType() == null) ? 0 : getPaymentType().hashCode());
         result = prime * result + ((getAcBookType() == null) ? 0 : getAcBookType().hashCode());
+        result = prime * result + ((getOrderNumber() == null) ? 0 : getOrderNumber().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -285,6 +297,7 @@ public class TbPayBill implements Serializable {
         sb.append(", paymentState=").append(paymentState);
         sb.append(", paymentType=").append(paymentType);
         sb.append(", acBookType=").append(acBookType);
+        sb.append(", orderNumber=").append(orderNumber);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

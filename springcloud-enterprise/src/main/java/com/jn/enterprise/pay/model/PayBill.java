@@ -54,6 +54,9 @@ public class PayBill extends Page implements Serializable {
     @ApiModelProperty(value="账本类型ID")
     private String acBookType;
 
+    @ApiModelProperty(value="统一下单号")
+    private String orderNumber;
+
     @ApiModelProperty(value="创建时间")
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
@@ -85,6 +88,14 @@ public class PayBill extends Page implements Serializable {
     @ApiModelProperty(value="记录状态   0标记删除，1正常")
     private String recordStatus;
 
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

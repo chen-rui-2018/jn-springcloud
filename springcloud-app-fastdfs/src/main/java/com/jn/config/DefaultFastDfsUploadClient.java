@@ -69,7 +69,7 @@ public class DefaultFastDfsUploadClient implements FastDfsUploadClient{
     private String getResAccessUrl(StorePath storePath,Boolean isNeedToken,User user,String fileName,String fileGroupId) {
         StringBuffer fileUrl = new StringBuffer();
         String url = isNeedToken?fastDfsProperties.getUrl().getNeedToken():fastDfsProperties.getUrl().getNoNeedToken();
-        fileUrl.append(GlobalConstants.HTTP_PRODOCOL)
+        fileUrl.append(GlobalConstants.OVER_HTTP_PRODOCOL)
                 .append(url)
                 .append("/")
                 .append(storePath.getFullPath());

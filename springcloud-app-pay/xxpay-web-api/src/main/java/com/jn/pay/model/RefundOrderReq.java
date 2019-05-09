@@ -1,5 +1,6 @@
 package com.jn.pay.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
@@ -17,11 +18,11 @@ public class RefundOrderReq implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 缴费类型
-     * （详情请查看 MchPayTypeEnum 枚举类）
+     * 商户ID
+     * （详情请查看 mchIdEnum 枚举类）
      * */
-    @NotBlank(message = "缴费类型不能为空！")
-    private String payType;
+    @NotBlank(message = "商户ID不能为空！")
+    private String mchId;
     /**
      * 支付订单号(支付系统返回的订单号)
      */
@@ -101,12 +102,33 @@ public class RefundOrderReq implements Serializable {
     private String extra ;
 
 
-    public String getPayType() {
-        return payType;
+    @Override
+    public String toString() {
+        return "RefundOrderReq{" +
+                "mchId='" + mchId + '\'' +
+                ", payOrderId='" + payOrderId + '\'' +
+                ", mchOrderNo='" + mchOrderNo + '\'' +
+                ", mchRefundNo='" + mchRefundNo + '\'' +
+                ", channelId='" + channelId + '\'' +
+                ", amount=" + amount +
+                ", clientIp='" + clientIp + '\'' +
+                ", device='" + device + '\'' +
+                ", notifyUrl='" + notifyUrl + '\'' +
+                ", channelUser='" + channelUser + '\'' +
+                ", userName='" + userName + '\'' +
+                ", remarkInfo='" + remarkInfo + '\'' +
+                ", param1='" + param1 + '\'' +
+                ", param2='" + param2 + '\'' +
+                ", extra='" + extra + '\'' +
+                '}';
     }
 
-    public void setPayType(String payType) {
-        this.payType = payType;
+    public String getMchId() {
+        return mchId;
+    }
+
+    public void setMchId(String mchId) {
+        this.mchId = mchId;
     }
 
     public String getPayOrderId() {
@@ -220,4 +242,6 @@ public class RefundOrderReq implements Serializable {
     public void setExtra(String extra) {
         this.extra = extra;
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.jn.enterprise.propaganda.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.propaganda.model.*;
 
 import java.util.List;
@@ -93,7 +94,7 @@ public interface BusinessPromotionService {
      * @param propagandaId 宣传id
      * @param loginAccount 登录用户账号
      */
-    void submitAudit(String propagandaId,String loginAccount);
+    IBPSResult submitAudit(String propagandaId, String loginAccount);
 
     /**
      * 获取宣传区域信息

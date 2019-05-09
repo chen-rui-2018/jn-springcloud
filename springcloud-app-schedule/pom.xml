@@ -31,7 +31,11 @@
 			<groupId>com.jn</groupId>
 			<artifactId>springcloud-park-api</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-hardware-api</artifactId>
+        </dependency>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>

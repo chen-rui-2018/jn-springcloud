@@ -15,6 +15,7 @@ import com.jn.park.gamtopic.dao.TbPersonCareMapper;
 import com.jn.park.gamtopic.entity.TbGamTopic;
 import com.jn.park.gamtopic.entity.TbPersonCare;
 import com.jn.park.gamtopic.entity.TbPersonCareCriteria;
+import com.jn.park.gamtopic.enums.DynamicEnum;
 import com.jn.park.gamtopic.model.*;
 import com.jn.park.gamtopic.service.DynamicService;
 import com.jn.park.gamtopic.vo.DnnamicCommentDetailsVo;
@@ -181,6 +182,9 @@ public class DynamicServiceImpl implements DynamicService {
         if(!dynamicWebList.isEmpty()) {
             dynamicWebList = improveWebUserInfo(dynamicWebList);
         }
+        for(DynamicWebShow show :dynamicWebList){
+            show.setIsSelf(show.getCreatorAccount().equals(account)? DynamicEnum.IS_SELF.getCode():DynamicEnum.NOT_IS_SELF.getCode());
+        }
         return new PaginationData<>(dynamicWebList,objects==null?0:objects.getTotal() );
     }
     @ServiceLog(doAction = "查找前台用户关注的用户的动态列表")
@@ -202,19 +206,35 @@ public class DynamicServiceImpl implements DynamicService {
         DynamicWebDetailsVo  vo = new DynamicWebDetailsVo();
        //获取动态详情
         DynamicWebShow dynamicWebShow =  dynamicDao.findDynamicWebDetails(dynamicId);
-        Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(dynamicWebShow.getCreatorAccount());
-        UserExtensionInfo info = result.getData();
-        if(info!=null) {
-            dynamicWebShow.setAvatar(info.getAvatar());
-            dynamicWebShow.setNickName(info.getNickName());
-        }
-        vo.setDynamicWebShow(dynamicWebShow);
-        //获取评论列表
-        Page objects = PageHelper.startPage(0,10,true);
-        List<DynamicComments> commentsList = dynamicDao.findDynamicComments(dynamicId);
-        if(!commentsList.isEmpty()){
-            commentsList = improveWebCommentUserInfo(commentsList);
-            vo.setCommentList(new PaginationData<>(commentsList,objects==null?0:objects.getTotal()));
+
+        if(dynamicWebShow != null){
+            Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(dynamicWebShow.getCreatorAccount());
+            UserExtensionInfo info = result.getData();
+            if(info!=null) {
+                dynamicWebShow.setAvatar(info.getAvatar());
+                dynamicWebShow.setNickName(info.getNickName());
+            }
+            if (StringUtils.isNotBlank(dynamicWebShow.getImgString())){
+                String imgString = dynamicWebShow.getImgString();
+                dynamicWebShow.setImgList(Arrays.asList(imgString.split(",")));
+            }
+            vo.setDynamicWebShow(dynamicWebShow);
+            DynamicCommentsParam param = new DynamicCommentsParam();
+            param.setParamId(dynamicId);
+            param.setPage(1);
+            param.setRows(10);
+            //获取评论列表
+            Page objects = PageHelper.startPage(0,10,true);
+            PaginationData<List<DynamicCommentReplyShow>> data = findDynamicCommentAndReplyList(param);
+            if(data != null) {
+                List<DynamicCommentReplyShow> commentsList = data.getRows();
+                if (!commentsList.isEmpty()) {
+                    commentsList = improveWebCommentAndReplyUserInfo(commentsList);
+
+                    vo.setCommentList(new PaginationData<>(commentsList, objects == null ? 0 : objects.getTotal()));
+                }
+            }
+
         }
         return vo;
     }
@@ -293,6 +313,37 @@ public class DynamicServiceImpl implements DynamicService {
         }
         return new PaginationData<>(dynamicList,objects==null?0:objects.getTotal());
     }
+    @ServiceLog(doAction = "根据动态id 返回动态评论列表+ 评论回复列表")
+    @Override
+    public PaginationData<List<DynamicCommentReplyShow>> findDynamicCommentAndReplyList(DynamicCommentsParam param) {
+        int pageSize  = param.getRows()==0?15:param.getRows();
+        int pageNum = param.getPage();
+        Page objects = PageHelper.startPage(pageNum,pageSize,true);
+        List<DynamicCommentReplyShow> commentsList = dynamicDao.findDynamicCommentAndReplyList(param.getParamId());
+        if(!commentsList.isEmpty()){
+            commentsList = improveWebCommentAndReplyUserInfo(commentsList);
+            List<String> parentIdList = new ArrayList<>();
+            for (DynamicCommentReplyShow show : commentsList){
+                      parentIdList.add(show.getCommentId());
+            }
+            List<DynamicComments> replyList =  dynamicDao.findReplyList(parentIdList);
+            if(!replyList.isEmpty()){
+                replyList = improveWebCommentUserInfo(replyList);
+            }
+            for(DynamicCommentReplyShow show : commentsList){
+                List<DynamicComments>  list = new ArrayList<>();
+                show.setReplyList(list);
+                for (DynamicComments comments : replyList){
+                    if(comments.getParentId().equals(show.getCommentId())){
+                        show.getReplyList().add(comments);
+                    }
+                }
+            }
+        }
+
+
+        return new PaginationData(commentsList,objects==null?0:objects.getTotal());
+    }
 
     /**
      * 完善点赞用户信息
@@ -333,6 +384,29 @@ public class DynamicServiceImpl implements DynamicService {
         if(!result.getData().isEmpty()){
             List<UserExtensionInfo> userList = result.getData();
             for(DynamicComments show : commentsList){
+                for(UserExtensionInfo user : userList){
+                    if(show.getCreatorAccount().equals(user.getAccount())){
+                        show.setAvatar(user.getAvatar());
+                        show.setNickName(user.getNickName());
+                    }
+                }
+            }
+        }
+        return commentsList;
+    }
+    /**
+     * 前台动态详情完善评论用户信息
+     * @return
+     */
+    private   List<DynamicCommentReplyShow>  improveWebCommentAndReplyUserInfo(List<DynamicCommentReplyShow> commentsList){
+        List<String> accountList = new ArrayList<>();
+        for(DynamicCommentReplyShow show : commentsList){
+            accountList.add(show.getCreatorAccount());
+        }
+        Result<List<UserExtensionInfo>> result = userExtensionClient.getMoreUserExtension(accountList);
+        if(!result.getData().isEmpty()){
+            List<UserExtensionInfo> userList = result.getData();
+            for(DynamicCommentReplyShow show : commentsList){
                 for(UserExtensionInfo user : userList){
                     if(show.getCreatorAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());

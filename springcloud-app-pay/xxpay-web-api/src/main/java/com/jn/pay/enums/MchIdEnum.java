@@ -10,24 +10,14 @@ import com.jn.common.api.CodeAndMsg;
  * @Version： v1.0
  * @Modified By:
  */
-public enum PayTypeEnum implements CodeAndMsg {
-
-    RENT("01", "房租")
-    ,GOODS_RENTAL_FEE("02", "物品租赁费")
-    ,ELECTRICITY_FEE("03", "电费")
-    ,PROPERTY_REPAIR_FEE("04", "物业维修费")
-    ,WATER_FEE("05", "水费")
-    ,PROPERTY_FEE("06", "物业费")
-    ,PARKING_FEE("07", "停车费")
-    ,PARKING_LOT_FEE("08", "车位费")
-    ,PROPAGANDA_FEE("09", "宣传费")
-    ,GOODS_FEE("10", "商品收费")
-    ,PHYSICAL_EXAMINATION_FEE("11", "体检收费");
+public enum MchIdEnum implements CodeAndMsg {
+    //目前只有一个商户  后期可能存在多个
+    MCH_BASE("10000000", "智慧园区-通用缴费");
 
     private String code;
     private String message;
 
-    PayTypeEnum(String code, String message) {
+    MchIdEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -43,9 +33,9 @@ public enum PayTypeEnum implements CodeAndMsg {
     }
 
 
-    public static PayTypeEnum getCode(String channelId) {
-        PayTypeEnum channelIdEnum = null;
-        for (PayTypeEnum channelType : values()) {
+    public static MchIdEnum getCode(String channelId) {
+        MchIdEnum channelIdEnum = null;
+        for (MchIdEnum channelType : values()) {
             if (channelType.getCode() == channelId) {
                 //获取指定的枚举
                 channelIdEnum = channelType;

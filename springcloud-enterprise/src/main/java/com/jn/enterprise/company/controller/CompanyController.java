@@ -8,6 +8,10 @@ import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.service.CompanyService;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
+import com.jn.park.activity.model.CommentAddParam;
+import com.jn.park.api.CommentClient;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -46,7 +50,8 @@ public class CompanyController extends BaseController {
     public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(
             @ApiParam(name="accountOrCompanyId",value = "用户账号或企业ID",required = true,example = "wangsong")
             @RequestParam(value = "accountOrCompanyId") String accountOrCompanyId){
-        return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId));
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId,user.getAccount()));
     }
 
 
@@ -59,6 +64,30 @@ public class CompanyController extends BaseController {
             throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
         }
         return new Result<>(companyService.getCompanyDetailByAccountOrId(user.getAccount()));
+    }
+
+    @ControllerLog(doAction = "获取评论/留言信息")
+    @ApiOperation(value = "获取评论/留言信息")
+    @RequestMapping(value = "/getCommentInfo",method = RequestMethod.GET)
+    public Result<PaginationData<List<Comment>>>  getCommentInfo(ActivityPagingParam activityPagingParam){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user == null){
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
+        }
+        activityPagingParam.setAccount(user.getAccount());
+        return companyService.getCommentInfo(activityPagingParam);
+    }
+
+    @ControllerLog(doAction = "留言/留言回复")
+    @ApiOperation(value = "留言/留言回复")
+    @RequestMapping(value = "/commentActivity",method = RequestMethod.POST)
+    public Result<Boolean> commentActivity(@RequestBody CommentAddParam commentAddParam){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user == null){
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
+        }
+        commentAddParam.setAccount(user.getAccount());
+        return companyService.saveComment(commentAddParam);
     }
 
 }

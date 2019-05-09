@@ -442,7 +442,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_INFO_NOT_EXIST);
         }
         TbPropaganda tbPropaganda=new TbPropaganda();
-        //删除当前数据
+        //逻辑删除当前数据
         tbPropaganda.setRecordStatus(Byte.parseByte(INVALID));
         //修改时间
         tbPropaganda.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
@@ -635,7 +635,6 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         paymentBillModel.setBillObjId(loginAccount);
         paymentBillModel.setBillObjName(loginAccount);
         paymentBillModel.setBillAmount(50.00);
-        paymentBillModel.setBillCreateTime(DateUtils.getDate(PATTERN));
         paymentBillModel.setPayEndTime(DateUtils.getDate(PATTERN));
         paymentBillModel.setBillCreateAccount(loginAccount);
         paymentBillModel.setBillRemark("ad_free");

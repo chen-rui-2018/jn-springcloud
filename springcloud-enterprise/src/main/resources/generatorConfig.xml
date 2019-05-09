@@ -225,6 +225,8 @@
 
         <table tableName="tb_service_product">
         </table>
+        <table tableName="tb_service_details">
+    </table>
 
         <table tableName="tb_service_product_loan_type">
         </table>
@@ -430,6 +432,7 @@
         </javaClientGenerator>
 
         <table tableName="tb_service_company"></table>
+        <table tableName="tb_service_company_modify"></table>
         <table tableName="tb_service_recruit"></table>
         <table tableName="tb_service_company_pro_img"></table>
         <table tableName="tb_service_company_staff">

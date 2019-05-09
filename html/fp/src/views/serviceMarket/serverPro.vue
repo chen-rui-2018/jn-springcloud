@@ -59,8 +59,10 @@
                             </div>
                             <div class="right1 fl">
                                 <p>
-                                    <el-rate disabled text-color="#00a041" score-template="{value}">
-                                    </el-rate>
+                                    <!-- <el-rate disabled text-color="#00a041" score-template="{value}">
+                                    </el-rate> -->
+                                    <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                                  </el-rate>
                                     <span class="mainColor">{{i.evaluationNumber}}</span>条评价</p>
                             </div>
                         </div>
@@ -258,6 +260,9 @@ export default {
           >span{
               color:#919191;
           }
+          >span.active{
+            color: #00a041;
+          }
       }
     .filMid {
       margin-top: 6px;
@@ -287,6 +292,10 @@ export default {
   .el-rate {
     margin-top: 20px;
   }
+   .el-textarea__inner:focus {
+    outline: 0;
+    border-color: #00a041;
+}
   .serverTip {
     display: inline-block;
     font-size: 12px;

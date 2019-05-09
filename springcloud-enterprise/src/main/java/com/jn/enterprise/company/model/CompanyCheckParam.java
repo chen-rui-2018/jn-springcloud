@@ -134,6 +134,9 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "是否参加园区获取【0否1是】",example = "0")
     private String isJoinActivity;
 
+    @ApiModelProperty(value = "所属园区[园区ID]",example = "846841")
+    private String affiliatedPark;
+
     public String getComName() {
         return comName;
     }
@@ -540,5 +543,13 @@ public class CompanyCheckParam implements Serializable {
 
     public void setMaterial(String material) {
         this.material = material;
+    }
+
+    public String getAffiliatedPark() {
+        return affiliatedPark;
+    }
+
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark;
     }
 }

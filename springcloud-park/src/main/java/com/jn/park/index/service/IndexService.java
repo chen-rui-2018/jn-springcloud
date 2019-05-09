@@ -1,5 +1,6 @@
 package com.jn.park.index.service;
 
+import com.jn.park.index.model.Achievement;
 import com.jn.park.index.model.ImportantNews;
 
 import java.util.List;
@@ -17,4 +18,10 @@ public interface IndexService {
      * @return
      */
     List<ImportantNews> getImportantNewsList();
+
+    /**
+     * 获取园区成果列表
+     * @return
+     */
+    List<Achievement> getAchievementList();
 }

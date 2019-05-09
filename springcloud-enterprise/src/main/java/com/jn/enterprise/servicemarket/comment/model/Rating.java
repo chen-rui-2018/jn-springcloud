@@ -30,6 +30,8 @@ public class Rating {
     private String isComment;
     @ApiModelProperty(value = "点评时间")
     private String commentTime;
+    @ApiModelProperty(value = "领域id")
+    private String businessId;
 
     public String getId() {
         return id;
@@ -101,5 +103,13 @@ public class Rating {
 
     public void setCommentTime(String commentTime) {
         this.commentTime = commentTime;
+    }
+
+    public String getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
     }
 }

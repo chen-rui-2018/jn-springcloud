@@ -445,7 +445,7 @@ input {
 }
 
 .el-pagination.is-background .el-pager li:not(.disabled).active {
-  background-color: #00a041;
+  background-color: #00a041 !important;
   color: #fff;
 }
 
@@ -477,11 +477,17 @@ input {
 
 /* 活动详情 */
 /* 服务超市-服务机构，服务产品 */
+.serverOrg,
+.serverPro,
+.serverCon, .quickSearch, .aboutUs, .finaInstitution {
+  padding-top: 65px;
+}
+
 .serverOrg .serverOrgMenu,
 .serverPro .serverOrgMenu,
 .serverCon .serverOrgMenu, .quickSearch .serverOrgMenu, .aboutUs .serverOrgMenu, .finaInstitution .serverOrgMenu {
   padding: 20px 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
 }
 
@@ -776,6 +782,13 @@ input {
 
 /* 服务超市-服务机构，服务产品  */
 /* 服务机构详情 */
+.serverOrgDetail,
+.serverProDetail,
+.serverConDetail,
+.quickSearch, .finaInsDetail {
+  padding-top: 65px;
+}
+
 .serverOrgDetail table,
 .serverProDetail table,
 .serverConDetail table,
@@ -810,7 +823,7 @@ input {
 .serverConDetail .serverOrgMenu,
 .quickSearch .serverOrgMenu, .finaInsDetail .serverOrgMenu {
   padding: 20px 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
 }
 
@@ -2000,7 +2013,7 @@ input {
 
 .portalIndex .portalIndexImg, .enterpriseservice .portalIndexImg {
   position: fixed;
-  z-index: 99999 !important;
+  z-index: 99;
   width: 100%;
 }
 

@@ -140,7 +140,7 @@
                 ) u ON meetingroom.creator_account = u.id
                 where meetingroom.record_status != 0
                 <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
-                    and meetingroom.NAME like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+                    and meetingroom.NAME like CONCAT('%', trim(#{name,jdbcType=VARCHAR}), '%')
                 </if>
                 <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
                     and meetingroom.record_status = #{recordStatus,jdbcType=VARCHAR}
@@ -255,7 +255,7 @@ FROM
         )m
         ) and meetingroom.record_status=1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
-            and meetingroom.NAME like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+            and meetingroom.NAME like CONCAT('%', trim(#{name,jdbcType=VARCHAR}), '%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
             and meetingroom.record_status = #{recordStatus,jdbcType=VARCHAR}

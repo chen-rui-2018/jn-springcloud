@@ -17,11 +17,11 @@ public class PayOrderQueryReq implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 缴费类型
-     * （详情请查看 PayTypeEnum 枚举类）
+     * 商户ID
+     * （详情请查看 MchIdEnum 枚举类）
      * */
-    @NotBlank(message = "缴费类型不能为空！")
-    private String payType;
+    @NotBlank(message = "商户ID不能为空！")
+    private String mchId;
     /**
      * 支付中心生成的订单号，与mchOrderNo二者传一即可
      * */
@@ -40,12 +40,12 @@ public class PayOrderQueryReq implements Serializable  {
         return serialVersionUID;
     }
 
-    public String getPayType() {
-        return payType;
+    public String getMchId() {
+        return mchId;
     }
 
-    public void setPayType(String payType) {
-        this.payType = payType;
+    public void setMchId(String mchId) {
+        this.mchId = mchId;
     }
 
     public String getPayOrderId() {
@@ -74,8 +74,8 @@ public class PayOrderQueryReq implements Serializable  {
 
     @Override
     public String toString() {
-        return "PayOrderQuery{" +
-                "payType='" + payType + '\'' +
+        return "PayOrderQueryReq{" +
+                "mchId='" + mchId + '\'' +
                 ", payOrderId='" + payOrderId + '\'' +
                 ", mchOrderNo='" + mchOrderNo + '\'' +
                 ", executeNotify=" + executeNotify +

@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -112,6 +113,16 @@ public class DataUploadController  extends BaseController {
     }
 
 
+    @ControllerLog(doAction = "数据上报-企业数据上报-保存企业数据上报保存为草稿")
+    @PostMapping(path = "/company/saveCompanyFormDataIsDraft")
+    @ApiOperation(value = "保存企业数据上报保存为草稿",notes = "返回成功或失败,正常结果为1")
+    @RequiresPermissions("/data/company/saveCompanyFormDataIsDraft")
+    public Result<Integer> saveCompanyFormDataIsDraft(@RequestBody ModelDataVO data){
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        int result = uploadService.saveCompanyFormDataAsDraft(data,user);
+        return new Result(result);
+    }
+
 
 
 
@@ -146,13 +157,13 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果,正常结果为1")
     @RequiresPermissions("/data/company/setStatisticsListUrgeCompany")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001")
-
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="fillId",value = "填报Id",dataType = "String",paramType = "query",example = "001")
     })
-    public Result<Integer> setStatisticsListUrgeCompany(String formTime,String modelName,String modelCycle){
-        return new Result();
+    public Result<Integer> setStatisticsListUrgeCompany(String taskBatch,String fillId){
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        Integer num = uploadService.setStatisticsListUrgeCompany(taskBatch,fillId,user);
+        return new Result(num);
     }
 
     @ControllerLog(doAction = "数据上报-企业数据上报统计-数据列表修改截至日期")
@@ -160,13 +171,12 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "数据列表修改截至日期",notes = "返回修改截至日期的结果，正常结果为1")
     @RequiresPermissions("/data/company/setDeadlineCompany")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="fillInFormDeadline",value = "截至日期",dataType = "String",paramType = "query",example = "001")
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="modelId",value = "模板ID",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="newDeadLine",value = "新的截至日期",dataType = "String",paramType = "query",example = "001")
 
     })
-    public Result<Integer> setDeadlineCompany(String formTime,String modelName,String modelCycle){
+    public Result<Integer> setDeadlineCompany(String taskBatch,String modelId,String newDeadLine){
         return new Result();
     }
 
@@ -246,6 +256,7 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "园区本月数据上报保存",notes = "返回成功或失败,正常结果为1")
     @RequiresPermissions("/data/garden/saveTaskData")
     public Result<Integer> saveTaskData(@RequestBody ModelDataVO data){
+
         return new Result();
     }
 
@@ -342,27 +353,26 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果,正常结果为1")
     @RequiresPermissions("/data/garden/setStatisticsListUrge")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001")
-
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="fillId",value = "填报Id",dataType = "String",paramType = "query",example = "001")
     })
-    public Result<Integer> setStatisticsListUrge(String formTime,String modelName,String modelCycle){
+    public Result<Integer> setStatisticsListUrge(String taskBatch,String fillId){
         return new Result();
     }
+
+
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区内部数据列表修改截至日期")
     @GetMapping(path = "/garden/setDeadline")
     @ApiOperation(value = "园区内部数据列表修改截至日期",notes = "返回修改截至日期的结果,正常结果为1")
     @RequiresPermissions("/data/garden/setDeadline")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001"),
-            @ApiImplicitParam(name="fillInFormDeadline",value = "截至日期",dataType = "String",paramType = "query",example = "001")
-
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="newDeadLine",value = "新的截至日期",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="modelId",value = "模板ID",dataType = "String",paramType = "query",example = "001")
     })
-    public Result<Integer> setDeadline(String formTime,String modelName,String modelCycle){
+
+    public Result<Integer> setDeadline(String taskBatch,String newDeadLine,String modelId){
         return new Result();
     }
 
@@ -394,6 +404,42 @@ public class DataUploadController  extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "数据上报-园区数据上报-科技园导入接口")
+    @PostMapping(path = "/garden/importData")
+    @ApiOperation(value = "科技园导入接口",notes = "返回excel文件")
+    @RequiresPermissions("/data/garden/importData")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="fillId",value = "任务Id",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="modelId",value = "模板Id",dataType = "String",paramType = "query",example = "001")
 
+    })
+    public Result importData(@RequestParam("formTime") String formTime,@RequestParam("fillId") String fillId,@RequestParam("modelId") String modelId, @RequestParam("file") MultipartFile file){
+        Integer result = uploadService.importData(file,formTime,fillId,modelId);
+        return new Result(result);
+    }
+
+
+    @ControllerLog(doAction = "数据上报-园区数据上报-科技园数据查询接口")
+    @PostMapping(path = "/garden/getImportData")
+    @ApiOperation(value = "科技园模板查询数据接口",notes = "返回数据")
+    @RequiresPermissions("/data/garden/getImportData")
+    public Result<PaginationData<Map<String,List<ScientModel>>>> getImportData(@RequestBody ScientLookupParamModel paramModel){
+        PaginationData<Map<String,List<ScientModel>>> result = uploadService.getImportData(paramModel);
+        return new Result(result);
+    }
+
+    @ControllerLog(doAction = "数据上报-园区数据上报-科技园查询表头")
+    @GetMapping(path = "/garden/getScientTabHeader")
+    @ApiOperation(value = "科技园查询表头",notes = "返回数据")
+    @RequiresPermissions("/data/garden/getScientTabHeader")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="fillId",value = "任务Id",dataType = "String",paramType = "query",example = "001")
+
+    })
+    public Result<Map<String,Object>> getScientTabHeader(String fillId){
+        Map<String,Object> result = uploadService.getScientTabHeader(fillId);
+        return new Result(result);
+    }
 
 }

@@ -343,10 +343,11 @@ export default {
               width:25%;
               margin-right: 35px;
               border: solid 1px #eeeeee;
-              transition:all .3s linear;
+              transition:all .3s ease 0s;
               &:hover{
-                box-shadow: 0px 0px 14px 4px rgba(0, 0, 0, 0.09);
+                box-shadow: 0px 0px 14px 4px rgba(0, 0, 0, 0.09);                
               }
+              
               &:last-child{
                 margin-right: 0;
               }

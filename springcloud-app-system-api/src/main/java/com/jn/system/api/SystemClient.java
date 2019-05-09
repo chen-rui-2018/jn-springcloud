@@ -2,6 +2,7 @@ package com.jn.system.api;
 
 import com.jn.common.model.Result;
 import com.jn.system.model.*;
+import com.jn.system.vo.SysDictKeyValue;
 import com.jn.system.vo.SysUserRoleVO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -197,12 +198,12 @@ public interface SystemClient {
      */
     @RequestMapping(value = "/api/system/selectDictValueByCondition", method = RequestMethod.POST)
     Result<String> selectDictValueByCondition(@RequestBody SysDictInvoke sysDictInvoke);
+
     /**
-     * 调用数据字典接口
-     * @param sysDictInvoke
+     * 调用数据字典
      * @return
      */
     @RequestMapping(value = "/api/system/getDict", method = RequestMethod.POST)
-    Result getDict(@RequestBody SysDictInvoke sysDictInvoke);
+    public Result<List<SysDictKeyValue>> getDict(@RequestBody SysDictInvoke sysDictInvoke);
 
 }

@@ -271,6 +271,8 @@ public class DataModelServiceImpl implements DataModelService {
             //创建model_id;插入模板基本信息
             String modelId=UUID.randomUUID().toString().replaceAll("-","");
             tbDataReportingModel.setModelId(modelId);
+            tbDataReportingModel.setCreatedTime(new Date());
+            tbDataReportingModel.setCreatorAccount(user.getAccount());
             tbDataReportingModelMapper.insertSelective(tbDataReportingModel);
 
         }else{
@@ -287,7 +289,15 @@ public class DataModelServiceImpl implements DataModelService {
             for(TabVO tabVO: tabVOList){
                 tbDataReportingModelTab = new TbDataReportingModelTab();
                 BeanUtils.copyProperties(tabVO,tbDataReportingModelTab);
-                tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
+                if(tabVO.getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                    //科技园模板单独处理
+                    tbDataReportingModelTab.setTabClumnType(null);
+                    tbDataReportingModelTab.setTabClumnTargetShow("");
+
+                }else{
+                    tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
+                }
+
                 if(StringUtils.isNotBlank(tabVO.getStatus())){
                     tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
                 }else{
@@ -381,10 +391,15 @@ public class DataModelServiceImpl implements DataModelService {
         for (int tabIndex=0 ,tabSize =tabPOList.size();tabIndex<tabSize;tabIndex++) {
             tabVO = new TabVO();
             BeanUtils.copyProperties(tabPOList.get(tabIndex),tabVO);
-
-            tabVO.setTabClumnType(tabPOList.get(tabIndex).getTabClumnType().toString());
-            tabVO.setStatus(tabPOList.get(tabIndex).getStatus().toString());
+            if(tabPOList.get(tabIndex).getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                tabVO.setTabClumnType(null);
+            }else{
+                tabVO.setTabClumnType(tabPOList.get(tabIndex).getTabClumnType().toString());
+            }
             tabVO.setTabCreateType(tabPOList.get(tabIndex).getTabCreateType().toString());
+
+            tabVO.setStatus(tabPOList.get(tabIndex).getStatus().toString());
+
             tabVO.setOrderNumber(tabPOList.get(tabIndex).getOrderNumber());
 
 
@@ -440,7 +455,7 @@ public class DataModelServiceImpl implements DataModelService {
         List<InputFormatModel> imlist = new ArrayList<>();
         if(tList !=null && tList.size()>0){
             TbDataReportingTargetGroupCriteria example =new TbDataReportingTargetGroupCriteria();
-            example.or().andTargetIdIn(tList);
+            example.or().andTargetIdIn(tList).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
             List<TbDataReportingTargetGroup> tgList = tbDataReportingTargetGroupMapper.selectByExample(example);
             InputFormatModel im =null;
             for(TbDataReportingTargetGroup tgBean:tgList){

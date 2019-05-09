@@ -102,7 +102,8 @@ public class BusinessPromotionController extends BaseController {
     @RequiresPermissions("/propaganda/businessPromotionController/cancelApprove")
     @ApiOperation(value = "(撤销申请)",notes ="propagandaId:宣传id,返回数据响应条数，正常为1" )
     @RequestMapping(value = "/cancelApprove",method = RequestMethod.POST)
-    public Result<Integer> cancelApprove(@RequestBody String propagandaId){
+    public Result<Integer> cancelApprove(String propagandaId){
+        Assert.notNull(propagandaId, BusinessPromotionExceptionEnum.PROPAGANDA_ID_NOT_NULL.getMessage());
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.warn("取消申请获取当前登录用户失败");
@@ -153,7 +154,7 @@ public class BusinessPromotionController extends BaseController {
     @RequiresPermissions("/propaganda/businessPromotionController/submitAudit")
     @ApiOperation(value = "提交审核)",notes ="propagandaId:宣传id" )
     @RequestMapping(value = "/submitAudit",method = RequestMethod.POST)
-    public Result<Integer> submitAudit(@RequestBody String propagandaId){
+    public Result<Integer> submitAudit(String propagandaId){
         Assert.notNull(propagandaId, BusinessPromotionExceptionEnum.PROPAGANDA_ID_NOT_NULL.getMessage());
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){

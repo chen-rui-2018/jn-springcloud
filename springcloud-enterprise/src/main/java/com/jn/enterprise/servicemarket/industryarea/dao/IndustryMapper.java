@@ -1,6 +1,7 @@
 package com.jn.enterprise.servicemarket.industryarea.dao;
 
 import com.jn.enterprise.servicemarket.industryarea.model.Industry;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictionaryProduct;
 import com.jn.enterprise.servicemarket.industryarea.model.IndustryParameter;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,5 +29,12 @@ public interface IndustryMapper {
      * @return
      */
     Industry getIndustryDetail(@Param("id") String id);
+
+
+    /**
+     * 机构领域及二级菜单
+     * @return
+     */
+    List<IndustryDictionaryProduct> selectIndustryProductList();
 
 }

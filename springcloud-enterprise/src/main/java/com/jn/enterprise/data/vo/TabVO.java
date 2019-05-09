@@ -114,8 +114,6 @@ public class TabVO implements Serializable {
         this.targetList = targetList;
     }
 
-
-
     public List<InputFormatModel> getInputList() {
         return inputList;
     }

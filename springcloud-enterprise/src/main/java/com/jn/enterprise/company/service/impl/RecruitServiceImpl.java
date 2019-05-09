@@ -15,8 +15,8 @@ import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.*;
+import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.RecruitService;
-import com.jn.enterprise.company.vo.RecruitDetailsVO;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -50,15 +50,13 @@ public class RecruitServiceImpl implements RecruitService {
     @Autowired
     private ServiceRecruitMapper serviceRecruitMapper;
 
-    /**
-     * 数据状态 1有效
-     */
-    private final static String RECORD_STATUS_VALID = "1";
+    @Autowired
+    private CompanyService companyService;
 
     @Override
     @ServiceLog(doAction = "根据招聘ID获取招聘详情")
-    public RecruitDetailsVO getRecruitDetailsById(String id) {
-        RecruitDetailsVO recruitDetails = checkRecruitExist(id);
+    public RecruitVO getRecruitDetailsById(String id) {
+        RecruitVO recruitDetails = checkRecruitExist(id);
         if (1 == serviceRecruitMapper.addRecruitClickById(id)) {
             logger.info("[招聘管理] 招聘信息浏览量增加,recruitId:{}",id);
         }
@@ -111,6 +109,14 @@ public class RecruitServiceImpl implements RecruitService {
         } else {
             // 默认查询已上架
             recruitParam.setStatus(RecruitDataTypeEnum.ON_SHELVES.getCode());
+        }
+
+        // 判断企业ID有效性
+        if (StringUtils.isNotEmpty(recruitParam.getComId())) {
+            ServiceCompany company = companyService.getCompanyDetailByAccountOrId(recruitParam.getComId());
+            if (company == null) {
+                throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_COMPANY_IS_NOT_EXIST);
+            }
         }
 
         ServiceRecruitSearchParam rp = new ServiceRecruitSearchParam();
@@ -223,8 +229,8 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
     // 判断招聘ID是否存在
-    public RecruitDetailsVO checkRecruitExist (String id) {
-        RecruitDetailsVO recruitDetails = serviceRecruitMapper.getRecruitDetailsById(id);
+    public RecruitVO checkRecruitExist (String id) {
+        RecruitVO recruitDetails = serviceRecruitMapper.getRecruitDetailsById(id);
         if (null == recruitDetails) {
             logger.warn("[招聘管理] 获取招聘信息失败,招聘信息不存在,recruitId:{}", id);
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_INFO_IS_NOT_EXIST);

@@ -21,7 +21,7 @@ public interface ServiceRecruitMapper {
      * @param id
      * @return
      */
-    RecruitDetailsVO getRecruitDetailsById(@Param("id") String id);
+    RecruitVO getRecruitDetailsById(@Param("id") String id);
 
     /**
      * 查询企业招聘信息列表

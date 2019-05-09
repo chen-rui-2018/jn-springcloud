@@ -14,7 +14,6 @@ import com.jn.enterprise.company.model.ServiceRecruitParam;
 import com.jn.enterprise.company.model.ServiceRecruitPublishParam;
 import com.jn.enterprise.company.model.ServiceRecruitUnderParam;
 import com.jn.enterprise.company.service.RecruitService;
-import com.jn.enterprise.company.vo.RecruitDetailsVO;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.system.model.User;
 import org.hamcrest.Matchers;
@@ -146,7 +145,7 @@ public class RecruitServiceImplTest {
     @Test
     public void getRecruitDetailsById() {
         try {
-            RecruitDetailsVO recruitDetailsById = serviceRecruitMapper.getRecruitDetailsById("22222222");
+            RecruitVO recruitDetailsById = serviceRecruitMapper.getRecruitDetailsById("22222222");
             assertThat(recruitDetailsById, notNullValue());
         } catch (JnSpringCloudException e) {
             logger.info("根据招聘ID获取详情失败");

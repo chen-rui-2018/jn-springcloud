@@ -4,19 +4,16 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.ServiceRecruitParam;
 import com.jn.enterprise.company.model.ServiceWebRecruitParam;
 import com.jn.enterprise.company.service.RecruitService;
-import com.jn.enterprise.company.vo.RecruitDetailsVO;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -56,7 +53,7 @@ public class RecruitGuestController extends BaseController {
     @ControllerLog(doAction = "招聘详情")
     @ApiOperation(value = "招聘详情（app/pc-招聘详情）", notes = "必传招聘ID")
     @RequestMapping(value = "/viewRecruitDetails",method = RequestMethod.GET)
-    public Result<RecruitDetailsVO> addRecruitClick(@RequestParam String recruitId){
+    public Result<RecruitVO> addRecruitClick(@RequestParam String recruitId){
         if (StringUtils.isBlank(recruitId)) {
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_ID_IS_NULL);
         }

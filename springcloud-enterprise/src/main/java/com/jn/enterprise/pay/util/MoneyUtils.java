@@ -100,13 +100,6 @@ public class MoneyUtils {
         }
         return amLong.toString();
     }
-
-    public static void main(String[] args) {
-        System.out.println(MoneyUtils.changeY2F("123.12"));
-        System.out.println(Long.parseLong(MoneyUtils.changeY2F("123.12")));
-        System.out.println(Integer.parseInt(MoneyUtils.changeY2F("10000000")));
-        System.out.println(Integer.MIN_VALUE);
-
-    }
+    
 
 }

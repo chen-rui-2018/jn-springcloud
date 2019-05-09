@@ -17,11 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 //TODO 后期将会删除,目前只是为了让业务系统测试
 @Service
-public class PayClientIml  implements PayOrderClient{
+public class PayClientIml implements PayClient {
 
 
     @Override
     public Result createPayOrder(@RequestBody @Validated PayOrderReq payOrderReq) {
+
         AlipayWapPayRsp alipayWapPayRsp = new AlipayWapPayRsp();
         Result result = new Result<AlipayWapPayRsp>();
         result.setData(alipayWapPayRsp);
@@ -36,4 +37,12 @@ public class PayClientIml  implements PayOrderClient{
         return  result ;
     }
 
+
+    @Override
+    public Result<RefundOrderRsp> createRefundOrder(@RequestBody @Validated RefundOrderReq refundOrderReq) {
+        RefundOrderRsp refundOrderRsp = new RefundOrderRsp();
+        Result result = new Result<RefundOrderRsp>();
+        result.setData(refundOrderRsp);
+        return  result ;
+    }
 }

@@ -9,8 +9,6 @@ import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
-import com.jn.system.model.User;
-import org.apache.shiro.SecurityUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,10 +37,6 @@ import static org.junit.Assert.fail;
 @SpringBootTest(classes = {SpringCloudEnterpriseApplication.class})
 public class OrgApproveServiceImplTest {
     private Logger logger = LoggerFactory.getLogger(OrgApproveServiceImplTest.class);
-
-    protected User getUser(){
-        return  (User) SecurityUtils.getSubject().getPrincipal();
-    }
 
     @Autowired
     private OrgApproveService orgApproveService;
@@ -82,9 +76,8 @@ public class OrgApproveServiceImplTest {
         orgApplyCheckData.setOrgId(orgId);
         orgApplyCheckData.setCheckStatus("1");
         orgApplyCheckData.setCkeckMessage("审核通过");
-
         try {
-            Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData,getUser());
+            Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData);
             assertThat(aBoolean,anything());
         }catch (JnSpringCloudException e){
             logger.warn("机构不存在");

@@ -18,13 +18,12 @@ public class PayOrderReq implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 商户ID
-     * （详情请查看 mchIdEnum 枚举类）
+     * 缴费类型
+     * （详情请查看 PayTypeEnum 枚举类）
      * */
-    @ApiModelProperty("商户ID")
-    @NotBlank(message = "商户ID不能为空！")
-    private String mchId;
-
+    @ApiModelProperty("缴费类型")
+    @NotBlank(message = "缴费类型不能为空！")
+    private String payType;
 
     /**
      * 商户订单号
@@ -116,11 +115,10 @@ public class PayOrderReq implements Serializable  {
     private String extra;
 
 
-
     @Override
     public String toString() {
         return "PayOrderReq{" +
-                "mchId='" + mchId + '\'' +
+                "payType='" + payType + '\'' +
                 ", mchOrderNo='" + mchOrderNo + '\'' +
                 ", channelId='" + channelId + '\'' +
                 ", amount=" + amount +
@@ -135,12 +133,12 @@ public class PayOrderReq implements Serializable  {
                 '}';
     }
 
-    public String getMchId() {
-        return mchId;
+    public String getPayType() {
+        return payType;
     }
 
-    public void setMchId(String mchId) {
-        this.mchId = mchId;
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
     public String getMchOrderNo() {

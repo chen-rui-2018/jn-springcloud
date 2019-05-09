@@ -15,6 +15,10 @@
     <dependencies>
         <dependency>
             <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-system-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
             <artifactId>springcloud-hardware-api</artifactId>
         </dependency>
         <dependency>

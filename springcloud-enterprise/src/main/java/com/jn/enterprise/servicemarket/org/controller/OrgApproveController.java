@@ -12,11 +12,9 @@ import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
 import com.jn.system.log.annotation.ControllerLog;
-import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,10 +39,6 @@ public class OrgApproveController extends BaseController{
      * 日志组件
      */
     private static Logger logger = LoggerFactory.getLogger(OrgApproveController.class);
-
-    protected User getUser(){
-        return  (User) SecurityUtils.getSubject().getPrincipal();
-    }
 
     @Autowired
     private OrgApproveService orgApproveService;
@@ -83,7 +77,7 @@ public class OrgApproveController extends BaseController{
     @RequestMapping(value = "/checkOrgApply",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/OrgApproveController/checkOrgApply")
     public Result<Boolean> checkOrgApply(@RequestBody OrgApplyCheckData orgApplyCheckData){
-        Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData,getUser());
+        Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData);
         return new Result<>(aBoolean);
     }
 

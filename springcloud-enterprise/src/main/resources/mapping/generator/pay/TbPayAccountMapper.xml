@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pay.dao.TbPayAccountMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pay.entity.TbPayAccount">
+    <id column="ACCOUNT_ID" jdbcType="VARCHAR" property="accountId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="PASSWD" jdbcType="VARCHAR" property="passwd" />
+    <result column="BALANCE" jdbcType="DECIMAL" property="balance" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="record_status" jdbcType="CHAR" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ACCOUNT_ID, user_id, PASSWD, BALANCE, created_time, creator_account, modified_time, 
+    modifier_account, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayAccountCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pay_account
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pay_account
+    where ACCOUNT_ID = #{accountId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_pay_account
+    where ACCOUNT_ID = #{accountId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.pay.entity.TbPayAccountCriteria">
+    delete from tb_pay_account
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.pay.entity.TbPayAccount">
+    insert into tb_pay_account (ACCOUNT_ID, user_id, PASSWD, 
+      BALANCE, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
+    values (#{accountId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, 
+      #{balance,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayAccount">
+    insert into tb_pay_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        ACCOUNT_ID,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="passwd != null">
+        PASSWD,
+      </if>
+      <if test="balance != null">
+        BALANCE,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null">
+        #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.pay.entity.TbPayAccountCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pay_account
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pay_account
+    <set>
+      <if test="record.accountId != null">
+        ACCOUNT_ID = #{record.accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.passwd != null">
+        PASSWD = #{record.passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.balance != null">
+        BALANCE = #{record.balance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pay_account
+    set ACCOUNT_ID = #{record.accountId,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      PASSWD = #{record.passwd,jdbcType=VARCHAR},
+      BALANCE = #{record.balance,jdbcType=DECIMAL},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pay.entity.TbPayAccount">
+    update tb_pay_account
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null">
+        PASSWD = #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null">
+        BALANCE = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=CHAR},
+      </if>
+    </set>
+    where ACCOUNT_ID = #{accountId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pay.entity.TbPayAccount">
+    update tb_pay_account
+    set user_id = #{userId,jdbcType=VARCHAR},
+      PASSWD = #{passwd,jdbcType=VARCHAR},
+      BALANCE = #{balance,jdbcType=DECIMAL},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=CHAR}
+    where ACCOUNT_ID = #{accountId,jdbcType=VARCHAR}
+  </update>
+</mapper>

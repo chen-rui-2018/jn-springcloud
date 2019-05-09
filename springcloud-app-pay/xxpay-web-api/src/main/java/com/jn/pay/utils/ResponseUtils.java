@@ -26,7 +26,7 @@ public class ResponseUtils {
      * @param content  响应值(根据RspEnum枚举返回值)
      *
     * */
-    static void outResult(HttpServletResponse response, String content) {
+    public static void outResult(HttpServletResponse response, String content) {
         response.setContentType("text/html");
         PrintWriter pw;
         try {

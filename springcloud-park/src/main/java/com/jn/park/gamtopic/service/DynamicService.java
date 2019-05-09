@@ -106,4 +106,11 @@ public interface DynamicService {
      */
     PaginationData<List<DynamicWebShow>> findDynamicByAccount(CareDetailsQueryParam param,String currentAccount);
 
+    /**
+     * 根据动态id 返回动态评论列表+ 评论回复列表
+     * @param param
+     * @return
+     */
+    PaginationData<List<DynamicCommentReplyShow>> findDynamicCommentAndReplyList(DynamicCommentsParam param);
+
 }

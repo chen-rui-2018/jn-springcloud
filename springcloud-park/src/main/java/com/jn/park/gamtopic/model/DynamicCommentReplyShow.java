@@ -4,21 +4,20 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author： chenr
- * @date： Created on 2019/4/11 20:46
+ * @date： Created on 2019/5/8 16:35
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value="DynamicComments",description = "动态评论内容,评论回复内容")
-public class DynamicComments implements Serializable {
+@ApiModel(value = "DynamicCommentReplyShow",description = "动态评论和评论回复列表实体bean")
+public class DynamicCommentReplyShow  implements Serializable {
     @ApiModelProperty(value="评论id")
     private String  commentId;
     @ApiModelProperty(value="评论根目标id")
     private String  rootId;
-    @ApiModelProperty(value="评论上级目标id")
-    private String  parentId;
     @ApiModelProperty(value="评论人账号")
     private String  creatorAccount;
     @ApiModelProperty(value="昵称")
@@ -31,14 +30,8 @@ public class DynamicComments implements Serializable {
     private String  likeNum;
     @ApiModelProperty(value= "评论的内容")
     private String comContent;
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
+    @ApiModelProperty(value = "评论的回复列表信息")
+    private List<DynamicComments> replyList;
 
     public String getCommentId() {
         return commentId;
@@ -102,5 +95,13 @@ public class DynamicComments implements Serializable {
 
     public void setComContent(String comContent) {
         this.comContent = comContent;
+    }
+
+    public List<DynamicComments> getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(List<DynamicComments> replyList) {
+        this.replyList = replyList;
     }
 }

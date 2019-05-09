@@ -116,7 +116,7 @@
         ,t1.identity as "identity"
         ,(SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id and com.p_id is null) AS "commentsNum"
         ,(SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id ) AS "likeNum"
-        ,t2.img_url as "imgUrl"
+        ,group_concat(t2.img_url) as "imgUrl"
         from tb_gam_topic t1
         left join tb_file_img t2 on t1.topic_id = t2.topic_id
         where t1.topic_id = #{dynamicId}
@@ -177,6 +177,38 @@
           select  tpc.receive_account from  tb_person_care tpc where tpc.care_account = #{account}
         )
         group by t1.topic_id  order by t1.created_time desc
+
+    </select>
+    <!--评论列表-->
+    <select id ="findDynamicCommentAndReplyList" resultType="com.jn.park.gamtopic.model.DynamicCommentReplyShow">
+           select
+        t1.creator_account as "creatorAccount"
+       ,t1.created_time as "createdTime"
+       ,t1.id as "commentId"
+       ,t1.com_content as "comContent"
+       ,(SELECT SUM(1) FROM tb_comment com WHERE com.p_id is not  null and t1.id = com.p_id) AS "replyNum"
+       ,(SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id ) AS "likeNum"
+    from tb_comment  t1 where t1.root_id = #{dynamicId} and t1.p_id is  null
+    </select>
+    <!--评论回复列表-->
+    <select id="findReplyList"  parameterType="java.util.List" resultType="com.jn.park.gamtopic.model.DynamicComments">
+
+         select
+        t1.creator_account as "creatorAccount"
+       ,t1.created_time as "createdTime"
+       ,t1.id as "commentId"
+       ,t1.com_content as "comContent"
+       ,t1.p_id as "parentId"
+       ,(SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id ) AS "likeNum"
+    from tb_comment  t1 where
+    1=1
+    <if test="parentIdList != null">
+        and   t1.p_id in
+        <foreach collection="parentIdList" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+
+    </if>
 
     </select>
 </mapper>

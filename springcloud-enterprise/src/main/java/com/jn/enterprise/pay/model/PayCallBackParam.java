@@ -16,57 +16,29 @@ import java.util.Date;
  */
 @ApiModel(value = "PayCallBackParam", description = "支付回调响应入参")
 public class PayCallBackParam implements Serializable {
-    @ApiModelProperty(value = "订单ID",required = true,example = "5cd80d8624f14737abcc7eda4c0675b8")
-    @NotBlank(message = "订单ID不能为空！")
-    private String orderId;
-    @ApiModelProperty(value = "支付状态[2已支付3支付失败]",required = true,example = "2")
-    @NotBlank(message = "支付状态不能为空！")
-    private String payStatus;
-    @ApiModelProperty(value = "支付时间")
-    private Date payTime;
-    @ApiModelProperty(value = "支付平台订单ID",required = true,example = "21314737abcc7eda4c0675b8")
-    @NotBlank(message = "支付平台订单ID不能为空")
+    @ApiModelProperty(value = "支付订单号",required = true,example = "5cd80d8624f14737abcc7eda4c0675b8")
+    @NotBlank(message = "支付订单号不能为空！")
     private String payOrderId;
-    @ApiModelProperty(value = "支付方式[0微信1支付宝2银联]",example = "0")
-    private String payType;
 
-    public String getOrderId() {
-        return orderId;
-    }
+    @ApiModelProperty(value = "商户ID",required = true,example = "5cd80d8624f14737abcc7eda4c0675b8")
+    @NotBlank(message = "商户ID不能为空！")
+    private String mchId;
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
+    @ApiModelProperty(value = "商户订单号",required = true,example = "5cd80d8624f14737abcc7eda4c0675b8")
+    @NotBlank(message = "商户订单号不能为空！")
+    private String mchOrderNo;
 
-    public String getPayStatus() {
-        return payStatus;
-    }
+    @ApiModelProperty(value = "渠道ID",required = true,example = "5cd80d8624f14737abcc7eda4c0675b8")
+    @NotBlank(message = "渠道ID不能为空！")
+    private String channelId;
 
-    public void setPayStatus(String payStatus) {
-        this.payStatus = payStatus;
-    }
+    @ApiModelProperty(value = "支付金额",required = true,example = "5cd80d8624f14737abcc7eda4c0675b8")
+    @NotBlank(message = "支付金额不能为空！")
+    private Long amount;
 
-    public Date getPayTime() {
-        return payTime;
-    }
+    @ApiModelProperty(value = "状态",required = true,example = "5cd80d8624f14737abcc7eda4c0675b8")
+    @NotBlank(message = "状态不能为空！")
+    private String status;
 
-    public void setPayTime(Date payTime) {
-        this.payTime = payTime;
-    }
 
-    public String getPayOrderId() {
-        return payOrderId;
-    }
-
-    public void setPayOrderId(String payOrderId) {
-        this.payOrderId = payOrderId;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
 }

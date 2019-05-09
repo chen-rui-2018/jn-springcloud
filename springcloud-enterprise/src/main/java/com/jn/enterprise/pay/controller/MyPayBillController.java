@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.enterprise.pay.model.*;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import com.jn.enterprise.pay.vo.PayBillVo;
+import com.jn.pay.model.PayOrderNotify;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 @Api(tags = "统一缴费-我的账单")
 @RestController
-@RequestMapping("/guest/payment/payBill")
+@RequestMapping("/payment/payBill")
 public class MyPayBillController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(MyPayBillController.class);
@@ -73,16 +74,17 @@ public class MyPayBillController extends BaseController {
     @ControllerLog(doAction = "统一缴费--发起支付")
     @ApiOperation(value = "统一缴费-发起支付")
     @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
-    public Result<PayBIllResponse> startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam){
+    public Result startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result<>(myPayBillService.startPayment(payBIllInitiateParam,user));
+        return new Result(myPayBillService.startPayment(payBIllInitiateParam,user));
     }
 
     @ControllerLog(doAction = "支付回调接口")
     @ApiOperation(value = "统一缴费-支付回调接口", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/payCallBack")
-    public Result<PayCallBack> payCallBack(@RequestBody PayCallBackParam callBackParam){
-        return new Result<>(myPayBillService.payCallBack(callBackParam));
+    public Result<String> ayCallBack(@RequestBody PayOrderNotify callBackParam){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        return new Result<>(myPayBillService.payCallBack(callBackParam,user));
     }
 
 }

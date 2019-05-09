@@ -1,10 +1,15 @@
 package com.jn.enterprise.company.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.enterprise.company.entity.TbServiceCompanyModify;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
+import com.jn.park.activity.model.CommentAddParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -33,6 +38,14 @@ public interface CompanyService {
     ServiceCompany getCompanyDetailByAccountOrId(String account);
 
     /**
+     * 根据用户账号查询企业信息（用户为企业管理员）,携带当前登录用户
+     * @param account
+     * @param currentAccount
+     * @return
+     */
+    ServiceCompany getCompanyDetailByAccountOrId(String account,String currentAccount);
+
+    /**
      * 编辑企业信息
      * @param companyUpdateParam 企业信息入参
      * @param account 当前用户账号
@@ -41,4 +54,17 @@ public interface CompanyService {
      */
     Integer updateCompanyInfo(CompanyUpdateParam companyUpdateParam, String account, String phone);
 
+    /**
+     * 获取评论信息
+     * @param activityPagingParam
+     * @return
+     */
+    Result<PaginationData<List<Comment>>> getCommentInfo(ActivityPagingParam activityPagingParam);
+
+    /**
+     * 保存评论
+     * @param commentAddParam
+     * @return
+     */
+    Result<Boolean> saveComment(CommentAddParam commentAddParam);
 }

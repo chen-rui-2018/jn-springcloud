@@ -1,4 +1,4 @@
-package com.jn.park.comment.model;
+package com.jn.park.activity.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,12 +16,14 @@ import java.io.Serializable;
  */
 @ApiModel(value = "CommentAddParam", description = "评论的传值信息")
 public class CommentAddParam implements Serializable {
-    @ApiModelProperty(value = "根id(活动id/服务id/话题id)",example="xxx1234")
+    @ApiModelProperty(value = "根id(活动id/服务id/话题id/企业ID)",example="xxx1234")
     private String rootId;
     @ApiModelProperty(value = "点评父id(可以是根id,可以是被评论的评论id)",example = "xxx5678")
     private String pId;
-    @ApiModelProperty(value = "类型(0-9的数值,0：活动点评，1：服务点评，2：话题点评 ，3：其他点评)",example="0")
-    @Pattern(regexp="^[0-9]$",message="{comType:'类型只能是0：活动点评，1：服务点评，2：话题点评 ，3：其他点评 ...'}")
+    @ApiModelProperty(value = "点评人账号[前端无需理会]")
+    private String account;
+    @ApiModelProperty(value = "类型(0-9的数值,0：活动点评，1：服务点评，2：话题点评 ，3企业点评)",example="0")
+    @Pattern(regexp="^[0-9]$",message="{comType:'类型只能是0：活动点评，1：服务点评，2：话题点评 ，3企业点评 ...'}")
     private String comType;
     @ApiModelProperty(value = "评论内容",example = "xxx评论")
     @Size(max=512,message="评论内容不能超过520个字")
@@ -43,6 +45,14 @@ public class CommentAddParam implements Serializable {
 
     public void setpId(String pId) {
         this.pId = pId;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getComType() {

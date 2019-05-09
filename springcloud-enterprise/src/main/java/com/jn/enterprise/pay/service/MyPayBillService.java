@@ -1,8 +1,10 @@
 package com.jn.enterprise.pay.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.enterprise.pay.model.*;
 import com.jn.enterprise.pay.vo.PayBillVo;
+import com.jn.pay.model.PayOrderNotify;
 import com.jn.system.model.User;
 
 import java.util.List;
@@ -44,12 +46,12 @@ public interface MyPayBillService {
      * @param user
      * @return
      */
-    PayBIllResponse startPayment(PayBIllInitiateParam payBIllInitiateParam, User user);
+    Result startPayment(PayBIllInitiateParam payBIllInitiateParam, User user);
 
     /**
      * 支付回调接口
      * @param callBackParam
      * @return
      */
-    PayCallBack payCallBack(PayCallBackParam callBackParam);
+    String payCallBack(PayOrderNotify callBackParam, User user);
 }

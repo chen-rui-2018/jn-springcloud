@@ -13,6 +13,7 @@
     <result column="PAYMENT_STATE" jdbcType="CHAR" property="paymentState" />
     <result column="PAYMENT_TYPE" jdbcType="CHAR" property="paymentType" />
     <result column="AC_BOOK_TYPE" jdbcType="VARCHAR" property="acBookType" />
+    <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -83,9 +84,9 @@
   </sql>
   <sql id="Base_Column_List">
     BILL_ID, AC_BOOK_ID, BILL_NAME, BILL_SOURCE, BILL_EXPENSE, REMINDER_NUMBER, OBJ_TYPE, 
-    OBJ_NAME, PAYMENT_STATE, PAYMENT_TYPE, AC_BOOK_TYPE, created_time, creator_account, 
-    modified_time, modifier_account, LATE_PAYMENT, PAYMENT_AFFIRM, AFFIRM_PART, AFFIRM_TIME, 
-    record_status
+    OBJ_NAME, PAYMENT_STATE, PAYMENT_TYPE, AC_BOOK_TYPE, order_number, created_time, 
+    creator_account, modified_time, modifier_account, LATE_PAYMENT, PAYMENT_AFFIRM, AFFIRM_PART, 
+    AFFIRM_TIME, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayBillCriteria" resultMap="BaseResultMap">
     select
@@ -121,17 +122,19 @@
     insert into tb_pay_bill (BILL_ID, AC_BOOK_ID, BILL_NAME, 
       BILL_SOURCE, BILL_EXPENSE, REMINDER_NUMBER, 
       OBJ_TYPE, OBJ_NAME, PAYMENT_STATE, 
-      PAYMENT_TYPE, AC_BOOK_TYPE, created_time, 
-      creator_account, modified_time, modifier_account, 
-      LATE_PAYMENT, PAYMENT_AFFIRM, AFFIRM_PART, 
-      AFFIRM_TIME, record_status)
+      PAYMENT_TYPE, AC_BOOK_TYPE, order_number, 
+      created_time, creator_account, modified_time, 
+      modifier_account, LATE_PAYMENT, PAYMENT_AFFIRM, 
+      AFFIRM_PART, AFFIRM_TIME, record_status
+      )
     values (#{billId,jdbcType=VARCHAR}, #{acBookId,jdbcType=VARCHAR}, #{billName,jdbcType=VARCHAR}, 
       #{billSource,jdbcType=VARCHAR}, #{billExpense,jdbcType=DECIMAL}, #{reminderNumber,jdbcType=INTEGER}, 
       #{objType,jdbcType=VARCHAR}, #{objName,jdbcType=VARCHAR}, #{paymentState,jdbcType=CHAR}, 
-      #{paymentType,jdbcType=CHAR}, #{acBookType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{latePayment,jdbcType=TIMESTAMP}, #{paymentAffirm,jdbcType=CHAR}, #{affirmPart,jdbcType=VARCHAR}, 
-      #{affirmTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR})
+      #{paymentType,jdbcType=CHAR}, #{acBookType,jdbcType=VARCHAR}, #{orderNumber,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{latePayment,jdbcType=TIMESTAMP}, #{paymentAffirm,jdbcType=CHAR}, 
+      #{affirmPart,jdbcType=VARCHAR}, #{affirmTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayBill">
     insert into tb_pay_bill
@@ -168,6 +171,9 @@
       </if>
       <if test="acBookType != null">
         AC_BOOK_TYPE,
+      </if>
+      <if test="orderNumber != null">
+        order_number,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -230,6 +236,9 @@
       </if>
       <if test="acBookType != null">
         #{acBookType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -302,6 +311,9 @@
       <if test="record.acBookType != null">
         AC_BOOK_TYPE = #{record.acBookType,jdbcType=VARCHAR},
       </if>
+      <if test="record.orderNumber != null">
+        order_number = #{record.orderNumber,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -347,6 +359,7 @@
       PAYMENT_STATE = #{record.paymentState,jdbcType=CHAR},
       PAYMENT_TYPE = #{record.paymentType,jdbcType=CHAR},
       AC_BOOK_TYPE = #{record.acBookType,jdbcType=VARCHAR},
+      order_number = #{record.orderNumber,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -393,6 +406,9 @@
       <if test="acBookType != null">
         AC_BOOK_TYPE = #{acBookType,jdbcType=VARCHAR},
       </if>
+      <if test="orderNumber != null">
+        order_number = #{orderNumber,jdbcType=VARCHAR},
+      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -435,6 +451,7 @@
       PAYMENT_STATE = #{paymentState,jdbcType=CHAR},
       PAYMENT_TYPE = #{paymentType,jdbcType=CHAR},
       AC_BOOK_TYPE = #{acBookType,jdbcType=VARCHAR},
+      order_number = #{orderNumber,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

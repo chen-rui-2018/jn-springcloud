@@ -25,8 +25,11 @@
          (select count(1) from tb_park_like tl where tl.like_parent_id in (
              select tt.topic_id from tb_gam_topic tt where tt.creator_account =t1.care_account
                   )) as "likedNum" <!--获赞数-->
-        ,
-         (select count(1) from tb_person_care tp3 where tp3.receive_account =t1.care_account and tp3.care_account=#{currentAccount})  as "careStatus" <!--是否已关注-->
+
+        <if test="currentAccount != null and currentAccount != '' ">
+            and t1.creator_account in
+            ,(select count(1) from tb_person_care tp3 where tp3.receive_account =t1.care_account and tp3.care_account=#{currentAccount})  as "careStatus" <!--是否已关注-->
+        </if>
         from tb_person_care t1 where t1.care_account = #{account}
 
     </select>

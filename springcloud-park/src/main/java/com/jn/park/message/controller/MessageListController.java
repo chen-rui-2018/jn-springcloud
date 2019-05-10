@@ -4,7 +4,6 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.addMessageModel;
 import com.jn.park.message.service.MessageListService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -46,7 +45,7 @@ public class MessageListController extends BaseController {
         return new Result(findAllMessageListVoList);
     }
 
-    @ControllerLog(doAction = "添加消息")
+    /*@ControllerLog(doAction = "添加消息")
     @ApiOperation(value = "添加消息",notes = "添加消息", httpMethod = "POST")
     @PostMapping(value = "/addMessage")
     @RequiresPermissions("/message/list/addMessage")
@@ -54,7 +53,7 @@ public class MessageListController extends BaseController {
         //todo
         messageListService.addMessage(addMessageModel);
         return new Result(new Result<>());
-    }
+    }*/
 
 
     @ControllerLog(doAction = "根据ID查询消息")

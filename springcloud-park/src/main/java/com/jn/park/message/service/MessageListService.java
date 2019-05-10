@@ -2,7 +2,6 @@ package com.jn.park.message.service;
 
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.addMessageModel;
 import com.jn.system.model.User;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public interface MessageListService {
      * 添加消息
      * @param addMessageModel
      */
-    void addMessage(addMessageModel addMessageModel);
+    //void addMessage(addMessageModel addMessageModel);
 
 
     /**

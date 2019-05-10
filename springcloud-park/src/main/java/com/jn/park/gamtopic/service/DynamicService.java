@@ -65,9 +65,10 @@ public interface DynamicService {
     /**
      * 前台动态详情+评论列表
      * @param dynamicId
+     * @param account
      * @return
      */
-    DynamicWebDetailsVo  findDynamicWebDetails(String dynamicId);
+    DynamicWebDetailsVo  findDynamicWebDetails(String dynamicId,String account);
 
     /**
      * 动态评论列表查询

@@ -202,7 +202,7 @@ public class DynamicServiceImpl implements DynamicService {
 
     @ServiceLog(doAction = "查找前台动态详情+评论列表")
     @Override
-    public DynamicWebDetailsVo findDynamicWebDetails(String dynamicId) {
+    public DynamicWebDetailsVo findDynamicWebDetails(String dynamicId,String account) {
         DynamicWebDetailsVo  vo = new DynamicWebDetailsVo();
        //获取动态详情
         DynamicWebShow dynamicWebShow =  dynamicDao.findDynamicWebDetails(dynamicId);
@@ -218,20 +218,24 @@ public class DynamicServiceImpl implements DynamicService {
                 String imgString = dynamicWebShow.getImgString();
                 dynamicWebShow.setImgList(Arrays.asList(imgString.split(",")));
             }
+            //是否为自己发布的动态
+            if(dynamicWebShow.getCreatorAccount().equals(account)){
+                dynamicWebShow.setIsSelf(DynamicEnum.IS_SELF.getCode());
+            }else{
+                dynamicWebShow.setIsSelf(DynamicEnum.NOT_IS_SELF.getCode());
+            }
             vo.setDynamicWebShow(dynamicWebShow);
             DynamicCommentsParam param = new DynamicCommentsParam();
             param.setParamId(dynamicId);
             param.setPage(1);
             param.setRows(10);
             //获取评论列表
-            Page objects = PageHelper.startPage(0,10,true);
             PaginationData<List<DynamicCommentReplyShow>> data = findDynamicCommentAndReplyList(param);
             if(data != null) {
                 List<DynamicCommentReplyShow> commentsList = data.getRows();
                 if (!commentsList.isEmpty()) {
                     commentsList = improveWebCommentAndReplyUserInfo(commentsList);
-
-                    vo.setCommentList(new PaginationData<>(commentsList, objects == null ? 0 : objects.getTotal()));
+                    vo.setCommentList(data);
                 }
             }
 

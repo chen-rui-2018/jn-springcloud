@@ -71,7 +71,7 @@ public class NoticeServiceImplTest {
         param.setSortField("1");
         param.setHomePopup("0");
         param.setHomeShow("0");
-        param.setNoticeContent("公告内容...奉天承运,皇帝诏曰..........");
+        param.setNoticeDetails("公告内容...奉天承运,皇帝诏曰..........");
 
         //查询入参
         queryParam = new NoticeQueryParam();

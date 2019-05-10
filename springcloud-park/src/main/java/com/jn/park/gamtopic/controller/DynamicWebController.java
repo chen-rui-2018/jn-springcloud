@@ -72,7 +72,9 @@ public class DynamicWebController extends BaseController {
     @ApiOperation(value ="动态详情",notes = "动态内容加评论信息")
     @RequestMapping(value="/findDynamicDetails",method = RequestMethod.GET)
     public Result<DynamicWebDetailsVo> findDynamicDetails(@ApiParam(value="动态id",name = "dynamicId",required = true,example = "ebf75324ccbe4614afbad37ca920aa08")@RequestParam("dynamicId") String dynamicId){
-        DynamicWebDetailsVo data = dynamicService.findDynamicWebDetails(dynamicId);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        DynamicWebDetailsVo data = dynamicService.findDynamicWebDetails(dynamicId,user==null?"":user.getAccount());
+
         return new Result<>(data);
     }
     @ControllerLog(doAction = "动态评论列表")

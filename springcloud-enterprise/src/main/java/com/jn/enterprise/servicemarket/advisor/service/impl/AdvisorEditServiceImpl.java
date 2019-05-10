@@ -102,6 +102,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             advisorBaseInfoParam.setId(tbServiceAdvisor.getId());
             //页面传递基本信息覆盖之前基本信息，非基本信息保持不变
             BeanUtils.copyProperties(advisorBaseInfoParam, tbServiceAdvisor);
+            //工作年限
+            tbServiceAdvisor.setWorkingYears(Float.parseFloat(advisorBaseInfoParam.getWorkingYears()));
             //机构名称
             tbServiceAdvisor.setOrgName(tbServiceOrg.getOrgName());
             //业务领域
@@ -173,6 +175,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //机构id、机构名称
         tbServiceAdvisor.setOrgId(advisorBaseInfoParam.getOrgId());
         tbServiceAdvisor.setOrgName(orgName);
+        //工作年限
+        tbServiceAdvisor.setWorkingYears(Float.parseFloat(advisorBaseInfoParam.getWorkingYears()));
         //浏览量
         tbServiceAdvisor.setPageViews(0);
         //业务领域

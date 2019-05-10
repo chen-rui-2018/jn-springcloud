@@ -357,7 +357,8 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
      * @param addRoleId  要修改的角色
      */
     @ServiceLog(doAction = "修改机构下用户角色")
-    private Boolean updateOrgUserRole(String account, String delRoleId, String addRoleId) {
+    @Override
+    public Boolean updateOrgUserRole(String account, String delRoleId, String addRoleId) {
         SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
         User user=new User();
         user.setAccount(account);
@@ -398,7 +399,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
         //清空用户信息表中的所属机构编码和机构名称
         UserAffiliateInfo userAffiliateInfo=new UserAffiliateInfo();
-        userAffiliateInfo.setAccountList(accountList);
+        userAffiliateInfo.setAccountList(Arrays.asList(accountList));
         userAffiliateInfo.setAffiliateCode("");
         userAffiliateInfo.setAffiliateName("");
         userExtensionClient.updateAffiliateInfo(userAffiliateInfo);

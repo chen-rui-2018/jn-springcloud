@@ -38,10 +38,10 @@ public class addMessageModel implements Serializable {
     @ApiModelProperty("消息发送人")
     private String messageSender;
 
-    @ApiModelProperty("消息一级类别")
+    @ApiModelProperty("消息一级类别（0：个人动态，1：企业空间）")
     private Integer messageOneSort;
 
-    @ApiModelProperty("消息二级类别")
+    @ApiModelProperty("消息二级类别（0：私人订单，1：信用动态，2：园区通知，3：消费汇总，4：收入汇总，5，付款通知，6：企业订单，7：信息发布动态，8：交费提醒，9：访客留言，10：数据上报提醒  11.机构邀请）")
     private Integer messageTowSort;
 
     @ApiModelProperty("创建者账号")

@@ -2,11 +2,11 @@ package com.jn.server;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.park.message.model.addMessageModel;
 import com.jn.park.api.MessageClient;
+import com.jn.park.message.model.addMessageModel;
 import com.jn.park.message.service.MessageListService;
-import com.jn.system.log.annotation.ControllerLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,7 +23,7 @@ public class MessageServiceController extends BaseController implements MessageC
     private MessageListService messageListService;
 
     @Override
-    public Result addMessage(addMessageModel addMessageModel) {
+    public Result addMessage(@RequestBody  addMessageModel addMessageModel) {
         messageListService.addMessage(addMessageModel);
         return new Result();
     }

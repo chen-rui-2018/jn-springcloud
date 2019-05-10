@@ -41,7 +41,6 @@ public class MessageListController extends BaseController {
             @ApiImplicitParam(name = "messageTowTort",value = "一级消息类别,0:个人动态;1:企业空间;",dataType = "Integer",paramType = "query")
     })
     public Result<FindAllMessageListVo> findAll(Integer messageTowTort){
-        // TODO: 2019/4/19
         List<FindAllMessageListVo> findAllMessageListVoList = messageListService.findAll(messageTowTort,getUser());
         return new Result(findAllMessageListVoList);
     }
@@ -51,7 +50,6 @@ public class MessageListController extends BaseController {
     @PostMapping(value = "/addMessage")
     @RequiresPermissions("/message/list/addMessage")
     public Result addMessage(@RequestBody addMessageModel addMessageModel){
-        //todo
         messageListService.addMessage(addMessageModel);
         return new Result(new Result<>());
     }

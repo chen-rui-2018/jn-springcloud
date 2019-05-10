@@ -953,6 +953,8 @@
         <table tableName="tb_data_reporting_snapshot_model_tab"></table>
         <table tableName="tb_data_reporting_snapshot_target_group"></table>
         <table tableName="tb_data_reporting_snapshot_target"></table>
+        <table tableName="tb_data_reporting_garden_check_access"></table>
+
 
     </context>
 

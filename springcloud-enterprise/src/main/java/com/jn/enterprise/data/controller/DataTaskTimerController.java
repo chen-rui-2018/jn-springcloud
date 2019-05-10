@@ -30,7 +30,7 @@ public class DataTaskTimerController extends BaseController {
     private DataTaskTimerService dataTaskTimerService;
     private static Logger logger = LoggerFactory.getLogger(DataTaskTimerController.class);
 
-    @Scheduled(cron = "0 0 1 1 * ?")
+    @Scheduled(cron = "0 0 1 0 * ?")
     @ControllerLog(doAction = "任务创建")
     @ApiOperation(value = "任务创建",notes = "任务创建")
     @GetMapping(value = "/task/createTask")
@@ -39,7 +39,7 @@ public class DataTaskTimerController extends BaseController {
         dataTaskTimerService.createTask();
     }
 
-    @Scheduled(cron = "0 0 1 1 * ?")
+    @Scheduled(cron = "0 0 1 0 * ?")
     @ControllerLog(doAction = "更新任务状态")
     @ApiOperation(value = "更新任务状态",notes = "更新任务状态")
     @GetMapping(value = "/task/updateTask")
@@ -48,7 +48,7 @@ public class DataTaskTimerController extends BaseController {
         dataTaskTimerService.updateTask();
     }
 
-    @Scheduled(cron = "0 0 1 1 * ?")
+    @Scheduled(cron = "0 0 1 0 * ?")
     @ControllerLog(doAction = "任务预警")
     @ApiOperation(value = "任务预警",notes = "任务预警")
     @GetMapping(value = "/task/taskWarning")

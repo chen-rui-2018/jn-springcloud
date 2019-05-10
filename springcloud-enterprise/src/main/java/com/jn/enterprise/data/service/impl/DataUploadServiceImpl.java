@@ -910,6 +910,7 @@ public class DataUploadServiceImpl implements DataUploadService {
      */
     @Override
     @ServiceLog(doAction = "科技园导入")
+    @Transactional(rollbackFor = Exception.class)
     public int importData(MultipartFile multipartFile,String formTime,String fillId,String modelId){
         int result=0;
 
@@ -1214,6 +1215,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
     @Override
     @ServiceLog(doAction = "企业填报任务数据进行保存")
+    @Transactional(rollbackFor = Exception.class)
     public int saveCompanyFormData(ModelDataVO data,User user){
         int result=0;
         if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){

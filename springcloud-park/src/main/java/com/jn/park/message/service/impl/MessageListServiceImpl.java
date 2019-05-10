@@ -1,6 +1,7 @@
 package com.jn.park.message.service.impl;
 
 import com.jn.park.message.dao.MessageListDao;
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
 import com.jn.park.message.service.MessageListService;
@@ -34,17 +35,15 @@ public class MessageListServiceImpl implements MessageListService {
         return findAllMessageListVoList;
     }
 
-    /*@ServiceLog(doAction = "添加消息")
+    @ServiceLog(doAction = "添加消息")
     @Override
-    public void addMessage(addMessageModel model) {
-        //获取用户信息
-       User user= (User) SecurityUtils.getSubject().getPrincipal();
+    public void addMessage(AddMessageModel model,User user) {
        //设置创建人
         model.setCreatorAccount(user.getAccount());
         //设置UUID作为ID
         model.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         messageListDao.addMessage(model);
-    }*/
+    }
 
     @ServiceLog(doAction = "根据ID查询单个消息")
     @Override

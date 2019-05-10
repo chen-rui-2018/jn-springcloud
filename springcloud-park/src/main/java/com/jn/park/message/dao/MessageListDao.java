@@ -1,5 +1,6 @@
 package com.jn.park.message.dao;
 
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
 import org.apache.ibatis.annotations.Param;
@@ -24,7 +25,7 @@ public interface MessageListDao {
      * 添加消息
      * @param addMessageModel
      */
-    //void addMessage(addMessageModel addMessageModel);
+    void addMessage(AddMessageModel addMessageModel);
 
 
     /**

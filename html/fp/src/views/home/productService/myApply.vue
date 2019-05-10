@@ -96,6 +96,7 @@ export default {
       background-color: #fff;
       padding: 17px;
       position: relative;
+      border-radius: 5px;
       .myApply_search {
         width: 170px;
         height: 26px;

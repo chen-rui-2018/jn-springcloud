@@ -13,7 +13,7 @@
           <div class="orgBtn fr mainColor">在线联系</div>
         </div>
         <div class="agent2 clearfix color2">
-          <div class="agentImg mainBorder fl">
+          <div class="agentImg fl">
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="serverOrgDetailList.orgLogo" alt="">
           </div>
@@ -323,7 +323,7 @@
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleSerpro">
         <el-tab-pane name="serverPro" >
-          <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
+          <span slot="label">服务产品({{serverPro[0].serviceTotal}})</span>
           <div class="serverPro">
             <ul class="list-imgleft">
               <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>
@@ -363,7 +363,7 @@
                       <div class="score">
                         <!-- <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                       </el-rate> -->
-                        <el-rate v-model="i.evaluationScore" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
+                        <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                       </el-rate>
                         <span class="c_default b">{{i.evaluationNumber}}</span>
                         <span>条评价</span>
@@ -388,7 +388,7 @@
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row1" layout="total, sizes, prev, pager, next, jumper" :total="total1">
+              <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row1" layout="total,prev, pager, next,sizes" :total="total1">
               </el-pagination>
             </div>
           </div>
@@ -434,7 +434,7 @@
                     <!-- 评价 begin -->
                     <div class="detail-evaluate inner-consultant">
                       <div class="score">
-                        <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                        <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                       </el-rate>
                         <span class="c_default b">{{i.evaluationNum}}</span>
                         <span>条评价</span>
@@ -460,7 +460,7 @@
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row2" layout="total, sizes, prev, pager, next, jumper" :total="total2">
+              <el-pagination background @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row2" layout="total,prev, pager, next,sizes" :total="total2">
               </el-pagination>
             </div>
           </div>
@@ -507,7 +507,7 @@
                       <div class="score">
                         <!-- <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                         </el-rate> -->
-                        <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                        <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                       </el-rate>
                         <span class="c_default b">1</span>
                         <span>条评价</span>
@@ -535,7 +535,7 @@
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange4" @current-change="handleCurrentChange4" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row4" layout="total, sizes, prev, pager, next, jumper" :total="total4">
+              <el-pagination background @size-change="handleSizeChange4" @current-change="handleCurrentChange4" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row4" layout="total,prev, pager, next,sizes" :total="total4">
               </el-pagination>
             </div>
           </div>
@@ -575,7 +575,7 @@
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage1" :page-sizes="[8, 12, 16, 20]" :page-size="row3" layout="total, sizes, prev, pager, next, jumper" :total="total3">
+              <el-pagination background @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage1" :page-sizes="[8, 12, 16, 20]" :page-size="row3" layout="total,prev, pager, next,sizes" :total="total3">
               </el-pagination>
             </div>
           </div>
@@ -614,7 +614,7 @@ export default {
       flag1:"",
       flag2:"",
       flag3:"",
-      flag4:"",
+      flag4:"0",
       showFlag1:true,
       showFlag2:false,
       showFlag3:false,

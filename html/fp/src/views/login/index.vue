@@ -60,7 +60,10 @@ export default {
             sessionStorage.setItem("account",_this.loginform.account);
             // _this.api.setToken(res.data);
             _this.$router.push({
-              path: "/userinfo",
+
+              // path: "/userinfo",
+
+              path: "/home",
               query: { account: _this.loginform.account }
             });
           } else {

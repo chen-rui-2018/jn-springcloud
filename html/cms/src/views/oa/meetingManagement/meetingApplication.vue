@@ -513,7 +513,6 @@ export default {
               if (data.startTime !== null) {
                 this.startTime = data.startTime.substring(10, 16)
               }
-              console.log(this.startTime)
               if (data.endTime !== null) {
                 this.endTime = data.endTime.substring(10, 16)
               }
@@ -524,8 +523,8 @@ export default {
               if (data.tbOaMeetingRoom !== null) {
                 this.meetingroomName = data.tbOaMeetingRoom.name
               }
-              if (data.departmentName) {
-                this.department = data.departmentName
+              if (data.organizationalDepartmentName) {
+                this.department = data.organizationalDepartmentName
               } else {
                 this.department = '无'
               }

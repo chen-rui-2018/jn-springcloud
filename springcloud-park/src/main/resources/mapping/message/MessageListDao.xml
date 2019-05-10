@@ -79,15 +79,15 @@
             )
             values(
             #{id},
-            #{messageTitle},
-            #{messageContent},
-            #{messageConnectName},
-            #{messageConnect},
-            #{messageRecipien},
-            #{messageSender},
-            #{messageOneSort},
-            #{messageTowSort},
-            #{creatorAccount},
+            #{messageTitle,jdbcType=VARCHAR},
+            #{messageContent,jdbcType=VARCHAR},
+            #{messageConnectName,jdbcType=VARCHAR},
+            #{messageConnect,jdbcType=VARCHAR},
+            #{messageRecipien,jdbcType=VARCHAR},
+            #{messageSender,jdbcType=VARCHAR},
+            #{messageOneSort,jdbcType=VARCHAR},
+            #{messageTowSort,jdbcType=VARCHAR},
+            #{creatorAccount,jdbcType=VARCHAR},
             SYSDATE()
             )
 

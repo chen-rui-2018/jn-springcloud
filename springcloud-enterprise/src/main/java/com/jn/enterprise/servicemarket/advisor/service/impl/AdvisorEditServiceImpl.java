@@ -6,6 +6,7 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
 import com.jn.enterprise.servicemarket.advisor.model.*;
@@ -88,10 +89,9 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         TbServiceOrg tbServiceOrg = checkOrgIdAdnGetOrgInfo(advisorBaseInfoParam.getOrgId());
 
         //根据账号查询是否存在顾问信息
-        //数据状态  0：删除  1：正常
-        byte recordStatus=1;
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        example.createCriteria().andAdvisorAccountEqualTo(advisorBaseInfoParam.getAdvisorAccount()).andRecordStatusEqualTo(recordStatus);
+        example.createCriteria().andAdvisorAccountEqualTo(advisorBaseInfoParam.getAdvisorAccount())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         //根据账号获取数据库现有顾问信息
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisorList.isEmpty()){
@@ -196,7 +196,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //是否认证 0：未认证     1：已认证
         tbServiceAdvisor.setIsCertification("0");
         //审核状态  - 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除
-        tbServiceAdvisor.setApprovalStatus("1");
+        tbServiceAdvisor.setApprovalStatus(ApprovalStatusEnum.NOT_APPROVED.getValue());
         //创建时间
         tbServiceAdvisor.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //创建人

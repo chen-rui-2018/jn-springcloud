@@ -35,7 +35,7 @@ public class MessageServiceController extends BaseController implements MessageC
 
     @Override
     public Result addMessage(@RequestBody  AddMessageModel addMessageModel) {
-        messageListService.addMessage(addMessageModel,getUser());
+        messageListService.addMessage(addMessageModel);
         return new Result();
     }
 

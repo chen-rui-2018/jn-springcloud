@@ -37,9 +37,9 @@ public class MessageListServiceImpl implements MessageListService {
 
     @ServiceLog(doAction = "添加消息")
     @Override
-    public void addMessage(AddMessageModel model,User user) {
+    public void addMessage(AddMessageModel model) {
        //设置创建人
-        model.setCreatorAccount(user.getAccount());
+        model.setCreatorAccount(model.getCreatorAccount());
         //设置UUID作为ID
         model.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         messageListDao.addMessage(model);

@@ -51,8 +51,7 @@ public class MessageListController extends BaseController {
     @PostMapping(value = "/addMessage")
     @RequiresPermissions("/message/list/addMessage")
     public Result addMessage(@RequestBody AddMessageModel addMessageModel){
-
-        messageListService.addMessage(addMessageModel,getUser());
+        messageListService.addMessage(addMessageModel);
         return new Result(new Result<>());
     }
 

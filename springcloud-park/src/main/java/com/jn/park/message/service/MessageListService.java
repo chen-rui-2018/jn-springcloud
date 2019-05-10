@@ -26,7 +26,7 @@ public interface MessageListService {
      * 添加消息
      * @param addMessageModel
      */
-    void addMessage(AddMessageModel addMessageModel,User user);
+    void addMessage(AddMessageModel addMessageModel);
 
 
     /**

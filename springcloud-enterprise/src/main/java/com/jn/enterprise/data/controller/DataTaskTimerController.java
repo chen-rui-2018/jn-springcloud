@@ -1,6 +1,7 @@
 package com.jn.enterprise.data.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.enterprise.api.EnterpriseClient;
 import com.jn.enterprise.data.service.DataTaskTimerService;
 import com.jn.enterprise.data.service.impl.DataModelServiceImpl;
 import com.jn.system.log.annotation.ControllerLog;
@@ -21,38 +22,29 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags="数据上报任务创建定时器")
 @RestController
-@RequestMapping(value = "/data")
-public class DataTaskTimerController extends BaseController {
+public class DataTaskTimerController extends BaseController  implements EnterpriseClient {
     @Autowired
     private DataTaskTimerService dataTaskTimerService;
     private static Logger logger = LoggerFactory.getLogger(DataTaskTimerController.class);
 
-    //@Scheduled(cron = "0 0 1 0 * ?")
     @ControllerLog(doAction = "任务创建")
-    @ApiOperation(value = "任务创建",notes = "任务创建")
-    @GetMapping(value = "/task/createTask")
+    @Override
     public void createTask(){
 
         dataTaskTimerService.createTask();
     }
 
-    //@Scheduled(cron = "0 0 1 0 * ?")
     @ControllerLog(doAction = "更新任务状态")
-    @ApiOperation(value = "更新任务状态",notes = "更新任务状态")
-    @GetMapping(value = "/task/updateTask")
+    @Override
     public void updateTask(){
 
         dataTaskTimerService.updateTask();
     }
 
-    //@Scheduled(cron = "0 0 1 0 * ?")
     @ControllerLog(doAction = "任务预警")
-    @ApiOperation(value = "任务预警",notes = "任务预警")
-    @GetMapping(value = "/task/taskWarning")
+    @Override
     public void taskWarning(){
-
         dataTaskTimerService.taskWarning();
     }
 }

@@ -31,6 +31,16 @@ public class DynamicComments implements Serializable {
     private String  likeNum;
     @ApiModelProperty(value= "评论的内容")
     private String comContent;
+    @ApiModelProperty(value= "评论时间")
+    private String createdTime;
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
 
     public String getParentId() {
         return parentId;

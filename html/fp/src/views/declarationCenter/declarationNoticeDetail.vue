@@ -121,7 +121,7 @@ export default {
         declareEnterprise:"",//申报企业
         declareItem:""//申报项目名称
       },
-      headers:{headers:''},
+      headers:{token: sessionStorage.token},
       fileList:[],
       rules:{
         appointmentItemName:[
@@ -193,12 +193,12 @@ export default {
     },
     // 文本域字数显示
     counselnum(){
-      this.residuenum=500-this.messageform.content.length
+      this.residuenum=500-this.appointment.remark.length
     },
     //去预约
     goappointment(){
       this.appointmentVisible=true
-      this.headers.headers=sessionStorage.getItem("token")
+      // this.headers=sessionStorage.getItem("token")
       if(sessionStorage.getItem("token")){
         let _this = this;
         this.api.get({
@@ -221,8 +221,9 @@ export default {
       }
     },
     uploadsuccess(file, fileList){
-      console.log(file)
-      console.log(fileList)
+      // console.log(file)
+      // console.log(fileList)
+      this.appointment.fileUrl=file.data
     },
     //提交
     submit(){
@@ -232,7 +233,9 @@ export default {
           data: this.appointment,
           callback: function(res) {
             if (res.code == "0000") {
-              console.log(res)
+              // console.log(res)
+              _this.$message.success("预约成功")
+              _this.appointmentVisible=false
             }
           }
         });
@@ -358,6 +361,7 @@ export default {
             border-color:#00a041; 
           }
         }
+                                     
         .el-upload--picture-card{ 
           width: 100px;
           height: 100px;
@@ -455,3 +459,4 @@ export default {
   }
 </style>
 
+                                         

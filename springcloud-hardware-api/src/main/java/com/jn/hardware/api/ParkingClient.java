@@ -28,12 +28,12 @@ public interface ParkingClient {
      */
     @RequestMapping(value = "/api/hardware/parking/getTemporaryCarParkingFee")
     Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
+
     /**
      * 缴费信息保存
      * @param paymentCarParkingFeeRequest 实体类参数
      * @return
      */
-
     @RequestMapping(value = "/api/hardware/parking/savePaymentCarParkingFee")
     Result savePaymentCarParkingFee(@RequestBody PaymentCarParkingFeeRequest paymentCarParkingFeeRequest);
 
@@ -43,7 +43,7 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/saveParkingMonthlyRentCard")
-    Result saveParkingMonthlyRentCard(@RequestBody ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest);/**
+    Result saveParkingMonthlyRentCard(@RequestBody ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest);
     /**
      * 月租卡开户信息列表
      * @param parkingMonthlyCardInfoRequest

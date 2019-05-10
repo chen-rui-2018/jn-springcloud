@@ -182,7 +182,7 @@ public class DynamicServiceImplTest {
      */
     @Test
     public void findDynamicWebDetails() {
-        DynamicWebDetailsVo vo =  dynamicService.findDynamicWebDetails(dynamicId);
+        DynamicWebDetailsVo vo =  dynamicService.findDynamicWebDetails(dynamicId,account);
         assertThat(anything(),anything());
     }
 

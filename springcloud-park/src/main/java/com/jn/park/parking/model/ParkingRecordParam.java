@@ -18,6 +18,9 @@ public class ParkingRecordParam extends Page implements Serializable {
     @ApiModelProperty(value = "车牌号码",required = true,example = "湘A00001")
     private String carLicense;
 
+    @ApiModelProperty(value = "停车场名称",example = "白下1号停车场")
+    private String areaName;
+
     @ApiModelProperty(value = "开始时间yyyy-MM-dd",example = "2019-04-10")
     private String startTime;
 
@@ -30,6 +33,14 @@ public class ParkingRecordParam extends Page implements Serializable {
 
     public void setCarLicense(String carLicense) {
         this.carLicense = carLicense;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public String getStartTime() {

@@ -1,14 +1,17 @@
 <template>
     <div class="regStatus w">
         <div class="regNav">
-            <el-breadcrumb separator="/">
+            <!-- <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
                 <el-breadcrumb-item>
                     <a href="/">活动中心</a>
                 </el-breadcrumb-item>
                 <el-breadcrumb-item class="mainColor">活动详情</el-breadcrumb-item>
                 <el-breadcrumb-item class="mainColor">报名情况</el-breadcrumb-item>
-            </el-breadcrumb>
+            </el-breadcrumb> -->
+          <span>企业服务/</span>
+          <span>活动详情/</span>
+          <span class="mainColor">报名情况</span>
         </div>
         <el-card>
             <div class="regContent">
@@ -74,16 +77,19 @@ export default {
 };
 </script>
 <style lang="scss">
-.el-pagination.is-background .el-pager li:not(.disabled).active {
+
+.regStatus {
+  padding-top: 65px;
+  .el-pagination.is-background .el-pager li:not(.disabled).active {
   background-color: #00a040;
   color: #fff;
 }
 .el-pager li:hover {
   color: #00a040;
 }
-.regStatus {
   .regNav {
     margin: 20px 0;
+    font-size: 13px;
   }
   .regContent {
     text-align: center;

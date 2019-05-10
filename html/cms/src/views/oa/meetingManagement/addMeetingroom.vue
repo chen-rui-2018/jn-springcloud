@@ -61,7 +61,7 @@
       <div class="primaryList">
         <el-button v-if="!lookMeetingroom" :disabled="isDisabled" type="primary" @click="title==='新增会议室'?submitForm('meetingroomForm'):updateData()">提交</el-button>
         <!-- <el-button v-if="!lookMeetingroom" :disabled="isDisabled" type="primary" @click="submitForm('meetingroomForm')">提交</el-button> -->
-        <el-button v-if="!lookMeetingroom" @click="cancel" >取消</el-button>
+        <el-button v-if="!lookMeetingroom" @click="cancel" >重置</el-button>
         <el-button @click="goBack($route)" >返回</el-button>
 
       </div>
@@ -272,7 +272,7 @@ export default {
     },
     // 预览图片
     handlePictureCardPreview(file) {
-      if (this.title === '编辑会议室') {
+      if (this.title === '编辑会议室' || this.title === '查看会议室') {
         this.dialogImageUrl = file.url
       }
       this.dialogVisible = true

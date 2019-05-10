@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @ApiModel(value ="DynamicCommentsParam" ,description = "动态评论列表入参/评论的回复列表入参")
 public class DynamicCommentsParam extends Page implements Serializable {
-    @ApiModelProperty(value = "动态id/评论id",required = true ,example = "ebf75324ccbe4614afbad37ca920aa08")
+    @ApiModelProperty(value = "动态id",required = true ,example = "ebf75324ccbe4614afbad37ca920aa08")
     @NotBlank(message = "入参id不能为空")
     private String  paramId;
 

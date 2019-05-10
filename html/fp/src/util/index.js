@@ -300,3 +300,11 @@ export function uniqueArr(arr) {
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
+
+export function isMobile() {
+  const userAgentInfo = navigator.userAgent
+  const Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"]
+  return Agents.some(str =>{
+    return userAgentInfo.indexOf(str) > 0
+  })
+}

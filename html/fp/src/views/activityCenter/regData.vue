@@ -80,6 +80,7 @@ export default {
 </script>
 <style lang="scss">
 .regData {
+  padding-top: 65px;
   .regDataNav {
     margin: 20px 0;
   }

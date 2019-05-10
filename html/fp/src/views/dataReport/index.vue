@@ -128,6 +128,7 @@
 </template>
 
 <script>
+  import { isMobile } from '@/util'
   import Swiper from 'swiper'
   export default {
     name: "reportEntry",
@@ -136,6 +137,7 @@
     },
     data() {
       return {
+        isMobile: isMobile(),
         searchFilled: '',
         adUrls: [],
         filledType: 0,
@@ -200,14 +202,23 @@
         this.getFilledData()
         this.getPcAd()
           .then(() => {
-            new Swiper('.swiper-container', {
-              slidesPerView: 'auto',
-              spaceBetween: 10,
-              pagination: {
-                el: '.swiper-pagination',
-                clickable: true
+            let options
+            if (this.isMobile) {
+              options = {
+                autoplay:true,
+                loop:true
               }
-            })
+            } else {
+              options = {
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+                pagination: {
+                  el: '.swiper-pagination',
+                  clickable: true
+                }
+              }
+            }
+            new Swiper('.swiper-container', options)
           })
       },
       filledTypeChange(data, index) {
@@ -252,7 +263,7 @@
         this.$router.push({
           path:'/servicemarket/product/productService/report',
           query:{
-            id: item.fillId
+            fileId: item.fillId
           }
         })
       },

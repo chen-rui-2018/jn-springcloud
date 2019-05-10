@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="formatData" :row-key="getRowKeys" :row-style="showRow" v-bind="$attrs">
+  <el-table :row-class-name="setClassName":data="formatData" :row-key="getRowKeys" :row-style="showRow" v-bind="$attrs">
     <el-table-column v-if="columns.length===0" width="150">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
@@ -161,6 +161,11 @@ export default {
       getRowKeys(row) {
         return row.id;
       },
+      setClassName(row) {
+        if (row.row.hasJurisdiction) {
+          return 'success-row'
+        }
+      }
     }
   },
   computed: {
@@ -358,7 +363,6 @@ export default {
         }
       }
   }
-
     .target-input {
       width: 160px;
     }
@@ -371,6 +375,14 @@ export default {
   .isMobile {
     .el-upload-list {
       width: 200px;
+    }
+  }
+  .el-table {
+    .success-row {
+      background-color: #f0f9eb;
+    }
+    .info-row {
+      background-color: #fafafa;
     }
   }
 </style>

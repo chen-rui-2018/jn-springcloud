@@ -1,12 +1,5 @@
 <template>
   <div class="data-report">
-    <div id="advertisement" class="swiper-container">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">
-          <img :src="img" class="swiper-slide-img" alt="">
-        </div>
-      </div>
-    </div>
     <el-tabs
       type="border-card"
       @tab-click="changeDepartment">
@@ -26,14 +19,6 @@
         </el-tabs>
       </el-tab-pane>
     </el-tabs>
-    <div class="btn-row">
-      <el-button size="small" type="primary" :disabled="formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDraft">保存为草稿</el-button>
-      <el-button size="small" type="primary" :disabled="submitting || formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDone">提交</el-button>
-      <el-button size="small" type="primary" v-if="formData.otherData">
-        <a :href="formData.otherData" download="" target="_blank">点击下载附件</a>
-      </el-button>
-      <el-button @click="$router.back()" size="small" type="primary">返回</el-button>
-    </div>
   </div>
 </template>
 
@@ -84,8 +69,7 @@
             value: 'unit',
             width: 40
           },
-        ],
-        adUrls: [], // 轮播图片
+        ]
       }
     },
     methods: {
@@ -98,13 +82,6 @@
           })
           .then(() => {
             this.loadingTab = false
-          })
-        this.getPcAd()
-          .then(() => {
-            new Swiper('#advertisement', {
-              autoplay:true,
-              loop:true
-            })
           })
       },
       formatFormData() {
@@ -378,28 +355,26 @@
                   _this.loadingFormData = false
                   _this.formDataListTitle = _this.formData.gardenFiller
                   for (const tab of  _this.formData.tabs) {
-                    const departmentId = _this.formDataListTitle && _this.formDataListTitle[0].departmentId
+                    const departmentId = _this.formDataListTitle[0].departmentId
                     _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
                 }
+                _this.formDataListTitle.map(item => {
+                  const status  = item.status
+                  const gardenExamineStatus = item.gardenExamineStatus
+                  if(status === 0){
+                    if(gardenExamineStatus === 1){
+                      item.departmentName += '(待审核)'
+                    }else if(gardenExamineStatus === 0){
+                      item.departmentName += '(审核通过)'
+                    }else{
+                      item.departmentName += '(审核不通过)'
+                    }
+                  }else{
+                    item.departmentName += '(未填报)'
+                  }
+                })
                 _this.formData.departmentId = _this.formDataListTitle[0].departmentId
-                resolve()
-              } else {
-                _this.$message.error(res.result)
-                reject()
-              }
-            }
-          })
-        })
-      },
-      getPcAd() {
-        return new Promise((resolve, reject) => {
-          const _this = this
-          this.api.get({
-            url: 'enterpriseGetPcAd',
-            callback(res) {
-              if (res.code === "0000") {
-                _this.adUrls = res.data.adUrls.filter(src =>  !!src)
                 resolve()
               } else {
                 _this.$message.error(res.result)

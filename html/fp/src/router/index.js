@@ -46,6 +46,87 @@ export default new Router({
       name: 'forgetPsw'
     },
     {
+      path: '/dataReportCheck',
+      component: resolve => require(['@/views/dataReport/dataReportCheck'], resolve),
+      meta: {title: '数据上报审核'},
+      name: 'dataReportCheck'
+    },
+    {
+      path: '/home',
+      component: resolve => require(['@/views/home'],resolve),
+      meta: {title: '用户中心'},
+      name:'home',
+      redirect:{name:'userCenter'},
+      children:[
+        {
+          path:'/servicemarket/product/userCenter',
+          name:'userCenter',
+          meta: {title: '首页'},
+          component:resolve => require(['@/views/home/userCenter'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryProduct',
+        name:'ordinaryProduct',
+        meta: {title: '常规服务产品'},
+        component:resolve => require(['@/views/home/productService/ordinaryProduct'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/productPutaway',
+        name:'productPutaway',
+        meta: {title: '常规产品上架'},
+        component:resolve => require(['@/views/home/productService/productPutaway'],resolve)
+        },
+        {
+          path:'/servicemarket/product/productService/dataReport',
+          name:'dataReport',
+          meta: {title: '企业数据上报入口', keepAlive: true},
+          component:resolve => require(['@/views/dataReport'],resolve)
+        },
+        {
+          path:'/servicemarket/product/productService/report',
+          name:'dataReportCommonEntrance',
+          meta: {title: '数据上报'},
+          component:resolve => require(['@/views/dataReport/report'],resolve)
+        },
+        {
+        path:'/servicemarket/product/productService/ordinaryproductDetail',
+        name:'ordinaryproductDetail',
+        meta: {title: '常规产品详情'},
+        component:resolve => require(['@/views/home/productService/ordinaryproductDetail'],resolve)
+        },
+        {
+        path:'/userHome',
+        name:'userHome',
+        meta: {title: '用户资料'},
+        component:resolve => require(['@/views/home/userHome'],resolve)
+        },
+        {
+          path: '/actiManagent',
+          component: resolve => require(['@/views/home/actiManagent'],resolve),
+          meta: {title: '活动管理'},
+          name:'actiManagent'
+        },
+        {
+        path:'/iframe',
+        name:'iframe',
+        meta: {title: '人才申报'},
+        component:resolve => require(['@/views/home/iframe'],resolve)
+        },
+        {
+        path:'/upgradeStaff',
+        name:'upgradeStaff',
+        meta: {title: '升级员工'},
+        component:resolve => require(['@/views/home/upgradeStaff'],resolve)
+        },
+        {
+        path:'/upgradeEnterprise',
+        name:'upgradeEnterprise',
+        meta: {title: '升级企业'},
+        component:resolve => require(['@/views/home/upgradeEnterprise'],resolve)
+        },
+      ]
+    },
+    {
       path: '/userinfo',
       component: resolve => require(['@/views/home/userinfo'], resolve),
       name: 'user',

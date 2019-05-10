@@ -84,11 +84,11 @@ export default {
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
 
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
-
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
         enterpriseGetScientTabHeader:"springcloud-enterprise/data/garden/getScientTabHeader", // 科技园模板表头查询接口
         enterpriseGetImportData:"springcloud-enterprise/data/garden/getImportData", // 科技园模板查询数据接口
         enterpriseImportData:"springcloud-enterprise/data/garden/importData", // 科技园导入接口
+        enterpriseGetCheckOrLookInfo:"springcloud-enterprise/data/garden/getCheckOrLookInfo", // 审核列表
 
 
 

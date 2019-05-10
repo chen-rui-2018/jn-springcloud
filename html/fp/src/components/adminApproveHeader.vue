@@ -104,10 +104,24 @@
         </div>
       </div>
     </el-card>
-    <div class="banner_box" v-show="this.$route.name=='compassView'||this.$route.name=='declarationPlatform'||this.$route.name=='declarationCenter'||this.$route.name=='talentsService'||this.$route.name=='talentPlatform'||this.$route.name=='familiarProblem'">
+    <div class="banner_box" v-show="this.$route.name=='compassView'">
       <el-carousel arrow="always" loop :autoplay="false">
           <el-carousel-item v-for="item in 4" :key="item">
             <img src="@/assets/image/approv.png" alt="">
+          </el-carousel-item>
+      </el-carousel>
+    </div>
+    <div class="banner_box" v-show="this.$route.name=='talentsService'||this.$route.name=='talentPlatform'">
+      <el-carousel arrow="always" loop :autoplay="false">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <img src="@/assets/image/talents.png" alt="">
+          </el-carousel-item>
+      </el-carousel>
+    </div>
+    <div class="banner_box" v-show="this.$route.name=='declarationPlatform'||this.$route.name=='declarationCenter'">
+      <el-carousel arrow="always" loop :autoplay="false">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <img src="@/assets/image/declaration.png" alt="">
           </el-carousel-item>
       </el-carousel>
     </div>

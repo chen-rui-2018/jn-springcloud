@@ -22,12 +22,10 @@
             <i class="iconfont icon-kefu"></i>
           </div>
         </li>
-        <li>
-          <a href="#">
-            <div class="to_top">
-              <i class="iconfont icon-top1"></i>
-            </div>
-          </a>
+        <li @click="toTop">
+          <div class="to_top">
+            <i class="iconfont icon-top1"></i>
+          </div>
         </li>
       </ul>
       <!--  -->
@@ -88,10 +86,20 @@ import SerHeader from './components/serverHeader'
 import adminApproveHeader from './components/adminApproveHeader'
 import TechnologyHeader from './components/technologyHeader'
 import './common/font/font.css'
+
 import { isMobile } from '@/util'
+
+let timer = null
+
 export default {
   name: 'App',
   components:{AppHeader,AppFooter,SerHeader,adminApproveHeader,TechnologyHeader},
+   props:{
+      step:{
+        type:Number,
+        default:100
+      }
+    },
   data () {
     return {
       isMobile: isMobile(),
@@ -105,26 +113,46 @@ export default {
     //     this.api.setToken(sessionStorage.token)
     // }
     this.init()
+    let vm =this;
+      window.onscroll=function(){
+        if (document.documentElement.scrollTop>60) {
+          vm.isActive=true;
+        }else {
+          vm.isActive=false;
+        }
+    }
   },
   methods:{
     init(){
       let _this=this
       this.api.post({
-          url: "loginURL",
-          data: {
-            account: "wangsong",
-            password: "wangsong"
-          },
-          dataFlag: false,
-          callback: function(res) {
-            if (res.code == "0000") {
-             sessionStorage.token=res.data
-            }
+        url: "loginURL",
+        data: {
+          account: "wangsong",
+          password: "wangsong"
+        },
+        dataFlag: false,
+        callback: function(res) {
+          if (res.code == "0000") {
+            sessionStorage.token=res.data
           }
-        });
+        }
+      })
+    },
+    toTop(){
+      timer = setInterval(function () {
+        let osTop = document.documentElement.scrollTop || document.body.scrollTop
+        let ispeed = Math.floor(-osTop / 5)
+        document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed
+        this.isTop = true
+        if (osTop === 0) {
+          clearInterval(timer)
+        }
+      },30)
     }
   }
 }
+
 </script>
 
 <style lang="scss">

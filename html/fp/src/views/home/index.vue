@@ -108,24 +108,25 @@
                   <el-menu-item-group>
                     <el-menu-item index="/servicemarket/product/productService/ordinaryProduct" style="padding-left: 20px;">常规服务产品</el-menu-item>
                     <el-menu-item index="/servicemarket/product/productService/specialproduct" style="padding-left: 20px;">特色服务产品</el-menu-item>
+                    <el-menu-item index="/servicemarket/product/productService/myApply" style="padding-left: 20px;">我的申请</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
-                <el-submenu index="/需求管理">
+                <el-submenu index="/needManage">
                   <template slot="title">
                     <span>需求管理</span>
                   </template>
                   <el-menu-item-group>
-                    <el-menu-item index="/servicemarket/product/productService/需求管理">需求管理</el-menu-item>
-                    <el-menu-item index="">需求管理</el-menu-item>
+                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/requireManagementController/forothersneed">对他人的需求</el-menu-item>
+                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/requireManagementController/receivedNeed">我收到的需求</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
-                <el-submenu index="/评价管理">
+                <el-submenu index="/evaluateManage">
                   <template slot="title">
                     <span>评价管理</span>
                   </template>
                   <el-menu-item-group>
-                    <el-menu-item index="/servicemarket/product/productService/评价管理">评价管理</el-menu-item>
-                    <el-menu-item index="">评价管理</el-menu-item>
+                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/comment/forOthersevaluate">对他人的评价</el-menu-item>
+                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/comment/receivedEvaluate">我收到的评价</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
                 <el-menu-item index="/actiManagent">
@@ -384,6 +385,12 @@ export default {
         }
         // 侧边栏
         .slider{
+          .el-aside{
+            border-radius: 5px;
+          }
+          .el-menu{
+            border-right: none;
+          }
           .el-submenu__title{
             border-top: 1px solid #eee;
             // border-bottom: 1px solid #eee;

@@ -37,6 +37,7 @@ export default {
         getseviceDetail:"springcloud-park/guest/portal/sp/power/getBusi",//业务明细（服务详情）
         message:"springcloud-park/portal/sp/power/SpMessage",//我要留言
         getplatform:"springcloud-enterprise/pd/declaration/list",//申报平台列表数据
+        list:"springcloud-enterprise/guest/pd/perennialDeclaration/list",//常年申报列表
         getplatformtype:"springcloud-enterprise/pd/declaration/typeList",//申报品台类型
         getdeclarationcentertype:"springcloud-enterprise/guest/pd/declarationNotice/typeList",//申报中心所属类型
         getdeclarationcentertList:"springcloud-enterprise/guest/pd/declarationNotice/list",//申报中心列表数据
@@ -81,6 +82,7 @@ export default {
         enterpriseGetFormed:"springcloud-enterprise/data/company/getFormed", // 获取企业填报历史表单列表
         enterpriseGetFormStruct:"springcloud-enterprise/data/company/getFormStruct", // 获取待填报的表单结构
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
+
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
 
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
@@ -138,6 +140,28 @@ export default {
         selectCompany:"springcloud-enterprise/guest/userUpgrade/selectCompany", // 查询公司列表
         changeToStaff:"springcloud-enterprise/guest/userUpgrade/changeToStaff", // 升级员工
         changeToCompany:"springcloud-enterprise/guest/userUpgrade/changeToCompany", // 升级员工
+
+        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
+        addOrEditMemorandum:"springcloud-enterprise/pd/declaration/addOrEditMemorandum",//申报平台备注
+        getProductSerialNumber:"springcloud-enterprise/servicemarket/product/manage/getProductSerialNumber",//产品编号获取
+        updateCommonProduct:"springcloud-enterprise/servicemarket/product/web/updateCommonProduct",
+        upShelfFeatureProduct:"springcloud-enterprise/technologyFinancial/financialProductController/upShelfFeatureProduct",//特色科技金融产品添加
+        getFinancialProductAssureType:"springcloud-enterprise/technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
+        getFinancialProductLoanType:"springcloud-enterprise/technologyFinancial/financialProductController/getFinancialProductLoanType",//金融产品贷款类别
+        addFeatureService:"springcloud-enterprise/servicemarket/product/web/addFeatureService",//添加特色服务产品(非科技金融)
+        modifyFeatureProduct:"springcloud-enterprise/technologyFinancial/financialProductController/modifyFeatureProduct",//编辑特色产品科技金融
+        updateFeatureProduct:"springcloud-enterprise/servicemarket/product/web/updateFeatureProduct",//编辑特色产品非科技
+        getRequireOtherList:"springcloud-enterprise/serviceMarket/requireManagementController/getRequireOtherList",//对他人的需求列表
+        getOtherRequireDetails:"springcloud-enterprise/serviceMarket/requireManagementController/getOtherRequireDetails",//对他人的需求详情
+        getRequireReceivedList:"springcloud-enterprise/serviceMarket/requireManagementController/getRequireReceivedList",//我收到的需求列表查询
+        getReceivedRequireDetails:"springcloud-enterprise/serviceMarket/requireManagementController/getReceivedRequireDetails",//收到的需求详情
+        cancelRequire:"springcloud-enterprise/serviceMarket/requireManagementController/cancelRequire",//撤销需求
+        getGiveOthersCommentList:"springcloud-enterprise/guest/serviceMarket/comment/getGiveOthersCommentList",//获取对他人的评价列表
+        handleRequire:"springcloud-enterprise/serviceMarket/requireManagementController/handleRequire",//对接需求
+        getRatingCommentDetail:"springcloud-enterprise/guest/serviceMarket/comment/getRatingCommentDetail",//获取评价页详情
+        getGiveMeCommentList:"springcloud-enterprise/guest/serviceMarket/comment/getGiveMeCommentList",//获取我收到的评价
+        saveRatingComment:"springcloud-enterprise/guest/serviceMarket/comment/saveRatingComment",//提交评价信息
+
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Component
 @Api(tags="数据上报任务创建定时器")
 @RestController
 @RequestMapping(value = "/data")

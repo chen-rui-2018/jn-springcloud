@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,20 +33,21 @@ public class DoorParkingController extends BaseController {
     private ParkingService parkingService;
 
     @ApiOperation(value = "道尔: 车辆入场信息保存",notes = "返回保存的数据的id string")
-    @RequestMapping(value = "/saveDoorCarInParkingInfo",method = RequestMethod.POST)
-    public DoorResult saveDoorCarInParkingInfo(@RequestBody DoorCarInParkingParam doorCarInParkingParam, HttpServletRequest request){
+    @RequestMapping(value = "/saveDoorCarInParkingInfo/{parkId}",method = RequestMethod.POST)
+    public DoorResult saveDoorCarInParkingInfo(@RequestBody DoorCarInParkingParam doorCarInParkingParam, HttpServletRequest request,@PathVariable String parkId){
         String  url = request.getRequestURL().toString();
 
-        DoorResult result =  parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url);
+        DoorResult result =  parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url,parkId);
         return  result;
     }
     @ApiOperation(value = "道尔: 车辆出场信息保存",notes = "返回保存的数据的id string")
-    @RequestMapping(value = "/saveDoorCarOutParkingInfo",method = RequestMethod.POST)
-    public DoorResult  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingParam, HttpServletRequest request){
+    @RequestMapping(value = "/saveDoorCarOutParkingInfo/{parkId}",method = RequestMethod.POST)
+    public DoorResult  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingParam, HttpServletRequest request,@PathVariable String parkId){
         String  url = request.getRequestURL().toString();
-        DoorResult  result =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url);
+        DoorResult  result =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url,parkId);
         return  result;
     }
+
 
     @ApiOperation(value = "道尔: 获取临停车费用",notes = "根据车场编号和车辆牌照获取停车信息")
     @RequestMapping(value = "/getTemporaryCarParkingFee",method = RequestMethod.GET)

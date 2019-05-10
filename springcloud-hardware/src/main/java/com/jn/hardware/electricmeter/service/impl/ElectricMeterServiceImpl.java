@@ -1,6 +1,7 @@
 package com.jn.hardware.electricmeter.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.RestTemplateUtil;
@@ -56,6 +57,8 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         multiValueMap.add("username",electricAccessTokenParam.getUsername());
         multiValueMap.add("password",electricAccessTokenParam.getPassword());
         multiValueMap.add("scopes",electricAccessTokenParam.getScopes());
+        //获取token前 将从redis中可获取token的状态设置为false
+        redisConfigStorage.setAccessTokenController(ElectricMeterEnum.ELECTRIC_GET_TOKEN_FALSE.getCode(),7200);
         String resultString =  RestTemplateUtil.post(url,multiValueMap,dynamicHeaders);
         ElectricAccessTokenShow  accessTokenShow = JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference<ElectricAccessTokenShow>(){});
         if(accessTokenShow ==null){
@@ -65,6 +68,8 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         //获取token成功
         if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
             redisConfigStorage.setAccessToken(electricResult.getData().getAccess_token(),Integer.valueOf(electricResult.getData().getExpires_in()));
+            //设置完成token后  将从redis中可获取token的状态设置为true
+            redisConfigStorage.setAccessTokenController(ElectricMeterEnum.ELECTRIC_GET_TOKEN_TRUE.getCode(),7200);
             result.setData(electricResult.getData());
             logger.info("获取电表平台access_token成功,access_token="+electricResult.getData().getAccess_token());
         }else{
@@ -83,7 +88,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
     public Result<List<ElectricMeterBuildingShow>> getElectricBuildingInfo() {
         Result result= new Result();
         String url = ElectricMeterService.GET_BUILDING_INFO_URL;
-        String accessToken = redisConfigStorage.getAccessToken();
+        String accessToken = getAccessToken();
         url = String.format(url,accessToken);
         String buildingString = RestTemplateUtil.get(url);
         ElectricResult<List<ElectricMeterBuildingShow>> electricResult = JsonStringToObjectUtil.jsonToObject(buildingString, new TypeReference<ElectricResult<List<ElectricMeterBuildingShow>>>(){});
@@ -107,7 +112,8 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
     public Result<ElectricMeterInfoShow> getElectricMeterForBuilding(ElectricMeterInfoParam electricMeterInfoParam) {
         Result result= new Result();
         ElectricResult<ElectricMeterInfoShow> electricResult = new ElectricResult();
-        String accessToken = redisConfigStorage.getAccessToken();
+
+        String accessToken = getAccessToken();
         String url = ElectricMeterService.GET_ELECTRIC_METER_INFO_URL;
         url = String.format(url,accessToken,electricMeterInfoParam.getCode(),electricMeterInfoParam.getPage(),electricMeterInfoParam.getRows());
         String electricString = RestTemplateUtil.get(url);
@@ -124,6 +130,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             result.setResult(electricResult.getMsg());
             logger.info("获取建筑下的仪表信息息失败,失败原因"+electricResult.getMsg());
         }
+
         return result;
     }
 
@@ -136,7 +143,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
     public Result<ElectricMeterStatusShow> getElectricMeterStatus(String code) {
         Result result= new Result();
         ElectricResult<ElectricMeterStatusShow> electricResult = new ElectricResult<>();
-        String accessToken = redisConfigStorage.getAccessToken();
+        String accessToken = getAccessToken();
         String url = ElectricMeterService.GET_ELECTRIC_METER_STATUS_URL;
         url = String.format(url,accessToken,code);
         String statusString = RestTemplateUtil.get(url);
@@ -165,7 +172,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
     public Result electricMeterSwitch(ElectricMeterSwitchParam electricMeterSwitchParam) {
         Result result= new Result();
         String url = ElectricMeterService.GET_ELECTRIC_METER_SWITCH_URL;
-        String accessToken = redisConfigStorage.getAccessToken();
+        String accessToken =getAccessToken();
         url = String.format(url,accessToken,electricMeterSwitchParam.getCode(),electricMeterSwitchParam.getFlag());
         String  switchSting = RestTemplateUtil.get(url);
         //如果返回不为空,则出现了开关操作错误;
@@ -187,7 +194,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
 
         Result result= new Result();
         String url = ElectricMeterService.GET_ELECTRIC_DATA_COLLECTION_URL;
-        String accessToken = redisConfigStorage.getAccessToken();
+        String accessToken = getAccessToken();
         url = String.format(url,electricMeterDataCollectionParam.getCode(),electricMeterDataCollectionParam.getDeviceType()
                 ,electricMeterDataCollectionParam.getStartTime(),accessToken);
         String dataString = RestTemplateUtil.get(url);
@@ -226,4 +233,30 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         return result;
     }
 
+    /**
+     * 从redis中 获取仪表平台的token
+     * @return
+     */
+    private String getAccessToken(){
+        try {
+            //获取token前先判断是否可以进行获取
+            String flag = redisConfigStorage.getAccessTokenController();
+            //获取token超过指定次数则提示token获取异常
+            int number = 0;
+            while (!ElectricMeterEnum.ELECTRIC_GET_TOKEN_TRUE.getCode().equals(flag)) {
+                if (number == Integer.valueOf(ElectricMeterEnum.ELECTRIC_GET_TOKEN_TIMES.getCode())) {
+                    logger.info("仪表平台access_token获取失败! 网络异常");
+                    throw new JnSpringCloudException(ElectricMeterEnum.ELECTRIC_GET_TOKEN_DEFEAT);
+                }
+                Thread.sleep(Long.valueOf(ElectricMeterEnum.ELECTRIC_GET_TOKEN_TIME.getCode()));
+                number++;
+                flag = redisConfigStorage.getAccessTokenController();
+            }
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        String accessToken = redisConfigStorage.getAccessToken();
+        return accessToken;
+
+    }
 }

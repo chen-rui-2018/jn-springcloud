@@ -9,12 +9,14 @@ import com.jn.hardware.model.parking.door.DoorParkingMonthlyCardShow;
 import com.jn.hardware.model.parking.door.DoorParkingSpaceAmountShow;
 import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeResponse;
 import com.jn.hardware.parking.service.ParkingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * TODO：未添加类描述
+ * 智慧停车 内部调用接口实现
  *
  * @Author： cm
  * @Date： Created on 2019/4/17 16:06
@@ -23,6 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class ParkingController extends BaseController implements ParkingClient {
+    /**
+     * 日志组件
+     */
+    Logger logger = LoggerFactory.getLogger(ParkingController.this.getClass());
 
     @Autowired
     private ParkingService parkingService;

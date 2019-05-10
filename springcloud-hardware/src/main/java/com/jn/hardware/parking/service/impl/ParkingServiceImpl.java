@@ -343,7 +343,7 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingParam ,String requestUrl) {
+    public DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingParam ,String requestUrl,String parkId) {
         String signatureKey =  ParkingCompanyEnum.SIGNATURE_KEY.getMessage();
         String secretString = String.format("%s@#%s@#%s", requestUrl, doorCarInParkingParam.getT(), signatureKey);
 
@@ -379,7 +379,7 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public DoorResult saveDoorCarOutParkingInfo(DoorCarOutParkingParam doorCarOutParkingParam,String requestUrl) {
+    public DoorResult saveDoorCarOutParkingInfo(DoorCarOutParkingParam doorCarOutParkingParam,String requestUrl,String parkId) {
         String signatureKey =  ParkingCompanyEnum.SIGNATURE_KEY.getMessage();
         String secretString = String.format("%s@#%s@#%s", requestUrl, doorCarOutParkingParam.getT(), signatureKey);
 

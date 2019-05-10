@@ -209,7 +209,8 @@ public class ParkingServiceImplTest {
         doorCarInParkingParam.setSignature("SJDKLSJKLDJSKLSHJKSHDJKHJKHJK");
         doorCarInParkingParam.setT("1520416876");
         String url= "";
-        DoorResult result = parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url);
+        String parkId = "";
+        DoorResult result = parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url,parkId);
         logger.info("\n车场车辆入场信息,结果说明：{}",result.getBody());
 
     }
@@ -266,7 +267,8 @@ public class ParkingServiceImplTest {
         doorCarOutParkingParam.setT("1520416876");
         doorCarOutParkingParam.setSignature("SJDKLSJKLDJSKLSHJKSHDJKHJKHJK");
         String url = "";
-        DoorResult doorResult =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url);
+        String parkId = "";
+        DoorResult doorResult =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url,parkId);
         logger.info("\n车场车辆出场信息,结果说明：{}",doorResult.getBody());
     }
 

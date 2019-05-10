@@ -1,11 +1,11 @@
 ali:
-  notify_url: http://8ufttg.natappfree.cc/pay/aliPayNotifyRes
+  notify_url: http://8ufttg.natappfree.cc/xxpay-service/pay/aliPayNotifyRes
   return_url: http://www.baidu.com
 cert:
   root:
     path: /Users/dingzhiwei/java/tmp/cert
 wx:
-  notify_url: http://xxpay.ngrok.cc/notify/pay/wxPayNotifyRes
+  notify_url: http://xxpay.ngrok.cc/notify/xxpay-service/pay/wxPayNotifyRes
 
 
 eureka:

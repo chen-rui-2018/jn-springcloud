@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 智慧停车系统服务定时任务
  * @author： jiangyl
@@ -37,6 +39,18 @@ public class ParkingServerController extends BaseController implements ParkingCl
     public Result<Boolean> getOutParkingCarInfoList(){
         logger.info("定时同步匝道系统车辆出场数据---出场--");
         return new Result<>(parkingServerService.getOutParkingCarInfoList());
+    }
+
+    @ControllerLog(doAction = "道尔 车辆入场推送接口")
+    @Override
+    public Result<String> carJoinParking(List carList){
+        return new Result<>(parkingServerService.carJoinParking(carList));
+    }
+
+    @ControllerLog(doAction = "道尔 车辆出场推送接口")
+    @Override
+    public Result<String> carOutParking(List carList){
+        return new Result<>(parkingServerService.carOutParking(carList));
     }
 
 }

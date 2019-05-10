@@ -66,7 +66,7 @@ public class DynamicServiceImpl implements DynamicService {
     private TbCommentMapper tbCommentMapper;
 
 
-    @ServiceLog(doAction = "发布动态")
+    @ServiceLog(doAction = "发布匝道")
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int addDynamicInfo(DynamicAddParam dynamicAddParam, String dynamicId, String account) {

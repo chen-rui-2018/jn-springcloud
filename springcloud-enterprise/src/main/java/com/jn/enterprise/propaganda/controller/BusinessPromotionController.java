@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,7 @@ public class BusinessPromotionController extends BaseController {
     @ApiOperation(value = "(撤销申请)",notes ="propagandaId:宣传id,返回数据响应条数，正常为1" )
     @RequestMapping(value = "/cancelApprove",method = RequestMethod.POST)
     public Result<Integer> cancelApprove(String propagandaId){
+        Assert.notNull(propagandaId, BusinessPromotionExceptionEnum.PROPAGANDA_ID_NOT_NULL.getMessage());
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.warn("取消申请获取当前登录用户失败");
@@ -151,17 +153,16 @@ public class BusinessPromotionController extends BaseController {
 
     @ControllerLog(doAction = "提交审核")
     @RequiresPermissions("/propaganda/businessPromotionController/submitAudit")
-    @ApiOperation(value = "提交审核)",notes ="propagandaId:宣传id" )
+    @ApiOperation(value = "提交审核",notes ="propagandaId:宣传id" )
     @RequestMapping(value = "/submitAudit",method = RequestMethod.POST)
-    public Result<Integer> submitAudit(String propagandaId){
+    public Result<JSONObject> submitAudit(String propagandaId){
         Assert.notNull(propagandaId, BusinessPromotionExceptionEnum.PROPAGANDA_ID_NOT_NULL.getMessage());
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.warn("提交审核获取当前登录用户失败");
             return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        businessPromotionService.submitAudit(propagandaId,user.getAccount());
-        return  new Result();
+        return  new Result(businessPromotionService.submitAudit(propagandaId, user.getAccount()));
     }
 
     @ControllerLog(doAction = "获取宣传区域信息")

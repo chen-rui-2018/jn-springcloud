@@ -93,7 +93,7 @@
         ,t1.acti_organizer as "actiOrganizer"
         ,t2.code_name as "parkName"
         ,t1.acti_address as "actiAddress"
-        ,date_format(t1.acti_start_time,"%Y-%m-%d %H:%m:%s") as "actiStartTime"
+        , date_format(t1.acti_start_time,'%Y-%m-%d %H:%i:%s') as "actiStartTime"
         ,t1.acti_status as "actiStatus"
 
         from tb_activity t1
@@ -102,6 +102,9 @@
             where t1.record_status ='1' and t1.acti_status != '1' and  t1.id in (
             select activity_id from tb_activity_apply where creator_account = #{account} and apply_status=#{applyStatus}
             )
+            <if test = "actiName != null and actiName != '' ">
+                and t1.acti_name like  concat('%', #{actiName},'%')
+            </if>
     </select>
 
     <!--机构活动列表-->

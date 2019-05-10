@@ -5,8 +5,8 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.AdvisorManagementPortalMapper;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementPortalService;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
@@ -92,9 +92,9 @@ public class AdvisorManagementPortalServiceImpl implements AdvisorManagementPort
         AdvisorManagementDetailsVo advisorManagementDetailsVo =new AdvisorManagementDetailsVo();
         advisorManagementDetailsVo.setAdvisorIntroduction(advisorIntroduction);
         //顾问基本资料
-        TbServiceAdvisor tbServiceAdvisor = advisorService.getAdvisorInfoByAccount(advisorAccount);
+        AdvisorServiceInfo advisorServiceInfo = advisorService.getAdvisorInfoByAccount(advisorAccount, ApprovalStatusEnum.APPROVED.getValue());
         AdvisorBaseInfoParam advisorBaseInfoParam =new AdvisorBaseInfoParam();
-        BeanUtils.copyProperties(tbServiceAdvisor, advisorBaseInfoParam);
+        BeanUtils.copyProperties(advisorServiceInfo, advisorBaseInfoParam);
         advisorManagementDetailsVo.setAdvisorBaseInfoParam(advisorBaseInfoParam);
         //荣誉资质
         List<ServiceHonor> advisorHonorInfo = advisorService.getAdvisorHonorInfo(advisorAccount);

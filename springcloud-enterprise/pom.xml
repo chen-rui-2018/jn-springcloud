@@ -46,6 +46,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-news-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>xxpay-web-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -76,10 +80,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        advisor
+                        company
                     </contexts>
                     <tableNames>
-                        tb_service_advisor
+                        tb_service_company
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

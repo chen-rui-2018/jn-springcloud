@@ -130,7 +130,8 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                 //企业任务
                 if(StringUtils.isNotBlank(modleBean.getGroupId()) && modleBean.getModelType().toString().equals(DataUploadConstants.COMPANY_TYPE)){
                     groupCompanyCriteria.clear();
-                    groupCompanyCriteria.or().andGroupIdEqualTo(modleBean.getGroupId());
+                    groupCompanyCriteria.or().andGroupIdEqualTo(modleBean.getGroupId())
+                            .andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
                     List<TbDataReportingGroupCompany> fillInFormIdList = groupCompanyMapper.selectByExample(groupCompanyCriteria);
                     //创建任务
                     String date = modleBean.getFilllInFormDeadline();
@@ -179,7 +180,8 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                 //企业任务
                 if(modleBean.getModelType().toString().equals(DataUploadConstants.COMPANY_TYPE) && StringUtils.isNotBlank(modleBean.getGroupId())){
                     groupCompanyCriteria.clear();
-                    groupCompanyCriteria.or().andGroupIdEqualTo(modleBean.getGroupId());
+                    groupCompanyCriteria.or().andGroupIdEqualTo(modleBean.getGroupId())
+                            .andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
                     List<TbDataReportingGroupCompany> fillInFormIdList  = groupCompanyMapper.selectByExample(groupCompanyCriteria);
                     //创建任务
                     createConcretTaskForCompany(modleBean,taskBatch,formTime,fillInFormIdList,deadLine);
@@ -444,7 +446,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
         //tab信息固化
         TbDataReportingModelTabCriteria mtc = new TbDataReportingModelTabCriteria();
-        mtc.or().andModelIdEqualTo(model.getModelId());
+        mtc.or().andModelIdEqualTo(model.getModelId()).andStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbDataReportingModelTab> tabList = modelTabMapper.selectByExample(mtc);
         TbDataReportingSnapshotModelTab tab = null;
         List<String> tabId = new ArrayList<>();
@@ -493,7 +495,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
         //指标固化
         TbDataReportingTargetCriteria targetExample = new TbDataReportingTargetCriteria();
-        targetExample.or().andTargetIdIn(targets);
+        targetExample.or().andTargetIdIn(targets).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbDataReportingTarget> list = targetMapper.selectByExample(targetExample);
         TbDataReportingSnapshotTarget snapshotTarget =null;
         List<TbDataReportingSnapshotTarget> snapshotTargetList = new ArrayList<>();
@@ -509,7 +511,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
         }
         //指标填报格式固化
         TbDataReportingTargetGroupCriteria tgExample = new TbDataReportingTargetGroupCriteria();
-        tgExample.or().andTargetIdIn(targets);
+        tgExample.or().andTargetIdIn(targets).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
         List<TbDataReportingTargetGroup> targetGroupsList =  targetGroupMapper.selectByExample(tgExample);
         TbDataReportingSnapshotTargetGroup snapshotTargetGroup =null;
         List<TbDataReportingSnapshotTargetGroup> snapshotTargetGroupList = new ArrayList<>();
@@ -619,16 +621,14 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                     TbDataReportingGardenLinkerCriteria  gardenLinkerCriteria = new TbDataReportingGardenLinkerCriteria();
                                     gardenLinkerCriteria.or().andDepartmentIdEqualTo(fillerBean.getDepartmentId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
 
-                                    //todo 假装此处具有园区联系人的账号
                                     List<TbDataReportingGardenLinker> linkers =  tbDataReportingGardenLinkerMapper.selectByExample(gardenLinkerCriteria);
                                     if(linkers !=null && linkers.size()>0){
                                         User user;
                                         String  title="数据上报系统任务预警";
                                         for(TbDataReportingGardenLinker linkerBean :  linkers){
                                             //通过预警人账号查询，预警人的email
-                                            //String account = linkerBean.getUserAccount();
-                                            String account = "wangsong";
-                                            user = getUserInfo(account);
+                                            String userId = linkerBean.getLinkAccount();
+                                            user = getUserInfo(userId);
                                             if(StringUtils.isNotBlank(user.getEmail())){
                                                 message =new StringBuilder();
                                                 message.append("[数据上报系统] 任务名称 ：").append(taskBean.getTaskName());
@@ -656,8 +656,9 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                 for(TbServiceCompany  tbServiceCompanyBean : list){
                                     //todo 假装此处具有园区联系人的email号码
                                     //String email =tbServiceCompanyBean.getOwnerEmail();
-                                    email ="";
-                                    if(StringUtils.isNotBlank(email)){
+                                    String userId = tbServiceCompanyBean.getId();
+                                    User user = getUserInfo(userId);
+                                    if(StringUtils.isNotBlank(user.getEmail())){
                                         message =new StringBuilder();
                                         message.append("[数据上报系统] 任务名称 ：").append(taskBean.getTaskName());
                                         if(taskBean.getInLine() !=0){
@@ -687,17 +688,14 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                     //查询电话
                                     TbDataReportingGardenLinkerCriteria  gardenLinkerCriteria = new TbDataReportingGardenLinkerCriteria();
                                     gardenLinkerCriteria.or().andDepartmentIdEqualTo(fillerBean.getDepartmentId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
-
-                                    //todo 假装此处具有园区联系人的账号
                                     List<TbDataReportingGardenLinker> linkers =  tbDataReportingGardenLinkerMapper.selectByExample(gardenLinkerCriteria);
                                     if(linkers !=null && linkers.size()>0){
                                         User user;
                                         for(TbDataReportingGardenLinker linkerBean :  linkers){
 
                                             //通过预警人账号查询，预警人的手机号码
-                                            //String account = linkerBean.getUserAccount();
-                                            String account = "wangsong";
-                                            user = getUserInfo(account);
+                                            String userId = linkerBean.getLinkAccount();
+                                            user = getUserInfo(userId);
                                             if(StringUtils.isNotBlank(user.getPhone())){
                                                 phone  =user.getPhone();
                                                 message =new StringBuilder();
@@ -745,13 +743,13 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
     /**
      * 通过用户账号查询用户信息
-     * @param userAccount
+     * @param userId
      * @return
      */
-    private User getUserInfo(String userAccount){
+    private User getUserInfo(String userId){
         //通过预警人账号查询，预警人的手机号码
         User user = new User();
-        user.setAccount(userAccount);
+        user.setId(userId);
         Result<User> concurentUser = systemClient.getUser(user);
         return concurentUser.getData();
     }

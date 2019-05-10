@@ -48,6 +48,50 @@ public class DefaultFastDfsUploadClient implements FastDfsUploadClient{
 
     @Override
     public String uploadFile(MultipartFile file, User user,String fileGroupId) throws IOException {
+        fileGroupId=getFileGroupId(fileGroupId);
+        TokenContext.setContext(Boolean.FALSE);
+        StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()),null);
+        return getResAccessUrl(storePath,Boolean.FALSE,user,file.getName(),fileGroupId);
+    }
+
+    @Override
+    public String uploadNeedTokenFile(MultipartFile file,User user,String fileGroupId) throws IOException {
+        fileGroupId=getFileGroupId(fileGroupId);
+        TokenContext.setContext(Boolean.TRUE);
+        StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()),null);
+        return getResAccessUrl(storePath,Boolean.TRUE,user,file.getName(),fileGroupId);
+    }
+    /**
+     * 封装文件完整URL地址,并保存文件明细到数据库
+     * @param storePath
+     * @return
+     */
+    private String getResAccessUrl(StorePath storePath,Boolean isNeedToken,User user,String fileName,String fileGroupId) {
+        StringBuffer fileUrl = new StringBuffer();
+        String url = isNeedToken?fastDfsProperties.getUrl().getNeedToken():fastDfsProperties.getUrl().getNoNeedToken();
+        fileUrl.append(GlobalConstants.OVER_HTTP_PRODOCOL)
+                .append(url)
+                .append("/")
+                .append(storePath.getFullPath());
+        SysFile sysFile=new SysFile();
+        if(user!=null){
+            sysFile.setUserId(user.getId());
+        }
+
+        sysFile.setFileUrl(fileUrl.toString());
+        sysFile.setFileName(fileName);
+        sysFile.setFileGroupId(fileGroupId);
+
+        systemClient.insertSysFile(sysFile);
+        return fileUrl.toString();
+    }
+
+    /**
+     * 当文件组为空获取默认文件组
+     * @param fileGroupId
+     * @return
+     */
+    private String getFileGroupId(String fileGroupId){
         if(StringUtils.isEmpty(fileGroupId)){
             SysDictInvoke sysDictInvoke=new SysDictInvoke();
             //数据字典模块编码
@@ -67,41 +111,9 @@ public class DefaultFastDfsUploadClient implements FastDfsUploadClient{
             }
             fileGroupId=(String) result.getData();
 
+
         }
-        TokenContext.setContext(Boolean.FALSE);
-        StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()),null);
-        return getResAccessUrl(storePath,Boolean.FALSE,user,file.getName(),fileGroupId);
-    }
-
-    @Override
-    public String uploadNeedTokenFile(MultipartFile file,User user,String fileGroupId) throws IOException {
-        TokenContext.setContext(Boolean.TRUE);
-        StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()),null);
-        return getResAccessUrl(storePath,Boolean.TRUE,user,file.getName(),fileGroupId);
-    }
-    /**
-     * 封装文件完整URL地址,并保存文件明细到数据库
-     * @param storePath
-     * @return
-     */
-    private String getResAccessUrl(StorePath storePath,Boolean isNeedToken,User user,String fileName,String fileGroupId) {
-        StringBuffer fileUrl = new StringBuffer();
-        String url = isNeedToken?fastDfsProperties.getUrl().getNeedToken():fastDfsProperties.getUrl().getNoNeedToken();
-        fileUrl.append(GlobalConstants.HTTP_PRODOCOL)
-                .append(url)
-                .append("/")
-                .append(storePath.getFullPath());
-        SysFile sysFile=new SysFile();
-        if(user!=null){
-            sysFile.setUserId(user.getId());
-        }
-
-        sysFile.setFileUrl(fileUrl.toString());
-        sysFile.setFileName(fileName);
-        sysFile.setFileGroupId(fileGroupId);
-
-        systemClient.insertSysFile(sysFile);
-        return fileUrl.toString();
+        return  fileGroupId;
     }
 
 }

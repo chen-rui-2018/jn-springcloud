@@ -52,6 +52,12 @@ public class TbSpPower implements Serializable {
     /*@ApiModelProperty("备注")*/
     private String notes;
 
+    /*@ApiModelProperty("首页显示顺序")*/
+    private Integer indexOrder;
+
+    /*@ApiModelProperty("热门显示顺序")*/
+    private Integer hotOrder;
+
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Integer recordStatus;
 
@@ -197,6 +203,22 @@ public class TbSpPower implements Serializable {
         this.notes = notes == null ? null : notes.trim();
     }
 
+    public Integer getIndexOrder() {
+        return indexOrder;
+    }
+
+    public void setIndexOrder(Integer indexOrder) {
+        this.indexOrder = indexOrder;
+    }
+
+    public Integer getHotOrder() {
+        return hotOrder;
+    }
+
+    public void setHotOrder(Integer hotOrder) {
+        this.hotOrder = hotOrder;
+    }
+
     public Integer getRecordStatus() {
         return recordStatus;
     }
@@ -265,6 +287,8 @@ public class TbSpPower implements Serializable {
             && (this.getIsQinzhengfa() == null ? other.getIsQinzhengfa() == null : this.getIsQinzhengfa().equals(other.getIsQinzhengfa()))
             && (this.getIsQubianban() == null ? other.getIsQubianban() == null : this.getIsQubianban().equals(other.getIsQubianban()))
             && (this.getNotes() == null ? other.getNotes() == null : this.getNotes().equals(other.getNotes()))
+            && (this.getIndexOrder() == null ? other.getIndexOrder() == null : this.getIndexOrder().equals(other.getIndexOrder()))
+            && (this.getHotOrder() == null ? other.getHotOrder() == null : this.getHotOrder().equals(other.getHotOrder()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -292,6 +316,8 @@ public class TbSpPower implements Serializable {
         result = prime * result + ((getIsQinzhengfa() == null) ? 0 : getIsQinzhengfa().hashCode());
         result = prime * result + ((getIsQubianban() == null) ? 0 : getIsQubianban().hashCode());
         result = prime * result + ((getNotes() == null) ? 0 : getNotes().hashCode());
+        result = prime * result + ((getIndexOrder() == null) ? 0 : getIndexOrder().hashCode());
+        result = prime * result + ((getHotOrder() == null) ? 0 : getHotOrder().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -322,6 +348,8 @@ public class TbSpPower implements Serializable {
         sb.append(", isQinzhengfa=").append(isQinzhengfa);
         sb.append(", isQubianban=").append(isQubianban);
         sb.append(", notes=").append(notes);
+        sb.append(", indexOrder=").append(indexOrder);
+        sb.append(", hotOrder=").append(hotOrder);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

@@ -2,6 +2,7 @@ package com.jn.park.sp.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.company.model.ServiceCompanyParam;
 import com.jn.park.sp.model.SpAdModel;
 import com.jn.park.sp.model.SpDictDepartModel;
 import com.jn.park.sp.model.SpMessageModel;
@@ -79,4 +80,11 @@ public interface SpPowerPortalService {
      * @return
      */
     String getDealUrl(String id);
+
+    /**
+     * 把行政审批指南推送给全部企业
+     * @param powerBusiIds
+     * @param userId
+     */
+    Integer pushPowerBusiBatch(String powerBusiIds, ServiceCompanyParam serviceCompanyParam, String userId);
 }

@@ -42,24 +42,24 @@
       </div>
       <!-- 在线预约弹窗 -->
       <div class="online_appointment">
-        <el-dialog title="我要留言" :visible.sync="appointmentVisible" width="616px" >
-          <el-form :model="appointment" label-position="left" label-width="100px">
-            <el-form-item label="预约项：" > 
+        <el-dialog title="在线预约" :visible.sync="appointmentVisible" width="616px" >
+          <el-form :model="appointment" label-position="left" label-width="100px" :rules="rules">
+            <el-form-item label="预约项："  prop="appointmentItemName"> 
               <el-input v-model="appointment.appointmentItemName" placeholder="请输入内容   默认填入当前企业名称"></el-input>
             </el-form-item>
-            <el-form-item label="预约人：">
+            <el-form-item label="预约人：" prop="contactName">
               <el-input v-model="appointment.contactName" placeholder="请输入内容   默认填入企业联系人姓名"></el-input>
             </el-form-item>
-            <el-form-item label="联系电话：">
+            <el-form-item label="联系电话：" prop="contactPhone">
               <el-input v-model="appointment.contactPhone" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
             </el-form-item>
-            <el-form-item label="电子邮箱：">
+            <el-form-item label="电子邮箱：" prop="email">
               <el-input v-model="appointment.email" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
             </el-form-item>
-            <el-form-item label="申报企业：">
+            <el-form-item label="申报企业：" prop="declareEnterprise">
               <el-input v-model="appointment.declareEnterprise" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
             </el-form-item>
-            <el-form-item label="申报名称：">
+            <el-form-item label="申报名称：" prop="declareItem">
               <el-input v-model="appointment.declareItem" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
             </el-form-item>
             <!-- 附件 -->
@@ -86,7 +86,7 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="submit">提  交</el-button>
-            <el-button type="primary" @click="messageVisible = false">取  消</el-button>
+            <el-button type="primary" @click="appointmentVisible = false">取  消</el-button>
           </div>
         </el-dialog>
       </div>
@@ -122,7 +122,27 @@ export default {
         declareItem:""//申报项目名称
       },
       headers:{headers:''},
-      fileList:[]
+      fileList:[],
+      rules:{
+        appointmentItemName:[
+          { required: true, message: '企业名称不能为空'}
+        ],
+        contactName:[
+          { required: true, message: '联系人不能为空'}
+        ],
+        contactPhone:[
+          { required: true, message: '联系电话不能为空'}
+        ],
+        email:[
+          { required: true, message: '内容不能为空'}
+        ],
+        declareEnterprise:[
+          { required: true, message: '内容不能为空'}
+        ],
+       declareItem:[
+         { required: true, message: '内容不能为空'}
+       ]
+      }
     }
   },
   filters: {
@@ -320,6 +340,11 @@ export default {
       }
       // 在线预约弹窗
       .online_appointment{
+        .el-dialog__header{
+          .el-dialog__headerbtn .el-dialog__close:hover{
+            color:#00a041;
+          }
+        }
         .el-dialog__body{
           padding: 26px 79px 12px 79px;
           border-bottom: 1px solid #ccc;
@@ -327,7 +352,10 @@ export default {
             line-height: 1;
           }
           .el-form-item{
-            margin-bottom: 13px;
+            margin-bottom: 22px;
+          }
+          input:focus { 
+            border-color:#00a041; 
           }
         }
         .el-upload--picture-card{ 
@@ -338,6 +366,7 @@ export default {
         .content_textarea{
               // border: 1px solid #DCDFE6;
               // border-radius: 5px;
+              textarea{outline: none;}
           textarea{
             padding: 8px 15px;
             resize: none;
@@ -388,7 +417,6 @@ export default {
           .el-button{
             padding: 7px 20px;
             border-radius: 5px;
-          
           }
           button:nth-child(1){
             border: solid 1px #41d787;
@@ -402,6 +430,9 @@ export default {
             border:1px solid #00a041;
           }
         }
+        textarea:focus { 
+            border-color:#00a041; 
+          }
       }
       // 电话号码
       .telephone{

@@ -17,6 +17,8 @@ public class BusinessPromotionListShow implements Serializable {
     private String orderNum;
     @ApiModelProperty(value = "宣传类型")
     private String propagandaType;
+    @ApiModelProperty(value = "宣传类型名称")
+    private String propagandaTypeName;
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "宣传编码")
@@ -39,6 +41,8 @@ public class BusinessPromotionListShow implements Serializable {
     private String propagandaArea;
     @ApiModelProperty(value = "数据状态(0:无效/未上架  1:有效/以上架      审批通过，但未上架属于”待发布“，审批通过，已上架属于“已发布”)")
     private String status;
+    @ApiModelProperty(value = "创建时间")
+    private String createdTime;
 
 
     public String getOrderNum() {
@@ -55,6 +59,14 @@ public class BusinessPromotionListShow implements Serializable {
 
     public void setPropagandaType(String propagandaType) {
         this.propagandaType = propagandaType;
+    }
+
+    public String getPropagandaTypeName() {
+        return propagandaTypeName;
+    }
+
+    public void setPropagandaTypeName(String propagandaTypeName) {
+        this.propagandaTypeName = propagandaTypeName;
     }
 
     public String getId() {
@@ -145,6 +157,14 @@ public class BusinessPromotionListShow implements Serializable {
         this.status = status;
     }
 
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
     @Override
     public String toString() {
         return "BusinessPromotionListShow{" +
@@ -161,6 +181,7 @@ public class BusinessPromotionListShow implements Serializable {
                 ", approvalStatus='" + approvalStatus + '\'' +
                 ", propagandaArea='" + propagandaArea + '\'' +
                 ", status='" + status + '\'' +
+                ", createTime='" + createdTime + '\'' +
                 '}';
     }
 }

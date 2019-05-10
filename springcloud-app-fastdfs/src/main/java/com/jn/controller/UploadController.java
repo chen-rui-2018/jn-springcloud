@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -48,7 +49,8 @@ public class UploadController {
      * @throws IOException
      */
     @RequestMapping("/upload/fastUpload")
-    public Result<String> uploadByLogin(@RequestParam("file") MultipartFile file,@RequestParam("fileGroupId") String fileGroupId) throws IOException{
+    public Result<String> uploadByLogin(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException{
+        String fileGroupId= request.getParameter("fileGroupId");
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(file,"文件不能为空");
         String data=fastDfsUploadClient.uploadFile(file,user,fileGroupId);
@@ -61,7 +63,8 @@ public class UploadController {
      * @throws IOException
      */
     @RequestMapping("/upload/token/fastUpload")
-    public Result<String> uploadByLoginUseToken(@RequestParam("file") MultipartFile file,@RequestParam("fileGroupId") String fileGroupId) throws IOException{
+    public Result<String> uploadByLoginUseToken(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException{
+        String fileGroupId= request.getParameter("fileGroupId");
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(file,"文件不能为空");
         Assert.notNull(fileGroupId,"文件组id不能为空");

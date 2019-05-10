@@ -73,9 +73,9 @@ public class RequireManagementController extends BaseController {
     }
 
     @ControllerLog(doAction = "对他人的需求列表查询")
-    @ApiOperation(value = "对他人的需求列表查询")
+    @ApiOperation(value = "对他人的需求列表查询,(pc/app需求管理)")
     @RequiresPermissions("/serviceMarket/requireManagementController/getRequireOtherList")
-    @RequestMapping(value = "/getRequireOtherList,(pc/app需求管理)",method = RequestMethod.GET)
+    @RequestMapping(value = "/getRequireOtherList",method = RequestMethod.GET)
     public Result<PaginationData<List<RequireInfoList>>> getRequireOtherList(@Validated RequireOtherParam requireOtherParam){
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();

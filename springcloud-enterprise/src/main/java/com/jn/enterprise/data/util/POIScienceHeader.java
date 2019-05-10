@@ -1,13 +1,14 @@
 package com.jn.enterprise.data.util;
 
-
 import com.jn.enterprise.data.model.CompanyTree;
 import com.jn.enterprise.data.tool.GetCompanyTree;
-import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.util.CellRangeAddress;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,34 +20,29 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * 科技园模板
- *
- */
-public class POIScience {
+public class POIScienceHeader {
 
 
+    public void getScienceHeaderTable(List<CompanyTree> list,HttpServletRequest req,
+                                             HttpServletResponse resp)throws IOException {
 
-    public  void getScienceTable(List<CompanyTree> list,  HttpServletRequest req,
-                                       HttpServletResponse resp)throws IOException {
 
-
-        Date date =new Date();
-        SimpleDateFormat sdf =new SimpleDateFormat("yyyyMMddHHmmss");
-        String time =sdf.format(date);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String time = sdf.format(date);
         String filename = time; //设置文件名
-        resp.setHeader("Content-Disposition", "attachment;filename=File" + time +".xlsx");
+        resp.setHeader("Content-Disposition", "attachment;filename=File" + time + ".xlsx");
         resp.setContentType("application/vnd.ms-excel;charset=UTF-8");//设置类型
         resp.setHeader("Cache-Control", "no-cache");//设置头
         resp.setDateHeader("Expires", 0);//设置日期头
 
-
+        //转换成树形
         GetCompanyTree getCompanyTree = new GetCompanyTree();
         List<CompanyTree> treeList = getCompanyTree.bulidscience(list);
         List<Map> treeList2 = getCompanyTree.bulid(list);
         List<CompanyTree> companyTreeslist = getCompanyTree.bulidlist(treeList);
 
+        System.out.println("+++++++================++++++++="+companyTreeslist.size());
 
         //构建HSSFWorkBook
         HSSFWorkbook wb = new HSSFWorkbook();
@@ -59,16 +55,16 @@ public class POIScience {
         //文件名
         HSSFSheet sheet = wb.createSheet(filename);
 
-        int length=0;
+        int length = 0;
 
         //得到最长指标值
-        for (CompanyTree tree:companyTreeslist
-             ) {
+        for (CompanyTree tree : companyTreeslist
+        ) {
             String d1 = tree.getDATA();
             String[] d2 = d1.split(";");
             int nlen = d2.length;
-            if(nlen>length){
-                length=nlen;
+            if (nlen > length) {
+                length = nlen;
             }
         }
 
@@ -78,13 +74,13 @@ public class POIScience {
         HSSFRow headrow1 = sheet.createRow(0);
 
         //得到数值行数
-        HSSFRow[] row =new HSSFRow[length];
-        for(int j=0;j<length;j++){
-            HSSFRow headrow2 = sheet.createRow(j+1);
-            row[j]=headrow2;
+        HSSFRow[] row = new HSSFRow[length];
+        for (int j = 0; j < length; j++) {
+            HSSFRow headrow2 = sheet.createRow(j + 1);
+            row[j] = headrow2;
         }
 
-        for(int i=0;i<companyTreeslist.size();i++) {
+        for (int i = 0; i < companyTreeslist.size(); i++) {
 
             //得到指标值的长度
             String fa = companyTreeslist.get(i).getDATA();
@@ -96,12 +92,6 @@ public class POIScience {
             cell.setCellStyle(headstyle);
             cell.setCellValue(companyTreeslist.get(i).getTargetname());
 
-
-            //填充值
-            for (int k=0;k<len;k++){
-                row[k].createCell(lent).setCellValue(fa2[k]);
-            }
-            lent++;
         }
 
 
@@ -111,10 +101,7 @@ public class POIScience {
 
         wb.close();
 
+
     }
-
-
-
-
 
 }

@@ -63,7 +63,7 @@
 
 
     <!--添加消息-->
-    <insert id="addMessage" parameterType="com.jn.park.message.model.addMessageModel">
+    <insert id="addMessage" parameterType="com.jn.park.message.model.AddMessageModel">
         insert into tb_message_list (
             id,
             message_title,

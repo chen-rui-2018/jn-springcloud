@@ -104,10 +104,9 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             logger.warn("当前账号{}在服务机构表中不存在",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
         }
-        //审批状态为“解除（value="4"）”，“审批不通过（value="3"）”
         List<String>approvalStatus=new ArrayList<>(8);
-        approvalStatus.add("3");
-        approvalStatus.add("4");
+        approvalStatus.add(ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue());
+        approvalStatus.add(ApprovalStatusEnum.LIFTED.getValue());
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andOrgIdEqualTo(serviceOrgInfo.getOrgId())
                 .andAdvisorAccountEqualTo(registerAccount)
@@ -419,11 +418,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             logger.warn("当前账号{}在服务机构表中不存在",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
         }
-        //判断顾问表中是否已存在当前机构和顾问关联的数据（状态为已拒绝（value="-1"））
+        //判断顾问表中是否已存在当前机构和顾问关联的数据（状态为已拒绝（value="3"））
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andOrgIdEqualTo(serviceOrgInfo.getOrgId())
                 .andAdvisorAccountEqualTo(advisorAccount)
-                .andApprovalStatusEqualTo("-1")
+                .andApprovalStatusEqualTo(ApprovalStatusEnum.REFUSED.getValue())
                 .andRecordStatusEqualTo(RECORD_STATUS);
         long existNum = tbServiceAdvisorMapper.countByExample(example);
         //没有数据
@@ -433,8 +432,14 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         }
         //修改当前邀请顾问的审批状态为未反馈（value="0"）
         int responseNum = updateApprovalStatus(advisorAccount, "0", "");
-        //3.todo:调用消息接口，向被邀顾问发送短信或邮件（顾问可通过信息中的链接直接跳转到接收机构邀请页面） yangph
-        return responseNum;
+        //3调用消息接口，向被邀顾问发送信息
+        Result<String> result = sendInvestorMessage(advisorAccount, loginAccount, serviceOrgInfo);
+        if(GlobalConstants.SUCCESS_CODE.equals(result.getCode())){
+            return responseNum;
+        }else{
+            logger.warn("机构邀请顾问调用消息接口失败");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.NETWORK_ANOMALY);
+        }
     }
 
     /**

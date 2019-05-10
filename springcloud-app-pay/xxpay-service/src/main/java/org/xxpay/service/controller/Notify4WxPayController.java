@@ -53,7 +53,7 @@ public class Notify4WxPayController extends Notify4BasePay {
 	 * @throws ServletException
 	 * @throws IOException
      */
-	@RequestMapping("/pay/wxPayNotifyRes.htm")
+	@RequestMapping("/pay/wxPayNotifyRes")
 	@ResponseBody
 	public String wxPayNotifyRes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		return doWxPayRes(request, response);

@@ -53,7 +53,7 @@ public class Notify4AliPayController extends Notify4BasePay {
 	 * @throws ServletException
 	 * @throws IOException
      */
-	@RequestMapping(value = "/pay/aliPayNotifyRes.htm")
+	@RequestMapping(value = "/pay/aliPayNotifyRes")
 	public void aliPayNotifyRes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String result =  doAliPayRes(request, response);
 		if(result != null) {

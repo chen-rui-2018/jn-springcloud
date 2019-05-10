@@ -3,6 +3,7 @@ package org.xxpay.mgr.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jn.pay.enums.ChannelIdEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.util.DateUtil;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.dal.dao.model.PayChannel;
@@ -73,10 +73,10 @@ public class PayChannelController {
         String channelId = po.getString("channelId");
         String param = po.getString("param");
         // 对于配置支付宝参数时,前端将+号转为空格bug处理
-        if(PayConstant.PAY_CHANNEL_ALIPAY_MOBILE.equals(channelId) ||
-                PayConstant.PAY_CHANNEL_ALIPAY_PC.equals(channelId) ||
-                PayConstant.PAY_CHANNEL_ALIPAY_WAP.equals(channelId) ||
-                PayConstant.PAY_CHANNEL_ALIPAY_QR.equals(channelId)) {
+        if(ChannelIdEnum.ALIPAY_MOBILE.getCode().equals(channelId) ||
+                ChannelIdEnum.ALIPAY_PC.getCode().equals(channelId) ||
+                ChannelIdEnum.ALIPAY_WAP.getCode().equals(channelId) ||
+                ChannelIdEnum.ALIPAY_QR.getCode().equals(channelId)) {
             JSONObject paramObj = null;
             try{
                 paramObj = JSON.parseObject(po.getString("param"));

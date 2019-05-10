@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.util.DateUtil;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.common.util.PayDigestUtil;
@@ -96,7 +95,7 @@ public class RefundOrderController {
             int ret = goodsOrderService.update(go);
             _log.info("修改商品订单,返回:{}", ret);
         }
-        if(PayConstant.PAY_CHANNEL_ALIPAY_MOBILE.equalsIgnoreCase(channelId)) return orderMap.get("payParams");
+        if("ALIPAY_MOBILE".equalsIgnoreCase(channelId)) return orderMap.get("payParams");
         return orderMap.get("payUrl");
     }
 

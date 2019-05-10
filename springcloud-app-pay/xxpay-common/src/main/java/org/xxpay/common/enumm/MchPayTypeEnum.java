@@ -9,8 +9,6 @@ package org.xxpay.common.enumm;
  * @Modified By:
  */
 public enum MchPayTypeEnum {
-
-    //缴费类型对应的商户ID
     //房租
     RENT("01", "10000000")
     //物品租赁费

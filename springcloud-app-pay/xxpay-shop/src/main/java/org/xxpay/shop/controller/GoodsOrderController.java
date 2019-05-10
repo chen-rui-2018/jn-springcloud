@@ -2,14 +2,14 @@ package org.xxpay.shop.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jn.pay.enums.ChannelIdEnum;
+import org.xxpay.common.enumm.MchPayTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.xxpay.common.constant.PayConstant;
-import org.xxpay.common.enumm.MchPayTypeEnum;
 import org.xxpay.common.util.*;
 import org.xxpay.shop.dao.model.GoodsOrder;
 import org.xxpay.shop.service.GoodsOrderService;
@@ -464,7 +464,7 @@ public class GoodsOrderController {
             int ret = goodsOrderService.update(go);
             _log.info("修改商品订单,返回:{}", ret);
         }
-        if(PayConstant.PAY_CHANNEL_ALIPAY_MOBILE.equalsIgnoreCase(channelId)) return orderMap.get("payParams");
+        if(ChannelIdEnum.ALIPAY_MOBILE.getCode().equalsIgnoreCase(channelId)) return orderMap.get("payParams");
         return orderMap.get("payUrl");
     }
 

@@ -2,24 +2,24 @@ package org.xxpay.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jn.common.model.Result;
+import com.jn.pay.api.RefundOrderClient;
+import com.jn.pay.model.RefundOrderReq;
+import com.jn.pay.model.RefundOrderRsp;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.xxpay.common.constant.PayConstant;
-import org.xxpay.common.enumm.MchPayTypeEnum;
+import org.xxpay.common.constant.PayEnum;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.common.util.MySeq;
-import org.xxpay.common.util.XXPayUtil;
 import org.xxpay.web.service.MchInfoServiceClient;
 import org.xxpay.web.service.PayChannelServiceClient;
 import org.xxpay.web.service.PayOrderServiceClient;
 import org.xxpay.web.service.RefundOrderServiceClient;
-
-import java.util.Map;
 
 /**
  * @Description: 退款订单
@@ -29,12 +29,9 @@ import java.util.Map;
  * @Copyright: www.xxpay.org
  */
 @RestController
-public class RefundOrderController {
+public class RefundOrderController implements RefundOrderClient {
 
     private final MyLog _log = MyLog.getLog(RefundOrderController.class);
-
-    @Autowired
-    private DiscoveryClient client;
 
     @Autowired
     private RefundOrderServiceClient refundOrderServiceClient;
@@ -54,108 +51,96 @@ public class RefundOrderController {
      * 2)验证通过创建退款订单
      * 3)根据商户选择渠道,调用退款服务进行下单
      * 4)返回下单数据
-     * @param params
+     * @param refundOrderReq
      * @return
-     */
-    @RequestMapping(value = "/refund/create_order")
-    public String payOrder(@RequestParam String params) {
+    */
+    @Override
+    public Result<RefundOrderRsp> createRefundOrder(@RequestBody @Validated RefundOrderReq refundOrderReq) {
         _log.info("###### 开始接收商户统一退款请求 ######");
         String logPrefix = "【商户统一退款】";
         try {
-            JSONObject po = JSONObject.parseObject(params);
             JSONObject refundContext = new JSONObject();
             JSONObject refundOrder = null;
             // 验证参数有效性
-            Object object = validateParams(po, refundContext);
+            Object object = validateParams(refundOrderReq, refundContext);
             if (object instanceof String) {
                 _log.info("{}参数校验不通过:{}", logPrefix, object);
-                return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, object.toString(), null, null));
+                return new Result(PayEnum.ERR_0014.getCode(),(String)object);
             }
             if (object instanceof JSONObject) {
                 refundOrder = (JSONObject) object;
             }
             if(refundOrder == null) {
-                return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "支付中心退款失败", null, null));
+                return new Result(PayEnum.ERR_0010.getCode(),"支付中心退款失败");
             }
             //创建退款单
             String result = refundOrderServiceClient.createRefundOrder(refundOrder.toJSONString());
             _log.info("{}创建退款订单,结果:{}", logPrefix, result);
             if(StringUtils.isEmpty(result)) {
-                return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "创建退款订单失败", null, null));
+                return new Result(PayEnum.ERR_0010.getCode(),"创建退款订单失败");
             }
             // 发送异步退款消息
             String refundOrderId = refundOrder.getString("refundOrderId");
             String channelName = refundContext.getString("channelName");
-
             refundOrderServiceClient.sendRefundNotify(refundOrderId, channelName);
             _log.info("{}发送退款任务完成,transOrderId={}", logPrefix, refundOrderId);
-
-            Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
-            map.put("refundOrderId", refundOrder.getString("refundOrderId"));
-            return XXPayUtil.makeRetData(map, refundContext.getString("resKey"));
+            //返回结果
+            RefundOrderRsp refundOrderRsp = new RefundOrderRsp();
+            refundOrderRsp.setRefundOrderId(refundOrder.getString("refundOrderId"));
+            return new Result(refundOrderRsp);
         }catch (Exception e) {
-            _log.error(e, "");
-            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "支付中心系统异常", null, null));
+            _log.error(e, "退款下单失败!");
+            return new Result(PayEnum.ERR_0010.getCode(),"支付中心系统异常");
         }
     }
 
     /**
-     * 验证创建订单请求参数,参数通过返回JSONObject对象,否则返回错误文本信息
-     * @param params
+     * 验证创建退款订单请求参数,参数通过返回JSONObject对象,否则返回错误文本信息
+     * @param refundOrderReq
+     * @param refundContext
      * @return
      */
-    private Object validateParams(JSONObject params, JSONObject refundContext) {
+    private Object validateParams(RefundOrderReq refundOrderReq, JSONObject refundContext) {
         // 验证请求参数,参数有问题返回错误提示
         String errorMessage;
         // -------------------支付参数------------------------
-        //缴费类型
-        String payType = params.getString("payType");
+        //商品ID(mchIdEnum枚举类)
+        String mchId = refundOrderReq.getMchId();
         // 支付订单号
-        String payOrderId = params.getString("payOrderId");
+        String payOrderId = refundOrderReq.getPayOrderId();
         // 商户支付单号
-        String mchOrderNo = params.getString("mchOrderNo");
+        String mchOrderNo = refundOrderReq.getMchOrderNo();
         // 商户退款单号
-        String mchRefundNo = params.getString("mchRefundNo");
+        String mchRefundNo = refundOrderReq.getMchRefundNo();
         // 渠道ID
-        String channelId = params.getString("channelId");
+        String channelId = refundOrderReq.getChannelId();
         // 退款金额（单位分）
-        String amount = params.getString("amount");
+        String amount = refundOrderReq.getAmount().toString();
         // 币种
         String currency = PayConstant.PAY_RMB;
         // 客户端IP
-        String clientIp = params.getString("clientIp");
+        String clientIp = refundOrderReq.getClientIp();
         // 设备
-        String device = params.getString("device");
+        String device = refundOrderReq.getDevice();
         // 特定渠道发起时额外参数
-        String extra = params.getString("extra");
+        String extra = refundOrderReq.getExtra();
         // 扩展参数1
-        String param1 = params.getString("param1");
+        String param1 = refundOrderReq.getParam1();
         // 扩展参数2
-        String param2 = params.getString("param2");
+        String param2 = refundOrderReq.getParam2();
         // 转账结果回调URL
-        String notifyUrl = params.getString("notifyUrl");
-        // 签名
-        String sign = params.getString("sign");
-        // 渠道用户标识,如微信openId,支付宝账号
-        String channelUser = params.getString("channelUser");
-        // 用户姓名
-        String userName = params.getString("userName");
-        // 备注
-        String remarkInfo = params.getString("remarkInfo");
-        //商品ID(通过缴费类型获取)
-        String mchId = "";
+        String notifyUrl = refundOrderReq.getNotifyUrl();
 
-        // 验证请求参数有效性（必选项）
-        if(StringUtils.isBlank(payType)) {
-            errorMessage = "request params[payType] error.";
-            return errorMessage;
-        }else{
-            //通过缴费类型获取商品ID
-            mchId = MchPayTypeEnum.getMchPayTypeEnum(payType) == null ? "" : MchPayTypeEnum.getMchPayTypeEnum(payType).getMchId();
-        }
+        // 渠道用户标识,如微信openId,支付宝账号
+        String channelUser = refundOrderReq.getChannelUser();
+        // 用户姓名
+        String userName = refundOrderReq.getUserName();
+        // 备注
+        String remarkInfo = refundOrderReq.getRemarkInfo();
+
 
         if(StringUtils.isBlank(mchId)) {
-            errorMessage = "request params[payType]  Can't find.";
+            errorMessage = "request params[mchId]  Can't find.";
             return errorMessage;
         }
         if(StringUtils.isBlank(payOrderId) && StringUtils.isBlank(mchOrderNo)) {
@@ -183,12 +168,6 @@ public class RefundOrderController {
             return errorMessage;
         }
 
-        // 签名信息
-        if (StringUtils.isEmpty(sign)) {
-            errorMessage = "request params[sign] error.";
-            return errorMessage;
-        }
-
         // 查询商户信息
         JSONObject mchInfo;
         String retStr = mchInfoServiceClient.selectMchInfo(getJsonParam("mchId", mchId));
@@ -210,14 +189,6 @@ public class RefundOrderController {
             return errorMessage;
         }
 
-
-        String reqKey = mchInfo.getString("reqKey");
-        if (StringUtils.isBlank(reqKey)) {
-            errorMessage = "reqKey is null[mchId="+mchId+"] record in db.";
-            return errorMessage;
-        }
-        refundContext.put("resKey", mchInfo.getString("resKey"));
-
         // 查询商户对应的支付渠道
         JSONObject payChannel;
         retStr = payChannelServiceClient.selectPayChannel(getJsonParam(new String[]{"channelId", "mchId"}, new String[]{channelId, mchId}));
@@ -238,15 +209,6 @@ public class RefundOrderController {
             return errorMessage;
         }
         refundContext.put("channelName", payChannel.getString("channelName"));
-
-
-
-        // 验证签名数据
-        boolean verifyFlag = XXPayUtil.verifyPaySign(params, reqKey);
-        if(!verifyFlag) {
-            errorMessage = "Verify XX refund sign failed.";
-            return errorMessage;
-        }
 
         // 验证支付订单是否存在
         JSONObject payOrder;

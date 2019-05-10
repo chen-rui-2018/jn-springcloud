@@ -391,9 +391,12 @@ public class DataModelServiceImpl implements DataModelService {
         for (int tabIndex=0 ,tabSize =tabPOList.size();tabIndex<tabSize;tabIndex++) {
             tabVO = new TabVO();
             BeanUtils.copyProperties(tabPOList.get(tabIndex),tabVO);
-            if(tabPOList.get(tabIndex).getTabCreateType().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+            if(tabPOList.get(tabIndex).getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                tabVO.setTabClumnType(null);
+            }else{
                 tabVO.setTabClumnType(tabPOList.get(tabIndex).getTabClumnType().toString());
             }
+            tabVO.setTabCreateType(tabPOList.get(tabIndex).getTabCreateType().toString());
 
             tabVO.setStatus(tabPOList.get(tabIndex).getStatus().toString());
 

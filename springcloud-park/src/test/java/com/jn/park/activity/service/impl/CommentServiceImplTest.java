@@ -5,7 +5,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
 import com.jn.park.activity.dao.TbParkLikeMapper;
 import com.jn.park.activity.entity.TbParkLikeCriteria;
-import com.jn.park.comment.model.CommentAddParam;
+import com.jn.park.activity.model.CommentAddParam;
 import com.jn.park.comment.service.CommentService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.enums.CommentExceptionEnum;
@@ -95,7 +95,7 @@ public class CommentServiceImplTest {
     @Test
     public void commentActivity() {
         try {
-            commentService.commentActivity(commentAddParam, account);
+            commentService.commentActivity(commentAddParam);
             assertThat(anything(),anything());
         } catch (Exception e) {
             logger.info("活动评论/回复失败");

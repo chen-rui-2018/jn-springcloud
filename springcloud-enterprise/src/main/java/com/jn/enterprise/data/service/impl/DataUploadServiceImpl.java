@@ -618,7 +618,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             for(int index=0,size=tabColumnType.length;index<size;index++){
                 List<InputFormatModel> history =  getLastValue(fillInId,modelId,tabId,formTime,modelCycle,tabColumnType[index],inputFormatModelList);
                 if(tabColumnType[index].equals(DataUploadConstants.AMPLIFICATION)){
-                    otherColumn.put(getLastFormTime(modelCycle,formTime,tabColumnType[index]),history);
+                    otherColumn.put("增幅",history);
                 }else if(tabColumnType[index].equals(DataUploadConstants.LAST_MONTH_LAST_YEAR)){
                     otherColumn.put(getLastFormTime(modelCycle,formTime,tabColumnType[index]),history);
                 }else if(tabColumnType[index].equals(DataUploadConstants.LAST_MONTH)){
@@ -793,7 +793,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                                                 if(dValue>0){
                                                     //大于等于零
                                                     dValue = dValue * 100;
-                                                    value = String.valueOf(dValue).substring(0,4)+"%";
+                                                    value = String.valueOf(dValue).substring(0,3)+"%";
                                                 }else if(dValue==0){
                                                     value="0%";
                                                 }else{
@@ -930,9 +930,14 @@ public class DataUploadServiceImpl implements DataUploadService {
 
             for(int pos=0,length=currentData.length;pos<length;pos++){
                 //当前正在处理的指标的名称
-                String targetName = title[pos];
+                String targetName = title[pos].trim();
                 //当前的值
                 content=currentData[pos];
+
+                if("null".equals(content)){
+                    content = "";
+                }
+
                 //通过名称来查找，其在数据库中的指标Id和填报格式Id
                 TbDataReportingSnapshotTarget currentTarget  = findTarget(targetName,targetList);
 
@@ -960,7 +965,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                 taskData = new TbDataReportingTaskData();
                 taskData.setTabId(companyName);
                 taskData.setFillId(fillId);
-                taskData.setTargetId(currentTarget.getTargetId());
+                taskData.setTargetId(currentTargetGroups.getTargetId());
                 taskData.setFallInFormId(UUID.randomUUID().toString().replaceAll("-",""));
                 taskData.setData(content);
                 taskData.setRowNum(0);
@@ -1005,6 +1010,7 @@ public class DataUploadServiceImpl implements DataUploadService {
         taskCriteria.or().andFillIdEqualTo(fillId);
         TbDataReportingTask taskRecord =new TbDataReportingTask();
         taskRecord.setStatus(new Byte(DataUploadConstants.FILLED));
+        taskRecord.setUpTime(new Date());
         tbDataReportingTaskMapper.updateByExampleSelective(taskRecord,taskCriteria);
         return result+1;
     }
@@ -1028,7 +1034,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
     /**
      * 查询出填报格式
-     * @param targetName
+     * @param targetName`
      * @param targetList
      * @return
      */
@@ -1059,6 +1065,7 @@ public class DataUploadServiceImpl implements DataUploadService {
         }
         return result;
     }
+
 
 
 
@@ -1163,6 +1170,9 @@ public class DataUploadServiceImpl implements DataUploadService {
         title = title.substring(1,title.length()-1);
         //标题的集合
         String[] titles = title.split(",");
+        for(int i=0;i<titles.length;i++){
+            titles[i] = titles[i].trim();
+        }
         return titles;
     }
 
@@ -2052,7 +2062,7 @@ public class DataUploadServiceImpl implements DataUploadService {
         companyList = data.getRows();
         if(companyList!=null && companyList.size()>0){
             for(int index=0,len=companyList.size();index<len;index++  ){
-                List<ScientModel> dataset =  targetDao.getValues(param.getCompanyName(),param.getFillId());
+                List<ScientModel> dataset =  targetDao.getValues(companyList.get(index),param.getFillId());
                 result.put(companyList.get(index),dataset);
             }
         }

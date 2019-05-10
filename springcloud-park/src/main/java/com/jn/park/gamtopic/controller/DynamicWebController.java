@@ -60,6 +60,14 @@ public class DynamicWebController extends BaseController {
         PaginationData data = dynamicService.findDynamicWebList(page,user==null? "" : user.getAccount());
         return new Result<>(data);
     }
+    @ControllerLog(doAction = "关注的用户动态列表")
+    @ApiOperation(value ="关注的用户动态列表",notes = "返回用户关注的用户的动态列表")
+    @RequestMapping(value="/findCareDynamicList",method = RequestMethod.GET)
+    public Result<PaginationData<List<DynamicWebShow>>> findCareDynamicList(Page page){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData data = dynamicService.findCareDynamicList(page,user==null? "" : user.getAccount());
+        return new Result<>(data);
+    }
     @ControllerLog(doAction = "动态详情")
     @ApiOperation(value ="动态详情",notes = "动态内容加评论信息")
     @RequestMapping(value="/findDynamicDetails",method = RequestMethod.GET)
@@ -74,6 +82,14 @@ public class DynamicWebController extends BaseController {
         PaginationData<List<DynamicComments>> data = dynamicService.findDynamicComments(param);
         return new Result<>(data);
     }
+    @ControllerLog(doAction = "动态评论列表+回复列表")
+    @ApiOperation(value ="动态评论列表+回复列表",notes = "根据动态id,返回评论列表及评论的回复列表")
+    @RequestMapping(value="/findDynamicCommentAndReplyList",method = RequestMethod.GET)
+    public Result<PaginationData<List<DynamicCommentReplyShow>>> findDynamicCommentAndReplyList(DynamicCommentsParam param){
+        PaginationData<List<DynamicCommentReplyShow>> data = dynamicService.findDynamicCommentAndReplyList(param);
+        return new Result<>(data);
+    }
+
     @ControllerLog(doAction = "动态评论详情")
     @ApiOperation(value ="动态评论详情",notes = "根据评论id,返回论信息和评论回复列表")
     @RequestMapping(value="/findDynamicCommentsDetails",method = RequestMethod.GET)

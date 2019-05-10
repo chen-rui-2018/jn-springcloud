@@ -14,9 +14,12 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @ApiModel(value = "ActivityPagingParam",description = "分页查询入参")
 public class ActivityPagingParam extends Page {
-    @ApiModelProperty(value = "活动ID",required = true,example = "f5c95f9adf714aedab3739cbc9297178")
+    @ApiModelProperty(value = "活动ID/企业ID/动态ID",required = true,example = "f5c95f9adf714aedab3739cbc9297178")
     @NotBlank(message = "活动id不能为空")
     private String activityId;
+
+    @ApiModelProperty(value = "账号[前端无需理会该参数]")
+    private String account;
 
     public String getActivityId() {
         return activityId;
@@ -24,5 +27,13 @@ public class ActivityPagingParam extends Page {
 
     public void setActivityId(String activityId) {
         this.activityId = activityId;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 }

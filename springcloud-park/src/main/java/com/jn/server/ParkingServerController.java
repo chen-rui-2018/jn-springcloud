@@ -9,6 +9,7 @@ import com.jn.system.log.annotation.ControllerLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
+@RestController
 public class ParkingServerController extends BaseController implements ParkingClient {
     private static Logger logger = LoggerFactory.getLogger(ParkingServerController.class);
 

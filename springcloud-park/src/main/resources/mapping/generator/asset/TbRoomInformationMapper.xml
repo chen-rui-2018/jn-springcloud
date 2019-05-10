@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.asset.dao.TbRoomInformationMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.asset.entity.TbRoomInformation">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="floor" jdbcType="VARCHAR" property="floor" />
+    <result column="tower_id" jdbcType="VARCHAR" property="towerId" />
+    <result column="tower_name" jdbcType="VARCHAR" property="towerName" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="room_area" jdbcType="VARCHAR" property="roomArea" />
+    <result column="shortest_lease" jdbcType="VARCHAR" property="shortestLease" />
+    <result column="lease_price" jdbcType="DECIMAL" property="leasePrice" />
+    <result column="lease_sum" jdbcType="DECIMAL" property="leaseSum" />
+    <result column="press" jdbcType="INTEGER" property="press" />
+    <result column="pay" jdbcType="INTEGER" property="pay" />
+    <result column="press_pay" jdbcType="VARCHAR" property="pressPay" />
+    <result column="house_type" jdbcType="VARCHAR" property="houseType" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="floor_plan" jdbcType="VARCHAR" property="floorPlan" />
+    <result column="room_plan" jdbcType="VARCHAR" property="roomPlan" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="lease_start_time" jdbcType="DATE" property="leaseStartTime" />
+    <result column="lease_end_time" jdbcType="DATE" property="leaseEndTime" />
+    <result column="enterprise_id" jdbcType="VARCHAR" property="enterpriseId" />
+    <result column="lease_enterprise" jdbcType="VARCHAR" property="leaseEnterprise" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, floor, tower_id, tower_name, group_id, group_name, room_area, shortest_lease, 
+    lease_price, lease_sum, press, pay, press_pay, house_type, img_url, floor_plan, room_plan, 
+    introduce, state, lease_start_time, lease_end_time, enterprise_id, lease_enterprise, 
+    contact_name, contact_phone, record_status, creator_account, create_time, modifier_account, 
+    modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomInformationCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_room_information
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_room_information
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_room_information
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.asset.entity.TbRoomInformationCriteria">
+    delete from tb_room_information
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.asset.entity.TbRoomInformation">
+    insert into tb_room_information (id, name, floor, 
+      tower_id, tower_name, group_id, 
+      group_name, room_area, shortest_lease, 
+      lease_price, lease_sum, press, 
+      pay, press_pay, house_type, 
+      img_url, floor_plan, room_plan, 
+      introduce, state, lease_start_time, 
+      lease_end_time, enterprise_id, lease_enterprise, 
+      contact_name, contact_phone, record_status, 
+      creator_account, create_time, modifier_account, 
+      modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, 
+      #{towerId,jdbcType=VARCHAR}, #{towerName,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, 
+      #{groupName,jdbcType=VARCHAR}, #{roomArea,jdbcType=VARCHAR}, #{shortestLease,jdbcType=VARCHAR}, 
+      #{leasePrice,jdbcType=DECIMAL}, #{leaseSum,jdbcType=DECIMAL}, #{press,jdbcType=INTEGER}, 
+      #{pay,jdbcType=INTEGER}, #{pressPay,jdbcType=VARCHAR}, #{houseType,jdbcType=VARCHAR}, 
+      #{imgUrl,jdbcType=VARCHAR}, #{floorPlan,jdbcType=VARCHAR}, #{roomPlan,jdbcType=VARCHAR}, 
+      #{introduce,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{leaseStartTime,jdbcType=DATE}, 
+      #{leaseEndTime,jdbcType=DATE}, #{enterpriseId,jdbcType=VARCHAR}, #{leaseEnterprise,jdbcType=VARCHAR}, 
+      #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomInformation">
+    insert into tb_room_information
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="floor != null">
+        floor,
+      </if>
+      <if test="towerId != null">
+        tower_id,
+      </if>
+      <if test="towerName != null">
+        tower_name,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="groupName != null">
+        group_name,
+      </if>
+      <if test="roomArea != null">
+        room_area,
+      </if>
+      <if test="shortestLease != null">
+        shortest_lease,
+      </if>
+      <if test="leasePrice != null">
+        lease_price,
+      </if>
+      <if test="leaseSum != null">
+        lease_sum,
+      </if>
+      <if test="press != null">
+        press,
+      </if>
+      <if test="pay != null">
+        pay,
+      </if>
+      <if test="pressPay != null">
+        press_pay,
+      </if>
+      <if test="houseType != null">
+        house_type,
+      </if>
+      <if test="imgUrl != null">
+        img_url,
+      </if>
+      <if test="floorPlan != null">
+        floor_plan,
+      </if>
+      <if test="roomPlan != null">
+        room_plan,
+      </if>
+      <if test="introduce != null">
+        introduce,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="leaseStartTime != null">
+        lease_start_time,
+      </if>
+      <if test="leaseEndTime != null">
+        lease_end_time,
+      </if>
+      <if test="enterpriseId != null">
+        enterprise_id,
+      </if>
+      <if test="leaseEnterprise != null">
+        lease_enterprise,
+      </if>
+      <if test="contactName != null">
+        contact_name,
+      </if>
+      <if test="contactPhone != null">
+        contact_phone,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="towerId != null">
+        #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="towerName != null">
+        #{towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="shortestLease != null">
+        #{shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="leasePrice != null">
+        #{leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseSum != null">
+        #{leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="press != null">
+        #{press,jdbcType=INTEGER},
+      </if>
+      <if test="pay != null">
+        #{pay,jdbcType=INTEGER},
+      </if>
+      <if test="pressPay != null">
+        #{pressPay,jdbcType=VARCHAR},
+      </if>
+      <if test="houseType != null">
+        #{houseType,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="floorPlan != null">
+        #{floorPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="roomPlan != null">
+        #{roomPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="leaseStartTime != null">
+        #{leaseStartTime,jdbcType=DATE},
+      </if>
+      <if test="leaseEndTime != null">
+        #{leaseEndTime,jdbcType=DATE},
+      </if>
+      <if test="enterpriseId != null">
+        #{enterpriseId,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseEnterprise != null">
+        #{leaseEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null">
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.asset.entity.TbRoomInformationCriteria" resultType="java.lang.Long">
+    select count(*) from tb_room_information
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_room_information
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.floor != null">
+        floor = #{record.floor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.towerId != null">
+        tower_id = #{record.towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.towerName != null">
+        tower_name = #{record.towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupId != null">
+        group_id = #{record.groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupName != null">
+        group_name = #{record.groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomArea != null">
+        room_area = #{record.roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shortestLease != null">
+        shortest_lease = #{record.shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leasePrice != null">
+        lease_price = #{record.leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.leaseSum != null">
+        lease_sum = #{record.leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.press != null">
+        press = #{record.press,jdbcType=INTEGER},
+      </if>
+      <if test="record.pay != null">
+        pay = #{record.pay,jdbcType=INTEGER},
+      </if>
+      <if test="record.pressPay != null">
+        press_pay = #{record.pressPay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.houseType != null">
+        house_type = #{record.houseType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imgUrl != null">
+        img_url = #{record.imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.floorPlan != null">
+        floor_plan = #{record.floorPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomPlan != null">
+        room_plan = #{record.roomPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="record.introduce != null">
+        introduce = #{record.introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=TINYINT},
+      </if>
+      <if test="record.leaseStartTime != null">
+        lease_start_time = #{record.leaseStartTime,jdbcType=DATE},
+      </if>
+      <if test="record.leaseEndTime != null">
+        lease_end_time = #{record.leaseEndTime,jdbcType=DATE},
+      </if>
+      <if test="record.enterpriseId != null">
+        enterprise_id = #{record.enterpriseId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leaseEnterprise != null">
+        lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactName != null">
+        contact_name = #{record.contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactPhone != null">
+        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_room_information
+    set id = #{record.id,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      floor = #{record.floor,jdbcType=VARCHAR},
+      tower_id = #{record.towerId,jdbcType=VARCHAR},
+      tower_name = #{record.towerName,jdbcType=VARCHAR},
+      group_id = #{record.groupId,jdbcType=VARCHAR},
+      group_name = #{record.groupName,jdbcType=VARCHAR},
+      room_area = #{record.roomArea,jdbcType=VARCHAR},
+      shortest_lease = #{record.shortestLease,jdbcType=VARCHAR},
+      lease_price = #{record.leasePrice,jdbcType=DECIMAL},
+      lease_sum = #{record.leaseSum,jdbcType=DECIMAL},
+      press = #{record.press,jdbcType=INTEGER},
+      pay = #{record.pay,jdbcType=INTEGER},
+      press_pay = #{record.pressPay,jdbcType=VARCHAR},
+      house_type = #{record.houseType,jdbcType=VARCHAR},
+      img_url = #{record.imgUrl,jdbcType=VARCHAR},
+      floor_plan = #{record.floorPlan,jdbcType=VARCHAR},
+      room_plan = #{record.roomPlan,jdbcType=VARCHAR},
+      introduce = #{record.introduce,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=TINYINT},
+      lease_start_time = #{record.leaseStartTime,jdbcType=DATE},
+      lease_end_time = #{record.leaseEndTime,jdbcType=DATE},
+      enterprise_id = #{record.enterpriseId,jdbcType=VARCHAR},
+      lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
+      contact_name = #{record.contactName,jdbcType=VARCHAR},
+      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.asset.entity.TbRoomInformation">
+    update tb_room_information
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        floor = #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="towerId != null">
+        tower_id = #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="towerName != null">
+        tower_name = #{towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        room_area = #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="shortestLease != null">
+        shortest_lease = #{shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="leasePrice != null">
+        lease_price = #{leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseSum != null">
+        lease_sum = #{leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="press != null">
+        press = #{press,jdbcType=INTEGER},
+      </if>
+      <if test="pay != null">
+        pay = #{pay,jdbcType=INTEGER},
+      </if>
+      <if test="pressPay != null">
+        press_pay = #{pressPay,jdbcType=VARCHAR},
+      </if>
+      <if test="houseType != null">
+        house_type = #{houseType,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="floorPlan != null">
+        floor_plan = #{floorPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="roomPlan != null">
+        room_plan = #{roomPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="leaseStartTime != null">
+        lease_start_time = #{leaseStartTime,jdbcType=DATE},
+      </if>
+      <if test="leaseEndTime != null">
+        lease_end_time = #{leaseEndTime,jdbcType=DATE},
+      </if>
+      <if test="enterpriseId != null">
+        enterprise_id = #{enterpriseId,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseEnterprise != null">
+        lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null">
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.asset.entity.TbRoomInformation">
+    update tb_room_information
+    set name = #{name,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=VARCHAR},
+      tower_id = #{towerId,jdbcType=VARCHAR},
+      tower_name = #{towerName,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=VARCHAR},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      room_area = #{roomArea,jdbcType=VARCHAR},
+      shortest_lease = #{shortestLease,jdbcType=VARCHAR},
+      lease_price = #{leasePrice,jdbcType=DECIMAL},
+      lease_sum = #{leaseSum,jdbcType=DECIMAL},
+      press = #{press,jdbcType=INTEGER},
+      pay = #{pay,jdbcType=INTEGER},
+      press_pay = #{pressPay,jdbcType=VARCHAR},
+      house_type = #{houseType,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      floor_plan = #{floorPlan,jdbcType=VARCHAR},
+      room_plan = #{roomPlan,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      state = #{state,jdbcType=TINYINT},
+      lease_start_time = #{leaseStartTime,jdbcType=DATE},
+      lease_end_time = #{leaseEndTime,jdbcType=DATE},
+      enterprise_id = #{enterpriseId,jdbcType=VARCHAR},
+      lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

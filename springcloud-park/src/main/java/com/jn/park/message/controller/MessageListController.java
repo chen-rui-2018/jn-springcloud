@@ -2,9 +2,9 @@ package com.jn.park.message.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.addMessageModel;
 import com.jn.park.message.service.MessageListService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -41,6 +41,7 @@ public class MessageListController extends BaseController {
             @ApiImplicitParam(name = "messageTowTort",value = "一级消息类别,0:个人动态;1:企业空间;",dataType = "Integer",paramType = "query")
     })
     public Result<FindAllMessageListVo> findAll(Integer messageTowTort){
+
         List<FindAllMessageListVo> findAllMessageListVoList = messageListService.findAll(messageTowTort,getUser());
         return new Result(findAllMessageListVoList);
     }
@@ -49,8 +50,9 @@ public class MessageListController extends BaseController {
     @ApiOperation(value = "添加消息",notes = "添加消息", httpMethod = "POST")
     @PostMapping(value = "/addMessage")
     @RequiresPermissions("/message/list/addMessage")
-    public Result addMessage(@RequestBody addMessageModel addMessageModel){
-        messageListService.addMessage(addMessageModel);
+    public Result addMessage(@RequestBody AddMessageModel addMessageModel){
+
+        messageListService.addMessage(addMessageModel,getUser());
         return new Result(new Result<>());
     }
 
@@ -63,7 +65,7 @@ public class MessageListController extends BaseController {
             @ApiImplicitParam(name = "id",value = "消息ID",dataType = "String",paramType = "query")
     })
     public Result<MessageListModel> findByMessage(String id){
-        //todo
+
         MessageListModel findByMessage= messageListService.findByMessage(id);
         return new Result(findByMessage);
     }
@@ -74,7 +76,7 @@ public class MessageListController extends BaseController {
     @PostMapping(value = "/updateMessage")
     @RequiresPermissions("/message/list/updateMessage")
     public Result updateMessage(@RequestBody  MessageListModel MessageListModel){
-        //todo
+
         messageListService.updateMessage(MessageListModel);
         return new Result(new Result<>());
     }
@@ -88,7 +90,7 @@ public class MessageListController extends BaseController {
             @ApiImplicitParam(name = "id",value = "消息ID",dataType = "String",paramType = "query")
     })
     public Result deleteMessage(String id){
-        //todo
+
         messageListService.deleteMessage(id);
         return new Result(new Result<>());
     }
@@ -102,7 +104,7 @@ public class MessageListController extends BaseController {
             @ApiImplicitParam(name = "id",value = "消息ID",dataType = "String",paramType = "query")
     })
     public Result updateIsReadStatus(String id){
-        //todo
+
         messageListService.updateIsReadStatus(id);
         return new Result(new Result<>());
     }

@@ -6,16 +6,12 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * @author： tangry
- * @date： Created on 2019/4/22
- * @version： v1.0
- * @modified By:
+ * @Author: tangry
+ * @Date: 2019/5/10
+ * @Version 1.0
  */
-@ApiModel(value ="addMessageModel",description = "添加消息")
-public class addMessageModel implements Serializable {
-
-
-    private static final long serialVersionUID = 7775713908624163861L;
+@ApiModel(value ="AddMessageModel",description = "添加消息")
+public class AddMessageModel implements Serializable {
 
     @ApiModelProperty("消息id")
     private String id;
@@ -47,10 +43,6 @@ public class addMessageModel implements Serializable {
     @ApiModelProperty("创建者账号")
     private String creatorAccount;
 
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public String getId() {
         return id;
@@ -135,7 +127,7 @@ public class addMessageModel implements Serializable {
 
     @Override
     public String toString() {
-        return "addMessageModel{" +
+        return "AddMessageModel{" +
                 "id='" + id + '\'' +
                 ", messageTitle='" + messageTitle + '\'' +
                 ", messageContent='" + messageContent + '\'' +

@@ -25,7 +25,7 @@ import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.park.api.MessageClient;
-import com.jn.park.message.model.addMessageModel;
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
@@ -40,7 +40,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -118,19 +117,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         if(tbServiceAdvisorList.isEmpty()){
             //2.往顾问信息表添加一条机构和顾问的信息
             int responseNum = insertServiceAdvisorInfo(registerAccount,loginAccount, serviceOrgInfo);
-            //消息标题
-            String messageTitle="机构["+serviceOrgInfo.getOrgName()+"]邀请信息";
-            //消息内容
-            String messageConnect="尊敬的"+registerAccount+"您好，"+serviceOrgInfo.getOrgName()+
-                    "邀请您加入机构【机构编码：[orgId:"+serviceOrgInfo.getOrgId()+"],机构名称：[orgName:"+serviceOrgInfo.getOrgName()+
-                    "],业务领域：[businessArea:"+serviceOrgInfo.getBusinessType()+"]】，成为机构顾问";
-            //消息一级类别 （0：个人动态，1：企业空间）
-            int oneSort=0;
-            //消息二级类别（0：私人订单，1：信用动态，2：园区通知，3：消费汇总，4：收入汇总，5，付款通知，6：企业订单，7：信息发布动态，8：交费提醒，9：访客留言，10：数据上报提醒  11.机构邀请）
-            int twoSort=11;
-            //3.调用消息接口，往消息接口添加一条邀请信息
-            addMessageModel addMessageModel = getAddMessageModel(registerAccount, loginAccount, messageTitle, messageConnect, oneSort, twoSort);
-            Result<String> result = messageClient.addMessage(addMessageModel);
+            Result<String> result = sendInvestorMessage(registerAccount, loginAccount, serviceOrgInfo);
             if(GlobalConstants.SUCCESS_CODE.equals(result.getCode())){
                 return responseNum;
             }else{
@@ -145,6 +132,30 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     }
 
     /**
+     * 发送邀请信息
+     * @param registerAccount
+     * @param loginAccount
+     * @param serviceOrgInfo
+     * @return
+     */
+    @ServiceLog(doAction = "发送邀请信息")
+    private Result<String> sendInvestorMessage(String registerAccount, String loginAccount, TbServiceOrg serviceOrgInfo) {
+        //消息标题
+        String messageTitle="机构["+serviceOrgInfo.getOrgName()+"]邀请信息";
+        //消息内容
+        String messageConnect="尊敬的"+registerAccount+"您好，"+serviceOrgInfo.getOrgName()+
+                "邀请您加入机构【机构编码：[orgId:"+serviceOrgInfo.getOrgId()+"],机构名称：[orgName:"+serviceOrgInfo.getOrgName()+
+                "],业务领域：[businessArea:"+serviceOrgInfo.getBusinessType()+"]】，成为机构顾问";
+        //消息一级类别 （0：个人动态，1：企业空间）
+        int oneSort=0;
+        //消息二级类别（0：私人订单，1：信用动态，2：园区通知，3：消费汇总，4：收入汇总，5，付款通知，6：企业订单，7：信息发布动态，8：交费提醒，9：访客留言，10：数据上报提醒  11.机构邀请）
+        int twoSort=11;
+        //3.调用消息接口，往消息接口添加一条邀请信息
+        AddMessageModel addMessageModel = getAddMessageModel(registerAccount, loginAccount, messageTitle, messageConnect, oneSort, twoSort);
+        return messageClient.addMessage(addMessageModel);
+    }
+
+    /**
      * 封装消息信息
      * @param acceptAccount    消息接受人
      * @param sendAccount      消息发送人
@@ -154,10 +165,8 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      * @param twoSort          消息二级类别
      */
     @ServiceLog(doAction = "")
-    private addMessageModel getAddMessageModel(String acceptAccount, String sendAccount, String messageTitle, String messageConnect, int oneSort, int twoSort) {
-        addMessageModel addMessageModel=new addMessageModel();
-        //消息id
-        addMessageModel.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+    private AddMessageModel getAddMessageModel(String acceptAccount, String sendAccount, String messageTitle, String messageConnect, int oneSort, int twoSort) {
+        AddMessageModel addMessageModel=new AddMessageModel();
         //消息标题
         addMessageModel.setMessageTitle(messageTitle);
         //消息内容
@@ -170,9 +179,6 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         addMessageModel.setMessageOneSort(oneSort);
         //消息二级类别（0：私人订单，1：信用动态，2：园区通知，3：消费汇总，4：收入汇总，5，付款通知，6：企业订单，7：信息发布动态，8：交费提醒，9：访客留言，10：数据上报提醒  11.机构邀请）
         addMessageModel.setMessageTowSort(twoSort);
-        //创建者账号
-        addMessageModel.setCreatorAccount(sendAccount);
-
         return addMessageModel;
     }
 

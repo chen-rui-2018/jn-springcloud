@@ -1,4 +1,4 @@
-package com.jn.enterprise.pay.model;
+package com.jn.pay.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
@@ -17,7 +17,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "PayBillDetails" ,description = "账单详情实体类")
-public class PayBillDetails extends Page implements Serializable {
+public class PayBillDetails implements Serializable {
     private static final long serialVersionUID = 9133457186116223879L;
 
     @ApiModelProperty(value="详情ID",example = "20190001")

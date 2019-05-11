@@ -2,7 +2,7 @@ package com.jn.enterprise.pay.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.pay.model.PayAccountBookMoneyRecord;
-import com.jn.enterprise.pay.vo.PayAccountAndAccountBookVo;
+import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.system.model.User;
 
 import java.util.List;
@@ -20,15 +20,15 @@ public interface MyPayAccountService {
 
     /**
      * 查询当前账户下所有账本信息
-     * @param user
+     * @param userId
      * @return
      */
-    PayAccountAndAccountBookVo queryPayAccountBook(User user);
+    PayAccountAndAccountBookVo queryPayAccountBook(String userId);
 
     /**
      * 查询当前账本下所有明细信息
      * @param user,payAccountBookMoneyRecord
      * @return
      */
-    PaginationData<List<PayAccountBookMoneyRecord>> queryPayAccountDetails(User user,PayAccountBookMoneyRecord payAccountBookMoneyRecord);
+    PaginationData<List<PayAccountBookMoneyRecord>> queryPayAccountDetails(User user,String acBookId,String startDate,String endDate,int page,int rows);
 }

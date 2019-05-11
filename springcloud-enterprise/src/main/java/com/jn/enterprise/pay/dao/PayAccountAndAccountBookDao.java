@@ -1,7 +1,9 @@
 package com.jn.enterprise.pay.dao;
 
-import com.jn.enterprise.pay.model.PayAccountBook;
-import com.jn.enterprise.pay.vo.PayAccountAndAccountBookVo;
+
+
+import com.jn.pay.model.PayAccountBook;
+import com.jn.pay.vo.PayAccountAndAccountBookVo;
 
 import java.util.List;
 

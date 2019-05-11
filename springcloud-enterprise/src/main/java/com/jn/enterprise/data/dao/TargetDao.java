@@ -66,7 +66,7 @@ public interface TargetDao {
     /**
      * 催报，未上报的数据
      */
-    void updateCalling(@Param("taskBatch") String taskBatch,@Param("modelId") String modelId,@Param("fileType") String fileType);
+    void updateCalling(@Param("taskBatch") String taskBatch,@Param("fillId") String fillId,@Param("fileType") String fileType);
 
     /**
      * 企业统计数据查询

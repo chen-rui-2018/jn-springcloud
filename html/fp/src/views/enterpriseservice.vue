@@ -779,10 +779,29 @@ export default {
       }
       return top;
     },
+     getScrollOffset(){
+        // 除IE8及更早版本
+        if( window.pageXOffset != null ){
+            return {
+                x : window.pageXOffset,
+                y : window.pageYOffset
+            }
+        }
+        // 标准模式下的IE
+        if( document.compatMode == "css1Compat" ){
+            return {
+                x : document.documentElement.scrollLeft,
+                y : document.documentElement.scrollTop
+            }
+        }
+        // 怪异模式下的浏览器
+        return {
+            x : document.body.scrollLeft,
+            y : document.body.scrollTop
+        }
+    },
     handleScroll() {
-      const osTop =
-        document.documentElement.scrollTop ||
-        document.documentElement.scrollTop;
+      const osTop = this.getScrollOffset().y;
       for (const key in this.$refs) {
         const top = this.getElementLeft(this.$refs[key]);
         // console.dir(top);

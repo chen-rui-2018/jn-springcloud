@@ -13,7 +13,7 @@
                     <div class="orgBtn fr mainColor">在线联系</div>
                 </div>
                 <div class="agent2 clearfix color2">
-                    <div class="agentImg mainBorder fl">
+                    <div class="agentImg fl">
                         <img :src="serverConDetailList.advisorIntroduction.avatar" alt="">
                     </div>
                     <div class="agent2Info fl color2">
@@ -193,7 +193,7 @@
                                         <!-- 评价 begin -->
                                         <div class="detail-evaluate inner-product">
                                             <div class="score">
-                                                <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
+                                                <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                                                 </el-rate>
                                                 <span class="c_default b">{{i.evaluationNumber}}</span>
                                                 <span>条评价</span>
@@ -216,7 +216,7 @@
                             </li>
                         </ul>
                         <div class="pagination-container">
-                            <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row1" layout="total, sizes, prev, pager, next, jumper" :total="total1">
+                            <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row1" layout="total,prev, pager, next,sizes" :total="total1">
                             </el-pagination>
                         </div>
                     </div>
@@ -261,7 +261,7 @@
                                         <!-- 评价 begin -->
                                         <div class="detail-evaluate inner-product">
                                             <div class="score">
-                                                <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
+                                                <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                                                 </el-rate>
                                                 <span class="c_default b">1</span>
                                                 <span>条评价</span>
@@ -287,7 +287,7 @@
                             </li>
                         </ul>
                         <div class="pagination-container">
-                            <el-pagination background @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row2" layout="total, sizes, prev, pager, next, jumper" :total="total2">
+                            <el-pagination background @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row2" layout="total,prev, pager, next,sizes" :total="total2">
                             </el-pagination>
                         </div>
                     </div>

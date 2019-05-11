@@ -146,6 +146,45 @@ FROM
 	v_pay_all
 WHERE
 	1=1
+and record_status = 1
+and obj_name = #{objName,jdbcType=VARCHAR}
   </select>
 
+    <insert id="insertList" parameterType="java.util.List">
+        insert into tb_pay_bill_details
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                details_id,
+                bill_id,
+                COST_NAME,
+                COST_VALUE,
+                creator_account,
+                created_time,
+                record_status,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <foreach item="item" index="index" collection="list" separator=",">
+                <if test="item.detailsId != null">
+                    #{item.detailsId,jdbcType=VARCHAR},
+                </if>
+                <if test="item.billId != null">
+                    #{item.billId,jdbcType=VARCHAR},
+                </if>
+                <if test="item.costName != null">
+                    #{item.costName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.costValue != null">
+                    #{item.costValue,jdbcType=VARCHAR},
+                </if>
+                <if test="item.creatorAccount != null">
+                    #{item.creatorAccount,jdbcType=VARCHAR},
+                </if>
+                <if test="item.createdTime != null">
+                    #{item.createdTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.recordStatus != null">
+                    #{item.recordStatus,jdbcType=CHAR},
+                </if>
+            </foreach>
+        </trim>
+    </insert>
 </mapper>

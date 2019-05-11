@@ -3,7 +3,7 @@
     <div class="business_title">
       <div class="myBusiness">我的机构 </div>
       <div class="business_nav">
-        <div @click="toEditBusiness">编辑机构</div>
+        <div @click="toBasicInformation">编辑机构</div>
         <div @click="toCounselorManagement">顾问管理</div>
         <div @click="toEnterprisePropaganda">企业宣传</div>
       </div>
@@ -193,7 +193,7 @@
             label="服务机构网址:"
             class="inline border-bottom"
           >
-            <span>{{orgWeb}}</span>
+            <span class="smallSize mainColor">{{orgWeb}}</span>
           </el-form-item>
         </div>
       </el-form>
@@ -262,7 +262,7 @@ export default {
             _this.orgSynopsis = res.data.orgDetailVo.orgSynopsis
             _this.orgBusiness = res.data.orgDetailVo.orgBusiness
             _this.staffCount = res.data.orgDetailVo.staffCount
-            _this.businessType = res.data.orgDetailVo.businessType
+            _this.businessType = res.data.orgDetailVo.businessTypeName
             _this.honorLicense=res.data.orgDetailVo.honorLicense
             // _this.awardTime = res.data.orgDetailVo.awardTime
             // _this.certType = res.data.orgDetailVo.certType
@@ -299,8 +299,8 @@ export default {
     toUserCenter(){
         this.$router.push({ name: "userCenter" });
     },
-    toEditBusiness(){
-        this.$router.push({ name: "editBusiness" });
+    toBasicInformation(){
+        this.$router.push({ path: "/roleCertifications/basicInformation" });
     }
   }
 };
@@ -403,7 +403,7 @@ margin-bottom: 59px;
   }
 
   .business_title {
-    width: 813px;
+    // width: 813px;
     background-color: #fff;
     display: flex;
     justify-content: space-between;
@@ -465,7 +465,7 @@ margin-bottom: 59px;
   .business_content {
     background: #fff;
     margin-top: 14px;
-    width: 813px;
+    // width: 813px;
     padding: 21px 28px;
     .enterprise {
       margin-bottom: 16px;

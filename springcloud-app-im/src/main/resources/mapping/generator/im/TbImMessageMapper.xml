@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.im.dao.TbImMessageMapper">
+  <resultMap id="BaseResultMap" type="com.jn.im.entity.TbImMessage">
+    <id column="im_ID" jdbcType="VARCHAR" property="id" />
+    <result column="im_SEND_ID" jdbcType="VARCHAR" property="sendId" />
+    <result column="im_MSG_TYPE" jdbcType="VARCHAR" property="msgType" />
+    <result column="im_RECEIVE_ID" jdbcType="VARCHAR" property="receiveId" />
+    <result column="im_CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="im_CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="im_IS_SENDED" jdbcType="VARCHAR" property="isSended" />
+    <result column="im_SEND_TIME" jdbcType="TIMESTAMP" property="sendTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    im.ID as im_ID, im.SEND_ID as im_SEND_ID, im.MSG_TYPE as im_MSG_TYPE, im.RECEIVE_ID as im_RECEIVE_ID, 
+    im.CONTENT as im_CONTENT, im.CREATE_TIME as im_CREATE_TIME, im.IS_SENDED as im_IS_SENDED, 
+    im.SEND_TIME as im_SEND_TIME
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.im.entity.TbImMessageCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_im_message im
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_im_message im
+    where im.ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_im_message
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.im.entity.TbImMessageCriteria">
+    delete from tb_im_message im
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.im.entity.TbImMessage">
+    insert into tb_im_message (ID, SEND_ID, MSG_TYPE, 
+      RECEIVE_ID, CONTENT, CREATE_TIME, 
+      IS_SENDED, SEND_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{sendId,jdbcType=VARCHAR}, #{msgType,jdbcType=VARCHAR}, 
+      #{receiveId,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{isSended,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.im.entity.TbImMessage">
+    insert into tb_im_message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="sendId != null">
+        SEND_ID,
+      </if>
+      <if test="msgType != null">
+        MSG_TYPE,
+      </if>
+      <if test="receiveId != null">
+        RECEIVE_ID,
+      </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="isSended != null">
+        IS_SENDED,
+      </if>
+      <if test="sendTime != null">
+        SEND_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sendId != null">
+        #{sendId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgType != null">
+        #{msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveId != null">
+        #{receiveId,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSended != null">
+        #{isSended,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.im.entity.TbImMessageCriteria" resultType="java.lang.Long">
+    select count(*) from tb_im_message im
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_im_message im
+    <set>
+      <if test="record.id != null">
+        im.ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sendId != null">
+        im.SEND_ID = #{record.sendId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msgType != null">
+        im.MSG_TYPE = #{record.msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiveId != null">
+        im.RECEIVE_ID = #{record.receiveId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        im.CONTENT = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        im.CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isSended != null">
+        im.IS_SENDED = #{record.isSended,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sendTime != null">
+        im.SEND_TIME = #{record.sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_im_message im
+    set im.ID = #{record.id,jdbcType=VARCHAR},
+      im.SEND_ID = #{record.sendId,jdbcType=VARCHAR},
+      im.MSG_TYPE = #{record.msgType,jdbcType=VARCHAR},
+      im.RECEIVE_ID = #{record.receiveId,jdbcType=VARCHAR},
+      im.CONTENT = #{record.content,jdbcType=VARCHAR},
+      im.CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      im.IS_SENDED = #{record.isSended,jdbcType=VARCHAR},
+      im.SEND_TIME = #{record.sendTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.im.entity.TbImMessage">
+    update tb_im_message
+    <set>
+      <if test="sendId != null">
+        SEND_ID = #{sendId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgType != null">
+        MSG_TYPE = #{msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveId != null">
+        RECEIVE_ID = #{receiveId,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSended != null">
+        IS_SENDED = #{isSended,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        SEND_TIME = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.im.entity.TbImMessage">
+    update tb_im_message
+    set SEND_ID = #{sendId,jdbcType=VARCHAR},
+      MSG_TYPE = #{msgType,jdbcType=VARCHAR},
+      RECEIVE_ID = #{receiveId,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      IS_SENDED = #{isSended,jdbcType=VARCHAR},
+      SEND_TIME = #{sendTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

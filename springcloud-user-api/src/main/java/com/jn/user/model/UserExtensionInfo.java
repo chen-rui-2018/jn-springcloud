@@ -14,7 +14,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "UserExtension", description = "个人用户扩展信息")
+@ApiModel(value = "UserExtensionInfo", description = "个人用户扩展信息")
 public class UserExtensionInfo implements Serializable {
     @ApiModelProperty(value = "用户id")
     private String id;
@@ -36,7 +36,7 @@ public class UserExtensionInfo implements Serializable {
     private String name;
     @ApiModelProperty(value = "呢称")
     private String nickName;
-    @ApiModelProperty(value = "性别")
+    @ApiModelProperty(value = "性别(0:女  1：男)")
     private String sex;
     @ApiModelProperty(value = "年龄")
     private Integer age;
@@ -46,12 +46,14 @@ public class UserExtensionInfo implements Serializable {
     private String signature;
     @ApiModelProperty(value = "公司")
     private String company;
-    @ApiModelProperty(value = "岗位")
-    private String post;
     @ApiModelProperty(value = "学历")
     private String education;
+    @ApiModelProperty(value = "毕业学校")
+    private String graduatedSchool;
     @ApiModelProperty(value = "头像")
     private String avatar;
+    @ApiModelProperty(value = "职位")
+    private String position;
     @ApiModelProperty(value = "用户类型")
     private String userType;
     @ApiModelProperty(value = "积分")
@@ -195,20 +197,28 @@ public class UserExtensionInfo implements Serializable {
         this.company = company;
     }
 
-    public String getPost() {
-        return post;
-    }
-
-    public void setPost(String post) {
-        this.post = post;
-    }
-
     public String getEducation() {
         return education;
     }
 
     public void setEducation(String education) {
         this.education = education;
+    }
+
+    public String getGraduatedSchool() {
+        return graduatedSchool;
+    }
+
+    public void setGraduatedSchool(String graduatedSchool) {
+        this.graduatedSchool = graduatedSchool;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getAvatar() {
@@ -317,9 +327,10 @@ public class UserExtensionInfo implements Serializable {
                 ", idCard='" + idCard + '\'' +
                 ", signature='" + signature + '\'' +
                 ", company='" + company + '\'' +
-                ", post='" + post + '\'' +
                 ", education='" + education + '\'' +
+                ", graduatedSchool='" + graduatedSchool + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", position='" + position + '\'' +
                 ", userType='" + userType + '\'' +
                 ", point=" + point +
                 ", birthday=" + birthday +

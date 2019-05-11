@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.enums.FinancialProductExceptionEnum;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
@@ -12,6 +13,7 @@ import com.jn.enterprise.servicemarket.product.dao.TbServiceProductAssureTypeMap
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductLoanTypeMapper;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
 import com.jn.enterprise.servicemarket.product.entity.*;
+import com.jn.enterprise.servicemarket.product.enums.ProductConstantEnum;
 import com.jn.enterprise.servicemarket.product.model.CommonServiceShelf;
 import com.jn.enterprise.technologyfinancial.financial.product.dao.FinancialProductMapper;
 import com.jn.enterprise.technologyfinancial.financial.product.model.*;
@@ -105,18 +107,34 @@ public class FinancialProductServiceImpl implements FinancialProductService {
      */
     @ServiceLog(doAction = "金融产品详情")
     @Override
-    public FinacialProductDetails getFinancialProductDetails(String productId) {
-        TbServiceProductCriteria example=new TbServiceProductCriteria();
-        example.createCriteria().andProductIdEqualTo(productId).andStatusEqualTo("1")
-                .andSignoryIdEqualTo(BUSINESS_AREA).andRecordStatusEqualTo(RECORD_STATUS);
-        List<TbServiceProduct> tbServiceProductList = tbServiceProductMapper.selectByExample(example);
-        if(tbServiceProductList.isEmpty()){
+    public FinancialProductDetails getFinancialProductDetails(String productId) {
+        FinancialProductDetails financialProductDetails = financialProductMapper.getFinancialProductDetails(productId, BUSINESS_AREA);
+        if(financialProductDetails==null){
             return null;
         }
-        TbServiceProduct tbServiceProduct = tbServiceProductList.get(0);
-        FinacialProductDetails finacialProductDetails=new FinacialProductDetails();
-        BeanUtils.copyProperties(tbServiceProduct, finacialProductDetails);
-        return finacialProductDetails;
+        //更新浏览次数
+        updateProductViewNum(productId);
+        return financialProductDetails;
+    }
+
+    /**
+     * 更新产品浏览次数
+     * @param productId
+     */
+    @ServiceLog(doAction = "更新产品浏览次数")
+    private void updateProductViewNum(String productId) {
+        TbServiceProductCriteria example=new TbServiceProductCriteria();
+        example.createCriteria().andProductIdEqualTo(productId).andSignoryIdEqualTo(BUSINESS_AREA).andRecordStatusEqualTo(RECORD_STATUS);
+        List<TbServiceProduct> tbServiceProductList = tbServiceProductMapper.selectByExample(example);
+        if(tbServiceProductList.isEmpty()){
+            logger.info("金融产品详情获取失败，当前产品[id:{}]在系统中不存在",productId);
+            throw new JnSpringCloudException(FinancialProductExceptionEnum.PRODUCT_NOT_EXIST);
+        }
+        Integer viewCount = tbServiceProductList.get(0).getViewCount();
+        int viewNum=viewCount==null?0:viewCount+1;
+        TbServiceProduct tbServiceProduct=new TbServiceProduct();
+        tbServiceProduct.setViewCount(viewNum);
+        tbServiceProductMapper.updateByExampleSelective(tbServiceProduct,example );
     }
 
     /**
@@ -125,19 +143,19 @@ public class FinancialProductServiceImpl implements FinancialProductService {
      */
     @ServiceLog(doAction = "金融产品贷款类别")
     @Override
-    public List<FinacialProductLoanType> getFinancialProductLoanType() {
+    public List<FinancialProductLoanType> getFinancialProductLoanType() {
         TbServiceProductLoanTypeCriteria example=new TbServiceProductLoanTypeCriteria();
         example.createCriteria().andLoanCodeIsNotNull().andRecordStatusEqualTo(RECORD_STATUS);
         List<TbServiceProductLoanType> tbServiceProductLoanTypeList = tbServiceProductLoanTypeMapper.selectByExample(example);
         if(tbServiceProductLoanTypeList.isEmpty()){
             return null;
         }else{
-            List<FinacialProductLoanType> resultList=new ArrayList<>(16);
+            List<FinancialProductLoanType> resultList=new ArrayList<>(16);
             for(TbServiceProductLoanType loanType:tbServiceProductLoanTypeList){
-                FinacialProductLoanType finacialProductLoanType=new FinacialProductLoanType();
-                finacialProductLoanType.setLoanCode(loanType.getLoanCode());
-                finacialProductLoanType.setLoanName(loanType.getLoanName());
-                resultList.add(finacialProductLoanType);
+                FinancialProductLoanType financialProductLoanType =new FinancialProductLoanType();
+                financialProductLoanType.setLoanCode(loanType.getLoanCode());
+                financialProductLoanType.setLoanName(loanType.getLoanName());
+                resultList.add(financialProductLoanType);
             }
             return resultList;
         }
@@ -193,7 +211,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
         //状态为审核通过，机构id不为空，
         String status="1";
-        example.createCriteria().andOrgIdIsNotNull().andBusinessSTypeEqualTo(BUSINESS_AREA)
+        example.createCriteria().andOrgIdIsNotNull().andBusinessTypeEqualTo(BUSINESS_AREA)
                 .andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
         return tbServiceOrgMapper.countByExample(example);
     }
@@ -236,20 +254,20 @@ public class FinancialProductServiceImpl implements FinancialProductService {
     @Override
     public void addFinancialProduct(FinancialProductAddInfo info,String account) {
         //记录状态
-        Byte recordStatus = 1;
+        Byte recordStatus =  new Byte(ProductConstantEnum.RECORD_STATUS_EFFECTIVE.getCode());
         //产品状态(正常)
-        String normalStatus ="1";
+        String normalStatus =ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode();
         //产品状态(待审核)
-        String approvalStatus ="0";
+        String approvalStatus =ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
         //产品类型(特色产品)
-        String featureType = "1";
+        String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode();
         //如果添加特色产品,常规产品则添加重名校验(上架常规产品则不校验)
-        if(featureType.equals(info.getProductType()) || info.getTemplateId()==null) {
+        if(featureType.equals(info.getProductType()) || info.getTemplateId() ==null) {
             TbServiceProductCriteria criteria = new TbServiceProductCriteria();
             criteria.createCriteria().andProductNameEqualTo(info.getProductName());
             List<TbServiceProduct> productList = tbServiceProductMapper.selectByExample(criteria);
             if (productList != null && productList.size() > 0) {
-                logger.warn("[服务产品新增]，特色服务产品名称{}不能重复：productName: {},特色服务产品名称{}不能重复!");
+                logger.warn("[服务产品新增]，服务产品名称{}不能重复：productName: {},服务产品名称{}不能重复!");
                 throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_DUPLICATE);
             }
         }
@@ -272,8 +290,8 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         product.setCreatorAccount(account);
         product.setRecordStatus(recordStatus);
         product.setReleaseTime(product.getCreatedTime());
-        //根据类型设置状态,特色产品需要进行审核
-        if(featureType.equals(info.getProductType())){
+        //根据机构上架产品则要进行审核
+        if(StringUtils.isNotBlank(product.getOrgId())){
             product.setStatus(approvalStatus);
         }else{
             product.setStatus(normalStatus);
@@ -348,5 +366,38 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         }
         info.setTemplateId(info.getProductId());
         addFinancialProduct(info,account);
+    }
+    @ServiceLog(doAction = "更新科技金融产品")
+    @Override
+    public int modifyFeatureProduct(FinancialProductModifyParam product, String account) {
+        TbServiceProduct product1 = tbServiceProductMapper.selectByPrimaryKey(product.getProductId());
+        // 若名字修改则进行 重名校验
+        if(!product1.getProductName().equals(product.getProductName())) {
+            TbServiceProductCriteria criteria = new TbServiceProductCriteria();
+            criteria.createCriteria().andProductNameEqualTo(product.getProductName());
+            List<TbServiceProduct> productList = tbServiceProductMapper.selectByExample(criteria);
+            if (productList != null && productList.size() > 1) {
+                logger.warn("[服务产品新增]，服务产品名称{}不能重复：productName: {},服务产品名称{}不能重复!");
+                throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_DUPLICATE);
+            }
+        }
+        TbServiceProduct tbServiceProduct = new TbServiceProduct();
+        BeanUtils.copyProperties(product,tbServiceProduct);
+        if(product.getRefRateMin()!=null && product.getRefRateMax()!=null ) {
+            tbServiceProduct.setRefRateMin(Double.valueOf(product.getRefRateMin()));
+            tbServiceProduct.setRefRateMax(Double.valueOf(product.getRefRateMax()));
+        }
+        if(product.getLoanAmountMin()!= null && product.getLoanAmountMax()!=null){
+            tbServiceProduct.setLoanAmountMin(Double.valueOf(product.getLoanAmountMin()));
+            tbServiceProduct.setLoanAmountMax(Double.valueOf(product.getLoanAmountMax()));
+        }
+        if(product.getLoanTermMin()!= null && product.getLoanTermMax()!=null){
+            tbServiceProduct.setLoanTermMax(Integer.valueOf(product.getLoanTermMax()));
+            tbServiceProduct.setLoanTermMin(Integer.valueOf(product.getLoanTermMin()));
+        }
+        tbServiceProduct.setModifierAccount(account);
+        tbServiceProduct.setModifiedTime(new Date());
+        int i =tbServiceProductMapper.updateByPrimaryKeySelective(tbServiceProduct);
+        return i;
     }
 }

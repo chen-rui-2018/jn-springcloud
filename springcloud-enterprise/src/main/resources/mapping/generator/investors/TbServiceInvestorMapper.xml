@@ -2,12 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestor">
-    <id column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="investor_code" jdbcType="VARCHAR" property="investorCode" />
     <result column="investor_account" jdbcType="VARCHAR" property="investorAccount" />
     <result column="investor_name" jdbcType="VARCHAR" property="investorName" />
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
-    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_id_" jdbcType="VARCHAR" property="orgId" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="address_province" jdbcType="VARCHAR" property="addressProvince" />
@@ -16,6 +17,7 @@
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="personal_profile" jdbcType="VARCHAR" property="personalProfile" />
+    <result column="inves_finan_exper" jdbcType="VARCHAR" property="invesFinanExper" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -83,9 +85,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, investor_account, investor_name, avatar, sex, org_id, org_name, position, address_province, 
-    address_city, address_area, phone, email, personal_profile, status, approval_status, 
-    created_time, creator_account, modified_time, modifier_account, record_status
+    id_, investor_code, investor_account, investor_name, avatar, sex, org_id_, org_name, 
+    position, address_province, address_city, address_area, phone, email, personal_profile, 
+    inves_finan_exper, status, approval_status, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria" resultMap="BaseResultMap">
     select
@@ -105,11 +108,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_service_investor
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_service_investor
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria">
     delete from tb_service_investor
@@ -118,28 +121,31 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestor">
-    insert into tb_service_investor (id, investor_account, investor_name, 
-      avatar, sex, org_id, 
-      org_name, position, address_province, 
-      address_city, address_area, phone, 
-      email, personal_profile, status, 
-      approval_status, created_time, creator_account, 
-      modified_time, modifier_account, record_status
-      )
-    values (#{id,jdbcType=VARCHAR}, #{investorAccount,jdbcType=VARCHAR}, #{investorName,jdbcType=VARCHAR}, 
-      #{avatar,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, 
-      #{orgName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{addressProvince,jdbcType=VARCHAR}, 
-      #{addressCity,jdbcType=VARCHAR}, #{addressArea,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{personalProfile,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{approvalStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
-      )
+    insert into tb_service_investor (id_, investor_code, investor_account, 
+      investor_name, avatar, sex, 
+      org_id_, org_name, position, 
+      address_province, address_city, address_area, 
+      phone, email, personal_profile, 
+      inves_finan_exper, status, approval_status, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
+    values (#{id,jdbcType=VARCHAR}, #{investorCode,jdbcType=VARCHAR}, #{investorAccount,jdbcType=VARCHAR}, 
+      #{investorName,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{addressProvince,jdbcType=VARCHAR}, #{addressCity,jdbcType=VARCHAR}, #{addressArea,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{personalProfile,jdbcType=VARCHAR}, 
+      #{invesFinanExper,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestor">
     insert into tb_service_investor
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        id,
+        id_,
+      </if>
+      <if test="investorCode != null">
+        investor_code,
       </if>
       <if test="investorAccount != null">
         investor_account,
@@ -154,7 +160,7 @@
         sex,
       </if>
       <if test="orgId != null">
-        org_id,
+        org_id_,
       </if>
       <if test="orgName != null">
         org_name,
@@ -179,6 +185,9 @@
       </if>
       <if test="personalProfile != null">
         personal_profile,
+      </if>
+      <if test="invesFinanExper != null">
+        inves_finan_exper,
       </if>
       <if test="status != null">
         status,
@@ -205,6 +214,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="investorCode != null">
+        #{investorCode,jdbcType=VARCHAR},
       </if>
       <if test="investorAccount != null">
         #{investorAccount,jdbcType=VARCHAR},
@@ -245,6 +257,9 @@
       <if test="personalProfile != null">
         #{personalProfile,jdbcType=VARCHAR},
       </if>
+      <if test="invesFinanExper != null">
+        #{invesFinanExper,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
       </if>
@@ -278,7 +293,10 @@
     update tb_service_investor
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
+        id_ = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.investorCode != null">
+        investor_code = #{record.investorCode,jdbcType=VARCHAR},
       </if>
       <if test="record.investorAccount != null">
         investor_account = #{record.investorAccount,jdbcType=VARCHAR},
@@ -293,7 +311,7 @@
         sex = #{record.sex,jdbcType=VARCHAR},
       </if>
       <if test="record.orgId != null">
-        org_id = #{record.orgId,jdbcType=VARCHAR},
+        org_id_ = #{record.orgId,jdbcType=VARCHAR},
       </if>
       <if test="record.orgName != null">
         org_name = #{record.orgName,jdbcType=VARCHAR},
@@ -318,6 +336,9 @@
       </if>
       <if test="record.personalProfile != null">
         personal_profile = #{record.personalProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invesFinanExper != null">
+        inves_finan_exper = #{record.invesFinanExper,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=VARCHAR},
@@ -347,12 +368,13 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_service_investor
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      investor_code = #{record.investorCode,jdbcType=VARCHAR},
       investor_account = #{record.investorAccount,jdbcType=VARCHAR},
       investor_name = #{record.investorName,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
       sex = #{record.sex,jdbcType=VARCHAR},
-      org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_id_ = #{record.orgId,jdbcType=VARCHAR},
       org_name = #{record.orgName,jdbcType=VARCHAR},
       position = #{record.position,jdbcType=VARCHAR},
       address_province = #{record.addressProvince,jdbcType=VARCHAR},
@@ -361,6 +383,7 @@
       phone = #{record.phone,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       personal_profile = #{record.personalProfile,jdbcType=VARCHAR},
+      inves_finan_exper = #{record.invesFinanExper,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -375,6 +398,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestor">
     update tb_service_investor
     <set>
+      <if test="investorCode != null">
+        investor_code = #{investorCode,jdbcType=VARCHAR},
+      </if>
       <if test="investorAccount != null">
         investor_account = #{investorAccount,jdbcType=VARCHAR},
       </if>
@@ -388,7 +414,7 @@
         sex = #{sex,jdbcType=VARCHAR},
       </if>
       <if test="orgId != null">
-        org_id = #{orgId,jdbcType=VARCHAR},
+        org_id_ = #{orgId,jdbcType=VARCHAR},
       </if>
       <if test="orgName != null">
         org_name = #{orgName,jdbcType=VARCHAR},
@@ -414,6 +440,9 @@
       <if test="personalProfile != null">
         personal_profile = #{personalProfile,jdbcType=VARCHAR},
       </if>
+      <if test="invesFinanExper != null">
+        inves_finan_exper = #{invesFinanExper,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
       </if>
@@ -436,15 +465,16 @@
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestor">
     update tb_service_investor
-    set investor_account = #{investorAccount,jdbcType=VARCHAR},
+    set investor_code = #{investorCode,jdbcType=VARCHAR},
+      investor_account = #{investorAccount,jdbcType=VARCHAR},
       investor_name = #{investorName,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=VARCHAR},
-      org_id = #{orgId,jdbcType=VARCHAR},
+      org_id_ = #{orgId,jdbcType=VARCHAR},
       org_name = #{orgName,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
       address_province = #{addressProvince,jdbcType=VARCHAR},
@@ -453,6 +483,7 @@
       phone = #{phone,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       personal_profile = #{personalProfile,jdbcType=VARCHAR},
+      inves_finan_exper = #{invesFinanExper,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -460,6 +491,6 @@
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT}
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

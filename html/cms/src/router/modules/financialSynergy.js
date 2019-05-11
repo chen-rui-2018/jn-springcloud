@@ -34,57 +34,21 @@ const financRouter = {
           component: () => import('@/views/financ/finacialMonitoring/expenses'),
           name: 'expenses',
           meta: { title: '支出录入', noCache: true }
+        },
+        {
+          path: 'income',
+          component: () => import('@/views/financ/finacialMonitoring/income'),
+          name: 'income',
+          meta: { title: '收入情况', noCache: true }
+        },
+        {
+          path: 'financeDetails',
+          component: () => import('@/views/financ/finacialMonitoring/financeDetails'),
+          name: 'financeDetails',
+          meta: { title: '财务明细', noCache: false }
         }
       ]
     }
-    //     {
-    //       path: 'departmentManagement',
-    //       component: () => import('@/views/menu/departmentManagement'),
-    //       name: 'departmentManagement',
-    //       meta: { title: '部门管理', noCache: true }
-    //     },
-    //     {
-    //       path: 'fileGroupManagement',
-    //       component: () => import('@/views/menu/fileGroupManagement'),
-    //       name: 'fileGroupManagement',
-    //       meta: { title: '文件组管理', noCache: true }
-    //     },
-    //     {
-    //       path: 'postManagement',
-    //       component: () => import('@/views/menu/postManagement'),
-    //       name: 'postManagement',
-    //       meta: { title: '岗位管理', noCache: true }
-    //     },
-    //     {
-    //       path: 'postTypeManagement',
-    //       component: () => import('@/views/menu/postTypeManagement'),
-    //       name: 'postTypeManagement',
-    //       meta: { title: '岗位类型管理', noCache: true }
-    //     },
-    //     {
-    //       path: 'menuManagement',
-    //       component: () => import('@/views/menu/menuManagement'),
-    //       name: 'menuManagement',
-    //       meta: { title: '菜单管理', noCache: true }
-    //     },
-    //     {
-    //       path: 'fileManagement',
-    //       component: () => import('@/views/menu/fileManagement'),
-    //       name: 'fileManagement',
-    //       meta: { title: '文件管理', noCache: true }
-    //     },
-    //     {
-    //       path: 'dataDictionary',
-    //       component: () => import('@/views/menu/dataDictionary'),
-    //       name: 'dataDictionary',
-    //       meta: { title: '数据字典', noCache: true }
-    //     },
-    //     {
-    //       path: 'moduleManagement',
-    //       component: () => import('@/views/menu/moduleManagement'),
-    //       name: 'moduleManagement',
-    //       meta: { title: '模块管理', noCache: true }
-    //     }
   ]
 }
 export default financRouter

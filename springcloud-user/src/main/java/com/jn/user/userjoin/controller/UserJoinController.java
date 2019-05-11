@@ -18,10 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户注册
@@ -44,32 +41,32 @@ public class UserJoinController extends BaseController {
     private UserJoinService userJoinService;
 
     @ControllerLog(doAction = "获取短信验证码")
-    @ApiOperation(value = "获取短信验证码",httpMethod = "POST",response = Result.class)
-    @RequestMapping(value = "/getCode")
-    public Result getCode(@ApiParam(value = "手机号",required = true) @RequestParam String phone){
+    @ApiOperation(value = "获取短信验证码",notes = "根据手机号获取")
+    @RequestMapping(value = "/getCode",method = RequestMethod.GET)
+    public Result getCode(@ApiParam(value = "手机号",required = true,example = "1817590****") @RequestParam String phone){
         Assert.notNull(phone, UserJoinExceptionEnum.MESSAGE_CODE_IS_WRONG.getMessage());
         userJoinService.getCode(phone);
         return new Result();
     }
 
     @ControllerLog(doAction = "用户注册")
-    @ApiOperation(value = "用户注册",httpMethod = "POST",response = Result.class)
-    @RequestMapping(value = "/addUser")
+    @ApiOperation(value = "用户注册")
+    @RequestMapping(value = "/addUser",method = RequestMethod.POST)
     public Result addUser(@RequestBody @Validated UserRegister userRegister){
         return userJoinService.addUser(userRegister);
     }
 
 
     @ControllerLog(doAction = "修改密码")
-    @ApiOperation(value = "修改密码",httpMethod = "POST",response = Result.class)
-    @RequestMapping(value = "/updatePassword")
+    @ApiOperation(value = "修改密码")
+    @RequestMapping(value = "/updatePassword",method = RequestMethod.POST)
     public Result updatePassword(@RequestBody @Validated UserRegister userRegister){
         return userJoinService.updateUser(userRegister);
     }
 
     @ControllerLog(doAction = "获取短信验证码[当前用户]")
-    @ApiOperation(value = "获取短信验证码[当前用户]",httpMethod = "POST",response = Result.class)
-    @RequestMapping(value = "/getUserCode")
+    @ApiOperation(value = "获取短信验证码[当前用户]",notes = "获取当前用户验证码")
+    @RequestMapping(value = "/getUserCode",method = RequestMethod.GET)
     public Result<String> getUserCode(){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         String phone = user.getPhone();

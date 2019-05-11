@@ -16,15 +16,21 @@ public interface TbServiceProductMapper {
 
     int insertSelective(TbServiceProduct record);
 
+    List<TbServiceProduct> selectByExampleWithBLOBs(TbServiceProductCriteria example);
+
     List<TbServiceProduct> selectByExample(TbServiceProductCriteria example);
 
     TbServiceProduct selectByPrimaryKey(String productId);
 
     int updateByExampleSelective(@Param("record") TbServiceProduct record, @Param("example") TbServiceProductCriteria example);
 
+    int updateByExampleWithBLOBs(@Param("record") TbServiceProduct record, @Param("example") TbServiceProductCriteria example);
+
     int updateByExample(@Param("record") TbServiceProduct record, @Param("example") TbServiceProductCriteria example);
 
     int updateByPrimaryKeySelective(TbServiceProduct record);
+
+    int updateByPrimaryKeyWithBLOBs(TbServiceProduct record);
 
     int updateByPrimaryKey(TbServiceProduct record);
 }

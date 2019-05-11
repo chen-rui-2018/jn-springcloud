@@ -4,23 +4,33 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.enums.CompanyExceptionEnum;
-import com.jn.company.model.CompanyProImg;
-import com.jn.company.model.ServiceCompany;
-import com.jn.company.model.ServiceCompanyParam;
+import com.jn.company.model.*;
+import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
-import com.jn.enterprise.company.entity.TbServiceCompany;
-import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
-import com.jn.enterprise.company.entity.TbServiceCompanyProImg;
-import com.jn.enterprise.company.entity.TbServiceCompanyProImgCriteria;
+import com.jn.enterprise.company.entity.*;
+import com.jn.enterprise.company.enums.CompanyDataEnum;
+import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
+import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
+import com.jn.park.activity.model.CommentAddParam;
+import com.jn.park.api.CareClient;
+import com.jn.park.api.CommentClient;
+import com.jn.park.care.model.CareParam;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +39,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +59,19 @@ public class CompanyServiceImpl implements CompanyService {
     private TbServicePreferMapper tbServicePreferMapper;
     @Autowired
     private TbServiceCompanyProImgMapper tbServiceCompanyProImgMapper;
+
+    @Autowired
+    private CompanyMapper companyMapper;
+
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+    @Autowired
+    private CommentClient commentClient;
+    @Autowired
+    private StaffService staffService;
+    @Autowired
+    private CareClient careClient;
+
     /**
      * 数据状态 1有效
      */
@@ -119,24 +143,29 @@ public class CompanyServiceImpl implements CompanyService {
 
         //查询企业字段数据
         TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
-        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
-        String[] comProperty = tbServiceCompany.getComProperty().split(",");
         List<String> comPropertys = new ArrayList<>(16);
-        company.setComPropertys(comProperty);
-        for (TbServicePrefer prefer: tbServicePrefers
-             ) {
-            // 行业领域
-            if(StringUtils.equals(prefer.getId(),tbServiceCompany.getInduType())){
-                company.setInduTypeName(prefer.getPreValue());
-            }
-            // 企业性质
-            for (String s: comProperty
-                 ) {
-                if(StringUtils.equals(s,prefer.getId())){
-                    comPropertys.add(prefer.getPreValue());
+        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
+        if(StringUtils.isNotEmpty(tbServiceCompany.getComProperty())){
+            String[] comProperty = tbServiceCompany.getComProperty().split(",");
+
+            company.setComPropertys(comProperty);
+            for (TbServicePrefer prefer: tbServicePrefers
+            ) {
+                // 行业领域
+                if(StringUtils.equals(prefer.getId(),tbServiceCompany.getInduType())){
+                    company.setInduTypeName(prefer.getPreValue());
+                }
+                // 企业性质
+                for (String s: comProperty
+                ) {
+                    if(StringUtils.equals(s,prefer.getId())){
+                        comPropertys.add(prefer.getPreValue());
+                    }
                 }
             }
         }
+
+
         if(null != tbServiceCompany.getFoundingTime()){
             company.setFoundingTime(DateUtils.formatDate(tbServiceCompany.getFoundingTime(),PATTERN));
         }
@@ -173,7 +202,75 @@ public class CompanyServiceImpl implements CompanyService {
             imgs.add(proImg);
         }
         company.setProImgs(imgs);
+
+        //TODO 企业员工
+
+
         return company;
+    }
+
+    @ServiceLog(doAction = "根据用户账号查询企业信息（用户为企业管理员）,携带当前登录用户")
+    @Override
+    public  ServiceCompany getCompanyDetailByAccountOrId(String account,String currentAccount){
+        ServiceCompany companyDetailByAccountOrId = this.getCompanyDetailByAccountOrId(account);
+        CareParam careParam = new CareParam();
+        careParam.setAccount(account);
+        careParam.setCurrentAccount(currentAccount);
+        Result companyCareInfo = careClient.findCompanyCareInfo(careParam);
+        if(null !=companyCareInfo && null != companyCareInfo.getData()){
+            CareUserDetails data = (CareUserDetails)companyCareInfo.getData();
+            companyDetailByAccountOrId.setCareUserDetails(data);
+        }
+        return companyDetailByAccountOrId;
+    }
+
+    @Override
+    @ServiceLog(doAction = "编辑企业信息")
+    public Integer updateCompanyInfo(CompanyUpdateParam companyUpdateParam, String account, String phone) {
+        // 判断当前用户是否为企业管理员
+        ServiceCompany company = getCompanyDetailByAccountOrId(account);
+
+        String code = (String)userExtensionClient.getSendCodeByPhone(phone).getData();
+        if(!StringUtils.equals(code,companyUpdateParam.getCheckCode())){
+            //验证码有误
+            throw new JnSpringCloudException(JoinParkExceptionEnum.MESSAGE_CODE_IS_WRONG);
+        }
+
+        // 如果有数据且正在审核中抛出异常
+        TbServiceCompanyModify companyModify = companyMapper.getLastModify(company.getId());
+        if (companyModify != null && companyModify.getCheckStatus().equals(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode())) {
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.COMPANY_CHECK_ING);
+        }
+
+        // 封装ibps数据
+        companyUpdateParam.setCheckStatus(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode());
+        companyUpdateParam.setComId(company.getId());
+        companyUpdateParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        companyUpdateParam.setCreatorAccount(account);
+        companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
+
+        IBPSResult ibpsResult = IBPSUtils.sendRequest("574913700364812288", account, companyUpdateParam);
+
+        // ibps启动流程失败
+        if (ibpsResult == null || ibpsResult.getState().equals("-1")) {
+            logger.warn("[编辑企业信息] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.COMPANY_CHECK_ERROR);
+        }
+        logger.info("[编辑企业信息] " + ibpsResult.getMessage());
+        return 1;
+    }
+
+
+    @ServiceLog(doAction = "获取评论信息")
+    @Override
+    public Result<PaginationData<List<Comment>>> getCommentInfo(ActivityPagingParam activityPagingParam){
+        return commentClient.getCommentInfo(activityPagingParam);
+    }
+
+    @ServiceLog(doAction = "保存评论")
+    @Override
+    public Result<Boolean> saveComment(CommentAddParam commentAddParam){
+        return commentClient.commentActivity(commentAddParam);
     }
 
 }

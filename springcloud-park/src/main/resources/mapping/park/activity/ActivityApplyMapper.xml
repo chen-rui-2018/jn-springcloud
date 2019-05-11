@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.activity.dao.ActivityApplyMapper">
+   <select id="findApplyActivityList" resultType="com.jn.park.activity.model.ActivityApplyDetail">
+        select
+        ta.id as "id",                                                      <!--签到信息id-->
+        ta.creator_account as "account",									<!--签到人账号-->
+        ta.sign_status as "signStatus",                                     <!--签到状态-->
+        ta.apply_status as "applyStatus",                                   <!--报名状态-->
+        ta.activity_Id as "activityId",                                     <!--活动ID-->
+        date_format(ta.created_time, '%Y-%m-%d %H:%i:%s') as "applyTime",     <!--报名时间-->
+        date_format(ta.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime"        <!--签到时间-->
+        from tb_activity_apply ta
+        where
+        1=1
+        and ta.apply_status = '1'
+        and ta.record_status = '1'
+        <if test="activityId !=null and activityId !='' ">
+            and ta.activity_id=#{activityId}
+        </if>
+        <if test="applyStatus !=null and applyStatus !='' ">
+            and ta.apply_status = #{applyStatus}
+        </if>
+
+    </select>
+
+    <select id="findApplyAccountList" resultType="com.jn.park.activity.model.ActivityApplyDetail">
+        select
+        ta.id as "id",                                                      <!--签到信息id-->
+        ta.activity_id as "activityId",                                     <!--活动ID-->
+        ta.creator_account as "account"     									    <!--签到人账号-->
+        from tb_activity_apply ta
+        where
+        1=1
+        and ta.apply_status = '1'
+        and ta.record_status = '1'
+        <if test="list != null and list.size()>0">
+            and ta.activity_id in
+            <foreach collection="list" index="index"  item = "item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+
+        </if>
+
+    </select>
+</mapper>

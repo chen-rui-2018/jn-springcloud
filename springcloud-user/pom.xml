@@ -23,6 +23,10 @@
         </dependency>
         <dependency>
             <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
             <artifactId>springcloud-user-api</artifactId>
         </dependency>
         <dependency>
@@ -63,10 +67,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        weChatInfo
+                        userExtension
                     </contexts>
                     <tableNames>
-                        tb_wechat_user_info
+                        tb_user_person
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

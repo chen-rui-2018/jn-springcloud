@@ -34,49 +34,49 @@ public class FinanceRecordsController extends BaseController {
     private FinanceRecordsService financeRecordsService;
 
     @ControllerLog(doAction = "备案项,需录入项等查询")
-    @ApiOperation(value = "备案项,需录入项等查询",notes = "备案项,需录入项等查询",httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "备案项,需录入项等查询",notes = "备案项,需录入项等查询",httpMethod = "GET")
     @GetMapping(value = "/findDetail")
     @RequiresPermissions("/finance/records/findDetail")
     public Result<FinanceRecordsFindDetailModel> findDetail(){
-        //todo
+
         FinanceRecordsFindDetailModel findDetail=financeRecordsService.findDetail();
         return new Result(findDetail);
     }
 
     @ControllerLog(doAction = "备案查询")
-    @ApiOperation(value = "备案查询",notes = "备案查询", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "备案查询",notes = "备案查询", httpMethod = "GET")
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/records/findAll")
     public Result<PaginationData<FinanceRecordsFindAllVo>> findAll(@RequestBody FinanceRecordsFindAllModel financeRecordsFindAllModel){
-        //todo
+
         PaginationData findAll=financeRecordsService.findAll(financeRecordsFindAllModel);
         return new Result(findAll);
     }
 
     @ControllerLog(doAction = "查看")
-    @ApiOperation(value = "查看",notes = "查看", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "查看",notes = "查看", httpMethod = "GET")
     @GetMapping(value = "/single")
     @RequiresPermissions("/finance/records/single")
     public Result single(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 
     @ControllerLog(doAction = "录入")
-    @ApiOperation(value = "录入", notes = "录入",httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "录入", notes = "录入",httpMethod = "POST")
     @PostMapping(value = "/entering")
     @RequiresPermissions("/finance/records/entering")
     public Result entering(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 
     @ControllerLog(doAction = "财务确认")
-    @ApiOperation(value = "财务确认",notes = "财务确认", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "财务确认",notes = "财务确认", httpMethod = "POST")
     @PostMapping(value = "/notarize")
     @RequiresPermissions("/finance/records/notarize")
     public Result notarize(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 

@@ -13,11 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 用户信息
- * @Author: yangph
+ * @Author: jiangyl
  * @Date: 2018/12/10 11:29
  * @Version v1.0
  * @modified By:
@@ -33,8 +34,8 @@ public class UserInfoController {
 
 
     @ControllerLog(doAction = "保存用户资料")
-    @ApiOperation(value = "保存用户资料", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/saveUserInfo")
+    @ApiOperation(value = "保存用户资料")
+    @RequestMapping(value = "/saveUserInfo",method = RequestMethod.POST)
     public Result<Integer> saveUserInfo(@RequestBody @Validated UserInfoParam userInfoParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = userInfoService.saveOrUpdateUserInfo(userInfoParam,user);
@@ -42,8 +43,8 @@ public class UserInfoController {
     }
 
     @ControllerLog(doAction = "获取当前前户资料")
-    @ApiOperation(value = "获取当前用户资料", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getUserExtension")
+    @ApiOperation(value = "获取当前用户资料")
+    @RequestMapping(value = "/getUserExtension",method = RequestMethod.GET)
     public Result<UserExtensionInfo> getUserExtension(){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         UserExtensionInfo userExtension = userInfoService.getUserExtension(null==user?null:user.getAccount());

@@ -25,13 +25,13 @@ public interface FinancialProductService {
      * @param productId 产品id
      * @return
      */
-    FinacialProductDetails getFinancialProductDetails(String productId);
+    FinancialProductDetails getFinancialProductDetails(String productId);
 
     /**
      * 金融产品贷款类别
      * @return
      */
-    List<FinacialProductLoanType> getFinancialProductLoanType();
+    List<FinancialProductLoanType> getFinancialProductLoanType();
 
     /**
      * 金融产品担保方式
@@ -64,5 +64,13 @@ public interface FinancialProductService {
      * @param account
      */
    void  upShelfFeatureProduct(FinancialProductAddInfo info,String account);
+
+    /**
+     * 更新服务科技金融产品
+     * @param product
+     * @param account
+     * @return
+     */
+   int modifyFeatureProduct(FinancialProductModifyParam product,String account);
 
 }

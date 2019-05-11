@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.product.dao.TbServiceDetailsMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.product.entity.TbServiceDetails">
-    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_id_" jdbcType="VARCHAR" property="productId" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.enterprise.servicemarket.product.entity.TbServiceDetails">
-    <result column="service_details" jdbcType="LONGVARBINARY" property="serviceDetails" />
+    <result column="service_details" jdbcType="LONGVARCHAR" property="serviceDetails" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    product_id
+    product_id_
   </sql>
   <sql id="Blob_Column_List">
     service_details
@@ -108,14 +108,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceDetails">
-    insert into tb_service_details (product_id, service_details)
-    values (#{productId,jdbcType=VARCHAR}, #{serviceDetails,jdbcType=LONGVARBINARY})
+    insert into tb_service_details (product_id_, service_details)
+    values (#{productId,jdbcType=VARCHAR}, #{serviceDetails,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceDetails">
     insert into tb_service_details
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="productId != null">
-        product_id,
+        product_id_,
       </if>
       <if test="serviceDetails != null">
         service_details,
@@ -126,7 +126,7 @@
         #{productId,jdbcType=VARCHAR},
       </if>
       <if test="serviceDetails != null">
-        #{serviceDetails,jdbcType=LONGVARBINARY},
+        #{serviceDetails,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -140,10 +140,10 @@
     update tb_service_details
     <set>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=VARCHAR},
+        product_id_ = #{record.productId,jdbcType=VARCHAR},
       </if>
       <if test="record.serviceDetails != null">
-        service_details = #{record.serviceDetails,jdbcType=LONGVARBINARY},
+        service_details = #{record.serviceDetails,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -152,15 +152,15 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update tb_service_details
-    set product_id = #{record.productId,jdbcType=VARCHAR},
-      service_details = #{record.serviceDetails,jdbcType=LONGVARBINARY}
+    set product_id_ = #{record.productId,jdbcType=VARCHAR},
+      service_details = #{record.serviceDetails,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_service_details
-    set product_id = #{record.productId,jdbcType=VARCHAR}
+    set product_id_ = #{record.productId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

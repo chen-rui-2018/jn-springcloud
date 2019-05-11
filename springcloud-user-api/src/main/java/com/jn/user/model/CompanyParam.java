@@ -21,10 +21,30 @@ public class CompanyParam extends Page implements Serializable {
     @NotNull(message = "所属企业编码不能为空")
     @Size(max = 32, message = "所属企业编码长度不能超过32个字")
     private String companyCode;
-    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页")
+    @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;
+    @ApiModelProperty(value = "姓名")
+    private String name;
+    @ApiModelProperty(value = "手机号")
+    private String phone;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getCompanyCode() {
         return companyCode;

@@ -37,15 +37,22 @@ export default {
     getUEContent() {
       // 获取内容方法
       return this.editor.getContent()
+    },
+    hasContents() {
+      return this.editor.hasContents()
+    },
+    setContent(content) {
+      console.dir(content)
+      this.editor.hasContents(content)
     }
   }
 }
 </script>
 <style  lang="scss">
-.ueQuidtor{
+// #editor{
 
-   .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
-    line-height: 22px !important;
-}
-}
+//    .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
+//     line-height: 22px !important;
+// }
+// }
 </style>

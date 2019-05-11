@@ -19,7 +19,7 @@ public class AdvisorIntroduction  implements Serializable {
     private String position;
     @ApiModelProperty(value = "头像")
     private String avatar;
-    @ApiModelProperty(value = "是否认证")
+    @ApiModelProperty(value = "是否认证(0：未认证  1：已认证)")
     private String isCertification;
     @ApiModelProperty(value = "所属机构名称")
     private String orgName;

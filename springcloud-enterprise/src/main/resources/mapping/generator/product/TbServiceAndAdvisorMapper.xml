@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.product.dao.TbServiceAndAdvisorMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor">
-    <id column="product_id" jdbcType="VARCHAR" property="productId" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="product_id_" jdbcType="VARCHAR" property="productId" />
     <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -64,7 +65,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    product_id, advisor_account
+    id, product_id_, advisor_account
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisorCriteria" resultMap="BaseResultMap">
     select
@@ -84,11 +85,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_service_and_advisor
-    where product_id = #{productId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_service_and_advisor
-    where product_id = #{productId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisorCriteria">
     delete from tb_service_and_advisor
@@ -97,20 +98,28 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor">
-    insert into tb_service_and_advisor (product_id, advisor_account)
-    values (#{productId,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR})
+    insert into tb_service_and_advisor (id, product_id_, advisor_account
+      )
+    values (#{id,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor">
     insert into tb_service_and_advisor
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="productId != null">
-        product_id,
+        product_id_,
       </if>
       <if test="advisorAccount != null">
         advisor_account,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="productId != null">
         #{productId,jdbcType=VARCHAR},
       </if>
@@ -128,8 +137,11 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_service_and_advisor
     <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=VARCHAR},
+        product_id_ = #{record.productId,jdbcType=VARCHAR},
       </if>
       <if test="record.advisorAccount != null">
         advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
@@ -141,7 +153,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_service_and_advisor
-    set product_id = #{record.productId,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=VARCHAR},
+      product_id_ = #{record.productId,jdbcType=VARCHAR},
       advisor_account = #{record.advisorAccount,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -150,15 +163,19 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor">
     update tb_service_and_advisor
     <set>
+      <if test="productId != null">
+        product_id_ = #{productId,jdbcType=VARCHAR},
+      </if>
       <if test="advisorAccount != null">
         advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       </if>
     </set>
-    where product_id = #{productId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor">
     update tb_service_and_advisor
-    set advisor_account = #{advisorAccount,jdbcType=VARCHAR}
-    where product_id = #{productId,jdbcType=VARCHAR}
+    set product_id_ = #{productId,jdbcType=VARCHAR},
+      advisor_account = #{advisorAccount,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

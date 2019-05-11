@@ -13,12 +13,12 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(value = "ReceiveRatingParameter",description = "我收到的评价查询入参")
 public class ReceiveRatingParameter extends Page {
-    @ApiModelProperty("需求提出人")
+    @ApiModelProperty(value = "需求提出人",example = "wangsong")
     private String issueAccount;
-    @ApiModelProperty("服务产品Id")
-    private String productId;
-    @ApiModelProperty("顾问Id")
-    private String advisorId;
+    @ApiModelProperty(value = "服务产品名称[模糊搜索]",example = "代理记账")
+    private String productName;
+    @ApiModelProperty(value = "顾问名称[模糊搜索]",example = "战三")
+    private String advisorName;
     @ApiModelProperty("当前用户[前台请忽略此参数]")
     private String account;
 
@@ -30,20 +30,20 @@ public class ReceiveRatingParameter extends Page {
         this.issueAccount = issueAccount;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getAdvisorId() {
-        return advisorId;
+    public String getAdvisorName() {
+        return advisorName;
     }
 
-    public void setAdvisorId(String advisorId) {
-        this.advisorId = advisorId;
+    public void setAdvisorName(String advisorName) {
+        this.advisorName = advisorName;
     }
 
     public String getAccount() {

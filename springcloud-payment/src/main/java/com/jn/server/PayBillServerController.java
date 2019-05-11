@@ -9,10 +9,7 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.unionpay.paybill.service.PayBillService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,8 +28,8 @@ public class PayBillServerController extends BaseController implements PayBillCl
     private PayBillService payBillService;
 
     @ControllerLog(doAction = "获取账单列表")
-    @ApiOperation(value = "获取账单列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getBillList")
+    @ApiOperation(value = "获取账单列表", httpMethod = "POST")
+    @RequestMapping(value = "/getPaymentBillList")
     @Override
     public Result<PaginationData<List<PaymentBill>>> getPaymentBillList(@RequestBody PaymentBillParam paymentBillParam){
         PaginationData<List<PaymentBill>> paymentBillList = payBillService.getPaymentBillList(paymentBillParam);
@@ -40,7 +37,7 @@ public class PayBillServerController extends BaseController implements PayBillCl
     }
 
     @ControllerLog(doAction = "创建账单")
-    @ApiOperation(value = "创建账单", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "创建账单,返回账单ID", httpMethod = "POST")
     @RequestMapping(value = "/createBill")
     @Override
     public Result<String> createBill(@RequestBody PaymentBillModel paymentBillModel){
@@ -49,16 +46,16 @@ public class PayBillServerController extends BaseController implements PayBillCl
     }
 
     @ControllerLog(doAction = "获取账单详情")
-    @ApiOperation(value = "获取账单详情", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "获取账单详情", httpMethod = "POST")
     @RequestMapping(value = "/getPayBillDetailByIdOrNum")
     @Override
-    public Result<PayBillVO> getPayBillDetailByIdOrNum(@RequestParam String idOrNum){
+    public Result<PayBillVO> getPayBillDetailByIdOrNum(@RequestBody String idOrNum){
         return new Result<>(payBillService.getPayBillDetailByIdOrNum(idOrNum));
     }
 
 
     @ControllerLog(doAction = "按天查询缴费系统中各分类的收入情况")
-    @ApiOperation(value = "按天查询缴费系统中各分类的收入情况", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "按天查询缴费系统中各分类的收入情况", httpMethod = "POST")
     @RequestMapping(value = "/statisticsBillAmount")
     @Override
     public Result<PayBillCountVO> statisticsBillAmount(@RequestBody PayBillCountParam payBillCountParam){
@@ -67,10 +64,36 @@ public class PayBillServerController extends BaseController implements PayBillCl
     }
 
     @ControllerLog(doAction = "支付回调接口")
-    @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST")
     @RequestMapping(value = "/payCallBack")
     @Override
     public Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam){
         return new Result<>(payBillService.payCallBack(callBackParam));
+    }
+
+    @ControllerLog(doAction = "根据账单IDs获取账单列表内容")
+    @ApiOperation(value = "根据账单IDs获取账单列表内容",notes = "根据账单IDs获取账单列表内容", httpMethod = "POST")
+    @RequestMapping(value = "/getPaymentBillListByIds")
+    @Override
+    public Result<List<PaymentBill>> getPaymentBillListByIds(@RequestBody String[] billIds){
+        List<PaymentBill> paymentBillList = payBillService.getPaymentBillListByIds(billIds);
+        return new Result<>(paymentBillList);
+    }
+
+
+    @ControllerLog(doAction = "获取订单详情")
+    @ApiOperation(value = "获取订单详情", httpMethod = "POST")
+    @RequestMapping(value = "/getPayOrderDetailByOrderId")
+    @Override
+    public Result<PayOrderVO> getPayOrderDetailByOrderId(@RequestBody String orderId){
+        return new Result<>(payBillService.getPayOrderDetail(orderId));
+    }
+
+    @ControllerLog(doAction = "通过账单号取消账单及生成的订单")
+    @ApiOperation(value = "通过账单号取消账单及生成的订单", httpMethod = "POST")
+    @RequestMapping(value = "/cancelPayBillByBillNum")
+    @Override
+    public Result<Boolean> cancelPayBillByBillNum(@RequestBody PayBillCancelParam payBillCancelParam){
+        return new Result<>(payBillService.cancelPayBillByBillNum(payBillCancelParam));
     }
 }

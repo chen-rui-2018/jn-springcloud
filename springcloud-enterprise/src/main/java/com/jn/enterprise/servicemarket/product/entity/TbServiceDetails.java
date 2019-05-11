@@ -1,12 +1,11 @@
 package com.jn.enterprise.servicemarket.product.entity;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 public class TbServiceDetails implements Serializable {
     private String productId;
 
-    private byte[] serviceDetails;
+    private String serviceDetails;
 
     private static final long serialVersionUID = 1L;
 
@@ -18,12 +17,12 @@ public class TbServiceDetails implements Serializable {
         this.productId = productId == null ? null : productId.trim();
     }
 
-    public byte[] getServiceDetails() {
+    public String getServiceDetails() {
         return serviceDetails;
     }
 
-    public void setServiceDetails(byte[] serviceDetails) {
-        this.serviceDetails = serviceDetails;
+    public void setServiceDetails(String serviceDetails) {
+        this.serviceDetails = serviceDetails == null ? null : serviceDetails.trim();
     }
 
     @Override
@@ -39,7 +38,7 @@ public class TbServiceDetails implements Serializable {
         }
         TbServiceDetails other = (TbServiceDetails) that;
         return (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
-            && (Arrays.equals(this.getServiceDetails(), other.getServiceDetails()));
+            && (this.getServiceDetails() == null ? other.getServiceDetails() == null : this.getServiceDetails().equals(other.getServiceDetails()));
     }
 
     @Override
@@ -47,7 +46,7 @@ public class TbServiceDetails implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
-        result = prime * result + (Arrays.hashCode(getServiceDetails()));
+        result = prime * result + ((getServiceDetails() == null) ? 0 : getServiceDetails().hashCode());
         return result;
     }
 

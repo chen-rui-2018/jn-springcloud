@@ -44,4 +44,10 @@ public interface IndustryService {
      */
     List<IndustryDictionary> getIndustryDictionary(IndustryDictParameter industryDictParameter);
 
+    /**
+     * 机构领域及二级菜单
+     * @return
+     */
+    List<IndustryDictionaryProduct> selectIndustryProductList();
+
 }

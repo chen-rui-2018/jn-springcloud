@@ -5,7 +5,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.OrgExceptionEnum;
-import com.jn.enterprise.servicemarket.org.model.*;
+import com.jn.enterprise.servicemarket.org.model.OrgApplyCheckData;
+import com.jn.enterprise.servicemarket.org.model.OrgApplyParameter;
 import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
@@ -19,10 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,7 +31,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "服务机构认证(后台管理审核)")
+@Api(tags = "服务超市-服务机构认证(后台管理审核)")
 @RestController
 @RequestMapping(value = "/serviceMarket/OrgApproveController")
 public class OrgApproveController extends BaseController{
@@ -46,18 +44,18 @@ public class OrgApproveController extends BaseController{
     private OrgApproveService orgApproveService;
 
     @ControllerLog(doAction = "查询机构审核认证列表")
-    @ApiOperation(value = "查询机构审核认证列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getOrgApplyList")
+    @ApiOperation(value = "查询机构审核认证列表",notes = "返回数据响应条数，正常情况为1")
+    @RequestMapping(value = "/getOrgApplyList",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/OrgApproveController/getOrgApplyList")
-    public Result<PaginationData<List<OrgApplyVo>>> getOrgApplyList(@RequestBody @Validated OrgApplyParameter orgApplyParameter){
+    public Result<PaginationData<List<OrgApplyVo>>> getOrgApplyList(@Validated OrgApplyParameter orgApplyParameter){
         PaginationData<List<OrgApplyVo>> orgApplyList = orgApproveService.getOrgApplyList(orgApplyParameter);
         logger.info("查询机构审核认证列表成功，响应条数："+orgApplyList.getTotal());
         return new Result<>(orgApplyList);
     }
 
     @ControllerLog(doAction = "查询机构入驻数据")
-    @ApiOperation(value = "查询机构入驻数据", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getOrgCount")
+    @ApiOperation(value = "查询机构入驻数据",notes = "统计数据")
+    @RequestMapping(value = "/getOrgCount",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/OrgApproveController/getOrgCount")
     public Result<OrgApplyCountVo> getOrgCount(){
         OrgApplyCountVo orgCount = orgApproveService.getOrgCount();
@@ -65,18 +63,18 @@ public class OrgApproveController extends BaseController{
     }
 
     @ControllerLog(doAction = "查询机构审核详情")
-    @ApiOperation(value = "查询机构审核详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getOrgApplyDetail")
+    @ApiOperation(value = "查询机构审核详情")
+    @RequestMapping(value = "/getOrgApplyDetail",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/OrgApproveController/getOrgApplyDetail")
-    public Result<OrgApplyDetailVo> getOrgApplyDetail(@ApiParam(name="orgId",value = "orgId:机构ID",required = true)@RequestParam(value = "orgId") String orgId){
+    public Result<OrgApplyDetailVo> getOrgApplyDetail(@ApiParam(name="orgId",value = "orgId:机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367")@RequestParam(value = "orgId") String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         OrgApplyDetailVo orgApplyDetailVo = orgApproveService.getOrgApplyDetail(orgId);
         return new Result<>(orgApplyDetailVo);
     }
 
     @ControllerLog(doAction = "服务机构申请审核")
-    @ApiOperation(value = "服务机构申请审核", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/checkOrgApply")
+    @ApiOperation(value = "服务机构申请审核")
+    @RequestMapping(value = "/checkOrgApply",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/OrgApproveController/checkOrgApply")
     public Result<Boolean> checkOrgApply(@RequestBody OrgApplyCheckData orgApplyCheckData){
         Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData);

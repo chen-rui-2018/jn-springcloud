@@ -15,15 +15,14 @@ import com.jn.oa.common.enums.OaReturnMessageEnum;
 import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.oa.meeting.dao.*;
 import com.jn.oa.meeting.entity.*;
-import com.jn.oa.meeting.enums.OaMeetingApproveStatusEnums;
-import com.jn.oa.meeting.enums.OaMeetingNoticesStatusEnums;
-import com.jn.oa.meeting.enums.OaMeetingNoticesTemplateEnums;
-import com.jn.oa.meeting.enums.OaMeetingStatusEnums;
+import com.jn.oa.meeting.enums.*;
 import com.jn.oa.meeting.model.*;
 import com.jn.oa.meeting.service.MeetingService;
 import com.jn.oa.meeting.vo.OaMeetingParticipantVo;
 import com.jn.oa.meeting.vo.OaMeetingVo;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.upload.api.UploadClient;
@@ -60,16 +59,10 @@ public class MeetingServiceImpl implements MeetingService {
     private TbOaMeetingMapper tbOaMeetingMapper;
 
     @Resource
-    private OaMeetingMapper oaMeetingMapper;
+    private MeetingMapper oaMeetingMapper;
 
     @Resource
     private TbOaMeetingContentMapper tbOaMeetingContentMapper;
-
-    @Resource
-    private TbOaMeetingParticipantsMapper tbOaMeetingParticipantsMapper;
-
-    @Resource
-    private OaMeetingParticipantMapper oaMeetingParticipantMapper;
 
     @Autowired
     private UploadClient uploadClient;
@@ -79,6 +72,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private SystemClient systemClient;
 
     @Autowired
     public MeetingServiceImpl(ResourceLoader resourceLoader) {
@@ -146,13 +142,13 @@ public class MeetingServiceImpl implements MeetingService {
 
         if(tbOaMeeting.getStartTime()!=null&&(tbOaMeeting.getStartTime().getTime() < new Date().getTime())){
             logger.warn("[会议申请] 会议申请失败,会议开始时间不能小于当前时间,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
-            throw new JnSpringCloudException(OaExceptionEnums.ADD_MEETING_TIME_CONFLICT);
+            throw new JnSpringCloudException(MeetingExceptionEnums.ADD_MEETING_TIME_CONFLICT);
         }
 
         List<TbOaMeeting> tbOaMeetingList= oaMeetingMapper.selectNotCompleteMeetingByTimeAndMeetingRoomId(tbOaMeeting);
         if(tbOaMeetingList!=null&&tbOaMeetingList.size()>0){
             logger.warn("[会议申请] 会议申请失败,会议室冲突,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
-            throw new JnSpringCloudException(OaExceptionEnums.ADD_MEETINGROOM_CONFLICT);
+            throw new JnSpringCloudException(MeetingExceptionEnums.ADD_MEETINGROOM_CONFLICT);
         }
 
         //保存会议申请内容
@@ -165,38 +161,13 @@ public class MeetingServiceImpl implements MeetingService {
         Byte status = Byte.parseByte(OaStatusEnums.EFFECTIVE.getCode());
         tbOaMeetingContent.setRecordStatus(status);
         tbOaMeetingContentMapper.insert(tbOaMeetingContent);
-        //保存参会人员信息
-        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(), oaMeetingAdd.getCreatorAccount(), oaMeetingAdd.getId());
 
         //默认会议状态是“待开始”
-        tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.TO_BEGIN.getCode());
+        tbOaMeeting.setMeetingStatus(MeetingStatusEnums.TO_BEGIN.getCode());
         //重新生成二维码
         saveQRCode(tbOaMeeting);
         tbOaMeetingMapper.insert(tbOaMeeting);
         logger.info("[会议申请] 添加会议申请成功！,tbOaMeetingId: {}", tbOaMeeting.getId());
-    }
-
-    /**
-     * 保存用户参会人员信息
-     *
-     * @param participantsIds
-     */
-    private void saveOaMeetingParticipant(String[] participantsIds, String creatorAccount, String meetingId) {
-        if (participantsIds != null && participantsIds.length > 0) {
-            //保存参会人员信息
-            for (String participantsId : participantsIds) {
-                TbOaMeetingParticipants tbOaMeetingParticipants = new TbOaMeetingParticipants();
-                tbOaMeetingParticipants.setId(UUID.randomUUID().toString());
-                tbOaMeetingParticipants.setMeetingUserId(participantsId);
-                tbOaMeetingParticipants.setCreatedTime(new Date());
-                tbOaMeetingParticipants.setCreatorAccount(creatorAccount);
-                Byte status = Byte.parseByte(OaStatusEnums.EFFECTIVE.getCode());
-                tbOaMeetingParticipants.setRecordStatus(status);
-                tbOaMeetingParticipants.setMeetingId(meetingId);
-                tbOaMeetingParticipantsMapper.insert(tbOaMeetingParticipants);
-
-            }
-        }
     }
 
     /**
@@ -214,7 +185,7 @@ public class MeetingServiceImpl implements MeetingService {
 
         if(tbOaMeeting.getStartTime()!=null&&(tbOaMeeting.getStartTime().getTime() < new Date().getTime())){
             logger.warn("[会议申请] 更改会议申请失败,会议开始时间不能小于当前时间,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
-            throw new JnSpringCloudException(OaExceptionEnums.UPDATE_MEETING_TIME_CONFLICT);
+            throw new JnSpringCloudException(MeetingExceptionEnums.UPDATE_MEETING_TIME_CONFLICT);
         }
 
         //判断修改信息是否存在
@@ -230,15 +201,10 @@ public class MeetingServiceImpl implements MeetingService {
             List<TbOaMeeting> tbOaMeetingList= oaMeetingMapper.selectNotCompleteMeetingByTimeAndMeetingRoomId(tbOaMeeting);
             if(tbOaMeetingList!=null&&tbOaMeetingList.size()>0){
                 logger.warn("[会议申请] 会议申请修改失败,会议室冲突,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
-                throw new JnSpringCloudException(OaExceptionEnums.UPDATE_MEETINGROOM_CONFLICT);
+                throw new JnSpringCloudException(MeetingExceptionEnums.UPDATE_MEETINGROOM_CONFLICT);
             }
         }
 
-
-        //根据会议id删除参会人员
-        oaMeetingParticipantMapper.deleteBranchByMeetingIds(getDeleteMap(user, null, oaMeetingAdd.getId()));
-        //保存参会人员的信息
-        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(), oaMeetingAdd.getCreatorAccount(), oaMeetingAdd.getId());
 
         //保存会议申请内容
         TbOaMeetingContent tbOaMeetingContent = new TbOaMeetingContent();
@@ -305,14 +271,33 @@ public class MeetingServiceImpl implements MeetingService {
             //6、File转换为MultipartFile
             MultipartFile multipartFile = MultipartFileUtil.from(ResourceUtils.getFile(outFilePath), null);
 
+            SysDictInvoke sysDictInvoke=new SysDictInvoke();
+            //数据字典模块编码
+            sysDictInvoke.setModuleCode(MeetingQRCodeFileEnums.MEETING_UPLOAD_MODULE_CODE.getCode());
+            //数据字典父分组编码
+            sysDictInvoke.setParentGroupCode(MeetingQRCodeFileEnums.MEETING_UPLOAD_PARENT_GROUP_CODE.getCode());
+            //数据字典分组编码
+            sysDictInvoke.setGroupCode(MeetingQRCodeFileEnums.MEETING_UPLOAD_GROUP_CODE.getCode());
+            //数据字典key
+            sysDictInvoke.setKey(MeetingQRCodeFileEnums.MEETING_UPLOAD_KEY.getCode());
+
+            //根据条件查询数据字典的值,查询默认“访客文件组”
+            Result data=systemClient.selectDictValueByCondition(sysDictInvoke);
+            if (data == null || data.getData() == null) {
+                logger.warn("[服务调用] 调用内部服务出现未知错误");
+                throw new JnSpringCloudException(OaExceptionEnums.CALL_SERVICE_ERROR);
+            }
+           String fileGroupId=(String) data.getData();
+
+
             //7、上传文件至fastdfs
-            Result<String> result = uploadClient.uploadFile(multipartFile, false);
+            Result<String> result = uploadClient.uploadFile(multipartFile, false,fileGroupId);
 
             tbOaMeeting.setSignInQr(result.getData());
         } catch (Exception e) {
             e.printStackTrace();
             logger.warn("生成会议签到二维码失败！,oaMeetingId: {}", tbOaMeeting.getId());
-            throw new JnSpringCloudException(OaExceptionEnums.CTEATE_QRCODE_FAIL);
+            throw new JnSpringCloudException(MeetingExceptionEnums.CTEATE_QRCODE_FAIL);
         }
     }
 
@@ -326,15 +311,14 @@ public class MeetingServiceImpl implements MeetingService {
     @Transactional(rollbackFor = Exception.class)
     public void approveOaMeeting(OaMeetingApprove oaMeetingApprove, User approveUser) {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
-        tbOaMeeting.setApprovalUser(approveUser.getId());
+
         tbOaMeeting.setId(oaMeetingApprove.getId());
-        tbOaMeeting.setApprovalStatus(oaMeetingApprove.getApprovalStatus());
+
         tbOaMeeting.setModifiedTime(new Date());
         tbOaMeeting.setModifierAccount(approveUser.getId());
-        tbOaMeeting.setApprovalOpinion(oaMeetingApprove.getApprovalOpinion());
         //作废的会议状态，设置为已取消
-        if (OaMeetingApproveStatusEnums.INVALID.getCode().equals(oaMeetingApprove.getApprovalStatus())) {
-            tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.CANCELLED.getCode());
+        if (MeetingApproveStatusEnums.INVALID.getCode().equals(oaMeetingApprove.getApprovalStatus())) {
+            tbOaMeeting.setMeetingStatus(MeetingStatusEnums.CANCELLED.getCode());
         }
         tbOaMeetingMapper.updateByPrimaryKeySelective(tbOaMeeting);
     }
@@ -351,7 +335,7 @@ public class MeetingServiceImpl implements MeetingService {
     public void finishOaMeeting(String meetingId, User approveUser) {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         tbOaMeeting.setId(meetingId);
-        tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.COMPLETED.getCode());
+        tbOaMeeting.setMeetingStatus(MeetingStatusEnums.COMPLETED.getCode());
         tbOaMeeting.setModifiedTime(new Date());
         tbOaMeeting.setModifierAccount(approveUser.getAccount());
         tbOaMeetingMapper.updateByPrimaryKeySelective(tbOaMeeting);
@@ -369,8 +353,7 @@ public class MeetingServiceImpl implements MeetingService {
     public void cancelOaMeeting(String meetingId, User user) {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         tbOaMeeting.setId(meetingId);
-        tbOaMeeting.setApprovalStatus(OaMeetingApproveStatusEnums.CANCELLED.getCode());
-        tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.CANCELLED.getCode());
+        tbOaMeeting.setMeetingStatus(MeetingStatusEnums.CANCELLED.getCode());
         tbOaMeeting.setModifiedTime(new Date());
         tbOaMeeting.setModifierAccount(user.getAccount());
         tbOaMeetingMapper.updateByPrimaryKeySelective(tbOaMeeting);
@@ -387,7 +370,7 @@ public class MeetingServiceImpl implements MeetingService {
 
             //短信通知
             SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
-            smsTemplateVo.setTemplateId(OaMeetingNoticesTemplateEnums.MESSAGE_TEMPLATE.getCode());
+            smsTemplateVo.setTemplateId(MeetingNoticesTemplateEnums.MESSAGE_TEMPLATE.getCode());
             String[] m = {oaMeetingNotice.getApplicantPhone()};
             smsTemplateVo.setMobiles(m);
             String[] t = {oaMeetingNotice.getMeetingRoomName(),oaMeetingNotice.getTitle()};
@@ -398,7 +381,7 @@ public class MeetingServiceImpl implements MeetingService {
 
             TbOaMeeting oaMeeting=new TbOaMeeting();
             oaMeeting.setId(oaMeetingNotice.getId());
-            oaMeeting.setIsRemind( OaMeetingNoticesStatusEnums.HAVE_INFORMED.getCode());
+            oaMeeting.setIsRemind( MeetingNoticesStatusEnums.HAVE_INFORMED.getCode());
             oaMeeting.setModifiedTime(new Date());
             logger.info("[会议申请] 修改提醒！,meetingId: {}",oaMeetingNotice.getId());
             tbOaMeetingMapper.updateByPrimaryKeySelective(oaMeeting);
@@ -464,12 +447,7 @@ public class MeetingServiceImpl implements MeetingService {
         TbOaMeetingCriteria tbOaMeetingCriteria = new TbOaMeetingCriteria();
         TbOaMeetingCriteria.Criteria criteria = tbOaMeetingCriteria.createCriteria();
         criteria.andTitleEqualTo(tbOaMeetingTitle);
-        //筛选已取消的数据
-        //过滤已作废的数据
-        //Byte invalidStatus = Byte.parseByte(OaMeetingStatusEnums.INVALID.getCode());
-        criteria.andApprovalStatusNotEqualTo(OaMeetingApproveStatusEnums.CANCELLED.getCode());
 
-        // criteria.andRecordStatusEqualTo(invalidStatus);
         return tbOaMeetingMapper.selectByExample(tbOaMeetingCriteria);
     }
 

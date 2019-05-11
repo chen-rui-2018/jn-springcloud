@@ -259,7 +259,7 @@ code {
 
 .app-main {
     padding: 15px;
-    background: #ebebeb;
+    // background: #ebebeb;
 }
 .bgc{
     background-color: #fff;
@@ -272,7 +272,7 @@ body .el-table th.gutter {
 .el-table thead .cell {
   font-weight: normal;
   color: #0a2b3a;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 .el-table--border,
 .el-table--group {
@@ -287,3 +287,6 @@ body .el-table th.gutter {
   position: relative;
   word-wrap: normal;
 }
+.write{
+    background: #fff;
+  }

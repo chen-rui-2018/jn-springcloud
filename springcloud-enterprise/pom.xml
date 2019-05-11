@@ -19,6 +19,10 @@
         </dependency>
         <dependency>
             <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-fastdfs-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
             <artifactId>springcloud-enterprise-api</artifactId>
         </dependency>
         <dependency>
@@ -26,9 +30,25 @@
             <artifactId>springcloud-user-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-park-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-news-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>xxpay-web-api</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -49,16 +69,21 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jn</groupId>
+                        <artifactId>jn-spring-cloud-generator</artifactId>
+                        <version>1.0-RELEASE</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        service_product
+                        company
                     </contexts>
                     <tableNames>
-                        tb_service_product,
-                        tb_service_product_loan_type,
-                        tb_service_product_assure_type
+                        tb_service_company
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

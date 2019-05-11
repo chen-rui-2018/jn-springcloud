@@ -14,7 +14,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "RequireOtherDetails", description = "对他人的需求详情")
-public class RequireOtherDetails extends Page implements Serializable {
+public class RequireOtherDetails implements Serializable {
     @ApiModelProperty(value = "企业名称")
     private String companyName;
     @ApiModelProperty(value = "需求单号")
@@ -35,6 +35,8 @@ public class RequireOtherDetails extends Page implements Serializable {
     private String reqEmail;
     @ApiModelProperty(value = "需求描述")
     private String requireDetail;
+    @ApiModelProperty(value="需求状态, (-1:已撤销 1：待处理，2：已处理)")
+    private String status;
 
     @ApiModelProperty(value = "[科技金融]融资金额")
     private String financingAmount;
@@ -45,6 +47,13 @@ public class RequireOtherDetails extends Page implements Serializable {
     @ApiModelProperty(value = "[科技金融]资金需求日期")
     private Date expectedDate;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getCompanyName() {
         return companyName;

@@ -34,11 +34,13 @@ public class TbUserPerson implements Serializable {
 
     private String company;
 
-    private String post;
+    private String graduatedSchool;
 
     private String education;
 
     private String avatar;
+
+    private String position;
 
     private String userType;
 
@@ -178,12 +180,12 @@ public class TbUserPerson implements Serializable {
         this.company = company == null ? null : company.trim();
     }
 
-    public String getPost() {
-        return post;
+    public String getGraduatedSchool() {
+        return graduatedSchool;
     }
 
-    public void setPost(String post) {
-        this.post = post == null ? null : post.trim();
+    public void setGraduatedSchool(String graduatedSchool) {
+        this.graduatedSchool = graduatedSchool == null ? null : graduatedSchool.trim();
     }
 
     public String getEducation() {
@@ -200,6 +202,14 @@ public class TbUserPerson implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar == null ? null : avatar.trim();
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position == null ? null : position.trim();
     }
 
     public String getUserType() {
@@ -293,9 +303,10 @@ public class TbUserPerson implements Serializable {
             && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
             && (this.getSignature() == null ? other.getSignature() == null : this.getSignature().equals(other.getSignature()))
             && (this.getCompany() == null ? other.getCompany() == null : this.getCompany().equals(other.getCompany()))
-            && (this.getPost() == null ? other.getPost() == null : this.getPost().equals(other.getPost()))
+            && (this.getGraduatedSchool() == null ? other.getGraduatedSchool() == null : this.getGraduatedSchool().equals(other.getGraduatedSchool()))
             && (this.getEducation() == null ? other.getEducation() == null : this.getEducation().equals(other.getEducation()))
             && (this.getAvatar() == null ? other.getAvatar() == null : this.getAvatar().equals(other.getAvatar()))
+            && (this.getPosition() == null ? other.getPosition() == null : this.getPosition().equals(other.getPosition()))
             && (this.getUserType() == null ? other.getUserType() == null : this.getUserType().equals(other.getUserType()))
             && (this.getPoint() == null ? other.getPoint() == null : this.getPoint().equals(other.getPoint()))
             && (this.getBirthday() == null ? other.getBirthday() == null : this.getBirthday().equals(other.getBirthday()))
@@ -325,9 +336,10 @@ public class TbUserPerson implements Serializable {
         result = prime * result + ((getIdCard() == null) ? 0 : getIdCard().hashCode());
         result = prime * result + ((getSignature() == null) ? 0 : getSignature().hashCode());
         result = prime * result + ((getCompany() == null) ? 0 : getCompany().hashCode());
-        result = prime * result + ((getPost() == null) ? 0 : getPost().hashCode());
+        result = prime * result + ((getGraduatedSchool() == null) ? 0 : getGraduatedSchool().hashCode());
         result = prime * result + ((getEducation() == null) ? 0 : getEducation().hashCode());
         result = prime * result + ((getAvatar() == null) ? 0 : getAvatar().hashCode());
+        result = prime * result + ((getPosition() == null) ? 0 : getPosition().hashCode());
         result = prime * result + ((getUserType() == null) ? 0 : getUserType().hashCode());
         result = prime * result + ((getPoint() == null) ? 0 : getPoint().hashCode());
         result = prime * result + ((getBirthday() == null) ? 0 : getBirthday().hashCode());
@@ -360,9 +372,10 @@ public class TbUserPerson implements Serializable {
         sb.append(", idCard=").append(idCard);
         sb.append(", signature=").append(signature);
         sb.append(", company=").append(company);
-        sb.append(", post=").append(post);
+        sb.append(", graduatedSchool=").append(graduatedSchool);
         sb.append(", education=").append(education);
         sb.append(", avatar=").append(avatar);
+        sb.append(", position=").append(position);
         sb.append(", userType=").append(userType);
         sb.append(", point=").append(point);
         sb.append(", birthday=").append(birthday);

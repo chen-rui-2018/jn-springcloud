@@ -17,34 +17,32 @@ import java.io.Serializable;
 public class ServiceContent  implements Serializable {
     @ApiModelProperty(value = "服务产品ID")
     private String productId;
-    @ApiModelProperty(value = "服务产品编号,新增常规产品时不能为空")
+    @ApiModelProperty(value = "服务产品编号")
     private String serialNumber;
-    @ApiModelProperty(value = "服务产品名称",required = true)
-    @NotBlank(message = "服务产品名称不能为空")
+    @ApiModelProperty(value = "服务产品名称")
     private String productName;
-    @ApiModelProperty(value = "服务产品参考价格范围",required = true)
-    @NotBlank(message = "服务产品参考价格范围不能为空")
+    @ApiModelProperty(value = "服务产品参考价格范围")
     private String referPrice;
-    @ApiModelProperty(value = "服务产品领域ID",required = true)
-    @NotBlank(message = "服务产品领域ID不能为空")
+    @ApiModelProperty(value = "服务产品领域ID")
     private String signoryId;
-    @ApiModelProperty(value = "服务产品领域名称",required = true)
-    @NotBlank(message = "服务产品领域名称不能为空")
+    @ApiModelProperty(value = "服务产品领域名称")
     private String signoryName;
-    @ApiModelProperty(value = "服务产品机构id,,机构上架常规服务,添加特色服务时不能为空")
+    @ApiModelProperty(value = "服务产品机构id")
     private String orgId;
-    @ApiModelProperty(value = "服务产品服务周期,单位为年或月或者日(天)",required = true)
-    @NotBlank(message = "服务产品服务周期不能为空")
+    @ApiModelProperty(value = "机构名称")
+    private String orgName;
+    @ApiModelProperty(value = "服务产品服务周期,单位为年或月或者日(天)")
     private String serviceCycle;
     @ApiModelProperty(value = "服务产品图片路径")
     private String pictureUrl;
-    @ApiModelProperty(value = "服务产品类型(0-常规产品,1-特色产品)0 ",required = true)
-    @NotBlank(message = "服务产品类型不能为空")
+    @ApiModelProperty(value = "服务产品类型(0-常规产品,1-特色产品)0 ")
     private String productType;
-    @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔")
+    @ApiModelProperty(value = "状态( -1无效(下架) 0-待审核 1-有效(上架/审核通过) 2-审核不通过)")
+    private String status;
+    @ApiModelProperty(value = "服务产品顾问账号")
     private String advisorAccount;
-    @ApiModelProperty(value = "服务产品描述byte数组")
-    private byte[] serviceDetails;
+    @ApiModelProperty(value = "服务产品的详情存入数据库时,后台转换使用")
+    private String  serviceDetails;
     @ApiModelProperty(value = "服务产品详情")
     private String productDetails;
 
@@ -138,11 +136,11 @@ public class ServiceContent  implements Serializable {
         this.advisorAccount = advisorAccount;
     }
 
-    public byte[] getServiceDetails() {
+    public String getServiceDetails() {
         return serviceDetails;
     }
 
-    public void setServiceDetails(byte[] serviceDetails) {
+    public void setServiceDetails(String serviceDetails) {
         this.serviceDetails = serviceDetails;
     }
 
@@ -152,5 +150,21 @@ public class ServiceContent  implements Serializable {
 
     public void setProductDetails(String productDetails) {
         this.productDetails = productDetails;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

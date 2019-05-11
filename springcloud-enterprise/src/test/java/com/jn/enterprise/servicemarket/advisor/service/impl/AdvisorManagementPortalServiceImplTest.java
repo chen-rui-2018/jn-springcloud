@@ -6,7 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementPortalService;
-import com.jn.enterprise.servicemarket.advisor.vo.AdvisroManagementDetailsVo;
+import com.jn.enterprise.servicemarket.advisor.vo.AdvisorManagementDetailsVo;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,12 +94,12 @@ public class AdvisorManagementPortalServiceImplTest {
     public void getAdvisorManagementDetails() {
 
         try {
-            AdvisroManagementDetailsVo advisorManagementDetails = advisorManagementPortalService.getAdvisorManagementDetails(advisorAccount);
+            AdvisorManagementDetailsVo advisorManagementDetails = advisorManagementPortalService.getAdvisorManagementDetails(advisorAccount);
             if(advisorManagementDetails!=null && advisorManagementDetails.getAdvisorIntroduction()!=null){
                 logger.info(advisorManagementDetails.getAdvisorIntroduction().toString());
             }
-            if(advisorManagementDetails!=null && advisorManagementDetails.getAdvisorBaseInfo()!=null){
-                logger.info(advisorManagementDetails.getAdvisorBaseInfo().toString());
+            if(advisorManagementDetails!=null && advisorManagementDetails.getAdvisorBaseInfoParam()!=null){
+                logger.info(advisorManagementDetails.getAdvisorBaseInfoParam().toString());
             }
             if(advisorManagementDetails!=null && advisorManagementDetails.getServiceHonorList()!=null){
                 for(ServiceHonor serviceHonor:advisorManagementDetails.getServiceHonorList()){

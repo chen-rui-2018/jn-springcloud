@@ -1,0 +1,16 @@
+/* 主题颜色 */
+.themeColor{
+
+    color:#00A041;
+}
+/* 最小文字 */
+.smallSize{
+ font-size: 12px;
+}
+/* 鼠标小手样式 */
+.cur{
+    cursor: pointer;
+}
+.redColor{
+    color:#ff0000
+  }

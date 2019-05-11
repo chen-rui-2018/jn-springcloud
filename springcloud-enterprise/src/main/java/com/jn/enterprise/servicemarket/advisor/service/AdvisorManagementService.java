@@ -3,7 +3,6 @@ package com.jn.enterprise.servicemarket.advisor.service;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementParam;
 import com.jn.enterprise.servicemarket.advisor.model.ApprovalParam;
-import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 
 /**
  * 顾问管理
@@ -15,9 +14,11 @@ import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 public interface AdvisorManagementService {
     /**
      * 邀请顾问
-     * @param inviteAdvisorInfo  邀请顾问入参（被邀请人和邀请人账号）
+     * @param registerAccount   被邀请人手机号或邮箱
+     * @param loginAccount      当前登录用户账号
+     * @return
      */
-    void inviteAdvisor(InviteAdvisorInfo inviteAdvisorInfo);
+    int inviteAdvisor(String registerAccount,String loginAccount);
 
     /**
      * 顾问管理
@@ -30,5 +31,13 @@ public interface AdvisorManagementService {
      * 审批顾问填写信息
      * @param approvalParam  审批顾问信息入参(顾问账号，审批结果，审批说明)
      */
-    void approvalAdvisorInfo(ApprovalParam approvalParam);
+    int approvalAdvisorInfo(ApprovalParam approvalParam);
+
+    /**
+     * 再次邀请
+     * @param advisorAccount 顾问账号
+     * @param loginAccount  当前登录用户
+     * @return
+     */
+    int inviteAgain(String advisorAccount,String loginAccount);
 }

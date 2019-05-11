@@ -89,6 +89,17 @@ public class OaMeeting implements Serializable {
     @ApiModelProperty(value = "会议状态（0:待开始、1:进行中、2:已完成、3:已取消）")
     private String meetingStatus;
 
+    @ApiModelProperty(value = "附件url")
+    private String fileUrl;
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
     public String getMeetingStatus() {
         return meetingStatus;
     }

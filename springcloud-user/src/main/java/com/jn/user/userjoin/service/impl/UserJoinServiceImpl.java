@@ -85,6 +85,7 @@ public class UserJoinServiceImpl implements UserJoinService {
             user.setPhone(userRegister.getPhone());
             user.setAccount(userRegister.getPhone());
             user.setPassword(userRegister.getPassword());
+            user.setName(userRegister.getPhone());
            return systemClient.addSysUser(user);
 
     }

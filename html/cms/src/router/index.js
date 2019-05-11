@@ -17,6 +17,8 @@ import menuRouter from './modules/menu'
 import portalRouter from './modules/portal'
 import oaRouter from './modules/oa'
 import financRouter from './modules/financialSynergy'
+import dataReport from './modules/dataReport'
+import noticeRouter from './modules/notice'
 // import permissionManagement from './modules/permissionManagement'
 /** note: Submenu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -71,13 +73,13 @@ export const constantRouterMap = [
   {
     path: '',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: '/',
     children: [
       {
-        path: 'dashboard',
+        path: '/',
         component: () => import('@/views/dashboard/index'),
-        name: '首页',
-        meta: { title: '首页', icon: 'dashboard', noCache: true }
+        name: '工作台',
+        meta: { title: '工作台', icon: 'dashboard', noCache: true }
       }
     ]
   },
@@ -86,7 +88,9 @@ export const constantRouterMap = [
   oaRouter,
   // permissionManagement,
   planningRouter,
-  financRouter
+  financRouter,
+  dataReport,
+  noticeRouter
   // {
   //   path: '/documentation',
   //   component: Layout,
@@ -116,7 +120,7 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  // mode: 'history', // require service support
+  // mode: 'history', // require service support 去掉url中的#
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })

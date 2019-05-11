@@ -1,10 +1,6 @@
 package com.jn.enterprise.servicemarket.advisor.service;
 
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceExperienceParam;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceHonorParam;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperienceParam;
+import com.jn.enterprise.servicemarket.advisor.model.*;
 
 import java.util.List;
 
@@ -18,32 +14,42 @@ import java.util.List;
 public interface AdvisorEditService {
     /**
      * 基本信息保存并更新
-     * @param advisorBaseInfo  顾问资料基本信息
+     * @param advisorBaseInfoParam  顾问资料基本信息
+     * @return
      */
-    void saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfo advisorBaseInfo);
+    int saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfoParam advisorBaseInfoParam);
 
     /**
      * 荣誉资质保存并更新
      * @param serviceHonorParam  荣誉资质信息
+     * @return
      */
-    void saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam);
+    int saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam);
 
     /**
      * 服务经历保存并更新
      * @param serviceExperienceParam 服务经历信息
+     * @return
      */
-    void saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam);
+    int saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam);
 
     /**
      * 项目经验保存并更新
      * @param serviceProjectExperienceParam  项目经验信息
+     * @return
      */
-    void saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam);
+    int saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam);
 
     /**
      * 获取指定证件类型
      * @param certificateType 证件类型分类
      * @return
      */
-    List<TbServiceCertificateType> getCertificateTypeList(String certificateType);
+    List<AdvisorCertificateTypeShow> getCertificateTypeList(String certificateType);
+
+    /**
+     * 判断当前登录用户是否为顾问
+     * @param loginAccount  用户账号
+     */
+    void currentUserIsAdvisor(String loginAccount);
 }

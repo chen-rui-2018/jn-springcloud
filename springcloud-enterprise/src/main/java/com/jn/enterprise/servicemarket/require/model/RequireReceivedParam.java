@@ -16,14 +16,14 @@ import java.io.Serializable;
  */
 @ApiModel(value = "RequireOtherParam", description = "我收到的需求查询入参")
 public class RequireReceivedParam extends Page implements Serializable {
-    @ApiModelProperty(value = "需求人")
+    @ApiModelProperty(value = "需求人",example = "xxx需求人")
     private String requirePerson;
-    @ApiModelProperty(value = "意向产品")
+    @ApiModelProperty(value = "意向产品",example = "***产品")
     private String intentProduct;
-    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)")
-    @Pattern(regexp = "^[1234]$", message = "{对接结果:'默认值只允许为1,2,3,4'}")
+    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接),全部传空",example = "4")
+    @Pattern(regexp = "^[1234]|(\\s*)$", message = "{对接结果:'默认值只允许为1,2,3,4'}")
     private String handleResult;
-    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页",required = true)
+    @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;

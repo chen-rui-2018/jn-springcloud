@@ -141,8 +141,8 @@ public class SysRoleController extends BaseController {
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "查询角色已经具有的用户信息")
-    @ApiOperation(value = "查询角色已经具有的用户信息",
+    @ControllerLog(doAction = "查询角色的用户信息")
+    @ApiOperation(value = "查询角色的用户信息",
             notes = "查询角色已经具有的用户信息,且条件分页获取为角色未拥有的用户信息")
     @RequestMapping(value = "/findUserOfRoleAndOtherUser", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysRole/findUserOfRoleAndOtherUser")
@@ -151,8 +151,8 @@ public class SysRoleController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "查询角色已经具有的用户组信息")
-    @ApiOperation(value = "查询角色已经具有的用户组信息",
+    @ControllerLog(doAction = "查询角色的用户组信息")
+    @ApiOperation(value = "查询角色的用户组信息",
             notes = "查询角色已经具有的用户组信息,且条件分页获取角色未拥有的用户组信息")
     @RequestMapping(value = "/findUserGroupOfRoleAndOtherGroup", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysRole/findUserGroupOfRoleAndOtherGroup")
@@ -161,8 +161,8 @@ public class SysRoleController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "查询角色已经具有的权限信息")
-    @ApiOperation(value = "查询角色已经具有的权限信息",
+    @ControllerLog(doAction = "查询角色的权限信息")
+    @ApiOperation(value = "查询角色的权限信息",
             notes = "查询角色已经具有的权限信息,且条件分页获取角色未拥有的权限信息")
     @RequestMapping(value = "/findPermissionOrRoleAndOtherPermission", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysRole/findPermissionTORole")

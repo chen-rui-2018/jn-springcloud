@@ -19,120 +19,123 @@ import java.util.List;
 @ApiModel(value = "CompanyCheckParam",description = "升级企业入参")
 public class CompanyCheckParam implements Serializable {
     @NotNull(message = "企业名称不能为空")
-    @ApiModelProperty(value = "企业名称",required = true)
+    @ApiModelProperty(value = "企业名称",required = true,example = "深圳君南")
     private String comName;
-    @ApiModelProperty(value = "企业简称")
+    @ApiModelProperty(value = "企业简称",example = "君南")
     private String comNameShort;
     @NotNull(message = "企业logo不能为空")
-    @ApiModelProperty(value = "企业logo",required = true)
+    @ApiModelProperty(value = "企业logo",required = true,example = "**/**/**,jpg")
     private String avatar;
     @NotNull(message = "企业领域不能为空")
-    @ApiModelProperty(value = "企业领域[产业领域、所属行业]",required = true,notes = "传机构字典接口返回的ID")
+    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=1返回的ID]",required = true,notes = "传机构字典接口入参preType=1返回的ID",example = "shengwuyiyao")
     private String induType;
     @NotNull(message = "企业法人不能为空")
-    @ApiModelProperty(value = "企业法人",required = true)
+    @ApiModelProperty(value = "企业法人",required = true,example = "李薇薇")
     private String ownerLaw;
-    @ApiModelProperty(value = "法人身份证号")
+    @ApiModelProperty(value = "法人身份证号",example = "110215458425368431891")
     private String ownerId;
-    @ApiModelProperty(value = "公司联系电话")
+    @ApiModelProperty(value = "公司联系电话",example = "010-12812025")
     private String conPhone;
     @NotNull(message = "注册时间不能为空")
-    @ApiModelProperty(value = "注册时间yyyy-MM-dd",required = true)
+    @ApiModelProperty(value = "注册时间yyyy-MM-dd",required = true,example = "2018-01-01")
     private String foundingTime;
     @NotNull(message = "落地时间不能为空")
-    @ApiModelProperty(value = "落地时间yyyy-MM-dd",required = true)
+    @ApiModelProperty(value = "落地时间yyyy-MM-dd",required = true,example = "2018-01-01")
     private String runTime;
     @NotNull(message = "公司注册地址不能为空")
-    @ApiModelProperty(value = "公司注册地址",required = true)
+    @ApiModelProperty(value = "公司注册地址",required = true,example = "湖南省长沙市麓谷企业广场")
     private String comAddress;
     @NotNull(message = "实际经营地址不能为空")
-    @ApiModelProperty(value = "实际经营地址（园区地址）",required = true)
+    @ApiModelProperty(value = "实际经营地址（园区地址）",required = true,example = "湖南省长沙市麓谷企业广场")
     private String addrPark;
-    @ApiModelProperty(value = "固定电话")
+    @ApiModelProperty(value = "固定电话",example = "010-111111")
     private String comTele;
     @NotNull(message = "注册资金不能为空")
-    @ApiModelProperty(value = "注册资金（万元）",required = true)
+    @ApiModelProperty(value = "注册资金（万元）",required = true,example = "500")
     private Long regCapital;
     @ApiModelProperty(value = "企业规模（万元）")
     private Long comScale;
     @NotNull(message = "统一社会信用代码不能为空")
-    @ApiModelProperty(value = "统一社会信用代码",required = true)
+    @ApiModelProperty(value = "统一社会信用代码",required = true,example = "1000")
     private String unifyCode;
     @ApiModelProperty(value = "三证一体或营业执照照片")
     private String businessLicense;
     @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[多个用,分隔]",required = true,notes = "传机构字典接口返回的ID")
+    @ApiModelProperty(value = "企业性质[多个用,分隔][传机构字典接口入参preType=3返回的ID]",required = true,notes = "传机构字典接口入参preType=3返回的ID",example = "guoyouqiye,minyingqiye")
     private String comProperty;
     @NotNull(message = "企业来源不能为空")
-    @ApiModelProperty(value = "企业来源 ",notes = "1人才企业2招商企业",required = true)
+    @ApiModelProperty(value = "企业来源 [1人才企业2招商企业]",notes = "1人才企业2招商企业",required = true,example = "1")
     private String comSource;
     @NotNull(message = "验证码不能为空")
-    @ApiModelProperty(value = "验证码",required = true)
+    @ApiModelProperty(value = "验证码",required = true,example = "1234")
     private String checkCode;
-    @ApiModelProperty(value = "法人微信")
+    @ApiModelProperty(value = "法人微信",example = "1811000000")
     private String ownerWechat;
-    @ApiModelProperty(value = "法人qq")
+    @ApiModelProperty(value = "法人qq",example = "123456")
     private String ownerQq;
-    @ApiModelProperty(value = "联系人微信")
+    @ApiModelProperty(value = "联系人微信",example = "132456123")
     private String conWechat;
-    @ApiModelProperty(value = "联系人")
+    @ApiModelProperty(value = "联系人",example = "厄尔完")
     private String contact;
-    @ApiModelProperty(value = "联系人电话")
+    @ApiModelProperty(value = "联系人电话",example = "181000000")
     private String con_phone;
-    @ApiModelProperty(value = "联系人qq")
+    @ApiModelProperty(value = "联系人qq",example = "123456789")
     private String conQq;
-    @ApiModelProperty(value = "行业代码 ")
+    @ApiModelProperty(value = "行业代码 [传各行业规范的代码，后台无固定数据]",notes = "传各行业规范的代码，后台无固定数据",example = "00")
     private String induCode;
-    @ApiModelProperty(value = "增资情况")
+    @ApiModelProperty(value = "增资情况",example = "无增资")
     private String addCapital;
-    @ApiModelProperty(value = "注册登记类型")
+    @ApiModelProperty(value = "注册登记类型",example = "普通注册")
     private String registerType;
-    @ApiModelProperty(value = "主要产品")
+    @ApiModelProperty(value = "主要产品",example = "计算机软件开发。。。")
     private String mainProducts;
-    @ApiModelProperty(value = "业务范围")
+    @ApiModelProperty(value = "业务范围",example = "计算机软件开发。。。")
     private String businessScope;
-    @ApiModelProperty(value = "企业官网地址")
+    @ApiModelProperty(value = "企业官网地址",example = "www.baidu.com")
     private String comWeb;
-    @ApiModelProperty(value = "我的服务")
+    @ApiModelProperty(value = "我的服务",example = "***服务")
     private String comServer;
-    @ApiModelProperty(value = "我的需求")
+    @ApiModelProperty(value = "我的需求",example = "***需求")
     private String comDemand;
-    @ApiModelProperty(value = "公司需求")
+    @ApiModelProperty(value = "公司需求",example = "***需求")
     private String comSynopsis;
     @ApiModelProperty(value = "公司宣传图片")
     private List<CompanyProImgParam> imgParams;
-    @ApiModelProperty(value = "投资人/股东")
+    @ApiModelProperty(value = "投资人/股东",example = "李文文")
     private String owners;
-    @ApiModelProperty(value = "法人电话")
+    @ApiModelProperty(value = "法人电话",example = "123456789")
     private String ownerPhone;
-    @ApiModelProperty(value = "开户银行")
+    @ApiModelProperty(value = "开户银行",example = "***银行")
     private String bankName;
-    @ApiModelProperty(value = "银行账号")
+    @ApiModelProperty(value = "银行账号",example = "123456789456")
     private String bankAccount;
-    @ApiModelProperty(value = "主营业务/主要产品")
+    @ApiModelProperty(value = "主营业务/主要产品",example = "***产品")
     private String products;
-    @ApiModelProperty(value = "主要原材料")
+    @ApiModelProperty(value = "主要原材料",example = "***原料")
     private String material;
-    @ApiModelProperty(value = "营业执照开始时间yyyy-MM-dd ")
+    @ApiModelProperty(value = "营业执照开始时间yyyy-MM-dd ",example = "2018-01-01")
     private String licStarttime;
-    @ApiModelProperty(value = "营业执照到期时间yyyy-MM-dd")
+    @ApiModelProperty(value = "营业执照到期时间yyyy-MM-dd",example = "2018-01-01")
     private String licEndtime;
-    @ApiModelProperty(value = "注册登记类型")
+    @ApiModelProperty(value = "组织机构代码",example = "55552220000")
     private String orgCode;
-    @ApiModelProperty(value = "联系人地址")
+    @ApiModelProperty(value = "联系人地址",example = "湖南长沙***")
     private String conAddress;
-    @ApiModelProperty(value = "邮编")
+    @ApiModelProperty(value = "邮编",example = "4100400")
     private String postcode;
-    @ApiModelProperty(value = "园区楼宇ID")
+    @ApiModelProperty(value = "园区楼宇ID",example = "2932jfiowejwhf***")
     private String parkBuildId;
-    @ApiModelProperty(value = "园区楼宇名称")
+    @ApiModelProperty(value = "园区楼宇名称",example = "F3栋")
     private String parkBuildName;
-    @ApiModelProperty(value = "信用积分")
+    @ApiModelProperty(value = "信用积分",example = "0.00")
     private BigDecimal creditPoints;
-    @ApiModelProperty(value = "企业类型")
+    @ApiModelProperty(value = "企业类型[传机构字典接口入参preType=0返回的ID]",notes = "传机构字典接口入参preType=0返回的ID",example = "ogistics")
     private String comType;
-    @ApiModelProperty(value = "是否参加园区获取【0否1是】")
+    @ApiModelProperty(value = "是否参加园区获取【0否1是】",example = "0")
     private String isJoinActivity;
+
+    @ApiModelProperty(value = "所属园区[园区ID]",example = "846841")
+    private String affiliatedPark;
 
     public String getComName() {
         return comName;
@@ -540,5 +543,13 @@ public class CompanyCheckParam implements Serializable {
 
     public void setMaterial(String material) {
         this.material = material;
+    }
+
+    public String getAffiliatedPark() {
+        return affiliatedPark;
+    }
+
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark;
     }
 }

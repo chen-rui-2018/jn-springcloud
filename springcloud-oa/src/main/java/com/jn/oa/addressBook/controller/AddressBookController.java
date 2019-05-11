@@ -29,18 +29,18 @@ public class AddressBookController extends BaseController {
     private AddressBookService addressBookService;
 
     @ControllerLog(doAction = "获取用户信息详情")
-    @ApiOperation(value = "获取用户信息详情", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/getUserInfo")
+    @ApiOperation(value = "获取用户信息详情", notes = "根据用户账号获取用户信息详情")
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
     @RequiresPermissions("/oa/addressBook/getUserInfo")
-    public Result getUserInfo(@RequestParam("userAccount") String userAccount) {
+    public Result<User> getUserInfo(@RequestParam("userAccount") String userAccount) {
         Result<User> result = addressBookService.getUserInfo(userAccount);
         return result;
     }
 
 
-    @ControllerLog(doAction = "条件分页获取用户列表")
-    @ApiOperation(value = "条件分页获取用户列表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/list")
+    @ControllerLog(doAction = "获取用户列表")
+    @ApiOperation(value = "获取用户列表", notes = "条件分页获取用户列表")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("/oa/addressBook/list")
     public Result list(@RequestBody UserPage userPage) {
         Result result = addressBookService.list(userPage);
@@ -48,8 +48,8 @@ public class AddressBookController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取部门树信息")
-    @ApiOperation(value = "获取部门树信息", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/getDeptTree")
+    @ApiOperation(value = "获取部门树信息", notes = "获取部门树信息")
+    @RequestMapping(value = "/getDeptTree", method = RequestMethod.POST)
     @RequiresPermissions("/oa/addressBook/getDeptTree")
     public Result getDeptTree() {
         Result result = addressBookService.getDeptTree();

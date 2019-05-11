@@ -22,6 +22,8 @@ public class OrgDetailVo implements Serializable {
 
     @ApiModelProperty("一级业务领域")
     private String businessType;
+    @ApiModelProperty("一级业务领域名称")
+    private String businessTypeName;
 
     @ApiModelProperty("二级业务领域")
     private String businessSType;
@@ -53,7 +55,10 @@ public class OrgDetailVo implements Serializable {
     @ApiModelProperty("业务擅长")
     private String orgSpeciality;
 
-    @ApiModelProperty(value = "经营状态")
+    @ApiModelProperty("机构状态(0未审核[审核中]1审核通过2审核不通过3已删除) ")
+    private String orgStatus;
+
+    @ApiModelProperty(value = "经营状态[0冻结 1正常户]")
     private String operateStatus;
 
     @ApiModelProperty(value = "组织机构代码")
@@ -62,6 +67,14 @@ public class OrgDetailVo implements Serializable {
     @ApiModelProperty(value = "法人/负责人")
     private String orgPrincipal;
 
+    @ApiModelProperty(value = "企业工商类型",example = "民营企业/有限责任公司")
+    private String orgBusinType;
+
+    @ApiModelProperty(value = "企业工商经营场所",example = "湖南长沙略略略略略")
+    private String orgBusinAddresse;
+
+    @ApiModelProperty(value = "企业工商经营范围",example = "计算机销售、软件开发及出售、计算机....")
+    private String orgBusinScope;
 
     @ApiModelProperty(value = "机构咨询电话")
     private String orgPhone;
@@ -110,6 +123,15 @@ public class OrgDetailVo implements Serializable {
 
     @ApiModelProperty(value = "机构人员列表")
     private List<OrgTeam> orgTeams;
+
+    @ApiModelProperty(value = "评价分数(平均分)")
+    private String evaluationScore;
+
+    @ApiModelProperty(value = "评价次数")
+    private Integer evaluationNum;
+
+    @ApiModelProperty(value = "职务")
+    private String position;
 
     public String getOrgId() {
         return orgId;
@@ -357,5 +379,69 @@ public class OrgDetailVo implements Serializable {
 
     public void setOrgWeb(String orgWeb) {
         this.orgWeb = orgWeb;
+    }
+
+    public String getOrgStatus() {
+        return orgStatus;
+    }
+
+    public void setOrgStatus(String orgStatus) {
+        this.orgStatus = orgStatus;
+    }
+
+    public String getEvaluationScore() {
+        return evaluationScore;
+    }
+
+    public void setEvaluationScore(String evaluationScore) {
+        this.evaluationScore = evaluationScore;
+    }
+
+    public Integer getEvaluationNum() {
+        return evaluationNum;
+    }
+
+    public void setEvaluationNum(Integer evaluationNum) {
+        this.evaluationNum = evaluationNum;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getOrgBusinType() {
+        return orgBusinType;
+    }
+
+    public void setOrgBusinType(String orgBusinType) {
+        this.orgBusinType = orgBusinType;
+    }
+
+    public String getOrgBusinAddresse() {
+        return orgBusinAddresse;
+    }
+
+    public void setOrgBusinAddresse(String orgBusinAddresse) {
+        this.orgBusinAddresse = orgBusinAddresse;
+    }
+
+    public String getOrgBusinScope() {
+        return orgBusinScope;
+    }
+
+    public void setOrgBusinScope(String orgBusinScope) {
+        this.orgBusinScope = orgBusinScope;
+    }
+
+    public String getBusinessTypeName() {
+        return businessTypeName;
+    }
+
+    public void setBusinessTypeName(String businessTypeName) {
+        this.businessTypeName = businessTypeName;
     }
 }

@@ -24,7 +24,8 @@ public enum ServiceProductExceptionEnum  implements CodeAndMsg {
     SERVICE_PRODUCT_ADVISOR_ACCOUNT_EMPTY("5020214","顾问账号不能为空!"),
     SERVICE_PRODUCT_NAME_DUPLICATE("5020215","服务产品名称重复!"),
     SERVICE_PRODUCT_TEMPLE_ID_EMPTY("5020216","上架常规产品时模板id不能为空"),
-    SERVICE_PRODUCT_ORG_OWNED_PRODUCT("5020217","机构已上架此产品")
+    SERVICE_PRODUCT_ORG_OWNED_PRODUCT("5020217","机构已上架此产品"),
+    SERVICE_PRODUCT_PRODUCT_SHELF("5020217","此产品已有机构上架,不能进行修改")
     ;
 
 

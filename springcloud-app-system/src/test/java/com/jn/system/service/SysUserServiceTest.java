@@ -2,6 +2,7 @@ package com.jn.system.service;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.model.SysDepartmentPost;
@@ -22,9 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 用户测试
@@ -52,7 +51,7 @@ public class SysUserServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setAccount("10000");
+        user.setAccount("wangsong");
 
         //初始化用户id
         userId = UUID.randomUUID().toString();
@@ -79,6 +78,14 @@ public class SysUserServiceTest {
             Assert.assertThat(e, Matchers.anything());
         }
     }
+    @Test
+    public void Test() {
+        try {
+            System.out.println(EncryptUtil.encryptSha256("123456"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
+    }
 
     @Test
     public void findSysUserByPageTest() {
@@ -94,7 +101,7 @@ public class SysUserServiceTest {
         SysUser sysUser = new SysUser();
         sysUser.setId(userId);
         sysUser.setName(userName);
-        Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
         sysUser.setRecordStatus(recordStatus);
         try {
             sysUserService.updateSysUser(sysUser, user);
@@ -181,6 +188,41 @@ public class SysUserServiceTest {
     public void zDeleteSysUserTest() {
         String[] ids = {userId};
         sysUserService.deleteSysUser(ids, user);
+    }
+
+    @Test
+    public void getUserInfoByAccount(){
+        List<String> accountList = new ArrayList<String>(16);
+        accountList.add("userAccount");
+        List<User> userInfoByAccount = sysUserService.getUserInfoByAccount(accountList);
+        Assert.assertThat(userInfoByAccount, Matchers.anything());
+    }
+
+    @Test
+    public void updateUserRole(){
+        //1.测试不传账号及id
+        User user1 = new User();
+        Set<String> deleRoleId = new HashSet<>(16);
+        Set<String> addRoleId = new HashSet<String>(16);
+        try {
+            sysUserService.updateUserRole(user1,deleRoleId,addRoleId);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
+
+        //2.测试传账号,删除和增加集合为空
+        user1.setAccount(userAccount);
+        Boolean result1 = sysUserService.updateUserRole(user1, deleRoleId, addRoleId);
+        Assert.assertThat(result1, Matchers.equalTo(Boolean.TRUE));
+
+        //3.测试传id,删除,增加均不为空
+        user1.setId("6d0e0465-e9ef-4552-82d6-d9aa631fd8ad");
+        addRoleId.add("26fbc372-672c-4418-a5b2-5edeeec2f888");
+        addRoleId.add("26fbc372-672c-4418-a5b2-5edeeec2f888");
+        addRoleId.add("531a2a04-be44-4239-a36b-5b09aac3499d");
+        deleRoleId.add("6f7fef69-c61c-43cf-a82c-fbb9ba088e81");
+        Boolean result = sysUserService.updateUserRole(user1, deleRoleId, addRoleId);
+        Assert.assertThat(result, Matchers.equalTo(Boolean.TRUE));
     }
 
 }

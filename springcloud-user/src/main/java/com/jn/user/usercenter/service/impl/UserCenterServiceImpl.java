@@ -3,6 +3,7 @@ package com.jn.user.usercenter.service.impl;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -50,16 +51,12 @@ public class UserCenterServiceImpl implements UserCenterService {
         user.setAccount(modifyPassword.getAccount());
         Result<User> resultUser = systemClient.getUser(user);
 
-        String passwordMd5= DigestUtils.md5Hex(modifyPassword.getOldPassword());
-       if(!resultUser.getData().getPassword().equals(passwordMd5)){
+        String passwordSha256= EncryptUtil.encryptSha256(modifyPassword.getOldPassword());
+       if(!resultUser.getData().getPassword().equals(passwordSha256)){
            logger.warn("[用户密码修改]，用户旧密码{}密码错误：oldPassword{},密码错误,请重新输入正确的密码");
            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_PASSWORD_IS_ERROR);
        }
-       if(!modifyPassword.getNewPasswordA().equals(modifyPassword.getNewPasswordB())){
-           logger.warn("[用户密码修改]，用户新密码{}两次输入不相等：newPassword{},密码不相等,请重新输入两次相同的新密码");
-           throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_PASSWORD_NOT_EQUALS);
-       }
-        user.setPassword(modifyPassword.getNewPasswordA());
+        user.setPassword(modifyPassword.getNewPassword());
         systemClient.updateSysUser(user);
     }
 

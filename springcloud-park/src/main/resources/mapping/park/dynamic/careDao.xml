@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.gamtopic.dao.CareDao">
+    <!--关注列表-->
+    <select id="findCareList" resultType="com.jn.park.gamtopic.model.CareUserShow">
+      select
+       t1.receive_account as "account",
+       (select count(1) from tb_person_care tc where tc.receive_account = t1.receive_account) as "fansNum"
+        from tb_person_care t1 where t1.care_account = #{account}
+    </select>
+   <!--粉丝列表-->
+    <select id="findFansList" resultType="com.jn.park.gamtopic.model.CareUserShow">
+       select
+        t1.care_account as "account",
+        (select count(1) from tb_person_care tc where tc.receive_account = t1.care_account) as "fansNum"
+        from tb_person_care t1 where t1.receive_account = #{account}
+    </select>
+    <!--关注用户信息-->
+    <select id="findCareDetails" resultType="com.jn.park.gamtopic.model.CareUserDetails">
+      select
+         distinct (t1.care_account) as "account",<!--目标账号-->
+         (select count(1) from tb_person_care tp1 where tp1.care_account = t1.care_account) as "careNum", <!--关注数-->
+         (select count(1) from tb_person_care tp2 where tp2.receive_account = t1.care_account) as "fansNum", <!--粉丝数-->
+         (select count(1) from tb_park_like tl where tl.like_parent_id in (
+             select tt.topic_id from tb_gam_topic tt where tt.creator_account =t1.care_account
+                  )) as "likedNum" <!--获赞数-->
+
+        <if test="currentAccount != null and currentAccount != '' ">
+            ,(select count(1) from tb_person_care tp3 where tp3.receive_account =t1.care_account and tp3.care_account=#{currentAccount})  as "careStatus" <!--是否已关注-->
+        </if>
+        from tb_person_care t1 where t1.care_account = #{account}
+
+    </select>
+
+
+
+</mapper>

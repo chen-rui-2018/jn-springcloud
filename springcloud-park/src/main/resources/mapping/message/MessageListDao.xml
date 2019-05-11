@@ -11,7 +11,13 @@
         from
          tb_message_list t
         WHERE t.record_status =1
-        AND t.message_one_sort = #{messageTowTort}
+        AND t.message_one_sort = #{messageOneTort}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTowTort)">
+            AND t.message_tow_sort = #{messageTowTort}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isRead)">
+            AND t.is_read = #{isRead}
+        </if>
         AND t.message_recipient = #{account}
         GROUP BY t.message_tow_sort
     </select>

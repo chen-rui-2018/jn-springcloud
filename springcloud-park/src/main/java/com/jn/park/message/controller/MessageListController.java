@@ -1,7 +1,10 @@
 package com.jn.park.message.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
@@ -38,11 +41,15 @@ public class MessageListController extends BaseController {
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/message/list/findAll")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "messageTowTort",value = "一级消息类别,0:个人动态;1:企业空间;",dataType = "Integer",paramType = "query")
+            @ApiImplicitParam(name = "messageOneTort",value = "一级消息类别,0:个人动态;1:企业空间;(必填)",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "messageTowTort",value = "二级消息类别(为空时查询一级分类下的全部消息)(（1级）1:个人动态;（2级）2:企业订单;3:信息发布动态;4:交费提醒;5:访客留言;6:数据上报提醒;7:机构邀请;8:企业邀请;9:机构邀请;10:私人订单);",dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "isRead",value = "消息是否已读(0:未读;1:已读);为空时查询全部",dataType = "Integer",paramType = "query")
     })
-    public Result<FindAllMessageListVo> findAll(Integer messageTowTort){
-
-        List<FindAllMessageListVo> findAllMessageListVoList = messageListService.findAll(messageTowTort,getUser());
+    public Result<FindAllMessageListVo> findAll(Integer messageOneTort,Integer messageTowTort,Integer isRead){
+        if(messageOneTort == null){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"请输入一级消息类别");
+        }
+        List<FindAllMessageListVo> findAllMessageListVoList = messageListService.findAll(messageOneTort,messageTowTort,isRead,getUser());
         return new Result(findAllMessageListVoList);
     }
 

@@ -19,7 +19,7 @@ public interface MessageListService {
      * @param messageTowTort 一级消息类别
      * @return
      */
-    List<FindAllMessageListVo> findAll(Integer messageTowTort, User user);
+    List<FindAllMessageListVo> findAll(Integer messageOneTort,Integer messageTowTort,Integer isRead, User user);
 
 
     /**

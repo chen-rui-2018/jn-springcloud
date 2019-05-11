@@ -30,8 +30,8 @@ public class MessageListServiceImpl implements MessageListService {
 
     @ServiceLog(doAction = "消息列表")
     @Override
-    public List<FindAllMessageListVo> findAll(Integer messageTowTort, User user) {
-        List<FindAllMessageListVo> findAllMessageListVoList = messageListDao.findAll(messageTowTort,user.getAccount());
+    public List<FindAllMessageListVo> findAll(Integer messageOneTort,Integer messageTowTort,Integer isRead, User user) {
+        List<FindAllMessageListVo> findAllMessageListVoList = messageListDao.findAll(messageOneTort,messageTowTort,isRead,user.getAccount());
         return findAllMessageListVoList;
     }
 

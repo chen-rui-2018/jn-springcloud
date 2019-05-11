@@ -76,7 +76,7 @@ public class CallOtherSwaggerUtils {
                 MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
                 map.add("account", account);
                 map.add("accountKey", accountKey);
-                JSONObject tokenJsonObject = RestTemplateUtil.request(LOGIN_URL, HttpMethod.POST, map, new HashMap<String,String>());
+                JSONObject tokenJsonObject = RestTemplateUtil.request(LOGIN_URL, HttpMethod.POST, map, new HashMap<>());
                 token = ((LinkedHashMap) tokenJsonObject.get("data")).get("token").toString();
                 callOtherSwaggerUtils.jedisFactory.getJedis().set(PREFIX + account, token, NXXX, EXPX, TIME);
             }

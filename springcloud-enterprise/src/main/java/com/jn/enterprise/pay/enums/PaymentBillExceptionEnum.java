@@ -25,8 +25,11 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     BILL_TYPE_IDENTICAL("6020526","账单类型需一致"),
     BILL_CALLBACK_IS_NULL("6020527","支付回调参数为空"),
     BILL_CALLBACK_ID_IS_NULL("6020528","支付回调参数订单ID为空"),
-    BILL_BOOK_IS_NOT_EXIT("6020529","账本不存在，请联系管委会"),
+    BILL_BOOK_IS_NOT_EXIT("6020529","账本查询异常或不存在"),
     BILL_QUERY_ERROR("6020530","账单查询异常"),
+    BILL_DEDUCTION_FEE_ERROR("6020531","账单扣费异常"),
+    QUERY_ENTERPRISE_INFO_ERROR("6020532","查询企业信息异常"),
+    BILL_ACCOUNT_IS_NOT_EXIT("6020533","账户查询异常或不存在"),
     ;
     /**
      * 编码

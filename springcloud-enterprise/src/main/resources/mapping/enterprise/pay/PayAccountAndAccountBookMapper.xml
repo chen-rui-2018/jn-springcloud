@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.pay.dao.PayAccountAndAccountBookDao">
 
-  <select id="selectPayAccountId" parameterType="java.lang.String" resultType="com.jn.enterprise.pay.vo.PayAccountAndAccountBookVo">
+  <select id="selectPayAccountId" parameterType="java.lang.String" resultType="com.jn.pay.vo.PayAccountAndAccountBookVo">
    SELECT
 	t.ACCOUNT_ID AS accountId,
 	t.user_id AS userId,
@@ -12,11 +12,12 @@
   WHERE
 	1 = 1
   AND t.record_status = 1
+  and b.is_show = 2
   and b.ACCOUNT_ID = t.ACCOUNT_ID
-  and user_id = #{userId,jdbcType=VARCHAR}
+  and t.user_id = #{userId,jdbcType=VARCHAR}
   </select>
 
-  <select id="selectPayAccountBookList" parameterType="java.lang.String" resultType="com.jn.enterprise.pay.model.PayAccountBook">
+  <select id="selectPayAccountBookList" parameterType="java.lang.String" resultType="com.jn.pay.model.PayAccountBook">
     select
       account_id as accountId,
       ac_book_id as acBookId,
@@ -25,6 +26,7 @@
       balance as balance,
       automatic_deductions as automaticDeductions,
       can_recharge as canRecharge,
+      is_show as isShow,
       created_time as createdTime,
       creator_account as creatorAccount,
       modified_time as modifiedTime,
@@ -33,6 +35,7 @@
     from tb_pay_account_book
     WHERE 1=1
     and record_status = 1
+    and is_show = 2
     and account_id = #{accountId,jdbcType=VARCHAR}
   </select>
 

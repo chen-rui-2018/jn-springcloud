@@ -54,20 +54,6 @@
           </div>
       </el-collapse-transition>
     </div>
-    <!-- 侧边栏 -->
-    <!-- <transition name='fade' appear  enter-active-class='animated fadeInDown' leave-active-class='animated fadeOutUp'>
-      <div class="nav" v-if="!show3&&isNavShow">
-        <div class="nav_cont" v-for="(slideitem,slideindex) in sliderData " :key="slideindex" >
-          <div class="nav_cont_father">{{slideitem.name}} <i class="el-icon-arrow-right"></i></div>
-          <div class="nav_cont_son">  
-            <div v-for="(item,index) in slideitem.childs" :key="index">
-              <span></span>
-              {{item.name}}
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition> -->
   </div>
 </template>
 
@@ -162,6 +148,7 @@ export default {
       width: 100%;
       color: #000;
       background: #fff;
+      border-bottom: 1px solid #eee;
       box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.07) ;
       .type_page{
         display: flex;
@@ -301,6 +288,57 @@ export default {
       }
     }
   }
+
+.search_box{
+  background: #fff;
+  text-align: center;
+  box-shadow:0 10px 10px -10px #ccc;
+  .el-input-group{
+   
+    border-radius: 28px;
+    width:42%;
+    margin:43px 0;
+    .el-input{
+      width:94px;
+    }
+    .el-input__inner:focus{
+      border-color: #00a041;
+      
+    }
+    .el-input-group__append, .el-input-group__prepend{
+      border-radius: 28px;
+    }
+    .el-input-group__append{
+      /* border-top-left-radius: 0;
+      border-bottom-left-radius: 0; */
+      background: #00a041;
+      color:#fff;
+      right: 58px;
+      .el-button{
+        margin: -10px -10px;
+      }
+    }
+    .el-input-group__prepend{
+      border-top-right-radius: 0; 
+      border-bottom-right-radius: 0;
+      background-color: #fff;
+      padding: 0px 17px 0 9px;
+      
+      input{
+        color:#666666;
+        text-align: right;
+        border-right: none;
+        &:focus{
+          border-left: none;
+        }
+      }
+    }
+  }
+}
+.search_box_act{
+  background:#fff;
+  box-shadow:0 10px 10px -10px #ccc;
+}
   
 }
 

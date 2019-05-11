@@ -1,7 +1,7 @@
 package com.jn.park.api;
 
 import com.jn.common.model.Result;
-import com.jn.park.message.model.addMessageModel;
+import com.jn.park.message.model.AddMessageModel;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +23,6 @@ public interface MessageClient {
      * @return
      */
     @RequestMapping(value = "/api/message/addMessage", method = RequestMethod.POST)
-    Result<String> addMessage(@RequestBody addMessageModel addMessageModel);
+    Result<String> addMessage(@RequestBody AddMessageModel addMessageModel);
 
 }

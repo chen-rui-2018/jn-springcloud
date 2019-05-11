@@ -151,6 +151,9 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
 
         TbParkingRecordCriteria recordCriteria = new TbParkingRecordCriteria();
         TbParkingRecordCriteria.Criteria criteria = recordCriteria.createCriteria().andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
+        if(StringUtils.isNotEmpty(parkingRecordParam.getAreaName())){
+            criteria.andAreaNameLike("%"+parkingRecordParam.getAreaName()+"%");
+        }
         recordCriteria.setOrderByClause("admission_time desc");
         if(StringUtils.isNotEmpty(parkingRecordParam.getCarLicense())){
             criteria.andCarLicenseEqualTo(parkingRecordParam.getCarLicense());
@@ -190,7 +193,7 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
         }
         //调用匝道接口查询最新数据
         ParkingRecordRampParam parkingByCarLicense = parkingServerService.getParkingByCarLicense(parkingRecordParam.getCarLicense());
-        if(null != parkingByCarLicense){
+        if(null != parkingByCarLicense && StringUtils.isNotEmpty(parkingByCarLicense.getGateId())&&null!=parkingByCarLicense.getAdmissionTime() ){
             if(null == tbParkingRecords || tbParkingRecords.size()==0 || StringUtils.equals(parkingByCarLicense.getAdmissionTime()
                     ,DateUtils.formatDate(tbParkingRecords.get(0).getAdmissionTime(),ParkingEnums.DATE_TIME_FORMAT.getCode()))){
                 ParkingRecordVo parkingRecordVo = new ParkingRecordVo();
@@ -205,13 +208,21 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
                 }catch (ParseException e){
                     throw new JnSpringCloudException(ParkingExceptionEnum.DAY_INTERVAL_ERROR);
                 }
+                //匹配停车场
                 TbParkingAreaCriteria areaCriteria = new TbParkingAreaCriteria();
                 areaCriteria.createCriteria().andGateIdEqualTo(parkingByCarLicense.getGateId());
                 List<TbParkingArea> tbParkingAreas = tbParkingAreaMapper.selectByExample(areaCriteria);
+                TbParkingArea tbParkingArea = null;
                 if(null!=tbParkingAreas&&tbParkingAreas.size()>0){
+                    tbParkingArea = tbParkingAreas.get(0);
+
                     parkingRecordVo.setAreaName(tbParkingAreas.get(0).getAreaName());
                 }
-                parkingRecordVos.add(parkingRecordVo);
+                Boolean b = StringUtils.isEmpty(parkingRecordParam.getAreaName()) ||
+                        (StringUtils.isNotEmpty(parkingRecordParam.getAreaName()) && null!= tbParkingArea && tbParkingArea.getAreaName().indexOf(parkingRecordParam.getAreaName())!= -1 );
+                if(b){
+                    parkingRecordVos.add(parkingRecordVo);
+                }
             }
         }
 
@@ -290,5 +301,12 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
         return parkingRecordDetailVo;
     }
 
+
+    public static void main(String[] args) {
+        String a = "123";
+        String b = "5123456";
+        int i = b.indexOf(a);
+        System.out.print(i+"");
+    }
 
 }

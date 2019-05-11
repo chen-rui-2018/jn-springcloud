@@ -100,6 +100,5 @@ public class MoneyUtils {
         }
         return amLong.toString();
     }
-    
 
 }

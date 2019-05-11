@@ -87,4 +87,18 @@ public interface DynamicDao {
      */
     List<DynamicWebShow> findCareDynamicList(@Param("account") String account);
 
+    /**
+     * 动态评论 和动态 评论回复列表
+     * @param dynamicId
+     * @return
+     */
+    List<DynamicCommentReplyShow> findDynamicCommentAndReplyList(@Param("dynamicId") String dynamicId);
+
+    /**
+     * 动态评论回复列表
+     * @param parentIdList
+     * @return
+     */
+    List<DynamicComments> findReplyList(@Param("parentIdList") List<String> parentIdList);
+
 }

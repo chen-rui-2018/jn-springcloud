@@ -14,7 +14,7 @@
                     <div class="orgBtn fr mainColor">在线联系</div>
                 </div>
                 <div class="agent2 clearfix color2">
-                    <div class="agentImg mainBorder fl">
+                    <div class="agentImg fl">
                         <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                         <img :src="investorInfoDetails.investorBaseInfoShow.avatar" alt="">
                     </div>
@@ -94,6 +94,7 @@ export default {
             _this.investorInfoDetails = res.data;
           } else {
             _this.$message.error(res.result);
+            _this.financialProVisible = false;
           }
         }
       });
@@ -103,6 +104,7 @@ export default {
 </script>
 <style lang="scss">
 .investorDetail {
+  padding-top:65px;
   .investorMenu {
     padding: 20px 0;
     font-size: 13px;

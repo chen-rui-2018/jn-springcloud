@@ -47,7 +47,7 @@ public class FinanceIncomeController extends BaseController {
             @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query",example = "201912")
     })
     public Result<FianceDynamicTableVo<List<FinanceIncomePeriodVo>>> periodContrast(String startTime,String endTime){
-        //todo
+
         this.checkIsSomeYear(startTime,endTime);
         FianceDynamicTableVo<List<FinanceIncomePeriodVo>> periodContrast=financeIncomeService.periodContrast(startTime,endTime);
         return new Result(periodContrast);
@@ -62,7 +62,7 @@ public class FinanceIncomeController extends BaseController {
             @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query",example = "201912")
     })
     public Result<FinanceIncomeSummarizingProportionVo> summarizingProportion(String startTime,String endTime){
-        //todo
+
         this.checkIsSomeYear(startTime,endTime);
         List<FinanceIncomeSummarizingProportionVo> summarizingProportion=financeIncomeService.summarizingProportion(startTime,endTime);
         return new Result(summarizingProportion);
@@ -77,7 +77,7 @@ public class FinanceIncomeController extends BaseController {
             @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query",example = "201912")
     })
     public Result<FianceDynamicTableVo<List<FinanceIncomeLastYearContrastVo>>> lastYearContrast(String startTime,String endTime){
-        //todo
+
         this.checkIsSomeYear(startTime,endTime);
         FianceDynamicTableVo<List<FinanceIncomeLastYearContrastVo>> lastYearContrast=financeIncomeService.lastYearContrast(startTime,endTime);
         return new Result(lastYearContrast);
@@ -91,7 +91,7 @@ public class FinanceIncomeController extends BaseController {
             @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query",example = "2019"),
     })
     public Result exportContrast(HttpServletResponse response, String year){
-        //todo
+
         List<FinanceIncomeExportContrastVo> sectionExpendForms=financeIncomeService.exportContrast(year);
 
         String exportTitle = "分类,去年1月收入,今年1月收入,去年2月收入,今年2月收入,去年3月收入,今年3月收入," +

@@ -1,6 +1,6 @@
 <template>
   <div class="homePage">
-    <div class="header clearfix">
+    <div class="header clearfix" v-if="!isMobile">
       <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
       <div class="headerRight fr pr">
         <i class="el-icon-search" v-if="!sousuo" @click="handleChange" style="vertical-align: middle;font-size:18px;color:#666;"></i>
@@ -47,10 +47,10 @@
         </transition>
       </div>
     </div>
-    <div class="homePage_content w">
+    <div class="homePage_content" :class="{'w': !isMobile}">
       <div class="homePage_typearea">
         <!-- 面包屑 -->
-        <div class="homePage_breadcrumb">
+        <div class="homePage_breadcrumb" v-if="!isMobile">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }">用户中心 </el-breadcrumb-item>
             <el-breadcrumb-item>
@@ -61,7 +61,7 @@
         <!-- 主体内容 -->
         <el-container>
           <!-- 侧边栏 -->
-          <div class="slider">
+          <div class="slider" v-if="!isMobile">
             <el-aside width="135px">
               <el-menu
                 :default-active="this.$route.path"
@@ -97,8 +97,8 @@
                     <span>加入园区</span>
                   </template>
                   <el-menu-item-group>
-                    <el-menu-item index="/servicemarket/product/productService/加入园区">加入园区</el-menu-item>
-                    <el-menu-item index="">加入园区</el-menu-item>
+                    <el-menu-item index="/upgradeStaff">升级员工</el-menu-item>
+                    <el-menu-item index="/upgradeEnterprise">升级企业</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
                 <el-submenu index="/servicemarket/product/productService">
@@ -108,38 +108,49 @@
                   <el-menu-item-group>
                     <el-menu-item index="/servicemarket/product/productService/ordinaryProduct" style="padding-left: 20px;">常规服务产品</el-menu-item>
                     <el-menu-item index="/servicemarket/product/productService/specialproduct" style="padding-left: 20px;">特色服务产品</el-menu-item>
+                    <el-menu-item index="/servicemarket/product/productService/myApply" style="padding-left: 20px;">我的申请</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
-                <el-submenu index="/需求管理">
+                <el-submenu index="/needManage">
                   <template slot="title">
                     <span>需求管理</span>
                   </template>
                   <el-menu-item-group>
-                    <el-menu-item index="/servicemarket/product/productService/需求管理">需求管理</el-menu-item>
-                    <el-menu-item index="">需求管理</el-menu-item>
+                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/requireManagementController/forothersneed">对他人的需求</el-menu-item>
+                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/requireManagementController/receivedNeed">我收到的需求</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
-                <el-submenu index="/评价管理">
+                <el-submenu index="/evaluateManage">
                   <template slot="title">
                     <span>评价管理</span>
                   </template>
                   <el-menu-item-group>
-                    <el-menu-item index="/servicemarket/product/productService/评价管理">评价管理</el-menu-item>
-                    <el-menu-item index="">评价管理</el-menu-item>
+                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/comment/forOthersevaluate">对他人的评价</el-menu-item>
+                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/comment/receivedEvaluate">我收到的评价</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
-                <el-menu-item index="/活动管理">
+                <el-menu-item index="/actiManagent">
                   <span slot="title">活动管理</span>
                 </el-menu-item>
                 <el-menu-item index="/servicemarket/product/productService/dataReport">
                   <span slot="title">数据上报</span>
                 </el-menu-item>
+
+                <el-submenu index="/流程系统">
+                  <template slot="title">
+                    <span>流程系统</span>
+                  </template>
+                  <el-menu-item-group>
+                    <el-menu-item index="/iframe?ph=http://112.94.22.222:2381/ibps" style="padding-left: 20px;">人才申报</el-menu-item>
+                  </el-menu-item-group>
+                </el-submenu>
+
               </el-menu>
             </el-aside>
           </div>
           <!-- 主体 -->
           <div class="homePage_main userHome">
-            <el-main>
+            <el-main :class="{'isMobile': isMobile}">
               <keep-alive>
                 <router-view v-if="$route.meta.keepAlive" :userData="userData"></router-view>
               </keep-alive>
@@ -153,12 +164,14 @@
 </template>
 <script>
 import $ from 'jquery'
+import { isMobile } from '@/util'
 import bus from "@/util/bus";
 import UserHome from '@/components/userHome'
 export default {
   components:{UserHome},
   data() {
     return {
+      isMobile: isMobile(),
       sousuo: false,
       menuFlag: false,
       userData: {
@@ -191,6 +204,7 @@ export default {
   },
   mounted() {
     this.getUserExtension();
+    
   },
   updated(){
     try {
@@ -371,6 +385,12 @@ export default {
         }
         // 侧边栏
         .slider{
+          .el-aside{
+            border-radius: 5px;
+          }
+          .el-menu{
+            border-right: none;
+          }
           .el-submenu__title{
             border-top: 1px solid #eee;
             // border-bottom: 1px solid #eee;
@@ -420,8 +440,11 @@ export default {
         }
         .homePage_main{
           flex: 1;
-          .el-main{
+          .el-main {
             padding: 0 20px;
+          }
+          .el-main.isMobile{
+            padding: 0;
           }
         }
       }
@@ -430,5 +453,11 @@ export default {
       flex: 1;
       width: 100%;
     }
+    .isMobile {
+      .el-tabs--border-card > .el-tabs__content {
+        padding: 0;
+      }
+    }
   }
 </style>
+

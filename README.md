@@ -2,6 +2,7 @@
 - 用户->nginx->HTML->ZUUL(路由中心)->eureka(注册中心)->具体服务（必须引入SHIRO权限,除非是guest用户的项目）->eureka(注册中心)->核心服务（SHIRO权限认证授权）->REDIS/MYSQL
 - 外部通信,方式HTTP,协议HTTP,权限SHIRO,注意ZUUL过滤器屏蔽内部接口（防止内部接口对外暴露）
 - 内部通信,方式Feign,协议HTTP,权限eureka账号密码
+- 涉及数据交互的，需要使用lcn进行事务处理
 
 
 ## 技术栈
@@ -12,6 +13,7 @@
 - feign 注解通信
 - config 配置中心
 - bus 消息通信
+- lcn 分布式事务
 - admin 监控中心（包含各个项目健康监控，hystrix 断路器监控，turbine监控聚合）
 - zipkin 链路监控
 - spring 框架
@@ -21,7 +23,7 @@
 - 连接池 druid
 - FastDfs 分布式文件服务器
 - swagger 接口API文档
-- VUE js框架
+- VUE js框架 
 - ElementUI  页面UI框架
 ###自定义技术
 - RedisCacheFactory 缓存实现
@@ -35,6 +37,7 @@
 - 2.启动rabbitmq
 - 3.启动注册中心springcloud-app-eureka
 - 4.启动配置中心springcloud-app-config
+- 4.启动分布式事务协调器springcloud-app-tx-manager
 - 5.启动路由中心springcloud-app-zuul
 - 6.启动用户服务中心springcloud-app-system
 - 7.启动nginx 访问端口80/html
@@ -49,6 +52,8 @@
 - 1.springcloud-app-eureka 注册中心项目，可以看到微服务注册到里面的情况。
 - 2.springcloud-app-admin 该项目主要是服务治理，启动该项目可以监控到全部服务的健康情况。
 - 3.springcloud-config-manager 该项目是配置化管理中心，启动该项目可以配置全部服务的配置文件。
+- 4.springcloud-app-tx-manager 该项目是分布式事务协调器
+
 
 
 
@@ -167,3 +172,7 @@
 - 由业务子服务，在API 维护README.md，进行一个版本号和说明
 - 1.0.0-RELEASE（初始化版本）
 - 初始化
+
+## 14.事务规范
+- 涉及到增删改的业务方法需要加入事务（ @Transactional）
+- 涉及到多系统调用增删改的业务链，需要在入口control的方法上加入@TxTransaction(isStart = true) 注解 。 业务链的control方法上加入@TxTransaction注解。

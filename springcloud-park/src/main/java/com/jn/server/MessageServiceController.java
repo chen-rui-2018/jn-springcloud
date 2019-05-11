@@ -2,10 +2,11 @@ package com.jn.server;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.park.message.model.addMessageModel;
 import com.jn.park.api.MessageClient;
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.service.MessageListService;
-import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,9 +23,14 @@ public class MessageServiceController extends BaseController implements MessageC
     @Autowired
     private MessageListService messageListService;
 
+    protected User getUser(){
+        return  (User) SecurityUtils.getSubject().getPrincipal();
+    }
+
+
     @Override
-    public Result addMessage(addMessageModel addMessageModel) {
-        messageListService.addMessage(addMessageModel);
+    public Result addMessage(AddMessageModel addMessageModel) {
+        messageListService.addMessage(addMessageModel,getUser());
         return new Result();
     }
 

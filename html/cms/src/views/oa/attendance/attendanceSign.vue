@@ -1,9 +1,9 @@
 <template>
   <div class="attendanceSign write">
-    <header class="clearfix">
+    <!-- <header class="clearfix">
       <strong>考勤签到</strong>
       <div><i class="el-icon-edit-outline"/><span><router-link :to="{name:'attendanceManagementList'}">明细</router-link></span></div>
-    </header>
+    </header> -->
     <el-row :gutter="20">
       <el-col :sm="12" :lg="12" :xs="12" :span="12">
         <el-card class="box-card">

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  */
 //TODO 后期将会删除,目前只是为了让业务系统测试
 @Service
-public class RefundClientIml implements RefundClient {
+public class RefundClientIml implements RefundOrderClient {
 
 
     @Override

@@ -357,6 +357,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
                     //当前园区任务的某个tab哪些部门可以填报
                     fillerBean = new TbDataReportingGardenFiller();
+                    fillerBean.setId(UUID.randomUUID().toString().replaceAll("-",""));
                     fillerBean.setFillId(id);
                     fillerBean.setDepartmentId(targetBean.getDepartmentId());
                     fillerBean.setDepartmentName(targetBean.getDepartmentName());

@@ -235,10 +235,10 @@ public class DynamicServiceImpl implements DynamicService {
                 List<DynamicCommentReplyShow> commentsList = data.getRows();
                 if (!commentsList.isEmpty()) {
                     commentsList = improveWebCommentAndReplyUserInfo(commentsList);
-                    vo.setCommentList(data);
+                    data.setRows(commentsList);
                 }
+                vo.setCommentList(data);
             }
-
         }
         return vo;
     }

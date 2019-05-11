@@ -19,7 +19,7 @@ public interface MessageListDao {
      * @param messageTowTort 一级消息类别
      * @return
      */
-    List<FindAllMessageListVo> findAll(@Param("messageTowTort") Integer messageTowTort, @Param("account") String account);
+    List<FindAllMessageListVo> findAll(@Param("messageOneTort") Integer messageOneTort,@Param("messageTowTort") Integer messageTowTort,@Param("isRead") Integer isRead, @Param("account") String account);
 
     /**
      * 添加消息

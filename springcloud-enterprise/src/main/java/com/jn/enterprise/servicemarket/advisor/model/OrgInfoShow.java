@@ -17,6 +17,9 @@ public class OrgInfoShow implements Serializable {
     private String orgId;
     @ApiModelProperty(value = "机构名称")
     private String orgName;
+    @ApiModelProperty(value = "业务领域编码")
+    private String businessArea;
+
 
     public String getOrgId() {
         return orgId;
@@ -34,11 +37,21 @@ public class OrgInfoShow implements Serializable {
         this.orgName = orgName;
     }
 
+    public String getBusinessArea() {
+        return businessArea;
+    }
+
+    public void setBusinessArea(String businessArea) {
+        this.businessArea = businessArea;
+    }
+
+
     @Override
     public String toString() {
         return "OrgInfoShow{" +
                 "orgId='" + orgId + '\'' +
                 ", orgName='" + orgName + '\'' +
+                ", businessArea='" + businessArea + '\'' +
                 '}';
     }
 }

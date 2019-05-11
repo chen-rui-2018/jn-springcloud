@@ -395,7 +395,7 @@ public class StaffServiceImpl implements StaffService {
 
             String[] accountList = new String[] {companyStaff.getAccount()};
             UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
-            userCompanyInfo.setAccountList(accountList);
+            userCompanyInfo.setAccountList(Arrays.asList(accountList));
             userCompanyInfo.setCompanyCode(company.getId());
             userCompanyInfo.setCompanyName(company.getComName());
             Result result = userExtensionClient.updateCompanyInfo(userCompanyInfo);
@@ -509,7 +509,7 @@ public class StaffServiceImpl implements StaffService {
         UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
         userCompanyInfo.setCompanyName("");
         userCompanyInfo.setCompanyCode("");
-        userCompanyInfo.setAccountList(accountList);
+        userCompanyInfo.setAccountList(Arrays.asList(accountList));
         Result result1 = userExtensionClient.updateCompanyInfo(userCompanyInfo);
         checkCallServiceSuccess(result1);
         logger.info("[企业成员] 批量修改用户扩展信息成功,计划删除:{},实际删除:{}", delStaffsList.size(), result1.getData());

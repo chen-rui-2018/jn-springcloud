@@ -5,8 +5,8 @@
     </div>
     <div class="ordinary_content">
        <el-form label-width="120px" class="postJobInfo">
-  <el-form-item label="注册手机/邮箱:" prop="post">
-    <el-input placeholder="请输入手机号或姓名" v-model="searchFiled" clearable>
+  <el-form-item label="员工账号:" prop="post" class="staffAccount">
+    <el-input placeholder="请输入员工账号" v-model="searchFiled" clearable>
           <el-button slot="append" icon="el-icon-search" @click="getStaffInfo"></el-button>
         </el-input>
   </el-form-item>
@@ -19,7 +19,8 @@
   </el-form-item>
   <el-form-item label="性别:" >
     <label slot="label">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</label>
-    <span>{{sex}}</span>
+    <span v-show="sex=='1'">男</span>
+    <span v-show="sex=='0'">女</span>
   </el-form-item>
   <el-form-item label="个性签名:" >
      <span>{{signature}}</span>
@@ -56,7 +57,7 @@ export default {
     // 获取邀请顾问信息
       getStaffInfo(){
           if(!this.searchFiled){
-              this.$message.error('请输入顾问账号');
+              this.$message.error('请输入员工账号');
           }
         this.api.get({
      url:'echoUserInfo',
@@ -75,7 +76,7 @@ export default {
       },
      submitForm() {
        if(!this.searchFiled){
-         this.$message.error('请输入顾问姓名');
+         this.$message.error('请输入员工账号');
          return
        }
       this.api.post({
@@ -104,6 +105,20 @@ export default {
 <style lang="scss">
   .inviteAdviser{
     width: 100%;
+    .staffAccount{
+      .el-input__inner{
+        height: 33px;
+        line-height: 33px;
+      }
+      .el-form-item__content{
+         height: 33px;
+        line-height: 33px;
+      }
+      .el-form-item__label{
+        height: 33px;
+        line-height: 33px;
+      }
+    }
     .hobbys{
     padding: 5px 15px;
     background: #f7f7f7;

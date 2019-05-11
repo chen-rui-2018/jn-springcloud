@@ -85,6 +85,7 @@ export default {
 
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
+
         enterpriseGetScientTabHeader:"springcloud-enterprise/data/garden/getScientTabHeader", // 科技园模板表头查询接口
         enterpriseGetImportData:"springcloud-enterprise/data/garden/getImportData", // 科技园模板查询数据接口
         enterpriseImportData:"springcloud-enterprise/data/garden/importData", // 科技园导入接口
@@ -94,6 +95,8 @@ export default {
 
 
 
+
+     //我的企业
         getMyBusiness:"springcloud-enterprise/guest/company/getCompanyDetailByNowAccount",//获取当前用户企业信息
         getUserAccount:"springcloud-app-system/system/sysUser/getUserInfo",//获取用户账号
         postJob:"springcloud-enterprise/enterprise/RecruitController/publishRecruitInfo",//发布招聘
@@ -119,6 +122,7 @@ export default {
         getPropagandaAreaList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaAreaList",//获取企业宣传区域信息
         getBusinessPromotionDetails:"springcloud-enterprise/propaganda/businessPromotionController/getBusinessPromotionDetails",//获取企业宣传详情
         cancelApprove:"springcloud-enterprise/propaganda/businessPromotionController/cancelApprove",//撤消企业申请
+        updateCompanyInfo:"springcloud-enterprise/enterprise/company/updateCompanyInfo",//编辑企业
         //我的机构
         inviteAdvisor:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAdvisor",//邀请顾问
         advisorDetails:"springcloud-enterprise/serviceMarket/advisorManagementController/advisorDetails",//获取邀请顾问的资料
@@ -134,6 +138,19 @@ export default {
         saveOrUpdateAdvisorBaseInfo:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorBaseInfo",//保存顾问基本信息
         getCertificateTypeList:"springcloud-enterprise/serviceMarket/advisorEditController/getCertificateTypeList",//获取指定证书类型
         saveOrUpdateAdvisorHonor:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor",//新增顾问荣誉资质信息
+        saveOrUpdateAdvisorExperience:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorExperience",//新增服务经历信息
+        saveOrUpdateAdvisorProjectExperience:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorProjectExperience",//新增项目经验信息
+        acceptOrgInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/acceptOrgInvitation",//接受机构邀请
+        refuseInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/refuseInvitation",//拒绝机构邀请
+        // 角色认证
+        getInvestorMainArea:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainArea",//获取主投领域
+        getInvestorMainRound:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
+        getAffiliationUnit:"springcloud-enterprise/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
+        addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
+        saveOrUpdateOrgDetail:"springcloud-enterprise/guest/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证
+        selectOrgInfo:"springcloud-enterprise/serviceMarket/advisorApproveController/selectOrgInfo",//获取服务机构列表
+        serviceAdvisorInfo:"springcloud-enterprise/serviceMarket/advisorEditController/getServiceAdvisorInfo",//服务顾问详情回显
+
 
 
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd",// 页面广告获取

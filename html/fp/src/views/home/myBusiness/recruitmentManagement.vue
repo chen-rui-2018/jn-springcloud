@@ -11,7 +11,7 @@
       <span :class="status==='0'?'active':''" @click="soldOut ">已下架</span>
       <span :class="status==='2'?'active':''" @click="allList ">全部</span>
     </div>
-        <el-input placeholder="请输入岗位" v-model="searchFiled">
+        <el-input placeholder="请输入岗位" v-model="searchFiled" clearable>
           <el-button slot="append" icon="el-icon-search" @click="initList()"></el-button>
         </el-input>
       </div>
@@ -175,8 +175,9 @@ line-height: 26px;
       padding: 20px;
       // 输入框
       .search{
-        display: flex;
-        justify-content: space-between;
+        position: relative;
+        // display: flex;
+        // justify-content: space-between;
     //     .el-checkbox-button.is-checked:first-child .el-checkbox-button__inner{
     //         border: none;
     // background: #fff;
@@ -189,7 +190,7 @@ line-height: 26px;
             display: inline-block;
             width: 77px;
             text-align: center;
-            padding: 0px 0px 18px 0px;
+            padding: 0px 0px 13px 0px;
             cursor: pointer;
         }
     }
@@ -201,7 +202,11 @@ line-height: 26px;
     border-bottom: 3px solid rgb(0, 160, 65);
         }
         .el-input-group{
-          width:20%;
+          width:24%;
+           position: absolute;
+        // width: 20%;
+        top: -5px;
+        right: 0px;
         }
         .el-input__inner{
           height: 27px;

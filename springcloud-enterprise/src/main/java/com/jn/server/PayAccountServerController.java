@@ -46,7 +46,7 @@ public class PayAccountServerController extends BaseController implements PayAcc
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(acBookId,"账本编号不能为空");
-        PaginationData<List<com.jn.enterprise.pay.model.PayAccountBookMoneyRecord>> data = myPayAccountService.queryPayAccountDetails(user,acBookId,startDate,endDate,page,rows);
+        PaginationData<List<PayAccountBookMoneyRecord>> data = myPayAccountService.queryPayAccountDetails(user,acBookId,startDate,endDate,page,rows);
         return new Result(data);
     }
 }

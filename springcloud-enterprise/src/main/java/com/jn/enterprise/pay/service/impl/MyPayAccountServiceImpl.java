@@ -6,17 +6,15 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.pay.dao.PayAccountAndAccountBookDao;
 import com.jn.enterprise.pay.dao.TbPayAccountBookMoneyRecordMapper;
-import com.jn.enterprise.pay.entity.TbPayAccountBookMoneyRecord;
 import com.jn.enterprise.pay.entity.TbPayAccountBookMoneyRecordCriteria;
-import com.jn.enterprise.pay.model.PayAccountBookMoneyRecord;
 import com.jn.enterprise.pay.service.MyPayAccountService;
 import com.jn.enterprise.pd.declaration.enums.PdStatusEnums;
 import com.jn.pay.model.PayAccountBook;
+import com.jn.pay.model.PayAccountBookMoneyRecord;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +52,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
     }
 
     @Override
-    public PaginationData<List<PayAccountBookMoneyRecord>> queryPayAccountDetails(User user, String acBookId,String startDate,String endDate,int page,int rows) {
+    public PaginationData<List<PayAccountBookMoneyRecord>> queryPayAccountDetails(User user, String acBookId, String startDate, String endDate, int page, int rows) {
         Page<Object> objects = PageHelper.startPage(page, rows);
         TbPayAccountBookMoneyRecordCriteria payCriteria = new TbPayAccountBookMoneyRecordCriteria();
         payCriteria.setOrderByClause("created_time desc");

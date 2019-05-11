@@ -19,6 +19,8 @@ public class TbPayBill implements Serializable {
 
     private String objType;
 
+    private String objId;
+
     private String objName;
 
     private String paymentState;
@@ -28,6 +30,8 @@ public class TbPayBill implements Serializable {
     private String acBookType;
 
     private String orderNumber;
+
+    private String callbackUrl;
 
     private Date createdTime;
 
@@ -46,6 +50,8 @@ public class TbPayBill implements Serializable {
     private Date affirmTime;
 
     private String recordStatus;
+
+    private String callbackId;
 
     private static final long serialVersionUID = 1L;
 
@@ -105,6 +111,14 @@ public class TbPayBill implements Serializable {
         this.objType = objType == null ? null : objType.trim();
     }
 
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId == null ? null : objId.trim();
+    }
+
     public String getObjName() {
         return objName;
     }
@@ -143,6 +157,14 @@ public class TbPayBill implements Serializable {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber == null ? null : orderNumber.trim();
+    }
+
+    public String getCallbackUrl() {
+        return callbackUrl;
+    }
+
+    public void setCallbackUrl(String callbackUrl) {
+        this.callbackUrl = callbackUrl == null ? null : callbackUrl.trim();
     }
 
     public Date getCreatedTime() {
@@ -217,6 +239,14 @@ public class TbPayBill implements Serializable {
         this.recordStatus = recordStatus == null ? null : recordStatus.trim();
     }
 
+    public String getCallbackId() {
+        return callbackId;
+    }
+
+    public void setCallbackId(String callbackId) {
+        this.callbackId = callbackId == null ? null : callbackId.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -236,11 +266,13 @@ public class TbPayBill implements Serializable {
             && (this.getBillExpense() == null ? other.getBillExpense() == null : this.getBillExpense().equals(other.getBillExpense()))
             && (this.getReminderNumber() == null ? other.getReminderNumber() == null : this.getReminderNumber().equals(other.getReminderNumber()))
             && (this.getObjType() == null ? other.getObjType() == null : this.getObjType().equals(other.getObjType()))
+            && (this.getObjId() == null ? other.getObjId() == null : this.getObjId().equals(other.getObjId()))
             && (this.getObjName() == null ? other.getObjName() == null : this.getObjName().equals(other.getObjName()))
             && (this.getPaymentState() == null ? other.getPaymentState() == null : this.getPaymentState().equals(other.getPaymentState()))
             && (this.getPaymentType() == null ? other.getPaymentType() == null : this.getPaymentType().equals(other.getPaymentType()))
             && (this.getAcBookType() == null ? other.getAcBookType() == null : this.getAcBookType().equals(other.getAcBookType()))
             && (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()))
+            && (this.getCallbackUrl() == null ? other.getCallbackUrl() == null : this.getCallbackUrl().equals(other.getCallbackUrl()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -249,7 +281,8 @@ public class TbPayBill implements Serializable {
             && (this.getPaymentAffirm() == null ? other.getPaymentAffirm() == null : this.getPaymentAffirm().equals(other.getPaymentAffirm()))
             && (this.getAffirmPart() == null ? other.getAffirmPart() == null : this.getAffirmPart().equals(other.getAffirmPart()))
             && (this.getAffirmTime() == null ? other.getAffirmTime() == null : this.getAffirmTime().equals(other.getAffirmTime()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getCallbackId() == null ? other.getCallbackId() == null : this.getCallbackId().equals(other.getCallbackId()));
     }
 
     @Override
@@ -263,11 +296,13 @@ public class TbPayBill implements Serializable {
         result = prime * result + ((getBillExpense() == null) ? 0 : getBillExpense().hashCode());
         result = prime * result + ((getReminderNumber() == null) ? 0 : getReminderNumber().hashCode());
         result = prime * result + ((getObjType() == null) ? 0 : getObjType().hashCode());
+        result = prime * result + ((getObjId() == null) ? 0 : getObjId().hashCode());
         result = prime * result + ((getObjName() == null) ? 0 : getObjName().hashCode());
         result = prime * result + ((getPaymentState() == null) ? 0 : getPaymentState().hashCode());
         result = prime * result + ((getPaymentType() == null) ? 0 : getPaymentType().hashCode());
         result = prime * result + ((getAcBookType() == null) ? 0 : getAcBookType().hashCode());
         result = prime * result + ((getOrderNumber() == null) ? 0 : getOrderNumber().hashCode());
+        result = prime * result + ((getCallbackUrl() == null) ? 0 : getCallbackUrl().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -277,6 +312,7 @@ public class TbPayBill implements Serializable {
         result = prime * result + ((getAffirmPart() == null) ? 0 : getAffirmPart().hashCode());
         result = prime * result + ((getAffirmTime() == null) ? 0 : getAffirmTime().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
+        result = prime * result + ((getCallbackId() == null) ? 0 : getCallbackId().hashCode());
         return result;
     }
 
@@ -293,11 +329,13 @@ public class TbPayBill implements Serializable {
         sb.append(", billExpense=").append(billExpense);
         sb.append(", reminderNumber=").append(reminderNumber);
         sb.append(", objType=").append(objType);
+        sb.append(", objId=").append(objId);
         sb.append(", objName=").append(objName);
         sb.append(", paymentState=").append(paymentState);
         sb.append(", paymentType=").append(paymentType);
         sb.append(", acBookType=").append(acBookType);
         sb.append(", orderNumber=").append(orderNumber);
+        sb.append(", callbackUrl=").append(callbackUrl);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
@@ -307,6 +345,7 @@ public class TbPayBill implements Serializable {
         sb.append(", affirmPart=").append(affirmPart);
         sb.append(", affirmTime=").append(affirmTime);
         sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", callbackId=").append(callbackId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

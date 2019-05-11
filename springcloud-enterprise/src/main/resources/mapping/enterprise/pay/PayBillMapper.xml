@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.pay.dao.PayBillDao">
     <!-- 一对多查询:一个账单包含该账单多条详细记录-->
-    <resultMap id="BaseResultMap" type="com.jn.enterprise.pay.vo.PayBillVo">
+    <resultMap id="BaseResultMap" type="com.jn.pay.vo.PayBillVo">
         <id column="BILL_ID" jdbcType="VARCHAR" property="billId" />
         <result column="AC_BOOK_ID" jdbcType="VARCHAR" property="acBookId" />
         <result column="BILL_NAME" jdbcType="VARCHAR" property="billName" />
@@ -30,7 +30,7 @@
         <result column="payment_action" jdbcType="VARCHAR" property="paymentAction" />
         <result column="nature_code" jdbcType="VARCHAR" property="natureCode" />
         <!-- 多条详细记录 -->
-        <collection property="payBillDetails" ofType="com.jn.enterprise.pay.model.PayBillDetails">
+        <collection property="payBillDetails" ofType="com.jn.pay.model.PayBillDetails">
             <id column="details_id" jdbcType="VARCHAR"  property="detailsId"/>
             <result column="cost_name" jdbcType="VARCHAR" property="costName"/>
             <result column="cost_value" jdbcType="VARCHAR" property="costValue"/>
@@ -86,7 +86,7 @@ from
 	)
 
   </select>-->
-  <select id="getBillQueryList" parameterType="com.jn.enterprise.pay.model.PayBill" resultType="com.jn.enterprise.pay.vo.PayBillVo">
+  <select id="getBillQueryList" parameterType="com.jn.pay.model.PayBillParams" resultType="com.jn.pay.vo.PayBillVo">
     SELECT
 	id_ AS billId,
 	ac_book_id AS acBookId,
@@ -102,6 +102,7 @@ from
     ELSE
         '其他'
     END objType,
+     obj_id AS objId,
      obj_name AS objName,
      CASE payment_state
     WHEN '1' THEN
@@ -147,7 +148,11 @@ FROM
 WHERE
 	1=1
 and record_status = 1
-and obj_name = #{objName,jdbcType=VARCHAR}
+and obj_id = #{payBill.objId,jdbcType=VARCHAR}
+
+      <if test="payBill.billId != null">
+          and id_ = #{payBill.billId,jdbcType=VARCHAR}
+      </if>
   </select>
 
     <insert id="insertList" parameterType="java.util.List">

@@ -37,11 +37,20 @@ public class PayBillCreateParamVo implements Serializable {
     @ApiModelProperty(value="对象类型【1：企业，2：个人】",example = "1")
     private String objType;
 
-    @ApiModelProperty(value="对象名称",example = "XXX科技企业")
+    @ApiModelProperty(value="对象Id（传企业ID或用户ID）",example = "wangsong")
+    private String objId;
+
+    @ApiModelProperty(value="对象名称（传企业名称或用户名称）",example = "XXX科技企业")
     private String objName;
 
     @ApiModelProperty(value="账本类型ID【1：电费，2：物业费】",example = "1")
     private String acBookType;
+
+    @ApiModelProperty(value="回调ID",example = "springcloud-app-system")
+    private String callbackId;
+
+    @ApiModelProperty(value="回调URL",example = "/api/system/getUser")
+    private String callbackUrl;
 
     @ApiModelProperty(value="创建时间",example = "2019-05-07 12:12:12")
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
@@ -59,6 +68,30 @@ public class PayBillCreateParamVo implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public String getCallbackId() {
+        return callbackId;
+    }
+
+    public void setCallbackId(String callbackId) {
+        this.callbackId = callbackId;
+    }
+
+    public String getCallbackUrl() {
+        return callbackUrl;
+    }
+
+    public void setCallbackUrl(String callbackUrl) {
+        this.callbackUrl = callbackUrl;
+    }
+
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
     }
 
     public String getBillId() {

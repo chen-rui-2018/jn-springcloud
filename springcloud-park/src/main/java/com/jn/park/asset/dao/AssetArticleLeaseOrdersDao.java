@@ -2,6 +2,7 @@ package com.jn.park.asset.dao;
 
 import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.LeaseOrdersModel;
+import com.jn.system.model.User;
 
 import java.util.List;
 import java.util.Map;
@@ -14,12 +15,6 @@ import java.util.Map;
 * @modified By:
 */
 public interface AssetArticleLeaseOrdersDao {
-
-    /**
-     * 返回物品租赁历史列表
-     * @return
-     */
-    List<AssetArticleLeaseOrdersModel> getArticleLeaseList();
 
     /**
      * 根据订单编号查询租借详情
@@ -40,4 +35,10 @@ public interface AssetArticleLeaseOrdersDao {
      * @param map
      */
     void updateStatus(Map<String,Object> map);
+
+    /**
+     * 返回物品租赁历史列表
+     * @return
+     */
+    List<AssetArticleLeaseOrdersModel> getArticleLeaseOrdersList(String account);
 }

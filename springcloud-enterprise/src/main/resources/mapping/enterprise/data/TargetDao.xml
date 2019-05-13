@@ -25,6 +25,8 @@
           where tab_id =#{tabId}
         )
 
+        and record_status='1'
+
     </select>
 
     <insert id="createTab" parameterType="java.util.List">
@@ -780,6 +782,7 @@
 
         <foreach collection="fillerList" index="index" item="item"  separator="UNION ALL" >
             select
+            #{ item.id,jdbcType=VARCHAR},
             #{ item.fillId,jdbcType=VARCHAR},
             #{ item.filler,jdbcType=VARCHAR},
             #{ item.fillerTel,jdbcType=VARCHAR},

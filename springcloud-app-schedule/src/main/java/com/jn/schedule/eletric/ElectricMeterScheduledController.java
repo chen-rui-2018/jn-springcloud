@@ -17,9 +17,9 @@ public class ElectricMeterScheduledController {
     ElectricMeterClient electricMeterClient;
 
     /**
-     * 每两小时强制刷新access_token
+     * 每小时强制刷新access_token
      */
-    @Scheduled(cron = "0 0 */2 * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void refreshAccessToken() {
         electricMeterClient.getElectricMeterAccessToken();
     }

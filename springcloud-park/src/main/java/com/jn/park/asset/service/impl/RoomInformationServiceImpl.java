@@ -118,6 +118,9 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             tbRoomOrders.setLeaseSum(room.getLeaseSum());
             tbRoomOrders.setPressPay("押"+room.getPress()+"付"+room.getPay());
             tbRoomOrders.setShortestLease(room.getShortestLease());
+            tbRoomOrders.setIntroduce(room.getIntroduce());
+            //订单创建者
+            tbRoomOrders.setCreatorAccount(user.getAccount());
             //计算付款金额
             //押
             BigDecimal press = new BigDecimal(room.getPress());
@@ -141,8 +144,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             int insert = tbRoomOrdersMapper.insert(tbRoomOrders);
             //同时更新房间信息租借状态(更改为租借申请中)
             Map<String,Object> map = new HashMap<>(16);
-            map.put("id",id);
-            map.put("state",Byte.parseByte(RoomLeaseStatusEnums.APPLY.getValue()));
+            map.put("roomId",id);
+            map.put("roomStatus",Byte.parseByte(RoomLeaseStatusEnums.APPLY.getValue()));
             roomInformationDao.updateStatus(map);
             if (insert > 0){
                 return tbRoomOrders.getId();

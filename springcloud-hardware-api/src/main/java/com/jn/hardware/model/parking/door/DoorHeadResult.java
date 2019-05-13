@@ -2,6 +2,7 @@ package com.jn.hardware.model.parking.door;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
+import org.checkerframework.checker.formatter.qual.UnknownFormat;
 
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
  * @Version： v1.0
  * @Modified By:
  */
+
 public class DoorHeadResult<T> implements Serializable {
 
     private static final long serialVersionUID = 2781143545628231967L;
@@ -26,10 +28,13 @@ public class DoorHeadResult<T> implements Serializable {
      */
     private String message="成功";
     @ApiModelProperty(value = "当前页码")
+    @JsonIgnore
     private String pageNo;
     @ApiModelProperty(value = "返回每页行数")
+    @JsonIgnore
     private String pageSize;
     @ApiModelProperty(value = "记录总行数")
+    @JsonIgnore
     private String rows;
 
     public String getPageNo() {

@@ -1,7 +1,6 @@
 package com.jn.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.jn.im.dao.ImMapper;
 import com.jn.im.dao.TbImMessageMapper;
 import com.jn.im.entity.TbImMessage;
@@ -16,8 +15,6 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version： v1.0
  * @modified By:
  */
-@ServerEndpoint("/websocket/{userId}")
+@ServerEndpoint("/websocket/{userId}/{token}")
 @Component
 @Slf4j
 public class WebSocketService {
@@ -53,14 +50,16 @@ public class WebSocketService {
 
 
     @OnOpen
-    public void onOpen(@PathParam("userId") String userId, Session session) {
-        logger.info("WebSocketService onOpen: " + userId);
+    public void onOpen(@PathParam("userId") String userId, @PathParam("token") String token, Session session) {
+        logger.info("WebSocketService OnOpen: userId>{},token>{}", userId, token);
+        //TODO 进行token认证
+
         if (sessionMap == null) {
             sessionMap = new ConcurrentHashMap<String, Session>();
         }
         sessionMap.put(userId, session);
 
-        //TODO 发送离线消息
+        //发送离线消息
         Session session_ = sessionMap.get(userId);
         List<Map<String, String>> userList = imMapper.selectOffLineUser(userId);
         for (Map<String, String> userMap : userList) {
@@ -74,8 +73,8 @@ public class WebSocketService {
     }
 
     @OnMessage
-    public void OnMessage(@PathParam("userId") String userId, Session session, String message) {
-        logger.info("WebSocketService OnMessage: " + userId + "<>" + message);
+    public void OnMessage(@PathParam("userId") String userId, @PathParam("token") String token, Session session, String message) {
+        logger.info("WebSocketService OnMessage: userId>{},token>{},message>{}", userId, token, message);
 
         Message msg = JSONObject.parseObject(message, Message.class);
 
@@ -90,11 +89,11 @@ public class WebSocketService {
 
         if (session_ == null) {
             tbImMessage.setIsSended("N");
-            logger.info("WebSocketService 无连接:" + msg.getToUser());
+            logger.info("WebSocketService 无连接:userId>{}", msg.getToUser());
         } else {
             tbImMessage.setIsSended("Y");
             tbImMessage.setSendTime(new Date());
-            logger.info("WebSocketService 有连接:" + msg.getToUser());
+            logger.info("WebSocketService 有连接:userId>{}", msg.getToUser());
             session_.getAsyncRemote().sendText(JSONObject.toJSONString(tbImMessage));
         }
         try {
@@ -110,19 +109,24 @@ public class WebSocketService {
     }
 
     @OnError
-    public void onError(Session session, Throwable throwable, @PathParam("userId") String userId) {
-        logger.error("WebSocketService Connection Exception:" + userId);
+    public void onError(Session session, Throwable throwable, @PathParam("userId") String userId, @PathParam("token") String token) {
+        logger.error("WebSocketService OnError: userId>{},token>{}", userId, token);
         logger.error(throwable.getMessage(), throwable);
         sessionMap.remove(userId);
     }
 
     @OnClose
-    public void onClose(Session session, @PathParam("userId") String userId) {
-        logger.info("Websocket Close Connection:" + userId);
+    public void onClose(Session session, @PathParam("userId") String userId, @PathParam("token") String token) {
+        logger.info("WebSocketService OnClose: userId>{},token>{}", userId, token);
         sessionMap.remove(userId);
     }
 
-
+    /**
+     * 同步发送消息
+     *
+     * @param session
+     * @param message
+     */
     protected void sendMsg(Session session, String message) {
         try {
             //synchronized (session) {

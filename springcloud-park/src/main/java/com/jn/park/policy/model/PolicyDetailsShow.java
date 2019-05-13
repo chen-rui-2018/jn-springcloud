@@ -21,6 +21,8 @@ public class PolicyDetailsShow implements Serializable {
     private String policyClassName;
     @ApiModelProperty(value = "政策标题")
     private String policyTitle;
+    @ApiModelProperty(value = "政策颁发编号")
+    private String policyIssuNum;
     @ApiModelProperty(value = "阅读次数")
     private Integer readNum;
     @ApiModelProperty(value = "发布日期")
@@ -64,6 +66,14 @@ public class PolicyDetailsShow implements Serializable {
 
     public void setPolicyTitle(String policyTitle) {
         this.policyTitle = policyTitle;
+    }
+
+    public String getPolicyIssuNum() {
+        return policyIssuNum;
+    }
+
+    public void setPolicyIssuNum(String policyIssuNum) {
+        this.policyIssuNum = policyIssuNum;
     }
 
     public Integer getReadNum() {

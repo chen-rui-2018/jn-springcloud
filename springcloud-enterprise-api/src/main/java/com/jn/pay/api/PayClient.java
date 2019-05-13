@@ -2,10 +2,8 @@ package com.jn.pay.api;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.pay.model.PayBIllInitiateParam;
-import com.jn.pay.model.PayBill;
-import com.jn.pay.model.PayCheckReminder;
-import com.jn.pay.model.PayOrderNotify;
+import com.jn.common.util.Assert;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.pay.vo.PayBillVo;
 import io.swagger.annotations.ApiOperation;
@@ -32,9 +30,13 @@ import java.util.List;
 public interface PayClient {
 
 
-    /*@ApiOperation(value = "我的账单-查询列表",notes = "我的账单-查询列表")
-    @RequestMapping(value = "/api/payment/payBill/billQuery",method = RequestMethod.GET)
-    Result<PaginationData<List<PayBillVo>>> billQuery(PayBill payBill);*/
+    @ApiOperation(value = "我的账单-查询列表",notes = "我的账单-查询列表")
+    @RequestMapping(value = "/api/payment/payBill/billQuery",method = RequestMethod.POST)
+    Result<PaginationData<List<PayBillVo>>> billQuery(PayBillParams payBillParams);
+
+    @ApiOperation(value = "我的账单-通过账单ID查询账单详情信息",notes = "我的账单-通过账单ID查询账单详情信息")
+    @RequestMapping(value = "/api/payment/payBill/getBillInfo",method = RequestMethod.GET)
+    Result<List<PayBillDetails>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId);
 
 
     @ApiOperation(value = "我的账单-账单催缴次数更新",notes = "我的账单-账单催缴次数更新")
@@ -49,7 +51,7 @@ public interface PayClient {
 
     @ApiOperation(value = "我的账单-创建账单",notes = "我的账单-创建账单")
     @RequestMapping(value = "/api/payment/payBill/billCreate",method = RequestMethod.POST)
-    Result bilCreate(@RequestBody @Validated PayBillCreateParamVo payBillCreateParamVo);
+    Result billCreate(@RequestBody @Validated PayBillCreateParamVo payBillCreateParamVo);
 
     @ApiOperation(value = "统一缴费-发起支付")
     @RequestMapping(value = "/api/payment/payBill/startPayment",method = RequestMethod.POST)

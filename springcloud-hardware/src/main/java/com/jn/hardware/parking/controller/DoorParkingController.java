@@ -63,8 +63,8 @@ public class DoorParkingController extends BaseController {
 
     @ApiOperation(value = "道尔: 月租卡开户信息保存",notes = "月租卡开户信息保存")
     @RequestMapping(value = "/saveParkingMonthlyRentCard",method = RequestMethod.POST)
-    public Result saveParkingMonthlyRentCard(@RequestBody ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest) {
-        return parkingService.saveParkingMonthlyRentCard(parkingMonthlyRentCardRequest);
+    public Result saveParkingMonthlyRentCard(@RequestBody ParkingMonthlyRentCardUnite parkingMonthlyRentCardUnite) {
+        return parkingService.saveParkingMonthlyRentCard(parkingMonthlyRentCardUnite);
     }
 
     @ApiOperation(value = "道尔: 月租卡开户信息列表",notes = "根据车场编号和车辆牌照 月租卡开户信息列表")

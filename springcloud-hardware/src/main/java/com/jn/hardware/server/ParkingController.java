@@ -44,9 +44,9 @@ public class ParkingController extends BaseController implements ParkingClient {
     }
 
     @Override
-    public Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest) {
+    public Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardUnite parkingMonthlyRentCardUnite) {
 
-        return parkingService.saveParkingMonthlyRentCard(parkingMonthlyRentCardRequest);
+        return parkingService.saveParkingMonthlyRentCard(parkingMonthlyRentCardUnite);
     }
 
     @Override

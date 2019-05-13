@@ -74,10 +74,10 @@ public interface ParkingService {
 
     /**
      * 月租卡开户信息保存
-     * @param parkingMonthlyRentCardRequest
+     * @param parkingMonthlyRentCardUnite
      * @return
      */
-    Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest);
+    Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardUnite parkingMonthlyRentCardUnite);
 
     /**
      * 月租卡信息查询

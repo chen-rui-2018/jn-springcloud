@@ -85,7 +85,7 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        parking
+                        parking,park
                     </contexts>
                     <tableNames>
                         tb_parking_preferential

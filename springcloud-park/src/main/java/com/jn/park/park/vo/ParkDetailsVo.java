@@ -15,39 +15,30 @@ public class ParkDetailsVo implements Serializable {
     private String id;
 
     @ApiModelProperty(value = "园区名")
-    private String parkname;
+    private String parkName;
 
     @ApiModelProperty(value = "园区主要宣传图片")
-    private String mainpicture;
+    private String mainPicture;
 
     @ApiModelProperty(value = "园区介绍")
-    private String parkintroduce;
+    private String parkIntroduce;
 
     @ApiModelProperty(value = "园区的发布状态")
-    private String parkstate;
+    private String parkState;
 
     @ApiModelProperty(value = "园区企业入驻情况")
-    private String isenter;
+    private String isEnter;
 
     @ApiModelProperty(value = "创建者账号")
-    private String creatoraccount;
+    private String creatorAccount;
 
     @ApiModelProperty(value = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-    private Date createdtime;
+    private Date createdTime;
 
     @ApiModelProperty(value = "园区次要宣传图片")
-    private String minorpicture;
-
-
-    public String getMinorpicture() {
-        return minorpicture;
-    }
-
-    public void setMinorpicture(String minorpicture) {
-        this.minorpicture = minorpicture;
-    }
+    private String minorPicture;
 
     public String getId() {
         return id;
@@ -57,77 +48,67 @@ public class ParkDetailsVo implements Serializable {
         this.id = id;
     }
 
-
-    public String getParkname() {
-        return parkname;
+    public String getParkName() {
+        return parkName;
     }
 
-    public void setParkname(String parkname) {
-        this.parkname = parkname;
+    public void setParkName(String parkName) {
+        this.parkName = parkName;
     }
 
-    public String getMainpicture() {
-        return mainpicture;
+    public String getMainPicture() {
+        return mainPicture;
     }
 
-    public void setMainpicture(String mainpicture) {
-        this.mainpicture = mainpicture;
+    public void setMainPicture(String mainPicture) {
+        this.mainPicture = mainPicture;
     }
 
-    public String getParkintroduce() {
-        return parkintroduce;
+    public String getParkIntroduce() {
+        return parkIntroduce;
     }
 
-    public void setParkintroduce(String parkintroduce) {
-        this.parkintroduce = parkintroduce;
+    public void setParkIntroduce(String parkIntroduce) {
+        this.parkIntroduce = parkIntroduce;
     }
 
-    public String getParkstate() {
-        return parkstate;
+    public String getParkState() {
+        return parkState;
     }
 
-    public void setParkstate(String parkstate) {
-        this.parkstate = parkstate;
+    public void setParkState(String parkState) {
+        this.parkState = parkState;
     }
 
-    public String getIsenter() {
-        return isenter;
+    public String getIsEnter() {
+        return isEnter;
     }
 
-    public void setIsenter(String isenter) {
-        this.isenter = isenter;
+    public void setIsEnter(String isEnter) {
+        this.isEnter = isEnter;
     }
 
-    public String getCreatoraccount() {
-        return creatoraccount;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreatoraccount(String creatoraccount) {
-        this.creatoraccount = creatoraccount;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreatedtime() {
-        return createdtime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreatedtime(Date createdtime) {
-        this.createdtime = createdtime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
+    public String getMinorPicture() {
+        return minorPicture;
+    }
 
-
-    @Override
-    public String toString() {
-        return "GardenDetailsVo{" +
-                "id='" + id + '\'' +
-                ", parkname='" + parkname + '\'' +
-                ", mainpicture='" + mainpicture + '\'' +
-                ", parkintroduce='" + parkintroduce + '\'' +
-                ", parkstate='" + parkstate + '\'' +
-                ", isenter='" + isenter + '\'' +
-                ", creatoraccount='" + creatoraccount + '\'' +
-                ", createdtime=" + createdtime +
-                ", minorpicture='" + minorpicture + '\'' +
-                '}';
+    public void setMinorPicture(String minorPicture) {
+        this.minorPicture = minorPicture;
     }
 }

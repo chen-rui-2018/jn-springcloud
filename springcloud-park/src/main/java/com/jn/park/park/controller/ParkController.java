@@ -23,10 +23,7 @@ import java.util.List;
 @Api(tags = "园区管理")
 @RestController
 @RequestMapping(value="/guest/portal/park")
-public class TbParkController extends BaseController {
-
-
-
+public class ParkController extends BaseController {
 
     @Autowired
     private ParkService parkService;
@@ -35,13 +32,9 @@ public class TbParkController extends BaseController {
     @ApiOperation(value = "获取全部园区数据列表", notes = "返回全部园区数据列表")
     @GetMapping(path = "/list")
     public Result<List<ParkName>> getGardenName()  {
-
         List<ParkName> list = parkService.getParkName();
         return new Result(list);
     }
-
-
-
 
     @ControllerLog(doAction = "园区管理-根据ID获取对应园区详情")
     @ApiOperation(value = "根据ID获取对应园区详情", notes = "返回对应园区数据列表")
@@ -50,22 +43,16 @@ public class TbParkController extends BaseController {
             @ApiImplicitParam(name = "id", value = "园区ID", dataType = "String", paramType = "query", example = "570327211966464000"),
     })
     public Result<ParkDetailsVo> getGardendetails(String id)  {
-
-        ParkDetailsVo park = parkService.getParkdetails(id);
+        ParkDetailsVo park = parkService.getParkDetails(id);
         return new Result<>(park);
-
     }
-
 
     @ControllerLog(doAction = "园区管理-获取园区概况")
     @ApiOperation(value = "获取园区概况", notes = "返回获取园区概况")
     @GetMapping(path = "/basic")
     public Result<ParkGeneral> getGardenGeneral()  {
-
         ParkGeneral park=parkService.getParkGeneral();
         return new Result<>(park);
-
-
     }
 
 

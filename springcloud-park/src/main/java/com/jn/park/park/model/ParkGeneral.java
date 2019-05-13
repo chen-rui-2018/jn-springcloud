@@ -7,16 +7,21 @@ import io.swagger.annotations.ApiModelProperty;
 public class ParkGeneral {
 
     @ApiModelProperty(value = "园区介绍")
-    private String parkintroduce;
+    private String parkIntroduce;
 
 
-    public String getParkintroduce() {
-        return parkintroduce;
+    public String getParkIntroduce() {
+        return parkIntroduce;
     }
 
-    public void setParkintroduce(String parkintroduce) {
-        this.parkintroduce = parkintroduce;
+    public void setParkIntroduce(String parkIntroduce) {
+        this.parkIntroduce = parkIntroduce;
     }
 
-
+    @Override
+    public String toString() {
+        return "ParkGeneral{" +
+                "parkIntroduce='" + parkIntroduce + '\'' +
+                '}';
+    }
 }

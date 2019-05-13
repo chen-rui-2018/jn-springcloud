@@ -26,7 +26,7 @@ public interface ParkService {
      * @return
      */
 
-    ParkDetailsVo getParkdetails(String id);
+    ParkDetailsVo getParkDetails(String id);
 
     /**
      * 获取园区介绍

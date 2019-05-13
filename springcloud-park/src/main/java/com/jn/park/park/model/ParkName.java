@@ -8,10 +8,18 @@ import io.swagger.annotations.ApiModelProperty;
 public class ParkName {
 
     @ApiModelProperty(value = "园区名")
-    private String parkname;
+    private String parkName;
 
     @ApiModelProperty(value = "园区ID")
     private String id;
+
+    public String getParkName() {
+        return parkName;
+    }
+
+    public void setParkName(String parkName) {
+        this.parkName = parkName;
+    }
 
     public String getId() {
         return id;
@@ -21,13 +29,12 @@ public class ParkName {
         this.id = id;
     }
 
-    public String getParkname() {
-        return parkname;
+
+    @Override
+    public String toString() {
+        return "ParkName{" +
+                "parkName='" + parkName + '\'' +
+                ", id='" + id + '\'' +
+                '}';
     }
-
-    public void setParkname(String parkname) {
-        this.parkname = parkname;
-    }
-
-
 }

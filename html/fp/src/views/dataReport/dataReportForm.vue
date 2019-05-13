@@ -359,7 +359,7 @@
                     _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
                 }
-                _this.formDataListTitle.map(item => {
+                _this.formDataListTitle.forEach(item => {
                   const status  = item.status
                   const gardenExamineStatus = item.gardenExamineStatus
                   if(status === 0){

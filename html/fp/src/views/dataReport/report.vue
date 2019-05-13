@@ -24,6 +24,7 @@
    },
    methods: {
      init () {
+
        this.getData()
          .catch(res => {
            console.dir(res)
@@ -35,7 +36,7 @@
          this.api.get({
            url: `enterpriseGetFormStruct`,
            data: {
-             fileId: _this.$route.query.id
+             fileId: _this.$route.query.fileId
            },
            callback(res) {
              if (res.code === "0000") {

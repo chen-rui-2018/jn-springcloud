@@ -483,7 +483,7 @@ export default {
       min-height: 100%;
       width: 200px;
       flex: none;
-      padding: 15px 15px 100px 15px;
+      padding-bottom: 100px;
     }
     .target-management-r {
       min-height: 100%;

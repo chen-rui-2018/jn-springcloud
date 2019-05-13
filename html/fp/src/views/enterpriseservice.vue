@@ -1,60 +1,5 @@
 <template>
     <div class="enterpriseservice">
-        <div class="portalIndexImg">
-            <div id="poheader" class="header" :class="{'headerw':showFF}">
-                <div class="headerContainer clearfix">
-                    <div class="titleImg fl">
-                        <img src="@/../static/img/LOGO1.png" v-if="!showFF"  class="pointer" alt="" @click="$router.push({path:'/'})">
-                        <img src="@/../static/img/login-logo.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
-                        </div>
-                    <div class="headerRight fr">
-                        <div class="search pointer" >
-                            <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-                        </div>
-                        <div class="navlogin">
-                            <a @click="$router.push({path:'/login'})">登录</a>
-                            <span class="line">|</span>
-                            <a @click="$router.push({path:'/register'})">注册</a>
-                        </div>
-                    </div>
-                    <div class="nav" id="nav">
-                        <!-- <transition name="fade"> -->
-                            <!-- <div class="sousuo posA" v-if="sousuo">
-                                <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-                                <input type="text" v-focus @keyup.enter="handleSearch">
-                                <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-                            </div> -->
-                            <ul class="posA clearfix" id="posA">
-                                <li class="firstLi" @click="$router.push({path:'/'})">
-                                    <a href="javascript:void(0);">首页</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">招商引资</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">智慧党建</a>
-                                </li>
-                                <li class="lastLi">
-                                    <a href="javascript:void(0);">企业服务</a>
-                                </li>
-                            </ul>
-
-                        <!-- </transition> -->
-                    </div>
-                </div>
-            </div>
-            <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
-                <el-collapse-transition>
-                <div v-show="show4">
-                    <div class="transition-box">
-                    <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                        <el-button slot="append" icon="el-icon-search">搜索 </el-button>
-                    </el-input>
-                    </div>
-                </div>
-                </el-collapse-transition>
-            </div>
-        </div>
         <div class="enterpriseCon">
             <div class="banner pr">
                 <div class="swiper-container">
@@ -67,7 +12,7 @@
                         </div>
                         <div class="swiper-slide" style="width:100%">
                             <img src="@/../static/img/banner11.png" alt="" @click="$router.push({path:'/serMatHp'})">
-                        </div>                  
+                        </div>
                     </div>
                     <!-- 如果需要分页器 -->
                          <div class="swiper-pagination"></div>
@@ -326,7 +271,7 @@
                                 </ul>
                             </div>
                         </div>
-                        
+
                         <div class="swiper-pagination"></div>
                         <div class="swiper-button-prev"></div>
                         <div class="swiper-button-next"></div>
@@ -810,18 +755,6 @@ export default {
           this.$refs[key].classList.add(name);
         }
       }
-      if (
-        this.getScrollTop() > document.getElementById("poheader").clientHeight
-      ) {
-        this.showFF = true;
-      } else {
-        this.showFF = false;
-      }
-       if (
-        this.getScrollTop() > document.getElementById("search_box").clientHeight
-      ) {
-        this.show4 = false;
-      } 
     },
     getScrollTop() {
       var scroll_top = 0;
@@ -904,65 +837,6 @@ export default {
   }
   .swiper-container {
     width: 100%;
-  }
- 
-  .portalIndexImg {
-      color:#fff;
-    .swiper-slide {
-      > img {
-        width: 100%;
-        vertical-align: middle;
-      }
-    }
-    .headerw{
-      background: #fff;
-      // box-shadow: 0 2px 12px 0px rgba(0, 0, 0, 0.3);
-      border: 1px solid #eee;
-      box-shadow:0 10px 10px -10px #ccc;
-      color: #666;
-      #nav,.headerRight{
-        color: #666;
-        li{
-          a{
-            color:#666;
-          }
-        }
-        li:nth-child(4){
-          background: none;
-          border-radius: none;
-          a{
-            color:#00a041;
-          }
-        }
-        li:hover{
-          background: none;
-          color: #00a041;
-        }
-         li:hover a{
-            color:#00a041;
-        }
-      }
-    }
-     #posA {
-      li{
-          color:#fff;
-      }
-        > .firstLi {
-        // background: rgba(255, 255, 255, 0.2);
-        background: inherit;
-        border-radius: none;
-        }
-        > li:hover {
-        background: #fff;
-        color: #00a041;
-        border-radius: 5px;
-        }
-        .lastLi {
-        background: #fff;
-        color: #00a041;
-        border-radius: 5px;
-        }
-    }
   }
   .enterpriseCon{
       .banner{

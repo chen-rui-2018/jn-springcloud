@@ -25,7 +25,7 @@ export default {}
     .target-frame-l {
       min-height: 100%;
       width: 200px;
-      padding: 15px;
+      padding: 10px;
       flex: none;
     }
     .target-frame-r {

@@ -58,7 +58,9 @@
 @function trsw($px) {
   @return $px * 0.8 + px;
 }
-
+.flex-center {
+  @include flex-center;
+}
 // 字号
 .fs-12 {
   font-size: 12px;

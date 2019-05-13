@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+<!--    <router-view></router-view>-->
      <div class="right_nav" v-if="$route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice'">
       <ul>
         <li @click="isVisibility=true">
@@ -109,6 +110,10 @@ export default {
     }
   },
   created(){
+    const token = this.$route.query.token
+    if (token) {
+      sessionStorage.setItem('token', token)
+    }
     // if(sessionStorage.token){
     //     this.api.setToken(sessionStorage.token)
     // }

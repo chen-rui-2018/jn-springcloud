@@ -1,75 +1,5 @@
 <template>
     <div class="portalIndex">
-        <div class="portalIndexImg">
-            <div class="header" id="header" :class="{'headerw':showFF}">
-                <div class="headerContainer clearfix">
-                    <div class="titleImg fl">
-                        <img src="@/../static/img/LOGO1.png" v-if="!showFF" class="pointer" alt="" @click="$router.push({path:'/'})">
-                        <img src="@/../static/img/login-logo.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
-                    </div>
-                    <!-- <div class="menu" style="display:none">
-              <i class="el-icon-close"></i>
-              <input type="text">
-              <i class="el-icon-search"></i>
-            </div> -->
-                    <div class="headerRight fr">
-                        <div class="search pointer">
-                            <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-                        </div>
-                        <div class="navlogin">
-                            <a @click="$router.push({path:'/login'})">登录</a>
-                            <span class="line">|</span>
-                            <a @click="$router.push({path:'/register'})">注册</a>
-                        </div>
-                    </div>
-                    <div class="nav" id="nav">
-                        <!-- <transition name="fade"> -->
-                        <!-- <div class="sousuo posA" v-if="sousuo">
-                  <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-                  <input type="text" v-focus @keyup.enter="handleSearch">
-                  <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-                </div> -->
-                        <ul class="posA clearfix">
-                            <li>
-                                <a href="javascript:void(0);">首页</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);">招商引资</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);">智慧党建</a>
-                            </li>
-                            <li @click="$router.push({path:'/enterpriseservice'})">
-                                <a href="javascript:void(0);">企业服务</a>
-                            </li>
-                        </ul>
-
-                        <!-- </transition> -->
-                    </div>
-                </div>
-            </div>
-            <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
-                <el-collapse-transition>
-                    <div v-show="show4">
-                        <div class="transition-box">
-                            <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                                <!-- <el-select v-model="select" slot="prepend" placeholder="产品">
-                    <el-option label="餐厅名" value="1"></el-option>
-                    <el-option label="订单号" value="2"></el-option>
-                    <el-option label="用户电话" value="3"></el-option>
-                  </el-select> -->
-                                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
-                            </el-input>
-                        </div>
-                    </div>
-                </el-collapse-transition>
-            </div>
-            <!-- <el-carousel :interval="5000" arrow="always">
-          <el-carousel-item v-for="item in 4" :key="item">
-          </el-carousel-item>
-        </el-carousel> -->
-
-        </div>
         <div class="portalCon">
             <div class="banner pr">
                 <div class="swiper-container">
@@ -740,17 +670,16 @@ export default {
     },
     handleScroll() {
         const osTop = this.getScrollOffset().y;
-    //   const osTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; //用于FF
-        // console.dir(osTop)
+
       // const arr = document.getElementsByClassName('.animation-dom')
       for (const key in this.$refs) {
         const top = this.getElementLeft(this.$refs[key]);
-        
+
         // console.dir(top);
         if (osTop + innerHeight + 300 >= top + 100) {
           const name = this.$refs[key].dataset.class;
           this.$refs[key].classList.add(name);
-          
+
         }
       }
       if (
@@ -800,7 +729,7 @@ export default {
 }
 
 .portalIndex {
- 
+
 .portalCon{
   .portalNotice,
   .policyGuide,
@@ -1162,4 +1091,4 @@ export default {
   }
 }
 </style>
-  
+

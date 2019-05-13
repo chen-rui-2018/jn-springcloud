@@ -1,5 +1,9 @@
 package com.jn.park.plan.service.Impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.jn.common.model.PaginationData;
+import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.plan.dao.ProjectManageDao;
 import com.jn.park.plan.model.*;
 import com.jn.park.plan.service.ProjectManageService;
@@ -24,11 +28,12 @@ public class ProjectManageServiceImpl implements ProjectManageService {
 
     @ServiceLog(doAction = "工程项目管理")
     @Override
-    public List<ProjectManageModel> findAll(String projectState, String progress, String projectName, String orderByClause) {
-        if(orderByClause == "" || orderByClause == null){
-            orderByClause="project_no desc";
+    public PaginationData<PaginationData<List<ProjectManageModel>>> findAll(ProjectModel projectModel) {
+        if(projectModel.getOrderByClause() == "" || projectModel.getOrderByClause() == null){
+            projectModel.setOrderByClause("project_no desc");
         }
-        List<ProjectManageModel> projectManageModelsList= projectManageDao.findAll(projectState,progress,projectName,orderByClause);
+        Page<Object> objects = PageHelper.startPage(projectModel.getPage(), projectModel.getRows());
+        List<ProjectManageModel> projectManageModelsList= projectManageDao.findAll(projectModel.getProjectState(),projectModel.getProgress(),projectModel.getProjectName(),projectModel.getOrderByClause());
         //获取每一条工程项目信息
         for(int i=0 ; i < projectManageModelsList.size() ; i++){
             //获取到每一个项目的进度记录信息
@@ -48,7 +53,7 @@ public class ProjectManageServiceImpl implements ProjectManageService {
             }
 
         }
-        return projectManageModelsList;
+        return new  PaginationData(projectManageModelsList,objects.getTotal());
     }
 
 

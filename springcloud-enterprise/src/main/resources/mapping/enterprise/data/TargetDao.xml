@@ -665,7 +665,7 @@
         p.warning_by warningBy,
         t.file_type fileType,
         t.fill_in_form_id fillInFormId,
-        t.fill_id
+        t.fill_id fillId
         FROM
         tb_data_reporting_task t,
         tb_data_reporting_snapshot_model p

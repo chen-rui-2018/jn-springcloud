@@ -1,4 +1,4 @@
-package com.jn.news.utils.jpush;
+package com.jn.news.app.service.impl;
 
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
@@ -13,19 +13,20 @@ import cn.jpush.api.push.model.notification.AndroidNotification;
 import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
 import com.jn.common.util.StringUtils;
-import com.jn.news.utils.enums.JPushEnum;
-import io.swagger.annotations.ApiModel;
+import com.jn.news.app.enums.JPushEnum;
+import com.jn.news.app.service.AppSinkService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * @author： chenr
- * @date： Created on 2019/4/29 16:48
+ * @date： Created on 2019/5/11 17:16
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "JPushUtils", description = "极光推送工具类")
-public class JPushUtils {
+@Service
+public class AppSinkServiceImpl implements AppSinkService {
 
     private static String APPKEY = JPushEnum.J_PUSH_APP_KEY.getMessage();
     private static String  MASTER_SECRET = JPushEnum.J_PUSH_MASTER_SECRET.getMessage();
@@ -37,7 +38,8 @@ public class JPushUtils {
      * @param ids     推送的目标id列表
      * @param platfromType 平台类型 ANDROID/IOS/null  如果为null 则发送给所有平台
      */
-    public static void  pushMessage(String content, String title, List<String> ids, String platfromType){
+    @Override
+    public void pushMessage(String content, String title, List<String> ids, String platfromType) {
         try {
             //所有人所有平台
             if (ids.isEmpty() && StringUtils.isBlank(platfromType)) {
@@ -65,24 +67,22 @@ public class JPushUtils {
             }
 
         }catch (APIConnectionException e) {
-                System.out.println("connection err");
-                e.printStackTrace();
+            System.out.println("connection err");
+            e.printStackTrace();
         } catch (APIRequestException e) {
-                System.out.println("request error");
-                e.printStackTrace();
+            System.out.println("request error");
+            e.printStackTrace();
         } catch (Exception e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
-
     }
-
     /**
      * 发给所有用户 所有平台
      * @param content
      * @param title
      * @throws Exception
      */
-    public static void pushAll(String content,String title) throws Exception {
+    private  void pushAll(String content,String title) throws Exception {
         try {
             JPushClient jPushClient=new JPushClient(MASTER_SECRET,APPKEY);
             PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.all())
@@ -125,7 +125,7 @@ public class JPushUtils {
      * @param title
      * @throws Exception
      */
-    public static void pushAll(String content,String title,List<String> ids) throws Exception {
+    private  void pushAll(String content,String title,List<String> ids) throws Exception {
         try {
             JPushClient jPushClient=new JPushClient(MASTER_SECRET,APPKEY);
             PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.all())
@@ -169,7 +169,7 @@ public class JPushUtils {
      * @param title
      * @throws Exception
      */
-    public static void pushAllForAndroid(String content,String title) throws Exception {
+    private  void pushAllForAndroid(String content,String title) throws Exception {
         try {
             JPushClient jPushClient=new JPushClient(MASTER_SECRET,APPKEY);
             PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.android())
@@ -205,7 +205,7 @@ public class JPushUtils {
      * @param title
      * @throws Exception
      */
-    public static void pushAllForIOS(String content,String title) throws Exception {
+    private  void pushAllForIOS(String content,String title) throws Exception {
         try {
             JPushClient jPushClient=new JPushClient(MASTER_SECRET,APPKEY);
             PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.ios())
@@ -244,7 +244,7 @@ public class JPushUtils {
      * @param title
      * @throws Exception
      */
-    public static void pushToIdsForIOS(String content,String title,List<String> ids) throws Exception {
+    private  void pushToIdsForIOS(String content,String title,List<String> ids) throws Exception {
         try {
             JPushClient jPushClient=new JPushClient(MASTER_SECRET,APPKEY);
             PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.ios())
@@ -285,7 +285,7 @@ public class JPushUtils {
      * @param title
      * @throws Exception
      */
-    public static void pushToIdsForAndroid(String content,String title,List<String> ids) throws Exception {
+    private  void pushToIdsForAndroid(String content,String title,List<String> ids) throws Exception {
         try {
             JPushClient jPushClient=new JPushClient(MASTER_SECRET,APPKEY);
             PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.android())
@@ -316,4 +316,3 @@ public class JPushUtils {
         }
     }
 }
-

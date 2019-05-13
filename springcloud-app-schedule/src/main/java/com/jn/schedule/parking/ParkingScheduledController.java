@@ -10,10 +10,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
- * oa定时调度
+ * 智慧停车定时调度
  *
- * @Author： cm
- * @Date： Created on 2019/1/23 16:17
+ * @Author： jiangyl
+ * @Date： Created on 2019/4/23 16:17
  * @Version： v1.0
  * @Modified By:
  */

@@ -27,7 +27,7 @@ public class PolicyCenterHomeParam extends Page implements Serializable {
     @Pattern(regexp = "^[01]$", message = "{policyType:'默认值只允许为0,1'}")
     private String policyType;
     @ApiModelProperty(value = "发布时间(范围1990~2039)",example = "2019")
-    @Pattern(regexp = "((199[0-9])|(20[0-3][0-9]))",
+    @Pattern(regexp = "((199[0-9])|(20[0-3][0-9]))|(\\s*)",
             message = "{releaseTime:'发布时间格式错误'}")
     private String releaseDate;
     @ApiModelProperty(value = "政策检索",example = "xxx政策")

@@ -14,7 +14,7 @@ import com.jn.park.comment.entity.TbComment;
 import com.jn.park.comment.entity.TbCommentCriteria;
 import com.jn.park.comment.entity.TbCommentSensitiveWord;
 import com.jn.park.comment.entity.TbCommentSensitiveWordCriteria;
-import com.jn.park.comment.model.CommentAddParam;
+import com.jn.park.activity.model.CommentAddParam;
 import com.jn.park.comment.service.CommentService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.enums.CommentExceptionEnum;
@@ -89,11 +89,10 @@ public class CommentServiceImpl implements CommentService {
     /**
      * 新增评论/回复
      * @param commentAddParam  点评信息   活动id,点评类型、点评内容
-     * @param account     用户账号/点评人
      */
     @ServiceLog(doAction ="新增评论/回复" )
     @Override
-    public void commentActivity(CommentAddParam commentAddParam, String account) {
+    public void commentActivity(CommentAddParam commentAddParam) {
         //从redis中获取敏感词词库
         Cache<Object> cache = redisCacheFactory.getCache(SENSITIVE_WORD_CACHE, expire);
         List<String> wordList = ( List<String>) cache.get(SENSITIVE_WORD);
@@ -127,7 +126,7 @@ public class CommentServiceImpl implements CommentService {
             throw new JnSpringCloudException(CommentExceptionEnum.SENSITIVE_WORDS_IN_COMMENT);
         }
         //新增点评
-        addActivityComment(commentAddParam, account);
+        addActivityComment(commentAddParam, commentAddParam.getAccount());
     }
 
     /**

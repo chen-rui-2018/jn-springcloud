@@ -1,7 +1,7 @@
 <template>
   <div class="business">
     <div class="business_title">
-      <div class="myBusiness">我的企业 &nbsp;(<span  @click="toColleagueList">查看企业同事</span>)</div>
+      <div class="myBusiness">我的企业 &nbsp;(<span @click="toColleagueList">查看企业同事</span>)</div>
       <div class="business_nav">
         <div @click="toRecruitmentManagement">招聘管理</div>
         <div @click="toEditBusiness">编辑企业</div>
@@ -14,153 +14,83 @@
       <div class="enterprise">企业资料</div>
       <el-form class="tableEnterprise">
         <div style="display:flex">
-          <el-form-item
-            label="企业名称:"
-            class="inline"
-          >
+          <el-form-item label="企业名称:" class="">
             <span>{{comName}}</span>
           </el-form-item>
-          <el-form-item
-            label="企业简称:"
-            class="inline"
-          >
+          <el-form-item label="企业简称:" class="borr">
             <span>{{comNameShort}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="产业领域:"
-            class="inline"
-          >
+          <el-form-item label="产业领域:" class="">
             <span>{{induTypeName}}</span>
           </el-form-item>
-          <el-form-item
-            label="法人:"
-            class="inline"
-          >
+          <el-form-item label="法人:" class="borr">
             <span>{{ownerLaw}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="联系电话:"
-            class="inline"
-          >
+          <el-form-item label="联系电话:" class="">
             <span>{{conPhone}}</span>
           </el-form-item>
-          <el-form-item
-            label="注册时间:"
-            prop="recordStatus"
-            class="inline"
-          >
-           {{foundingTime}}
+          <el-form-item label="注册时间:" class="borr">
+            {{foundingTime}}
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="落地时间:"
-            lass="inline"
-          >
+          <el-form-item label="落地时间:" class="">
             <span>{{runTime}}</span>
           </el-form-item>
-          <el-form-item
-            label="注册地址:"
-            lass="inline"
-          >
+          <el-form-item label="注册地址:" class="borr">
             <span>{{comAddress}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="实际经营地址:"
-            lass="inline"
-          >
+          <el-form-item label="实际经营地址:" class="">
             <span>{{addrPark}}</span>
           </el-form-item>
-          <el-form-item
-            label="固定电话:"
-            lass="inline"
-          >
-            <span>{{conPhone}}</span>
+          <el-form-item label="固定电话:" class="borr">
+            <span>{{comTele}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="注册资金:"
-            lass="inline"
-          >
+          <el-form-item label="注册资金（万元）:" class="">
             <span>{{regCapital}}</span>
           </el-form-item>
-          <el-form-item
-            label="企业规模:"
-            lass="inline"
-          >
+          <el-form-item label="企业规模:" class="borr">
             <span>{{comScale}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="统一社会信用代码:"
-            lass="inline"
-          >
+          <el-form-item label="统一社会信用代码:" class="">
             <span>{{unifyCode}}</span>
           </el-form-item>
-          <el-form-item
-            label="企业性质:"
-            lass="inline"
-          >
+          <el-form-item label="企业性质:" class="borr">
             <span>{{comPropertyNames}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="所属园区:"
-            lass="inline"
-          >
+          <el-form-item label="所属园区:" class=" borb">
             <span>{{parkBuildName}}</span>
           </el-form-item>
-          <el-form-item
-            label="企业官网地址:"
-            lass="inline"
-          >
+          <el-form-item label="企业官网地址:" class=" borb borr">
             <span>{{comWeb}}</span>
           </el-form-item>
 
         </div>
 
       </el-form>
-      <el-form
-        class="enterprise_bottom"
-        label-position="right"
-        label-width="142px"
-      >
-        <el-form-item label="企业管理授权书:">
-          <img
-            src="/static/img/glsq.png"
-            alt=""
-            class="enterprise_img"
-          >
-        </el-form-item>
+      <el-form class="enterprise_bottom" label-position="right" label-width="142px">
         <el-form-item label="企业LOGO:">
-          <img
-            src="/static/img/qylogo.png"
-            alt=""
-            class="enterprise_img"
-          >
+          <img :src="avatar.url" alt="LOGO图片" class="enterprise_img">
         </el-form-item>
         <el-form-item label="三证一体或营业执照:">
-          <img
-            src="/static/img/yyzz.png"
-            alt=""
-            class="enterprise_img"
-          >
+          <img :src="businessLicense.url" alt="营业执照" class="enterprise_img">
         </el-form-item>
         <el-form-item label="企业宣传图片:">
-          <img
-            src="/static/img/qyxc.png"
-            alt=""
-            class="enterprise_img"
-          >
+          <div v-for="(item,index) in  proImgs" :key="index">
+            <img :src="item" alt="企业宣传图片" class="enterprise_img">
+          </div>
         </el-form-item>
       </el-form>
       <div class="business_footer" @click="toUserCenter">
@@ -175,82 +105,80 @@
 export default {
   data() {
     return {
-           userAccount:'',
-           foundingTime:'',//注册时间
-           comName:'',//企业名称
-           comNameShort:'',//企业简称
-           induTypeName:'',//行业分类ID(产业领域、所属行业)
-           ownerLaw:'',//法人
-           comTele:'',//固定电话
-           runTime:'',//落地时间
-           unifyCode:'',//统一社会信用代码
-           comAddress:'',//注册地址
-           addrPark:'',//公司园区地址-实际经营地址
-           conPhone:'',//联系电话
-           regCapital:'',//注册资本 万元
-           comScale:'',//企业规模
-           comType:'',//企业类型
-           parkBuildName:'',//园区名称
-           comWeb:'',//企业官网地址
-           avatar:'',//企业logo
-           businessLicense:'',//营业执照
-           comPropertyNames:'',//企业性质名称
-proImgs:[],//企业宣传图片
-
-    }
+      userAccount: "",
+      foundingTime: "", //注册时间
+      comName: "", //企业名称
+      comNameShort: "", //企业简称
+      induTypeName: "", //行业分类ID(产业领域、所属行业)
+      ownerLaw: "", //法人
+      comTele: "", //固定电话
+      runTime: "", //落地时间
+      unifyCode: "", //统一社会信用代码
+      comAddress: "", //注册地址
+      addrPark: "", //公司园区地址-实际经营地址
+      conPhone: "", //联系电话
+      regCapital: "", //注册资本 万元
+      comScale: "", //企业规模
+      comType: "", //企业类型
+      parkBuildName: "", //园区名称
+      comWeb: "", //企业官网地址
+      avatar: "", //企业logo
+      businessLicense: "", //营业执照
+      comPropertyNames: "", //企业性质名称
+      proImgs: [] //企业宣传图片
+    };
   },
-  mounted(){
-        this.init()
+  mounted() {
+    this.init();
   },
   methods: {
-      init(){
-          let _this = this;
-             _this.api.get({
-                   url: "getMyBusiness",
+    init() {
+      let _this = this;
+      _this.api.get({
+        url: "getMyBusiness",
         callback: function(res) {
           console.log(res);
           if (res.code == "0000") {
-            _this.comName = res.data.comName
-            _this.comNameShort = res.data.comNameShort
-            _this.induTypeName = res.data.induTypeName
-            _this.ownerLaw = res.data.ownerLaw
-            _this.comTele = res.data.comTele
-            _this.runTime = res.data.runTime
-            _this.unifyCode = res.data.unifyCode
-            _this.comAddress = res.data.comAddress
-            _this.addrPark = res.data.addrPark
-            _this.conPhone = res.data.conPhone
-            _this.regCapital = res.data.regCapital
-            _this.comScale = res.data.comScale
-            _this.comType=_this.comType
-            _this.parkBuildName=_this.parkBuildName
-            _this.foundingTime=_this.foundingTime
-            _this.comWeb=_this.comWeb
-            _this.avatar=_this.avatar
-            _this.businessLicense=_this.businessLicense
-            _this.proImgs=_this.proImgs
-
+            _this.comName = res.data.comName;
+            _this.comNameShort = res.data.comNameShort;
+            _this.induTypeName = res.data.induTypeName;
+            _this.ownerLaw = res.data.ownerLaw;
+            _this.comTele = res.data.comTele;
+            _this.runTime = res.data.runTime;
+            _this.unifyCode = res.data.unifyCode;
+            _this.comAddress = res.data.comAddress;
+            _this.addrPark = res.data.addrPark;
+            _this.conPhone = res.data.conPhone;
+            _this.regCapital = res.data.regCapital;
+            _this.comScale = res.data.comScale;
+            _this.comType = res.data.comType;
+            _this.parkBuildName = res.data.parkBuildName;
+            _this.foundingTime = res.data.foundingTime;
+            _this.comWeb = res.data.comWeb;
+            _this.avatar = res.data.avatar;
+            _this.businessLicense = res.data.businessLicense;
+            _this.proImgs = res.data.proImgs;
           }
         }
-      })
-      },
-      toColleagueList(){
-this.$router.push({ name: "colleagueList" });
-      },
+      });
+    },
+    toColleagueList() {
+      this.$router.push({ name: "colleagueList" });
+    },
     toEnterprisePropaganda() {
       this.$router.push({ name: "enterprisePropaganda" });
     },
     toRecruitmentManagement() {
       this.$router.push({ name: "recruitmentManagement" });
     },
-    toStaffManagement(){
-        this.$router.push({ name: "staffManagement" });
+    toStaffManagement() {
+      this.$router.push({ name: "staffManagement" });
     },
-    toUserCenter(){
-        this.$router.push({ name: "userCenter" });
+    toUserCenter() {
+      this.$router.push({ path: "/servicemarket/product/userCenter" });
     },
-    toEditBusiness(){
-        this.$router.push({ name: "editBusiness" });
+    toEditBusiness() {
+      this.$router.push({ name: "editBusiness" });
     }
   }
 };
@@ -259,24 +187,33 @@ this.$router.push({ name: "colleagueList" });
 <style lang="scss" >
 .business {
   .tableEnterprise {
-    .inline {
-      display: inline-block;
+    // .inline {
+    //   display: inline-block;
+    // }
+    .borb{
+      border-bottom: 1px solid #ccc;
+    }
+    .borr{
+         border-right: 1px solid #ccc;
     }
     .el-form-item__label {
-      width: 132px;
+      width: 133px;
       // padding: 15px 0;
       display: inline-block;
       background-color: #f0f0f0;
-      border: 1px solid #ccc;
+      // border: 1px solid #ccc;
+      border-top: unset;
       display: flex;
       line-height: 45px;
       padding-left: 13px;
       font-size: 13px;
-      padding-right: unset;
+      // padding-right: unset;
     }
     .el-form-item {
       margin-bottom: 0px;
       flex: 1;
+      border-top:1px solid #ccc;
+      border-left:1px solid #ccc;
       display: flex;
     }
     .el-form-item__content {
@@ -284,12 +221,12 @@ this.$router.push({ name: "colleagueList" });
       display: inline-block;
       padding-left: 13px;
       // padding: 15px;
-      border: 1px solid #ccc;
+      // border-bottom: 1px solid #ccc;
     }
   }
 
   .business_title {
-    width: 813px;
+    // width: 813px;
     background-color: #fff;
     display: flex;
     justify-content: space-between;
@@ -358,7 +295,7 @@ this.$router.push({ name: "colleagueList" });
   .business_content {
     background: #fff;
     margin-top: 14px;
-    width: 813px;
+    // width: 813px;
     padding: 21px 28px;
     .enterprise {
       margin-bottom: 16px;

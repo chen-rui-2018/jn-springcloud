@@ -3,7 +3,7 @@ package com.jn.park.comment.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.park.comment.model.CommentAddParam;
+import com.jn.park.activity.model.CommentAddParam;
 import com.jn.park.comment.service.CommentService;
 import com.jn.park.enums.CommentExceptionEnum;
 import com.jn.system.log.annotation.ControllerLog;
@@ -53,7 +53,9 @@ public class CommentController extends BaseController {
             logger.info("评论获取用户账号失败");
             return new Result(CommentExceptionEnum.NETWORK_ANOMALY.getCode(),CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        commentService.commentActivity(commentAddParam,user.getAccount());
+        commentAddParam.getAccount();
+        commentService.commentActivity(commentAddParam);
+
         return result;
     }
 

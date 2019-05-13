@@ -50,13 +50,10 @@ public class ServiceCompany implements Serializable {
     private String material;
     @ApiModelProperty(value = "企业性质ID 多个,分隔")
     private String comProperty;
-
     @ApiModelProperty(value = "企业性质ID[数组]")
     private String[] comPropertys;
-
     @ApiModelProperty(value = "企业性质名称[数组]")
     private String[] comPropertyNames;
-
     @ApiModelProperty(value = "注册资本 万元")
     private Long regCapital;
     @ApiModelProperty(value = "增资情况")
@@ -69,10 +66,8 @@ public class ServiceCompany implements Serializable {
     private String runTime;
     @ApiModelProperty(value = "行业分类ID(产业领域、所属行业)")
     private String induType;
-
     @ApiModelProperty(value = "行业分类(产业领域、所属行业)名称")
     private String induTypeName;
-
     @ApiModelProperty(value = "行业代码")
     private String induCode;
     @ApiModelProperty(value = "营业执照")
@@ -141,7 +136,8 @@ public class ServiceCompany implements Serializable {
     private String modifiedTime;
     @ApiModelProperty(value = "企业宣传图片")
     private List<CompanyProImg> proImgs;
-
+    @ApiModelProperty(value = "关注用户数及当前用户关注状态")
+    private CareUserDetails careUserDetails;
 
     public String getId() {
         return id;
@@ -621,5 +617,13 @@ public class ServiceCompany implements Serializable {
 
     public void setInduTypeName(String induTypeName) {
         this.induTypeName = induTypeName;
+    }
+
+    public CareUserDetails getCareUserDetails() {
+        return careUserDetails;
+    }
+
+    public void setCareUserDetails(CareUserDetails careUserDetails) {
+        this.careUserDetails = careUserDetails;
     }
 }

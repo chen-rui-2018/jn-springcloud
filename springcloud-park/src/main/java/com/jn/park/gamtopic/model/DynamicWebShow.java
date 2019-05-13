@@ -39,6 +39,26 @@ public class DynamicWebShow implements Serializable {
     private String imgString;
     @ApiModelProperty(value = "是否已关注 1是 0 否")
     private String careStatus;
+    @ApiModelProperty(value = "账号身份 0 个人- 1 企业")
+    private String identity;
+    @ApiModelProperty(value = "是否为本人发布动态 0 否- 1 是")
+    private String isSelf;
+
+    public String getIsSelf() {
+        return isSelf;
+    }
+
+    public void setIsSelf(String isSelf) {
+        this.isSelf = isSelf;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
 
     public String getTopicId() {
         return topicId;

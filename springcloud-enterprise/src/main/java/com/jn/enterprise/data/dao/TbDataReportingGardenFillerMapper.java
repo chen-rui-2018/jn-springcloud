@@ -10,13 +10,21 @@ public interface TbDataReportingGardenFillerMapper {
 
     int deleteByExample(TbDataReportingGardenFillerCriteria example);
 
+    int deleteByPrimaryKey(String id);
+
     int insert(TbDataReportingGardenFiller record);
 
     int insertSelective(TbDataReportingGardenFiller record);
 
     List<TbDataReportingGardenFiller> selectByExample(TbDataReportingGardenFillerCriteria example);
 
+    TbDataReportingGardenFiller selectByPrimaryKey(String id);
+
     int updateByExampleSelective(@Param("record") TbDataReportingGardenFiller record, @Param("example") TbDataReportingGardenFillerCriteria example);
 
     int updateByExample(@Param("record") TbDataReportingGardenFiller record, @Param("example") TbDataReportingGardenFillerCriteria example);
+
+    int updateByPrimaryKeySelective(TbDataReportingGardenFiller record);
+
+    int updateByPrimaryKey(TbDataReportingGardenFiller record);
 }

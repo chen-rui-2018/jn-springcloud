@@ -315,7 +315,7 @@ color: #00A041;
   .advisory_content {
     background: #fff;
     margin-top: 14px;
-    width: 813px;
+    // width: 813px;
     padding: 21px 28px;
     .enterprise {
       margin-bottom: 16px;

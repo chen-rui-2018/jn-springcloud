@@ -1,5 +1,5 @@
 <template>
-    <div class="serverPro w">
+    <div class="serverPro w" style="padding-top:65px;">
         <div class="serverOrgMenu">
             <span>首页</span>
             <span>/</span>
@@ -41,7 +41,7 @@
             <ul>
                 <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
                 <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
-                    <div class="orgImg mainBorder fl" @click="handleProDel(i.productId,i.signoryId)">
+                    <div class="orgImg fl" @click="handleProDel(i.productId,i.signoryId)">
                         <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                         <img :src="i.pictureUrl" alt="">
                     </div>
@@ -72,7 +72,7 @@
             </ul>
         </div>
         <div class="pagination-container">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
             </el-pagination>
         </div>
         <!-- 提需求弹框 -->

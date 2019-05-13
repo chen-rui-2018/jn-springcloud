@@ -1,10 +1,16 @@
 package com.jn.park.park.service.impl;
 
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
 import com.jn.park.park.dao.ParkMapper;
+import com.jn.park.park.dao.TbParkMapper;
+import com.jn.park.park.entity.TbPark;
 import com.jn.park.park.model.ParkGeneral;
 import com.jn.park.park.model.ParkName;
 import com.jn.park.park.service.ParkService;
 import com.jn.park.park.vo.ParkDetailsVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +21,8 @@ public class ParkServiceImpl implements ParkService {
 
     @Autowired
     private ParkMapper mapper;
+    @Autowired
+    private TbParkMapper tbParkMapper;
 
     /**
      * 园区管理-根据ID获取详情
@@ -22,51 +30,41 @@ public class ParkServiceImpl implements ParkService {
     @Override
     public ParkDetailsVo getParkdetails(String id) {
 
-        List<ParkDetailsVo> list = mapper.getParkdetails(id);
-        ParkDetailsVo garden = new ParkDetailsVo();
-        for (ParkDetailsVo nlist : list
-        ) {
-
-            String enter = nlist.getIsenter();
-            String state = nlist.getParkstate();
-
-
-            if (enter != null) {
-
-                if (enter.equals("0")) {
-                    enter = "未入住";
-                }
-                if (enter.equals("1")) {
-                    enter = "已入住";
-                }
-                if (enter.equals("2")) {
-                    enter = "正在走流程";
-                }
-
-                if (state.equals("0")) {
-                    state = "未发布";
-                }
-                if (state.equals("1")) {
-                    state = "发布";
-                }
-                if (state.equals("2")) {
-                    state = "失效";
-                }
-
-            }
-
-            garden.setIsenter(enter);
-            garden.setParkstate(state);
-            garden.setCreatedtime(nlist.getCreatedtime());
-            garden.setId(nlist.getId());
-            garden.setParkname(nlist.getParkname());
-            garden.setParkintroduce(nlist.getParkintroduce());
-            garden.setCreatoraccount(nlist.getCreatoraccount());
-            garden.setMainpicture(nlist.getMainpicture());
-            garden.setMinorpicture(nlist.getMinorpicture());
-
+        TbPark tbPark=tbParkMapper.selectByPrimaryKey(id);
+        if(null==tbPark || !(new Byte("1").equals(tbPark.getRecordStatus()))){
+            throw new JnSpringCloudException(new Result("-1","数据不存在"));
         }
-        return garden;
+        ParkDetailsVo parkDetailsVo=new ParkDetailsVo();
+        BeanUtils.copyProperties(tbPark,parkDetailsVo);
+
+        String enter = parkDetailsVo.getIsenter();
+        String state = parkDetailsVo.getParkstate();
+
+        //转换显示 enter内容
+        switch (enter){
+            case "0":
+                enter="未入住";
+                break;
+            case "1":
+                enter="已入住";
+                break;
+            case "2":
+                enter="正在走流程";
+                break;
+        }
+        //转换显示 state内容
+        switch (state){
+            case "0":
+                state="未发布";
+                break;
+            case "1":
+                state="已发布";
+                break;
+            case "2":
+                state="失效";
+                break;
+        }
+        return parkDetailsVo;
     }
 
     @Override

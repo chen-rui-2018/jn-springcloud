@@ -1,22 +1,29 @@
 package com.jn.park.parking.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.hardware.api.ParkingClient;
 import com.jn.hardware.model.parking.ParkingMonthlyRentCardRequest;
 import com.jn.hardware.model.parking.ParkingMonthlyRentCardUnite;
+import com.jn.hardware.model.parking.PaymentCarParkingFeeRequest;
 import com.jn.hardware.model.parking.door.DoorCarInParkingShow;
 import com.jn.hardware.model.parking.door.DoorCarOutParkingShow;
 import com.jn.park.enums.ParkingExceptionEnum;
 import com.jn.park.parking.dao.ParkingRecordMapper;
+import com.jn.park.parking.dao.TbParkingAreaMapper;
+import com.jn.park.parking.dao.TbParkingRecordMapper;
 import com.jn.park.parking.dao.TbParkingSpaceRentalMapper;
-import com.jn.park.parking.entity.TbParkingSpaceRental;
-import com.jn.park.parking.entity.TbParkingSpaceRentalCriteria;
+import com.jn.park.parking.entity.*;
 import com.jn.park.parking.enums.ParkingEnums;
 import com.jn.park.parking.model.ParkingRecordRampDetailParam;
 import com.jn.park.parking.service.ParkingServerService;
 import com.jn.park.parking.model.ParkingRecordRampParam;
+import com.jn.pay.api.PayClient;
+import com.jn.pay.model.PayBillDetails;
+import com.jn.paybill.api.PayBillClient;
+import com.jn.paybill.model.PayBillVO;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +49,15 @@ public class ParkingServerServiceImpl implements ParkingServerService {
     @Autowired
     private ParkingRecordMapper parkingRecordMapper;
     @Autowired
+    private TbParkingRecordMapper tbParkingRecordMapper;
+    @Autowired
     private TbParkingSpaceRentalMapper tbParkingSpaceRentalMapper;
     @Autowired
     private ParkingClient parkingClient;
+    @Autowired
+    private PayBillClient payBillClient;
+    @Autowired
+    private TbParkingAreaMapper tbParkingAreaMapper;
 
     @ServiceLog(doAction = "定时同步匝道系统车辆入场数据")
     @Override
@@ -131,10 +144,43 @@ public class ParkingServerServiceImpl implements ParkingServerService {
     }
 
     @ServiceLog(doAction = "临时车支付成功回调接口")
-    public Boolean parkingCarBillCallBack(String billNum){
+    public Boolean parkingCarBillCallBack(String billId){
+        Result<PayBillVO> payBillDetailByIdOrNum = payBillClient.getPayBillDetailByIdOrNum(billId);
+        if(null == payBillDetailByIdOrNum || null == payBillDetailByIdOrNum.getData()){
+            throw new JnSpringCloudException(ParkingExceptionEnum.PARKING_PAYMENT_NOT_EXIT);
+        }
         //TODO 调用匝道通知临时车已缴费
+        PaymentCarParkingFeeRequest paymentCarParking = new PaymentCarParkingFeeRequest();
+        Result result = parkingClient.savePaymentCarParkingFee(paymentCarParking);
+        String code = result.getCode();
+        if(StringUtils.equals(code,ParkingEnums.PARKING_RESPONSE_SUCCESS.getCode())){
+            logger.info("道闸系统处理成功，开始创建新的停车记录数据。");
 
-        //TODO 创建新的停车记录。缴费开始计算时间为缴费时间+15分钟
+        }else{
+            logger.error("临停缴费支付回调，对接道闸业务系统响应失败，账单号：{}",billId);
+            throw new JnSpringCloudException(ParkingExceptionEnum.PARKING_GATE_ERROR);
+        }
+
+        TbParkingRecordCriteria recordCriteria = new TbParkingRecordCriteria();
+        recordCriteria.createCriteria().andOrderBillNumEqualTo(payBillDetailByIdOrNum.getData().getBillNum()).andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
+        List<TbParkingRecord> parkingRecords = tbParkingRecordMapper.selectByExample(recordCriteria);
+
+        if(parkingRecords.size()>0){
+            //创建新的停车记录。缴费开始计算时间为缴费时间+免费时间
+            TbParkingRecord tbParkingRecord = parkingRecords.get(0);
+            String billCreateTime = payBillDetailByIdOrNum.getData().getBillCreateTime();
+            TbParkingArea tbParkingArea = tbParkingAreaMapper.selectByPrimaryKey(tbParkingRecord.getAreaId());
+            try{
+                tbParkingRecord.setStartBillingTime(DateUtils.addMinutes(DateUtils.parseDate(billCreateTime,"yyyy-MM-dd HH:mm:ss"),tbParkingArea.getTempFreeTime()));
+            }catch (ParseException e){
+                logger.error("账单创建是加能赚换失败，改用当前时间。",e);
+                tbParkingRecord.setStartBillingTime(DateUtils.addMinutes(new Date(),tbParkingArea.getTempFreeTime()));
+            }
+            tbParkingRecord.setCreatedTime(new Date());
+
+            int insert = tbParkingRecordMapper.insert(tbParkingRecord);
+            logger.info("临停支付成功，创建新的停车记录。缴费开始计算时间为缴费时间+免费分钟，响应条数：{}",insert);
+        }
         return true;
     }
 
@@ -156,8 +202,7 @@ public class ParkingServerServiceImpl implements ParkingServerService {
             param.setParkingStatus(ParkingEnums.CAR_IS_IN_PARKING.getCode());
             param.setAdmissionTime(door.getEntranceTime());
             param.setCarLicense(door.getCarNo());
-            //TODO 需接口侧添加此参数。
-            param.setGateId("18951384123941");
+            param.setGateId(parkId);
             parkingRecordRampParam.add(param);
             sb.append(door.getId()+",");
         }

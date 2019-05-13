@@ -43,6 +43,7 @@ public enum ParkingEnums implements CodeAndMsg {
     PARKING_SPACE_RENTAL_IS_PAYED("6","租赁服务已支付"),
     PARKING_YEAR_FIXED_DISCOUNT("1","固定金额优惠"),
     PARKING_YEAR_PROPORTIONAL_DISCOUNT("2","比例优惠"),
+    PARKING_RESPONSE_SUCCESS("0000","响应成功"),
 
 
 

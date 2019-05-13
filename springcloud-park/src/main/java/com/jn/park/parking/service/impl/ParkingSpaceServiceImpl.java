@@ -330,6 +330,11 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
         paymentBillModel.setBillCreateAccount(user.getAccount());
         paymentBillModel.setBillRemark(ParkingEnums.PARKING_MONTH_BILL_TYPE_NAME.getCode());
         Result<String> bill = payBillClient.createBill(paymentBillModel);
+        //支付发起成功，将支付账单id写入停车记录，方便下次发起支付删除原有缴费记录。
+        tbParkingSpaceRental.setOrderBillNum(paymentBillModel.getBillNum());
+        tbParkingSpaceRental.setModifiedTime(new Date());
+        int i = tbParkingSpaceRentalMapper.updateByPrimaryKeySelective(tbParkingSpaceRental);
+        logger.info("租车位支付发起成功，处理租赁记录数据账单号好响应条数：{}",i);
         return bill.getData();
     }
 

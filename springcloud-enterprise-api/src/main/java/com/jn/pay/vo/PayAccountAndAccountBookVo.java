@@ -1,7 +1,7 @@
-package com.jn.enterprise.pay.vo;
+package com.jn.pay.vo;
 
 import com.jn.common.model.Page;
-import com.jn.enterprise.pay.model.PayAccountBook;
+import com.jn.pay.model.PayAccountBook;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

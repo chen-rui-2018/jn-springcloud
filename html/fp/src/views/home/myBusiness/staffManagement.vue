@@ -13,7 +13,7 @@
       <span :class="status==='5'?'active':''" @click="noFeedback ">已邀请</span>
       <span :class="status==='7'?'active':''" @click="denied ">已拒绝</span>
     </div>
-        <el-input placeholder="请输入姓名或手机号" v-model="searchFiled" clearable>
+        <el-input placeholder="请输入真实姓名或手机号" v-model="searchFiled" clearable>
           <el-button slot="append" icon="el-icon-search" @click="initList()"></el-button>
         </el-input>
       </div>
@@ -286,7 +286,7 @@ line-height: 26px;
         .el-input-group{
           // width:24%;
               position: absolute;
-    width: 24%;
+    width: 26%;
     top: -5px;
     right: 0px;
         }

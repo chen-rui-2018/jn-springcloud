@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.asset.enums.PageExceptionEnums;
+import com.jn.park.asset.enums.RoomLeaseStatusEnums;
 import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.RoomInformationModel;
 import com.jn.park.asset.model.RoomOrdersModle;
@@ -116,8 +117,10 @@ public class RoomManageController {
     @ApiOperation(value = "房间租赁历史列表",notes = "获取房间租赁历史列表")
     @GetMapping(value = "/getRoomOrdersList")
     public Result<PaginationData<List<RoomOrdersModle>>> getRoomOrdersList(Page page){
+        //获取登录信息
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
         if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<RoomOrdersModle>> roomOrdersList = roomOrdersService.getRoomOrdersList(page);
+            PaginationData<List<RoomOrdersModle>> roomOrdersList = roomOrdersService.getRoomOrdersList(user.getAccount(),page);
             return new Result<>(roomOrdersList);
         }else{
             throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);

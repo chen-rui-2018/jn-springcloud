@@ -1,4 +1,4 @@
-package com.jn.enterprise.pay.model;
+package com.jn.pay.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;

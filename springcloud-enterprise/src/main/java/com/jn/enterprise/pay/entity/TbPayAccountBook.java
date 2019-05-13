@@ -19,6 +19,8 @@ public class TbPayAccountBook implements Serializable {
 
     private String canRecharge;
 
+    private String isShow;
+
     private Date createdTime;
 
     private String creatorAccount;
@@ -87,6 +89,14 @@ public class TbPayAccountBook implements Serializable {
         this.canRecharge = canRecharge == null ? null : canRecharge.trim();
     }
 
+    public String getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(String isShow) {
+        this.isShow = isShow == null ? null : isShow.trim();
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -146,6 +156,7 @@ public class TbPayAccountBook implements Serializable {
             && (this.getBalance() == null ? other.getBalance() == null : this.getBalance().equals(other.getBalance()))
             && (this.getAutomaticDeductions() == null ? other.getAutomaticDeductions() == null : this.getAutomaticDeductions().equals(other.getAutomaticDeductions()))
             && (this.getCanRecharge() == null ? other.getCanRecharge() == null : this.getCanRecharge().equals(other.getCanRecharge()))
+            && (this.getIsShow() == null ? other.getIsShow() == null : this.getIsShow().equals(other.getIsShow()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -164,6 +175,7 @@ public class TbPayAccountBook implements Serializable {
         result = prime * result + ((getBalance() == null) ? 0 : getBalance().hashCode());
         result = prime * result + ((getAutomaticDeductions() == null) ? 0 : getAutomaticDeductions().hashCode());
         result = prime * result + ((getCanRecharge() == null) ? 0 : getCanRecharge().hashCode());
+        result = prime * result + ((getIsShow() == null) ? 0 : getIsShow().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -185,6 +197,7 @@ public class TbPayAccountBook implements Serializable {
         sb.append(", balance=").append(balance);
         sb.append(", automaticDeductions=").append(automaticDeductions);
         sb.append(", canRecharge=").append(canRecharge);
+        sb.append(", isShow=").append(isShow);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

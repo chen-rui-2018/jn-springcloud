@@ -61,6 +61,7 @@ public class AdvisorApproveServiceImpl implements AdvisorApproveService {
             OrgInfoShow orgInfoShow=new OrgInfoShow();
             orgInfoShow.setOrgId(tbServiceOrg.getOrgId());
             orgInfoShow.setOrgName(tbServiceOrg.getOrgName());
+            orgInfoShow.setBusinessArea(tbServiceOrg.getBusinessType());
             resultList.add(orgInfoShow);
         }
         return resultList;

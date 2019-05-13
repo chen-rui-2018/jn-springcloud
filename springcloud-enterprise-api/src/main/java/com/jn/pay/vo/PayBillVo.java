@@ -1,9 +1,8 @@
-package com.jn.enterprise.pay.vo;
+package com.jn.pay.vo;
 
-import com.jn.enterprise.pay.entity.TbPayBillDetails;
-import com.jn.enterprise.pay.model.PayAccountBookMoneyRecord;
-import com.jn.enterprise.pay.model.PayBill;
-import com.jn.enterprise.pay.model.PayBillDetails;
+import com.jn.pay.model.PayAccountBookMoneyRecord;
+import com.jn.pay.model.PayBill;
+import com.jn.pay.model.PayBillDetails;
 import io.swagger.annotations.ApiModel;
 
 import java.io.Serializable;
@@ -23,7 +22,7 @@ public class PayBillVo extends PayBill implements Serializable {
 
     PayAccountBookMoneyRecord payAccountBookMoneyRecord;
 
-    List<TbPayBillDetails> payBillDetails;
+    List<PayBillDetails> payBillDetails;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -37,11 +36,11 @@ public class PayBillVo extends PayBill implements Serializable {
         this.payAccountBookMoneyRecord = payAccountBookMoneyRecord;
     }
 
-    public List<TbPayBillDetails> getPayBillDetails() {
+    public List<PayBillDetails> getPayBillDetails() {
         return payBillDetails;
     }
 
-    public void setPayBillDetails(List<TbPayBillDetails> payBillDetails) {
+    public void setPayBillDetails(List<PayBillDetails> payBillDetails) {
         this.payBillDetails = payBillDetails;
     }
 }

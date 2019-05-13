@@ -1,10 +1,11 @@
-package com.jn.enterprise.pay.model;
+package com.jn.pay.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -42,7 +43,8 @@ public class PayBill extends Page implements Serializable {
     @ApiModelProperty(value="对象类型")
     private String objType;
 
-    @ApiModelProperty(value="对象名称")
+    @ApiModelProperty(value="对象名称",example = "wangsong")
+    @NotNull(message = "对象名称不能为空")
     private String objName;
 
     @ApiModelProperty(value="支付状态（如 已支付、待支付）")

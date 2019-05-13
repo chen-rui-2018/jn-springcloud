@@ -1,4 +1,4 @@
-package com.jn.enterprise.pay.model;
+package com.jn.pay.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
@@ -21,7 +21,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "PayCheckReminder" ,description = "线下核对提醒实体类")
-public class PayCheckReminder  extends Page implements Serializable {
+public class PayCheckReminder extends Page implements Serializable {
     private static final long serialVersionUID = 6589486251046038120L;
 
     @ApiModelProperty(value="缴费流水ID" ,example = "JF201905041212")

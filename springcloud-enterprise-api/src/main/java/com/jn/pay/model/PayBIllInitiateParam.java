@@ -1,4 +1,4 @@
-package com.jn.enterprise.pay.model;
+package com.jn.pay.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,13 +16,9 @@ import java.io.Serializable;
 @ApiModel(value = "PayBIllInitiateParam", description = "支付发起参数")
 public class PayBIllInitiateParam implements Serializable {
 
-    @ApiModelProperty(value = "账单ID[数组]",required = true,example = "['ZJ-201899512510','TC-2019031910124']")
+    @ApiModelProperty(value = "账单ID[数组]",required = true,example = "['2019050600025','2019050600026']")
     @NotBlank(message = "账单ID[数组]不能为空")
     private String[] billIds;
-
-    @ApiModelProperty(value = "账单类型[数组]",required = true,example = "['1','1']")
-    @NotBlank(message = "账单类型[数组]不能为空")
-    private String[] billTypes;
 
     @NotBlank(message = "支付方式不能为空")
     @Pattern(regexp = "^[1,2,3,4]$", message = "{payMenthed:'支付方式只能为[1、2、3、4]'}")
@@ -45,11 +41,4 @@ public class PayBIllInitiateParam implements Serializable {
         this.payMenthed = payMenthed;
     }
 
-    public String[] getBillTypes() {
-        return billTypes;
-    }
-
-    public void setBillTypes(String[] billTypes) {
-        this.billTypes = billTypes;
-    }
 }

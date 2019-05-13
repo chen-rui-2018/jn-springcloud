@@ -12,6 +12,7 @@ import com.jn.park.parking.vo.ParkingRecordDetailVo;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +50,8 @@ public class ParkingTemporaryController extends BaseController {
     @ControllerLog(doAction = "临停缴费查询停车信息详情")
     @ApiOperation(value = "临停缴费查询停车信息详情", notes = "临停缴费查询停车信息详情,返回空则表示未查询到相关数据")
     @RequestMapping(value = "/getCarTempParkingDetail",method = RequestMethod.GET)
-    public Result<ParkingRecordDetailVo> getCarTempParkingDetail(String carLicense){
+    public Result<ParkingRecordDetailVo> getCarTempParkingDetail(@ApiParam(name="carLicense",value = "车牌号",required = true,example = "湘A00001")
+                                                                     @RequestParam(value = "carLicense")String carLicense){
         return new Result<>(parkingCarInfoService.getCarTempParkingDetail(carLicense));
     }
 

@@ -1,8 +1,8 @@
 package com.jn.park.message.service;
 
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.addMessageModel;
 import com.jn.system.model.User;
 
 import java.util.List;
@@ -19,14 +19,14 @@ public interface MessageListService {
      * @param messageTowTort 一级消息类别
      * @return
      */
-    List<FindAllMessageListVo> findAll(Integer messageTowTort, User user);
+    List<FindAllMessageListVo> findAll(Integer messageOneTort,Integer messageTowTort,Integer isRead, User user);
 
 
     /**
      * 添加消息
      * @param addMessageModel
      */
-    void addMessage(addMessageModel addMessageModel);
+    void addMessage(AddMessageModel addMessageModel);
 
 
     /**

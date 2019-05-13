@@ -1,15 +1,15 @@
 <template>
-  <div class="productPutaway">
-    <div class="putaway_title">
-      <div>常规产品上架</div>
-      <div>返回列表</div>
+  <div class="ordinary_product_detial"  >
+    <div class="detial_title">
+      <div>{{this.$route.meta.title}}</div>
+      <div @click="$router.go(-1)">返回列表</div>
     </div>
-    <div class="putaway_main">
-      <div class="putaway_form" v-if="territory===1">
+    <div class="detial_main">
+      <div class="detial_form" v-if="businessType!='technology_finance'">
         <el-form label-position="right" label-width="100px" >
           <div :model="productDetail" class="">
             <el-form-item label="业务领域：">
-              <span></span>
+              <span>非科技金融</span>
             </el-form-item>
           </div>
           <div>
@@ -22,118 +22,118 @@
               <span></span>
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div class="">
             <el-form-item label="产品编号">
-              <span>55</span>
+              <span>{{productDetail.serialNumber}}</span>
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div>
             <el-form-item label="参考价格：">
-              <span>55</span>
+              <span>{{productDetail.referPrice}} </span>
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div class="">
             <el-form-item label="产品图片：">
-              <img src="@/assets/image/test2.png" alt="">
+              <img :src="productDetail.pictureUrl" alt="">
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div class="">
             <el-form-item label="服务周期：">
-              <span>848</span>
+              <span>{{productDetail.serviceCycle}}</span>
             </el-form-item>
           </div>
-          <div :model="productDetail" class="">
+          <div class="">
             <el-form-item label="产品描述：">
-              <div>机构接受企业委托，对其核算的研发项目研究开发费用归集明细表进行鉴证，就其研发费用的发生和能否 税前加计扣除进行鉴证，并出具专项鉴证报告</div>
+              <div>{{productDetail.productDetails}}</div>
             </el-form-item>
           </div>
         </el-form>
       </div>
-      <div class="putaway_form" v-else>
+      <div class="detial_form" v-else>
         <el-form label-position="right" label-width="150px" >
           <div :model="productDetail" class="">
             <el-form-item label="业务领域：">
-              <span></span>
+              <span>{{productDetail.signoryName}} </span>
             </el-form-item>
           </div>
            <div>
             <el-form-item label="产品名称：">
-              <span></span>
+              <span>{{productDetail.productName}} </span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="产品编号：">
-              <span>55</span>
+              <span>{{productDetail.serialNumber}}</span>
             </el-form-item>
           </div>
          <div :model="productDetail" class="">
             <el-form-item label="参考利率范围：">
-              <span>55</span>
+              <span>{{productDetail.refRateMin}}-{{productDetail.refRateMax}} </span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否网贷直联：">
-              <span>55</span>
+              <span>{{productDetail.isOnlineLoan}} </span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否政策性产品：">
-              <span>55</span>
+              <span>{{productDetail.isPolicyPro}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* 是否通用产品：">
-              <span>55</span>
+            <el-form-item label="是否通用产品：">
+              <span>{{productDetail.isGeneralPro}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* 是否人民币：">
-              <span>55</span>
+            <el-form-item label="是否人民币：">
+              <span>{{productDetail.isRmb}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* 贷款类别：">
-              <span>55</span>
+            <el-form-item label="贷款类别：">
+              <span>{{productDetail.loanCategoryName}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* * 贷款期限：">
-              <span>55</span>
+            <el-form-item label="贷款期限：">
+              <span>{{productDetail.loanTermMin}}-{{productDetail.loanTermMax}} </span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="* 担保方式：">
-              <span>55</span>
+            <el-form-item label="担保方式：">
+              <span>{{productDetail.assureMethodName}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否政策性产品：">
-              <span>55</span>
+              <span>{{productDetail.isPolicyPro}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="产品图片：">
-              <img src="@/assets/image/test2.png" alt="">
+              <img :src="productDetail.pictureUrl" alt="">
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="产品特点：">
-              <span>848</span>
+              <span>{{productDetail.productFeature}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="申请条件：">
-              <div>机构接受企业委托，对其核算的研发项目研究开发费用归集明细表进行鉴证，就其研发费用的发生和能否 税前加计扣除进行鉴证，并出具专项鉴证报告</div>
+              <div>{{productDetail.applyCondition}}</div>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="提交材料：">
-              <span>848</span>
+              <span>{{productDetail.submitMaterial}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="产品特点：">
-              <span>848</span>
+              <span>{{productDetail.productFeature}}</span>
             </el-form-item>
           </div>
         </el-form>
@@ -141,23 +141,89 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   data () {
     return {
-      productDetail:{},
-      counselor:{ },//服务顾问
-      productName:'',//产品名称
-      territory:0
+      // loading:true,
+      productDetail:{},//产品详情
+      productNameList:[],//产品名称列表
+      advisorAccount:'',
+      orgId:'',
+      templateId:0,
+      businessType:''
+    }
+  },
+  mounted () {
+    this.orgId=this.$route.query.orgid
+    this.templateId=this.$route.query.productId
+    this.getType()
+   /*  if(this.businessType==='technology_finance'){
+       this.getFinancialProductDetails()
+    }else{
+      this.getProductDetails()
+    } */
+  },
+  methods: {
+    //通过id判断是否科技金融
+    getType(){
+      let _this = this;
+      this.api.get({
+      url: "getActivityDetailsFm",
+      data: {orgId:this.orgId},
+      callback: function(res) {
+        if (res.code == "0000") {
+            // console.log(res)
+          _this.businessType= res.data.businessType
+          if(_this.businessType==='technology_finance'){
+            _this.getFinancialProductDetails()
+          }else{
+            _this.getProductDetails()
+          }
+          }
+        }
+      })
+    },
+    // 获取服务产品详情（非科技金融）
+    getProductDetails(){
+      let _this = this;
+      this.api.get({
+      url: "findProductDetails",
+      data: {productId:this.templateId},
+      callback: function(res) {
+        if (res.code == "0000") {
+          // console.log(res)
+          _this.productDetail= res.data.info
+          }
+        }
+      })
+    },
+    // 获取服务产品详情（科技金融）
+    getFinancialProductDetails(){
+      let _this = this;
+      this.api.get({
+      url: "getFinancialProductDetails",
+      data: {productId:this.templateId},
+      callback: function(res) {
+        if (res.code == "0000") {
+          // console.log(res)
+          _this.productDetail= res.data
+          }
+        }
+      })
     }
   }
 }
 </script>
 <style lang="scss">
-  .productPutaway{
+    .el-select-dropdown__item.selected{
+      color:#00a041;
+    }
+  .ordinary_product_detial{
     width: 100%;
     // 大标题
-    .putaway_title{
+    .detial_title{
       background-color: #fff;
       display: flex;
       justify-content: space-between;
@@ -176,14 +242,19 @@ export default {
       }
     }
     // 主体
-    .putaway_main{
+    .detial_main{
       margin-top: 14px;
       background-color: #fff;
       padding: 17px;
+      border-radius: 5px;
       // 表单
-      .putaway_form{
+      .detial_form{
         width: 43%;
         margin: 0 auto;
+        img{
+          width: 100px;
+          height: 100px;
+        }
         .el-form-item__label{
           padding: 0 25px 0 0;
           line-height:25px;
@@ -204,19 +275,12 @@ export default {
         .el-form-item{
           margin-bottom: 14px;
         }
-      }
-      .submit{
-        background-color: #ecfcf2;
-        border-radius: 5px;
-        border: solid 2px #41d787;
-        padding:7px 31px;
-        font-size: 12px;
-        cursor: pointer;
-        width:5%;
-        text-align: center;
-        color:#00a041;
-        margin:30px auto 15px;
+        input:focus{
+          border-color:#00a041;
+        }
       }
     }
   }
 </style>
+
+

@@ -1,16 +1,16 @@
 <template>
   <div class="report-entrance">
-<!--    <div class="en-header">-->
-<!--      <div class="en-banner">-->
-<!--        <div class="swiper-container">-->
-<!--          <div class="swiper-wrapper">-->
-<!--            <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">-->
-<!--              <img :src="img" class="swiper-slide-img" alt="">-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <div class="en-header">
+      <div class="en-banner">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">
+              <img :src="img" class="swiper-slide-img" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="en-body">
       <el-tabs type="border-card" style="background-color: #f5f5f5">
         <el-tab-pane label="本月上报数据">
@@ -25,9 +25,21 @@
                   <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
                   <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
                   <div class="tc" v-if="item.isOverdue === '0'">
-                    还有
-                    <span class="en-warning">{{ item.residueDays }}天</span>
-                    逾期
+
+                    <div v-if="Number(item.residueDays) === 0">
+                      <span class="en-warning">今天</span>逾期
+                    </div>
+                    <div v-else-if="Number(item.residueDays) === 1">
+                      <span class="en-warning">明天</span>逾期
+                    </div>
+                    <div v-else-if="Number(item.residueDays) === 2">
+                      <span class="en-warning">后天</span>逾期
+                    </div>
+                    <div v-else>
+                      还有
+                      <span class="en-warning">{{ item.residueDays }}天</span>
+                      逾期
+                    </div>
                   </div>
                   <div class="tc" v-else>
                     已经逾期
@@ -47,10 +59,10 @@
         </el-tab-pane>
         <el-tab-pane label="历史上报数据">
           <div class="search-row">
-            <div>
+            <div class="search-row-cell">
               <el-button v-for="(item, index) in reportType" :key="index" :type="filledType === index ? 'primary' : ''" size="mini" @click="filledTypeChange(item.data, index)">{{ item.name }}</el-button>
             </div>
-            <div>
+            <div class="search-row-cell">
               <el-input
                 v-model="searchFilled"
                 placeholder="请输入内容"
@@ -116,6 +128,7 @@
 </template>
 
 <script>
+  import { isMobile } from '@/util'
   import Swiper from 'swiper'
   export default {
     name: "reportEntry",
@@ -124,6 +137,7 @@
     },
     data() {
       return {
+        isMobile: isMobile(),
         searchFilled: '',
         adUrls: [],
         filledType: 0,
@@ -188,14 +202,23 @@
         this.getFilledData()
         this.getPcAd()
           .then(() => {
-            new Swiper('.swiper-container', {
-              slidesPerView: 'auto',
-              spaceBetween: 10,
-              pagination: {
-                el: '.swiper-pagination',
-                clickable: true
+            let options
+            if (this.isMobile) {
+              options = {
+                autoplay:true,
+                loop:true
               }
-            })
+            } else {
+              options = {
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+                pagination: {
+                  el: '.swiper-pagination',
+                  clickable: true
+                }
+              }
+            }
+            new Swiper('.swiper-container', options)
           })
       },
       filledTypeChange(data, index) {
@@ -238,9 +261,9 @@
       },
       toFillData(item) {
         this.$router.push({
-          path:'/servicemarket/product/productService/dataReportEntrance',
+          path:'/servicemarket/product/productService/report',
           query:{
-            id: item.fillId
+            fileId: item.fillId
           }
         })
       },
@@ -302,6 +325,9 @@
     $success-color: #00a041;
     $warning-color: #FF2222;
     $info-color: #ebebeb;
+    .en-body {
+      margin-top: 6px;
+    }
     .en-card-bg {
       flex-wrap: wrap;
       padding: 15px 0;
@@ -312,10 +338,12 @@
     }
     .search-row {
       @include flex($h:space-between);
+      flex-wrap: wrap;
     }
     .en-card {
       width: 25%;
-      min-width: 220px;
+      /*min-width: 220px;*/
+      /*max-width: 250px;*/
       padding: 15px;
       font-size: 14px;
       background-color: #f5f5f5;
@@ -407,12 +435,16 @@
         text-align: center;
         padding:6px;
         margin-bottom: 10px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
       }
     }
     .swiper-slide {
       width: auto;
       img {
-        /*width: 100%;*/
+        width: 100%;
+        max-height: 400px;
       }
     }
     .filled-pagination {
@@ -423,6 +455,18 @@
       @include flex-center;
       font-size: 16px;
       height: 400px;
+    }
+  }
+  .isMobile {
+    .en-card {
+      width: 50%;
+      padding: 4px;
+    }
+    .search-row {
+      padding: 0 10px;
+    }
+    .search-row-cell {
+      margin-top: 10px;
     }
   }
 </style>

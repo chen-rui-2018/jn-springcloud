@@ -54,12 +54,8 @@
             </div> -->
             <div class="actiContent">
                 <div class="actiNav">
-                    <el-breadcrumb separator="/">
-                        <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
-                        <el-breadcrumb-item>
-                            <a href="/">活动中心</a>
-                        </el-breadcrumb-item>
-                    </el-breadcrumb>
+                   <span>企业服务/</span>
+                   <span class="mainColor">活动中心</span>
                 </div>
                 <div class="actiFilter clearfix">
                     <div class="timeFilter">
@@ -314,6 +310,7 @@ export default {
 </script>
 <style lang="scss">
 .actiTrain {
+  padding-top: 65px;
   .fullNav {
     // width: 1286px;
     // margin:0 auto;

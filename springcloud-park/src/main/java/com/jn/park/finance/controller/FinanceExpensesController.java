@@ -44,7 +44,7 @@ public class FinanceExpensesController extends BaseController {
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/expenses/findAll")
     public Result<PaginationData<List<FinanceExpendHistoryVo>>> findAll(FinanceExpensesPageModel financeExpensesPageModel){
-        //todo
+
         this.checkIsSomeYear(financeExpensesPageModel.getStartTime(),financeExpensesPageModel.getEndTime());
         PaginationData findAll= financeExpensesService.findAll(financeExpensesPageModel);
         return new Result(findAll);
@@ -55,7 +55,7 @@ public class FinanceExpensesController extends BaseController {
     @GetMapping(value = "/findHistoryAll")
     @RequiresPermissions("/finance/expenses/findHistoryAll")
     public Result<PaginationData<List<FinanceExpendHistoryVo>>> findHistoryAll(FinanceExpensesHistoryPageModel financeEhpm){
-        //todo
+
         this.checkIsSomeYear(financeEhpm.getStartTime(),financeEhpm.getEndTime());
         PaginationData findHistoryAll= financeExpensesService.findHistoryAll(financeEhpm);
         return new Result(findHistoryAll);
@@ -66,7 +66,7 @@ public class FinanceExpensesController extends BaseController {
     @PostMapping(value = "/importData")
     @RequiresPermissions("/finance/expenses/importData")
     public Result<FinanceExpendImportDataVo> importData(@ApiParam(value = "Excel模板文件",required = true) MultipartFile file){
-        //todo
+
         //判断文件后缀名是否为.xlsx
         //获取文件名
         String name=file.getOriginalFilename();
@@ -84,7 +84,7 @@ public class FinanceExpensesController extends BaseController {
     @PostMapping(value = "/saveMarkData")
     @RequiresPermissions("/finance/expenses/saveMarkData")
     public Result saveMarkData(@RequestBody List<FinanceExpendFindImportDataVo> feList){
-        //todo
+
         Result result=financeExpensesService.saveMarkData(feList,getUser());
         return new Result(result);
     }
@@ -94,7 +94,7 @@ public class FinanceExpensesController extends BaseController {
     @GetMapping(value = "/selectFinanceType")
     @RequiresPermissions("/finance/expenses/selectFinanceType")
     public Result<List<FinanceExpendFinanceTypeVo>>  selectFinanceType(){
-        //todo
+
         List<FinanceExpendFinanceTypeVo> selectFinanceType= financeExpensesService.selectFinanceType();
         return new Result(selectFinanceType);
     }
@@ -104,7 +104,7 @@ public class FinanceExpensesController extends BaseController {
     @GetMapping(value = "/selectDepartment")
     @RequiresPermissions("/finance/expenses/selectDepartment")
     public Result<List<FinanceSelectDepartmentModel>>  selectDepartment(){
-        //todo
+
         List<FinanceSelectDepartmentModel> selectFinanceType= financeExpensesService.selectDepartment();
         return new Result(selectFinanceType);
     }

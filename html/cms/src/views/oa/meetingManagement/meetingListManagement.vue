@@ -1,8 +1,8 @@
 <template>
   <div v-loading="listLoading" class="meetingManagement">
     <el-form :inline="true" :model="listQuery" class="filter-bar">
-      <el-radio-group v-model="listQuery.meetingStatus" style="width:40%">
-        <el-radio-button label="">全部</el-radio-button>
+      <el-radio-group v-model="listQuery.meetingStatus" style="width:40%" @change="handleFilter">
+        <el-radio-button label="" >全部</el-radio-button>
         <el-radio-button label= "1">进行中</el-radio-button>
         <el-radio-button label="2">已完成</el-radio-button>
         <el-radio-button label="3">已取消</el-radio-button>

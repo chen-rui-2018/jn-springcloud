@@ -7,7 +7,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -28,9 +27,6 @@ public class CallOtherSwaggerUtils {
     @Autowired
     private JedisFactory jedisFactory;
 
-    @Autowired
-    RestTemplate restTemplate;
-
     public static CallOtherSwaggerUtils callOtherSwaggerUtils;
 
     @PostConstruct
@@ -41,7 +37,7 @@ public class CallOtherSwaggerUtils {
     /**
      * KEY PREFIX
      */
-    private static String PREFIX = "swagger:account:";
+    private static String PREFIX = "swagger:account:nj:";
 
     /**
      * REAL_PATH
@@ -81,7 +77,7 @@ public class CallOtherSwaggerUtils {
                 map.add("account", account);
                 map.add("accountKey", accountKey);
                 JSONObject tokenJsonObject = RestTemplateUtil.request(LOGIN_URL, HttpMethod.POST, map, new HashMap<>());
-                token = ((LinkedHashMap)tokenJsonObject.get("data")).get("token").toString();
+                token = ((LinkedHashMap) tokenJsonObject.get("data")).get("token").toString();
                 callOtherSwaggerUtils.jedisFactory.getJedis().set(PREFIX + account, token, NXXX, EXPX, TIME);
             }
             Map dynamicHeaders = new HashMap<>();

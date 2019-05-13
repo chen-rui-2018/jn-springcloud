@@ -60,13 +60,17 @@
     <transition name='fade' appear  enter-active-class='animated fadeInDown' leave-active-class='animated fadeOutUp'>
       <div class="nav" v-if="!show3&&isNavShow">
         <div class="nav_cont" v-for="(slideitem,slideindex) in sliderData " :key="slideindex">
-          <div class="nav_cont_father">{{slideitem.preValue}} <i class="el-icon-arrow-right"></i></div>
-          <div class="nav_cont_son" :class="{'hidder_son':slideitem.products.length===0} ">  
-            <div v-for="(item,index) in slideitem.products" :key="index" >
-              <span></span>
-              {{item.productName}}
+          <a href="javascript:;">
+            <div class="nav_cont_father">{{slideitem.preValue}} <i class="el-icon-arrow-right"></i></div>
+          </a>
+            <div class="nav_cont_son" :class="{'hidder_son':slideitem.products.length===0} ">  
+                <div v-for="(item,index) in slideitem.products" :key="index" >
+                  <a href="javascript:;">
+                      <span></span>
+                      {{item.productName}}
+                  </a>
+                </div>
             </div>
-          </div>
         </div>
       </div>
     </transition>
@@ -214,10 +218,14 @@
       <!-- 战略合作伙伴 -->
       <div class="partner" ref="partner2" data-class="allFade">
         <div class="partner_titile">战略合作伙伴</div>
-        <div class="partner_list">
-          <ul>
-            <li  v-for="(item,index) in 18" :key="index"> <img src="../../assets/image/testsn.png" alt=""> </li>
-          </ul>
+        <div class="partner_box">
+          <div class="partner_list">
+            <ul class="partner_list_ul">
+              <!-- <li  v-for="(item,index) in 18" :key="index"> <img src="../../assets/image/testsn.png" alt=""></li> -->
+              <li  v-for="(item,index) in partnerLogo" :key="index"> <img :src="item.orgLogo" alt=""></li>
+            </ul>
+            <ul class="partner_list_ul2" v-if="partnerLogo.length>18"></ul>
+          </div>
         </div>
       </div>
       <!-- 优质顾问 -->
@@ -239,8 +247,10 @@
                   <a href="javascript:;">
                     <div class="info_img">
                       <div>
-                        <img src="../../assets/image/test2.png" alt="">
+                        <!-- <img src="../../assets/image/test2.png" alt=""> -->
+                        <img :src="counselorinfoItem.avatar" alt="">
                       </div>
+                      
                     </div>
                     <div class="info_all">
                       <div class="info_name"><span>{{counselorinfoItem.advisorName}}</span>/<span>{{counselorinfoItem.position}} </span></div>
@@ -255,8 +265,8 @@
               <li class="conselor_mid">
                 <div v-for="(counselorinfoItem2,counselorinfoindex2) in counselorList" :key="counselorinfoindex2" class="conselor_mid_list" v-if="counselorinfoindex2>=2&&counselorinfoindex2<10">
                   <a href="javascript:;">
-                    <div class="info_img"><img src="../../assets/image/test2.png" alt=""></div>
-                    <!-- <div class="info_img"><img :src="counselorinfoItem.avatar" alt=""></div> -->
+                    <!-- <div class="info_img"><img src="../../assets/image/test2.png" alt=""></div> -->
+                    <div class="info_img"><img :src="counselorinfoItem2.avatar" alt=""></div>
                     <div class="info_all">
                       <div class="info_name"><span>{{counselorinfoItem2.advisorName}}</span>/<span>{{counselorinfoItem2.position}} </span></div>
                       <div class="info_detail">
@@ -292,7 +302,7 @@
                   <a href="javascript:;">
                     <div class="liveness_img">
                       <!-- <img :src="item.orgLogo" alt=""> -->
-                      <img src="../../assets/image/test3.png" alt="">
+                      <img :src="item.orgLogo" alt="">
                     </div>
                     <div class="liveness_detail">
                       <p>{{item.orgName}}</p>
@@ -312,30 +322,22 @@
           <div class="liveness_titile">最新评价</div>
           <div class="comment_box">
             <div class="comment_list" >
-              <!-- <div class="swiper-container swiper2 ">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide" >  -->
-                    <!-- <p> -->
-                      <ul class="comment_list_ul">
-                        <li v-for="(item,index) in RatingList" :key="index">
-                            <p>{{item.evaluationAccount|hiddentel}} ：@ <span>{{item.orgName}}</span>@{{item.advisorName}}</p>
-                            <p>              
-                              <span :class="[item.evaluationScore>=1?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span>
-                              <span :class="[item.evaluationScore>=2?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
-                              <span :class="[item.evaluationScore>=3?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
-                              <span :class="[item.evaluationScore>=4?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
-                              <span :class="[item.evaluationScore>=5?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
-                            </p>
-                            <p><span>评分（{{item.evaluationScore}}）</span></p>
-                            <p>"{{item.evaluationDesc}}"</p>
-                            <p>{{item.createdTime}}2019-02-25  15:28:30</p>
-                        </li>
-                      </ul>
-                      <ul class="comment_list_ul2"></ul>
-                    <!-- </p> -->
-                  <!-- </div>
-                </div>
-              </div> -->
+              <ul class="comment_list_ul">
+                <li v-for="(item,index) in RatingList" :key="index">
+                    <p>{{item.evaluationAccount|hiddentel}} ：@ <span>{{item.orgName}}</span>@{{item.advisorName}}</p>
+                    <p>              
+                      <span :class="[item.evaluationScore>=1?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span>
+                      <span :class="[item.evaluationScore>=2?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
+                      <span :class="[item.evaluationScore>=3?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
+                      <span :class="[item.evaluationScore>=4?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
+                      <span :class="[item.evaluationScore>=5?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
+                    </p>
+                    <p><span>评分（{{item.evaluationScore}}）</span></p>
+                    <p>"{{item.evaluationDesc}}"</p>
+                    <p>{{item.createdTime}}2019-02-25  15:28:30</p>
+                </li>
+              </ul>
+              <ul class="comment_list_ul2"></ul>
             </div>
           </div>
         </div>
@@ -377,7 +379,8 @@ export default {
        select:'',
        menuShow:true,
        sliderData:[],
-       sekectShow:false
+       sekectShow:false,
+       partnerLogo:[]
     };
   },
   filters: {
@@ -406,6 +409,8 @@ export default {
     this.getRatingList()
     this.selectIndustryProductList()
     window.addEventListener('scroll', this.handleScroll)
+    this.scrollpartner()
+    this.getPartner()
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
@@ -421,26 +426,44 @@ export default {
     changeselectShow(val){
       this.sekectShow=val
     },
+    // 合作伙伴无限滚动
+    scrollpartner(){
+      let speed = 50;
+      let demo=document.querySelector('.partner_list');
+      let demo2=document.querySelector('.partner_list_ul2');
+      let demo1=document.querySelector('.partner_list_ul');
+      if(demo2){
+        demo2.innerHTML = demo1.innerHTML;
+      }
+      function Marquee(){
+        if(demo.scrollTop>=demo1.offsetHeight){
+          demo.scrollTop=0;
+          }
+          else{
+              demo.scrollTop=demo.scrollTop+1;
+          }
+      }
+      let MyMar=setInterval(Marquee,speed);
+      demo.onmouseover=function(){clearInterval(MyMar)};
+      demo.onmouseout=function(){MyMar=setInterval(Marquee,speed); };
+    },
     // 列表无限滚动
     scrollList(){
-      let box = document.querySelector('.comment_list')
-      let ul = document.querySelector('.comment_list_ul')
-      let oUl = document.createElement('ul');
-      var speed = 100;
-            var demo=document.querySelector('.comment_list');
-            var demo2=document.querySelector('.comment_list_ul2');
-            var demo1=document.querySelector('.comment_list_ul');;
-            demo2.innerHTML = demo1.innerHTML;
-            function Marquee(){if(demo.scrollTop>=demo1.offsetHeight){
-                    demo.scrollTop=0;
-                }
-                else{
-                    demo.scrollTop=demo.scrollTop+2;
-                }
-            }
-            var MyMar=setInterval(Marquee,speed);
-            demo.onmouseover=function(){clearInterval(MyMar)};
-            demo.onmouseout=function(){MyMar=setInterval(Marquee,speed); };
+      let speed = 50;
+      let demo=document.querySelector('.comment_list');
+      let demo2=document.querySelector('.comment_list_ul2');
+      let demo1=document.querySelector('.comment_list_ul');;
+          demo2.innerHTML = demo1.innerHTML;
+          function Marquee(){if(demo.scrollTop>=demo1.offsetHeight){
+                  demo.scrollTop=0;
+              }
+              else{
+                  demo.scrollTop=demo.scrollTop+1;
+              }
+          }
+          let MyMar=setInterval(Marquee,speed);
+          demo.onmouseover=function(){clearInterval(MyMar)};
+          demo.onmouseout=function(){MyMar=setInterval(Marquee,speed); };
     },
     // 初始化swiper
     swiperInit(){
@@ -654,8 +677,25 @@ export default {
           sortTypes:this.sortTypes
          },
         callback: function(res) {
-          // console.log(res);
+          console.log(res);
             _this.serviceOrgList = res.data.rows;
+        }
+      });
+    },
+    //合作伙伴logo
+    getPartner(){
+      let _this = this;
+      this.api.get({
+        url: "selectServiceOrgList",
+        data: {
+          businessType:'',
+          page:1,
+          rows:50,
+          sortTypes:''
+         },
+        callback: function(res) {
+          // console.log(res);
+            _this.partnerLogo = res.data.rows;
         }
       });
     },
@@ -1166,6 +1206,7 @@ export default {
             width: 100%;
             height: 192px;
             overflow: hidden;
+            border-radius: 5px;
             img{
               height: 100%;
               width: 100%;
@@ -1201,27 +1242,38 @@ export default {
           font-size: 28px;
           text-align: center;
         }
+        .partner_box{
+          width: 100%;
+          border: 1px solid #dedede;
+          border-radius: 10px;
+          margin-top: 28px;
+        }
         .partner_list{
-          margin-top: 39px;
+          margin: 30px 0;
+          overflow: hidden;
+          height: 228px;
+          padding: 13px 0;
           ul{
             display: flex;
-            justify-content: space-between;
+            // justify-content: space-between;
             flex-wrap: wrap;
-            margin-bottom: 27px;
+            // margin-bottom: 27px;
             li{
               border:1px solid #dedede;
               padding:5px 14px;
               transition: all 0.5s;
               margin-bottom: 17px;
+              margin-left: 20px;
               &:hover{
                 box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.07);     
                 transform: translateY(-5px)
               }
               img{
-                width:77%;
+                width:137px;
                 display: block;
-                padding: 7px 10px;
+                // padding: 7px 10px;
                 margin: 0 auto;
+                height: 43px;
               }
             }
           }
@@ -1255,6 +1307,7 @@ export default {
                 color:#666666;
                 font-size: 13px;
                 padding:0 5px 5px 5px;
+                cursor: pointer;
               }
               .active{
                 border-bottom: 3px solid #00a041;
@@ -1290,6 +1343,8 @@ export default {
                       border-radius: 50%;
                       display: block;
                       // margin: 20px auto;
+                      width:157px;
+                      height: 157px;
                     }
                   }
                   .info_all{
@@ -1323,8 +1378,9 @@ export default {
                   .info_img{
                     width: 27%;
                     img{
-                      width: 79%;
-                      border-radius: 50%;
+                      width: 75px;
+                      height: 75px;
+                      border-radius: 75px;
                       display: block;
                       margin: 6px auto;
                     }
@@ -1397,12 +1453,15 @@ export default {
                   }
                   .liveness_img{
                     overflow: hidden;
+                    margin-bottom: 15px;
                     height: 113px;
                     img{
-                      margin-left: 57px;
-                      height: 63%;
+                      margin: 0 auto;
+                      width: 85%;
                       padding-top: 20px;
                       transition: all 0.6s;
+                      margin: 0 auto;
+                      display: block;
                     }
                   }
                   .liveness_detail{
@@ -1619,13 +1678,16 @@ export default {
     // animation: fadeInDown 3s ;
     position: absolute;
     left: 13%;
-    width: 16%;
+    width: 12%;
     margin-top: 14px;
     font-size: 13px;
     // border:1px solid black;
     .nav_cont{
       display: flex;
       flex-wrap: wrap;
+      a{
+        width:100%;
+      }
       .nav_cont_son {
         display: none;
         color:#fff;
@@ -1669,7 +1731,7 @@ export default {
       .nav_cont_father{
         background: rgba(0, 0, 0,0.3);
         // position: relative;
-        width: 100%;
+        // width: 100%;
         color:#fff;
         padding:20px 20px 20px 28px;
         display: flex;

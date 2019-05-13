@@ -90,7 +90,7 @@
     <div class="serverOrgContent">
       <ul>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg mainBorder fl" @click="handleOrgDel(i.orgId)">
+          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.orgLogo" alt="">
           </div>
@@ -107,7 +107,7 @@
               </div>
               <div class="right1 fl">
                 <p>
-                  <el-rate v-model="i.attitudeScore" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
+                  <el-rate :model="parseInt(i.attitudeScore)" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
                   </el-rate>
                   <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
                 <p>
@@ -123,7 +123,7 @@
       </ul>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -292,5 +292,8 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.serverOrg{
+  padding-top:65px;
+}
 </style>

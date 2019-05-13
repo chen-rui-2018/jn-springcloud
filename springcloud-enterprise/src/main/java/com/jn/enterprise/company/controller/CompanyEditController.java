@@ -3,10 +3,17 @@ package com.jn.enterprise.company.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
-import com.jn.company.enums.CompanyExceptionEnum;
+import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
+import com.jn.company.model.IBPSResult;
 import com.jn.company.model.ServiceCompany;
+import com.jn.enterprise.company.entity.TbServiceCompanyModify;
+import com.jn.enterprise.company.enums.CompanyDataEnum;
+import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.enums.JoinParkExceptionEnum;
+import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -18,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 /**
  * @author： huxw
@@ -34,18 +43,14 @@ public class CompanyEditController extends BaseController {
     private CompanyService companyService;
 
     @ControllerLog(doAction = "编辑企业资料")
-    @ApiOperation(value = "编辑企业资料", notes = "编辑企业资料")
+    @ApiOperation(value = "编辑企业资料", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/updateCompanyInfo",method = RequestMethod.POST)
     public Result updateCompanyInfo(@Validated @RequestBody CompanyUpdateParam companyUpdateParam){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
             throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
         }
-        // 判断当前用户是否为企业管理员
-        companyService.getCompanyDetailByAccountOrId(user.getAccount());
-
-        // TODO 调用ibps
-        return new Result();
+        Integer result = companyService.updateCompanyInfo(companyUpdateParam, user.getAccount(), user.getPhone());
+        return new Result(result);
     }
-
 }

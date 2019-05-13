@@ -209,13 +209,13 @@
                 </div>
 
             </div>
-            <div class="policyGuide" ref="policyGuide" data-class="bottom1">
+            <div class="policyGuide" ref="policyGuide" data-class="bottom">
                 <div ref="policy1" data-class="bottom1">
                     <div class="tit">政策指南</div>
                     <div class="eng">Policy&nbsp;guidelines</div>
                     <div class="line"></div>
                 </div>
-                <div class="fenye fenye1 w pr" ref="policyGuide2" data-class="bottom2">
+                <div class="fenye fenye1 w pr" ref="policyGuide2" data-class="bottom1">
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide" style="width:100%" v-for="(i,k) in [1,1,1]" :key="k">
@@ -286,7 +286,7 @@
                     <div class="eng mainColor">Popular&nbsp;activities</div>
                     <div class="line"></div>
                 </div>
-                <div class="acti" ref="popularActi2" data-class="bottom2">
+                <div class="acti" ref="popularActi2" data-class="bottom1">
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide" style="width:100%">
@@ -717,18 +717,40 @@ export default {
       }
       return top;
     },
-
+    getScrollOffset(){
+        // 除IE8及更早版本
+        if( window.pageXOffset != null ){
+            return {
+                x : window.pageXOffset,
+                y : window.pageYOffset
+            }
+        }
+        // 标准模式下的IE
+        if( document.compatMode == "css1Compat" ){
+            return {
+                x : document.documentElement.scrollLeft,
+                y : document.documentElement.scrollTop
+            }
+        }
+        // 怪异模式下的浏览器
+        return {
+            x : document.body.scrollLeft,
+            y : document.body.scrollTop
+        }
+    },
     handleScroll() {
-      const osTop =
-        document.documentElement.scrollTop ||
-        document.documentElement.scrollTop;
+        const osTop = this.getScrollOffset().y;
+    //   const osTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; //用于FF
+        // console.dir(osTop)
       // const arr = document.getElementsByClassName('.animation-dom')
       for (const key in this.$refs) {
         const top = this.getElementLeft(this.$refs[key]);
+        
         // console.dir(top);
         if (osTop + innerHeight + 300 >= top + 100) {
           const name = this.$refs[key].dataset.class;
           this.$refs[key].classList.add(name);
+          
         }
       }
       if (
@@ -765,7 +787,7 @@ export default {
   }
 };
 </script>
-  <style lang="scss">
+<style lang="scss">
 @keyframes qfyfadeInLeft {
   0% {
     opacity: 0;

@@ -1,11 +1,11 @@
 <template>
   <div class="data-report">
     <div id="advertisement" class="swiper-container">
-<!--      <div class="swiper-wrapper">-->
-<!--        <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">-->
-<!--          <img :src="img" class="swiper-slide-img" alt="">-->
-<!--        </div>-->
-<!--      </div>-->
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">
+          <img :src="img" class="swiper-slide-img" alt="">
+        </div>
+      </div>
     </div>
     <el-tabs
       type="border-card"
@@ -27,8 +27,8 @@
       </el-tab-pane>
     </el-tabs>
     <div class="btn-row">
-      <el-button size="small" type="primary" @click="submitForDraft">保存为草稿</el-button>
-      <el-button size="small" type="primary" @click="submitForDone">提交</el-button>
+      <el-button size="small" type="primary" :disabled="formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDraft">保存为草稿</el-button>
+      <el-button size="small" type="primary" :disabled="submitting || formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDone">提交</el-button>
       <el-button size="small" type="primary" v-if="formData.otherData">
         <a :href="formData.otherData" download="" target="_blank">点击下载附件</a>
       </el-button>
@@ -39,7 +39,7 @@
 
 <script>
   import treeTable from './common/tree-table/index'
-  import { deepClone } from '@/util'
+  import { deepClone, isMobile } from '@/util'
   import Swiper from 'swiper'
 
   export default {
@@ -52,6 +52,8 @@
     },
     data() {
       return {
+        submitting: false,
+        isMobile: isMobile(),
         loadingFormData: true,
         loadingTab: true,
         formDataListTitle: [{
@@ -63,21 +65,35 @@
           {
             text: '指标名称',
             value: 'text',
-            width: 160
+            width: 240
           },
           {
             text: '单位',
             value: 'unit',
-            width: 160
-          }
+            width: 120
+          },
+        ],
+        appColumns: [ // 表头
+          {
+            text: '指标名称',
+            value: 'text',
+            width: 80
+          },
+          {
+            text: '单位',
+            value: 'unit',
+            width: 40
+          },
         ],
         adUrls: [], // 轮播图片
       }
     },
     methods: {
       init() {
+        // 获取表单原始数据
         this.getData()
           .then(() => {
+            // 格式化树形指标、表头和otherColumns
             return this.formatFormData()
           })
           .then(() => {
@@ -85,30 +101,35 @@
           })
         this.getPcAd()
           .then(() => {
-            // new Swiper('#advertisement', {
-            //   autoplay:true,
-            //   loop:true
-            // })
+            new Swiper('#advertisement', {
+              autoplay:true,
+              loop:true
+            })
           })
       },
       formatFormData() {
         return new Promise(resolve => {
           for (const tab of this.formData.tabs) {
+            // 填报格式根据指标id挂载到树形指标上面
             this.formatInputFormatModel(tab)
+            // 格式化表头设置key对应指标上otherColumn的数据
             this.formatColumn(tab)
+            // 把otherColumns的对象根据指标id挂载到树形指标上面
             this.formatTreeOtherColumnData(tab)
           }
         })
       },
       formatInputFormatModel(tab) {
+        // 填报格式合并到树指标
         this.treeMerge(tab.inputList, tab.targetList)
       },
       formatColumn(tab) {
         // 整合表头
+        tab.columns = !this.isMobile ? deepClone(this.columns) : deepClone(this.appColumns)
+        // 如果是PC端才有上期填报值的表头
         const formTime = this.formData.taskInfo.formTime
         const date = new Date(formTime.substring(0, 4) + '-' + formTime.substring(4, 6))
         const tabColumnType = tab.tabColumnType
-        tab.columns = deepClone(this.columns)
         let text = date.getFullYear() + '年'
         if (tabColumnType === '0') {
           text += '1-'
@@ -117,25 +138,28 @@
         tab.columns.push({
           text: text,
           value: 'inputFormatModel',
-          width: 600
+          width: !this.isMobile ? 600 : ''
         })
-        if (tab.otherColumn) {
-          for (const key in tab.otherColumn) {
-            let text
-            if (key.length === 6) {
-              text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
-            } else{
-              text = key + '年'
+        if (!this.isMobile) {
+          if (tab.otherColumn) {
+            for (const key in tab.otherColumn) {
+              let text
+              if (key.length === 6) {
+                text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
+              } else{
+                text = key + '年'
+              }
+              tab.columns.push({
+                text: text,
+                value: key,
+                width: 160
+              })
             }
-            tab.columns.push({
-              text: text,
-              value: key,
-              width: 160
-            })
           }
         }
       },
       changeDepartment(el) {
+        // 表格中有来自不同部门的指标，tab查看指定部门时，不属于该部门的是没有权限填报的，所以根据填报格式的部门id和当前部门的id比对来设置权限
         const index = Number(el.index)
         const departmentId = this.formDataListTitle[index].departmentId
         this.formData.departmentId = departmentId
@@ -149,6 +173,7 @@
         }
       },
       formatTreeJurisdiction(arr, departmentId) {
+        // 填报格式设置权限字段
         for (const list of arr) {
           if (departmentId === list.departmentId) {
             this.$set(list, 'hasJurisdiction', true)
@@ -165,12 +190,17 @@
         }
       },
       treeOtherColumnMerge(treeData, otherColumn) {
+        // 其他表格列的值（上期值比对）挂载到树形指标，跟着指标循环的时候显示
         for (const target of treeData) {
           for (const key in otherColumn){
+            this.$set(target, key, [])
             if (otherColumn[key]) {
               for(const column of otherColumn[key]) {
                 if (target.id === column.targetId) {
-                  target.key = column.value
+                  target[key].push({
+                    value: column.value || '-',
+                    label: column.formName
+                  })
                 }
               }
             }
@@ -220,9 +250,12 @@
         }
       },
       submitForDone() {
+        // 点击提交按钮
         const _this = this
+        // 验证表格
         this.submit()
           .then(formData => {
+            this.submitting = true
             this.api.post({
               url: 'enterpriseSaveCompanyFormData',
               data: formData,
@@ -234,13 +267,16 @@
                 }
               }
             })
+          }, err => {
+            console.dir(err)
           })
       },
       submitForDraft() {
+        // 提交草稿
         const _this = this
+        // 验证表格
         this.submit()
           .then(formData => {
-            console.dir(JSON.stringify(formData))
             this.api.post({
               url: 'enterpriseSaveCompanyFormDataIsDraft',
               data: formData,
@@ -254,32 +290,56 @@
             })
           })
       },
-      submit() {
-        return new Promise((resolve, reject) => {
-          this.formData.tabs.forEach(item => {
-            item.inputList.some(input => {
-              if ((input.required && !value) || (input.required && value.length === 0)) {
-                this.$message.warning(`${input.formName}要求必填，请填写后提交`)
-                return true
-              }
-            })
-          })
-          this.formData.tabs.forEach(item => {
-            this.setOrder(item.targetList)
-          })
-          const formData = this.partDeepClone(this.formData, ['tabs'])
-          // 先克隆提交表单对象
-          formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'columns']))
-          // 把填报格式是多选的value把数组转成字符串
-          formData.tabs.forEach((item, index) => {
-            for (const list of item.inputList) {
-              if (list.formType === '4') {
-                list.value = list.value.join(',')
+      checkInputFormatModel(tree, resolve, reject) {
+        // 递归选中的指标树节点和获取到的填报格式数组比对，寻找对应的填报格式，并挂载到指标节点中
+        for (const target of tree) {
+          for (const list of target.inputFormatModel) {
+            for (const input of list) {
+              if ((target.hasJurisdiction && Number(input.required) && !input.value && input.formType !== '2') || (target.hasJurisdiction && Number(input.required) && input.value.length === 0)) {
+                reject({ target, input })
               }
             }
+          }
+          if (target.hasOwnProperty('children') && target.children.length > 0) {
+            this.checkInputFormatModel(target.children, resolve, reject)
+          }
+        }
+        resolve()
+      },
+      validateInputFormatModel() {
+        return new Promise((resolve, reject) => {
+          this.formData.tabs.forEach(tab => {
+            this.checkInputFormatModel(tab.targetList, resolve, reject)
           })
-          // console.dir(JSON.stringify(formData))
-          resolve(formData)
+        })
+      },
+      submit() {
+        return new Promise((resolve, reject) => {
+          this.validateInputFormatModel()
+            .then(() => {
+              this.formData.tabs.forEach(item => {
+                this.setOrder(item.targetList)
+              })
+              const formData = this.partDeepClone(this.formData, ['tabs'])
+              // 先克隆提交表单对象
+              formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'columns']))
+              // 把填报格式是多选的value把数组转成字符串
+              formData.tabs.forEach((item, index) => {
+                for (const list of item.inputList) {
+                  if (list.formType === '4') {
+                    list.value = list.value.join(',')
+                  }
+                }
+              })
+              resolve(formData)
+            },({ target, input }) => {
+              if (input.formName) {
+                this.$message.warning(`${target.text}指标里的${input.formName}要求必填，请填写后提交`)
+              } else {
+                this.$message.warning(`${target.text}指标要求必填，请填写后提交`)
+              }
+              reject()
+            })
         })
       },
       setOrder(tree) {
@@ -306,7 +366,7 @@
           this.api.get({
             url: `enterpriseGetFormStruct`,
             data: {
-              fileId: _this.$route.query.id
+              fileId: _this.$route.query.fileId
             },
             callback(res) {
               if (res.code === "0000") {
@@ -318,7 +378,7 @@
                   _this.loadingFormData = false
                   _this.formDataListTitle = _this.formData.gardenFiller
                   for (const tab of  _this.formData.tabs) {
-                    const departmentId = _this.formDataListTitle[0].departmentId
+                    const departmentId = _this.formDataListTitle && _this.formDataListTitle[0].departmentId
                     _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
                 }
@@ -339,7 +399,7 @@
             url: 'enterpriseGetPcAd',
             callback(res) {
               if (res.code === "0000") {
-                _this.adUrls = res.data.adUrls
+                _this.adUrls = res.data.adUrls.filter(src =>  !!src)
                 resolve()
               } else {
                 _this.$message.error(res.result)
@@ -381,6 +441,7 @@
       width: 100%;
       img {
         width: 100%;
+        max-height: 400px;
       }
     }
   }

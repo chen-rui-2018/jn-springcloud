@@ -35,13 +35,13 @@
         </div>
         <div class="perennial_list">
           <ul>
-            <li v-for="(item,index) in 4" :key="index">
+            <li v-for="(item,index) in perennialList" :key="index">
               <div class="list_cont">
-                <p><img src="" alt=""> </p>
-                <p>国家千人项目（顶尖人才与创新团队项目）</p>
-                <p><span class="el-icon-location"></span>全国</p>
-                <p>收益：<span>￥365万元</span> </p>
-                <p>价格：面议</p>
+                <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                <p>{{item.title}}</p>
+                <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                <p>收益：<span>{{item.profit}}</span> </p>
+                <p>价格：{{item.price}}</p>
               </div>
               <div class="list_view"><span>查看详情</span> </div>
             </li>
@@ -105,7 +105,8 @@ export default {
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:4
+        rows:4,
+        perennialList:[]
       }
     },
     filters: {
@@ -127,6 +128,7 @@ export default {
     created () {
       this.getdeclarationcentertype()//区类型
       this.getdeclarationcenterList()//公告列表获取
+      this.getperennialList()//常年申报
     },
     methods: {
       //区类型获取
@@ -171,6 +173,23 @@ export default {
               // console.log(res)
               _this.centerList = res.data.rows;
               _this.total=res.data.total
+            }
+          }
+        });
+      },
+      //常年申报列表
+      getperennialList(){
+        let _this = this;
+        this.api.get({
+          url: "list",
+          data: {
+            page:1,
+            rows:4
+          },
+          callback: function(res) {
+            if (res.code == "0000") {
+              // console.log(res)
+              _this.perennialList = res.data.rows;
             }
           }
         });
@@ -309,6 +328,12 @@ export default {
                   border-bottom: 1px solid #eeeeee;
                   padding: 11px 0;
                   margin-top: 0;
+                  img{
+                    width: 51%;
+                    height: 100%;
+                    display: block;
+                    margin: auto;
+                  }
                 }
                 p:nth-child(2){
                   color:black;
@@ -319,6 +344,8 @@ export default {
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 2;
                   overflow: hidden;
+                  height: 48px;
+
                 }
                 p:nth-child(4){
                  span{

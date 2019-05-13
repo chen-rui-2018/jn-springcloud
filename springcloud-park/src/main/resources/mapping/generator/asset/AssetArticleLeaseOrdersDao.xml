@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.asset.dao.AssetArticleLeaseOrdersDao">
+<select id="getArticleLeaseList" resultType="com.jn.park.asset.model.AssetArticleLeaseOrdersModel">
+    SELECT
+        id,
+        asset_number as assetNumber,
+        article_id AS articleId,
+        type_id AS typeId,
+        asset_type AS assetType,
+        specification,
+        article_name AS articleName,
+        article_url AS articleUrl,
+        article_introduction AS articleIntroduction,
+        lease_enterprise AS leaseEnterprise,
+        contact_name AS contactName,
+        contact_phone AS contactPhone,
+        lease_cash AS leaseCash,
+        lease_price AS leasePrice,
+        start_time AS startTime,
+        end_time AS endTime,
+        article_status AS articleStatus
+    FROM tb_asset_article_lease_orders
+    WHERE record_status = '1'
+</select>
+    <select id="getLeaseOrders" parameterType="java.lang.String" resultType="com.jn.park.asset.model.AssetArticleLeaseOrdersModel">
+        SELECT
+            id,
+            asset_number as assetNumber,
+            article_id AS articleId,
+            type_id AS typeId,
+            asset_type AS assetType,
+            specification,
+            article_name AS articleName,
+            article_url AS articleUrl,
+            article_introduction AS articleIntroduction,
+            lease_enterprise AS leaseEnterprise,
+            contact_name AS contactName,
+            contact_phone AS contactPhone,
+            lease_cash AS leaseCash,
+            lease_price AS leasePrice,
+            start_time AS startTime,
+            end_time AS endTime,
+            article_status AS articleStatus
+        FROM tb_asset_article_lease_orders
+        WHERE record_status = '1'	AND id = #{id}
+    </select>
+
+    <select id="getPayOrders" parameterType="java.lang.String" resultType="com.jn.park.asset.model.LeaseOrdersModel">
+        SELECT
+            id,
+            asset_number as assetNumber,
+            asset_type AS assetType,
+            specification,
+            article_name AS articleName,
+            article_introduction AS articleIntroduction,
+            lease_cash AS leaseCash,
+            lease_price AS leasePrice,
+            start_time AS startTime,
+            end_time AS endTime,
+            pay_sum AS paySum,
+            create_time AS createTime
+        FROM tb_asset_article_lease_orders
+        WHERE record_status = '1'	AND id = #{id}
+    </select>
+
+    <update id="updateStatus" parameterType="java.util.Map">
+        UPDATE tb_asset_article_lease_orders
+        SET article_status = #{status}
+        WHERE
+            id = #{id}
+    </update>
+
+</mapper>

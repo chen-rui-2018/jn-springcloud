@@ -13,7 +13,7 @@
           <div class="orgBtn fr mainColor">在线联系</div>
         </div>
         <div class="agent2 clearfix color2">
-          <div class="agentImg mainBorder fl">
+          <div class="agentImg fl">
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="serverOrgDetailList.orgLogo" alt="">
           </div>
@@ -36,11 +36,11 @@
     <div class="agentDel">
       <div class="agentDelTit">机构详情</div>
       <div class="agentDelCon pr color1">
-        <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click='handleZd'>
+        <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click='zankaiFlag=!zankaiFlag'>
           收起
           <i class="el-icon-arrow-up"></i>
         </div>
-        <div class="mainColor shouqi zhankai pointer" v-else @click='handleZk'>
+        <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
           <i class="el-icon-arrow-down"></i>
         </div>
         <el-card>
@@ -257,68 +257,55 @@
 
     <div class="agentCon">
       <div class="agentFil mainBorder">
-        <!-- <ul class="select-list clearfix">
+        <ul class="select-list clearfix" v-if="showFlag1">
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current">
+          <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')" v-if="serverPro.length>0">
             <a href="javascript:;" data="%">全部({{serverPro[0].serviceTotal}})</a>
           </li>
-          <li class="list-item ">
+          <li class="list-item " :class="{'active':flag1=='0'}" @click="screenPro('0')" v-if="serverPro.length>0">
             <a href="javascript:;" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
           </li>
-          <li class="list-item ">
+          <li class="list-item " :class="{'active':flag1=='1'}" @click="screenPro('1')" v-if="serverPro.length>0">
             <a href="javascript:;" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
           </li>
-        </ul> -->
-        <!-- <ul class="select-list clearfix">
-          <li>
-            <a href="javascript:;">排序：</a>
-          </li>
-          <li class="list-item current">
-            <a href="javascript:;" data="%">综合</a>
-          </li>
-          <li class="list-item ">
-            <a href="javascript:;" data="常规服务">人气</a>
-          </li>
-          <li class="list-item ">
-            <a href="javascript:;" data="特色服务">服务量</a>
-          </li>
-        </ul> -->
-        <!-- <ul class="select-list clearfix">
+        </ul>
+        <ul class="select-list clearfix" v-if="showFlag2">
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current">
-            <a href="javascript:;" data="%">全部()</a>
+          <li class="list-item current" :class="{'active':flag3==''}" @click="screenEva('')">
+            <a href="javascript:;" data="%">全部({{evaCount.evaluationTotal}})</a>
           </li>
-          <li class="list-item ">
-            <a href="javascript:;" data="常规服务">好评()</a>
+          <li class="list-item " :class="{'active':flag3=='praise'}" @click="screenEva('praise')">
+            <a href="javascript:;">好评({{evaCount.praiseNum}})</a>
           </li>
-          <li class="list-item ">
-            <a href="javascript:;" data="特色服务">中评()</a>
+          <li class="list-item " :class="{'active':flag3=='average'}" @click="screenEva('average')">
+            <a href="javascript:;">中评({{evaCount.averageNum}})</a>
           </li>
-          <li class="list-item ">
-            <a href="javascript:;" data="特色服务">差评()</a>
+          <li class="list-item " :class="{'active':flag3=='badReview'}" @click="screenEva('badReview')">
+            <a href="javascript:;">差评({{evaCount.badReviewNum}})</a>
           </li>
-        </ul> -->
-        <ul class="select-list clearfix">
+        </ul>
+        <ul class="select-list clearfix" v-if="showFlag4">
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current">
-            <a href="javascript:;" data="%">全部()</a>
+          <li class="list-item current" :class="{'active':flag4=='0'}" @click="screenActi('0')">
+            <a href="javascript:;">全部({{serverActiList[0].actiNum}})</a>
           </li>
-          <li class="list-item ">
-            <a href="javascript:;" data="常规服务">最近一周()</a>
+          <li class="list-item " :class="{'active':flag4=='1'}" @click="screenActi('1')">
+            <a href="javascript:;">最近一周({{serverActiList[0].weekNum}})</a>
           </li>
-          <li class="list-item ">
-            <a href="javascript:;" data="特色服务">最近一月()</a>
+          <li class="list-item " :class="{'active':flag4=='2'}" @click="screenActi('2')">
+            <a href="javascript:;">最近一月({{serverActiList[0].monthNum}})</a>
           </li>
         </ul>
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleSerpro">
-        <el-tab-pane label="服务产品" name="serverPro" >
+        <el-tab-pane name="serverPro">
+          <span slot="label" >服务产品({{serverPro[0].serviceTotal}})</span>
           <div class="serverPro">
             <ul class="list-imgleft">
               <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>
@@ -386,7 +373,8 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="服务评价" name="serEvaluation" >
+        <el-tab-pane name="serEvaluation">
+          <span slot="label">服务评价({{evaCount.evaluationTotal}})</span>
           <div class="serEvaluation">
             <ul class="list-imgleft">
               <li class="list-item pr" v-for="(i,k) in serviceRatingList" :key='k'>
@@ -458,7 +446,8 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="活动资讯" name="actiConsultation">
+        <el-tab-pane name="actiConsultation">
+          <span slot="label">活动资讯({{total3}})</span>
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
               <li v-for="(i,k) in serverActiList" :key='k'>
@@ -506,8 +495,8 @@ export default {
   data() {
     return {
       zankaiFlag: false,
-      activeName: "baseInfo",
       activeName1: "serverPro",
+      activeName: "baseInfo",
       serverOrgDetailList: {},
       serverPro: [
         // {
@@ -521,9 +510,6 @@ export default {
       page1: 1,
       total1: 0,
       serviceConsultant: [],
-      row2: 5,
-      page2: 1,
-      total2: 0,
       serverActiList: [],
       row3: 5,
       page3: 1,
@@ -532,7 +518,13 @@ export default {
       row4: 5,
       page4: 1,
       total4: 0,
-      evaCount:{},
+      evaCount: {},
+      showFlag1: true,
+      showFlag2: false,
+      showFlag4: false,
+      flag4: "0",
+      flag1: "",
+      flag3: ""
     };
   },
   mounted() {
@@ -541,33 +533,44 @@ export default {
     // this.getServiceConList();
     this.selActiList();
     this.getServiceRatingInfo();
+    this.getEvaluationCountInfo();
   },
   methods: {
-    handleSerpro(tab, event) {
-      console.log(tab.label)
-      return
-      this.findOrgCountProductList();
+    screenPro(i) {
+      //服务产品筛选
+      (this.productType = i),
+        (this.flag1 = i),
+        (this.page1 = 1),
+        this.findOrgCountProductList();
     },
-    handleSercon() {
-      console.log(1)
-      this.getServiceConList();
+    screenEva(i) {
+      //筛选评价
+      (this.ratingType = i),
+        (this.flag3 = i),
+        (this.page4 = 1),
+        this.getServiceRatingInfo();
     },
-    handleSereva() {
-      console.log(2)
-
-      this.getServiceRatingInfo();
-      this.getEvaluationCountInfo()
+    screenActi(i) {
+      //筛选活动
+      (this.timeInterval = i),
+        (this.flag4 = i),
+        (this.page3 = 1),
+        this.selActiList();
     },
-    handleActicon() {
-      console.log(3)
-
-      this.selActiList();
-    },
-    handleZk() {
-      this.zankaiFlag = true;
-    },
-    handleZd() {
-      this.zankaiFlag = false;
+     handleSerpro(tab, event) {
+        if(tab.name=='serEvaluation'){
+         this.showFlag1=false
+         this.showFlag2=true
+         this.showFlag4=false
+      } else if(tab.name=='actiConsultation'){
+        this.showFlag2=false
+         this.showFlag1=false
+         this.showFlag4=true
+      } else if(tab.name=='serverPro'){
+         this.showFlag2=false
+         this.showFlag1=true
+         this.showFlag4=false
+      }
     },
     handleSizeChange1(val) {
       //改变每页显示多少条的回调函数
@@ -579,17 +582,6 @@ export default {
       //改变当前页码的回调函数
       this.page1 = val;
       this.findOrgCountProductList();
-    },
-    handleSizeChange2(val) {
-      //改变每页显示多少条的回调函数
-      this.row2 = val;
-      this.page2 = 1;
-      this.getServiceConList();
-    },
-    handleCurrentChange2(val) {
-      //改变当前页码的回调函数
-      this.page2 = val;
-      this.getServiceConList();
     },
     handleSizeChange3(val) {
       //改变每页显示多少条的回调函数
@@ -622,18 +614,42 @@ export default {
       this.api.get({
         url: "getEvaluationCountInfo",
         data: {
-          // orgId: _this.$route.query.orgId,
-          orgId: "1001211",
+          orgId: _this.$route.query.orgId,
+          // orgId: "1001211",
           needPage: 1,
           isPublicPage: 0,
-          // page: _this.page4,
-          // rows: _this.row4
+          page: _this.page4,
+          rows: _this.row4
         },
         callback: function(res) {
           if (res.code == "0000") {
             console.log(res);
             _this.evaCount = res.data;
-            // _this.total4 = res.data.total;
+            _this.total4 = res.data.total;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    getServiceRatingInfo() {
+      //服务评价
+      let _this = this;
+      this.api.get({
+        url: "getServiceRatingInfo",
+        data: {
+          orgId: _this.$route.query.orgId,
+          // orgId: "1001211",
+          needPage: 1,
+          isPublicPage: 0,
+          page: _this.page4,
+          rows: _this.row4
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            console.log(res);
+            _this.serviceRatingList = res.data.rows;
+            _this.total4 = res.data.total;
           } else {
             _this.$message.error(res.result);
           }
@@ -655,30 +671,6 @@ export default {
             console.log(res);
             _this.serverActiList = res.data.rows;
             _this.total3 = res.data.total;
-          } else {
-            _this.$message.error(res.result);
-          }
-        }
-      });
-    },
-    getServiceRatingInfo() {
-      //服务评价
-      let _this = this;
-      this.api.get({
-        url: "getServiceRatingInfo",
-        data: {
-          // orgId: _this.$route.query.orgId,
-          orgId: "1001211",
-          needPage: 1,
-          isPublicPage: 0,
-          page: _this.page4,
-          rows: _this.row4
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            console.log(res);
-            _this.serviceRatingList = res.data.rows;
-            _this.total4 = res.data.total;
           } else {
             _this.$message.error(res.result);
           }

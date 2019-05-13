@@ -6,450 +6,235 @@
     </div>
 
     <div class="advisory_content">
-      <div class="enterprise">基本信息 <span @click="editBasic('basicForm')"> <i class="el-icon-edit-outline"></i>&nbsp;{{basicText}}</span></div>
-      <el-form
-        class="tableEnterprise marBtn"
-        v-if="isShow"
-      >
+      <div class="enterprise">基本信息 <span class="cancel" @click="cancelBasic" v-if="!isShow">取&nbsp;消</span><span @click="editBasic('basicForm')">
+          <i class="el-icon-edit-outline"></i>&nbsp;{{basicText}}</span></div>
+      <el-form class="tableEnterprise marBtn" v-if="isShow">
         <div style="display:flex">
-          <el-form-item
-            label="从业年限:"
-            class="inline "
-          >
-            <span>{{basicForm.workingYears}}年</span>
+          <el-form-item label="从业年限:" class="inline ">
+            <span>{{basicForm.workingYears}}</span>
           </el-form-item>
-          <el-form-item
-            label="毕业学校:"
-            class="inline bodyName"
-          >
+          <el-form-item label="毕业学校:" class="inline bodyName">
             <span>{{basicForm.graduatedSchool}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="学历:"
-            class="inline"
-          >
+          <el-form-item label="学历:" class="inline">
             <span>{{basicForm.education}}</span>
           </el-form-item>
-          <el-form-item
-            label="联系手机:"
-            class="inline bodyName"
-          >
+          <el-form-item label="联系手机:" class="inline bodyName">
             <span>{{basicForm.phone}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="联系邮箱:"
-            class="inline"
-          >
+          <el-form-item label="联系邮箱:" class="inline">
             <span>{{basicForm.contactEmail}}</span>
           </el-form-item>
-          <el-form-item
-            label="执业资源:"
-            class="inline"
-          >
+          <el-form-item label="执业资源:" class="inline">
             <span>{{basicForm.practiceQualification}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="业务擅长:"
-            class="inline"
-          >
+          <el-form-item label="业务擅长:" class="inline">
             <span>{{basicForm.goodAtBusiness}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item
-            label="个人简介:"
-            class="inline border-bottom"
-          >
+          <el-form-item label="个人简介:" class="inline border-bottom">
             <span>{{basicForm.personalProfile}}</span>
           </el-form-item>
         </div>
       </el-form>
-      <el-form
-        class="editForm"
-        v-if="!isShow"
-        :rules="rules"
-        :model="basicForm"
-        label-width="100px"
-        ref="basicForm"
-      >
-        <el-form-item
-          label="从业年限:"
-          class="inline "
-          prop="workingYears"
-        >
-          <el-input
-            v-model="basicForm.workingYears"
-            placeholder="请输入从业年限"
-            clearable
-          ></el-input>
+      <el-form class="editForm" v-if="!isShow" :rules="rules" :model="basicForm" label-width="100px" ref="basicForm">
+        <el-form-item label="从业年限:" class="inline " prop="workingYears">
+          <el-input v-model="basicForm.workingYears" placeholder="请输入从业年限" clearable></el-input>
           <!-- <span>{{workingYears}}年</span> -->
         </el-form-item>
-        <el-form-item
-          label="毕业学校:"
-          class="inline bodyName"
-          prop="graduatedSchool"
-        >
-          <el-input
-            v-model="basicForm.graduatedSchool"
-            placeholder="请输入毕业学校"
-            clearable
-          ></el-input>
+        <el-form-item label="毕业学校:" class="inline bodyName" prop="graduatedSchool">
+          <el-input v-model="basicForm.graduatedSchool" placeholder="请输入毕业学校" clearable></el-input>
           <!-- <span>{{graduatedSchool}}</span> -->
         </el-form-item>
 
-        <el-form-item
-          label="学历:"
-          class="inline"
-          prop="education"
-        >
+        <el-form-item label="学历:" class="inline" prop="education">
           <label slot="label">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;历:</label>
-          <el-input
-            v-model="basicForm.education"
-            placeholder="请输入学历"
-            clearable
-          ></el-input>
+          <el-input v-model="basicForm.education" placeholder="请输入学历" clearable></el-input>
           <!-- <span>{{education}}</span> -->
         </el-form-item>
-        <el-form-item
-          label="联系手机:"
-          class="inline bodyName"
-          prop="phone"
-        >
-          <el-input
-            v-model="basicForm.phone"
-            placeholder="请输入联系手机"
-            clearable
-          ></el-input>
+        <el-form-item label="联系手机:" class="inline bodyName" prop="phone">
+          <el-input v-model="basicForm.phone" placeholder="请输入联系手机" clearable></el-input>
           <!-- <span>{{phone}}</span> -->
         </el-form-item>
 
-        <el-form-item
-          label="联系邮箱:"
-          class="inline"
-          prop="contactEmail"
-        >
-          <el-input
-            v-model="basicForm.contactEmail"
-            placeholder="请输入联系邮箱"
-            clearable
-          ></el-input>
+        <el-form-item label="联系邮箱:" class="inline" prop="contactEmail">
+          <el-input v-model="basicForm.contactEmail" placeholder="请输入联系邮箱" clearable></el-input>
           <!-- <span>{{contactEmail}}</span> -->
         </el-form-item>
-        <el-form-item
-          label="执业资源:"
-          prop="practiceQualification"
-        >
-          <el-input
-            v-model="basicForm.practiceQualification"
-            placeholder="请输入执业资源"
-            clearable
-          ></el-input>
+        <el-form-item label="执业资源:" prop="practiceQualification">
+          <el-input v-model="basicForm.practiceQualification" placeholder="请输入执业资源" clearable></el-input>
           <!-- <span>{{practiceQualification}}</span> -->
         </el-form-item>
-        <el-form-item
-          label="业务领域:"
-          prop="business"
-        >
-          <el-select
-            v-model="basicForm.business"
-            placeholder="请选择业务领域"
-            clearable
-          >
-            <el-option
-              v-for="item in businessAreasOptions"
-              :key="item.id"
-              :label="item.preValue"
-              :value="item.id"
-            >
+        <el-form-item label="业务领域:" prop="business">
+          <el-select v-model="basicForm.business" placeholder="请选择业务领域" clearable>
+            <el-option v-for="item in businessAreasOptions" :key="item.id" :label="item.preValue" :value="item.id">
             </el-option>
           </el-select>
           <!-- <el-input v-model="basicForm.goodAtBusiness" placeholder="请输入业务擅长" clearable></el-input> -->
           <!-- <span>{{goodAtBusiness}}</span> -->
         </el-form-item>
-        <el-form-item
-          label="业务擅长:"
-          class="inline"
-          prop="goodAtBusiness"
-        >
-          <el-input
-            v-model="basicForm.goodAtBusiness"
-            placeholder="请输入业务擅长"
-            clearable
-          ></el-input>
+        <el-form-item label="业务擅长:" class="inline" prop="goodAtBusiness">
+          <el-input v-model="basicForm.goodAtBusiness" placeholder="请输入业务擅长" clearable></el-input>
           <!-- <span>{{goodAtBusiness}}</span> -->
         </el-form-item>
 
-        <el-form-item
-          label="个人简介:"
-          prop="personalProfile"
-          class="inline border-bottom"
-        >
-          <el-input
-            v-model="basicForm.personalProfile"
-            type="textarea"
-            autosize
-            placeholder="请输入个人简介"
-            clearable
-          ></el-input>
+        <el-form-item label="个人简介:" prop="personalProfile" class="inline border-bottom">
+          <el-input v-model="basicForm.personalProfile" type="textarea" autosize placeholder="请输入个人简介" clearable></el-input>
           <!-- <span>{{personalProfile}}</span> -->
         </el-form-item>
 
       </el-form>
-      <div class="enterprise">荣誉资质 <span @click="editCertificate('certificateForm')"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span> <span>取消</span></div>
-      <div
-        class="marBtn"
-        v-if="!isShowEdit"
-      >
-        <el-table
-          :data="honorData"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="certificateName"
-            align="center"
-            label="证书名称"
-          >
-            <!-- <template slot-scope="scope">
-              <span v-if="!isShowEdit">{{scope.row.certificateName}}</span>
-              <el-input
-                v-if="isShowEdit"
-                v-model="honorData[scope.$index].certificateName"
-                placeholder="请输入证书名称"
-                clearable
-              ></el-input>
-            </template> -->
+      <div class="enterprise">荣誉资质 <span class="cancel" @click="cancelHonorData" v-if="isShowEdit">取&nbsp;消</span><span
+          @click="addCertificate('certificateForm')"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span> </div>
+      <div class="marBtn" v-if="!isShowEdit">
+        <el-table :data="honorData" style="width: 100%">
+          <el-table-column prop="certificateName" align="center" label="证书名称">
           </el-table-column>
-          <el-table-column
-            prop="certificateType"
-            label="证书类型"
-            align="center"
-          >
+          <el-table-column prop="certificateTypeName" label="证书类型" align="center">
           </el-table-column>
-          <el-table-column
-            prop="issuingAgency"
-            label="颁发机构"
-            align="center"
-          >
+          <el-table-column prop="issuingAgency" label="颁发机构" align="center">
           </el-table-column>
-          <el-table-column
-            prop="getTime"
-            align="center"
-            label="颁发时间"
-          >
+          <el-table-column prop="getTime" align="center" label="颁发时间">
           </el-table-column>
-          <el-table-column
-            prop="certificatePhoto"
-            align="center"
-            label="附件"
-          >
+          <el-table-column prop="certificatePhoto" align="center" label="附件">
             <template slot-scope="scope">
-              <span
-                v-if="scope.row.certificatePhoto"
-                class="themeColor smallSize cur"
-                @click="lookPoster(scope.row)"
-              >点击查看</span>
+              <span v-if="scope.row.certificatePhoto" class="themeColor smallSize cur" @click="lookPoster(scope.row)">点击查看</span>
               <span v-if="!scope.row.certificatePhoto">暂无附件</span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="certificatePhoto"
-            align="center"
-            label=""
-            v-if="title==='XX机构邀请'"
-          >
-            <template>
-              <!-- <span v-if="!scope.row.certificateName" class="themeColor smallSize cur" @click="lookPoster(scope.row)">保存并更新</span> -->
-              <span
-                class="redColor smallSize cur"
-                @click="editCertificate"
-              >编辑</span>
+          <el-table-column prop="certificatePhoto" align="center" label="操作">
+            <template slot-scope="scope">
+              <span class="redColor smallSize cur" @click="editCertificate(scope.row)">编辑</span>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <el-form
-        class="editForm"
-        v-if="isShowEdit"
-        :rules="certificateFormRules"
-        :model="certificateForm"
-        label-width="100px"
-        ref="certificateForm"
-      >
-        <el-form-item
-          label="证书名称:"
-          prop="certificateName"
-        >
-          <el-input
-            v-model="certificateForm.certificateName"
-            placeholder="请输入证书名称"
-            clearable
-          ></el-input>
-          <!-- <span>{{workingYears}}年</span> -->
+      <el-form class="editForm" v-if="isShowEdit" :rules="certificateFormRules" :model="certificateForm" label-width="100px"
+        ref="certificateForm">
+        <el-form-item label="证书名称:" prop="certificateName">
+          <el-input v-model="certificateForm.certificateName" placeholder="请输入证书名称" clearable></el-input>
         </el-form-item>
-        <el-form-item
-          label="证书类型:"
-          prop="certificateCode"
-        >
-          <el-select
-            v-model="certificateForm.certificateCode"
-            placeholder="请选择证书类型"
-            clearable
-          >
-            <el-option
-              v-for="item in certificateAreasOptions"
-              :key="item.certificateCode"
-              :label="item.certificateName"
-              :value="item.certificateCode"
-            >
+        <el-form-item label="证书类型:" prop="certificateCode">
+          <el-select v-model="certificateForm.certificateCode" placeholder="请选择证书类型" clearable>
+            <el-option v-for="item in certificateAreasOptions" :key="item.certificateCode" :label="item.certificateName"
+              :value="item.certificateCode">
             </el-option>
           </el-select>
-          <!-- <el-input v-model="basicForm.goodAtBusiness" placeholder="请输入业务擅长" clearable></el-input> -->
-          <!-- <span>{{goodAtBusiness}}</span> -->
         </el-form-item>
-         <el-form-item
-          label="颁发机构:"
-          prop="issuingAgency"
-        >
-          <el-input
-            v-model="certificateForm.issuingAgency"
-            placeholder="请输入颁发机构"
-            clearable
-          ></el-input>
-          <!-- <span>{{workingYears}}年</span> -->
+        <el-form-item label="颁发机构:" prop="issuingAgency">
+          <el-input v-model="certificateForm.issuingAgency" placeholder="请输入颁发机构" clearable></el-input>
         </el-form-item>
-        <el-form-item
-          label="颁发时间:"
-          class="inline"
-          prop="getTime"
-        >
-          <el-date-picker
-            v-model="certificateForm.getTime"
-            value-format="yyyyMM"
-            type="date"
-            placeholder="选择日期"
-          >
+        <el-form-item label="颁发时间:" class="inline" prop="getTime">
+
+          <el-date-picker v-model="certificateForm.getTime" value-format="yyyyMM" type="month" placeholder="请选择时间">
           </el-date-picker>
         </el-form-item>
 
-        <el-form-item
-          label="附件:"
-          prop="personalProfile"
-          class="inline border-bottom"
-        >
-         <label slot="label">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件:</label>
-          <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
-            :headers="headers"
-            :on-exceed="handleExceed"
-            :limit="1"
-            list-type="picture-card"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-          >
-            <i class="el-icon-plus"></i>
+        <el-form-item label="附件:" prop="personalProfile" class="inline border-bottom">
+          <label slot="label">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件:</label>
+          <el-upload class="avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+            :headers="headers" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+            <img v-if="certificateForm.certificatePhoto" :src="certificateForm.certificatePhoto">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <!-- <i class="el-icon-plus"></i> -->
           </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
+          <!-- <el-dialog :visible.sync="dialogVisible">
             <img
               width="100%"
               :src="dialogImageUrl"
               alt=""
-            >
-          </el-dialog>
+            > -->
+          <!-- </el-dialog> -->
           <!-- <span>{{personalProfile}}</span> -->
         </el-form-item>
 
       </el-form>
-      <div class="enterprise">服务经历</div>
-      <div class="marBtn">
-        <el-table
-          :data="serviceExperienceList"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="companyName"
-            label="公司名称"
-            align="center"
-          >
+      <div class="enterprise">服务经历 <span class="cancel" @click="cancelExperienceList" v-if="isShowExperienceList">取&nbsp;消</span><span
+          @click="addExperienceList('experienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editExperienceList}}</span>
+      </div>
+      <div class="marBtn" v-if="!isShowExperienceList">
+        <el-table :data="serviceExperienceList" style="width: 100%">
+          <el-table-column prop="companyName" label="公司名称" align="center">
           </el-table-column>
-          <el-table-column
-            prop="name"
-            align="position"
-            label="职务"
-          >
+          <el-table-column prop="position" align="center" label="职务">
           </el-table-column>
-          <el-table-column
-            prop="workTime"
-            align="center"
-            label="入职时间"
-          >
+          <el-table-column prop="workTime" align="center" label="入职时间">
+          </el-table-column>
+          <el-table-column align="center" label="操作">
+            <template slot-scope="scope">
+              <span class="redColor smallSize cur" @click="updataExperienceList(scope.row)">编辑</span>
+            </template>
           </el-table-column>
         </el-table>
+      </div>
+      <el-form class="editForm" v-if="isShowExperienceList" :rules="experienceListFormRules" :model="experienceListForm"
+        label-width="100px" ref="experienceListForm">
+        <el-form-item label="公司名称:" prop="companyName">
+          <el-input v-model="experienceListForm.companyName" placeholder="请输入公司名称" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="职务:" prop="position">
+          <label slot="label">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务:</label>
+          <el-input v-model="experienceListForm.position" placeholder="请输入职务" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="入职日期:" class="inline">
+          <el-date-picker v-model="experienceListForm.workTime" type="month" value-format="yyyyMM" placeholder="请选择时间">
+          </el-date-picker>
+        </el-form-item>
+
+      </el-form>
+      <div class="enterprise">项目经验<span class="cancel" @click="cancelProjectExperienceList" v-if="isShowProjectExperienceList">取&nbsp;消</span><span
+          @click="addProjectExperienceList('projectExperienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editProjectExperienceList}}</span></div>
+      <div class="marBtn" v-if="!isShowProjectExperienceList">
+        <el-table :data="serviceProjectExperienceList" style="width: 100%">
+          <el-table-column prop="projectName" align="center" label="项目名称">
+          </el-table-column>
+          <el-table-column align="center" prop="companyName" label="公司名称">
+          </el-table-column>
+          <el-table-column prop="personalDuties" align="center" label="个人职责">
+          </el-table-column>
+          <el-table-column prop="projectTime" align="center" label="项目时间">
+          </el-table-column>
+          <el-table-column align="center" label="操作">
+            <template slot-scope="scope">
+              <span class="redColor smallSize cur" @click="updataProjectExperienceList(scope.row)">编辑</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <el-form class="editForm" v-if="isShowProjectExperienceList" :rules="projectExperienceListFormRules" :model="projectExperienceListForm"
+        label-width="100px" ref="projectExperienceListForm">
+        <el-form-item label="项目名称:" prop="projectName">
+          <el-input v-model="projectExperienceListForm.projectName" placeholder="请输入项目名称" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="公司名称:" prop="companyName">
+          <el-input v-model="projectExperienceListForm.companyName" placeholder="请输入公司名称" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="项目时间:" class="inline">
+          <el-date-picker v-model="projectExperienceListForm.projectTime" type="month" value-format="yyyyMM"
+            placeholder="请选择时间">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="个人职责:">
+          <el-input v-model="projectExperienceListForm.personalDuties" placeholder="请输入个人职责" type="textarea" clearable></el-input>
+        </el-form-item>
+
+      </el-form>
+      <div v-show="showBtn" class="footer ct">
+        <el-button size="mini" @click="acceptInvitation" :disabled="disabled" class="mainColor accept">接受邀请</el-button>
+        <el-button size="mini" type="success" @click="refuseInvitation">拒绝邀请</el-button>
       </div>
 
-      <div class="enterprise">项目经验</div>
-      <div class="marBtn">
-        <el-table
-          :data="serviceProjectExperienceList"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="projectName"
-            align="center"
-            label="项目名称"
-          >
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="companyName"
-            label="公司名称"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="personalDuties"
-            align="center"
-            label="个人职责"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="projectTime"
-            align="center"
-            label="项目时间"
-          >
-          </el-table-column>
-        </el-table>
-      </div>
-      <button
-        class="business_footer"
-        @click="submitForm('counselorForm')"
-        :disabled="disabled"
-      > 接受邀请 </button>
-      <button
-        class="business_footer"
-        @click="submitForm('counselorForm')"
-        :disabled="disabled"
-      > 拒绝邀请 </button>
     </div>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      width="50%"
-    >
-      <img
-        :src="certificatePhoto"
-        alt="图片"
-        style="width:100%"
-      >
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
+    <el-dialog :visible.sync="dialogVisible" width="50%">
+      <img :src="certificatePhoto" alt="图片" style="width:100%">
+      <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
     </el-dialog>
@@ -460,15 +245,20 @@
 export default {
   data() {
     return {
-      dialogImageUrl:'',
-      dialogVisible:false,
+      showBtn: true,
+      dialogImageUrl: "",
+      dialogVisible: false,
       headers: {
         token: sessionStorage.token
       },
-      certificateAreasOptions:[],//证书类型
+      certificateAreasOptions: [], //证书类型
       editText: "添加荣誉资质",
+      editExperienceList: "添加服务经历",
+      editProjectExperienceList: "添加项目经验",
+      isShowExperienceList: false,
+      isShowProjectExperienceList: false,
       isShowEdit: false,
-      title: "XX机构邀请",
+      title: "",
       businessAreasOptions: [],
       basicText: "编 辑",
       isShow: true,
@@ -495,20 +285,49 @@ export default {
         education: "", //学历
         contactEmail: "", //联系邮箱
         phone: "",
-        orgId: "285bfb89580a422ea927200f5d7accc4"
+        // orgId: "285bfb89580a422ea927200f5d7accc4"
+        orgId: ""
       },
-      certificateForm:{
-        advisorAccount:sessionStorage.getItem("account"),
-        certificateName:'',
-        certificateCode:'',
-        id:'',
-         getTime:'',
-         certificatePhoto:'',
-         issuingAgency:'',//颁发机构
-
-        },
-        certificateFormRules:{
-              certificateCode: [
+      certificateForm: {
+        advisorAccount: sessionStorage.getItem("account"),
+        certificateName: "",
+        certificateCode: "",
+        id: "",
+        getTime: "",
+        certificatePhoto: "",
+        issuingAgency: "" //颁发机构
+      },
+      projectExperienceListForm: {
+        advisorAccount: sessionStorage.getItem("account"),
+        personalDuties: "",
+        companyName: "",
+        id: "",
+        projectName: "",
+        projectTime: ""
+      },
+      experienceListForm: {
+        advisorAccount: sessionStorage.getItem("account"),
+        companyName: "",
+        position: "",
+        id: "",
+        workTime: ""
+      },
+      projectExperienceListFormRules: {
+        companyName: [
+          { required: true, message: "请输入公司名称", trigger: "blur" }
+        ],
+        projectName: [
+          { required: true, message: "请输入项目名称", trigger: "blur" }
+        ]
+      },
+      experienceListFormRules: {
+        companyName: [
+          { required: true, message: "请输入公司名称", trigger: "blur" }
+        ],
+        position: [{ required: true, message: "请输入职务", trigger: "blur" }]
+      },
+      certificateFormRules: {
+        certificateCode: [
           { required: true, message: "请选择证书类型", trigger: "change" }
         ],
         certificateName: [
@@ -516,8 +335,8 @@ export default {
         ],
         issuingAgency: [
           { required: true, message: "请输入颁发机构", trigger: "blur" }
-        ],
-        },
+        ]
+      },
       rules: {
         //     workingYears: [
         //       { required: true, message: '请输入从业年限', trigger: 'blur' }
@@ -590,23 +409,193 @@ export default {
     this.getCertificateTypeList();
   },
   methods: {
-      // resetForm(formName) {
-      //   this.$refs[formName].resetFields();
-      // },
-    // 保存荣誉资质
-    editCertificate(certificateForm) {
+    //拒绝邀请
+    refuseInvitation() {},
+    // 接受邀请
+    acceptInvitation() {
+      this.disabled = true;
+      if (!this.basicForm.workingYears) {
+        this.$message.error("请先填写基本信息");
+        this.disabled = false;
+        return;
+      }
+      this.api.post({
+        url: "acceptOrgInvitation",
+        data: { advisorAccount: this.basicForm.advisorAccount },
+        dataFlag: true,
+        callback: res => {
+          if (res.code === "0000") {
+            this.$message({
+              message: "操作成功",
+              type: "success"
+            });
+            this.disabled = false;
+            // this.businessAreasOptions = res.data;
+          } else {
+            this.$message.error(res.result);
+            this.disabled = false;
+          }
+        }
+      });
+    },
+    // 新增项目经验
+    addProjectExperienceList(projectExperienceListForm) {
+      if (this.editProjectExperienceList === "添加项目经验") {
+        this.projectExperienceListForm.personalDuties = "";
+        this.projectExperienceListForm.companyName = "";
+        this.projectExperienceListForm.projectName = "";
+        this.projectExperienceListForm.projectTime = "";
+        this.projectExperienceListForm.id = "";
+        this.isShowProjectExperienceList = true;
+        this.showBtn = false;
+        this.editProjectExperienceList = "保存并更新";
+      } else {
+        this.$refs[projectExperienceListForm].validate(valid => {
+          if (valid) {
+            console.log(this.projectExperienceListForm);
+            this.api.post({
+              url: "saveOrUpdateAdvisorProjectExperience",
+              data: this.projectExperienceListForm,
+              callback: res => {
+                if (res.code == "0000") {
+                  this.$message({
+                    message: "操作成功",
+                    type: "success"
+                  });
+                  this.isShowProjectExperienceList = false;
+                  this.showBtn = true;
+                  this.editProjectExperienceList = "添加项目经验";
+                  this.init();
+                } else {
+                  this.$message.error(res.result);
+                  return false;
+                }
+              }
+            });
+          } else {
+            return false;
+          }
+        });
+      }
+    },
+    // 取消项目经验
+    cancelProjectExperienceList() {
+      this.isShowProjectExperienceList = false;
+      this.editProjectExperienceList = "添加项目经验";
+      this.showBtn = true;
+    },
+    // 编辑项目经验
+    updataProjectExperienceList(row) {
+      this.projectExperienceListForm.personalDuties = row.personalDuties;
+      this.projectExperienceListForm.companyName = row.companyName;
+      this.projectExperienceListForm.projectName = row.projectName;
+      this.projectExperienceListForm.projectTime = row.projectTime;
+      this.projectExperienceListForm.id = row.id;
+      this.isShowProjectExperienceList = true;
+      this.editProjectExperienceList = "保存并更新";
+      this.showBtn = false;
+    },
+    // 编辑服务经历
+    updataExperienceList(row) {
+      this.experienceListForm.workTime = row.workTime;
+      this.experienceListForm.companyName = row.companyName;
+      this.experienceListForm.position = row.position;
+      this.experienceListForm.id = row.id;
+      this.isShowExperienceList = true;
+      this.showBtn = false;
+      this.editExperienceList = "保存并更新";
+    },
+    // 新增服务经历
+    addExperienceList(experienceListForm) {
+      if (this.editExperienceList === "添加服务经历") {
+        // this.resetForm('certificateForm')
+        // this.$refs['certificateForm'].resetFields();
+        this.experienceListForm.workTime = "";
+        this.experienceListForm.companyName = "";
+        this.experienceListForm.position = "";
+        this.experienceListForm.id = "";
+        this.isShowExperienceList = true;
+        this.showBtn = false;
+        this.editExperienceList = "保存并更新";
+      } else {
+        this.$refs[experienceListForm].validate(valid => {
+          if (valid) {
+            console.log(this.experienceListForm);
+            this.api.post({
+              url: "saveOrUpdateAdvisorExperience",
+              data: this.experienceListForm,
+              callback: res => {
+                if (res.code == "0000") {
+                  this.$message({
+                    message: "操作成功",
+                    type: "success"
+                  });
+                  this.isShowExperienceList = false;
+                  this.showBtn = true;
+                  this.editExperienceList = "添加服务经历";
+                  this.init();
+                } else {
+                  this.$message.error(res.result);
+                  return false;
+                }
+              }
+            });
+          } else {
+            return false;
+          }
+        });
+      }
+    },
+    // 取消基本信息的更改
+    cancelBasic() {
+      this.isShow = true;
+      this.basicText = "编 辑";
+      this.showBtn = true;
+    },
+    // 取消服务经历的更改
+    cancelExperienceList() {
+      this.isShowExperienceList = false;
+      this.editExperienceList = "添加服务经历";
+      this.showBtn = true;
+    },
+    // 取消编辑荣誉资质
+    cancelHonorData() {
+      this.isShowEdit = false;
+      this.showBtn = true;
+      this.editText = "添加荣誉资质";
+    },
+    // resetForm(formName) {
+    //   this.$refs[formName].resetFields();
+    // },
+    //编辑荣誉资质
+    editCertificate(row) {
+      console.log(row);
+      this.certificateForm.certificateName = row.certificateName;
+      this.certificateForm.certificateCode = row.certificateType;
+      this.certificateForm.getTime = row.getTime;
+      this.certificateForm.id = row.id;
+      this.certificateForm.certificatePhoto = row.certificatePhoto;
+      this.certificateForm.issuingAgency = row.issuingAgency;
+      this.isShowEdit = true;
+      this.showBtn = false;
+      this.editText = "保存并更新";
+    },
+    // 新增荣誉资质
+    addCertificate(certificateForm) {
       if (this.editText === "添加荣誉资质") {
-    // this.resetForm('certificateForm')
-    // this.$refs['certificateForm'].resetFields();
-    this.certificateForm.getTime=''
-    this.certificateForm.certificateName=''
-    this.certificateForm.certificateCode=''
-    this.certificateForm.certificatePhoto=''
-    this.certificateForm.issuingAgency=''
+        // this.resetForm('certificateForm')
+        // this.$refs['certificateForm'].resetFields();
+        this.certificateForm.getTime = "";
+        this.certificateForm.certificateName = "";
+        this.certificateForm.certificateCode = "";
+        this.certificateForm.certificatePhoto = "";
+        this.certificateForm.issuingAgency = "";
+        this.certificateForm.id = "";
         this.isShowEdit = true;
+        this.showBtn = false;
         this.editText = "保存并更新";
       } else {
-          this.$refs[certificateForm].validate(valid => {
+        this.$refs[certificateForm].validate(valid => {
           if (valid) {
             // this.certificateForm.getTime=/
             console.log(this.certificateForm);
@@ -620,8 +609,9 @@ export default {
                     message: "操作成功",
                     type: "success"
                   });
-                   this.isShowEdit = false;
-        this.editText = "添加荣誉资质";
+                  this.isShowEdit = false;
+                  this.showBtn = true;
+                  this.editText = "添加荣誉资质";
                   this.init();
                 } else {
                   this.$message.error(res.result);
@@ -633,7 +623,6 @@ export default {
             return false;
           }
         });
-
       }
     },
     // 获取业务领域
@@ -666,16 +655,16 @@ export default {
         }
       });
     },
-    handleExceed(files, fileList) {
-      this.$message.warning(`只能上传一张海报图片`);
-    },
-    handleRemove(file, fileList) {
-      this.dialogImageUrl = "";
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
+    // handleExceed(files, fileList) {
+    //   this.$message.warning(`只能上传一张海报图片`);
+    // },
+    // handleRemove(file, fileList) {
+    //   this.dialogImageUrl = "";
+    // },
+    // handlePictureCardPreview(file) {
+    //   this.dialogImageUrl = file.url;
+    //   this.dialogVisible = true;
+    // },
     handleAvatarSuccess(res, file) {
       this.certificateForm.certificatePhoto = res.data;
     },
@@ -707,6 +696,7 @@ export default {
                     message: "操作成功",
                     type: "success"
                   });
+                  this.showBtn = true;
                   this.isShow = true;
                   this.basicText = "编 辑";
                   this.init();
@@ -722,6 +712,7 @@ export default {
         });
       } else {
         this.isShow = false;
+        this.showBtn = false;
         this.basicText = "保 存";
       }
     },
@@ -736,6 +727,8 @@ export default {
     },
     init() {
       let _this = this;
+      this.basicForm.orgId = this.$route.query.orgId;
+      this.title = this.$route.query.title;
       // this.basicForm.advisorAccount = sessionStorage.getItem("account");
       // this.certificateForm.advisorAccount = sessionStorage.getItem("account");
       console.log(this.basicForm.advisorAccount);
@@ -743,7 +736,6 @@ export default {
         url: "advisorDetails",
         data: { advisorAccount: this.basicForm.advisorAccount },
         callback: function(res) {
-          console.log(res);
           if (res.code == "0000") {
             _this.basicForm.personalProfile =
               res.data.advisorServiceInfo.personalProfile;
@@ -782,7 +774,9 @@ export default {
                   message: "操作成功",
                   type: "success"
                 });
-                this.$router.push({ name: "counselorManagement" });
+                this.$router.push({
+                  path: "/servicemarket/product/userCenter"
+                });
                 this.disabled = false;
               } else {
                 this.$message.error(res.result);
@@ -798,7 +792,7 @@ export default {
       });
     },
     toCounselorManagement() {
-      this.$router.push({ name: "counselorManagement" });
+      this.$router.push({ path: "/servicemarket/product/userCenter" });
     }
     // toEditAdvisers() {
     //   this.$router.push({ name: "editAdvisers" });
@@ -809,6 +803,75 @@ export default {
 
 <style lang="scss" >
 .acceptInvitation {
+  .footer {
+    margin: 0 auto;
+    margin-top: 100px;
+    height: 29px;
+    line-height: 29px;
+    margin-bottom: 17px;
+    .accept {
+      background: rgba(236, 252, 242, 1);
+      border: 1px solid rgba(65, 215, 135, 1);
+      border-radius: 4px;
+      color: #00a041;
+    }
+    //     >span:nth-child(1){
+    //       display:inline-block;
+    //       color:rgba(0,160,65,1);
+    //       width:90px;
+    // height:29px;
+    // background:rgba(236,252,242,1);
+    // border:1px solid rgba(65,215,135,1);
+    // border-radius:4px;
+    // margin-right:85px;
+    //     }
+    //     >span:nth-child(2){
+    //        display:inline-block;
+    //       width:90px;
+    //       color:rgba(255,255,255,1);
+    // height:29px;
+    // background:rgba(0,160,65,1);
+    // border-radius:4px;
+    //     }
+
+    // display: block;
+    // margin: 0 auto;
+    // margin-top: 58px;
+    // border-radius: 4px;
+    // text-align: center;
+    // cursor: pointer;
+    // height: 29px;
+    // line-height: 29px;
+    // width: 90px;
+    // color: #41d787;
+    // background: rgba(236, 252, 242, 1);
+    // border: 1px solid rgba(65, 215, 135, 1);
+    // margin-bottom: 17px;
+  }
+  .el-table__header {
+    border-right: 1px solid rgba(65, 215, 135, 1);
+    border-left: 1px solid rgba(65, 215, 135, 1);
+  }
+  .cancel {
+    margin-left: 15px;
+  }
+  .avatar-uploader-icon {
+    border: 2px dashed #eee;
+    font-size: 20px;
+    color: #8c939d;
+    width: 85px;
+    height: 85px;
+    line-height: 85px;
+    text-align: center;
+  }
+  .avatarImg {
+    //  width: 85px;
+    // height: 85px;
+    img {
+      width: 85px;
+      height: 85px;
+    }
+  }
   .el-table thead {
     color: #00a041;
   }
@@ -819,15 +882,15 @@ export default {
   .el-table th {
     padding: 5px;
   }
-   .el-upload-list--picture-card .el-upload-list__item{
-      width: 85px;
-      height: 85px;
-    }
-    .el-upload--picture-card{
-        width: 85px;
-      height: 85px;
-      line-height: 85px;
-    }
+  // .el-upload-list--picture-card .el-upload-list__item {
+  //   width: 85px;
+  //   height: 85px;
+  // }
+  // .el-upload--picture-card {
+  //   width: 85px;
+  //   height: 85px;
+  //   line-height: 85px;
+  // }
   .editForm {
     padding-left: 170px;
     .el-form-item__content {
@@ -865,7 +928,7 @@ export default {
     border-top: 1px solid rgba(65, 215, 135, 1);
     border-bottom: 1px solid rgba(65, 215, 135, 1);
     // border: 1px solid rgba(65,215,135,1);
-    padding: unset;
+    // padding: unset;
     font-size: 12px;
     // color: #00A041;
     font-weight: 400;
@@ -947,7 +1010,7 @@ export default {
 .advisory_content {
   background: #fff;
   margin-top: 14px;
-  width: 813px;
+  // width: 813px;
   padding: 21px 28px;
   .enterprise {
     margin-bottom: 16px;
@@ -978,20 +1041,5 @@ export default {
       // height: 69px;
     }
   }
-}
-.business_footer {
-  display: block;
-  margin: 0 auto;
-  margin-top: 58px;
-  border-radius: 4px;
-  text-align: center;
-  cursor: pointer;
-  height: 29px;
-  line-height: 29px;
-  width: 90px;
-  color: #41d787;
-  background: rgba(236, 252, 242, 1);
-  border: 1px solid rgba(65, 215, 135, 1);
-  margin-bottom: 17px;
 }
 </style>

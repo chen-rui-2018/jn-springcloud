@@ -50,7 +50,7 @@
       </ul>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -151,9 +151,10 @@ export default {
 </script>
 <style lang="scss">
 .investor {
+  padding-top: 65px;
   .investorMenu {
     padding: 20px 0;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
   }
   .investorNav {

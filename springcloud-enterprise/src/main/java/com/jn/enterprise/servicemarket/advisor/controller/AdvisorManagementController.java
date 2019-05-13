@@ -1,5 +1,6 @@
 package com.jn.enterprise.servicemarket.advisor.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
@@ -75,6 +76,7 @@ public class AdvisorManagementController extends BaseController {
 
 
     @ControllerLog(doAction = "邀请顾问")
+    @TxTransaction(isStart = true)
     @RequiresPermissions("/serviceMarket/advisorManagementController/inviteAdvisor")
     @ApiOperation(value = "邀请顾问,(pc/app邀请顾问)",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/inviteAdvisor",method = RequestMethod.POST)
@@ -91,6 +93,7 @@ public class AdvisorManagementController extends BaseController {
     }
 
     @ControllerLog(doAction = "审批顾问填写信息")
+    @TxTransaction(isStart = true)
     @RequiresPermissions("/serviceMarket/advisorManagementController/approvalAdvisorInfo")
     @ApiOperation(value = "审批顾问填写信息",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/approvalAdvisorInfo",method = RequestMethod.POST)
@@ -106,11 +109,12 @@ public class AdvisorManagementController extends BaseController {
     @RequestMapping(value = "/advisorDetails",method = RequestMethod.GET)
     public Result<AdvisorDetailsVo> advisorDetails(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
-        AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
+        AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount,"");
         return  new Result(advisorDetailsVo);
     }
 
     @ControllerLog(doAction = "再次邀请")
+    @TxTransaction(isStart = true)
     @RequiresPermissions("/serviceMarket/advisorManagementController/inviteAgain")
     @ApiOperation(value = "再次邀请")
     @RequestMapping(value = "/inviteAgain",method = RequestMethod.GET)

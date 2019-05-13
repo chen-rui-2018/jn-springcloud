@@ -6,6 +6,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.company.model.IBPSResult;
 import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.dao.ServiceRecruitMapper;
 import com.jn.enterprise.company.dao.TbServiceRecruitMapper;
@@ -18,6 +19,9 @@ import com.jn.enterprise.company.model.*;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.RecruitService;
 import com.jn.enterprise.company.vo.RecruitVO;
+import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.enums.ServiceProductExceptionEnum;
+import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
@@ -30,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -147,41 +152,72 @@ public class RecruitServiceImpl implements RecruitService {
     @ServiceLog(doAction = "发布招聘信息")
     @Transactional(rollbackFor = Exception.class)
     public Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, ServiceCompany company, User user) {
-        TbServiceRecruit sr = new TbServiceRecruit();
-        BeanUtils.copyProperties(serviceRecruitPublishParam,sr);
+        TbServiceRecruitPublishParam tbServiceRecruitPublishParam = new TbServiceRecruitPublishParam();
+        BeanUtils.copyProperties(serviceRecruitPublishParam, tbServiceRecruitPublishParam);
 
-        sr.setCreatedTime(new Date());
-        sr.setCreatorAccount(user.getAccount());
-        sr.setComId(company.getId());
-        sr.setComName(company.getComName());
-        sr.setRecordStatus(new Byte(CompanyDataEnum.RECORD_STATUS_VALID.getCode()));
-        sr.setStatus(new Byte(CompanyDataEnum.RECORD_STATUS_NOT_VALID.getCode()));
-        sr.setViewCount(0);
-        sr.setId(UUID.randomUUID().toString().replaceAll("-",""));
+        Integer randomNo = (int)(Math.random() * 900 + 10000);
+        String recruitNo = "QYZP-" + DateUtils.formatDate(new Date(), "yyyyMMddHHmmss") + randomNo;
+        tbServiceRecruitPublishParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        tbServiceRecruitPublishParam.setCreatorAccount(user.getAccount());
+        tbServiceRecruitPublishParam.setComId(company.getId());
+        tbServiceRecruitPublishParam.setComName(company.getComName());
+        tbServiceRecruitPublishParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getCode());
+        tbServiceRecruitPublishParam.setNum(serviceRecruitPublishParam.getNum().toString());
+        tbServiceRecruitPublishParam.setStatus(RecruitDataTypeEnum.OFF_SHELVES.getCode());
+        tbServiceRecruitPublishParam.setApprovalStatus(RecruitDataTypeEnum.APPROVAL_STATUS_WAIT.getCode());
+        tbServiceRecruitPublishParam.setRecruitNo(recruitNo);
+        tbServiceRecruitPublishParam.setViewCount("0");
+        tbServiceRecruitPublishParam.setId("");
 
-        Integer result = tbServiceRecruitMapper.insertSelective(sr);
-        if (1 == result) {
-            logger.info("[招聘管理] {}发布招聘成功",user.getAccount());
+        String bpmnDefId = "567739285222981632";
+        IBPSResult ibpsResult = IBPSUtils.sendRequest(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
+
+        // ibps启动流程失败
+        if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
+            logger.warn("[发布招聘信息] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_PUBLISH_IBPS_ERROR);
         }
-        return result;
+        logger.info("[发布招聘信息] " + ibpsResult.getMessage());
+        return 1;
     }
 
     @Override
     @ServiceLog(doAction = "编辑招聘信息")
     @Transactional(rollbackFor = Exception.class)
     public Integer editRecruitInfo(ServiceRecruitEditParam serviceRecruitEditParam, User user) {
-        checkRecruitExist(serviceRecruitEditParam.getId());
-        TbServiceRecruit sr = new TbServiceRecruit();
-        BeanUtils.copyProperties(serviceRecruitEditParam,sr);
+        RecruitVO recruitVO = checkRecruitExist(serviceRecruitEditParam.getId());
+        TbServiceRecruit tbServiceRecruit = tbServiceRecruitMapper.selectByPrimaryKey(serviceRecruitEditParam.getId());
+        TbServiceRecruitPublishParam tbServiceRecruitPublishParam = new TbServiceRecruitPublishParam();
+        BeanUtils.copyProperties(tbServiceRecruit, tbServiceRecruitPublishParam);
+        BeanUtils.copyProperties(serviceRecruitEditParam, tbServiceRecruitPublishParam);
 
-        sr.setModifierAccount(user.getAccount());
-        sr.setModifiedTime(new Date());
+        tbServiceRecruitPublishParam.setStatus(RecruitDataTypeEnum.OFF_SHELVES.getCode());
+        tbServiceRecruitPublishParam.setApprovalStatus(RecruitDataTypeEnum.APPROVAL_STATUS_WAIT.getCode());
+        tbServiceRecruitPublishParam.setNum(serviceRecruitEditParam.getNum().toString());
+        tbServiceRecruitPublishParam.setCreatedTime(DateUtils.formatDate(recruitVO.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
+        tbServiceRecruitPublishParam.setModifiedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        tbServiceRecruitPublishParam.setModifierAccount(user.getAccount());
+        tbServiceRecruitPublishParam.setViewCount(tbServiceRecruit.getViewCount().toString());
+        tbServiceRecruitPublishParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getCode());
+        tbServiceRecruitPublishParam.setId("");
 
-        Integer result = tbServiceRecruitMapper.updateByPrimaryKeySelective(sr);
-        if (1 == result) {
-            logger.info("[招聘管理] 修改招聘信息成功,recruitId:{}",sr.getId());
+        String bpmnDefId = "567739285222981632";
+        IBPSResult ibpsResult = IBPSUtils.sendRequest(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
+
+        // ibps启动流程失败
+        if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
+            logger.warn("[编辑招聘信息] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_PUBLISH_IBPS_ERROR);
         }
-        return result;
+        logger.info("[编辑招聘信息] " + ibpsResult.getMessage());
+
+        // 流程启动成功删除之前的数据
+        if (ibpsResult.getState().equals("200")) {
+            tbServiceRecruit.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+            return tbServiceRecruitMapper.updateByPrimaryKeySelective(tbServiceRecruit);
+        } else {
+            return 0;
+        }
     }
 
     @Override

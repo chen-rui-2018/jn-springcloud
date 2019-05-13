@@ -114,8 +114,6 @@ public class RecruitServiceImplTest {
         serviceRecruitEditParam.setNum(20);
         // 岗位
         serviceRecruitEditParam.setPost("JUNIT测试工程师");
-        // 招聘编码
-        serviceRecruitEditParam.setRecruitNo("JN_JUNIT_TEST_20111111");
         // 薪资待遇
         serviceRecruitEditParam.setSalary("face_face");
         // 类型

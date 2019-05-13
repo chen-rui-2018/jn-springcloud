@@ -381,19 +381,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         ServiceContent content = new ServiceContent();
         BeanUtils.copyProperties(tbServiceProduct, content);
         content.setAdvisorAccount(product.getAdvisorAccount());
-        String state = addServiceProduct(content, account, tbServiceProduct.getTemplateId());
-
-        // ibps启动成功删除数据
-        if ("200".equals(state)) {
-            tbServiceProduct.setRecordStatus(RecordStatusEnum.DELETE.getValue());
-            tbServiceProductMapper.updateByPrimaryKeySelective(tbServiceProduct);
-
-            TbServiceAndAdvisorCriteria tbServiceAndAdvisorCriteria = new TbServiceAndAdvisorCriteria();
-            tbServiceAndAdvisorCriteria.createCriteria().andProductIdEqualTo(tbServiceProduct.getProductId());
-            tbServiceAndAdvisorMapper.deleteByExample(tbServiceAndAdvisorCriteria);
-        } else {
-            throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SEND_ERROR);
-        }
+        startProductIbps(content, account, tbServiceProduct.getTemplateId(), tbServiceProduct);
     }
 
     @ServiceLog(doAction = "机构编辑特色服务产品")
@@ -412,19 +400,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             content.setAdvisorAccount(product.getAdvisorAccount());
         }
 
-        String state = addServiceProduct(content, account, tbServiceProduct.getTemplateId());
-        // ibps启动成功删除数据
-        if ("200".equals(state)) {
-            tbServiceProduct.setRecordStatus(RecordStatusEnum.DELETE.getValue());
-            tbServiceProductMapper.updateByPrimaryKeySelective(tbServiceProduct);
-
-            TbServiceAndAdvisorCriteria tbServiceAndAdvisorCriteria = new TbServiceAndAdvisorCriteria();
-            tbServiceAndAdvisorCriteria.createCriteria().andProductIdEqualTo(tbServiceProduct.getProductId());
-            tbServiceAndAdvisorMapper.deleteByExample(tbServiceAndAdvisorCriteria);
-        } else {
-            throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SEND_ERROR);
-        }
-
+        startProductIbps(content, account, tbServiceProduct.getTemplateId(), tbServiceProduct);
     }
     @ServiceLog(doAction = "顾问-服务产品列表")
     @Override
@@ -622,5 +598,28 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             advisorList.add(advisor);
         }
         advisorDao.addServiceAdvisor(advisorList);
+    }
+
+    /**
+     * 编辑产品并启动IBPS
+     * @param content 入参
+     * @param account 账号
+     * @param templateId 模板ID
+     * @param tbServiceProduct 需要删除的产品
+     */
+    public void startProductIbps(ServiceContent content, String account, String templateId, TbServiceProduct tbServiceProduct){
+        String state = addServiceProduct(content, account, templateId);
+
+        // ibps启动成功删除数据
+        if ("200".equals(state)) {
+            tbServiceProduct.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+            tbServiceProductMapper.updateByPrimaryKeySelective(tbServiceProduct);
+
+            TbServiceAndAdvisorCriteria tbServiceAndAdvisorCriteria = new TbServiceAndAdvisorCriteria();
+            tbServiceAndAdvisorCriteria.createCriteria().andProductIdEqualTo(tbServiceProduct.getProductId());
+            tbServiceAndAdvisorMapper.deleteByExample(tbServiceAndAdvisorCriteria);
+        } else {
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SEND_ERROR);
+        }
     }
 }

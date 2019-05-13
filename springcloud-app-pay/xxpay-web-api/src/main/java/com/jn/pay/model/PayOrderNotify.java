@@ -74,6 +74,10 @@ public class PayOrderNotify implements Serializable  {
      *通知类型，1-前台通知，2-后台通知
      * */
     private String backType;
+    /**
+     * 签名
+     * */
+    private String sign;
 
 
     @Override
@@ -94,6 +98,7 @@ public class PayOrderNotify implements Serializable  {
                 ", param2='" + param2 + '\'' +
                 ", paySuccTime=" + paySuccTime +
                 ", backType='" + backType + '\'' +
+                ", sign='" + sign + '\'' +
                 '}';
     }
 
@@ -215,5 +220,13 @@ public class PayOrderNotify implements Serializable  {
 
     public void setBackType(String backType) {
         this.backType = backType;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }

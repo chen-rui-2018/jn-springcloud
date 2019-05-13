@@ -3,6 +3,7 @@ package org.xxpay.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.ChannelIdEnum;
 import com.jn.pay.model.PayOrderQueryReq;
@@ -25,9 +26,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.constant.PayEnum;
-import org.xxpay.common.util.MyLog;
-import org.xxpay.common.util.MySeq;
-import org.xxpay.web.service.MchInfoServiceClient;
+import org.xxpay.common.util.*;
+import org.xxpay.dal.dao.model.MchInfo;
+import org.xxpay.web.service.MchInfoService;
 import org.xxpay.web.service.PayChannelServiceClient;
 import org.xxpay.web.service.PayOrderServiceClient;
 
@@ -39,7 +40,7 @@ import org.xxpay.web.service.PayOrderServiceClient;
  * @Copyright: www.xxpay.org
  */
 @RestController
-public class PayOrderController implements PayOrderClient {
+public class PayOrderController extends BaseController implements PayOrderClient {
 
 
     private final MyLog _log = MyLog.getLog(PayOrderController.class);
@@ -51,10 +52,10 @@ public class PayOrderController implements PayOrderClient {
     private PayOrderServiceClient payOrderServiceClient;
 
     @Autowired
-    private MchInfoServiceClient mchInfoServiceClient;
+    private PayChannelServiceClient payChannelServiceClient;
 
     @Autowired
-    private PayChannelServiceClient payChannelServiceClient;
+    private MchInfoService mchInfoService;
 
 
     /**
@@ -99,29 +100,31 @@ public class PayOrderController implements PayOrderClient {
             }
             //获取支付渠道ID
             String channelId = payOrder.getString("channelId");
+            //响应密钥
+            String resKey = payOrder.getString("resKey");
             //根据支付渠道ID 执行不同的支付方式
             switch (ChannelIdEnum.getCode(channelId)) {
                 case WX_APP :
                     String wxAppParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_APP, payOrder}));
-                    return returnResult(wxAppParam,ChannelIdEnum.getCode(channelId));
+                    return returnResult(wxAppParam,ChannelIdEnum.getCode(channelId),resKey);
                 case WX_JSAPI :
                     String wxJsapiParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_JSPAI, payOrder}));
-                    return returnResult(wxJsapiParam,ChannelIdEnum.getCode(channelId));
+                    return returnResult(wxJsapiParam,ChannelIdEnum.getCode(channelId),resKey);
                 case WX_NATIVE :
                     String wxNativeParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_NATIVE, payOrder}));
-                    return returnResult(wxNativeParam,ChannelIdEnum.getCode(channelId));
+                    return returnResult(wxNativeParam,ChannelIdEnum.getCode(channelId),resKey);
                 case WX_MWEB :
                     String wxMwebParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_MWEB, payOrder}));
-                    return returnResult(wxMwebParam,ChannelIdEnum.getCode(channelId));
+                    return returnResult(wxMwebParam,ChannelIdEnum.getCode(channelId),resKey);
                 case ALIPAY_MOBILE :
                     String aliPayMobileParam =  payOrderServiceClient.doAliPayMobileReq(getJsonParam("payOrder", payOrder));
-                    return returnResult(aliPayMobileParam,ChannelIdEnum.getCode(channelId));
+                    return returnResult(aliPayMobileParam,ChannelIdEnum.getCode(channelId),resKey);
                 case ALIPAY_PC :
                     String jsonParam = payOrderServiceClient.doAliPayPcReq(getJsonParam("payOrder", payOrder));
-                    return returnResult(jsonParam,ChannelIdEnum.getCode(channelId));
+                    return returnResult(jsonParam,ChannelIdEnum.getCode(channelId),resKey);
                case ALIPAY_WAP :
                    String aliPayWapParam =  payOrderServiceClient.doAliPayWapReq(getJsonParam("payOrder", payOrder));
-                   return returnResult(aliPayWapParam,ChannelIdEnum.getCode(channelId));
+                   return returnResult(aliPayWapParam,ChannelIdEnum.getCode(channelId),resKey);
                 default:
                     return new Result(PayEnum.ERR_0016.getCode(),PayEnum.ERR_0016.getMessage());
             }
@@ -167,7 +170,7 @@ public class PayOrderController implements PayOrderClient {
             String retStr = payOrderServiceClient.queryPayOrder(getJsonParam(new String[]{"mchId", "payOrderId", "mchOrderNo", "executeNotify"}, new Object[]{mchId, payOrderId, mchOrderNo, executeNotify}));
             JSONObject retObj = JSON.parseObject(retStr);
             _log.info("{}查询支付订单,结果:{}", logPrefix, retObj);
-            if(!"0000".equals(retObj.getString("code"))) {
+            if(!GlobalConstants.SUCCESS_CODE.equals(retObj.getString("code"))) {
                 return new Result(PayEnum.ERR_0010.getCode(),retObj.getString("msg"));
             }
             payOrder = retObj.getJSONObject("result");
@@ -177,6 +180,9 @@ public class PayOrderController implements PayOrderClient {
             _log.info("商户查询订单成功,payOrder={}", payOrder);
             _log.info("###### 商户查询订单处理完成 ######");
             PayOrderQueryRsp payOrderQueryRsp =  JSON.parseObject(payOrder.toJSONString(), PayOrderQueryRsp.class);
+            //生成响应签名
+            String sign = PayDigestUtil.getSign(BeanToMap.toMap(payOrderQueryRsp), payContext.getString("resKey"), PayConstant.RESULT_PARAM_SIGN);
+            payOrderQueryRsp.setSign(sign);
             return new Result(payOrderQueryRsp);
 
         }catch (Exception e) {
@@ -194,14 +200,14 @@ public class PayOrderController implements PayOrderClient {
      */
     private Object validatePayParams(PayOrderReq payOrderReq) {
         // 验证请求参数,参数有问题返回错误提示
-        String errorMessage;
+        String errorMessage = "";
 
         if(null == payOrderReq) {
             errorMessage = "request params  payOrderReq is null.";
             return errorMessage;
         }
 
-        //商户ID
+        // 商户ID
         String mchId = payOrderReq.getMchId();
         // 商户订单号
         String mchOrderNo = payOrderReq.getMchOrderNo();
@@ -223,10 +229,16 @@ public class PayOrderController implements PayOrderClient {
         String param2 = payOrderReq.getParam2();
         // 支付结果回调URL
         String notifyUrl = payOrderReq.getNotifyUrl();
+        // springCloud 回调服务的ID
+        String serviceId = payOrderReq.getServiceId();
+        // springCloud 回调服务的URL
+        String serviceUrl = payOrderReq.getServiceId();
         // 商品主题
         String subject = payOrderReq.getSubject();
         // 商品描述信息
         String body = payOrderReq.getBody();
+        //签名
+        String sign = payOrderReq.getSign();
 
 
         // 验证请求参数有效性（必选项）
@@ -247,8 +259,10 @@ public class PayOrderController implements PayOrderClient {
             errorMessage = "request params[amount] error.";
             return errorMessage;
         }
-        if(StringUtils.isBlank(notifyUrl)) {
-            errorMessage = "request params[notifyUrl] error.";
+        // notifyUrl如果为空,serviceId和serviceUrl为必传
+        //serviceId和serviceUrl如果为空,notifyUrl为必传
+        if(StringUtils.isBlank(notifyUrl) && (StringUtils.isBlank(serviceId) || StringUtils.isBlank(serviceUrl))) {
+            errorMessage = "request params[notifyUrl or (serviceId and serviceUrl)] is null ";
             return errorMessage;
         }
         if(StringUtils.isBlank(subject)) {
@@ -298,38 +312,40 @@ public class PayOrderController implements PayOrderClient {
                 return errorMessage;
             }
         }
+        // 签名信息
+        if (StringUtils.isEmpty(sign)) {
+            errorMessage = "request params[sign] error.";
+            return errorMessage;
+        }
         // 查询商户信息
-        JSONObject mchInfo;
-        String retStr = mchInfoServiceClient.selectMchInfo(getJsonParam("mchId", mchId));
-
-        JSONObject retObj = JSON.parseObject(retStr);
-        if("0000".equals(retObj.getString("code"))) {
-            mchInfo = retObj.getJSONObject("result");
-            if (mchInfo == null) {
-                errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
-                return errorMessage;
-            }
-            if(mchInfo.getByte("state") != 1) {
-                errorMessage = "mchInfo not available [mchId="+mchId+"] record in db.";
-                return errorMessage;
-            }
-        }else {
+        MchInfo mchInfo = mchInfoService.getMchInfoById(mchId);
+        if(null == mchInfo){
             errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
-            _log.info("查询商户没有正常返回数据,code={},msg={}", retObj.getString("code"), retObj.getString("msg"));
+            return errorMessage;
+        }
+        if(mchInfo.getState() != 1){
+            errorMessage = "mchInfo not available [mchId="+mchId+"] record in db.";
             return errorMessage;
         }
 
-        String reqKey = mchInfo.getString("reqKey");
-        if (StringUtils.isBlank(reqKey)) {
-            errorMessage = "reqKey is null[mchId="+mchId+"] record in db.";
+        if(StringUtils.isBlank(mchInfo.getReqKey())){
+             errorMessage = "reqKey is null[mchId="+mchId+"] record in db.";
             return errorMessage;
         }
+        //请求密钥
+        String reqKey = mchInfo.getReqKey();
+
+
+        //查询返回结果
+        String retStr;
+        //JSONObject对象
+        JSONObject retObj;
 
         // 查询商户对应的支付渠道
         JSONObject payChannel;
         retStr = payChannelServiceClient.selectPayChannel(getJsonParam(new String[]{"channelId", "mchId"}, new String[]{channelId, mchId}));
         retObj = JSON.parseObject(retStr);
-        if("0000".equals(retObj.getString("code"))) {
+        if(GlobalConstants.SUCCESS_CODE.equals(retObj.getString("code"))) {
             payChannel = JSON.parseObject(retObj.getString("result"));
             if(payChannel == null) {
                 errorMessage = "Can't found payChannel[channelId="+channelId+",mchId="+mchId+"] record in db.";
@@ -342,6 +358,13 @@ public class PayOrderController implements PayOrderClient {
         }else {
             errorMessage = "Can't found payChannel[channelId="+channelId+",mchId="+mchId+"] record in db.";
             _log.info("查询渠道没有正常返回数据,code={},msg={}", retObj.getString("code"), retObj.getString("msg"));
+            return errorMessage;
+        }
+
+        // 验证签名数据
+        boolean verifyFlag = XXPayUtil.verifyPaySign(BeanToMap.toMap(payOrderReq), reqKey);
+        if(!verifyFlag) {
+            errorMessage = "Verify XX pay sign failed.";
             return errorMessage;
         }
 
@@ -362,6 +385,8 @@ public class PayOrderController implements PayOrderClient {
         payOrder.put("param1", param1);
         payOrder.put("param2", param2);
         payOrder.put("notifyUrl", notifyUrl);
+        //响应密钥
+        payOrder.put("resKey",mchInfo.getResKey());
         return payOrder;
     }
 
@@ -369,8 +394,9 @@ public class PayOrderController implements PayOrderClient {
      * 封装统一支付接口返回结果
      * @param jsonParam 统一下单接口返回的参数
      * @param channelIdEnum 渠道ID枚举
+     * @[aram resKey 请求密钥(用于生成签名)
     * */
-    Result returnResult(String jsonParam, ChannelIdEnum channelIdEnum ){
+    Result returnResult(String jsonParam, ChannelIdEnum channelIdEnum,String resKey ){
         if(StringUtils.isBlank(jsonParam)){
             return new Result(PayEnum.ERR_0010.getCode(),PayEnum.ERR_0010.getMessage());
         }
@@ -389,29 +415,50 @@ public class PayOrderController implements PayOrderClient {
             String errCodeDes = paramObj.getString("errCodeDes");
             return new Result(errCode,errCodeDes);
         }
+        //响应签名
+        String sign ;
 
         //根据渠道ID返回对应的实体类
         switch (channelIdEnum) {
                 case WX_APP :
-                    return  new Result(JSON.parseObject(jsonParam, WxAppPayRsp.class));
+                    WxAppPayRsp wxAppPayRsp = JSON.parseObject(jsonParam, WxAppPayRsp.class);
+                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(wxAppPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
+                    wxAppPayRsp.setSign(sign);
+                    return  new Result(wxAppPayRsp);
                 case WX_JSAPI :
-                    return  new Result(JSON.parseObject(jsonParam, WxJsapiPayRsp.class));
+                    WxJsapiPayRsp wxJsapiPayRsp = JSON.parseObject(jsonParam, WxJsapiPayRsp.class);
+                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(wxJsapiPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
+                    wxJsapiPayRsp.setSign(sign);
+                    return  new Result(wxJsapiPayRsp);
                 case WX_NATIVE :
-                    return  new Result(JSON.parseObject(jsonParam, WxNativePayRsp.class));
+                    WxNativePayRsp wxNativePayRsp = JSON.parseObject(jsonParam, WxNativePayRsp.class);
+                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(wxNativePayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
+                    wxNativePayRsp.setSign(sign);
+                    return  new Result(wxNativePayRsp);
                 case WX_MWEB :
+                    WxMwebPayRsp wxMwebPayRsp = JSON.parseObject(jsonParam, WxMwebPayRsp.class);
+                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(wxMwebPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
+                    wxMwebPayRsp.setSign(sign);
                     return  new Result(JSON.parseObject(jsonParam, WxMwebPayRsp.class));
                 case ALIPAY_MOBILE :
-                    return  new Result(JSON.parseObject(jsonParam, AlipayMobilePayRsp.class));
+                    AlipayMobilePayRsp alipayMobilePayRsp = JSON.parseObject(jsonParam, AlipayMobilePayRsp.class);
+                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(alipayMobilePayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
+                    alipayMobilePayRsp.setSign(sign);
+                    return  new Result(alipayMobilePayRsp);
                 case ALIPAY_PC :
-                    return  new Result(JSON.parseObject(jsonParam, AlipayPcPayRsp.class));
+                    AlipayPcPayRsp alipayPcPayRsp = JSON.parseObject(jsonParam, AlipayPcPayRsp.class);
+                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(alipayPcPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
+                    alipayPcPayRsp.setSign(sign);
+                    return  new Result(alipayPcPayRsp);
                 case ALIPAY_WAP :
-                    return new Result(JSON.parseObject(jsonParam, AlipayWapPayRsp.class));
+                    AlipayWapPayRsp alipayWapPayRsp = JSON.parseObject(jsonParam, AlipayWapPayRsp.class);
+                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(alipayWapPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
+                    alipayWapPayRsp.setSign(sign);
+                    return new Result(alipayWapPayRsp);
             default:
                 return new Result(PayEnum.ERR_0010.getCode(),PayEnum.ERR_0010.getMessage());
         }
     }
-
-
 
 
     /**
@@ -437,6 +484,8 @@ public class PayOrderController implements PayOrderClient {
         String mchOrderNo = payOrderQueryReq.getMchOrderNo();
         // 支付订单号
         String payOrderId = payOrderQueryReq.getPayOrderId();
+        // 签名
+        String sign = payOrderQueryReq.getSign();
 
         // 验证请求参数有效性（必选项）
         if(StringUtils.isBlank(mchId)) {
@@ -447,45 +496,45 @@ public class PayOrderController implements PayOrderClient {
             errorMessage = "request params[mchOrderNo or payOrderId] error.";
             return errorMessage;
         }
-
-        // 查询商户信息
-        JSONObject mchInfo;
-        String retStr = mchInfoServiceClient.selectMchInfo(getJsonParam("mchId", mchId));
-
-        JSONObject retObj = JSON.parseObject(retStr);
-        if("0000".equals(retObj.getString("code"))) {
-            mchInfo = retObj.getJSONObject("result");
-            if (mchInfo == null) {
-                errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
-                return errorMessage;
-            }
-            if(mchInfo.getByte("state") != 1) {
-                errorMessage = "mchInfo not available [mchId="+mchId+"] record in db.";
-                return errorMessage;
-            }
-        }else {
-            errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
-            _log.info("查询商户没有正常返回数据,code={},msg={}", retObj.getString("code"), retObj.getString("msg"));
+        // 签名信息
+        if (StringUtils.isEmpty(sign)) {
+            errorMessage = "request params[sign] error.";
             return errorMessage;
         }
+
+        // 查询商户信息
+        MchInfo mchInfo = mchInfoService.getMchInfoById(mchId);
+        if(null == mchInfo){
+            errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
+            return errorMessage;
+        }
+        if(mchInfo.getState() != 1){
+            errorMessage = "mchInfo not available [mchId="+mchId+"] record in db.";
+            return errorMessage;
+        }
+        if(StringUtils.isBlank(mchInfo.getReqKey())){
+            errorMessage = "reqKey is null[mchId="+mchId+"] record in db.";
+            return errorMessage;
+        }
+
+        //商户的请求密钥
+        String reqKey = mchInfo.getReqKey();
+        //商户的响应密钥
+        String resKey = mchInfo.getResKey();
+        payContext.put("resKey", resKey);
+
+        // 验证签名数据
+        boolean verifyFlag = XXPayUtil.verifyPaySign(BeanToMap.toMap(payOrderQueryReq), reqKey);
+        if(!verifyFlag) {
+            errorMessage = "Verify XX pay sign failed.";
+            return errorMessage;
+        }
+
         return "success";
     }
 
 
 
 
-    String getJsonParam(String[] names, Object[] values) {
-        JSONObject jsonParam = new JSONObject();
-        for (int i = 0; i < names.length; i++) {
-            jsonParam.put(names[i], values[i]);
-        }
-        return jsonParam.toJSONString();
-    }
-
-    String getJsonParam(String name, Object value) {
-        JSONObject jsonParam = new JSONObject();
-        jsonParam.put(name, value);
-        return jsonParam.toJSONString();
-    }
 
 }

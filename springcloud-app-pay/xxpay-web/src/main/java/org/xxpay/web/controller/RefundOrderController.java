@@ -3,6 +3,7 @@ package org.xxpay.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
 import com.jn.pay.api.RefundOrderClient;
 import com.jn.pay.model.RefundOrderReq;
 import com.jn.pay.model.RefundOrderRsp;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.constant.PayEnum;
-import org.xxpay.common.util.MyLog;
-import org.xxpay.common.util.MySeq;
-import org.xxpay.web.service.MchInfoServiceClient;
+import org.xxpay.common.util.*;
+import org.xxpay.dal.dao.model.MchInfo;
+import org.xxpay.web.service.MchInfoService;
 import org.xxpay.web.service.PayChannelServiceClient;
 import org.xxpay.web.service.PayOrderServiceClient;
 import org.xxpay.web.service.RefundOrderServiceClient;
@@ -29,7 +30,7 @@ import org.xxpay.web.service.RefundOrderServiceClient;
  * @Copyright: www.xxpay.org
  */
 @RestController
-public class RefundOrderController implements RefundOrderClient {
+public class RefundOrderController extends BaseController implements RefundOrderClient {
 
     private final MyLog _log = MyLog.getLog(RefundOrderController.class);
 
@@ -37,7 +38,7 @@ public class RefundOrderController implements RefundOrderClient {
     private RefundOrderServiceClient refundOrderServiceClient;
 
     @Autowired
-    private MchInfoServiceClient mchInfoServiceClient;
+    private MchInfoService mchInfoService;
 
     @Autowired
     private PayChannelServiceClient payChannelServiceClient;
@@ -87,6 +88,10 @@ public class RefundOrderController implements RefundOrderClient {
             //返回结果
             RefundOrderRsp refundOrderRsp = new RefundOrderRsp();
             refundOrderRsp.setRefundOrderId(refundOrder.getString("refundOrderId"));
+            //生成响应签名
+            String sign = PayDigestUtil.getSign(BeanToMap.toMap(refundOrderRsp), refundContext.getString("resKey"), PayConstant.RESULT_PARAM_SIGN);
+            refundOrderRsp.setSign(sign);
+
             return new Result(refundOrderRsp);
         }catch (Exception e) {
             _log.error(e, "退款下单失败!");
@@ -130,13 +135,14 @@ public class RefundOrderController implements RefundOrderClient {
         String param2 = refundOrderReq.getParam2();
         // 转账结果回调URL
         String notifyUrl = refundOrderReq.getNotifyUrl();
-
         // 渠道用户标识,如微信openId,支付宝账号
         String channelUser = refundOrderReq.getChannelUser();
         // 用户姓名
         String userName = refundOrderReq.getUserName();
         // 备注
         String remarkInfo = refundOrderReq.getRemarkInfo();
+        // 签名
+        String sign = refundOrderReq.getSign();
 
 
         if(StringUtils.isBlank(mchId)) {
@@ -167,33 +173,48 @@ public class RefundOrderController implements RefundOrderClient {
             errorMessage = "request params[channelUser] error.";
             return errorMessage;
         }
-
-        // 查询商户信息
-        JSONObject mchInfo;
-        String retStr = mchInfoServiceClient.selectMchInfo(getJsonParam("mchId", mchId));
-
-        JSONObject retObj = JSON.parseObject(retStr);
-        if("0000".equals(retObj.getString("code"))) {
-            mchInfo = retObj.getJSONObject("result");
-            if (mchInfo == null) {
-                errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
-                return errorMessage;
-            }
-            if(mchInfo.getByte("state") != 1) {
-                errorMessage = "mchInfo not available [mchId="+mchId+"] record in db.";
-                return errorMessage;
-            }
-        }else {
-            errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
-            _log.info("查询商户没有正常返回数据,code={},msg={}", retObj.getString("code"), retObj.getString("msg"));
+        // 签名信息
+        if (StringUtils.isEmpty(sign)) {
+            errorMessage = "request params[sign] error.";
             return errorMessage;
         }
 
+        // 查询商户信息
+        MchInfo mchInfo = mchInfoService.getMchInfoById(mchId);
+        if(null == mchInfo){
+            errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
+            return errorMessage;
+        }
+        if(mchInfo.getState() != 1){
+            errorMessage = "mchInfo not available [mchId="+mchId+"] record in db.";
+            return errorMessage;
+        }
+
+        if(org.apache.commons.lang.StringUtils.isBlank(mchInfo.getReqKey())){
+            errorMessage = "reqKey is null[mchId="+mchId+"] record in db.";
+            return errorMessage;
+        }
+
+        //获取对应商户的请求密钥
+        String reqKey = mchInfo.getReqKey();
+        //设置返回响应密钥
+        refundContext.put("resKey", mchInfo.getResKey());
+
+
+        // 验证签名数据
+        boolean verifyFlag = XXPayUtil.verifyPaySign(BeanToMap.toMap(refundOrderReq), reqKey);
+        if(!verifyFlag) {
+            errorMessage = "Verify XX refund sign failed.";
+            return errorMessage;
+        }
+
+        String retStr;
+        JSONObject retObj;
         // 查询商户对应的支付渠道
         JSONObject payChannel;
         retStr = payChannelServiceClient.selectPayChannel(getJsonParam(new String[]{"channelId", "mchId"}, new String[]{channelId, mchId}));
         retObj = JSON.parseObject(retStr);
-        if("0000".equals(retObj.getString("code"))) {
+        if(GlobalConstants.SUCCESS_CODE.equals(retObj.getString("code"))) {
             payChannel = JSON.parseObject(retObj.getString("result"));
             if(payChannel == null) {
                 errorMessage = "Can't found payChannel[channelId="+channelId+",mchId="+mchId+"] record in db.";
@@ -214,7 +235,7 @@ public class RefundOrderController implements RefundOrderClient {
         JSONObject payOrder;
         retStr = payOrderServiceClient.queryPayOrder(getJsonParam(new String[]{"payOrderId","mchId"}, new String[]{payOrderId,mchId}));
         retObj = JSON.parseObject(retStr);
-        if("0000".equals(retObj.getString("code"))) {
+        if(GlobalConstants.SUCCESS_CODE.equals(retObj.getString("code"))) {
             payOrder = JSON.parseObject(retObj.getString("result"));
             if(payOrder == null) {
                 errorMessage = "Can't found payOrder[payOrderId="+payOrderId+",mchId="+mchId+"] record in db.";
@@ -253,19 +274,5 @@ public class RefundOrderController implements RefundOrderClient {
         refundOrder.put("param2", param2);
         refundOrder.put("notifyUrl", notifyUrl);
         return refundOrder;
-    }
-
-    String getJsonParam(String[] names, Object[] values) {
-        JSONObject jsonParam = new JSONObject();
-        for (int i = 0; i < names.length; i++) {
-            jsonParam.put(names[i], values[i]);
-        }
-        return jsonParam.toJSONString();
-    }
-
-    String getJsonParam(String name, Object value) {
-        JSONObject jsonParam = new JSONObject();
-        jsonParam.put(name, value);
-        return jsonParam.toJSONString();
     }
 }

@@ -24,6 +24,13 @@ public class WxNativePayRsp extends PayBaseRsp {
     * */
     private String codeUrl;
 
+    /**
+     * 签名
+     * */
+    private String sign;
+
+
+
     public String getPrepayId() {
         return prepayId;
     }
@@ -38,5 +45,13 @@ public class WxNativePayRsp extends PayBaseRsp {
 
     public void setCodeUrl(String codeUrl) {
         this.codeUrl = codeUrl;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }

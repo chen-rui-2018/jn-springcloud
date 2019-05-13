@@ -103,6 +103,10 @@ public class PayOrderQueryRsp implements Serializable  {
      *设备
      * */
     private String device;
+    /**
+     * 签名
+     * */
+    private String sign;
 
 
     public String getPayOrderId() {
@@ -281,6 +285,14 @@ public class PayOrderQueryRsp implements Serializable  {
         this.device = device;
     }
 
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
     @Override
     public String toString() {
         return "PayOrderQueryRsp{" +
@@ -306,6 +318,7 @@ public class PayOrderQueryRsp implements Serializable  {
                 ", param2='" + param2 + '\'' +
                 ", clientIp='" + clientIp + '\'' +
                 ", device='" + device + '\'' +
+                ", sign='" + sign + '\'' +
                 '}';
     }
 }

@@ -1,6 +1,7 @@
 package org.xxpay.service.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xxpay.common.constant.PayConstant;
@@ -125,13 +126,27 @@ public class Notify4BasePay {
 
 	/**
 	 * 创建通知商户
+	 * 如果存在http方式回调 则不用springCloud方式
 	 * @param payOrder 支付订单对象
 	 * @param isFirst  是否第一次通知
 	* */
 
 	public JSONObject createNotifyInfo(PayOrder payOrder,Boolean isFirst) {
-		//通知地址
-		String url = createNotifyUrl(payOrder, "2");
+		//http回调通知地址
+		String url = "";
+		//springCloud 回调通知地址
+		String serviceId  = "";
+		String serviceUrl  = "";
+
+
+		//如果存在http方式回调 则不用springCloud方式
+		if(StringUtils.isNotBlank(payOrder.getNotifyUrl())){
+			url = createNotifyUrl(payOrder, "2");
+		}else{
+			serviceId = payOrder.getServiceId();
+			serviceUrl = payOrder.getServiceUrl();
+		}
+
 		if(isFirst) {
 			int result = mchNotifyService.insertMchNotify(payOrder.getPayOrderId(), payOrder.getMchId(), payOrder.getMchOrderNo(), PayConstant.MCH_NOTIFY_TYPE_PAY, url);
 			_log.info("增加支付商户通知记录,orderId={},result:{}", payOrder.getPayOrderId(), result);
@@ -144,13 +159,16 @@ public class Notify4BasePay {
 			}
 		}
 
-
 		JSONObject object = new JSONObject();
 		object.put("method", "GET");
 		object.put("url", url);
+		object.put("serviceId", serviceId);
+		object.put("serviceUrl", serviceUrl);
+		object.put("payOrderJson", JSONObject.toJSON(payOrder));
 		object.put("orderId", payOrder.getPayOrderId());
 		object.put("count", count);
 		object.put("createTime", System.currentTimeMillis());
+
 		return object;
 	}
 

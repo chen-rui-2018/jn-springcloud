@@ -74,7 +74,10 @@ public class RefundOrderNotify implements Serializable  {
      *通知类型，1-前台通知，2-后台通知
      * */
     private String backType;
-
+    /**
+     * 签名
+     * */
+    private String sign;
 
     @Override
     public String toString() {
@@ -94,6 +97,7 @@ public class RefundOrderNotify implements Serializable  {
                 ", param2='" + param2 + '\'' +
                 ", refundSuccTime=" + refundSuccTime +
                 ", backType='" + backType + '\'' +
+                ", sign='" + sign + '\'' +
                 '}';
     }
 
@@ -215,5 +219,13 @@ public class RefundOrderNotify implements Serializable  {
 
     public void setBackType(String backType) {
         this.backType = backType;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }

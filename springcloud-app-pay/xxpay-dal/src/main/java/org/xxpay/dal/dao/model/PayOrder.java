@@ -132,8 +132,9 @@ public class PayOrder implements Serializable {
     private String param2;
 
     /**
-     * 通知地址
-     *
+     * 回调地址
+     * 支付系统回调通知业务系统地址(http方式)
+     * notifyUrl如果为空,serviceId和serviceUrl为必传
      * @mbggenerated
      */
     private String notifyUrl;
@@ -195,6 +196,19 @@ public class PayOrder implements Serializable {
      * （详情请查看 MchPayTypeEnum 枚举类）
     * */
     private String payType;
+
+
+    /**
+     * 回调springCloud服务名称ID
+     * serviceId和serviceUrl如果为空,notifyUrl为必传
+     */
+    private String serviceId;
+
+    /**
+     * 回调springCloud服务URL
+     * serviceId和serviceUrl如果为空,notifyUrl为必传
+     */
+    private String serviceUrl;
 
     private static final long serialVersionUID = 1L;
 
@@ -422,6 +436,22 @@ public class PayOrder implements Serializable {
         this.payType = payType;
     }
 
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
+    }
+
     @Override
     public String toString() {
         return "PayOrder{" +
@@ -453,6 +483,8 @@ public class PayOrder implements Serializable {
                 ", sign='" + sign + '\'' +
                 ", backType='" + backType + '\'' +
                 ", payType='" + payType + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                ", serviceUrl='" + serviceUrl + '\'' +
                 '}';
     }
 
@@ -492,11 +524,13 @@ public class PayOrder implements Serializable {
                 Objects.equals(updateTime, payOrder.updateTime) &&
                 Objects.equals(sign, payOrder.sign) &&
                 Objects.equals(backType, payOrder.backType) &&
-                Objects.equals(payType, payOrder.payType);
+                Objects.equals(payType, payOrder.payType) &&
+                Objects.equals(serviceId, payOrder.serviceId) &&
+                Objects.equals(serviceUrl, payOrder.serviceUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(payOrderId, mchId, mchOrderNo, channelId, amount, currency, status, clientIp, device, subject, body, extra, channelMchId, channelOrderNo, errCode, errMsg, param1, param2, notifyUrl, notifyCount, lastNotifyTime, expireTime, paySuccTime, createTime, updateTime, sign, backType, payType);
+        return Objects.hash(payOrderId, mchId, mchOrderNo, channelId, amount, currency, status, clientIp, device, subject, body, extra, channelMchId, channelOrderNo, errCode, errMsg, param1, param2, notifyUrl, notifyCount, lastNotifyTime, expireTime, paySuccTime, createTime, updateTime, sign, backType, payType, serviceId, serviceUrl);
     }
 }

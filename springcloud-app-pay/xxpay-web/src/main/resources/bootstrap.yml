@@ -23,6 +23,26 @@ spring:
           serviceId: springcloud-app-config
         label: master
         profile: master
+  datasource:
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    maxWait: 60000
+    url: jdbc:mysql://192.168.10.28:3306/dbps?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+    validationQuery: SELECT 1 FROM DUAL
+    minEvictableIdleTimeMillis: 300000
+    filters: 'stat,wall,log4j'
+    testOnBorrow: 'false'
+    testOnReturn: 'false'
+    initialSize: 5
+    password: dbps_u_123
+    driver-class-name: com.mysql.jdbc.Driver
+    maxActive: 20
+    username: dbpsuser
+    maxPoolPreparedStatementPerConnectionSize: 20
+    poolPreparedStatements: 'true'
+    testWhileIdle: 'true'
+    timeBetweenEvictionRunsMillis: 60000
+    minIdle: 5
+    type: com.alibaba.druid.pool.DruidDataSource
   rabbitmq:
     port: 5672
     host: 192.168.10.12

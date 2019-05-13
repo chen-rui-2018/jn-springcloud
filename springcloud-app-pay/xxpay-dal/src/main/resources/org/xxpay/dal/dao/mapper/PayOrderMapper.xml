@@ -27,6 +27,8 @@
     <result column="PaySuccTime" property="paySuccTime" jdbcType="BIGINT" />
     <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="ServiceId" property="serviceId" jdbcType="VARCHAR" />
+    <result column="ServiceUrl" property="serviceUrl" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -89,7 +91,8 @@
   <sql id="Base_Column_List" >
     PayOrderId, MchId, MchOrderNo, ChannelId, Amount, Currency, Status, ClientIp, Device, 
     Subject, Body, Extra, ChannelMchId, ChannelOrderNo, ErrCode, ErrMsg, Param1, Param2, 
-    NotifyUrl, NotifyCount, LastNotifyTime, ExpireTime, PaySuccTime, CreateTime, UpdateTime
+    NotifyUrl, NotifyCount, LastNotifyTime, ExpireTime, PaySuccTime, CreateTime, UpdateTime,
+    ServiceId,ServiceUrl
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.PayOrderExample" >
     select
@@ -138,7 +141,7 @@
       ErrMsg, Param1, Param2, 
       NotifyUrl, NotifyCount, LastNotifyTime, 
       ExpireTime, PaySuccTime, CreateTime, 
-      UpdateTime)
+      UpdateTime,ServiceId,ServiceUrl)
     values (#{payOrderId,jdbcType=VARCHAR}, #{mchId,jdbcType=VARCHAR}, #{mchOrderNo,jdbcType=VARCHAR}, 
       #{channelId,jdbcType=VARCHAR}, #{amount,jdbcType=BIGINT}, #{currency,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT}, #{clientIp,jdbcType=VARCHAR}, #{device,jdbcType=VARCHAR}, 
@@ -147,7 +150,7 @@
       #{errMsg,jdbcType=VARCHAR}, #{param1,jdbcType=VARCHAR}, #{param2,jdbcType=VARCHAR}, 
       #{notifyUrl,jdbcType=VARCHAR}, #{notifyCount,jdbcType=TINYINT}, #{lastNotifyTime,jdbcType=BIGINT}, 
       #{expireTime,jdbcType=BIGINT}, #{paySuccTime,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP},#{serviceId,jdbcType=VARCHAR},#{serviceUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.PayOrder" >
     insert into t_pay_order
@@ -227,6 +230,12 @@
       <if test="updateTime != null" >
         UpdateTime,
       </if>
+      <if test="serviceId != null" >
+        ServiceId,
+      </if>
+      <if test="serviceUrl != null" >
+        ServiceUrl,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="payOrderId != null" >
@@ -303,6 +312,12 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceUrl != null" >
+        #{serviceUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -390,6 +405,12 @@
       <if test="record.updateTime != null" >
         UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.serviceId != null" >
+        ServiceId = #{record.serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceUrl != null" >
+        ServiceUrl = #{record.serviceUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -421,7 +442,9 @@
       ExpireTime = #{record.expireTime,jdbcType=BIGINT},
       PaySuccTime = #{record.paySuccTime,jdbcType=BIGINT},
       CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
-      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      ServiceId = #{record.serviceId,jdbcType=VARCHAR},
+      ServiceUrl = #{record.serviceUrl,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -501,6 +524,12 @@
       <if test="updateTime != null" >
         UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="serviceId != null" >
+        ServiceId = #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceUrl != null" >
+        ServiceUrl = #{serviceUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     where PayOrderId = #{payOrderId,jdbcType=VARCHAR}
   </update>
@@ -529,7 +558,9 @@
       ExpireTime = #{expireTime,jdbcType=BIGINT},
       PaySuccTime = #{paySuccTime,jdbcType=BIGINT},
       CreateTime = #{createTime,jdbcType=TIMESTAMP},
-      UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      ServiceId = #{serviceId,jdbcType=VARCHAR},
+      ServiceUrl = #{serviceUrl,jdbcType=VARCHAR}
     where PayOrderId = #{payOrderId,jdbcType=VARCHAR}
   </update>
 </mapper>

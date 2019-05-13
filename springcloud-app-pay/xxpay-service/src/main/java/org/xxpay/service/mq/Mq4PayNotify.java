@@ -2,6 +2,10 @@ package org.xxpay.service.mq;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
+import com.jn.common.util.LoadBalancerUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
@@ -10,7 +14,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.service.service.MchNotifyService;
 import org.xxpay.service.service.PayOrderService;
@@ -39,6 +42,9 @@ public class Mq4PayNotify extends BaseMq{
 
     @Autowired
     private MchNotifyService mchNotifyService;
+
+    @Autowired
+    private LoadBalancerUtil loadBalancerUtil;
 
     /**
      * 日志
@@ -91,6 +97,7 @@ public class Mq4PayNotify extends BaseMq{
 
     /**
      * 接收处理支付消息
+     * 如果存在http方式回调 则不用springCloud方式
      * @param msg
     * */
     @RabbitListener(queues = MqConfig.PAY_NOTIFY_QUEUE_NAME)
@@ -98,23 +105,39 @@ public class Mq4PayNotify extends BaseMq{
     public void receive(String msg) {
         _log.info("do notify task, msg={}", msg);
         JSONObject msgObj = JSON.parseObject(msg);
-        String respUrl = msgObj.getString("url");
         String orderId = msgObj.getString("orderId");
+        //http回调通知地址
+        String respUrl = msgObj.getString("url");
+        //springCloud 回调通知
+        String serviceId = msgObj.getString("serviceId");
+        String serviceUrl = msgObj.getString("serviceUrl");
+        //通知次数
         int count = msgObj.getInteger("count");
-        if(StringUtils.isEmpty(respUrl)) {
-            _log.warn("notify url is empty. respUrl={}", respUrl);
-            return;
-        }
+
         try {
             _log.info("==>MQ支付结果通知业务系统开始[orderId：{}][count：{}][time：{}]", orderId, count, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            //根据回调地址进行通知业务系统
-            String httpResult = httpPost(respUrl, (10 * 1000),(5 * 1000));
+
+            //回调通知接收的结果（success 成功 ，非success 如：fail 则会继续隔段时间回调）
+            String noticeResult = "";
+
+            //根据回调地址进行通知业务系统，如果存在http方式回调 则不用springCloud方式
+            if(StringUtils.isNotBlank(respUrl)){
+                noticeResult = httpPost(respUrl, (10 * 1000),(5 * 1000));
+            }else {
+                //springCloud 回调通知
+                String payOrderJson = msgObj.getString("payOrderJson");
+                Result<String> apiResult = loadBalancerUtil.getClientPostForEntity(serviceId, serviceUrl, payOrderJson);
+                if(GlobalConstants.SUCCESS_CODE.equals(apiResult.getCode())){
+                    noticeResult = apiResult.getData();
+                }
+            }
+
             _log.info("<==MQ支付结果通知业务系统结束[orderId：{}][count：{}][time：{}]", orderId, count, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             //通知次数
             int cnt = count+1;
             // 验证结果
             _log.info("notify response , OrderID={}", orderId);
-            if(httpResult.equalsIgnoreCase("success")){
+            if(noticeResult.equalsIgnoreCase("success")){
                 //_log.info("{} notify success, url:{}", _notifyInfo.getBusiId(), respUrl);
                 //修改订单表
                 try {
@@ -128,7 +151,7 @@ public class Mq4PayNotify extends BaseMq{
                     //修改支付订单表的通知次数
                     int payOrderResult = payOrderService.updateNotify(orderId, (byte) cnt);
                     //修改商户通知为成功
-                    int MchNotifyResult = mchNotifyService.updateMchNotifySuccess(orderId, httpResult, (byte) cnt);
+                    int MchNotifyResult = mchNotifyService.updateMchNotifySuccess(orderId, noticeResult, (byte) cnt);
 
                     _log.info("修改payOrderId={},通知业务系统次数->{}", orderId, (MchNotifyResult == 1 && payOrderResult == 1) ? "成功" : "失败");
                 }catch (Exception e) {
@@ -143,23 +166,23 @@ public class Mq4PayNotify extends BaseMq{
                     //修改支付订单表的通知次数
                     int payOrderResult = payOrderService.updateNotify(orderId, (byte) cnt);
                     //修改商户通知为失败
-                    int MchNotifyResult = mchNotifyService.updateMchNotifyFail(orderId, httpResult, (byte) cnt);
+                    int MchNotifyResult = mchNotifyService.updateMchNotifyFail(orderId, noticeResult, (byte) cnt);
                     _log.info("修改payOrderId={},通知业务系统次数->{}", (MchNotifyResult == 1 && payOrderResult == 1) ? "成功" : "失败");
                 }catch (Exception e) {
                     _log.error(e, "修改通知次数异常");
                 }
                 //通知次数大于6次则不再通知
                 if (cnt > 5) {
-                    _log.info("notify count>5 stop. url={}", respUrl);
+                    _log.info("notify count>5 stop. url={},serviceId={},serviceUrl={}", respUrl,serviceId,serviceUrl);
                     return ;
                 }
                 msgObj.put("count", cnt);
                 this.send(msgObj.toJSONString(), cnt * 60 * 1000);
             }
-            _log.warn("notify failed. url:{}, response body:{}", respUrl, httpResult);
+            _log.warn("notify failed. url={},serviceId={},serviceUrl={} response body:{}", respUrl,serviceId,serviceUrl, noticeResult);
         } catch(Exception e) {
             _log.info("<==MQ通知业务系统结束[orderId：{}][count：{}][time：{}]", orderId, count, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            _log.error(e, "notify exception. url:%s", respUrl);
+            _log.error(e, "notify exception. url={} ,serviceId={},serviceUrl={}", respUrl,serviceId,serviceUrl);
         }
     }
 }

@@ -101,6 +101,12 @@ public class RefundOrderReq implements Serializable {
      */
     private String extra ;
 
+    /**
+     * 签名
+     */
+    @ApiModelProperty("签名,可以通过API提供的工具生成")
+    @NotBlank(message = "签名不能为空！")
+    private String sign;
 
     @Override
     public String toString() {
@@ -120,6 +126,7 @@ public class RefundOrderReq implements Serializable {
                 ", param1='" + param1 + '\'' +
                 ", param2='" + param2 + '\'' +
                 ", extra='" + extra + '\'' +
+                ", sign='" + sign + '\'' +
                 '}';
     }
 
@@ -243,5 +250,11 @@ public class RefundOrderReq implements Serializable {
         this.extra = extra;
     }
 
+    public String getSign() {
+        return sign;
+    }
 
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
 }

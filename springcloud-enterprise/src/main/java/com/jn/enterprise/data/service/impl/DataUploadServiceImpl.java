@@ -1702,7 +1702,7 @@ public class DataUploadServiceImpl implements DataUploadService {
     @Override
     @ServiceLog(doAction = "园区历史填报任务详情")
     public ModelDataVO getGardenFormStruct(String fileId,User user) {
-        return getModelStructByHistoryFillId(fileId,user,DataUploadConstants.COMPANY_TYPE);
+        return getModelStructByHistoryFillId(fileId,user,DataUploadConstants.GARDEN_TYPE);
     }
 
     /**

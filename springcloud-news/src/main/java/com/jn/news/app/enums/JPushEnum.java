@@ -1,4 +1,4 @@
-package com.jn.news.utils.enums;
+package com.jn.news.app.enums;
 
 import com.jn.common.api.CodeAndMsg;
 

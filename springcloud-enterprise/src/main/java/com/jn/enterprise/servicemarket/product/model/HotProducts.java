@@ -19,6 +19,8 @@ public class HotProducts  implements Serializable {
     private String  productId;
     @ApiModelProperty(value = "产品名称")
     private String  productName;
+    @ApiModelProperty(value = "领域Id")
+    private String  signoryId;
     @ApiModelProperty(value = "产品图片路径")
     private String  pictureUrl;
     @ApiModelProperty(value = "服务产品参考价格范围")
@@ -84,5 +86,13 @@ public class HotProducts  implements Serializable {
 
     public void setReferPrice(String referPrice) {
         this.referPrice = referPrice;
+    }
+
+    public String getSignoryId() {
+        return signoryId;
+    }
+
+    public void setSignoryId(String signoryId) {
+        this.signoryId = signoryId;
     }
 }

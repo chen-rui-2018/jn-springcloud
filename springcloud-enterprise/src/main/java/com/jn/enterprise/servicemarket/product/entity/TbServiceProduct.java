@@ -84,9 +84,9 @@ public class TbServiceProduct implements Serializable {
 
     private Date modifiedTime;
 
-    private Byte recordStatus;
-
     private String productDetails;
+
+    private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -410,20 +410,20 @@ public class TbServiceProduct implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public Byte getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(Byte recordStatus) {
-        this.recordStatus = recordStatus;
-    }
-
     public String getProductDetails() {
         return productDetails;
     }
 
     public void setProductDetails(String productDetails) {
         this.productDetails = productDetails == null ? null : productDetails.trim();
+    }
+
+    public Byte getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -478,8 +478,8 @@ public class TbServiceProduct implements Serializable {
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
-            && (this.getProductDetails() == null ? other.getProductDetails() == null : this.getProductDetails().equals(other.getProductDetails()));
+            && (this.getProductDetails() == null ? other.getProductDetails() == null : this.getProductDetails().equals(other.getProductDetails()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -526,8 +526,8 @@ public class TbServiceProduct implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
-        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getProductDetails() == null) ? 0 : getProductDetails().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -577,8 +577,8 @@ public class TbServiceProduct implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
-        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", productDetails=").append(productDetails);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

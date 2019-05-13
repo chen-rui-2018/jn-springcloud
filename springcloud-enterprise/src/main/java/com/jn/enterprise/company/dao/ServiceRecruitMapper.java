@@ -1,7 +1,6 @@
 package com.jn.enterprise.company.dao;
 
 import com.jn.enterprise.company.model.ServiceRecruitSearchParam;
-import com.jn.enterprise.company.vo.RecruitDetailsVO;
 import com.jn.enterprise.company.vo.RecruitVO;
 import org.apache.ibatis.annotations.Param;
 

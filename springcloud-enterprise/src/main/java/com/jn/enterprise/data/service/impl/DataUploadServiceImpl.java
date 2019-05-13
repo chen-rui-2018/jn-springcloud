@@ -1479,8 +1479,44 @@ public class DataUploadServiceImpl implements DataUploadService {
 
 
             }else if(DataUploadConstants.NOT_FILL.equals(needToSavetask.getStatus().toString())){
-                //未填报状态；直接写入数据
-                targetDao.saveData(dataList);
+                if(DataUploadConstants.COMPANY_TYPE.equals(data.getTaskInfo().getFileType())){
+                    //未填报状态；直接写入数据
+                    targetDao.saveData(dataList);
+                }else{
+
+                    TbDataReportingTaskDataCriteria taskDataCriteria = new TbDataReportingTaskDataCriteria();
+                    taskDataCriteria.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdIn(tgList);
+                    List<TbDataReportingTaskData> dataset = tbDataReportingTaskDataMapper.selectByExample(taskDataCriteria);
+                    //更新
+                    if(dataset !=null && dataset.size()>0){
+                        List<TbDataReportingTaskData> dbList = new ArrayList<>();
+                        TbDataReportingTaskDataCriteria taskDataCriteriaBean = new TbDataReportingTaskDataCriteria();
+                        TbDataReportingTaskData updateRecord=null;
+                        for(TbDataReportingTaskData dbean : dataList){
+                            taskDataCriteriaBean.clear();
+
+                            updateRecord = new TbDataReportingTaskData();
+                            updateRecord.setData(dbean.getData());
+                            taskDataCriteriaBean.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdEqualTo(dbean.getTargetId())
+                                    .andRowNumEqualTo(dbean.getRowNum());
+
+                            int resultSize = tbDataReportingTaskDataMapper.updateByExample(updateRecord,taskDataCriteriaBean);
+
+                            if(resultSize !=1){
+                                dbList.add(dbean);
+                            }
+                        }
+
+                        if(dbList !=null && dbList.size()>0){
+                            targetDao.saveData(dbList);
+                        }
+                    }else{
+                        //保存
+                        targetDao.saveData(dataList);
+                    }
+
+                }
+
             }
         }
 

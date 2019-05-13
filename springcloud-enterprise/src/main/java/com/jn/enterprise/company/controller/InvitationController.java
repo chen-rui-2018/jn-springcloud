@@ -61,7 +61,7 @@ public class InvitationController extends BaseController {
     public Result<Integer> inviteStaff(String[] accounts){
         User user = checkUserValid();
         Integer res = staffService.inviteStaff(accounts, user);
-        //TODO 调用消息推送
+        //TODO 调用消息推送接口 huxw
 
         return new Result(res);
     }
@@ -73,7 +73,7 @@ public class InvitationController extends BaseController {
     public Result<Integer> inviteStaffAgain(String staffId){
         User user = checkUserValid();
         Integer res = staffService.inviteStaffAgain(staffId, user.getAccount());
-        //TODO 调用消息推送
+        //TODO 调用消息推送接口 huxw
 
         return new Result(res);
     }

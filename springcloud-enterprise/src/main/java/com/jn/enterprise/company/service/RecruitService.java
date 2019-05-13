@@ -2,9 +2,8 @@ package com.jn.enterprise.company.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.company.model.ServiceCompany;
-import com.jn.enterprise.company.model.ServiceRecruitEditParam;
-import com.jn.enterprise.company.vo.RecruitDetailsVO;
 import com.jn.enterprise.company.entity.TbServiceRecruit;
+import com.jn.enterprise.company.model.ServiceRecruitEditParam;
 import com.jn.enterprise.company.model.ServiceRecruitParam;
 import com.jn.enterprise.company.model.ServiceRecruitPublishParam;
 import com.jn.enterprise.company.model.ServiceRecruitUnderParam;
@@ -27,7 +26,7 @@ public interface RecruitService {
      * @param id
      * @return
      */
-    RecruitDetailsVO getRecruitDetailsById(String id);
+    RecruitVO getRecruitDetailsById(String id);
 
     /**
      * 根据编号获取招聘详情

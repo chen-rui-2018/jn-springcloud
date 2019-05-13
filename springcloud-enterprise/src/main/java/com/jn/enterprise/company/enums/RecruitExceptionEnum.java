@@ -21,6 +21,7 @@ public enum RecruitExceptionEnum implements CodeAndMsg {
     RECRUIT_SORT_TYPE_ERROR("5011221","排序字段传值错误"),
     RECRUIT_STATUS_ERROR("5011222","招聘信息状态传值错误"),
     RECRUIT_SEARCH_DATE_FORMAT_ERROR("5011223","发布日期格式错误"),
+    RECRUIT_PUBLISH_IBPS_ERROR("5011224","企业招聘提交审核出错，请检查提交数据"),
     ;
     /**
      * 编码

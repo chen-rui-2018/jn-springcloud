@@ -508,7 +508,7 @@ public class ActivityServiceImpl implements ActivityService {
         if(needPage){
             objects = PageHelper.startPage(pageNumber,pageSize,true);
         }
-        List<ActivityListApply> activityList = activityMapper.findActivitySuccessfulRegistration(query.getAccount(),query.getApplyStatus());
+        List<ActivityListApply> activityList = activityMapper.findActivitySuccessfulRegistration(query.getAccount(),query.getApplyStatus(),query.getActiName());
 
         return new PaginationData(activityList,objects==null?0:objects.getTotal());
     }

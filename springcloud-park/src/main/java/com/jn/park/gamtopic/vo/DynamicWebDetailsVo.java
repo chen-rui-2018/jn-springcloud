@@ -1,6 +1,7 @@
 package com.jn.park.gamtopic.vo;
 
 import com.jn.common.model.PaginationData;
+import com.jn.park.gamtopic.model.DynamicCommentReplyShow;
 import com.jn.park.gamtopic.model.DynamicComments;
 import com.jn.park.gamtopic.model.DynamicWebShow;
 import io.swagger.annotations.ApiModel;
@@ -20,7 +21,7 @@ public class DynamicWebDetailsVo implements Serializable {
     @ApiModelProperty(value="动态详情")
     private DynamicWebShow dynamicWebShow;
     @ApiModelProperty(value="评论列表")
-    private PaginationData<List<DynamicComments>> commentList;
+    private PaginationData<List<DynamicCommentReplyShow>> commentList;
 
     public DynamicWebShow getDynamicWebShow() {
         return dynamicWebShow;
@@ -30,11 +31,11 @@ public class DynamicWebDetailsVo implements Serializable {
         this.dynamicWebShow = dynamicWebShow;
     }
 
-    public PaginationData<List<DynamicComments>> getCommentList() {
+    public PaginationData<List<DynamicCommentReplyShow>> getCommentList() {
         return commentList;
     }
 
-    public void setCommentList(PaginationData<List<DynamicComments>> commentList) {
+    public void setCommentList(PaginationData<List<DynamicCommentReplyShow>> commentList) {
         this.commentList = commentList;
     }
 }

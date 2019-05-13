@@ -30,11 +30,12 @@
         <div class="direct_approve_list">
             <el-collapse accordion>
               <el-collapse-item v-for="(poweritem,powerindex) in powerList" :key="powerindex">
-                <template slot="title">
-                  <span></span><span>{{poweritem.name}}</span>
+                <template slot="title"  >
+                  <span></span><span v-if="poweritem.childs.length!=0">{{poweritem.name}}</span>
+                  <span v-else @click="gotorightdetail(poweritem.id)">{{poweritem.name}}</span>
                 </template>
                   <p v-for="(childsitem,childsindex) in poweritem.childs" :key="childsindex" @click="gotorightdetail(childsitem.id)"><span></span>{{childsitem.name}}</p>
-                  <p v-show="poweritem.childs.length===0">暂无数据</p>
+                  <!-- <p v-show="poweritem.childs.length===0">暂无数据</p> -->
               </el-collapse-item>
             </el-collapse>
         </div>
@@ -123,10 +124,12 @@ export default {
     //改变name
     changename(name){
       this.name=name
+      this.loading=true
       this.getPowerList()
     },
     //搜索
     handlesearch(){
+      this.loading=true
       this.getPowerList()
     },
     //跳转到rightdetail
@@ -272,6 +275,7 @@ export default {
         border-bottom:none;
         span{
           font-size: 15px;
+          width:100%;
           &:first-child{
             display: inline-block;
             width: 8px;

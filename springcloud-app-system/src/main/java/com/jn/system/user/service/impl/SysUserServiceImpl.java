@@ -515,6 +515,9 @@ public class SysUserServiceImpl implements SysUserService {
         if (com.jn.common.util.StringUtils.isNotBlank(user.getAccount())) {
             criteria.andAccountEqualTo(user.getAccount());
         }
+        if(StringUtils.isNotBlank(user.getId())){
+            criteria.andIdEqualTo(user.getId());
+        }
         Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
         criteria.andRecordStatusNotEqualTo(recordStatus);
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);

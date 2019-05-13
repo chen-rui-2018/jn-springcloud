@@ -16,21 +16,15 @@ public interface TbPropagandaMapper {
 
     int insertSelective(TbPropaganda record);
 
-    List<TbPropaganda> selectByExampleWithBLOBs(TbPropagandaCriteria example);
-
     List<TbPropaganda> selectByExample(TbPropagandaCriteria example);
 
     TbPropaganda selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPropaganda record, @Param("example") TbPropagandaCriteria example);
 
-    int updateByExampleWithBLOBs(@Param("record") TbPropaganda record, @Param("example") TbPropagandaCriteria example);
-
     int updateByExample(@Param("record") TbPropaganda record, @Param("example") TbPropagandaCriteria example);
 
     int updateByPrimaryKeySelective(TbPropaganda record);
-
-    int updateByPrimaryKeyWithBLOBs(TbPropaganda record);
 
     int updateByPrimaryKey(TbPropaganda record);
 }

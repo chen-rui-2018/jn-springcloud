@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.company.dao.CompanyMapper">
+
+    <!-- 获取员工列表邀请状态 -->
+    <select id="getLastModify" resultType="com.jn.enterprise.company.entity.TbServiceCompanyModify">
+        SELECT
+          a.id AS "id",
+          a.com_id AS "comId",
+          a.com_name AS "comName",
+          a.com_name_short AS "comNameShort",
+          a.avatar AS "avatar",
+          a.unify_code AS "unifyCode",
+          a.owner_law AS "ownerLaw",
+          a.owner_phone AS "ownerPhone",
+          a.com_property AS "comProperty",
+          a.reg_capital AS "regCapital",
+          a.com_scale AS "comScale",
+          a.founding_time AS "foundingTime",
+          a.run_time AS "runTime",
+          a.indu_type AS "induType",
+          a.indu_code AS "induCode",
+          a.business_license AS "businessLicense",
+          a.propaganda_picture AS "propagandaPicture",
+          a.main_products AS "mainProducts",
+          a.com_address AS "comAddress",
+          a.com_tele AS "comTele",
+          a.com_web AS "comWeb",
+          a.com_server AS "comServer",
+          a.com_demand AS "comDemand",
+          a.addr_park AS "addrPark",
+          a.com_synopsis AS "comSynopsis",
+          a.check_status AS "checkStatus",
+          a.check_time AS "checkTime",
+          a.com_source AS "comSource",
+          a.affiliated_park AS "affiliatedPark",
+          a.creator_account AS "creatorAccount",
+          a.created_time AS "createdTime"
+        FROM tb_service_company_modify a
+        WHERE a.com_id = #{comId}
+        ORDER BY a.created_time DESC
+        LIMIT 1
+    </select>
+</mapper>

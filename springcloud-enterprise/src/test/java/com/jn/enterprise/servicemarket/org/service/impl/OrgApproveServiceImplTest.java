@@ -9,6 +9,7 @@ import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
+import com.jn.system.model.User;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -72,12 +73,13 @@ public class OrgApproveServiceImplTest {
 
     @Test
     public void checkOrgApply() {
+        User user=new User();
         OrgApplyCheckData orgApplyCheckData = new OrgApplyCheckData();
         orgApplyCheckData.setOrgId(orgId);
         orgApplyCheckData.setCheckStatus("1");
         orgApplyCheckData.setCkeckMessage("审核通过");
         try {
-            Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData);
+            Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData,user);
             assertThat(aBoolean,anything());
         }catch (JnSpringCloudException e){
             logger.warn("机构不存在");

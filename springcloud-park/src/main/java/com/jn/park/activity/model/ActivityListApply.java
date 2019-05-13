@@ -31,7 +31,7 @@ public class ActivityListApply implements Serializable {
     @ApiModelProperty(value = "活动地址")
     private String actiAddress;
     @ApiModelProperty(value = "活动开始时间")
-    private Date actiStartTime;
+    private String actiStartTime;
     @ApiModelProperty(value = "活动状态 , 2报名中 3活动结束4活动取消")
     private String actiStatus;
 
@@ -93,11 +93,11 @@ public class ActivityListApply implements Serializable {
         this.actiAddress = actiAddress;
     }
 
-    public Date getActiStartTime() {
+    public String getActiStartTime() {
         return actiStartTime;
     }
 
-    public void setActiStartTime(Date actiStartTime) {
+    public void setActiStartTime(String actiStartTime) {
         this.actiStartTime = actiStartTime;
     }
 

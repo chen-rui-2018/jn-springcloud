@@ -85,10 +85,9 @@ public class PayBillServiceImplTest {
         PaymentBillModel paymentBillModel = new PaymentBillModel();
         paymentBillModel.setBillAmount(new Double("200"));
         paymentBillModel.setBillCreateAccount("zhangsan");
-        paymentBillModel.setBillCreateTime("2019-03-19 10:00:00");
         paymentBillModel.setBillName("停车费 统一缴费单元测试01");
         paymentBillModel.setBillObjId("2934eca0ac084475a96f02ddb630f333");
-        paymentBillModel.setBillObjName("君南");
+        paymentBillModel.setBillObjName("白下");
         paymentBillModel.setBillRemark("湘A123456");
         paymentBillModel.setBillType("005");
         paymentBillModel.setPayEndTime("2019-05-01 01:00:00");

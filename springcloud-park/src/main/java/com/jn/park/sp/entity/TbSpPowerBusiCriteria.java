@@ -865,6 +865,146 @@ public class TbSpPowerBusiCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andIsContactOnlineIsNull() {
+            addCriterion("is_contact_online is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineIsNotNull() {
+            addCriterion("is_contact_online is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineEqualTo(String value) {
+            addCriterion("is_contact_online =", value, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineNotEqualTo(String value) {
+            addCriterion("is_contact_online <>", value, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineGreaterThan(String value) {
+            addCriterion("is_contact_online >", value, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineGreaterThanOrEqualTo(String value) {
+            addCriterion("is_contact_online >=", value, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineLessThan(String value) {
+            addCriterion("is_contact_online <", value, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineLessThanOrEqualTo(String value) {
+            addCriterion("is_contact_online <=", value, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineLike(String value) {
+            addCriterion("is_contact_online like", value, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineNotLike(String value) {
+            addCriterion("is_contact_online not like", value, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineIn(List<String> values) {
+            addCriterion("is_contact_online in", values, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineNotIn(List<String> values) {
+            addCriterion("is_contact_online not in", values, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineBetween(String value1, String value2) {
+            addCriterion("is_contact_online between", value1, value2, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsContactOnlineNotBetween(String value1, String value2) {
+            addCriterion("is_contact_online not between", value1, value2, "isContactOnline");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupIsNull() {
+            addCriterion("contact_qq_group is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupIsNotNull() {
+            addCriterion("contact_qq_group is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupEqualTo(String value) {
+            addCriterion("contact_qq_group =", value, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupNotEqualTo(String value) {
+            addCriterion("contact_qq_group <>", value, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupGreaterThan(String value) {
+            addCriterion("contact_qq_group >", value, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupGreaterThanOrEqualTo(String value) {
+            addCriterion("contact_qq_group >=", value, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupLessThan(String value) {
+            addCriterion("contact_qq_group <", value, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupLessThanOrEqualTo(String value) {
+            addCriterion("contact_qq_group <=", value, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupLike(String value) {
+            addCriterion("contact_qq_group like", value, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupNotLike(String value) {
+            addCriterion("contact_qq_group not like", value, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupIn(List<String> values) {
+            addCriterion("contact_qq_group in", values, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupNotIn(List<String> values) {
+            addCriterion("contact_qq_group not in", values, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupBetween(String value1, String value2) {
+            addCriterion("contact_qq_group between", value1, value2, "contactQqGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andContactQqGroupNotBetween(String value1, String value2) {
+            addCriterion("contact_qq_group not between", value1, value2, "contactQqGroup");
+            return (Criteria) this;
+        }
+
         public Criteria andRecordStatusIsNull() {
             addCriterion("record_status is null");
             return (Criteria) this;

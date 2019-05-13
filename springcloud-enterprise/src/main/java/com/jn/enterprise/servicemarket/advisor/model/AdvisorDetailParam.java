@@ -24,8 +24,9 @@ public class AdvisorDetailParam implements Serializable {
     @ApiModelProperty(value = "业务领域",required = true,example = "technology_financial")
     private String businessArea;
     @NotNull(message="从业年限不能为空")
+    @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "workingYears:只能输入的数字和小数点")
     @ApiModelProperty(value = "从业年限",required = true,example = "10")
-    private Double workingYears;
+    private String workingYears;
     @NotNull(message="毕业学校不能为空")
     @ApiModelProperty(value = "毕业学校",required = true,example = "xxx学校")
     private String graduatedSchool;
@@ -76,11 +77,11 @@ public class AdvisorDetailParam implements Serializable {
         this.businessArea = businessArea;
     }
 
-    public Double getWorkingYears() {
+    public String getWorkingYears() {
         return workingYears;
     }
 
-    public void setWorkingYears(Double workingYears) {
+    public void setWorkingYears(String workingYears) {
         this.workingYears = workingYears;
     }
 

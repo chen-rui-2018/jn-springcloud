@@ -9,10 +9,16 @@ package com.jn.common.util;
  * @modified By:
  */
 public final class GlobalConstants {
+
     /**
-     * 全站，是http，还是https
+     * 内全站，是http，还是https
      */
     public final static String HTTP_PRODOCOL = "http://";
+
+    /**
+     * 外全站
+     */
+    public final static String OVER_HTTP_PRODOCOL = "http://";
 
     /**
      * 全站，默认成功编码是0000

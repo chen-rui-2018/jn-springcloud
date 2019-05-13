@@ -1,7 +1,7 @@
 <template>
   <div class="actiDetail w">
     <div class="delnav">
-      <el-breadcrumb separator="/">
+      <!-- <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/actiCenter' }">
           <a href="/actiCenter.vue">活动中心</a>
@@ -9,7 +9,10 @@
         <el-breadcrumb-item>
           <a href="javascript:void(0)" style="color:#00a042;font-weight:bold">活动详情</a>
         </el-breadcrumb-item>
-      </el-breadcrumb>
+      </el-breadcrumb> -->
+      <span>企业服务/</span>
+      <span>活动中心/</span>
+      <span class="mainColor">活动详情</span>
     </div>
     <div class="delinfo">
       <el-card style="overflow:visible">
@@ -144,14 +147,17 @@ export default {
       row: 5,
       total: 0,
       commentList: [],
-      // sysTemTime:''
+      sysTemTime:"",
       accountIsLike: false,
       isCommentLike: false
     };
   },
-  mounted() {
+  created(){
     this.init();
     this.getCommentInfo();
+  },
+  mounted() {    
+    this.countdown()
   },
   methods: {
     replyFlag() {
@@ -256,27 +262,6 @@ export default {
       //   }
       // });
     },
-    // comCancleLike(item) {
-    //   //评论取消点赞
-    //   this.isClick=0
-    //   let _this = this;
-    //   this.api.post({
-    //     url: `springcloud-park/comment/review/commentActivityCancelLike?id=${item.id}`,
-    //     data: {
-    //       id: item.id
-    //     },
-    //     dataFlag: true,
-    //     urlFlag: true,
-    //     callback: function(res) {
-    //       if (res.code == "0000") {
-    //         item.likeNum = item.likeNum * 1 - 1;
-    //         _this.$message.success("取消点赞成功");
-    //       } else {
-    //         _this.$message.error(res.result);
-    //       }
-    //     }
-    //   });
-    // },
     handleSizeChange(val) {
       this.row = val;
       this.page = 1;
@@ -374,6 +359,14 @@ export default {
     //   var t2=new Date(this.activityDetail.applyEndTime)
 
     // },
+    //报名倒计时
+    countdown(){
+      console.log(this.sysTemTime)
+      var s1=new Date(this.sysTemTime);
+      var s2=new Date(this.activityDetail.applyEndTime);
+      var s3 = s2.getTime() - s1.getTime();
+      console.log(s3)
+    },
     init() {
       //数据初始化
       let _this = this;
@@ -386,7 +379,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.activityDetail = res.data.activityDetail;
-            // this.sysTemTime=res.data.sysTemTime
+            _this.sysTemTime=res.data.sysTemTime;
             _this.accountIsLike = res.data.accountIsLike;
           }
         }
@@ -422,8 +415,10 @@ export default {
 .actiDetail {
   width: 1190px;
   margin: 0 auto;
+  padding-top: 65px;
   .delnav {
     padding: 20px 0;
+    font-size: 13px;
   }
   .delinfo {
     margin-top: 40px;
@@ -458,7 +453,7 @@ export default {
         > p {
           margin-top: 30px;
           .free {
-            margin-left: 80px;
+            margin-left: 70px;
           }
         }
         .delAddress {

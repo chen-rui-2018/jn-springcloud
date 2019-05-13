@@ -37,6 +37,13 @@ export default {
     getUEContent() {
       // 获取内容方法
       return this.editor.getContent()
+    },
+    hasContents() {
+      return this.editor.hasContents()
+    },
+    setContent(content) {
+      console.dir(content)
+      this.editor.hasContents(content)
     }
   }
 }

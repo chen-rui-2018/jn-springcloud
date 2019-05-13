@@ -30,11 +30,11 @@ public class InvestorManagementListParam extends Page implements Serializable {
     @Size(max=11,message = "手机号码最多为11位")
     private String phone;
     @ApiModelProperty(value = "申请日期开始时间",example = "201903")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{applyStartTime:'申请日期开始时间格式错误'}")
     private String applyStartTime;
     @ApiModelProperty(value = "申请日期结束时间",example = "201904")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{applyEndTime:'申请日期结束时间格式错误'}")
     private String applyEndTime;
     @ApiModelProperty(value = "职务",example = "xxx职务")

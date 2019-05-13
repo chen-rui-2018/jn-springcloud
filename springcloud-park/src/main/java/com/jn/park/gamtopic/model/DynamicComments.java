@@ -17,6 +17,8 @@ public class DynamicComments implements Serializable {
     private String  commentId;
     @ApiModelProperty(value="评论根目标id")
     private String  rootId;
+    @ApiModelProperty(value="评论上级目标id")
+    private String  parentId;
     @ApiModelProperty(value="评论人账号")
     private String  creatorAccount;
     @ApiModelProperty(value="昵称")
@@ -29,7 +31,24 @@ public class DynamicComments implements Serializable {
     private String  likeNum;
     @ApiModelProperty(value= "评论的内容")
     private String comContent;
+    @ApiModelProperty(value= "评论时间")
+    private String createdTime;
 
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
     public String getCommentId() {
         return commentId;

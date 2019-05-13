@@ -30,12 +30,10 @@ public class BusinessPromotionDetailsParam implements Serializable {
             "(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)",
             message = "{effectiveDate:'生效日期格式错误'}")
     private String effectiveDate;
-    @ApiModelProperty(value = "失效日期",required = true,example = "2019-05-05")
-    @Pattern(regexp = "(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-" +
-            "(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})" +
-            "(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)",
-            message = "{effectiveDate:'生效日期格式错误'}")
-    private String invalidDate;
+    @ApiModelProperty(value = "宣传时间(1:一个月  3：三个月  6：半年  12：一年)",required = true,example = "1")
+    @Pattern(regexp = "^[0-9]*$",message = "propagandaTime:只能输入大于0的数字")
+    @NotNull(message="宣传时间不能为空")
+    private String propagandaTime;
     @ApiModelProperty(value = "宣传产品/宣传标题",required = true,example = "xxx产品")
     @NotNull(message="宣传产品不能为空")
     private String propagandaTitle;
@@ -54,9 +52,9 @@ public class BusinessPromotionDetailsParam implements Serializable {
     @ApiModelProperty(value = "宣传费用规则编码",required = true,example = "xxx123")
     @NotNull(message="宣传费用规则编码不能为空")
     private String proFeeRuleCode;
-    @ApiModelProperty(value = "宣传费用",required = true,example = "50")
+    @ApiModelProperty(value = "宣传费用(基础费用*宣传时间+宣传区域对应金额)",required = true,example = "50")
     @NotNull(message="宣传费用不能为空")
-    @Pattern(regexp = "^([0-9]*)(\\.[0-9]{0,2})$",message = "issuePlatform:只能输入的数字和小数点")
+    @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "propagandaFee:只能输入的数字和小数点")
     private String propagandaFee;
 
     public String getId() {
@@ -91,12 +89,12 @@ public class BusinessPromotionDetailsParam implements Serializable {
         this.effectiveDate = effectiveDate;
     }
 
-    public String getInvalidDate() {
-        return invalidDate;
+    public String getPropagandaTime() {
+        return propagandaTime;
     }
 
-    public void setInvalidDate(String invalidDate) {
-        this.invalidDate = invalidDate;
+    public void setPropagandaTime(String propagandaTime) {
+        this.propagandaTime = propagandaTime;
     }
 
     public String getPropagandaTitle() {

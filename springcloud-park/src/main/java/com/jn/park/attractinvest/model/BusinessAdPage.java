@@ -21,11 +21,15 @@ public class BusinessAdPage extends Page implements Serializable {
     @ApiModelProperty(value = "园区id", example = "570327211966464000")
     private String parkId;
 
+    @ApiModelProperty(value = "关键字", notes = "对招商信息标题及副标题进行模糊搜索",example = "招商")
+    private String keyWords;
+
     public BusinessAdPage() {
     }
 
-    public BusinessAdPage(String parkId) {
+    public BusinessAdPage(String parkId, String keyWords) {
         this.parkId = parkId;
+        this.keyWords = keyWords;
     }
 
     public String getParkId() {
@@ -36,10 +40,19 @@ public class BusinessAdPage extends Page implements Serializable {
         this.parkId = parkId;
     }
 
+    public String getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
+    }
+
     @Override
     public String toString() {
         return "BusinessAdPage{" +
                 "parkId='" + parkId + '\'' +
+                ", keyWords='" + keyWords + '\'' +
                 '}';
     }
 }

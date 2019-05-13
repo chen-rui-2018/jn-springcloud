@@ -25,6 +25,8 @@
           where tab_id =#{tabId}
         )
 
+        and record_status='1'
+
     </select>
 
     <insert id="createTab" parameterType="java.util.List">

@@ -304,15 +304,31 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @Override
     public void currentUserIsAdvisor(String loginAccount) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        //审核状态( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
-        String approvalStatus="2";
-        example.createCriteria().andAdvisorAccountEqualTo(loginAccount).andApprovalStatusEqualTo(approvalStatus)
+        example.createCriteria().andAdvisorAccountEqualTo(loginAccount)
+                .andApprovalStatusEqualTo(ApprovalStatusEnum.APPROVED.getValue())
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         long existNum = tbServiceAdvisorMapper.countByExample(example);
         if(existNum>0){
             logger.warn("当前用户[{}]已经是审批通过的机构顾问，不允许编辑顾问信息",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_HAS_EXIST);
         }
+    }
+
+    /**
+     * 发送申请/提交审批
+     * @param loginAccount
+     * @return
+     */
+    @Override
+    public int sendApproval(String loginAccount) {
+        TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
+        example.createCriteria().andAdvisorAccountEqualTo(loginAccount)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
+        tbServiceAdvisor.setApprovalStatus(ApprovalStatusEnum.APPROVAL.getValue());
+        tbServiceAdvisor.setModifierAccount(loginAccount);
+        tbServiceAdvisor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+        return tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
     }
 
     /**

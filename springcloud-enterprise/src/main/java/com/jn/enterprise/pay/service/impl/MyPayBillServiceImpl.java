@@ -28,6 +28,7 @@ import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.enums.RspEnum;
 import com.jn.pay.utils.ResponseUtils;
 import com.jn.pay.vo.PayBillCreateParamVo;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
 import org.json.simple.JSONObject;
@@ -98,6 +99,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     private LoadBalancerUtil loadBalancerUtils;
 
 
+    @ServiceLog(doAction = "我的账单-查询账单信息列表")
     @Override
     public PaginationData<List<PayBillVo>> getBillQueryList(@Param("payBill")PayBillParams payBill) {
         Page<Object> objects = PageHelper.startPage(payBill.getPage(), payBill.getRows());
@@ -105,6 +107,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         return new PaginationData(payBillVo, objects.getTotal());
     }
 
+    @ServiceLog(doAction = "我的账单-通过账单ID查询账单详情信息")
     @Override
     public List<PayBillDetails> getBillInfo(String billId) {
         List<PayBillDetails> list = new ArrayList<>();
@@ -120,6 +123,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         return list;
     }
 
+
     @Override
     public void updateBillNumber(String billId, int reminderNumber) {
         TbPayBill bill = new TbPayBill();
@@ -128,6 +132,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         tbPayBillMapper.updateByPrimaryKeySelective(bill);
     }
 
+    @ServiceLog(doAction = "我的账单-我的账单-核查提醒录入")
     @Override
     public void billCheckReminder(PayCheckReminder payCheckReminder, User user) {
         TbPayCheckReminder checkReminder = new TbPayCheckReminder();
@@ -138,6 +143,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         tbPayCheckReminderMapper.insertSelective(checkReminder);
     }
 
+    @ServiceLog(doAction = "我的账单-创建账单")
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result billCreate(PayBillCreateParamVo payBillCreateParamVo, User user) {
@@ -247,6 +253,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         /**TODO 是否需要推送自动扣费的消息给企业或个人*/
     }
 
+    @ServiceLog(doAction = "我的账单-统一缴费发起支付")
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public Result startPayment(PayBIllInitiateParam payBIllInitiateParam, User user) {
@@ -326,6 +333,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         return result;
     }
 
+    @ServiceLog(doAction = "我的账单-统一缴费回调")
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void payCallBack(HttpServletResponse response, PayOrderNotify callBackParam, User user) {

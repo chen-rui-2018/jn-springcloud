@@ -37,6 +37,17 @@
         and IS_SENDED = 'N'
         and RECEIVE_ID = #{0}
         and SEND_ID = #{1}
+        order by CREATE_TIME asc
+    </select>
+
+    <!-- 查询聊天列表 -->
+    <select id="selectMsgList" resultType="com.jn.im.entity.TbImMessage" parameterType="com.jn.im.model.Message">
+        select  im.ID "id", im.SEND_ID "sendId", im.MSG_TYPE "msgType", im.RECEIVE_ID "receiveId",
+        im.CONTENT "content", im.CREATE_TIME as "createTime", im.IS_SENDED as "isSended",
+        im.SEND_TIME as "sendTime"
+        from tb_im_message im
+        where RECEIVE_ID = #{fromUser}
+        group by SEND_ID
         order by CREATE_TIME desc
     </select>
 

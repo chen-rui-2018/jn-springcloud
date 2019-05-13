@@ -74,10 +74,10 @@ public interface ParkingService {
 
     /**
      * 月租卡开户信息保存
-     * @param parkingMonthlyRentCardRequest
+     * @param parkingMonthlyRentCardUnite
      * @return
      */
-    Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest);
+    Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardUnite parkingMonthlyRentCardUnite);
 
     /**
      * 月租卡信息查询
@@ -118,16 +118,18 @@ public interface ParkingService {
      * 车辆入场记录信息
      * @param doorCarInParkingShow
      * @param url
+     * @param parkId 车场id
      * @return
      */
-    DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingShow, String url);
+    DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingShow, String url,String parkId);
 
     /**
      * 车辆出场记录信息
      * @param doorCarOutParkingShow
      * @param url
+     * @param parkId 车场id
      * @return
      */
-    DoorResult  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingShow, String url);
+    DoorResult  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingShow, String url,String parkId);
 
 }

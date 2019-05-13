@@ -76,23 +76,21 @@ public class ParkingServiceImplTest {
     public void saveParkingMonthlyRentCard() {
         Date  date = new Date();
         long time = date.getTime();
-        ParkingMonthlyRentCardRequest rentCardRequest = new ParkingMonthlyRentCardRequest();
-        DoorParkingMonthlyRentCardParam param = new DoorParkingMonthlyRentCardParam();
-        rentCardRequest.setParkingCompanyId(ParkingCompanyEnum.DOOR_COMPANY.getCode());
-        param.setParkid("100010_0004");
-        param.setCarNo("粤Z76760");
+        ParkingMonthlyRentCardUnite param = new ParkingMonthlyRentCardUnite();
+        param.setParkingCompanyId(ParkingCompanyEnum.DOOR_COMPANY.getCode());
+        param.setAreaId("100010_0004");
+        param.setCarLicense("粤Z76760");
         param.setCardTypeId("11");
-        param.setStartDate("2019-04-18");
-        param.setEndDate("2020-04-18");
-        param.setAmount("1000.00");
+        param.setStartTime("2019-04-18");
+        param.setEndTime("2020-04-18");
+        param.setActualMoney("1000.00");
         param.setPayType("1");
-        param.setPaymentNumber(Long.toString(time));
+        param.setOrderBillNum(Long.toString(time));
         param.setPayDate("2019-04-16 12:12:12");
-        param.setContactName("王淞");
-        param.setContactPhone("18899996666");
+        param.setAccount("王淞");
+        param.setPhone("18899996666");
         param.setOperaterName("王多鱼");
-        rentCardRequest.setDoorParkingMonthlyRentCardParam(param);
-        Result result = parkingService.saveParkingMonthlyRentCard(rentCardRequest);
+        Result result = parkingService.saveParkingMonthlyRentCard(param);
         logger.info("\n保存月租卡开户信息,结果说明：{}",result.getResult());
     }
 
@@ -209,7 +207,8 @@ public class ParkingServiceImplTest {
         doorCarInParkingParam.setSignature("SJDKLSJKLDJSKLSHJKSHDJKHJKHJK");
         doorCarInParkingParam.setT("1520416876");
         String url= "";
-        DoorResult result = parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url);
+        String parkId = "";
+        DoorResult result = parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url,parkId);
         logger.info("\n车场车辆入场信息,结果说明：{}",result.getBody());
 
     }
@@ -266,7 +265,8 @@ public class ParkingServiceImplTest {
         doorCarOutParkingParam.setT("1520416876");
         doorCarOutParkingParam.setSignature("SJDKLSJKLDJSKLSHJKSHDJKHJKHJK");
         String url = "";
-        DoorResult doorResult =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url);
+        String parkId = "";
+        DoorResult doorResult =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url,parkId);
         logger.info("\n车场车辆出场信息,结果说明：{}",doorResult.getBody());
     }
 

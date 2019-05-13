@@ -27,7 +27,7 @@ public interface RoomOrdersService {
      * @param page
      * @return
      */
-    PaginationData<List<RoomOrdersModle>> getRoomOrdersList(Page page);
+    PaginationData<List<RoomOrdersModle>> getRoomOrdersList(String account,Page page);
 
     /**
      * 获取房间租借订单详情信息

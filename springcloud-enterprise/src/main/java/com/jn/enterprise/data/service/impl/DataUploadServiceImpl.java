@@ -34,6 +34,7 @@ import com.jn.news.vo.EmailVo;
 import com.jn.news.vo.SmsTemplateVo;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysDepartmentPostVO;
 import com.jn.upload.api.UploadClient;
@@ -85,6 +86,9 @@ public class DataUploadServiceImpl implements DataUploadService {
 
     @Autowired(required = false)
     private TbDataReportingGardenFillerMapper tbDataReportingGardenFillerMapper;
+
+    @Autowired(required = false)
+    private TbDataReportingGardenCheckAccessMapper tbDataReportingGardenCheckAccessMapper;
 
     @Autowired
     private DownLoadClient downLoadClient;
@@ -449,22 +453,53 @@ public class DataUploadServiceImpl implements DataUploadService {
         //权限集
         List<GardenFillerAccessModel> access = new ArrayList<>();
         GardenFillerAccessModel gardenFillerAccessModel =null;
-        for(TbDataReportingGardenFiller gardenFiller : taskAccess){
-            //默认没有权限
-            boolean hasAccess = false;
-            for(String departmentId : userAccess){
-                if(gardenFiller.getDepartmentId().equals(departmentId)){
-                    hasAccess = true;
-                    break;
+
+
+
+        List<SysRole> sysRoles =  user.getSysRole();
+        List<String> sysRoleIds = new ArrayList<>();
+        TbDataReportingGardenCheckAccessCriteria accessCriteria = new TbDataReportingGardenCheckAccessCriteria();
+        List<TbDataReportingGardenCheckAccess> dataUploadCheckAccess = null;
+        if(sysRoles !=null && sysRoles.size()>0){
+            for(SysRole sysRole : sysRoles){
+                sysRoleIds.add(sysRole.getId());
+            }
+
+            if(sysRoleIds !=null && sysRoleIds.size()>0){
+                accessCriteria.or().andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID)).andIdIn(sysRoleIds);
+                dataUploadCheckAccess = tbDataReportingGardenCheckAccessMapper.selectByExample(accessCriteria);
+            }
+        }
+
+
+
+        //如果不具备审核权限
+        if(dataUploadCheckAccess==null || dataUploadCheckAccess.size()==0){
+            for(TbDataReportingGardenFiller gardenFiller : taskAccess){
+                //默认没有权限
+                boolean hasAccess = false;
+                for(String departmentId : userAccess){
+                    if(gardenFiller.getDepartmentId().equals(departmentId)){
+                        hasAccess = true;
+                        break;
+                    }
+                }
+                if(hasAccess){
+                    gardenFillerAccessModel = new GardenFillerAccessModel();
+                    BeanUtils.copyProperties(gardenFiller,gardenFillerAccessModel);
+
+                    access.add(gardenFillerAccessModel);
                 }
             }
-            if(hasAccess){
-                gardenFillerAccessModel = new GardenFillerAccessModel();
+        }else{
+            //具备审核权限
+            for(TbDataReportingGardenFiller gardenFiller : taskAccess){
                 BeanUtils.copyProperties(gardenFiller,gardenFillerAccessModel);
-
                 access.add(gardenFillerAccessModel);
             }
         }
+
+
         result.setGardenFiller(access);
 
         return result;
@@ -875,6 +910,7 @@ public class DataUploadServiceImpl implements DataUploadService {
      */
     @Override
     @ServiceLog(doAction = "科技园导入")
+    @Transactional(rollbackFor = Exception.class)
     public int importData(MultipartFile multipartFile,String formTime,String fillId,String modelId){
         int result=0;
 
@@ -1179,6 +1215,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
     @Override
     @ServiceLog(doAction = "企业填报任务数据进行保存")
+    @Transactional(rollbackFor = Exception.class)
     public int saveCompanyFormData(ModelDataVO data,User user){
         int result=0;
         if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){

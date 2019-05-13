@@ -52,7 +52,7 @@
             and sp.policy_title like concat('%',#{policyCenterHomeParam.policySearch},'%')
         </if>
         <if test="thematicType != null and thematicType != ''">
-            and sp.thematic_type =#{policyCenterHomeParam.thematicType}
+            and sp.thematic_type =#{thematicType}
         </if>
         order by sp.release_date desc
     </select>

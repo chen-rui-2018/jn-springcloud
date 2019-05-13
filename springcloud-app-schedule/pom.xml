@@ -31,10 +31,15 @@
 			<groupId>com.jn</groupId>
 			<artifactId>springcloud-park-api</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
             <groupId>com.jn</groupId>
             <artifactId>springcloud-hardware-api</artifactId>
         </dependency>
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>springcloud-enterprise-api</artifactId>
+		</dependency>
+
     </dependencies>
 	<build>
 		<plugins>

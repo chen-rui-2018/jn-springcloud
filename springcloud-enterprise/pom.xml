@@ -50,6 +50,12 @@
             <groupId>com.jn</groupId>
             <artifactId>xxpay-web-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.44</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -80,10 +86,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        service_product
+                        pay
                     </contexts>
                     <tableNames>
-                        tb_service_product
+                        tb_pay_bill
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

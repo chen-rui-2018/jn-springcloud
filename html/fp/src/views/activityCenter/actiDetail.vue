@@ -1,7 +1,7 @@
 <template>
   <div class="actiDetail w">
     <div class="delnav">
-      <el-breadcrumb separator="/">
+      <!-- <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/actiCenter' }">
           <a href="/actiCenter.vue">活动中心</a>
@@ -9,7 +9,10 @@
         <el-breadcrumb-item>
           <a href="javascript:void(0)" style="color:#00a042;font-weight:bold">活动详情</a>
         </el-breadcrumb-item>
-      </el-breadcrumb>
+      </el-breadcrumb> -->
+      <span>企业服务/</span>
+      <span>活动中心/</span>
+      <span class="mainColor">活动详情</span>
     </div>
     <div class="delinfo">
       <el-card style="overflow:visible">
@@ -412,8 +415,10 @@ export default {
 .actiDetail {
   width: 1190px;
   margin: 0 auto;
+  padding-top: 65px;
   .delnav {
     padding: 20px 0;
+    font-size: 13px;
   }
   .delinfo {
     margin-top: 40px;

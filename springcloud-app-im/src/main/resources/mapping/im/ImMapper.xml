@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.im.dao.ImMapper">
+
+    <!-- 查询聊天记录 -->
+    <select id="selectMsg" resultType="com.jn.im.entity.TbImMessage" parameterType="com.jn.im.model.Message">
+        select
+        im.ID "id", im.SEND_ID "sendId", im.MSG_TYPE "msgType", im.RECEIVE_ID "receiveId",
+        im.CONTENT "content", im.CREATE_TIME as "createTime", im.IS_SENDED as "isSended",
+        im.SEND_TIME as "sendTime"
+        from tb_im_message im
+        where 1=1
+        and ((SEND_ID = #{fromUser} and RECEIVE_ID = #{toUser})
+        or (SEND_ID = #{toUser} and RECEIVE_ID = #{fromUser}))
+        order by CREATE_TIME desc
+    </select>
+
+    <!-- 根据用户查找离线未读消息，根据发送人分组-->
+    <select id="selectOffLineUser" resultType="java.util.Map" parameterType="java.lang.String">
+        select
+        SEND_ID "sendId",count(1) "count"
+        from tb_im_message im
+        where 1=1
+          and IS_SENDED = 'N'
+          and RECEIVE_ID = #{userId}
+        group by SEND_ID
+    </select>
+
+    <!-- 根据用户查找离线未读消息 -->
+    <select id="selectOffLineMsg" resultType="com.jn.im.entity.TbImMessage" parameterType="java.lang.String">
+        select
+        im.ID "id", im.SEND_ID "sendId", im.MSG_TYPE "msgType", im.RECEIVE_ID "receiveId",
+        im.CONTENT "content", im.CREATE_TIME as "createTime", im.IS_SENDED as "isSended",
+        im.SEND_TIME as "sendTime"
+        from tb_im_message im
+        where 1=1
+        and IS_SENDED = 'N'
+        and RECEIVE_ID = #{0}
+        and SEND_ID = #{1}
+        order by CREATE_TIME desc
+    </select>
+
+</mapper>

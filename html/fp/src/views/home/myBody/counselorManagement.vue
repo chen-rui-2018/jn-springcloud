@@ -7,90 +7,27 @@
     <div class="ordinary_main">
       <div class="search">
         <div class="search_type">
-          <span
-            :class="approvalStatus==='pending'?'active':''"
-            @click="approvalPending"
-          >待审批</span>
-          <span
-            :class="approvalStatus==='approvalNotPassed'?'active':''"
-            @click="disapprove "
-          >审批不通过</span>
-          <span
-            :class="approvalStatus==='noFeedBack'?'active':''"
-            @click="noFeedback "
-          >未反馈</span>
-          <span
-            :class="approvalStatus==='rejected'?'active':''"
-            @click="denied "
-          >已拒绝</span>
+          <span :class="approvalStatus==='pending'?'active':''" @click="approvalPending">待审批</span>
+          <span :class="approvalStatus==='approvalNotPassed'?'active':''" @click="disapprove ">审批不通过</span>
+          <span :class="approvalStatus==='noFeedBack'?'active':''" @click="noFeedback ">未反馈</span>
+          <span :class="approvalStatus==='rejected'?'active':''" @click="denied ">已拒绝</span>
         </div>
-        <el-input
-          placeholder="请输入顾问姓名"
-          v-model="advisorName"
-          clearable
-        >
-          <el-button
-            slot="append"
-            icon="el-icon-search"
-            @click="initList()"
-          ></el-button>
+        <el-input placeholder="请输入顾问姓名" v-model="advisorName" clearable>
+          <el-button slot="append" icon="el-icon-search" @click="initList()"></el-button>
         </el-input>
       </div>
       <div class="ordinary_table">
-        <el-table
-          :data="recruitmentTable"
-          stripe
-          border
-          :header-cell-style="{background:'#f8f8f8',color:'#666666'}"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="advisorName"
-            label="姓名"
-            align="center"
-          > </el-table-column>
-          <el-table-column
-            prop="advisorAccount"
-            label="注册手机/邮箱"
-            width="100"
-            align="center"
-          > </el-table-column>
-          <el-table-column
-            prop="position"
-            label="职务"
-            align="center"
-          > </el-table-column>
-          <el-table-column
-            prop="workingYears"
-            label="从业年限"
-            align="center"
-          > </el-table-column>
-          <el-table-column
-            prop="graduatedSchool"
-            label="毕业学校"
-            align="center"
-          > </el-table-column>
-          <el-table-column
-            prop="education"
-            label="学历"
-            align="center"
-          > </el-table-column>
-          <el-table-column
-            prop="createdTime"
-            label="入职日期"
-            width="140"
-            align="center"
-          > </el-table-column>
-          <el-table-column
-            prop="graduatedSchool"
-            label="毕业学校"
-            align="center"
-          > </el-table-column>
-          <el-table-column
-            prop="approvalStatus"
-            label="邀请状态"
-            align="center"
-          >
+        <el-table :data="recruitmentTable" stripe border :header-cell-style="{background:'#f8f8f8',color:'#666666'}"
+          style="width: 100%">
+          <el-table-column prop="advisorName" label="姓名" align="center"> </el-table-column>
+          <el-table-column prop="advisorAccount" label="注册手机/邮箱" width="120" align="center"> </el-table-column>
+          <el-table-column prop="position" label="职务" align="center"> </el-table-column>
+          <el-table-column prop="workingYears" label="从业年限" align="center"> </el-table-column>
+          <el-table-column prop="graduatedSchool" label="毕业学校" align="center"> </el-table-column>
+          <el-table-column prop="education" label="学历" align="center"> </el-table-column>
+          <el-table-column prop="createdTime" label="入职日期" width="140" align="center"> </el-table-column>
+          <el-table-column prop="graduatedSchool" label="毕业学校" align="center"> </el-table-column>
+          <el-table-column prop="approvalStatus" label="邀请状态" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.approvalStatus==='1'">待审批</span>
               <span v-if="scope.row.approvalStatus==='3'">审批不通过</span>
@@ -100,55 +37,24 @@
               <span v-if="scope.row.approvalStatus==='-1'">审批通过</span> -->
             </template>
           </el-table-column>
-          <el-table-column  label="操作" align="center"  width="120" >
+          <el-table-column label="操作" align="center" width="120">
             <template slot-scope="scope">
-              <el-button
-                v-if="scope.row.approvalStatus==='1'"
-                size="mini"
-                type="text"
-                @click="handleConsent( scope.row)"
-                class="greenColor"
-              ><span>审批</span>
+              <el-button v-if="scope.row.approvalStatus==='1'" size="mini" type="text" @click="handleConsent( scope.row)"
+                class="mainColor"><span>审批</span>
               </el-button>
-              <!-- <el-button
-                v-if="scope.row.approvalStatus==='1'"
-                size="mini"
-                type="text"
-                @click="handleRefuse( scope.row)"
-                class="redColor"
-              ><span>拒绝</span>
-              </el-button> -->
-              <el-button
-                v-if="scope.row.approvalStatus==='-1'"
-                size="mini"
-                type="text"
-                @click="handleAgainInvite( scope.row)"
-                class="redColor"
-              ><span>再次邀请</span>
+              <el-button v-if="scope.row.approvalStatus==='-1'" size="mini" type="text" @click="handleAgainInvite( scope.row)"
+                class="redColor"><span>再次邀请</span>
               </el-button>
-              <el-button
-                v-if="scope.row.approvalStatus==='3'"
-                size="mini"
-                type="text"
-                @click="handleDetails( scope.row)"
-                class="greenColor"
-              ><span>详情</span>
+              <el-button v-if="scope.row.approvalStatus==='3'" size="mini" type="text" @click="handleDetails( scope.row)"
+                class="mainColor"><span>详情</span>
               </el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <div class="pagination-container">
-        <el-pagination
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="page"
-          :page-sizes="[10, 20, 30, 50]"
-          :page-size="rows"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-        >
+        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
+          :page-sizes="[10, 20, 30, 50]" :page-size="rows" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
     </div>
@@ -172,7 +78,7 @@ export default {
   methods: {
     //   跳转到详情页
     handleDetails(row) {
-      console.log(row)
+      console.log(row);
       this.$router.push({
         name: "advisoryDetails",
         query: { account: row.advisorAccount }
@@ -235,33 +141,11 @@ export default {
     },
     // 点击审批 跳转到审批顾问页面
     handleConsent(row) {
-      console.log(row)
-          this.$router.push({ name: "approveAdvisory",query:{advisorAccount :row.advisorAccount } });
-      // let _this = this;
-      // this.$confirm(`此操作将同意邀请, 是否继续?`, "提示", {
-      //   confirmButtonText: "确定",
-      //   cancelButtonText: "取消",
-      //   type: "warning"
-      // })
-      //   .then(() => {
-      //     this.api.post({
-      //       url: "reviewStaff",
-      //       data: { checkStatus: "1", staffId: row.staffId },
-      //       // dataFlag:true,
-      //       callback: function(res) {
-      //         if (res.code == "0000") {
-      //           _this.$message({
-      //             message: "操作成功",
-      //             type: "success"
-      //           });
-      //           _this.initList();
-      //         } else {
-      //           this.$message.error(res.result);
-      //         }
-      //       }
-      //     });
-      //   })
-      //   .catch(() => {});
+      console.log(row);
+      this.$router.push({
+        name: "approveAdvisory",
+        query: { advisorAccount: row.advisorAccount }
+      });
     },
     toInviteAdviser() {
       this.$router.push({ name: "inviteAdviser" });
@@ -309,10 +193,6 @@ export default {
           if (res.code == "0000") {
             console.log(res);
             _this.recruitmentTable = res.data.rows;
-            // for (let it in _this.serverAgent) {
-            //   _this.serverAgent[it].attitudeScore =
-            //     _this.serverAgent[it].attitudeScore * 1;
-            // }
             _this.total = res.data.total;
           } else {
             _this.$message.error(res.result);
@@ -327,9 +207,15 @@ export default {
 <style lang="scss">
 .counselorManagement {
   width: 100%;
-  .el-table{
-      font-size: 12px;
-    }
+  .el-table {
+    font-size: 12px;
+  }
+  .el-table__empty-block{
+    min-height: 40px;
+  }
+  .el-table__empty-text{
+    line-height: 40px;
+  }
   .ordinary_title {
     background-color: #fff;
     display: flex;
@@ -384,7 +270,7 @@ export default {
         border-bottom: 3px solid rgb(0, 160, 65);
       }
       .el-input-group {
-        width: 24%;
+        width: 26%;
         position: absolute;
         // width: 20%;
         top: -5px;
@@ -410,9 +296,6 @@ export default {
       border-top: 1px solid #eee;
       .redColor {
         color: #ff0000;
-      }
-      .greenColor {
-        color: #00a041;
       }
     }
   }

@@ -1,11 +1,9 @@
 package com.jn.park.message.service.impl;
 
-import com.jn.common.util.StringUtils;
-import com.jn.park.finance.dao.FinanceExpensesDao;
 import com.jn.park.message.dao.MessageListDao;
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.addMessageModel;
 import com.jn.park.message.service.MessageListService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -32,18 +30,16 @@ public class MessageListServiceImpl implements MessageListService {
 
     @ServiceLog(doAction = "消息列表")
     @Override
-    public List<FindAllMessageListVo> findAll(Integer messageTowTort, User user) {
-        List<FindAllMessageListVo> findAllMessageListVoList = messageListDao.findAll(messageTowTort,user.getAccount());
+    public List<FindAllMessageListVo> findAll(Integer messageOneTort,Integer messageTowTort,Integer isRead, User user) {
+        List<FindAllMessageListVo> findAllMessageListVoList = messageListDao.findAll(messageOneTort,messageTowTort,isRead,user.getAccount());
         return findAllMessageListVoList;
     }
 
     @ServiceLog(doAction = "添加消息")
     @Override
-    public void addMessage(addMessageModel model) {
-        //获取用户信息
-       User user= (User) SecurityUtils.getSubject().getPrincipal();
+    public void addMessage(AddMessageModel model) {
        //设置创建人
-        model.setCreatorAccount(user.getAccount());
+        model.setCreatorAccount(model.getCreatorAccount());
         //设置UUID作为ID
         model.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         messageListDao.addMessage(model);

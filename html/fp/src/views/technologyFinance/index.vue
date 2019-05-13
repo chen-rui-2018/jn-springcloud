@@ -206,7 +206,7 @@
           <div class="investor">
             <div class="inverTil clearfix">
               <p class="fl color1">投资人</p>
-              <span class="fr color3">MORE
+              <span class="fr color3" @click="$router.push({path:'/investor'})">MORE
                 <i class="el-icon-arrow-right"></i>
               </span>
             </div>
@@ -321,7 +321,7 @@
           <div class="investor financialPro pr">
             <div class="inverTil clearfix">
               <p class="fl color1">金融产品</p>
-              <span class="fr color3">MORE
+              <span class="fr color3" @click="$router.push({path:'/finaPro'})">MORE
                 <i class="el-icon-arrow-right"></i>
               </span>
             </div>
@@ -385,7 +385,7 @@
           <div class="investor financialPro financialIns">
             <div class="inverTil clearfix">
               <p class="fl color1">金融机构</p>
-              <span class="fr color3">MORE
+              <span class="fr color3" @click="$router.push({path:'/finaInstitution'})">MORE
                 <i class="el-icon-arrow-right"></i>
               </span>
             </div>
@@ -410,7 +410,7 @@
                     <i class="mainColor">{{i.transactionNum}}</i>
                     笔交易
                   </span>
-                  <span class="mainColor" style="margin-left:60px">了解详情</span>
+                  <span class="mainColor" style="margin-left:60px" @click="$router.push({path:'/finaInsDetail',query: { orgId: i.orgId }})">了解详情</span>
                 </p>
               </li>
               <!-- <li class="finaInsLi">
@@ -560,7 +560,7 @@ export default {
   },
   mounted() {
     this.techInit()
-    console.dir(this.$refs.box)
+    // console.dir(this.$refs.box)
   
     this.$router.afterEach((to, from, next) => {
         window.scrollTo(0, 0)
@@ -662,18 +662,18 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.$message.success("提交需求成功");
             _this.financialProVisible = false;
           } else {
             _this.$message.error(res.result);
+            _this.financialProVisible = false;
           }
         }
       });
     },
     //提需求
     raiseDemand(i) {
-      // this.financialProVisible = true;
+      this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
       this.financialProform.financingPeriodMax = "";
@@ -696,7 +696,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.InvestorInfoList = res.data.rows;
           } else {
             _this.$message.error(res.result);
@@ -716,7 +715,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.FinancialProList = res.data.rows;
             _this.total1 = Math.ceil(res.data.total / _this.rows);
           } else {
@@ -735,7 +733,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.ServiceOrgList = res.data.rows;
           } else {
             _this.$message.error(res.result);
@@ -755,7 +752,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
           } else {
             _this.$message.error(res.result);
           }
@@ -769,7 +765,6 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.financialOrgNum = res.data.financialOrgNum;
             _this.financialProductNum = res.data.financialProductNum;
             _this.investorsNum = res.data.investorsNum;
@@ -786,7 +781,7 @@ export default {
 .TechnologyFinance {
   .techHeah{
     position: fixed;
-    z-index: 99999 !important;
+    z-index: 9;
     width: 100%;
    .header {
     // position: fixed;
@@ -914,7 +909,7 @@ export default {
             color:#00a041;
         }
       }
-    }
+  }
     .search_box {
       background: rgba(0, 0, 0, 0.3);
       // text-align: center;

@@ -53,7 +53,7 @@
               <el-row v-else-if="item.formType === '4'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-checkbox-group v-model="item.value" @change="change">
+                  <el-checkbox-group v-model="item.value">
                     <el-checkbox v-for="name in item.choiceOption.split(',')" :key="name" :label="name" >{{ name }}</el-checkbox>
                   </el-checkbox-group>
                 </el-col>
@@ -104,11 +104,6 @@ export default {
       type: Array,
       default: () => []
     },
-    evalFunc: {
-      type: Function,
-      required: false,
-      default: () => treeToArray
-    },
     evalArgs: {
       type: Array,
       default() {
@@ -137,7 +132,7 @@ export default {
       } else {
         tmp = this.data
       }
-      const func = this.evalFunc || treeToArray
+      const func = treeToArray
       const args = this.evalArgs ? Array.concat([tmp, this.expandAll], this.evalArgs) : [tmp, this.expandAll]
       return func.apply(null, args)
     }

@@ -24,6 +24,8 @@ public class DynamicCommentReplyShow  implements Serializable {
     private String  nickName;
     @ApiModelProperty(value="头像")
     private String  avatar;
+    @ApiModelProperty(value= "评论时间")
+    private String createdTime;
     @ApiModelProperty(value="评论回复数")
     private String  replyNum;
     @ApiModelProperty(value="点赞数")
@@ -32,6 +34,14 @@ public class DynamicCommentReplyShow  implements Serializable {
     private String comContent;
     @ApiModelProperty(value = "评论的回复列表信息")
     private List<DynamicComments> replyList;
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
 
     public String getCommentId() {
         return commentId;

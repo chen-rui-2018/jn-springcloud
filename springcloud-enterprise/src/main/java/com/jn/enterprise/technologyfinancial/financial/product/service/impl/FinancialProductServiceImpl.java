@@ -10,6 +10,7 @@ import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.enums.FinancialProductExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
+import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
@@ -255,9 +256,8 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         TbServiceInvestorCriteria example=new TbServiceInvestorCriteria();
         //状态为有效，审批状态为审批通过
         String status="1";
-        String approvalStatus="1";
         example.createCriteria().andInvestorAccountIsNotNull().andStatusEqualTo(status)
-                .andApprovalStatusEqualTo(approvalStatus).andRecordStatusEqualTo(RECORD_STATUS);
+                .andApprovalStatusEqualTo(ApprovalStatusEnum.APPROVED.getValue()).andRecordStatusEqualTo(RECORD_STATUS);
         return tbServiceInvestorMapper.countByExample(example);
     }
 

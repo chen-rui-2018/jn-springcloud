@@ -53,4 +53,12 @@ public interface OrgColleagueService {
      * @return
      */
     List<UserRoleInfo> getUserRoleInfoList(List<String> accountList, String roleName);
+
+    /**
+     * 修改机构下用户角色
+     * @param account    用户账号
+     * @param delRoleId  要删除的角色
+     * @param addRoleId  要修改的角色
+     */
+    Boolean updateOrgUserRole(String account, String delRoleId, String addRoleId);
 }

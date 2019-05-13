@@ -49,10 +49,10 @@ public class SpPowerBusiDetailVo extends SpPowerBusiModel implements Serializabl
     @ApiModelProperty("收费标准")
     private String feeStandard;
 
-    /*@ApiModelProperty("受理方式：在线留言（2不支持，1支持）")*/
+    @ApiModelProperty("受理方式：在线留言（2不支持，1支持）")
     private String isContactOnline;
 
-    /*@ApiModelProperty("受理方式：QQ群受理（填写了Q群号码代表支持Q群受理）")*/
+    @ApiModelProperty("受理方式：QQ群受理（填写了Q群号码代表支持Q群受理）")
     private String contactQqGroup;
 
     @ApiModelProperty("是否删除（0标记删除，1正常）")

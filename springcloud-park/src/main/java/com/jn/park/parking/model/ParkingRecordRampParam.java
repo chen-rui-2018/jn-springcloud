@@ -13,7 +13,8 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ParkingRecordRampParam",description = "停车记录匝道")
 public class ParkingRecordRampParam implements Serializable {
-
+    @ApiModelProperty(value = "停车记录ID",example = "5895425")
+    private String parkingId;
     @ApiModelProperty(value = "车牌",example = "苏A00001")
     private String carLicense;
     @ApiModelProperty(value = "入场时间 yyyy-MM-dd HH:mm:ss",example = "2019-01-24 10:00:10")
@@ -24,6 +25,14 @@ public class ParkingRecordRampParam implements Serializable {
     private String gateId;
     @ApiModelProperty(value = "停车状态1-入场,0离场",example = "1")
     private String parkingStatus;
+
+    public String getParkingId() {
+        return parkingId;
+    }
+
+    public void setParkingId(String parkingId) {
+        this.parkingId = parkingId;
+    }
 
     public String getCarLicense() {
         return carLicense;

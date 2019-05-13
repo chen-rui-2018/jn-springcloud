@@ -1,6 +1,7 @@
 package com.jn.park.index.service.impl;
 
 import com.jn.common.util.DateUtils;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.park.index.dao.TbAchievementMapper;
 import com.jn.park.index.dao.TbImportantNewsMapper;
 import com.jn.park.index.entity.TbAchievement;
@@ -45,18 +46,26 @@ public class IndexServiceImpl implements IndexService {
 
     @Override
     @ServiceLog(doAction = "获取重要消息列表")
-    public List<ImportantNews> getImportantNewsList() {
+    public List<ImportantNews> getImportantNewsList(String platForm) {
         List<ImportantNews> dataList = new ArrayList<>();
 
         String curDateStr = DateUtils.formatDate(new Date(), "yyyy-MM-dd 00:00:00");
         try {
             Date curDate = DateUtils.parseDate(curDateStr, "yyyy-MM-dd HH:mm:ss");
             TbImportantNewsCriteria criteria = new TbImportantNewsCriteria();
-            criteria.createCriteria().andRecordStatusEqualTo(new Byte(IndexDataEnum.RECORD_STATUS_VALID.getCode()))
+            TbImportantNewsCriteria criteria1 = new TbImportantNewsCriteria();
+            TbImportantNewsCriteria.Criteria platFormCriteria = criteria1.createCriteria();
+            criteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
                     .andStatusEqualTo(IndexDataEnum.IMPORTANT_NEWS_STATUS_VALID.getCode())
                     .andPlatformTypeEqualTo(IndexDataEnum.IMPORTANT_NEWS_PLATFORM_TYPE_ALL.getCode())
                     .andStartTimeLessThanOrEqualTo(curDate).andEndTimeGreaterThanOrEqualTo(curDate);
 
+            platFormCriteria.andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                    .andStatusEqualTo(IndexDataEnum.IMPORTANT_NEWS_STATUS_VALID.getCode())
+                    .andStartTimeLessThanOrEqualTo(curDate).andEndTimeGreaterThanOrEqualTo(curDate)
+                    .andPlatformTypeEqualTo(platForm);
+
+            criteria.or(platFormCriteria);
 
             List<TbImportantNews> newsList = importantNewsMapper.selectByExample(criteria);
             if (newsList != null && !newsList.isEmpty()) {
@@ -77,7 +86,7 @@ public class IndexServiceImpl implements IndexService {
     public List<Achievement> getAchievementList() {
         List<Achievement> dataList = new ArrayList<>();
         TbAchievementCriteria criteria = new TbAchievementCriteria();
-        criteria.createCriteria().andRecordStatusEqualTo(new Byte(IndexDataEnum.RECORD_STATUS_VALID.getCode()))
+        criteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
                 .andStatusEqualTo(IndexDataEnum.IMPORTANT_NEWS_STATUS_VALID.getCode());
 
 

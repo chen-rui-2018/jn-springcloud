@@ -52,4 +52,11 @@ public interface AdvisorEditService {
      * @param loginAccount  用户账号
      */
     void currentUserIsAdvisor(String loginAccount);
+
+    /**
+     *发送申请/提交审批
+     * @param loginAccount  登录用户账号
+     * @return
+     */
+    int sendApproval(String loginAccount);
 }

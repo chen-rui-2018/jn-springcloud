@@ -623,8 +623,12 @@ public class DataUploadServiceImpl implements DataUploadService {
                                 rows.add(model1);
                             }
                         }
+                        tabVO.setInputList(rows);
+                    }else{
+                        tabVO.setInputList(inputFormatModelList);
                     }
-
+                }else{
+                    tabVO.setInputList(inputFormatModelList);
                 }
             }else{
                 //已填报,草稿
@@ -645,6 +649,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                             }
                         }
                     }
+                    tabVO.setInputList(rows);
             }
 
             //计算该tab的上期值
@@ -672,7 +677,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             //设置指标信息
             tabVO.setTargetList(targetModelVOList);
             //设置指标对应的填报格式信息
-            tabVO.setInputList(rows);
+
             tabVOList.add(tabVO);
         }
         ModelDataVO modelDataVO = new ModelDataVO();

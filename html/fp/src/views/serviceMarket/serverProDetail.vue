@@ -13,7 +13,7 @@
                     <div class="orgBtn fr mainColor" @click="demandRaise('')">提需求</div>
                 </div>
                 <div class="agent2 clearfix color2">
-                    <div class="agentImg mainBorder fl">
+                    <div class="agentImg fl">
                         <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                         <img :src="proDelInfo.pictureUrl" alt="">
                     </div>
@@ -71,13 +71,13 @@
                         <a href="javascript:;">筛选：</a>
                     </li>
                     <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')">
-                        <a href="javascript:;" data="%">全部(10)</a>
+                        <a href="javascript:;" data="%">全部({{proDelInfo.sameTypeNum}})</a>
                     </li>
                     <li class="list-item " :class="{'active':flag1=='0'}" @click="screenPro('0')">
-                        <a href="javascript:;" data="常规服务">常规服务(10)</a>
+                        <a href="javascript:;" data="常规服务">常规服务({{proDelInfo.commentNum}})</a>
                     </li>
                     <li class="list-item " :class="{'active':flag1=='1'}" @click="screenPro('1')">
-                        <a href="javascript:;" data="特色服务">特色服务(10)</a>
+                        <a href="javascript:;" data="特色服务">特色服务({{proDelInfo.featureNum}})</a>
                     </li>
                 </ul>
                 <ul class="select-list clearfix" v-else>
@@ -85,16 +85,16 @@
                         <a href="javascript:;">筛选：</a>
                     </li>
                     <li class="list-item current" :class="{'active':flag2==''}" @click="handleEvaluation('')">
-                        <a href="javascript:;" data="%">全部(10)</a>
+                        <a href="javascript:;" data="%">全部({{evaCount.evaluationTotal}})</a>
                     </li>
                     <li class="list-item " :class="{'active':flag2=='praise'}" @click="handleEvaluation('praise')">
-                        <a href="javascript:;" data="好评">好评(10)</a>
+                        <a href="javascript:;" data="好评">好评({{evaCount.praiseNum}})</a>
                     </li>
                     <li class="list-item " :class="{'active':flag2=='average'}" @click="handleEvaluation('average')">
-                        <a href="javascript:;" data="中评">中评(10)</a>
+                        <a href="javascript:;" data="中评">中评({{evaCount.averageNum}})</a>
                     </li>
                     <li class="list-item" :class="{'active':flag2=='badReview'}" @click="handleEvaluation('badReview')">
-                        <a href="javascript:;" data="差评">差评(10)</a>
+                        <a href="javascript:;" data="差评">差评({{evaCount.badReviewNum}})</a>
                     </li>
                 </ul>
             </div>
@@ -159,7 +159,7 @@
                             </li>
                         </ul>
                         <div class="pagination-container">
-                            <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row1" layout="total, sizes, prev, pager, next, jumper" :total="total1">
+                            <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row1" layout="total,prev, pager, next,sizes" :total="total1">
                             </el-pagination>
                         </div>
                     </div>
@@ -230,7 +230,7 @@
                             </li>
                         </ul>
                         <div class="pagination-container">
-                            <el-pagination background @size-change="handleSizeChange4" @current-change="handleCurrentChange4" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row4" layout="total, sizes, prev, pager, next, jumper" :total="total4">
+                            <el-pagination background @size-change="handleSizeChange4" @current-change="handleCurrentChange4" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row4" layout="total,prev, pager, next,sizes" :total="total4">
                             </el-pagination>
                         </div>
                     </div>
@@ -279,12 +279,14 @@ export default {
       flag2:'',
       ratingType:'',
       productType:'',
+      evaCount:{},
     };
   },
   mounted() {
     this.findProductDetails();
     this.sameTypeProductList();
     this.getServiceRatingInfo();
+    this.getEvaluationCountInfo()
   },
   methods: {
     screenPro(i){
@@ -403,6 +405,26 @@ export default {
           if (res.code == "0000") {
             _this.serviceRatingList = res.data.rows;
             _this.total4 = res.data.total;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+       getEvaluationCountInfo() {
+      //服务评价统计信息
+      let _this = this;
+      this.api.get({
+        url: "getEvaluationCountInfo",
+        data: {
+          productId: _this.$route.query.productId,
+          // orgId: "1001211",
+          needPage: 1,
+          isPublicPage: 0,
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.evaCount = res.data;
           } else {
             _this.$message.error(res.result);
           }

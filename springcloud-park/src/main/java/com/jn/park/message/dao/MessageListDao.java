@@ -1,8 +1,8 @@
 package com.jn.park.message.dao;
 
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.addMessageModel;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,13 +19,13 @@ public interface MessageListDao {
      * @param messageTowTort 一级消息类别
      * @return
      */
-    List<FindAllMessageListVo> findAll(@Param("messageTowTort") Integer messageTowTort, @Param("account") String account);
+    List<FindAllMessageListVo> findAll(@Param("messageOneTort") Integer messageOneTort,@Param("messageTowTort") Integer messageTowTort,@Param("isRead") Integer isRead, @Param("account") String account);
 
     /**
      * 添加消息
      * @param addMessageModel
      */
-    void addMessage(addMessageModel addMessageModel);
+    void addMessage(AddMessageModel addMessageModel);
 
 
     /**

@@ -780,6 +780,7 @@
 
         <foreach collection="fillerList" index="index" item="item"  separator="UNION ALL" >
             select
+            #{ item.id,jdbcType=VARCHAR},
             #{ item.fillId,jdbcType=VARCHAR},
             #{ item.filler,jdbcType=VARCHAR},
             #{ item.fillerTel,jdbcType=VARCHAR},

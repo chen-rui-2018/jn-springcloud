@@ -2,6 +2,8 @@ package com.jn.park.asset.dao;
 
 import com.jn.park.asset.model.MaintainManageModel;
 
+import java.util.List;
+
 /**
 * 维保管理dao
 * @author： zhuyz
@@ -11,9 +13,15 @@ import com.jn.park.asset.model.MaintainManageModel;
 */
 public interface MaintainManageDao {
     /**
-     * 根据维保信息id获取维保信息
-     * @param id
+     * 根据资产编号id获取维保信息
+     * @param assetNumber
      * @return
      */
-    MaintainManageModel getMaintain(String id);
+    MaintainManageModel getMaintain(String assetNumber);
+
+    /**
+     * 分页获取维保设备列表
+     * @return
+     */
+    List<MaintainManageModel> getMaintainList();
 }

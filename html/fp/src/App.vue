@@ -22,12 +22,10 @@
             <i class="iconfont icon-kefu"></i>
           </div>
         </li>
-        <li>
-          <a href="#">
-            <div class="to_top">
-              <i class="iconfont icon-top1"></i>
-            </div>
-          </a>
+        <li @click="toTop">
+          <div class="to_top">
+            <i class="iconfont icon-top1"></i>
+          </div>
         </li>
       </ul>
       <!--  -->
@@ -68,16 +66,16 @@
     <!-- <app-header v-if="$route.name=='actiCenter'||$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'||$route.name=='actiManagent'||$route.name=='peoDec'"></app-header> -->
     <!-- <ser-header v-if="$route.name=='actiTrain'||$route.name=='index'"></ser-header>z -->
     <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'||$route.name=='declarationCenter'||$route.name=='talentsService'||$route.name=='talentPlatform'||$route.name=='talentsServiceDetail'"></adminApprove-header>
-    <app-header v-if="$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'||$route.name=='actiManagent'"></app-header>
+    <app-header v-if="$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'"></app-header>
 
     <ser-header v-if="$route.name=='actiTrain'||$route.name=='serverOrg'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header>
-    <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'||$route.name=='finaPro'"></technology-Header>
+    <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'||$route.name=='finaPro'||$route.name=='finaProDetail'"></technology-Header>
 
-    <ser-header v-if="$route.name=='actiTrain'||$route.name=='serverOrg'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header>
-    <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'"></technology-Header>
+    <!-- <ser-header v-if="$route.name=='actiTrain'||$route.name=='serverOrg'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header> -->
+    <!-- <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'"></technology-Header> -->
 
-    <router-view/>
-    <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'"></app-footer>
+    <router-view class="routView"/>
+    <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& !isMobile"></app-footer>
   </div>
 </template>
 
@@ -88,11 +86,23 @@ import SerHeader from './components/serverHeader'
 import adminApproveHeader from './components/adminApproveHeader'
 import TechnologyHeader from './components/technologyHeader'
 import './common/font/font.css'
+
+import { isMobile } from '@/util'
+
+let timer = null
+
 export default {
   name: 'App',
   components:{AppHeader,AppFooter,SerHeader,adminApproveHeader,TechnologyHeader},
+   props:{
+      step:{
+        type:Number,
+        default:100
+      }
+    },
   data () {
     return {
+      isMobile: isMobile(),
       show:false,
       isVisibility:false,
       telShow:false
@@ -103,26 +113,46 @@ export default {
     //     this.api.setToken(sessionStorage.token)
     // }
     this.init()
+    let vm =this;
+      window.onscroll=function(){
+        if (document.documentElement.scrollTop>60) {
+          vm.isActive=true;
+        }else {
+          vm.isActive=false;
+        }
+    }
   },
   methods:{
     init(){
       let _this=this
       this.api.post({
-          url: "loginURL",
-          data: {
-            account: "wangsong",
-            password: "wangsong"
-          },
-          dataFlag: false,
-          callback: function(res) {
-            if (res.code == "0000") {
-             sessionStorage.token=res.data
-            }
+        url: "loginURL",
+        data: {
+          account: "wangsong",
+          password: "wangsong"
+        },
+        dataFlag: false,
+        callback: function(res) {
+          if (res.code == "0000") {
+            sessionStorage.token=res.data
           }
-        });
+        }
+      })
+    },
+    toTop(){
+      timer = setInterval(function () {
+        let osTop = document.documentElement.scrollTop || document.body.scrollTop
+        let ispeed = Math.floor(-osTop / 5)
+        document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed
+        this.isTop = true
+        if (osTop === 0) {
+          clearInterval(timer)
+        }
+      },30)
     }
   }
 }
+
 </script>
 
 <style lang="scss">
@@ -136,6 +166,9 @@ export default {
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    .routView{
+      min-height: 500px;
+    }
       .fadeIn{
         animation-duration:  0.3s;
         animation-delay:0.4s;
@@ -178,7 +211,7 @@ export default {
       top:60%;
       z-index:100;
       ul{
-        
+
         bottom: 40px;
         float: right;
         li{
@@ -213,7 +246,7 @@ export default {
             } */
           }
           .weixin:hover{
-            
+
           }
         }
       }
@@ -239,7 +272,7 @@ export default {
       .slide_nav_fence{
         font-size: 14px;
         li{
-          padding-bottom: 8px; 
+          padding-bottom: 8px;
           cursor: pointer;
           &:nth-child(1){
             padding-top: 20px;

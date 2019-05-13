@@ -31,12 +31,6 @@ public class TbAssetMaintainManage implements Serializable {
     /*@ApiModelProperty("规格")*/
     private String specification;
 
-    /*@ApiModelProperty("厂商名称")*/
-    private String manufacturerName;
-
-    /*@ApiModelProperty("厂商联系电话")*/
-    private String contactPhone;
-
     /*@ApiModelProperty("生产日期")*/
     private Date productionTime;
 
@@ -54,6 +48,15 @@ public class TbAssetMaintainManage implements Serializable {
 
     /*@ApiModelProperty("需维保(0不需要维保,1需要维保)")*/
     private Byte isMaintaion;
+
+    /*@ApiModelProperty("维保厂家ID")*/
+    private String companyId;
+
+    /*@ApiModelProperty("维保厂家名称")*/
+    private String companyName;
+
+    /*@ApiModelProperty("厂商联系电话")*/
+    private String contactPhone;
 
     /*@ApiModelProperty("录入状态(0:不可录入,1可录入)")*/
     private Byte status;
@@ -147,22 +150,6 @@ public class TbAssetMaintainManage implements Serializable {
         this.specification = specification == null ? null : specification.trim();
     }
 
-    public String getManufacturerName() {
-        return manufacturerName;
-    }
-
-    public void setManufacturerName(String manufacturerName) {
-        this.manufacturerName = manufacturerName == null ? null : manufacturerName.trim();
-    }
-
-    public String getContactPhone() {
-        return contactPhone;
-    }
-
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone == null ? null : contactPhone.trim();
-    }
-
     public Date getProductionTime() {
         return productionTime;
     }
@@ -209,6 +196,30 @@ public class TbAssetMaintainManage implements Serializable {
 
     public void setIsMaintaion(Byte isMaintaion) {
         this.isMaintaion = isMaintaion;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId == null ? null : companyId.trim();
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone == null ? null : contactPhone.trim();
     }
 
     public Byte getStatus() {
@@ -280,14 +291,15 @@ public class TbAssetMaintainManage implements Serializable {
             && (this.getTowerName() == null ? other.getTowerName() == null : this.getTowerName().equals(other.getTowerName()))
             && (this.getTowerAddress() == null ? other.getTowerAddress() == null : this.getTowerAddress().equals(other.getTowerAddress()))
             && (this.getSpecification() == null ? other.getSpecification() == null : this.getSpecification().equals(other.getSpecification()))
-            && (this.getManufacturerName() == null ? other.getManufacturerName() == null : this.getManufacturerName().equals(other.getManufacturerName()))
-            && (this.getContactPhone() == null ? other.getContactPhone() == null : this.getContactPhone().equals(other.getContactPhone()))
             && (this.getProductionTime() == null ? other.getProductionTime() == null : this.getProductionTime().equals(other.getProductionTime()))
             && (this.getPosition() == null ? other.getPosition() == null : this.getPosition().equals(other.getPosition()))
             && (this.getAssetUrl() == null ? other.getAssetUrl() == null : this.getAssetUrl().equals(other.getAssetUrl()))
             && (this.getMaintenanceTime() == null ? other.getMaintenanceTime() == null : this.getMaintenanceTime().equals(other.getMaintenanceTime()))
             && (this.getMaintenancePeriod() == null ? other.getMaintenancePeriod() == null : this.getMaintenancePeriod().equals(other.getMaintenancePeriod()))
             && (this.getIsMaintaion() == null ? other.getIsMaintaion() == null : this.getIsMaintaion().equals(other.getIsMaintaion()))
+            && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
+            && (this.getContactPhone() == null ? other.getContactPhone() == null : this.getContactPhone().equals(other.getContactPhone()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -309,14 +321,15 @@ public class TbAssetMaintainManage implements Serializable {
         result = prime * result + ((getTowerName() == null) ? 0 : getTowerName().hashCode());
         result = prime * result + ((getTowerAddress() == null) ? 0 : getTowerAddress().hashCode());
         result = prime * result + ((getSpecification() == null) ? 0 : getSpecification().hashCode());
-        result = prime * result + ((getManufacturerName() == null) ? 0 : getManufacturerName().hashCode());
-        result = prime * result + ((getContactPhone() == null) ? 0 : getContactPhone().hashCode());
         result = prime * result + ((getProductionTime() == null) ? 0 : getProductionTime().hashCode());
         result = prime * result + ((getPosition() == null) ? 0 : getPosition().hashCode());
         result = prime * result + ((getAssetUrl() == null) ? 0 : getAssetUrl().hashCode());
         result = prime * result + ((getMaintenanceTime() == null) ? 0 : getMaintenanceTime().hashCode());
         result = prime * result + ((getMaintenancePeriod() == null) ? 0 : getMaintenancePeriod().hashCode());
         result = prime * result + ((getIsMaintaion() == null) ? 0 : getIsMaintaion().hashCode());
+        result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
+        result = prime * result + ((getContactPhone() == null) ? 0 : getContactPhone().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -341,14 +354,15 @@ public class TbAssetMaintainManage implements Serializable {
         sb.append(", towerName=").append(towerName);
         sb.append(", towerAddress=").append(towerAddress);
         sb.append(", specification=").append(specification);
-        sb.append(", manufacturerName=").append(manufacturerName);
-        sb.append(", contactPhone=").append(contactPhone);
         sb.append(", productionTime=").append(productionTime);
         sb.append(", position=").append(position);
         sb.append(", assetUrl=").append(assetUrl);
         sb.append(", maintenanceTime=").append(maintenanceTime);
         sb.append(", maintenancePeriod=").append(maintenancePeriod);
         sb.append(", isMaintaion=").append(isMaintaion);
+        sb.append(", companyId=").append(companyId);
+        sb.append(", companyName=").append(companyName);
+        sb.append(", contactPhone=").append(contactPhone);
         sb.append(", status=").append(status);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

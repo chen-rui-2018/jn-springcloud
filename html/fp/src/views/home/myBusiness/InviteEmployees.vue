@@ -5,28 +5,32 @@
     </div>
     <div class="ordinary_content">
        <el-form label-width="120px" class="postJobInfo">
-  <el-form-item label="注册手机/邮箱:" prop="post">
+  <el-form-item label="注册手机/邮箱:" prop="post" class="staffAccount">
     <el-input placeholder="请输入手机号或姓名" v-model="searchFiled" clearable>
           <el-button slot="append" icon="el-icon-search" @click="getStaffInfo"></el-button>
         </el-input>
   </el-form-item>
   <el-form-item label="昵称:">
+    <label slot="label">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</label>
     <span>{{nickName}}</span>
   </el-form-item>
   <el-form-item label="真实姓名:">
    <span>{{name}}</span>
   </el-form-item>
   <el-form-item label="性别:" >
-    <span>{{sex}}</span>
+     <label slot="label">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</label>
+    <span v-show="sex=='1'">男</span>
+    <span v-show="sex=='0'">女</span>
   </el-form-item>
   <el-form-item label="个性签名:" >
      <span>{{signature}}</span>
   </el-form-item>
-  <el-form-item label="兴趣爱好:" >
-     <span>{{hobbys}}</span>
+  <el-form-item label="兴趣爱好:" class="hobbies">
+      <span v-for="(item, index) in hobbys" :key="index" class="hobbys">{{item}}</span>
   </el-form-item>
-  <el-form-item label="职业:" >
-    <span>{{jobs}}</span>
+  <el-form-item label="职业:" class="hobbies">
+      <label slot="label">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业:</label>
+    <span v-for="(item, index) in jobs" :key="index" class="hobbys">{{item}}</span>
   </el-form-item>
  <div class="business_footer" @click="submitForm()">
         邀请该员工
@@ -57,13 +61,13 @@ export default {
      data:{searchFiled :this.searchFiled },
      callback:(res=>{
          console.log(res)
-         this.nickName=res.data.nickName
-         this.name=res.data.name
-         this.sex=res.data.sex
-         this.account=res.data.account
-         this.jobs=res.data.jobs
-         this.signature=res.data.signature
-         this.hobbys=res.data.hobbys
+         this.nickName=res.data.rows[0].nickName
+         this.name=res.data.rows[0].name
+         this.sex=res.data.rows[0].sex
+         this.account=res.data.rows[0].account
+         this.jobs=res.data.rows[0].jobs
+         this.signature=res.data.rows[0].signature
+         this.hobbys=res.data.rows[0].hobbys
      })
  })
       },
@@ -100,6 +104,28 @@ export default {
 
 <style lang="scss">
   .inviteProduct{
+    .staffAccount{
+      .el-input__inner{
+        height: 33px;
+        line-height: 33px;
+      }
+      .el-form-item__content{
+         height: 33px;
+        line-height: 33px;
+      }
+      .el-form-item__label{
+        height: 33px;
+        line-height: 33px;
+      }
+    }
+     .hobbys{
+    padding: 5px 15px;
+    background: #f7f7f7;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    margin-right: 20px;
+    color: #999;
+    }
     width: 100%;
     .ordinary_title{
       background-color: #fff;
@@ -126,6 +152,10 @@ export default {
             .el-form-item__content,.el-select{
                 width: 266px;
             }
+            .hobbies{
+               .el-form-item__content,.el-select{
+                width:100%;
+            }}
              .el-textarea__inner{
                  width: 348px;
                 min-height: 100px !important;

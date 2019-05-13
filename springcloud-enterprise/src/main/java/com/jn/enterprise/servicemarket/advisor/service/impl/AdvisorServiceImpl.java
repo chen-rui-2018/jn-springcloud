@@ -395,8 +395,13 @@ public class AdvisorServiceImpl implements AdvisorService {
     @Override
     public AdvisorServiceInfo getAdvisorInfoByAccount(String advisorAccount,String approvalStatus) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount).andApprovalStatusEqualTo(approvalStatus)
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        if(StringUtils.isBlank(approvalStatus)){
+            example.createCriteria().andAdvisorAccountEqualTo(advisorAccount)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }else{
+            example.createCriteria().andAdvisorAccountEqualTo(advisorAccount).andApprovalStatusEqualTo(approvalStatus)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }
         List<TbServiceAdvisor> tbServiceAdvisors = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisors.isEmpty()){
             logger.warn("当前顾问[{}]信息不存在",advisorAccount);

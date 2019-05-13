@@ -14,6 +14,9 @@ import java.io.Serializable;
  */
 @ApiModel(value = "HotProducts" ,description = "热门产品")
 public class HotProducts  implements Serializable {
+
+    @ApiModelProperty(value = "产品id")
+    private String  productId;
     @ApiModelProperty(value = "产品名称")
     private String  productName;
     @ApiModelProperty(value = "产品图片路径")
@@ -26,6 +29,14 @@ public class HotProducts  implements Serializable {
     private Integer advisorCount;
     @ApiModelProperty(value = "评论次数")
     private Integer ratingCount;
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
     public String getProductName() {
         return productName;

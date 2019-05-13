@@ -40,7 +40,7 @@
   title="海报图片"
   :visible.sync="dialogVisible"
   width="50%">
-  <img :src="posterUrl" alt="海报图片" style="width:100%">
+  <img :src="posterUrl" alt="海报图片" style="width:100%;height:200px;">
   <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">返 回</el-button>
   </span>
@@ -104,6 +104,7 @@ export default {
 <style lang="scss">
   .propagandaDetails{
     width: 100%;
+    color:#999;
     .el-form-item__label{
         margin-right:30px;
         line-height: 26px;

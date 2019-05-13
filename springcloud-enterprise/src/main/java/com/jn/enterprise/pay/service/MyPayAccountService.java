@@ -1,7 +1,7 @@
 package com.jn.enterprise.pay.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.pay.model.PayAccountBookMoneyRecord;
+import com.jn.pay.model.PayAccountBookMoneyRecord;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.system.model.User;
 
@@ -30,5 +30,5 @@ public interface MyPayAccountService {
      * @param user,payAccountBookMoneyRecord
      * @return
      */
-    PaginationData<List<PayAccountBookMoneyRecord>> queryPayAccountDetails(User user,String acBookId,String startDate,String endDate,int page,int rows);
+    PaginationData<List<PayAccountBookMoneyRecord>> queryPayAccountDetails(User user, String acBookId, String startDate, String endDate, int page, int rows);
 }

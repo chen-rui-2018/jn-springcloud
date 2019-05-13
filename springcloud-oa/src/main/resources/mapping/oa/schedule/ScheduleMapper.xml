@@ -21,7 +21,7 @@
             creator_account = #{userAccount,jdbcType=VARCHAR}
         AND record_status = 1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(title)">
-          and title like CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
+          and title like CONCAT('%', trim(#{title,jdbcType=VARCHAR}), '%')
         </if>
         <if test="null != date">
           AND MONTH (start_time) = MONTH (#{date,jdbcType=TIMESTAMP})

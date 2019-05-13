@@ -605,7 +605,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             String fillInId=tbDataReportingTask.getFillInFormId();
             String modelId =tbDataReportingTask.getModelId();
             String tabId =tab.getTabId();
-
+            List<InputFormatModel> rows = new ArrayList<>();
             //本期值未填,那增幅列为空
             if(type.equals(DataUploadConstants.NOT_FILL)){
                 if(tbDataReportingTask.getFileType().toString().equals(DataUploadConstants.GARDEN_TYPE)){
@@ -616,10 +616,11 @@ public class DataUploadServiceImpl implements DataUploadService {
                     if(data !=null && data.size()>0){
                         for(InputFormatModel bean :inputFormatModelList){
                             for(TbDataReportingTaskData dataBean:data){
-                                if(bean.getFormId().equals(dataBean.getFormId())){
-                                    bean.setValue(dataBean.getData());
-                                    break;
-                                }
+                                InputFormatModel model1 = new InputFormatModel();
+                                BeanUtils.copyProperties(bean,model1);
+                                model1.setValue(dataBean.getData());
+                                model1.setRowNum(dataBean.getRowNum());
+                                rows.add(model1);
                             }
                         }
                     }
@@ -636,8 +637,11 @@ public class DataUploadServiceImpl implements DataUploadService {
                     for(InputFormatModel bean :inputFormatModelList){
                         for(TbDataReportingTaskData dataBean:data){
                             if(bean.getFormId().equals(dataBean.getFormId())){
-                                bean.setValue(dataBean.getData());
-                                break;
+                                InputFormatModel model1 = new InputFormatModel();
+                                BeanUtils.copyProperties(bean,model1);
+                                model1.setValue(dataBean.getData());
+                                model1.setRowNum(dataBean.getRowNum());
+                                rows.add(model1);
                             }
                         }
                     }
@@ -668,7 +672,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             //设置指标信息
             tabVO.setTargetList(targetModelVOList);
             //设置指标对应的填报格式信息
-            tabVO.setInputList(inputFormatModelList);
+            tabVO.setInputList(rows);
             tabVOList.add(tabVO);
         }
         ModelDataVO modelDataVO = new ModelDataVO();
@@ -804,14 +808,14 @@ public class DataUploadServiceImpl implements DataUploadService {
                 //数据类型转换。转换成VO对象
                 resultList = new ArrayList<>();
                 InputFormatModel im=null;
+
+
+
                 for(TbDataReportingSnapshotTargetGroup tgBean:inputList){
-                    //拷贝数据
-                    im = new InputFormatModel();
-                    BeanUtils.copyProperties(tgBean,im);
 
                     String value="";
                     Integer rowNum=0;
-                    //如果是需要的是增幅列
+                    //查询每个值
                     for(TbDataReportingTaskData tdrmBean:data){
                         //如果相等就进行值设置
                         if(tdrmBean.getFormId().equals(tgBean.getFormId())){
@@ -841,25 +845,41 @@ public class DataUploadServiceImpl implements DataUploadService {
                                                 value = "";
                                                 rowNum = tdrmBean.getRowNum();
                                             }
-                                            break;
+                                            //拷贝数据
+                                            im = new InputFormatModel();
+                                            BeanUtils.copyProperties(tgBean,im);
+                                            im.setValue(value);
+                                            im.setRowNum(rowNum);
+                                            resultList.add(im);
                                         }
                                     }
                                 }else{
                                     value = "";
                                     rowNum = tdrmBean.getRowNum();
+                                    //拷贝数据
+                                    im = new InputFormatModel();
+                                    BeanUtils.copyProperties(tgBean,im);
+                                    im.setValue(value);
+                                    im.setRowNum(rowNum);
+                                    resultList.add(im);
                                 }
                             }else{
                                 value = tdrmBean.getData();
                                 rowNum = tdrmBean.getRowNum();
+                                //拷贝数据
+                                im = new InputFormatModel();
+                                BeanUtils.copyProperties(tgBean,im);
+                                im.setValue(value);
+                                im.setRowNum(rowNum);
+                                resultList.add(im);
                             }
 
-                            break;
+                            //break;
                         }
 
+
                     }
-                    im.setValue(value);
-                    im.setRowNum(rowNum);
-                    resultList.add(im);
+
                 }
             }
         }
@@ -1414,7 +1434,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
 
                 targetGroupExample.clear();
-                targetGroupExample.or().andTargetIdIn(tgList).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+                targetGroupExample.or().andTargetIdIn(tgList).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID)).andTaskBatchEqualTo(taskBatch);
                 snapshotTargetGroupList = tbDataReportingSnapshotTargetGroupMapper.selectByExample(targetGroupExample);
 
             }

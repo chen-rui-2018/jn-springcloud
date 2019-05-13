@@ -8,6 +8,9 @@ ul {
   list-style: none;
 }
 
+body .el-table th.gutter{
+  display: table-cell!important;
+}
 a {
   text-decoration: none;
   color: inherit;
@@ -87,6 +90,10 @@ input {
 
 .impact {
   font-family: IMPACT;
+}
+
+.maxWidth .el-input {
+  width: 266px;
 }
 
 .arialn {

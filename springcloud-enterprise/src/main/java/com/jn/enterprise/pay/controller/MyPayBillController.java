@@ -4,18 +4,17 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.enterprise.pay.entity.TbPayBillDetails;
 import com.jn.enterprise.pay.service.MyPayBillService;
-import com.jn.enterprise.pay.vo.PayBillVo;
-import com.jn.pay.model.PayBIllInitiateParam;
-import com.jn.pay.model.PayBill;
-import com.jn.pay.model.PayCheckReminder;
-import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.vo.PayBillVo;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +45,19 @@ public class MyPayBillController extends BaseController {
 
     @ControllerLog(doAction = "我的账单-查询列表")
     @ApiOperation(value = "我的账单-查询列表",notes = "我的账单-查询列表")
-    @RequestMapping(value = "/billQuery",method = RequestMethod.GET)
-    public Result<PaginationData<List<PayBillVo>>> billQuery(PayBill payBill){
+    @RequestMapping(value = "/billQuery",method = RequestMethod.POST)
+    public Result<PaginationData<List<PayBillVo>>> billQuery(@Param("payBill")PayBillParams payBill){
+        Assert.notNull(payBill.getObjId(),"对象ID不能为空");
         PaginationData<List<PayBillVo>> data = myPayBillService.getBillQueryList(payBill);
+        return new Result<>(data);
+    }
+
+    @ControllerLog(doAction = "我的账单-通过账单ID查询账单详情信息")
+    @ApiOperation(value = "我的账单-通过账单ID查询账单详情信息",notes = "我的账单-通过账单ID查询账单详情信息")
+    @RequestMapping(value = "/getBillInfo",method = RequestMethod.GET)
+    public Result<List<PayBillDetails>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId){
+        Assert.notNull(billId,"账单ID或编号不能为空");
+        List<PayBillDetails> data = myPayBillService.getBillInfo(billId);
         return new Result<>(data);
     }
 
@@ -74,7 +83,7 @@ public class MyPayBillController extends BaseController {
     @ControllerLog(doAction = "我的账单-创建账单")
     @ApiOperation(value = "我的账单-创建账单",notes = "我的账单-创建账单")
     @RequestMapping(value = "/billCreate",method = RequestMethod.POST)
-    public Result bilCreate(@RequestBody @Validated PayBillCreateParamVo payBillCreateParamVo){
+    public Result billCreate(@RequestBody @Validated PayBillCreateParamVo payBillCreateParamVo){
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(payBillCreateParamVo.getAcBookType(),"账本类型ID不能为空");

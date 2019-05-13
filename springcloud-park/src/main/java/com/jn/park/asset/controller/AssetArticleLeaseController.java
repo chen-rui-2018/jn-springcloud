@@ -119,8 +119,10 @@ public class AssetArticleLeaseController {
     @ApiOperation(value = "物品租赁历史列表",notes = "获取物品租赁历史列表")
     @GetMapping(value = "/LeaseOrdersList")
     public Result<PaginationData<List<AssetArticleLeaseOrdersModel>>> getArticleLeaseOrdersList(Page page){
+        //获取登录信息
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
         if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<AssetArticleLeaseOrdersModel>> articleLeaseList = assetArticleLeaseOrdersService.getArticleLeaseList(page);
+            PaginationData<List<AssetArticleLeaseOrdersModel>> articleLeaseList = assetArticleLeaseOrdersService.getArticleLeaseOrdersList(user.getAccount(),page);
             return new Result<>(articleLeaseList);
         }else{
             throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);

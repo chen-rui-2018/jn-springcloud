@@ -1,9 +1,10 @@
 package com.jn.enterprise.pay.dao;
 
 
-import com.jn.enterprise.pay.vo.PayBillVo;
+import com.jn.pay.vo.PayBillVo;
 import com.jn.pay.model.PayBill;
 import com.jn.pay.model.PayBillDetails;
+import com.jn.pay.model.PayBillParams;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public interface PayBillDao {
 
-    List<PayBillVo> getBillQueryList(PayBill payBill);
+    List<PayBillVo> getBillQueryList(@Param("payBill")PayBillParams payBill);
 
     void insertList(@Param("list") List<PayBillDetails> list);
 }

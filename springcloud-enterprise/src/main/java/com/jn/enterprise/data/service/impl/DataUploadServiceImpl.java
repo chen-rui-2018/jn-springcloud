@@ -1720,10 +1720,10 @@ public class DataUploadServiceImpl implements DataUploadService {
         TbDataReportingTaskCriteria task = new TbDataReportingTaskCriteria();
         if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
             task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
-                    .andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(fillType));
+                    .andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(DataUploadConstants.COMPANY_TYPE));
         }else{
             task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
-                    .andFileTypeEqualTo(new Byte(fillType));
+                    .andFileTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE));
         }
 
 

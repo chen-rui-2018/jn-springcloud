@@ -1,7 +1,6 @@
 package com.jn.enterprise.company.dao;
 
 import com.jn.enterprise.company.model.ServiceRecruitSearchParam;
-import com.jn.enterprise.company.vo.RecruitDetailsVO;
 import com.jn.enterprise.company.vo.RecruitVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,7 +20,7 @@ public interface ServiceRecruitMapper {
      * @param id
      * @return
      */
-    RecruitDetailsVO getRecruitDetailsById(@Param("id") String id);
+    RecruitVO getRecruitDetailsById(@Param("id") String id);
 
     /**
      * 查询企业招聘信息列表

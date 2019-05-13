@@ -1,5 +1,6 @@
 package com.jn.enterprise.company.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
@@ -37,6 +38,7 @@ import java.util.Map;
 @Api(tags = "用户中心-我的企业-企业同事")
 @RestController
 @RequestMapping("/enterprise/ColleagueController")
+@TxTransaction(isStart = true)
 public class ColleagueController extends BaseController {
 
     @Autowired

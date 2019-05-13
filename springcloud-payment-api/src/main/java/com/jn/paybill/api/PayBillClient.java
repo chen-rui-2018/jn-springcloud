@@ -85,4 +85,12 @@ public interface PayBillClient {
     @RequestMapping(value = "/api/pay/bill/cancelPayBillByBillNum", method = RequestMethod.POST)
     Result<Boolean> cancelPayBillByBillNum(@RequestBody PayBillCancelParam payBillCancelParam);
 
+    /**
+     * 根据账单号取消对应的账单
+     * @param orderId
+     * @return true取消成功 false取消失败
+     */
+    @RequestMapping(value = "/api/pay/bill/cancelPayBillByBillId", method = RequestMethod.POST)
+    Result<Boolean> cancelPayBillByBillId(@RequestBody String orderId);
+
 }

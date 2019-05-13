@@ -146,12 +146,6 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "查询同事列表")
     public Map<String, Object> getColleagueList(StaffListParam staffListParam, String curAccount) {
         Map<String, Object> map = new HashMap<>();
-        String isShowFlag = "1";
-        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(curAccount);
-        if (company != null) {
-            isShowFlag = "0";
-        }
-        map.put("isShow", isShowFlag);
 
         // 获取当前用户扩展信息
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(curAccount);
@@ -163,6 +157,14 @@ public class StaffServiceImpl implements StaffService {
         if(StringUtils.isBlank(comId)){
             throw new JnSpringCloudException(CompanyExceptionEnum.USER_NO_STAFF);
         }
+
+        // 判断当前用户是否企业管理员
+        String isShowFlag = "0";
+        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(comId);
+        if (company != null && company.getComAdmin().equals(curAccount)) {
+            isShowFlag = "1";
+        }
+        map.put("isShow", isShowFlag);
 
         List<StaffListVO> dataList = new ArrayList<>(16);
         List<String> accountList = new ArrayList<>(16);

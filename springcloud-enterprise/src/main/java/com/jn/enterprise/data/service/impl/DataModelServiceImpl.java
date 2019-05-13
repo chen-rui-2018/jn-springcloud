@@ -407,19 +407,22 @@ public class DataModelServiceImpl implements DataModelService {
             //自己写语句
             List<TbDataReportingTarget> targetList = targetDao.getTargetFromTab(tabPOList.get(tabIndex).getTabId());
 
-            for(int targetIndex=0 ,targetSize =targetList.size();targetIndex<targetSize;targetIndex++){
-                //inputFormatModelListVO = new ArrayList<>();
-                targetVO = new TargetModelVO();
-                BeanUtils.copyProperties(targetList.get(targetIndex),targetVO);
-                targetVO.setIsMuiltRow(targetList.get(targetIndex).getIsMuiltRow().toString());
-                targetVO.setTargetType(targetList.get(targetIndex).getTargetType().toString());
-                targetVO.setRecordStatus(targetList.get(targetIndex).getRecordStatus().toString());
+            if(targetList ==null || targetList.size()==0){
+                for(int targetIndex=0 ,targetSize =targetList.size();targetIndex<targetSize;targetIndex++){
+                    //inputFormatModelListVO = new ArrayList<>();
+                    targetVO = new TargetModelVO();
+                    BeanUtils.copyProperties(targetList.get(targetIndex),targetVO);
+                    targetVO.setIsMuiltRow(targetList.get(targetIndex).getIsMuiltRow().toString());
+                    targetVO.setTargetType(targetList.get(targetIndex).getTargetType().toString());
+                    targetVO.setRecordStatus(targetList.get(targetIndex).getRecordStatus().toString());
 
-                targetVO.setId(targetList.get(targetIndex).getTargetId());
-                targetVO.setPid(targetList.get(targetIndex).getParentId());
-                targetVO.setText(targetList.get(targetIndex).getTargetName());
-                listTargetVO.add(targetVO);
+                    targetVO.setId(targetList.get(targetIndex).getTargetId());
+                    targetVO.setPid(targetList.get(targetIndex).getParentId());
+                    targetVO.setText(targetList.get(targetIndex).getTargetName());
+                    listTargetVO.add(targetVO);
+                }
             }
+
             tabVO.setTargetList(listTargetVO);
             tabVOList.add(tabVO);
         }

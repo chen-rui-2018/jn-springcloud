@@ -177,9 +177,9 @@ $(function() {
 			return;
 		}
 		if('WebSocket' in window){
-			var wsUrl = "ws://192.168.10.31:8888/websocket/";
+			var wsUrl = "ws://localhost:8888/websocket/";
 			
-			websocket = new WebSocket(wsUrl+agent);
+			websocket = new WebSocket(wsUrl+agent+"/token");
 		
 		    
 		     

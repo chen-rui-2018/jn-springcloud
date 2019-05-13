@@ -418,7 +418,10 @@ public class DataUploadServiceImpl implements DataUploadService {
     @Override
     @ServiceLog(doAction = "企业获取未填的任务的表单")
     public ModelDataVO getFormStruct(String fileId,User user) {
+
+
         String type=DataUploadConstants.NOT_FILL;
+
 
         ModelDataVO result;
         if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
@@ -629,6 +632,8 @@ public class DataUploadServiceImpl implements DataUploadService {
                     }else{
                         tabVO.setInputList(inputFormatModelList);
                     }
+
+
                 }else{
                     tabVO.setInputList(inputFormatModelList);
                 }
@@ -1493,20 +1498,26 @@ public class DataUploadServiceImpl implements DataUploadService {
                     if(dataset !=null && dataset.size()>0){
                         List<TbDataReportingTaskData> dbList = new ArrayList<>();
                         TbDataReportingTaskDataCriteria taskDataCriteriaBean = new TbDataReportingTaskDataCriteria();
+                        TbDataReportingSnapshotTargetCriteria taretInfoCriteriaBean = new TbDataReportingSnapshotTargetCriteria();
+
                         TbDataReportingTaskData updateRecord=null;
                         for(TbDataReportingTaskData dbean : dataList){
                             taskDataCriteriaBean.clear();
-
                             updateRecord = new TbDataReportingTaskData();
                             updateRecord.setData(dbean.getData());
                             taskDataCriteriaBean.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdEqualTo(dbean.getTargetId())
                                     .andRowNumEqualTo(dbean.getRowNum());
-
-                            int resultSize = tbDataReportingTaskDataMapper.updateByExample(updateRecord,taskDataCriteriaBean);
-
-                            if(resultSize !=1){
-                                dbList.add(dbean);
+                            taretInfoCriteriaBean.clear();
+                            taretInfoCriteriaBean.or().andTargetIdEqualTo(dbean.getTargetId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
+                                    .andTaskBatchEqualTo(taskBatch).andDepartmentIdEqualTo(data.getDepartmentId());
+                            List<TbDataReportingSnapshotTarget> targetList = tbDataReportingSnapshotTargetMapper.selectByExample(taretInfoCriteriaBean);
+                            if(targetList !=null && targetList.size()>0){
+                                int resultSize = tbDataReportingTaskDataMapper.updateByExample(updateRecord,taskDataCriteriaBean);
+                                if(resultSize !=1){
+                                    dbList.add(dbean);
+                                }
                             }
+
                         }
 
                         if(dbList !=null && dbList.size()>0){
@@ -1516,6 +1527,8 @@ public class DataUploadServiceImpl implements DataUploadService {
                         //保存
                         targetDao.saveData(dataList);
                     }
+
+                    //部门Id，在model的最外层
 
                 }
 
@@ -1705,8 +1718,14 @@ public class DataUploadServiceImpl implements DataUploadService {
         List<String> fillInFormId = getFillId(companyInfo,user);
 
         TbDataReportingTaskCriteria task = new TbDataReportingTaskCriteria();
-        task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
-                .andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(fillType));
+        if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
+            task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
+                    .andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(fillType));
+        }else{
+            task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
+                    .andFileTypeEqualTo(new Byte(fillType));
+        }
+
 
         List<TbDataReportingTask> taskList =tbDataReportingTaskMapper.selectByExample(task);
         if(taskList ==null || taskList.size()==0){

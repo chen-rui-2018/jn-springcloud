@@ -66,10 +66,10 @@
         GROUP BY t1.id) t
         <where>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(title)">
-                t.title like CONCAT('%', #{title,jdbcType=VARCHAR},'%')
+                t.title like CONCAT('%', trim(#{title,jdbcType=VARCHAR}),'%')
             </if>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(creator)">
-                t.creator like CONCAT('%', #{creator,jdbcType=VARCHAR},'%')
+                t.creator like CONCAT('%', trim(#{creator,jdbcType=VARCHAR}),'%')
             </if>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(sendStatus)">
                 and t.send_status = #{sendStatus,jdbcType=VARCHAR}

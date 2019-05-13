@@ -3,14 +3,13 @@ package com.jn.server;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.enterprise.pay.entity.TbPayBillDetails;
 import com.jn.enterprise.pay.service.MyPayBillService;
-import com.jn.pay.api.PayClient;
-import com.jn.pay.model.PayBIllInitiateParam;
-import com.jn.pay.model.PayBill;
-import com.jn.pay.model.PayCheckReminder;
-import com.jn.pay.model.PayOrderNotify;
-import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.pay.vo.PayBillVo;
+import com.jn.pay.api.PayClient;
+import com.jn.pay.model.*;
+import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.model.User;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +31,18 @@ public class PayServerController extends BaseController implements PayClient {
     private MyPayBillService myPayBillService;
 
 
-    /*@Override
-    public Result<PaginationData<List<PayBillVo>>> billQuery(PayBill payBill) {
-        PaginationData<List<PayBillVo>> data = myPayBillService.getBillQueryList(payBill);
+    @Override
+    public Result<PaginationData<List<PayBillVo>>> billQuery(PayBillParams payBillParams) {
+        PaginationData<List<PayBillVo>> data = myPayBillService.getBillQueryList(payBillParams);
         return new Result(data);
-    }*/
+    }
+
+    @Override
+    public Result<List<PayBillDetails>> getBillInfo(String billId) {
+        Assert.notNull(billId,"账单ID或编号不能为空");
+        List<PayBillDetails> data = myPayBillService.getBillInfo(billId);
+        return new Result<>(data);
+    }
 
     @Override
     public Result updateBillNumber(String billId, int reminderNumber) {
@@ -53,7 +59,7 @@ public class PayServerController extends BaseController implements PayClient {
     }
 
     @Override
-    public Result bilCreate(PayBillCreateParamVo payBillCreateParamVo) {
+    public Result billCreate(PayBillCreateParamVo payBillCreateParamVo) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         myPayBillService.billCreate(payBillCreateParamVo,user);

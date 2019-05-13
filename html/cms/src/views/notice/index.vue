@@ -50,25 +50,73 @@
         border
         style="width: 100%; min-height: 400px;"
       >
-        <div v-for="column in columns" :key="column.name">
-          <el-table-column
-            v-if="column.render"
-            :label="column.label"
-            :width="column.width"
-            :fixed="column.fixed"
-            align="center">
-            <template slot-scope="scope">
-              <div>{{ options[column.name + 'Options'][scope.row[column.name]] }}</div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            v-else
-            :prop="column.name"
-            :width="column.width"
-            :label="column.label"
-            :fixed="column.fixed"
-            align="center"/>
-        </div>
+        <el-table-column
+          prop="index"
+          label="序列"
+          width="100"
+          fixed
+          align="center"/>
+        <el-table-column
+          prop="noticeTitle"
+          label="公告标题"
+          width="180"
+          fixed
+          align="center"/>
+        <el-table-column
+          prop="noticeDetails"
+          label="公告内容"
+          width="250"
+          align="center">
+          <template slot-scope="scope">
+            <div v-html="scope.row.noticeDetails"/>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="startTime"
+          label="起止时间"
+          width="120"
+          align="center"/>
+        <el-table-column
+          prop="publishName"
+          label="发布人"
+          align="center"/>
+        <el-table-column
+          prop="createdTime"
+          label="发布时间"
+          width="160"
+          align="center"/>
+        <el-table-column
+          prop="homePopup"
+          label="是否首页弹出"
+          align="center">
+          <template slot-scope="scope">
+            <div>{{ options.homePopupOptions[scope.row.homePopup] }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="homeShow"
+          label="是否首页展示"
+          align="center">
+          <template slot-scope="scope">
+            <div>{{ options.homeShowOptions[scope.row.homeShow] }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="sortField"
+          label="排序"
+          align="center"/>
+        <el-table-column
+          prop="platformName"
+          label="平台"
+          align="center"/>
+        <el-table-column
+          prop="noticeStatus"
+          label="状态"
+          align="center">
+          <template slot-scope="scope">
+            <div>{{ options.noticeStatusOptions[scope.row.noticeStatus] }}</div>
+          </template>
+        </el-table-column>
         <el-table-column
           label="操作"
           width="200"

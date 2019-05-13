@@ -85,12 +85,12 @@ public class NoticeManageServiceImpl implements NoticeManageService {
         //3.基本信息入库
         i =  noticeInfoMapper.insertSelective(info);
         //4.保存公告内容(详情)
-        if(StringUtils.isNotBlank(param.getNoticeContent())) {
+        if(StringUtils.isNotBlank(param.getNoticeDetails())) {
 
                 TbNoticeDetails details = new TbNoticeDetails();
                 details.setNoticeId(info.getId());
                 details.setId((info.getId()));
-                details.setNoticeDetails(param.getNoticeContent());
+                details.setNoticeDetails(param.getNoticeDetails());
                 noticeDetailsMapper.insert(details);
         }
             }catch (ParseException e){
@@ -134,12 +134,12 @@ public class NoticeManageServiceImpl implements NoticeManageService {
             //3.更新基本信息入库
             i =  noticeInfoMapper.updateByPrimaryKeySelective(info);
             //4.更新公告内容(详情)
-            if(StringUtils.isNotBlank(param.getNoticeContent())) {
+            if(StringUtils.isNotBlank(param.getNoticeDetails())) {
 
                 TbNoticeDetails details = new TbNoticeDetails();
                 details.setId(info.getId());
                 details.setNoticeId(info.getId());
-                details.setNoticeDetails(param.getNoticeContent());
+                details.setNoticeDetails(param.getNoticeDetails());
                 noticeDetailsMapper.updateByPrimaryKeySelective(details);
             }
         }catch (ParseException e){

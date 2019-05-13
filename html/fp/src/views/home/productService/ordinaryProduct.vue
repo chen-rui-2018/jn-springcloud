@@ -2,18 +2,18 @@
   <div class="ordinaryProduct"  v-loading="loading">
     <div class="ordinary_title">
       <div>常规服务产品</div>
-      <div @click="goputaway('')">常规产品上架</div>
+      <div @click="goputaway()">常规产品上架</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
         <div></div>
         <el-input placeholder="请输入内容" v-model="sendData.keyWords">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button slot="append" icon="el-icon-search" @click="handlesearch"></el-button>
         </el-input>
       </div>
       <div class="ordinary_table">
         <el-table :data="orgProductList" stripe border :header-cell-style="{background:'#f8f8f8',color:'#666666'}" style="width: 100%">
-          <el-table-column prop="productName" label="产品名称" align="center"> </el-table-column>
+          <el-table-column prop="productName" label="产品名称" align="center" width="120"> </el-table-column>
           <el-table-column prop="orgName" label="服务机构" align="center"> </el-table-column>
           <el-table-column prop="signoryName" label="业务领域" align="center"> </el-table-column>
           <el-table-column prop="advisorName" label="服务顾问" align="center"> </el-table-column>
@@ -28,13 +28,13 @@
               <span style="margin-left: 10px">{{ scope.row.status|approvestatus }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" width="180" >
+          <el-table-column label="操作" align="center" width="140">
             <template slot-scope="scope">
               <div class="ordinarybth" >
-                <span v-show="scope.row.status!='1'" @click="goputaway(scope.row.productId)">编辑</span>
-                <span>详情</span>
+                <span v-if="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'&&businessType!='technology_finance'" @click="goEdit(scope.row.productId)">编辑</span>
+                <span @click="goDetail(scope.row.productId)">详情</span>
                 <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'"  @click="handleshelf('-1',scope.row.productId)">下架</span>
-                <span v-else @click="handleshelf('1',scope.row.productId)">上架</span>
+                <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status!='1'" @click="handleshelf('1',scope.row.productId)">上架</span>
               </div>
             </template>
           </el-table-column>
@@ -63,14 +63,14 @@ export default {
       total:0,
       sendData:{
         keyWords:'',
-        orgId:'',
+        orgId:'',//285bfb89580a422ea927200f5d7accc4,cbe0d8ba94844a3a8f7b44822cfc7382 非
         page:1,
         productStatus:'',
         productType:0,
         rows:8
       },
       orgProductList:[],
-      territory:0,
+      businessType:""
     }
   },
   filters: {
@@ -93,6 +93,7 @@ export default {
   },
   mounted () {
     this.getOrgId()
+    // this.getOrgProductList()
   },
   methods: {
     // 获取当前登录id
@@ -103,10 +104,24 @@ export default {
       data: { },
       callback: function(res) {
         if (res.code == "0000") {
-          _this.sendData.orgId= res.data.id
+          _this.sendData.orgId= res.data.affiliateCode
           _this.$nextTick(()=>{
             _this.getOrgProductList()
+            _this.getType()
             })
+          }
+        }
+      })
+    },
+    getType(){
+      let _this = this;
+      this.api.get({
+      url: "getActivityDetailsFm",
+      data: {orgId:this.sendData.orgId},
+      callback: function(res) {
+        if (res.code == "0000") {
+            // console.log(res)
+          _this.businessType= res.data.businessType
           }
         }
       })
@@ -119,7 +134,7 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-          console.log(res)
+          // console.log(res)
           _this.loading=false
           _this.orgProductList= res.data.rows
           _this.total=res.data.total
@@ -128,14 +143,20 @@ export default {
       })
     },
     //去新增
-    goputaway(productId){
+    goputaway(){
       //territory为0是科技金融，为1是非科技金融
-      // console.log(productId)
-      if(this.territory===0){
-        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:0,productId:productId}})
-      }else if(territory===1){
-        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:1,productId:productId}})
-      }
+        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId}})
+     /*  else if(this.territory===1){
+        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:1}})
+      } */
+    },
+    // 去编辑
+    goEdit(productId){
+        this.$router.push({path:'/servicemarket/product/productService/ordinaryproductEdit',query:{orgid:this.sendData.orgId,productId:productId}})
+    },
+    //去详情
+    goDetail(productId){
+      this.$router.push({path:'/servicemarket/product/productService/ordinaryproductDetail',query:{orgid:this.sendData.orgId,productId:productId}})
     },
     // 下架
     handleshelf(status,productId){
@@ -165,6 +186,10 @@ export default {
       this.sendData.page=val
       this.getOrgProductList()
     },
+    //搜索
+    handlesearch(){
+      this.getOrgProductList()
+    }
   }
 }
 </script>
@@ -194,6 +219,8 @@ export default {
       margin-top: 14px;
       background-color: #fff;
       padding: 17px;
+      border-radius: 5px;
+      
       // 输入框
       .search{
         display: flex;
@@ -254,7 +281,7 @@ export default {
           border: 1px solid #eee;
         }
         .el-pagination.is-background .el-pager li:not(.disabled):hover{
-          color:#fff;
+          color:#000;
         }
         .el-pagination.is-background .el-pager li:not(.disabled).active{
           background-color: #00a041;

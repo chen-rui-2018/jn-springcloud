@@ -16,12 +16,12 @@
         <el-table :data="recruitmentTable" stripe border :header-cell-style="{background:'#f8f8f8',color:'#666666'}" style="width: 100%">
           <el-table-column prop="account" label="姓名" align="center"> </el-table-column>
           <el-table-column prop="phone" label="联系手机" align="center"> </el-table-column>
-          <el-table-column prop="email" label="联系邮箱" align="center"  min-width="150"> </el-table-column>
+          <el-table-column prop="email" label="联系邮箱" align="center"  width="150"> </el-table-column>
           <el-table-column prop="graduatedSchool" label="毕业学校" align="center"> </el-table-column>
           <el-table-column prop="education" label="学历" align="center"> </el-table-column>
           <el-table-column prop="position" label="担任职务" align="center" > </el-table-column>
           <el-table-column prop="orgIdentity" label="机构身份" align="center"> </el-table-column>
-          <el-table-column prop="entryDate" label="入驻日期" align="center" min-width="100"> </el-table-column>
+          <el-table-column prop="entryDate" label="入驻日期" align="center" width="100"> </el-table-column>
           <el-table-column label="操作" align="center" width='120'  >
             <template slot-scope="scope">
               <el-button

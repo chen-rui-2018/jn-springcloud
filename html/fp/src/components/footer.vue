@@ -2,7 +2,7 @@
   <div class="footer">
     <div class="container">
       <div class="footer1 clearfix">
-        <div class="footLeft">
+        <div class="footLeft clearfix">
           <div class="help">
             <h5>友情链接</h5>
             <div class="line"></div>
@@ -24,7 +24,7 @@
               </li>
             </ul>
           </div>
-          <div class="help">
+          <div class="help help1">
             <!-- <h5>帮助</h5> -->
             <!-- <div class="line"></div> -->
             <ul>
@@ -45,7 +45,7 @@
               </li>
             </ul>
           </div>
-          <div class="help">
+          <div class="help help1">
             <ul>
               <li>
                 <a href="http://www.jiangsudoc.gov.cn/" target="_blank">江苏省商务厅</a>
@@ -64,7 +64,7 @@
               </li>
             </ul>
           </div>
-          <div class="help">
+          <div class="help help1">
             <ul>
               <li>
                 <a href="http://www.njdpc.gov.cn/" target="_blank">南京市发展和改革委员会</a>
@@ -154,7 +154,8 @@ export default {
         float: left;
         .help {
           margin-right: 50px;
-          display: inline-block;
+          // display: inline-block;
+          float: left;
           h5 {
             font-size: 14px;
           }
@@ -174,6 +175,9 @@ export default {
               }
             }
           }
+        }
+        .help1{
+          margin-top: 45px;
         }
         .attention {
           display: inline-block;

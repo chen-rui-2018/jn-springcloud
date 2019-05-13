@@ -1,6 +1,7 @@
 package com.jn.enterprise.technologyfinancial.investors.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
 
@@ -41,7 +42,7 @@ public interface InvestorService {
      * @param investorAccount           投资人账号
      * @return
      */
-    int addInvestorInfo(InvestorAuthenticateParam investorAuthenticateParam,String investorAccount);
+    IBPSResult addInvestorInfo(InvestorAuthenticateParam investorAuthenticateParam, String investorAccount);
 
     /**
      * 查询投资人主投领域

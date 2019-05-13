@@ -11,7 +11,13 @@
         from
          tb_message_list t
         WHERE t.record_status =1
-        AND t.message_one_sort = #{messageTowTort}
+        AND t.message_one_sort = #{messageOneTort}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTowTort)">
+            AND t.message_tow_sort = #{messageTowTort}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isRead)">
+            AND t.is_read = #{isRead}
+        </if>
         AND t.message_recipient = #{account}
         GROUP BY t.message_tow_sort
     </select>
@@ -63,7 +69,7 @@
 
 
     <!--添加消息-->
-    <insert id="addMessage" parameterType="com.jn.park.message.model.addMessageModel">
+    <insert id="addMessage" parameterType="com.jn.park.message.model.AddMessageModel">
         insert into tb_message_list (
             id,
             message_title,
@@ -79,15 +85,15 @@
             )
             values(
             #{id},
-            #{messageTitle},
-            #{messageContent},
-            #{messageConnectName},
-            #{messageConnect},
-            #{messageRecipien},
-            #{messageSender},
-            #{messageOneSort},
-            #{messageTowSort},
-            #{creatorAccount},
+            #{messageTitle,jdbcType=VARCHAR},
+            #{messageContent,jdbcType=VARCHAR},
+            #{messageConnectName,jdbcType=VARCHAR},
+            #{messageConnect,jdbcType=VARCHAR},
+            #{messageRecipien,jdbcType=VARCHAR},
+            #{messageSender,jdbcType=VARCHAR},
+            #{messageOneSort,jdbcType=VARCHAR},
+            #{messageTowSort,jdbcType=VARCHAR},
+            #{creatorAccount,jdbcType=VARCHAR},
             SYSDATE()
             )
 

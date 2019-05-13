@@ -114,4 +114,6 @@ public class AdvisorEditController extends BaseController {
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount, ApprovalStatusEnum.APPROVAL.getValue());
         return  new Result(advisorDetailsVo);
     }
+
+   //todo:顾问认证页面提交审批，修改状态（未反馈》》待审批）为待审批
 }

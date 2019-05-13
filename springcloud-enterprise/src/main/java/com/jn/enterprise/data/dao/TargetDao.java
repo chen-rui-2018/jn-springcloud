@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author： yangh
@@ -65,7 +66,7 @@ public interface TargetDao {
     /**
      * 催报，未上报的数据
      */
-    void updateCalling(@Param("taskBatch") String taskBatch,@Param("modelId") String modelId,@Param("fileType") String fileType);
+    void updateCalling(@Param("taskBatch") String taskBatch,@Param("fillId") String fillId,@Param("fileType") String fileType);
 
     /**
      * 企业统计数据查询
@@ -183,7 +184,15 @@ public interface TargetDao {
     List<TbDataReportingSnapshotTargetGroup> getTargetGroupByFillId (@Param("fillId") String fillId);
 
 
+/**
+ *   数据统计--导出模块
+ *   获取数据
+ */
 
+   // List<CompanyTree> getExcel(Map map);
+
+
+List<CompanyTree> getExcel (@Param("taskbatch") String taskbatch,@Param("modelid") String modelid);
 
     /**
      * 检测本次任务中是否存在缴纳税收总额字段

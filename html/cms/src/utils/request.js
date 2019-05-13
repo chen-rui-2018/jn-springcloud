@@ -1,33 +1,19 @@
 import axios from 'axios'
-// import { Message } from 'element-ui'
 import $ from 'jquery'
-import { getToken, setToken } from '@/utils/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.BASE_API, // api 的 base_url
   timeout: 1000 // request timeout
 })
-const deleteCookie = function(key) { // 删除cookie方法
-  var date = new Date()
-  date.setTime(date.getTime() - 10000)
-  document.cookie = key + '=v; expires =' + date.toGMTString()
-}
+
 // request interceptor
 service.interceptors.request.use(
   config => {
     // Do something before request is sent
-
-    console.log('================>getToken：' + getToken() + '<1>' + !getToken())
+    // console.log('================>getToken：' + getToken() + '<1>' + !getToken())
     if (!getToken()) {
-      /* axios.post('http://112.94.22.222:8000/springcloud-app-system/authLogin', '').then(res => {
-        if (res.data.code === '0000') {
-          if (res.data.data !== null) {
-            console.log('================>authLogin请求返回：' + res.data.data)
-            setToken(res.data.data)
-          }
-        }
-      })*/
       $.ajax({
         url: 'http://112.94.22.222:8000/springcloud-app-system/authLogin',
         type: 'POST',
@@ -38,10 +24,10 @@ service.interceptors.request.use(
         beforeSend: function(xhr) {
         },
         success: function(data, textStatus, jqXHR) {
-          console.log('================>authLogin请求返回data：' + data)
+          // console.log('================>authLogin请求返回data：' + data)
           if (data.code === '0000') {
             if (data.data !== null) {
-              console.log('================>authLogin请求返回：' + data.data)
+              // console.log('================>authLogin请求返回：' + data.data)
               setToken(data.data)
             }
           }
@@ -52,13 +38,13 @@ service.interceptors.request.use(
         }
       })
     }
-    console.log('================>getToken：' + getToken() + '<2>' + !getToken())
+    // console.log('================>getToken：' + getToken() + '<2>' + !getToken())
     if (getToken() != null) {
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       config.headers['token'] = getToken()
-      console.log('================>请求带token：' + getToken())
+      // console.log('================>请求带token：' + getToken())
     } else {
-      console.log('================>请求不带token：' + getToken())
+      // console.log('================>请求不带token：' + getToken())
     }
     return config
   },
@@ -68,17 +54,18 @@ service.interceptors.request.use(
     Promise.reject(error)
   }
 )
+
 service.interceptors.response.use(response => {
   const res = response.data
-  console.log('================>请求返回code：' + res.code)
+  // console.log('================>请求返回code：' + res.code)
   if (res.code === 'index') {
-    deleteCookie('Admin-Token')
+    removeToken()
     location.href = 'http://112.94.22.222:2384/ibps/logout.htm'
   } else {
     return response
   }
 }, error => {
-  deleteCookie('Admin-Token')
+  removeToken()
   console.log('请重新登录：' + error)
   location.href = 'http://112.94.22.222:2384/ibps/logout.htm'
   return Promise.reject(error)

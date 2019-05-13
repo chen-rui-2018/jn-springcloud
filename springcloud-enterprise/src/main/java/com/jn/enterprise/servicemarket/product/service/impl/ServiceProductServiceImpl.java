@@ -62,14 +62,16 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String addServiceProduct(ServiceContent content, String account,String templateId) {
-        //服务产品类型 0 : 常规服务产品 / 1:特色服务产品
-        String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode();
+
+
         //服务产品状态 -1(无效/下架),0(待审核),1(上架/有效/审核通过).2(审核不通过)
         String approvalStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
-        String effectiveStatus = ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode();
+        String status = ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode();
+        // 如果为机构上架(新增)产品需要进行审批,
+        if(StringUtils.isNotBlank(content.getOrgId())){
+            status = approvalStatus;
+        }
 
-        // 如果为特色产品则需要进行审批,
-        String status = content.getProductType().equals(featureType) ?approvalStatus:effectiveStatus;
         //数据记录状态 1 有效 ---- 0 无效/删除
         Byte recordStatus =  new Byte(ProductConstantEnum.RECORD_STATUS_EFFECTIVE.getCode());
 
@@ -97,6 +99,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         tbServiceProduct.setCreatorAccount(account);
         tbServiceProduct.setStatus(status);
         tbServiceProduct.setRecordStatus(recordStatus);
+        tbServiceProduct.setProductDetails(content.getProductDetails());
         //设置机构名称
         if (StringUtils.isNotBlank(content.getOrgId())){
             TbServiceOrg org= tbServiceOrgMapper.selectByPrimaryKey(content.getOrgId());
@@ -106,18 +109,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         }
         //保存服务产品的基本信息
         tbServiceProductMapper.insertSelective(tbServiceProduct);
-        //服务产品描述不为空则 插入详情;
-        if (StringUtils.isNotBlank(content.getProductDetails())) {
-            TbServiceDetails details = new TbServiceDetails();
-            details.setProductId(content.getProductId());
-            try{
-                details.setServiceDetails(content.getProductDetails().getBytes("UTF-8"));
-            }catch(UnsupportedEncodingException e){
-                e.printStackTrace();
-                logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
-            }
-            tbServiceDetailsMapper.insertSelective(details);
-        }
+
         //保存顾问和服务间关系
         if(StringUtils.isNotBlank(content.getAdvisorAccount())){
             addAdvisor(content.getAdvisorAccount(),content.getProductId());
@@ -178,7 +170,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         if(detail!=null){
             ServiceContent content= detail.getContent();
             if (content!=null){
-                 content.setProductDetails(checkServiceDetails(content.getServiceDetails()));
+                 content.setProductDetails(content.getServiceDetails());
                  content.setServiceDetails(null);
                  content.setServiceDetails(null);
                  detail.setContent(content);
@@ -213,7 +205,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void productShelf(ProductShelfOperation operation , String account) {
-        productDao.productShelf(operation.getProductId(),operation.getStatus(),account);
+        //如果进行上架操作,则需要进行审核,修改状态为待审核
+        String productStatus = operation.getStatus();
+        if(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode().equals(productStatus)){
+            productStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
+        }
+        productDao.productShelf(operation.getProductId(),productStatus,account);
     }
 
 
@@ -254,19 +251,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         BeanUtils.copyProperties(content,product);
         product.setModifierAccount(account);
         product.setModifiedTime(new Date());
+        product.setProductDetails(content.getProductDetails());
         tbServiceProductMapper.updateByPrimaryKeySelective(product);
-        if (StringUtils.isNotBlank(content.getProductDetails())){
-            TbServiceDetailsCriteria criteria = new TbServiceDetailsCriteria();
-            criteria.createCriteria().andProductIdEqualTo(content.getProductId());
-            TbServiceDetails details = new TbServiceDetails();
-            try{
-                details.setServiceDetails(content.getProductDetails().getBytes("UTF-8"));
-            }catch(UnsupportedEncodingException e){
-                e.printStackTrace();
-                logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
-            }
-            tbServiceDetailsMapper.updateByExample(details,criteria);
-        }
+
     }
     @ServiceLog(doAction = "服务超市首页,热门服务产品列表")
     @Override
@@ -288,7 +275,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             return null;
         }
         //产品详情
-        info.setProductDetails(checkServiceDetails(info.getServiceDetails()));
+        info.setProductDetails(info.getServiceDetails());
         info.setServiceDetails(null);
         ProductQueryConditions conditions = new ProductQueryConditions();
         conditions.setSignoryId(info.getSignoryId());
@@ -347,7 +334,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public WebServiceProductInfo findShelfProductInfo(String productId)  {
         WebServiceProductInfo data =   productDao.findShelfProductInfo(productId);
-        data.setProductDetails(checkServiceDetails(data.getServiceDetails()));
+        data.setProductDetails(data.getServiceDetails());
         data.setServiceDetails(null);
         return data;
     }
@@ -378,13 +365,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFeatureProduct(OrgUpdateFeatureProduct content, String account) {
-       //修改后需要进行审核
-        String status = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
+
         TbServiceProduct tbServiceProduct = new TbServiceProduct();
         BeanUtils.copyProperties(content,tbServiceProduct);
         tbServiceProduct.setModifierAccount(account);
+        tbServiceProduct.setProductDetails(content.getProductDetails());
         tbServiceProduct.setModifiedTime(new Date());
-        tbServiceProduct.setStatus(status);
         if (content.getReferPrice() != null) {
             checkReferPrice(content.getReferPrice());
         }
@@ -393,6 +379,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         if(StringUtils.isNotBlank(content.getAdvisorAccount())){
             addAdvisor(content.getAdvisorAccount(),content.getProductId());
         }
+
     }
     @ServiceLog(doAction = "顾问-服务产品列表")
     @Override
@@ -426,7 +413,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public UpdateCommonProductShow modifyCommonServiceShow(String productId) {
         UpdateCommonProductShow show = productDao.modifyCommonServiceShow(productId);
-        show.setProductDetails(checkServiceDetails(show.getServiceDetails()));
+        show.setProductDetails(show.getServiceDetails());
         show.setServiceDetails(null);
         return  show;
     }
@@ -512,7 +499,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         String [] accounts = account.split(",");
         List<TbServiceAndAdvisor> advisorList = new ArrayList<>();
         for(String advisorAccount : accounts){
+            String uuid= UUID.randomUUID().toString().replaceAll("-","");
             TbServiceAndAdvisor advisor = new TbServiceAndAdvisor();
+            advisor.setId(uuid);
             advisor.setProductId(productId);
             advisor.setAdvisorAccount(advisorAccount);
             advisorList.add(advisor);
@@ -520,21 +509,5 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         advisorDao.addServiceAdvisor(advisorList);
     }
 
-    /**
-     * 产品详情转换
-     * @param serviceDetails
-     * @return
-     */
-     private String  checkServiceDetails(byte [] serviceDetails){
-        String productDetails =null;
-         if(serviceDetails != null) {
-             try {
-              productDetails = new String(serviceDetails, "UTF-8");
-             } catch (UnsupportedEncodingException e) {
-                 e.printStackTrace();
-                 logger.info("服务产品详情描述,不支持的字符集" + e.getMessage());
-             }
-         }
-        return productDetails;
-    }
+
 }

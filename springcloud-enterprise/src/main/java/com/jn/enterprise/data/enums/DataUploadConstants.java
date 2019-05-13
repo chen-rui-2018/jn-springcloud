@@ -145,4 +145,29 @@ public class DataUploadConstants {
      */
     public final static String WARNING_BY_SMSTEXT="0";
 
+    /**
+     *是否必填
+     */
+    public final static String  REQUIRED="1";
+
+    /**
+     *模板状态
+     */
+    public final static String  MODEL_STATUS_VALID="0";
+
+    /**
+     * 是否为科技园模板
+     */
+    public final static String  IS_SCIENT_MODEL="1";
+
+    /**
+     * 是否为‘缴纳税收总额’
+     */
+    public final static String  IS_TAXI="缴纳税收总额";
+
+    /**
+     * 是否为‘纳税人名称’
+     */
+    public final static String IS_TAXI_PERSON_COLUMN="纳税人名称";
+
 }

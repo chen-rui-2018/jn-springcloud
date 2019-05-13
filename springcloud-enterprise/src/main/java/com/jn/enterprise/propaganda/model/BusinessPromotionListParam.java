@@ -16,14 +16,14 @@ import java.io.Serializable;
  */
 @ApiModel(value = "BusinessPromotionListParam", description = "企业宣传查询列表入参")
 public class BusinessPromotionListParam extends Page implements Serializable {
-    @ApiModelProperty(value = "宣传类型",example = "xxx123")
+    @ApiModelProperty(value = "宣传类型",example = "business_promotion")
     private String propagandaType;
     @ApiModelProperty(value = "数据状态（0：失效  1：有效  不传查询全部）",example = "1")
     @Pattern(regexp = "^[01]$", message = "{^[01]$:'默认值只允许为0,1'}")
     private String status;
     @ApiModelProperty(value = "搜索内容(宣传产品名称模糊搜索))",example = "xxx产品")
     private String searchContent;
-    @ApiModelProperty(value = "审批状态（0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)），默认查询未审批数据",required = true,example = "0")
+    @ApiModelProperty(value = "审批状态（0：未审批  1：审批中   2：审批通过   3：审批不通过，4：未付款  5：待发布  6：已发布)），不传查询全部",example = "0")
     @Pattern(regexp = "^[0-9]$",message = "approvalStatus:只能输入0-9的数字")
     private String approvalStatus;
     @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")

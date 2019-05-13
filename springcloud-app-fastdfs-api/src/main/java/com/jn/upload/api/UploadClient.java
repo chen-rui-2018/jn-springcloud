@@ -27,9 +27,11 @@ public interface UploadClient {
      * 文件上传
      * @param file  文件
      * @param token 是否需要token下载
+     * @param fileGroupId 文件组id
      * @return  返回一个http可访问的路径地址
      */
     @RequestMapping(value = "/api/uploadFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.POST)
     Result<String> uploadFile(@RequestPart("file") MultipartFile file,
-                              @RequestParam("token") Boolean token) throws IOException;
+                              @RequestParam("token") Boolean token,
+                              @RequestParam("fileGroupId") String fileGroupId) throws IOException;
 }

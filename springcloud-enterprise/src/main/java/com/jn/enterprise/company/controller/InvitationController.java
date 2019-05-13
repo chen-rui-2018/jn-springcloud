@@ -1,6 +1,7 @@
 package com.jn.enterprise.company.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
@@ -40,9 +41,6 @@ import java.util.List;
 public class InvitationController extends BaseController {
 
     @Autowired
-    private CompanyService companyService;
-
-    @Autowired
     private StaffService staffService;
 
     @ControllerLog(doAction = "邀请列表")
@@ -50,30 +48,19 @@ public class InvitationController extends BaseController {
     @RequestMapping(value = "/getInviteStaffList",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/StaffController/getInviteStaffList")
     public Result<PaginationData<List<StaffListVO>>> getInviteStaffList(@Validated StaffInviteParam staffInviteParam){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null){
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(),CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
-        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        Assert.notNull(company, CompanyExceptionEnum.USER_IS_NOT_COMPANY_ADMIN.getMessage());
+        User user = checkUserValid();
         StaffListParam staffListParam = new StaffListParam();
         BeanUtils.copyProperties(staffInviteParam, staffListParam);
-        return new Result(staffService.getInviteStaffList(staffListParam, company.getId()));
+        return new Result(staffService.getInviteStaffList(staffListParam, user.getAccount()));
     }
 
     @ControllerLog(doAction = "批量邀请员工")
     @ApiOperation(value = "批量邀请员工（pc/app-邀请员工）", notes = "企业管理员发送邀请")
     @RequestMapping(value = "/inviteStaff",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/inviteStaff")
-    public Result<Integer> inviteStaff(@Validated @NotNull @RequestBody @ApiParam(name="accounts", value = "受邀请账号数组", required = true, example = "['zhangsan','lisi']") String[] accounts){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null) {
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(), CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
-        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        Assert.notNull(company, CompanyExceptionEnum.USER_IS_NOT_COMPANY_ADMIN.getMessage());
-
-        Integer res = staffService.inviteStaff(accounts, company, user);
+    public Result<Integer> inviteStaff(String[] accounts){
+        User user = checkUserValid();
+        Integer res = staffService.inviteStaff(accounts, user);
         //TODO 调用消息推送
 
         return new Result(res);
@@ -83,29 +70,22 @@ public class InvitationController extends BaseController {
     @ApiOperation(value = "再次邀请员工（pc-再次邀请）", notes = "企业管理员再次发送邀请")
     @RequestMapping(value = "/inviteStaffAgain",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/inviteStaffAgain")
-    public Result<Integer> inviteStaffAgain(@Validated @NotNull @RequestBody @ApiParam(name="staffId", value = "员工ID", required = true) String staffId){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null) {
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(), CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
-        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        Assert.notNull(company, CompanyExceptionEnum.USER_IS_NOT_COMPANY_ADMIN.getMessage());
-
-        Integer res = staffService.inviteStaffAgain(staffId);
+    public Result<Integer> inviteStaffAgain(String staffId){
+        User user = checkUserValid();
+        Integer res = staffService.inviteStaffAgain(staffId, user.getAccount());
         //TODO 调用消息推送
 
         return new Result(res);
     }
 
     @ControllerLog(doAction = "接受邀请")
-    @ApiOperation(value = "接受邀请（pc/app-接受邀请）", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "接受邀请（pc/app-接受邀请）", notes = "返回数据响应条数，正常情况为1(account仅为测试字段，实际是当前用户)")
     @RequestMapping(value = "/acceptInvite",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/acceptInvite")
     public Result<Integer> acceptInvite(@Validated @RequestBody AcceptInviteParam acceptInviteParam){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null) {
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(), CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
+        User user = checkUserValid();
+        // TODO 打包上测试库前需设置为当前用户
+        //acceptInviteParam.setAccount(user.getAccount());
         return new Result(staffService.acceptInvite(acceptInviteParam));
     }
 
@@ -113,11 +93,8 @@ public class InvitationController extends BaseController {
     @ApiOperation(value = "拒绝邀请（pc/app-拒绝邀请）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/refuseInvite",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/refuseInvite")
-    public Result<Integer> refuseInvite(@Validated @NotNull @RequestBody @ApiParam(name="staffId", value = "员工ID", required = true) String staffId){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null) {
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(), CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
+    public Result<Integer> refuseInvite(String staffId){
+        checkUserValid();
         return new Result(staffService.refuseInvite(staffId));
     }
 
@@ -125,11 +102,20 @@ public class InvitationController extends BaseController {
     @ApiOperation(value = "待审核列表（app-待审核列表）", notes = "获取待审核列表[不支持分页查询]")
     @RequestMapping(value = "/getAuditStatus",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/InvitationController/getAuditStatus")
-    public Result<StaffAuditVO> getAuditStatus(@Validated @NotNull @RequestParam @ApiParam(name="account", value = "账号", required = true, example = "wangsong") String account){
+    public Result<StaffAuditVO> getAuditStatus(){
+        User user = checkUserValid();
+        return new Result(staffService.getAuditStatus(user.getAccount()));
+    }
+
+    /**
+     * 判断当前账号是否有效
+     * @return
+     */
+    public User checkUserValid() {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null) {
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(), CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
+        if(user == null){
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
         }
-        return new Result(staffService.getAuditStatus(account));
+        return user;
     }
 }

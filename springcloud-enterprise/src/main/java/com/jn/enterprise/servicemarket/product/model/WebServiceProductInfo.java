@@ -36,7 +36,7 @@ public class WebServiceProductInfo implements Serializable {
     @ApiModelProperty(value = "前台展示产品详情,产品内容")
     private String productDetails;
     @ApiModelProperty(value = "后台进行产品详情转换使用")
-    private byte[] serviceDetails;
+    private String serviceDetails;
     @ApiModelProperty(value = "交易数")
     private Integer transactionsNumber;
     @ApiModelProperty(value = "浏览数")
@@ -78,11 +78,11 @@ public class WebServiceProductInfo implements Serializable {
         this.featureNum = featureNum;
     }
 
-    public byte[] getServiceDetails() {
+    public String getServiceDetails() {
         return serviceDetails;
     }
 
-    public void setServiceDetails(byte[] serviceDetails) {
+    public void setServiceDetails(String serviceDetails) {
         this.serviceDetails = serviceDetails;
     }
 

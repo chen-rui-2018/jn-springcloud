@@ -59,6 +59,16 @@ public interface SysFileGroupFileMapper {
     List<String> getUserFilePermission(String userId, String fileUrl);
 
     /**
+     * 获取用户是否拥有该文件组的操作权限
+     *
+     * @param userId  用户ID
+     * @param fileGroupId 文件组ID
+     * @return
+     */
+    List<String> getUserFileGroupPermission(String userId, String fileGroupId);
+
+
+    /**
      * 根据文件id获取对应文件组名称
      *
      * @param fileId

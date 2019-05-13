@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.Assert;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -196,8 +198,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public boolean updateAffiliateInfo(UserAffiliateInfo userAffiliateInfo) {
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        List<String> updateAccountList = Arrays.asList(userAffiliateInfo.getAccountList());
-        example.createCriteria().andAccountIn(updateAccountList);
+        example.createCriteria().andAccountIn(userAffiliateInfo.getAccountList());
         TbUserPerson tbUserPerson=new TbUserPerson();
         tbUserPerson.setAffiliateCode(userAffiliateInfo.getAffiliateCode());
         tbUserPerson.setAffiliateName(userAffiliateInfo.getAffiliateName());
@@ -215,7 +216,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public boolean updateCompanyInfo(UserCompanyInfo userCompanyInfo) {
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        example.createCriteria().andAccountIn(Arrays.asList(userCompanyInfo.getAccountList()));
+        example.createCriteria().andAccountIn(userCompanyInfo.getAccountList());
         TbUserPerson tbUserPerson=new TbUserPerson();
         tbUserPerson.setCompanyCode(userCompanyInfo.getCompanyCode());
         tbUserPerson.setCompanyName(userCompanyInfo.getCompanyName());
@@ -398,6 +399,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             for (TbUserPerson userPerson : userPersonList) {
                 UserExtensionInfo userExtensionInfo = new UserExtensionInfo();
                 BeanUtils.copyProperties(userPerson, userExtensionInfo);
+                getUserHobbyAndJobs(userExtensionInfo);
                 resultList.add(userExtensionInfo);
             }
             return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
@@ -416,6 +418,16 @@ public class UserInfoServiceImpl implements UserInfoService {
         TbUserPerson tbUserPerson = new TbUserPerson();
         BeanUtils.copyProperties(user,tbUserPerson);
         BeanUtils.copyProperties(userInfoParam,tbUserPerson);
+
+        // 出生年月不为空时，判断日期格式
+        if (StringUtils.isNotEmpty(userInfoParam.getBirthday())) {
+            try {
+                tbUserPerson.setBirthday(DateUtils.parseDate(userInfoParam.getBirthday(),"yyyy-MM-dd"));
+            } catch (ParseException e) {
+                throw new JnSpringCloudException(UserExtensionExceptionEnum.BIRTHDAY_FORMAT_ERROR);
+            }
+        }
+
         int a;
         if(null == tbUserPeople || tbUserPeople.size() == 0){
             //新增

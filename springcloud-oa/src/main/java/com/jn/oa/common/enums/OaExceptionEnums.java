@@ -15,7 +15,8 @@ public enum OaExceptionEnums implements CodeAndMsg {
     UPDATEERR_NAME_EXIST("6000502", "修改失败,名称已存在"),
     UPDATEDATA_NOT_EXIST("6000503","修改失败,修改信息不存在"),
     ID_NOT_NULL("6000504","ID不能为空"),
-    TIMING_FAILURE("6000510","定时设置失败,请稍后再试")
+    TIMING_FAILURE("6000510","定时设置失败,请稍后再试"),
+    CALL_SERVICE_ERROR("6000101", "调用内部服务出现未知错误");
     ;
 
     private String code;

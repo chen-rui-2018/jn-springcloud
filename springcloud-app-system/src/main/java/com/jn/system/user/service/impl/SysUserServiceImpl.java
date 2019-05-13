@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.Assert;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -103,7 +104,7 @@ public class SysUserServiceImpl implements SysUserService {
         tbSysUser.setCreatedTime(new Date());
         tbSysUser.setCreatorAccount(user.getAccount());
         if (StringUtils.isBlank(tbSysUser.getPassword())) {
-            tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+            tbSysUser.setPassword( EncryptUtil.encryptSha256(RandomStringUtils.random(6, true, true)));
         }
         //添加用户信息
         tbSysUserMapper.insert(tbSysUser);
@@ -243,7 +244,7 @@ public class SysUserServiceImpl implements SysUserService {
         }
         //判断是否修改密码
         if (StringUtils.isNotBlank(sysUser.getPassword())) {
-            sysUser.setPassword(DigestUtils.md5Hex(sysUser.getPassword()));
+            sysUser.setPassword(EncryptUtil.encryptSha256(sysUser.getPassword()));
         }
         //修改用户信息
         TbSysUser tbSysUser = new TbSysUser();
@@ -513,6 +514,9 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         if (com.jn.common.util.StringUtils.isNotBlank(user.getAccount())) {
             criteria.andAccountEqualTo(user.getAccount());
+        }
+        if(StringUtils.isNotBlank(user.getId())){
+            criteria.andIdEqualTo(user.getId());
         }
         Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
         criteria.andRecordStatusNotEqualTo(recordStatus);

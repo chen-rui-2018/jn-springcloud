@@ -55,11 +55,20 @@ public interface DynamicService {
     PaginationData<List<DynamicWebShow>> findDynamicWebList(Page page, String account);
 
     /**
-     * 前台动态详情+评论列表
-     * @param dynamicId
+     * 获取当前用户的关注用户动态列表
+     * @param page
+     * @param account
      * @return
      */
-    DynamicWebDetailsVo  findDynamicWebDetails(String dynamicId);
+    PaginationData<List<DynamicWebShow>> findCareDynamicList(Page page,String account);
+
+    /**
+     * 前台动态详情+评论列表
+     * @param dynamicId
+     * @param account
+     * @return
+     */
+    DynamicWebDetailsVo  findDynamicWebDetails(String dynamicId,String account);
 
     /**
      * 动态评论列表查询
@@ -97,4 +106,12 @@ public interface DynamicService {
      * @return
      */
     PaginationData<List<DynamicWebShow>> findDynamicByAccount(CareDetailsQueryParam param,String currentAccount);
+
+    /**
+     * 根据动态id 返回动态评论列表+ 评论回复列表
+     * @param param
+     * @return
+     */
+    PaginationData<List<DynamicCommentReplyShow>> findDynamicCommentAndReplyList(DynamicCommentsParam param);
+
 }

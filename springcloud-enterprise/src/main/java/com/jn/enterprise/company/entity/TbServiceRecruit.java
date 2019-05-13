@@ -24,6 +24,8 @@ public class TbServiceRecruit implements Serializable {
 
     private Byte status;
 
+    private String approvalStatus;
+
     private Integer viewCount;
 
     private String creatorAccount;
@@ -118,6 +120,14 @@ public class TbServiceRecruit implements Serializable {
         this.status = status;
     }
 
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus == null ? null : approvalStatus.trim();
+    }
+
     public Integer getViewCount() {
         return viewCount;
     }
@@ -188,6 +198,7 @@ public class TbServiceRecruit implements Serializable {
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getDetails() == null ? other.getDetails() == null : this.getDetails().equals(other.getDetails()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
             && (this.getViewCount() == null ? other.getViewCount() == null : this.getViewCount().equals(other.getViewCount()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -210,6 +221,7 @@ public class TbServiceRecruit implements Serializable {
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getDetails() == null) ? 0 : getDetails().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
         result = prime * result + ((getViewCount() == null) ? 0 : getViewCount().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -235,6 +247,7 @@ public class TbServiceRecruit implements Serializable {
         sb.append(", type=").append(type);
         sb.append(", details=").append(details);
         sb.append(", status=").append(status);
+        sb.append(", approvalStatus=").append(approvalStatus);
         sb.append(", viewCount=").append(viewCount);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

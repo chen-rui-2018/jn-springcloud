@@ -27,9 +27,9 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  **/
-@Api(tags = "招商管理")
+@Api(tags = "招商管理(门户匿名)")
 @RestController
-@RequestMapping("/oa/businessAd")
+@RequestMapping("/guest/portal/businessAd")
 public class BusinessAdController extends BaseController {
 
     @Autowired

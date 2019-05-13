@@ -21,6 +21,8 @@ public enum PayBillEnum implements CodeAndMsg {
     PAY_METHOD_OFFLINE("11","支付方式：11线下"),
     REMIND_IS_NOT_CHECK("0","核对单状态 0未审核"),
     PAYMENT_CODE_TYPE_BILL("1","数据字典类型 1账单"),
+    PAYMENT_ORDER_IS_DELETE("0","订单已删除"),
+    PAYMENT_BILL_IS_DELETE("9","账单已删除"),
 
     ;
 

@@ -63,6 +63,9 @@ import java.util.Date;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifiedTime;
 
+    @ApiModelProperty(value="账户密码（备忘录）")
+    private String accountAndPassword;
+
     public String getId() {
         return id;
     }
@@ -165,5 +168,13 @@ import java.util.Date;
 
     public void setModifiedTime(Date modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    public String getAccountAndPassword() {
+        return accountAndPassword;
+    }
+
+    public void setAccountAndPassword(String accountAndPassword) {
+        this.accountAndPassword = accountAndPassword;
     }
 }

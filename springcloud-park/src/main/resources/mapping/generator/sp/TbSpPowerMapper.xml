@@ -18,6 +18,8 @@
     <result column="is_qinzhengfa" jdbcType="INTEGER" property="isQinzhengfa" />
     <result column="is_qubianban" jdbcType="INTEGER" property="isQubianban" />
     <result column="notes" jdbcType="VARCHAR" property="notes" />
+    <result column="index_order" jdbcType="INTEGER" property="indexOrder" />
+    <result column="hot_order" jdbcType="INTEGER" property="hotOrder" />
     <result column="record_status" jdbcType="INTEGER" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -84,8 +86,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, parent_id, parent_name, name, depart_id, depart_name, setting_basis, type, code, 
-    level, come_from, is_area, is_ningzhengfa, is_qinzhengfa, is_qubianban, notes, record_status, 
-    creator_account, created_time, modifier_account, modified_time
+    level, come_from, is_area, is_ningzhengfa, is_qinzhengfa, is_qubianban, notes, index_order, 
+    hot_order, record_status, creator_account, created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.sp.entity.TbSpPowerCriteria" resultMap="BaseResultMap">
     select
@@ -123,17 +125,17 @@
       setting_basis, type, code, 
       level, come_from, is_area, 
       is_ningzhengfa, is_qinzhengfa, is_qubianban, 
-      notes, record_status, creator_account, 
-      created_time, modifier_account, modified_time
-      )
+      notes, index_order, hot_order, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
     values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{parentName,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{departId,jdbcType=VARCHAR}, #{departName,jdbcType=VARCHAR}, 
       #{settingBasis,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{level,jdbcType=VARCHAR}, #{comeFrom,jdbcType=VARCHAR}, #{isArea,jdbcType=INTEGER}, 
       #{isNingzhengfa,jdbcType=INTEGER}, #{isQinzhengfa,jdbcType=INTEGER}, #{isQubianban,jdbcType=INTEGER}, 
-      #{notes,jdbcType=VARCHAR}, #{recordStatus,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+      #{notes,jdbcType=VARCHAR}, #{indexOrder,jdbcType=INTEGER}, #{hotOrder,jdbcType=INTEGER}, 
+      #{recordStatus,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.sp.entity.TbSpPower">
     insert into tb_sp_power
@@ -185,6 +187,12 @@
       </if>
       <if test="notes != null">
         notes,
+      </if>
+      <if test="indexOrder != null">
+        index_order,
+      </if>
+      <if test="hotOrder != null">
+        hot_order,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -250,6 +258,12 @@
       </if>
       <if test="notes != null">
         #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="indexOrder != null">
+        #{indexOrder,jdbcType=INTEGER},
+      </if>
+      <if test="hotOrder != null">
+        #{hotOrder,jdbcType=INTEGER},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=INTEGER},
@@ -325,6 +339,12 @@
       <if test="record.notes != null">
         notes = #{record.notes,jdbcType=VARCHAR},
       </if>
+      <if test="record.indexOrder != null">
+        index_order = #{record.indexOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.hotOrder != null">
+        hot_order = #{record.hotOrder,jdbcType=INTEGER},
+      </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=INTEGER},
       </if>
@@ -363,6 +383,8 @@
       is_qinzhengfa = #{record.isQinzhengfa,jdbcType=INTEGER},
       is_qubianban = #{record.isQubianban,jdbcType=INTEGER},
       notes = #{record.notes,jdbcType=VARCHAR},
+      index_order = #{record.indexOrder,jdbcType=INTEGER},
+      hot_order = #{record.hotOrder,jdbcType=INTEGER},
       record_status = #{record.recordStatus,jdbcType=INTEGER},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -420,6 +442,12 @@
       <if test="notes != null">
         notes = #{notes,jdbcType=VARCHAR},
       </if>
+      <if test="indexOrder != null">
+        index_order = #{indexOrder,jdbcType=INTEGER},
+      </if>
+      <if test="hotOrder != null">
+        hot_order = #{hotOrder,jdbcType=INTEGER},
+      </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=INTEGER},
       </if>
@@ -455,6 +483,8 @@
       is_qinzhengfa = #{isQinzhengfa,jdbcType=INTEGER},
       is_qubianban = #{isQubianban,jdbcType=INTEGER},
       notes = #{notes,jdbcType=VARCHAR},
+      index_order = #{indexOrder,jdbcType=INTEGER},
+      hot_order = #{hotOrder,jdbcType=INTEGER},
       record_status = #{recordStatus,jdbcType=INTEGER},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

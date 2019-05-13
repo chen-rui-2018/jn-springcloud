@@ -106,72 +106,72 @@ public class TbServiceProductCriteria {
         }
 
         public Criteria andProductIdIsNull() {
-            addCriterion("product_id is null");
+            addCriterion("product_id_ is null");
             return (Criteria) this;
         }
 
         public Criteria andProductIdIsNotNull() {
-            addCriterion("product_id is not null");
+            addCriterion("product_id_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andProductIdEqualTo(String value) {
-            addCriterion("product_id =", value, "productId");
+            addCriterion("product_id_ =", value, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdNotEqualTo(String value) {
-            addCriterion("product_id <>", value, "productId");
+            addCriterion("product_id_ <>", value, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdGreaterThan(String value) {
-            addCriterion("product_id >", value, "productId");
+            addCriterion("product_id_ >", value, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdGreaterThanOrEqualTo(String value) {
-            addCriterion("product_id >=", value, "productId");
+            addCriterion("product_id_ >=", value, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdLessThan(String value) {
-            addCriterion("product_id <", value, "productId");
+            addCriterion("product_id_ <", value, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdLessThanOrEqualTo(String value) {
-            addCriterion("product_id <=", value, "productId");
+            addCriterion("product_id_ <=", value, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdLike(String value) {
-            addCriterion("product_id like", value, "productId");
+            addCriterion("product_id_ like", value, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdNotLike(String value) {
-            addCriterion("product_id not like", value, "productId");
+            addCriterion("product_id_ not like", value, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdIn(List<String> values) {
-            addCriterion("product_id in", values, "productId");
+            addCriterion("product_id_ in", values, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdNotIn(List<String> values) {
-            addCriterion("product_id not in", values, "productId");
+            addCriterion("product_id_ not in", values, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdBetween(String value1, String value2) {
-            addCriterion("product_id between", value1, value2, "productId");
+            addCriterion("product_id_ between", value1, value2, "productId");
             return (Criteria) this;
         }
 
         public Criteria andProductIdNotBetween(String value1, String value2) {
-            addCriterion("product_id not between", value1, value2, "productId");
+            addCriterion("product_id_ not between", value1, value2, "productId");
             return (Criteria) this;
         }
 
@@ -312,6 +312,76 @@ public class TbServiceProductCriteria {
 
         public Criteria andProductNameNotBetween(String value1, String value2) {
             addCriterion("product_name not between", value1, value2, "productName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanIsNull() {
+            addCriterion("is_online_loan is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanIsNotNull() {
+            addCriterion("is_online_loan is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanEqualTo(String value) {
+            addCriterion("is_online_loan =", value, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanNotEqualTo(String value) {
+            addCriterion("is_online_loan <>", value, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanGreaterThan(String value) {
+            addCriterion("is_online_loan >", value, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanGreaterThanOrEqualTo(String value) {
+            addCriterion("is_online_loan >=", value, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanLessThan(String value) {
+            addCriterion("is_online_loan <", value, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanLessThanOrEqualTo(String value) {
+            addCriterion("is_online_loan <=", value, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanLike(String value) {
+            addCriterion("is_online_loan like", value, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanNotLike(String value) {
+            addCriterion("is_online_loan not like", value, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanIn(List<String> values) {
+            addCriterion("is_online_loan in", values, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanNotIn(List<String> values) {
+            addCriterion("is_online_loan not in", values, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanBetween(String value1, String value2) {
+            addCriterion("is_online_loan between", value1, value2, "isOnlineLoan");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOnlineLoanNotBetween(String value1, String value2) {
+            addCriterion("is_online_loan not between", value1, value2, "isOnlineLoan");
             return (Criteria) this;
         }
 
@@ -596,72 +666,72 @@ public class TbServiceProductCriteria {
         }
 
         public Criteria andOrgIdIsNull() {
-            addCriterion("org_id is null");
+            addCriterion("org_id_ is null");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdIsNotNull() {
-            addCriterion("org_id is not null");
+            addCriterion("org_id_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdEqualTo(String value) {
-            addCriterion("org_id =", value, "orgId");
+            addCriterion("org_id_ =", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdNotEqualTo(String value) {
-            addCriterion("org_id <>", value, "orgId");
+            addCriterion("org_id_ <>", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdGreaterThan(String value) {
-            addCriterion("org_id >", value, "orgId");
+            addCriterion("org_id_ >", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdGreaterThanOrEqualTo(String value) {
-            addCriterion("org_id >=", value, "orgId");
+            addCriterion("org_id_ >=", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdLessThan(String value) {
-            addCriterion("org_id <", value, "orgId");
+            addCriterion("org_id_ <", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdLessThanOrEqualTo(String value) {
-            addCriterion("org_id <=", value, "orgId");
+            addCriterion("org_id_ <=", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdLike(String value) {
-            addCriterion("org_id like", value, "orgId");
+            addCriterion("org_id_ like", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdNotLike(String value) {
-            addCriterion("org_id not like", value, "orgId");
+            addCriterion("org_id_ not like", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdIn(List<String> values) {
-            addCriterion("org_id in", values, "orgId");
+            addCriterion("org_id_ in", values, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdNotIn(List<String> values) {
-            addCriterion("org_id not in", values, "orgId");
+            addCriterion("org_id_ not in", values, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdBetween(String value1, String value2) {
-            addCriterion("org_id between", value1, value2, "orgId");
+            addCriterion("org_id_ between", value1, value2, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdNotBetween(String value1, String value2) {
-            addCriterion("org_id not between", value1, value2, "orgId");
+            addCriterion("org_id_ not between", value1, value2, "orgId");
             return (Criteria) this;
         }
 
@@ -1455,73 +1525,73 @@ public class TbServiceProductCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanIsNull() {
-            addCriterion("is_online_loan is null");
+        public Criteria andModifierAccountIsNull() {
+            addCriterion("modifier_account is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanIsNotNull() {
-            addCriterion("is_online_loan is not null");
+        public Criteria andModifierAccountIsNotNull() {
+            addCriterion("modifier_account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanEqualTo(String value) {
-            addCriterion("is_online_loan =", value, "isOnlineLoan");
+        public Criteria andModifierAccountEqualTo(String value) {
+            addCriterion("modifier_account =", value, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanNotEqualTo(String value) {
-            addCriterion("is_online_loan <>", value, "isOnlineLoan");
+        public Criteria andModifierAccountNotEqualTo(String value) {
+            addCriterion("modifier_account <>", value, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanGreaterThan(String value) {
-            addCriterion("is_online_loan >", value, "isOnlineLoan");
+        public Criteria andModifierAccountGreaterThan(String value) {
+            addCriterion("modifier_account >", value, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanGreaterThanOrEqualTo(String value) {
-            addCriterion("is_online_loan >=", value, "isOnlineLoan");
+        public Criteria andModifierAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("modifier_account >=", value, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanLessThan(String value) {
-            addCriterion("is_online_loan <", value, "isOnlineLoan");
+        public Criteria andModifierAccountLessThan(String value) {
+            addCriterion("modifier_account <", value, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanLessThanOrEqualTo(String value) {
-            addCriterion("is_online_loan <=", value, "isOnlineLoan");
+        public Criteria andModifierAccountLessThanOrEqualTo(String value) {
+            addCriterion("modifier_account <=", value, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanLike(String value) {
-            addCriterion("is_online_loan like", value, "isOnlineLoan");
+        public Criteria andModifierAccountLike(String value) {
+            addCriterion("modifier_account like", value, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanNotLike(String value) {
-            addCriterion("is_online_loan not like", value, "isOnlineLoan");
+        public Criteria andModifierAccountNotLike(String value) {
+            addCriterion("modifier_account not like", value, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanIn(List<String> values) {
-            addCriterion("is_online_loan in", values, "isOnlineLoan");
+        public Criteria andModifierAccountIn(List<String> values) {
+            addCriterion("modifier_account in", values, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanNotIn(List<String> values) {
-            addCriterion("is_online_loan not in", values, "isOnlineLoan");
+        public Criteria andModifierAccountNotIn(List<String> values) {
+            addCriterion("modifier_account not in", values, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanBetween(String value1, String value2) {
-            addCriterion("is_online_loan between", value1, value2, "isOnlineLoan");
+        public Criteria andModifierAccountBetween(String value1, String value2) {
+            addCriterion("modifier_account between", value1, value2, "modifierAccount");
             return (Criteria) this;
         }
 
-        public Criteria andIsOnlineLoanNotBetween(String value1, String value2) {
-            addCriterion("is_online_loan not between", value1, value2, "isOnlineLoan");
+        public Criteria andModifierAccountNotBetween(String value1, String value2) {
+            addCriterion("modifier_account not between", value1, value2, "modifierAccount");
             return (Criteria) this;
         }
 
@@ -2722,76 +2792,6 @@ public class TbServiceProductCriteria {
 
         public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountIsNull() {
-            addCriterion("modifier_account is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountIsNotNull() {
-            addCriterion("modifier_account is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountEqualTo(String value) {
-            addCriterion("modifier_account =", value, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountNotEqualTo(String value) {
-            addCriterion("modifier_account <>", value, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountGreaterThan(String value) {
-            addCriterion("modifier_account >", value, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("modifier_account >=", value, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountLessThan(String value) {
-            addCriterion("modifier_account <", value, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountLessThanOrEqualTo(String value) {
-            addCriterion("modifier_account <=", value, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountLike(String value) {
-            addCriterion("modifier_account like", value, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountNotLike(String value) {
-            addCriterion("modifier_account not like", value, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountIn(List<String> values) {
-            addCriterion("modifier_account in", values, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountNotIn(List<String> values) {
-            addCriterion("modifier_account not in", values, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountBetween(String value1, String value2) {
-            addCriterion("modifier_account between", value1, value2, "modifierAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifierAccountNotBetween(String value1, String value2) {
-            addCriterion("modifier_account not between", value1, value2, "modifierAccount");
             return (Criteria) this;
         }
 

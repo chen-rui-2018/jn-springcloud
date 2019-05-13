@@ -62,7 +62,7 @@ public class FinanceDocumentsController extends BaseController {
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/documents/findAll")
     public Result<PaginationData<List<FinanceDocumentsFindAllVo>>> findAll(@RequestBody FinanceDocumentsFindAllModel financeDocumentsFindAllModel){
-        //todo
+
         this.checkIsSomeYear(financeDocumentsFindAllModel.getStartTime(),financeDocumentsFindAllModel.getEndTime());
         PaginationData findAll=financeDocumentsService.findAll(financeDocumentsFindAllModel);
         return new Result(findAll);
@@ -76,7 +76,7 @@ public class FinanceDocumentsController extends BaseController {
     @GetMapping(value = "/getUserDepartment")
     @RequiresPermissions("/finance/documents/getUserDepartment")
     public Result<List<SysDepartmentPostVO>> getUserDepartment(){
-        //todo
+
         //部门信息
         List<SysDepartmentPostVO> sysDepartmentPostVO = getUser().getSysDepartmentPostVO();
         //保存要返回的結果

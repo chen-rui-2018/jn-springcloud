@@ -8,19 +8,17 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
+import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.common.dao.TbServiceCodeMapper;
 import com.jn.enterprise.common.entity.TbServiceCode;
 import com.jn.enterprise.common.entity.TbServiceCodeCriteria;
-import com.jn.enterprise.data.controller.DataModelController;
 import com.jn.enterprise.enums.BusinessPromotionExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.propaganda.dao.BusinessPromotionMapper;
+import com.jn.enterprise.propaganda.dao.TbPropagandaAreaInfoMapper;
 import com.jn.enterprise.propaganda.dao.TbPropagandaFeeRulesMapper;
 import com.jn.enterprise.propaganda.dao.TbPropagandaMapper;
-import com.jn.enterprise.propaganda.entity.TbPropaganda;
-import com.jn.enterprise.propaganda.entity.TbPropagandaCriteria;
-import com.jn.enterprise.propaganda.entity.TbPropagandaFeeRules;
-import com.jn.enterprise.propaganda.entity.TbPropagandaFeeRulesCriteria;
+import com.jn.enterprise.propaganda.entity.*;
 import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.propaganda.enums.PromotionAreaEnum;
 import com.jn.enterprise.propaganda.enums.PropagandaTypeEnum;
@@ -28,11 +26,13 @@ import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.paybill.api.PayBillClient;
 import com.jn.paybill.model.PaymentBillModel;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
+import org.apache.commons.collections4.list.UnmodifiableList;
 import org.apache.commons.lang.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +40,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * 用户中心--企业宣传
@@ -71,6 +70,9 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
 
     @Autowired
     private UserExtensionClient userExtensionClient;
+
+    @Autowired
+    private TbPropagandaAreaInfoMapper tbPropagandaAreaInfoMapper;
 
     @Autowired
     private TbServiceCodeMapper tbServiceCodeMapper;
@@ -104,6 +106,11 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
      * 宣传类型组名
      */
     private static final String PROPAGANDA_TYPE="propaganda_type";
+
+    /**
+     * 宣传区域组名
+     */
+    private static final String PROPAGANDA_AREA="propagandaArea";
 
     /**
      * 企业宣传列表查询
@@ -148,8 +155,15 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     private boolean isSuperAdmin(String loginAccount) {
         List<String> accountList=new ArrayList<>(16);
         accountList.add(loginAccount);
-        List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, "超级管理员");
-        return !roleInfoList.isEmpty();
+        String roleName="超级管理";
+        List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
+        if(roleInfoList.isEmpty()|| StringUtils.isBlank(roleInfoList.get(0).getRoleName())){
+            //没有查询到数据 返回false
+            return false;
+        }
+        //返回的数据没有角色或者角色不包含超级管理，返回false，否则返回true
+        return roleInfoList.get(0).getRoleName().contains(roleName);
+
     }
 
     /**
@@ -180,32 +194,37 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
 
     /**
      * 保存宣传信息
-     * @param businessPromotionDetailsParam
+     * @param bpd
      * @param loginAccount
      * @return
      */
     @ServiceLog(doAction = "保存宣传信息")
-    private int savePropagandaInfo(BusinessPromotionDetailsParam businessPromotionDetailsParam, String loginAccount) {
+    private int savePropagandaInfo(BusinessPromotionDetailsParam bpd, String loginAccount) {
         TbPropaganda tbPropaganda=new TbPropaganda();
-        BeanUtils.copyProperties(businessPromotionDetailsParam, tbPropaganda);
+        BeanUtils.copyProperties(bpd, tbPropaganda);
         //主键id
         tbPropaganda.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         //宣传编码
         tbPropaganda.setPropagandaCode(getPropagandaCode());
         //生效日期
-        tbPropaganda.setEffectiveDate(DateUtils.parseDate(businessPromotionDetailsParam.getEffectiveDate()));
+        Date now=DateUtils.parseDate(bpd.getEffectiveDate());
+        tbPropaganda.setEffectiveDate(now);
         //失效日期
-        tbPropaganda.setInvalidDate(DateUtils.parseDate(businessPromotionDetailsParam.getEffectiveDate()));
-        //状态
-        tbPropaganda.setStatus(INVALID);
+        tbPropaganda.setInvalidDate(getCurrentTimeSpecifiedDate(now, Integer.parseInt(bpd.getPropagandaTime())));
         //宣传费用
-        tbPropaganda.setPropagandaFee(Double.valueOf(businessPromotionDetailsParam.getPropagandaFee()));
+        tbPropaganda.setPropagandaFee(Double.valueOf(bpd.getPropagandaFee()));
         //服务机构
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(loginAccount);
         tbPropaganda.setOrgId(userExtension.getData().getAffiliateCode());
         tbPropaganda.setOrgName(userExtension.getData().getAffiliateName());
         //审批状态 (-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)
-        tbPropaganda.setApprovalStatus("-1");
+        tbPropaganda.setApprovalStatus("0");
+        //排序
+        tbPropaganda.setSort(1);
+        //是否付款 0:未付款   1：已付款
+        tbPropaganda.setIsPay("0");
+        //状态 1:有效/上架   0：失效/下架
+        tbPropaganda.setStatus(INVALID);
         //创建时间
         tbPropaganda.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //创建人
@@ -213,6 +232,19 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         //是否删除
         tbPropaganda.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
         return tbPropagandaMapper.insert(tbPropaganda);
+    }
+
+    /**
+     * 获取当前时间指定月份后的日期
+     * @param now  当前时间
+     * @param month 指定月份  month=6，表示当前日期6个月后的日期
+     * @return
+     */
+    private Date getCurrentTimeSpecifiedDate(Date now,int month) {
+        Calendar lastedDate=Calendar.getInstance();
+        lastedDate.setTime(now);
+        lastedDate.add(Calendar.MONTH, month);
+        return lastedDate.getTime();
     }
 
     /**
@@ -232,15 +264,6 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     private void checkBusinessPromotionData(BusinessPromotionDetailsParam bpd,String loginAccount) {
         //校验宣传类型
         checkPropagandaType(bpd, loginAccount);
-        //校验生效日期和失效日期
-        if(StringUtils.isNotBlank(bpd.getEffectiveDate()) && StringUtils.isNotBlank(bpd.getInvalidDate())){
-            int effectiveDate=Integer.parseInt(bpd.getEffectiveDate().replaceAll("-", ""));
-            int invalidDate=Integer.parseInt(bpd.getInvalidDate().replaceAll("-", ""));
-            if(effectiveDate>invalidDate){
-                logger.warn("校验发布宣传的参数,生效时间[{}]晚于失效时间[{}]",bpd.getEffectiveDate(),bpd.getInvalidDate());
-                throw new JnSpringCloudException(BusinessPromotionExceptionEnum.EFFECTIVE_MORE_THAN_INVALID);
-            }
-        }
         //校验宣传区域
         List<String> areaList=new ArrayList<>(16);
         areaList.add(PromotionAreaEnum.AREA_TOP.getCode());
@@ -254,14 +277,32 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         List<PropagandaFeeRulesShow> propagandaFeeRulesList = getPropagandaFeeRulesList();
         //宣传规则编码校验标志
         boolean feeCode=true;
-        //宣传费用校验标志
+        //基本宣传费用校验标志
         boolean feeValue=true;
+        //基本金额
         String propagandaFee="";
+        String totalAmount="";
+        //获取区域信息，得到区域金额
+        List<PropagandaAreaShow> propagandaAreaList = getPropagandaAreaList();
+        BigDecimal areaAmount=BigDecimal.valueOf(0.0);
+        for(PropagandaAreaShow propagandaAreaShow:propagandaAreaList){
+            if(StringUtils.equals(bpd.getPropagandaArea(),propagandaAreaShow.getPropagandaArea())){
+                areaAmount=new BigDecimal(propagandaAreaShow.getAreaAmount());
+                break;
+            }
+        }
         for (PropagandaFeeRulesShow pro:propagandaFeeRulesList) {
             if(StringUtils.equals(pro.getProFeeRuleCode(), bpd.getProFeeRuleCode())){
                 feeCode=false;
                 propagandaFee = pro.getPropagandaFee();
-                if(Double.valueOf(pro.getPropagandaFee())==Double.parseDouble(bpd.getPropagandaFee())){
+                //总金额 把基本金额转换为bigDecimal进行运算
+                BigDecimal totalFee = new BigDecimal(propagandaFee);
+                //宣传时间
+                BigDecimal selectTime=new BigDecimal(bpd.getPropagandaTime());
+                //总金额=基本金额*宣传时间+宣传区域金额
+                totalFee=totalFee.multiply(selectTime).add(areaAmount);
+                totalAmount=totalFee.toString();
+                if(Double.valueOf(bpd.getPropagandaFee())==Double.parseDouble(totalFee.toString())){
                     feeValue=false;
                 }
                 break;
@@ -272,8 +313,8 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR);
         }
         if(feeValue){
-            logger.warn("校验发布宣传的参数,传递的宣传费用[{}]与系统中当前费用规则[{}]对应的费用{{}}不匹配",bpd.getPropagandaFee(),bpd.getProFeeRuleCode(),propagandaFee);
-            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_ERROR);
+            logger.warn("校验发布宣传的参数,传递的宣传费用[{}]与系统计算前费用规则[{}]对应的费用{{}}不匹配",bpd.getPropagandaFee(),bpd.getProFeeRuleCode(),totalAmount);
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_NOT_RIGHT);
         }
     }
 
@@ -323,7 +364,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         example.createCriteria().andProFeeRuleCodeIsNotNull().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbPropagandaFeeRules> tbPropagandaFeeRulesList = tbPropagandaFeeRulesMapper.selectByExample(example);
         if(tbPropagandaFeeRulesList.isEmpty()){
-            logger.warn("获取宣传费用规则失败，系统中不传在宣传费用规则");
+            logger.warn("获取宣传费用规则失败，系统中不存在宣传费用规则");
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROMOTION_FEE_RULES_NOT_EXIST);
         }
         List<PropagandaFeeRulesShow> resultList=new ArrayList<>(16);
@@ -367,7 +408,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             List<String>accountList=new ArrayList<>();
             accountList.add(loginAccount);
             List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, "宣传");
-            if(roleInfoList.isEmpty()){
+            if(roleInfoList.isEmpty()|| StringUtils.isBlank(roleInfoList.get(0).getRoleName())){
                 logger.warn("获取宣传类型失败，当前用户[account:{}]没有企业宣传相关权限",loginAccount);
                 throw new JnSpringCloudException(BusinessPromotionExceptionEnum.ACCOUNT_CAN_NOT_ALLOW_PROPAGANDA);
             }
@@ -393,17 +434,18 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @ServiceLog(doAction = "撤销申请")
     @Override
     public int cancelApprove(String propagandaId, String loginAccount) {
-        //根据宣传id，审批状态为未付款（value="-1"）查询系统中是否有当前数据
+        //根据宣传id，审批状态为未付款（value="-1"）和未审批（value="0"）查询系统中是否有当前数据
+        List<String>statusList=Arrays.asList("-1","0");
         TbPropagandaCriteria example=new TbPropagandaCriteria();
-        example.createCriteria().andIdEqualTo(propagandaId).andApprovalStatusEqualTo("-1")
+        example.createCriteria().andIdEqualTo(propagandaId).andApprovalStatusIn(statusList)
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         long responseNum = tbPropagandaMapper.countByExample(example);
         if(responseNum==0){
-            logger.warn("撤销申请失败,系统中不存在id[{}],状态为有效，审批状态为未付款的数据",propagandaId);
+            logger.warn("撤销申请失败,系统中不存在id[{}],状态为有效，审批状态为未付款、未审批的数据",propagandaId);
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_INFO_NOT_EXIST);
         }
         TbPropaganda tbPropaganda=new TbPropaganda();
-        //删除当前数据
+        //逻辑删除当前数据
         tbPropaganda.setRecordStatus(Byte.parseByte(INVALID));
         //修改时间
         tbPropaganda.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
@@ -442,7 +484,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         approvalStatus.add("0");
         approvalStatus.add("3");
         example.createCriteria().andIdEqualTo(propagandaId).andApprovalStatusIn(approvalStatus)
-        .andStatusEqualTo(STATUS).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         long existNum = tbPropagandaMapper.countByExample(example);
         if(existNum==0){
             logger.warn("修改企业宣传失败，当前宣传信息审批状态不允许修改");
@@ -452,21 +494,24 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
 
     /***
      * 修改宣传信息
-     * @param businessPromotionDetailsParam
+     * @param bpd
      * @param loginAccount
      * @return
      */
     @ServiceLog(doAction = "修改宣传信息")
-    private int updatePropagandaInfo(BusinessPromotionDetailsParam businessPromotionDetailsParam, String loginAccount) {
+    private int updatePropagandaInfo(BusinessPromotionDetailsParam bpd, String loginAccount) {
         TbPropagandaCriteria example=new TbPropagandaCriteria();
-        example.createCriteria().andIdEqualTo(businessPromotionDetailsParam.getId())
+        example.createCriteria().andIdEqualTo(bpd.getId())
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         TbPropaganda tbPropaganda=new TbPropaganda();
-        BeanUtils.copyProperties(businessPromotionDetailsParam,tbPropaganda);
+        BeanUtils.copyProperties(bpd,tbPropaganda);
         //生效日期
-        tbPropaganda.setEffectiveDate(DateUtils.parseDate(businessPromotionDetailsParam.getEffectiveDate()));
+        Date now=DateUtils.parseDate(bpd.getEffectiveDate());
+        tbPropaganda.setEffectiveDate(now);
         //失效日期
-        tbPropaganda.setInvalidDate(DateUtils.parseDate(businessPromotionDetailsParam.getEffectiveDate()));
+        tbPropaganda.setInvalidDate(getCurrentTimeSpecifiedDate(now, Integer.parseInt(bpd.getPropagandaTime())));
+        //费用
+        tbPropaganda.setPropagandaFee(Double.valueOf(bpd.getPropagandaFee()));
         //审批状态 (-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)
         tbPropaganda.setStatus("0");
         //修改时间
@@ -593,7 +638,6 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         paymentBillModel.setBillObjId(loginAccount);
         paymentBillModel.setBillObjName(loginAccount);
         paymentBillModel.setBillAmount(50.00);
-        paymentBillModel.setBillCreateTime(DateUtils.getDate(PATTERN));
         paymentBillModel.setPayEndTime(DateUtils.getDate(PATTERN));
         paymentBillModel.setBillCreateAccount(loginAccount);
         paymentBillModel.setBillRemark("ad_free");
@@ -603,5 +647,104 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.NETWORK_ANOMALY);
         }
         return bill.getData();
+    }
+
+    /**
+     * 提交审核
+     * @param propagandaId 宣传id
+     * @param loginAccount 登录用户账号
+     */
+    @ServiceLog(doAction = "提交审核")
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public IBPSResult submitAudit(String propagandaId, String loginAccount) {
+        //根据宣传id,状态（value="0"），审批状态（value="0"）,是否删除（value="1"）查询宣传信息
+        TbPropagandaCriteria example=new TbPropagandaCriteria();
+        example.createCriteria().andIdEqualTo(propagandaId).andStatusEqualTo(INVALID)
+                .andApprovalStatusEqualTo(ApprovalStatusEnum.NOT_APPROVED.getValue())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbPropaganda> tbPropagandaList = tbPropagandaMapper.selectByExample(example);
+        if(tbPropagandaList.isEmpty()){
+            logger.warn("提交审核失败，宣传信息[propagandaId:{}]在系统中不存在或不允许当前操作",propagandaId);
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.SUBMIT_AUDIT_NOT_ALLOW);
+        }
+        TbPropaganda tbPropaganda = tbPropagandaList.get(0);
+        BusinessPromotionWorkFlow bpw=new BusinessPromotionWorkFlow();
+        BeanUtils.copyProperties(tbPropaganda, bpw);
+        //审批状态为待审批
+        if(tbPropaganda.getEffectiveDate()!=null){
+            //生效时间
+            bpw.setEffectiveDate(DateUtils.formatDate(tbPropaganda.getEffectiveDate(), PATTERN));
+        }
+        if(tbPropaganda.getInvalidDate()!=null){
+            //失效时间
+            bpw.setInvalidDate(DateUtils.formatDate(tbPropaganda.getInvalidDate(), PATTERN));
+        }
+        if(tbPropaganda.getCreatedTime()!=null){
+            //创建时间
+            bpw.setCreatedTime(DateUtils.formatDate(tbPropaganda.getCreatedTime(), PATTERN));
+        }
+        if(tbPropaganda.getModifiedTime()!=null){
+            //修改时间
+            bpw.setModifiedTime(DateUtils.formatDate(tbPropaganda.getModifiedTime(), PATTERN));
+        }
+        //流程id，每个流程的id是固定的
+        String processId="575715552383729664";
+        //启动工作流
+        IBPSResult ibpsResult = IBPSUtils.sendRequest(processId, loginAccount, bpw);
+        String okStatus="200";
+        //启动工作流成功
+        if(okStatus.equals(ibpsResult.getState())){
+            logger.info("宣传编码为：[{}]的宣传信息审批流程启动成功,流程实例id为：[{}]",tbPropaganda.getPropagandaCode(),ibpsResult.getData());
+            //逻辑删除数据表中的数据（传递的数据）
+            tbPropaganda=new TbPropaganda();
+            tbPropaganda.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+            tbPropagandaMapper.updateByExampleSelective(tbPropaganda, example);
+        }
+        return ibpsResult;
+    }
+
+    /**
+     * 获取宣传区域信息
+     * @return
+     */
+    @ServiceLog(doAction = "获取宣传区域信息")
+    @Override
+    public List<PropagandaAreaShow> getPropagandaAreaList() {
+        TbPropagandaAreaInfoCriteria example=new TbPropagandaAreaInfoCriteria();
+        example.createCriteria().andGroupIdEqualTo(PROPAGANDA_AREA).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbPropagandaAreaInfo> tbPropagandaAreaInfoList = tbPropagandaAreaInfoMapper.selectByExample(example);
+        if(tbPropagandaAreaInfoList.isEmpty()){
+            logger.warn("获取宣传区域信息失败，系统中不存在宣传区域信息");
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_AREA_NOT_EXIST);
+        }
+        List<PropagandaAreaShow>resultList=new ArrayList<>(16);
+        for(TbPropagandaAreaInfo tbServiceCode:tbPropagandaAreaInfoList){
+            PropagandaAreaShow propagandaAreaShow=new PropagandaAreaShow();
+            propagandaAreaShow.setPropagandaArea(tbServiceCode.getAreaName());
+            propagandaAreaShow.setPropagandaAreaUrl(tbServiceCode.getAreaCode());
+            propagandaAreaShow.setAreaAmount(tbServiceCode.getAreaAmount().toString());
+            resultList.add(propagandaAreaShow);
+        }
+        //返回只读数据
+        return  new UnmodifiableList<>(resultList);
+    }
+
+    /**
+     * 门户各首页企业宣传列表查询
+     * @param businessHomePageParam
+     * @param loginAccount
+     * @return
+     */
+    @ServiceLog(doAction = "门户各首页企业宣传列表查询")
+    @Override
+    public PaginationData getBusinessPromotionList(BusinessHomePageParam businessHomePageParam, String loginAccount) {
+        BusinessPromotionListParam bpb=new BusinessPromotionListParam();
+        BeanUtils.copyProperties(businessHomePageParam, bpb);
+        //审批状态（0：未审批  1：审批中   2：审批通过   3：审批不通过，4：未付款  5：待发布  6：已发布)）
+        //门户首页查询都是已发布的宣传信息
+        String hasBeenPublish="6";
+        bpb.setApprovalStatus(hasBeenPublish);
+        return getBusinessPromotionList(bpb,loginAccount);
     }
 }

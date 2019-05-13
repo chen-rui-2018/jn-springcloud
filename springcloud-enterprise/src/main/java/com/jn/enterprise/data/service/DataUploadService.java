@@ -5,15 +5,15 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.enterprise.data.enums.DataUploadConstants;
-import com.jn.enterprise.data.model.CompanyDataModel;
-import com.jn.enterprise.data.model.CompanyDataParamModel;
-import com.jn.enterprise.data.model.CompanyDataStatisticsModel;
-import com.jn.enterprise.data.model.CompanyDataStatisticsParamModel;
+import com.jn.enterprise.data.model.*;
 import com.jn.enterprise.data.vo.ModelDataVO;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -127,6 +127,25 @@ public interface DataUploadService {
     int saveCompanyFormData(ModelDataVO data,User user);
 
 
+    /**
+     * 企业填报数据保存为草稿
+     * @param data
+     * @param user
+     * @return
+     */
+    int saveTaskDataAsDraft(ModelDataVO data,User user);
+
+    /**
+     * 企业填报数据保存为草稿
+     * @param data
+     * @param user
+     * @return
+     */
+    int saveCompanyFormDataAsDraft(ModelDataVO data,User user);
+
+
+
+
 
     /**园区、企业的数据上报统计接口功能*/
 
@@ -181,17 +200,17 @@ public interface DataUploadService {
     /**
      * 企业催报
      * @param taskBatch
-     * @param modelId
+     * @param fillId
      * @return
      */
-    int setStatisticsListUrgeCompany(String taskBatch,String modelId);
+    int setStatisticsListUrgeCompany(String taskBatch,String fillId,User user);
     /**
      * 园区催报
      * @param taskBatch
-     * @param modelId
+     * @param fillId
      * @return
      */
-    int setStatisticsListUrge(String taskBatch,String modelId);
+    int setStatisticsListUrge(String taskBatch,String fillId);
 
     /**
      * 企业数据统计-填报任务详细信息获取
@@ -208,4 +227,27 @@ public interface DataUploadService {
      * @return
      */
     ModelDataVO getStruct(User user,String fillId);
+
+    /**
+     * 科技园导入
+     * @param multipartFile
+     * @return
+     */
+    int importData(MultipartFile multipartFile, String formTime,String fillId,String modelId);
+
+    /**
+     * 科技园查询接口
+     * @param param
+     * @return
+     */
+    PaginationData<Map<String,List<ScientModel>>> getImportData(ScientLookupParamModel param);
+
+    /**
+     * 科技园表头获取接口
+     * @param fillId
+     * @return
+     */
+    Map<String,Object> getScientTabHeader(String fillId);
+
+
 }

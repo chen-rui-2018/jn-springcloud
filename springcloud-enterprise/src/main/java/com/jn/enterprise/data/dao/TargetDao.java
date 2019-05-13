@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author： yangh
@@ -65,7 +66,7 @@ public interface TargetDao {
     /**
      * 催报，未上报的数据
      */
-    void updateCalling(@Param("taskBatch") String taskBatch,@Param("modelId") String modelId,@Param("fileType") String fileType);
+    void updateCalling(@Param("taskBatch") String taskBatch,@Param("fillId") String fillId,@Param("fileType") String fileType);
 
     /**
      * 企业统计数据查询
@@ -105,7 +106,17 @@ public interface TargetDao {
     List<CompanyDataModel> getGardenTask(@Param("list") List<String> list);
 
 
+    /**
+     * 获取整个园区的任务批次，用于获取广告
+     */
 
+    List<String> getAllGardenBatch(@Param("lastMon") String lastMon,@Param("lastYear") String lastYear);
+
+    /**
+     *
+     * @return
+     */
+    List <DepartementModel>  getDepartmentFromTarget(@Param("fileId") String fileId);
 
 
 
@@ -142,15 +153,106 @@ public interface TargetDao {
 
     /**
      * 更新任务状态
-     * @param nowDate
      */
-    void updateTask(String nowDate);
+    void updateTask();
 
     /**
      * 预警任务获取
-     * @param nowDate
      */
-    List<WarningTaskModel> getWarningTask(String nowDate);
+    List<WarningTaskModel> getWarningTask(@Param("fillId") String fillId,@Param("taskBatch") String taskBatch);
+
+
+    /**
+     * 保存园区任务可填报部门的信息
+     * @param fillerList
+     */
+    void saveFillerList(@Param("fillerList") List<TbDataReportingGardenFiller> fillerList);
+
+
+    /**
+     * 通过任务ID查询指标
+     * @return
+     */
+    List<TbDataReportingSnapshotTarget> getTargetByFillId (@Param("fillId") String fillId);
+
+    /**
+     * 通过任务ID查询填报格式
+     * @param fillId
+     * @return
+     */
+
+    List<TbDataReportingSnapshotTargetGroup> getTargetGroupByFillId (@Param("fillId") String fillId);
+
+
+/**
+ *   数据统计--导出模块
+ *   获取数据
+ */
+
+   // List<CompanyTree> getExcel(Map map);
+
+
+List<CompanyTree> getExcel (@Param("taskbatch") String taskbatch,@Param("modelid") String modelid);
+
+    /**
+     * 检测本次任务中是否存在缴纳税收总额字段
+     * @param fillId
+     * @return
+     */
+    List<TbDataReportingSnapshotTargetGroup>  checkIsHaveTaxiProperty(@Param("fillId") String fillId);
+
+    /**
+     * 将缴纳税收总额更新到科技园任务中
+     * @param data 值
+     * @param fillId 科技园模板任务Id
+     * @param formId 填报格式Id
+     * @param targetId 指标Id
+     * @param companyName 企业名称
+     */
+    int  updateTaxiToScientTarget(@Param("data") String data,@Param("fillId") String fillId,@Param("formId") String formId,@Param("targetId") String targetId,@Param("companyName") String  companyName);
+
+    /**
+     * 通过科技园任务Id,查询出纳税总额的指标Id,和填报格式Id
+     * @return
+     */
+    List<TbDataReportingSnapshotTargetGroup>  getScientTaxiTargetByFillId(@Param("fillId") String fillId);
+
+    /**
+     * 检测科技园任务是否已经导入
+     * @param formTime
+     * @return
+     */
+    List<TbDataReportingTask>  checkThisFormTimeScientIsImport(@Param("formTime") String formTime);
+
+    /**
+     * 科技园查询接口-分组企业
+     * @param companyName
+     * @param fillId
+     * @return
+     */
+    List<String> getCompanyList(@Param("companyName") String companyName,@Param("fillId") String fillId);
+
+    /**
+     * 科技园查询接口-按照企业进行查询
+     * @param companyName
+     * @param fillId
+     * @return
+     */
+    List<ScientModel> getValues(@Param("companyName") String companyName,@Param("fillId") String fillId);
+
+    /**
+     * 科技园表头指标获取
+     * @param fillId
+     * @return
+     */
+    List<TbDataReportingSnapshotTarget> getScientTabHeaderTarget(@Param("fillId") String fillId);
+
+    /**
+     * 科技园表头填报格式获取
+     * @param fillId
+     * @return
+     */
+    List<TbDataReportingSnapshotTargetGroup> getScientTabHeaderTargetGroup(@Param("fillId") String fillId);
 
 
 }

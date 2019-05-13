@@ -44,6 +44,17 @@ public class GardenCheckModel implements Serializable{
     @ApiModelProperty(value = "任务批次",example = "001")
     private String taskBatch;
 
+    @ApiModelProperty(value = "任务周期",example = "1")
+    private String modelCycle;
+
+    public String getModelCycle() {
+        return modelCycle;
+    }
+
+    public void setModelCycle(String modelCycle) {
+        this.modelCycle = modelCycle;
+    }
+
     public String getStatus() {
         return status;
     }

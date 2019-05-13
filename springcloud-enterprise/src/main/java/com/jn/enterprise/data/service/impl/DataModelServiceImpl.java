@@ -271,6 +271,8 @@ public class DataModelServiceImpl implements DataModelService {
             //创建model_id;插入模板基本信息
             String modelId=UUID.randomUUID().toString().replaceAll("-","");
             tbDataReportingModel.setModelId(modelId);
+            tbDataReportingModel.setCreatedTime(new Date());
+            tbDataReportingModel.setCreatorAccount(user.getAccount());
             tbDataReportingModelMapper.insertSelective(tbDataReportingModel);
 
         }else{
@@ -287,8 +289,20 @@ public class DataModelServiceImpl implements DataModelService {
             for(TabVO tabVO: tabVOList){
                 tbDataReportingModelTab = new TbDataReportingModelTab();
                 BeanUtils.copyProperties(tabVO,tbDataReportingModelTab);
-                tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
-                tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
+                if(tabVO.getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                    //科技园模板单独处理
+                    tbDataReportingModelTab.setTabClumnType(null);
+                    tbDataReportingModelTab.setTabClumnTargetShow("");
+
+                }else{
+                    tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
+                }
+
+                if(StringUtils.isNotBlank(tabVO.getStatus())){
+                    tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
+                }else{
+                    tbDataReportingModelTab.setStatus(new Byte(DataUploadConstants.VALID));
+                }
                 tbDataReportingModelTab.setTabCreateType(new Byte(tabVO.getTabCreateType()));
                 tbDataReportingModelTab.setOrderNumber(tabVO.getOrderNumber());
                 //tabId是空的
@@ -297,24 +311,33 @@ public class DataModelServiceImpl implements DataModelService {
                 tbDataReportingModelTab.setModelId(tbDataReportingModel.getModelId());
                 tbDataReportingModelTabList.add(tbDataReportingModelTab);
 
-                List<InputFormatModel>  imtList =tabVO.getInputList();
-                for(InputFormatModel im:imtList){
-                    tbDataReportingModelStruct = new TbDataReportingModelStruct();
-                    String uuid =UUID.randomUUID().toString().replaceAll("-","");
-                    tbDataReportingModelStruct.setId(uuid);
-                    tbDataReportingModelStruct.setTargetId(im.getTargetId());
-                    tbDataReportingModelStruct.setTabId(tabId);
-                    tbDataReportingModelStruct.setModelId(tbDataReportingModel.getModelId());
-                    tbDataReportingModelStructList.add(tbDataReportingModelStruct);
+                List<TargetModelVO>  tgList =tabVO.getTargetList();
+
+                if(tgList !=null && tgList.size()>0){
+                    for(TargetModelVO tg : tgList){
+                        tbDataReportingModelStruct = new TbDataReportingModelStruct();
+                        String uuid =UUID.randomUUID().toString().replaceAll("-","");
+                        tbDataReportingModelStruct.setId(uuid);
+                        tbDataReportingModelStruct.setTargetId(tg.getId());
+                        tbDataReportingModelStruct.setTabId(tabId);
+                        tbDataReportingModelStruct.setModelId(tbDataReportingModel.getModelId());
+                        tbDataReportingModelStructList.add(tbDataReportingModelStruct);
+                    }
                 }
+
+
             }
 
             //创建模板对应的Tab，保存tab信息
-            targetDao.createTab(tbDataReportingModelTabList);
-            //建立Tab和指标之间的关系
-            targetDao.createRelation(tbDataReportingModelStructList);
-        }
+            if(tbDataReportingModelTabList != null &&tbDataReportingModelTabList.size()>0){
+                targetDao.createTab(tbDataReportingModelTabList);
+                if(tbDataReportingModelStructList !=null && tbDataReportingModelStructList.size()>0){
+                    //建立Tab和指标之间的关系
+                    targetDao.createRelation(tbDataReportingModelStructList);
+                }
+            }
 
+        }
         result=1;
         return result;
     }
@@ -368,10 +391,15 @@ public class DataModelServiceImpl implements DataModelService {
         for (int tabIndex=0 ,tabSize =tabPOList.size();tabIndex<tabSize;tabIndex++) {
             tabVO = new TabVO();
             BeanUtils.copyProperties(tabPOList.get(tabIndex),tabVO);
-
-            tabVO.setTabClumnType(tabPOList.get(tabIndex).getTabClumnType().toString());
-            tabVO.setStatus(tabPOList.get(tabIndex).getStatus().toString());
+            if(tabPOList.get(tabIndex).getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                tabVO.setTabClumnType(null);
+            }else{
+                tabVO.setTabClumnType(tabPOList.get(tabIndex).getTabClumnType().toString());
+            }
             tabVO.setTabCreateType(tabPOList.get(tabIndex).getTabCreateType().toString());
+
+            tabVO.setStatus(tabPOList.get(tabIndex).getStatus().toString());
+
             tabVO.setOrderNumber(tabPOList.get(tabIndex).getOrderNumber());
 
 
@@ -427,7 +455,7 @@ public class DataModelServiceImpl implements DataModelService {
         List<InputFormatModel> imlist = new ArrayList<>();
         if(tList !=null && tList.size()>0){
             TbDataReportingTargetGroupCriteria example =new TbDataReportingTargetGroupCriteria();
-            example.or().andTargetIdIn(tList);
+            example.or().andTargetIdIn(tList).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
             List<TbDataReportingTargetGroup> tgList = tbDataReportingTargetGroupMapper.selectByExample(example);
             InputFormatModel im =null;
             for(TbDataReportingTargetGroup tgBean:tgList){

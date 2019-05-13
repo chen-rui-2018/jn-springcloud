@@ -5,6 +5,7 @@ import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -42,6 +43,6 @@ public interface OrgApproveService {
      * @param orgApplyCheckData
      * @return
      */
-    Boolean checkOrgApply(OrgApplyCheckData orgApplyCheckData);
+    Boolean checkOrgApply(OrgApplyCheckData orgApplyCheckData, User user);
 
 }

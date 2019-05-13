@@ -1,5 +1,6 @@
 package com.jn.server;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
@@ -69,6 +70,7 @@ public class UserExtensionController extends BaseController implements UserExten
     }
 
     @ControllerLog(doAction = "更新用户所属机构信息")
+    @TxTransaction
     @Override
     public Result updateAffiliateInfo(@RequestBody @Validated UserAffiliateInfo userAffiliateInfo) {
         boolean updateSuccess = userInfoService.updateAffiliateInfo(userAffiliateInfo);
@@ -76,6 +78,7 @@ public class UserExtensionController extends BaseController implements UserExten
     }
 
     @ControllerLog(doAction = "更新用户所属企业信息")
+    @TxTransaction
     @Override
     public Result updateCompanyInfo(@RequestBody @Validated UserCompanyInfo userCompanyInfo) {
         boolean updateSuccess = userInfoService.updateCompanyInfo(userCompanyInfo);
@@ -109,6 +112,7 @@ public class UserExtensionController extends BaseController implements UserExten
     }
 
     @ControllerLog(doAction = "保存/修改用户信息")
+    @TxTransaction
     @Override
     public Result saveOrUpdateUserInfo(@RequestBody UserInfo userInfo) {
         User user = new User();

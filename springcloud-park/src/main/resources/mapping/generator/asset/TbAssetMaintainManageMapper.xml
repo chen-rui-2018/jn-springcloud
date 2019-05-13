@@ -20,7 +20,7 @@
     <result column="company_id" jdbcType="VARCHAR" property="companyId" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status_" jdbcType="TINYINT" property="status" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -88,7 +88,7 @@
   <sql id="Base_Column_List">
     id, asset_number, name, type_id, asset_type, tower_id, tower_name, tower_address, 
     specification, production_time, position, asset_url, maintenance_time, maintenance_period, 
-    is_maintaion, company_id, company_name, contact_phone, status, record_status, creator_account, 
+    is_maintaion, company_id, company_name, contact_phone, status_, record_status, creator_account, 
     create_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbAssetMaintainManageCriteria" resultMap="BaseResultMap">
@@ -128,7 +128,7 @@
       production_time, position, asset_url, 
       maintenance_time, maintenance_period, is_maintaion, 
       company_id, company_name, contact_phone, 
-      status, record_status, creator_account, 
+      status_, record_status, creator_account, 
       create_time, modifier_account, modified_time
       )
     values (#{id,jdbcType=VARCHAR}, #{assetNumber,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
@@ -199,7 +199,7 @@
         contact_phone,
       </if>
       <if test="status != null">
-        status,
+        status_,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -356,7 +356,7 @@
         contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
-        status = #{record.status,jdbcType=TINYINT},
+        status_ = #{record.status,jdbcType=TINYINT},
       </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -398,7 +398,7 @@
       company_id = #{record.companyId,jdbcType=VARCHAR},
       company_name = #{record.companyName,jdbcType=VARCHAR},
       contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=TINYINT},
+      status_ = #{record.status,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -463,7 +463,7 @@
         contact_phone = #{contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
+        status_ = #{status,jdbcType=TINYINT},
       </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
@@ -502,7 +502,7 @@
       company_id = #{companyId,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},
       contact_phone = #{contactPhone,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
+      status_ = #{status,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

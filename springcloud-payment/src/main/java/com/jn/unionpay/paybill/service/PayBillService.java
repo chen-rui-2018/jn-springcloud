@@ -96,5 +96,12 @@ public interface PayBillService {
      */
     Boolean cancelPayBillByBillNum(PayBillCancelParam payBillCancelParam);
 
+    /**
+     * 根据账单号取消对应的账单
+     * @param billId
+     * @return
+     */
+    Boolean cancelPayBillByBillId(String billId);
+
 
 }

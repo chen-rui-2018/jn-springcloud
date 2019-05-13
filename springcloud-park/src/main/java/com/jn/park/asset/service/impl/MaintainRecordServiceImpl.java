@@ -39,13 +39,13 @@ public class MaintainRecordServiceImpl implements MaintainRecordService {
      */
     @Override
     @ServiceLog(doAction = "新增维保记录")
-    public Integer addRecord(User user,String maintainId, String message, String imgUrl) {
-        MaintainManageModel maintain = maintainManageDao.getMaintain(maintainId);
+    public Integer addRecord(User user,String assetNumber, String message, String imgUrl) {
+        MaintainManageModel maintain = maintainManageDao.getMaintain(assetNumber);
         if (maintain != null){
             TbAssetMaintainRecord tbAssetMaintainRecord = new TbAssetMaintainRecord();
             tbAssetMaintainRecord.setId(UUID.randomUUID().toString());
             tbAssetMaintainRecord.setAssetNumber(maintain.getAssetNumber());
-            tbAssetMaintainRecord.setMaintainId(maintainId);
+            tbAssetMaintainRecord.setMaintainId(maintain.getId());
             tbAssetMaintainRecord.setMaintainName(maintain.getName());
             tbAssetMaintainRecord.setTypeId(maintain.getTypeId());
             tbAssetMaintainRecord.setAssetType(maintain.getAssetType());

@@ -50,4 +50,12 @@ public class ImServiceImpl implements ImService {
         tbImMessage.setIsSended("Y");
         tbImMessageMapper.updateByPrimaryKeySelective(tbImMessage);
     }
+
+    @Override
+    public PaginationData<List<TbImMessage>> selectMsgList(Message message) {
+        Page<Object> objects = PageHelper.startPage(message.getPage(), message.getRows());
+        List<TbImMessage> selectMsgList = imMapper.selectMsgList(message);
+        PaginationData data = new PaginationData(selectMsgList, objects.getTotal());
+        return data;
+    }
 }

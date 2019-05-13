@@ -96,4 +96,12 @@ public class PayBillServerController extends BaseController implements PayBillCl
     public Result<Boolean> cancelPayBillByBillNum(@RequestBody PayBillCancelParam payBillCancelParam){
         return new Result<>(payBillService.cancelPayBillByBillNum(payBillCancelParam));
     }
+
+    @ControllerLog(doAction = "根据账单号取消对应的账单")
+    @ApiOperation(value = "根据账单号取消对应的账单", httpMethod = "POST")
+    @RequestMapping(value = "/cancelPayBillByBillId")
+    @Override
+    public Result<Boolean> cancelPayBillByBillId(@RequestBody String orderId){
+        return new Result<>(payBillService.cancelPayBillByBillId(orderId));
+    }
 }

@@ -11,14 +11,15 @@
     <result column="tower_name" jdbcType="VARCHAR" property="towerName" />
     <result column="tower_address" jdbcType="VARCHAR" property="towerAddress" />
     <result column="specification" jdbcType="VARCHAR" property="specification" />
-    <result column="manufacturer_name" jdbcType="VARCHAR" property="manufacturerName" />
-    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
     <result column="production_time" jdbcType="DATE" property="productionTime" />
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="asset_url" jdbcType="VARCHAR" property="assetUrl" />
     <result column="maintenance_time" jdbcType="DATE" property="maintenanceTime" />
     <result column="maintenance_period" jdbcType="VARCHAR" property="maintenancePeriod" />
     <result column="is_maintaion" jdbcType="TINYINT" property="isMaintaion" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -86,8 +87,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, asset_number, name, type_id, asset_type, tower_id, tower_name, tower_address, 
-    specification, manufacturer_name, contact_phone, production_time, position, asset_url, 
-    maintenance_time, maintenance_period, is_maintaion, status, record_status, creator_account, 
+    specification, production_time, position, asset_url, maintenance_time, maintenance_period, 
+    is_maintaion, company_id, company_name, contact_phone, status, record_status, creator_account, 
     create_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbAssetMaintainManageCriteria" resultMap="BaseResultMap">
@@ -124,19 +125,21 @@
     insert into tb_asset_maintain_manage (id, asset_number, name, 
       type_id, asset_type, tower_id, 
       tower_name, tower_address, specification, 
-      manufacturer_name, contact_phone, production_time, 
-      position, asset_url, maintenance_time, 
-      maintenance_period, is_maintaion, status, 
-      record_status, creator_account, create_time, 
-      modifier_account, modified_time)
+      production_time, position, asset_url, 
+      maintenance_time, maintenance_period, is_maintaion, 
+      company_id, company_name, contact_phone, 
+      status, record_status, creator_account, 
+      create_time, modifier_account, modified_time
+      )
     values (#{id,jdbcType=VARCHAR}, #{assetNumber,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{typeId,jdbcType=VARCHAR}, #{assetType,jdbcType=VARCHAR}, #{towerId,jdbcType=VARCHAR}, 
       #{towerName,jdbcType=VARCHAR}, #{towerAddress,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, 
-      #{manufacturerName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{productionTime,jdbcType=DATE}, 
-      #{position,jdbcType=VARCHAR}, #{assetUrl,jdbcType=VARCHAR}, #{maintenanceTime,jdbcType=DATE}, 
-      #{maintenancePeriod,jdbcType=VARCHAR}, #{isMaintaion,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{productionTime,jdbcType=DATE}, #{position,jdbcType=VARCHAR}, #{assetUrl,jdbcType=VARCHAR}, 
+      #{maintenanceTime,jdbcType=DATE}, #{maintenancePeriod,jdbcType=VARCHAR}, #{isMaintaion,jdbcType=TINYINT}, 
+      #{companyId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbAssetMaintainManage">
     insert into tb_asset_maintain_manage
@@ -168,12 +171,6 @@
       <if test="specification != null">
         specification,
       </if>
-      <if test="manufacturerName != null">
-        manufacturer_name,
-      </if>
-      <if test="contactPhone != null">
-        contact_phone,
-      </if>
       <if test="productionTime != null">
         production_time,
       </if>
@@ -191,6 +188,15 @@
       </if>
       <if test="isMaintaion != null">
         is_maintaion,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="contactPhone != null">
+        contact_phone,
       </if>
       <if test="status != null">
         status,
@@ -239,12 +245,6 @@
       <if test="specification != null">
         #{specification,jdbcType=VARCHAR},
       </if>
-      <if test="manufacturerName != null">
-        #{manufacturerName,jdbcType=VARCHAR},
-      </if>
-      <if test="contactPhone != null">
-        #{contactPhone,jdbcType=VARCHAR},
-      </if>
       <if test="productionTime != null">
         #{productionTime,jdbcType=DATE},
       </if>
@@ -262,6 +262,15 @@
       </if>
       <if test="isMaintaion != null">
         #{isMaintaion,jdbcType=TINYINT},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        #{contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
@@ -319,12 +328,6 @@
       <if test="record.specification != null">
         specification = #{record.specification,jdbcType=VARCHAR},
       </if>
-      <if test="record.manufacturerName != null">
-        manufacturer_name = #{record.manufacturerName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.contactPhone != null">
-        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
-      </if>
       <if test="record.productionTime != null">
         production_time = #{record.productionTime,jdbcType=DATE},
       </if>
@@ -342,6 +345,15 @@
       </if>
       <if test="record.isMaintaion != null">
         is_maintaion = #{record.isMaintaion,jdbcType=TINYINT},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactPhone != null">
+        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
@@ -377,14 +389,15 @@
       tower_name = #{record.towerName,jdbcType=VARCHAR},
       tower_address = #{record.towerAddress,jdbcType=VARCHAR},
       specification = #{record.specification,jdbcType=VARCHAR},
-      manufacturer_name = #{record.manufacturerName,jdbcType=VARCHAR},
-      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       production_time = #{record.productionTime,jdbcType=DATE},
       position = #{record.position,jdbcType=VARCHAR},
       asset_url = #{record.assetUrl,jdbcType=VARCHAR},
       maintenance_time = #{record.maintenanceTime,jdbcType=DATE},
       maintenance_period = #{record.maintenancePeriod,jdbcType=VARCHAR},
       is_maintaion = #{record.isMaintaion,jdbcType=TINYINT},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -422,12 +435,6 @@
       <if test="specification != null">
         specification = #{specification,jdbcType=VARCHAR},
       </if>
-      <if test="manufacturerName != null">
-        manufacturer_name = #{manufacturerName,jdbcType=VARCHAR},
-      </if>
-      <if test="contactPhone != null">
-        contact_phone = #{contactPhone,jdbcType=VARCHAR},
-      </if>
       <if test="productionTime != null">
         production_time = #{productionTime,jdbcType=DATE},
       </if>
@@ -445,6 +452,15 @@
       </if>
       <if test="isMaintaion != null">
         is_maintaion = #{isMaintaion,jdbcType=TINYINT},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
@@ -477,14 +493,15 @@
       tower_name = #{towerName,jdbcType=VARCHAR},
       tower_address = #{towerAddress,jdbcType=VARCHAR},
       specification = #{specification,jdbcType=VARCHAR},
-      manufacturer_name = #{manufacturerName,jdbcType=VARCHAR},
-      contact_phone = #{contactPhone,jdbcType=VARCHAR},
       production_time = #{productionTime,jdbcType=DATE},
       position = #{position,jdbcType=VARCHAR},
       asset_url = #{assetUrl,jdbcType=VARCHAR},
       maintenance_time = #{maintenanceTime,jdbcType=DATE},
       maintenance_period = #{maintenancePeriod,jdbcType=VARCHAR},
       is_maintaion = #{isMaintaion,jdbcType=TINYINT},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

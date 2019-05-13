@@ -69,8 +69,8 @@
 
     <update id="updateStatus" parameterType="java.util.Map">
         UPDATE tb_room_information
-        SET state = #{state}
+        SET state = #{roomStatus}
         WHERE
-            id = #{id}
+            id = #{roomId}
     </update>
 </mapper>

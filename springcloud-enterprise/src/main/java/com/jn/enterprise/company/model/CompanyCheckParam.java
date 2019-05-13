@@ -27,7 +27,7 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "企业logo",required = true,example = "**/**/**,jpg")
     private String avatar;
     @NotNull(message = "企业领域不能为空")
-    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=1返回的ID]",required = true,notes = "传机构字典接口入参preType=1返回的ID",example = "shengwuyiyao")
+    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=0返回的ID]",required = true,notes = "传机构字典接口入参preType=1返回的ID",example = "shengwuyiyao")
     private String induType;
     @NotNull(message = "企业法人不能为空")
     @ApiModelProperty(value = "企业法人",required = true,example = "李薇薇")
@@ -129,7 +129,7 @@ public class CompanyCheckParam implements Serializable {
     private String parkBuildName;
     @ApiModelProperty(value = "信用积分",example = "0.00")
     private BigDecimal creditPoints;
-    @ApiModelProperty(value = "企业类型[传机构字典接口入参preType=0返回的ID]",notes = "传机构字典接口入参preType=0返回的ID",example = "ogistics")
+    @ApiModelProperty(value = "企业类型[传机构字典接口入参preType=1返回的ID]",notes = "传机构字典接口入参preType=0返回的ID",example = "ogistics")
     private String comType;
     @ApiModelProperty(value = "是否参加园区获取【0否1是】",example = "0")
     private String isJoinActivity;

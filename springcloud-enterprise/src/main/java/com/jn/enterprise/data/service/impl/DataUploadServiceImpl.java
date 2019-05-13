@@ -616,11 +616,13 @@ public class DataUploadServiceImpl implements DataUploadService {
                     if(data !=null && data.size()>0){
                         for(InputFormatModel bean :inputFormatModelList){
                             for(TbDataReportingTaskData dataBean:data){
-                                InputFormatModel model1 = new InputFormatModel();
-                                BeanUtils.copyProperties(bean,model1);
-                                model1.setValue(dataBean.getData());
-                                model1.setRowNum(dataBean.getRowNum());
-                                rows.add(model1);
+                                if(bean.getFormId().equals(dataBean.getFormId())){
+                                    InputFormatModel model1 = new InputFormatModel();
+                                    BeanUtils.copyProperties(bean,model1);
+                                    model1.setValue(dataBean.getData());
+                                    model1.setRowNum(dataBean.getRowNum());
+                                    rows.add(model1);
+                                }
                             }
                         }
                         tabVO.setInputList(rows);

@@ -3,6 +3,7 @@ package com.jn.park.plan.service;
 import com.jn.common.model.PaginationData;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.plan.model.*;
+import com.jn.park.plan.vo.ProjectPlanVo;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface ProjectManageService {
      * @param projectNo
      * @return
      */
-    ProjectPlanModel findTaskPlan(String projectNo);
+    List<ProjectPlanVo> findTaskPlan(String projectNo);
 
     /**
      * 工程项目查看-完成及时率

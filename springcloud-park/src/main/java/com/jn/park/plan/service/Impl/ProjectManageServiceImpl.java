@@ -36,13 +36,13 @@ public class ProjectManageServiceImpl implements ProjectManageService {
         if(projectModel.getOrderByClause() == "" || projectModel.getOrderByClause() == null){
             projectModel.setOrderByClause("project_no desc");
         }
-        if(projectModel.getProgress() == "" || projectModel.getProgress() == null){
+        if(projectModel.getProgress() == null){
             projectModel.setProgress("");
         }
-        if(projectModel.getProjectState() == "" || projectModel.getProjectState() == null){
+        if(projectModel.getProjectState() == null){
             projectModel.setProjectState("");
         }
-        if(projectModel.getProjectName() == "" || projectModel.getProjectName() == null){
+        if(projectModel.getProjectName() == null){
             projectModel.setProjectName("");
         }
         Page<Object> objects = PageHelper.startPage(projectModel.getPage(), projectModel.getRows());

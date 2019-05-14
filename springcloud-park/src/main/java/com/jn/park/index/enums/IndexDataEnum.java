@@ -15,7 +15,6 @@ public enum IndexDataEnum implements CodeAndMsg {
     SERVICE_TYPE_POLICY("1","政策服务"),
     SERVICE_TYPE_BUSINESS("2","商务服务"),
 
-    RECORD_STATUS_VALID("0","正常"),
     IMPORTANT_NEWS_STATUS_VALID("1", "有效"),
     IMPORTANT_NEWS_PLATFORM_TYPE_ALL("0", "全部"),
     IMPORTANT_NEWS_PLATFORM_TYPE_APP("1", "APP"),

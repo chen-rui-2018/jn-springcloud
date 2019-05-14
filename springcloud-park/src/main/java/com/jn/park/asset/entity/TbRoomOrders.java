@@ -59,6 +59,9 @@ public class TbRoomOrders implements Serializable {
     /*@ApiModelProperty("最短租期(月)")*/
     private String shortestLease;
 
+    /*@ApiModelProperty("介绍")*/
+    private String introduce;
+
     /*@ApiModelProperty("付款金额")*/
     private BigDecimal paySum;
 
@@ -250,6 +253,14 @@ public class TbRoomOrders implements Serializable {
         this.shortestLease = shortestLease == null ? null : shortestLease.trim();
     }
 
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce == null ? null : introduce.trim();
+    }
+
     public BigDecimal getPaySum() {
         return paySum;
     }
@@ -400,6 +411,7 @@ public class TbRoomOrders implements Serializable {
             && (this.getLeaseSum() == null ? other.getLeaseSum() == null : this.getLeaseSum().equals(other.getLeaseSum()))
             && (this.getPressPay() == null ? other.getPressPay() == null : this.getPressPay().equals(other.getPressPay()))
             && (this.getShortestLease() == null ? other.getShortestLease() == null : this.getShortestLease().equals(other.getShortestLease()))
+            && (this.getIntroduce() == null ? other.getIntroduce() == null : this.getIntroduce().equals(other.getIntroduce()))
             && (this.getPaySum() == null ? other.getPaySum() == null : this.getPaySum().equals(other.getPaySum()))
             && (this.getPayState() == null ? other.getPayState() == null : this.getPayState().equals(other.getPayState()))
             && (this.getRoomStatus() == null ? other.getRoomStatus() == null : this.getRoomStatus().equals(other.getRoomStatus()))
@@ -439,6 +451,7 @@ public class TbRoomOrders implements Serializable {
         result = prime * result + ((getLeaseSum() == null) ? 0 : getLeaseSum().hashCode());
         result = prime * result + ((getPressPay() == null) ? 0 : getPressPay().hashCode());
         result = prime * result + ((getShortestLease() == null) ? 0 : getShortestLease().hashCode());
+        result = prime * result + ((getIntroduce() == null) ? 0 : getIntroduce().hashCode());
         result = prime * result + ((getPaySum() == null) ? 0 : getPaySum().hashCode());
         result = prime * result + ((getPayState() == null) ? 0 : getPayState().hashCode());
         result = prime * result + ((getRoomStatus() == null) ? 0 : getRoomStatus().hashCode());
@@ -481,6 +494,7 @@ public class TbRoomOrders implements Serializable {
         sb.append(", leaseSum=").append(leaseSum);
         sb.append(", pressPay=").append(pressPay);
         sb.append(", shortestLease=").append(shortestLease);
+        sb.append(", introduce=").append(introduce);
         sb.append(", paySum=").append(paySum);
         sb.append(", payState=").append(payState);
         sb.append(", roomStatus=").append(roomStatus);

@@ -34,11 +34,11 @@ public class FinancialProductAddInfo implements Serializable {
     @ApiModelProperty(value = "产品名称",required = true,example = "无忧贷款")
     @NotBlank(message = "产品名称不能为空")
     private String productName;
-    @ApiModelProperty(value = "服务机构id,", required =  true, example = "00000000000000001111111111111111")
-    @NotBlank(message = "服务机构id不能为空")
+    @ApiModelProperty(value = "服务机构id,", hidden =  true, example = "00000000000000001111111111111111")
+//    @NotBlank(message = "服务机构id不能为空")
     private String orgId;
-    @ApiModelProperty(value = "服务机构名称",required = true,example = "北京快手")
-    @NotBlank(message = "服务机构名称不能为空")
+    @ApiModelProperty(value = "服务机构名称",hidden = true,example = "北京快手")
+//    @NotBlank(message = "服务机构名称不能为空")
     private String orgName;
     @ApiModelProperty(value = "参考利率最小值",required = true,example = "2.56")
     @NotBlank(message = "参考利率不能为空")

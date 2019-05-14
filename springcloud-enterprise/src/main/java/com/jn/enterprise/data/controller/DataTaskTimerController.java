@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
+@Api(tags = "数据上报-企业/园区定时任务创建")
 @RestController
 public class DataTaskTimerController extends BaseController  implements EnterpriseClient {
     @Autowired

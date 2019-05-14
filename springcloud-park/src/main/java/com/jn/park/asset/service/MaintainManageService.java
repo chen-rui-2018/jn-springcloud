@@ -1,6 +1,11 @@
 package com.jn.park.asset.service;
 
+import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
+import com.jn.park.asset.model.AssetArticleLeaseModel;
 import com.jn.park.asset.model.MaintainManageModel;
+
+import java.util.List;
 
 /**
 * 维保管理service
@@ -11,16 +16,19 @@ import com.jn.park.asset.model.MaintainManageModel;
 */
 public interface MaintainManageService {
     /**
-     * 根据维保信息id获取维保信息
-     * @param id
+     * 根据资产编号获取维保信息
+     * @param assetNumber
      * @return
      */
-    MaintainManageModel getMaintain(String id);
+    MaintainManageModel getMaintain(String assetNumber);
 
     /**
-     * 维保信息录入
-     * @param maintainManageModel
+     * 分页获取维保设备列表
+     * @param page
      * @return
      */
-    Integer updateMaintain(MaintainManageModel maintainManageModel);
+    PaginationData<List<MaintainManageModel>> getMaintainList(Page page);
+
+
+
 }

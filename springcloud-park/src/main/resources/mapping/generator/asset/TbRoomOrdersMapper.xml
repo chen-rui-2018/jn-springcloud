@@ -20,6 +20,7 @@
     <result column="lease_sum" jdbcType="DECIMAL" property="leaseSum" />
     <result column="press_pay" jdbcType="VARCHAR" property="pressPay" />
     <result column="shortest_lease" jdbcType="VARCHAR" property="shortestLease" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
     <result column="pay_sum" jdbcType="DECIMAL" property="paySum" />
     <result column="pay_state" jdbcType="TINYINT" property="payState" />
     <result column="room_status" jdbcType="TINYINT" property="roomStatus" />
@@ -97,10 +98,10 @@
   <sql id="Base_Column_List">
     id, enterprise_id, lease_enterprise, room_id, room_name, floor, tower_id, tower_name, 
     room_url, lease_start_time, lease_end_time, contact_name, contact_phone, room_area, 
-    lease_price, lease_sum, press_pay, shortest_lease, pay_sum, pay_state, room_status, 
-    quit_apply_time, quit_penal_sum, quit_explain, practical_quit_time, lease_apply_status, 
-    quit_apply_status, is_relet, record_status, creator_account, create_time, modifier_account, 
-    modified_time
+    lease_price, lease_sum, press_pay, shortest_lease, introduce, pay_sum, pay_state, 
+    room_status, quit_apply_time, quit_penal_sum, quit_explain, practical_quit_time, 
+    lease_apply_status, quit_apply_status, is_relet, record_status, creator_account, 
+    create_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersCriteria" resultMap="BaseResultMap">
     select
@@ -139,24 +140,24 @@
       lease_start_time, lease_end_time, contact_name, 
       contact_phone, room_area, lease_price, 
       lease_sum, press_pay, shortest_lease, 
-      pay_sum, pay_state, room_status, 
-      quit_apply_time, quit_penal_sum, quit_explain, 
-      practical_quit_time, lease_apply_status, quit_apply_status, 
-      is_relet, record_status, creator_account, 
-      create_time, modifier_account, modified_time
-      )
+      introduce, pay_sum, pay_state, 
+      room_status, quit_apply_time, quit_penal_sum, 
+      quit_explain, practical_quit_time, lease_apply_status, 
+      quit_apply_status, is_relet, record_status, 
+      creator_account, create_time, modifier_account, 
+      modified_time)
     values (#{id,jdbcType=VARCHAR}, #{enterpriseId,jdbcType=VARCHAR}, #{leaseEnterprise,jdbcType=VARCHAR}, 
       #{roomId,jdbcType=VARCHAR}, #{roomName,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, 
       #{towerId,jdbcType=VARCHAR}, #{towerName,jdbcType=VARCHAR}, #{roomUrl,jdbcType=VARCHAR}, 
       #{leaseStartTime,jdbcType=DATE}, #{leaseEndTime,jdbcType=DATE}, #{contactName,jdbcType=VARCHAR}, 
       #{contactPhone,jdbcType=VARCHAR}, #{roomArea,jdbcType=VARCHAR}, #{leasePrice,jdbcType=DECIMAL}, 
       #{leaseSum,jdbcType=DECIMAL}, #{pressPay,jdbcType=VARCHAR}, #{shortestLease,jdbcType=VARCHAR}, 
-      #{paySum,jdbcType=DECIMAL}, #{payState,jdbcType=TINYINT}, #{roomStatus,jdbcType=TINYINT}, 
-      #{quitApplyTime,jdbcType=DATE}, #{quitPenalSum,jdbcType=DECIMAL}, #{quitExplain,jdbcType=VARCHAR}, 
-      #{practicalQuitTime,jdbcType=DATE}, #{leaseApplyStatus,jdbcType=TINYINT}, #{quitApplyStatus,jdbcType=TINYINT}, 
-      #{isRelet,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+      #{introduce,jdbcType=VARCHAR}, #{paySum,jdbcType=DECIMAL}, #{payState,jdbcType=TINYINT}, 
+      #{roomStatus,jdbcType=TINYINT}, #{quitApplyTime,jdbcType=DATE}, #{quitPenalSum,jdbcType=DECIMAL}, 
+      #{quitExplain,jdbcType=VARCHAR}, #{practicalQuitTime,jdbcType=DATE}, #{leaseApplyStatus,jdbcType=TINYINT}, 
+      #{quitApplyStatus,jdbcType=TINYINT}, #{isRelet,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomOrders">
     insert into tb_room_orders
@@ -214,6 +215,9 @@
       </if>
       <if test="shortestLease != null">
         shortest_lease,
+      </if>
+      <if test="introduce != null">
+        introduce,
       </if>
       <if test="paySum != null">
         pay_sum,
@@ -315,6 +319,9 @@
       </if>
       <if test="shortestLease != null">
         #{shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType=VARCHAR},
       </if>
       <if test="paySum != null">
         #{paySum,jdbcType=DECIMAL},
@@ -426,6 +433,9 @@
       <if test="record.shortestLease != null">
         shortest_lease = #{record.shortestLease,jdbcType=VARCHAR},
       </if>
+      <if test="record.introduce != null">
+        introduce = #{record.introduce,jdbcType=VARCHAR},
+      </if>
       <if test="record.paySum != null">
         pay_sum = #{record.paySum,jdbcType=DECIMAL},
       </if>
@@ -496,6 +506,7 @@
       lease_sum = #{record.leaseSum,jdbcType=DECIMAL},
       press_pay = #{record.pressPay,jdbcType=VARCHAR},
       shortest_lease = #{record.shortestLease,jdbcType=VARCHAR},
+      introduce = #{record.introduce,jdbcType=VARCHAR},
       pay_sum = #{record.paySum,jdbcType=DECIMAL},
       pay_state = #{record.payState,jdbcType=TINYINT},
       room_status = #{record.roomStatus,jdbcType=TINYINT},
@@ -569,6 +580,9 @@
       <if test="shortestLease != null">
         shortest_lease = #{shortestLease,jdbcType=VARCHAR},
       </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
       <if test="paySum != null">
         pay_sum = #{paySum,jdbcType=DECIMAL},
       </if>
@@ -636,6 +650,7 @@
       lease_sum = #{leaseSum,jdbcType=DECIMAL},
       press_pay = #{pressPay,jdbcType=VARCHAR},
       shortest_lease = #{shortestLease,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
       pay_sum = #{paySum,jdbcType=DECIMAL},
       pay_state = #{payState,jdbcType=TINYINT},
       room_status = #{roomStatus,jdbcType=TINYINT},

@@ -110,7 +110,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             tbAssetArticleLeaseOrders.setStartTime(articleLease.getStartTime());
             tbAssetArticleLeaseOrders.setEndTime(articleLease.getEndTime());
             //订单创建者
-            tbAssetArticleLeaseOrders.setContactName(user.getName());
+            tbAssetArticleLeaseOrders.setCreatorAccount(user.getAccount());
             tbAssetArticleLeaseOrders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
             //计算开始时间和结束时间的相差天数
             int days = (int) ((articleLease.getEndTime().getTime() - articleLease.getStartTime().getTime()) / (1000*3600*24)+1);

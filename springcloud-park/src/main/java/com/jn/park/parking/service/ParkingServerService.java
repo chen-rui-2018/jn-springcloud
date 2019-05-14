@@ -52,7 +52,7 @@ public interface ParkingServerService {
      * @param carList
      * @return 返回处理成功的记录id
      */
-    String carJoinParking(List carList);
+    String carJoinParking(List carList,String parkId);
 
     /**
      * 道尔 车辆出场推送接口

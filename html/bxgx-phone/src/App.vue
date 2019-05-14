@@ -2,8 +2,6 @@
   <div id="app">
     <administrative-header v-if="this.$route.name==='approvalGuide'||this.$route.name==='powerDetail'||this.$route.name==='consult'||this.$route.name==='declarationCenter'||this.$route.name==='declarationPlatform'||this.$route.name==='declarationDetail'||this.$route.name==='consult'||$route.name==='serverProDetail'||$route.name==='actiDetail'" ></administrative-header>
 
-
-
     <router-view/>
   </div>
 </template>
@@ -17,7 +15,7 @@ export default {
   components: {administrativeHeader},
   mounted () {
     this.init()
-  components: { administrativeHeader },
+  },
   created () {
     this.init()
     // this.$post({

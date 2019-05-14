@@ -3,15 +3,19 @@ package com.jn.park.plan.service.Impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.DateUtils;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.plan.dao.ProjectManageDao;
 import com.jn.park.plan.model.*;
 import com.jn.park.plan.service.ProjectManageService;
+import com.jn.park.plan.vo.ProjectPlanVo;
 import com.jn.system.log.annotation.ServiceLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,27 +36,46 @@ public class ProjectManageServiceImpl implements ProjectManageService {
         if(projectModel.getOrderByClause() == "" || projectModel.getOrderByClause() == null){
             projectModel.setOrderByClause("project_no desc");
         }
+        if(projectModel.getProgress() == "" || projectModel.getProgress() == null){
+            projectModel.setProgress("");
+        }
+        if(projectModel.getProjectState() == "" || projectModel.getProjectState() == null){
+            projectModel.setProjectState("");
+        }
+        if(projectModel.getProjectName() == "" || projectModel.getProjectName() == null){
+            projectModel.setProjectName("");
+        }
         Page<Object> objects = PageHelper.startPage(projectModel.getPage(), projectModel.getRows());
         List<ProjectManageModel> projectManageModelsList= projectManageDao.findAll(projectModel.getProjectState(),projectModel.getProgress(),projectModel.getProjectName(),projectModel.getOrderByClause());
         //获取每一条工程项目信息
         for(int i=0 ; i < projectManageModelsList.size() ; i++){
+            //计算出剩余工期   不使用查询结果的剩余工期,拿到当前时间与查询的计划结束时间计算,得到剩余工期
+            String surplusTime= getDatePoor(DateUtils.parseDate(projectManageModelsList.get(i).getPlanStopTime()));
+            projectManageModelsList.get(i).setSurplusTime(surplusTime);
             //获取到每一个项目的进度记录信息
             List<ProjectProgressRecordModel> projectProgressRecordModelsList=projectManageModelsList.get(i).getProjectProgressRecordModels();
             //循环获取每个项目进度记录中的每一条
+            List<String> createTime=new ArrayList<>();
+            List<String> progress=new ArrayList<>();
             for(int j=0 ; j<projectProgressRecordModelsList.size() ; j++){
                 ProjectProgressRecordModel projectProgressRecordModel=projectProgressRecordModelsList.get(j);
-                //判断记录月份是1-9月还是10-12月,1-9月去0加月.10-12在后面加月
-                String ct=projectProgressRecordModel.getCreatedTime();
-                if(Integer.parseInt(ct)<10){
-                    ct=String.format("%s月",ct.substring(1));
-                }else{
-                    ct=String.format("%s月",ct);
-                }
-                projectProgressRecordModel.setCreatedTime(ct);
-                projectProgressRecordModel.setProgress(projectProgressRecordModel.getProgress()+"%");
+                //拼接出数组集合
+                createTime.add(projectProgressRecordModel.getCreatedTime());
+                progress.add(projectProgressRecordModel.getProgress());
+                //
+                ProjectProgressRecordArrayModel projectProgressRecordArrayModel=new ProjectProgressRecordArrayModel();
+                projectProgressRecordArrayModel.setCreatedTime(createTime);
+                projectProgressRecordArrayModel.setProgress(progress);
+                projectProgressRecordArrayModel.setCurrentData(projectProgressRecordModel.getCurrentData());
+
+                projectManageModelsList.get(i).setArrayModel(projectProgressRecordArrayModel);
             }
 
         }
+
+
+
+
         return new  PaginationData(projectManageModelsList,objects.getTotal());
     }
 
@@ -67,13 +90,58 @@ public class ProjectManageServiceImpl implements ProjectManageService {
 
     @ServiceLog(doAction = "工程项目查看-任务进展")
     @Override
-    public ProjectPlanModel findTaskPlan(String projectNo) {
-        return projectManageDao.findTaskPlan(projectNo);
+    public List<ProjectPlanVo>  findTaskPlan(String projectNo) {
+        //ProjectPlanVo
+        ProjectPlanModel projectPlanModelList= projectManageDao.findTaskPlan(projectNo);
+        String key[]={"总数","未开始","已完成","未完成"};
+        List<ProjectPlanVo> projectPlanVos=new ArrayList<>();
+        for(int i =0 ; i < 4 ; i++){
+            ProjectPlanVo projectPlanVo=new ProjectPlanVo();
+            projectPlanVo.setKey(key[i]);
+            if(i == 0){
+                projectPlanVo.setValue(projectPlanModelList.getTotal());
+            }
+            if(i == 1){
+                projectPlanVo.setValue(projectPlanModelList.getNoStart());
+            }
+            if(i == 2){
+                projectPlanVo.setValue(projectPlanModelList.getComplete());
+            }
+            if(i == 3){
+                projectPlanVo.setValue(projectPlanModelList.getUnComplete());
+            }
+            projectPlanVos.add(projectPlanVo);
+        }
+
+
+        return projectPlanVos;
     }
 
     @ServiceLog(doAction = "工程项目查看-完成及时率")
     @Override
     public ProjectCompleteRatioModel findCompleteRatio(String projectNo) {
         return projectManageDao.findCompleteRatio(projectNo);
+    }
+
+
+    public static String getDatePoor(Date endDate) {
+
+        Date nowDate=new Date();
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+        // long ns = 1000;
+        // 获得两个时间的毫秒时间差异
+        long diff = endDate.getTime() - nowDate.getTime();
+        // 计算差多少天
+        long day = diff / nd;
+        // 计算差多少小时
+        long hour = diff % nd / nh;
+        // 计算差多少分钟
+        long min = diff % nd % nh / nm;
+        // 计算差多少秒//输出结果
+        // long sec = diff % nd % nh % nm / ns;
+        //return day + "天" + hour + "小时" + min + "分钟";
+        return day + "天" + hour + "小时" ;
     }
 }

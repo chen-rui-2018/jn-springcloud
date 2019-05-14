@@ -33,10 +33,12 @@ public class RequireInfoList implements Serializable {
     private String advisorName;
     @ApiModelProperty(value = "提需求日期")
     private String requireTime;
-    @ApiModelProperty(value = "需求状态")
+    @ApiModelProperty(value = "需求状态(-1:已撤销 1：待处理，2：已处理)")
     private String status;
-    @ApiModelProperty(value = "对接结果")
+    @ApiModelProperty(value = "对接结果((1:对接成功  2:对接失败  3:企业需求撤销 4:未对接))")
     private String handleResult;
+    @ApiModelProperty(value = "点评状态 (0未点评  1已点评)")
+    private String isComment;
 
 
     public String getReqNum() {
@@ -133,6 +135,14 @@ public class RequireInfoList implements Serializable {
 
     public void setHandleResult(String handleResult) {
         this.handleResult = handleResult;
+    }
+
+    public String getIsComment() {
+        return isComment;
+    }
+
+    public void setIsComment(String isComment) {
+        this.isComment = isComment;
     }
 
     @Override

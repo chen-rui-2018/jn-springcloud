@@ -446,6 +446,20 @@ public class DataUploadServiceImpl implements DataUploadService {
         ModelDataVO result =  getModelDataByType(fileId,user,type);
 
         //任务的部门权限
+        List<GardenFillerAccessModel>  access = new ArrayList<>();
+        access = getAccess(fileId, user);
+
+        result.setGardenFiller(access);
+
+        return result;
+    }
+
+    /**
+     * 获取部门权限
+     */
+
+    private List<GardenFillerAccessModel> getAccess(String fileId,User user){
+        //任务的部门权限
         TbDataReportingGardenFillerCriteria example = new TbDataReportingGardenFillerCriteria();
         example.or().andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID)).andFillIdEqualTo(fileId);
         List<TbDataReportingGardenFiller> taskAccess = tbDataReportingGardenFillerMapper.selectByExample(example);
@@ -502,10 +516,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             }
         }
 
-
-        result.setGardenFiller(access);
-
-        return result;
+        return access;
     }
 
     /**
@@ -1702,7 +1713,7 @@ public class DataUploadServiceImpl implements DataUploadService {
     @Override
     @ServiceLog(doAction = "园区历史填报任务详情")
     public ModelDataVO getGardenFormStruct(String fileId,User user) {
-        return getModelStructByHistoryFillId(fileId,user,DataUploadConstants.COMPANY_TYPE);
+        return getModelStructByHistoryFillId(fileId,user,DataUploadConstants.GARDEN_TYPE);
     }
 
     /**
@@ -1720,10 +1731,10 @@ public class DataUploadServiceImpl implements DataUploadService {
         TbDataReportingTaskCriteria task = new TbDataReportingTaskCriteria();
         if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
             task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
-                    .andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(fillType));
+                    .andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(DataUploadConstants.COMPANY_TYPE));
         }else{
             task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
-                    .andFileTypeEqualTo(new Byte(fillType));
+                    .andFileTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE));
         }
 
 
@@ -1736,9 +1747,15 @@ public class DataUploadServiceImpl implements DataUploadService {
         //未填报
         if(concretTask.getStatus().toString().equals(DataUploadConstants.NOT_FILL)){
             result = getFormStruct(fileId,user);
+
         }else{
         //已填报
             result = getModelDataByType(fileId,user,concretTask.getStatus().toString());
+            //任务的部门权限
+            List<GardenFillerAccessModel>  access = new ArrayList<>();
+            access = getAccess(fileId, user);
+            result.setGardenFiller(access);
+
         }
         return result;
     }

@@ -1,19 +1,38 @@
 <template>
   <div id="app">
-    <administrative-header v-if="this.$route.name==='approvalGuide'" ></administrative-header>
+    <administrative-header v-if="this.$route.name==='approvalGuide'||this.$route.name==='powerDetail'||this.$route.name==='consult'||this.$route.name==='declarationCenter'||this.$route.name==='declarationPlatform'||this.$route.name==='declarationDetail'||this.$route.name==='consult'" ></administrative-header>
     <router-view/>
   </div>
 </template>
 
 <script>
-
 import './assets/styles/reset.css'
-
 import administrativeHeader from './components/administrativeHeader'
 
 export default {
   name: 'App',
-  components: {administrativeHeader}
+  components: {administrativeHeader},
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      this.api.post({
+        url: 'loginURL',
+        data: {
+          account: 'wangsong',
+          password: 'wangsong'
+        },
+        dataFlag: false,
+        callback: function (res) {
+          if (res.code === '0000') {
+            sessionStorage.token = res.data
+          }
+        }
+      })
+    }
+
+  }
 }
 </script>
 

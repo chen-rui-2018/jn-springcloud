@@ -30,7 +30,7 @@ exports.cssLoaders = function (options) {
   const px2remLoader = {
     loader: 'px2rem-loader',
     options: {
-    remUint: 75
+      remUint: 75
     }
   }
 
@@ -40,11 +40,7 @@ exports.cssLoaders = function (options) {
     const loaders = [cssLoader, px2remLoader]
     if (options.usePostCSS) {
       loaders.push(postcssLoader)
-
-      }
-
     }
-
     if (loader) {
       loaders.push({
         loader: loader + '-loader',
@@ -83,9 +79,9 @@ exports.cssLoaders = function (options) {
     less: generateLoaders('less'),
     sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass').concat({
-      loader:'sass-resources-loader',
-      options:{
-        resources:path.resolve(__dirname,'./../src/assets/styles/common.scss')
+      loader: 'sass-resources-loader',
+      options: {
+        resources: path.resolve(__dirname, './../src/assets/styles/common.scss')
       }
     }),
     stylus: generateLoaders('stylus'),

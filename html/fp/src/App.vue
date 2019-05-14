@@ -47,13 +47,13 @@
             <p @click="$router.push({path:'/enterpriseservice'})">企业服务</p>
             <div class="slide_nav_fence">
               <ul>
-                <li>申报中心</li>
+                <li @click="$router.push({path:'/declarationCenter'})">申报中心</li>
                 <li>政策中心</li>
                 <li>行政中心</li>
-                <li>活动中心</li>
-                <li>科技金融</li>
-                <li>人力资源</li>
-                <li>服务超市</li>
+                <li @click="$router.push({path:'/actiCenter'})">活动中心</li>
+                <li @click="$router.push({path:'/tfindex'})">科技金融</li>
+                <li >人力资源</li>
+                <li @click="$router.push({path:'/serMatHp'})">服务超市</li>
               </ul>
             </div>
           </div>

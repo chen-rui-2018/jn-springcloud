@@ -12,12 +12,12 @@
                   <div class="title">服务超市</div>
                 </div>
                 <div class="bannerUl">
-                  <li class="active" :class="{'liActiv':isActClass===true}">首页</li>
-                    <li>服务机构</li>
-                    <li>服务产品</li>
-                    <li>服务顾问</li>
-                    <li>活动培训</li>
-                    <li>关于我们</li>
+                    <li @click='$router.push({path:"/serMatHp"})'>首页</li>
+                    <li :class="{'active':this.$route.name==='serverOrg'||this.$route.name==='serverOrgDetail'}" @click='$router.push({path:"/serverOrg"})'>服务机构</li>
+                    <li @click='$router.push({path:"/serverPro"})' :class="{'active':this.$route.name==='serverPro'||this.$route.name==='serverProDetail'}">服务产品</li>
+                    <li @click='$router.push({path:"/serverCon"})' :class="{'active':this.$route.name==='serverCon'||this.$route.name==='serverConDetail'}">服务顾问</li>
+                    <li @click='$router.push({path:"/actiTrain"})' :class="{'active':this.$route.name==='actiTrain'||this.$route.name==='actiDetail'}">活动培训</li>
+                    <li @click='$router.push({path:"/aboutUs"})' :class="{'active':this.$route.name==='aboutUs'}">关于我们</li>
                 </div>
                 <div class="headerRight">
                   <div class="search" >
@@ -187,12 +187,7 @@ export default {
           border-radius: 5px;
         }
         .active{
-          background: #fff;
           color:#00a041;
-        }
-        .liActiv{
-          // background-color:#00a041;
-          // color:#00a041;
         }
       }
       .headerRight {

@@ -55,7 +55,8 @@
             <div class="actiContent">
                 <div class="actiNav">
                    <span>企业服务/</span>
-                   <span class="mainColor">活动中心</span>
+                   <span>服务超市/</span>
+                   <span class="mainColor">活动培训</span>
                 </div>
                 <div class="actiFilter clearfix">
                     <div class="timeFilter">
@@ -103,7 +104,7 @@
                 <div class="actiTab">
                     <ul class="allActiUl clearfix" v-if="flag">
                         <li v-for="(item,index) in actiListSlim" :key='index'>
-                            <img :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg" @click="handleRout(item.id)">
+                            <div style="width:100%;height:200px"><img  style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg" @click="handleRout(item.id)"></div>
                             <div class="actiInfo">
                                 <p class="actiNameItem">{{item.actiName}}</p>
                                 <p class="actiTimer">

@@ -2,9 +2,9 @@
     <div class="serverConDetail w">
         <div class="serverOrgMenu color2">
             <span>首页/</span>
-            <span>服务机构</span>
+            <span>服务顾问</span>
             <span>/</span>
-            <span class="mainColor agent">服务机构详情</span>
+            <span class="mainColor agent">服务顾问详情</span>
         </div>
         <div class="agentInfo">
             <el-card v-if="serverConDetailList">
@@ -121,8 +121,8 @@
         </div>
         <div class="agentCon">
             <div class="agentFil mainBorder">
-                <ul class="select-list clearfix" v-if="serverPro.length>0&&showFlag==true">
-                    <li>
+                <ul class="select-list clearfix" v-if="serverPro&&serverPro.length>0,showFlag==true">
+                    <li> 
                         <a href="javascript:;">筛选：</a>
                     </li>
                     <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')">
@@ -155,7 +155,7 @@
             </div>
             <el-tabs v-model="activeName1" @tab-click="handleClick">
                 <el-tab-pane name="serverPro">
-                     <span slot="label">服务产品({{serverPro[0].serviceTotal}})</span>
+                     <span slot="label">服务产品({{total1}})</span>
                     <div class="serverPro">
                         <ul class="list-imgleft">
                             <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>

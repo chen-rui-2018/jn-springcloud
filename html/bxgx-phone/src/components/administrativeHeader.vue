@@ -1,11 +1,15 @@
 <template>
   <div class="adniministrativeHeader">
-    <!-- <x-header></x-header> -->
-    <x-header :left-options="{backText: ''}">{{this.$route.meta.title}} <span slot="right" v-if="this.$route.name==='serviceDetail'||this.$route.name==='declarationDetail'">咨询</span></x-header>
+    <x-header :left-options="{backText: ''}">{{this.$route.meta.title}}</x-header>
   </div>
 </template>
 <script>
-
+import { XHeader } from 'vux'
+export default {
+  components: {
+    XHeader
+  }
+}
 </script>
 <style lang="scss">
   .adniministrativeHeader{
@@ -14,6 +18,8 @@
     top:0;
     width: 100%;
     background: #fff;
+  }
+ .adniministrativeHeader{
     padding:30px 34px;
     .vux-header{
       background-color: #fff;

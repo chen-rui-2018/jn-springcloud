@@ -160,6 +160,7 @@ export default {
         changeToStaff:"springcloud-enterprise/guest/userUpgrade/changeToStaff", // 升级员工
         changeToCompany:"springcloud-enterprise/guest/userUpgrade/changeToCompany", // 升级员工
 
+
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
         addOrEditMemorandum:"springcloud-enterprise/pd/declaration/addOrEditMemorandum",//申报平台备注
         getProductSerialNumber:"springcloud-enterprise/servicemarket/product/manage/getProductSerialNumber",//产品编号获取
@@ -180,6 +181,16 @@ export default {
         getRatingCommentDetail:"springcloud-enterprise/guest/serviceMarket/comment/getRatingCommentDetail",//获取评价页详情
         getGiveMeCommentList:"springcloud-enterprise/guest/serviceMarket/comment/getGiveMeCommentList",//获取我收到的评价
         saveRatingComment:"springcloud-enterprise/guest/serviceMarket/comment/saveRatingComment",//提交评价信息
+
+        getPolicyCenterList:"springcloud-park/guest/policy/policyCenterController/getPolicyCenterList",//政策中心首页列表
+        getPolicyClassList:"springcloud-park/guest/policy/policyCenterController/getPolicyClassList",//政策分类列表
+        getPolicyLevelList:"springcloud-park/guest/policy/policyCenterController/getPolicyLevelList",//政策级别列表
+        getPolicyDetails:"springcloud-park/guest/policy/policyCenterController/getPolicyDetails",//政策指南详情
+        getPolicyDiagramDetails:"springcloud-park/guest/policy/policyCenterController/getPolicyDiagramDetails",//图解政策详情
+        selectBusinessAreaNum:"springcloud-enterprise/guest/serviceMarket/org/selectBusinessAreaStatisticalNum",//根据业务领域查询服务超市统计数据
+        getCompanyList:"springcloud-enterprise/guest/company/getCompanyList",//查询企业列表
+        getAllList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
+        getBusinessAdContent:"springcloud-park/guest/portal/businessAd/getBusinessAdContent",//获取招商信息
 
     },
     setToken: function (obj) {   //设置token在请求头上面

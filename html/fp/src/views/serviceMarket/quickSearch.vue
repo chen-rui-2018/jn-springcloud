@@ -14,9 +14,7 @@
                     <div class="agentMid1">
                         <div class="conproduct">常规产品:</div>
                         <ul class="proItem clearfix">
-                            <li>代理记账</li>
-                            <li>代理记账</li>
-                            <li>代理记账</li>
+                            <li v-for="(i,k) in commentList" :key="k">{{i.productName}}</li>
                         </ul>
                     </div>
                     <div class="agentMid2">
@@ -25,7 +23,7 @@
                                 <div class="itemImg"><img src="@/../static/img/k1.png" alt=""></div>
                                 <div class="itemInfo">
                                     <p>机构</p>
-                                    <p class="mainColor">256家</p>
+                                    <p class="mainColor">{{businessAreaNum.orgNum}}家</p>
                                 </div>
                             </li>
                             <li class="line"></li>
@@ -33,7 +31,7 @@
                                 <div class="itemImg"><img src="@/../static/img/k2.png" alt=""></div>
                                 <div class="itemInfo">
                                     <p>产品</p>
-                                    <p class="mainColor">256家</p>
+                                    <p class="mainColor">{{businessAreaNum.productNum}}家</p>
                                 </div>
                             </li>
                             <li class="line"></li>
@@ -41,7 +39,7 @@
                                 <div class="itemImg"><img src="@/../static/img/k3.png" alt=""></div>
                                 <div class="itemInfo">
                                     <p>顾问</p>
-                                    <p class="mainColor">256家</p>
+                                    <p class="mainColor">{{businessAreaNum.advisorNum}}家</p>
                                 </div>
                             </li>
                             <li class="line"></li>
@@ -49,7 +47,7 @@
                                 <div class="itemImg"><img src="@/../static/img/k4.png" alt=""></div>
                                 <div class="itemInfo">
                                     <p>评价</p>
-                                    <p class="mainColor">256家</p>
+                                    <p class="mainColor">{{businessAreaNum.evaluateNum}}家</p>
                                 </div>
                             </li>
                             <li class="line"></li>
@@ -57,7 +55,7 @@
                                 <div class="itemImg"><img src="@/../static/img/k5.png" alt=""></div>
                                 <div class="itemInfo">
                                     <p>交易量</p>
-                                    <p class="mainColor">256家</p>
+                                    <p class="mainColor">{{businessAreaNum.transactionNum}}家</p>
                                 </div>
                             </li>
                         </ul>
@@ -67,7 +65,7 @@
         </div>
 
         <div class="agentCon">
-            <div class="serverOrgFilter mainBorder clearfix">
+            <div class="serverOrgFilter mainBorder clearfix" v-if="flag1">
                 <div class="filLeft fl" id="filLeft">排序：
                     <!-- <span @click="handleFil('')" :class="{'active':colorFlag == ''}">综合</span> -->
                     <span @click="handleFil('popularity')" :class="{'active':colorFlag == 'popularity'}">人气</span>
@@ -84,8 +82,32 @@
                     <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                 </div>
             </div>
+            <div class="serverOrgFilter mainBorder clearfix" v-if="flag2">
+                <div class="filLeft fl" id="filLeft">排序：
+                    <span @click="handleFil1('')" :class="{'active':colorFlag1 == ''}">综合</span>
+                    <span @click="handleFil1('popularity')" :class="{'active':colorFlag1 == 'popularity'}">人气</span>
+                    <span @click="handleFil1('attitudeScore')" :class="{'active':colorFlag1 == 'attitudeScore'}">好评</span>
+                    <span @click="handleFil1('serviceNum')" :class="{'active':colorFlag1 == 'serviceNum'}">服务量</span>
+                </div>
+                <div class="filRight fr">
+                    <input type="text" placeholder="搜索关键字" v-model="keyWords">
+                    <i class="iconfont icon-sousuo" @click="handleSearchList1"></i>
+                </div>
+            </div>
+            <div class="serverOrgFilter mainBorder clearfix" v-if="flag3">
+                <div class="filLeft fl" id="filLeft">排序：
+                    <span @click="handleFil2('integrate')" :class="{'active':colorFlag2 == 'integrate'}">综合</span>
+                    <span @click="handleFil2('popularity')" :class="{'active':colorFlag2 == 'popularity'}">人气</span>
+                    <span @click="handleFil2('praise')" :class="{'active':colorFlag2 == 'praise'}">好评</span>
+                    <span @click="handleFil2('serviceNum')" :class="{'active':colorFlag2 == 'serviceNum'}">服务量</span>
+                </div>
+                <div class="filRight fr">
+                    <input type="text" placeholder="搜索关键字" v-model="keyWords">
+                    <i class="iconfont icon-sousuo" @click="handleSearchList2"></i>
+                </div>
+            </div>
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="服务产品" name="serverPro" @click="handleSerpro">
+                <el-tab-pane label="服务产品" name="serverPro">
                     <div class="serverPro">
                         <ul class="list-imgleft">
                             <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>
@@ -135,7 +157,7 @@
                                         <!-- 评价 end -->
                                         <!-- 交易量 begin -->
                                         <div class="detail-count">
-                                            <div class="orgBtn fr mainColor">提需求</div>
+                                            <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
                                         </div>
                                         <!-- 交易量 end -->
                                     </div>
@@ -151,7 +173,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="服务机构" name="serverOrgContent" @click="handleSerorg">
+                <el-tab-pane label="服务机构" name="serverOrgContent">
                     <div class="serverOrgContent">
                         <ul class="list-imgleft">
                             <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
@@ -192,7 +214,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="服务顾问" name="serConsultant" @click="handleSercon">
+                <el-tab-pane label="服务顾问" name="serConsultant">
                     <div class="serverOrgContent">
                         <ul class="list-imgleft adviser">
                             <li class="clearfix" v-for="(i,k) in serviceConsultant" :key='k'>
@@ -231,15 +253,39 @@
 
             </el-tabs>
         </div>
+        <!-- 提需求弹框 -->
+        <template v-if="proVisible">
+            <el-dialog :visible.sync="proVisible" width="530px" top="30vh">
+                <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+                    <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+                        <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+                    </el-form-item>
+                </el-form>
+                <div class="demandLine"></div>
+                <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+                <div class="demandDia" @click="demandDia()">提交需求</div>
+            </el-dialog>
+        </template>
     </div>
 </template>
 <script>
 export default {
   data() {
     return {
+        proVisible:false,
+        serverProform: {
+        requireDetail: "",
+        productId: "",
+        productName: ""
+      },
+      flag1:true,
+      flag2:false,
+      flag3:false,
       activeName: "serverPro",
       serverOrgDetailList: {},
       colorFlag: "",
+      colorFlag1: "",
+      colorFlag2: "integrate",
       filterFlag1: "",
       keyWords: "",
       serverPro: [
@@ -262,19 +308,78 @@ export default {
       page3: 1,
       total3: 0,
       serverAgent: [],
-      evaCount: {}
+      evaCount: {},
+      businessAreaNum:{},
+      commentList:{},
     };
   },
   mounted() {
     // this.initList();
     // this.findOrgCountProductList();
     this.findProductList();
-    this.selectServiceOrgList();
-    this.getServiceConList();
+    // this.selectServiceOrgList();
+    // this.getServiceConList();
+    this.selectBusinessAreaNum()
+    this.commentProductList()
   },
   methods: {
+       demandRaise(i) {
+      this.proVisible = true;
+      this.serverProform.requireDetail = "";
+      this.serverProform.productId = i.productId;
+      this.serverProform.productName = i.productName;
+    },
+    demandDia() {
+      let _this = this;
+      this.api.post({
+        url: "userDemand",
+        data: {
+          productId: _this.serverProform.productId,
+          productName: _this.serverProform.productName,
+          requireDetail: _this.serverProform.requireDetail
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.$message.success("提交需求成功");
+            _this.proVisible = false;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    handleClick(tab, event) {
+     if(tab.name=='serverOrgContent'){
+         this.flag2=true,
+         this.flag1=false
+         this.flag3=false
+         this.selectServiceOrgList();
+     } else if (tab.name=='serConsultant'){
+         this.flag3=true
+         this.flag1=false
+         this.flag2=false
+         this.getServiceConList();
+     } else {
+         this.flag1=true
+         this.flag2=false
+         this.flag3=false
+         this.findProductList();
+     }
+    },
     handleFil(i) {
       this.colorFlag = i;
+      this.sortTypes = i;
+      this.page = 1;
+      this.findProductList();
+    },
+    handleFil1(i) {
+      this.colorFlag1 = i;
+      this.sortTypes = i;
+      this.page = 1;
+      this. selectServiceOrgList();
+    },
+    handleFil2(i) {
+      this.colorFlag2 = i;
       this.sortTypes = i;
       this.page = 1;
       this.findProductList();
@@ -285,17 +390,16 @@ export default {
       this.findProductList();
     },
     handleSearchList() {
-      this.page = 1;
+      this.page1 = 1;
       this.findProductList();
     },
-    handleSerpro() {
-      this.findProductList();
-    },
-    handleSercon() {
-      this.getServiceConList();
-    },
-    handleSerorg() {
+    handleSearchList1() {
+      this.page2 = 1;
       this.selectServiceOrgList();
+    },
+    handleSearchList2() {
+      this.page3 = 1;
+      this.getServiceConList();
     },
     handleSizeChange1(val) {
       //改变每页显示多少条的回调函数
@@ -330,8 +434,26 @@ export default {
       this.page3 = val;
       this.getServiceConList();
     },
-    handleClick(tab, event) {
-      // console.log(tab, event);
+     selectBusinessAreaNum() {
+      //根据业务领域查询服务超市统计数据
+      let _this = this;
+      this.api.get({
+        url: "selectBusinessAreaNum",
+        data: {
+          // orgId: _this.$route.query.orgId,
+          //   orgId: "1001211",
+          businessType:_this.$route.query.signoryId,
+          productId: ''
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.businessAreaNum = res.data;
+            // _this.total3 = res.data.total;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
     },
     getServiceConList() {
       //服务顾问
@@ -346,7 +468,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serviceConsultant = res.data.rows;
             _this.total3 = res.data.total;
           } else {
@@ -363,7 +484,7 @@ export default {
         data: {
           orgId: "",
           page: _this.page1,
-          signoryId: "",
+          signoryId: _this.$route.query.signoryId,
           rows: _this.row1,
           keyWords: _this.keyWords,
           sortTypes: _this.sortTypes,
@@ -371,7 +492,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
           } else {
@@ -393,7 +513,6 @@ export default {
         // sortTypes: _this.sortTypes,
         // orgName: _this.keyW
       };
-      console.log(data);
       this.api.get({
         url: "selectServiceOrgList",
         data: data,
@@ -411,7 +530,25 @@ export default {
           }
         }
       });
-    }
+    },
+    //常规产品
+     commentProductList() {
+      let _this = this;
+      this.api.get({
+        url: "findProductList",
+        data: {
+          signoryId: _this.$route.query.signoryId,
+          productType: '0'
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.commentList = res.data.rows;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
   }
 };
 </script>
@@ -514,6 +651,33 @@ export default {
         }
       }
     }
+  }
+  .serverTip {
+    display: inline-block;
+    font-size: 12px;
+  }
+  .demandDia {
+    display: inline-block;
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+    margin-left: 20px;
+    font-size: 12px;
+  }
+  .demandLine {
+    height: 1px;
+    width: 530px;
+    position: relative;
+    left: -20px;
+    background: #eee;
+    margin-bottom: 20px;
+    margin-top: 10px;
   }
 }
 </style>

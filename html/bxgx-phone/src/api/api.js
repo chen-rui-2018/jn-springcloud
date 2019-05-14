@@ -1,7 +1,8 @@
-﻿import axios from 'axios'
+
+import axios from 'axios'
 export default {
   host: 'http://112.94.22.222:8000/', // api的域名提出来放这里
-  apiURL: { // API路径统一管理,需要的路径在这里加就可以了
+  apiURL: {
     departList: 'springcloud-park/guest/portal/sp/power/departList', // 实施部门列表
     powerList: 'springcloud-park/guest/portal/sp/power/list', // 权利清单列表
     getpowerDetail: 'springcloud-park/guest/portal/sp/power/get', // 权利详情
@@ -13,7 +14,12 @@ export default {
     platformType: 'springcloud-enterprise/pd/declaration/typeList', // 申报中心所属平台类型列表
     selectByTalentNotice: 'springcloud-enterprise/guest/pd/declarationNotice/selectByTalentNotice', // 申报中心-查询公告详情
     getPlatformList: 'springcloud-enterprise/pd/declaration/list', // 申报平台列表
-    loginURL: 'springcloud-app-system/login'
+    loginURL: 'springcloud-app-system/login',
+    getActivityDetails: 'springcloud-park/guest/getActivityDetails', // 获取活动详情
+    findProductDetails: 'springcloud-enterprise/servicemarket/product/web/findProductDetails', // 服务产品详情
+    sameTypeProductList: 'springcloud-enterprise/servicemarket/product/web/sameTypeProductList', // 同类型产品
+    activityLike: 'springcloud-park/activity/activityLike/activityLike', // 活动点赞
+    CancelLike: 'springcloud-park/activity/activityLike/cancelLike' // 取消点赞
   },
   setToken: function (obj) { // 设置token在请求头上面
     axios.interceptors.request.use(function (config) {
@@ -24,7 +30,6 @@ export default {
     })
   },
   get: function (url, data, callback, error) {
-    // let _this = this
     if (!url) {
       return alert('未获取到有效的URL')
     };
@@ -45,10 +50,16 @@ export default {
       }
     })
       .then(function (response) {
-        if (typeof callback === 'function') { callback(response.data) }
+        if (typeof callback === 'function') {
+          callback(response.data)
+        }
       })
       .catch(function (err) {
-        if (typeof error === 'function') { error(err) } else { console.error(err) }
+        if (typeof error === 'function') {
+          error(err)
+        } else {
+          console.error(err)
+        }
       })
 
     /**  使用实例
@@ -106,10 +117,16 @@ export default {
       }
     })
       .then(function (response) {
-        if (typeof callback === 'function') { callback(response.data) }
+        if (typeof callback === 'function') {
+          callback(response.data)
+        }
       })
       .catch(function (err) {
-        if (typeof error === 'function') { error(err) } else { console.error(err) }
+        if (typeof error === 'function') {
+          error(err)
+        } else {
+          console.error(err)
+        }
       })
 
     /**  使用实例
@@ -185,27 +202,27 @@ export default {
       time = new Date(t_s + 1000 * 60 * 60 * 24 * (n || 0))
     };
 
-    var yyyy = time.getFullYear()
-    MM = time.getMonth() + 1,
-    dd = time.getDate(),
-    hh = time.getHours(),
-    mm = time.getMinutes(),
-    ss = time.getSeconds()
+    var yyyy = time.getFullYear(),
+      MM = time.getMonth() + 1,
+      dd = time.getDate(),
+      hh = time.getHours(),
+      mm = time.getMinutes(),
+      ss = time.getSeconds()
     MM = MM < 10 ? '0' + MM : MM
     dd = dd < 10 ? '0' + dd : dd
     hh = hh < 10 ? '0' + hh : hh
     mm = mm < 10 ? '0' + mm : mm
     ss = ss < 10 ? '0' + ss : ss
     return yyyy + '-' + MM + '-' + dd
-  },
-  getCurrentTime () { // 获取当前时间
-    var date = new Date()
-    var seperator1 = '-'
-    var seperator2 = ':'
-    var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
-    var strDate = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-    return currentdate
   }
+  //   getCurrentTime () { // 获取当前时间
+  //     var date = new Date()
+  //     var seperator1 = '-'
+  //     var seperator2 = ':'
+  //     var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+  //     var strDate = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+  //     var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+  //     return currentdate
+  //   }
 
 }

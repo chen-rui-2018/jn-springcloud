@@ -1,7 +1,6 @@
 import BaseModule from './BaseModule'
 
 class UserServer extends BaseModule {
-
   constructor () {
     super()
   }
@@ -11,6 +10,12 @@ class UserServer extends BaseModule {
   }
 
   getUser (id) {
+    if (!id) {
+      return Promise.reject(new Error(`getUser：id(${id})无效`))
+    }
+    return this.get(`/users/${id}`)
+  }
+  deleteUser (id) {
     if (!id) {
       return Promise.reject(new Error(`getUser：id(${id})无效`))
     }

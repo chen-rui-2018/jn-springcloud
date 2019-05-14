@@ -33,7 +33,6 @@ exports.cssLoaders = function (options) {
       remUint: 75
     }
   }
-
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
     // const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]

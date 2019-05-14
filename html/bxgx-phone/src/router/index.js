@@ -9,7 +9,8 @@ export default new Router({
     {
       path: '/actiDetail',
       name: 'actiDetail',
-      component: () => import('@/views/actiDetail')
+      component: () => import('@/views/actiDetail'),
+      meta: {title: '活动详情'}
     },
     {
       path: '/guest/portal/sp/power/approvalGuide',
@@ -58,6 +59,19 @@ export default new Router({
       name: 'consult',
       meta: {title: '我要咨询'},
       component: () => import('@/views/declarationCenter/consult')
+	},
+	{
+      path: '/serverProDetail',
+      name: 'serverProDetail',
+      component: () => import('@/views/serverProDetail'),
+      meta: {title: '服务产品详情'}
+    },
+    {
+      path: '/demandRaise',
+      name: 'demandRaise',
+      component: () => import('@/views/demandRaise'),
+      meta: {title: '提需求'}
+
     }
   ]
 })

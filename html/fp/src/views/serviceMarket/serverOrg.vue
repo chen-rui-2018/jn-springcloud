@@ -107,7 +107,7 @@
               </div>
               <div class="right1 fl">
                 <p>
-                  <el-rate :model="parseInt(i.attitudeScore)" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
+                  <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                   </el-rate>
                   <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
                 <p>

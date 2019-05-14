@@ -24,6 +24,10 @@ input {
   outline-style: none;
 }
 
+img {
+  vertical-align: middle;
+}
+
 .clearfix:after {
   /*正常浏览器 清除浮动*/
   clear: both;
@@ -2990,7 +2994,7 @@ input {
   text-align: center;
 }
 
-.portalIndex .enterpriseinfo .enterPriseCon .con2 .conlef2, .enterpriseservice .enterpriseinfo .enterPriseCon .con2 .conlef2 {
+.portalIndex .enterpriseinfo .enterPriseCon .con2 .conlef1:nth-child(2), .enterpriseservice .enterpriseinfo .enterPriseCon .con2 .conlef1:nth-child(2) {
   margin-left: 20px;
 }
 

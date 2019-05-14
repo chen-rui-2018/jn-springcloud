@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <administrative-header v-if="this.$route.name==='approvalGuide'||this.$route.name==='powerDetail'||this.$route.name==='consult'||this.$route.name==='declarationCenter'||this.$route.name==='declarationPlatform'||this.$route.name==='declarationDetail'||this.$route.name==='consult'" ></administrative-header>
+    <administrative-header v-if="this.$route.name==='approvalGuide'||this.$route.name==='powerDetail'||this.$route.name==='consult'||this.$route.name==='declarationCenter'||this.$route.name==='declarationPlatform'||this.$route.name==='declarationDetail'||this.$route.name==='consult'||$route.name==='serverProDetail'||$route.name==='actiDetail'" ></administrative-header>
+
+
+
     <router-view/>
   </div>
 </template>
@@ -14,6 +17,18 @@ export default {
   components: {administrativeHeader},
   mounted () {
     this.init()
+  components: { administrativeHeader },
+  created () {
+    this.init()
+    // this.$post({
+    //   url: 'http://192.168.10.31:1101/springcloud-app-system/login',
+    //   data: {
+    //     account: 'wangsong',
+    //     password: 'wangsong'
+    //   }
+    // }).then(res => {
+    //   sessionStorage.setItem('token', res.data)
+    // })
   },
   methods: {
     init () {
@@ -31,14 +46,12 @@ export default {
         }
       })
     }
-
   }
 }
 </script>
-
-<style>
+<style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center;

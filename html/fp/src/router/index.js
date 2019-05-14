@@ -718,5 +718,29 @@ export default new Router({
       },
       name: 'finaProDetail'
     },
+    {
+      path: '/policyCenter',
+      component: resolve => require(['@/views/policyCenter/policyCenter'], resolve),
+      meta: {
+        title: '政策中心首页'
+      },
+      name: 'policyCenter'
+    },
+    {
+      path: '/graphicPolicy',
+      component: resolve => require(['@/views/policyCenter/graphicPolicy'], resolve),
+      meta: {
+        title: '图解政策详情'
+      },
+      name: 'graphicPolicy'
+    },
+    {
+      path: '/policyGuide',
+      component: resolve => require(['@/views/policyCenter/policyGuide'], resolve),
+      meta: {
+        title: '政策指南详情'
+      },
+      name: 'policyGuide'
+    },
   ]
 })

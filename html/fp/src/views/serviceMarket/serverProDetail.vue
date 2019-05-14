@@ -139,7 +139,7 @@
                                         <!-- 评价 begin -->
                                         <div class="detail-evaluate inner-product">
                                             <div class="score">
-                                                <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                                                <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                                                 </el-rate>
                                                 <span class="c_default b">{{i.evaluationNumber}}</span>
                                                 <span>条评价</span>

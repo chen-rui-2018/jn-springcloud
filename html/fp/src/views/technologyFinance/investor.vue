@@ -1,5 +1,5 @@
 <template>
-  <div class="investor w">
+  <div class="investor w" id="investor">
     <div class="investorMenu">
       <span>首页</span>
       <span>/</span>
@@ -121,7 +121,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.investorInfoList = res.data.rows;
             _this.total = res.data.total;
           } else {
@@ -138,7 +137,6 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.investorMainArea = res.data;
           } else {
             _this.$message.error(res.result);
@@ -150,8 +148,10 @@ export default {
 };
 </script>
 <style lang="scss">
+#investor{
+padding-top: 65px;
+}
 .investor {
-  padding-top: 65px;
   .investorMenu {
     padding: 20px 0;
     font-size: 13px;

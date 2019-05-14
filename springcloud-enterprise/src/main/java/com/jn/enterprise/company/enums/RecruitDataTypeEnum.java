@@ -18,9 +18,9 @@ public enum RecruitDataTypeEnum implements CodeAndMsg {
     HOT("hot","热度"),
 
     // 状态
-    ALL_SHELVES("2","全部"),
-    ON_SHELVES("1","已上架"),
-    OFF_SHELVES("0","已下架"),
+    ALL_SHELVES("2", (byte)2,"全部"),
+    ON_SHELVES("1", (byte)1, "已上架"),
+    OFF_SHELVES("0", (byte)0, "已下架"),
 
     APPROVAL_STATUS_WAIT("0", "未审批"),
     APPROVAL_STATUS_ING("1", "审批中"),
@@ -36,8 +36,16 @@ public enum RecruitDataTypeEnum implements CodeAndMsg {
      */
     private String message;
 
+    private byte value;
+
     RecruitDataTypeEnum(String code, String message) {
         this.code = code;
+        this.message = message;
+    }
+
+    RecruitDataTypeEnum(String code, byte value, String message) {
+        this.code = code;
+        this.value = value;
         this.message = message;
     }
 
@@ -58,4 +66,11 @@ public enum RecruitDataTypeEnum implements CodeAndMsg {
     public void setMessage(String message) {
         this.message = message;
     }
-}
+
+    public byte getValue() {
+        return value;
+    }
+
+    public void setValue(byte value) {
+        this.value = value;
+    }}

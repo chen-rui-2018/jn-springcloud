@@ -33,7 +33,7 @@ public class ProjectManageServiceImpl implements ProjectManageService {
     @ServiceLog(doAction = "工程项目管理")
     @Override
     public PaginationData<PaginationData<List<ProjectManageModel>>> findAll(ProjectModel projectModel) {
-        if(projectModel.getOrderByClause() == "" || projectModel.getOrderByClause() == null){
+        if(projectModel.getOrderByClause() == null){
             projectModel.setOrderByClause("project_no desc");
         }
         if(projectModel.getProgress() == null){
@@ -119,8 +119,99 @@ public class ProjectManageServiceImpl implements ProjectManageService {
 
     @ServiceLog(doAction = "工程项目查看-完成及时率")
     @Override
-    public ProjectCompleteRatioModel findCompleteRatio(String projectNo) {
-        return projectManageDao.findCompleteRatio(projectNo);
+    public ProjectCompleteRatioArrayModel findCompleteRatio(String projectNo) {
+
+        ProjectCompleteRatioModel projectCompleteRatioModel= projectManageDao.findCompleteRatio(projectNo);
+
+        ProjectCompleteRatioArrayModel projectCompleteRatioArrayModel=new ProjectCompleteRatioArrayModel();
+        //赋值月份
+        List<String> month=new ArrayList<>();
+        for (int i=1;i<13;i++){
+            String m=i+"月完成及时率";
+            month.add(m);
+        }
+        projectCompleteRatioArrayModel.setMonth(month);
+        List<CompleteRatioModel> completeRatioModels=new ArrayList<>();
+        for (int i=1;i<13;i++){
+            CompleteRatioModel completeRatioModel=new CompleteRatioModel();
+            if (i==1){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan1());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual1());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio1());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==2){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan2());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual2());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio2());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==3){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan3());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual3());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio3());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==4){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan4());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual4());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio4());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==5){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan5());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual5());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio5());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==6){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan6());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual6());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio6());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==7){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan7());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual7());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio7());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==8){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan8());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual8());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio8());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==9){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan9());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual9());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio9());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==10){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan10());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutuall0());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio10());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==11){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan11());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual11());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio11());
+                completeRatioModels.add(completeRatioModel);
+            }
+            if (i==12){
+                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan12());
+                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual12());
+                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio12());
+                completeRatioModels.add(completeRatioModel);
+            }
+
+        }
+
+        projectCompleteRatioArrayModel.setCompleteRatioModels(completeRatioModels);
+
+        return projectCompleteRatioArrayModel;
     }
 
 

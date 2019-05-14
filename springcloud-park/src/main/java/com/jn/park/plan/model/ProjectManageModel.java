@@ -2,6 +2,7 @@ package com.jn.park.plan.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,12 +41,36 @@ public class ProjectManageModel implements Serializable {
     @ApiModelProperty(value = "当前时间")
     private String nowTime;
 
+    @ApiModelProperty(value = "工程状态(2已完成;1 进行中;0 未开始)")
+    private String projectState;
+
     @ApiModelProperty(value = "进度记录")
+    ProjectProgressRecordArrayModel arrayModel;
+
+    @ApiModelProperty(value = "进度记录-test")
     List<ProjectProgressRecordModel> projectProgressRecordModels;
+
 
     /*@ApiModelProperty(value = "排序字段(空格隔开)desc/asc(project_no:项目编号/surplus_time:剩余工期/progress:进度)默认project_no desc",example = "project_no desc")
     private String  orderByClause;*/
 
+
+    public ProjectProgressRecordArrayModel getArrayModel() {
+        return arrayModel;
+    }
+
+    public void setArrayModel(ProjectProgressRecordArrayModel arrayModel) {
+        this.arrayModel = arrayModel;
+    }
+
+    public String getProjectState() {
+        return projectState;
+    }
+
+
+    public void setProjectState(String projectState) {
+        this.projectState = projectState;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -135,7 +160,9 @@ public class ProjectManageModel implements Serializable {
                 ", projectSurplusTask='" + projectSurplusTask + '\'' +
                 ", surplusTime='" + surplusTime + '\'' +
                 ", nowTime='" + nowTime + '\'' +
+                ", projectState='" + projectState + '\'' +
                 ", projectProgressRecordModels=" + projectProgressRecordModels +
+                ", arrayModel=" + arrayModel +
                 '}';
     }
 }

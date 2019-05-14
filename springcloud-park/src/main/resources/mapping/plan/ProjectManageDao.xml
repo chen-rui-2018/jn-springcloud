@@ -15,13 +15,14 @@
         DATE_FORMAT(t.plan_stop_time,'%Y-%m-%e') as "planstoptime", <!-- 项目计划截止时间-->
         CONCAT(ROUND(t.project_surplus_task),"%") as "projectsurplustask", <!-- 项目剩余任务量-->
         IF(t.surplus_time = 0,'少于1',t.surplus_time) as "surplustime", <!-- 项目剩余工期-->
-        curdate() as "nowtime" <!-- 当前时间-->
+        curdate() as "nowtime", <!-- 当前时间-->
+        t.project_state as "projectstate" <!-- 工程状态-->
         <!-- CONCAT(ROUND(IF(t.surplus_time = 0,"少于一",t.surplus_time)),"天") as "surplustime"-->
         FROM
             tb_plan_project t
         WHERE t.record_status = 1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(projectName)">
-        AND t.project_name = #{projectName}
+        AND t.project_name LIKE concat(concat('%',#{projectName}),'%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(projectState)">
         AND t.project_state = #{projectState} <!-- 工程状态（2 已完成，1 进行中，0 未开始）-->
@@ -42,6 +43,7 @@
         <result column="projectSurplusTask" jdbcType="VARCHAR" property="projectSurplusTask" />
         <result column="surplusTime" jdbcType="VARCHAR" property="surplusTime" />
         <result column="nowTime" jdbcType="VARCHAR" property="nowTime" />
+        <result column="projectState" jdbcType="VARCHAR" property="projectState" />
         <collection property="projectProgressRecordModels"
                     ofType="com.jn.park.plan.model.ProjectProgressRecordModel"
                     select="selectProjectProgressRecordList"
@@ -51,8 +53,9 @@
     <select id="selectProjectProgressRecordList" resultMap="findAllProgressRecordList">
       SELECT
     <!-- DATE_FORMAT(MAX(t.created_time),'%Y-%m-%d') as "createdtime" , 时间-->
-    DATE_FORMAT(MAX(t.created_time),'%m') as "createdtime" ,<!-- 时间-->
-    t.progress as "progress" <!-- 进度 -->
+    DATE_FORMAT(MAX(t.created_time),'%Y-%m-%d') as "createdtime" ,<!-- 时间-->
+    t.progress as "progress", <!-- 进度 -->
+    DATE_FORMAT(CURRENT_DATE(),'%Y-%m-%d') as "currentData"
     FROM
         tb_plan_project_d t
     WHERE t.record_status = 1
@@ -64,6 +67,8 @@
 
         <result column="created_time" jdbcType="VARCHAR" property="createdTime" />
         <result column="progress" jdbcType="VARCHAR" property="progress" />
+        <result column="currentData" jdbcType="VARCHAR" property="currentData" />
+
     </resultMap>
 
 

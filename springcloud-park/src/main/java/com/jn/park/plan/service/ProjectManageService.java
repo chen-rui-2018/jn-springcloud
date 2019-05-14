@@ -40,5 +40,5 @@ public interface ProjectManageService {
      * @param projectNo
      * @return
      */
-    ProjectCompleteRatioModel findCompleteRatio(String projectNo);
+    ProjectCompleteRatioArrayModel findCompleteRatio(String projectNo);
 }

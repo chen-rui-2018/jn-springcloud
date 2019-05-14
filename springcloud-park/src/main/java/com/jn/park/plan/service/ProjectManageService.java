@@ -1,9 +1,8 @@
 package com.jn.park.plan.service;
 
-import com.jn.park.plan.model.ProjectCompleteRatioModel;
-import com.jn.park.plan.model.ProjectManageModel;
-import com.jn.park.plan.model.ProjectPlanModel;
-import com.jn.park.plan.model.ProjectTaskModel;
+import com.jn.common.model.PaginationData;
+import com.jn.park.message.model.FindAllMessageListVo;
+import com.jn.park.plan.model.*;
 
 import java.util.List;
 
@@ -16,13 +15,10 @@ public interface ProjectManageService {
 
     /**
      * 工程项目管理
-     * @param projectState 工程状态
-     * @param progress 项目进度
-     * @param projectName 项目名称
-     * @param orderByClause 排序字段
+     * @param projectModel 工程状态
      * @return
      */
-    List<ProjectManageModel> findAll(String projectState, String progress, String projectName, String orderByClause);
+    PaginationData<PaginationData<List<ProjectManageModel>>>  findAll(ProjectModel projectModel);
 
     /**
      * 工程项目查看-任务信息

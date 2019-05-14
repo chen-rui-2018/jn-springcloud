@@ -36,7 +36,7 @@ public class TbAssetArticleLease implements Serializable {
     private String contactPhone;
 
     /*@ApiModelProperty("租借押金")*/
-    private String leaseCash;
+    private BigDecimal leaseCash;
 
     /*@ApiModelProperty("租借单价")*/
     private BigDecimal leasePrice;
@@ -171,12 +171,12 @@ public class TbAssetArticleLease implements Serializable {
         this.contactPhone = contactPhone == null ? null : contactPhone.trim();
     }
 
-    public String getLeaseCash() {
+    public BigDecimal getLeaseCash() {
         return leaseCash;
     }
 
-    public void setLeaseCash(String leaseCash) {
-        this.leaseCash = leaseCash == null ? null : leaseCash.trim();
+    public void setLeaseCash(BigDecimal leaseCash) {
+        this.leaseCash = leaseCash;
     }
 
     public BigDecimal getLeasePrice() {

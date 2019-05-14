@@ -17,7 +17,7 @@ public interface IndexService {
      * 获取重要消息列表
      * @return
      */
-    List<ImportantNews> getImportantNewsList();
+    List<ImportantNews> getImportantNewsList(String platForm);
 
     /**
      * 获取园区成果列表

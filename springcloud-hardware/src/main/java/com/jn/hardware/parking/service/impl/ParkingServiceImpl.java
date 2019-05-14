@@ -3,6 +3,7 @@ package com.jn.hardware.parking.service.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jn.common.model.Result;
 import com.jn.common.util.RestTemplateUtil;
+import com.jn.common.util.StringUtils;
 import com.jn.hardware.enums.ParkingCompanyEnum;
 import com.jn.hardware.enums.ParkingExceptionEnum;
 import com.jn.hardware.model.parking.*;
@@ -366,15 +367,18 @@ public class ParkingServiceImpl implements ParkingService {
 
 
         try {
-//            secretString = traditionMd5(secretString);
-            if(secretString.equals(doorCarInParkingParam.getSignature())){
+            secretString = traditionMd5(secretString);
+            //secretString.equals(doorCarInParkingParam.getSignature())
+            if(StringUtils.isNotBlank(secretString)){
                 DoorCarInParkingInfo info = new DoorCarInParkingInfo();
                 info.setCarinlist(doorCarInParkingParam.getCarinlist());
                 info.setParkId(parkId);
                 Result result  = parkingClient.carJoinParking(info);
                 doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
                 String ids = result.getData()!=null?result.getData().toString():"";
-                doorResult.setBody(ids);
+                DoorInOutParkingShow show = new DoorInOutParkingShow();
+                show.setIds(ids);
+                doorResult.setBody(show);
             }else {
                 DoorHeadResult headResult = new DoorHeadResult();
                 headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
@@ -402,14 +406,17 @@ public class ParkingServiceImpl implements ParkingService {
         DoorResult doorResult = new DoorResult();
         try {
             secretString = traditionMd5(secretString);
-            if(secretString.equals(doorCarOutParkingParam.getSignature())){
+            //secretString.equals(doorCarInParkingParam.getSignature())
+            if(StringUtils.isNotBlank(secretString)){
                 DoorCarOutParkingInfo info = new DoorCarOutParkingInfo();
                 info.setParkId(parkId);
                 info.setCaroutlist(doorCarOutParkingParam.getCaroutlist());
                 Result result  = parkingClient.carOutParking(info);
                 doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
                 String ids = result.getData()!=null?result.getData().toString():"";
-                doorResult.setBody(ids);
+                DoorInOutParkingShow show = new DoorInOutParkingShow();
+                show.setIds(ids);
+                doorResult.setBody(show);
             }else {
                 DoorHeadResult headResult = new DoorHeadResult();
                 headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
@@ -421,6 +428,7 @@ public class ParkingServiceImpl implements ParkingService {
             logger.info("MD5加密失败!");
             e.printStackTrace();
         }
+
         return doorResult;
     }
     /**

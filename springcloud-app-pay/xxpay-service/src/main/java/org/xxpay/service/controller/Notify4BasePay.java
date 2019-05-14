@@ -1,10 +1,14 @@
 package org.xxpay.service.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.RefundOrderNotify;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xxpay.common.constant.PayConstant;
+import org.xxpay.common.util.BeanToMap;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.common.util.PayDigestUtil;
 import org.xxpay.common.util.XXPayUtil;
@@ -57,24 +61,40 @@ public class Notify4BasePay {
 		MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
 		String resKey = mchInfo.getResKey();
 		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("payOrderId", payOrder.getPayOrderId() == null ? "" : payOrder.getPayOrderId());           // 支付订单号
-		paramMap.put("mchId", payOrder.getMchId() == null ? "" : payOrder.getMchId());                      	// 商户ID
-		paramMap.put("mchOrderNo", payOrder.getMchOrderNo() == null ? "" : payOrder.getMchOrderNo());       	// 商户订单号
-		paramMap.put("channelId", payOrder.getChannelId() == null ? "" : payOrder.getChannelId());              // 渠道ID
-		paramMap.put("amount", payOrder.getAmount() == null ? "" : payOrder.getAmount());                      	// 支付金额
-		paramMap.put("currency", payOrder.getCurrency() == null ? "" : payOrder.getCurrency());                 // 货币类型
-		paramMap.put("status", payOrder.getStatus() == null ? "" : payOrder.getStatus());               		// 支付状态
-		paramMap.put("clientIp", payOrder.getClientIp()==null ? "" : payOrder.getClientIp());   				// 客户端IP
-		paramMap.put("device", payOrder.getDevice()==null ? "" : payOrder.getDevice());               			// 设备
-		paramMap.put("subject", payOrder.getSubject()==null ? "" : payOrder.getSubject());     	   				// 商品标题
-		paramMap.put("channelOrderNo", payOrder.getChannelOrderNo()==null ? "" : payOrder.getChannelOrderNo()); // 渠道订单号
-		paramMap.put("param1", payOrder.getParam1()==null ? "" : payOrder.getParam1());               		   	// 扩展参数1
-		paramMap.put("param2", payOrder.getParam2()==null ? "" : payOrder.getParam2());               		   	// 扩展参数2
-		paramMap.put("paySuccTime", payOrder.getPaySuccTime()==null ? "" : payOrder.getPaySuccTime());			// 支付成功时间
+		// 支付订单号
+		paramMap.put("payOrderId", payOrder.getPayOrderId() == null ? "" : payOrder.getPayOrderId());
+		// 商户ID
+		paramMap.put("mchId", payOrder.getMchId() == null ? "" : payOrder.getMchId());
+		// 商户订单号
+		paramMap.put("mchOrderNo", payOrder.getMchOrderNo() == null ? "" : payOrder.getMchOrderNo());
+		// 渠道ID
+		paramMap.put("channelId", payOrder.getChannelId() == null ? "" : payOrder.getChannelId());
+		// 支付金额
+		paramMap.put("amount", payOrder.getAmount() == null ? "" : payOrder.getAmount());
+		// 货币类型
+		paramMap.put("currency", payOrder.getCurrency() == null ? "" : payOrder.getCurrency());
+		// 支付状态
+		paramMap.put("status", payOrder.getStatus() == null ? "" : payOrder.getStatus());
+		// 客户端IP
+		paramMap.put("clientIp", payOrder.getClientIp()==null ? "" : payOrder.getClientIp());
+		// 设备
+		paramMap.put("device", payOrder.getDevice()==null ? "" : payOrder.getDevice());
+		// 商品标题
+		paramMap.put("subject", payOrder.getSubject()==null ? "" : payOrder.getSubject());
+		// 渠道订单号
+		paramMap.put("channelOrderNo", payOrder.getChannelOrderNo()==null ? "" : payOrder.getChannelOrderNo());
+		// 扩展参数1
+		paramMap.put("param1", payOrder.getParam1()==null ? "" : payOrder.getParam1());
+		// 扩展参数2
+		paramMap.put("param2", payOrder.getParam2()==null ? "" : payOrder.getParam2());
+		// 支付成功时间
+		paramMap.put("paySuccTime", payOrder.getPaySuccTime()==null ? "" : payOrder.getPaySuccTime());
+		//通知类型
 		paramMap.put("backType", backType==null ? "" : backType);
 		// 先对原文签名
 		String reqSign = PayDigestUtil.getSign(paramMap, resKey);
-		paramMap.put("sign", reqSign);   // 签名
+		// 签名
+		paramMap.put("sign", reqSign);
 		// 签名后再对有中文参数编码
 		try {
 			paramMap.put("device", URLEncoder.encode(payOrder.getDevice()==null ? "" : payOrder.getDevice(), PayConstant.RESP_UTF8));
@@ -130,21 +150,31 @@ public class Notify4BasePay {
 	 * @param payOrder 支付订单对象
 	 * @param isFirst  是否第一次通知
 	* */
-
 	public JSONObject createNotifyInfo(PayOrder payOrder,Boolean isFirst) {
 		//http回调通知地址
 		String url = "";
 		//springCloud 回调通知地址
 		String serviceId  = "";
 		String serviceUrl  = "";
+		PayOrderNotify payOrderNotify = new PayOrderNotify();
+
 
 
 		//如果存在http方式回调 则不用springCloud方式
 		if(StringUtils.isNotBlank(payOrder.getNotifyUrl())){
-			url = createNotifyUrl(payOrder, "2");
+			url = createNotifyUrl(payOrder, PayConstant.MCH_NOTICE_BACKSTAGE);
 		}else{
+			//springClound回调参数
 			serviceId = payOrder.getServiceId();
 			serviceUrl = payOrder.getServiceUrl();
+			//把值赋予返回对象
+			payOrder.setBackType(PayConstant.MCH_NOTICE_BACKSTAGE);
+			BeanUtils.copyProperties(payOrder, payOrderNotify);
+			//生成签名
+			MchInfo mchInfo = mchInfoService.selectMchInfo(payOrderNotify.getMchId());
+			String resKey = mchInfo.getResKey();
+			String sign = PayDigestUtil.getSign(BeanToMap.toMap(payOrderNotify), resKey);
+			payOrderNotify.setSign(sign);
 		}
 
 		if(isFirst) {
@@ -164,7 +194,7 @@ public class Notify4BasePay {
 		object.put("url", url);
 		object.put("serviceId", serviceId);
 		object.put("serviceUrl", serviceUrl);
-		object.put("payOrderJson", JSONObject.toJSON(payOrder));
+		object.put("payOrderJson", JSONObject.toJSON(payOrderNotify));
 		object.put("orderId", payOrder.getPayOrderId());
 		object.put("count", count);
 		object.put("createTime", System.currentTimeMillis());

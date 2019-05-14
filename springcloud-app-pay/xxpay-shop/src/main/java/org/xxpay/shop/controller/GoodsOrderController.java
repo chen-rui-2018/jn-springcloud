@@ -3,13 +3,14 @@ package org.xxpay.shop.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jn.pay.enums.ChannelIdEnum;
-import org.xxpay.common.enumm.MchPayTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.xxpay.common.constant.PayConstant;
+import org.xxpay.common.enumm.MchPayTypeEnum;
 import org.xxpay.common.util.*;
 import org.xxpay.shop.dao.model.GoodsOrder;
 import org.xxpay.shop.service.GoodsOrderService;
@@ -103,7 +104,7 @@ public class GoodsOrderController {
         String result = XXPayUtil.call4Post(url + reqData);
         System.out.println("请求支付中心下单接口,响应数据:" + result);
         Map retMap = JSON.parseObject(result);
-        if("SUCCESS".equals(retMap.get("retCode"))) {
+        if(PayConstant.RETURN_VALUE_SUCCESS.equals(retMap.get("retCode"))) {
             // 验签
             String checkSign = PayDigestUtil.getSign(retMap, resKey, "sign", "payParams");
             String retSign = (String) retMap.get("sign");
@@ -157,7 +158,7 @@ public class GoodsOrderController {
         String result = XXPayUtil.call4Post(url + reqData);
         System.out.println("请求支付中心下单接口,响应数据:" + result);
         Map retMap = JSON.parseObject(result);
-        if("SUCCESS".equals(retMap.get("retCode"))) {
+        if(PayConstant.RETURN_VALUE_SUCCESS.equals(retMap.get("retCode"))) {
             // 验签
             String checkSign = PayDigestUtil.getSign(retMap, resKey, "sign", "payParams");
             String retSign = (String) retMap.get("sign");
@@ -195,7 +196,7 @@ public class GoodsOrderController {
         String result = XXPayUtil.call4Post(url + reqData);
         System.out.println("请求支付中心下单接口,响应数据:" + result);
         Map retMap = JSON.parseObject(result);
-        if("SUCCESS".equals(retMap.get("retCode"))) {
+        if(PayConstant.RETURN_VALUE_SUCCESS.equals(retMap.get("retCode"))) {
             // 验签
             String checkSign = PayDigestUtil.getSign(retMap, resKey, "sign", "payParams");
             String retSign = (String) retMap.get("sign");
@@ -408,7 +409,7 @@ public class GoodsOrderController {
         try {
             GoodsOrder goodsOrder = goodsOrderService.getGoodsOrder(mchOrderNo);
             if(goodsOrder != null && goodsOrder.getStatus() == Constant.GOODS_ORDER_STATUS_COMPLETE) {
-                outResult(response, "success");
+                outResult(response, PayConstant.MCH_NOTICE_REQUEST_SUCCESS);
                 return;
             }
             // 执行业务逻辑
@@ -419,7 +420,7 @@ public class GoodsOrderController {
             if(ret == 1) {
                 ret = goodsOrderService.updateStatus4Complete(mchOrderNo);
                 if(ret == 1) {
-                    resStr = "success";
+                    resStr = PayConstant.MCH_NOTICE_REQUEST_SUCCESS;
                 }else {
                     resStr = "fail";
                 }
@@ -437,7 +438,7 @@ public class GoodsOrderController {
 
     @RequestMapping("/notify_test")
     public void notifyTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        outResult(response, "success");
+        outResult(response, PayConstant.MCH_NOTICE_REQUEST_SUCCESS);
     }
 
     @RequestMapping("/toAliPay.html")

@@ -1,5 +1,7 @@
 package com.jn.pay.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -108,6 +110,33 @@ public class PayOrderQueryRsp implements Serializable  {
      * */
     private String sign;
 
+    /**
+     * 回调springCloud服务名称ID
+     * serviceId和serviceUrl如果为空,notifyUrl为必传
+     */
+    private String serviceId;
+
+    /**
+     * 回调springCloud服务URL
+     * serviceId和serviceUrl如果为空,notifyUrl为必传
+     */
+    private String serviceUrl;
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
+    }
 
     public String getPayOrderId() {
         return payOrderId;
@@ -319,6 +348,8 @@ public class PayOrderQueryRsp implements Serializable  {
                 ", clientIp='" + clientIp + '\'' +
                 ", device='" + device + '\'' +
                 ", sign='" + sign + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                ", serviceUrl='" + serviceUrl + '\'' +
                 '}';
     }
 }

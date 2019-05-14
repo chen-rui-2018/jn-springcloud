@@ -232,7 +232,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
         // springCloud 回调服务的ID
         String serviceId = payOrderReq.getServiceId();
         // springCloud 回调服务的URL
-        String serviceUrl = payOrderReq.getServiceId();
+        String serviceUrl = payOrderReq.getServiceUrl();
         // 商品主题
         String subject = payOrderReq.getSubject();
         // 商品描述信息
@@ -385,6 +385,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         payOrder.put("param1", param1);
         payOrder.put("param2", param2);
         payOrder.put("notifyUrl", notifyUrl);
+        payOrder.put("serviceId", serviceId);
+        payOrder.put("serviceUrl", serviceUrl);
         //响应密钥
         payOrder.put("resKey",mchInfo.getResKey());
         return payOrder;

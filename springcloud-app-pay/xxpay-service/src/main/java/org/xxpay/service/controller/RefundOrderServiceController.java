@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.xxpay.common.constant.CommonConstants;
 import org.xxpay.common.domain.BaseParam;
 import org.xxpay.common.enumm.RetEnum;
 import org.xxpay.common.util.*;
@@ -42,7 +43,7 @@ public class RefundOrderServiceController extends Notify4BasePay {
     public String createPayOrder(@RequestParam String jsonParam) {
         _log.info("接收创建退款订单请求,jsonParam={}", jsonParam);
         JSONObject retObj = new JSONObject();
-        retObj.put("code", "0000");
+        retObj.put("code", CommonConstants.SUCCESS_CODE);
         if(StringUtils.isBlank(jsonParam)) {
             retObj.put("code", "0001");
             retObj.put("msg", "缺少参数");

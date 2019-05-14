@@ -5,9 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.xxpay.common.constant.CommonConstants;
 import org.xxpay.common.util.MyBase64;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.dal.dao.model.PayChannel;
@@ -33,7 +33,7 @@ public class PayChannelServiceController {
         // TODO 参数校验
         _log.info("selectPayChannel << {}", jsonParam);
         JSONObject retObj = new JSONObject();
-        retObj.put("code", "0000");
+        retObj.put("code", CommonConstants.SUCCESS_CODE);
         if(StringUtils.isBlank(jsonParam)) {
             retObj.put("code", "0001"); // 参数错误
             retObj.put("msg", "缺少参数");

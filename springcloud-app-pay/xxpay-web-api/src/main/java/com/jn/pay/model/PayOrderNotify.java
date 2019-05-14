@@ -41,7 +41,7 @@ public class PayOrderNotify implements Serializable  {
     /**
      * 支付状态,0-订单生成,1-支付中,2-支付成功,3-业务处理完成
     * */
-    private Integer status;
+    private Byte status;
     /**
      * 客户端IP
      */
@@ -54,6 +54,10 @@ public class PayOrderNotify implements Serializable  {
      * 商品标题
      */
     private String subject;
+    /**
+     * 商品描述
+    * */
+    private String body;
     /**
      * 第三方支付渠道订单号(微信,支付宝)
     * */
@@ -78,7 +82,21 @@ public class PayOrderNotify implements Serializable  {
      * 签名
      * */
     private String sign;
+    /**
+     * 回调springCloud服务名称ID
+     * serviceId和serviceUrl如果为空,notifyUrl为必传
+     */
+    private String serviceId;
 
+    /**
+     * 回调springCloud服务URL
+     * serviceId和serviceUrl如果为空,notifyUrl为必传
+     */
+    private String serviceUrl;
+    /**
+     * 第三方支付渠道交易单号
+    * */
+    private String channelMchId;
 
     @Override
     public String toString() {
@@ -93,13 +111,49 @@ public class PayOrderNotify implements Serializable  {
                 ", clientIp='" + clientIp + '\'' +
                 ", device='" + device + '\'' +
                 ", subject='" + subject + '\'' +
+                ", body='" + body + '\'' +
                 ", channelOrderNo='" + channelOrderNo + '\'' +
                 ", param1='" + param1 + '\'' +
                 ", param2='" + param2 + '\'' +
                 ", paySuccTime=" + paySuccTime +
                 ", backType='" + backType + '\'' +
                 ", sign='" + sign + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                ", serviceUrl='" + serviceUrl + '\'' +
+                ", channelMchId='" + channelMchId + '\'' +
                 '}';
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getChannelMchId() {
+        return channelMchId;
+    }
+
+    public void setChannelMchId(String channelMchId) {
+        this.channelMchId = channelMchId;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
     }
 
     public String getPayOrderId() {
@@ -150,11 +204,11 @@ public class PayOrderNotify implements Serializable  {
         this.amount = amount;
     }
 
-    public Integer getStatus() {
+    public Byte getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(Byte status) {
         this.status = status;
     }
 

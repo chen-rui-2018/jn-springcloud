@@ -1,5 +1,10 @@
 package org.xxpay.service.mq;
 
+import com.alibaba.fastjson.JSONObject;
+import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
+import com.jn.common.util.LoadBalancerUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
@@ -30,6 +35,8 @@ public class BaseMq  {
     * */
     private static final MyLog _log = MyLog.getLog(BaseMq.class);
 
+    @Autowired
+    private LoadBalancerUtil loadBalancerUtil;
 
     /**
      * 消息队列发送
@@ -75,6 +82,40 @@ public class BaseMq  {
             return new X509Certificate[] {};
         }
     }
+
+
+
+    /**
+     * 回调通知
+     *根据回调地址进行通知业务系统，如果存在http方式回调 则不用springCloud方式
+     * @param msgObj 通知消息
+    * */
+    public String callbackNotice(JSONObject msgObj) {
+        //回调通知接收的结果（success 成功 ，非success 如：fail 则会继续隔段时间回调）
+        String noticeResult = "";
+
+        //http回调通知地址
+        String respUrl = msgObj.getString("url");
+        //springCloud 回调通知
+        String serviceId = msgObj.getString("serviceId");
+        String serviceUrl = msgObj.getString("serviceUrl");
+
+        //根据回调地址进行通知业务系统，如果存在http方式回调 则不用springCloud方式
+        if(StringUtils.isNotBlank(respUrl)){
+            //http 回调通知
+            noticeResult = httpPost(respUrl, (10 * 1000),(5 * 1000));
+        }else {
+            //springCloud 回调通知
+            String payOrderJson = msgObj.getString("payOrderJson");
+            Result<String> apiResult = loadBalancerUtil.getClientPostForEntity(serviceId, serviceUrl, payOrderJson);
+            if(GlobalConstants.SUCCESS_CODE.equals(apiResult.getCode())){
+                noticeResult = apiResult.getData();
+            }
+        }
+
+        return noticeResult;
+    }
+
 
     /**
      * HTTP(post)请求回调业务系统
@@ -134,7 +175,6 @@ public class BaseMq  {
         }
         return sb.toString().trim();
     }
-
 
 
 }

@@ -1,12 +1,16 @@
 package org.xxpay.service.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jn.pay.model.RefundOrderNotify;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.xxpay.common.constant.PayConstant;
+import org.xxpay.common.util.BeanToMap;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.common.util.PayDigestUtil;
 import org.xxpay.common.util.XXPayUtil;
@@ -51,6 +55,9 @@ public class RefundOrderService {
 
     @Autowired
     private Mq4MchRefundNotify mq4MchRefundNotify;
+
+    @Autowired
+    private MchInfoService mchInfoService;
     /**
      * 日志
     * */
@@ -79,7 +86,9 @@ public class RefundOrderService {
     public int updateStatus4Ing(String refundOrderId, String channelOrderNo) {
         RefundOrder refundOrder = new RefundOrder();
         refundOrder.setStatus(PayConstant.REFUND_STATUS_REFUNDING);
-        if(channelOrderNo != null) refundOrder.setChannelOrderNo(channelOrderNo);
+        if(channelOrderNo != null) {
+            refundOrder.setChannelOrderNo(channelOrderNo);
+        }
         refundOrder.setRefundSuccTime(new Date());
         RefundOrderExample example = new RefundOrderExample();
         RefundOrderExample.Criteria criteria = example.createCriteria();
@@ -99,7 +108,9 @@ public class RefundOrderService {
         refundOrder.setStatus(PayConstant.REFUND_STATUS_SUCCESS);
         refundOrder.setResult(PayConstant.REFUND_RESULT_SUCCESS);
         refundOrder.setRefundSuccTime(new Date());
-        if(StringUtils.isNotBlank(channelOrderNo)) refundOrder.setChannelOrderNo(channelOrderNo);
+        if(StringUtils.isNotBlank(channelOrderNo)) {
+            refundOrder.setChannelOrderNo(channelOrderNo);
+        }
         RefundOrderExample example = new RefundOrderExample();
         RefundOrderExample.Criteria criteria = example.createCriteria();
         criteria.andRefundOrderIdEqualTo(refundOrderId);
@@ -117,8 +128,12 @@ public class RefundOrderService {
         RefundOrder refundOrder = new RefundOrder();
         refundOrder.setStatus(PayConstant.REFUND_STATUS_FAIL);
         refundOrder.setResult(PayConstant.REFUND_RESULT_FAIL);
-        if(channelErrCode != null) refundOrder.setChannelErrCode(channelErrCode);
-        if(channelErrMsg != null) refundOrder.setChannelErrMsg(channelErrMsg);
+        if(channelErrCode != null) {
+            refundOrder.setChannelErrCode(channelErrCode);
+        }
+        if(channelErrMsg != null) {
+            refundOrder.setChannelErrMsg(channelErrMsg);
+        }
         RefundOrderExample example = new RefundOrderExample();
         RefundOrderExample.Criteria criteria = example.createCriteria();
         criteria.andRefundOrderIdEqualTo(refundOrderId);
@@ -161,10 +176,37 @@ public class RefundOrderService {
     }
 
     /**
-     * 创建商户通知
-    * */
+     * 创建通知商户
+     * 如果存在http方式回调 则不用springCloud方式
+     * @param refundOrder 退款订单
+     * @param isFirst  是否第一次通知
+     * */
     public JSONObject createNotifyInfo(RefundOrder refundOrder, boolean isFirst) {
-        String url = createNotifyUrl(refundOrder, "2");
+        //http回调通知地址
+        String url = "";
+        //springCloud 回调通知地址
+        String serviceId  = "";
+        String serviceUrl  = "";
+        RefundOrderNotify refundOrderNotify = new RefundOrderNotify();
+
+        //如果存在http方式回调 则不用springCloud方式
+        if(StringUtils.isNotBlank(refundOrder.getNotifyUrl())){
+            url = createNotifyUrl(refundOrder, PayConstant.MCH_NOTICE_BACKSTAGE);
+        }else{
+            //springClound回调参数
+            serviceId = refundOrder.getServiceId();
+            serviceUrl = refundOrder.getServiceUrl();
+            //把值赋予返回对象
+            BeanUtils.copyProperties(refundOrder, refundOrderNotify);
+            refundOrderNotify.setBackType(PayConstant.MCH_NOTICE_BACKSTAGE);
+            //生成签名
+            MchInfo mchInfo = mchInfoService.selectMchInfo(refundOrderNotify.getMchId());
+            String resKey = mchInfo.getResKey();
+            String sign = PayDigestUtil.getSign(BeanToMap.toMap(refundOrderNotify), resKey);
+            refundOrderNotify.setSign(sign);
+
+        }
+
         if(isFirst) {
             int result = mchNotifyService.insertMchNotify(refundOrder.getRefundOrderId(), refundOrder.getMchId(), refundOrder.getMchRefundNo(), PayConstant.MCH_NOTIFY_TYPE_REFUND, url);
             _log.info("增加商户通知记录,orderId={},result:{}", refundOrder.getRefundOrderId(), result);
@@ -182,6 +224,9 @@ public class RefundOrderService {
         object.put("orderId", refundOrder.getRefundOrderId());
         object.put("count", count);
         object.put("createTime", System.currentTimeMillis());
+        object.put("serviceId", serviceId);
+        object.put("serviceUrl", serviceUrl);
+        object.put("payOrderJson", JSONObject.toJSON(refundOrderNotify));
         return object;
     }
 

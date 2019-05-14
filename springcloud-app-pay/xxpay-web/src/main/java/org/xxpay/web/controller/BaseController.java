@@ -3,6 +3,7 @@ package org.xxpay.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.xxpay.common.constant.CommonConstants;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.web.service.MchInfoServiceClient;
 
@@ -62,7 +63,7 @@ public class BaseController {
         String retStr = mchInfoServiceClient.selectMchInfo(getJsonParam("mchId", mchId));
 
         JSONObject retObj = JSON.parseObject(retStr);
-        if("0000".equals(retObj.getString("code"))) {
+        if(CommonConstants.SUCCESS_CODE.equals(retObj.getString("code"))) {
             mchInfo = retObj.getJSONObject("result");
             if (mchInfo == null) {
                 errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";

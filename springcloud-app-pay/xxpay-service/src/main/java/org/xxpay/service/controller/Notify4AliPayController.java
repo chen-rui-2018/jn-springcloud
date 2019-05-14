@@ -117,6 +117,7 @@ public class Notify4AliPayController extends Notify4BasePay {
 			if (payStatus != PayConstant.PAY_STATUS_SUCCESS && payStatus != PayConstant.PAY_STATUS_COMPLETE) {
 				// 第三方交易单号
 				String tradeNo = params.get("trade_no");
+				payOrder.setChannelOrderNo(tradeNo);
 				updatePayOrderRows = payOrderService.updateStatus4Success(payOrder.getPayOrderId(),tradeNo);
 				if (updatePayOrderRows != 1) {
 					_log.error("{}更新支付状态失败,将payOrderId={},更新payStatus={}失败", logPrefix, payOrder.getPayOrderId(), PayConstant.PAY_STATUS_SUCCESS);

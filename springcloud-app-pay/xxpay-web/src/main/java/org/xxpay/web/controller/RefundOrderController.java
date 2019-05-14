@@ -143,6 +143,10 @@ public class RefundOrderController extends BaseController implements RefundOrder
         String remarkInfo = refundOrderReq.getRemarkInfo();
         // 签名
         String sign = refundOrderReq.getSign();
+        // springCloud 回调服务的ID
+        String serviceId = refundOrderReq.getServiceId();
+        // springCloud 回调服务的URL
+        String serviceUrl = refundOrderReq.getServiceUrl();
 
 
         if(StringUtils.isBlank(mchId)) {
@@ -165,10 +169,6 @@ public class RefundOrderController extends BaseController implements RefundOrder
             errorMessage = "request params[amount] error.";
             return errorMessage;
         }
-        if(StringUtils.isBlank(notifyUrl)) {
-            errorMessage = "request params[notifyUrl] error.";
-            return errorMessage;
-        }
         if(StringUtils.isBlank(channelUser)) {
             errorMessage = "request params[channelUser] error.";
             return errorMessage;
@@ -176,6 +176,12 @@ public class RefundOrderController extends BaseController implements RefundOrder
         // 签名信息
         if (StringUtils.isEmpty(sign)) {
             errorMessage = "request params[sign] error.";
+            return errorMessage;
+        }
+        // notifyUrl如果为空,serviceId和serviceUrl为必传
+        //serviceId和serviceUrl如果为空,notifyUrl为必传
+        if(StringUtils.isBlank(notifyUrl) && (StringUtils.isBlank(serviceId) || StringUtils.isBlank(serviceUrl))) {
+            errorMessage = "request params[notifyUrl or (serviceId and serviceUrl)] is null ";
             return errorMessage;
         }
 
@@ -273,6 +279,8 @@ public class RefundOrderController extends BaseController implements RefundOrder
         refundOrder.put("param1", param1);
         refundOrder.put("param2", param2);
         refundOrder.put("notifyUrl", notifyUrl);
+        refundOrder.put("serviceId", serviceId);
+        refundOrder.put("serviceUrl", serviceUrl);
         return refundOrder;
     }
 }

@@ -2,10 +2,6 @@ package org.xxpay.service.mq;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.jn.common.model.Result;
-import com.jn.common.util.GlobalConstants;
-import com.jn.common.util.LoadBalancerUtil;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
@@ -14,6 +10,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.service.service.MchNotifyService;
 import org.xxpay.service.service.PayOrderService;
@@ -43,8 +41,7 @@ public class Mq4PayNotify extends BaseMq{
     @Autowired
     private MchNotifyService mchNotifyService;
 
-    @Autowired
-    private LoadBalancerUtil loadBalancerUtil;
+
 
     /**
      * 日志
@@ -103,41 +100,36 @@ public class Mq4PayNotify extends BaseMq{
     @RabbitListener(queues = MqConfig.PAY_NOTIFY_QUEUE_NAME)
     @RabbitHandler
     public void receive(String msg) {
+        String logPrefix = "【商户支付通知】";
         _log.info("do notify task, msg={}", msg);
         JSONObject msgObj = JSON.parseObject(msg);
         String orderId = msgObj.getString("orderId");
         //http回调通知地址
         String respUrl = msgObj.getString("url");
-        //springCloud 回调通知
+        //springCloud 回调通知参数
         String serviceId = msgObj.getString("serviceId");
         String serviceUrl = msgObj.getString("serviceUrl");
         //通知次数
         int count = msgObj.getInteger("count");
 
+        if(StringUtils.isEmpty(respUrl) && (StringUtils.isEmpty(serviceId) || StringUtils.isEmpty(serviceUrl))) {
+            _log.warn("{}商户通知httpURL 或者 springCloud回调 serviceId 和 serviceUrl 为空,respUrl={},serviceId={},serviceUrl={}", logPrefix, respUrl,serviceId,serviceUrl);
+            return;
+        }
+
         try {
             _log.info("==>MQ支付结果通知业务系统开始[orderId：{}][count：{}][time：{}]", orderId, count, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-
             //回调通知接收的结果（success 成功 ，非success 如：fail 则会继续隔段时间回调）
-            String noticeResult = "";
-
             //根据回调地址进行通知业务系统，如果存在http方式回调 则不用springCloud方式
-            if(StringUtils.isNotBlank(respUrl)){
-                noticeResult = httpPost(respUrl, (10 * 1000),(5 * 1000));
-            }else {
-                //springCloud 回调通知
-                String payOrderJson = msgObj.getString("payOrderJson");
-                Result<String> apiResult = loadBalancerUtil.getClientPostForEntity(serviceId, serviceUrl, payOrderJson);
-                if(GlobalConstants.SUCCESS_CODE.equals(apiResult.getCode())){
-                    noticeResult = apiResult.getData();
-                }
-            }
+            _log.info("{}前参数respUrl={},serviceId={},serviceUrl={}",logPrefix,respUrl,serviceId,serviceUrl);
+            String noticeResult = callbackNotice(msgObj);
+            _log.info("<==MQ支付结果通知业务系统结束[orderId：{}][count：{}][time：{}]   通知结果：{}", orderId, count, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),noticeResult);
 
-            _log.info("<==MQ支付结果通知业务系统结束[orderId：{}][count：{}][time：{}]", orderId, count, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            //通知次数
+            //更新通知次数
             int cnt = count+1;
             // 验证结果
             _log.info("notify response , OrderID={}", orderId);
-            if(noticeResult.equalsIgnoreCase("success")){
+            if(PayConstant.MCH_NOTICE_REQUEST_SUCCESS.equalsIgnoreCase(noticeResult)){
                 //_log.info("{} notify success, url:{}", _notifyInfo.getBusiId(), respUrl);
                 //修改订单表
                 try {

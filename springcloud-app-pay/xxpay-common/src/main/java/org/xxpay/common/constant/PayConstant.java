@@ -62,8 +62,13 @@ public class PayConstant {
 	public static final String RESULT_PARAM_ERRCODE = "errCode";
 	public static final String RESULT_PARAM_ERRCODEDES = "errCodeDes";
 	public static final String RESULT_PARAM_SIGN = "sign";
-
+	/**
+	 * 响应值返回成功
+	* */
 	public static final String RETURN_VALUE_SUCCESS = "SUCCESS";
+	/**
+	 * 响应值返回失败
+	 * */
 	public static final String RETURN_VALUE_FAIL = "FAIL";
 
 	public static final String RETURN_ALIPAY_VALUE_SUCCESS = "success";
@@ -100,5 +105,22 @@ public class PayConstant {
 
 	public static final String NOTIFY_BUSI_PAY = "NOTIFY_VV_PAY_RES";
 	public static final String NOTIFY_BUSI_TRANS = "NOTIFY_VV_TRANS_RES";
+
+	/**
+ 	 * 商户通知方式；
+	 * 1.前台通知(运营平台)
+	* */
+	public static final String MCH_NOTICE_FRONT_END = "1";
+	/**
+	 * 商户通知方式
+	 * 2：后台接口
+	* */
+	public static final String MCH_NOTICE_BACKSTAGE = "2";
+	/**
+	 * 请求通信标识（英文返回）
+	 * 返回成功
+	* */
+	public static final String MCH_NOTICE_REQUEST_SUCCESS = "success";
+
 	
 }

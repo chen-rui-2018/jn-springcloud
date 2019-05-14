@@ -29,7 +29,10 @@
 			<groupId>com.jn</groupId>
 			<artifactId>xxpay-common</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>xxpay-web-api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>

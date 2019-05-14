@@ -2,6 +2,7 @@ package org.xxpay.shop.demo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.util.PayDigestUtil;
 import org.xxpay.common.util.XXPayUtil;
 
@@ -71,7 +72,7 @@ public class PayOrderDemo {
         String result = XXPayUtil.call4Post(url + reqData);
         System.out.println("请求支付中心下单接口,响应数据:" + result);
         Map retMap = JSON.parseObject(result);
-        if("SUCCESS".equals(retMap.get("retCode")) && "SUCCESS".equalsIgnoreCase(retMap.get("resCode").toString())) {
+        if(PayConstant.RETURN_VALUE_SUCCESS.equals(retMap.get("retCode")) && PayConstant.RETURN_VALUE_SUCCESS.equalsIgnoreCase(retMap.get("resCode").toString())) {
             // 验签
             String checkSign = PayDigestUtil.getSign(retMap, repKey, "sign", "payParams");
             String retSign = (String) retMap.get("sign");
@@ -100,7 +101,7 @@ public class PayOrderDemo {
         String result = XXPayUtil.call4Post(url + reqData);
         System.out.println("请求支付中心查单接口,响应数据:" + result);
         Map retMap = JSON.parseObject(result);
-        if("SUCCESS".equals(retMap.get("retCode")) && "SUCCESS".equalsIgnoreCase(retMap.get("resCode").toString())) {
+        if(PayConstant.RETURN_VALUE_SUCCESS.equals(retMap.get("retCode")) && PayConstant.RETURN_VALUE_SUCCESS.equalsIgnoreCase(retMap.get("resCode").toString())) {
             // 验签
             String checkSign = PayDigestUtil.getSign(retMap, repKey, "sign", "payParams");
             String retSign = (String) retMap.get("sign");

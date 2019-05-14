@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.xxpay.common.constant.CommonConstants;
 import org.xxpay.common.util.MyBase64;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.dal.dao.model.MchInfo;
@@ -35,7 +36,7 @@ public class MchInfoServiceController {
         String mchId = paramObj.getString("mchId");
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
         JSONObject retObj = new JSONObject();
-        retObj.put("code", "0000");
+        retObj.put("code", CommonConstants.SUCCESS_CODE);
         if(StringUtils.isBlank(jsonParam)) {
             retObj.put("code", "0001"); // 参数错误
             retObj.put("msg", "缺少参数");

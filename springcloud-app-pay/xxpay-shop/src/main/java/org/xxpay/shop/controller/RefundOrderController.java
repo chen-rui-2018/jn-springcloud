@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.util.DateUtil;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.common.util.PayDigestUtil;
@@ -132,7 +133,7 @@ public class RefundOrderController {
         String result = XXPayUtil.call4Post(url + reqData);
         System.out.println("请求支付中心退款下单接口,响应数据:" + result);
         Map retMap = JSON.parseObject(result);
-        if("SUCCESS".equals(retMap.get("retCode"))) {
+        if(PayConstant.RETURN_VALUE_SUCCESS.equals(retMap.get("retCode"))) {
             // 验签
             String checkSign = PayDigestUtil.getSign(retMap, resKey, "sign", "payParams");
             String retSign = (String) retMap.get("sign");
@@ -239,7 +240,7 @@ public class RefundOrderController {
 
         _log.info("====== 退款通知处理完成 ======");
 
-        outResult(response,"success");
+        outResult(response, PayConstant.MCH_NOTICE_REQUEST_SUCCESS);
     }
 
     void outResult(HttpServletResponse response, String content) {

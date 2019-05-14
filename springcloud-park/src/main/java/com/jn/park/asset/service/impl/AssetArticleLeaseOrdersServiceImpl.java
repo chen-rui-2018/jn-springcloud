@@ -13,6 +13,7 @@ import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.LeaseOrdersModel;
 import com.jn.park.asset.service.AssetArticleLeaseOrdersService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,20 +40,6 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
     private AssetArticleLeaseOrdersDao assetArticleLeaseOrdersDao;
     @Autowired
     private AssetArticleLeaseDao assetArticleLeaseDao;
-
-    /**
-     * 分页返回物品租赁历史列表
-     * @param page
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "分页返回物品租赁历史列表")
-    public PaginationData<List<AssetArticleLeaseOrdersModel>> getArticleLeaseList(Page page) {
-        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
-        List<AssetArticleLeaseOrdersModel> assetArticleLeaseOrdersModelList = assetArticleLeaseOrdersDao.getArticleLeaseList();
-        PaginationData<List<AssetArticleLeaseOrdersModel>> data = new PaginationData<>(assetArticleLeaseOrdersModelList,objects.getTotal());
-        return data;
-    }
 
 
     /**
@@ -111,6 +98,20 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
         map.put("status",Byte.parseByte(LeaseStatusEnums.RETURN_ING.getValue()));
         assetArticleLeaseDao.updateStatus(map);
         assetArticleLeaseOrdersDao.updateStatus(map);
+    }
+
+    /**
+     * 分页返回物品租赁历史列表
+     * @param page
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "分页返回物品租赁历史列表")
+    public PaginationData<List<AssetArticleLeaseOrdersModel>> getArticleLeaseOrdersList(String account, Page page) {
+        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
+        List<AssetArticleLeaseOrdersModel> assetArticleLeaseOrdersModelList = assetArticleLeaseOrdersDao.getArticleLeaseOrdersList(account);
+        PaginationData<List<AssetArticleLeaseOrdersModel>> data = new PaginationData<>(assetArticleLeaseOrdersModelList,objects.getTotal());
+        return data;
     }
 
     /**

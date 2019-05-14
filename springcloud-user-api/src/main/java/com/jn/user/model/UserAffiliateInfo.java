@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 修改用户所属机构信息入参
@@ -18,7 +19,7 @@ import java.io.Serializable;
 public class UserAffiliateInfo implements Serializable {
     @ApiModelProperty("用户账号(可一次修改多个账号)")
     @NotNull(message = "用户账号不能为空")
-    private String[] accountList;
+    private List<String> accountList;
     @ApiModelProperty("所属机构编码")
     @Size(max = 32, message = "所属机构编码长度不能超过32个字")
     private String affiliateCode;
@@ -26,11 +27,11 @@ public class UserAffiliateInfo implements Serializable {
     @Size(max =100, message = "所属机构名称长度不能超过100个字")
     private String affiliateName;
 
-    public String[] getAccountList() {
+    public List<String> getAccountList() {
         return accountList;
     }
 
-    public void setAccountList(String[] accountList) {
+    public void setAccountList(List<String> accountList) {
         this.accountList = accountList;
     }
 

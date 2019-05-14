@@ -36,7 +36,7 @@ public class FinanceWorkbenchController extends BaseController {
     @PostMapping(value = "/financeMonitoring")
     @RequiresPermissions("/finance/expend/financeMonitoring")
     public Result<FinanceWorkbenchMonitoringVo> financeMonitoring(){
-        //todo
+
         List<FinanceWorkbenchMonitoringVo> financeMonitoring=financeWorkbenchService.financeMonitoring();
         return new Result(financeMonitoring);
     }
@@ -46,7 +46,7 @@ public class FinanceWorkbenchController extends BaseController {
     @PostMapping(value = "/records")
     @RequiresPermissions("/finance/expend/records")
     public Result records(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 
@@ -55,7 +55,7 @@ public class FinanceWorkbenchController extends BaseController {
     @PostMapping(value = "/approveList")
     @RequiresPermissions("/finance/expend/approveList")
     public Result approveList(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 }

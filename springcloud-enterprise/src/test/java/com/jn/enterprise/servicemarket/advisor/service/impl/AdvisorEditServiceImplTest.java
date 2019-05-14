@@ -76,7 +76,7 @@ public class AdvisorEditServiceImplTest {
         //账号
         advisorBaseInfoParam.setAdvisorAccount(advisorAccount);
         //从业年限
-        advisorBaseInfoParam.setWorkingYears(11d);
+        advisorBaseInfoParam.setWorkingYears("11");
         //毕业学校
         advisorBaseInfoParam.setGraduatedSchool("中南大学");
         //学历

@@ -1,5 +1,6 @@
 package com.jn.enterprise.company.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -33,6 +34,7 @@ import java.util.List;
 @Api(tags = "用户中心-我的企业-员工管理")
 @RestController
 @RequestMapping("/enterprise/StaffController")
+@TxTransaction(isStart = true)
 public class StaffController extends BaseController {
 
     @Autowired

@@ -5,7 +5,6 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.enums.RequireExceptionEnum;
-import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
@@ -50,7 +49,7 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "基本信息保存并更新(pc/app基本资料)")
     @RequestMapping(value = "/saveOrUpdateAdvisorBaseInfo",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorBaseInfo")
-    public Result saveOrUpdateAdvisorBaseInfo(@RequestBody @Validated AdvisorBaseInfoParam advisorBaseInfoParam){
+    public Result<Integer> saveOrUpdateAdvisorBaseInfo(@RequestBody @Validated AdvisorBaseInfoParam advisorBaseInfoParam){
         int responseNum = advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
         logger.info("------基本信息保存并更新成功，数据响应条数：{}------",responseNum);
         return new Result(responseNum);
@@ -60,7 +59,7 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "荣誉资质保存并更新,(pc/app资质认证)")
     @RequestMapping(value = "/saveOrUpdateAdvisorHonor",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor")
-    public Result saveOrUpdateAdvisorHonor(@RequestBody @Validated ServiceHonorParam serviceHonorParam){
+    public Result<Integer> saveOrUpdateAdvisorHonor(@RequestBody @Validated ServiceHonorParam serviceHonorParam){
         int responseNum = advisorEditService.saveOrUpdateAdvisorHonor(serviceHonorParam);
         logger.info("------荣誉资质保存并更新成功，数据响应条数：{}------",responseNum);
         return new Result(responseNum);
@@ -80,7 +79,7 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "项目经验保存并更新(pc/app项目经验)")
     @RequestMapping(value = "/saveOrUpdateAdvisorProjectExperience",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorProjectExperience")
-    public Result saveOrUpdateAdvisorProjectExperience(@RequestBody @Validated ServiceProjectExperienceParam serviceProjectExperienceParam){
+    public Result<Integer> saveOrUpdateAdvisorProjectExperience(@RequestBody @Validated ServiceProjectExperienceParam serviceProjectExperienceParam){
         int responseNum = advisorEditService.saveOrUpdateAdvisorProjectExperience(serviceProjectExperienceParam);
         logger.info("------荣誉资质保存并更新成功，数据响应条数：{}------",responseNum);
         return new Result(responseNum);
@@ -111,7 +110,22 @@ public class AdvisorEditController extends BaseController {
         }
         //判断当前登录用户是否为顾问
         advisorEditService.currentUserIsAdvisor(user.getAccount());
-        AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount, ApprovalStatusEnum.APPROVAL.getValue());
+        AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount, "");
         return  new Result(advisorDetailsVo);
     }
+
+   @ControllerLog(doAction = "发送申请/提交审批")
+   @ApiOperation(value = "发送申请/提交审批(将顾问信息审批状态由未反馈改为待审批)")
+   @RequestMapping(value = "/sendApproval",method = RequestMethod.POST)
+   @RequiresPermissions("/serviceMarket/advisorEditController/sendApproval")
+   public Result<Integer> sendApproval(){
+       User user = (User) SecurityUtils.getSubject().getPrincipal();
+       if(user==null || user.getAccount()==null){
+           logger.warn("发送申请/提交审批获取当前登录用户信息失败");
+           return new Result(RequireExceptionEnum.NETWORK_ANOMALY.getCode(),RequireExceptionEnum.NETWORK_ANOMALY.getMessage());
+       }
+       int responseNum = advisorEditService.sendApproval(user.getAccount());
+       logger.info("------发送申请/提交审批成功，数据响应条数：{}------",responseNum);
+       return new Result(responseNum);
+   }
 }

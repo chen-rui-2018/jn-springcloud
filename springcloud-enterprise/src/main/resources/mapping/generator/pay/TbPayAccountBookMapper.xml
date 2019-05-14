@@ -9,6 +9,7 @@
     <result column="BALANCE" jdbcType="DECIMAL" property="balance" />
     <result column="AUTOMATIC_DEDUCTIONS" jdbcType="CHAR" property="automaticDeductions" />
     <result column="CAN_RECHARGE" jdbcType="CHAR" property="canRecharge" />
+    <result column="is_show" jdbcType="CHAR" property="isShow" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -75,7 +76,8 @@
   </sql>
   <sql id="Base_Column_List">
     AC_BOOK_ID, ACCOUNT_ID, AC_BOOK_NAME, AC_BOOK_TYPE, BALANCE, AUTOMATIC_DEDUCTIONS, 
-    CAN_RECHARGE, created_time, creator_account, modified_time, modifier_account, record_status
+    CAN_RECHARGE, is_show, created_time, creator_account, modified_time, modifier_account, 
+    record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayAccountBookCriteria" resultMap="BaseResultMap">
     select
@@ -110,14 +112,14 @@
   <insert id="insert" parameterType="com.jn.enterprise.pay.entity.TbPayAccountBook">
     insert into tb_pay_account_book (AC_BOOK_ID, ACCOUNT_ID, AC_BOOK_NAME, 
       AC_BOOK_TYPE, BALANCE, AUTOMATIC_DEDUCTIONS, 
-      CAN_RECHARGE, created_time, creator_account, 
-      modified_time, modifier_account, record_status
-      )
+      CAN_RECHARGE, is_show, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status)
     values (#{acBookId,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, #{acBookName,jdbcType=VARCHAR}, 
       #{acBookType,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{automaticDeductions,jdbcType=CHAR}, 
-      #{canRecharge,jdbcType=CHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=CHAR}
-      )
+      #{canRecharge,jdbcType=CHAR}, #{isShow,jdbcType=CHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayAccountBook">
     insert into tb_pay_account_book
@@ -142,6 +144,9 @@
       </if>
       <if test="canRecharge != null">
         CAN_RECHARGE,
+      </if>
+      <if test="isShow != null">
+        is_show,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -180,6 +185,9 @@
       </if>
       <if test="canRecharge != null">
         #{canRecharge,jdbcType=CHAR},
+      </if>
+      <if test="isShow != null">
+        #{isShow,jdbcType=CHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -228,6 +236,9 @@
       <if test="record.canRecharge != null">
         CAN_RECHARGE = #{record.canRecharge,jdbcType=CHAR},
       </if>
+      <if test="record.isShow != null">
+        is_show = #{record.isShow,jdbcType=CHAR},
+      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -257,6 +268,7 @@
       BALANCE = #{record.balance,jdbcType=DECIMAL},
       AUTOMATIC_DEDUCTIONS = #{record.automaticDeductions,jdbcType=CHAR},
       CAN_RECHARGE = #{record.canRecharge,jdbcType=CHAR},
+      is_show = #{record.isShow,jdbcType=CHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -287,6 +299,9 @@
       <if test="canRecharge != null">
         CAN_RECHARGE = #{canRecharge,jdbcType=CHAR},
       </if>
+      <if test="isShow != null">
+        is_show = #{isShow,jdbcType=CHAR},
+      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -313,6 +328,7 @@
       BALANCE = #{balance,jdbcType=DECIMAL},
       AUTOMATIC_DEDUCTIONS = #{automaticDeductions,jdbcType=CHAR},
       CAN_RECHARGE = #{canRecharge,jdbcType=CHAR},
+      is_show = #{isShow,jdbcType=CHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

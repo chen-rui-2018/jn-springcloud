@@ -198,8 +198,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public boolean updateAffiliateInfo(UserAffiliateInfo userAffiliateInfo) {
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        List<String> updateAccountList = Arrays.asList(userAffiliateInfo.getAccountList());
-        example.createCriteria().andAccountIn(updateAccountList);
+        example.createCriteria().andAccountIn(userAffiliateInfo.getAccountList());
         TbUserPerson tbUserPerson=new TbUserPerson();
         tbUserPerson.setAffiliateCode(userAffiliateInfo.getAffiliateCode());
         tbUserPerson.setAffiliateName(userAffiliateInfo.getAffiliateName());
@@ -217,7 +216,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public boolean updateCompanyInfo(UserCompanyInfo userCompanyInfo) {
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        example.createCriteria().andAccountIn(Arrays.asList(userCompanyInfo.getAccountList()));
+        example.createCriteria().andAccountIn(userCompanyInfo.getAccountList());
         TbUserPerson tbUserPerson=new TbUserPerson();
         tbUserPerson.setCompanyCode(userCompanyInfo.getCompanyCode());
         tbUserPerson.setCompanyName(userCompanyInfo.getCompanyName());

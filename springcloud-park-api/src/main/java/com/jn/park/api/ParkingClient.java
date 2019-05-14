@@ -1,9 +1,16 @@
 package com.jn.park.api;
 
 import com.jn.common.model.Result;
+import com.jn.hardware.model.parking.door.DoorCarInParkingInfo;
+import com.jn.hardware.model.parking.door.DoorCarOutParkingInfo;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * @author： jiangyl
@@ -27,4 +34,19 @@ public interface ParkingClient {
     @RequestMapping(value = "/api/parking/getOutParkingCarInfoList", method = RequestMethod.POST)
     Result<Boolean> getOutParkingCarInfoList();
 
+    /**
+     * 道尔 车辆入场推送接口
+     * @param doorCarInParkingInfo
+     * @return
+     */
+    @RequestMapping(value = "/api/parking/carJoinParking", method = RequestMethod.POST)
+    Result<String> carJoinParking(@RequestBody  DoorCarInParkingInfo doorCarInParkingInfo);
+
+    /**
+     * 道尔 车辆出场推送接口
+     * @param doorCarOutParkingInfo
+     * @return
+     */
+    @RequestMapping(value = "/api/parking/carOutParking", method = RequestMethod.POST)
+    Result<String> carOutParking(@RequestBody  DoorCarOutParkingInfo doorCarOutParkingInfo);
 }

@@ -25,6 +25,8 @@
           where tab_id =#{tabId}
         )
 
+        and record_status='1'
+
     </select>
 
     <insert id="createTab" parameterType="java.util.List">
@@ -663,7 +665,7 @@
         p.warning_by warningBy,
         t.file_type fileType,
         t.fill_in_form_id fillInFormId,
-        t.fill_id
+        t.fill_id fillId
         FROM
         tb_data_reporting_task t,
         tb_data_reporting_snapshot_model p
@@ -780,6 +782,7 @@
 
         <foreach collection="fillerList" index="index" item="item"  separator="UNION ALL" >
             select
+            #{ item.id,jdbcType=VARCHAR},
             #{ item.fillId,jdbcType=VARCHAR},
             #{ item.filler,jdbcType=VARCHAR},
             #{ item.fillerTel,jdbcType=VARCHAR},

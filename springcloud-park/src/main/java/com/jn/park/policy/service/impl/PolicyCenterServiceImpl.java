@@ -6,10 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.enums.PolicyInfoExceptionEnum;
-import com.jn.park.policy.dao.PolicyCenterMapper;
-import com.jn.park.policy.dao.TbPolicyClassMapper;
-import com.jn.park.policy.dao.TbPolicyLevelMapper;
-import com.jn.park.policy.dao.TbPolicyMapper;
+import com.jn.park.policy.dao.*;
 import com.jn.park.policy.entity.*;
 import com.jn.park.policy.enums.PolicyTableTypeEnum;
 import com.jn.park.policy.model.*;
@@ -250,7 +247,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
             //设置政策原文
             String relationPolicyOriginalId = tbPolicy.getRelationPolicyOriginalId();
             policyType="0";
-            example = getTbPolicyCriteria(policyId, policyType);
+            example = getTbPolicyCriteria(relationPolicyOriginalId, policyType);
             long existNum = tbPolicyMapper.countByExample(example);
             if(existNum>0){
                 policyDiagramDetailsVo.setPolicyDetailsShow(getPolicyDetails(relationPolicyOriginalId));

@@ -12,15 +12,38 @@
             tower_name AS towerName,
             tower_address AS towerAddress,
             specification,
-            manufacturer_name AS manufacturerName,
-            contact_phone AS contactPhone,
             production_time AS productionTime,
             position,
             asset_url AS assetUrl,
             maintenance_time AS maintenanceTime,
-            maintenance_period AS maintenancePeriod
+            maintenance_period AS maintenancePeriod,
+            company_id AS companyId,
+            company_name AS companyName
         FROM
             tb_asset_maintain_manage
-        WHERE  id = #{id}
+        WHERE  asset_number = #{assetNumber}
+    </select>
+
+    <select id="getMaintainList" resultType="java.util.Map">
+        SELECT
+            id,
+            asset_number AS assetNumber,
+            name,
+            type_id AS typeId,
+            asset_type AS assetType,
+            tower_id AS towerId,
+            tower_name AS towerName,
+            tower_address AS towerAddress,
+            specification,
+            production_time AS productionTime,
+            position,
+            asset_url AS assetUrl,
+            maintenance_time AS maintenanceTime,
+            maintenance_period AS maintenancePeriod,
+            company_id AS companyId,
+            company_name AS companyName
+        FROM
+            tb_asset_maintain_manage
+        WHERE  record_status = '1' and is_maintaion = '1'
     </select>
 </mapper>

@@ -27,7 +27,7 @@ public interface MessageListService {
      * 获取是否有已读消息
      * @return
      */
-    int getIsRead(User user);
+    int getIsRead(String messageOneTort,String messageTowTort,User user);
 
     /**
      * 添加消息

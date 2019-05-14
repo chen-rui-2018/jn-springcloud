@@ -61,4 +61,19 @@ public interface ParkingServerService {
      */
     String carOutParking(List carList);
 
+
+    /**
+     * 停车位租赁支付成功回调接口
+     * @param billNum
+     * @return
+     */
+    Boolean parkingSpaceBillCallBack(String billNum);
+
+    /**
+
+     * 临时车支付成功回调接口
+     * @param billNum
+     * @return
+     */
+    Boolean parkingCarBillCallBack(String billNum);
 }

@@ -170,10 +170,10 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
             throw new JnSpringCloudException(ParkingExceptionEnum.DAY_INTERVAL_ERROR);
         }
         if (StringUtils.isEmpty(parkingSpaceApplyModel.getName())) {
-            tbParkingSpaceRental.setName(user.getName());
+            tbParkingSpaceRental.setName(user.getName()==null?user.getAccount():user.getName());
         }
         if (StringUtils.isEmpty(parkingSpaceApplyModel.getPhone())) {
-            tbParkingSpaceRental.setPhone(user.getPhone());
+            tbParkingSpaceRental.setPhone(user.getPhone()==null?user.getAccount():user.getPhone());
         }
         tbParkingSpaceRental.setApprovalStatus(ParkingEnums.PARKING_USER_APPLY_WAIT_CHECK.getCode());
         tbParkingSpaceRental.setCreatedTime(new Date());
@@ -331,11 +331,17 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
         paymentBillModel.setBillRemark(ParkingEnums.PARKING_MONTH_BILL_TYPE_NAME.getCode());
         Result<String> bill = payBillClient.createBill(paymentBillModel);
         //支付发起成功，将支付账单id写入停车记录，方便下次发起支付删除原有缴费记录。
-        tbParkingSpaceRental.setOrderBillNum(paymentBillModel.getBillNum());
-        tbParkingSpaceRental.setModifiedTime(new Date());
-        int i = tbParkingSpaceRentalMapper.updateByPrimaryKeySelective(tbParkingSpaceRental);
-        logger.info("租车位支付发起成功，处理租赁记录数据账单号好响应条数：{}",i);
-        return bill.getData();
+
+        if(StringUtils.equals(bill.getCode(),ParkingEnums.PARKING_RESPONSE_SUCCESS.getCode())){
+            tbParkingSpaceRental.setOrderBillNum(paymentBillModel.getBillNum());
+            tbParkingSpaceRental.setModifiedTime(new Date());
+            int i = tbParkingSpaceRentalMapper.updateByPrimaryKeySelective(tbParkingSpaceRental);
+            logger.info("租车位支付发起成功，处理租赁记录数据账单号响应条数：{}",i);
+            return bill.getData();
+        }else{
+            logger.info("租车位支付发起失败");
+            return bill.getResult();
+        }
     }
 
 

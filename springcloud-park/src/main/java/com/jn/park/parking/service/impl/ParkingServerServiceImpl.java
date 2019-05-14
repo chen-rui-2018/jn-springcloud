@@ -1,7 +1,18 @@
 package com.jn.park.parking.service.impl;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
+import com.jn.hardware.api.ParkingClient;
+import com.jn.hardware.model.parking.ParkingMonthlyRentCardRequest;
+import com.jn.hardware.model.parking.ParkingMonthlyRentCardUnite;
+import com.jn.hardware.model.parking.door.DoorCarInParkingShow;
+import com.jn.hardware.model.parking.door.DoorCarOutParkingShow;
+import com.jn.park.enums.ParkingExceptionEnum;
 import com.jn.park.parking.dao.ParkingRecordMapper;
+import com.jn.park.parking.dao.TbParkingSpaceRentalMapper;
+import com.jn.park.parking.entity.TbParkingSpaceRental;
+import com.jn.park.parking.entity.TbParkingSpaceRentalCriteria;
 import com.jn.park.parking.enums.ParkingEnums;
 import com.jn.park.parking.model.ParkingRecordRampDetailParam;
 import com.jn.park.parking.service.ParkingServerService;
@@ -30,6 +41,10 @@ public class ParkingServerServiceImpl implements ParkingServerService {
 
     @Autowired
     private ParkingRecordMapper parkingRecordMapper;
+    @Autowired
+    private TbParkingSpaceRentalMapper tbParkingSpaceRentalMapper;
+    @Autowired
+    private ParkingClient parkingClient;
 
     @ServiceLog(doAction = "定时同步匝道系统车辆入场数据")
     @Override
@@ -69,7 +84,7 @@ public class ParkingServerServiceImpl implements ParkingServerService {
              parkingRecordRampParam) {
             ParkingRecordRampDetailParam parkingRecordRampDetailParam = new ParkingRecordRampDetailParam();
             parkingRecordRampDetailParam.setGateId(param.getGateId());
-            parkingRecordRampDetailParam.setParkingId(UUID.randomUUID().toString().replaceAll("-",""));
+            parkingRecordRampDetailParam.setParkingId(StringUtils.isEmpty(param.getParkingId())?UUID.randomUUID().toString().replaceAll("-",""):param.getParkingId());
             parkingRecordRampDetailParam.setCarLicense(param.getCarLicense());
             parkingRecordRampDetailParam.setCreatedTime(new Date());
             try{
@@ -95,9 +110,24 @@ public class ParkingServerServiceImpl implements ParkingServerService {
 
     @ServiceLog(doAction = "停车位租赁支付成功回调接口")
     public Boolean parkingSpaceBillCallBack(String billNum){
+        TbParkingSpaceRentalCriteria spaceRentalCriteria = new TbParkingSpaceRentalCriteria();
+        spaceRentalCriteria.createCriteria().andOrderBillNumEqualTo(billNum);
+        List<TbParkingSpaceRental> tbParkingSpaceRentals = tbParkingSpaceRentalMapper.selectByExample(spaceRentalCriteria);
+        if(null == tbParkingSpaceRentals || tbParkingSpaceRentals.size() == 0 ){
+            throw new JnSpringCloudException(ParkingExceptionEnum.REND_ID_IS_NOT_EXIT);
+        }
+        TbParkingSpaceRental tbParkingSpaceRental = tbParkingSpaceRentals.get(0);
         //TODO 调用匝道通知车辆已开通月租卡
-        //TODO 改变租赁数据状态
-        return true;
+        ParkingMonthlyRentCardUnite parkingMonthlyRentCardRequest = new ParkingMonthlyRentCardUnite();
+        parkingClient.saveParkingMonthlyRentCard(parkingMonthlyRentCardRequest);
+
+        //改变租赁数据状态
+        tbParkingSpaceRental.setApprovalStatus(ParkingEnums.PARKING_USER_APPLY_PAYED.getCode());
+        tbParkingSpaceRental.setModifiedTime(new Date());
+
+        int i = tbParkingSpaceRentalMapper.updateByPrimaryKeySelective(tbParkingSpaceRental);
+        logger.info("车位支付回调，处理数据完成，响应条数：{}",i);
+        return i==1?true:false;
     }
 
     @ServiceLog(doAction = "临时车支付成功回调接口")
@@ -106,6 +136,61 @@ public class ParkingServerServiceImpl implements ParkingServerService {
 
         //TODO 创建新的停车记录。缴费开始计算时间为缴费时间+15分钟
         return true;
+    }
+
+    @ServiceLog(doAction = "道尔 车辆入场推送接口")
+    @Override
+    public String carJoinParking(List carList,String parkId){
+        logger.info("道尔 车辆入场推送接口 parkId:"+parkId);
+        StringBuffer sb = new StringBuffer();
+        if(null == carList || carList.size() == 0){
+            throw new JnSpringCloudException(ParkingExceptionEnum.PARKING_INFO_IS_NOT_NULL);
+        }
+        logger.info("开始处理道尔推送车辆入场数据，数据总条数：{}",carList.size());
+        List<ParkingRecordRampParam> parkingRecordRampParam = new ArrayList<>(16);
+        for (Object obj:carList
+             ) {
+            ParkingRecordRampParam param = new ParkingRecordRampParam();
+            DoorCarInParkingShow door = (DoorCarInParkingShow)obj;
+            param.setParkingId(door.getId());
+            param.setParkingStatus(ParkingEnums.CAR_IS_IN_PARKING.getCode());
+            param.setAdmissionTime(door.getEntranceTime());
+            param.setCarLicense(door.getCarNo());
+            //TODO 需接口侧添加此参数。
+            param.setGateId("18951384123941");
+            parkingRecordRampParam.add(param);
+            sb.append(door.getId()+",");
+        }
+        int i = insertParkingRecordByRamp(parkingRecordRampParam);
+        logger.info("处理道尔推送车辆入场数据成功，响应条数：{}",i);
+        String s = sb.toString();
+        return s.substring(0,s.length()-1);
+    }
+
+    @ServiceLog(doAction = "道尔 车辆出场推送接口")
+    @Override
+    public String carOutParking(List carList){
+        StringBuffer sb = new StringBuffer();
+        if(null == carList || carList.size() == 0){
+            throw new JnSpringCloudException(ParkingExceptionEnum.PARKING_INFO_IS_NOT_NULL);
+        }
+        logger.info("开始处理道尔推送车辆出场数据，数据总条数：-- {}",carList.size());
+        List<ParkingRecordRampParam> parkingRecordRampParam = new ArrayList<>(16);
+        for (Object obj:carList
+             ) {
+            ParkingRecordRampParam param = new ParkingRecordRampParam();
+            DoorCarOutParkingShow door = (DoorCarOutParkingShow)obj;
+            param.setParkingStatus(ParkingEnums.CAR_IS_IN_PARKING.getCode());
+            param.setAdmissionTime(door.getEntranceTime());
+            param.setDepartureTime(door.getExportTime());
+            param.setCarLicense(door.getCarNo());
+            parkingRecordRampParam.add(param);
+            sb.append(door.getId()+",");
+        }
+        int i = updateParkingRecordByParam(parkingRecordRampParam);
+        logger.info("处理道尔推送车辆出场数据成功，响应条数：-- {}",i);
+        String s = sb.toString();
+        return s.substring(0,s.length()-1);
     }
 
 }

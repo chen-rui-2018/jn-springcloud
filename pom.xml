@@ -51,6 +51,7 @@
         <module>springcloud-wechat-miniprogram-api</module>
 
 		<module>springcloud-app-pay</module>
+		<module>springcloud-app-im</module>
 
 	</modules>
 

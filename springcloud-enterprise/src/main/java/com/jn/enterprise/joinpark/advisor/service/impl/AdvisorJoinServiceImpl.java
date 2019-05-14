@@ -117,7 +117,7 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
         BeanUtils.copyProperties(advisorDetailParam, advisorBaseInfoParam);
         advisorBaseInfoParam.setAdvisorAccount(account);
         try {
-            advisorBaseInfoParam.setWorkingYears(new Double(advisorDetailParam.getWorkingYears()));
+            advisorBaseInfoParam.setWorkingYears(advisorDetailParam.getWorkingYears());
         }catch (Exception e){
             logger.error("时间转换出错，请核对参数,{}",e.getMessage(),e);
             throw new JnSpringCloudException(AdvisorExceptionEnum.HONOR_INFO_NOT_EXIST);

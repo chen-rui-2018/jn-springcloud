@@ -12,7 +12,7 @@
     <result column="lease_enterprise" jdbcType="VARCHAR" property="leaseEnterprise" />
     <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
     <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
-    <result column="lease_cash" jdbcType="VARCHAR" property="leaseCash" />
+    <result column="lease_cash" jdbcType="DECIMAL" property="leaseCash" />
     <result column="lease_price" jdbcType="DECIMAL" property="leasePrice" />
     <result column="lease_time" jdbcType="VARCHAR" property="leaseTime" />
     <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
@@ -139,7 +139,7 @@
     values (#{id,jdbcType=VARCHAR}, #{assetNumber,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{typeId,jdbcType=VARCHAR}, #{assetType,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, 
       #{qrCode,jdbcType=VARCHAR}, #{leaseEnterprise,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
-      #{contactPhone,jdbcType=VARCHAR}, #{leaseCash,jdbcType=VARCHAR}, #{leasePrice,jdbcType=DECIMAL}, 
+      #{contactPhone,jdbcType=VARCHAR}, #{leaseCash,jdbcType=DECIMAL}, #{leasePrice,jdbcType=DECIMAL}, 
       #{leaseTime,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{articleIntroduction,jdbcType=VARCHAR}, 
       #{articleStatus,jdbcType=TINYINT}, #{isLease,jdbcType=TINYINT}, #{isOverdue,jdbcType=INTEGER}, 
       #{applyTime,jdbcType=DATE}, #{startTime,jdbcType=DATE}, #{currentTime,jdbcType=DATE}, 
@@ -267,7 +267,7 @@
         #{contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="leaseCash != null">
-        #{leaseCash,jdbcType=VARCHAR},
+        #{leaseCash,jdbcType=DECIMAL},
       </if>
       <if test="leasePrice != null">
         #{leasePrice,jdbcType=DECIMAL},
@@ -362,7 +362,7 @@
         contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="record.leaseCash != null">
-        lease_cash = #{record.leaseCash,jdbcType=VARCHAR},
+        lease_cash = #{record.leaseCash,jdbcType=DECIMAL},
       </if>
       <if test="record.leasePrice != null">
         lease_price = #{record.leasePrice,jdbcType=DECIMAL},
@@ -432,7 +432,7 @@
       lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
       contact_name = #{record.contactName,jdbcType=VARCHAR},
       contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
-      lease_cash = #{record.leaseCash,jdbcType=VARCHAR},
+      lease_cash = #{record.leaseCash,jdbcType=DECIMAL},
       lease_price = #{record.leasePrice,jdbcType=DECIMAL},
       lease_time = #{record.leaseTime,jdbcType=VARCHAR},
       img_url = #{record.imgUrl,jdbcType=VARCHAR},
@@ -485,7 +485,7 @@
         contact_phone = #{contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="leaseCash != null">
-        lease_cash = #{leaseCash,jdbcType=VARCHAR},
+        lease_cash = #{leaseCash,jdbcType=DECIMAL},
       </if>
       <if test="leasePrice != null">
         lease_price = #{leasePrice,jdbcType=DECIMAL},
@@ -552,7 +552,7 @@
       lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
       contact_name = #{contactName,jdbcType=VARCHAR},
       contact_phone = #{contactPhone,jdbcType=VARCHAR},
-      lease_cash = #{leaseCash,jdbcType=VARCHAR},
+      lease_cash = #{leaseCash,jdbcType=DECIMAL},
       lease_price = #{leasePrice,jdbcType=DECIMAL},
       lease_time = #{leaseTime,jdbcType=VARCHAR},
       img_url = #{imgUrl,jdbcType=VARCHAR},

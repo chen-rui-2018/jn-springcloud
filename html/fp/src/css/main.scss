@@ -39,7 +39,9 @@ i {
 input {
   outline-style: none;
 }
-
+img {
+  vertical-align: middle;
+}
 .clearfix:after {
   /*正常浏览器 清除浮动*/
   clear: both;
@@ -107,6 +109,11 @@ input {
 .impact {
   font-family: IMPACT;
 }
+.maxWidth{
+  .el-input{
+    width: 266px;
+  }
+}
 
 .arialn {
   font-family: ARIALN;
@@ -119,7 +126,7 @@ input {
 
   .actiNav {
     margin: 20px 0;
-    font-size: 16px;
+    font-size: 13px;
 
     a:last-child {
       color: #00a041;
@@ -367,7 +374,7 @@ input {
               margin-right: 5px;
             }
          }
-         
+
         }
 
         .actiInfo {
@@ -514,11 +521,11 @@ input {
 /* 服务超市-服务机构，服务产品 */
 .serverOrg,
 .serverPro,
-.serverCon,.quickSearch,.aboutUs,.finaInstitution {
+.serverCon,.quickSearch,.aboutUs,.finaInstitution,.finaPro {
   // .el-rate__icon.el-icon-star-on{
   //   color:#00a041 !important;
   // }
-  padding-top: 65px;
+  // padding-top: 65px;
   .serverOrgMenu {
     padding: 20px 0;
     font-size: 13px;
@@ -682,7 +689,7 @@ input {
           margin-left: 20px;
 
           .conTil {
-            font-size: 13px;
+            font-size: 15px;
             color: #222;
             font-weight: bold;
             margin-bottom: 40px;
@@ -744,7 +751,7 @@ input {
 .serverOrgDetail,
 .serverProDetail,
 .serverConDetail,
-.quickSearch,.finaInsDetail {
+.quickSearch,.finaInsDetail,.finaProDetail {
   padding-top: 65px;
   table {
     border-collapse: collapse;
@@ -1388,7 +1395,7 @@ input {
             // line-height: 52px;
             // padding: 0 50px;
             width: 100px;
-            
+
           }
           >li:hover{
             background: #fff;
@@ -1459,7 +1466,7 @@ input {
     z-index: 99;
     width: 100%;
     // background: url("../../static/img/c11.png") 100% 100% / 100% 100% no-repeat;
-    
+
     .el-carousel__button {
       width: 10px;
       height: 10px;
@@ -1502,8 +1509,8 @@ input {
         width: 42%;
         margin: 43px 0;
         position: relative;
-    transform: translateX(-50%);
-    left: 50%;
+        transform: translateX(-50%);
+        left: 50%;
         .el-input {
           width: 94px;
         }
@@ -1534,7 +1541,7 @@ input {
             text-align: right;
           }
         }
-        
+
       }
       .input-with-select .el-input__inner{
           border-top-left-radius: 19px;
@@ -1597,7 +1604,7 @@ input {
       margin-left: 20px;
     }
   }
- 
+
   .declarationNotice,
   .popularActi,
   .districtGardens,
@@ -1956,7 +1963,7 @@ input {
               height: 100%;
               width: 100%;
             }
-            
+
           }
           .postImgItem2 {
             // background: url("../../static/img/tuceng2.png") 100% 100% / 100% 94%

@@ -9,25 +9,70 @@
         AND end_time <![CDATA[ < ]]> CURRENT_DATE ()
     </update>
 
+    <sql id="base_column1">
+      id,
+        title,
+        ad_cover as adCover,
+        ad_flag as adFlag,
+        start_time as startTime,
+        end_time as endTime,
+        sub_title as subTitle,
+        park
+    </sql>
+    <sql id="base_column2">
+        id,
+        title,
+        ad_cover,
+        ad_flag,
+        start_time,
+        end_time,
+        sub_title,
+        park
+    </sql>
     <select id="getBusinessAdContent" resultType="com.jn.park.attractinvest.model.BusinessAdContent"
             parameterType="com.jn.park.attractinvest.model.BusinessAdPage">
-        SELECT
-            id,
-            title,
-            ad_cover as adCover,
-            ad_flag as adFlag,
-            start_time as startTime,
-            end_time as endTime,
-            sub_title as subTitle,
-            park
-        FROM
-            `tb_business_ad_content`
-        WHERE
-            record_status = '1'
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(parkId)">
-            and park = #{parkId,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isBlank(keyWords)">
+            SELECT
+              <include refid="base_column1"/>
+            FROM
+              `tb_business_ad_content`
+            WHERE
+                record_status = '1'
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(parkId)">
+                    and park = #{parkId,jdbcType=VARCHAR}
+                </if>
+            ORDER BY
+              `id` DESC
         </if>
-        ORDER BY
-            `id` DESC
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(keyWords)">
+            SELECT DISTINCT
+              <include refid="base_column1"/>
+            FROM
+                (
+                    SELECT
+                      <include refid="base_column2"/>
+                    FROM
+                      `tb_business_ad_content`
+                    WHERE
+                      record_status = '1'
+                      and title like CONCAT('%', REPLACE(#{keyWords,jdbcType=VARCHAR}," ",""), '%')
+                      <if test="@org.apache.commons.lang.StringUtils@isNotBlank(parkId)">
+                        and park = #{parkId,jdbcType=VARCHAR}
+                      </if>
+                    UNION
+                        SELECT
+                          <include refid="base_column2"/>
+                        FROM
+                          `tb_business_ad_content`
+                        WHERE
+                            record_status = '1'
+                            and sub_title like CONCAT('%', REPLACE(#{keyWords,jdbcType=VARCHAR}," ",""), '%')
+                            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(parkId)">
+                                and park = #{parkId,jdbcType=VARCHAR}
+                            </if>
+                ) t
+              ORDER BY
+                t.id DESC
+        </if>
     </select>
 </mapper>

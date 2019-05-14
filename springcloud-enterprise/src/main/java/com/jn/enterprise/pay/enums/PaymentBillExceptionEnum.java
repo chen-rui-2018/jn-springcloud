@@ -17,13 +17,19 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     BILL_ID_IS_NOT_NULL("6020505","账单标识不能为空"),
     BILL_STATUS_IS_NOT_NULL("60205014","账单状态不能为空"),
     BILL_IS_NOT_EXIT("6020506","账单不存在"),
-    BILL_PAY_ORDER_CREATE_ERROR("6020507","支付账单创建异常，请稍后重试"),
     BILL_ORDER_IS_NOT_EXIT("6020508","支付账单创建异常，请稍后重试"),
     COMMIT_AMOUNT_NOT_EQUAL_BILL_AMOUNT("6020509","提交金额不等于账单金额"),
     PAYMENT_STATUS_IS_PAY("6020516","账单已支付，无需再次支付。"),
     BILL_PAY_ORDER_IS_NOT_EXIT("6020521","支付账单不存在。"),
     BILL_TYPE_IS_NOT_NULL("6020525","账单类型不能为空"),
     BILL_TYPE_IDENTICAL("6020526","账单类型需一致"),
+    BILL_CALLBACK_IS_NULL("6020527","支付回调参数为空"),
+    BILL_CALLBACK_ID_IS_NULL("6020528","支付回调参数订单ID为空"),
+    BILL_BOOK_IS_NOT_EXIT("6020529","账本查询异常或不存在"),
+    BILL_QUERY_ERROR("6020530","账单查询异常"),
+    BILL_DEDUCTION_FEE_ERROR("6020531","账单扣费异常"),
+    QUERY_ENTERPRISE_INFO_ERROR("6020532","查询企业信息异常"),
+    BILL_ACCOUNT_IS_NOT_EXIT("6020533","账户查询异常或不存在"),
     ;
     /**
      * 编码

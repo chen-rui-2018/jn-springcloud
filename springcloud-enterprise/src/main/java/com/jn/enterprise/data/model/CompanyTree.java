@@ -6,23 +6,32 @@ import java.util.List;
 
 public class CompanyTree {
 
+    @ApiModelProperty(value = "任务批次")
+    private String taskbatch;
+
+    @ApiModelProperty(value = "模板ID")
+    private String modelid;
+
+    @ApiModelProperty(value = "")
+    private String tabid;
+
+    @ApiModelProperty(value = "")
+    private String tabname;
+
+    @ApiModelProperty(value = "")
+    private String targetid;
+
+    @ApiModelProperty(value = "指标名称")
+    private String targetname;
+
     @ApiModelProperty(value = "父ID")
-    private String parent_id;
+    private String parentid;
 
-    @ApiModelProperty(value = "")
-    private String tatarget_name;
+    @ApiModelProperty(value = "填报格式名称")
+    private  String formid;
 
-    @ApiModelProperty(value = "")
-    private String task_batch;
-
-    @ApiModelProperty(value = "")
-    private String target_id;
-
-    @ApiModelProperty(value = "")
-    private String model_id;
-
-    @ApiModelProperty(value = "")
-    private String tab_id;
+    @ApiModelProperty(value = "填报格式名称")
+    private String formname;
 
     @ApiModelProperty(value = "单位")
     private String unit;
@@ -30,86 +39,68 @@ public class CompanyTree {
     @ApiModelProperty(value = "指标值")
     private String DATA;
 
+
     @ApiModelProperty(value = "合计")
-    private String sum_val;
+    private String sumval;
 
-    @ApiModelProperty(value = "指标名称")
-    private String target_name;
-
-    @ApiModelProperty(value = "填报格式名称")
-    private String form_name;
-
-    private  String form_id;
-
-
-
-
-    public String getForm_name() {
-        return form_name;
-    }
-
-    public void setForm_name(String form_name) {
-        this.form_name = form_name;
-    }
-
-    public String getForm_id() {
-        return form_id;
-    }
-
-    public void setForm_id(String form_id) {
-        this.form_id = form_id;
-    }
-
+    @ApiModelProperty(value = "子集")
     private List<CompanyTree> children;
 
-    public String getParent_id() {
-        return parent_id;
+
+    public String getTaskbatch() {
+        return taskbatch;
     }
 
-    public void setParent_id(String parent_id) {
-        this.parent_id = parent_id;
+    public void setTaskbatch(String taskbatch) {
+        this.taskbatch = taskbatch;
     }
 
-
-    public String getTatarget_name() {
-        return tatarget_name;
+    public String getModelid() {
+        return modelid;
     }
 
-    public void setTatarget_name(String tatarget_name) {
-        this.tatarget_name = tatarget_name;
+    public void setModelid(String modelid) {
+        this.modelid = modelid;
     }
 
-
-    public String getTask_batch() {
-        return task_batch;
+    public String getTabid() {
+        return tabid;
     }
 
-    public void setTask_batch(String task_batch) {
-        this.task_batch = task_batch;
+    public void setTabid(String tabid) {
+        this.tabid = tabid;
     }
 
-    public String getTarget_id() {
-        return target_id;
+    public String getTabname() {
+        return tabname;
     }
 
-    public void setTarget_id(String target_id) {
-        this.target_id = target_id;
+    public void setTabname(String tabname) {
+        this.tabname = tabname;
     }
 
-    public String getModel_id() {
-        return model_id;
+    public String getTargetid() {
+        return targetid;
     }
 
-    public void setModel_id(String model_id) {
-        this.model_id = model_id;
+    public void setTargetid(String targetid) {
+        this.targetid = targetid;
     }
 
-    public String getTab_id() {
-        return tab_id;
+    public String getTargetname() {
+        return targetname;
     }
 
-    public void setTab_id(String tab_id) {
-        this.tab_id = tab_id;
+    public void setTargetname(String targetname) {
+        this.targetname = targetname;
+    }
+
+    public String getParentid() {
+        return parentid;
+    }
+
+    public void setParentid(String parentid) {
+        this.parentid = parentid;
     }
 
     public String getUnit() {
@@ -128,20 +119,28 @@ public class CompanyTree {
         this.DATA = DATA;
     }
 
-    public String getSum_val() {
-        return sum_val;
+    public String getSumval() {
+        return sumval;
     }
 
-    public void setSum_val(String sum_val) {
-        this.sum_val = sum_val;
+    public void setSumval(String sumval) {
+        this.sumval = sumval;
     }
 
-    public String getTarget_name() {
-        return target_name;
+    public String getFormname() {
+        return formname;
     }
 
-    public void setTarget_name(String target_name) {
-        this.target_name = target_name;
+    public void setFormname(String formname) {
+        this.formname = formname;
+    }
+
+    public String getFormid() {
+        return formid;
+    }
+
+    public void setFormid(String formid) {
+        this.formid = formid;
     }
 
     public List<CompanyTree> getChildren() {

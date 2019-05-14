@@ -38,7 +38,7 @@ public class FinanceRecordsController extends BaseController {
     @GetMapping(value = "/findDetail")
     @RequiresPermissions("/finance/records/findDetail")
     public Result<FinanceRecordsFindDetailModel> findDetail(){
-        //todo
+
         FinanceRecordsFindDetailModel findDetail=financeRecordsService.findDetail();
         return new Result(findDetail);
     }
@@ -48,7 +48,7 @@ public class FinanceRecordsController extends BaseController {
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/records/findAll")
     public Result<PaginationData<FinanceRecordsFindAllVo>> findAll(@RequestBody FinanceRecordsFindAllModel financeRecordsFindAllModel){
-        //todo
+
         PaginationData findAll=financeRecordsService.findAll(financeRecordsFindAllModel);
         return new Result(findAll);
     }
@@ -58,7 +58,7 @@ public class FinanceRecordsController extends BaseController {
     @GetMapping(value = "/single")
     @RequiresPermissions("/finance/records/single")
     public Result single(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 
@@ -67,7 +67,7 @@ public class FinanceRecordsController extends BaseController {
     @PostMapping(value = "/entering")
     @RequiresPermissions("/finance/records/entering")
     public Result entering(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 
@@ -76,7 +76,7 @@ public class FinanceRecordsController extends BaseController {
     @PostMapping(value = "/notarize")
     @RequiresPermissions("/finance/records/notarize")
     public Result notarize(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 

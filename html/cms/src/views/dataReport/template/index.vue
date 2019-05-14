@@ -158,12 +158,12 @@
                   :rules="{ required: true, message: '请填写表名', trigger: 'change' }">
                   <el-radio-group v-model="form.tabCreateType" @change="(value) => { targetTypeChange(value, index) }">
                     <el-radio label="0">普通模板</el-radio>
-                    <el-radio :disabled="formData.modelType !== '1'" label="1">科技园模板</el-radio>
+                    <el-radio :disabled="formData.modelType !== '1' || formData.tabs.length > 1" label="1">科技园模板</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
               <el-col :span="6" style="text-align: right;">
-                <i class="el-icon-circle-plus green" @click="addTargetFormData(index)" />
+                <i class="el-icon-circle-plus green" @click="addTargetFormData(index, form)" />
                 <i class="el-icon-circle-close red" @click="deleteTargetFormData(index)" />
               </el-col>
             </el-row>
@@ -181,7 +181,7 @@
                   check-on-click-node
                   @check="(a, b, c) => setBroNode(index, a, b, c)"
                 />
-                <el-button class="add-more-target" icon="el-icon-plus" type="primary">去新增更多指标</el-button>
+                <el-button class="add-more-target" icon="el-icon-plus" type="primary" @click="toTargetPage">去新增更多指标</el-button>
               </div>
               <div slot="right">
                 <target-row v-if="form.tabCreateType !== '1'" class="target-row" title="填报数据列">
@@ -580,6 +580,7 @@ export default {
           this.loading = true
           this.submitting = true
           // 保存的时候再预览一遍, 获取选中指标树的填报格式
+
           this.previewForm()
             .then(() => {
               const formData = this.partDeepClone(this.formData, ['tabs', 'filllInFormDeadline', 'taskCreateTime'])
@@ -597,7 +598,6 @@ export default {
                 const filllInFormDeadline = this.formData.filllInFormDeadline < 10 ? '0' + this.formData.filllInFormDeadline : this.formData.filllInFormDeadline
                 formData.filllInFormDeadline = this.filllInFormDeadlineMonth + filllInFormDeadline
                 formData.taskCreateTime = this.formData.taskCreateTime
-                console.dir(formData.filllInFormDeadline)
               } else {
                 // 如果填报周期是年
                 formData.filllInFormDeadline = this.getDate(this.formData.filllInFormDeadline)
@@ -617,7 +617,6 @@ export default {
                   }
                 }
               })
-              console.dir(formData)
               this.$_post(`${this.GLOBAL.enterpriseUrl}data/dataModel/updateModel`, formData).then(data => {
                 if (data.code === '0000') {
                   this.submitting = false
@@ -844,7 +843,11 @@ export default {
       this.formData.filllInFormDeadline = ''
       this.filllInFormDeadlineMonth = ''
     },
-    addTargetFormData(index) {
+    addTargetFormData(index, form) {
+      if (form.tabCreateType === '1') {
+        this.$message.warning('一个模板只能创建一个科技园模板表单')
+        return
+      }
       this.$message.success('添加表格成功')
       this.formData.tabs.push(deepClone(this.originTab))
     },
@@ -1022,8 +1025,6 @@ export default {
                 }
                 // 勾选的树结构指标挂载到tree-table
                 this.$set(tab, 'treeTableData', list)
-                console.dir(list)
-                resolve()
               })
           } else {
             //  科技园模板表头
@@ -1032,6 +1033,7 @@ export default {
         })
         this.$nextTick(() => {
           this.previewing = false
+          resolve()
         })
       })
     },
@@ -1132,6 +1134,21 @@ export default {
     },
     handleExceed(files, fileList) {
       this.$message.warning(`最多只能上传1个附件`)
+    },
+    toTargetPage() {
+      if (!this.formData.modelId) {
+        this.$confirm('将要跳到指标管理页面，当前已填写表单信息会丢失，确定跳转?', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$router.push('/dataReport/targetManagement')
+        }).catch(() => {
+
+        })
+      } else {
+        this.$router.push('/dataReport/targetManagement')
+      }
     }
   }
 }

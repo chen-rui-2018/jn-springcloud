@@ -243,12 +243,13 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
 
             if (null == tbParkingPreferential.getDayConditions() || (applyDay+dayInterval) > tbParkingPreferential.getDayConditions()) {
                 logger.info("满足优惠条件，开始计算优惠金额，优惠政策{}，用户已租天数{}，本次租赁天数{}。", tbParkingPreferential.getPolicyCode(),applyDay, dayInterval);
-                if (null != tbParkingPreferential.getOfferPrice() && 0 != tbParkingPreferential.getOfferPrice()) {
+
+                if(StringUtils.equals(tbParkingPreferential.getPolicyType(),ParkingEnums.PARKING_YEAR_FIXED_DISCOUNT.getCode())){
                     //减免固定金额
                     parkingSpaceAmountVo.setDeductionMoney(tbParkingPreferential.getOfferPrice());
                     parkingSpaceAmountVo.setActualMoney(new BigDecimal(Double.toString(dueMoney)).subtract(new BigDecimal(Double.toString(tbParkingPreferential.getOfferPrice()))).doubleValue());
-                } else {
-                    //按比例减免
+                }else if(StringUtils.equals(tbParkingPreferential.getPolicyType(),ParkingEnums.PARKING_YEAR_PROPORTIONAL_DISCOUNT.getCode())){
+                    //比列折扣
                     BigDecimal divide = new BigDecimal(dueMoney).multiply(new BigDecimal(Double.toString(tbParkingPreferential.getOfferRatio()))).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
                     parkingSpaceAmountVo.setDeductionMoney(divide.doubleValue());
                     parkingSpaceAmountVo.setActualMoney(new BigDecimal(Double.toString(dueMoney)).subtract(divide).doubleValue());
@@ -259,6 +260,7 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
                 parkingSpaceAmountVo.setActualMoney(dueMoney);
             }
         } else {
+            logger.info("无对应优惠数据，优惠金额为0，按原价计算");
             parkingSpaceAmountVo.setDeductionMoney(new Double(0));
             parkingSpaceAmountVo.setActualMoney(dueMoney);
         }

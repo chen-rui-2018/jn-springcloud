@@ -50,6 +50,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-payment-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-hardware-api</artifactId>
+        </dependency>
 
     </dependencies>
     <build>
@@ -84,7 +88,7 @@
                         parking
                     </contexts>
                     <tableNames>
-                        tb_parking_service
+                        tb_parking_preferential
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

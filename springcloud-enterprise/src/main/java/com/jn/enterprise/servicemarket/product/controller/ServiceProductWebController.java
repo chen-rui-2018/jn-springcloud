@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
+import com.jn.enterprise.servicemarket.product.enums.ProductConstantEnum;
 import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.enterprise.servicemarket.product.vo.ProductListAndCountVO;
@@ -46,10 +47,10 @@ public class ServiceProductWebController  extends BaseController {
     public Result upShelfCommonService(@RequestBody @Validated CommonProductShelf product){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //服务产品主键Id
-        String productId = UUID.randomUUID().toString().replaceAll("-", "");
+        //String productId = UUID.randomUUID().toString().replaceAll("-", "");
         CommonServiceShelf serviceShelf = new CommonServiceShelf();
         BeanUtils.copyProperties(product,serviceShelf);
-        serviceShelf.setProductId(productId);
+        serviceShelf.setProductId("");
         productService.upShelfCommonService(serviceShelf,user != null?user.getAccount():"");
         return new Result();
     }
@@ -60,11 +61,12 @@ public class ServiceProductWebController  extends BaseController {
     @RequestMapping(value = "/addFeatureService",method = RequestMethod.POST)
     public Result addFeatureService(@RequestBody @Validated AddFeatureProduct product){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        String productId = UUID.randomUUID().toString().replaceAll("-","");
+        //String productId = UUID.randomUUID().toString().replaceAll("-","");
+        product.setProductType(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode());
         ServiceContent content = new ServiceContent();
         BeanUtils.copyProperties(product,content);
-        content.setProductId(productId);
-        productService.addServiceProduct(content,user != null?user.getAccount():"",productId);
+        content.setProductId("");
+        productService.addServiceProduct(content,user != null?user.getAccount():"",null);
         return new Result();
     }
 
@@ -148,6 +150,7 @@ public class ServiceProductWebController  extends BaseController {
     @RequestMapping(value = "/updateFeatureProduct",method = RequestMethod.POST)
     public Result updateFeatureProduct(@RequestBody @Validated OrgUpdateFeatureProduct product){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
+        product.setProductType(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode());
         productService.updateFeatureProduct(product,user.getAccount());
         return new Result();
     }

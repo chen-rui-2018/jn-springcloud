@@ -7,22 +7,25 @@ public class TbParkingPreferential implements Serializable {
     /*@ApiModelProperty("优惠政策id")*/
     private String policyId;
 
+    /*@ApiModelProperty("优惠类型 1优惠固定金额2按比例优惠")*/
+    private String policyType;
+
     /*@ApiModelProperty("政策编码")*/
     private String policyCode;
 
     /*@ApiModelProperty("优惠内容")*/
     private String policyComments;
 
-    /*@ApiModelProperty("优惠金额")*/
+    /*@ApiModelProperty("优惠金额[空/0标识不设置优惠金额]")*/
     private Double offerPrice;
 
-    /*@ApiModelProperty("优惠折扣[如已设置优惠金额，则优惠比例不生效]")*/
+    /*@ApiModelProperty("优惠折扣[抵扣百分比][如已设置优惠金额，则优惠比例不生效]")*/
     private Double offerRatio;
 
     /*@ApiModelProperty("0 无效  1 有效")*/
     private String policyStatus;
 
-    /*@ApiModelProperty("租满多少天可用(加上之前租赁天数)")*/
+    /*@ApiModelProperty("租满多少天可用[空/0则不设置天数。加上之前租赁天数]")*/
     private Integer dayConditions;
 
     /*@ApiModelProperty("创建者账号")*/
@@ -48,6 +51,14 @@ public class TbParkingPreferential implements Serializable {
 
     public void setPolicyId(String policyId) {
         this.policyId = policyId == null ? null : policyId.trim();
+    }
+
+    public String getPolicyType() {
+        return policyType;
+    }
+
+    public void setPolicyType(String policyType) {
+        this.policyType = policyType == null ? null : policyType.trim();
     }
 
     public String getPolicyCode() {
@@ -151,6 +162,7 @@ public class TbParkingPreferential implements Serializable {
         }
         TbParkingPreferential other = (TbParkingPreferential) that;
         return (this.getPolicyId() == null ? other.getPolicyId() == null : this.getPolicyId().equals(other.getPolicyId()))
+            && (this.getPolicyType() == null ? other.getPolicyType() == null : this.getPolicyType().equals(other.getPolicyType()))
             && (this.getPolicyCode() == null ? other.getPolicyCode() == null : this.getPolicyCode().equals(other.getPolicyCode()))
             && (this.getPolicyComments() == null ? other.getPolicyComments() == null : this.getPolicyComments().equals(other.getPolicyComments()))
             && (this.getOfferPrice() == null ? other.getOfferPrice() == null : this.getOfferPrice().equals(other.getOfferPrice()))
@@ -169,6 +181,7 @@ public class TbParkingPreferential implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getPolicyId() == null) ? 0 : getPolicyId().hashCode());
+        result = prime * result + ((getPolicyType() == null) ? 0 : getPolicyType().hashCode());
         result = prime * result + ((getPolicyCode() == null) ? 0 : getPolicyCode().hashCode());
         result = prime * result + ((getPolicyComments() == null) ? 0 : getPolicyComments().hashCode());
         result = prime * result + ((getOfferPrice() == null) ? 0 : getOfferPrice().hashCode());
@@ -190,6 +203,7 @@ public class TbParkingPreferential implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", policyId=").append(policyId);
+        sb.append(", policyType=").append(policyType);
         sb.append(", policyCode=").append(policyCode);
         sb.append(", policyComments=").append(policyComments);
         sb.append(", offerPrice=").append(offerPrice);

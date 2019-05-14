@@ -1,10 +1,16 @@
 package com.jn.park.message.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
+import com.jn.park.finance.vo.FinanceExpendHistoryVo;
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.addMessageModel;
+import com.jn.park.message.model.findAllMessageListModel;
 import com.jn.park.message.service.MessageListService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -37,21 +43,28 @@ public class MessageListController extends BaseController {
     @ApiOperation(value = "消息列表",notes = "查询消息列表", httpMethod = "GET")
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/message/list/findAll")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "messageTowTort",value = "一级消息类别,0:个人动态;1:企业空间;",dataType = "Integer",paramType = "query")
-    })
-    public Result<FindAllMessageListVo> findAll(Integer messageTowTort){
-        // TODO: 2019/4/19
-        List<FindAllMessageListVo> findAllMessageListVoList = messageListService.findAll(messageTowTort,getUser());
+    public Result<PaginationData<List<FindAllMessageListVo>>> findAll(findAllMessageListModel findAllMessageListModel){
+
+        PaginationData findAllMessageListVoList = messageListService.findAll(findAllMessageListModel,getUser());
         return new Result(findAllMessageListVoList);
+    }
+
+    @ControllerLog(doAction = "是否有已读消息")
+    @ApiOperation(value = "是否有已读消息",notes = "是否有已读消息", httpMethod = "GET")
+    @GetMapping(value = "/getIsRead")
+    @RequiresPermissions("/message/list/getIsRead")
+    public Result getIsRead(){
+
+        int getIsRead=messageListService.getIsRead(getUser());
+
+        return new Result(getIsRead);
     }
 
     @ControllerLog(doAction = "添加消息")
     @ApiOperation(value = "添加消息",notes = "添加消息", httpMethod = "POST")
     @PostMapping(value = "/addMessage")
     @RequiresPermissions("/message/list/addMessage")
-    public Result addMessage(@RequestBody addMessageModel addMessageModel){
-        //todo
+    public Result addMessage(@RequestBody AddMessageModel addMessageModel){
         messageListService.addMessage(addMessageModel);
         return new Result(new Result<>());
     }
@@ -65,7 +78,7 @@ public class MessageListController extends BaseController {
             @ApiImplicitParam(name = "id",value = "消息ID",dataType = "String",paramType = "query")
     })
     public Result<MessageListModel> findByMessage(String id){
-        //todo
+
         MessageListModel findByMessage= messageListService.findByMessage(id);
         return new Result(findByMessage);
     }
@@ -76,7 +89,7 @@ public class MessageListController extends BaseController {
     @PostMapping(value = "/updateMessage")
     @RequiresPermissions("/message/list/updateMessage")
     public Result updateMessage(@RequestBody  MessageListModel MessageListModel){
-        //todo
+
         messageListService.updateMessage(MessageListModel);
         return new Result(new Result<>());
     }
@@ -90,7 +103,7 @@ public class MessageListController extends BaseController {
             @ApiImplicitParam(name = "id",value = "消息ID",dataType = "String",paramType = "query")
     })
     public Result deleteMessage(String id){
-        //todo
+
         messageListService.deleteMessage(id);
         return new Result(new Result<>());
     }
@@ -104,7 +117,7 @@ public class MessageListController extends BaseController {
             @ApiImplicitParam(name = "id",value = "消息ID",dataType = "String",paramType = "query")
     })
     public Result updateIsReadStatus(String id){
-        //todo
+
         messageListService.updateIsReadStatus(id);
         return new Result(new Result<>());
     }

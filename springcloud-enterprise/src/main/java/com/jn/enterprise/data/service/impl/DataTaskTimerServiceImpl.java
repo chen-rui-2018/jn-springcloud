@@ -29,6 +29,7 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import com.jn.news.vo.SmsTemplateVo;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.ws.BindingType;
 import java.util.*;
@@ -88,6 +89,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
     @Override
     @ServiceLog(doAction = "创建任务")
+    @Transactional(rollbackFor = Exception.class)
     public void createTask() {
         //扫描有效的模板，检测是否到了新建任务的时候
         TbDataReportingModelCriteria modelCri = new TbDataReportingModelCriteria();
@@ -355,6 +357,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
                     //当前园区任务的某个tab哪些部门可以填报
                     fillerBean = new TbDataReportingGardenFiller();
+                    fillerBean.setId(UUID.randomUUID().toString().replaceAll("-",""));
                     fillerBean.setFillId(id);
                     fillerBean.setDepartmentId(targetBean.getDepartmentId());
                     fillerBean.setDepartmentName(targetBean.getDepartmentName());

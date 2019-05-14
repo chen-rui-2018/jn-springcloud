@@ -576,6 +576,76 @@ public class TbPayBillCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andObjIdIsNull() {
+            addCriterion("obj_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdIsNotNull() {
+            addCriterion("obj_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdEqualTo(String value) {
+            addCriterion("obj_id =", value, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdNotEqualTo(String value) {
+            addCriterion("obj_id <>", value, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdGreaterThan(String value) {
+            addCriterion("obj_id >", value, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdGreaterThanOrEqualTo(String value) {
+            addCriterion("obj_id >=", value, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdLessThan(String value) {
+            addCriterion("obj_id <", value, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdLessThanOrEqualTo(String value) {
+            addCriterion("obj_id <=", value, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdLike(String value) {
+            addCriterion("obj_id like", value, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdNotLike(String value) {
+            addCriterion("obj_id not like", value, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdIn(List<String> values) {
+            addCriterion("obj_id in", values, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdNotIn(List<String> values) {
+            addCriterion("obj_id not in", values, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdBetween(String value1, String value2) {
+            addCriterion("obj_id between", value1, value2, "objId");
+            return (Criteria) this;
+        }
+
+        public Criteria andObjIdNotBetween(String value1, String value2) {
+            addCriterion("obj_id not between", value1, value2, "objId");
+            return (Criteria) this;
+        }
+
         public Criteria andObjNameIsNull() {
             addCriterion("OBJ_NAME is null");
             return (Criteria) this;
@@ -853,6 +923,146 @@ public class TbPayBillCriteria {
 
         public Criteria andAcBookTypeNotBetween(String value1, String value2) {
             addCriterion("AC_BOOK_TYPE not between", value1, value2, "acBookType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberIsNull() {
+            addCriterion("order_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberIsNotNull() {
+            addCriterion("order_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberEqualTo(String value) {
+            addCriterion("order_number =", value, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberNotEqualTo(String value) {
+            addCriterion("order_number <>", value, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberGreaterThan(String value) {
+            addCriterion("order_number >", value, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("order_number >=", value, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberLessThan(String value) {
+            addCriterion("order_number <", value, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberLessThanOrEqualTo(String value) {
+            addCriterion("order_number <=", value, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberLike(String value) {
+            addCriterion("order_number like", value, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberNotLike(String value) {
+            addCriterion("order_number not like", value, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberIn(List<String> values) {
+            addCriterion("order_number in", values, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberNotIn(List<String> values) {
+            addCriterion("order_number not in", values, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberBetween(String value1, String value2) {
+            addCriterion("order_number between", value1, value2, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumberNotBetween(String value1, String value2) {
+            addCriterion("order_number not between", value1, value2, "orderNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlIsNull() {
+            addCriterion("callback_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlIsNotNull() {
+            addCriterion("callback_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlEqualTo(String value) {
+            addCriterion("callback_url =", value, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlNotEqualTo(String value) {
+            addCriterion("callback_url <>", value, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlGreaterThan(String value) {
+            addCriterion("callback_url >", value, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("callback_url >=", value, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlLessThan(String value) {
+            addCriterion("callback_url <", value, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlLessThanOrEqualTo(String value) {
+            addCriterion("callback_url <=", value, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlLike(String value) {
+            addCriterion("callback_url like", value, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlNotLike(String value) {
+            addCriterion("callback_url not like", value, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlIn(List<String> values) {
+            addCriterion("callback_url in", values, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlNotIn(List<String> values) {
+            addCriterion("callback_url not in", values, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlBetween(String value1, String value2) {
+            addCriterion("callback_url between", value1, value2, "callbackUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackUrlNotBetween(String value1, String value2) {
+            addCriterion("callback_url not between", value1, value2, "callbackUrl");
             return (Criteria) this;
         }
 
@@ -1443,6 +1653,76 @@ public class TbPayBillCriteria {
 
         public Criteria andRecordStatusNotBetween(String value1, String value2) {
             addCriterion("record_status not between", value1, value2, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdIsNull() {
+            addCriterion("callback_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdIsNotNull() {
+            addCriterion("callback_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdEqualTo(String value) {
+            addCriterion("callback_id =", value, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdNotEqualTo(String value) {
+            addCriterion("callback_id <>", value, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdGreaterThan(String value) {
+            addCriterion("callback_id >", value, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdGreaterThanOrEqualTo(String value) {
+            addCriterion("callback_id >=", value, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdLessThan(String value) {
+            addCriterion("callback_id <", value, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdLessThanOrEqualTo(String value) {
+            addCriterion("callback_id <=", value, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdLike(String value) {
+            addCriterion("callback_id like", value, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdNotLike(String value) {
+            addCriterion("callback_id not like", value, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdIn(List<String> values) {
+            addCriterion("callback_id in", values, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdNotIn(List<String> values) {
+            addCriterion("callback_id not in", values, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdBetween(String value1, String value2) {
+            addCriterion("callback_id between", value1, value2, "callbackId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCallbackIdNotBetween(String value1, String value2) {
+            addCriterion("callback_id not between", value1, value2, "callbackId");
             return (Criteria) this;
         }
     }

@@ -1,10 +1,15 @@
 package com.jn.enterprise.pay.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.pay.model.*;
-import com.jn.enterprise.pay.vo.PayBillVo;
+import com.jn.common.model.Result;
+import com.jn.enterprise.pay.entity.TbPayBillDetails;
+import com.jn.pay.vo.PayBillVo;
+import com.jn.pay.model.*;
+import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.model.User;
+import org.apache.ibatis.annotations.Param;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -19,10 +24,18 @@ public interface MyPayBillService {
 
     /**
      * 查询账单
-     * @param payBill
+     * @param payBillParams
      * @return
      */
-    PaginationData<List<PayBillVo>> getBillQueryList(PayBill payBill);
+    PaginationData<List<PayBillVo>> getBillQueryList(@Param("payBill")PayBillParams payBillParams);
+
+    /**
+     * 通过账单ID查询账单详情信息
+     * @param billId
+     * @return
+     */
+    List<PayBillDetails> getBillInfo(String billId);
+
 
     /**
      * 账单催缴次数更新
@@ -39,17 +52,24 @@ public interface MyPayBillService {
     void billCheckReminder(PayCheckReminder payCheckReminder, User user);
 
     /**
+     * 创建账单
+     * @param payBillCreateParamVo,user
+     * @return
+     */
+    Result billCreate(PayBillCreateParamVo payBillCreateParamVo, User user);
+
+    /**
      * 缴费单支付发起
      * @param payBIllInitiateParam,user
      * @param user
      * @return
      */
-    PayBIllResponse startPayment(PayBIllInitiateParam payBIllInitiateParam, User user);
+    Result startPayment(PayBIllInitiateParam payBIllInitiateParam, User user);
 
     /**
      * 支付回调接口
      * @param callBackParam
      * @return
      */
-    PayCallBack payCallBack(PayCallBackParam callBackParam);
+    void payCallBack(HttpServletResponse response, PayOrderNotify callBackParam, User user);
 }

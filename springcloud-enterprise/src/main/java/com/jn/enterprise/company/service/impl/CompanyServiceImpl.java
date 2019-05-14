@@ -4,13 +4,11 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.enums.CompanyExceptionEnum;
-import com.jn.company.model.CompanyProImg;
-import com.jn.company.model.IBPSResult;
-import com.jn.company.model.ServiceCompany;
-import com.jn.company.model.ServiceCompanyParam;
+import com.jn.company.model.*;
 import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
@@ -18,13 +16,21 @@ import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.service.StaffService;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
+import com.jn.park.activity.model.CommentAddParam;
+import com.jn.park.api.CareClient;
+import com.jn.park.api.CommentClient;
+import com.jn.park.care.model.CareParam;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -59,6 +65,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private UserExtensionClient userExtensionClient;
+    @Autowired
+    private CommentClient commentClient;
+    @Autowired
+    private StaffService staffService;
+    @Autowired
+    private CareClient careClient;
 
     /**
      * 数据状态 1有效
@@ -96,6 +108,9 @@ public class CompanyServiceImpl implements CompanyService {
         }
         if(StringUtils.isNotEmpty(companyParam.getComType())){
             criteria.andComTypeEqualTo(companyParam.getComType());
+        }
+        if(StringUtils.isNotEmpty(companyParam.getAffiliatedPark())){
+            criteria.andAffiliatedParkEqualTo(companyParam.getAffiliatedPark());
         }
         Page<Object> objects = PageHelper.startPage(companyParam.getPage(), companyParam.getRows() == 0 ? 15 : companyParam.getRows());
         List<TbServiceCompany> tbServiceCompanies = tbServiceCompanyMapper.selectByExample(companyCriteria);
@@ -190,7 +205,26 @@ public class CompanyServiceImpl implements CompanyService {
             imgs.add(proImg);
         }
         company.setProImgs(imgs);
+
+        //TODO 企业员工
+
+
         return company;
+    }
+
+    @ServiceLog(doAction = "根据用户账号查询企业信息（用户为企业管理员）,携带当前登录用户")
+    @Override
+    public  ServiceCompany getCompanyDetailByAccountOrId(String account,String currentAccount){
+        ServiceCompany companyDetailByAccountOrId = this.getCompanyDetailByAccountOrId(account);
+        CareParam careParam = new CareParam();
+        careParam.setAccount(account);
+        careParam.setCurrentAccount(currentAccount);
+        Result companyCareInfo = careClient.findCompanyCareInfo(careParam);
+        if(null !=companyCareInfo && null != companyCareInfo.getData()){
+            CareUserDetails data = (CareUserDetails)companyCareInfo.getData();
+            companyDetailByAccountOrId.setCareUserDetails(data);
+        }
+        return companyDetailByAccountOrId;
     }
 
     @Override
@@ -227,6 +261,19 @@ public class CompanyServiceImpl implements CompanyService {
         }
         logger.info("[编辑企业信息] " + ibpsResult.getMessage());
         return 1;
+    }
+
+
+    @ServiceLog(doAction = "获取评论信息")
+    @Override
+    public Result<PaginationData<List<Comment>>> getCommentInfo(ActivityPagingParam activityPagingParam){
+        return commentClient.getCommentInfo(activityPagingParam);
+    }
+
+    @ServiceLog(doAction = "保存评论")
+    @Override
+    public Result<Boolean> saveComment(CommentAddParam commentAddParam){
+        return commentClient.commentActivity(commentAddParam);
     }
 
 }

@@ -4,6 +4,8 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.LeaseOrdersModel;
+import com.jn.system.model.User;
+import com.jn.system.model.UserPage;
 
 import java.util.List;
 /**
@@ -14,11 +16,6 @@ import java.util.List;
 * @modified By:
 */
 public interface AssetArticleLeaseOrdersService {
-    /**
-     * 返回物品租赁历史列表
-     * @return
-     */
-    PaginationData<List<AssetArticleLeaseOrdersModel>> getArticleLeaseList(Page page);
 
     /**
      * 根据订单编号查询租借详情
@@ -51,4 +48,12 @@ public interface AssetArticleLeaseOrdersService {
      * @param id
      */
     void giveBack(String id);
+
+    /**
+     * 返回物品租赁历史列表
+     * @param account
+     * @param page
+     * @return
+     */
+    PaginationData<List<AssetArticleLeaseOrdersModel>> getArticleLeaseOrdersList(String account, Page page);
 }

@@ -1,6 +1,6 @@
 <template>
-  <div class="appHead">
-    <el-card class="box-card">
+  <div class="apphead">
+    <div class="box-card">
       <!-- <div id="header" :class="{'headerBg':this.$route.name=='actiCenter'}" v-if="headFlag"> -->
       <!-- <div id="header" v-if="headFlag">
         <div class="headerContainer clearfix">
@@ -59,28 +59,28 @@
             <i class="el-icon-search"></i>
           </div>
           <div class="headerRight fr">
-            <div class="search" v-if="!sousuo">
-              <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
+            <div class="search">
+              <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
             </div>
             <div class="navlogin" v-if="this.$route.name!=='actiManagent'">
               <a>登录</a>
               <span class="line">|</span>
               <a>注册</a>
             </div>
-            <div class="navlogin" v-if="this.$route.name =='actiManagent'">
+            <!-- <div class="navlogin" v-if="this.$route.name =='actiManagent'">
               <i class="el-icon-bell"></i>
               <span class="line">|</span>
               <img src="" alt="">
-            </div>
+            </div> -->
           </div>
           <div class="nav" v-if="this.$route.name=='actiCenter'||this.$route.name=='actiDetail'||this.$route.name=='regData'||this.$route.name=='regStatus'||this.$route.name=='actiManagent'">
-            <transition name="fade">
+            <!-- <transition name="fade">
               <div class="sousuo posA" v-if="sousuo">
                 <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
                 <input type="text" v-focus @keyup.enter="handleSearch">
                 <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-              </div>
-              <ul class="posA clearfix" v-else>
+              </div> -->
+              <ul class="posA clearfix">
                 <li>
                   <a href="javascript:void(0);">首页</a>
                 </li>
@@ -95,11 +95,22 @@
                 </li>
               </ul>
 
-            </transition>
+            <!-- </transition> -->
           </div>
         </div>
       </div>
-    </el-card>
+    </div>
+    <div class="search_box" id="search_box" @mouseleave="show4=!show4">
+      <el-collapse-transition>
+        <div v-show="show4">
+          <div class="transition-box">
+            <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
+              <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+            </el-input>
+          </div>
+        </div>
+      </el-collapse-transition>
+    </div>
   </div>
 
 </template>
@@ -109,6 +120,8 @@ export default {
   data() {
     return {
       sousuo: false,
+      show4:false,
+      searchData:'',
     };
   },
   methods: {
@@ -120,9 +133,58 @@ export default {
 </script>
 
 <style lang="scss">
-.appHead {
-  .el-card__body {
-    padding: 0;
+.apphead {
+   z-index: 9;
+  width: 100%;
+  position: fixed;
+   .search_box {
+      // background: rgba(0, 0, 0, 0.3);
+      width: 100%;
+       background: #fff;
+       box-shadow:0 10px 10px -10px #ccc;
+      .el-input-group {
+        border-radius: 28px;
+        width: 42%;
+        margin: 43px 0;
+        position: relative;
+        transform: translateX(-50%);
+        left: 50%;
+        .el-input {
+          width: 94px;
+        }
+        .el-input__inner:focus {
+          border-color: #00a041;
+        }
+        .el-input-group__append,
+        .el-input-group__prepend {
+          border-radius: 28px;
+        }
+        .el-input-group__append {
+          /* border-top-left-radius: 0;
+        border-bottom-left-radius: 0; */
+          background: #00a041;
+          color: #fff;
+          right: 58px;
+          .el-button {
+            margin: -10px -10px;
+          }
+        }
+        .el-input-group__prepend {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          background-color: #fff;
+          padding: 0px 17px 0 9px;
+          input {
+            color: #666666;
+            text-align: right;
+          }
+        }
+      }
+      .input-with-select .el-input__inner {
+        border-top-left-radius: 19px;
+        border-bottom-left-radius: 19px;
+        border: 1px solid #00a041;
+      }
   }
 }
 .headerBg {
@@ -130,17 +192,18 @@ export default {
 }
 
 #headerActi {
-  position: relative;
+  // position: relative;
   background-color: #fff;
-  padding: 0 160px;
-  // box-shadow: 2px 2px 2px #ccc;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 10px 10px -10px #ccc;
   .headerContainer {
     // position: relative;
+    padding: 0 160px;
     width: 100%;
     height: 65px;
     line-height: 65px;
     color: #666;
-    font-weight: bold;
+    // font-weight: bold;
     font-size: 16px;
     box-sizing: border-box;
     // background-color: #757381;

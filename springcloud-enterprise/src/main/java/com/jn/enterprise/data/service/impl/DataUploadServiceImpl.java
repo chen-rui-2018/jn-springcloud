@@ -983,7 +983,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
         //获取出科技园模板的‘缴纳税收总额’的指标Id和填报格式Id
         List<TbDataReportingSnapshotTargetGroup> sicentTarget = getScientTaxiTargetByFillId(fillId);
-        if(sicentTarget == null || sicentTarget.size()<0){
+        if(sicentTarget == null || sicentTarget.size()==0){
             //抛出异常，提示模板中没有缴纳税收总额指标
             throw new JnSpringCloudException(DataUploadExceptionEnum.NO_TAXI_TARGET);
         }

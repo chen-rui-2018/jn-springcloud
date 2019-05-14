@@ -20,7 +20,7 @@
               <div
                    v-for="(item, index) in willFillList"
                    class="en-card"
-                   @click="toFillData(item)">
+                   @click="toFillData(item, 'form')">
                 <div class="card-cell">
                   <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
                   <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
@@ -79,7 +79,7 @@
                    :class="formatReported(item).class"
                    :key="index"
                    class="en-card"
-                   @click="toFillData(item)">
+                   @click="toFillData(item, 'formed')">
                 <div class="card-cell">
                   <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
                   <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
@@ -133,7 +133,12 @@
   export default {
     name: "reportEntry",
     mounted() {
-      this.init()
+
+    },
+    activated() {
+      this.$nextTick(() => {
+        this.init()
+      })
     },
     data() {
       return {
@@ -265,11 +270,12 @@
         this.filledData.page = page
         this.getFilledData()
       },
-      toFillData(item) {
+      toFillData(item, type) {
         this.$router.push({
           path:'/servicemarket/product/productService/report',
           query:{
-            fileId: item.fillId
+            fileId: item.fillId,
+            type: type
           }
         })
       },

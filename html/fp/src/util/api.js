@@ -81,6 +81,7 @@ export default {
         enterpriseGetForm:"springcloud-enterprise/data/company/getForm", // 获取本月待填报的任务
         enterpriseGetFormed:"springcloud-enterprise/data/company/getFormed", // 获取企业填报历史表单列表
         enterpriseGetFormStruct:"springcloud-enterprise/data/company/getFormStruct", // 获取待填报的表单结构
+      enterpriseGetCompanyFormedStruct:"springcloud-enterprise/data/company/getCompanyFormedStruct", // 获取企业已经填报的表单的结构信息和值
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
 
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
@@ -90,6 +91,7 @@ export default {
         enterpriseGetImportData:"springcloud-enterprise/data/garden/getImportData", // 科技园模板查询数据接口
         enterpriseImportData:"springcloud-enterprise/data/garden/importData", // 科技园导入接口
         enterpriseGetCheckOrLookInfo:"springcloud-enterprise/data/garden/getCheckOrLookInfo", // 审核列表
+
 
 
 

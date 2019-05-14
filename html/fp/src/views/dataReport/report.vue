@@ -1,6 +1,6 @@
 <template>
 <!--  根据填报的是普通模板还是科技园模板渲染不同组件-->
-  <component :modelId="modelId" :formTime="formTime" v-bind:is="componentType"></component>
+  <component :modelId="modelId" :type="type" :formTime="formTime" v-bind:is="componentType"></component>
 </template>
 
 <script>
@@ -16,7 +16,8 @@
      return {
        modelId: '',
        formTime: '',
-       componentType: null
+       componentType: null,
+       type: ''
      }
    },
    created() {
@@ -24,7 +25,7 @@
    },
    methods: {
      init () {
-
+       this.type = this.$route.query.type
        this.getData()
          .catch(res => {
            console.dir(res)
@@ -33,8 +34,15 @@
      getData() {
        return new Promise((resolve, reject) => {
          const _this = this
+         const type = this.$route.query.type
+         let url
+         if (type === 'form') {
+           url = 'enterpriseGetFormStruct'
+         } else if(type === 'formed'){
+           url = 'enterpriseGetCompanyFormedStruct'
+         }
          this.api.get({
-           url: `enterpriseGetFormStruct`,
+           url: url,
            data: {
              fileId: _this.$route.query.fileId
            },

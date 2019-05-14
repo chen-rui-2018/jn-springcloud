@@ -236,6 +236,9 @@
               }else if (item.formType === '5') {
                 item.fileList = item.value ? [{ name: item.value, url: item.value }] : []
               }
+              if (!target.inputFormatModel[Number(item.rowNum)]) {
+                target.inputFormatModel[Number(item.rowNum)] = []
+              }
               target.inputFormatModel[Number(item.rowNum)].push(item)
             }
           }
@@ -338,7 +341,6 @@
                 item.inputList = item.flatteningInputList
                 delete item.flatteningInputList
               })
-              console.dir(JSON.stringify(formData))
               resolve(formData)
             },({ target, input }) => {
               let text
@@ -385,15 +387,21 @@
           this.loadingFormData = true
           this.loadingTab = true
           const _this = this
+          const type = this.$route.query.type
+          let url
+          if (type === 'form') {
+            url = 'enterpriseGetFormStruct'
+          } else if(type === 'formed'){
+            url = 'enterpriseGetCompanyFormedStruct'
+          }
           this.api.get({
-            url: `enterpriseGetFormStruct`,
+            url: url,
             data: {
               fileId: _this.$route.query.fileId
             },
             callback(res) {
               if (res.code === "0000") {
                 _this.formData = res.data
-                console.dir(JSON.stringify(res.data))
                 _this.formData.tabs.sort((a, b) => {
                   return a['orderNumber'] - b['orderNumber']
                 })

@@ -188,21 +188,21 @@ public class EmailServiceImpl implements EmailService {
             String emailId = tbOaEmail.getId();
             //获取邮件任务接收人邮箱
             String userEmailInfo = emailUserMapper.getUserEmailInfo(emailId);
-            if (userEmailInfo == null) {
-                return;
+            boolean sendStatus = true;
+            if (userEmailInfo != null) {
+                EmailVo emailVo = new EmailVo();
+                emailVo.setEmail(userEmailInfo);
+                emailVo.setEmailSubject(tbOaEmail.getTitle());
+                emailVo.setEmailContent(tbOaEmail.getEmailContent());
+
+                //获取附件信息
+                String attachment = tbOaEmail.getAttachment();
+                //从文件服务器上下载附件
+                downlownAttachment(fileList, emailVo, attachment);
+                //发送邮件
+                sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());;
             }
 
-            EmailVo emailVo = new EmailVo();
-            emailVo.setEmail(userEmailInfo);
-            emailVo.setEmailSubject(tbOaEmail.getTitle());
-            emailVo.setEmailContent(tbOaEmail.getEmailContent());
-
-            //获取附件信息
-            String attachment = tbOaEmail.getAttachment();
-            //从文件服务器上下载附件
-            downlownAttachment(fileList, emailVo, attachment);
-
-            boolean sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
             //更新邮件发送时间
             tbOaEmail.setSendTime(new Date());
             if (user != null) {

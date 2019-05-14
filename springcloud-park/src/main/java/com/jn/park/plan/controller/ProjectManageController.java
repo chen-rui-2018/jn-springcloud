@@ -2,6 +2,7 @@ package com.jn.park.plan.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
@@ -9,10 +10,7 @@ import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
 import com.jn.park.message.service.MessageListService;
-import com.jn.park.plan.model.ProjectCompleteRatioModel;
-import com.jn.park.plan.model.ProjectManageModel;
-import com.jn.park.plan.model.ProjectPlanModel;
-import com.jn.park.plan.model.ProjectTaskModel;
+import com.jn.park.plan.model.*;
 import com.jn.park.plan.service.ProjectManageService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -50,16 +48,17 @@ public class ProjectManageController extends BaseController {
     @ApiOperation(value = "工程项目管理",notes = "工程项目管理页面小方块中的数据", httpMethod = "GET")
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/planning/project/findAll")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "projectState",value = "工程状态(默认为0;2 已完成;1 进行中;0 未开始)",dataType = "String",paramType = "query",example = "0"),
-            @ApiImplicitParam(name = "progress",value = "进度(默认为0;0 正常;1 提前;2 延迟)",dataType = "String",paramType = "query",example = "0"),
-            @ApiImplicitParam(name = "projectName",value = "工程项目名称",dataType = "String",paramType = "query"),
-            @ApiImplicitParam(name = "orderByClause",value = "排序字段(空格隔开)desc/asc(project_no:项目编号/surplus_time:剩余工期/progress:进度)默认project_no desc",dataType = "String",paramType = "query",example = "project_no desc")
-    })
-    public Result<ProjectManageModel> findAll(String projectState,String progress,String projectName,String orderByClause){
-        checkIsType(projectState);
-        checkIsType(progress);
-        List<ProjectManageModel> findAll=projectManageService.findAll(projectState,progress,projectName,orderByClause);
+    public Result<PaginationData<List<ProjectManageModel>> > findAll(ProjectModel projectModel){
+        //输入类型限制只能输入 0 1 2
+        if(projectModel.getProjectState() != "" && projectModel.getProjectState() != null){
+            checkIsType(projectModel.getProjectState());
+        }
+        if(projectModel.getProgress() != "" && projectModel.getProgress() != null){
+            checkIsType(projectModel.getProgress());
+        }
+
+
+        PaginationData findAll=projectManageService.findAll(projectModel);
 
        return new Result(findAll);
     }

@@ -2,7 +2,9 @@ package com.jn.park.message.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.vo.FinanceExpendHistoryVo;
 import com.jn.park.message.dao.MessageListDao;
 import com.jn.park.message.model.AddMessageModel;
@@ -44,8 +46,22 @@ public class MessageListServiceImpl implements MessageListService {
     }
 
     @Override
-    public int getIsRead(User user) {
-        int getIsRead=messageListDao.getIsRead(user.getAccount());
+    public int getIsRead(String messageOneTort,String messageTowTort,User user) {
+        //一级是二级的前提条件
+        if(messageTowTort != null){
+            if(messageOneTort == null){
+                throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"请先输入一级类型");
+            }
+        }
+        //
+        if(messageOneTort == null){
+            messageOneTort="";
+        }
+        if(messageTowTort == null){
+            messageTowTort="";
+        }
+
+        int getIsRead=messageListDao.getIsRead(messageOneTort,messageTowTort,user.getAccount());
         if(getIsRead>0){
             getIsRead=0;
         }else{

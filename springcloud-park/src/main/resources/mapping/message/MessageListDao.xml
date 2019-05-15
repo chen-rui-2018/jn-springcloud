@@ -178,7 +178,7 @@
     </update>
 
 
-    <!--单个查询-->
+    <!--是否有新的未读消息-->
     <select id="getIsRead" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT
             COUNT(t.id)
@@ -187,6 +187,12 @@
         WHERE
             t.record_status = 1
         AND t.is_read = 0
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageOneTort)">
+        AND t.message_one_sort=#{messageOneTort}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTowTort)">
+		AND t.message_tow_sort=#{messageTowTort}
+        </if>
         AND t.message_recipient = #{account}
     </select>
 

@@ -1005,8 +1005,8 @@
     </table>
   </context>
 
-  <!--XQ00016一区多园-->
-  <context id="park">
+  <!--客服中心-->
+  <context id="customer">
     <!-- 实现Serializable接口 -->
     <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
     <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
@@ -1036,26 +1036,27 @@
     </javaTypeResolver>
 
     <!-- 生成模型的包名和位置 -->
-    <javaModelGenerator targetPackage="com.jn.park.park.entity"
+    <javaModelGenerator targetPackage="com.jn.park.customer.entity"
                         targetProject="src/main/java">
       <property name="enableSubPackages" value="true"/>
       <property name="trimStrings" value="true"/>
     </javaModelGenerator>
 
     <!-- 生成映射文件的包名和位置 -->
-    <sqlMapGenerator targetPackage="mapping.generator.park"
+    <sqlMapGenerator targetPackage="mapping.generator.customer"
                      targetProject="src/main/resources">
       <property name="enableSubPackages" value="true"/>
     </sqlMapGenerator>
 
     <!-- 生成Mapper 接口的包名和位置-->
     <javaClientGenerator type="XMLMAPPER"
-                         targetPackage="com.jn.park.park.dao"
+                         targetPackage="com.jn.park.customer.dao"
                          targetProject="src/main/java">
       <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>
 
-    <!--  一区多园-->
-    <table tableName="tb_park"></table>
+    <!--客服中心表-->
+    <table tableName="tb_client_service_center"></table>
+
   </context>
 </generatorConfiguration>

@@ -124,6 +124,15 @@ public class DynamicWebController extends BaseController {
         return new Result<>(data);
 
     }
+    @ControllerLog(doAction = "动态点赞/取消点赞")
+    @ApiOperation(value ="动态点赞/取消点赞",notes = "根据当前登录用户,操作的的目标进行点赞/取消点赞操作")
+    @RequestMapping(value="/dynamicLikeOperate",method = RequestMethod.POST)
+    public Result dynamicLikeOperate(@RequestBody  DynamicLikeOperate param){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        int  data = dynamicService.dynamicLikeOperate(param,user==null?"":user.getAccount());
+        return new Result<>(data);
+
+    }
 
 
 

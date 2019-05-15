@@ -98,7 +98,7 @@
           </div>
           <!-- 主体 -->
           <div class="homePage_main userHome">
-            <el-main :class="{'isMobile': !$store.state.needNav}">
+            <el-main :class="{'isMobile': isMobile}">
               <keep-alive>
                 <router-view v-if="$route.meta.keepAlive" :userData="userData"></router-view>
               </keep-alive>
@@ -128,13 +128,15 @@
   </div>
 </template>
 <script>
-// import $ from "jquery";
+import $ from "jquery";
+import { isMobile } from "@/util";
 import bus from "@/util/bus";
 import UserHome from "@/components/userHome";
 export default {
   components: { UserHome },
   data() {
     return {
+      isMobile: isMobile(),
       orgArr: [],
       organizationForm: {
         orgName: "",

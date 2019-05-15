@@ -2271,7 +2271,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             throw new JnSpringCloudException(DataUploadExceptionEnum.USER_PHONE_IS_NOT_EXIST);
         }
         SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
-        smsTemplateVo.setTemplateId("1000");
+        smsTemplateVo.setTemplateId("999");
         String[] m = {phone};
         smsTemplateVo.setMobiles(m);
         String[] t = {message};

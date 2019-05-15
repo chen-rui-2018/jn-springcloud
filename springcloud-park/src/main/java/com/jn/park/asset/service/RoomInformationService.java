@@ -2,9 +2,8 @@ package com.jn.park.asset.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.park.asset.model.RoomInformationModel;
-import com.jn.park.asset.model.RoomOrdersModle;
-import com.jn.system.model.User;
 
 import java.sql.Date;
 import java.util.List;
@@ -32,22 +31,15 @@ public interface RoomInformationService {
     RoomInformationModel getRoomInformation(String id);
 
     /**
-     * 租借资料填写
-     * @param id
-     * @param leaseEnterprise
+     *
+     * @param roomId
      * @param contactName
      * @param contactPhone
      * @param leaseStartTime
      * @param leaseEndTime
-     */
-    void leaseWriter(String id, String leaseEnterprise, String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime);
-
-    /**
-     * 新增房间订单
-     * @param id
-     * @param user
+     * @param userAccount
      * @return
      */
-    //String addRoomOrders(String id, User user);
+    Result addRoomOrders(String roomId, String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime, String userAccount);
 
 }

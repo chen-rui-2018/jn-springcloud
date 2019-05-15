@@ -69,30 +69,19 @@ public class RoomManageController {
         return new Result<>(roomInformationModel);
     }
 
-    @ControllerLog(doAction = "租借资料填写")
-    @ApiOperation(value = "租借资料填写",notes = "租借企业资料填写")
-    @PostMapping(value = "/leaseWriter")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "房间id",example = "575020345132580865",required = true),
-            @ApiImplicitParam(name = "leaseEnterprise",value = "租借企业",example = "美的",required = true),
-            @ApiImplicitParam(name = "contactName",value = "联系人姓名",example = "先生",required = true),
-            @ApiImplicitParam(name = "contactPhone",value = "联系人电话",example = "123456",required = true),
-            @ApiImplicitParam(name = "leaseStartTime",value = "开始时间",example = "2018-5-1",required = true),
-            @ApiImplicitParam(name = "leaseEndTime",value = "结束时间",example = "2019-5-1",required = true)
-    })
-    public Result leaseWriter(String id, String leaseEnterprise, String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime){
-        roomInformationService.leaseWriter(id,leaseEnterprise,contactName,contactPhone,leaseStartTime,leaseEndTime);
-        return new Result();
-    }
 
     //todo
-   /* @ControllerLog(doAction = "新增房间租赁订单")
+   @ControllerLog(doAction = "新增房间租赁订单")
     @ApiOperation(value ="新增房间租赁订单",notes = "新增房间租赁订单")
     @PostMapping(value = "/addRoomOrders")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "房间id",example = "575020345132580865")
-    })
-    public Result addRoomOrders(String id){
+   @ApiImplicitParams({
+           @ApiImplicitParam(name = "id",value = "房间id",example = "575020345132580865",required = true),
+           @ApiImplicitParam(name = "contactName",value = "联系人姓名",example = "先生",required = true),
+           @ApiImplicitParam(name = "contactPhone",value = "联系人电话",example = "123456",required = true),
+           @ApiImplicitParam(name = "leaseStartTime",value = "开始时间",example = "2018-5-1",required = true),
+           @ApiImplicitParam(name = "leaseEndTime",value = "结束时间",example = "2019-5-1",required = true)
+   })
+    public Result addRoomOrders(String id,  String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         String ordersNumber= roomInformationService.addRoomOrders(id,user);
@@ -100,7 +89,7 @@ public class RoomManageController {
             return new Result("-1","新增租赁订单失败");
         }
         return new Result(ordersNumber);
-    }*/
+    }
 
     @ControllerLog(doAction = "支付订单")
     @ApiOperation(value = "支付订单",notes = "支付订单")

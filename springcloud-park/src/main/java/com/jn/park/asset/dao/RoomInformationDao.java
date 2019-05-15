@@ -20,12 +20,7 @@ public interface RoomInformationDao {
      */
     List<RoomInformationModel> getRoomLeaseList();
 
-    /**
-     * 返回房间信息
-     * @param id
-     * @return
-     */
-    RoomInformationModel getRoomInformation(String id);
+
 
     /**
      * 更改房间信息租借状态

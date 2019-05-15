@@ -6,6 +6,7 @@
     <result column="tower_id" jdbcType="VARCHAR" property="towerId" />
     <result column="tower_name" jdbcType="VARCHAR" property="towerName" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="room_ids" jdbcType="VARCHAR" property="roomIds" />
     <result column="rooms" jdbcType="VARCHAR" property="rooms" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, tower_id, tower_name, name, rooms, record_status, creator_account, create_time, 
-    modifier_account, modified_time
+    id, tower_id, tower_name, name, room_ids, rooms, record_status, creator_account, 
+    create_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomGroupCriteria" resultMap="BaseResultMap">
     select
@@ -107,13 +108,13 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.asset.entity.TbRoomGroup">
     insert into tb_room_group (id, tower_id, tower_name, 
-      name, rooms, record_status, 
-      creator_account, create_time, modifier_account, 
-      modified_time)
+      name, room_ids, rooms, 
+      record_status, creator_account, create_time, 
+      modifier_account, modified_time)
     values (#{id,jdbcType=VARCHAR}, #{towerId,jdbcType=VARCHAR}, #{towerName,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{rooms,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+      #{name,jdbcType=VARCHAR}, #{roomIds,jdbcType=VARCHAR}, #{rooms,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomGroup">
     insert into tb_room_group
@@ -129,6 +130,9 @@
       </if>
       <if test="name != null">
         name,
+      </if>
+      <if test="roomIds != null">
+        room_ids,
       </if>
       <if test="rooms != null">
         rooms,
@@ -161,6 +165,9 @@
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="roomIds != null">
+        #{roomIds,jdbcType=VARCHAR},
       </if>
       <if test="rooms != null">
         #{rooms,jdbcType=VARCHAR},
@@ -203,6 +210,9 @@
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
+      <if test="record.roomIds != null">
+        room_ids = #{record.roomIds,jdbcType=VARCHAR},
+      </if>
       <if test="record.rooms != null">
         rooms = #{record.rooms,jdbcType=VARCHAR},
       </if>
@@ -232,6 +242,7 @@
       tower_id = #{record.towerId,jdbcType=VARCHAR},
       tower_name = #{record.towerName,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
+      room_ids = #{record.roomIds,jdbcType=VARCHAR},
       rooms = #{record.rooms,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -253,6 +264,9 @@
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="roomIds != null">
+        room_ids = #{roomIds,jdbcType=VARCHAR},
       </if>
       <if test="rooms != null">
         rooms = #{rooms,jdbcType=VARCHAR},
@@ -280,6 +294,7 @@
     set tower_id = #{towerId,jdbcType=VARCHAR},
       tower_name = #{towerName,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
+      room_ids = #{roomIds,jdbcType=VARCHAR},
       rooms = #{rooms,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

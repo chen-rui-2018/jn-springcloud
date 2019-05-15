@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.List;
 
 /**
 * 房间信息model
@@ -37,8 +38,7 @@ public class RoomInformationModel implements Serializable {
     @ApiModelProperty(value = "所属分组",example = "分组一")
     private String groupName;
 
-    @ApiModelProperty(value = "同属分组(房间id)",example = "")
-    private String groupRooms;
+
 
     @ApiModelProperty(value = "面积(平方米)",example = "100")
     private String roomArea;
@@ -100,6 +100,9 @@ public class RoomInformationModel implements Serializable {
     @ApiModelProperty(value = "创建时间",example = "2019-05-05")
     private Date crateTime;
 
+    @ApiModelProperty(value = "同属分组(房间id)",example = "")
+    private List<RoomInformationModel> groupRoomList;
+
     public String getId() {
         return id;
     }
@@ -140,13 +143,7 @@ public class RoomInformationModel implements Serializable {
         this.towerName = towerName;
     }
 
-    public String getGroupRooms() {
-        return groupRooms;
-    }
 
-    public void setGroupRooms(String groupRooms) {
-        this.groupRooms = groupRooms;
-    }
     public String getGroupId() {
         return groupId;
     }
@@ -321,5 +318,47 @@ public class RoomInformationModel implements Serializable {
 
     public void setCrateTime(Date crateTime) {
         this.crateTime = crateTime;
+    }
+
+    public List<RoomInformationModel> getGroupRoomList() {
+        return groupRoomList;
+    }
+
+    public void setGroupRoomList(List<RoomInformationModel> groupRoomList) {
+        this.groupRoomList = groupRoomList;
+    }
+
+    @Override
+    public String toString() {
+        return "RoomInformationModel{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", floor='" + floor + '\'' +
+                ", towerId='" + towerId + '\'' +
+                ", towerName='" + towerName + '\'' +
+                ", groupId='" + groupId + '\'' +
+                ", groupName='" + groupName + '\'' +
+                ", roomArea='" + roomArea + '\'' +
+                ", shortestLease='" + shortestLease + '\'' +
+                ", leasePrice=" + leasePrice +
+                ", leaseSum=" + leaseSum +
+                ", press='" + press + '\'' +
+                ", pay='" + pay + '\'' +
+                ", pressPay='" + pressPay + '\'' +
+                ", houseType='" + houseType + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", floorPlan='" + floorPlan + '\'' +
+                ", roomPlan='" + roomPlan + '\'' +
+                ", introduce='" + introduce + '\'' +
+                ", state='" + state + '\'' +
+                ", enterpriseId='" + enterpriseId + '\'' +
+                ", leaseEnterprise='" + leaseEnterprise + '\'' +
+                ", leaseStartTime=" + leaseStartTime +
+                ", leaseEndTime=" + leaseEndTime +
+                ", contactName='" + contactName + '\'' +
+                ", contactPhone='" + contactPhone + '\'' +
+                ", crateTime=" + crateTime +
+                ", groupRoomList=" + groupRoomList +
+                '}';
     }
 }

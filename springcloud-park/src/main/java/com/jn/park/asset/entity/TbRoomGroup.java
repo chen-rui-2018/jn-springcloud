@@ -16,6 +16,9 @@ public class TbRoomGroup implements Serializable {
     /*@ApiModelProperty("分组名称")*/
     private String name;
 
+    /*@ApiModelProperty("房间号ID（多个用逗号隔开）")*/
+    private String roomIds;
+
     /*@ApiModelProperty("所有房间号，逗号隔开")*/
     private String rooms;
 
@@ -66,6 +69,14 @@ public class TbRoomGroup implements Serializable {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getRoomIds() {
+        return roomIds;
+    }
+
+    public void setRoomIds(String roomIds) {
+        this.roomIds = roomIds == null ? null : roomIds.trim();
     }
 
     public String getRooms() {
@@ -132,6 +143,7 @@ public class TbRoomGroup implements Serializable {
             && (this.getTowerId() == null ? other.getTowerId() == null : this.getTowerId().equals(other.getTowerId()))
             && (this.getTowerName() == null ? other.getTowerName() == null : this.getTowerName().equals(other.getTowerName()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getRoomIds() == null ? other.getRoomIds() == null : this.getRoomIds().equals(other.getRoomIds()))
             && (this.getRooms() == null ? other.getRooms() == null : this.getRooms().equals(other.getRooms()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -148,6 +160,7 @@ public class TbRoomGroup implements Serializable {
         result = prime * result + ((getTowerId() == null) ? 0 : getTowerId().hashCode());
         result = prime * result + ((getTowerName() == null) ? 0 : getTowerName().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + ((getRoomIds() == null) ? 0 : getRoomIds().hashCode());
         result = prime * result + ((getRooms() == null) ? 0 : getRooms().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -167,6 +180,7 @@ public class TbRoomGroup implements Serializable {
         sb.append(", towerId=").append(towerId);
         sb.append(", towerName=").append(towerName);
         sb.append(", name=").append(name);
+        sb.append(", roomIds=").append(roomIds);
         sb.append(", rooms=").append(rooms);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

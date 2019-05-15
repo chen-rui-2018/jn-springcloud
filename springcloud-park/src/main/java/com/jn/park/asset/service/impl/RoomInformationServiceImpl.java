@@ -1,20 +1,22 @@
 package com.jn.park.asset.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
-import com.jn.park.asset.dao.RoomInformationDao;
-import com.jn.park.asset.dao.TbRoomInformationMapper;
-import com.jn.park.asset.dao.TbRoomOrdersMapper;
-import com.jn.park.asset.entity.TbRoomInformation;
-import com.jn.park.asset.entity.TbRoomInformationCriteria;
-import com.jn.park.asset.entity.TbRoomOrders;
-import com.jn.park.asset.enums.*;
+import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
+import com.jn.park.asset.dao.*;
+import com.jn.park.asset.entity.*;
+import com.jn.park.asset.enums.AssetStatusEnums;
+import com.jn.park.asset.enums.PayStatusEnums;
+import com.jn.park.asset.enums.RoomLeaseStatusEnums;
+import com.jn.park.asset.enums.RoomReletStatusEnums;
 import com.jn.park.asset.model.RoomInformationModel;
-import com.jn.park.asset.model.RoomOrdersModle;
 import com.jn.park.asset.service.RoomInformationService;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,13 +35,17 @@ import java.util.*;
 */
 @Service
 public class RoomInformationServiceImpl implements RoomInformationService {
-
+    private static Logger logger = LoggerFactory.getLogger(RoomInformationServiceImpl.class);
     @Autowired
     private RoomInformationDao roomInformationDao;
     @Autowired
     private TbRoomInformationMapper tbRoomInformationMapper;
     @Autowired
     private TbRoomOrdersMapper tbRoomOrdersMapper;
+    @Autowired
+    private TbRoomGroupMapper tbRoomGroupMapper;
+    @Autowired
+    private TbRoomOrdersItemMapper tbRoomOrdersItemMapper;
 
 
     /**
@@ -64,96 +70,143 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     @Override
     @ServiceLog(doAction = "返回房间信息")
     public RoomInformationModel getRoomInformation(String id) {
-        RoomInformationModel roomInformationModel = roomInformationDao.getRoomInformation(id);
+        TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(id);
+        RoomInformationModel roomInformationModel=new RoomInformationModel();
+        BeanUtils.copyProperties(tbRoomInformation,roomInformationModel);
+
+        //设置同属分组房间
+        roomInformationModel.setGroupRoomList(new ArrayList<>());
+        List<TbRoomInformation> tbRoomInformationList=this.getRoomGroupId(tbRoomInformation.getGroupId());
+        if(null==tbRoomInformationList){
+            return roomInformationModel;
+        }
+        for(TbRoomInformation e:tbRoomInformationList){
+            RoomInformationModel target=new RoomInformationModel();
+            BeanUtils.copyProperties(e,target);
+            roomInformationModel.getGroupRoomList().add(target);
+        }
         return roomInformationModel;
     }
 
-    /**
-     * 租借资料填写
-     * @param id
-     * @param leaseEnterprise
-     * @param contactName
-     * @param contactPhone
-     * @param leaseStartTime
-     * @param leaseEndTime
-     */
-    @Override
-    @ServiceLog(doAction = "租借资料填写")
-    public void leaseWriter(String id, String leaseEnterprise, String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime) {
-        RoomInformationModel roomInformation = roomInformationDao.getRoomInformation(id);
-        roomInformation.setLeaseEnterprise(leaseEnterprise);
-        roomInformation.setContactName(contactName);
-        roomInformation.setContactPhone(contactPhone);
-        roomInformation.setLeaseStartTime(leaseStartTime);
-        roomInformation.setLeaseEndTime(leaseEndTime);
-        TbRoomInformation tbRoomInformation = new TbRoomInformation();
-        BeanUtils.copyProperties(roomInformation,tbRoomInformation);
-        TbRoomInformationCriteria tbRoomInformationCriteria = new TbRoomInformationCriteria();
-        TbRoomInformationCriteria.Criteria criteria = tbRoomInformationCriteria.createCriteria();
-        criteria.andIdEqualTo(id);
-        tbRoomInformationMapper.updateByExample(tbRoomInformation, tbRoomInformationCriteria);
-    }
+
 
     //todo
-    /*@Override
+    @Override
     @ServiceLog(doAction ="新增房间订单")
-    public String addRoomOrders(String id, User user) {
-        RoomInformationModel room = roomInformationDao.getRoomInformation(id);
-        if (room != null){
-            TbRoomOrders tbRoomOrders = new TbRoomOrders();
-            //生成订单编号
-            tbRoomOrders.setId(getOrderIdByTime());
-            tbRoomOrders.setLeaseEnterprise(room.getLeaseEnterprise());
-            tbRoomOrders.setRoomId(id);
-            tbRoomOrders.setRoomName(room.getName());
-            tbRoomOrders.setFloor(room.getFloor());
-            tbRoomOrders.setTowerId(room.getTowerId());
-            tbRoomOrders.setTowerName(room.getTowerName());
-            tbRoomOrders.setRoomUrl(room.getImgUrl());
-            tbRoomOrders.setLeaseStartTime(room.getLeaseStartTime());
-            tbRoomOrders.setLeaseEndTime(room.getLeaseEndTime());
-            tbRoomOrders.setContactName(room.getContactName());
-            tbRoomOrders.setContactPhone(room.getContactPhone());
-            tbRoomOrders.setRoomArea(room.getRoomArea());
-            tbRoomOrders.setLeasePrice(room.getLeasePrice());
-            tbRoomOrders.setLeaseSum(room.getLeaseSum());
-            tbRoomOrders.setPressPay("押"+room.getPress()+"付"+room.getPay());
-            tbRoomOrders.setShortestLease(room.getShortestLease());
-            tbRoomOrders.setIntroduce(room.getIntroduce());
-            //订单创建者
-            tbRoomOrders.setCreatorAccount(user.getAccount());
-            //计算付款金额
-            //押
-            BigDecimal press = new BigDecimal(room.getPress());
-            //付
-            BigDecimal pay = new BigDecimal(room.getPay());
-            //租金
-            BigDecimal leaseSum = room.getLeaseSum();
-            //付款总金额
-            BigDecimal paySum = leaseSum.multiply(press).add(leaseSum.multiply(pay));
-            tbRoomOrders.setPaySum(paySum);
-            //未付款
-            tbRoomOrders.setPayState(Byte.parseByte(PayStatusEnums.NONPAYMENT.getCode()));
-            //是否是续租订单(否)
-            tbRoomOrders.setIsRelet(Byte.parseByte(RoomReletStatusEnums.NO.getCode()));
-            //有效
-            tbRoomOrders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
-            //房间房间租借状态(更改为租借申请中)
-            tbRoomOrders.setRoomStatus(Byte.parseByte(RoomLeaseStatusEnums.APPLY.getValue()));
-            tbRoomOrders.setCreateTime(new java.util.Date());
-            tbRoomOrders.setContactName(user.getAccount());
-            int insert = tbRoomOrdersMapper.insert(tbRoomOrders);
-            //同时更新房间信息租借状态(更改为租借申请中)
-            Map<String,Object> map = new HashMap<>(16);
-            map.put("roomId",id);
-            map.put("roomStatus",Byte.parseByte(RoomLeaseStatusEnums.APPLY.getValue()));
-            roomInformationDao.updateStatus(map);
-            if (insert > 0){
-                return tbRoomOrders.getId();
-            }
+    public Result addRoomOrders(String roomId,  String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime,String userAccount) {
+
+        TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(roomId);
+
+        //
+        this.validShortestLease(leaseStartTime,leaseEndTime,tbRoomInformation);
+
+        //
+        this.checkIsCompanyUser(userAccount);
+
+        //拿到要出租的所有房间
+        List<TbRoomInformation> tbRoomInformationList=this.getRoomGroupId(tbRoomInformation.getGroupId());
+        if(tbRoomInformationList==null){
+            tbRoomInformationList.add(tbRoomInformation);
         }
-        return "-1";
-    }*/
+
+        //生成订单号
+        String orderId=UUID.randomUUID().toString();
+        //订单总金额
+        BigDecimal orderPaySum=new BigDecimal("0");
+
+        //生成订单明细
+        for(TbRoomInformation e:tbRoomInformationList){
+            TbRoomOrdersItem item=new TbRoomOrdersItem();
+            item.setId(UUID.randomUUID().toString());
+            item.setOrderId(orderId);
+            item.setRoomId(e.getId());
+            item.setRoomName(e.getName());
+            //todo
+
+            item.setPaySum(this.calPrice(e));
+            //加到订单总金额里面
+            orderPaySum.add(item.getPaySum());
+            logger.info("插入订单明细数据，{}",item);
+            tbRoomOrdersItemMapper.insertSelective(item);
+        }
+
+        //生成总订单
+        TbRoomOrders orders=new TbRoomOrders();
+        orders.setId(orderId);
+        orders.setPaySum(orderPaySum);
+        //未付款
+        orders.setPayState(Byte.parseByte(PayStatusEnums.NONPAYMENT.getCode()));
+        //是否是续租订单(否)
+        orders.setIsRelet(Byte.parseByte(RoomReletStatusEnums.NO.getCode()));
+        //有效
+        orders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
+        orders.setCreateTime(new java.util.Date());
+        orders.setContactName(userAccount);
+        //todo .....
+        logger.info("插入订单主表数据，{}",orders);
+        tbRoomOrdersMapper.insert(orders);
+
+        //同时更新房间信息租借状态(更改为租借申请中)
+        Map<String,Object> map = new HashMap<>(16);
+        map.put("roomId",roomId);
+        map.put("roomStatus",Byte.parseByte(RoomLeaseStatusEnums.APPLY.getValue()));
+        roomInformationDao.updateStatus(map);//todo 单表不要自己写
+
+        return new Result(orderId);
+    }
+
+    //校验最短租期
+    private void validShortestLease(Date leaseStartTime, Date leaseEndTime,TbRoomInformation tbRoomInformation){
+        //todo
+        throw new JnSpringCloudException(new Result("",""));
+    }
+    //校验用户是否属于某个企业
+    private void checkIsCompanyUser(String account){
+
+    }
+
+    /**
+     * 计算单个房间的总价
+     * @param room
+     * @return
+     */
+    private BigDecimal calPrice(TbRoomInformation room){
+
+        //计算付款金额
+        //押
+        BigDecimal press = new BigDecimal(room.getPress());
+        //付
+        BigDecimal pay = new BigDecimal(room.getPay());
+        //租金
+        BigDecimal leaseSum = room.getLeaseSum();
+        //付款总金额
+        BigDecimal paySum = leaseSum.multiply(press).add(leaseSum.multiply(pay));
+        return paySum;
+    }
+
+    /**
+     * 拿到同属的所有房间
+     * @param groupId
+     * @return
+     */
+    private List<TbRoomInformation>getRoomGroupId(String groupId){
+        if(StringUtils.isBlank(groupId)){
+            return null;
+        }
+        TbRoomGroup tbRoomGroup=tbRoomGroupMapper.selectByPrimaryKey(groupId);
+        if(null!=tbRoomGroup){
+            TbRoomInformationCriteria roomInformationCriteria=new TbRoomInformationCriteria();
+            List<String>roomIdList=new ArrayList<>();
+            String[] roomIdArr=tbRoomGroup.getRoomIds().split(",");
+            for(String e:roomIdArr){
+                roomIdList.add(e);
+            }
+            roomInformationCriteria.createCriteria().andIdIn(roomIdList);
+            List<TbRoomInformation>  tbRoomInformationList=tbRoomInformationMapper.selectByExample(roomInformationCriteria);
+            return tbRoomInformationList;
+        }
+        return null;
+    }
 
     /**
      * 生成订单编号

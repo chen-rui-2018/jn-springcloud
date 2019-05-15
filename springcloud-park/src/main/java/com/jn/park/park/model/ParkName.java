@@ -13,6 +13,10 @@ public class ParkName {
     @ApiModelProperty(value = "园区ID")
     private String id;
 
+    @ApiModelProperty(value = "园区图片（主要 一张）")
+    private String mainPicture;
+
+
     public String getParkName() {
         return parkName;
     }
@@ -29,12 +33,20 @@ public class ParkName {
         this.id = id;
     }
 
+    public String getMainPicture() {
+        return mainPicture;
+    }
+
+    public void setMainPicture(String mainPicture) {
+        this.mainPicture = mainPicture;
+    }
 
     @Override
     public String toString() {
         return "ParkName{" +
                 "parkName='" + parkName + '\'' +
                 ", id='" + id + '\'' +
+                ", mainPicture='" + mainPicture + '\'' +
                 '}';
     }
 }

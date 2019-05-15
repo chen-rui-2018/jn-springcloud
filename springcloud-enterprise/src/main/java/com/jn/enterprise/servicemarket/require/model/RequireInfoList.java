@@ -39,6 +39,10 @@ public class RequireInfoList implements Serializable {
     private String handleResult;
     @ApiModelProperty(value = "点评状态 (0未点评  1已点评)")
     private String isComment;
+    @ApiModelProperty(value = "评价分数")
+    private String ratingScore;
+    @ApiModelProperty(value = "评价描述")
+    private String evaluationDesc;
 
 
     public String getReqNum() {
@@ -145,6 +149,22 @@ public class RequireInfoList implements Serializable {
         this.isComment = isComment;
     }
 
+    public String getRatingScore() {
+        return ratingScore;
+    }
+
+    public void setRatingScore(String ratingScore) {
+        this.ratingScore = ratingScore;
+    }
+
+    public String getEvaluationDesc() {
+        return evaluationDesc;
+    }
+
+    public void setEvaluationDesc(String evaluationDesc) {
+        this.evaluationDesc = evaluationDesc;
+    }
+
     @Override
     public String toString() {
         return "RequireInfoList{" +
@@ -160,6 +180,8 @@ public class RequireInfoList implements Serializable {
                 ", requireTime='" + requireTime + '\'' +
                 ", status='" + status + '\'' +
                 ", handleResult='" + handleResult + '\'' +
+                ", isComment='" + isComment + '\'' +
+                ", ratingScore='" + ratingScore + '\'' +
                 '}';
     }
 }

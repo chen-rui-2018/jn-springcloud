@@ -407,7 +407,7 @@ public class DataModelServiceImpl implements DataModelService {
             //自己写语句
             List<TbDataReportingTarget> targetList = targetDao.getTargetFromTab(tabPOList.get(tabIndex).getTabId());
 
-            if(targetList ==null || targetList.size()==0){
+            if(targetList !=null || targetList.size()>0){
                 for(int targetIndex=0 ,targetSize =targetList.size();targetIndex<targetSize;targetIndex++){
                     //inputFormatModelListVO = new ArrayList<>();
                     targetVO = new TargetModelVO();

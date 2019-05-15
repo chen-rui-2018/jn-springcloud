@@ -111,6 +111,11 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
      * 宣传区域组名
      */
     private static final String PROPAGANDA_AREA="propagandaArea";
+    /**
+     * 企业宣传流程id
+     */
+    @Value(value = "${businessPromotionProcessId}")
+    private String businessPromotionProcessId;
 
     /**
      * 企业宣传列表查询
@@ -688,10 +693,8 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             //修改时间
             bpw.setModifiedTime(DateUtils.formatDate(tbPropaganda.getModifiedTime(), PATTERN));
         }
-        //流程id，每个流程的id是固定的
-        String processId="575715552383729664";
         //启动工作流
-        IBPSResult ibpsResult = IBPSUtils.sendRequest(processId, loginAccount, bpw);
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(businessPromotionProcessId, loginAccount, bpw);
         String okStatus="200";
         //启动工作流成功
         if(okStatus.equals(ibpsResult.getState())){

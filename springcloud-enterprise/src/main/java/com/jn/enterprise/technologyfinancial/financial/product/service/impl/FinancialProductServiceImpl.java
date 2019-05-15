@@ -346,7 +346,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
 
         // 启动IBPS流程
         String bpmnDefId = "575627245847052288";
-        IBPSResult ibpsResult = IBPSUtils.sendRequest(bpmnDefId, account, product);
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, product);
 
         // ibps启动流程失败
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {

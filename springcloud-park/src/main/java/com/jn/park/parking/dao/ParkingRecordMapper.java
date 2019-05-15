@@ -28,4 +28,11 @@ public interface ParkingRecordMapper {
      */
     int updateParkingRecordByRamp(@Param(value = "list") List<ParkingRecordRampParam> list);
 
+    /**
+     * 查询停车数据
+     * @param list
+     * @return
+     */
+    List<ParkingRecordRampParam> selectParkingRecordByRamp(@Param(value = "list") List<ParkingRecordRampParam> list);
+
 }

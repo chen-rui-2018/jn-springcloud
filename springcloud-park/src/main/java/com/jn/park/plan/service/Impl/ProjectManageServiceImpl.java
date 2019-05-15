@@ -93,21 +93,18 @@ public class ProjectManageServiceImpl implements ProjectManageService {
     public List<ProjectPlanVo>  findTaskPlan(String projectNo) {
         //ProjectPlanVo
         ProjectPlanModel projectPlanModelList= projectManageDao.findTaskPlan(projectNo);
-        String key[]={"总数","未开始","已完成","未完成"};
+        String key[]={"未开始","已完成","已开始"};
         List<ProjectPlanVo> projectPlanVos=new ArrayList<>();
-        for(int i =0 ; i < 4 ; i++){
+        for(int i =0 ; i < 3 ; i++){
             ProjectPlanVo projectPlanVo=new ProjectPlanVo();
             projectPlanVo.setKey(key[i]);
             if(i == 0){
-                projectPlanVo.setValue(projectPlanModelList.getTotal());
-            }
-            if(i == 1){
                 projectPlanVo.setValue(projectPlanModelList.getNoStart());
             }
-            if(i == 2){
+            if(i == 1){
                 projectPlanVo.setValue(projectPlanModelList.getComplete());
             }
-            if(i == 3){
+            if(i == 2){
                 projectPlanVo.setValue(projectPlanModelList.getUnComplete());
             }
             projectPlanVos.add(projectPlanVo);

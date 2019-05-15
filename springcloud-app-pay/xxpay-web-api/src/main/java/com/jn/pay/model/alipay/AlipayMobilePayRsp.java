@@ -16,6 +16,10 @@ public class AlipayMobilePayRsp extends PayBaseRsp {
      * 调用SDK需要的参数
     * */
     private String payParams;
+    /**
+     * 签名
+     * */
+    private String sign;
 
     public String getPayParams() {
         return payParams;
@@ -25,5 +29,11 @@ public class AlipayMobilePayRsp extends PayBaseRsp {
         this.payParams = payParams;
     }
 
+    public String getSign() {
+        return sign;
+    }
 
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
 }

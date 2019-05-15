@@ -301,12 +301,4 @@ public class ParkingCarInfoServiceImpl implements ParkingCarInfoService {
         return parkingRecordDetailVo;
     }
 
-
-    public static void main(String[] args) {
-        String a = "123";
-        String b = "5123456";
-        int i = b.indexOf(a);
-        System.out.print(i+"");
-    }
-
 }

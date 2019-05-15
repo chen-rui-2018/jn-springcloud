@@ -156,40 +156,27 @@ and obj_id = #{payBill.objId,jdbcType=VARCHAR}
   </select>
 
     <insert id="insertList" parameterType="java.util.List">
-        insert into tb_pay_bill_details
-        <trim prefix="(" suffix=")" suffixOverrides=",">
+        insert into tb_pay_bill_details(
                 details_id,
                 bill_id,
                 COST_NAME,
                 COST_VALUE,
+                sort,
                 creator_account,
                 created_time,
-                record_status,
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <foreach item="item" index="index" collection="list" separator=",">
-                <if test="item.detailsId != null">
+                record_status)
+        values
+            <foreach item="item" index="index" collection="list" separator="," >
+                (
                     #{item.detailsId,jdbcType=VARCHAR},
-                </if>
-                <if test="item.billId != null">
                     #{item.billId,jdbcType=VARCHAR},
-                </if>
-                <if test="item.costName != null">
                     #{item.costName,jdbcType=VARCHAR},
-                </if>
-                <if test="item.costValue != null">
                     #{item.costValue,jdbcType=VARCHAR},
-                </if>
-                <if test="item.creatorAccount != null">
+                    #{item.sort,jdbcType=INTEGER},
                     #{item.creatorAccount,jdbcType=VARCHAR},
-                </if>
-                <if test="item.createdTime != null">
                     #{item.createdTime,jdbcType=TIMESTAMP},
-                </if>
-                <if test="item.recordStatus != null">
-                    #{item.recordStatus,jdbcType=CHAR},
-                </if>
+                    #{item.recordStatus,jdbcType=CHAR}
+                )
             </foreach>
-        </trim>
     </insert>
 </mapper>

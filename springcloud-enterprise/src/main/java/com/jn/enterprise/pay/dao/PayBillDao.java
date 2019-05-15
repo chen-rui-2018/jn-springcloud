@@ -1,9 +1,8 @@
 package com.jn.enterprise.pay.dao;
 
 
+import com.jn.enterprise.pay.entity.TbPayBillDetails;
 import com.jn.pay.vo.PayBillVo;
-import com.jn.pay.model.PayBill;
-import com.jn.pay.model.PayBillDetails;
 import com.jn.pay.model.PayBillParams;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,5 +20,5 @@ public interface PayBillDao {
 
     List<PayBillVo> getBillQueryList(@Param("payBill")PayBillParams payBill);
 
-    void insertList(@Param("list") List<PayBillDetails> list);
+    void insertList(@Param("list") List<TbPayBillDetails> list);
 }

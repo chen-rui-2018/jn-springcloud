@@ -6,6 +6,7 @@
     <result column="bill_id" jdbcType="VARCHAR" property="billId" />
     <result column="COST_NAME" jdbcType="VARCHAR" property="costName" />
     <result column="COST_VALUE" jdbcType="VARCHAR" property="costValue" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
@@ -71,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    details_id, bill_id, COST_NAME, COST_VALUE, creator_account, created_time, modifier_account, 
-    modified_time, record_status
+    details_id, bill_id, COST_NAME, COST_VALUE, sort, creator_account, created_time, 
+    modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayBillDetailsCriteria" resultMap="BaseResultMap">
     select
@@ -106,13 +107,13 @@
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pay.entity.TbPayBillDetails">
     insert into tb_pay_bill_details (details_id, bill_id, COST_NAME, 
-      COST_VALUE, creator_account, created_time, 
-      modifier_account, modified_time, record_status
-      )
+      COST_VALUE, sort, creator_account, 
+      created_time, modifier_account, modified_time, 
+      record_status)
     values (#{detailsId,jdbcType=VARCHAR}, #{billId,jdbcType=VARCHAR}, #{costName,jdbcType=VARCHAR}, 
-      #{costValue,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR}
-      )
+      #{costValue,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayBillDetails">
     insert into tb_pay_bill_details
@@ -128,6 +129,9 @@
       </if>
       <if test="costValue != null">
         COST_VALUE,
+      </if>
+      <if test="sort != null">
+        sort,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -157,6 +161,9 @@
       </if>
       <if test="costValue != null">
         #{costValue,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -196,6 +203,9 @@
       <if test="record.costValue != null">
         COST_VALUE = #{record.costValue,jdbcType=VARCHAR},
       </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -222,6 +232,7 @@
       bill_id = #{record.billId,jdbcType=VARCHAR},
       COST_NAME = #{record.costName,jdbcType=VARCHAR},
       COST_VALUE = #{record.costValue,jdbcType=VARCHAR},
+      sort = #{record.sort,jdbcType=INTEGER},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
@@ -242,6 +253,9 @@
       </if>
       <if test="costValue != null">
         COST_VALUE = #{costValue,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -266,6 +280,7 @@
     set bill_id = #{billId,jdbcType=VARCHAR},
       COST_NAME = #{costName,jdbcType=VARCHAR},
       COST_VALUE = #{costValue,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},

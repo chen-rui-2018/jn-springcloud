@@ -89,7 +89,7 @@
                         pay
                     </contexts>
                     <tableNames>
-                        tb_pay_bill
+                        tb_pay_bill_details
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

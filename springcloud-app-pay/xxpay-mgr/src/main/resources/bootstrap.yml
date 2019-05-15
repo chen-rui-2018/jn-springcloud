@@ -1,0 +1,21 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://springcloud:springcloud@localhost:1025/eureka/
+  instance:
+    prefer-ip-address: true
+spring:
+  application:
+    name: xxpay-mgr
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: springcloud-app-config
+      label: master
+      profile: master
+  mybatis:
+    mapper-locations: 'classpath:org/xxpay/dal/dao/mapper/*.xml'
+
+server:
+  port: 8092

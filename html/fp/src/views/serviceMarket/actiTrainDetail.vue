@@ -10,8 +10,8 @@
           <a href="javascript:void(0)" style="color:#00a042;font-weight:bold">活动详情</a>
         </el-breadcrumb-item>
       </el-breadcrumb> -->
-      <span>企业服务/</span>
-      <span>活动中心/</span>
+      <span class="pointer" @click="$router.push({ path: '/serMatHp'})">首页/</span>
+      <span class="pointer" @click="$router.push({ path: '/actiTrain'})">活动培训/</span>
       <span class="mainColor">活动详情</span>
     </div>
     <div class="delinfo">

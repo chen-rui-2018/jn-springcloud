@@ -1,8 +1,8 @@
 <template>
     <div class="serverProDetail w">
         <div class="serverOrgMenu">
-            <span>首页/</span>
-            <span>服务产品</span>
+            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页/</span>
+            <span class="pointer" @click="$routet.push({path:'/serverPro'})">服务产品</span>
             <span>/</span>
             <span class="mainColor agent">服务产品详情</span>
         </div>
@@ -70,13 +70,13 @@
                     <li>
                         <a href="javascript:;">筛选：</a>
                     </li>
-                    <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')">
+                    <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')">
                         <a href="javascript:;" data="%">全部({{proDelInfo.sameTypeNum}})</a>
                     </li>
-                    <li class="list-item " :class="{'active':flag1=='0'}" @click="screenPro('0')">
+                    <li class="list-item " :class="{'active3':flag1=='0'}" @click="screenPro('0')">
                         <a href="javascript:;" data="常规服务">常规服务({{proDelInfo.commentNum}})</a>
                     </li>
-                    <li class="list-item " :class="{'active':flag1=='1'}" @click="screenPro('1')">
+                    <li class="list-item " :class="{'active3':flag1=='1'}" @click="screenPro('1')">
                         <a href="javascript:;" data="特色服务">特色服务({{proDelInfo.featureNum}})</a>
                     </li>
                 </ul>
@@ -84,16 +84,16 @@
                     <li>
                         <a href="javascript:;">筛选：</a>
                     </li>
-                    <li class="list-item current" :class="{'active':flag2==''}" @click="handleEvaluation('')">
+                    <li class="list-item current" :class="{'active3':flag2==''}" @click="handleEvaluation('')">
                         <a href="javascript:;" data="%">全部({{evaCount.evaluationTotal}})</a>
                     </li>
-                    <li class="list-item " :class="{'active':flag2=='praise'}" @click="handleEvaluation('praise')">
+                    <li class="list-item " :class="{'active3':flag2=='praise'}" @click="handleEvaluation('praise')">
                         <a href="javascript:;" data="好评">好评({{evaCount.praiseNum}})</a>
                     </li>
-                    <li class="list-item " :class="{'active':flag2=='average'}" @click="handleEvaluation('average')">
+                    <li class="list-item " :class="{'active3':flag2=='average'}" @click="handleEvaluation('average')">
                         <a href="javascript:;" data="中评">中评({{evaCount.averageNum}})</a>
                     </li>
-                    <li class="list-item" :class="{'active':flag2=='badReview'}" @click="handleEvaluation('badReview')">
+                    <li class="list-item" :class="{'active3':flag2=='badReview'}" @click="handleEvaluation('badReview')">
                         <a href="javascript:;" data="差评">差评({{evaCount.badReviewNum}})</a>
                     </li>
                 </ul>

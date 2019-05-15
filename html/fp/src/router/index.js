@@ -497,9 +497,17 @@ export default new Router({
     },
     {
       path: '/actiTrain',
-      component: resolve => require(['@/views/activityCenter/actiTrain'], resolve),
+      component: resolve => require(['@/views/serviceMarket/actiTrain'], resolve),
       meta: {
         title: '活动培训'
+      },
+      name: 'actiTrain'
+    },
+    {
+      path: '/actiTrainDetail',
+      component: resolve => require(['@/views/serviceMarket/actiTrainDetail'], resolve),
+      meta: {
+        title: '活动培训详情'
       },
       name: 'actiTrain'
     },

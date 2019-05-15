@@ -1,7 +1,7 @@
 <template>
     <div class="serverPro w" style="padding-top:65px;">
         <div class="serverOrgMenu">
-            <span>首页</span>
+            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页</span>
             <span>/</span>
             <span class="mainColor agent">服务产品</span>
         </div>
@@ -9,10 +9,10 @@
             <div class="nav1 clearfix" id="nav1">
                 <div class="nav1Tit fl">业务领域：</div>
                 <ul class="nav1Ul fl clearfix" style="width:auto;">
-                    <li :class="{'active':filterFlag == ''}" @click="handleFilter('')">不限</li>
+                    <li :class="{'active1':filterFlag == ''}" @click="handleFilter('')">不限</li>
                 </ul>
                 <ul class="nav1Ul fl clearfix" :class="{'sh':!flag1}">
-                    <li class="wid1" v-for="(i,k) in businessArea" :key='k' @click="handleFilter(i.id)" :class="{'active':filterFlag == i.id}">{{i.preValue}}</li>
+                    <li class="wid1" v-for="(i,k) in businessArea" :key='k' @click="handleFilter(i.id)" :class="{'active1':filterFlag == i.id}">{{i.preValue}}</li>
                 </ul>
                 <div class="fr" v-if="widFun('wid1')">
                     <i class="el-icon-arrow-down" v-if="flag1" @click="flag1=!flag1"></i>
@@ -23,14 +23,14 @@
         <div class="serverOrgFilter mainBorder clearfix">
             <div class="filLeft fl" id="filLeft">排序：
                 <!-- <span @click="handleFil('')" :class="{'active':colorFlag == ''}">综合</span> -->
-                <span @click="handleFil('popularity')" :class="{'active':colorFlag == 'popularity'}">人气</span>
+                <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">人气</span>
                 <!-- <span>好评</span> -->
-                <span @click="handleFil('serviceNum')" :class="{'active':colorFlag == 'serviceNum'}">服务量</span>
+                <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">服务量</span>
             </div>
             <div class="filMid fl">
                 筛选：
-                <span :class="{'active':filterFlag1 == '0'}" @click="handleSort('0')">常规服务</span>
-                <span :class="{'active':filterFlag1 == '1'}" @click="handleSort('1')">特色服务</span>
+                <span :class="{'activeA':filterFlag1 == '0'}" @click="handleSort('0')">常规服务</span>
+                <span :class="{'activeA':filterFlag1 == '1'}" @click="handleSort('1')">特色服务</span>
             </div>
             <div class="filRight fr">
                 <input type="text" placeholder="搜索关键字" v-model="keyWords">
@@ -228,16 +228,17 @@ export default {
         url: "selectTeamList",
         data: {
           id: "",
-          preType: "",
+          preType: 0,
           preValue: ""
         },
         callback: function(res) {
           if (res.code == "0000") {
-            for (let it in res.data) {
-              if (res.data[it].preType == "0") {
-                _this.businessArea.push(res.data[it]);
-              }
-            }
+            // for (let it in res.data) {
+            //   if (res.data[it].preType == "0") {
+            //     _this.businessArea.push(res.data[it]);
+            //   }
+            // }
+            _this.businessArea=res.data
           } else {
             _this.$message.error(res.result);
           }
@@ -278,7 +279,7 @@ export default {
         line-height: 26px;
         cursor: pointer;
       }
-      > span.active {
+      > span.activeA {
         color: #fff;
         background: linear-gradient(to bottom right, #35bf6d, #00a041);
       }

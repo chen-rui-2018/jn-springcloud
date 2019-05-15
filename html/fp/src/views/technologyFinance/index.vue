@@ -330,8 +330,8 @@
             <ul class="finaUl clearfix">
               <li class="mainBorder" v-if="k<8" v-for="(i,k) in FinancialProList" :key="k">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
-                <div class="finaProItem">
-                  <img class="pointer" :src="i.pictureUrl" alt="" @click="$router.push({ path: '/finaProDetail', query: { productId: i.productId }})">
+                <div class="finaProItem" @click="$router.push({ path: '/finaProDetail', query: { productId: i.productId }})">
+                  <img class="pointer" :src="i.pictureUrl" alt="" >
                 </div>
                 <div class="finaDiv1">
                   <div class="finaTit">{{i.productName}}</div>

@@ -5,7 +5,7 @@
         <div class="headerContainer clearfix">
           <div class="titleImg fl">
             <img src="@/../static/img/login-logo.png" v-if="showFF || isCenter" class="pointer" alt="" @click="$router.push({path:'/'})">
-            <img src="@/../static/img/LOGO1.png" v-else="!showFF" class="pointer" alt="" @click="$router.push({path:'/'})">
+            <img src="@/../static/img/LOGO1.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
           </div>
           <div class="headerRight fr">
             <router-link to="/messageCenter" class="search">
@@ -23,16 +23,16 @@
           <div class="nav" id="nav">
             <ul class="posA clearfix">
               <li class="">
-                <router-link to="/" class="router-link">首页</router-link>
+                <router-link to="/" class="router-link" :class="{'ru-active':$route.path == '/'}" >首页</router-link>
               </li>
               <li>
-                <router-link to="/investment" class="router-link">招商引资</router-link>
+                <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
               </li>
               <li>
-                <router-link to="" class="router-link">智慧党建</router-link>
+                <router-link to="" class="router-link" :class="{'ru-active':$route.path == ''}">智慧党建</router-link>
               </li>
               <li>
-                <router-link to="/enterpriseservice" class="router-link">企业服务</router-link>
+                <router-link to="/enterpriseservice" class="router-link" :class="{'ru-active':$route.path == '/enterpriseservice'}">企业服务</router-link>
               </li>
             </ul>
           </div>
@@ -84,6 +84,7 @@
       }
     },
     mounted() {
+      console.log(this.$route.path)
       this.swiperinit();
       window.addEventListener("scroll", this.handleScroll);
     },
@@ -187,12 +188,10 @@
 
           }
         }
-        if (
-          this.getScrollTop() > document.getElementById("header").clientHeight
-        ) {
+        if (this.getScrollTop() > document.getElementById("header").clientHeight) {        
           this.showFF = true;
           this.show4 = false;
-        } else {
+        } else {       
           this.showFF = false;
         }
         //    if (
@@ -293,18 +292,18 @@
         #nav,
         .headerRight {
           color: #666;
-          li {
-            a {
-              color: #666;
-            }
-          }
-          li:nth-child(1) {
-            background: none;
-            border-radius: none;
-            a {
-              color: #00a041;
-            }
-          }
+          // li {
+          //   a {
+          //     color: #666;
+          //   }
+          // }
+          // li:nth-child(1) {
+          //   background: none;
+          //   border-radius: none;
+          //   a {
+          //     color: #00a041;
+          //   }
+          // }
           li:hover {
             background: none;
           }
@@ -312,6 +311,9 @@
             color:#00a041;
           }
         }
+        .ru-active{
+            color: #00a041;
+          }
       }
       .search_box {
         background: rgba(0, 0, 0, 0.3);

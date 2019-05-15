@@ -1,9 +1,9 @@
 <template>
     <div class="aboutUs w">
         <div class="serverOrgMenu">
-            <span>企业服务</span>
+            <span class="pointer" @click="$routet.push({path:'/enterpriseservice'})">企业服务</span>
             <span>/</span>
-            <span>服务超市</span>
+            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">服务超市</span>
             <span>/</span>
             <span class="mainColor agent">关于我们</span>
         </div>

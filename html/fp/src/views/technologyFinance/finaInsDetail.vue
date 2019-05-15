@@ -1,8 +1,8 @@
 <template>
   <div class="finaInsDetail w">
     <div class="serverOrgMenu color2">
-      <span>首页/</span>
-      <span>金融机构</span>
+      <span class="pointer" @click="$routet.push({path:'/tfindex'})">首页/</span>
+      <span class="pointer" @click="$routet.push({path:'/finaInstitution'})">金融机构</span>
       <span>/</span>
       <span class="mainColor agent">金融机构详情</span>
     </div>

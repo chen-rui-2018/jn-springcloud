@@ -56,7 +56,6 @@ export default {
         addtalentviews:"springcloud-enterprise/guest/pd/talentNotice/trafficVolume",//增加人才公告详情访问量
         appointment:"springcloud-enterprise/pd/online/onlineBooking",//预约申报
         getTechnologyInfoNum:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getTechnologyInfoNum",//科技金融首页投资人数，金融产品数，金融机构数
-        getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",//投资人列表查询
         getFinancialProList:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductList",//金融产品列表查询
         getAssureType:"springcloud-enterprise//technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
 
@@ -150,7 +149,6 @@ export default {
         acceptOrgInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/acceptOrgInvitation",//接受机构邀请
         refuseInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/refuseInvitation",//拒绝机构邀请
         // 角色认证
-        getInvestorMainArea:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainArea",//获取主投领域
         getInvestorMainRound:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
         getAffiliationUnit:"springcloud-enterprise/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
@@ -166,7 +164,7 @@ export default {
         changeToCompany:"springcloud-enterprise/guest/userUpgrade/changeToCompany", // 升级员工
 
 
-        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
+       
         addOrEditMemorandum:"springcloud-enterprise/pd/declaration/addOrEditMemorandum",//申报平台备注
         getProductSerialNumber:"springcloud-enterprise/servicemarket/product/manage/getProductSerialNumber",//产品编号获取
         updateCommonProduct:"springcloud-enterprise/servicemarket/product/web/updateCommonProduct",
@@ -196,6 +194,11 @@ export default {
         getCompanyList:"springcloud-enterprise/guest/company/getCompanyList",//查询企业列表
         getAllList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
         getBusinessAdContent:"springcloud-park/guest/portal/businessAd/getBusinessAdContent",//获取招商信息
+
+
+        getRecruitList:"springcloud-enterprise/guest/RecruitController/getWebRecruitList",//招聘列表（门户首页）
+
+
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

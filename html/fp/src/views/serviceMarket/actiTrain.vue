@@ -54,8 +54,8 @@
             </div> -->
             <div class="actiContent">
                 <div class="actiNav">
-                   <span>企业服务/</span>
-                   <span>服务超市/</span>
+                   <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
+                   <span class="pointer" @click="$router.push({ path: '/serMatHp'})">服务超市/</span>
                    <span class="mainColor">活动培训</span>
                 </div>
                 <div class="actiFilter clearfix">
@@ -121,14 +121,14 @@
                             <div class="actiNum clearfix">
                                 <div class="avatar">
                                     <ul>
+                                        <li v-for="(avr,key) in avatarList" :key="key"><img :src="avr" alt=""></li>
+                                        <!-- <li><img src="" alt=""></li>
                                         <li><img src="" alt=""></li>
                                         <li><img src="" alt=""></li>
-                                        <li><img src="" alt=""></li>
-                                        <li><img src="" alt=""></li>
-                                        <li><img src="" alt=""></li>
+                                        <li><img src="" alt=""></li> -->
                                     </ul>
                                 </div>
-                                <i>{{item.actiNumber}}</i>
+                                <i>{{item.applyNum}}/{{item.actiNumber}}</i>
                                 <span>
                                     <i class="iconfont icon-xihuan"></i>{{item.actiLike}}</span>
                             </div>
@@ -240,7 +240,7 @@ export default {
       this.initList();
     },
     handleRout(id) {
-        this.$router.push({ path: "actiDetail",query: { activityId: id }});
+        this.$router.push({ path: "actiTrainDetail",query: { activityId: id }});
     },
     handleSearchList() {
       //搜索

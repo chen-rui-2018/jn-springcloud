@@ -915,7 +915,7 @@
         update tb_data_reporting_task_data t set t.data=#{data}
         where t.fill_id =#{fillId}
         and t.form_id =#{formId}
-        and t.targetId =#{targetId}
+        and t.target_id =#{targetId}
         and t.tab_id=#{companyName}
     </update>
 

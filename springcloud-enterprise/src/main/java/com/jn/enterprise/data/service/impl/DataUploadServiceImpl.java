@@ -1435,6 +1435,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                             taskDataCriteriaBean.clear();
                             updateRecord = new TbDataReportingTaskData();
                             updateRecord.setData(dbean.getData());
+                            updateRecord.setFillId(fillId);
                             taskDataCriteriaBean.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdEqualTo(dbean.getTargetId())
                                     .andRowNumEqualTo(dbean.getRowNum());
                             taretInfoCriteriaBean.clear();
@@ -1637,6 +1638,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                             taskDataCriteriaBean.clear();
                             updateRecord = new TbDataReportingTaskData();
                             updateRecord.setData(dbean.getData());
+                            updateRecord.setFillId(fillId);
                             taskDataCriteriaBean.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdEqualTo(dbean.getTargetId())
                                     .andRowNumEqualTo(dbean.getRowNum());
                             taretInfoCriteriaBean.clear();

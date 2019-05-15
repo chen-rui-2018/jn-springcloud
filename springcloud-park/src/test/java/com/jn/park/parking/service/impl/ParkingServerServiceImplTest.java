@@ -60,27 +60,7 @@ public class ParkingServerServiceImplTest {
         int i = parkingServerService.insertParkingRecordByRamp(parkingRecordRampParam);
         logger.info("批量插入入参数据响应条数{}",i);
     }
-    @Test
-    public void updateParkingRecordByParam() {
-        List<ParkingRecordRampParam> parkingRecordRampParam = new ArrayList<>(16);
-
-        ParkingRecordRampParam param = new ParkingRecordRampParam();
-        param.setGateId("258415618442413");
-        param.setCarLicense("湘A00001");
-        param.setAdmissionTime("2019-04-25 10:10:10");
-        param.setDepartureTime("2019-04-25 18:10:10");
-        param.setParkingStatus("0");
-        ParkingRecordRampParam param1 = new ParkingRecordRampParam();
-        param1.setGateId("258415618442413");
-        param1.setCarLicense("湘A00001");
-        param1.setAdmissionTime("2019-04-25 10:55:10");
-        param1.setDepartureTime("2019-04-25 15:55:12");
-        param1.setParkingStatus("1");
-        parkingRecordRampParam.add(param);
-        parkingRecordRampParam.add(param1);
-        int i = parkingServerService.updateParkingRecordByParam(parkingRecordRampParam);
-        logger.info("批量插入入参数据响应条数{}",i);
-    }
+    
 
     @Test
     public void selectParkingRecordByRamp() {

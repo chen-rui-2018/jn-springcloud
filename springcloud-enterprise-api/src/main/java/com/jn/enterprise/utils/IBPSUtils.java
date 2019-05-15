@@ -65,7 +65,7 @@ public class IBPSUtils {
         if(StringUtils.isNotBlank(bpmInstId)){
             param.put("bpmInstId", bpmInstId);
         }
-        if(StringUtils.isNotBlank(bpmInstId)){
+        if(StringUtils.isNotBlank(taskId)){
             param.put("taskId",taskId);
         }
         JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.OPINIONS.getRequestUrl(), null, param, HttpMethod.GET);

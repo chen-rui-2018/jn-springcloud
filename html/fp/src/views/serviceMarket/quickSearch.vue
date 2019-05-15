@@ -223,7 +223,7 @@
                   <img :src="i.avatar" alt="">
                 </div>
                 <div class="orgCon fl">
-                  <div class="conTil">{{i.orgName}}</div>
+                  <div class="conTil">{{i.advisorName}}</div>
                   <div class="conContent clearfix color3">
                     <div class="left1 fl" id="left1">
                       <p>所属机构：{{i.orgName}}

@@ -2821,7 +2821,7 @@ img {
 .portalIndex .enterpriseinfo .enterPriseCon .conlef1 .conInfo, .enterpriseservice .enterpriseinfo .enterPriseCon .con1 .conInfo,
 .enterpriseservice .enterpriseinfo .enterPriseCon .conlef1 .conInfo {
   text-align: left;
-  font-size: 14px;
+  font-size: 13px;
   color: #b6b6b6;
 }
 
@@ -2857,6 +2857,7 @@ img {
   display: inline-block;
   margin-left: 20px;
   vertical-align: top;
+  text-align: left;
 }
 
 .portalIndex .enterpriseinfo .enterPriseCon .con2 .conlef1, .enterpriseservice .enterpriseinfo .enterPriseCon .con2 .conlef1 {

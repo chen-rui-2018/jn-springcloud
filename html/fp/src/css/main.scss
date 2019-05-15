@@ -2185,6 +2185,7 @@ img {
     }
   }
   .enterpriseinfo {
+    // text-align: left;
     .enterPriseCon {
       .con1,
       .conlef1 {
@@ -2201,7 +2202,7 @@ img {
         }
         .conInfo {
           text-align: left;
-          font-size: 14px;
+          font-size: 13px;
           color: #b6b6b6;
           > img {
             width: 53px;
@@ -2229,6 +2230,7 @@ img {
         display: inline-block;
         margin-left: 20px;
         vertical-align: top;
+        text-align: left;
         .conlef1 {
           text-align: left;
           width: 192px;

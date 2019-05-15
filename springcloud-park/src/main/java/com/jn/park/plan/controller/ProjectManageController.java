@@ -100,9 +100,9 @@ public class ProjectManageController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "projectNo",value = "工程项目编号",dataType = "String",paramType = "query",example = "CS201904230001")
     })
-    public Result<ProjectCompleteRatioModel> findCompleteRatio(String projectNo){
+    public Result<ProjectCompleteRatioArrayModel> findCompleteRatio(String projectNo){
 
-        ProjectCompleteRatioModel findCompleteRatio=projectManageService.findCompleteRatio(projectNo);
+        ProjectCompleteRatioArrayModel findCompleteRatio=projectManageService.findCompleteRatio(projectNo);
 
         return new Result(findCompleteRatio);
     }

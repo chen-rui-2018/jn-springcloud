@@ -141,14 +141,14 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Override
     @ControllerLog(doAction = "添加用户")
-    public Result addSysUser(@Validated @RequestBody User user) {
+    public Result<User> addSysUser(@Validated @RequestBody User user) {
         user.setId(UUID.randomUUID().toString());
         user.setPassword(DigestUtils.md5Hex(user.getPassword()));
         user.setRecordStatus(Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode()));
         SysUserAdd SysUserAdd = new SysUserAdd();
         BeanUtils.copyProperties(user, SysUserAdd);
         sysUserService.addSysUser(SysUserAdd, new User());
-        return new Result();
+        return new Result(user);
     }
 
     @Override

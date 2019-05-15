@@ -1442,7 +1442,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                                     .andTaskBatchEqualTo(taskBatch).andDepartmentIdEqualTo(data.getDepartmentId());
                             List<TbDataReportingSnapshotTarget> targetList = tbDataReportingSnapshotTargetMapper.selectByExample(taretInfoCriteriaBean);
                             if (targetList != null && targetList.size() > 0) {
-                                int resultSize = tbDataReportingTaskDataMapper.updateByExample(updateRecord, taskDataCriteriaBean);
+                                int resultSize = tbDataReportingTaskDataMapper.updateByExampleSelective(updateRecord, taskDataCriteriaBean);
                                 if (resultSize != 1) {
                                     dbList.add(dbean);
                                 }
@@ -1468,7 +1468,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             record.setFillerTel(user.getPhone());
             TbDataReportingTaskCriteria examp = new TbDataReportingTaskCriteria();
             examp.or().andFillIdEqualTo(fillId);
-            tbDataReportingTaskMapper.updateByExample(record,examp);
+            tbDataReportingTaskMapper.updateByExampleSelective(record,examp);
         }else{
         //园区
             TbDataReportingGardenFiller gardenFiller = new TbDataReportingGardenFiller();
@@ -1644,7 +1644,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                                     .andTaskBatchEqualTo(taskBatch).andDepartmentIdEqualTo(data.getDepartmentId());
                             List<TbDataReportingSnapshotTarget> targetList = tbDataReportingSnapshotTargetMapper.selectByExample(taretInfoCriteriaBean);
                             if(targetList !=null && targetList.size()>0){
-                                int resultSize = tbDataReportingTaskDataMapper.updateByExample(updateRecord,taskDataCriteriaBean);
+                                int resultSize = tbDataReportingTaskDataMapper.updateByExampleSelective(updateRecord,taskDataCriteriaBean);
                                 if(resultSize !=1){
                                     dbList.add(dbean);
                                 }

@@ -32,5 +32,10 @@ public interface AssetArticleLeaseDao {
      */
     void updateStatus(Map<String,Object> map);
 
-
+    /**
+     * 通过物品名称搜索物品
+     * @param name
+     * @return
+     */
+    List<AssetArticleLeaseModel> searchArticleList(String name);
 }

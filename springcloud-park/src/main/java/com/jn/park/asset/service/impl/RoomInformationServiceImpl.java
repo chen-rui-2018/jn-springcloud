@@ -94,7 +94,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         tbRoomInformationMapper.updateByExample(tbRoomInformation, tbRoomInformationCriteria);
     }
 
-    @Override
+    //todo
+    /*@Override
     @ServiceLog(doAction ="新增房间订单")
     public String addRoomOrders(String id, User user) {
         RoomInformationModel room = roomInformationDao.getRoomInformation(id);
@@ -152,7 +153,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             }
         }
         return "-1";
-    }
+    }*/
 
     /**
      * 生成订单编号

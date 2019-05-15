@@ -33,7 +33,7 @@ public class CallOtherSwaggerUtilsTest {
     @Test
     public void test1() {
         //获取用戶菜單角色
-        JSONObject jsonObject2 = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/appResourcesService/getMenuData", HttpMethod.GET, new LinkedMultiValueMap<String, String>());
+            JSONObject jsonObject2 = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/appResourcesService/getMenuData", HttpMethod.GET, new LinkedMultiValueMap<String, String>());
         System.out.println(jsonObject2);
     }
 }

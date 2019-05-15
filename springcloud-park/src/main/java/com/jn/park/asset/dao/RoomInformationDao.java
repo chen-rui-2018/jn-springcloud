@@ -32,4 +32,11 @@ public interface RoomInformationDao {
      * @param map
      */
     void updateStatus(Map<String, Object> map);
+
+    /**
+     * 通过关键字搜索房间
+     * @param name
+     * @return
+     */
+    List<RoomInformationModel> searchList(String name);
 }

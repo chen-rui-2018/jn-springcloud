@@ -48,6 +48,6 @@ public interface RoomInformationService {
      * @param user
      * @return
      */
-    String addRoomOrders(String id, User user);
+    //String addRoomOrders(String id, User user);
 
 }

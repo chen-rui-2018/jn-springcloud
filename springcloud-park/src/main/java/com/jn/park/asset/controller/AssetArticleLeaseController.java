@@ -13,16 +13,10 @@ import com.jn.park.asset.service.AssetArticleLeaseOrdersService;
 import com.jn.park.asset.service.AssetArticleLeaseService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.List;
@@ -44,6 +38,7 @@ public class AssetArticleLeaseController {
     @Autowired
     private AssetArticleLeaseOrdersService assetArticleLeaseOrdersService;
 
+
     @ControllerLog(doAction = "物品租赁列表")
     @ApiOperation(value = "物品租赁列表",notes = "返回可租赁的资产列表")
     @GetMapping(value = "/articleLeaseList")
@@ -56,12 +51,28 @@ public class AssetArticleLeaseController {
         }
     }
 
+    @ControllerLog(doAction = "物品搜索")
+    @ApiOperation(value = "物品搜索",notes = "物品搜索")
+    @GetMapping(value = "/searchArticleList")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name",value = "搜索关键字",example = "空调")
+    })
+    public Result<PaginationData<List<AssetArticleLeaseModel>>> searchArticleList(Page page,String name){
+        if (page.getPage() > 0 && page.getRows() > 0){
+            PaginationData<List<AssetArticleLeaseModel>> data = assetArticleLeaseService.searchArticleList(page ,name);
+            return new Result<>(data);
+        }else{
+            throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
+        }
+
+    }
+
 
     @ControllerLog(doAction = "获取物品租赁详细信息")
     @ApiOperation(value = "获取物品租赁详细信息",notes = "根据资产编号获取物品详细信息")
     @GetMapping(value = "/getArticleLease")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "572058527984517120")
+            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "577555965931421696")
     })
     public Result<AssetArticleLeaseModel> getArticleLease (String assetNumber){
         Assert.notNull(assetNumber,"资产编号不能为空");
@@ -73,7 +84,7 @@ public class AssetArticleLeaseController {
     @ApiOperation(value = "租借资料填写",notes = "租借企业资料填写")
     @PostMapping(value = "/leaseWriter")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "572058527984517120",required = true),
+            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "577555965931421696",required = true),
             @ApiImplicitParam(name = "leaseEnterprise",value = "租借企业",example = "美的",required = true),
             @ApiImplicitParam(name = "contactName",value = "联系人姓名",example = "先生",required = true),
             @ApiImplicitParam(name = "contactPhone",value = "联系人电话",example = "123456",required = true),
@@ -81,25 +92,15 @@ public class AssetArticleLeaseController {
             @ApiImplicitParam(name = "endTime",value = "结束时间",example = "2019-6-1",required = true)
     })
     public Result leaseWriter(String assetNumber,String leaseEnterprise, String contactName, String contactPhone, Date startTime,Date endTime){
-        assetArticleLeaseService.leaseWriter(assetNumber,leaseEnterprise,contactName,contactPhone,startTime,endTime);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "新增租赁订单")
-    @ApiOperation(value ="新增租赁订单",notes = "新增租赁订单")
-    @PostMapping(value = "/addLeaseOrders")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "572058527984517120")
-    })
-    public Result addLeaseOrders(String assetNumber){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        String ordersNumber= assetArticleLeaseService.addLeaseOrders(assetNumber,user);
+        String ordersNumber = assetArticleLeaseService.leaseWriter(assetNumber,leaseEnterprise,contactName,contactPhone,startTime,endTime,user);
         if (ordersNumber.equals("-1")){
             return new Result("-1","新增租赁订单失败");
         }
         return new Result(ordersNumber);
     }
+
 
     @ControllerLog(doAction = "支付订单")
     @ApiOperation(value = "支付订单",notes = "支付订单")
@@ -113,6 +114,17 @@ public class AssetArticleLeaseController {
         return new Result<>(leaseOrders);
     }
 
+
+    @ControllerLog(doAction ="发起支付")
+    @ApiOperation(value = "发起支付",notes = "发起支付")
+    @PostMapping(value = "/startPayment")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019")
+    })
+    public Result startPayment(String id){
+        Assert.notNull(id,"订单编号不能为空");
+        return new Result(assetArticleLeaseOrdersService.startPayment(id));
+    }
 
 
     @ControllerLog(doAction = "物品租赁历史列表")

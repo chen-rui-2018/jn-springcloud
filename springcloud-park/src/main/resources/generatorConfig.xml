@@ -828,6 +828,10 @@
       <table tableName="tb_room_information"></table>
       <!--房间管理-房间订单-->
       <table tableName="tb_room_orders"></table>
+      <!--房间管理-房间订单(子)-->
+      <table tableName="tb_room_orders_item"></table>
+      <!--房间管理-房间分组-->
+      <table tableName="tb_room_group"></table>
     </context>
 
 

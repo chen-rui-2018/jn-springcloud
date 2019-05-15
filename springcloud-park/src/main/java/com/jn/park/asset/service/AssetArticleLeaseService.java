@@ -29,12 +29,6 @@ public interface AssetArticleLeaseService {
      */
     AssetArticleLeaseModel getArticleLease(String assetNumber);
 
-    /**
-     * 新增租赁订单
-     * @param assetNumber
-     * @return
-     */
-    String addLeaseOrders(String assetNumber, User user);
 
     /**
      * 企业填写租借资料
@@ -46,6 +40,13 @@ public interface AssetArticleLeaseService {
      * @param endTime
      * @return
      */
-    void leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, Date startTime, Date endTime);
+    String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, Date startTime, Date endTime,User user);
 
+    /**
+     * 通过物品名称搜索物品
+     * @param page
+     * @param name
+     * @return
+     */
+    PaginationData<List<AssetArticleLeaseModel>> searchArticleList(Page page, String name);
 }

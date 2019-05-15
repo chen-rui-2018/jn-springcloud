@@ -85,7 +85,8 @@ public class RoomManageController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "新增房间租赁订单")
+    //todo
+   /* @ControllerLog(doAction = "新增房间租赁订单")
     @ApiOperation(value ="新增房间租赁订单",notes = "新增房间租赁订单")
     @PostMapping(value = "/addRoomOrders")
     @ApiImplicitParams({
@@ -99,7 +100,7 @@ public class RoomManageController {
             return new Result("-1","新增租赁订单失败");
         }
         return new Result(ordersNumber);
-    }
+    }*/
 
     @ControllerLog(doAction = "支付订单")
     @ApiOperation(value = "支付订单",notes = "支付订单")

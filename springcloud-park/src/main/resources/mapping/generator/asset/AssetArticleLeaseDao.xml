@@ -4,22 +4,22 @@
     <select id="getArticleLeaseList" resultType="com.jn.park.asset.model.AssetArticleLeaseModel">
         SELECT
             id,
-            asset_number AS assetNumber,
+            asset_number         AS assetNumber,
             NAME,
-            type_id AS typeId,
-            asset_type AS assetType,
+            type_id              AS typeId,
+            asset_type           AS assetType,
             specification,
-            qr_code AS qrCode,
-            lease_cash AS leaseCash,
-            lease_price AS leasePrice,
-            lease_time AS leaseTime,
-            img_url AS imgUrl,
+            qr_code              AS qrCode,
+            lease_cash           AS leaseCash,
+            lease_price          AS leasePrice,
+            lease_time           AS leaseTime,
+            img_url              AS imgUrl,
             article_introduction AS articleIntroduction,
-            lease_enterprise AS leaseEnterprise,
-            contact_name AS contactName,
-            contact_phone AS contactPhone,
-            start_time AS startTime,
-            end_time AS endTime
+            lease_enterprise     AS leaseEnterprise,
+            contact_name         AS contactName,
+            contact_phone        AS contactPhone,
+            start_time           AS startTime,
+            end_time             AS endTime
         FROM
             tb_asset_article_lease
         WHERE
@@ -29,26 +29,27 @@
            OR article_status = '5'
     </select>
 
-    <select id="getArticleLease" parameterType="java.lang.String" resultType="com.jn.park.asset.model.AssetArticleLeaseModel">
+    <select id="getArticleLease" parameterType="java.lang.String"
+            resultType="com.jn.park.asset.model.AssetArticleLeaseModel">
         SELECT
             id,
-            asset_number AS assetNumber,
+            asset_number         AS assetNumber,
             NAME,
-            type_id AS typeId,
-            asset_type AS assetType,
+            type_id              AS typeId,
+            asset_type           AS assetType,
             specification,
-            qr_code AS qrCode,
-            lease_cash AS leaseCash,
-            lease_price AS leasePrice,
-            lease_time AS leaseTime,
-            img_url AS imgUrl,
+            qr_code              AS qrCode,
+            lease_cash           AS leaseCash,
+            lease_price          AS leasePrice,
+            lease_time           AS leaseTime,
+            img_url              AS imgUrl,
             article_introduction AS articleIntroduction,
-            article_status AS articleStatus,
-            lease_enterprise AS leaseEnterprise,
-            contact_name AS contactName,
-            contact_phone AS contactPhone,
-            start_time AS startTime,
-            end_time AS endTime
+            article_status       AS articleStatus,
+            lease_enterprise     AS leaseEnterprise,
+            contact_name         AS contactName,
+            contact_phone        AS contactPhone,
+            start_time           AS startTime,
+            end_time             AS endTime
         FROM
             tb_asset_article_lease
         WHERE
@@ -61,4 +62,34 @@
         WHERE
             asset_number = #{assetNumber}
     </update>
+
+    <select id="searchArticleList" parameterType="java.lang.String"
+            resultType="com.jn.park.asset.model.AssetArticleLeaseModel">
+        SELECT
+            id,
+            asset_number         AS assetNumber,
+            NAME,
+            type_id              AS typeId,
+            asset_type           AS assetType,
+            specification,
+            qr_code              AS qrCode,
+            lease_cash           AS leaseCash,
+            lease_price          AS leasePrice,
+            lease_time           AS leaseTime,
+            img_url              AS imgUrl,
+            article_introduction AS articleIntroduction,
+            article_status       AS articleStatus,
+            lease_enterprise     AS leaseEnterprise,
+            contact_name         AS contactName,
+            contact_phone        AS contactPhone,
+            start_time           AS startTime,
+            end_time             AS endTime
+        FROM
+            tb_asset_article_lease
+        WHERE
+            NAME like CONCAT('%', #{name}, '%')
+          AND record_status = '1'
+          AND is_lease = '1'
+          AND article_status IN ('0', '5')
+    </select>
 </mapper>

@@ -31,11 +31,14 @@ public class RoomInformationModel implements Serializable {
     @ApiModelProperty(value = "所属楼宇名称",example = "1号楼")
     private String towerName;
 
-    @ApiModelProperty(value = "分组id",example = "")
+    @ApiModelProperty(value = "分组id",example = "2019051300020")
     private String groupId;
 
-    @ApiModelProperty(value = "所属分组",example = "")
+    @ApiModelProperty(value = "所属分组",example = "分组一")
     private String groupName;
+
+    @ApiModelProperty(value = "同属分组(房间id)",example = "")
+    private String groupRooms;
 
     @ApiModelProperty(value = "面积(平方米)",example = "100")
     private String roomArea;
@@ -94,6 +97,9 @@ public class RoomInformationModel implements Serializable {
     @ApiModelProperty(value = "联系人电话",example = "123456")
     private String contactPhone;
 
+    @ApiModelProperty(value = "创建时间",example = "2019-05-05")
+    private Date crateTime;
+
     public String getId() {
         return id;
     }
@@ -134,6 +140,13 @@ public class RoomInformationModel implements Serializable {
         this.towerName = towerName;
     }
 
+    public String getGroupRooms() {
+        return groupRooms;
+    }
+
+    public void setGroupRooms(String groupRooms) {
+        this.groupRooms = groupRooms;
+    }
     public String getGroupId() {
         return groupId;
     }
@@ -300,5 +313,13 @@ public class RoomInformationModel implements Serializable {
 
     public void setContactPhone(String contactPhone) {
         this.contactPhone = contactPhone;
+    }
+
+    public Date getCrateTime() {
+        return crateTime;
+    }
+
+    public void setCrateTime(Date crateTime) {
+        this.crateTime = crateTime;
     }
 }

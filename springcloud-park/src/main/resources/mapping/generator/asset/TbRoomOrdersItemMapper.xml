@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.park.asset.dao.TbRoomOrdersMapper">
-  <resultMap id="BaseResultMap" type="com.jn.park.asset.entity.TbRoomOrders">
+<mapper namespace="com.jn.park.asset.dao.TbRoomOrdersItemMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.asset.entity.TbRoomOrdersItem">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="enterprise_id" jdbcType="VARCHAR" property="enterpriseId" />
-    <result column="lease_enterprise" jdbcType="VARCHAR" property="leaseEnterprise" />
-    <result column="lease_start_time" jdbcType="DATE" property="leaseStartTime" />
-    <result column="lease_end_time" jdbcType="DATE" property="leaseEndTime" />
-    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
-    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="room_id" jdbcType="VARCHAR" property="roomId" />
+    <result column="room_name" jdbcType="VARCHAR" property="roomName" />
+    <result column="floor" jdbcType="VARCHAR" property="floor" />
+    <result column="tower_id" jdbcType="VARCHAR" property="towerId" />
+    <result column="tower_name" jdbcType="VARCHAR" property="towerName" />
+    <result column="room_url" jdbcType="VARCHAR" property="roomUrl" />
+    <result column="room_area" jdbcType="VARCHAR" property="roomArea" />
+    <result column="lease_price" jdbcType="DECIMAL" property="leasePrice" />
+    <result column="lease_sum" jdbcType="DECIMAL" property="leaseSum" />
+    <result column="press_pay" jdbcType="VARCHAR" property="pressPay" />
+    <result column="shortest_lease" jdbcType="VARCHAR" property="shortestLease" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
     <result column="pay_sum" jdbcType="DECIMAL" property="paySum" />
-    <result column="pay_state" jdbcType="TINYINT" property="payState" />
     <result column="room_status" jdbcType="TINYINT" property="roomStatus" />
-    <result column="apply_time" jdbcType="DATE" property="applyTime" />
     <result column="quit_penal_sum" jdbcType="DECIMAL" property="quitPenalSum" />
     <result column="explain" jdbcType="VARCHAR" property="explain" />
     <result column="approval_opinion" jdbcType="VARCHAR" property="approvalOpinion" />
     <result column="practical_quit_time" jdbcType="DATE" property="practicalQuitTime" />
     <result column="lease_apply_status" jdbcType="TINYINT" property="leaseApplyStatus" />
     <result column="quit_apply_status" jdbcType="TINYINT" property="quitApplyStatus" />
-    <result column="is_relet" jdbcType="TINYINT" property="isRelet" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -85,18 +89,19 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, enterprise_id, lease_enterprise, lease_start_time, lease_end_time, contact_name, 
-    contact_phone, pay_sum, pay_state, room_status, apply_time, quit_penal_sum, explain, 
-    approval_opinion, practical_quit_time, lease_apply_status, quit_apply_status, is_relet, 
-    record_status, creator_account, create_time, modifier_account, modified_time
+    id, order_id, room_id, room_name, floor, tower_id, tower_name, room_url, room_area, 
+    lease_price, lease_sum, press_pay, shortest_lease, introduce, pay_sum, room_status, 
+    quit_penal_sum, explain, approval_opinion, practical_quit_time, lease_apply_status, 
+    quit_apply_status, record_status, creator_account, create_time, modifier_account, 
+    modified_time
   </sql>
-  <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersItemCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_room_orders
+    from tb_room_orders_item
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -107,72 +112,91 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_room_orders
+    from tb_room_orders_item
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_room_orders
+    delete from tb_room_orders_item
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersCriteria">
-    delete from tb_room_orders
+  <delete id="deleteByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersItemCriteria">
+    delete from tb_room_orders_item
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.park.asset.entity.TbRoomOrders">
-    insert into tb_room_orders (id, enterprise_id, lease_enterprise, 
-      lease_start_time, lease_end_time, contact_name, 
-      contact_phone, pay_sum, pay_state, 
-      room_status, apply_time, quit_penal_sum, 
-      explain, approval_opinion, practical_quit_time, 
-      lease_apply_status, quit_apply_status, is_relet, 
-      record_status, creator_account, create_time, 
-      modifier_account, modified_time)
-    values (#{id,jdbcType=VARCHAR}, #{enterpriseId,jdbcType=VARCHAR}, #{leaseEnterprise,jdbcType=VARCHAR}, 
-      #{leaseStartTime,jdbcType=DATE}, #{leaseEndTime,jdbcType=DATE}, #{contactName,jdbcType=VARCHAR}, 
-      #{contactPhone,jdbcType=VARCHAR}, #{paySum,jdbcType=DECIMAL}, #{payState,jdbcType=TINYINT}, 
-      #{roomStatus,jdbcType=TINYINT}, #{applyTime,jdbcType=DATE}, #{quitPenalSum,jdbcType=DECIMAL}, 
-      #{explain,jdbcType=VARCHAR}, #{approvalOpinion,jdbcType=VARCHAR}, #{practicalQuitTime,jdbcType=DATE}, 
-      #{leaseApplyStatus,jdbcType=TINYINT}, #{quitApplyStatus,jdbcType=TINYINT}, #{isRelet,jdbcType=TINYINT}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.jn.park.asset.entity.TbRoomOrdersItem">
+    insert into tb_room_orders_item (id, order_id, room_id, 
+      room_name, floor, tower_id, 
+      tower_name, room_url, room_area, 
+      lease_price, lease_sum, press_pay, 
+      shortest_lease, introduce, pay_sum, 
+      room_status, quit_penal_sum, explain, 
+      approval_opinion, practical_quit_time, lease_apply_status, 
+      quit_apply_status, record_status, creator_account, 
+      create_time, modifier_account, modified_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{roomId,jdbcType=VARCHAR}, 
+      #{roomName,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, #{towerId,jdbcType=VARCHAR}, 
+      #{towerName,jdbcType=VARCHAR}, #{roomUrl,jdbcType=VARCHAR}, #{roomArea,jdbcType=VARCHAR}, 
+      #{leasePrice,jdbcType=DECIMAL}, #{leaseSum,jdbcType=DECIMAL}, #{pressPay,jdbcType=VARCHAR}, 
+      #{shortestLease,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR}, #{paySum,jdbcType=DECIMAL}, 
+      #{roomStatus,jdbcType=TINYINT}, #{quitPenalSum,jdbcType=DECIMAL}, #{explain,jdbcType=VARCHAR}, 
+      #{approvalOpinion,jdbcType=VARCHAR}, #{practicalQuitTime,jdbcType=DATE}, #{leaseApplyStatus,jdbcType=TINYINT}, 
+      #{quitApplyStatus,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomOrders">
-    insert into tb_room_orders
+  <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomOrdersItem">
+    insert into tb_room_orders_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="enterpriseId != null">
-        enterprise_id,
+      <if test="orderId != null">
+        order_id,
       </if>
-      <if test="leaseEnterprise != null">
-        lease_enterprise,
+      <if test="roomId != null">
+        room_id,
       </if>
-      <if test="leaseStartTime != null">
-        lease_start_time,
+      <if test="roomName != null">
+        room_name,
       </if>
-      <if test="leaseEndTime != null">
-        lease_end_time,
+      <if test="floor != null">
+        floor,
       </if>
-      <if test="contactName != null">
-        contact_name,
+      <if test="towerId != null">
+        tower_id,
       </if>
-      <if test="contactPhone != null">
-        contact_phone,
+      <if test="towerName != null">
+        tower_name,
+      </if>
+      <if test="roomUrl != null">
+        room_url,
+      </if>
+      <if test="roomArea != null">
+        room_area,
+      </if>
+      <if test="leasePrice != null">
+        lease_price,
+      </if>
+      <if test="leaseSum != null">
+        lease_sum,
+      </if>
+      <if test="pressPay != null">
+        press_pay,
+      </if>
+      <if test="shortestLease != null">
+        shortest_lease,
+      </if>
+      <if test="introduce != null">
+        introduce,
       </if>
       <if test="paySum != null">
         pay_sum,
       </if>
-      <if test="payState != null">
-        pay_state,
-      </if>
       <if test="roomStatus != null">
         room_status,
-      </if>
-      <if test="applyTime != null">
-        apply_time,
       </if>
       <if test="quitPenalSum != null">
         quit_penal_sum,
@@ -191,9 +215,6 @@
       </if>
       <if test="quitApplyStatus != null">
         quit_apply_status,
-      </if>
-      <if test="isRelet != null">
-        is_relet,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -215,35 +236,50 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseId != null">
-        #{enterpriseId,jdbcType=VARCHAR},
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
       </if>
-      <if test="leaseEnterprise != null">
-        #{leaseEnterprise,jdbcType=VARCHAR},
+      <if test="roomId != null">
+        #{roomId,jdbcType=VARCHAR},
       </if>
-      <if test="leaseStartTime != null">
-        #{leaseStartTime,jdbcType=DATE},
+      <if test="roomName != null">
+        #{roomName,jdbcType=VARCHAR},
       </if>
-      <if test="leaseEndTime != null">
-        #{leaseEndTime,jdbcType=DATE},
+      <if test="floor != null">
+        #{floor,jdbcType=VARCHAR},
       </if>
-      <if test="contactName != null">
-        #{contactName,jdbcType=VARCHAR},
+      <if test="towerId != null">
+        #{towerId,jdbcType=VARCHAR},
       </if>
-      <if test="contactPhone != null">
-        #{contactPhone,jdbcType=VARCHAR},
+      <if test="towerName != null">
+        #{towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomUrl != null">
+        #{roomUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="leasePrice != null">
+        #{leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseSum != null">
+        #{leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="pressPay != null">
+        #{pressPay,jdbcType=VARCHAR},
+      </if>
+      <if test="shortestLease != null">
+        #{shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType=VARCHAR},
       </if>
       <if test="paySum != null">
         #{paySum,jdbcType=DECIMAL},
       </if>
-      <if test="payState != null">
-        #{payState,jdbcType=TINYINT},
-      </if>
       <if test="roomStatus != null">
         #{roomStatus,jdbcType=TINYINT},
-      </if>
-      <if test="applyTime != null">
-        #{applyTime,jdbcType=DATE},
       </if>
       <if test="quitPenalSum != null">
         #{quitPenalSum,jdbcType=DECIMAL},
@@ -263,9 +299,6 @@
       <if test="quitApplyStatus != null">
         #{quitApplyStatus,jdbcType=TINYINT},
       </if>
-      <if test="isRelet != null">
-        #{isRelet,jdbcType=TINYINT},
-      </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
       </if>
@@ -283,47 +316,62 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersCriteria" resultType="java.lang.Long">
-    select count(*) from tb_room_orders
+  <select id="countByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersItemCriteria" resultType="java.lang.Long">
+    select count(*) from tb_room_orders_item
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_room_orders
+    update tb_room_orders_item
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.enterpriseId != null">
-        enterprise_id = #{record.enterpriseId,jdbcType=VARCHAR},
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=VARCHAR},
       </if>
-      <if test="record.leaseEnterprise != null">
-        lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
+      <if test="record.roomId != null">
+        room_id = #{record.roomId,jdbcType=VARCHAR},
       </if>
-      <if test="record.leaseStartTime != null">
-        lease_start_time = #{record.leaseStartTime,jdbcType=DATE},
+      <if test="record.roomName != null">
+        room_name = #{record.roomName,jdbcType=VARCHAR},
       </if>
-      <if test="record.leaseEndTime != null">
-        lease_end_time = #{record.leaseEndTime,jdbcType=DATE},
+      <if test="record.floor != null">
+        floor = #{record.floor,jdbcType=VARCHAR},
       </if>
-      <if test="record.contactName != null">
-        contact_name = #{record.contactName,jdbcType=VARCHAR},
+      <if test="record.towerId != null">
+        tower_id = #{record.towerId,jdbcType=VARCHAR},
       </if>
-      <if test="record.contactPhone != null">
-        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      <if test="record.towerName != null">
+        tower_name = #{record.towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomUrl != null">
+        room_url = #{record.roomUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomArea != null">
+        room_area = #{record.roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leasePrice != null">
+        lease_price = #{record.leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.leaseSum != null">
+        lease_sum = #{record.leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pressPay != null">
+        press_pay = #{record.pressPay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shortestLease != null">
+        shortest_lease = #{record.shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="record.introduce != null">
+        introduce = #{record.introduce,jdbcType=VARCHAR},
       </if>
       <if test="record.paySum != null">
         pay_sum = #{record.paySum,jdbcType=DECIMAL},
       </if>
-      <if test="record.payState != null">
-        pay_state = #{record.payState,jdbcType=TINYINT},
-      </if>
       <if test="record.roomStatus != null">
         room_status = #{record.roomStatus,jdbcType=TINYINT},
-      </if>
-      <if test="record.applyTime != null">
-        apply_time = #{record.applyTime,jdbcType=DATE},
       </if>
       <if test="record.quitPenalSum != null">
         quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
@@ -342,9 +390,6 @@
       </if>
       <if test="record.quitApplyStatus != null">
         quit_apply_status = #{record.quitApplyStatus,jdbcType=TINYINT},
-      </if>
-      <if test="record.isRelet != null">
-        is_relet = #{record.isRelet,jdbcType=TINYINT},
       </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -367,25 +412,29 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_room_orders
+    update tb_room_orders_item
     set id = #{record.id,jdbcType=VARCHAR},
-      enterprise_id = #{record.enterpriseId,jdbcType=VARCHAR},
-      lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
-      lease_start_time = #{record.leaseStartTime,jdbcType=DATE},
-      lease_end_time = #{record.leaseEndTime,jdbcType=DATE},
-      contact_name = #{record.contactName,jdbcType=VARCHAR},
-      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      room_id = #{record.roomId,jdbcType=VARCHAR},
+      room_name = #{record.roomName,jdbcType=VARCHAR},
+      floor = #{record.floor,jdbcType=VARCHAR},
+      tower_id = #{record.towerId,jdbcType=VARCHAR},
+      tower_name = #{record.towerName,jdbcType=VARCHAR},
+      room_url = #{record.roomUrl,jdbcType=VARCHAR},
+      room_area = #{record.roomArea,jdbcType=VARCHAR},
+      lease_price = #{record.leasePrice,jdbcType=DECIMAL},
+      lease_sum = #{record.leaseSum,jdbcType=DECIMAL},
+      press_pay = #{record.pressPay,jdbcType=VARCHAR},
+      shortest_lease = #{record.shortestLease,jdbcType=VARCHAR},
+      introduce = #{record.introduce,jdbcType=VARCHAR},
       pay_sum = #{record.paySum,jdbcType=DECIMAL},
-      pay_state = #{record.payState,jdbcType=TINYINT},
       room_status = #{record.roomStatus,jdbcType=TINYINT},
-      apply_time = #{record.applyTime,jdbcType=DATE},
       quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
       explain = #{record.explain,jdbcType=VARCHAR},
       approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
       practical_quit_time = #{record.practicalQuitTime,jdbcType=DATE},
       lease_apply_status = #{record.leaseApplyStatus,jdbcType=TINYINT},
       quit_apply_status = #{record.quitApplyStatus,jdbcType=TINYINT},
-      is_relet = #{record.isRelet,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -395,38 +444,53 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.asset.entity.TbRoomOrders">
-    update tb_room_orders
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.asset.entity.TbRoomOrdersItem">
+    update tb_room_orders_item
     <set>
-      <if test="enterpriseId != null">
-        enterprise_id = #{enterpriseId,jdbcType=VARCHAR},
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
       </if>
-      <if test="leaseEnterprise != null">
-        lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
+      <if test="roomId != null">
+        room_id = #{roomId,jdbcType=VARCHAR},
       </if>
-      <if test="leaseStartTime != null">
-        lease_start_time = #{leaseStartTime,jdbcType=DATE},
+      <if test="roomName != null">
+        room_name = #{roomName,jdbcType=VARCHAR},
       </if>
-      <if test="leaseEndTime != null">
-        lease_end_time = #{leaseEndTime,jdbcType=DATE},
+      <if test="floor != null">
+        floor = #{floor,jdbcType=VARCHAR},
       </if>
-      <if test="contactName != null">
-        contact_name = #{contactName,jdbcType=VARCHAR},
+      <if test="towerId != null">
+        tower_id = #{towerId,jdbcType=VARCHAR},
       </if>
-      <if test="contactPhone != null">
-        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      <if test="towerName != null">
+        tower_name = #{towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomUrl != null">
+        room_url = #{roomUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        room_area = #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="leasePrice != null">
+        lease_price = #{leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseSum != null">
+        lease_sum = #{leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="pressPay != null">
+        press_pay = #{pressPay,jdbcType=VARCHAR},
+      </if>
+      <if test="shortestLease != null">
+        shortest_lease = #{shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=VARCHAR},
       </if>
       <if test="paySum != null">
         pay_sum = #{paySum,jdbcType=DECIMAL},
       </if>
-      <if test="payState != null">
-        pay_state = #{payState,jdbcType=TINYINT},
-      </if>
       <if test="roomStatus != null">
         room_status = #{roomStatus,jdbcType=TINYINT},
-      </if>
-      <if test="applyTime != null">
-        apply_time = #{applyTime,jdbcType=DATE},
       </if>
       <if test="quitPenalSum != null">
         quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
@@ -446,9 +510,6 @@
       <if test="quitApplyStatus != null">
         quit_apply_status = #{quitApplyStatus,jdbcType=TINYINT},
       </if>
-      <if test="isRelet != null">
-        is_relet = #{isRelet,jdbcType=TINYINT},
-      </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
@@ -467,25 +528,29 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.park.asset.entity.TbRoomOrders">
-    update tb_room_orders
-    set enterprise_id = #{enterpriseId,jdbcType=VARCHAR},
-      lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
-      lease_start_time = #{leaseStartTime,jdbcType=DATE},
-      lease_end_time = #{leaseEndTime,jdbcType=DATE},
-      contact_name = #{contactName,jdbcType=VARCHAR},
-      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.asset.entity.TbRoomOrdersItem">
+    update tb_room_orders_item
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      room_id = #{roomId,jdbcType=VARCHAR},
+      room_name = #{roomName,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=VARCHAR},
+      tower_id = #{towerId,jdbcType=VARCHAR},
+      tower_name = #{towerName,jdbcType=VARCHAR},
+      room_url = #{roomUrl,jdbcType=VARCHAR},
+      room_area = #{roomArea,jdbcType=VARCHAR},
+      lease_price = #{leasePrice,jdbcType=DECIMAL},
+      lease_sum = #{leaseSum,jdbcType=DECIMAL},
+      press_pay = #{pressPay,jdbcType=VARCHAR},
+      shortest_lease = #{shortestLease,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
       pay_sum = #{paySum,jdbcType=DECIMAL},
-      pay_state = #{payState,jdbcType=TINYINT},
       room_status = #{roomStatus,jdbcType=TINYINT},
-      apply_time = #{applyTime,jdbcType=DATE},
       quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
       explain = #{explain,jdbcType=VARCHAR},
       approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
       practical_quit_time = #{practicalQuitTime,jdbcType=DATE},
       lease_apply_status = #{leaseApplyStatus,jdbcType=TINYINT},
       quit_apply_status = #{quitApplyStatus,jdbcType=TINYINT},
-      is_relet = #{isRelet,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

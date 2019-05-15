@@ -2,8 +2,10 @@ package com.jn.enterprise.servicemarket.product.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.enterprise.servicemarket.product.entity.TbServiceProduct;
 import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.vo.WebServiceProductDetails;
+import com.jn.user.model.UserExtensionInfo;
 
 import java.util.List;
 
@@ -170,4 +172,26 @@ public interface ServiceProductService {
      * @return
      */
     PaginationData findOrgCountProductList(OrgCountQueryParam query,boolean needPage);
+
+    /**
+     * 判断是否已发布该模板常规产品
+     * @param templateId 模板ID
+     * @param orgId 机构ID
+     * @param productId 产品ID
+     */
+    void checkTemplateProduct(String templateId, String orgId, String productId);
+
+    /**
+     * 根据账号查询是否机构账号
+     * @param account 账号
+     * @return
+     */
+    UserExtensionInfo getUserExtensionByAccount(String account);
+
+    /**
+     * 根据产品ID判断是否能修改
+     * @param productId 产品ID
+     * @return
+     */
+    TbServiceProduct getCanUpdateProduct(String productId);
 }

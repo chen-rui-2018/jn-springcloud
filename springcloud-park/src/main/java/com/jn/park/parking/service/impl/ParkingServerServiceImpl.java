@@ -5,6 +5,7 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.hardware.api.ParkingClient;
 import com.jn.hardware.model.parking.ParkingMonthlyRentCardRequest;
+import com.jn.hardware.model.parking.ParkingMonthlyRentCardUnite;
 import com.jn.hardware.model.parking.door.DoorCarInParkingShow;
 import com.jn.hardware.model.parking.door.DoorCarOutParkingShow;
 import com.jn.park.enums.ParkingExceptionEnum;
@@ -117,7 +118,7 @@ public class ParkingServerServiceImpl implements ParkingServerService {
         }
         TbParkingSpaceRental tbParkingSpaceRental = tbParkingSpaceRentals.get(0);
         //TODO 调用匝道通知车辆已开通月租卡
-        ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest = new ParkingMonthlyRentCardRequest();
+        ParkingMonthlyRentCardUnite parkingMonthlyRentCardRequest = new ParkingMonthlyRentCardUnite();
         parkingClient.saveParkingMonthlyRentCard(parkingMonthlyRentCardRequest);
 
         //改变租赁数据状态
@@ -139,7 +140,8 @@ public class ParkingServerServiceImpl implements ParkingServerService {
 
     @ServiceLog(doAction = "道尔 车辆入场推送接口")
     @Override
-    public String carJoinParking(List carList){
+    public String carJoinParking(List carList,String parkId){
+        logger.info("道尔 车辆入场推送接口 parkId:"+parkId);
         StringBuffer sb = new StringBuffer();
         if(null == carList || carList.size() == 0){
             throw new JnSpringCloudException(ParkingExceptionEnum.PARKING_INFO_IS_NOT_NULL);

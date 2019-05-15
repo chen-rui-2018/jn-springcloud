@@ -109,6 +109,9 @@ public class CompanyServiceImpl implements CompanyService {
         if(StringUtils.isNotEmpty(companyParam.getComType())){
             criteria.andComTypeEqualTo(companyParam.getComType());
         }
+        if(StringUtils.isNotEmpty(companyParam.getAffiliatedPark())){
+            criteria.andAffiliatedParkEqualTo(companyParam.getAffiliatedPark());
+        }
         Page<Object> objects = PageHelper.startPage(companyParam.getPage(), companyParam.getRows() == 0 ? 15 : companyParam.getRows());
         List<TbServiceCompany> tbServiceCompanies = tbServiceCompanyMapper.selectByExample(companyCriteria);
         List<ServiceCompany> companies = new ArrayList<>(16);
@@ -249,7 +252,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyUpdateParam.setCreatorAccount(account);
         companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
 
-        IBPSResult ibpsResult = IBPSUtils.sendRequest("574913700364812288", account, companyUpdateParam);
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow("574913700364812288", account, companyUpdateParam);
 
         // ibps启动流程失败
         if (ibpsResult == null || ibpsResult.getState().equals("-1")) {

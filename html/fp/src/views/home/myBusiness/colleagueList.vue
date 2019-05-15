@@ -8,7 +8,7 @@
     <div class="ordinary_main">
         <div class="search">
         <div></div>
-        <el-input placeholder="请输入姓名或手机号" v-model="searchFiled" clearable>
+        <el-input placeholder="请输入真实姓名或手机号" v-model="searchFiled" clearable>
           <el-button slot="append" icon="el-icon-search" @click="initList()"></el-button>
         </el-input>
       </div>
@@ -20,10 +20,10 @@
           <el-table-column prop="birthday" label="出生年月" align="center"> </el-table-column>
           <el-table-column prop="roleName" label="企业身份" align="center"> </el-table-column>
           <el-table-column prop="checkTime" label="入驻日期" align="center" min-width="130"> </el-table-column>
-          <el-table-column label="操作" align="center" width='180'  v-if="isShow" >
+          <el-table-column label="操作" align="center" v-if="isShow=='0'" >
             <template slot-scope="scope">
               <el-button
-              v-if=" scope.row.roleName!=='企业员工'"
+              v-if=" scope.row.roleName==='企业联系人'"
                 size="mini"
                  type="text"
                 @click="handleCancel(scope.row)" class="greenColor"><span>取消联系人</span>
@@ -35,6 +35,7 @@
                 @click="handleSetContact( scope.row)" class="greenColor"><span>设为联系人</span>
               </el-button>
               <el-button
+               v-if=" scope.row.roleName!=='企业管理员'"
                 size="mini"
                 type="text"
                 @click="handleDelete(scope.row)" class="redColor"><span>删除</span>
@@ -79,7 +80,8 @@ export default {
         .then(() => {
       this.api.post({
         url: "delColleague",
-        data: [row.account],
+        data: {accounts:row.account},
+        dataFlag:true,
         callback: function(res) {
           if (res.code === "0000") {
             console.log(res)
@@ -227,7 +229,7 @@ handleSetContact(row){
         }
     }
         .el-input-group{
-          width:24%;
+          width:26%;
           margin-bottom: 13px;
         }
         .el-input__inner{

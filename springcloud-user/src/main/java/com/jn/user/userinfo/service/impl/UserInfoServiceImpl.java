@@ -77,8 +77,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final static String TAG_CODE_IS_JOB = "1";
 
     /**
-     * 根据账号获取用户扩展信息
-     * @param account 用户账号
+     * 根据用户账号/手机号/邮箱获取用户扩展信息
+     * @param account 用户账号/手机号/邮箱
      * @return
      */
     @ServiceLog(doAction = "根据账号获取用户扩展信息")
@@ -198,8 +198,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public boolean updateAffiliateInfo(UserAffiliateInfo userAffiliateInfo) {
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        List<String> updateAccountList = Arrays.asList(userAffiliateInfo.getAccountList());
-        example.createCriteria().andAccountIn(updateAccountList);
+        example.createCriteria().andAccountIn(userAffiliateInfo.getAccountList());
         TbUserPerson tbUserPerson=new TbUserPerson();
         tbUserPerson.setAffiliateCode(userAffiliateInfo.getAffiliateCode());
         tbUserPerson.setAffiliateName(userAffiliateInfo.getAffiliateName());
@@ -217,7 +216,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public boolean updateCompanyInfo(UserCompanyInfo userCompanyInfo) {
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        example.createCriteria().andAccountIn(Arrays.asList(userCompanyInfo.getAccountList()));
+        example.createCriteria().andAccountIn(userCompanyInfo.getAccountList());
         TbUserPerson tbUserPerson=new TbUserPerson();
         tbUserPerson.setCompanyCode(userCompanyInfo.getCompanyCode());
         tbUserPerson.setCompanyName(userCompanyInfo.getCompanyName());
@@ -278,7 +277,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     /**
      * 根据账号获取用户扩展信息
-     * @param account  用户账号
+     * @param account  用户账号/手机号/邮箱
      * @return
      */
     @ServiceLog(doAction = "根据账号获取用户扩展信息")

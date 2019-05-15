@@ -136,7 +136,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     @ServiceLog(doAction = "新增会议申请")
     @Transactional(rollbackFor = Exception.class)
-    public void insertOaMeeting(OaMeetingAdd oaMeetingAdd) {
+    public synchronized void insertOaMeeting(OaMeetingAdd oaMeetingAdd) {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
 

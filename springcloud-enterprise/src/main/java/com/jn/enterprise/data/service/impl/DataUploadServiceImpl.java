@@ -446,6 +446,20 @@ public class DataUploadServiceImpl implements DataUploadService {
         ModelDataVO result =  getModelDataByType(fileId,user,type);
 
         //任务的部门权限
+        List<GardenFillerAccessModel>  access = new ArrayList<>();
+        access = getAccess(fileId, user);
+
+        result.setGardenFiller(access);
+
+        return result;
+    }
+
+    /**
+     * 获取部门权限
+     */
+
+    private List<GardenFillerAccessModel> getAccess(String fileId,User user){
+        //任务的部门权限
         TbDataReportingGardenFillerCriteria example = new TbDataReportingGardenFillerCriteria();
         example.or().andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID)).andFillIdEqualTo(fileId);
         List<TbDataReportingGardenFiller> taskAccess = tbDataReportingGardenFillerMapper.selectByExample(example);
@@ -502,10 +516,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             }
         }
 
-
-        result.setGardenFiller(access);
-
-        return result;
+        return access;
     }
 
     /**
@@ -1857,9 +1868,15 @@ public class DataUploadServiceImpl implements DataUploadService {
         //未填报
         if(concretTask.getStatus().toString().equals(DataUploadConstants.NOT_FILL)){
             result = getFormStruct(fileId,user);
+
         }else{
         //已填报
             result = getModelDataByType(fileId,user,concretTask.getStatus().toString());
+            //任务的部门权限
+            List<GardenFillerAccessModel>  access = new ArrayList<>();
+            access = getAccess(fileId, user);
+            result.setGardenFiller(access);
+
         }
         return result;
     }

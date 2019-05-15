@@ -17,6 +17,10 @@ public class ElectricRedisConfigStorage {
     private JedisFactory jedisFactory;
 
     private static final String ACCESS_TOKEN_KEY = "electric:access_token:";
+    /**
+     * 控制在刷新token时,用户暂时不能去获取token(0:不可获取--1:可以获取)
+     */
+    private static final String ACCESS_TOKEN_KEY_CONTROLLER = "electric:access_token_controller:";
 
     /**
      * 获取access_token
@@ -35,6 +39,24 @@ public class ElectricRedisConfigStorage {
     public void setAccessToken(String accessToken,int expiresInSeconds) {
         Jedis jedis = jedisFactory.getJedis();
         jedis.setex(ACCESS_TOKEN_KEY, expiresInSeconds,accessToken);
+    }
+    /**
+     * 获取access_token_controller
+     * @return
+     */
+    public String getAccessTokenController() {
+        Jedis jedis = jedisFactory.getJedis();
+        return jedis.get(ACCESS_TOKEN_KEY_CONTROLLER);
+    }
+
+    /**
+     * 缓存access_token
+     * @param tokenFlag
+     * @param expiresInSeconds
+     */
+    public void setAccessTokenController(String tokenFlag,int expiresInSeconds) {
+        Jedis jedis = jedisFactory.getJedis();
+        jedis.setex(ACCESS_TOKEN_KEY_CONTROLLER, expiresInSeconds,tokenFlag);
     }
 
 }

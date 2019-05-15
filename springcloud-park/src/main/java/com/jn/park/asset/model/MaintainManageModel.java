@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 /**
 * 维保管理model
@@ -45,12 +46,6 @@ public class MaintainManageModel implements Serializable {
     @ApiModelProperty(value = "规格",example = "1匹")
     private String specification;
 
-    @ApiModelProperty(value = "厂商名称",example = "格力")
-    private String manufacturerName;
-
-    @ApiModelProperty(value = "厂商联系电话",example = "123456")
-    private String contactPhone;
-
     @ApiModelProperty(value = "生产日期",example = "2019-05-05")
     private Date productionTime;
 
@@ -62,6 +57,19 @@ public class MaintainManageModel implements Serializable {
 
     @ApiModelProperty(value = "维保周期",example = "90")
     private String maintenancePeriod;
+
+    @ApiModelProperty(value = "维保厂家Id",example = "575786950632407040")
+    private String companyId;
+
+    @ApiModelProperty(value = "维保厂家名称",example = "格力空调厂家")
+    private String companyName;
+
+
+    @ApiModelProperty(value = "厂家信息")
+    private AssetMaintainCompanyModel assetMaintainCompanyModel;
+
+    @ApiModelProperty(value = "维保记录")
+    private List<AssetMaintainRecordModel> assetMaintainRecordModels;
 
     public String getId() {
         return id;
@@ -143,36 +151,12 @@ public class MaintainManageModel implements Serializable {
         this.specification = specification;
     }
 
-    public String getManufacturerName() {
-        return manufacturerName;
-    }
-
-    public void setManufacturerName(String manufacturerName) {
-        this.manufacturerName = manufacturerName;
-    }
-
-    public String getContactPhone() {
-        return contactPhone;
-    }
-
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
-    }
-
     public Date getProductionTime() {
         return productionTime;
     }
 
     public void setProductionTime(Date productionTime) {
         this.productionTime = productionTime;
-    }
-
-    public Date getMaintenanceTime() {
-        return maintenanceTime;
-    }
-
-    public void setMaintenanceTime(Date maintenanceTime) {
-        this.maintenanceTime = maintenanceTime;
     }
 
     public String getAssetUrl() {
@@ -183,7 +167,29 @@ public class MaintainManageModel implements Serializable {
         this.assetUrl = assetUrl;
     }
 
+    public Date getMaintenanceTime() {
+        return maintenanceTime;
+    }
 
+    public void setMaintenanceTime(Date maintenanceTime) {
+        this.maintenanceTime = maintenanceTime;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
     public String getMaintenancePeriod() {
         return maintenancePeriod;
@@ -192,5 +198,23 @@ public class MaintainManageModel implements Serializable {
     public void setMaintenancePeriod(String maintenancePeriod) {
         this.maintenancePeriod = maintenancePeriod;
     }
+
+    public AssetMaintainCompanyModel getAssetMaintainCompanyModel() {
+        return assetMaintainCompanyModel;
+    }
+
+    public void setAssetMaintainCompanyModel(AssetMaintainCompanyModel assetMaintainCompanyModel) {
+        this.assetMaintainCompanyModel = assetMaintainCompanyModel;
+    }
+
+    public List<AssetMaintainRecordModel> getAssetMaintainRecordModels() {
+        return assetMaintainRecordModels;
+    }
+
+    public void setAssetMaintainRecordModels(List<AssetMaintainRecordModel> assetMaintainRecordModels) {
+        this.assetMaintainRecordModels = assetMaintainRecordModels;
+    }
+
+
 }
 

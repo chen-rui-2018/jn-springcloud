@@ -36,15 +36,15 @@ public class AddFeatureProduct implements Serializable {
     private String serviceCycle;
     @ApiModelProperty(value = "服务产品图片路径",example = "http://www.pptok.com/wp-content/uploads/2012/08/xunguang-4.jpg")
     private String pictureUrl;
-    @ApiModelProperty(value = "服务产品类型(0-常规产品,1-特色产品)0 ",required = true,example = "1")
-    @NotBlank(message = "服务产品类型不能为空")
+    @ApiModelProperty(value = "服务产品类型(0-常规产品,1-特色产品)0 ",hidden = true,example = "1")
+    //@NotBlank(message = "服务产品类型不能为空")
     private String productType;
     @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔",example = "wangsong,qianqi")
     private String advisorAccount;
     @ApiModelProperty(value = "服务产品详情",example = "本产品,服务........")
     private String productDetails;
-    @ApiModelProperty(value = "服务产品机构id",required = true,example = "040e6f1a459e49989fd6db3dc2dfd6a4")
-    @NotBlank(message = "上架此服务产品的机构id不能为空")
+    @ApiModelProperty(value = "服务产品机构id",hidden = true,example = "040e6f1a459e49989fd6db3dc2dfd6a4")
+    //@NotBlank(message = "上架此服务产品的机构id不能为空")
     private String orgId;
 
     public String getSerialNumber() {

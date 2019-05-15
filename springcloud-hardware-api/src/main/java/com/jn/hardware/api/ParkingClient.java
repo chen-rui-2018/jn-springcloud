@@ -43,7 +43,7 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/saveParkingMonthlyRentCard")
-    Result saveParkingMonthlyRentCard(@RequestBody ParkingMonthlyRentCardUnite ParkingMonthlyRentCardUnite);/**
+    Result saveParkingMonthlyRentCard(@RequestBody ParkingMonthlyRentCardUnite ParkingMonthlyRentCardUnite);
     /**
      * 月租卡开户信息列表
      * @param parkingMonthlyCardInfoRequest

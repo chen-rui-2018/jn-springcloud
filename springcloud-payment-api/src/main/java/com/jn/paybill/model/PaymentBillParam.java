@@ -57,7 +57,7 @@ public class PaymentBillParam extends Page implements Serializable {
     private String searchCode;
     @ApiModelProperty(value = "查询类型[1前端业务2后台业务]{前台业务和后台业务的区别为：前台用户不能查询待审核和审核失败账单，为空默认查前端业务}"
             ,notes = "前台业务和后台业务的区别为：前台用户不能查询待审核和审核失败账单，为空默认查前端业务",example = "2")
-    @Pattern(regexp = "^[2,1]$", message = "{isUrge:'支付方式只能为[2、1]'}")
+    @Pattern(regexp = "^[2,1]$", message = "{isUrge:'查询类型只能为[2、1]'}")
     private String queryType;
 
     public String getBillId() {

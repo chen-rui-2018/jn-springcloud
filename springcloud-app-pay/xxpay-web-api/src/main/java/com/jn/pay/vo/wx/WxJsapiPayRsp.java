@@ -25,6 +25,10 @@ public class WxJsapiPayRsp extends PayBaseRsp {
      * */
     private PayParams payParams;
 
+    /**
+     * 签名
+     * */
+    private String sign;
 
     public String getPrepayId() {
         return prepayId;
@@ -40,5 +44,13 @@ public class WxJsapiPayRsp extends PayBaseRsp {
 
     public void setPayParams(PayParams payParams) {
         this.payParams = payParams;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }

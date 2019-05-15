@@ -2,6 +2,10 @@ package com.jn.park.customer.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.park.customer.model.ConsultationCustomerListParam;
+import com.jn.park.customer.model.OnlineCustomerParam;
+import com.jn.park.customer.model.ServiceModuleShow;
+
+import java.util.List;
 
 /**
  * @Author: yangph
@@ -25,4 +29,18 @@ public interface CustomerServiceCenterService {
      * @return
      */
     Object customerQuesDetail(String account,String processId);
+
+    /**
+     * 服务模块信息
+     * @return
+     */
+    List<ServiceModuleShow> serviceModules();
+
+    /**
+     * 在线客服
+     * @param onlineCustomerParam
+     * @param loginAccount
+     * @return
+     */
+    int onlineCustomerService(OnlineCustomerParam onlineCustomerParam,String loginAccount);
 }

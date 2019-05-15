@@ -137,6 +137,13 @@ public class PayOrderReq implements Serializable  {
     @NotBlank(message = "签名不能为空！")
     private String sign;
 
+    /**
+     * 支付完成跳转的页面(只有支付宝才有)
+     * 买家在支付成功后会看到一个支付宝交易提示成功的页面，该页面会停留几秒，
+     * 然后会自动跳转回商户指定的同步通知页面
+    * */
+    @ApiModelProperty("买家付款完成以后进行自动跳转 ，returnUrl为http方式 ,且外网可访问链接不能带任何参数")
+    private String aliPayReturnUrl;
 
     @Override
     public String toString() {
@@ -156,9 +163,17 @@ public class PayOrderReq implements Serializable  {
                 ", param2='" + param2 + '\'' +
                 ", extra='" + extra + '\'' +
                 ", sign='" + sign + '\'' +
+                ", aliPayReturnUrl='" + aliPayReturnUrl + '\'' +
                 '}';
     }
 
+    public String getAliPayReturnUrl() {
+        return aliPayReturnUrl;
+    }
+
+    public void setAliPayReturnUrl(String aliPayReturnUrl) {
+        this.aliPayReturnUrl = aliPayReturnUrl;
+    }
     public String getMchId() {
         return mchId;
     }

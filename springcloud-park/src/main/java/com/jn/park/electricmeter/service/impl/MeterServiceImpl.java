@@ -110,7 +110,6 @@ public class MeterServiceImpl implements MeterService {
                         logger.info("日期格式不规范-转换错误");
                         throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_TIME_PARSE_DEFAULT);
                     }
-
                     reading.setTimeEnd(timeEnd);
                     reading.setStatus(new Byte("1"));
                     reading.setStatusMsg("成功");

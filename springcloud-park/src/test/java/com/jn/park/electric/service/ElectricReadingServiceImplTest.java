@@ -6,6 +6,7 @@ package com.jn.park.electric.service;/**
  */
 
 import com.jn.common.model.Result;
+import com.jn.park.electricmeter.service.MeterService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,13 +28,13 @@ import java.util.Date;
 @SpringBootTest
 public class ElectricReadingServiceImplTest {
     @Resource
-    private ElectricReadingService electricReadingService;
+    private MeterService electricReadingService;
 
     @Test
     public void meterDataCollection(){
-        Result result=electricReadingService.meterDataCollection(new Date(),11,"33");
-        System.out.println(result);
-        System.out.println("++++++++++++");
+        electricReadingService.getDataFromHardare();
+//        System.out.println(result);
+//        System.out.println("++++++++++++");
     }
 
 }

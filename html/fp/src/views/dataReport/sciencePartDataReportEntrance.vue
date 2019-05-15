@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       query: {
-        fillId: this.$route.query.id,
+        fillId: this.$route.query.fileId,
         companyName: null,
         page: 1,
         rows: 20
@@ -190,7 +190,7 @@ export default {
         this.api.get({
           url: `enterpriseGetScientTabHeader`,
           data: {
-            fillId: _this.$route.query.id
+            fillId: _this.$route.query.fileId
           },
           callback(res) {
             if (res.code === "0000") {
@@ -211,9 +211,9 @@ export default {
       }
       let form = new FormData()
       form.append('file', file)
-      form.append('formTime', '201904')
+      form.append('formTime', this.formTime)
       form.append('modelId', this.modelId)
-      form.append('fillId', this.$route.query.id)
+      form.append('fillId', this.$route.query.fileId)
       this.api.post({
         url: `enterpriseImportData`,
         data: form,

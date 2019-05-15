@@ -16,6 +16,13 @@ export default {
         commentActivity:"springcloud-park/comment/review/commentActivity",//活动评论/回复
         activityApplyInfo:"springcloud-park/activity/activityApply/activityApplyInfo",//报名人资料
         findActivityRegistration:"springcloud-park/guest/activity/findActivityRegistration",//用户中心-已报名活动列表
+        basic:"springcloud-park/guest/portal/park/basic",//获取园区概况
+        getBusinessAdDynamic:"springcloud-park/guest/portal/businessAd/getBusinessAdDynamic",//获取招商动态信息
+        getBusinessAdPolicy:"springcloud-park/guest/portal/businessAd/getBusinessAdPolicy",//招商政策
+        parkList:"springcloud-park/guest/portal/park/list",//一区多园
+
+
+
         getUserCode:"springcloud-user/guest/userJoin/getUserCode",//获取短信验证码[当前用户]
         getCode:"springcloud-user/guest/userJoin/getCode",//获取短信验证码
         addUser:"springcloud-user/guest/userJoin/addUser",//用户注册
@@ -81,7 +88,7 @@ export default {
         enterpriseGetForm:"springcloud-enterprise/data/company/getForm", // 获取本月待填报的任务
         enterpriseGetFormed:"springcloud-enterprise/data/company/getFormed", // 获取企业填报历史表单列表
         enterpriseGetFormStruct:"springcloud-enterprise/data/company/getFormStruct", // 获取待填报的表单结构
-      enterpriseGetCompanyFormedStruct:"springcloud-enterprise/data/company/getCompanyFormedStruct", // 获取企业已经填报的表单的结构信息和值
+        enterpriseGetCompanyFormedStruct:"springcloud-enterprise/data/company/getCompanyFormedStruct", // 获取企业已经填报的表单的结构信息和值
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
 
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿

@@ -341,7 +341,7 @@
           this.loadingTab = true
           const _this = this
           this.api.get({
-            url: `enterpriseGetFormStruct`,
+            url: `enterpriseGetCompanyFormedStruct`,
             data: {
               fileId: _this.$route.query.fileId
             },

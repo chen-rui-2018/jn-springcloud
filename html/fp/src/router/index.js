@@ -63,7 +63,7 @@ export default new Router({
           meta: {
             title: '招商引资'
           },
-          name: 'enterpriseservice'
+          name: 'investment'
         },
         {
           path: '/enterpriseservice',
@@ -72,6 +72,14 @@ export default new Router({
             title: '企业服务首页'
           },
           name: 'enterpriseservice'
+        },
+        {
+          path: '/messageCenter',
+          component: resolve => require(['@/views/messageCenter/index'], resolve),
+          meta: {
+            title: '消息中心'
+          },
+          name: 'messageCenter'
         },
         {
           path: '/home',

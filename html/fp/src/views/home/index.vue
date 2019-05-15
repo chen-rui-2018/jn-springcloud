@@ -288,6 +288,7 @@ export default {
     }
   }
 .homePage {
+  padding-top: 66px;
   background: #f3f3f3;
   .btn {
     text-align: center;

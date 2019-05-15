@@ -8,6 +8,9 @@
             <img src="@/../static/img/LOGO1.png" v-else="!showFF" class="pointer" alt="" @click="$router.push({path:'/'})">
           </div>
           <div class="headerRight fr">
+            <router-link to="/messageCenter" class="search">
+              <i class="el-icon-bell" style="font-size:20px"></i>
+            </router-link>
             <div class="search pointer">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
             </div>

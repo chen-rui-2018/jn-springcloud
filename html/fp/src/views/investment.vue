@@ -4,14 +4,12 @@
       <div class="banner pr">
         <div class="swiper-container">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" style="width:100%">
-              <img src="@/../static/img/banner11.png" alt="" @click="$router.push({path:'/serMatHp'})">
-            </div>
-            <div class="swiper-slide" style="width:100%">
-              <img src="@/../static/img/banner11.png" alt="" @click="$router.push({path:'/serMatHp'})">
-            </div>
-            <div class="swiper-slide" style="width:100%">
-              <img src="@/../static/img/banner11.png" alt="" @click="$router.push({path:'/serMatHp'})">
+            <div
+              v-for="(banner, index) in bannerList"
+              :key="index"
+              class="swiper-slide"
+              style="width:100%">
+              <img :src="banner.posterUrl" alt=""/>
             </div>
           </div>
           <!-- 如果需要分页器 -->
@@ -65,20 +63,18 @@
           <img src="@/../static/img/banner11.png" alt="">
         </div>
         <div class="park-desc">
-          <span>{{ parkDesc | formatParkDesc}}</span>
-          <span class="more-desc">
-            <span>MORE</span>
-            <i class="el-icon-arrow-right"></i>
-          </span>
+          <span >{{ parkDesc | formatParkDesc}}</span>
+<!--          <div v-html="basicHtml"></div>-->
+          <more-btn class="more-desc"></more-btn>
         </div>
       </div>
       <div class="park-film">
         <div class="film-desc">
           <div>
             <div class="film-desc-title">视频展示</div>
-            <div class="film-desc-subheading">video display</div>
+            <div class="film-desc-subheading">VIDEO DISPLAY</div>
           </div>
-          <div class="film-desc-content">文体名。凡是不押韵、不重排偶的散体文章，概称散文。随着文学概念的演变和文学体裁的发展，散文的概念也时有变化，在某些历史时期又将小说与其他抒情、记事的文学作品统称为散文，以区别于讲求韵律的诗歌。现代散文是指除小说、诗歌、戏剧等文学体裁之外的其他文学作品。其本身按其内容和形式的不同，又可分为杂文、小品、随笔等。</div>
+          <div class="film-desc-content">南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科</div>
           <div class="square-angle-bg">
             <div class="square-angle">
               <span class="square-angle-l"></span><i class="square-angle-r el-icon-caret-right"></i>
@@ -86,184 +82,40 @@
           </div>
         </div>
         <div class="film-show">
-          <img src="@/../static/img/banner11.png" alt="">
+          <video src="" width="100%" poster="@/../static/img/banner11.png"></video>
+<!--          <img src="@/../static/img/banner11.png" alt="">-->
           <div class="film-play"></div>
         </div>
       </div>
 
       <div class="policyCenter w" ref="policyCenter" data-class="bottom1">
         <div ref="poCenter1" data-class="bottom">
-          <div class="tit color2 pr">政策中心
-          </div>
-          <div class="eng mainColor">Policy&nbsp;center</div>
+          <div class="tit color2 pr">招商政策</div>
+          <div class="eng mainColor">INVESTMENT POLICY</div>
           <div class="line"></div>
         </div>
         <div class="paging w pr" ref="poCenter2" data-class="bottom">
           <div class="swiper-container">
             <div class="swiper-wrapper">
-              <div class="swiper-slide">
+              <div
+                v-for="(list, listIndex) in businessAdPolicy"
+                class="swiper-slide"
+              >
                 <ul class="page1 clearfix" ref="poCenter3" data-class="bottom">
-                  <li ref="li11" data-class="left">
+                  <li
+                    v-for="(item, index) in list"
+                    ref="li11"
+                    data-class="left">
                     <div class="left1">N</div>
                     <div class="right1">
-                      <div class="rightTit color1">白下高新区金融扶持政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                      <div class="rightTit color1">{{ item.title }}</div>
+                      <p class="color2">{{ item.subTitle }}</p>
                       <div class="liBom clearfix">
                         <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li ref="li22" data-class="right">
-                    <div class="left1">E</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li ref="li33" data-class="left">
-                    <div class="left1">W</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li ref="li44" data-class="right">
-                    <div class="left1">S</div>
-                    <div class="right1">
-                      <div class="rightTit color1">关于维护知识产权政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="swiper-slide">
-                <ul class="page1 clearfix">
-                  <li>
-                    <div class="left1">N</div>
-                    <div class="right1">
-                      <div class="rightTit color1">白下高新区金融扶持政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li >
-                    <div class="left1">E</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">W</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li >
-                    <div class="left1">S</div>
-                    <div class="right1">
-                      <div class="rightTit color1">关于维护知识产权政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="swiper-slide">
-                <ul class="page1 clearfix">
-                  <li>
-                    <div class="left1">N</div>
-                    <div class="right1">
-                      <div class="rightTit color1">白下高新区金融扶持政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li >
-                    <div class="left1">E</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">W</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li >
-                    <div class="left1">S</div>
-                    <div class="right1">
-                      <div class="rightTit color1">关于维护知识产权政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
+                          <i class="el-icon-view"></i>
+                          <span>{{ item.viewCount }}</span>
+                        </p>
+                        <span class="fr gray-tips">{{ item.startTime }}</span>
                       </div>
                     </div>
                   </li>
@@ -275,16 +127,81 @@
             <div class="swiper-button-next"></div>
           </div>
         </div>
+        <div class="districtGardens w" ref="districtGardens" data-class="bottom1">
+          <div ref="disGardens" data-class="bottom">
+            <div class="tit color2">招商动态</div>
+            <div class="eng mainColor">MERCHANTS DYNAMIC</div>
+            <div class="line"></div>
+          </div>
+          <div class="more-garden">
+            <div
+              v-for="item in businessAdDynamic"
+              :key="item.id"
+              class="more-garden-card"
+            >
+              <div class="more-garden-card-cell">
+                <img class="more-garden-img" src="@/../static/img/图层 50.png" alt=""/>
+                <div class="more-garden-desc">{{ item.content || '暂无'}}</div>
+                <div class="more-garden-footer">
+                  <span class="more-garden-date">{{ item.startTime }}</span>
+                  <more-btn></more-btn>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="districtGardens w" ref="districtGardens" data-class="bottom1">
+          <div ref="disGardens" data-class="bottom">
+            <div class="tit color2">一区多园</div>
+            <div class="eng mainColor">AREA MORE GARDEN</div>
+            <div class="line"></div>
+          </div>
+          <div class="multi-park">
+            <div class="multi-park-title">
+              <div class="fw-title">南京白下A区</div>
+              <div class="gray-tips">查看更多</div>
+            </div>
+            <div class="multi-park-content">
+              <div
+                v-for="(item, index) in 4"
+                :class="{small: index !== 0}"
+                class="multi-park-card">
+                  <div class="multi-park-card-cell">
+                    <img :src="index === 0 ? '@/../static/img/multi-park-poster.png' : '@/../static/img/multi-park-list.png'"  alt="">
+                    <div v-if="index !== 0" class="multi-park-desc">
+                      <div class="fw-title">大数据、云计算产业招募</div>
+                      <div class="gray-tips">数博会作为全球首个大数据主题博览会， 自2015年起已连续在中国贵州贵阳成功...</div>
+                      <div class="tag-list">
+                        <div class="tag-btn">
+                          <el-tag
+                            v-for="(item, index) in ['关键字标签', '云储蓄']"
+                            :key="index"
+                            class="tag-text"
+                            type="success"
+                            size="mini"
+                            color="#ECFCF2"
+                          >{{ item }}</el-tag>
+                        </div>
+                        <div class="method-btn">立即考察</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
   import arrowDown from './common/arrowDown'
+  import moreBtn from './common/moreBtn'
   import swiper from "swiper";
   export default {
     components: {
-      arrowDown
+      arrowDown,
+      moreBtn
     },
     data() {
       return {
@@ -296,13 +213,18 @@
         show2: false,
         show3: false,
         show4: false,
-        parkDesc: '南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国际大学科技园、国家专利产业化试点开学科技园、国家专利产业化试点基开学科技园、国家专利产业化试点基开学...',
+        parkDesc: '南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科...',
         activeNames: ["1"],
         searchData:'',
         showBtn:false,
         sw:'1',
-        nodeList: []
-      };
+        nodeList: [],
+        bannerList: [],
+        basicHtml: '',
+        businessAdDynamic: [],
+        businessAdPolicy: [],
+        parkList: []
+      }
     },
     mounted() {
       this.$router.afterEach((to, from, next) => {
@@ -321,6 +243,65 @@
       }
     },
     methods: {
+      getBasic() {
+        this.api.get({
+          url: 'basic',
+          callback: (res) => {
+            if (res.code === "0000") {
+              this.basicHtml = res.data.parkIntroduce
+            } else {
+              this.$message.error(res.result)
+            }
+          }
+        })
+      },
+      getBusinessAdDynamic() {
+        this.api.get({
+          url: 'getBusinessAdDynamic',
+          callback: (res) => {
+            if (res.code === "0000") {
+              this.businessAdDynamic = res.data
+            } else {
+              this.$message.error(res.result)
+            }
+          }
+        })
+      },
+      getBusinessAdPolicy() {
+        this.api.get({
+          url: 'getBusinessAdPolicy',
+          callback: (res) => {
+            if (res.code === "0000") {
+              this.businessAdPolicy = this.formatArr(res.data, 4)
+            } else {
+              this.$message.error(res.result)
+            }
+          }
+        })
+      },
+      getPartList() {
+        this.api.get({
+          url: 'parkList',
+          callback: (res) => {
+            if (res.code === "0000") {
+              this.parkList = res.data
+            } else {
+              this.$message.error(res.result)
+            }
+          }
+        })
+      },
+      formatArr(arr, n) {
+        const len = arr.length;
+        let lineNum = len % 4 === 0 ? len / 4 : Math.floor( (len / 4) + 1 );
+        const result = [];
+        for (let i = 0; i < lineNum; i++) {
+          // slice() 方法返回一个从开始到结束（不包括结束）选择的数组的一部分浅拷贝到一个新数组对象。且原始数组不会被修改。
+          let temp = arr.slice(i*n, i*n+n);
+          result.push(temp);
+        }
+        return result
+      },
       handleChange11(val) {
         console.log(val);
         if(val=='2'){
@@ -394,25 +375,55 @@
         return scroll_top;
       },
       init() {
-        var mySwiper = new swiper(".swiper-container", {
-          direction: "horizontal", // 垂直切换选项
-          loop: true, // 循环模式选项
+        Promise.all([
+          this.getBanner(),
+          this.getBasic(),
+          this.getBusinessAdDynamic(),
+          this.getBusinessAdPolicy(),
+          this.getPartList()
+        ])
+          .then(() => {
+            new swiper(".swiper-container", {
+              direction: "horizontal", // 垂直切换选项
+              loop: true, // 循环模式选项
+              // 如果需要分页器
+              pagination: {
+                el: ".swiper-pagination"
+              },
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+              },
 
-          // 如果需要分页器
-          pagination: {
-            el: ".swiper-pagination"
-          },
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev"
-          },
-
-          // 如果需要滚动条
-          scrollbar: {
-            el: ".swiper-scrollbar"
-          }
-        });
+              // 如果需要滚动条
+              scrollbar: {
+                el: ".swiper-scrollbar"
+              }
+            });
+          })
+      },
+      getBanner() {
+        return new Promise((resolve, reject) => {
+          this.api.get({
+            url: 'getBusinessPromotionList',
+            data: {
+              approvalStatus: 6,
+              status: 1,
+              propagandaType: 'investment_banner',
+              needPage: 0
+            },
+            callback: (res) => {
+              if (res.code === "0000") {
+                this.bannerList = res.data.rows
+                resolve()
+              } else {
+                reject()
+                this.$message.error(res.result)
+              }
+            }
+          })
+        })
       },
       onchange() {
         console.log(0);
@@ -445,7 +456,6 @@
             position: absolute;
             right: 0;
             bottom: 0;
-            color: $--color-primary;
           }
         }
       }
@@ -488,13 +498,12 @@
       }
       .film-show {
         width: 50%;
-        height: 343px;
-        background: #ccc;
         box-sizing: border-box;
         position: relative;
-        img {
+        video{
           width: 100%;
           height: 100%;
+          vertical-align: middle;
         }
         .film-play {
           $size: 74px;
@@ -508,6 +517,109 @@
           cursor: pointer;
           &.hover {
             opacity: .9;
+          }
+        }
+      }
+    }
+    .more-garden {
+      width: 900px;
+      margin: 60px auto;
+      flex-wrap: wrap;
+      @include flex($h: space-between);
+      .more-garden-card {
+        flex: 1;
+        box-sizing: border-box;
+        padding: 20px;
+        .more-garden-card-cell {
+          cursor: pointer;
+          width: 100%;
+          padding: 30px;
+          box-shadow:0px 0px 18px 0px rgba(208,209,210,0.42);
+          box-sizing: border-box;
+          transform: scale(1);
+          transition: .3s;
+          &:hover {
+            transform: scale(1.1);
+          }
+          .more-garden-img {
+            width: 100%;
+            display: block;
+          }
+          .more-garden-desc {
+            height: 66px;
+            margin-top: 35px;
+            text-align: left;
+            text-indent: 2em;
+            font-size: 12px;
+            color: #666;
+            overflow: hidden;
+            text-overflow:ellipsis;//文本溢出显示省略号
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+          }
+          .more-garden-footer {
+            margin-top: 22px;
+            font-size: 12px;
+            @include flex($h: space-between);
+            .more-garden-date {
+              color: #999;
+            }
+          }
+        }
+      }
+    }
+    .multi-park {
+      width: 900px;
+      margin: 68px auto;
+      .multi-park-title {
+        padding: 10px 0;
+        @include flex($h: space-between);
+      }
+      .multi-park-content {
+        $bg-gray: #DEDEDE;
+        @include flex($h: space-between, $v: stretch);
+        .multi-park-card {
+          flex: 1;
+          box-sizing: border-box;
+          text-align: left;
+          &.small {
+            padding: 6px;
+            box-sizing: border-box;
+            .multi-park-card-cell {
+              border: 1px solid $bg-gray;
+            }
+          }
+          img {
+            width: 100%;
+            display: block;
+          }
+          .multi-park-desc {
+            padding: 6px;
+            .fw-title {
+              font-size: 13px;
+              margin: 0 auto 10px;
+            }
+          }
+          .tag-list {
+            @include flex($h: space-between);
+            color: $--color-primary;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid $bg-gray;
+            .el-tag--success {
+              color: $--color-primary;
+            }
+            .tag-btn {
+              @include flex($h: space-between);
+              .tag-text {
+                margin-right: 6px;
+                &.last-of-type {
+                  margin-right: 0;
+                }
+              }
+            }
+            font-size: 12px;
           }
         }
       }

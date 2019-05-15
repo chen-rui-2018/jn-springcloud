@@ -2069,6 +2069,9 @@ public class DataUploadServiceImpl implements DataUploadService {
                                             //通过预警人账号查询，预警人的email
                                             String userId = linkerBean.getLinkAccount();
                                             User user = getUserInfo(userId);
+                                            if(user == null ){
+                                                continue;
+                                            }
                                             if(StringUtils.isNotBlank(user.getEmail())){
                                                 message =new StringBuilder();
                                                 message.append("[数据上报系统] 任务名称 ：").append(taskBean.getTaskName());
@@ -2098,6 +2101,9 @@ public class DataUploadServiceImpl implements DataUploadService {
                                     //String email =tbServiceCompanyBean.getOwnerEmail();
                                     String userId = tbServiceCompanyBean.getId();
                                     User user = getUserInfo(userId);
+                                    if(user == null ){
+                                        continue;
+                                    }
                                     if(StringUtils.isNotBlank(user.getEmail())){
                                         message =new StringBuilder();
                                         message.append("[数据上报系统] 任务名称 ：").append(taskBean.getTaskName());
@@ -2136,6 +2142,9 @@ public class DataUploadServiceImpl implements DataUploadService {
                                             //通过预警人账号查询，预警人的手机号码
                                             String userId = linkerBean.getLinkAccount();
                                             user = getUserInfo(userId);
+                                            if(user == null ){
+                                                continue;
+                                            }
                                             if(StringUtils.isNotBlank(user.getPhone())){
                                                 phone  =user.getPhone();
                                                 message =new StringBuilder();

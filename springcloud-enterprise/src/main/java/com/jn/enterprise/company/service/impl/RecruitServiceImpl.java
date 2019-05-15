@@ -172,7 +172,7 @@ public class RecruitServiceImpl implements RecruitService {
         tbServiceRecruitPublishParam.setId("");
 
         String bpmnDefId = ibpsDefIdConfig.getCompanyRecruit();
-        IBPSResult ibpsResult = IBPSUtils.sendRequest(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
 
         // ibps启动流程失败
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
@@ -204,7 +204,7 @@ public class RecruitServiceImpl implements RecruitService {
         tbServiceRecruitPublishParam.setId("");
 
         String bpmnDefId = ibpsDefIdConfig.getCompanyRecruit();
-        IBPSResult ibpsResult = IBPSUtils.sendRequest(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
 
         // ibps启动流程失败
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {

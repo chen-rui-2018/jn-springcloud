@@ -26,6 +26,11 @@
             WHEN '4' THEN "未对接"
             ELSE '--'
             END AS "handleResult"				  <!--对接结果-->
+            ,case sr.is_comment
+            when '0' then "未点评"
+            when '1' then "已点评"
+            else '--'
+            end as "isComment"                    <!--点评结果-->
         FROM tb_service_require sr
         WHERE 1=1
         and sr.record_status='1'
@@ -38,6 +43,19 @@
         </if>
         <if test="requireOtherParam.handleResult!=null and requireOtherParam.handleResult!=''">
             and sr.handle_result=#{requireOtherParam.handleResult}
+        </if>
+        <if test="requireOtherParam.dataStatus ==1 "> <!--待受理-->
+            and sr.status= '1'
+        </if>
+        <if test="requireOtherParam.dataStatus ==2 "> <!--待评价-->
+            and sr.status= '2'  <!--已处理-->
+            and sr.handle_result='1'  <!--对接成功-->
+            and sr.is_comment='0' <!--未点评-->
+        </if>
+        <if test="requireOtherParam.dataStatus ==3 "> <!--已评价-->
+            and sr.status= '2'  <!--已处理-->
+            and sr.handle_result='1'  <!--对接成功-->
+            and sr.is_comment='1' <!--已点评-->
         </if>
         order by sr.issue_account desc
     </select>
@@ -67,6 +85,11 @@
         WHEN '4' THEN "未对接"
         ELSE '--'
         END AS "handleResult"				          <!--对接结果-->
+        ,case sr.is_comment
+        when '0' then "未点评"
+        when '1' then "已点评"
+        else '--'
+        end as "isComment"                            <!--点评结果-->
         FROM tb_service_require sr
         <if test="orgId==null or orgId==''">          <!--顾问账号  我收到的需求-->
             left join tb_service_and_advisor tsa
@@ -99,6 +122,19 @@
         </if>
         <if test="requireReceivedParam.requirePerson!=null and requireReceivedParam.requirePerson!=''"> <!--需求人-->
             and (sr.req_name like CONCAT('%', #{requireReceivedParam.requirePerson}, '%') or sr.issue_account like CONCAT('%', #{requireReceivedParam.requirePerson}, '%'))
+        </if>
+        <if test="requireReceivedParam.dataStatus ==1 "> <!--待受理-->
+            and sr.status= '1'
+        </if>
+        <if test="requireReceivedParam.dataStatus ==2 "> <!--待评价-->
+            and sr.status= '2'  <!--已处理-->
+            and sr.handle_result='1'  <!--对接成功-->
+            and sr.is_comment='0' <!--未点评-->
+        </if>
+        <if test="requireReceivedParam.dataStatus ==3 "> <!--已评价-->
+            and sr.status= '2'  <!--已处理-->
+            and sr.handle_result='1'  <!--对接成功-->
+            and sr.is_comment='1' <!--已点评-->
         </if>
         order by sr.issue_account desc
     </select>

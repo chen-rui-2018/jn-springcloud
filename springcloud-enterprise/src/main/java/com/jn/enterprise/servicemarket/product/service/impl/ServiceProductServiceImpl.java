@@ -128,7 +128,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
 
         // 启动IBPS流程
         String bpmnDefId = ibpsDefIdConfig.getProduct();
-        IBPSResult ibpsResult = IBPSUtils.sendRequest(bpmnDefId, account, content);
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, content);
 
         // ibps启动流程失败
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {

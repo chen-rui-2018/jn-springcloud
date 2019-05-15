@@ -84,11 +84,8 @@ public class RoomManageController {
     public Result addRoomOrders(String id,  String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        String ordersNumber= roomInformationService.addRoomOrders(id,user);
-        if (ordersNumber.equals("-1")){
-            return new Result("-1","新增租赁订单失败");
-        }
-        return new Result(ordersNumber);
+        Result ordersNumber= roomInformationService.addRoomOrders(id,contactName,contactPhone,leaseStartTime,leaseEndTime,user.getAccount());
+        return ordersNumber;
     }
 
     @ControllerLog(doAction = "支付订单")

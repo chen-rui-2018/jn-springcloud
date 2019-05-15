@@ -244,51 +244,85 @@
     },
     methods: {
       getBasic() {
-        this.api.get({
-          url: 'basic',
-          callback: (res) => {
-            if (res.code === "0000") {
-              this.basicHtml = res.data.parkIntroduce
-            } else {
-              this.$message.error(res.result)
+        return new Promise((resolve, reject) => {
+          this.api.get({
+            url: 'basic',
+            callback: (res) => {
+              if (res.code === "0000") {
+                this.basicHtml = res.data.parkIntroduce
+                resolve()
+              } else {
+                this.$message.error(res.result)
+                reject()
+              }
             }
-          }
+          })
         })
       },
       getBusinessAdDynamic() {
-        this.api.get({
-          url: 'getBusinessAdDynamic',
-          callback: (res) => {
-            if (res.code === "0000") {
-              this.businessAdDynamic = res.data
-            } else {
-              this.$message.error(res.result)
+        return new Promise((resolve, reject) => {
+          this.api.get({
+            url: 'getBusinessAdDynamic',
+            callback: (res) => {
+              if (res.code === "0000") {
+                this.businessAdDynamic = res.data
+                resolve()
+              } else {
+                this.$message.error(res.result)
+                reject()
+              }
             }
-          }
+          })
         })
       },
       getBusinessAdPolicy() {
-        this.api.get({
-          url: 'getBusinessAdPolicy',
-          callback: (res) => {
-            if (res.code === "0000") {
-              this.businessAdPolicy = this.formatArr(res.data, 4)
-            } else {
-              this.$message.error(res.result)
+        return new Promise((resolve, reject) => {
+          this.api.get({
+            url: 'getBusinessAdPolicy',
+            callback: (res) => {
+              if (res.code === "0000") {
+                this.businessAdPolicy = this.formatArr(res.data, 4)
+                resolve()
+              } else {
+                this.$message.error(res.result)
+                reject()
+              }
             }
-          }
+          })
         })
       },
       getPartList() {
-        this.api.get({
-          url: 'parkList',
-          callback: (res) => {
-            if (res.code === "0000") {
-              this.parkList = res.data
-            } else {
-              this.$message.error(res.result)
+        return new Promise((resolve, reject) => {
+          this.api.get({
+            url: 'parkList',
+            callback: (res) => {
+              if (res.code === "0000") {
+                this.parkList = res.data
+                resolve()
+              } else {
+                this.$message.error(res.result)
+                reject()
+              }
             }
-          }
+          })
+        })
+      },
+      getPartDetail(parkId) {
+        return new Promise((resolve, reject) => {
+          this.api.get({
+            url: 'getBusinessAdContent',
+            data: {
+              parkId: parkId
+            },
+            callback: (res) => {
+              if (res.code === "0000") {
+                resolve(res.data)
+              } else {
+                this.$message.error(res.result)
+                reject()
+              }
+            }
+          })
         })
       },
       formatArr(arr, n) {
@@ -375,12 +409,20 @@
         return scroll_top;
       },
       init() {
+        this.getPartList()
+          .then(() => {
+            this.parkList.forEach((item, index) => {
+              this.getPartDetail(item.id)
+                .then((data) => {
+                  this.$set(item, 'list', data)
+                })
+            })
+          })
         Promise.all([
           this.getBanner(),
           this.getBasic(),
           this.getBusinessAdDynamic(),
           this.getBusinessAdPolicy(),
-          this.getPartList()
         ])
           .then(() => {
             new swiper(".swiper-container", {

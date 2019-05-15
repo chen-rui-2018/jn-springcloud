@@ -384,6 +384,9 @@
           })
         })
       },
+      getFormData() {
+        return this.formData
+      },
       partDeepClone(source, arr) {
         // 因为formData.tabs存在循环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性
         if (!source && typeof source !== 'object') {

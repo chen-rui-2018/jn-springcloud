@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 <!--    <router-view></router-view>-->
-     <div class="right_nav" v-if="$route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice' || $store.state.needNav">
+     <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice') &&$store.state.needNav">
       <ul>
         <li @click="isVisibility=true">
           <div class="right_nav_slide">
@@ -177,7 +177,6 @@ export default {
 @import url(./css/main.css);
 @import url(./css/home.css);
 @import url(./css/serviceMarket.css);
-
 #app {
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

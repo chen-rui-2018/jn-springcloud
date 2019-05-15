@@ -1,6 +1,6 @@
 <template>
 <!--  根据填报的是普通模板还是科技园模板渲染不同组件-->
-  <component :modelId="modelId" :type="type" :formTime="formTime" v-bind:is="componentType"></component>
+  <component :modelId="modelId" :taskInfo="taskInfo" :type="type" :formTime="formTime" v-bind:is="componentType"></component>
 </template>
 
 <script>
@@ -17,7 +17,8 @@
        modelId: '',
        formTime: '',
        componentType: null,
-       type: ''
+       type: '',
+       taskInfo: null
      }
    },
    created() {
@@ -51,6 +52,7 @@
                const data = res.data
                 _this.modelId = data.modelId
                _this.formTime = data.taskInfo.formTime
+               _this.taskInfo = data.taskInfo
                if (data.tabs && data.tabs.length > 0 && data.tabs[0]) {
                  const type = data.tabs[0].tabCreateType
                  // 0是普通模板，1是科技园模板

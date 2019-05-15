@@ -62,15 +62,17 @@ public class CustomerServiceCenterController extends BaseController {
     @ApiOperation(value = "用户问题详情")
     @RequiresPermissions("/customer/customerServiceCenterController/customerQuesDetail")
     @RequestMapping(value = "/customerQuesDetail",method = RequestMethod.GET)
-    public Result customerQuesDetail(@ApiParam(name="taskId",value = "任务Id",required = true,example = "f5c95f9adf714aedab3739cbc9297178")
-                                         @RequestParam(value = "taskId") String taskId) {
+    public Result customerQuesDetail(@ApiParam(name="processId",value = "流程实例Id",required = true,example = "f5c95f9adf714aedab3739cbc9297178")
+                                         @RequestParam(value = "processId") String processId) {
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.warn("用户问题详情获取当前登录用户信息失败");
             return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        Object obj=customerServiceCenterService.customerQuesDetail(user.getAccount(),taskId);
+        Object obj=customerServiceCenterService.customerQuesDetail(user.getAccount(),processId);
         return new Result<>(obj);
     }
+
+
 }

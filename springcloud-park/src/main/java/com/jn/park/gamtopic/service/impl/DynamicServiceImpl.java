@@ -6,6 +6,9 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.park.activity.dao.TbParkLikeMapper;
+import com.jn.park.activity.entity.TbParkLike;
+import com.jn.park.activity.entity.TbParkLikeCriteria;
 import com.jn.park.comment.dao.TbCommentMapper;
 import com.jn.park.enums.GamTopicExceptionEnum;
 import com.jn.park.fileimg.service.FileImgService;
@@ -31,10 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author： chenr
@@ -64,6 +64,8 @@ public class DynamicServiceImpl implements DynamicService {
     private TbPersonCareMapper tbPersonCareMapper;
     @Autowired
     private TbCommentMapper tbCommentMapper;
+    @Autowired
+    private TbParkLikeMapper tbParkLikeMapper;
 
 
     @ServiceLog(doAction = "发布匝道")
@@ -347,6 +349,67 @@ public class DynamicServiceImpl implements DynamicService {
 
 
         return new PaginationData(commentsList,objects==null?0:objects.getTotal());
+    }
+
+    @ServiceLog(doAction = "动态点赞/取消点赞")
+    @Override
+    public int dynamicLikeOperate(DynamicLikeOperate dynamicLikeOperate, String account) {
+        int i;
+
+        TbGamTopic tbGamTopic = tbGamTopicMapper.selectByPrimaryKey(dynamicLikeOperate.getDynamicId());
+        if(tbGamTopic == null ){
+            logger.warn("当前进行点赞的动态不存在请刷新后再试{}动态id:"+dynamicLikeOperate.getDynamicId());
+            throw new JnSpringCloudException(GamTopicExceptionEnum.DYNAMIC_IS_NOT_EXIST);
+        }
+        TbParkLikeCriteria criteria = new TbParkLikeCriteria();
+        criteria.createCriteria().andLikeParentIdEqualTo(dynamicLikeOperate.getDynamicId()).andCreatorAccountEqualTo(account);
+        List<TbParkLike> likes =  tbParkLikeMapper.selectByExample(criteria);
+        //只有首次点赞时添加一条数据, 否则进行修改,同一账号对同一动态只有一条点赞数据
+        if(likes.isEmpty()){
+            i =  addDynamicLikeOperate(dynamicLikeOperate,account);
+        }else{
+            i = modifyDynamicLikeOperate(dynamicLikeOperate,account);
+        }
+        return i;
+    }
+
+    /**
+     * 添加点赞信息
+     * @param dynamicLikeOperate
+     * @param account
+     * @return
+     */
+    private int addDynamicLikeOperate(DynamicLikeOperate dynamicLikeOperate, String account){
+        // 状态值为 1 ( 有效 )
+        byte recordStatus = 1;
+        TbParkLike like  = new TbParkLike();
+        like.setId(UUID.randomUUID().toString().replaceAll("-",""));
+        like.setLikeStatus(dynamicLikeOperate.getLikeStatus());
+        like.setLikeParentId(dynamicLikeOperate.getDynamicId());
+        like.setCreatorAccount(account);
+        like.setRecordStatus(recordStatus);
+        like.setCreatedTime(new Date());
+        return tbParkLikeMapper.insertSelective(like);
+    }
+
+    /**
+     * 修改点赞信息
+     * @param dynamicLikeOperate
+     * @param account
+     * @return
+     */
+    private int modifyDynamicLikeOperate(DynamicLikeOperate dynamicLikeOperate, String account){
+        // 状态值为 1 ( 有效 )
+        byte recordStatus = 1;
+        TbParkLikeCriteria criteria = new TbParkLikeCriteria();
+        criteria.createCriteria().andLikeParentIdEqualTo(dynamicLikeOperate.getDynamicId()).andCreatorAccountEqualTo(account);
+        TbParkLike like  = new TbParkLike();
+        like.setLikeStatus(dynamicLikeOperate.getLikeStatus());
+        like.setLikeParentId(dynamicLikeOperate.getDynamicId());
+        like.setModifierAccount(account);
+        like.setRecordStatus(recordStatus);
+        like.setModifiedTime(new Date());
+        return tbParkLikeMapper.updateByExampleSelective(like,criteria);
     }
 
     /**

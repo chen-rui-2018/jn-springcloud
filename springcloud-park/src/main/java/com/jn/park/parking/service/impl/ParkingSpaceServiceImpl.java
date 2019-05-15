@@ -7,6 +7,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.company.model.IBPSResult;
+import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.enums.ParkingExceptionEnum;
 import com.jn.park.parking.dao.*;
 import com.jn.park.parking.entity.*;
@@ -170,10 +172,10 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
             throw new JnSpringCloudException(ParkingExceptionEnum.DAY_INTERVAL_ERROR);
         }
         if (StringUtils.isEmpty(parkingSpaceApplyModel.getName())) {
-            tbParkingSpaceRental.setName(user.getName());
+            tbParkingSpaceRental.setName(user.getName()==null?user.getAccount():user.getName());
         }
         if (StringUtils.isEmpty(parkingSpaceApplyModel.getPhone())) {
-            tbParkingSpaceRental.setPhone(user.getPhone());
+            tbParkingSpaceRental.setPhone(user.getPhone()==null?user.getAccount():user.getPhone());
         }
         tbParkingSpaceRental.setApprovalStatus(ParkingEnums.PARKING_USER_APPLY_WAIT_CHECK.getCode());
         tbParkingSpaceRental.setCreatedTime(new Date());
@@ -193,12 +195,16 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
             logger.info("用户车位申请绑定车辆响应结果：{}",s);
         }
 
-        //TODO 调用审核流
+        String ibpsId = "578176874434265088";
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(ibpsId, user.getAccount(), tbParkingSpaceRental);
 
-
-
-        int insert = tbParkingSpaceRentalMapper.insert(tbParkingSpaceRental);
-        return insert + "";
+        // ibps启动流程失败
+        if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
+            logger.warn("[提交车位租赁申请] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            throw new JnSpringCloudException(ParkingExceptionEnum.SPACE_RENTAL_PUBLISH_IBPS_ERROR);
+        }
+        logger.info("[提交车位租赁申请] " + ibpsResult.getMessage());
+        return "1";
     }
 
     @ServiceLog(doAction = "租车位费用计算接口")
@@ -330,7 +336,18 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
         paymentBillModel.setBillCreateAccount(user.getAccount());
         paymentBillModel.setBillRemark(ParkingEnums.PARKING_MONTH_BILL_TYPE_NAME.getCode());
         Result<String> bill = payBillClient.createBill(paymentBillModel);
-        return bill.getData();
+        //支付发起成功，将支付账单id写入停车记录，方便下次发起支付删除原有缴费记录。
+
+        if(StringUtils.equals(bill.getCode(),ParkingEnums.PARKING_RESPONSE_SUCCESS.getCode())){
+            tbParkingSpaceRental.setOrderBillNum(paymentBillModel.getBillNum());
+            tbParkingSpaceRental.setModifiedTime(new Date());
+            int i = tbParkingSpaceRentalMapper.updateByPrimaryKeySelective(tbParkingSpaceRental);
+            logger.info("租车位支付发起成功，处理租赁记录数据账单号响应条数：{}",i);
+            return bill.getData();
+        }else{
+            logger.info("租车位支付发起失败");
+            return bill.getResult();
+        }
     }
 
 

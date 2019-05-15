@@ -193,7 +193,20 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         logger.info("结束执行统一缴费插入账单信息操作");
         /** 插入账单详情信息*/
         logger.info("开始执行统一缴费插入账单详情信息操作");
-        payBillDao.insertList(payBillCreateParamVo.getPayBillDetails());
+        List<TbPayBillDetails> list = new ArrayList<>();
+        if(payBillCreateParamVo.getPayBillDetails().size() > 0){
+            for (PayBillDetails tp : payBillCreateParamVo.getPayBillDetails()) {
+                TbPayBillDetails tb2 = new TbPayBillDetails();
+                tb2.setBillId(payBillCreateParamVo.getBillId());
+                tb2.setCreatedTime(payBillCreateParamVo.getCreatedTime());
+                tb2.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
+                tb2.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+                tb2.setDetailsId(UUID.randomUUID().toString().replaceAll("-", ""));
+                BeanUtils.copyProperties(tp,tb2);
+                list.add(tb2);
+            }
+            payBillDao.insertList(list);
+        }
         logger.info("结束执行统一缴费插入账单详情信息操作");
         TbPayBill tbs = tbPayBillMapper.selectByPrimaryKey(tb.getBillId());
         if(null == tbs){

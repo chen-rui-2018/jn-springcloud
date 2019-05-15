@@ -12,13 +12,6 @@
         <result column="t_creatorAccount" jdbcType="VARCHAR" property="creatorAccount" javaType="java.lang.String"/>
         <result column="t_modifiedTime" jdbcType="VARCHAR" property="modifiedTime" javaType="java.lang.String"/>
         <result column="t_modifierAccount" jdbcType="VARCHAR" property="modifierAccount" javaType="java.lang.String"/>
-
-        <!-- 文件图片 -->
-        <collection property="imgs" javaType="java.util.List"
-                    ofType="com.jn.park.fileimg.model.FileImg">
-            <id column="i_imgUrl" property="imgUrl" jdbcType="VARCHAR"/>
-            <result column="i_imgRemark" property="imgRemark" jdbcType="VARCHAR"/>
-        </collection>
     </resultMap>
 
     <!--获得当前用户话题列表-->
@@ -33,10 +26,7 @@
         ,t.creator_account AS "t_creatorAccount"
         ,t.modifier_account AS "t_modifierAccount"
         ,DATE_FORMAT(t.modified_time,'%Y-%m-%d %H:%i:%s') AS "t_modifiedTime"
-        ,i.img_url AS "i_imgUrl"
-        ,i.img_remark AS "i_imgRemark"
-        FROM tb_gam_topic t  LEFT JOIN tb_file_img i ON t.topic_id = i.topic_id AND i.record_status = '1'
-        WHERE t.record_status = '1'
+        FROM tb_gam_topic t WHERE t.record_status = '1'
         <if test="topicContent != null and topicContent != ''">
             and t.topic_content = #{topicContent}
         </if>

@@ -26,7 +26,7 @@ public interface MessageListDao {
      * 获取是否有已读消息
      * @return
      */
-    int getIsRead(@Param("account") String account);
+    int getIsRead(@Param("messageOneTort") String messageOneTort,@Param("messageTowTort") String messageTowTort,@Param("account") String account);
 
 
     /**

@@ -4,6 +4,7 @@ import com.jn.common.model.Result;
 import com.jn.pay.model.PayOrderQueryReq;
 import com.jn.pay.model.PayOrderQueryRsp;
 import com.jn.pay.model.PayOrderReq;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @Version： v1.0
  * @Modified By:
  */
+@FeignClient("xxpay-web")
 public interface PayOrderClient {
 
     /**

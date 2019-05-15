@@ -252,7 +252,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyUpdateParam.setCreatorAccount(account);
         companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
 
-        IBPSResult ibpsResult = IBPSUtils.sendRequest("574913700364812288", account, companyUpdateParam);
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow("574913700364812288", account, companyUpdateParam);
 
         // ibps启动流程失败
         if (ibpsResult == null || ibpsResult.getState().equals("-1")) {

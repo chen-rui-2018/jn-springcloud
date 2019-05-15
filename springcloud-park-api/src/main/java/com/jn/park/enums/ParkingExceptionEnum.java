@@ -31,6 +31,9 @@ public enum ParkingExceptionEnum implements CodeAndMsg {
     PARKING_CAR_IS_PAYMENT("40202017","已缴费请离场，超时将重新计费"),
     PARKING_INFO_IS_NOT_NULL("40202018","停车数据不能为空"),
     REND_ID_IS_NOT_EXIT("4020219","租赁记录不存在"),
+    PARKING_GATE_ERROR("4020220","道闸系统处理失败"),
+    PARKING_PAYMENT_NOT_EXIT("4020221","缴费账单记录不存在"),
+    SPACE_RENTAL_PUBLISH_IBPS_ERROR("4020222","提交审核异常，请检查数据完整性"),
 
     ;
 

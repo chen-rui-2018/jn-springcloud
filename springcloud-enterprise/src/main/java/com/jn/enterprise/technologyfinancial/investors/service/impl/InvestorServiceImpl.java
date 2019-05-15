@@ -24,10 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 科技金融投资人
@@ -69,6 +73,11 @@ public class InvestorServiceImpl implements InvestorService {
 
     @Autowired
     private TbServiceMainRoundMapper tbServiceMainRoundMapper;
+    /**
+     * 投资人认证流程id
+     */
+    @Value(value = "${investorProcessId}")
+    private String investorProcessId;
 
     /**
      * 时间格式
@@ -359,8 +368,7 @@ public class InvestorServiceImpl implements InvestorService {
         }
         logger.info("投资人认证信息：{}",investorInfoWorkFlow.toString());
         //启动工作流
-        String processId="576076335919661056";
-        IBPSResult ibpsResult = IBPSUtils.sendRequest(processId, investorAccount, investorInfoWorkFlow);
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(investorProcessId, investorAccount, investorInfoWorkFlow);
         String okStatus="200";
         //启动工作流成功
         if(okStatus.equals(ibpsResult.getState())){

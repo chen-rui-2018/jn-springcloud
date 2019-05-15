@@ -239,6 +239,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         String body = payOrderReq.getBody();
         //签名
         String sign = payOrderReq.getSign();
+        //支付宝支付完成的跳转页面
+        String aliPayReturnUrl = payOrderReq.getAliPayReturnUrl();
 
 
         // 验证请求参数有效性（必选项）
@@ -389,6 +391,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
         payOrder.put("serviceUrl", serviceUrl);
         //响应密钥
         payOrder.put("resKey",mchInfo.getResKey());
+        payOrder.put("aliPayReturnUrl",aliPayReturnUrl);
         return payOrder;
     }
 

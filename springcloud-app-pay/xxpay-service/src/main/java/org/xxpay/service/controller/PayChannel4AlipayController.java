@@ -99,7 +99,7 @@ public class PayChannel4AlipayController {
         // 设置异步通知地址
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
-        alipay_request.setReturnUrl(alipayConfig.getReturn_url());
+        alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
         String payUrl = null;
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
@@ -163,7 +163,7 @@ public class PayChannel4AlipayController {
         // 设置异步通知地址
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
-        alipay_request.setReturnUrl(alipayConfig.getReturn_url());
+        alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
         String payUrl = null;
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
@@ -212,7 +212,7 @@ public class PayChannel4AlipayController {
         // 设置异步通知地址
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
-        alipay_request.setReturnUrl(alipayConfig.getReturn_url());
+        alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
         String payParams = null;
         try {
             payParams = client.sdkExecute(alipay_request).getBody();
@@ -276,7 +276,7 @@ public class PayChannel4AlipayController {
         // 设置异步通知地址
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
-        alipay_request.setReturnUrl(alipayConfig.getReturn_url());
+        alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
         String payUrl = null;
         try {
             payUrl = client.execute(alipay_request).getBody();

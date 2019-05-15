@@ -59,35 +59,35 @@ public interface ElectricMeterClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/electric/electricMeterSwitch")
-    Result electricMeterSwitch(ElectricMeterSwitchParam electricMeterSwitchParam);
+    Result electricMeterSwitch(@RequestBody ElectricMeterSwitchParam electricMeterSwitchParam);
      /**
      *仪表数据采集
      * @param electricMeterDataCollectionParam
      * @return
      */
     @RequestMapping(value = "/api/hardware/electric/MeterDataCollection")
-    Result meterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam);
+    Result meterDataCollection(@RequestBody ElectricMeterDataCollectionParam electricMeterDataCollectionParam);
     /**
      *电表数据采集 仪表类型必须为1(电表)
      * @param electricMeterDataCollectionParam
      * @return
      */
     @RequestMapping(value = "/api/hardware/electric/electricMeterDataCollection")
-    Result<List<ElectricMeterWaterOrElectricShow>> electricMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam);
+    Result<ElectricOrWaterConditionShow> electricMeterDataCollection(@RequestBody ElectricMeterDataCollectionParam electricMeterDataCollectionParam);
      /**
          *水表数据采集 仪表类型必须为2(水表)
          * @param electricMeterDataCollectionParam
          * @return
          */
     @RequestMapping(value = "/api/hardware/electric/waterMeterDataCollection")
-    Result<List<ElectricMeterWaterOrElectricShow>> waterMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam);
+    Result<ElectricOrWaterConditionShow> waterMeterDataCollection(@RequestBody ElectricMeterDataCollectionParam electricMeterDataCollectionParam);
     /**
-         *水表数据采集 仪表类型必须为3(空调表)
+         *空调表数据采集 仪表类型必须为3(空调表)
          * @param electricMeterDataCollectionParam
          * @return
          */
     @RequestMapping(value = "/api/hardware/electric/airMeterDataCollection")
-    Result<List<ElectricMeterAirConditionShow>> airMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam);
+    Result<AirMeterConditionShow> airMeterDataCollection( @RequestBody ElectricMeterDataCollectionParam electricMeterDataCollectionParam);
 
 
 

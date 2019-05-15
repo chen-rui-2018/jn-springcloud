@@ -6,8 +6,8 @@ import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
-import com.jn.hardware.electricmeter.service.ElectricRedisConfigStorage;
 import com.jn.hardware.electricmeter.service.ElectricMeterService;
+import com.jn.hardware.electricmeter.service.ElectricRedisConfigStorage;
 import com.jn.hardware.enums.ElectricMeterEnum;
 import com.jn.hardware.model.electricmeter.*;
 import com.jn.hardware.util.JsonStringToObjectUtil;
@@ -195,23 +195,32 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         Result result= new Result();
         String url = ElectricMeterService.GET_ELECTRIC_DATA_COLLECTION_URL;
         String accessToken = getAccessToken();
-        url = String.format(url,electricMeterDataCollectionParam.getCode(),electricMeterDataCollectionParam.getDeviceType()
-                ,electricMeterDataCollectionParam.getStartTime(),accessToken);
+        if(StringUtils.isNotBlank(electricMeterDataCollectionParam.getCode())) {
+            url = String.format(url, electricMeterDataCollectionParam.getCode(), electricMeterDataCollectionParam.getDeviceType()
+                    , electricMeterDataCollectionParam.getStartTime(), accessToken);
+        }else{
+            url = String.format(ElectricMeterService.GET_ELECTRIC_DATA_COLLECTION_NOCODE_URL,electricMeterDataCollectionParam.getDeviceType()
+                    , electricMeterDataCollectionParam.getStartTime(), accessToken);
+        }
+        logger.info("\n仪表数据采集{}路径信息 url:"+url);
         String dataString = RestTemplateUtil.get(url);
         if(StringUtils.isBlank(dataString)){
-            logger.info("当前类型的仪表此时间段内无数据{}仪表类型="+electricMeterDataCollectionParam.getDeviceType()+"时间点="+electricMeterDataCollectionParam.getStartTime());
+            logger.info("\n当前类型的仪表此时间段内无数据{}仪表类型="+electricMeterDataCollectionParam.getDeviceType()+"时间点="+electricMeterDataCollectionParam.getStartTime());
             return result;
         }
         //查询的表类型为空调表
         if (ElectricMeterEnum.ELECTRIC_METER_TYPE_AIR.getCode().equals(electricMeterDataCollectionParam.getDeviceType())) {
-               ElectricResult<List<ElectricMeterAirConditionShow>> electricResult = JsonStringToObjectUtil.jsonToObject(dataString, new TypeReference<ElectricResult<List<ElectricMeterAirConditionShow>>>() {});
-            if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
-                result.setData(electricResult.getData());
-                logger.info("空调表数据信息采集成功,statusString:"+dataString);
+            //通过result判断是否获取成功
+              ElectricResult<List<ElectricMeterAirConditionShow>> electricResult = JsonStringToObjectUtil.jsonToObject(dataString, new TypeReference<ElectricResult<List<ElectricMeterAirConditionShow>>>() {});
+              AirMeterConditionShow show = JsonStringToObjectUtil.jsonToObject(dataString, new TypeReference<AirMeterConditionShow>() {});
+              if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
+                show.setData(electricResult.getData());
+                result.setData(show);
+                logger.info("\n空调表数据信息采集成功,statusString:"+dataString);
             }else{
                 result.setCode(electricResult.getCode());
                 result.setResult(electricResult.getMsg());
-                logger.info("空调表数据信息采集失败,失败原因"+electricResult.getMsg());
+                logger.info("\n空调表数据信息采集失败,失败原因"+electricResult.getMsg());
             }
         } else {
             //电表 或 水表数据采集 使用相同的返回实体
@@ -224,14 +233,17 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             if(ElectricMeterEnum.ELECTRIC_METER_TYPE_WATER.getCode().equals(electricMeterDataCollectionParam.getDeviceType())){
                 meterName = ElectricMeterEnum.ELECTRIC_METER_TYPE_WATER.getMessage();
             }
+            //通过result判断是否获取成功
             ElectricResult<List<ElectricMeterWaterOrElectricShow>> electricResult = JsonStringToObjectUtil.jsonToObject(dataString, new TypeReference<ElectricResult<List<ElectricMeterWaterOrElectricShow>>>() {});
+            ElectricOrWaterConditionShow show = JsonStringToObjectUtil.jsonToObject(dataString, new TypeReference<ElectricOrWaterConditionShow>() {});
             if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
-                result.setData(electricResult.getData());
-                logger.info(meterName+"数据信息采集成功,statusString:"+dataString);
+                show.setData(electricResult.getData());
+                result.setData(show);
+                logger.info(meterName+"\n数据信息采集成功,statusString:"+dataString);
             }else{
                 result.setCode(electricResult.getCode());
                 result.setResult(electricResult.getMsg());
-                logger.info(meterName+"数据信息采集失败,失败原因"+electricResult.getMsg());
+                logger.info(meterName+"\n数据信息采集失败,失败原因"+electricResult.getMsg());
             }
         }
         return result;

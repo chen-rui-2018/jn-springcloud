@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
+@RestController
 public class ElectricClientController implements ElectricMeterClient {
     /**
      * 日志组件
@@ -29,10 +32,7 @@ public class ElectricClientController implements ElectricMeterClient {
 
     @Autowired
     private ElectricMeterService electricMeterService;
-    @Value(value = "${electric.client.secret}")
-    private String  client_secret;
-    @Value(value = "${electric.client.id}")
-    private String  client_id;
+
     @Value(value = "${electric.grant.type}")
     private String  grant_type;
     @Value(value = "${electric.username}")
@@ -48,7 +48,7 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result<ElectricAccessTokenShow> getElectricMeterAccessToken(ElectricAccessTokenParam electricAccessTokenParam) {
+    public Result<ElectricAccessTokenShow> getElectricMeterAccessToken( @RequestBody ElectricAccessTokenParam electricAccessTokenParam) {
        Result result = electricMeterService.getElectricMeterAccessToken(electricAccessTokenParam);
        return result;
     }
@@ -84,7 +84,7 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result<ElectricMeterInfoShow> getElectricMeterForBuilding(ElectricMeterInfoParam electricMeterInfoParam) {
+    public Result<ElectricMeterInfoShow> getElectricMeterForBuilding(@RequestBody ElectricMeterInfoParam electricMeterInfoParam) {
         return electricMeterService.getElectricMeterForBuilding(electricMeterInfoParam);
     }
 
@@ -104,7 +104,7 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result electricMeterSwitch(ElectricMeterSwitchParam electricMeterSwitchParam) {
+    public Result electricMeterSwitch(@RequestBody ElectricMeterSwitchParam electricMeterSwitchParam) {
         return electricMeterService.electricMeterSwitch(electricMeterSwitchParam);
 
     }
@@ -115,7 +115,7 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result meterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+    public Result meterDataCollection(@RequestBody ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
         return electricMeterService.electricMeterDataCollection(electricMeterDataCollectionParam);
     }
     /**
@@ -124,7 +124,7 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result<List<ElectricMeterWaterOrElectricShow>> electricMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+    public Result<ElectricOrWaterConditionShow> electricMeterDataCollection(@RequestBody ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
        if(!ElectricMeterEnum.ELECTRIC_METER_TYPE_ELECTRIC.getCode().equals(electricMeterDataCollectionParam.getDeviceType())){
            throw new JnSpringCloudException(ElectricMeterEnum.ELECTRIC_METER_DATA_COLLECTION);
        }
@@ -136,7 +136,7 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result<List<ElectricMeterWaterOrElectricShow>> waterMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+    public Result<ElectricOrWaterConditionShow> waterMeterDataCollection(@RequestBody ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
         if(!ElectricMeterEnum.ELECTRIC_METER_TYPE_WATER.getCode().equals(electricMeterDataCollectionParam.getDeviceType())){
             throw new JnSpringCloudException(ElectricMeterEnum.WATER_METER_DATA_COLLECTION);
         }
@@ -148,7 +148,7 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result<List<ElectricMeterAirConditionShow>> airMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+    public Result<AirMeterConditionShow> airMeterDataCollection(@RequestBody ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
         if(!ElectricMeterEnum.ELECTRIC_METER_TYPE_AIR.getCode().equals(electricMeterDataCollectionParam.getDeviceType())){
             throw new JnSpringCloudException(ElectricMeterEnum.AIR_METER_DATA_COLLECTION);
         }

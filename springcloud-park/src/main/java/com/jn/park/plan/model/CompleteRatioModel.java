@@ -17,45 +17,48 @@ public class CompleteRatioModel implements Serializable {
 
     private static final long serialVersionUID = 8586735657548846710L;
     @ApiModelProperty(value = "计划要完成数量")
-    private String plan;
+    List<String> plan;
 
     @ApiModelProperty(value = "累计已完成数量")
-    private String autual;
+    List<String> autual;
 
     @ApiModelProperty(value = "完成及时率")
-    private String completeRatio;
+    List<String> completeRatio;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
-    public String getPlan() {
+    public List<String> getPlan() {
         return plan;
     }
 
-    public void setPlan(String plan) {
+    public void setPlan(List<String> plan) {
         this.plan = plan;
     }
 
-    public String getAutual() {
+    public List<String> getAutual() {
         return autual;
     }
 
-    public void setAutual(String autual) {
+    public void setAutual(List<String> autual) {
         this.autual = autual;
     }
 
-    public String getCompleteRatio() {
+    public List<String> getCompleteRatio() {
         return completeRatio;
     }
 
-    public void setCompleteRatio(String completeRatio) {
+    public void setCompleteRatio(List<String> completeRatio) {
         this.completeRatio = completeRatio;
     }
 
     @Override
     public String toString() {
         return "CompleteRatioModel{" +
-                "plan='" + plan + '\'' +
-                ", autual='" + autual + '\'' +
-                ", completeRatio='" + completeRatio + '\'' +
+                "plan=" + plan +
+                ", autual=" + autual +
+                ", completeRatio=" + completeRatio +
                 '}';
     }
 }

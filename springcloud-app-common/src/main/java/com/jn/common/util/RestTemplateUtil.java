@@ -9,8 +9,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * RestTemplateUtil 工具类
@@ -125,8 +124,32 @@ public class RestTemplateUtil {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, setHeaders(headers, dynamicHeaders));
+        if(HttpMethod.GET.equals(method)){
+            url = url + createLinkStringByGet(map);
+        }
         ResponseEntity<JSONObject> response = restTemplate.exchange(url, method, request, JSONObject.class);
         return response.getBody();
+    }
+
+    /**
+     * createLinkStringByGet
+     * @param params
+     * @return
+     */
+    public static String createLinkStringByGet(MultiValueMap<String, String> params) {
+        List<String> keys = new ArrayList<String>(params.keySet());
+        Collections.sort(keys);
+        String prestr = "?";
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            String value = params.get(key).get(0);
+            if (i == keys.size() - 1) {
+                prestr += key + "=" + value;
+            } else {
+                prestr += key + "=" + value + "&";
+            }
+        }
+        return prestr;
     }
 
     /**

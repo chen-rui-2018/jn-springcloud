@@ -8,6 +8,8 @@ import com.jn.hardware.api.ElectricMeterClient;
 import com.jn.hardware.enums.ElectricMeterEnum;
 import com.jn.hardware.model.electricmeter.ElectricMeterDataCollectionParam;
 import com.jn.hardware.model.electricmeter.ElectricMeterWaterOrElectricShow;
+import com.jn.hardware.model.electricmeter.ElectricOrWaterConditionShow;
+import com.jn.park.electricmeter.dao.MeterDao;
 import com.jn.park.electricmeter.entity.TbElectricReading;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.enums.NoticeExceptionEnum;
@@ -37,6 +39,8 @@ public class MeterServiceImpl implements MeterService {
 
     @Autowired
     private ElectricMeterClient electricMeterClient;
+    @Autowired
+    private MeterDao meterDao;
     Logger logger = LoggerFactory.getLogger(MeterServiceImpl.class);
 
     @Override
@@ -62,62 +66,72 @@ public class MeterServiceImpl implements MeterService {
 
         String startTime =timeStr.split(":")[0]+":"+":00";
         */
-        ElectricMeterDataCollectionParam parameter = getTimerParam("",ElectricMeterEnum.ELECTRIC_METER_TYPE_ELECTRIC.getCode(),"2019-05-15 14:00:00");
-        //ElectricMeterDataCollectionParam parameter = getTimerParam(code,type,startTime);
-        Result result = null;
-        //水表
+        String[] test ={"2019-05-15 07:00:00","2019-05-15 08:00:00","2019-05-15 09:00:00","2019-05-15 10:00:00","2019-05-15 11:00:00","2019-05-15 12:00:00"};
+        for(int i=0;i<test.length;i++){
 
-        result = electricMeterClient.electricMeterDataCollection(parameter);
-        if(result.getData() != null){
-            List<ElectricMeterWaterOrElectricShow> dataList= (List<ElectricMeterWaterOrElectricShow>)result.getData();
-            if(dataList ==null || dataList.size() ==0){
-                List<TbElectricReading> readings = new ArrayList<>();
-                TbElectricReading reading =null;
-                Date date = new Date();
-                String dealDateStr = DateUtils.getDate("yyyy-MM-dd");
-                Date dealDate = null;
-                Date dealDateDrag = null;
-                BigDecimal readingEnd=null;
-                try{
-                    dealDate = DateUtils.parseDate(dealDateStr,"yyyy-MM-dd");
 
-                    dealDateDrag = DateUtils.parseDate("2019-05-15","yyyy-MM-dd");
-                }catch (ParseException e){
-                    e.printStackTrace();
-                    logger.info("日期格式不规范-转换错误");
-                    throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_TIME_PARSE_DEFAULT);
-                }
+            ElectricMeterDataCollectionParam parameter = getTimerParam("",ElectricMeterEnum.ELECTRIC_METER_TYPE_ELECTRIC.getCode(),test[i]);
+            //ElectricMeterDataCollectionParam parameter = getTimerParam(code,type,startTime);
+            Result result = null;
+            //水表
 
-                for(ElectricMeterWaterOrElectricShow data :dataList ){
-                    reading = new TbElectricReading();
-                    reading.setBuildingId(data.getBuildingId());
-                    reading.setCreateTime(date);
-
-                    //reading.setDealDate(dealDate);
-                    reading.setDealDate(dealDateDrag);
-                    reading.setDealHour(new Byte("15"));
-                    reading.setId(UUID.randomUUID().toString().replaceAll("-",""));
-                    reading.setMeterCode(data.getDeviceId());
-                    reading.setParam(parameter.toString());
-                    reading.setRecordStatus(new Byte("1"));
-                    readingEnd = new BigDecimal(data.getReadingEnd());
-                    reading.setReadingEnd(readingEnd );
-                    Date timeEnd=null;
+            result = electricMeterClient.electricMeterDataCollection(parameter);
+            if(result.getData() != null){
+                ElectricOrWaterConditionShow data1= (ElectricOrWaterConditionShow) result.getData();
+                List<ElectricMeterWaterOrElectricShow> dataList = data1.getData();
+                if(dataList !=null && dataList.size() >0){
+                    List<TbElectricReading> readings = new ArrayList<>();
+                    TbElectricReading reading =null;
+                    Date date = new Date();
+                    String dealDateStr = DateUtils.getDate("yyyy-MM-dd");
+                    Date dealDate = null;
+                    Date dealDateDrag = null;
+                    BigDecimal readingEnd=null;
                     try{
-                        dealDate = DateUtils.parseDate(data.getTimeEnd(),"yyyy-MM-dd HH:mm:ss");
+                        dealDate = DateUtils.parseDate(dealDateStr,"yyyy-MM-dd");
+
+                        dealDateDrag = DateUtils.parseDate("2019-05-15","yyyy-MM-dd");
                     }catch (ParseException e){
                         e.printStackTrace();
                         logger.info("日期格式不规范-转换错误");
                         throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_TIME_PARSE_DEFAULT);
                     }
-                    reading.setTimeEnd(timeEnd);
-                    reading.setStatus(new Byte("1"));
-                    reading.setStatusMsg("成功");
+
+                    for(ElectricMeterWaterOrElectricShow data :dataList ){
+                        reading = new TbElectricReading();
+                        reading.setBuildingId(data.getBuildingId());
+                        reading.setCreateTime(date);
+
+                        //reading.setDealDate(dealDate);
+                        reading.setDealDate(dealDateDrag);
+                        reading.setDealHour(new Byte("15"));
+                        reading.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                        reading.setMeterCode(data.getDeviceId());
+                        reading.setParam(parameter.toString());
+                        reading.setRecordStatus(new Byte("1"));
+                        readingEnd = new BigDecimal(data.getReadingEnd());
+                        reading.setReadingEnd(readingEnd );
+                        Date timeEnd=null;
+                        try{
+                            dealDate = DateUtils.parseDate(data.getTimeEnd(),"yyyy-MM-dd HH:mm:ss");
+                        }catch (ParseException e){
+                            e.printStackTrace();
+                            logger.info("日期格式不规范-转换错误");
+                            throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_TIME_PARSE_DEFAULT);
+                        }
+                        reading.setTimeEnd(timeEnd);
+                        reading.setStatus(new Byte("1"));
+                        reading.setStatusMsg("成功");
+                        readings.add(reading);
+                    }
+
+                    if(readings !=null && readings.size()>0){
+                        meterDao.insertReadingData(readings);
+                    }
                 }
             }
+
         }
-
-
 
     }
 

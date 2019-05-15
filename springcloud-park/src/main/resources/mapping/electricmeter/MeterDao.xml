@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.electricmeter.dao.MeterDao">
+
+    <insert id="insertReadingData" parameterType="java.util.List">
+        insert into Tb_Electric_Reading
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricReadingMapper.Base_Column_List"/>)
+        <foreach collection="readings"  index="index" item="item" separator="UNION ALL">
+            select
+            #{item.id,jdbcType=VARCHAR},
+            #{item.meterCode,jdbcType=VARCHAR},
+            #{item.recordStatus,jdbcType=TINYINT},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.dealDate,jdbcType=DATE},
+            #{item.degreeDiff,jdbcType=DECIMAL},
+            #{item.dealHour,jdbcType=TINYINT},
+            #{item.readingEnd,jdbcType=DECIMAL},
+            #{item.timeEnd,jdbcType=TIMESTAMP},
+            #{item.param,jdbcType=VARCHAR},
+            #{item.buildingId,jdbcType=VARCHAR},
+            #{item.status,jdbcType=TINYINT},
+            #{item.statusMsg,jdbcType=VARCHAR}
+            from  dual
+        </foreach>
+    </insert>
+
+</mapper>

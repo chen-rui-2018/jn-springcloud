@@ -47,7 +47,7 @@ public class ParkingServerController extends BaseController implements ParkingCl
     @ControllerLog(doAction = "道尔 车辆入场推送接口")
     @Override
     public Result<String> carJoinParking(@RequestBody  DoorCarInParkingInfo doorCarInParkingInfo){
-        logger.info("\n道尔 车辆入场推送接口 parkId:"+doorCarInParkingInfo.getParkId());
+        logger.info("道尔 车辆入场推送接口 parkId:"+doorCarInParkingInfo.getParkId());
         return new Result<>(parkingServerService.carJoinParking(doorCarInParkingInfo.getCarinlist(),doorCarInParkingInfo.getParkId()));
     }
 

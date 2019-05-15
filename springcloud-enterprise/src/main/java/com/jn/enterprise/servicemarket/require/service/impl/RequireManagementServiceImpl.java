@@ -9,6 +9,9 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.enums.RequireExceptionEnum;
+import com.jn.enterprise.servicemarket.comment.dao.TbServiceRatingMapper;
+import com.jn.enterprise.servicemarket.comment.entity.TbServiceRating;
+import com.jn.enterprise.servicemarket.comment.entity.TbServiceRatingCriteria;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgInfoMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgInfo;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgInfoCriteria;
@@ -63,6 +66,9 @@ public class RequireManagementServiceImpl implements RequireManagementService {
 
     @Autowired
     private TbServiceAndAdvisorMapper tbServiceAndAdvisorMapper;
+
+    @Autowired
+    private  TbServiceRatingMapper tbServiceRatingMapper;
 
     @Autowired
     private RequireManagementMapper requireManagementMapper;
@@ -428,8 +434,31 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         }
         //设置企业名称
         requireOtherDetails.setCompanyName(userExtension.getData().getCompanyName());
-
+        //根据需求id获取评价信息
+        TbServiceRating ratingInfo = getRatingInfo(tbServiceRequire.getId());
+        if(ratingInfo!=null){
+            requireOtherDetails.setRatingScore(ratingInfo.getAttitudeScore());
+            requireOtherDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
+        }
         return requireOtherDetails;
+    }
+
+    /**
+     * 根据需求id获取需求点评信息
+     * @param reqId
+     * @return
+     */
+    private TbServiceRating getRatingInfo(String reqId) {
+        TbServiceRatingCriteria example=new TbServiceRatingCriteria();
+        example.createCriteria().andRequireIdEqualTo(reqId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceRating> tbServiceRatingList = tbServiceRatingMapper.selectByExample(example);
+        if(tbServiceRatingList.isEmpty()){
+            return null;
+        }else{
+            return tbServiceRatingList.get(0);
+        }
+
     }
 
     /**
@@ -533,6 +562,12 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         }
         //设置企业名称
         requireReceivedDetails.setCompanyName(userExtension.getData().getCompanyName());
+        //根据需求id获取评价信息
+        TbServiceRating ratingInfo = getRatingInfo(tbServiceRequire.getId());
+        if(ratingInfo!=null){
+            requireReceivedDetails.setRatingScore(ratingInfo.getAttitudeScore());
+            requireReceivedDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
+        }
         return requireReceivedDetails;
     }
 

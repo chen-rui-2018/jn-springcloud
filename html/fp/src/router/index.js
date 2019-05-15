@@ -87,11 +87,17 @@ export default new Router({
           meta: {
             title: '用户中心'
           },
-          name: 'home',
-          redirect: {
-            name: 'userCenter'
-          },
+          // redirect: {
+          //   name: 'userCenter'
+          // },
           children: [{
+            path: '/',
+            name: 'userCenter',
+            meta: {
+              title: '首页'
+            },
+            component: resolve => require(['@/views/home/userCenter'], resolve)
+          }, {
             path: '/userHome',
             name: 'userHome',
             meta: {
@@ -99,14 +105,6 @@ export default new Router({
             },
             component: resolve => require(['@/views/home/userHome'], resolve)
           },
-            {
-              path: '/servicemarket/product/userCenter',
-              name: 'userCenter',
-              meta: {
-                title: '首页'
-              },
-              component: resolve => require(['@/views/home/userCenter'], resolve)
-            },
             {
               path: '/servicemarket/product/productService/ordinaryProduct',
               name: 'ordinaryProduct',

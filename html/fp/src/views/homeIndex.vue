@@ -1,6 +1,6 @@
 <template>
   <div class="portalIndex">
-    <div class="portalIndexImg">
+    <div class="portalIndexImg" v-if="$store.state.needNav">
       <div class="header" id="header" :class="{'headerw':showFF, 'user-center': isCenter}">
         <div class="headerContainer clearfix">
           <div class="titleImg fl">

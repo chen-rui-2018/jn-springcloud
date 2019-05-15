@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 <!--    <router-view></router-view>-->
-     <div class="right_nav" v-if="$route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice'">
+     <div class="right_nav" v-if="$route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice' || $store.state.needNav">
       <ul>
         <li @click="isVisibility=true">
           <div class="right_nav_slide">
@@ -76,7 +76,7 @@
     <!-- <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'"></technology-Header> -->
 
     <router-view class="routView"/>
-    <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& !isMobile"></app-footer>
+    <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& $store.state.needNav"></app-footer>
   </div>
 </template>
 
@@ -110,10 +110,6 @@ export default {
     }
   },
   created(){
-    const token = this.$route.query.token
-    if (token) {
-      sessionStorage.setItem('token', token)
-    }
     // if(sessionStorage.token){
     //     this.api.setToken(sessionStorage.token)
     // }
@@ -125,6 +121,11 @@ export default {
         }else {
           vm.isActive=false;
         }
+    }
+  },
+  watch: {
+    '$route'() {
+      this.setEnvironment()
     }
   },
   methods:{
@@ -143,6 +144,16 @@ export default {
           }
         }
       })
+    },
+    setEnvironment() {
+      const token = this.$route.query.token
+      if (token) {
+        sessionStorage.sestItem('token', token)
+      }
+      const iframe = this.$route.query.iframe
+      if (iframe === '1' || this.isMobile) {
+        this.$store.commit('setNeedNav', false)
+      }
     },
     toTop(){
       timer = setInterval(function () {

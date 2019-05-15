@@ -1,9 +1,9 @@
 <template>
-  <div class="homePage">
-    <div class="homePage_content" :class="{'w': !isMobile}">
+  <div class="homePage" :class="{pd: $store.state.needNav}">
+    <div class="homePage_content" :class="{'w': $store.state.needNav}">
       <div class="homePage_typearea">
         <!-- 面包屑 -->
-        <div class="homePage_breadcrumb" v-if="!isMobile">
+        <div class="homePage_breadcrumb" v-if="$store.state.needNav">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }">用户中心</el-breadcrumb-item>
             <el-breadcrumb-item>
@@ -14,11 +14,11 @@
         <!-- 主体内容 -->
         <el-container>
           <!-- 侧边栏 -->
-          <div class="slider" v-if="!isMobile">
+          <div class="slider" v-if="$store.state.needNav">
             <el-aside width="135px">
               <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
-                <el-menu-item index="/servicemarket/product/userCenter">
+                <el-menu-item index="/home">
                   <span slot="title">首页</span>
                 </el-menu-item>
                 <el-menu-item index="/userHome">
@@ -98,7 +98,7 @@
           </div>
           <!-- 主体 -->
           <div class="homePage_main userHome">
-            <el-main :class="{'isMobile': isMobile}">
+            <el-main :class="{'isMobile': !$store.state.needNav}">
               <keep-alive>
                 <router-view v-if="$route.meta.keepAlive" :userData="userData"></router-view>
               </keep-alive>
@@ -128,16 +128,13 @@
   </div>
 </template>
 <script>
-import $ from "jquery";
-import { isMobile } from "@/util";
+// import $ from "jquery";
 import bus from "@/util/bus";
 import UserHome from "@/components/userHome";
 export default {
   components: { UserHome },
   data() {
     return {
-      isMobile: isMobile(),
-
       orgArr: [],
       organizationForm: {
         orgName: "",
@@ -288,7 +285,9 @@ export default {
     }
   }
 .homePage {
-  padding-top: 66px;
+  &.pd {
+    padding-top: 66px;
+  }
   background: #f3f3f3;
   .btn {
     text-align: center;

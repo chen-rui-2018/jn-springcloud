@@ -92,16 +92,14 @@ export default {
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
 
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
-        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
 
         enterpriseGetScientTabHeader:"springcloud-enterprise/data/garden/getScientTabHeader", // 科技园模板表头查询接口
         enterpriseGetImportData:"springcloud-enterprise/data/garden/getImportData", // 科技园模板查询数据接口
         enterpriseImportData:"springcloud-enterprise/data/garden/importData", // 科技园导入接口
         enterpriseGetCheckOrLookInfo:"springcloud-enterprise/data/garden/getCheckOrLookInfo", // 审核列表
-
-
-
-
+        getScienceExcel:"springcloud-enterprise/data/garden/getScienceExcel", // 科技园模板
+        getCompanyExcel:"springcloud-enterprise/data/garden/getCompanyExcel", // 纵向树形指标导出模式
+        getScienceHeaderExcel:"springcloud-enterprise/data/garden/getScienceHeaderExcel", // 科技园模板表头
 
 
 
@@ -198,7 +196,6 @@ export default {
         getCompanyList:"springcloud-enterprise/guest/company/getCompanyList",//查询企业列表
         getAllList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
         getBusinessAdContent:"springcloud-park/guest/portal/businessAd/getBusinessAdContent",//获取招商信息
-
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

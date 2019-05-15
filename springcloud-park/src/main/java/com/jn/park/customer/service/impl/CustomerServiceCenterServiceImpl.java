@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.RecordStatusEnum;
-import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.customer.dao.TbClientServiceCenterMapper;
 import com.jn.park.customer.entity.TbClientServiceCenter;
 import com.jn.park.customer.entity.TbClientServiceCenterCriteria;
@@ -12,7 +11,6 @@ import com.jn.park.customer.model.ConsultationCustomerListParam;
 import com.jn.park.customer.model.ConsultationCustomerListShow;
 import com.jn.park.customer.service.CustomerServiceCenterService;
 import com.jn.system.log.annotation.ServiceLog;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -76,8 +74,8 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     @ServiceLog(doAction = "根据任务id获取问题详情")
     @Override
     public Object customerQuesDetail(String account,String taskId){
-        JSONObject formData = IBPSUtils.getFormData(account, taskId);
-        return formData;
+
+        return null;
     }
 
     /**

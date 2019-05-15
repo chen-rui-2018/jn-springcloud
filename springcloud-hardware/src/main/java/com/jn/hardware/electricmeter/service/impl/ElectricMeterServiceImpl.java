@@ -198,6 +198,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         url = String.format(url,electricMeterDataCollectionParam.getCode(),electricMeterDataCollectionParam.getDeviceType()
                 ,electricMeterDataCollectionParam.getStartTime(),accessToken);
         String dataString = RestTemplateUtil.get(url);
+        if(StringUtils.isBlank(dataString)){
+            logger.info("当前类型的仪表此时间段内无数据{}仪表类型="+electricMeterDataCollectionParam.getDeviceType()+"时间点="+electricMeterDataCollectionParam.getStartTime());
+            return result;
+        }
         //查询的表类型为空调表
         if (ElectricMeterEnum.ELECTRIC_METER_TYPE_AIR.getCode().equals(electricMeterDataCollectionParam.getDeviceType())) {
                ElectricResult<List<ElectricMeterAirConditionShow>> electricResult = JsonStringToObjectUtil.jsonToObject(dataString, new TypeReference<ElectricResult<List<ElectricMeterAirConditionShow>>>() {});

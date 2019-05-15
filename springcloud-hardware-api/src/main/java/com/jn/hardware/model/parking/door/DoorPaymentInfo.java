@@ -1,5 +1,6 @@
 package com.jn.hardware.model.parking.door;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "DoorPaymentInfo",description = "费用信息")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DoorPaymentInfo implements Serializable {
 
     private static final long serialVersionUID = -7419705251609474222L;
@@ -26,8 +28,7 @@ public class DoorPaymentInfo implements Serializable {
     @ApiModelProperty(value = " 交易编号 唯一值")
     private String  paymentTnx;
     @ApiModelProperty(value = "交易支付时间")
-    private String  PayDate;
-
+    private String  payDate;
     public String getAccountCharge() {
         return accountCharge;
     }
@@ -69,11 +70,13 @@ public class DoorPaymentInfo implements Serializable {
     }
 
     public String getPayDate() {
-        return PayDate;
+        return payDate;
     }
+
     public void setPayDate(String payDate) {
-        PayDate = payDate;
+        this.payDate = payDate;
     }
+
     @Override
     public String toString() {
         return "DoorPaymentInfo{" +
@@ -82,7 +85,7 @@ public class DoorPaymentInfo implements Serializable {
                 ", disAmount='" + disAmount + '\'' +
                 ", paymentType='" + paymentType + '\'' +
                 ", paymentTnx='" + paymentTnx + '\'' +
-                ", PayDate='" + PayDate + '\'' +
+                ", payDate='" + payDate + '\'' +
                 '}';
     }
 

@@ -1,8 +1,10 @@
 package com.jn.hardware.server;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.hardware.api.ElectricMeterClient;
 import com.jn.hardware.electricmeter.service.ElectricMeterService;
+import com.jn.hardware.enums.ElectricMeterEnum;
 import com.jn.hardware.model.electricmeter.*;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -113,7 +115,44 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result electricMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+    public Result meterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
         return electricMeterService.electricMeterDataCollection(electricMeterDataCollectionParam);
     }
+    /**
+     * 电表数据采集 仪表类型必须为1(电表)
+     * @param electricMeterDataCollectionParam
+     * @return
+     */
+    @Override
+    public Result<List<ElectricMeterWaterOrElectricShow>> electricMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+       if(!ElectricMeterEnum.ELECTRIC_METER_TYPE_ELECTRIC.getCode().equals(electricMeterDataCollectionParam.getDeviceType())){
+           throw new JnSpringCloudException(ElectricMeterEnum.ELECTRIC_METER_DATA_COLLECTION);
+       }
+        return electricMeterService.electricMeterDataCollection(electricMeterDataCollectionParam);
+    }
+    /**
+     *水表数据采集 仪表类型必须为2(水表)
+     * @param electricMeterDataCollectionParam
+     * @return
+     */
+    @Override
+    public Result<List<ElectricMeterWaterOrElectricShow>> waterMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+        if(!ElectricMeterEnum.ELECTRIC_METER_TYPE_WATER.getCode().equals(electricMeterDataCollectionParam.getDeviceType())){
+            throw new JnSpringCloudException(ElectricMeterEnum.WATER_METER_DATA_COLLECTION);
+        }
+        return electricMeterService.electricMeterDataCollection(electricMeterDataCollectionParam);
+    }
+    /**
+     *水表数据采集 仪表类型必须为3(空调表)
+     * @param electricMeterDataCollectionParam
+     * @return
+     */
+    @Override
+    public Result<List<ElectricMeterAirConditionShow>> airMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+        if(!ElectricMeterEnum.ELECTRIC_METER_TYPE_AIR.getCode().equals(electricMeterDataCollectionParam.getDeviceType())){
+            throw new JnSpringCloudException(ElectricMeterEnum.AIR_METER_DATA_COLLECTION);
+        }
+        return electricMeterService.electricMeterDataCollection(electricMeterDataCollectionParam);
+    }
+
 }

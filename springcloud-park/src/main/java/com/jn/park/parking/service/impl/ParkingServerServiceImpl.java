@@ -164,6 +164,7 @@ public class ParkingServerServiceImpl implements ParkingServerService {
         int i = insertParkingRecordByRamp(parkingRecordRampParam);
         logger.info("处理道尔推送车辆入场数据成功，响应条数：{}",i);
         String s = sb.toString();
+        logger.info("处理道尔推送车辆入场数据成功，ids：{}",s);
         return s.substring(0,s.length()-1);
     }
 

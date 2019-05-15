@@ -1,9 +1,11 @@
 package com.jn.hardware.electricmeter.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.hardware.electricmeter.service.ElectricMeterService;
 import com.jn.hardware.electricmeter.service.impl.ElectricMeterServiceImpl;
+import com.jn.hardware.enums.ElectricMeterEnum;
 import com.jn.hardware.model.electricmeter.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -75,8 +77,8 @@ public class ElectricMeterController extends BaseController {
 
     }
     @ApiOperation(value = "仪表数据采集(电表或水表)",notes = "根据仪表编号,仪表类型为(水表或电表),以及仪表的数据采集开始时间,返回所采集的数据内容")
-    @RequestMapping(value = "/electricMeterDataCollection",method = RequestMethod.GET)
-    public Result<List<ElectricMeterWaterOrElectricShow>> electricMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+    @RequestMapping(value = "/meterDataCollection",method = RequestMethod.GET)
+    public Result<List<ElectricMeterWaterOrElectricShow>> meterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
         return electricMeterService.electricMeterDataCollection(electricMeterDataCollectionParam);
     }
 
@@ -85,5 +87,14 @@ public class ElectricMeterController extends BaseController {
     public Result<List<ElectricMeterAirConditionShow>> electricAirMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
         return electricMeterService.electricMeterDataCollection(electricMeterDataCollectionParam);
     }
+    @ApiOperation(value = "仪表数据采集(电表)",notes = "根据仪表编号,仪表类型为(电表),以及仪表的数据采集开始时间,返回所采集的数据内容")
+    @RequestMapping(value = "/electricMeterDataCollection",method = RequestMethod.GET)
+    public Result<List<ElectricMeterWaterOrElectricShow>> electricMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
+        if(!ElectricMeterEnum.ELECTRIC_METER_TYPE_ELECTRIC.getCode().equals(electricMeterDataCollectionParam.getDeviceType())){
+            throw new JnSpringCloudException(ElectricMeterEnum.ELECTRIC_METER_DATA_COLLECTION);
+        }
+        return electricMeterService.electricMeterDataCollection(electricMeterDataCollectionParam);
+    }
+
 
 }

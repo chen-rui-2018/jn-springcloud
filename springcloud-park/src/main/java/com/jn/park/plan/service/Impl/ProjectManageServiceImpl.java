@@ -36,15 +36,18 @@ public class ProjectManageServiceImpl implements ProjectManageService {
         if(projectModel.getOrderByClause() == null){
             projectModel.setOrderByClause("project_no desc");
         }
-        if(projectModel.getProgress() == null){
-            projectModel.setProgress("");
+        /*if(projectModel.getProgress() == "" ){
+            projectModel.setProgress(null);
+        }
+        if(projectModel.getProjectState() == ""){
+            projectModel.setProjectState(null);
         }
         if(projectModel.getProjectState() == null){
             projectModel.setProjectState("");
         }
-        if(projectModel.getProjectName() == null){
-            projectModel.setProjectName("");
-        }
+        if(projectModel.getProjectName() == ""){
+            projectModel.setProjectName(null);
+        }*/
         Page<Object> objects = PageHelper.startPage(projectModel.getPage(), projectModel.getRows());
         List<ProjectManageModel> projectManageModelsList= projectManageDao.findAll(projectModel.getProjectState(),projectModel.getProgress(),projectModel.getProjectName(),projectModel.getOrderByClause());
         //获取每一条工程项目信息

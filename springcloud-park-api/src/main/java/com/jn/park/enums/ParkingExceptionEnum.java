@@ -33,6 +33,7 @@ public enum ParkingExceptionEnum implements CodeAndMsg {
     REND_ID_IS_NOT_EXIT("4020219","租赁记录不存在"),
     PARKING_GATE_ERROR("4020220","道闸系统处理失败"),
     PARKING_PAYMENT_NOT_EXIT("4020221","缴费账单记录不存在"),
+    SPACE_RENTAL_PUBLISH_IBPS_ERROR("4020222","提交审核异常，请检查数据完整性"),
 
     ;
 

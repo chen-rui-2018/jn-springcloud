@@ -7,6 +7,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.company.model.IBPSResult;
+import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.enums.ParkingExceptionEnum;
 import com.jn.park.parking.dao.*;
 import com.jn.park.parking.entity.*;
@@ -193,12 +195,16 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
             logger.info("用户车位申请绑定车辆响应结果：{}",s);
         }
 
-        //TODO 调用审核流
+        String ibpsId = "578176874434265088";
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(ibpsId, user.getAccount(), tbParkingSpaceRental);
 
-
-
-        int insert = tbParkingSpaceRentalMapper.insert(tbParkingSpaceRental);
-        return insert + "";
+        // ibps启动流程失败
+        if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
+            logger.warn("[提交车位租赁申请] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            throw new JnSpringCloudException(ParkingExceptionEnum.SPACE_RENTAL_PUBLISH_IBPS_ERROR);
+        }
+        logger.info("[提交车位租赁申请] " + ibpsResult.getMessage());
+        return "1";
     }
 
     @ServiceLog(doAction = "租车位费用计算接口")

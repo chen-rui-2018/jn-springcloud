@@ -40,12 +40,8 @@ public interface ParkingServerService {
      */
     int insertParkingRecordByRamp( List<ParkingRecordRampParam> parkingRecordRampParam);
 
-    /**
-     * 批量修改停车数据[处理车辆出场时间和状态]
-     * @param parkingRecordRampParam
-     * @return
-     */
-    int updateParkingRecordByParam( List<ParkingRecordRampParam> parkingRecordRampParam);
+
+    List<ParkingRecordRampParam> selectParkingRecordByRamp( List<ParkingRecordRampParam> parkingRecordRampParam);
 
     /**
      * 道尔 车辆入场推送接口

@@ -120,8 +120,8 @@ public class ParkingServerServiceImpl implements ParkingServerService {
 
     @ServiceLog(doAction = "批量修改停车数据[处理车辆出场时间和状态]")
     @Override
-    public int updateParkingRecordByParam(List<ParkingRecordRampParam> parkingRecordRampParam){
-        return parkingRecordMapper.updateParkingRecordByRamp(parkingRecordRampParam);
+    public List<ParkingRecordRampParam> selectParkingRecordByRamp(List<ParkingRecordRampParam> parkingRecordRampParam){
+        return parkingRecordMapper.selectParkingRecordByRamp(parkingRecordRampParam);
     }
 
 
@@ -342,10 +342,24 @@ public class ParkingServerServiceImpl implements ParkingServerService {
             param.setDepartureTime(door.getExportTime());
             param.setCarLicense(door.getCarNo());
             parkingRecordRampParam.add(param);
-            sb.append(door.getId()+",");
+
+
         }
-        int i = updateParkingRecordByParam(parkingRecordRampParam);
+        int i = parkingRecordMapper.updateParkingRecordByRamp(parkingRecordRampParam);
         logger.info("处理道尔推送车辆出场数据成功，响应条数：-- {}",i);
+
+        //处理返回接口
+        List<ParkingRecordRampParam> parkingRecordRampParams = parkingRecordMapper.selectParkingRecordByRamp(parkingRecordRampParam);
+        for (ParkingRecordRampParam ramp:parkingRecordRampParams
+             ) {
+            for (Object obj:carList
+                ) {
+                DoorCarOutParkingShow door = (DoorCarOutParkingShow)obj;
+                if(StringUtils.equals(ramp.getParkingId(),door.getId())){
+                    sb.append(door.getId()+",");
+                }
+            }
+        }
         String s = sb.toString();
         return s.substring(0,s.length()-1);
     }

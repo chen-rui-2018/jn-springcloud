@@ -36,15 +36,18 @@ public class DoorParkingController extends BaseController {
     @RequestMapping(value = "/saveDoorCarInParkingInfo/{parkId}",method = RequestMethod.POST)
     public DoorResult saveDoorCarInParkingInfo(@RequestBody DoorCarInParkingParam doorCarInParkingParam, HttpServletRequest request,@PathVariable String parkId){
         String  url = request.getRequestURL().toString();
-
+        logger.info("\n道尔: 车辆入场信息保存{}入场信息实体:"+doorCarInParkingParam.toString());
         DoorResult result =  parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url,parkId);
+        logger.info("\n道尔: 车辆入场信息保存{}返回信息实体:"+result.toString());
         return  result;
     }
     @ApiOperation(value = "道尔: 车辆出场信息保存",notes = "返回保存的数据的id string")
     @RequestMapping(value = "/saveDoorCarOutParkingInfo/{parkId}",method = RequestMethod.POST)
     public DoorResult  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingParam, HttpServletRequest request,@PathVariable String parkId){
         String  url = request.getRequestURL().toString();
+        logger.info("\n道尔: 车辆出场信息保存{}出场信息实体:"+doorCarOutParkingParam.toString());
         DoorResult  result =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url,parkId);
+        logger.info("\n道尔: 车辆出场信息保存{}返回信息实体:"+result.toString());
         return  result;
     }
 }

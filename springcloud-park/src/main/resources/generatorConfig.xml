@@ -1060,7 +1060,6 @@
 
   </context>
 
-  <!--XQ00007物业服务管理子系统-电表相关-->
   <context id="electric">
     <!-- 实现Serializable接口 -->
     <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
@@ -1091,27 +1090,47 @@
     </javaTypeResolver>
 
     <!-- 生成模型的包名和位置 -->
-    <javaModelGenerator targetPackage="com.jn.park.electric.entity"
+    <javaModelGenerator targetPackage="com.jn.park.electricmeter.entity"
                         targetProject="src/main/java">
       <property name="enableSubPackages" value="true"/>
       <property name="trimStrings" value="true"/>
     </javaModelGenerator>
 
     <!-- 生成映射文件的包名和位置 -->
-    <sqlMapGenerator targetPackage="mapping.generator.electric"
+    <sqlMapGenerator targetPackage="mapping.generator.electricmeter"
                      targetProject="src/main/resources">
       <property name="enableSubPackages" value="true"/>
     </sqlMapGenerator>
 
     <!-- 生成Mapper 接口的包名和位置-->
     <javaClientGenerator type="XMLMAPPER"
-                         targetPackage="com.jn.park.electric.dao"
+                         targetPackage="com.jn.park.electricmeter.dao"
                          targetProject="src/main/java">
       <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>
 
-
+    <!--客服中心表-->
+    <table tableName="tb_electric_energy_control_person_config"></table>
+    <table tableName="tb_electric_energy_control_push_log"></table>
+    <table tableName="tb_electric_energy_control_rules"></table>
+    <table tableName="tb_electric_energy_control_target"></table>
+    <table tableName="tb_electric_energy_day_log"></table>
+    <table tableName="tb_electric_energy_group_log"></table>
+    <table tableName="tb_electric_meter_company_day"></table>
+    <table tableName="tb_electric_meter_day_log"></table>
+    <table tableName="tb_electric_meter_info"></table>
+    <table tableName="tb_electric_price_rules"></table>
+    <table tableName="tb_electric_pricerule_company"></table>
+    <table tableName="tb_electric_pricerule_company_in_day"></table>
     <table tableName="tb_electric_reading"></table>
-
+    <table tableName="tb_electric_rules_content"></table>
+    <table tableName="tb_electric_turn_rules"></table>
+    <table tableName="tb_electric_warning_record"></table>
+    <table tableName="tb_electric_warning_rules"></table>
   </context>
+
+
+
+
+
 </generatorConfiguration>

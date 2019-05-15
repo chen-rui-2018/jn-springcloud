@@ -29,6 +29,17 @@ public class ImController {
     private ImService imService;
 
     /**
+     * 查询聊天列表
+     * @param message
+     * @return
+     */
+    @RequestMapping(value = "/selectMsgList", method = RequestMethod.POST)
+    public Result<PaginationData<List<TbImMessage>>> selectMsgList(@RequestBody Message message) {
+        PaginationData<List<TbImMessage>> result = imService.selectMsgList(message);
+        return new Result(result);
+    }
+
+    /**
      * 查询聊天记录
      *
      * @param message

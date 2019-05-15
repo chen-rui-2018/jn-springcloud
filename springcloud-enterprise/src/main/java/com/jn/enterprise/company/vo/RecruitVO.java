@@ -23,8 +23,12 @@ public class RecruitVO implements Serializable {
     private String statusName;
     @ApiModelProperty(value = "浏览数")
     private Integer viewCount;
-    @ApiModelProperty(value = "公司名称")
+    @ApiModelProperty(value = "企业ID")
+    private String comId;
+    @ApiModelProperty(value = "企业名称")
     private String comName;
+    @ApiModelProperty(value = "企业logo")
+    private String comAvatar;
     @ApiModelProperty(value = "招聘类型名称")
     private String typeName;
     @ApiModelProperty(value = "招聘类型")
@@ -35,11 +39,37 @@ public class RecruitVO implements Serializable {
     private String salary;
     @ApiModelProperty(value = "审批状态（0未审批 1审批中 2审批通过 3未通过审批）")
     private String approvalStatus;
+    @ApiModelProperty(value = "招聘详情")
+    private String details;
     @ApiModelProperty(value = "发布时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createdTime;
 
     private static final long serialVersionUID = 1L;
+
+    public String getComId() {
+        return comId;
+    }
+
+    public void setComId(String comId) {
+        this.comId = comId;
+    }
+
+    public String getComAvatar() {
+        return comAvatar;
+    }
+
+    public void setComAvatar(String comAvatar) {
+        this.comAvatar = comAvatar;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
 
     public String getType() {
         return type;

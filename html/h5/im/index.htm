@@ -96,7 +96,9 @@
 		</table>
 	</div>
 	<div>
-		<a id="btnSelectMsg" href="javascript:void(0)">查看聊天记录</a>
+		<a id="btnSelectMsgList" href="javascript:void(0)">查看聊天列表<> /im/selectMsgList</a><br/>
+		<a id="btnSelectMsg" href="javascript:void(0)">查看聊天记录<> /im/selectMsg</a><br/>
+		<a id="btnIsSended" href="javascript:void(0)">更改消息为已读<> /im/isSended</a><br/>
 		<div id="selectMsgDiv">
 		<div>
 	</div>
@@ -175,9 +177,9 @@ $(function() {
 			return;
 		}
 		if('WebSocket' in window){
-			var wsUrl = "ws://192.168.10.31:8888/websocket/";
+			var wsUrl = "ws://localhost:8888/websocket/";
 			
-			websocket = new WebSocket(wsUrl+agent);
+			websocket = new WebSocket(wsUrl+agent+"/token");
 		
 		    
 		     
@@ -261,10 +263,37 @@ $(function() {
 						$("#selectMsgDiv").append(JSON.stringify(data.data.rows[i])+"</br>");
 					}
 				}
-				
              }
          });
 	});
+
+	//聊天列表记录
+	$("#btnSelectMsgList").click(function(){
+		var fromUser = $("#fromUser").val();
+		var toUser = $("#toUser").val();
+
+		var param = {
+			"fromUser":fromUser,
+			"page":"1",
+			"rows":"10"
+		};
+		$.ajax({
+			type: "POST",
+			url: "http://192.168.10.31:8888/im/selectMsgList",
+			data: JSON.stringify(param),
+			dataType: "json",
+			contentType: "application/json",
+			success: function(data){
+				if(data.data.total != 0){
+					$("#selectMsgDiv").html("");
+					for(var i=0;i<data.data.rows.length;i++){
+						$("#selectMsgDiv").append(JSON.stringify(data.data.rows[i])+"</br>");
+					}
+				}
+			}
+		});
+	});
+
 });
 </script>
 

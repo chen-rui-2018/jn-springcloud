@@ -1,0 +1,29 @@
+ali:
+  notify_url: http://gspuau.natappfree.cc/xxpay-service/pay/aliPayNotifyRes
+  return_url: http://www.baidu.com
+cert:
+  root:
+    path: /Users/dingzhiwei/java/tmp/cert
+wx:
+  notify_url: http://2agrvi.natappfree.cc/xxpay-service/pay/wxPayNotifyRes
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://springcloud:springcloud@localhost:1025/eureka/
+  instance:
+    prefer-ip-address: true
+spring:
+  application:
+    name: xxpay-service
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: springcloud-app-config
+      label: master
+      profile: master
+
+server:
+  port: 3000

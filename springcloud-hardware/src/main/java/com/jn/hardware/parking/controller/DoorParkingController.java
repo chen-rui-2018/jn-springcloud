@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,66 +33,21 @@ public class DoorParkingController extends BaseController {
     private ParkingService parkingService;
 
     @ApiOperation(value = "道尔: 车辆入场信息保存",notes = "返回保存的数据的id string")
-    @RequestMapping(value = "/saveDoorCarInParkingInfo",method = RequestMethod.POST)
-    public DoorResult saveDoorCarInParkingInfo(@RequestBody DoorCarInParkingParam doorCarInParkingParam, HttpServletRequest request){
+    @RequestMapping(value = "/saveDoorCarInParkingInfo/{parkId}",method = RequestMethod.POST)
+    public DoorResult saveDoorCarInParkingInfo(@RequestBody DoorCarInParkingParam doorCarInParkingParam, HttpServletRequest request,@PathVariable String parkId){
         String  url = request.getRequestURL().toString();
-
-        DoorResult result =  parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url);
+        logger.info("\n道尔: 车辆入场信息保存{}入场信息实体:"+doorCarInParkingParam.toString());
+        DoorResult result =  parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url,parkId);
+        logger.info("\n道尔: 车辆入场信息保存{}返回信息实体:"+result.toString());
         return  result;
     }
     @ApiOperation(value = "道尔: 车辆出场信息保存",notes = "返回保存的数据的id string")
-    @RequestMapping(value = "/saveDoorCarOutParkingInfo",method = RequestMethod.POST)
-    public DoorResult  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingParam, HttpServletRequest request){
+    @RequestMapping(value = "/saveDoorCarOutParkingInfo/{parkId}",method = RequestMethod.POST)
+    public DoorResult  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingParam, HttpServletRequest request,@PathVariable String parkId){
         String  url = request.getRequestURL().toString();
-        DoorResult  result =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url);
+        logger.info("\n道尔: 车辆出场信息保存{}出场信息实体:"+doorCarOutParkingParam.toString());
+        DoorResult  result =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url,parkId);
+        logger.info("\n道尔: 车辆出场信息保存{}返回信息实体:"+result.toString());
         return  result;
-    }
-
-    @ApiOperation(value = "道尔: 获取临停车费用",notes = "根据车场编号和车辆牌照获取停车信息")
-    @RequestMapping(value = "/getTemporaryCarParkingFee",method = RequestMethod.GET)
-    public Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
-        return parkingService.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
-    }
-
-    @ApiOperation(value = "道尔: 缴费信息保存",notes = "保存停车缴费信息")
-    @RequestMapping(value = "/getTemporaryCarParkingFee",method = RequestMethod.POST)
-    public Result savePaymentCarParkingFee(@RequestBody PaymentCarParkingFeeRequest paymentCarParkingFeeRequest) {
-        return  parkingService.savePaymentCarParkingFee(paymentCarParkingFeeRequest);
-    }
-
-    @ApiOperation(value = "道尔: 月租卡开户信息保存",notes = "月租卡开户信息保存")
-    @RequestMapping(value = "/saveParkingMonthlyRentCard",method = RequestMethod.POST)
-    public Result saveParkingMonthlyRentCard(@RequestBody ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest) {
-        return parkingService.saveParkingMonthlyRentCard(parkingMonthlyRentCardRequest);
-    }
-
-    @ApiOperation(value = "道尔: 月租卡开户信息列表",notes = "根据车场编号和车辆牌照 月租卡开户信息列表")
-    @RequestMapping(value = "/findParkingMonthlyRentCard",method = RequestMethod.GET)
-    public Result<DoorParkingMonthlyCardShow> findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
-        return parkingService.findParkingMonthlyRentCard(parkingMonthlyCardInfoRequest);
-    }
-
-    @ApiOperation(value = "道尔: 保存月租卡续费信息",notes = "保存月租卡续费信息")
-    @RequestMapping(value = "/saveMonthlyRentalCardRenewalFee",method = RequestMethod.POST)
-    public Result saveMonthlyRentalCardRenewalFee(@RequestBody  MonthlyRentalCardRenewalFeeRequset monthlyRentalCardRenewalFeeRequset) {
-        return parkingService.saveMonthlyRentalCardRenewalFee(monthlyRentalCardRenewalFeeRequset);
-    }
-
-    @ApiOperation(value = "道尔: 月租信息获取(含费率)",notes = "根据车场编号和车辆牌照,获取月租信息获取(含费率)")
-    @RequestMapping(value = "/findMonthlyRentCardRateInfo",method = RequestMethod.GET)
-    public Result<DoorMonthlyRentCardRateInfo>  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
-        return parkingService.findMonthlyRentCardRateInfo(monthyRentalCardRateRequest);
-    }
-
-    @ApiOperation(value = "道尔: 月租卡销户操作",notes = "根据车场编号和车辆牌照,对月租卡进行销户")
-    @RequestMapping(value = "/cancelMonthlyRentAccount",method = RequestMethod.POST)
-    public Result cancelMonthlyRentAccount(@RequestBody CancelMonthlyRentAccountRequest cancelMonthlyRentAccountRequest) {
-        return parkingService.cancelMonthlyRentAccount(cancelMonthlyRentAccountRequest);
-    }
-
-    @ApiOperation(value = "道尔: 车场车位查询",notes = "根据停车场id,过去车场的车位情况信息")
-    @RequestMapping(value = "/findParkingSpaceAmount",method = RequestMethod.GET)
-    public Result<DoorParkingSpaceAmountShow> findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
-        return parkingService.findParkingSpaceAmount(parkingSpaceAmountRequest);
     }
 }

@@ -25,6 +25,8 @@
           where tab_id =#{tabId}
         )
 
+        and record_status='1'
+
     </select>
 
     <insert id="createTab" parameterType="java.util.List">
@@ -645,8 +647,9 @@
     </update>
     <!--获取需要进行预警的任务-->
     <select id="getWarningTask" resultType="com.jn.enterprise.data.model.WarningTaskModel">
+        select taskName,inLine,outLine,formTime,warningBy,fileType,fillId,fillInFormId from (
         SELECT
-        p.model_name modelName,
+        p.model_name taskName,
         CASE
         WHEN ceiling( datediff(  t.fill_in_form_deadline,SYSDATE( ) ) ) &lt; p.warning_before_days  and
         ceiling( datediff(  t.fill_in_form_deadline,SYSDATE( ) ) ) &gt; 0
@@ -663,7 +666,7 @@
         p.warning_by warningBy,
         t.file_type fileType,
         t.fill_in_form_id fillInFormId,
-        t.fill_id
+        t.fill_id as fillId
         FROM
         tb_data_reporting_task t,
         tb_data_reporting_snapshot_model p
@@ -671,12 +674,15 @@
         t.STATUS != 0
         and t.record_status=1
         AND p.task_batch = t.task_batch
-        <if test="fillId !=null">
+        <if test="fillId !=null and fillId !=''">
             and t.fill_id =#{fillId}
         </if>
-        <if test="taskBatch !=null">
+        <if test="taskBatch !=null and taskBatch !=''">
             and t.task_batch =#{taskBatch}
         </if>
+
+        ) x where x.inLine!=0  or x.outLine !=0
+
     </select>
 
     <!--获取园区本月任务批次号-->
@@ -780,6 +786,7 @@
 
         <foreach collection="fillerList" index="index" item="item"  separator="UNION ALL" >
             select
+            #{ item.id,jdbcType=VARCHAR},
             #{ item.fillId,jdbcType=VARCHAR},
             #{ item.filler,jdbcType=VARCHAR},
             #{ item.fillerTel,jdbcType=VARCHAR},

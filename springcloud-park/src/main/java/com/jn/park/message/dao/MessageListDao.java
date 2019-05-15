@@ -3,6 +3,7 @@ package com.jn.park.message.dao;
 import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
+import com.jn.park.message.model.findAllMessageListModel;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -16,10 +17,17 @@ public interface MessageListDao {
 
     /**
      * 查询所有消息
-     * @param messageTowTort 一级消息类别
+     * @param
      * @return
      */
     List<FindAllMessageListVo> findAll(@Param("messageOneTort") Integer messageOneTort,@Param("messageTowTort") Integer messageTowTort,@Param("isRead") Integer isRead, @Param("account") String account);
+
+    /**
+     * 获取是否有已读消息
+     * @return
+     */
+    int getIsRead(@Param("messageOneTort") String messageOneTort,@Param("messageTowTort") String messageTowTort,@Param("account") String account);
+
 
     /**
      * 添加消息

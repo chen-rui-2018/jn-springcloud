@@ -181,7 +181,7 @@ public class ParkingServiceImplTest {
         doorPaymentInfo.setAccountCharge("3.0000");
         doorPaymentInfo.setPayCharge("1.2300");
         doorPaymentInfo.setPaymentType("1");
-        doorPaymentInfo.setPayDate("2017-06-14 09:45:45");
+//        doorPaymentInfo.setPayDate("2017-06-14 09:45:45");
         doorPaymentInfo.setDisAmount("1.7700");
         doorPaymentInfo.setPaymentTnx("139071630220170614094545275");
         paymentInfoList.add(doorPaymentInfo);
@@ -203,7 +203,8 @@ public class ParkingServiceImplTest {
         doorCarInParkingShow.setEntryPic("");
         carinlist.add(doorCarInParkingShow);
         //入场入参
-        doorCarInParkingParam.setCarinlist(carinlist);
+        String[]  strings =  new String[]{};
+//        doorCarInParkingParam.setCarinlist(strings);
         doorCarInParkingParam.setSignature("SJDKLSJKLDJSKLSHJKSHDJKHJKHJK");
         doorCarInParkingParam.setT("1520416876");
         String url= "";
@@ -227,7 +228,7 @@ public class ParkingServiceImplTest {
         doorPaymentInfo.setAccountCharge("3.0000");
         doorPaymentInfo.setPayCharge("1.2300");
         doorPaymentInfo.setPaymentType("1");
-        doorPaymentInfo.setPayDate("2017-06-14 09:45:45");
+//        doorPaymentInfo.setPayDate("2017-06-14 09:45:45");
         doorPaymentInfo.setDisAmount("1.7700");
         doorPaymentInfo.setPaymentTnx("139071630220170614094545275");
         paymentInfoList.add(doorPaymentInfo);
@@ -261,7 +262,8 @@ public class ParkingServiceImplTest {
         doorCarOutParkingShow.setEntrancePic("");
         showList.add(doorCarOutParkingShow);
        //出场入参
-        doorCarOutParkingParam.setCaroutlist(showList);
+        String[]  strings =  new String[]{};
+//        doorCarOutParkingParam.setCaroutlist(strings);
         doorCarOutParkingParam.setT("1520416876");
         doorCarOutParkingParam.setSignature("SJDKLSJKLDJSKLSHJKSHDJKHJKHJK");
         String url = "";

@@ -19,4 +19,11 @@ public interface MchInfoService {
     * */
     MchInfo getMchInfoById(String mchId);
 
+    /**
+     * 根据支付订单ID获取商户信息
+     * @param payOrderId 商户ID
+     * @return
+     * */
+    MchInfo getMchInfoByPayOrderId(String payOrderId);
+
 }

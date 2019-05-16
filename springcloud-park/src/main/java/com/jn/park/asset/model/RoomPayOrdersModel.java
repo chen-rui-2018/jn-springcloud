@@ -17,7 +17,7 @@ import java.util.List;
 public class RoomPayOrdersModel implements Serializable {
     private static final long serialVersionUID = 7931481554400000727L;
 
-    @ApiModelProperty(value = "订单明细信息",example = "[{roomName:\"102房间\"},{roomName:\"103房间\"}]")
+    @ApiModelProperty(value = "订单明细信息")
     private List<RoomPayOrdersItemModel> roomPayOrdersItemModels;
 
     @ApiModelProperty(value ="主键",example = "")

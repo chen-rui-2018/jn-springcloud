@@ -1,5 +1,6 @@
 package org.xxpay.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.jn.common.model.Result;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.api.RefundOrderClient;
@@ -37,7 +38,7 @@ public class PayControllerTest {
 
 
     /**
-     *创建支付订单
+     *创建支付订单（支付宝WAP）
     * */
     @Test
     public void createPayOrder() {
@@ -151,6 +152,54 @@ public class PayControllerTest {
         /*******step 5 验签通过后进行业务处理 ********/
         System.out.println("result 数据返回："+result.toString());
         System.out.println("结束退款订单========================");
+
+    }
+
+
+    /**
+     *创建支付订单（微信）
+     * */
+    @Test
+    public void createWxPayOrder() {
+
+        /*******step 1 封装参数 ********/
+        System.out.println("开始支付下单========================");
+        PayOrderReq payOrder = new PayOrderReq();
+        payOrder.setMchId(MchIdEnum.MCH_BASE.getCode());
+        //payOrder.setMchOrderNo(UUID.randomUUID().toString().substring(0,20));
+        payOrder.setMchOrderNo("123");
+        payOrder.setChannelId(ChannelIdEnum.WX_MWEB.getCode());
+        payOrder.setAmount(10000L);
+        payOrder.setSubject("商品测试标题");
+        payOrder.setBody("阳的测试消费");
+        payOrder.setParam1("param1");
+        //payOrder.setNotifyUrl("http://192.168.10.80:3010/pay/notice");
+        payOrder.setServiceId("springcloud-enterprise");
+        payOrder.setServiceUrl("/api/payment/payBill/payCallBack");
+        payOrder.setAliPayReturnUrl("http://www.taobao.com");
+        payOrder.setExtra("{sceneInfo:22}");
+        payOrder.setClientIp("192.168.10.80");
+        /*******step 2 生成签名(签名后必须要确保参数都不变,否则影响验签结果) ********/
+        //生成签名
+        payOrder.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrder),MchIdEnum.MCH_BASE.getReqKey()));
+
+        /*******step 3 调用接口 ********/
+        //执行下单
+        Result result  =   payOrderClient.createPayOrder(payOrder);
+
+        /*******step 4 验证响应签名 ********/
+        //验证响应签名
+        boolean verifyFlag = XXPayUtil.verifyPaySign(BeanToMap.toMap(result.getData()), MchIdEnum.MCH_BASE.getRspKey());
+        if(!verifyFlag) {
+            System.out.println(" 支付验证响应签名失败  fail ！");
+            return;
+        }
+
+        /*******step 5 验签通过后进行业务处理 ********/
+        System.out.println("成功下单:");
+        System.out.println("result数据:"+result.toString());
+        System.out.println("JSON格式:" + JSON.toJSONString(result.getData()));
+        System.out.println("结束支付下单========================");
 
     }
 

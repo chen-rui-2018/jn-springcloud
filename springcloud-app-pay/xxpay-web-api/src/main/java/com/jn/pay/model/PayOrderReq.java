@@ -132,6 +132,8 @@ public class PayOrderReq implements Serializable  {
 
     /**
      * 签名
+     * 通过工具 PayDigestUtil.getSign(BeanToMap.toMap(请求对象),请求密钥)
+     *
      */
     @ApiModelProperty("签名,可以通过API提供的工具生成")
     @NotBlank(message = "签名不能为空！")

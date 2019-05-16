@@ -18,23 +18,14 @@ public class PayOrderQueryReq implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 商户ID
-     * （详情请查看 MchIdEnum 枚举类）
-     * */
-    @NotBlank(message = "商户ID不能为空！")
-    private String mchId;
-    /**
-     * 支付中心生成的订单号，与mchOrderNo二者传一即可
+     * 支付系统生成的订单号
      * */
     private String payOrderId;
     /**
-     * 商户订单号,与payOrderId二者传一即可
-     */
-    private String mchOrderNo;
-    /**
-     * 是否执行回调，如果为true，则支付中心会再次向商户发起一次回调，如果为false则不发起
+     * 是否执行回调，如果为true，则支付中心会再次向商户发起一次回调
+     * 如果为false则不发起,默认为false
     * */
-    private boolean executeNotify;
+    private Boolean executeNotify = false;
     /**
      * 签名
      */
@@ -43,27 +34,14 @@ public class PayOrderQueryReq implements Serializable  {
     private String sign;
 
 
+
     @Override
     public String toString() {
         return "PayOrderQueryReq{" +
-                "mchId='" + mchId + '\'' +
-                ", payOrderId='" + payOrderId + '\'' +
-                ", mchOrderNo='" + mchOrderNo + '\'' +
+                "payOrderId='" + payOrderId + '\'' +
                 ", executeNotify=" + executeNotify +
                 ", sign='" + sign + '\'' +
                 '}';
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public String getMchId() {
-        return mchId;
-    }
-
-    public void setMchId(String mchId) {
-        this.mchId = mchId;
     }
 
     public String getPayOrderId() {
@@ -74,19 +52,11 @@ public class PayOrderQueryReq implements Serializable  {
         this.payOrderId = payOrderId;
     }
 
-    public String getMchOrderNo() {
-        return mchOrderNo;
-    }
-
-    public void setMchOrderNo(String mchOrderNo) {
-        this.mchOrderNo = mchOrderNo;
-    }
-
-    public boolean isExecuteNotify() {
+    public Boolean getExecuteNotify() {
         return executeNotify;
     }
 
-    public void setExecuteNotify(boolean executeNotify) {
+    public void setExecuteNotify(Boolean executeNotify) {
         this.executeNotify = executeNotify;
     }
 

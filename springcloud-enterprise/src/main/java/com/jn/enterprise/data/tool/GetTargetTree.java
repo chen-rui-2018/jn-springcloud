@@ -36,7 +36,6 @@ public class GetTargetTree {
                 tmVO.setIsMuiltRow(target.getIsMuiltRow().toString());
                 tmVO.setTargetType(target.getTargetType().toString());
                 tmVO.setRecordStatus(target.getRecordStatus().toString());
-
                 tmVO.setId(target.getTargetId());
                 tmVO.setPid(target.getParentId());
                 tmVO.setText(target.getTargetName());

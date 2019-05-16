@@ -44,8 +44,6 @@ public class POICompany {
         //转换成树形
         GetCompanyTree getCompanyTree = new GetCompanyTree();
         List<Map> treeList = getCompanyTree.bulid(list);
-
-
         //构建HSSFWorkBook
         HSSFWorkbook wb = new HSSFWorkbook();
         // 生成一个样式
@@ -54,24 +52,19 @@ public class POICompany {
         headstyle.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
         headstyle.setLocked(true);
 
-
         //指标值长度
         int lenth = 0;
-
         for (int i = 0; i < treeList.size(); i++) {
-
             HashMap map = (HashMap) treeList.get(i);
             Set set = map.keySet();
             Iterator iterator = set.iterator();
             String key = (String) iterator.next();
             List<CompanyTree> childs = (List<CompanyTree>) map.get(key);
 
-
             for (CompanyTree child : childs) {
                 String str = child.getDATA();
                 String[] str1 = str.split(";");
                 int len = str1.length;
-
                 if (len > lenth) {
                     lenth = len;
                 }
@@ -80,22 +73,23 @@ public class POICompany {
 
         //文件名
         HSSFSheet sheet = wb.createSheet(filename);
-
         //表头设置
         HSSFRow headrow = sheet.createRow(0);
         headrow.createCell(0).setCellValue("指标名称");
         headrow.createCell(1).setCellValue("单位");
-
         HSSFCell cell = headrow.createCell(2);
         cell.setCellValue("指标值");
         cell.setCellStyle(headstyle);
-        sheet.addMergedRegionUnsafe(new CellRangeAddress(0, 0, 2, 2 + (lenth - 1)));
 
-        headrow.createCell(2 + lenth).setCellValue("合计");
+        if((2+lenth-1)>2){
+            sheet.addMergedRegionUnsafe(new CellRangeAddress(0, 0, 2, 2 + (lenth - 1)));
+            headrow.createCell(2 + lenth).setCellValue("合计");
+        }else{
+            headrow.createCell(3).setCellValue("合计");
+        }
 
         //填充数据
         int rowlen = 1;
-
         for (int i = 0; i < treeList.size(); i++) {
             HSSFRow row = sheet.createRow(rowlen);
             HashMap map = (HashMap) treeList.get(i);
@@ -117,30 +111,15 @@ public class POICompany {
                 for (int j = 0; j < len; j++) {
                     row1.createCell(2 + j).setCellValue(str1[j]);
                 }
-
                 row1.createCell(2 + lenth).setCellValue(child2.getSumval());
-
-
                 rowlen++;
             }
         }
 
-
         wb.write(resp.getOutputStream());
         resp.getOutputStream().flush();
         resp.getOutputStream().close();
-
         wb.close();
-
-
-//        try {
-//            //写入到excel中去
-//            wb.write(new File("D:\\test.xls"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
     }
 
 }

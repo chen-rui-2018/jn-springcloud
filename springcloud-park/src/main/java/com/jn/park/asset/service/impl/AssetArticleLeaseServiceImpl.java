@@ -97,6 +97,9 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
     public PaginationData<List<AssetArticleLeaseModel>> getArticleLeaseList(Page page, String name) {
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
         List<AssetArticleLeaseModel> assetArticleLeaseModelList = assetArticleLeaseDao.getArticleLeaseList(name);
+        for (AssetArticleLeaseModel assetArticleLeaseModel : assetArticleLeaseModelList) {
+            assetArticleLeaseModel.setBarCode(assetArticleLeaseModel.getAssetNumber());
+        }
         PaginationData<List<AssetArticleLeaseModel>> data = new PaginationData(assetArticleLeaseModelList,objects.getTotal());
         return data;
     }

@@ -33,11 +33,17 @@ public class PayServerController extends BaseController implements PayClient {
     private MyPayBillService myPayBillService;
 
 
-    @ControllerLog(doAction = "我的账单-查询列表")
+    /*@ControllerLog(doAction = "我的账单-查询列表")
     @Override
     public Result<PaginationData<List<PayBillVo>>> billQuery(PayBillParams payBillParams) {
         PaginationData<List<PayBillVo>> data = myPayBillService.getBillQueryList(payBillParams);
         return new Result(data);
+    }*/
+
+    @Override
+    @ControllerLog(doAction = "我的账单-通过账单ID查询账单【基础】信息(包含账单支付状态)")
+    public PayBill getBillBasicInfo(String billId) {
+        return myPayBillService.getBillBasicInfo(billId);
     }
 
     @ControllerLog(doAction = "我的账单-通过账单ID查询账单详情信息")

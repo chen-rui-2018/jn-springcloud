@@ -9,8 +9,12 @@ import com.jn.common.api.CodeAndMsg;
  * @modified By:
  */
 public enum JPushEnum implements CodeAndMsg  {
-    J_PUSH_APP_KEY("appKey","7b20e6375099fe80ff706dca"),
-    J_PUSH_MASTER_SECRET("Master_Secret","2a35e0e5980a109b10814468"),
+    // 测试环境
+    J_PUSH_APP_KEY("appKey","080b2d2bf80c41248e159dba"),
+    J_PUSH_MASTER_SECRET("Master_Secret","2273860de366bd73e545d858"),
+    // 生产环境
+//    J_PUSH_APP_KEY("appKey","7b20e6375099fe80ff706dca"),
+//    J_PUSH_MASTER_SECRET("Master_Secret","2a35e0e5980a109b10814468"),
     J_PUSH_MASTER_ANDROID("1","ANDROID"),
     J_PUSH_MASTER_IOS("2","IOS"),
     ;

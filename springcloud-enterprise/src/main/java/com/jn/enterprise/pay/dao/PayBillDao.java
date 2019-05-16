@@ -2,10 +2,11 @@ package com.jn.enterprise.pay.dao;
 
 
 import com.jn.enterprise.pay.entity.TbPayBillDetails;
+import com.jn.pay.model.PayBill;
+import com.jn.pay.vo.PayBillReturnParamVo;
 import com.jn.pay.vo.PayBillVo;
 import com.jn.pay.model.PayBillParams;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -19,6 +20,8 @@ import java.util.List;
 public interface PayBillDao {
 
     List<PayBillVo> getBillQueryList(@Param("payBill")PayBillParams payBill);
+
+    List<PayBillReturnParamVo> getBillAppList(@Param("payBill")PayBill payBill);
 
     void insertList(@Param("list") List<TbPayBillDetails> list);
 }

@@ -1725,6 +1725,76 @@ public class TbPayBillCriteria {
             addCriterion("callback_id not between", value1, value2, "callbackId");
             return (Criteria) this;
         }
+
+        public Criteria andBillReceiverIsNull() {
+            addCriterion("bill_receiver is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverIsNotNull() {
+            addCriterion("bill_receiver is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverEqualTo(String value) {
+            addCriterion("bill_receiver =", value, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverNotEqualTo(String value) {
+            addCriterion("bill_receiver <>", value, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverGreaterThan(String value) {
+            addCriterion("bill_receiver >", value, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverGreaterThanOrEqualTo(String value) {
+            addCriterion("bill_receiver >=", value, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverLessThan(String value) {
+            addCriterion("bill_receiver <", value, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverLessThanOrEqualTo(String value) {
+            addCriterion("bill_receiver <=", value, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverLike(String value) {
+            addCriterion("bill_receiver like", value, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverNotLike(String value) {
+            addCriterion("bill_receiver not like", value, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverIn(List<String> values) {
+            addCriterion("bill_receiver in", values, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverNotIn(List<String> values) {
+            addCriterion("bill_receiver not in", values, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverBetween(String value1, String value2) {
+            addCriterion("bill_receiver between", value1, value2, "billReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillReceiverNotBetween(String value1, String value2) {
+            addCriterion("bill_receiver not between", value1, value2, "billReceiver");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

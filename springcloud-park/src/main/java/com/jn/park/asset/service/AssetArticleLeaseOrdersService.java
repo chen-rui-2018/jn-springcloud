@@ -2,6 +2,7 @@ package com.jn.park.asset.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.LeaseOrdersModel;
 import com.jn.system.model.User;
@@ -56,4 +57,11 @@ public interface AssetArticleLeaseOrdersService {
      * @return
      */
     PaginationData<List<AssetArticleLeaseOrdersModel>> getArticleLeaseOrdersList(String account, Page page);
+
+    /**
+     * 发起支付
+     * @param id
+     * @return
+     */
+    Result startPayment(String id);
 }

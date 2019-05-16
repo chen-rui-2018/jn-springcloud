@@ -43,6 +43,16 @@ public class DynamicWebShow implements Serializable {
     private String identity;
     @ApiModelProperty(value = "是否为本人发布动态 0 否- 1 是")
     private String isSelf;
+    @ApiModelProperty(value = "是已经点赞 0 否- 1 是")
+    private String isLike;
+
+    public String getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(String isLike) {
+        this.isLike = isLike;
+    }
 
     public String getIsSelf() {
         return isSelf;

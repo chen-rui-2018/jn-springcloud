@@ -227,10 +227,7 @@ public class DataUploadController  extends BaseController {
     })
     public void getCompanyExcel(String taskbatch, String modelid, HttpServletRequest req,
                                     HttpServletResponse resp)throws IOException {
-
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
-       //List<CompanyTree> list = uploadService.getExcel(taskbatch,modelid);
-        System.out.println("================"+list);
         POICompany company = new POICompany();
        company.getTable(list,req,resp);
 
@@ -248,9 +245,7 @@ public class DataUploadController  extends BaseController {
     })
     public void getDescribeExcel(String taskbatch, String modelid, HttpServletRequest req,
                                 HttpServletResponse resp)throws IOException {
-
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
-
         POIDescribe de = new POIDescribe();
         de.getDescribeTable(list,req,resp);
 
@@ -267,14 +262,11 @@ public class DataUploadController  extends BaseController {
     })
     public void getScienceExcel(String taskbatch, String modelid, HttpServletRequest req,
                                  HttpServletResponse resp)throws IOException {
-
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
-
         POIScience science = new POIScience();
         science.getScienceTable(list,req,resp);
 
     }
-
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-科技园模板表头")
     @GetMapping(path = "/garden/getScienceHeaderExcel")
@@ -287,9 +279,7 @@ public class DataUploadController  extends BaseController {
     })
     public void getScienceHeaderExcel(String taskbatch, String modelid, HttpServletRequest req,
                                 HttpServletResponse resp)throws IOException {
-
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
-
         POIScienceHeader header = new POIScienceHeader();
         header.getScienceHeaderTable(list,req,resp);
 

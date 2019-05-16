@@ -1,9 +1,7 @@
 package com.jn.pay.vo;
 
-import com.jn.pay.model.PayAccountBookMoneyRecord;
-import com.jn.pay.model.PayBill;
-import com.jn.pay.model.PayBillDetails;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,30 +15,44 @@ import java.util.List;
  * @modified By:
  */
 @ApiModel(value = "PayBillVo" ,description = "账单查询VO")
-public class PayBillVo extends PayBill implements Serializable {
+public class PayBillVo implements Serializable {
     private static final long serialVersionUID = -6645256359045252226L;
 
-    PayAccountBookMoneyRecord payAccountBookMoneyRecord;
+    @ApiModelProperty(value="账单类型")
+    private String type;
 
-    List<PayBillDetails> payBillDetails;
+    @ApiModelProperty(value="催缴总次数")
+    private Integer totalReminderNumber;
+
+
+    @ApiModelProperty(value="账单基础信息")
+    List<PayBillReturnParamVo> payBillReturnParamVo;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public PayAccountBookMoneyRecord getPayAccountBookMoneyRecord() {
-        return payAccountBookMoneyRecord;
+    public String getType() {
+        return type;
     }
 
-    public void setPayAccountBookMoneyRecord(PayAccountBookMoneyRecord payAccountBookMoneyRecord) {
-        this.payAccountBookMoneyRecord = payAccountBookMoneyRecord;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public List<PayBillDetails> getPayBillDetails() {
-        return payBillDetails;
+    public Integer getTotalReminderNumber() {
+        return totalReminderNumber;
     }
 
-    public void setPayBillDetails(List<PayBillDetails> payBillDetails) {
-        this.payBillDetails = payBillDetails;
+    public void setTotalReminderNumber(Integer totalReminderNumber) {
+        this.totalReminderNumber = totalReminderNumber;
+    }
+
+    public List<PayBillReturnParamVo> getPayBillReturnParamVo() {
+        return payBillReturnParamVo;
+    }
+
+    public void setPayBillReturnParamVo(List<PayBillReturnParamVo> payBillReturnParamVo) {
+        this.payBillReturnParamVo = payBillReturnParamVo;
     }
 }

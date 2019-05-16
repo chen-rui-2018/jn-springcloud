@@ -47,7 +47,7 @@ public class SecurityVideoServiceImplTest {
 //        securityPlayBackUrlParam.setProtocol("RTSP");
 //        securityPlayBackUrlParam.setTransmode("0");
 //        securityPlayBackUrlParam.setUuid("4750e3a4a5bbad3cda5bbad3cd4af9ed5101");
-//        securityPlayBackUrlParam.setExpand("streamform=rtp");
+        securityPlayBackUrlParam.setExpand("streamform=rtp");
     }
     @Test
     public void findSecurityMonitoringPointList() {

@@ -230,7 +230,9 @@ public class StaffServiceImpl implements StaffService {
     @Override
     @ServiceLog(doAction = "邀请新成员列表")
     public PaginationData getInviteStaffList(StaffListParam staffListParam, String curAccount) {
-        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
+        //String comId = checkAccountIsCompanyAdmin(curAccount).getId();
+        // 判断账号是否为企业管理员
+        checkAccountIsCompanyAdmin(curAccount);
 
         // 返回数据集合
         List<UserExtensionInfoVO> dataList = new ArrayList<>(16);
@@ -241,15 +243,32 @@ public class StaffServiceImpl implements StaffService {
         // 企管理员账号集合
         List<String> comAdminAccountList = new ArrayList<>(5);
 
-        // 根据企业ID查询已邀请的账号列表
-        StaffListInParam staffListInParam = new StaffListInParam();
-        staffListInParam.setComId(comId);
-        List<StaffStatusList> staffStatusList = staffMapper.getStaffStatusList(staffListInParam);
-        for (StaffStatusList usl : staffStatusList) {
-            accountList.add(usl.getAccount());
+        // 根据企业ID查询已邀请的账号列表（员工可以加入多个企业）
+        //StaffListInParam staffListInParam = new StaffListInParam();
+        //staffListInParam.setComId(comId);
+        //List<StaffStatusList> staffStatusList = staffMapper.getStaffStatusList(staffListInParam);
+
+        // 查询已经是员工的数据
+        TbServiceCompanyStaffCriteria inviteCriteria = new TbServiceCompanyStaffCriteria();
+        TbServiceCompanyStaffCriteria checkCriteria = new TbServiceCompanyStaffCriteria();
+        TbServiceCompanyStaffCriteria.Criteria checkStatusCriteria = checkCriteria.createCriteria();
+        inviteCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andInviteStatusNotEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode())
+                .andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode());
+
+        checkStatusCriteria.andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andInviteStatusNotEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode())
+                .andCheckStatusIsNull();
+        inviteCriteria.or(checkStatusCriteria);
+
+        List<TbServiceCompanyStaff> StaffList = tbServiceCompanyStaffMapper.selectByExample(inviteCriteria);
+        if (StaffList != null && !StaffList.isEmpty()) {
+            for (TbServiceCompanyStaff usl : StaffList) {
+                accountList.add(usl.getAccount());
+            }
         }
 
-        // 查询所有用户表信息
+        // 查询不是员工的账号信息
         SearchFiledParam searchFiledParam = new SearchFiledParam();
         BeanUtils.copyProperties(staffListParam, searchFiledParam);
         searchFiledParam.setAccountList(accountList);

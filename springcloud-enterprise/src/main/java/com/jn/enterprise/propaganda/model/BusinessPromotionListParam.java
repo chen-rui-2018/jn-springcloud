@@ -30,6 +30,26 @@ public class BusinessPromotionListParam extends Page implements Serializable {
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;
+    @ApiModelProperty(value = "宣传区域", hidden = true)
+    private String propagandaArea;
+    @ApiModelProperty(value = "发布平台(1:App 2:门户)", hidden = true)
+    private String issuePlatform;
+
+    public String getPropagandaArea() {
+        return propagandaArea;
+    }
+
+    public void setPropagandaArea(String propagandaArea) {
+        this.propagandaArea = propagandaArea;
+    }
+
+    public String getIssuePlatform() {
+        return issuePlatform;
+    }
+
+    public void setIssuePlatform(String issuePlatform) {
+        this.issuePlatform = issuePlatform;
+    }
 
     public String getPropagandaType() {
         return propagandaType;

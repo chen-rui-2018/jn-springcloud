@@ -53,7 +53,7 @@ public class BusinessHomePageController extends BaseController {
             logger.warn("企业宣传列表查询获取当前登录用户失败");
             return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        return  new Result(businessPromotionService.getBusinessPromotionList(businessHomePageParam,user.getAccount()));
+        return  new Result(businessPromotionService.getBusinessPromotionList(businessHomePageParam,null));
     }
 
     @ControllerLog(doAction = "门户各首页企业宣传详情")

@@ -348,7 +348,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
 
         // ibps启动流程失败
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
-            logger.warn("[添加科技金融产品] 启动ibps流程出错，错误信息：", ibpsResult != null ? ibpsResult.getMessage() : "");
+            logger.warn("[添加科技金融产品] 启动ibps流程出错，错误信息：{}", ibpsResult != null ? ibpsResult.getMessage() : "");
             throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SUBMIT_IBPS_ERROR);
         }
         logger.info("[添加科技金融产品] " + ibpsResult.getMessage());

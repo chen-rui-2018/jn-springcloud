@@ -1410,12 +1410,8 @@ public class DataUploadServiceImpl implements DataUploadService {
                 }
             }
 
-
-
             //数据存储
             if(dataList !=null && dataList.size()>0){
-
-
                 if(DataUploadConstants.COMPANY_TYPE.equals(data.getTaskInfo().getFileType())){
                     //未填报状态；直接写入数据
                     targetDao.saveData(dataList);
@@ -1430,21 +1426,50 @@ public class DataUploadServiceImpl implements DataUploadService {
                         TbDataReportingTaskDataCriteria taskDataCriteriaBean = new TbDataReportingTaskDataCriteria();
                         TbDataReportingSnapshotTargetCriteria taretInfoCriteriaBean = new TbDataReportingSnapshotTargetCriteria();
 
+                        //检测 获取出该任务填报过的所有值，然后和，用户传上来的值进行比较；如果不存在则从数据库中删除该数据，防止出现用户删不掉
+                        taskDataCriteriaBean.or().andFillIdEqualTo(fillId).andTabIdEqualTo(tabBean.getTabId()).andModelIdEqualTo(modelId);
+                        List<TbDataReportingTaskData>  beforeValue = tbDataReportingTaskDataMapper.selectByExample(taskDataCriteriaBean);
+                        List<String>  fallInFormIds = new ArrayList<>();
+                        for(TbDataReportingTaskData beforeBean : beforeValue){
+                            //不存在时为true
+                            boolean isNotExist = true;
+                            for(TbDataReportingTaskData  nowData : dataList){
+                                //存在时将标志位修改为false
+                                if(nowData.getFormId().equals(beforeBean.getFormId())  && nowData.getRowNum().equals(beforeBean.getRowNum()) && nowData.getTargetId().equals(beforeBean.getTargetId())){
+                                    isNotExist =false;
+                                    break;
+                                }
+                            }
+                            if(isNotExist){
+                                fallInFormIds.add(beforeBean.getFallInFormId());
+                            }
+                        }
+                        if(fallInFormIds !=null && fallInFormIds.size()>0){
+                            taskDataCriteriaBean.clear();
+                            taskDataCriteriaBean.or().andFallInFormIdIn(fallInFormIds);
+                            //删除掉用户删除的值
+                            tbDataReportingTaskDataMapper.deleteByExample(taskDataCriteriaBean);
+                        }
+
                         TbDataReportingTaskData updateRecord = null;
                         for (TbDataReportingTaskData dbean : dataList) {
                             taskDataCriteriaBean.clear();
                             updateRecord = new TbDataReportingTaskData();
                             updateRecord.setData(dbean.getData());
                             updateRecord.setFillId(fillId);
-                            taskDataCriteriaBean.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdEqualTo(dbean.getTargetId())
-                                    .andRowNumEqualTo(dbean.getRowNum());
+                            taskDataCriteriaBean.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdEqualTo(dbean.getTargetId()).andFillIdEqualTo(fillId)
+                                    .andFormIdEqualTo(dbean.getFormId()) .andRowNumEqualTo(dbean.getRowNum());
                             taretInfoCriteriaBean.clear();
                             taretInfoCriteriaBean.or().andTargetIdEqualTo(dbean.getTargetId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
                                     .andTaskBatchEqualTo(taskBatch).andDepartmentIdEqualTo(data.getDepartmentId());
                             List<TbDataReportingSnapshotTarget> targetList = tbDataReportingSnapshotTargetMapper.selectByExample(taretInfoCriteriaBean);
-                            if (targetList != null && targetList.size() > 0) {
-                                int resultSize = tbDataReportingTaskDataMapper.updateByExampleSelective(updateRecord, taskDataCriteriaBean);
-                                if (resultSize != 1) {
+                            if(targetList !=null && targetList.size()>0){
+
+
+                                List<TbDataReportingTaskData> resultSize =  tbDataReportingTaskDataMapper.selectByExample(taskDataCriteriaBean);
+                                tbDataReportingTaskDataMapper.updateByExampleSelective(updateRecord,taskDataCriteriaBean);
+
+                                if(resultSize ==null || resultSize.size() ==0){
                                     dbList.add(dbean);
                                 }
                             }
@@ -1633,21 +1658,49 @@ public class DataUploadServiceImpl implements DataUploadService {
                         TbDataReportingTaskDataCriteria taskDataCriteriaBean = new TbDataReportingTaskDataCriteria();
                         TbDataReportingSnapshotTargetCriteria taretInfoCriteriaBean = new TbDataReportingSnapshotTargetCriteria();
 
+                        //检测 获取出该任务填报过的所有值，然后和，用户传上来的值进行比较；如果不存在则从数据库中删除该数据，防止出现用户删不掉
+                        taskDataCriteriaBean.or().andFillIdEqualTo(fillId).andTabIdEqualTo(tabBean.getTabId()).andModelIdEqualTo(modelId);
+                        List<TbDataReportingTaskData>  beforeValue = tbDataReportingTaskDataMapper.selectByExample(taskDataCriteriaBean);
+                        List<String>  fallInFormIds = new ArrayList<>();
+                        for(TbDataReportingTaskData beforeBean : beforeValue){
+                            //不存在时为true
+                            boolean isNotExist = true;
+                            for(TbDataReportingTaskData  nowData : dataList){
+                                //存在时将标志位修改为false
+                                if(nowData.getFormId().equals(beforeBean.getFormId())  && nowData.getRowNum().equals(beforeBean.getRowNum()) && nowData.getTargetId().equals(beforeBean.getTargetId())){
+                                    isNotExist =false;
+                                    break;
+                                }
+                            }
+                            if(isNotExist){
+                                fallInFormIds.add(beforeBean.getFallInFormId());
+                            }
+                        }
+                        if(fallInFormIds !=null && fallInFormIds.size()>0){
+                            taskDataCriteriaBean.clear();
+                            taskDataCriteriaBean.or().andFallInFormIdIn(fallInFormIds);
+                            //删除掉用户删除的值
+                            tbDataReportingTaskDataMapper.deleteByExample(taskDataCriteriaBean);
+                        }
+
+
                         TbDataReportingTaskData updateRecord=null;
                         for(TbDataReportingTaskData dbean : dataList){
                             taskDataCriteriaBean.clear();
                             updateRecord = new TbDataReportingTaskData();
                             updateRecord.setData(dbean.getData());
                             updateRecord.setFillId(fillId);
-                            taskDataCriteriaBean.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdEqualTo(dbean.getTargetId())
-                                    .andRowNumEqualTo(dbean.getRowNum());
+                            taskDataCriteriaBean.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdEqualTo(dbean.getTargetId()).andFillIdEqualTo(fillId)
+                                    .andFormIdEqualTo(dbean.getFormId()) .andRowNumEqualTo(dbean.getRowNum());
                             taretInfoCriteriaBean.clear();
                             taretInfoCriteriaBean.or().andTargetIdEqualTo(dbean.getTargetId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
                                     .andTaskBatchEqualTo(taskBatch).andDepartmentIdEqualTo(data.getDepartmentId());
                             List<TbDataReportingSnapshotTarget> targetList = tbDataReportingSnapshotTargetMapper.selectByExample(taretInfoCriteriaBean);
                             if(targetList !=null && targetList.size()>0){
-                                int resultSize = tbDataReportingTaskDataMapper.updateByExampleSelective(updateRecord,taskDataCriteriaBean);
-                                if(resultSize !=1){
+                                List<TbDataReportingTaskData> resultSize =  tbDataReportingTaskDataMapper.selectByExample(taskDataCriteriaBean);
+                                tbDataReportingTaskDataMapper.updateByExampleSelective(updateRecord,taskDataCriteriaBean);
+
+                                if(resultSize ==null || resultSize.size() ==0){
                                     dbList.add(dbean);
                                 }
                             }
@@ -1715,7 +1768,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             // 检测其他部门是否已经填报完毕
             gardenFillerCriteria.clear();
             gardenFillerCriteria.or().andFillIdEqualTo(fillId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
-                    .andStatusEqualTo(new Byte(DataUploadConstants.FILLED));
+                    .andStatusNotEqualTo(new Byte(DataUploadConstants.FILLED));
             List<TbDataReportingGardenFiller> notFillList = tbDataReportingGardenFillerMapper.selectByExample(gardenFillerCriteria);
 
             // 任务状态修改，只有该任务的所有部门都是已填报的状态，任务的整体状态才能是已完成

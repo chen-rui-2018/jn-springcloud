@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.plan.dao.ProjectManageDao;
 import com.jn.park.plan.model.*;
@@ -36,14 +37,17 @@ public class ProjectManageServiceImpl implements ProjectManageService {
         if(projectModel.getOrderByClause() == null){
             projectModel.setOrderByClause("project_no desc");
         }
-        if(projectModel.getProgress() == null){
-            projectModel.setProgress("");
+        if(StringUtils.isBlank(projectModel.getProgress())){
+            projectModel.setProgress(null);
         }
-        if(projectModel.getProjectState() == null){
-            projectModel.setProjectState("");
+        if(StringUtils.isBlank(projectModel.getProjectState())){
+            projectModel.setProjectState(null);
         }
-        if(projectModel.getProjectName() == null){
-            projectModel.setProjectName("");
+        if(StringUtils.isBlank(projectModel.getProjectState())){
+            projectModel.setProjectState(null);
+        }
+        if(StringUtils.isBlank(projectModel.getProjectName())){
+            projectModel.setProjectName(null);
         }
         Page<Object> objects = PageHelper.startPage(projectModel.getPage(), projectModel.getRows());
         List<ProjectManageModel> projectManageModelsList= projectManageDao.findAll(projectModel.getProjectState(),projectModel.getProgress(),projectModel.getProjectName(),projectModel.getOrderByClause());

@@ -2,8 +2,6 @@ package com.jn.enterprise.pay.service.impl;
 
 
 import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
@@ -20,18 +18,19 @@ import com.jn.enterprise.pay.enums.PaymentBillExceptionEnum;
 import com.jn.enterprise.pay.enums.PaymentBillMethodEnum;
 import com.jn.enterprise.pay.util.MoneyUtils;
 import com.jn.pay.model.*;
+import com.jn.pay.vo.PayBillReturnParamVo;
 import com.jn.pay.vo.PayBillVo;
 import com.jn.enterprise.pd.declaration.enums.PdStatusEnums;
-import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.ChannelIdEnum;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.enums.RspEnum;
 import com.jn.pay.utils.ResponseUtils;
 import com.jn.pay.vo.PayBillCreateParamVo;
+import com.jn.send.api.DelaySendMessageClient;
+import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -39,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.*;
@@ -90,21 +90,57 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     private TbPayBillMiddleMapper tbPayBillMiddleMapper;
 
     @Autowired
-    private PayOrderClient payOrderClient;
-
-    @Autowired
     private CompanyService companyService;
 
     @Autowired
-    private LoadBalancerUtil loadBalancerUtils;
+    private DelaySendMessageClient delaySendMessageClient;
 
 
-    @ServiceLog(doAction = "我的账单-查询账单信息列表")
+
+    @ServiceLog(doAction = "我的账单-查询账单信息列表(APP端)")
     @Override
-    public PaginationData<List<PayBillVo>> getBillQueryList(@Param("payBill")PayBillParams payBill) {
-        Page<Object> objects = PageHelper.startPage(payBill.getPage(), payBill.getRows());
-        List<PayBillVo> payBillVo = payBillDao.getBillQueryList(payBill);
-        return new PaginationData(payBillVo, objects.getTotal());
+    public PaginationData<List<PayBillVo>> getBillQueryList(@Param("payBill")PayBillParams payBill,User user) {
+        List<PayBillVo> pbList = new ArrayList<>();
+        /**获取所有账单该用户账单*/
+        PayBill pay = new PayBill();
+        List<PayBillReturnParamVo> listBills = new ArrayList<>();
+        pay.setBillReceiver(user.getAccount());
+        BeanUtils.copyProperties(payBill,pay);
+        listBills = payBillDao.getBillAppList(pay);
+        //类型标识
+        List<String> list = new ArrayList<>();
+        if(listBills.size() > 0){
+            list.add(listBills.get(0).getAcBookType());
+            String flag = listBills.get(0).getAcBookType();
+            for (int i = 0; i <listBills.size() ; i++) {
+                //账单类型标识
+                if(!flag.equals(listBills.get(i).getAcBookType())){
+                    list.add(listBills.get(i).getAcBookType());
+                    flag = listBills.get(i).getAcBookType();
+                }
+            }
+            for (int i = 0; i < list.size(); i++) {
+                PayBillVo payBillVo = new PayBillVo();
+                String str = list.get(i);
+                //相同类型催缴总次数
+                int total = 0;
+                List<PayBillReturnParamVo> pb = new ArrayList<>();
+                for (int j = 0; j < listBills.size(); j++) {
+                    if(str.equals(listBills.get(j).getAcBookType())){
+                        total += listBills.get(j).getReminderNumber();
+                        pb.add(listBills.get(j));
+                    }
+                }
+                payBillVo.setTotalReminderNumber(total);
+                payBillVo.setPayBillReturnParamVo(pb);
+                payBillVo.setType(str);
+                pbList.add(payBillVo);
+            }
+        }
+        PaginationData paginationData = new PaginationData();
+        paginationData.setRows(pbList);
+        paginationData.setTotal(pbList.size());
+        return paginationData;
     }
 
     @ServiceLog(doAction = "我的账单-通过账单ID查询账单详情信息")
@@ -121,6 +157,15 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             list.add(payBillDetails);
         }
         return list;
+    }
+
+    @Override
+    @ServiceLog(doAction = "我的账单-通过账单ID查询账单【基础】信息(包含账单支付状态)")
+    public PayBill getBillBasicInfo(String billId) {
+        PayBill payBill = new PayBill();
+        TbPayBill pb = tbPayBillMapper.selectByPrimaryKey(billId);
+        BeanUtils.copyProperties(pb,payBill);
+        return payBill;
     }
 
 
@@ -189,6 +234,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         tb.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
         tb.setReminderNumber(Integer.parseInt(PaymentBillEnum.PAY_REMINDER_NUMBER.getCode()));
         tb.setPaymentAffirm(PaymentBillEnum.BILL_AC_BOOK_CHECK_2.getCode());
+        tb.setBillReceiver(tbPayAccount.get(0).getUserId());
         tbPayBillMapper.insertSelective(tb);
         logger.info("结束执行统一缴费插入账单信息操作");
         /** 插入账单详情信息*/
@@ -255,14 +301,20 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             }
         }
         /**回调通知各业务测账单状态*/
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("billId", tbs.getBillId());
-        jsonObject.put("paymentState", tbs.getPaymentState());
-        Result result = loadBalancerUtils.getClientPostForEntity(
-                tbs.getCallbackId(),
-                tbs.getCallbackUrl(),
-                jsonObject.toString());
+        PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
+        payCallBackNotify.setBillId(tbs.getBillId());
+        payCallBackNotify.setPaymentState(tbs.getPaymentState());
+        Delay delay = new Delay();
+        delay.setServiceId(tbs.getCallbackId());
+        delay.setServiceUrl(tbs.getCallbackUrl());
+        delay.setTtl("30");
+        delay.setDataString(payCallBackNotify.toString());
+        logger.info("接收到延迟消息内容：【{}】",delay.toString());
+        logger.info("开始回调");
+        Result<Boolean> result = delaySendMessageClient.delaySend(delay);
+        logger.info("结束回调结果，【{}】",result.toString());
         return result;
+
         /**TODO 是否需要推送自动扣费的消息给企业或个人*/
     }
 
@@ -313,14 +365,18 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         payOrderReq.setSubject("支付标题必传");
         payOrderReq.setBody("支付描述信息必传");
         payOrderReq.setNotifyUrl("http://192.168.10.63:6101/api/payment/payBill/payCallBack");
-        Result result = null;
+        Result<Boolean> result = null;
         try{
             /**调用统一支付接口*/
             String jsonObject = JSON.toJSONString(payOrderReq);
-            result  = loadBalancerUtils.getClientPostForEntity(
-                    ENT_CLIENT,
-                    ENT_CLIENT_CALLBOCK_SERVICE,
-                    jsonObject);
+            logger.info("开始回调");
+            Delay delay = new Delay();
+            delay.setServiceId(ENT_CLIENT);
+            delay.setServiceUrl(ENT_CLIENT_CALLBOCK_SERVICE);
+            delay.setTtl("30");
+            delay.setDataString(jsonObject);
+            logger.info("接收到延迟消息内容：【{}】",delay.toString());
+            result = delaySendMessageClient.delaySend(delay);
             logger.info("调用统一支付下单接口返回结果{}",result);
             if(result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
                 /**返回成功状态，更新订单号到账单表*/
@@ -365,13 +421,13 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             List<TbPayBill> tbPayBills = tbPayBillMapper.selectByExample(billCriteria);
             for (int i = 0; i < tbPayBills.size(); i++) {
                 /**判断查询的账单状态是否为已支付*/
-                if(tbPayBills.get(i).getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_PAY)){
+                if (tbPayBills.get(i).getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_PAY)) {
                     throw new JnSpringCloudException(PaymentBillExceptionEnum.PAYMENT_STATUS_IS_PAY);
                 }
                 /**更新支付状态并新增流水记录
-                通过账本ID查询账本信息，进行入账出账等操作*/
+                 通过账本ID查询账本信息，进行入账出账等操作*/
                 TbPayAccountBook tbPayAccountBook = tbPayAccountBookMapper.selectByPrimaryKey(tbPayBills.get(i).getAcBookId());
-                if(null == tbPayAccountBook){
+                if (null == tbPayAccountBook) {
                     throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_BOOK_IS_NOT_EXIT);
                 }
                 /**先补充账本金额*/
@@ -391,9 +447,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tpbmr.setBillId(tbPayBills.get(i).getBillId());
                 tpbmr.setAcBookId(tbPayBills.get(i).getAcBookId());
                 String[] tmp = callBackParam.getChannelId().split("_");
-                if(tmp[0].equals(PaymentBillMethodEnum.BILL_STATE_WX_.getCode())){
+                if (tmp[0].equals(PaymentBillMethodEnum.BILL_STATE_WX_.getCode())) {
                     tpbmr.setPaymentMethod(PaymentBillMethodEnum.BILL_STATE_WX_.getMessage());
-                }else if(tmp[0].equals(PaymentBillMethodEnum.BILL_STATE_ALIPAY_.getCode())){
+                } else if (tmp[0].equals(PaymentBillMethodEnum.BILL_STATE_ALIPAY_.getCode())) {
                     tpbmr.setPaymentMethod(PaymentBillMethodEnum.BILL_STATE_ALIPAY_.getMessage());
                 }
                 tpbmr.setPaymentAction(PaymentBillActionEnum.BILL_STATE_MANUAL.getCode());
@@ -426,21 +482,25 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tbPayBillMapper.updateByPrimaryKeySelective(tbPayBills.get(i));
                 logger.info("调用统一支付下单接口回调，更新账单状态操作结束");
                 /**回调通知各业务测账单状态*/
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("billId", tbPayBills.get(i).getBillId());
-                jsonObject.put("paymentState", tbPayBills.get(i).getPaymentState());
-                loadBalancerUtils.getClientPostForEntity(
-                        tbPayBills.get(i).getCallbackId(),
-                        tbPayBills.get(i).getCallbackUrl(),
-                        jsonObject.toString());
-                }
-            logger.info("调用统一支付下单接口回调，更新账单状态到账单中间表操作开始");
-            TbPayBillMiddle tbPayBillMiddle = new TbPayBillMiddle();
-            tbPayBillMiddle.setOrderNumber(tbPayBills.get(0).getOrderNumber());
-            tbPayBillMiddle.setStatus(callBackParam.getStatus().toString());
-            tbPayBillMiddleMapper.updateByPrimaryKeySelective(tbPayBillMiddle);
-
-            result = RspEnum.SUCCESS.getCode();
+                PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
+                payCallBackNotify.setBillId(tbPayBills.get(i).getBillId());
+                payCallBackNotify.setPaymentState(tbPayBills.get(i).getPaymentState());
+                Delay delay = new Delay();
+                delay.setServiceId(tbPayBills.get(i).getCallbackId());
+                delay.setServiceUrl(tbPayBills.get(i).getCallbackUrl());
+                delay.setTtl("30");
+                delay.setDataString(payCallBackNotify.toString());
+                logger.info("接收到延迟消息内容：【{}】", delay.toString());
+                logger.info("开始回调");
+                Result<Boolean> result2 = delaySendMessageClient.delaySend(delay);
+                logger.info("结束回调结果，【{}】",result2);
+                logger.info("调用统一支付下单接口回调，更新账单状态到账单中间表操作开始");
+                TbPayBillMiddle tbPayBillMiddle = new TbPayBillMiddle();
+                tbPayBillMiddle.setOrderNumber(tbPayBills.get(0).getOrderNumber());
+                tbPayBillMiddle.setStatus(callBackParam.getStatus().toString());
+                tbPayBillMiddleMapper.updateByPrimaryKeySelective(tbPayBillMiddle);
+                result = RspEnum.SUCCESS.getCode();
+            }
         }catch (Exception e){
             ResponseUtils.outResult(response,result);
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_QUERY_ERROR);

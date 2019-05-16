@@ -1,5 +1,6 @@
 package com.jn.enterprise.company.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -37,6 +38,7 @@ public class UserExtensionInfoVO implements Serializable {
     private String signature;
     @ApiModelProperty(value = "头像")
     private String avatar;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "生日")
     private Date birthday;
     @ApiModelProperty(value = "兴趣爱好")

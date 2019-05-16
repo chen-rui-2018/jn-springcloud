@@ -41,12 +41,12 @@ public interface ElectricMeterService {
      * 数据采集,有code查询
      * todo 后面需写在配置文件中
      */
-    String GET_ELECTRIC_DATA_COLLECTION_URL = "http://api.leiyoukeji.com/api/queryDeviceDate?code=%s&deviceType=%s&startTime=%s&access_token=%s";
+    String GET_ELECTRIC_DATA_COLLECTION_URL = "http://api.leiyoukeji.com/api/queryDeviceDate?code=%s&deviceType=%s&startTime=%s&access_token=%s&pageNum=%s&pageSize=%s";
 /**
      * 数据采集,无code查询
      * todo 后面需写在配置文件中
      */
-    String GET_ELECTRIC_DATA_COLLECTION_NOCODE_URL = "http://api.leiyoukeji.com/api/queryDeviceDate?deviceType=%s&startTime=%s&access_token=%s";
+    String GET_ELECTRIC_DATA_COLLECTION_NOCODE_URL = "http://api.leiyoukeji.com/api/queryDeviceDate?deviceType=%s&startTime=%s&access_token=%s&pageNum=%s&pageSize=%s";
 
     /**
      * 获取电表平台access_token接口

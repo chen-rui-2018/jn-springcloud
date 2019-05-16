@@ -56,6 +56,10 @@
             <version>1.2.44</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-delay-stream-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -89,7 +93,11 @@
                         pay
                     </contexts>
                     <tableNames>
+<<<<<<< Updated upstream
                         tb_pay_bill_details
+=======
+                        tb_pay_bill
+>>>>>>> Stashed changes
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -7,6 +7,8 @@ import com.jn.hardware.security.service.SecurityVideoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
+@RestController
 public class SecurityVideoController implements SecurityVideoClient {
     /**
      * 日志组件
@@ -32,16 +35,16 @@ public class SecurityVideoController implements SecurityVideoClient {
      * @return
      */
     @Override
-    public Result<SecurityMonitoringPointShow> findSecurityMonitoringPointList(SecurityMonitoringPointParam securityMonitoringPointParam) {
+    public Result<SecurityMonitoringPointShow> findSecurityMonitoringPointList(@RequestBody SecurityMonitoringPointParam securityMonitoringPointParam) {
         return  securityVideoService.findSecurityMonitoringPointList(securityMonitoringPointParam);
     }
     /**
-     * 查询监控点列表
+     * 查询监控回放路径url列表
      * @param securityPlayBackUrlParam 实体类参数
      * @return
      */
     @Override
-    public Result<SecurityPlayBackUrlShow> findSecurityPlayBackUrlList(SecurityPlayBackUrlParam securityPlayBackUrlParam) {
+    public Result<SecurityPlayBackUrlShow> findSecurityPlayBackUrlList(@RequestBody SecurityPlayBackUrlParam securityPlayBackUrlParam) {
         return  securityVideoService.findSecurityPlayBackUrlList(securityPlayBackUrlParam);
     }
 }

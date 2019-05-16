@@ -49,8 +49,9 @@ public class MyPayBillController extends BaseController {
     @RequestMapping(value = "/billQuery",method = RequestMethod.GET)
     @RequiresPermissions("/payment/payBill/billQuery")
     public Result<PaginationData<List<PayBillVo>>> billQuery(@Param("payBill")PayBillParams payBill){
-        Assert.notNull(payBill.getObjId(),"对象ID不能为空");
-        PaginationData<List<PayBillVo>> data = myPayBillService.getBillQueryList(payBill);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData<List<PayBillVo>> data = myPayBillService.getBillQueryList(payBill,user);
         return new Result<>(data);
     }
 

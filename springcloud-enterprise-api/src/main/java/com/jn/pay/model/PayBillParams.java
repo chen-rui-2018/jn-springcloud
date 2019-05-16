@@ -1,14 +1,8 @@
 package com.jn.pay.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 账单查询入參实体类
@@ -19,16 +13,17 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "PayBillParams" ,description = "账单查询入參实体类")
-public class PayBillParams extends Page implements Serializable {
+public class PayBillParams implements Serializable {
     private static final long serialVersionUID = -3611813821244989233L;
 
     @ApiModelProperty(value="账单编号",example = "201905090000003")
-    @NotNull(message = "账单编号不能为空")
     private String billId;
 
-    @ApiModelProperty(value="对象ID(传企业ID或用户ID)",example = "wangsong")
-    @NotNull(message = "对象ID不能为空")
-    private String objId;
+    @ApiModelProperty(value="账单类型【1：电费，2：物业费】",example = "1")
+    private String acBookType;
+
+    @ApiModelProperty(value="支付状态（如 1:已支付、2:待支付）")
+    private String paymentState;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -42,11 +37,19 @@ public class PayBillParams extends Page implements Serializable {
         this.billId = billId;
     }
 
-    public String getObjId() {
-        return objId;
+    public String getAcBookType() {
+        return acBookType;
     }
 
-    public void setObjId(String objId) {
-        this.objId = objId;
+    public void setAcBookType(String acBookType) {
+        this.acBookType = acBookType;
+    }
+
+    public String getPaymentState() {
+        return paymentState;
+    }
+
+    public void setPaymentState(String paymentState) {
+        this.paymentState = paymentState;
     }
 }

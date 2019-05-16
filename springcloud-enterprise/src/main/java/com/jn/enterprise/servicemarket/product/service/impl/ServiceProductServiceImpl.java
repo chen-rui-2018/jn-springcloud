@@ -9,6 +9,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
+import com.jn.enterprise.common.config.IBPSDefIdConfig;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
@@ -65,6 +66,8 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     private ServiceOrgDao serviceOrgDao;
     @Autowired
     private UserExtensionClient userExtensionClient;
+    @Autowired
+    private IBPSDefIdConfig ibpsDefIdConfig;
 
 
     @ServiceLog(doAction = "添加服务产品")
@@ -124,7 +127,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         content.setTb_service_and_advisor(tb_service_and_advisor);
 
         // 启动IBPS流程
-        String bpmnDefId = "572370953367977984";
+        String bpmnDefId = ibpsDefIdConfig.getProduct();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, content);
 
         // ibps启动流程失败

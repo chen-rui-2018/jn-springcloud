@@ -20,9 +20,12 @@ public class RequireReceivedParam extends Page implements Serializable {
     private String requirePerson;
     @ApiModelProperty(value = "意向产品",example = "***产品")
     private String intentProduct;
-    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接),全部传空",example = "4")
+    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接),全部传空，pc端查询条件",example = "4")
     @Pattern(regexp = "^[1234]|(\\s*)$", message = "{对接结果:'默认值只允许为1,2,3,4'}")
     private String handleResult;
+    @ApiModelProperty(value = "数据状态(1:待受理  2:待评价  3:已评价),全部传空，app端查询条件")
+    @Pattern(regexp = "^[123]|(\\s*)$", message = "{对接结果:'默认值只允许为1,2,3'}")
+    private String dataStatus;
     @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
@@ -50,6 +53,14 @@ public class RequireReceivedParam extends Page implements Serializable {
 
     public void setHandleResult(String handleResult) {
         this.handleResult = handleResult;
+    }
+
+    public String getDataStatus() {
+        return dataStatus;
+    }
+
+    public void setDataStatus(String dataStatus) {
+        this.dataStatus = dataStatus;
     }
 
     public String getNeedPage() {

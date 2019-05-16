@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.asset.dao.AssetArticleLeaseOrdersDao">
-<select id="getArticleLeaseList" resultType="com.jn.park.asset.model.AssetArticleLeaseOrdersModel">
+<select id="getArticleLeaseOrdersList" parameterType="java.lang.String" resultType="com.jn.park.asset.model.AssetArticleLeaseOrdersModel">
     SELECT
         id,
         asset_number as assetNumber,
@@ -21,7 +21,7 @@
         end_time AS endTime,
         article_status AS articleStatus
     FROM tb_asset_article_lease_orders
-    WHERE record_status = '1'
+    WHERE record_status = '1' and creator_account = #{account} ORDER BY create_time DESC
 </select>
     <select id="getLeaseOrders" parameterType="java.lang.String" resultType="com.jn.park.asset.model.AssetArticleLeaseOrdersModel">
         SELECT

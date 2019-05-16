@@ -49,7 +49,7 @@ public class InvestorController extends BaseController {
     }
 
     @ControllerLog(doAction = "投资人认证")
-    @ApiOperation(value = "投资人认证",notes = "返回数据为数据响应条数,正常情况为1")
+    @ApiOperation(value = "投资人认证",notes = "返回数据状态为200，表示投资人认证提交成功，启动审批流程成功")
     @RequiresPermissions("/technologyFinancial/investorController/addInvestorInfo")
     @RequestMapping(value = "/technologyFinancial/investorController/addInvestorInfo",method = RequestMethod.POST)
     public Result<Integer> addInvestorInfo(@RequestBody @Validated InvestorAuthenticateParam investorAuthenticateParam){
@@ -58,9 +58,7 @@ public class InvestorController extends BaseController {
             logger.warn("投资人认证获取当前登录用户失败");
             return new Result(InvestorExceptionEnum.NETWORK_ANOMALY.getCode(),InvestorExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        int responseNum = investorService.addInvestorInfo(investorAuthenticateParam, user.getAccount());
-        logger.info("-------投资人认证成功，数据响应条数是[{}]-------",responseNum);
-        return  new Result(responseNum);
+        return  new Result(investorService.addInvestorInfo(investorAuthenticateParam, user.getAccount()));
     }
 
     @ControllerLog(doAction = "投资人详情")

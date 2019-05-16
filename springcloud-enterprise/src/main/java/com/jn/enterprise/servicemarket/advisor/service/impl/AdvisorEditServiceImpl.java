@@ -6,6 +6,7 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
 import com.jn.enterprise.servicemarket.advisor.model.*;
@@ -88,10 +89,9 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         TbServiceOrg tbServiceOrg = checkOrgIdAdnGetOrgInfo(advisorBaseInfoParam.getOrgId());
 
         //根据账号查询是否存在顾问信息
-        //数据状态  0：删除  1：正常
-        byte recordStatus=1;
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        example.createCriteria().andAdvisorAccountEqualTo(advisorBaseInfoParam.getAdvisorAccount()).andRecordStatusEqualTo(recordStatus);
+        example.createCriteria().andAdvisorAccountEqualTo(advisorBaseInfoParam.getAdvisorAccount())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         //根据账号获取数据库现有顾问信息
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisorList.isEmpty()){
@@ -102,6 +102,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             advisorBaseInfoParam.setId(tbServiceAdvisor.getId());
             //页面传递基本信息覆盖之前基本信息，非基本信息保持不变
             BeanUtils.copyProperties(advisorBaseInfoParam, tbServiceAdvisor);
+            //工作年限
+            tbServiceAdvisor.setWorkingYears(Float.parseFloat(advisorBaseInfoParam.getWorkingYears()));
             //机构名称
             tbServiceAdvisor.setOrgName(tbServiceOrg.getOrgName());
             //业务领域
@@ -173,6 +175,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //机构id、机构名称
         tbServiceAdvisor.setOrgId(advisorBaseInfoParam.getOrgId());
         tbServiceAdvisor.setOrgName(orgName);
+        //工作年限
+        tbServiceAdvisor.setWorkingYears(Float.parseFloat(advisorBaseInfoParam.getWorkingYears()));
         //浏览量
         tbServiceAdvisor.setPageViews(0);
         //业务领域
@@ -192,7 +196,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //是否认证 0：未认证     1：已认证
         tbServiceAdvisor.setIsCertification("0");
         //审核状态  - 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除
-        tbServiceAdvisor.setApprovalStatus("1");
+        tbServiceAdvisor.setApprovalStatus(ApprovalStatusEnum.NOT_APPROVED.getValue());
         //创建时间
         tbServiceAdvisor.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //创建人
@@ -300,15 +304,31 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @Override
     public void currentUserIsAdvisor(String loginAccount) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        //审核状态( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
-        String approvalStatus="2";
-        example.createCriteria().andAdvisorAccountEqualTo(loginAccount).andApprovalStatusEqualTo(approvalStatus)
+        example.createCriteria().andAdvisorAccountEqualTo(loginAccount)
+                .andApprovalStatusEqualTo(ApprovalStatusEnum.APPROVED.getValue())
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         long existNum = tbServiceAdvisorMapper.countByExample(example);
         if(existNum>0){
             logger.warn("当前用户[{}]已经是审批通过的机构顾问，不允许编辑顾问信息",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_HAS_EXIST);
         }
+    }
+
+    /**
+     * 发送申请/提交审批
+     * @param loginAccount
+     * @return
+     */
+    @Override
+    public int sendApproval(String loginAccount) {
+        TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
+        example.createCriteria().andAdvisorAccountEqualTo(loginAccount)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
+        tbServiceAdvisor.setApprovalStatus(ApprovalStatusEnum.APPROVAL.getValue());
+        tbServiceAdvisor.setModifierAccount(loginAccount);
+        tbServiceAdvisor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+        return tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
     }
 
     /**

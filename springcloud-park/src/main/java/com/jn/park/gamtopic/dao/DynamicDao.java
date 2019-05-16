@@ -40,9 +40,10 @@ public interface DynamicDao {
     /**
      * 获取动态详情
      * @param dynamicId
+     * @param currentAccount
      * @return
      */
-    DynamicWebShow  findDynamicWebDetails(@Param("dynamicId") String dynamicId);
+    DynamicWebShow  findDynamicWebDetails(@Param("dynamicId") String dynamicId,@Param("currentAccount") String currentAccount);
 
     /**
      * 获取评论列表

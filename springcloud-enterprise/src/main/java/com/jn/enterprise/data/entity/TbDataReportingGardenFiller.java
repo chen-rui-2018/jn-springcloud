@@ -3,13 +3,16 @@ package com.jn.enterprise.data.entity;
 import java.io.Serializable;
 
 public class TbDataReportingGardenFiller implements Serializable {
+    /*@ApiModelProperty("")*/
+    private String id;
+
     /*@ApiModelProperty("任务id")*/
     private String fillId;
 
-    /*@ApiModelProperty("填报ID")*/
+    /*@ApiModelProperty("填报人账号")*/
     private String filler;
 
-    /*@ApiModelProperty("快照指标ID")*/
+    /*@ApiModelProperty("填报人电话")*/
     private String fillerTel;
 
     /*@ApiModelProperty("部门ID")*/
@@ -34,6 +37,14 @@ public class TbDataReportingGardenFiller implements Serializable {
     private String tabId;
 
     private static final long serialVersionUID = 1L;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
 
     public String getFillId() {
         return fillId;
@@ -127,7 +138,8 @@ public class TbDataReportingGardenFiller implements Serializable {
             return false;
         }
         TbDataReportingGardenFiller other = (TbDataReportingGardenFiller) that;
-        return (this.getFillId() == null ? other.getFillId() == null : this.getFillId().equals(other.getFillId()))
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getFillId() == null ? other.getFillId() == null : this.getFillId().equals(other.getFillId()))
             && (this.getFiller() == null ? other.getFiller() == null : this.getFiller().equals(other.getFiller()))
             && (this.getFillerTel() == null ? other.getFillerTel() == null : this.getFillerTel().equals(other.getFillerTel()))
             && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
@@ -143,6 +155,7 @@ public class TbDataReportingGardenFiller implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getFillId() == null) ? 0 : getFillId().hashCode());
         result = prime * result + ((getFiller() == null) ? 0 : getFiller().hashCode());
         result = prime * result + ((getFillerTel() == null) ? 0 : getFillerTel().hashCode());
@@ -162,6 +175,7 @@ public class TbDataReportingGardenFiller implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
         sb.append(", fillId=").append(fillId);
         sb.append(", filler=").append(filler);
         sb.append(", fillerTel=").append(fillerTel);

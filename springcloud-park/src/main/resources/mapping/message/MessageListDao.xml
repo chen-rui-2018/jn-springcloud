@@ -4,14 +4,20 @@
 
 
     <!--消息列表-->
-    <select id="findAll" resultMap="findAllMessageOneSortMap">
+    <select id="findAll" parameterType="com.jn.park.message.model.findAllMessageListModel"  resultMap="findAllMessageOneSortMap">
         SELECT
         t.message_tow_sort as "messageTowSort",
         #{account} as "account"
         from
          tb_message_list t
         WHERE t.record_status =1
-        AND t.message_one_sort = #{messageTowTort}
+        AND t.message_one_sort = #{messageOneTort}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTowTort)">
+            AND t.message_tow_sort = #{messageTowTort}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isRead)">
+            AND t.is_read = #{isRead}
+        </if>
         AND t.message_recipient = #{account}
         GROUP BY t.message_tow_sort
     </select>
@@ -79,15 +85,15 @@
             )
             values(
             #{id},
-            #{messageTitle},
-            #{messageContent},
-            #{messageConnectName},
-            #{messageConnect},
-            #{messageRecipien},
-            #{messageSender},
-            #{messageOneSort},
-            #{messageTowSort},
-            #{creatorAccount},
+            #{messageTitle,jdbcType=VARCHAR},
+            #{messageContent,jdbcType=VARCHAR},
+            #{messageConnectName,jdbcType=VARCHAR},
+            #{messageConnect,jdbcType=VARCHAR},
+            #{messageRecipien,jdbcType=VARCHAR},
+            #{messageSender,jdbcType=VARCHAR},
+            #{messageOneSort,jdbcType=VARCHAR},
+            #{messageTowSort,jdbcType=VARCHAR},
+            #{creatorAccount,jdbcType=VARCHAR},
             SYSDATE()
             )
 
@@ -172,6 +178,23 @@
     </update>
 
 
+    <!--是否有新的未读消息-->
+    <select id="getIsRead" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            COUNT(t.id)
+        FROM
+            tb_message_list t
+        WHERE
+            t.record_status = 1
+        AND t.is_read = 0
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageOneTort)">
+        AND t.message_one_sort=#{messageOneTort}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTowTort)">
+		AND t.message_tow_sort=#{messageTowTort}
+        </if>
+        AND t.message_recipient = #{account}
+    </select>
 
 
 </mapper>

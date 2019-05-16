@@ -8,6 +8,11 @@
     <description>支付平台</description>
 
     <modules>
+        <module>xxpay-service</module>
+        <module>xxpay-web</module>
+        <module>xxpay-common</module>
+        <module>xxpay-dal</module>
+        <module>xxpay-mgr</module>
         <module>xxpay-web-api</module>
     </modules>
 
@@ -16,13 +21,6 @@
         <artifactId>jn-springcloud-app</artifactId>
         <version>1.0.0-RELEASE</version>
     </parent>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <docker.url>http://192.168.188.165:2375</docker.url>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -40,36 +38,4 @@
         </dependency>
     </dependencies>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Dalston.SR2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>docker-maven-plugin</artifactId>
-                    <version>0.4.13</version>
-                    <configuration>
-                        <skipDockerBuild>true</skipDockerBuild>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 </project>

@@ -3,6 +3,7 @@ package com.jn.park.parking.service.impl;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
 import com.jn.park.enums.ParkingExceptionEnum;
 import com.jn.park.parking.dao.TbParkingAreaMapper;
 import com.jn.park.parking.dao.TbParkingCarInfoMapper;
@@ -20,6 +21,8 @@ import com.jn.paybill.model.PaymentBillModel;
 import com.jn.paybill.model.PaymentBillParam;
 import com.jn.system.log.annotation.ServiceLog;
 import org.apache.commons.lang.math.RandomUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +40,7 @@ import java.util.UUID;
  */
 @Service
 public class ParkingTemporaryServiceImpl implements ParkingTemporaryService {
-
+    private static Logger logger = LoggerFactory.getLogger(ParkingTemporaryServiceImpl.class);
     @Autowired
     private TbParkingRecordMapper tbParkingRecordMapper;
     @Autowired
@@ -160,6 +163,11 @@ public class ParkingTemporaryServiceImpl implements ParkingTemporaryService {
             parkingCarPayVo.setCreateStatus(aBoolean==true? ParkingEnums.PARKING_PAYMENT_IS_NOT.getCode():ParkingEnums.PARKING_PAYMENT_IS_NOT_PAY.getCode());
             //不用缴费的数据不同步至匝道系统
         }else{
+            //判断是否已创建账单，已创建则取消原账单。
+            if(StringUtils.isNotEmpty(parkingRecord.getOrderBillNum())){
+                Result<Boolean> booleanResult = payBillClient.cancelPayBillByBillId(parkingRecord.getOrderBillNum());
+                logger.info("删除临时停车原有缴费记录数据，响应结果：{}",booleanResult.getData());
+            }
             PaymentBillModel paymentBillModel = new PaymentBillModel();
             paymentBillModel.setBillNum("PK-"+ DateUtils.getDate(ParkingEnums.DATE_TIME_FORMAT_DATE_NUM.getCode())+ RandomUtils.nextInt(999));
             paymentBillModel.setBillName(parkingRecord.getCarLicense()+"-"+DateUtils.formatDate(parkingRecord.getAdmissionTime(),ParkingEnums.DATE_TIME_FORMAT_DATE_NUM.getCode())+"停车费");
@@ -175,6 +183,12 @@ public class ParkingTemporaryServiceImpl implements ParkingTemporaryService {
             parkingCarPayVo.setBillNum(paymentBillModel.getBillNum());
             parkingCarPayVo.setDueMoney(aDouble);
             parkingCarPayVo.setCreateStatus(ParkingEnums.PARKING_PAYMENT_IS_INITIATE.getCode());
+
+            //支付发起成功，将支付账单id写入停车记录，方便下次发起支付删除原有缴费记录。
+            parkingRecord.setModifiedTime(new Date());
+            parkingRecord.setOrderBillNum(paymentBillModel.getBillNum());
+            int i = tbParkingRecordMapper.updateByPrimaryKeySelective(parkingRecord);
+            logger.info("处理临时停车账单号逻辑完成，响应条数：{}",i);
         }
         return parkingCarPayVo;
     }

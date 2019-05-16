@@ -17,6 +17,8 @@
         cd.code_name AS "typeName",
         tsc.code_value AS "salary",
         tsc.code_name AS "salaryName",
+        com.avatar AS "comAvatar",
+        com.id AS "comId",
         CASE
             WHEN a.status = '1' THEN '有效'
             WHEN a.status = '0' THEN '无效'
@@ -24,12 +26,13 @@
     </sql>
 
     <sql id="recruitJoin">
+        LEFT JOIN tb_service_company com ON com.id = a.com_id
         LEFT JOIN tb_service_code cd ON cd.group_id = 'recruitType' AND cd.code_value = a.type
         LEFT JOIN tb_service_code tsc ON tsc.group_id = 'recruitSalary' AND tsc.code_value = a.salary
     </sql>
 
     <!-- 根据ID获取招聘详情 -->
-    <select id="getRecruitDetailsById" resultType="com.jn.enterprise.company.vo.RecruitDetailsVO">
+    <select id="getRecruitDetailsById" resultType="com.jn.enterprise.company.vo.RecruitVO">
         SELECT
             <include refid="recruitFiled" />
         FROM tb_service_recruit a

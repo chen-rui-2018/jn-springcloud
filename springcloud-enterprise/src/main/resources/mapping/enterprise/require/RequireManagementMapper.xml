@@ -26,7 +26,16 @@
             WHEN '4' THEN "未对接"
             ELSE '--'
             END AS "handleResult"				  <!--对接结果-->
+            ,case sr.is_comment
+            when '0' then "未点评"
+            when '1' then "已点评"
+            else '--'
+            end as "isComment"                    <!--点评结果-->
+            ,tsr.attitude_score as "ratingScore"  <!--点评分数-->
+            ,tsr.evaluation_desc as "evaluationDesc"  <!--点评描述-->
         FROM tb_service_require sr
+        left join tb_service_rating tsr
+        on sr.id=tsr.require_id
         WHERE 1=1
         and sr.record_status='1'
         AND sr.issue_account=#{account}           <!--发布人  对他人的需求-->
@@ -39,6 +48,19 @@
         <if test="requireOtherParam.handleResult!=null and requireOtherParam.handleResult!=''">
             and sr.handle_result=#{requireOtherParam.handleResult}
         </if>
+        <if test="requireOtherParam.dataStatus ==1 "> <!--待受理-->
+            and sr.status= '1'
+        </if>
+        <if test="requireOtherParam.dataStatus ==2 "> <!--待评价-->
+            and sr.status= '2'  <!--已处理-->
+            and sr.handle_result='1'  <!--对接成功-->
+            and sr.is_comment='0' <!--未点评-->
+        </if>
+        <if test="requireOtherParam.dataStatus ==3 "> <!--已评价-->
+            and sr.status= '2'  <!--已处理-->
+            and sr.handle_result='1'  <!--对接成功-->
+            and sr.is_comment='1' <!--已点评-->
+        </if>
         order by sr.issue_account desc
     </select>
 
@@ -46,7 +68,7 @@
     <select id="getRequireReceivedList" resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
         SELECT
         sr.`req_num` AS "reqNum"			                          <!--需求单号-->
-        ,sr.`org_id_` AS "orgId"				                          <!--机构id-->
+        ,sr.`org_id_` AS "orgId"				                      <!--机构id-->
         ,sr.`org_name`AS "orgName"			                          <!--机构名称-->
         ,sr.`business_id` AS "businessId"		                      <!--领域id-->
         ,sr.`business_area` AS "businessArea"		                  <!--领域名称-->
@@ -67,7 +89,16 @@
         WHEN '4' THEN "未对接"
         ELSE '--'
         END AS "handleResult"				          <!--对接结果-->
+        ,case sr.is_comment
+        when '0' then "未点评"
+        when '1' then "已点评"
+        else '--'
+        end as "isComment"                            <!--点评结果-->
+        ,tsr.attitude_score as "ratingScore"          <!--点评分数-->
+        ,tsr.evaluation_desc as "evaluationDesc"      <!--点评描述-->
         FROM tb_service_require sr
+        left join tb_service_rating tsr
+        on sr.id=tsr.require_id
         <if test="orgId==null or orgId==''">          <!--顾问账号  我收到的需求-->
             left join tb_service_and_advisor tsa
             on sr.product_id_=tsa.product_id_
@@ -99,6 +130,19 @@
         </if>
         <if test="requireReceivedParam.requirePerson!=null and requireReceivedParam.requirePerson!=''"> <!--需求人-->
             and (sr.req_name like CONCAT('%', #{requireReceivedParam.requirePerson}, '%') or sr.issue_account like CONCAT('%', #{requireReceivedParam.requirePerson}, '%'))
+        </if>
+        <if test="requireReceivedParam.dataStatus ==1 "> <!--待受理-->
+            and sr.status= '1'
+        </if>
+        <if test="requireReceivedParam.dataStatus ==2 "> <!--待评价-->
+            and sr.status= '2'  <!--已处理-->
+            and sr.handle_result='1'  <!--对接成功-->
+            and sr.is_comment='0' <!--未点评-->
+        </if>
+        <if test="requireReceivedParam.dataStatus ==3 "> <!--已评价-->
+            and sr.status= '2'  <!--已处理-->
+            and sr.handle_result='1'  <!--对接成功-->
+            and sr.is_comment='1' <!--已点评-->
         </if>
         order by sr.issue_account desc
     </select>
@@ -186,13 +230,17 @@
         END AS "handleResult"				 	                  <!--对接结果-->
         ,IFNULL(sr.result_detail,"暂无") as "resultDetail"         <!--结果描述-->
         ,sr.financing_amount as "financingAmount"                 <!--[科技金融]融资金额-->
-        ,sr.financing_period_max as "financingPeriod"                 <!--[科技金融]融资期限-->
+        ,sr.financing_period_max as "financingPeriod"             <!--[科技金融]融资期限-->
         ,sr.actual_loan_amount as "actualLoanAmount"              <!--[科技金融]实际贷款金额(万元)-->
         ,sr.funds_req_desc as "fundsReqDesc"                      <!--[科技金融]资金需求说明-->
         ,DATE_FORMAT(sr.expected_date,"%Y-%m-%d")as "expectedDate"<!--[科技金融]资金需求日期")-->
         ,sr.contract_home_page as "contractHomePage"              <!--合同首页-->
         ,sr.contract_end_page as "contractEndPage"                <!--合同尾页-->
+        ,tsr.attitude_score as "ratingScore"                      <!--点评分数-->
+        ,tsr.evaluation_desc as "evaluationDesc"                  <!--点评描述-->
         FROM tb_service_require sr
+        left join tb_service_rating tsr
+        on sr.id=tsr.require_id
         LEFT JOIN tb_service_product sp
         ON sr.product_id_=sp.product_id_
         where 1=1

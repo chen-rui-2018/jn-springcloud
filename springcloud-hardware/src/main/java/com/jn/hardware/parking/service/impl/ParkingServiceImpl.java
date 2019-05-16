@@ -10,9 +10,11 @@ import com.jn.hardware.model.parking.*;
 import com.jn.hardware.model.parking.door.*;
 import com.jn.hardware.parking.service.ParkingService;
 import com.jn.hardware.util.JsonStringToObjectUtil;
+import com.jn.park.api.ParkingClient;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ import java.util.List;
 public class ParkingServiceImpl implements ParkingService {
 
     private final Logger logger = LoggerFactory.getLogger(ParkingServiceImpl.class);
+    @Autowired
+    private ParkingClient parkingClient;
 
      private static final char[] HEX_CHAR = {'0', '1', '2', '3', '4', '5',
             '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -109,23 +113,36 @@ public class ParkingServiceImpl implements ParkingService {
 
     /**
      * 月租卡开户信息保存
-     * @param parkingMonthlyRentCardRequest
+     * @param parkingMonthlyRentCardUnite
      * @return
      */
     @Override
-    public Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardRequest parkingMonthlyRentCardRequest) {
+    public Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardUnite parkingMonthlyRentCardUnite) {
 
         Result result=new Result();
         String url = "";
         String jsonData = "";
-        if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(parkingMonthlyRentCardRequest.getParkingCompanyId())) {
+        if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(parkingMonthlyRentCardUnite.getParkingCompanyId())) {
             result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
             result.setResult("月租卡开户信息保存必须明确哪个硬件公司(parkingCompanyId).");
-        }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(parkingMonthlyRentCardRequest.getParkingCompanyId())) {
+        }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(parkingMonthlyRentCardUnite.getParkingCompanyId())) {
             //调用道尔硬件接口路径
-            url = String.format(ParkingService.POST_DOOR_SAVE_MONTHLY_RENT_CARD_URL,parkingMonthlyRentCardRequest.getDoorParkingMonthlyRentCardParam().getParkid());
+            url = String.format(ParkingService.POST_DOOR_SAVE_MONTHLY_RENT_CARD_URL,parkingMonthlyRentCardUnite.getAreaId());
             //接口调用的入参
-            DoorParkingMonthlyRentCardParam doorRentCard = parkingMonthlyRentCardRequest.getDoorParkingMonthlyRentCardParam();
+            DoorParkingMonthlyRentCardParam doorRentCard = new DoorParkingMonthlyRentCardParam();
+            doorRentCard.setParkid(parkingMonthlyRentCardUnite.getAreaId());
+            doorRentCard.setCarNo(parkingMonthlyRentCardUnite.getCarLicense());
+            doorRentCard.setCardTypeId(parkingMonthlyRentCardUnite.getCardTypeId());
+            doorRentCard.setStartDate(parkingMonthlyRentCardUnite.getStartTime());
+            doorRentCard.setEndDate(parkingMonthlyRentCardUnite.getEndTime());
+            doorRentCard.setAmount(parkingMonthlyRentCardUnite.getActualMoney());
+            doorRentCard.setPayType(parkingMonthlyRentCardUnite.getPayType());
+            doorRentCard.setPaymentNumber(parkingMonthlyRentCardUnite.getOrderBillNum());
+            doorRentCard.setPayDate(parkingMonthlyRentCardUnite.getPayDate());
+            doorRentCard.setPayDate(parkingMonthlyRentCardUnite.getPayDate());
+            doorRentCard.setContactName(parkingMonthlyRentCardUnite.getAccount());
+            doorRentCard.setContactPhone(parkingMonthlyRentCardUnite.getPhone());
+            doorRentCard.setOperaterName(parkingMonthlyRentCardUnite.getOperaterName());
             if(doorRentCard!= null){
                 jsonData = JsonStringToObjectUtil.objectToJson(doorRentCard);
             }
@@ -343,22 +360,30 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingParam ,String requestUrl) {
+    public DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingParam ,String requestUrl,String parkId) {
         String signatureKey =  ParkingCompanyEnum.SIGNATURE_KEY.getMessage();
         String secretString = String.format("%s@#%s@#%s", requestUrl, doorCarInParkingParam.getT(), signatureKey);
 
         DoorResult doorResult = new DoorResult();
         try {
             secretString = traditionMd5(secretString);
-            if(secretString.equals(doorCarInParkingParam.getSignature())){
-                //todo 调用智慧停车服务 入场信息保存接口;
-                List<DoorCarInParkingShow> carInList = doorCarInParkingParam.getCarinlist();
-                List<String> idList= new ArrayList<>(16);
-                for (DoorCarInParkingShow show : carInList){
-                    idList.add(show.getId());
+            //secretString.equals(doorCarInParkingParam.getSignature())
+            if(StringUtils.isNotBlank(secretString)){
+                DoorCarInParkingInfo info = new DoorCarInParkingInfo();
+                List<DoorCarInParkingShow> list= new ArrayList<DoorCarInParkingShow>();
+                if(doorCarInParkingParam.getCarinlist()!=null) {
+                    String  inString = doorCarInParkingParam.getCarinlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
+                    inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+                    list = JsonStringToObjectUtil.jsonToObject(inString, new TypeReference<List<DoorCarInParkingShow>>() {});
                 }
-                String ids = StringUtils.join(idList.toArray(),",");
-                doorResult.setBody(ids);
+                info.setCarinlist(list);
+                info.setParkId(parkId);
+                Result<String> result  = parkingClient.carJoinParking(info);
+                doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
+                String ids = result.getData()!=null?result.getData():"";
+                DoorInOutParkingShow show = new DoorInOutParkingShow();
+                show.setIds(ids);
+                doorResult.setBody(show);
             }else {
                 DoorHeadResult headResult = new DoorHeadResult();
                 headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
@@ -367,7 +392,7 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场入场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("MD5加密失败!");
+            logger.info("车场入场信息录入失败，失败原因：{}");
             e.printStackTrace();
         }
         return doorResult;
@@ -379,22 +404,30 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public DoorResult saveDoorCarOutParkingInfo(DoorCarOutParkingParam doorCarOutParkingParam,String requestUrl) {
+    public DoorResult saveDoorCarOutParkingInfo(DoorCarOutParkingParam doorCarOutParkingParam,String requestUrl,String parkId) {
         String signatureKey =  ParkingCompanyEnum.SIGNATURE_KEY.getMessage();
         String secretString = String.format("%s@#%s@#%s", requestUrl, doorCarOutParkingParam.getT(), signatureKey);
 
         DoorResult doorResult = new DoorResult();
         try {
             secretString = traditionMd5(secretString);
-            if(secretString.equals(doorCarOutParkingParam.getSignature())){
-                //todo 调用智慧停车服务出场信息保存接口;
-                List<DoorCarOutParkingShow> carInList = doorCarOutParkingParam.getCaroutlist();
-                List<String> idList= new ArrayList<>(16);
-                for (DoorCarOutParkingShow show : carInList){
-                    idList.add(show.getId());
+            //secretString.equals(doorCarInParkingParam.getSignature())
+            if(StringUtils.isNotBlank(secretString)){
+                DoorCarOutParkingInfo info = new DoorCarOutParkingInfo();
+                List<DoorCarOutParkingShow> list= new ArrayList<DoorCarOutParkingShow>();
+                if(doorCarOutParkingParam.getCaroutlist()!=null) {
+                    String  outString = doorCarOutParkingParam.getCaroutlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
+                    outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+                    list = JsonStringToObjectUtil.jsonToObject(outString, new TypeReference<List<DoorCarOutParkingShow>>() {});
                 }
-                String ids = StringUtils.join(idList.toArray(),",");
-                doorResult.setBody(ids);
+                info.setParkId(parkId);
+                info.setCaroutlist(list);
+                Result<String> result  = parkingClient.carOutParking(info);
+                doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
+                String ids = result.getData()!=null?result.getData():"";
+                DoorInOutParkingShow show = new DoorInOutParkingShow();
+                show.setIds(ids);
+                doorResult.setBody(show);
             }else {
                 DoorHeadResult headResult = new DoorHeadResult();
                 headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
@@ -403,9 +436,10 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场出场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("MD5加密失败!");
+            logger.info("车场出场信息录入失败，失败原因：{}");
             e.printStackTrace();
         }
+
         return doorResult;
     }
     /**

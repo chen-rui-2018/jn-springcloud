@@ -36,7 +36,7 @@ public enum MchIdEnum implements CodeAndMsg {
     public static MchIdEnum getCode(String channelId) {
         MchIdEnum channelIdEnum = null;
         for (MchIdEnum channelType : values()) {
-            if (channelType.getCode() == channelId) {
+            if (channelType.getCode().equals(channelId)) {
                 //获取指定的枚举
                 channelIdEnum = channelType;
                 break;

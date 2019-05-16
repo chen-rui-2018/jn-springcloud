@@ -28,7 +28,7 @@ public class PayCallBackParam implements Serializable {
     @ApiModelProperty(value = "支付平台订单ID",required = true,example = "21314737abcc7eda4c0675b8")
     @NotBlank(message = "支付平台订单ID不能为空")
     private String payOrderId;
-    @ApiModelProperty(value = "支付方式[0微信1支付宝2银联]",example = "0")
+    @ApiModelProperty(value = "支付方式[1 银联闪付 2 微信 3 支付宝]",example = "0")
     private String payType;
 
     public String getOrderId() {

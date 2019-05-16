@@ -40,19 +40,15 @@ public interface ParkingServerService {
      */
     int insertParkingRecordByRamp( List<ParkingRecordRampParam> parkingRecordRampParam);
 
-    /**
-     * 批量修改停车数据[处理车辆出场时间和状态]
-     * @param parkingRecordRampParam
-     * @return
-     */
-    int updateParkingRecordByParam( List<ParkingRecordRampParam> parkingRecordRampParam);
+
+    List<ParkingRecordRampParam> selectParkingRecordByRamp( List<ParkingRecordRampParam> parkingRecordRampParam);
 
     /**
      * 道尔 车辆入场推送接口
      * @param carList
      * @return 返回处理成功的记录id
      */
-    String carJoinParking(List carList);
+    String carJoinParking(List carList,String parkId);
 
     /**
      * 道尔 车辆出场推送接口
@@ -61,4 +57,19 @@ public interface ParkingServerService {
      */
     String carOutParking(List carList);
 
+
+    /**
+     * 停车位租赁支付成功回调接口
+     * @param billNum
+     * @return
+     */
+    Boolean parkingSpaceBillCallBack(String billNum);
+
+    /**
+
+     * 临时车支付成功回调接口
+     * @param billNum
+     * @return
+     */
+    Boolean parkingCarBillCallBack(String billNum);
 }

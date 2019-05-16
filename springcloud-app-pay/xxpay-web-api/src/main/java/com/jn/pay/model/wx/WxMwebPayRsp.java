@@ -22,7 +22,10 @@ public class WxMwebPayRsp extends PayBaseRsp {
     *第三方支付中心生生成跳转第三方支付页面的URL地址
     * */
    private String payUrl;
-
+    /**
+     * 签名
+     * */
+    private String sign;
 
 
     public String getPrepayId() {
@@ -40,4 +43,13 @@ public class WxMwebPayRsp extends PayBaseRsp {
     public void setPayUrl(String payUrl) {
         this.payUrl = payUrl;
     }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
 }

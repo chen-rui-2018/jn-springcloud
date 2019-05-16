@@ -140,7 +140,7 @@
               class="more-garden-card"
             >
               <div class="more-garden-card-cell">
-                <img class="more-garden-img" src="@/../static/img/图层 50.png" alt=""/>
+                <img class="more-garden-img" :src="item.mainPicture" alt=""/>
                 <div class="more-garden-desc">{{ item.content || '暂无'}}</div>
                 <div class="more-garden-footer">
                   <span class="more-garden-date">{{ item.startTime }}</span>
@@ -150,43 +150,49 @@
             </div>
           </div>
         </div>
-        <div class="districtGardens w" ref="districtGardens" data-class="bottom1">
+        <div v-if="loadingParkList" class="districtGardens w" ref="districtGardens" data-class="bottom1">
           <div ref="disGardens" data-class="bottom">
             <div class="tit color2">一区多园</div>
             <div class="eng mainColor">AREA MORE GARDEN</div>
             <div class="line"></div>
           </div>
-          <div class="multi-park">
+          <div
+            v-for="row in parkList"
+            :key="row.id"
+            class="multi-park">
             <div class="multi-park-title">
-              <div class="fw-title">南京白下A区</div>
+              <div class="fw-title">{{ row.parkName }}</div>
               <div class="gray-tips">查看更多</div>
             </div>
             <div class="multi-park-content">
               <div
-                v-for="(item, index) in 4"
+                v-for="(item, index) in row.list"
+                :key="index"
                 :class="{small: index !== 0}"
                 class="multi-park-card">
-                  <div class="multi-park-card-cell">
-                    <img :src="index === 0 ? '@/../static/img/multi-park-poster.png' : '@/../static/img/multi-park-list.png'"  alt="">
-                    <div v-if="index !== 0" class="multi-park-desc">
-                      <div class="fw-title">大数据、云计算产业招募</div>
-                      <div class="gray-tips">数博会作为全球首个大数据主题博览会， 自2015年起已连续在中国贵州贵阳成功...</div>
-                      <div class="tag-list">
-                        <div class="tag-btn">
-                          <el-tag
-                            v-for="(item, index) in ['关键字标签', '云储蓄']"
-                            :key="index"
-                            class="tag-text"
-                            type="success"
-                            size="mini"
-                            color="#ECFCF2"
-                          >{{ item }}</el-tag>
-                        </div>
-                        <div class="method-btn">立即考察</div>
+                <div class="multi-park-card-cell">
+                  <img :src="index === 0 ? item.fileName ? item.fileName : '@/../static/img/multi-park-poster.png' : item.fileName ? item.fileName : '@/../static/img/multi-park-list.png'"  alt="">
+                  <div v-if="index !== 0" class="multi-park-desc">
+                    <div class="fw-title">{{ item.title }}</div>
+                    <div class="gray-tips">{{ item.subTitle }}</div>
+                    <div class="tag-list">
+                      <div class="tag-btn">
+                        <el-tag
+                          v-for="(tag, tagIndex) in item.adFlag.split(',')"
+                          v-if="tagIndex < 2"
+                          :key="tagIndex"
+                          class="tag-text"
+                          type="success"
+                          size="mini"
+                          color="#ECFCF2"
+                        >{{ tag }}</el-tag>
+                        <div v-if="item.adFlag.split(',').length >= 2">...</div>
                       </div>
+                      <div class="method-btn">立即考察</div>
                     </div>
                   </div>
                 </div>
+              </div>
             </div>
           </div>
         </div>
@@ -223,7 +229,8 @@
         basicHtml: '',
         businessAdDynamic: [],
         businessAdPolicy: [],
-        parkList: []
+        parkList: [],
+        loadingParkList: false
       }
     },
     mounted() {
@@ -414,8 +421,13 @@
             this.parkList.forEach((item, index) => {
               this.getPartDetail(item.id)
                 .then((data) => {
-                  this.$set(item, 'list', data)
+                  data.rows.unshift(item.mainPicture)
+                  this.$set(item, 'list', data.rows)
                 })
+            })
+            this.$nextTick(() => {
+              console.dir(this.parkList)
+              this.loadingParkList = true
             })
           })
         Promise.all([
@@ -620,16 +632,21 @@
       }
       .multi-park-content {
         $bg-gray: #DEDEDE;
-        @include flex($h: space-between, $v: stretch);
+        @include flex($h: flex-start, $v: flex-start);
         .multi-park-card {
-          flex: 1;
+          width: 25%;
           box-sizing: border-box;
           text-align: left;
+          height: 285px;
           &.small {
             padding: 6px;
             box-sizing: border-box;
             .multi-park-card-cell {
+              height: 100%;
               border: 1px solid $bg-gray;
+              img {
+                height: 133px;
+              }
             }
           }
           img {
@@ -637,20 +654,35 @@
             display: block;
           }
           .multi-park-desc {
-            padding: 6px;
             .fw-title {
               font-size: 13px;
               margin: 0 auto 10px;
+              padding: 6px;
+            }
+            .gray-tips {
+              height: 56px;
+              padding: 6px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 3;
+              -webkit-box-orient: vertical;
+              box-sizing: border-box;
             }
           }
           .tag-list {
             @include flex($h: space-between);
+            padding: 8px 6px 6px;
             color: $--color-primary;
             margin-top: 8px;
-            padding-top: 8px;
             border-top: 1px solid $bg-gray;
             .el-tag--success {
+              max-width: 60px;
               color: $--color-primary;
+              border-color: #41D787;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
             .tag-btn {
               @include flex($h: space-between);

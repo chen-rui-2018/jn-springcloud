@@ -79,7 +79,15 @@ export default new Router({
           meta: {
             title: '消息中心'
           },
-          name: 'messageCenter'
+          children: [
+            {
+              path: 'chat',
+              component: resolve => require(['@/views/messageCenter/chat'], resolve),
+              meta: {
+                title: '社区交流'
+              }
+            }
+          ]
         },
         {
           path: '/home',

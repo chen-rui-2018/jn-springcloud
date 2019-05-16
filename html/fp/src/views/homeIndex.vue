@@ -1,10 +1,10 @@
 <template>
   <div class="portalIndex">
     <div class="portalIndexImg" v-if="$store.state.needNav">
-      <div class="header" id="header" :class="{'headerw':showFF, 'user-center': isCenter}">
+      <div class="header" id="header" :class="{'headerw':isCenter}">
         <div class="headerContainer clearfix">
           <div class="titleImg fl">
-            <img src="@/../static/img/login-logo.png" v-if="showFF || isCenter" class="pointer" alt="" @click="$router.push({path:'/'})">
+            <img src="@/../static/img/login-logo.png" v-if="isCenter" class="pointer" alt="" @click="$router.push({path:'/'})">
             <img src="@/../static/img/LOGO1.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
           </div>
           <div class="headerRight fr">
@@ -78,9 +78,16 @@
     },
     computed: {
       isCenter() {
-        return this.$route.matched.some(item => {
-          return item.name === 'home'
-        })
+        const list = ['portalIndex', 'enterpriseservice']
+        let flag
+        for (const item of this.$route.matched) {
+          for (const name of list) {
+            if (item.name === name) {
+              flag = true
+            }
+          }
+        }
+        return flag
       }
     },
     mounted() {
@@ -188,10 +195,10 @@
 
           }
         }
-        if (this.getScrollTop() > document.getElementById("header").clientHeight) {        
+        if (this.getScrollTop() > document.getElementById("header").clientHeight) {
           this.showFF = true;
           this.show4 = false;
-        } else {       
+        } else {
           this.showFF = false;
         }
         //    if (

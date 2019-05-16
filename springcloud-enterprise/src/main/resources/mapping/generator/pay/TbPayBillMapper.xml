@@ -26,6 +26,7 @@
     <result column="AFFIRM_TIME" jdbcType="TIMESTAMP" property="affirmTime" />
     <result column="record_status" jdbcType="CHAR" property="recordStatus" />
     <result column="callback_id" jdbcType="VARCHAR" property="callbackId" />
+    <result column="bill_receiver" jdbcType="VARCHAR" property="billReceiver" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -89,7 +90,7 @@
     BILL_ID, AC_BOOK_ID, BILL_NAME, BILL_SOURCE, BILL_EXPENSE, REMINDER_NUMBER, OBJ_TYPE, 
     obj_id, OBJ_NAME, PAYMENT_STATE, PAYMENT_TYPE, AC_BOOK_TYPE, order_number, callback_url, 
     created_time, creator_account, modified_time, modifier_account, LATE_PAYMENT, PAYMENT_AFFIRM, 
-    AFFIRM_PART, AFFIRM_TIME, record_status, callback_id
+    AFFIRM_PART, AFFIRM_TIME, record_status, callback_id, bill_receiver
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayBillCriteria" resultMap="BaseResultMap">
     select
@@ -129,8 +130,8 @@
       order_number, callback_url, created_time, 
       creator_account, modified_time, modifier_account, 
       LATE_PAYMENT, PAYMENT_AFFIRM, AFFIRM_PART, 
-      AFFIRM_TIME, record_status, callback_id
-      )
+      AFFIRM_TIME, record_status, callback_id, 
+      bill_receiver)
     values (#{billId,jdbcType=VARCHAR}, #{acBookId,jdbcType=VARCHAR}, #{billName,jdbcType=VARCHAR}, 
       #{billSource,jdbcType=VARCHAR}, #{billExpense,jdbcType=DECIMAL}, #{reminderNumber,jdbcType=INTEGER}, 
       #{objType,jdbcType=VARCHAR}, #{objId,jdbcType=VARCHAR}, #{objName,jdbcType=VARCHAR}, 
@@ -138,8 +139,8 @@
       #{orderNumber,jdbcType=VARCHAR}, #{callbackUrl,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{latePayment,jdbcType=TIMESTAMP}, #{paymentAffirm,jdbcType=CHAR}, #{affirmPart,jdbcType=VARCHAR}, 
-      #{affirmTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR}, #{callbackId,jdbcType=VARCHAR}
-      )
+      #{affirmTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR}, #{callbackId,jdbcType=VARCHAR}, 
+      #{billReceiver,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayBill">
     insert into tb_pay_bill
@@ -216,6 +217,9 @@
       <if test="callbackId != null">
         callback_id,
       </if>
+      <if test="billReceiver != null">
+        bill_receiver,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="billId != null">
@@ -289,6 +293,9 @@
       </if>
       <if test="callbackId != null">
         #{callbackId,jdbcType=VARCHAR},
+      </if>
+      <if test="billReceiver != null">
+        #{billReceiver,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -373,6 +380,9 @@
       <if test="record.callbackId != null">
         callback_id = #{record.callbackId,jdbcType=VARCHAR},
       </if>
+      <if test="record.billReceiver != null">
+        bill_receiver = #{record.billReceiver,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -403,7 +413,8 @@
       AFFIRM_PART = #{record.affirmPart,jdbcType=VARCHAR},
       AFFIRM_TIME = #{record.affirmTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=CHAR},
-      callback_id = #{record.callbackId,jdbcType=VARCHAR}
+      callback_id = #{record.callbackId,jdbcType=VARCHAR},
+      bill_receiver = #{record.billReceiver,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -480,6 +491,9 @@
       <if test="callbackId != null">
         callback_id = #{callbackId,jdbcType=VARCHAR},
       </if>
+      <if test="billReceiver != null">
+        bill_receiver = #{billReceiver,jdbcType=VARCHAR},
+      </if>
     </set>
     where BILL_ID = #{billId,jdbcType=VARCHAR}
   </update>
@@ -507,7 +521,8 @@
       AFFIRM_PART = #{affirmPart,jdbcType=VARCHAR},
       AFFIRM_TIME = #{affirmTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=CHAR},
-      callback_id = #{callbackId,jdbcType=VARCHAR}
+      callback_id = #{callbackId,jdbcType=VARCHAR},
+      bill_receiver = #{billReceiver,jdbcType=VARCHAR}
     where BILL_ID = #{billId,jdbcType=VARCHAR}
   </update>
 </mapper>

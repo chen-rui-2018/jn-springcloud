@@ -1,9 +1,10 @@
 package org.xxpay.dal.dao.mapper;
 
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.xxpay.dal.dao.model.MchInfo;
 import org.xxpay.dal.dao.model.MchInfoExample;
+
+import java.util.List;
 
 public interface MchInfoMapper {
     int countByExample(MchInfoExample example);
@@ -27,4 +28,10 @@ public interface MchInfoMapper {
     int updateByPrimaryKeySelective(MchInfo record);
 
     int updateByPrimaryKey(MchInfo record);
+    /**
+     * 根据支付订单号获取商户信息
+     * @param payOrderId
+    * */
+    MchInfo selectByPayOrderKey(String payOrderId);
+
 }

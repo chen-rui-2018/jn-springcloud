@@ -73,7 +73,7 @@ public class SecurityVideoServiceImpl implements SecurityVideoService {
         return result;
     }
     /**
-     * 查询监控点列表
+     * 查询监控回放路径url列表
      * @param securityPlayBackUrlParam 实体类参数
      * @return
      */
@@ -105,11 +105,6 @@ public class SecurityVideoServiceImpl implements SecurityVideoService {
                 }
             }
         }
-        return result;
-    }
-    private Result  transformResult(SecurityResult securityResult){
-        Result result = new Result();
-
         return result;
     }
 

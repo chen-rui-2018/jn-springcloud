@@ -40,9 +40,9 @@ public class SecurityVideoServiceImplTest {
 
         //获取回放URL
         securityPlayBackUrlParam = new SecurityPlayBackUrlParam();
-        securityPlayBackUrlParam.setCameraIndexCode("8bb1497fe2db4929ab45091aa58050cd");
-        securityPlayBackUrlParam.setBeginTime("2019-05-09T12:00:00.000+08:00");
-        securityPlayBackUrlParam.setEndTime("2019-05-09T12:30:00.000+08:00");
+        securityPlayBackUrlParam.setCameraIndexCode("3226a7b1a4f74c55a8d57f3187a355e0");
+        securityPlayBackUrlParam.setBeginTime("2019-05-15T00:00:00.000+08:00");
+        securityPlayBackUrlParam.setEndTime("2019-05-15T10:00:00.000+08:00");
 //        securityPlayBackUrlParam.setRecordLocation("0");
 //        securityPlayBackUrlParam.setProtocol("RTSP");
 //        securityPlayBackUrlParam.setTransmode("0");
@@ -59,7 +59,7 @@ public class SecurityVideoServiceImplTest {
     @Test
     public void findSecurityPlayBackUrlList() {
         Result<SecurityPlayBackUrlShow> show  =  securityVideoClient.findSecurityPlayBackUrlList(securityPlayBackUrlParam);
-        logger.info("\n获取监控点获取回放URL,监控点获取回放URL: {}",show.getResult());
+        logger.info("\n获取监控点获取回放URL,监控点获取回放URL: {}",show.getData().getUrl());
         assertThat(anything(),anything());
     }
 }

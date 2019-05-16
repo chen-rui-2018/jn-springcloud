@@ -207,7 +207,7 @@ public class DynamicServiceImpl implements DynamicService {
     public DynamicWebDetailsVo findDynamicWebDetails(String dynamicId,String account) {
         DynamicWebDetailsVo  vo = new DynamicWebDetailsVo();
        //获取动态详情
-        DynamicWebShow dynamicWebShow =  dynamicDao.findDynamicWebDetails(dynamicId);
+        DynamicWebShow dynamicWebShow =  dynamicDao.findDynamicWebDetails(dynamicId,account);
 
         if(dynamicWebShow != null){
             Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(dynamicWebShow.getCreatorAccount());

@@ -5,6 +5,9 @@
     <!--定义日志文件的存储地址 -->
     <property name="LOG_HOME" value="./logs" />
 
+    <!--kafka的url -->
+    <springProperty name = "KAFKA_URL" scope="context" source="jn.kafka.url"  />
+
 
 
     <!-- 控制台输出 -->
@@ -37,8 +40,17 @@
     </appender>
 
 
+    <appender name="KAFKA" class="com.jn.common.util.log.UnblockedKafkaAppender">
+        <systemName>${PROJECT_NAME}</systemName>
+        <url>${KAFKA_URL}</url>
+    </appender>
+
+
+
+
     <logger name="com.jn" additivity="true" level="INFO">
         <appender-ref ref="MY_INFO_FILE"/>
+        <appender-ref ref="KAFKA"/>
     </logger>
 
     <root level="INFO">

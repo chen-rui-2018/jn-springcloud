@@ -263,4 +263,11 @@
       UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
     where MchId = #{mchId,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectByPayOrderKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_mch_info
+    where MchId = (select t.MchId from t_pay_order t where t.PayOrderId =  #{payOrderId,jdbcType=VARCHAR})
+  </select>
 </mapper>

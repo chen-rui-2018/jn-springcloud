@@ -11,6 +11,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.util.MyLog;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -109,7 +110,7 @@ public class BaseMq  {
             String payOrderJson = msgObj.getString("payOrderJson");
             Result<String> apiResult = loadBalancerUtil.getClientPostForEntity(serviceId, serviceUrl, payOrderJson);
             if(GlobalConstants.SUCCESS_CODE.equals(apiResult.getCode())){
-                noticeResult = apiResult.getData();
+                noticeResult = PayConstant.MCH_NOTICE_REQUEST_SUCCESS;
             }
         }
 

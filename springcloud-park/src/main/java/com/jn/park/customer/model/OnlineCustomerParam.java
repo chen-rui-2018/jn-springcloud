@@ -16,13 +16,14 @@ import java.io.Serializable;
 @ApiModel(value = "OnlineCustomerParam",description = "客服中心在线客服入参")
 public class OnlineCustomerParam implements Serializable {
     @ApiModelProperty(value = "问题标题",required = true,example = "xxx问题")
+    @Size(max=100,message = "问题标题不能超过100字")
     private String quesTitle;
     @ApiModelProperty(value = "问题描述",required = true,example = "xxx问题的具体描述...")
     @Size(max=300, message = "问题描述不能超过300字")
     private String quesDetails;
     @ApiModelProperty("问题描述url(最多允许三张图片)")
     private String[] quesUrl;
-    @ApiModelProperty(value = "服务模块编码(从服务模块编码信息接口获取)",required = true,example = "systemConsulting")
+    @ApiModelProperty(value = "服务模块编码(从服务模块编码信息接口获取)",required = true,example = "service_consulting")
     private String serviceModule;
     @ApiModelProperty(value = "客户类型编码(1：个人    2：企业)",required = true,example = "1")
     @Pattern(regexp = "^[12]$", message = "{clientType:'默认值只允许为1,2'}")

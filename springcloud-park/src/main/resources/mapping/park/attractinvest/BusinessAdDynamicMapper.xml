@@ -14,7 +14,8 @@
             id,
             title,
             start_time as startTime,
-            end_time as endTime
+            end_time as endTime,
+            ad_cover as adCover
         FROM
             `tb_business_ad_dynamic`
         WHERE

@@ -51,14 +51,12 @@ public class ProjectManageController extends BaseController {
     @RequiresPermissions("/planning/project/findAll")
     public Result<PaginationData<List<ProjectManageModel>> > findAll(ProjectModel projectModel){
         //输入类型限制只能输入 0 1 2
-        if(projectModel.getProjectState() != "" && projectModel.getProjectState() != null){
+        if(StringUtils.isNotBlank(projectModel.getProjectState())){
             checkIsType(projectModel.getProjectState());
         }
-        if(projectModel.getProgress() != "" && projectModel.getProgress() != null){
+        if(StringUtils.isNotBlank(projectModel.getProgress())){
             checkIsType(projectModel.getProgress());
         }
-
-
         PaginationData findAll=projectManageService.findAll(projectModel);
 
        return new Result(findAll);

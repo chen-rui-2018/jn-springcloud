@@ -1105,7 +1105,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="tb_pay_bill_details">
+        <table tableName="tb_pay_bill">
         </table>
     </context>
 </generatorConfiguration>

@@ -83,6 +83,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("QUICK_WAP_PAY");
+        model.setTimeoutExpress(PayConstant.ALIPAY_ORDER_MAX_VALID_TIME);
         // 获取objParams参数
         String objParams = payOrder.getExtra();
         if (StringUtils.isNotEmpty(objParams)) {
@@ -99,7 +100,7 @@ public class PayChannel4AlipayController {
         // 设置异步通知地址
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
-        alipay_request.setReturnUrl(alipayConfig.getReturn_url());
+        alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
         String payUrl = null;
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
@@ -144,6 +145,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("FAST_INSTANT_TRADE_PAY");
+        model.setTimeoutExpress(PayConstant.ALIPAY_ORDER_MAX_VALID_TIME);
         // 获取objParams参数
         String objParams = payOrder.getExtra();
         String qr_pay_mode = "2";
@@ -163,7 +165,7 @@ public class PayChannel4AlipayController {
         // 设置异步通知地址
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
-        alipay_request.setReturnUrl(alipayConfig.getReturn_url());
+        alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
         String payUrl = null;
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
@@ -208,11 +210,12 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("QUICK_MSECURITY_PAY");
+        model.setTimeoutExpress(PayConstant.ALIPAY_ORDER_MAX_VALID_TIME);
         alipay_request.setBizModel(model);
         // 设置异步通知地址
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
-        alipay_request.setReturnUrl(alipayConfig.getReturn_url());
+        alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
         String payParams = null;
         try {
             payParams = client.sdkExecute(alipay_request).getBody();
@@ -255,6 +258,7 @@ public class PayChannel4AlipayController {
         model.setSubject(payOrder.getSubject());
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
+        model.setTimeoutExpress(PayConstant.ALIPAY_ORDER_MAX_VALID_TIME);
         // 获取objParams参数
         String objParams = payOrder.getExtra();
         if (StringUtils.isNotEmpty(objParams)) {
@@ -276,7 +280,7 @@ public class PayChannel4AlipayController {
         // 设置异步通知地址
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
-        alipay_request.setReturnUrl(alipayConfig.getReturn_url());
+        alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
         String payUrl = null;
         try {
             payUrl = client.execute(alipay_request).getBody();

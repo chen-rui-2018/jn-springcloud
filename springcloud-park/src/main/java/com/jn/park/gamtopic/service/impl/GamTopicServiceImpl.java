@@ -8,11 +8,15 @@ import com.jn.common.util.StringUtils;
 import com.jn.park.enums.GamTopicExceptionEnum;
 import com.jn.park.feedback.model.FeedbackVO;
 import com.jn.park.fileimg.dao.FileImgMapper;
+import com.jn.park.fileimg.dao.TbFileImgMapper;
+import com.jn.park.fileimg.entity.TbFileImg;
+import com.jn.park.fileimg.entity.TbFileImgCriteria;
 import com.jn.park.fileimg.model.FileImg;
 import com.jn.park.fileimg.service.FileImgService;
 import com.jn.park.gamtopic.dao.GamTopicMapper;
 import com.jn.park.gamtopic.dao.TbGamTopicMapper;
 import com.jn.park.gamtopic.entity.TbGamTopic;
+import com.jn.park.gamtopic.entity.TbGamTopicCriteria;
 import com.jn.park.gamtopic.model.GamTopic;
 import com.jn.park.gamtopic.model.GamTopicParam;
 import com.jn.park.gamtopic.model.GamTopicVO;
@@ -24,6 +28,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -44,6 +50,8 @@ public class GamTopicServiceImpl implements GamTopicService {
     private TbGamTopicMapper tbGamTopicMapper;
     @Autowired
     private GamTopicMapper gamTopicMapper;
+    @Autowired
+    private TbFileImgMapper tbFileImgMapper;
 
     /**
      * 话题状态 1有效0无效
@@ -91,17 +99,54 @@ public class GamTopicServiceImpl implements GamTopicService {
     public PaginationData<List<GamTopicVO>> getMyGamTopicList(Page page, String account){
         GamTopicParam gamTopicParam = new GamTopicParam();
         gamTopicParam.setCreatorAcount(account);
-        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows());
-        List<GamTopicVO> gamTopicVOS = gamTopicMapper.getUserFeedbackList(gamTopicParam);
-        PaginationData<List<GamTopicVO>> data = new PaginationData(gamTopicVOS, objects.getTotal());
-        return data;
+        BeanUtils.copyProperties(page,gamTopicParam);
+        return getGamTopicListByParam(gamTopicParam);
     }
 
     @Override
     @ServiceLog(doAction = "根据条件查询用户话题列表[后台管理接口]")
     public PaginationData<List<GamTopicVO>> getGamTopicListByParam(GamTopicParam gamTopicParam){
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(gamTopicParam.getPage(), gamTopicParam.getRows() == 0 ? 15 : gamTopicParam.getRows());
+        TbGamTopicCriteria topicCriteria = new TbGamTopicCriteria();
+        TbGamTopicCriteria.Criteria criteria = topicCriteria.createCriteria();
+        if(StringUtils.isNotEmpty(gamTopicParam.getCreatorAcount())){
+            criteria.andCreatorAccountEqualTo(gamTopicParam.getCreatorAcount());
+        }
+        if(StringUtils.isNotEmpty(gamTopicParam.getTopicContent())){
+            criteria.andTopicContentEqualTo(gamTopicParam.getTopicContent());
+        }
+        if(StringUtils.isNotEmpty(gamTopicParam.getTopicType())){
+            criteria.andTopicTypeEqualTo(gamTopicParam.getTopicType());
+        }
         List<GamTopicVO> gamTopicVOS = gamTopicMapper.getUserFeedbackList(gamTopicParam);
+
+        List<String> ids = new ArrayList<>(16);
+        for (GamTopicVO tppic: gamTopicVOS
+        ) {
+            ids.add(tppic.getTopicId());
+        }
+        TbFileImgCriteria imgCriteria = new TbFileImgCriteria();
+        imgCriteria.createCriteria().andTopicIdIn(ids);
+        List<TbFileImg> tbFileImgs = tbFileImgMapper.selectByExample(imgCriteria);
+        for (GamTopicVO tppic: gamTopicVOS
+        ) {
+            for (TbFileImg img:tbFileImgs
+            ) {
+                if(StringUtils.equals(tppic.getTopicId(),img.getTopicId())){
+                    FileImg i = new FileImg();
+                    BeanUtils.copyProperties(img,i);
+                    List<FileImg> imgs = tppic.getImgs();
+                    if(imgs!=null){
+                        imgs.add(i);
+                        tppic.setImgs(imgs);
+                    }else{
+                        List<FileImg> fl = new ArrayList<>(4);
+                        fl.add(i);
+                        tppic.setImgs(fl);
+                    }
+                }
+            }
+        }
         PaginationData<List<GamTopicVO>> data = new PaginationData(gamTopicVOS, objects.getTotal());
         return data;
     }

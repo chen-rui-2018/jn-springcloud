@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>xxpay-service</artifactId>
+	<packaging>jar</packaging>
+	<name>xxpay-service</name>
+	<description>xxpay-service</description>
+
+	<parent>
+		<groupId>com.jn</groupId>
+		<artifactId>springcloud-app-pay</artifactId>
+		<version>1.0.0-RELEASE</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>springcloud-app-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>xxpay-dal</artifactId>
+			<version>1.0.0-RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>xxpay-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>xxpay-web-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+		</dependency>
+		<!--wx_pay-->
+		<dependency>
+			<groupId>com.github.binarywang</groupId>
+			<artifactId>weixin-java-pay</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<!--ali_pay-->
+		<dependency>
+			<groupId>com.alipay</groupId>
+			<artifactId>sdk</artifactId>
+			<version>1.5</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20170818173712.jar</systemPath>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/webapp/WEB-INF/lib/</directory>
+				<targetPath>BOOT-INF/lib/</targetPath>
+				<includes>
+					<include>**/*.jar</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<targetPath>BOOT-INF/classes/</targetPath>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

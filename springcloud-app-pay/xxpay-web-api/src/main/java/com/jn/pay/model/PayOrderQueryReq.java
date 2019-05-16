@@ -1,5 +1,6 @@
 package com.jn.pay.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
@@ -34,7 +35,24 @@ public class PayOrderQueryReq implements Serializable  {
      * 是否执行回调，如果为true，则支付中心会再次向商户发起一次回调，如果为false则不发起
     * */
     private boolean executeNotify;
+    /**
+     * 签名
+     */
+    @ApiModelProperty("签名,可以通过API提供的工具生成")
+    @NotBlank(message = "签名不能为空！")
+    private String sign;
 
+
+    @Override
+    public String toString() {
+        return "PayOrderQueryReq{" +
+                "mchId='" + mchId + '\'' +
+                ", payOrderId='" + payOrderId + '\'' +
+                ", mchOrderNo='" + mchOrderNo + '\'' +
+                ", executeNotify=" + executeNotify +
+                ", sign='" + sign + '\'' +
+                '}';
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -72,13 +90,11 @@ public class PayOrderQueryReq implements Serializable  {
         this.executeNotify = executeNotify;
     }
 
-    @Override
-    public String toString() {
-        return "PayOrderQueryReq{" +
-                "mchId='" + mchId + '\'' +
-                ", payOrderId='" + payOrderId + '\'' +
-                ", mchOrderNo='" + mchOrderNo + '\'' +
-                ", executeNotify=" + executeNotify +
-                '}';
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }

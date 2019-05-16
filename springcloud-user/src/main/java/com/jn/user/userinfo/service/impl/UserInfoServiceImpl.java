@@ -77,8 +77,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final static String TAG_CODE_IS_JOB = "1";
 
     /**
-     * 根据账号获取用户扩展信息
-     * @param account 用户账号
+     * 根据用户账号/手机号/邮箱获取用户扩展信息
+     * @param account 用户账号/手机号/邮箱
      * @return
      */
     @ServiceLog(doAction = "根据账号获取用户扩展信息")
@@ -277,7 +277,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     /**
      * 根据账号获取用户扩展信息
-     * @param account  用户账号
+     * @param account  用户账号/手机号/邮箱
      * @return
      */
     @ServiceLog(doAction = "根据账号获取用户扩展信息")

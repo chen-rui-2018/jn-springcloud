@@ -17,11 +17,32 @@ public class RefundOrderRsp  implements Serializable  {
     * */
     private String refundOrderId;
 
+    /**
+     * 签名
+     * */
+    private String sign;
+
     public String getRefundOrderId() {
         return refundOrderId;
     }
 
     public void setRefundOrderId(String refundOrderId) {
         this.refundOrderId = refundOrderId;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    @Override
+    public String toString() {
+        return "RefundOrderRsp{" +
+                "refundOrderId='" + refundOrderId + '\'' +
+                ", sign='" + sign + '\'' +
+                '}';
     }
 }

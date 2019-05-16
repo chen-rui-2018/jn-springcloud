@@ -1,9 +1,16 @@
 package com.jn.park.message.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
+import com.jn.park.finance.vo.FinanceExpendHistoryVo;
 import com.jn.park.message.dao.MessageListDao;
 import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.message.model.MessageListModel;
+import com.jn.park.message.model.findAllMessageListModel;
 import com.jn.park.message.service.MessageListService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -30,9 +37,37 @@ public class MessageListServiceImpl implements MessageListService {
 
     @ServiceLog(doAction = "消息列表")
     @Override
-    public List<FindAllMessageListVo> findAll(Integer messageOneTort,Integer messageTowTort,Integer isRead, User user) {
-        List<FindAllMessageListVo> findAllMessageListVoList = messageListDao.findAll(messageOneTort,messageTowTort,isRead,user.getAccount());
-        return findAllMessageListVoList;
+    public PaginationData<PaginationData<List<FindAllMessageListVo>>> findAll(findAllMessageListModel fModel, User user) {
+
+        Page<Object> objects = PageHelper.startPage(fModel.getPage(), fModel.getRows());
+
+        List<FindAllMessageListVo> findAllMessageListVoList = messageListDao.findAll(fModel.getMessageOneTort(),fModel.getMessageTowTort(),fModel.getIsRead(),user.getAccount());
+        return new  PaginationData(findAllMessageListVoList,objects.getTotal());
+    }
+
+    @Override
+    public int getIsRead(String messageOneTort,String messageTowTort,User user) {
+        //一级是二级的前提条件
+        if(messageTowTort != null){
+            if(messageOneTort == null){
+                throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"请先输入一级类型");
+            }
+        }
+        //
+        if(messageOneTort == null){
+            messageOneTort="";
+        }
+        if(messageTowTort == null){
+            messageTowTort="";
+        }
+
+        int getIsRead=messageListDao.getIsRead(messageOneTort,messageTowTort,user.getAccount());
+        if(getIsRead>0){
+            getIsRead=0;
+        }else{
+            getIsRead=1;
+        }
+        return getIsRead;
     }
 
     @ServiceLog(doAction = "添加消息")

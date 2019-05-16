@@ -26,6 +26,9 @@ public class PolicyCenterHomeParam extends Page implements Serializable {
     @ApiModelProperty(value = "政策类型(0：普通政策  1：图解政策)",example = "0")
     @Pattern(regexp = "^[01]$", message = "{policyType:'默认值只允许为0,1'}")
     private String policyType;
+    @ApiModelProperty(value = "发布时间之前(如2015年以前，查询2015年及以前，只查询当前年政策不传，查询当前及以前必传)",example = "1")
+    @Pattern(regexp = "^[1]|(\\s*)$", message = "{yearBefore:'默认值只允许为1或者空'}")
+    private String yearBefore;
     @ApiModelProperty(value = "发布时间(范围1990~2039)",example = "2019")
     @Pattern(regexp = "((199[0-9])|(20[0-3][0-9]))|(\\s*)",
             message = "{releaseTime:'发布时间格式错误'}")
@@ -68,6 +71,14 @@ public class PolicyCenterHomeParam extends Page implements Serializable {
 
     public void setPolicyType(String policyType) {
         this.policyType = policyType;
+    }
+
+    public String getYearBefore() {
+        return yearBefore;
+    }
+
+    public void setYearBefore(String yearBefore) {
+        this.yearBefore = yearBefore;
     }
 
     public String getReleaseDate() {

@@ -106,13 +106,13 @@ public class FinancialProductController extends BaseController {
     @RequestMapping(value = "/technologyFinancial/financialProductController/upShelfCommonProduct",method = RequestMethod.POST)
     public Result upShelfCommonProduct(@RequestBody @Validated CommonProductShelf commonService ){
         Assert.notNull(commonService.getTemplateId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_TEMPLE_ID_EMPTY.getMessage());
-        Assert.notNull(commonService.getOrgId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
+//        Assert.notNull(commonService.getOrgId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //服务产品主键Id
-        String productId = UUID.randomUUID().toString().replaceAll("-", "");
+        //String productId = UUID.randomUUID().toString().replaceAll("-", "");
         CommonServiceShelf serviceShelf = new CommonServiceShelf();
         BeanUtils.copyProperties(commonService,serviceShelf);
-        serviceShelf.setProductId(productId);
+        serviceShelf.setProductId("");
         financialProductService.upShelfCommonProduct(serviceShelf,user != null?user.getAccount():"");
         return new Result();
     }
@@ -121,13 +121,12 @@ public class FinancialProductController extends BaseController {
     @RequiresPermissions("/technologyFinancial/financialProductController/upShelfFeatureProduct")
     @RequestMapping(value = "/technologyFinancial/financialProductController/upShelfFeatureProduct",method = RequestMethod.POST)
     public Result upShelfFeatureProduct(@RequestBody @Validated  FinancialProductFeatureAdd featureProduct){
-        Assert.notNull(featureProduct.getOrgId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //服务产品主键Id
-        String productId = UUID.randomUUID().toString().replaceAll("-", "");
+        //String productId = UUID.randomUUID().toString().replaceAll("-", "");
         FinancialProductAddInfo info = new FinancialProductAddInfo();
         BeanUtils.copyProperties(featureProduct,info);
-        info.setProductId(productId);
+        info.setProductId("");
         financialProductService.upShelfFeatureProduct(info,user != null?user.getAccount():"");
         return new Result();
     }

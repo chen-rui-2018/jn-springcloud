@@ -1,25 +1,31 @@
 package com.jn.park.asset.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.park.asset.dao.RoomInformationDao;
 import com.jn.park.asset.dao.RoomOrdersDao;
+import com.jn.park.asset.dao.TbRoomOrdersItemMapper;
+import com.jn.park.asset.dao.TbRoomOrdersMapper;
+import com.jn.park.asset.entity.TbRoomOrders;
+import com.jn.park.asset.entity.TbRoomOrdersItem;
+import com.jn.park.asset.entity.TbRoomOrdersItemCriteria;
 import com.jn.park.asset.enums.OrdersTypeEnums;
 import com.jn.park.asset.enums.RoomLeaseStatusEnums;
 import com.jn.park.asset.model.RoomOrdersModle;
+import com.jn.park.asset.model.RoomPayOrdersItemModel;
 import com.jn.park.asset.model.RoomPayOrdersModel;
 import com.jn.park.asset.service.RoomOrdersService;
 import com.jn.system.log.annotation.ServiceLog;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
 * 房间租借订单impl
@@ -35,6 +41,10 @@ public class RoomOrdersServiceImpl implements RoomOrdersService {
     private RoomOrdersDao roomOrdersDao;
     @Autowired
     private RoomInformationDao roomInformationDao;
+    @Autowired
+    private TbRoomOrdersMapper tbRoomOrdersMapper;
+    @Autowired
+    private TbRoomOrdersItemMapper tbRoomOrdersItemMapper;
 
     /**
      * 返回支付订单
@@ -44,7 +54,25 @@ public class RoomOrdersServiceImpl implements RoomOrdersService {
     @Override
     @ServiceLog(doAction = "返回支付订单")
     public RoomPayOrdersModel getPayOrders(String id) {
-       RoomPayOrdersModel roomPayOrdersModel = roomOrdersDao.getPayOrders(id);
+        //查询订单表
+        TbRoomOrders tbRoomOrders = tbRoomOrdersMapper.selectByPrimaryKey(id);
+        RoomPayOrdersModel roomPayOrdersModel = new RoomPayOrdersModel();
+        BeanUtils.copyProperties(tbRoomOrders,roomPayOrdersModel);
+        //通过订单id查询订单字表
+        TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria= new TbRoomOrdersItemCriteria();
+        tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(id);
+        List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
+        //创建子订单List集合
+        List<RoomPayOrdersItemModel> roomPayOrdersItemModelList = new ArrayList<>();
+
+        if (tbRoomOrdersItemList != null){
+            for (TbRoomOrdersItem tbRoomOrdersItem : tbRoomOrdersItemList) {
+                RoomPayOrdersItemModel roomPay = new RoomPayOrdersItemModel();
+                BeanUtils.copyProperties(tbRoomOrdersItem,roomPay);
+                roomPayOrdersItemModelList.add(roomPay);
+            }
+            roomPayOrdersModel.setRoomPayOrdersItemModels(roomPayOrdersItemModelList);
+        }
         try {
             if (roomPayOrdersModel != null){
                 //账单类型
@@ -73,10 +101,24 @@ public class RoomOrdersServiceImpl implements RoomOrdersService {
      */
     @Override
     @ServiceLog(doAction = "分页返回房间租借历史列表")
-    public PaginationData<List<RoomOrdersModle>> getRoomOrdersList(String account,Page page) {
+    public PaginationData<List<RoomPayOrdersItemModel>> getRoomOrdersList(String account,Page page) {
+        //开始分页
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
-        List<RoomOrdersModle> roomOrdersModleList = roomOrdersDao.getRoomOrdersList(account);
-        PaginationData<List<RoomOrdersModle>> data = new PaginationData<>(roomOrdersModleList,objects.getTotal());
+        //创建订单集合
+        List<RoomPayOrdersItemModel> roomPayOrdersItemModelList = new ArrayList<>();
+        //设置查询条件
+        TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
+        //设置用户
+        tbRoomOrdersItemCriteria.createCriteria().andCreatorAccountEqualTo(account);
+        //按照创建时间倒序排序
+        tbRoomOrdersItemCriteria.setOrderByClause("create_time DESC");
+        List<TbRoomOrdersItem> tbRoomOrdersItems = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
+        for (TbRoomOrdersItem tbRoomOrdersItem : tbRoomOrdersItems) {
+            RoomPayOrdersItemModel roomPayOrdersItemModel = new RoomPayOrdersItemModel();
+            BeanUtils.copyProperties(tbRoomOrdersItem,roomPayOrdersItemModel);
+            roomPayOrdersItemModelList.add(roomPayOrdersItemModel);
+        }
+        PaginationData<List<RoomPayOrdersItemModel>> data = new PaginationData(tbRoomOrdersItems,objects.getTotal());
         return data;
     }
 
@@ -87,9 +129,11 @@ public class RoomOrdersServiceImpl implements RoomOrdersService {
      */
     @Override
     @ServiceLog(doAction ="获取房间租借详情信息")
-    public RoomOrdersModle getRoomOrders(String id) {
-        RoomOrdersModle roomOrdersModle = roomOrdersDao.getRoomOrders(id);
-        return roomOrdersModle;
+    public RoomPayOrdersItemModel getRoomOrders(String id) {
+        TbRoomOrdersItem tbRoomOrdersItem = tbRoomOrdersItemMapper.selectByPrimaryKey(id);
+        RoomPayOrdersItemModel roomPayOrdersItemModel = new RoomPayOrdersItemModel();
+        BeanUtils.copyProperties(tbRoomOrdersItem,roomPayOrdersItemModel);
+        return roomPayOrdersItemModel;
     }
 
     /**

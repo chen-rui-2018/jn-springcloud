@@ -33,5 +33,5 @@ public interface RoomInformationDao {
      * @param name
      * @return
      */
-    List<RoomInformationModel> searchList(String name);
+    List<RoomInformationModel> searchRoomList(String name);
 }

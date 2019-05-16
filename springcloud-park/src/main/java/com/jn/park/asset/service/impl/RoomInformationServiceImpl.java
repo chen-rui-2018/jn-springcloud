@@ -6,12 +6,12 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.company.api.CompanyClient;
+import com.jn.company.model.ServiceCompany;
 import com.jn.park.asset.dao.*;
 import com.jn.park.asset.entity.*;
-import com.jn.park.asset.enums.AssetStatusEnums;
-import com.jn.park.asset.enums.PayStatusEnums;
-import com.jn.park.asset.enums.RoomLeaseStatusEnums;
-import com.jn.park.asset.enums.RoomReletStatusEnums;
+import com.jn.park.asset.enums.*;
+import com.jn.park.asset.model.RoomBaseModel;
 import com.jn.park.asset.model.RoomInformationModel;
 import com.jn.park.asset.service.RoomInformationService;
 import com.jn.system.log.annotation.ServiceLog;
@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -46,6 +47,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     private TbRoomGroupMapper tbRoomGroupMapper;
     @Autowired
     private TbRoomOrdersItemMapper tbRoomOrdersItemMapper;
+    @Autowired
+    private CompanyClient companyClient;
 
 
     /**
@@ -89,18 +92,19 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     }
 
 
-
-    //todo
     @Override
     @ServiceLog(doAction ="新增房间订单")
     public Result addRoomOrders(String roomId,  String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime,String userAccount) {
 
         TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(roomId);
+        //通过用户account查询企业
+        Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
+        ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
 
-        //
+        //判断租借时间是否大于最短租期
         this.validShortestLease(leaseStartTime,leaseEndTime,tbRoomInformation);
 
-        //
+        //判断租借用户是否是企业用户
         this.checkIsCompanyUser(userAccount);
 
         //拿到要出租的所有房间
@@ -121,9 +125,19 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             item.setOrderId(orderId);
             item.setRoomId(e.getId());
             item.setRoomName(e.getName());
-            //todo
-
+            item.setFloor(e.getFloor());
+            item.setTowerId(e.getTowerId());
+            item.setTowerName(e.getTowerName());
+            item.setRoomUrl(e.getImgUrl());
+            item.setRoomArea(e.getRoomArea());
+            item.setLeasePrice(e.getLeasePrice());
+            item.setLeaseSum(e.getLeaseSum());
+            item.setPressPay(e.getPressPay());
+            item.setShortestLease(e.getShortestLease());
+            item.setIntroduce(e.getIntroduce());
             item.setPaySum(this.calPrice(e));
+            item.setCreatorAccount(userAccount);
+            item.setCreateTime(new java.util.Date());
             //加到订单总金额里面
             orderPaySum.add(item.getPaySum());
             logger.info("插入订单明细数据，{}",item);
@@ -134,35 +148,81 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         TbRoomOrders orders=new TbRoomOrders();
         orders.setId(orderId);
         orders.setPaySum(orderPaySum);
+
         //未付款
         orders.setPayState(Byte.parseByte(PayStatusEnums.NONPAYMENT.getCode()));
         //是否是续租订单(否)
         orders.setIsRelet(Byte.parseByte(RoomReletStatusEnums.NO.getCode()));
         //有效
         orders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
+        orders.setEnterpriseId(data.getId());
+        orders.setLeaseEnterprise(data.getComName());
+        orders.setLeaseStartTime(leaseStartTime);
+        orders.setLeaseEndTime(leaseEndTime);
+        orders.setContactName(contactName);
+        orders.setContactPhone(contactPhone);
         orders.setCreateTime(new java.util.Date());
         orders.setContactName(userAccount);
-        //todo .....
         logger.info("插入订单主表数据，{}",orders);
         tbRoomOrdersMapper.insert(orders);
 
         //同时更新房间信息租借状态(更改为租借申请中)
-        Map<String,Object> map = new HashMap<>(16);
-        map.put("roomId",roomId);
-        map.put("roomStatus",Byte.parseByte(RoomLeaseStatusEnums.APPLY.getValue()));
-        roomInformationDao.updateStatus(map);//todo 单表不要自己写
+        TbRoomInformation tbRoom = tbRoomInformationMapper.selectByPrimaryKey(roomId);
+        tbRoom.setState(Byte.parseByte(RoomLeaseStatusEnums.APPLY.getValue()));
+        logger.info("更新房间租借状态,{}",tbRoom);
+        tbRoomInformationMapper.updateByPrimaryKey(tbRoom);
 
         return new Result(orderId);
     }
 
+    @Override
+    @ServiceLog(doAction ="获取房间基本信息")
+    public RoomBaseModel getRoomBaseInfo(String roomId) {
+        TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(roomId);
+        //拿到要出租的所有房间
+        List<TbRoomInformation> tbRoomInformationList=this.getRoomGroupId(tbRoomInformation.getGroupId());
+        if (tbRoomInformation == null){
+            RoomBaseModel BaseModel = new RoomBaseModel();
+            BeanUtils.copyProperties(tbRoomInformation,BaseModel);
+            return BaseModel;
+        }
+        List<RoomBaseModel> roomBaseModelList = new ArrayList<>();
+        RoomBaseModel roomBaseModel = new RoomBaseModel();
+        for (TbRoomInformation roomInformation : tbRoomInformationList) {
+            RoomBaseModel roomBase = new RoomBaseModel();
+            BeanUtils.copyProperties(roomInformation,roomBase);
+            roomBaseModelList.add(roomBase);
+        }
+        roomBaseModel.setGroupRoomList(roomBaseModelList);
+        return roomBaseModel;
+    }
+
+    @Override
+    @ServiceLog(doAction = "搜索房间")
+    public PaginationData<List<RoomInformationModel>> searchRoomList(Page page, String name) {
+        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
+        List<RoomInformationModel> roomInformationModelList = roomInformationDao.searchRoomList(name);
+        PaginationData data = new PaginationData(roomInformationModelList, objects.getTotal());
+        return data;
+    }
+
     //校验最短租期
     private void validShortestLease(Date leaseStartTime, Date leaseEndTime,TbRoomInformation tbRoomInformation){
-        //todo
-        throw new JnSpringCloudException(new Result("",""));
+        //判断租借时间是否大于最短租期
+        int days = (int) ((leaseEndTime.getTime() - leaseStartTime.getTime()) / (1000*3600*24)+1);
+        //最短租借时间
+        int leaseTime = Integer.parseInt(tbRoomInformation.getShortestLease());
+        if (leaseTime > days) {
+            throw new JnSpringCloudException(AssetExceptionEnum.TIME_NOT_AFTER_LEASE_TIME);
+        }
     }
     //校验用户是否属于某个企业
     private void checkIsCompanyUser(String account){
-
+        Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(account);
+        ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
+        if (null == data){
+            throw new JnSpringCloudException(new Result("4020502","当前用户不属于企业用户"));
+        }
     }
 
     /**
@@ -223,42 +283,4 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         return newDate + result;
     }
 
-    /**
-     * 计算时间差
-     * @param date1
-     * @param date2
-     * @return
-     */
-    public static int differentDays(java.util.Date date1, java.util.Date date2) {
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(date1);
-
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(date2);
-        int day1 = cal1.get(Calendar.DAY_OF_YEAR);
-        int day2 = cal2.get(Calendar.DAY_OF_YEAR);
-
-        int year1 = cal1.get(Calendar.YEAR);
-        int year2 = cal2.get(Calendar.YEAR);
-        //同一年
-        if (year1 != year2) {
-            int timeDistance = 0;
-            for (int i = year1; i < year2; i++) {
-                //闰年
-                if (i % 4 == 0 && i % 100 != 0 || i % 400 == 0) {
-                    timeDistance += 366;
-
-                } else {
-                    //不是闰年
-                    timeDistance += 365;
-                }
-            }
-
-            return timeDistance + (day2 - day1);
-        } else {
-            //不同年
-            System.out.println("判断day2 - day1 : " + (day2 - day1));
-            return day2 - day1;
-        }
-    }
 }

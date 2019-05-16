@@ -904,72 +904,72 @@ public class TbRoomOrdersCriteria {
         }
 
         public Criteria andExplainIsNull() {
-            addCriterion("explain is null");
+            addCriterion("explain_ is null");
             return (Criteria) this;
         }
 
         public Criteria andExplainIsNotNull() {
-            addCriterion("explain is not null");
+            addCriterion("explain_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andExplainEqualTo(String value) {
-            addCriterion("explain =", value, "explain");
+            addCriterion("explain_ =", value, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainNotEqualTo(String value) {
-            addCriterion("explain <>", value, "explain");
+            addCriterion("explain_ <>", value, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainGreaterThan(String value) {
-            addCriterion("explain >", value, "explain");
+            addCriterion("explain_ >", value, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainGreaterThanOrEqualTo(String value) {
-            addCriterion("explain >=", value, "explain");
+            addCriterion("explain_ >=", value, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainLessThan(String value) {
-            addCriterion("explain <", value, "explain");
+            addCriterion("explain_ <", value, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainLessThanOrEqualTo(String value) {
-            addCriterion("explain <=", value, "explain");
+            addCriterion("explain_ <=", value, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainLike(String value) {
-            addCriterion("explain like", value, "explain");
+            addCriterion("explain_ like", value, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainNotLike(String value) {
-            addCriterion("explain not like", value, "explain");
+            addCriterion("explain_ not like", value, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainIn(List<String> values) {
-            addCriterion("explain in", values, "explain");
+            addCriterion("explain_ in", values, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainNotIn(List<String> values) {
-            addCriterion("explain not in", values, "explain");
+            addCriterion("explain_ not in", values, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainBetween(String value1, String value2) {
-            addCriterion("explain between", value1, value2, "explain");
+            addCriterion("explain_ between", value1, value2, "explain");
             return (Criteria) this;
         }
 
         public Criteria andExplainNotBetween(String value1, String value2) {
-            addCriterion("explain not between", value1, value2, "explain");
+            addCriterion("explain_ not between", value1, value2, "explain");
             return (Criteria) this;
         }
 

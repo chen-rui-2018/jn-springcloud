@@ -3,6 +3,7 @@ package com.jn.park.asset.service;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.park.asset.model.RoomBaseModel;
 import com.jn.park.asset.model.RoomInformationModel;
 
 import java.sql.Date;
@@ -42,4 +43,18 @@ public interface RoomInformationService {
      */
     Result addRoomOrders(String roomId, String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime, String userAccount);
 
+    /**
+     * 获取房间基本信息
+     * @param roomId
+     * @return
+     */
+    RoomBaseModel getRoomBaseInfo(String roomId);
+
+    /**
+     * 搜索房间
+     * @param page
+     * @param name
+     * @return
+     */
+    PaginationData<List<RoomInformationModel>> searchRoomList(Page page, String name);
 }

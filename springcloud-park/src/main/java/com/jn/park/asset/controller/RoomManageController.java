@@ -5,12 +5,10 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.park.asset.entity.TbRoomOrdersItem;
 import com.jn.park.asset.enums.PageExceptionEnums;
 import com.jn.park.asset.enums.RoomLeaseStatusEnums;
-import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
-import com.jn.park.asset.model.RoomInformationModel;
-import com.jn.park.asset.model.RoomOrdersModle;
-import com.jn.park.asset.model.RoomPayOrdersModel;
+import com.jn.park.asset.model.*;
 import com.jn.park.asset.service.RoomInformationService;
 import com.jn.park.asset.service.RoomOrdersService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -20,6 +18,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,8 +68,36 @@ public class RoomManageController {
         return new Result<>(roomInformationModel);
     }
 
+    @ControllerLog(doAction = "获取房间基本信息")
+    @ApiOperation(value = "获取房间基本信息",notes = "获取房间基本信息")
+    @GetMapping(value = "/getRoomBaseInfo" )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roomId",value = "房间id",example = "575020345132580865")
+    })
+    public Result<RoomBaseModel> getRoomBaseInfo(String roomId){
+        Assert.notNull(roomId,"房间id不能为空");
+        RoomBaseModel roomBaseModel = roomInformationService.getRoomBaseInfo(roomId);
+        return new Result<>(roomBaseModel);
+    }
 
-    //todo
+    @ControllerLog(doAction = "房间搜索")
+    @ApiOperation(value = "房间搜索",notes = "房间搜索")
+    @GetMapping(value = "/searchRoomList")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name",value = "房间名称或楼层名称",example = "1")
+    })
+    public Result<PaginationData<List<RoomInformationModel>>> searchRoomList(Page page,String name){
+        if (page.getPage() > 0 && page.getRows() > 0){
+            PaginationData<List<RoomInformationModel>> data = roomInformationService.searchRoomList(page ,name);
+            return new Result<>(data);
+        }else{
+            throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
+        }
+
+    }
+
+
+
    @ControllerLog(doAction = "新增房间租赁订单")
     @ApiOperation(value ="新增房间租赁订单",notes = "新增房间租赁订单")
     @PostMapping(value = "/addRoomOrders")
@@ -103,11 +130,11 @@ public class RoomManageController {
     @ControllerLog(doAction = "房间租赁历史列表")
     @ApiOperation(value = "房间租赁历史列表",notes = "获取房间租赁历史列表")
     @GetMapping(value = "/getRoomOrdersList")
-    public Result<PaginationData<List<RoomOrdersModle>>> getRoomOrdersList(Page page){
+    public Result<PaginationData<List<RoomPayOrdersItemModel>>> getRoomOrdersList(Page page){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<RoomOrdersModle>> roomOrdersList = roomOrdersService.getRoomOrdersList(user.getAccount(),page);
+            PaginationData<List<RoomPayOrdersItemModel>> roomOrdersList = roomOrdersService.getRoomOrdersList(user.getAccount(),page);
             return new Result<>(roomOrdersList);
         }else{
             throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
@@ -120,10 +147,10 @@ public class RoomManageController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050811515490657")
     })
-    public Result<RoomOrdersModle> getRoomOrders (String id){
+    public Result<RoomPayOrdersItemModel> getRoomOrders (String id){
         Assert.notNull(id,"订单编号不能为空");
-        RoomOrdersModle roomOrdersModle =  roomOrdersService.getRoomOrders(id);
-        return new Result<>(roomOrdersModle);
+        RoomPayOrdersItemModel roomPayOrdersItemModel =  roomOrdersService.getRoomOrders(id);
+        return new Result<>(roomPayOrdersItemModel);
     }
 
     @ControllerLog(doAction = "房间退租")

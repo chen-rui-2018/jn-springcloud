@@ -19,7 +19,7 @@
     <result column="pay_sum" jdbcType="DECIMAL" property="paySum" />
     <result column="room_status" jdbcType="TINYINT" property="roomStatus" />
     <result column="quit_penal_sum" jdbcType="DECIMAL" property="quitPenalSum" />
-    <result column="explain" jdbcType="VARCHAR" property="explain" />
+    <result column="explain_" jdbcType="VARCHAR" property="explain" />
     <result column="approval_opinion" jdbcType="VARCHAR" property="approvalOpinion" />
     <result column="practical_quit_time" jdbcType="DATE" property="practicalQuitTime" />
     <result column="lease_apply_status" jdbcType="TINYINT" property="leaseApplyStatus" />
@@ -91,7 +91,7 @@
   <sql id="Base_Column_List">
     id, order_id, room_id, room_name, floor, tower_id, tower_name, room_url, room_area, 
     lease_price, lease_sum, press_pay, shortest_lease, introduce, pay_sum, room_status, 
-    quit_penal_sum, explain, approval_opinion, practical_quit_time, lease_apply_status, 
+    quit_penal_sum, explain_, approval_opinion, practical_quit_time, lease_apply_status, 
     quit_apply_status, record_status, creator_account, create_time, modifier_account, 
     modified_time
   </sql>
@@ -131,7 +131,7 @@
       tower_name, room_url, room_area, 
       lease_price, lease_sum, press_pay, 
       shortest_lease, introduce, pay_sum, 
-      room_status, quit_penal_sum, explain, 
+      room_status, quit_penal_sum, explain_, 
       approval_opinion, practical_quit_time, lease_apply_status, 
       quit_apply_status, record_status, creator_account, 
       create_time, modifier_account, modified_time
@@ -202,7 +202,7 @@
         quit_penal_sum,
       </if>
       <if test="explain != null">
-        explain,
+        explain_,
       </if>
       <if test="approvalOpinion != null">
         approval_opinion,
@@ -377,7 +377,7 @@
         quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
       </if>
       <if test="record.explain != null">
-        explain = #{record.explain,jdbcType=VARCHAR},
+        explain_ = #{record.explain,jdbcType=VARCHAR},
       </if>
       <if test="record.approvalOpinion != null">
         approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
@@ -430,7 +430,7 @@
       pay_sum = #{record.paySum,jdbcType=DECIMAL},
       room_status = #{record.roomStatus,jdbcType=TINYINT},
       quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
-      explain = #{record.explain,jdbcType=VARCHAR},
+      explain_ = #{record.explain,jdbcType=VARCHAR},
       approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
       practical_quit_time = #{record.practicalQuitTime,jdbcType=DATE},
       lease_apply_status = #{record.leaseApplyStatus,jdbcType=TINYINT},
@@ -496,7 +496,7 @@
         quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
       </if>
       <if test="explain != null">
-        explain = #{explain,jdbcType=VARCHAR},
+        explain_ = #{explain,jdbcType=VARCHAR},
       </if>
       <if test="approvalOpinion != null">
         approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
@@ -546,7 +546,7 @@
       pay_sum = #{paySum,jdbcType=DECIMAL},
       room_status = #{roomStatus,jdbcType=TINYINT},
       quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
-      explain = #{explain,jdbcType=VARCHAR},
+      explain_ = #{explain,jdbcType=VARCHAR},
       approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
       practical_quit_time = #{practicalQuitTime,jdbcType=DATE},
       lease_apply_status = #{leaseApplyStatus,jdbcType=TINYINT},

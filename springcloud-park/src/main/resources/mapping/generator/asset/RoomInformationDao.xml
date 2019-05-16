@@ -44,7 +44,7 @@
             id = #{roomId}
     </update>
 
-    <select id="searchList" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomInformationModel">
+    <select id="searchRoomList" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomInformationModel">
         SELECT
             id,
             NAME,
@@ -75,6 +75,9 @@
             create_Time AS createTime
         FROM
             tb_room_information
-        where record_status = '1' and NAME like CONCAT('%',#{name},'%')
+        WHERE
+            (NAME LIKE CONCAT('%', #{name}, '%') or tower_name Like CONCAT('%', #{name}, '%'))
+          and record_status = '1'
+          and state in ('0','4')
     </select>
 </mapper>

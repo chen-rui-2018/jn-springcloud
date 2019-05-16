@@ -2,7 +2,9 @@ package com.jn.park.asset.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.park.asset.entity.TbRoomOrdersItem;
 import com.jn.park.asset.model.RoomOrdersModle;
+import com.jn.park.asset.model.RoomPayOrdersItemModel;
 import com.jn.park.asset.model.RoomPayOrdersModel;
 
 import java.util.List;
@@ -27,14 +29,14 @@ public interface RoomOrdersService {
      * @param page
      * @return
      */
-    PaginationData<List<RoomOrdersModle>> getRoomOrdersList(String account,Page page);
+    PaginationData<List<RoomPayOrdersItemModel>> getRoomOrdersList(String account, Page page);
 
     /**
      * 获取房间租借订单详情信息
      * @param id
      * @return
      */
-    RoomOrdersModle getRoomOrders(String id);
+    RoomPayOrdersItemModel getRoomOrders(String id);
 
     /**
      * 房间退租申请

@@ -20,7 +20,7 @@ public class ElectricMeterDataCollectionParam extends Page implements Serializab
     private String code;
     @ApiModelProperty(value = "仪表类型,1:电表--2:水表--3:空调表",required = true,example = "1")
     private String deviceType;
-    @ApiModelProperty(value = "String字符串”yyyy-MM-dd HH:mm:ss”，查询该时间之后1小时的数据",required = true ,example = "2019-04-16")
+    @ApiModelProperty(value = "String字符串”yyyy-MM-dd HH:mm:ss”，查询该时间之后1小时的数据",required = true ,example = "2019-04-16 15:15:15")
     private String startTime;
 
     public String getCode() {

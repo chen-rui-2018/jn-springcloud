@@ -1,10 +1,8 @@
 package com.jn.hardware.electricmeter.service.impl;
 
 import com.jn.common.model.Result;
-import com.jn.hardware.electricmeter.service.ElectricMeterService;
+import com.jn.hardware.api.ElectricMeterClient;
 import com.jn.hardware.model.electricmeter.*;
-import com.jn.hardware.parking.service.impl.ParkingServiceImplTest;
-import org.hamcrest.core.IsAnything;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.hamcrest.core.IsAnything.anything;
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -39,7 +36,7 @@ public class ElectricMeterServiceImplTest {
     private  ElectricMeterDataCollectionParam electricMeterDataCollectionParam;
 
     @Autowired
-    private ElectricMeterService electricMeterService;
+    private ElectricMeterClient electricMeterClient;
     @Before
     public void setUp() throws Exception {
 
@@ -63,7 +60,7 @@ public class ElectricMeterServiceImplTest {
         electricMeterSwitchParam.setFlag("4");
         //仪表数据采集入参
         electricMeterDataCollectionParam = new ElectricMeterDataCollectionParam();
-        electricMeterDataCollectionParam.setCode("320104A001001006");
+//        electricMeterDataCollectionParam.setCode("320104A001001006");
         electricMeterDataCollectionParam.setDeviceType("1");
 
         electricMeterDataCollectionParam.setStartTime("2019-04-25 15:06:20");
@@ -74,7 +71,7 @@ public class ElectricMeterServiceImplTest {
 
     @Test
     public void getElectricMeterAccessToken() {
-        Result<ElectricAccessTokenShow>   result =  electricMeterService.getElectricMeterAccessToken(electricAccessTokenParam);
+        Result<ElectricAccessTokenShow>   result =  electricMeterClient.getElectricMeterAccessToken(electricAccessTokenParam);
         logger.info("\naccess_token 获取结果说明：{}",result.getResult());
         assertThat(anything(),anything());
 
@@ -82,35 +79,35 @@ public class ElectricMeterServiceImplTest {
 
     @Test
     public void getElectricBuildingInfo() {
-        Result<List<ElectricMeterBuildingShow>> buildList = electricMeterService.getElectricBuildingInfo();
+        Result<List<ElectricMeterBuildingShow>> buildList = electricMeterClient.getElectricBuildingInfo();
         logger.info("\naccess_token 获取结果说明：{}",buildList.getResult());
         assertThat(anything(),anything());
     }
 
     @Test
     public void getElectricMeterForBuilding() {
-        Result<ElectricMeterInfoShow> show  =   electricMeterService.getElectricMeterForBuilding(electricMeterInfoParam);
+        Result<ElectricMeterInfoShow> show  =   electricMeterClient.getElectricMeterForBuilding(electricMeterInfoParam);
         logger.info("\n根据建筑编号获取建筑下的仪表信息,仪表信息: {}",show.getResult());
         assertThat(anything(),anything());
     }
 
     @Test
     public void getElectricMeterStatus() {
-        Result<ElectricMeterStatusShow> show  = electricMeterService.getElectricMeterStatus(code);
+        Result<ElectricMeterStatusShow> show  = electricMeterClient.getElectricMeterStatus(code);
         logger.info("\n根据仪表编号获取仪表状态,仪表状态: {} 仪表状态,仪表开关状态  0-关闭；1-开启;''-没有这个仪表",show.getResult());
         assertThat(anything(),anything());
     }
 
     @Test
     public void electricMeterSwitch() {
-        Result result =    electricMeterService.electricMeterSwitch(electricMeterSwitchParam);
+        Result result =    electricMeterClient.electricMeterSwitch(electricMeterSwitchParam);
         logger.info("\n仪表开关操作,操作结果:{} ",result.getResult()==null?"成功":result.getResult());
         assertThat(anything(),anything());
     }
 
     @Test
     public void electricMeterDataCollection() {
-        Result  data =  electricMeterService.electricMeterDataCollection(electricMeterDataCollectionParam);
+        Result  data =  electricMeterClient.electricMeterDataCollection(electricMeterDataCollectionParam);
         logger.info("\n仪表数据采集,采集结果结果: {} ",data.getResult());
         assertThat(anything(),anything());
     }

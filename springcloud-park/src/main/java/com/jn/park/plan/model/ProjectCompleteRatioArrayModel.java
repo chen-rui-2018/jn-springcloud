@@ -20,7 +20,7 @@ public class ProjectCompleteRatioArrayModel implements Serializable {
     List<String> month;
 
     @ApiModelProperty(value = "完成及时率")
-    List<CompleteRatioModel> completeRatioModels;
+    CompleteRatioModel completeRatioModels;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -34,11 +34,11 @@ public class ProjectCompleteRatioArrayModel implements Serializable {
         this.month = month;
     }
 
-    public List<CompleteRatioModel> getCompleteRatioModels() {
+    public CompleteRatioModel getCompleteRatioModels() {
         return completeRatioModels;
     }
 
-    public void setCompleteRatioModels(List<CompleteRatioModel> completeRatioModels) {
+    public void setCompleteRatioModels(CompleteRatioModel completeRatioModels) {
         this.completeRatioModels = completeRatioModels;
     }
 

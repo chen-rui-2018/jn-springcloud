@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -364,18 +365,22 @@ public class ParkingServiceImpl implements ParkingService {
         String secretString = String.format("%s@#%s@#%s", requestUrl, doorCarInParkingParam.getT(), signatureKey);
 
         DoorResult doorResult = new DoorResult();
-
-
         try {
             secretString = traditionMd5(secretString);
             //secretString.equals(doorCarInParkingParam.getSignature())
             if(StringUtils.isNotBlank(secretString)){
                 DoorCarInParkingInfo info = new DoorCarInParkingInfo();
-                info.setCarinlist(doorCarInParkingParam.getCarinlist());
+                List<DoorCarInParkingShow> list= new ArrayList<DoorCarInParkingShow>();
+                if(doorCarInParkingParam.getCarinlist()!=null) {
+                    String  inString = doorCarInParkingParam.getCarinlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
+                    inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+                    list = JsonStringToObjectUtil.jsonToObject(inString, new TypeReference<List<DoorCarInParkingShow>>() {});
+                }
+                info.setCarinlist(list);
                 info.setParkId(parkId);
-                Result result  = parkingClient.carJoinParking(info);
+                Result<String> result  = parkingClient.carJoinParking(info);
                 doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
-                String ids = result.getData()!=null?result.getData().toString():"";
+                String ids = result.getData()!=null?result.getData():"";
                 DoorInOutParkingShow show = new DoorInOutParkingShow();
                 show.setIds(ids);
                 doorResult.setBody(show);
@@ -387,7 +392,7 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场入场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("MD5加密失败!");
+            logger.info("车场入场信息录入失败，失败原因：{}");
             e.printStackTrace();
         }
         return doorResult;
@@ -409,11 +414,17 @@ public class ParkingServiceImpl implements ParkingService {
             //secretString.equals(doorCarInParkingParam.getSignature())
             if(StringUtils.isNotBlank(secretString)){
                 DoorCarOutParkingInfo info = new DoorCarOutParkingInfo();
+                List<DoorCarOutParkingShow> list= new ArrayList<DoorCarOutParkingShow>();
+                if(doorCarOutParkingParam.getCaroutlist()!=null) {
+                    String  outString = doorCarOutParkingParam.getCaroutlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
+                    outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+                    list = JsonStringToObjectUtil.jsonToObject(outString, new TypeReference<List<DoorCarOutParkingShow>>() {});
+                }
                 info.setParkId(parkId);
-                info.setCaroutlist(doorCarOutParkingParam.getCaroutlist());
-                Result result  = parkingClient.carOutParking(info);
+                info.setCaroutlist(list);
+                Result<String> result  = parkingClient.carOutParking(info);
                 doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
-                String ids = result.getData()!=null?result.getData().toString():"";
+                String ids = result.getData()!=null?result.getData():"";
                 DoorInOutParkingShow show = new DoorInOutParkingShow();
                 show.setIds(ids);
                 doorResult.setBody(show);
@@ -425,7 +436,7 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场出场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("MD5加密失败!");
+            logger.info("车场出场信息录入失败，失败原因：{}");
             e.printStackTrace();
         }
 

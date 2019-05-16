@@ -21,8 +21,8 @@ public interface CustomerServiceCenterService {
     /**
      * 根据任务id获取问题详情
      * @param account 用户账号
-     * @param taskId 任务id
+     * @param processId 流程实例id
      * @return
      */
-    Object customerQuesDetail(String account,String taskId);
+    Object customerQuesDetail(String account,String processId);
 }

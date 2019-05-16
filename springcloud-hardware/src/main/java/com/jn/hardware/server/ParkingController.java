@@ -39,38 +39,38 @@ public class ParkingController extends BaseController implements ParkingClient {
     }
 
     @Override
-    public Result savePaymentCarParkingFee(PaymentCarParkingFeeRequest paymentCarParkingFeeRequest) {
+    public Result savePaymentCarParkingFee(@RequestBody PaymentCarParkingFeeRequest paymentCarParkingFeeRequest) {
         return  parkingService.savePaymentCarParkingFee(paymentCarParkingFeeRequest);
     }
 
     @Override
-    public Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardUnite parkingMonthlyRentCardUnite) {
+    public Result saveParkingMonthlyRentCard(@RequestBody ParkingMonthlyRentCardUnite parkingMonthlyRentCardUnite) {
 
         return parkingService.saveParkingMonthlyRentCard(parkingMonthlyRentCardUnite);
     }
 
     @Override
-    public Result findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
+    public Result findParkingMonthlyRentCard(@RequestBody ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
         return parkingService.findParkingMonthlyRentCard(parkingMonthlyCardInfoRequest);
     }
 
     @Override
-    public Result saveMonthlyRentalCardRenewalFee(MonthlyRentalCardRenewalFeeRequset monthlyRentalCardRenewalFeeRequset) {
+    public Result saveMonthlyRentalCardRenewalFee(@RequestBody MonthlyRentalCardRenewalFeeRequset monthlyRentalCardRenewalFeeRequset) {
         return parkingService.saveMonthlyRentalCardRenewalFee(monthlyRentalCardRenewalFeeRequset);
     }
 
     @Override
-    public Result  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
+    public Result  findMonthlyRentCardRateInfo(@RequestBody MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
         return parkingService.findMonthlyRentCardRateInfo(monthyRentalCardRateRequest);
     }
 
     @Override
-    public Result cancelMonthlyRentAccount(CancelMonthlyRentAccountRequest cancelMonthlyRentAccountRequest) {
+    public Result cancelMonthlyRentAccount(@RequestBody CancelMonthlyRentAccountRequest cancelMonthlyRentAccountRequest) {
         return parkingService.cancelMonthlyRentAccount(cancelMonthlyRentAccountRequest);
     }
 
     @Override
-    public Result findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
+    public Result findParkingSpaceAmount(@RequestBody ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
         return parkingService.findParkingSpaceAmount(parkingSpaceAmountRequest);
     }
 

@@ -22,6 +22,28 @@ public class BusinessHomePageParam extends Page implements Serializable {
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;
+    @ApiModelProperty(value = "宣传区域[不传查询全部](top:顶部 central:中部 bottom:底部)", example = "top")
+    @Pattern(regexp = "^(top)|(central)|(bottom)$", message = "宣传区域传参错误")
+    private String propagandaArea;
+    @ApiModelProperty(value = "发布平台(1:App 2:门户)", required = true, example = "2")
+    @Pattern(regexp = "^[12]$", message = "宣传区域传参错误")
+    private String issuePlatform;
+
+    public String getPropagandaArea() {
+        return propagandaArea;
+    }
+
+    public void setPropagandaArea(String propagandaArea) {
+        this.propagandaArea = propagandaArea;
+    }
+
+    public String getIssuePlatform() {
+        return issuePlatform;
+    }
+
+    public void setIssuePlatform(String issuePlatform) {
+        this.issuePlatform = issuePlatform;
+    }
 
     public String getPropagandaType() {
         return propagandaType;

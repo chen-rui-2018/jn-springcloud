@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
 import com.jn.park.message.model.FindAllMessageListVo;
 import com.jn.park.plan.dao.ProjectManageDao;
 import com.jn.park.plan.model.*;
@@ -36,14 +37,17 @@ public class ProjectManageServiceImpl implements ProjectManageService {
         if(projectModel.getOrderByClause() == null){
             projectModel.setOrderByClause("project_no desc");
         }
-        if(projectModel.getProgress() == null){
-            projectModel.setProgress("");
+        if(StringUtils.isBlank(projectModel.getProgress())){
+            projectModel.setProgress(null);
         }
-        if(projectModel.getProjectState() == null){
-            projectModel.setProjectState("");
+        if(StringUtils.isBlank(projectModel.getProjectState())){
+            projectModel.setProjectState(null);
         }
-        if(projectModel.getProjectName() == null){
-            projectModel.setProjectName("");
+        if(StringUtils.isBlank(projectModel.getProjectState())){
+            projectModel.setProjectState(null);
+        }
+        if(StringUtils.isBlank(projectModel.getProjectName())){
+            projectModel.setProjectName(null);
         }
         Page<Object> objects = PageHelper.startPage(projectModel.getPage(), projectModel.getRows());
         List<ProjectManageModel> projectManageModelsList= projectManageDao.findAll(projectModel.getProjectState(),projectModel.getProgress(),projectModel.getProjectName(),projectModel.getOrderByClause());
@@ -93,21 +97,18 @@ public class ProjectManageServiceImpl implements ProjectManageService {
     public List<ProjectPlanVo>  findTaskPlan(String projectNo) {
         //ProjectPlanVo
         ProjectPlanModel projectPlanModelList= projectManageDao.findTaskPlan(projectNo);
-        String key[]={"总数","未开始","已完成","未完成"};
+        String key[]={"未开始","已完成","已开始"};
         List<ProjectPlanVo> projectPlanVos=new ArrayList<>();
-        for(int i =0 ; i < 4 ; i++){
+        for(int i =0 ; i < 3 ; i++){
             ProjectPlanVo projectPlanVo=new ProjectPlanVo();
             projectPlanVo.setKey(key[i]);
             if(i == 0){
-                projectPlanVo.setValue(projectPlanModelList.getTotal());
-            }
-            if(i == 1){
                 projectPlanVo.setValue(projectPlanModelList.getNoStart());
             }
-            if(i == 2){
+            if(i == 1){
                 projectPlanVo.setValue(projectPlanModelList.getComplete());
             }
-            if(i == 3){
+            if(i == 2){
                 projectPlanVo.setValue(projectPlanModelList.getUnComplete());
             }
             projectPlanVos.add(projectPlanVo);
@@ -127,89 +128,62 @@ public class ProjectManageServiceImpl implements ProjectManageService {
         //赋值月份
         List<String> month=new ArrayList<>();
         for (int i=1;i<13;i++){
-            String m=i+"月完成及时率";
+            String m=i+"月";
             month.add(m);
         }
         projectCompleteRatioArrayModel.setMonth(month);
-        List<CompleteRatioModel> completeRatioModels=new ArrayList<>();
-        for (int i=1;i<13;i++){
-            CompleteRatioModel completeRatioModel=new CompleteRatioModel();
-            if (i==1){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan1());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual1());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio1());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==2){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan2());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual2());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio2());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==3){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan3());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual3());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio3());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==4){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan4());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual4());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio4());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==5){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan5());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual5());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio5());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==6){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan6());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual6());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio6());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==7){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan7());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual7());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio7());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==8){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan8());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual8());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio8());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==9){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan9());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual9());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio9());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==10){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan10());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutuall0());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio10());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==11){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan11());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual11());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio11());
-                completeRatioModels.add(completeRatioModel);
-            }
-            if (i==12){
-                completeRatioModel.setPlan(projectCompleteRatioModel.getPlan12());
-                completeRatioModel.setAutual(projectCompleteRatioModel.getAutual12());
-                completeRatioModel.setCompleteRatio(projectCompleteRatioModel.getCompleteRatio12());
-                completeRatioModels.add(completeRatioModel);
-            }
+        //List<CompleteRatioModel> completeRatioModels=new ArrayList<>();
 
-        }
+        CompleteRatioModel completeRatioModel=new CompleteRatioModel();
 
-        projectCompleteRatioArrayModel.setCompleteRatioModels(completeRatioModels);
+        List<String> plan=new ArrayList<>();
+        List<String> autual=new ArrayList<>();
+        List<String> completeRatio=new ArrayList<>();
+
+        plan.add(projectCompleteRatioModel.getAutual1());
+        plan.add(projectCompleteRatioModel.getAutual2());
+        plan.add(projectCompleteRatioModel.getAutual3());
+        plan.add(projectCompleteRatioModel.getAutual4());
+        plan.add(projectCompleteRatioModel.getAutual5());
+        plan.add(projectCompleteRatioModel.getAutual6());
+        plan.add(projectCompleteRatioModel.getAutual7());
+        plan.add(projectCompleteRatioModel.getAutual8());
+        plan.add(projectCompleteRatioModel.getAutual9());
+        plan.add(projectCompleteRatioModel.getAutuall0());
+        plan.add(projectCompleteRatioModel.getAutual11());
+        plan.add(projectCompleteRatioModel.getAutual12());
+
+        autual.add(projectCompleteRatioModel.getAutual1());
+        autual.add(projectCompleteRatioModel.getAutual2());
+        autual.add(projectCompleteRatioModel.getAutual3());
+        autual.add(projectCompleteRatioModel.getAutual4());
+        autual.add(projectCompleteRatioModel.getAutual5());
+        autual.add(projectCompleteRatioModel.getAutual6());
+        autual.add(projectCompleteRatioModel.getAutual7());
+        autual.add(projectCompleteRatioModel.getAutual8());
+        autual.add(projectCompleteRatioModel.getAutual9());
+        autual.add(projectCompleteRatioModel.getAutuall0());
+        autual.add(projectCompleteRatioModel.getAutual11());
+        autual.add(projectCompleteRatioModel.getAutual12());
+
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio1());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio2());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio3());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio4());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio5());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio6());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio7());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio8());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio9());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio10());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio11());
+        completeRatio.add(projectCompleteRatioModel.getCompleteRatio12());
+
+        completeRatioModel.setPlan(plan);
+        completeRatioModel.setAutual(autual);
+        completeRatioModel.setCompleteRatio(completeRatio);
+
+        projectCompleteRatioArrayModel.setCompleteRatioModels(completeRatioModel);
 
         return projectCompleteRatioArrayModel;
     }

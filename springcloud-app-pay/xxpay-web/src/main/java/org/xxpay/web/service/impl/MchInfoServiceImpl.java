@@ -29,4 +29,17 @@ public class MchInfoServiceImpl implements MchInfoService {
     public MchInfo getMchInfoById(String mchId) {
         return mchInfoMapper.selectByPrimaryKey(mchId);
     }
+
+    /**
+     * 根据支付订单ID获取商户信息
+     * @param payOrderId 商户ID
+     * @return
+     * */
+    @Override
+    public MchInfo getMchInfoByPayOrderId(String payOrderId) {
+
+        return mchInfoMapper.selectByPayOrderKey(payOrderId);
+    }
+
+
 }

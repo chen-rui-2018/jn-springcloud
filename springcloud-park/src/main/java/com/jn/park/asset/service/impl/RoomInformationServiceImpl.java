@@ -207,7 +207,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
      * @return
      */
     @Override
-    @ServiceLog(doAction = "搜索房间")
+    @ServiceLog(doAction = "分页返回房间租借列表(可搜索)")
     public PaginationData<List<RoomInformationModel>> getRoomLeaseList(Page page, String name) {
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
         List<RoomInformationModel> roomInformationModelList = roomInformationDao.getRoomLeaseList(name);

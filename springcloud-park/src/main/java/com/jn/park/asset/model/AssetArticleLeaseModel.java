@@ -70,7 +70,7 @@ public class AssetArticleLeaseModel implements Serializable {
     @ApiModelProperty(value = "结束时间",example = "2019-06-01")
     private Date endTime;
 
-    @ApiModelProperty(value = "租借状态",example = "3")
+    @ApiModelProperty(value = "租借状态(0标记为空闲,1申请中,2交付中,3租借中,4归还中,5已归还)",example = "3")
     private Byte articleStatus;
 
     public String getId() {

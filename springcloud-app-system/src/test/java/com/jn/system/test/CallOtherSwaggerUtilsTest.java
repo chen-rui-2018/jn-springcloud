@@ -33,7 +33,12 @@ public class CallOtherSwaggerUtilsTest {
     @Test
     public void test1() {
         //获取用戶菜單角色
-            JSONObject jsonObject2 = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/appResourcesService/getMenuData", HttpMethod.GET, new LinkedMultiValueMap<String, String>());
+        //JSONObject jsonObject2 = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/appResourcesService/getMenuData", HttpMethod.GET, new LinkedMultiValueMap<String, String>());
+
+        //获取审批历史记录
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        map.add("bpmInstId", "578164728874926080");
+        JSONObject jsonObject2 = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/bpmService/opinions", HttpMethod.GET, map);
         System.out.println(jsonObject2);
     }
 }

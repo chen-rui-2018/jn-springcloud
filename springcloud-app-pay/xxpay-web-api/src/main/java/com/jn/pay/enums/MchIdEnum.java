@@ -1,37 +1,61 @@
 package com.jn.pay.enums;
 
-import com.jn.common.api.CodeAndMsg;
-
 /**
- * @ClassName：缴费类型枚举类
+ * @ClassName：商户枚举类
  * @Descript：
  * @Author： hey
  * @Date： Created on 2019/5/7 11:15
  * @Version： v1.0
  * @Modified By:
  */
-public enum MchIdEnum implements CodeAndMsg {
+public enum MchIdEnum {
     //目前只有一个商户  后期可能存在多个
-    MCH_BASE("10000000", "智慧园区-通用缴费");
+    MCH_BASE("10000000", "bkQfoOf@uQMIAvgv*Ud3V1HvhDXaSb%9","0YjfL7%&Xh10Imq7t2fp6ZC4DLhi@PhP");
 
+    /**
+     * 商户id
+     */
     private String code;
-    private String message;
+    /**
+     * 请求密钥
+     */
+    private String reqKey;
+    /**
+     * 响应密钥
+     */
+    private String rspKey;
 
-    MchIdEnum(String code, String message) {
+
+
+    MchIdEnum(String code, String reqKey, String rspKey) {
         this.code = code;
-        this.message = message;
+        this.reqKey = reqKey;
+        this.rspKey = rspKey;
     }
 
-    @Override
     public String getCode() {
         return code;
     }
 
-    @Override
-    public String getMessage() {
-        return message;
+    public void setCode(String code) {
+        this.code = code;
     }
 
+    public String getReqKey() {
+        return reqKey;
+    }
+
+    public void setReqKey(String reqKey) {
+        this.reqKey = reqKey;
+    }
+
+    public String getRspKey() {
+        return rspKey;
+    }
+
+    public void setRspKey(String rspKey) {
+        this.rspKey = rspKey;
+    }
 
     public static MchIdEnum getCode(String channelId) {
         MchIdEnum channelIdEnum = null;

@@ -59,9 +59,9 @@ public class MyPayBillController extends BaseController {
     @ApiOperation(value = "我的账单-通过账单ID查询账单详情信息",notes = "我的账单-通过账单ID查询账单详情信息")
     @RequestMapping(value = "/getBillInfo",method = RequestMethod.GET)
     @RequiresPermissions("/payment/payBill/getBillInfo")
-    public Result<List<PayBillDetails>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId){
+    public Result<PaginationData<List<PayBillDetails>>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId){
         Assert.notNull(billId,"账单ID或编号不能为空");
-        List<PayBillDetails> data = myPayBillService.getBillInfo(billId);
+        PaginationData<List<PayBillDetails>> data = myPayBillService.getBillInfo(billId);
         return new Result<>(data);
     }
 

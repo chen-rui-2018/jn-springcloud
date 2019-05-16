@@ -18,7 +18,7 @@ import java.util.List;
  * @modified By:
  */
 @ApiModel(value = "PayAccountAndAccountBookVo" ,description = "账户账本查询VO")
-public class PayAccountAndAccountBookVo extends Page implements Serializable {
+public class PayAccountAndAccountBookVo implements Serializable {
     private static final long serialVersionUID = 1250820710541049549L;
 
     @ApiModelProperty(value="用户ID")

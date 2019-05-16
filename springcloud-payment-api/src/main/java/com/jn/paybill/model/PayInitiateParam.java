@@ -22,8 +22,8 @@ public class PayInitiateParam implements Serializable {
     private String[] billIds;
 
     @NotBlank(message = "支付方式不能为空")
-    @Pattern(regexp = "^[0,1,2]$", message = "{payMenthed:'支付方式只能为[0、1、2]'}")
-    @ApiModelProperty(value = "支付方式[暂定：0微信1支付宝2银联]",required = true,example = "0")
+    @Pattern(regexp = "^[0,1,2]$", message = "{payMenthed:'支付方式只能为[2、3、1]'}")
+    @ApiModelProperty(value = "支付方式[暂定：1 银联闪付 2 微信 3 支付宝]",required = true,example = "2")
     private String payMenthed;
 
     @NotBlank(message = "是否使用积分不能为空")

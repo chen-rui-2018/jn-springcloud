@@ -47,10 +47,10 @@ public class PayBill extends Page implements Serializable {
     @NotNull(message = "对象名称不能为空")
     private String objName;
 
-    @ApiModelProperty(value="支付状态（如 已支付、待支付）")
+    @ApiModelProperty(value="支付状态（如 1：已支付、2：待支付）")
     private String paymentState;
 
-    @ApiModelProperty(value="支付平台类型（线上或线下）")
+    @ApiModelProperty(value="支付平台类型（1：线上或2：线下）")
     private String paymentType;
 
     @ApiModelProperty(value="账本类型ID")
@@ -58,6 +58,9 @@ public class PayBill extends Page implements Serializable {
 
     @ApiModelProperty(value="统一下单号")
     private String orderNumber;
+
+    @ApiModelProperty(value="账单接收者")
+    private String billReceiver;
 
     @ApiModelProperty(value="创建时间")
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
@@ -90,6 +93,14 @@ public class PayBill extends Page implements Serializable {
     @ApiModelProperty(value="记录状态   0标记删除，1正常")
     private String recordStatus;
 
+
+    public String getBillReceiver() {
+        return billReceiver;
+    }
+
+    public void setBillReceiver(String billReceiver) {
+        this.billReceiver = billReceiver;
+    }
 
     public String getOrderNumber() {
         return orderNumber;

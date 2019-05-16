@@ -18,6 +18,8 @@ public class TbBusinessAdDynamic implements Serializable {
 
     private String title;
 
+    private String adCover;
+
     private Date startTime;
 
     private Date endTime;
@@ -86,6 +88,14 @@ public class TbBusinessAdDynamic implements Serializable {
         this.title = title == null ? null : title.trim();
     }
 
+    public String getAdCover() {
+        return adCover;
+    }
+
+    public void setAdCover(String adCover) {
+        this.adCover = adCover == null ? null : adCover.trim();
+    }
+
     public Date getStartTime() {
         return startTime;
     }
@@ -145,6 +155,7 @@ public class TbBusinessAdDynamic implements Serializable {
             && (this.getModifierAccoun() == null ? other.getModifierAccoun() == null : this.getModifierAccoun().equals(other.getModifierAccoun()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
+            && (this.getAdCover() == null ? other.getAdCover() == null : this.getAdCover().equals(other.getAdCover()))
             && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
             && (this.getEndTime() == null ? other.getEndTime() == null : this.getEndTime().equals(other.getEndTime()))
             && (this.getModAccoun() == null ? other.getModAccoun() == null : this.getModAccoun().equals(other.getModAccoun()))
@@ -163,6 +174,7 @@ public class TbBusinessAdDynamic implements Serializable {
         result = prime * result + ((getModifierAccoun() == null) ? 0 : getModifierAccoun().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
+        result = prime * result + ((getAdCover() == null) ? 0 : getAdCover().hashCode());
         result = prime * result + ((getStartTime() == null) ? 0 : getStartTime().hashCode());
         result = prime * result + ((getEndTime() == null) ? 0 : getEndTime().hashCode());
         result = prime * result + ((getModAccoun() == null) ? 0 : getModAccoun().hashCode());
@@ -184,6 +196,7 @@ public class TbBusinessAdDynamic implements Serializable {
         sb.append(", modifierAccoun=").append(modifierAccoun);
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", title=").append(title);
+        sb.append(", adCover=").append(adCover);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
         sb.append(", modAccoun=").append(modAccoun);

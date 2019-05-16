@@ -16,17 +16,17 @@ import java.util.List;
 public class DoorCarOutParkingParam implements Serializable {
     private static final long serialVersionUID = -2790193198828716737L;
     @ApiModelProperty(value = "道尔:入场信息列表")
-    List<DoorCarOutParkingShow>  caroutlist;
+   private String  caroutlist;
     @ApiModelProperty(value = "动态签名")
     private String  signature;
     @ApiModelProperty(value = "时间戳")
     private String  t;
 
-    public List<DoorCarOutParkingShow> getCaroutlist() {
+    public String  getCaroutlist() {
         return caroutlist;
     }
 
-    public void setCaroutlist(List<DoorCarOutParkingShow> caroutlist) {
+    public void setCaroutlist(String caroutlist) {
         this.caroutlist = caroutlist;
     }
 

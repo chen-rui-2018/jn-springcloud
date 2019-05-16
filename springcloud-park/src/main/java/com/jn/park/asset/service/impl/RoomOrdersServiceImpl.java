@@ -4,13 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
-import com.jn.park.asset.dao.RoomInformationDao;
-import com.jn.park.asset.dao.RoomOrdersDao;
-import com.jn.park.asset.dao.TbRoomOrdersItemMapper;
-import com.jn.park.asset.dao.TbRoomOrdersMapper;
-import com.jn.park.asset.entity.TbRoomOrders;
-import com.jn.park.asset.entity.TbRoomOrdersItem;
-import com.jn.park.asset.entity.TbRoomOrdersItemCriteria;
+import com.jn.park.asset.dao.*;
+import com.jn.park.asset.entity.*;
 import com.jn.park.asset.enums.OrdersTypeEnums;
 import com.jn.park.asset.enums.RoomLeaseStatusEnums;
 import com.jn.park.asset.model.RoomOrdersModle;
@@ -18,6 +13,9 @@ import com.jn.park.asset.model.RoomPayOrdersItemModel;
 import com.jn.park.asset.model.RoomPayOrdersModel;
 import com.jn.park.asset.service.RoomOrdersService;
 import com.jn.system.log.annotation.ServiceLog;
+import org.apache.poi.ss.formula.functions.T;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +34,7 @@ import java.util.*;
 */
 @Service
 public class RoomOrdersServiceImpl implements RoomOrdersService {
+    private static Logger logger = LoggerFactory.getLogger(RoomOrdersServiceImpl.class);
 
     @Autowired
     private RoomOrdersDao roomOrdersDao;
@@ -45,6 +44,8 @@ public class RoomOrdersServiceImpl implements RoomOrdersService {
     private TbRoomOrdersMapper tbRoomOrdersMapper;
     @Autowired
     private TbRoomOrdersItemMapper tbRoomOrdersItemMapper;
+    @Autowired
+    private TbRoomInformationMapper tbRoomInformationMapper;
 
     /**
      * 返回支付订单
@@ -143,19 +144,24 @@ public class RoomOrdersServiceImpl implements RoomOrdersService {
      */
     @Override
     @ServiceLog(doAction = "房间退租申请")
-    public RoomOrdersModle quitApply(String id) {
-        //状态未更新前
-        RoomOrdersModle beforeRoomOrders = roomOrdersDao.getRoomOrders(id);
-        Map<String,Object> map = new HashMap<>(16);
-        map.put("roomId",beforeRoomOrders.getRoomId());
-        map.put("roomStatus",Byte.parseByte(RoomLeaseStatusEnums.QUIT.getValue()));
-        map.put("orderId",id);
-        //更新房间订单状态
-        roomOrdersDao.updateRoomStatus(map);
-        //更新房间状态
-        roomInformationDao.updateStatus(map);
-        //状态更新后
-        RoomOrdersModle afterRoomOrders = roomOrdersDao.getRoomOrders(id);
-        return afterRoomOrders;
+    public RoomPayOrdersItemModel quitApply(String id) {
+        //更新订单房间状态
+        TbRoomOrdersItem tbRoomOrdersItem = tbRoomOrdersItemMapper.selectByPrimaryKey(id);
+        tbRoomOrdersItem.setRecordStatus(Byte.parseByte(RoomLeaseStatusEnums.QUIT.getValue()));
+        TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
+        tbRoomOrdersItemCriteria.createCriteria().andIdEqualTo(id);
+        logger.info("更新订单房间状态,{}",tbRoomOrdersItem);
+        tbRoomOrdersItemMapper.updateByExampleSelective(tbRoomOrdersItem,tbRoomOrdersItemCriteria);
+        //更新房间信息房间状态
+        TbRoomInformation tbRoomInformation = tbRoomInformationMapper.selectByPrimaryKey(tbRoomOrdersItem.getRoomId());
+        tbRoomInformation.setState(Byte.parseByte(RoomLeaseStatusEnums.QUIT.getValue()));
+        TbRoomInformationCriteria tbRoomInformationCriteria = new TbRoomInformationCriteria();
+        tbRoomInformationCriteria.createCriteria().andIdEqualTo(tbRoomOrdersItem.getRoomId());
+        logger.info("更新房间信息房间状态,{}",tbRoomInformation);
+        tbRoomInformationMapper.updateByExampleSelective(tbRoomInformation,tbRoomInformationCriteria);
+        //返回更新后的房间订单信息
+        RoomPayOrdersItemModel roomPayOrdersItemModel = new RoomPayOrdersItemModel();
+        BeanUtils.copyProperties(tbRoomOrdersItem,roomPayOrdersItemModel);
+        return roomPayOrdersItemModel;
     }
 }

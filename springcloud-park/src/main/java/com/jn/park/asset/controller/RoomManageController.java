@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,17 +45,6 @@ public class RoomManageController {
     @Autowired
     private RoomOrdersService roomOrdersService;
 
-    @ControllerLog(doAction = "房间租赁列表")
-    @ApiOperation(value = "房间租赁列表",notes = "返回房间租赁列表")
-    @GetMapping(value = "/getRoomLeaseList")
-    public Result<PaginationData<List<RoomInformationModel>>> getRoomLeaseList(Page page){
-        if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<RoomInformationModel>> data = roomInformationService.getRoomLeaseList(page);
-            return new Result(data);
-        }else{
-            throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
-        }
-    }
 
     @ControllerLog(doAction = "获取房间信息")
     @ApiOperation(value = "获取房间信息",notes = "返回房间详细信息")
@@ -80,15 +70,15 @@ public class RoomManageController {
         return new Result<>(roomBaseModel);
     }
 
-    @ControllerLog(doAction = "房间搜索")
-    @ApiOperation(value = "房间搜索",notes = "房间搜索")
-    @GetMapping(value = "/searchRoomList")
+    @ControllerLog(doAction = "房间租赁列表")
+    @ApiOperation(value = "房间租赁列表",notes = "返回房间租赁列表(可搜索)")
+    @GetMapping(value = "/getRoomLeaseList")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name",value = "房间名称或楼层名称",example = "1")
     })
-    public Result<PaginationData<List<RoomInformationModel>>> searchRoomList(Page page,String name){
+    public Result<PaginationData<List<RoomInformationModel>>> getRoomLeaseList(Page page,String name){
         if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<RoomInformationModel>> data = roomInformationService.searchRoomList(page ,name);
+            PaginationData<List<RoomInformationModel>> data = roomInformationService.getRoomLeaseList(page ,name);
             return new Result<>(data);
         }else{
             throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
@@ -159,9 +149,9 @@ public class RoomManageController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050811515490657"),
     })
-    public Result<RoomOrdersModle> quitApply(String id){
-        RoomOrdersModle roomOrdersModle = roomOrdersService.quitApply(id);
-        return new Result(roomOrdersModle);
+    public Result<RoomPayOrdersItemModel> quitApply(String id){
+        RoomPayOrdersItemModel roomPayOrdersItemModel = roomOrdersService.quitApply(id);
+        return new Result(roomPayOrdersItemModel);
     }
 
 }

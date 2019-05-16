@@ -52,20 +52,6 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
 
     /**
-     * 分页返回房间租借列表
-     * @param page
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "分页返回房间租借列表")
-    public PaginationData<List<RoomInformationModel>> getRoomLeaseList(Page page) {
-        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
-        List<RoomInformationModel> roomLeaseList = roomInformationDao.getRoomLeaseList();
-        PaginationData<List<RoomInformationModel>> data = new PaginationData<>(roomLeaseList,objects.getTotal());
-        return data;
-    }
-
-    /**
      * 返回房间信息
      * @param id
      * @return
@@ -197,11 +183,17 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         return roomBaseModel;
     }
 
+    /**
+     * 分页返回房间租借列表(可搜索)
+     * @param page
+     * @param name
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "搜索房间")
-    public PaginationData<List<RoomInformationModel>> searchRoomList(Page page, String name) {
+    public PaginationData<List<RoomInformationModel>> getRoomLeaseList(Page page, String name) {
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
-        List<RoomInformationModel> roomInformationModelList = roomInformationDao.searchRoomList(name);
+        List<RoomInformationModel> roomInformationModelList = roomInformationDao.getRoomLeaseList(name);
         PaginationData data = new PaginationData(roomInformationModelList, objects.getTotal());
         return data;
     }

@@ -43,19 +43,6 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
     @Autowired
     private TbAssetArticleLeaseOrdersMapper tbAssetArticleLeaseOrdersMapper;
 
-    /**
-     * 分页返回可租借的资产列表
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "返回可租借的资产列表")
-    public PaginationData<List<AssetArticleLeaseModel>> getArticleLeaseList(Page page) {
-        //分页返回资产列表
-        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
-        List<AssetArticleLeaseModel> assetArticleLeaseModelList = assetArticleLeaseDao.getArticleLeaseList();
-        PaginationData<List<AssetArticleLeaseModel>> data = new PaginationData(assetArticleLeaseModelList,objects.getTotal());
-        return data;
-    }
 
     /**
      * 通过资产编号获取物品租赁详细信息
@@ -100,16 +87,16 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
     }
 
     /**
-     * 通过物品名称搜索物品
+     * 分页返回可租借的资产列表(可搜索)
      * @param page
      * @param name
      * @return
      */
     @Override
     @ServiceLog(doAction = "通过物品名称搜索物品")
-    public PaginationData<List<AssetArticleLeaseModel>> searchArticleList(Page page, String name) {
+    public PaginationData<List<AssetArticleLeaseModel>> getArticleLeaseList(Page page, String name) {
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
-        List<AssetArticleLeaseModel> assetArticleLeaseModelList = assetArticleLeaseDao.searchArticleList(name);
+        List<AssetArticleLeaseModel> assetArticleLeaseModelList = assetArticleLeaseDao.getArticleLeaseList(name);
         PaginationData<List<AssetArticleLeaseModel>> data = new PaginationData(assetArticleLeaseModelList,objects.getTotal());
         return data;
     }

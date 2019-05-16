@@ -16,11 +16,6 @@ import java.util.*;
 * @modified By:
 */
 public interface AssetArticleLeaseService {
-    /**
-     * 返回可租借的资产列表
-     * @return
-     */
-    PaginationData<List<AssetArticleLeaseModel>> getArticleLeaseList(Page page);
 
    /**
      * 通过资产编号获取物品租赁详细信息
@@ -43,10 +38,10 @@ public interface AssetArticleLeaseService {
     String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, Date startTime, Date endTime,User user);
 
     /**
-     * 通过物品名称搜索物品
+     * 返回可租借的资产列表(可搜索)
      * @param page
      * @param name
      * @return
      */
-    PaginationData<List<AssetArticleLeaseModel>> searchArticleList(Page page, String name);
+    PaginationData<List<AssetArticleLeaseModel>> getArticleLeaseList(Page page, String name);
 }

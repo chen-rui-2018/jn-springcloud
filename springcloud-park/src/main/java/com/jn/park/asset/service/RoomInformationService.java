@@ -17,12 +17,6 @@ import java.util.List;
 * @modified By:
 */
 public interface RoomInformationService {
-    /**
-     * 分页返回房间租赁列表
-     * @param page
-     * @return
-     */
-    PaginationData<List<RoomInformationModel>> getRoomLeaseList(Page page);
 
     /**
      * 获取房间信息
@@ -51,10 +45,10 @@ public interface RoomInformationService {
     RoomBaseModel getRoomBaseInfo(String roomId);
 
     /**
-     * 搜索房间
+     * 分页返回房间租赁列表(可搜索)
      * @param page
      * @param name
      * @return
      */
-    PaginationData<List<RoomInformationModel>> searchRoomList(Page page, String name);
+    PaginationData<List<RoomInformationModel>> getRoomLeaseList(Page page, String name);
 }

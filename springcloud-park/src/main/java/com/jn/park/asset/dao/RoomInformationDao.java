@@ -14,13 +14,6 @@ import java.util.Map;
 */
 public interface RoomInformationDao {
 
-    /**
-     * 返回可租借的房间列表
-     * @return
-     */
-    List<RoomInformationModel> getRoomLeaseList();
-
-
 
     /**
      * 更改房间信息租借状态
@@ -29,9 +22,9 @@ public interface RoomInformationDao {
     void updateStatus(Map<String, Object> map);
 
     /**
-     * 通过关键字搜索房间
+     * 返回可租借的房间列表(可搜索)
      * @param name
      * @return
      */
-    List<RoomInformationModel> searchRoomList(String name);
+    List<RoomInformationModel> getRoomLeaseList(String name);
 }

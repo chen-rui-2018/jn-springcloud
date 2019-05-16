@@ -14,6 +14,7 @@ import com.jn.park.asset.service.AssetArticleLeaseService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.*;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,28 +39,15 @@ public class AssetArticleLeaseController {
     @Autowired
     private AssetArticleLeaseOrdersService assetArticleLeaseOrdersService;
 
-
     @ControllerLog(doAction = "物品租赁列表")
-    @ApiOperation(value = "物品租赁列表",notes = "返回可租赁的资产列表")
+    @ApiOperation(value = "物品租赁列表",notes = "返回可租赁的资产列表(可搜索)")
     @GetMapping(value = "/articleLeaseList")
-    public Result<PaginationData<List<AssetArticleLeaseModel>>> getArticleLeaseList(Page page){
-        if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<AssetArticleLeaseModel>> data = assetArticleLeaseService.getArticleLeaseList(page);
-            return new Result<>(data);
-        }else{
-            throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
-        }
-    }
-
-    @ControllerLog(doAction = "物品搜索")
-    @ApiOperation(value = "物品搜索",notes = "物品搜索")
-    @GetMapping(value = "/searchArticleList")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name",value = "搜索关键字",example = "空调")
     })
-    public Result<PaginationData<List<AssetArticleLeaseModel>>> searchArticleList(Page page,String name){
+    public Result<PaginationData<List<AssetArticleLeaseModel>>> getArticleLeaseList(Page page,String name){
         if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<AssetArticleLeaseModel>> data = assetArticleLeaseService.searchArticleList(page ,name);
+            PaginationData<List<AssetArticleLeaseModel>> data = assetArticleLeaseService.getArticleLeaseList(page ,name);
             return new Result<>(data);
         }else{
             throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);

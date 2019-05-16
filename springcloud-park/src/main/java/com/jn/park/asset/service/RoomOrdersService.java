@@ -43,5 +43,5 @@ public interface RoomOrdersService {
      * @param id
      * @return
      */
-    RoomOrdersModle quitApply(String id);
+    RoomPayOrdersItemModel quitApply(String id);
 }

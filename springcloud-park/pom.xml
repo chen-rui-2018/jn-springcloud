@@ -85,10 +85,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        customer
+                        parking,park,attractinvest
                     </contexts>
                     <tableNames>
-                        tb_client_service_center
+
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

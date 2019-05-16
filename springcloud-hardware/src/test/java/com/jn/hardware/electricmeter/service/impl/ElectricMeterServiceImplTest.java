@@ -62,7 +62,6 @@ public class ElectricMeterServiceImplTest {
         electricMeterDataCollectionParam = new ElectricMeterDataCollectionParam();
 //        electricMeterDataCollectionParam.setCode("320104A001001006");
         electricMeterDataCollectionParam.setDeviceType("1");
-
         electricMeterDataCollectionParam.setStartTime("2019-04-25 15:06:20");
         electricMeterDataCollectionParam.setPage(1);
         electricMeterDataCollectionParam.setRows(10);

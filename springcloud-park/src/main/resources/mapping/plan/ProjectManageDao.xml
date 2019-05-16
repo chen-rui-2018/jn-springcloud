@@ -21,16 +21,16 @@
         FROM
             tb_plan_project t
         WHERE t.record_status = 1
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(projectName)">
-        AND t.project_name LIKE concat(concat('%',#{projectName}),'%')
+        <if test="projectName != null and projectName !='' ">
+        AND t.project_name LIKE concat(concat('%',#{projectName,jdbcType=VARCHAR}),'%')
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(projectState)">
-        AND t.project_state = #{projectState} <!-- 工程状态（2 已完成，1 进行中，0 未开始）-->
+        <if test="projectState != null and projectState !='' ">
+        AND t.project_state = #{projectState,jdbcType=INTEGER} <!-- 工程状态（2 已完成，1 进行中，0 未开始）-->
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(progress)">
-        AND t.progress = #{progress} <!-- 进度（默认为0 ， 0 正常， 1 提前， 2 延迟 ）-->
+        <if test="progress != null and progress != '' ">
+        AND t.progress = #{progress,jdbcType=DECIMAL} <!-- 进度（默认为0 ， 0 正常， 1 提前， 2 延迟 ）-->
         </if>
-        ORDER BY ${orderByClause}
+        ORDER BY #{orderByClause}
     </select>
 
 

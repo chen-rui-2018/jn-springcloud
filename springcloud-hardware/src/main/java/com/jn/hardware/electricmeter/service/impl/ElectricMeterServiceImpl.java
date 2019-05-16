@@ -197,10 +197,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         String accessToken = getAccessToken();
         if(StringUtils.isNotBlank(electricMeterDataCollectionParam.getCode())) {
             url = String.format(url, electricMeterDataCollectionParam.getCode(), electricMeterDataCollectionParam.getDeviceType()
-                    , electricMeterDataCollectionParam.getStartTime(), accessToken);
+                    ,electricMeterDataCollectionParam.getStartTime(),accessToken,electricMeterDataCollectionParam.getPage(),electricMeterDataCollectionParam.getRows());
         }else{
             url = String.format(ElectricMeterService.GET_ELECTRIC_DATA_COLLECTION_NOCODE_URL,electricMeterDataCollectionParam.getDeviceType()
-                    , electricMeterDataCollectionParam.getStartTime(), accessToken);
+                    , electricMeterDataCollectionParam.getStartTime(), accessToken,electricMeterDataCollectionParam.getPage(),electricMeterDataCollectionParam.getRows());
         }
         logger.info("\n仪表数据采集{}路径信息 url:"+url);
         String dataString = RestTemplateUtil.get(url);

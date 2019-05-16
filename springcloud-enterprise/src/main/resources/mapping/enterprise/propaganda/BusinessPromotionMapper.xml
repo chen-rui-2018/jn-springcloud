@@ -50,6 +50,12 @@
         <if test="bpp.status !=null and bpp.status!=''">
             and sp.status=#{bpp.status}
         </if>
+        <if test="bpp.issuePlatform !=null and bpp.issuePlatform !=''">
+            and sp.issue_platform=#{bpp.issuePlatform}
+        </if>
+        <if test="bpp.propagandaArea !=null and bpp.propagandaArea !=''">
+            and sp.propaganda_area=#{bpp.propagandaArea}
+        </if>
         <if test="creator !=null and creator !=''">
             and sp.creator_account=#{creator}
         </if>

@@ -26,7 +26,7 @@ public interface SecurityVideoClient {
     @RequestMapping(value = "/api/hardware/security/findSecurityMonitoringPointList")
     Result<SecurityMonitoringPointShow> findSecurityMonitoringPointList(@RequestBody SecurityMonitoringPointParam securityMonitoringPointParam);
     /**
-     * 查询监控点列表
+     * 查询监控回放路径url列表
      * @param securityPlayBackUrlParam 实体类参数
      * @return
      */

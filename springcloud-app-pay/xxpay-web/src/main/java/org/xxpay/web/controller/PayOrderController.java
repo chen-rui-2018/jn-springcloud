@@ -30,6 +30,7 @@ import org.xxpay.common.util.*;
 import org.xxpay.dal.dao.model.MchInfo;
 import org.xxpay.web.service.MchInfoService;
 import org.xxpay.web.service.PayChannelServiceClient;
+import org.xxpay.web.service.PayOrderService;
 import org.xxpay.web.service.PayOrderServiceClient;
 
 /**
@@ -56,6 +57,9 @@ public class PayOrderController extends BaseController implements PayOrderClient
 
     @Autowired
     private MchInfoService mchInfoService;
+
+    @Autowired
+    private PayOrderService payOrderService;
 
 
     /**
@@ -157,17 +161,13 @@ public class PayOrderController extends BaseController implements PayOrderClient
                 return new Result(PayEnum.ERR_0010.getCode(),errorMessage);
             }
             _log.debug("请求参数及签名校验通过");
-            // 商户Id
-            String mchId = payOrderQueryReq.getMchId();
-            // 商户订单号
-            String mchOrderNo = payOrderQueryReq.getMchOrderNo();
             // 支付订单号
             String payOrderId = payOrderQueryReq.getPayOrderId();
             // 是否执行回调
-            String executeNotify = String.valueOf(payOrderQueryReq.isExecuteNotify());
+            String executeNotify = String.valueOf(payOrderQueryReq.getExecuteNotify());
 
             JSONObject payOrder;
-            String retStr = payOrderServiceClient.queryPayOrder(getJsonParam(new String[]{"mchId", "payOrderId", "mchOrderNo", "executeNotify"}, new Object[]{mchId, payOrderId, mchOrderNo, executeNotify}));
+            String retStr = payOrderServiceClient.queryPayOrder(getJsonParam(new String[]{"payOrderId", "executeNotify"}, new Object[]{payOrderId, executeNotify}));
             JSONObject retObj = JSON.parseObject(retStr);
             _log.info("{}查询支付订单,结果:{}", logPrefix, retObj);
             if(!GlobalConstants.SUCCESS_CODE.equals(retObj.getString("code"))) {
@@ -239,6 +239,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         String body = payOrderReq.getBody();
         //签名
         String sign = payOrderReq.getSign();
+        //支付宝支付完成的跳转页面
+        String aliPayReturnUrl = payOrderReq.getAliPayReturnUrl();
 
 
         // 验证请求参数有效性（必选项）
@@ -389,6 +391,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
         payOrder.put("serviceUrl", serviceUrl);
         //响应密钥
         payOrder.put("resKey",mchInfo.getResKey());
+        payOrder.put("aliPayReturnUrl",aliPayReturnUrl);
         return payOrder;
     }
 
@@ -480,22 +483,14 @@ public class PayOrderController extends BaseController implements PayOrderClient
 
 
         // ----------------支付参数------------------------
-        //商户ID
-        String mchId = payOrderQueryReq.getMchId();
-        // 商户订单号
-        String mchOrderNo = payOrderQueryReq.getMchOrderNo();
         // 支付订单号
         String payOrderId = payOrderQueryReq.getPayOrderId();
         // 签名
         String sign = payOrderQueryReq.getSign();
 
-        // 验证请求参数有效性（必选项）
-        if(StringUtils.isBlank(mchId)) {
-            errorMessage = "request params[mchId] error.";
-            return errorMessage;
-        }
-        if(StringUtils.isBlank(mchOrderNo) && StringUtils.isBlank(payOrderId)) {
-            errorMessage = "request params[mchOrderNo or payOrderId] error.";
+
+        if(StringUtils.isBlank(payOrderId)) {
+            errorMessage = "request params[payOrderId] error.";
             return errorMessage;
         }
         // 签名信息
@@ -505,17 +500,17 @@ public class PayOrderController extends BaseController implements PayOrderClient
         }
 
         // 查询商户信息
-        MchInfo mchInfo = mchInfoService.getMchInfoById(mchId);
+        MchInfo mchInfo = mchInfoService.getMchInfoByPayOrderId(payOrderId);
         if(null == mchInfo){
-            errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
+            errorMessage = "Can't found mchInfo[payOrderId="+payOrderId+"] record in db.";
             return errorMessage;
         }
         if(mchInfo.getState() != 1){
-            errorMessage = "mchInfo not available [mchId="+mchId+"] record in db.";
+            errorMessage = "mchInfo not available [payOrderId="+payOrderId+"] record in db.";
             return errorMessage;
         }
         if(StringUtils.isBlank(mchInfo.getReqKey())){
-            errorMessage = "reqKey is null[mchId="+mchId+"] record in db.";
+            errorMessage = "reqKey is null[payOrderId="+payOrderId+"] record in db.";
             return errorMessage;
         }
 

@@ -565,6 +565,76 @@ public class TbBusinessAdDynamicCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andAdCoverIsNull() {
+            addCriterion("ad_cover is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverIsNotNull() {
+            addCriterion("ad_cover is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverEqualTo(String value) {
+            addCriterion("ad_cover =", value, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverNotEqualTo(String value) {
+            addCriterion("ad_cover <>", value, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverGreaterThan(String value) {
+            addCriterion("ad_cover >", value, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverGreaterThanOrEqualTo(String value) {
+            addCriterion("ad_cover >=", value, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverLessThan(String value) {
+            addCriterion("ad_cover <", value, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverLessThanOrEqualTo(String value) {
+            addCriterion("ad_cover <=", value, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverLike(String value) {
+            addCriterion("ad_cover like", value, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverNotLike(String value) {
+            addCriterion("ad_cover not like", value, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverIn(List<String> values) {
+            addCriterion("ad_cover in", values, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverNotIn(List<String> values) {
+            addCriterion("ad_cover not in", values, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverBetween(String value1, String value2) {
+            addCriterion("ad_cover between", value1, value2, "adCover");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdCoverNotBetween(String value1, String value2) {
+            addCriterion("ad_cover not between", value1, value2, "adCover");
+            return (Criteria) this;
+        }
+
         public Criteria andStartTimeIsNull() {
             addCriterion("start_time is null");
             return (Criteria) this;

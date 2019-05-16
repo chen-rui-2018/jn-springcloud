@@ -9,6 +9,7 @@
     <result column="modifier_accoun" jdbcType="VARCHAR" property="modifierAccoun" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="ad_cover" jdbcType="VARCHAR" property="adCover" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="mod_accoun" jdbcType="VARCHAR" property="modAccoun" />
@@ -77,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, record_status, creator_account, created_time, modifier_accoun, modified_time, 
-    title, start_time, end_time, mod_accoun, mod_time
+    title, ad_cover, start_time, end_time, mod_accoun, mod_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -133,14 +134,14 @@
   <insert id="insert" parameterType="com.jn.park.attractinvest.entity.TbBusinessAdDynamic">
     insert into tb_business_ad_dynamic (id, record_status, creator_account, 
       created_time, modifier_accoun, modified_time, 
-      title, start_time, end_time, 
-      mod_accoun, mod_time, content
-      )
+      title, ad_cover, start_time, 
+      end_time, mod_accoun, mod_time, 
+      content)
     values (#{id,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccoun,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{title,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{modAccoun,jdbcType=VARCHAR}, #{modTime,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
-      )
+      #{title,jdbcType=VARCHAR}, #{adCover,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{modAccoun,jdbcType=VARCHAR}, #{modTime,jdbcType=VARCHAR}, 
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.attractinvest.entity.TbBusinessAdDynamic">
     insert into tb_business_ad_dynamic
@@ -165,6 +166,9 @@
       </if>
       <if test="title != null">
         title,
+      </if>
+      <if test="adCover != null">
+        ad_cover,
       </if>
       <if test="startTime != null">
         start_time,
@@ -203,6 +207,9 @@
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="adCover != null">
+        #{adCover,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
@@ -251,6 +258,9 @@
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
+      <if test="record.adCover != null">
+        ad_cover = #{record.adCover,jdbcType=VARCHAR},
+      </if>
       <if test="record.startTime != null">
         start_time = #{record.startTime,jdbcType=TIMESTAMP},
       </if>
@@ -280,6 +290,7 @@
       modifier_accoun = #{record.modifierAccoun,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       title = #{record.title,jdbcType=VARCHAR},
+      ad_cover = #{record.adCover,jdbcType=VARCHAR},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       mod_accoun = #{record.modAccoun,jdbcType=VARCHAR},
@@ -298,6 +309,7 @@
       modifier_accoun = #{record.modifierAccoun,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       title = #{record.title,jdbcType=VARCHAR},
+      ad_cover = #{record.adCover,jdbcType=VARCHAR},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       mod_accoun = #{record.modAccoun,jdbcType=VARCHAR},
@@ -327,6 +339,9 @@
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
       </if>
+      <if test="adCover != null">
+        ad_cover = #{adCover,jdbcType=VARCHAR},
+      </if>
       <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
@@ -353,6 +368,7 @@
       modifier_accoun = #{modifierAccoun,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       title = #{title,jdbcType=VARCHAR},
+      ad_cover = #{adCover,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       mod_accoun = #{modAccoun,jdbcType=VARCHAR},
@@ -368,6 +384,7 @@
       modifier_accoun = #{modifierAccoun,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       title = #{title,jdbcType=VARCHAR},
+      ad_cover = #{adCover,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       mod_accoun = #{modAccoun,jdbcType=VARCHAR},

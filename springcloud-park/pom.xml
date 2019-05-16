@@ -54,7 +54,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-hardware-api</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>xxpay-web-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -85,10 +88,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        customer
+                        asset
                     </contexts>
                     <tableNames>
-                        tb_client_service_center
+                        tb_room_orders
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

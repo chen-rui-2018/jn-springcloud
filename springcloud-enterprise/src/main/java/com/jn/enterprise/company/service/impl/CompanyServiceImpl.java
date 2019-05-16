@@ -9,6 +9,7 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.enums.CompanyExceptionEnum;
 import com.jn.company.model.*;
+import com.jn.enterprise.common.config.IBPSDefIdConfig;
 import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
@@ -18,6 +19,7 @@ import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
@@ -30,7 +32,6 @@ import com.jn.park.api.CommentClient;
 import com.jn.park.care.model.CareParam;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -38,7 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -71,6 +71,8 @@ public class CompanyServiceImpl implements CompanyService {
     private StaffService staffService;
     @Autowired
     private CareClient careClient;
+    @Autowired
+    private IBPSDefIdConfig ibpsDefIdConfig;
 
     /**
      * 数据状态 1有效
@@ -84,7 +86,7 @@ public class CompanyServiceImpl implements CompanyService {
     @ServiceLog(doAction = "查询企业列表")
     public PaginationData<List<ServiceCompany>> getCompanyList(ServiceCompanyParam companyParam){
         TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
-        TbServiceCompanyCriteria.Criteria criteria = companyCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        TbServiceCompanyCriteria.Criteria criteria = companyCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         if(StringUtils.isNotEmpty(companyParam.getComName())){
             criteria.andComNameLike("%"+companyParam.getComName()+"%");
         }
@@ -252,11 +254,12 @@ public class CompanyServiceImpl implements CompanyService {
         companyUpdateParam.setCreatorAccount(account);
         companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
 
-        IBPSResult ibpsResult = IBPSUtils.startWorkFlow("574913700364812288", account, companyUpdateParam);
+        String bpmnDefId = ibpsDefIdConfig.getUpdateCompanyInfo();
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, companyUpdateParam);
 
         // ibps启动流程失败
         if (ibpsResult == null || ibpsResult.getState().equals("-1")) {
-            logger.warn("[编辑企业信息] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            logger.warn("[编辑企业信息] 启动ibps流程出错，错误信息：{}", ibpsResult != null ? ibpsResult.getMessage() : "");
             throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.COMPANY_CHECK_ERROR);
         }
         logger.info("[编辑企业信息] " + ibpsResult.getMessage());

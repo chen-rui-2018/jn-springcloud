@@ -64,15 +64,9 @@ public class PayOrderServiceController extends Notify4BasePay {
             return retObj.toJSONString();
         }
         JSONObject paramObj = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
-        String mchId = paramObj.getString("mchId");
         String payOrderId = paramObj.getString("payOrderId");
-        String mchOrderNo = paramObj.getString("mchOrderNo");
-        PayOrder payOrder;
-        if(StringUtils.isNotBlank(payOrderId)) {
-            payOrder = payOrderService.selectPayOrderByMchIdAndPayOrderId(mchId, payOrderId);
-        }else {
-            payOrder = payOrderService.selectPayOrderByMchIdAndMchOrderNo(mchId, mchOrderNo);
-        }
+        PayOrder payOrder = payOrderService.selectPayOrder(payOrderId);
+
         if(payOrder == null) {
             retObj.put("code", "0002");
             retObj.put("msg", "支付订单不存在");

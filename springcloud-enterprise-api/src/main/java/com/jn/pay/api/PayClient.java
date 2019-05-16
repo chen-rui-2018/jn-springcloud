@@ -29,14 +29,14 @@ import java.util.List;
 @FeignClient("springcloud-enterprise")
 public interface PayClient {
 
+    @ApiOperation(value = "我的账单-通过账单ID查询账单【基础】信息(包含账单支付状态)",notes = "我的账单-通过账单ID查询账单【基础】信息(包含账单支付状态)")
+    @RequestMapping(value = "/api/payment/payBill/getBillBasicInfo",method = RequestMethod.GET)
+    PayBill getBillBasicInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId);
 
-    @ApiOperation(value = "我的账单-查询列表",notes = "我的账单-查询列表")
-    @RequestMapping(value = "/api/payment/payBill/billQuery",method = RequestMethod.POST)
-    Result<PaginationData<List<PayBillVo>>> billQuery(PayBillParams payBillParams);
 
-    @ApiOperation(value = "我的账单-通过账单ID查询账单详情信息",notes = "我的账单-通过账单ID查询账单详情信息")
+    @ApiOperation(value = "我的账单-通过账单ID查询账单【详情】信息",notes = "我的账单-通过账单ID查询账单【详情】信息")
     @RequestMapping(value = "/api/payment/payBill/getBillInfo",method = RequestMethod.GET)
-    Result<List<PayBillDetails>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId);
+    Result<PaginationData<List<PayBillDetails>>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId);
 
 
     @ApiOperation(value = "我的账单-账单催缴次数更新",notes = "我的账单-账单催缴次数更新")

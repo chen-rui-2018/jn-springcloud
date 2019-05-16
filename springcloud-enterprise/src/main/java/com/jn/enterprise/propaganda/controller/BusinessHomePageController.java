@@ -48,12 +48,7 @@ public class BusinessHomePageController extends BaseController {
     @ApiOperation(value = "(门户各首页企业宣传列表查询)")
     @RequestMapping(value = "/getBusinessPromotionList",method = RequestMethod.GET)
     public Result<PaginationData<List<BusinessPromotionListShow>>> getBusinessPromotionList(@Validated BusinessHomePageParam businessHomePageParam){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user==null || user.getAccount()==null){
-            logger.warn("企业宣传列表查询获取当前登录用户失败");
-            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
-        return  new Result(businessPromotionService.getBusinessPromotionList(businessHomePageParam,user.getAccount()));
+        return  new Result(businessPromotionService.getBusinessPromotionList(businessHomePageParam,null));
     }
 
     @ControllerLog(doAction = "门户各首页企业宣传详情")

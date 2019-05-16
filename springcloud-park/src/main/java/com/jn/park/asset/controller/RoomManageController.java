@@ -5,21 +5,20 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.park.asset.entity.TbRoomOrdersItem;
 import com.jn.park.asset.enums.PageExceptionEnums;
-import com.jn.park.asset.enums.RoomLeaseStatusEnums;
-import com.jn.park.asset.model.*;
+import com.jn.park.asset.model.RoomBaseModel;
+import com.jn.park.asset.model.RoomInformationModel;
+import com.jn.park.asset.model.RoomPayOrdersItemModel;
+import com.jn.park.asset.model.RoomPayOrdersModel;
 import com.jn.park.asset.service.RoomInformationService;
-import com.jn.park.asset.service.RoomOrdersService;
+import com.jn.park.asset.vo.AppPayDataVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.List;
 
 /**
 *
@@ -42,8 +41,6 @@ import java.util.*;
 public class RoomManageController {
     @Autowired
     private RoomInformationService roomInformationService;
-    @Autowired
-    private RoomOrdersService roomOrdersService;
 
 
     @ControllerLog(doAction = "获取房间信息")
@@ -58,8 +55,8 @@ public class RoomManageController {
         return new Result<>(roomInformationModel);
     }
 
-    @ControllerLog(doAction = "获取房间基本信息")
-    @ApiOperation(value = "获取房间基本信息",notes = "获取房间基本信息")
+    @ControllerLog(doAction = "获取房间基本信息(含同属分组的所有房间)")
+    @ApiOperation(value = "获取房间基本信息(含同属分组的所有房间)",notes = "获取房间基本信息(含同属分组的所有房间)")
     @GetMapping(value = "/getRoomBaseInfo" )
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roomId",value = "房间id",example = "575020345132580865")
@@ -105,26 +102,28 @@ public class RoomManageController {
         return ordersNumber;
     }
 
-    @ControllerLog(doAction = "支付订单")
-    @ApiOperation(value = "支付订单",notes = "支付订单")
-    @GetMapping(value = "/getPayOrders")
+
+    @ControllerLog(doAction = "创建支付订单")
+    @ApiOperation(value = "创建支付订单",notes = "创建支付订单")
+    @PostMapping(value = "/createPayOrder")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050811515490657")
+            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050811515490657"),
+            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE")
     })
-    public Result<RoomPayOrdersModel> getPayOrders (String id){
-        Assert.notNull(id,"订单编号不能为空");
-        RoomPayOrdersModel roomPayOrdersModel =  roomOrdersService.getPayOrders(id);
-        return new Result<>(roomPayOrdersModel);
+    public Result<AppPayDataVo> createPayOrder (String orderId, String channelId){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(orderId,"订单编号不能为空");
+        return roomInformationService.createPayOrder(orderId,channelId,user.getAccount());
     }
 
     @ControllerLog(doAction = "房间租赁历史列表")
     @ApiOperation(value = "房间租赁历史列表",notes = "获取房间租赁历史列表")
     @GetMapping(value = "/getRoomOrdersList")
-    public Result<PaginationData<List<RoomPayOrdersItemModel>>> getRoomOrdersList(Page page){
+    public Result<PaginationData<List<RoomPayOrdersModel>>> getRoomOrdersList(Page page){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<RoomPayOrdersItemModel>> roomOrdersList = roomOrdersService.getRoomOrdersList(user.getAccount(),page);
+            PaginationData<List<RoomPayOrdersModel>> roomOrdersList = roomInformationService.getRoomOrdersList(user.getAccount(),page);
             return new Result<>(roomOrdersList);
         }else{
             throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
@@ -135,12 +134,13 @@ public class RoomManageController {
     @ApiOperation(value = "房间租借详情",notes = "根据订单编号获取租借详情")
     @GetMapping(value = "/getRoomOrders")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050811515490657")
+            @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657")
     })
-    public Result<RoomPayOrdersItemModel> getRoomOrders (String id){
-        Assert.notNull(id,"订单编号不能为空");
-        RoomPayOrdersItemModel roomPayOrdersItemModel =  roomOrdersService.getRoomOrders(id);
-        return new Result<>(roomPayOrdersItemModel);
+    public Result<RoomPayOrdersModel> getRoomOrders (String orderId){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(orderId,"订单编号不能为空");
+        RoomPayOrdersModel roomPayOrdersModel =  roomInformationService.getRoomOrders(orderId,user.getAccount());
+        return new Result<>(roomPayOrdersModel);
     }
 
     @ControllerLog(doAction = "房间退租")
@@ -150,8 +150,18 @@ public class RoomManageController {
             @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050811515490657"),
     })
     public Result<RoomPayOrdersItemModel> quitApply(String id){
-        RoomPayOrdersItemModel roomPayOrdersItemModel = roomOrdersService.quitApply(id);
+        RoomPayOrdersItemModel roomPayOrdersItemModel = roomInformationService.quitApply(id);
         return new Result(roomPayOrdersItemModel);
     }
 
+    @ControllerLog(doAction = "取消订单")
+    @ApiOperation(value = "取消订单",notes = "取消订单")
+    @GetMapping(value = "/cancelOrder")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657"),
+    })
+    public Result cancelOrder(String orderId){
+        //todo zhuyongze
+        return new Result();
+    }
 }

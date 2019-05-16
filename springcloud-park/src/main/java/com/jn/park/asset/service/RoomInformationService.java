@@ -5,6 +5,9 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.asset.model.RoomBaseModel;
 import com.jn.park.asset.model.RoomInformationModel;
+import com.jn.park.asset.model.RoomPayOrdersItemModel;
+import com.jn.park.asset.model.RoomPayOrdersModel;
+import com.jn.pay.model.PayOrderNotify;
 
 import java.sql.Date;
 import java.util.List;
@@ -51,4 +54,46 @@ public interface RoomInformationService {
      * @return
      */
     PaginationData<List<RoomInformationModel>> getRoomLeaseList(Page page, String name);
+
+     /**
+     * 创建支付订单
+     * @param orderId
+     * @param channelId
+     * @return
+     */
+    public Result createPayOrder(String orderId,String channelId ,String userAccount);
+    /**
+     * 支付回调
+     * @param payOrderNotify
+     * @return
+     */
+    Result payCallBack(PayOrderNotify payOrderNotify);
+
+    /**
+     * 返回支付订单
+     * @param id
+     * @return
+     */
+    RoomPayOrdersModel getPayOrders(String id);
+
+    /**
+     * 分页返回房间租借历史
+     * @param page
+     * @return
+     */
+    PaginationData<List<RoomPayOrdersModel>> getRoomOrdersList(String account, Page page);
+
+    /**
+     * 获取房间租借订单详情信息
+     * @param orderId
+     * @return
+     */
+    RoomPayOrdersModel getRoomOrders(String orderId,String userAccount);
+
+    /**
+     * 房间退租申请
+     * @param id
+     * @return
+     */
+    RoomPayOrdersItemModel quitApply(String id);
 }

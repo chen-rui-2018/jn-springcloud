@@ -88,11 +88,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        hatch
+                        asset
                     </contexts>
                     <tableNames>
-                        tb_hatch_enterprise_nature,tb_hatch_enterprise_tech,tb_hatch_enterprise_type,tb_hatch_home_config,
-                        tb_hatch_incubator,tb_hatch_incubator_enterprise,tb_hatch_incubator_team,tb_hatch_incubator_type
+                        tb_room_orders
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

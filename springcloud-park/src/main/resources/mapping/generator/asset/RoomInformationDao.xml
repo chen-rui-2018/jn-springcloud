@@ -1,71 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.asset.dao.RoomInformationDao">
-    <select id="getRoomLeaseList" resultType="com.jn.park.asset.model.RoomInformationModel">
-        SELECT
-            id,
-            NAME,
-            floor,
-            tower_id AS towerId,
-            tower_name AS towerName,
-            group_id AS groupId,
-            group_name AS groupName,
-            room_area AS roomArea,
-            shortest_lease AS shortestLease,
-            lease_price AS leasePrice,
-            lease_sum AS leaseSum,
-            press,
-            pay,
-            press_pay AS pressPay,
-            house_type AS houseType,
-            img_url AS imgUrl,
-            floor_plan AS floorPlan,
-            room_plan AS roomPlan,
-            introduce,
-            state,
-            lease_start_time AS leaseStartTime,
-            lease_end_time leaseEndTime,
-            enterprise_id AS enterpriseId,
-            lease_enterprise AS leaseEnterprise,
-            contact_name AS contactName,
-            contact_phone AS contactPhone
-        FROM
-            tb_room_information
-        where record_status = 1 and state = 0 or state = 4
-    </select>
-
-    <select id="getRoomInformation" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomInformationModel">
-        SELECT
-            id,
-            NAME,
-            floor,
-            tower_id AS towerId,
-            tower_name AS towerName,
-            group_id AS groupId,
-            group_name AS groupName,
-            room_area AS roomArea,
-            shortest_lease AS shortestLease,
-            lease_price AS leasePrice,
-            lease_sum AS leaseSum,
-            press,
-            pay,
-            press_pay AS pressPay,
-            house_type AS houseType,
-            img_url AS imgUrl,
-            floor_plan AS floorPlan,
-            room_plan AS roomPlan,
-            introduce,
-            state,
-            lease_start_time AS leaseStartTime,
-            lease_end_time leaseEndTime,
-            enterprise_id AS enterpriseId,
-            lease_enterprise AS leaseEnterprise,
-            contact_name AS contactName,
-            contact_phone AS contactPhone
-        FROM
-            tb_room_information
-        where id = #{id}
-    </select>
 
     <update id="updateStatus" parameterType="java.util.Map">
         UPDATE tb_room_information
@@ -73,4 +8,42 @@
         WHERE
             id = #{roomId}
     </update>
+
+    <select id="getRoomLeaseList" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomInformationModel">
+        SELECT
+            id,
+            NAME,
+            floor,
+            tower_id AS towerId,
+            tower_name AS towerName,
+            group_id AS groupId,
+            group_name AS groupName,
+            room_area AS roomArea,
+            shortest_lease AS shortestLease,
+            lease_price AS leasePrice,
+            lease_sum AS leaseSum,
+            press,
+            pay,
+            press_pay AS pressPay,
+            house_type AS houseType,
+            img_url AS imgUrl,
+            floor_plan AS floorPlan,
+            room_plan AS roomPlan,
+            introduce,
+            state,
+            lease_start_time AS leaseStartTime,
+            lease_end_time leaseEndTime,
+            enterprise_id AS enterpriseId,
+            lease_enterprise AS leaseEnterprise,
+            contact_name AS contactName,
+            contact_phone AS contactPhone,
+            create_Time AS createTime
+        FROM
+            tb_room_information t
+        WHERE record_status = '1'
+         <if test="_parameter != null and _parameter != ''">
+             and  (t.NAME LIKE CONCAT('%', #{name}, '%') or tower_name Like CONCAT('%', #{name}, '%'))
+         </if>
+          and state in ('0','4')
+    </select>
 </mapper>

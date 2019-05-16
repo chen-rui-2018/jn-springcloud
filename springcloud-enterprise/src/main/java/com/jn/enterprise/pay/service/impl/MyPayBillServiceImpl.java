@@ -6,7 +6,6 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
-import com.jn.common.util.LoadBalancerUtil;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.service.CompanyService;
@@ -145,7 +144,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
 
     @ServiceLog(doAction = "我的账单-通过账单ID查询账单详情信息")
     @Override
-    public List<PayBillDetails> getBillInfo(String billId) {
+    public PaginationData<List<PayBillDetails>> getBillInfo(String billId) {
         List<PayBillDetails> list = new ArrayList<>();
         TbPayBillDetailsCriteria tbPayBillDetailsCriteria = new TbPayBillDetailsCriteria();
         TbPayBillDetailsCriteria.Criteria criteria = tbPayBillDetailsCriteria.createCriteria();
@@ -156,7 +155,10 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             BeanUtils.copyProperties(tbPayBillDetails.get(i),payBillDetails);
             list.add(payBillDetails);
         }
-        return list;
+        PaginationData paginationData = new PaginationData();
+        paginationData.setRows(list);
+        paginationData.setTotal(list.size());
+        return paginationData;
     }
 
     @Override

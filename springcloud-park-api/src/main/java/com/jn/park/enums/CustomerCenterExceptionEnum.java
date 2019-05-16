@@ -11,6 +11,7 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum CustomerCenterExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("4020901", "网络异常，请稍后重试。"),
+    QUES_PICTURE_NUM_MORE_THAN_MAX("4020551","问题描述图片不能超过3张"),
     ;
     /**
      * 编码

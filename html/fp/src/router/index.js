@@ -663,6 +663,18 @@ export default new Router({
       name: 'investor'
     },
     {
+          path:'/roleCertifications/advisoryInformation',
+          name:'advisoryInformation',
+          meta: {title: '填写顾问资料'},
+          component:resolve => require(['@/views/home/roleCertifications/advisoryInformation'],resolve)
+        },
+        {
+          path:'/roleCertifications/basicInformation',
+          name:'basicInformation',
+          meta: {title: '服务机构认证'},
+          component:resolve => require(['@/views/home/roleCertifications/basicInformation'],resolve)
+        }
+    {
       path: '/investorDetail',
       component: resolve => require(['@/views/technologyFinance/investorDetail'], resolve),
       meta: {

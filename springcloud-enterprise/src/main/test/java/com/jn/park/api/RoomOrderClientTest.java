@@ -34,7 +34,7 @@ public class RoomOrderClientTest {
     @Test
     public void payCallBack(){
         PayOrderNotify payOrderNotify=new PayOrderNotify();
-        payOrderNotify.setPayOrderId("05bd1428-2c8b-437c-b");
+        payOrderNotify.setPayOrderId("P0020190517172453000002");
         Result result=roomOrderClient.payCallBack(payOrderNotify);
         Assert.assertEquals(result.getCode(),"0000");
     }

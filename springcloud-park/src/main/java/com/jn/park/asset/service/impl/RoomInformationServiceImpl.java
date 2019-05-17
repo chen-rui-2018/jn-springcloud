@@ -17,11 +17,9 @@ import com.jn.park.asset.model.RoomInformationModel;
 import com.jn.park.asset.model.RoomPayOrdersItemModel;
 import com.jn.park.asset.model.RoomPayOrdersModel;
 import com.jn.park.asset.service.RoomInformationService;
-import com.jn.park.asset.vo.AppPayDataVo;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.*;
-import com.jn.pay.model.alipay.AlipayMobilePayRsp;
 import com.jn.pay.vo.wx.WxAppPayRsp;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
@@ -31,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xxpay.common.util.BeanToMap;
 import org.xxpay.common.util.PayDigestUtil;
+import org.xxpay.common.util.XXPayUtil;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -278,7 +277,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     }
 
      @ServiceLog(doAction = "创建支付订单")
-    public Result<AppPayDataVo> createPayOrder(String orderId, String channelId , String userAccount){
+    public Result<PayOrderRsp> createPayOrder(String orderId, String channelId , String userAccount){
         logger.info("创建支付订单,orderId={}",orderId);
         TbRoomOrders tbRoomOrders=tbRoomOrdersMapper.selectByPrimaryKey(orderId);
 
@@ -312,28 +311,29 @@ public class RoomInformationServiceImpl implements RoomInformationService {
          payOrderReq.setSign(sign);
 
         logger.info("调用 统一支付下单接口,请求参数{}",payOrderReq);
-        Result payResult=payOrderClient.createPayOrder(payOrderReq);
+        Result<PayOrderRsp> payResult=payOrderClient.createPayOrder(payOrderReq);
         logger.info("调用 统一支付下单接口，返回{}",payResult);
         if(!StringUtils.equals(payResult.getCode(),"0000")){
             logger.info("统一支付下单失败，{}",payOrderReq);
             return payResult;
         }
 
-        if(payResult.getData() instanceof AlipayMobilePayRsp){
-            AlipayMobilePayRsp alipayMobilePayRsp=(AlipayMobilePayRsp)payResult.getData();
-        }
-         JSONObject jsonObject=new JSONObject();
-        JSONObject.parseObject("", WxAppPayRsp.class);
-        PayBaseRsp payBaseRsp=(PayBaseRsp)payResult.getData();
+        /*******step 4 验证响应签名 ********/
+         //验证响应签名
+         boolean verifyFlag = XXPayUtil.verifyPaySign(BeanToMap.toMap(payResult.getData()), MchIdEnum.MCH_BASE.getRspKey());
+         if(!verifyFlag) {
+             logger.info(" 支付验证响应签名失败  fail ！verifyFlag={}",verifyFlag);
+             return new Result<>("-1","支付验证响应签名失败");
+         }
+
         TbRoomOrdersPay tbRoomOrdersPay=new TbRoomOrdersPay();
-        tbRoomOrdersPay.setPayId(payBaseRsp.getPayOrderId());
+        tbRoomOrdersPay.setPayId(payResult.getData().getPayOrderId());
         tbRoomOrdersPay.setOrderId(orderId);
-        tbRoomOrdersPay.setPayState(new Byte("1"));//支付中
+        tbRoomOrdersPay.setPayState(new Byte("0"));//未付款
         tbRoomOrdersPay.setCreateTime(new java.util.Date());
         tbRoomOrdersPay.setCreatorAccount(userAccount);
-        logger.info("插入订单支付表{}",tbRoomOrdersPay);
+        logger.info("支付订单接口返回成功，插入业务订单支付表{}",tbRoomOrdersPay);
         tbRoomOrdersPayMapper.insertSelective(tbRoomOrdersPay);
-
 
         return  payResult;
 
@@ -349,7 +349,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             logger.info("支付订单ID["+payOrderNotify.getPayOrderId()+"]不存在");
             return new Result("-1","支付订单ID["+payOrderNotify.getPayOrderId()+"]不存在");
         }
-        if(tbRoomOrdersPay.getPayState().equals(2)){
+        if(tbRoomOrdersPay.getPayState().equals(1)){
             logger.info("支付状态已更新过了，无需再回调");
             return new Result("-1","支付状态已更新过了，无需再回调");
         }
@@ -366,7 +366,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         if(rep.getData().getStatus().equals(2)){//支付成功
             TbRoomOrdersPay updateRecord=new TbRoomOrdersPay();
             updateRecord.setPayId(payOrderNotify.getPayOrderId());
-            updateRecord.setPayState(new Byte("2"));
+            updateRecord.setPayState(new Byte("1"));
             updateRecord.setModifiedTime(new java.util.Date());
             logger.info("支付表的支付状态更新为：已支付，参数：{}",updateRecord);
             int updateCount=tbRoomOrdersPayMapper.updateByPrimaryKeySelective(updateRecord);
@@ -537,4 +537,5 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         BeanUtils.copyProperties(tbRoomOrdersItem,roomPayOrdersItemModel);
         return roomPayOrdersItemModel;
     }
+
 }

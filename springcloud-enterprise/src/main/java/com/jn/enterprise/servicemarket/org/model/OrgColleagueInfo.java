@@ -15,6 +15,8 @@ import java.io.Serializable;
 public class OrgColleagueInfo implements Serializable {
     @ApiModelProperty(value = "账号")
     private String account;
+    @ApiModelProperty(value = "姓名")
+    private String name;
     @ApiModelProperty(value = "联系手机")
     private String phone;
     @ApiModelProperty(value = "联系邮箱")
@@ -29,6 +31,10 @@ public class OrgColleagueInfo implements Serializable {
     private String orgIdentity;
     @ApiModelProperty(value = "入驻日期")
     private String entryDate;
+    @ApiModelProperty(value = "头像")
+    private String avatar;
+    @ApiModelProperty(value = "从业年限")
+    private String workingYears;
 
     public String getAccount() {
         return account;
@@ -36,6 +42,14 @@ public class OrgColleagueInfo implements Serializable {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhone() {
@@ -94,6 +108,22 @@ public class OrgColleagueInfo implements Serializable {
         this.entryDate = entryDate;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getWorkingYears() {
+        return workingYears;
+    }
+
+    public void setWorkingYears(String workingYears) {
+        this.workingYears = workingYears;
+    }
+
     @Override
     public String toString() {
         return "OrgColleagueInfo{" +
@@ -105,6 +135,8 @@ public class OrgColleagueInfo implements Serializable {
                 ", position='" + position + '\'' +
                 ", orgIdentity='" + orgIdentity + '\'' +
                 ", entryDate='" + entryDate + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", workingYears='" + workingYears + '\'' +
                 '}';
     }
 }

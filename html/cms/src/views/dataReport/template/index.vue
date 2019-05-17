@@ -537,11 +537,21 @@ export default {
     getData() {
       // 获取树形指标
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/target/getTargetTree`).then(data => {
-        this.originTab.treeData = data.data
+        const treeList = data.data
+        this.sortTree(treeList)
+        this.originTab.treeData = treeList
       })
       // 获取预警人
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/dataModel/getWarner`).then(data => {
         this.warnerOptions = data.data.map(item => ({ id: item.id, label: item.creatorAccount }))
+      })
+    },
+    sortTree(tree) {
+      tree.sort((a, b) => {
+        if (a.children && a.children.length > 0) {
+          this.sortTree(a.children)
+        }
+        return a.orderNumber - b.orderNumber
       })
     },
     getModelTree() {

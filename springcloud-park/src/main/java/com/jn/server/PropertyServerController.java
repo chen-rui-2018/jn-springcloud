@@ -4,14 +4,13 @@ import com.jn.common.controller.BaseController;
 
 import com.jn.common.model.Result;
 import com.jn.park.api.PropertyCenterClient;
+import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.park.repair.service.RepairService;
 import com.jn.system.log.annotation.ControllerLog;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -36,8 +35,9 @@ public class PropertyServerController extends BaseController implements Property
 
     @ControllerLog(doAction = "物业服务-自动执行ibps处理节点任务")
     @Override
-    public Result<String> automaticApprovalTaskByTaskId(@RequestBody JSONObject jsonObject) {
-        repairService.automaticApprovalTaskByTaskId(jsonObject);
+    public Result<String> automaticApprovalTaskByTaskId(@RequestBody PayCallBackNotify  payCallBackNotify) {
+        logger.info("物业服务-自动执行ibps处理节点任务");
+        repairService.automaticApprovalTaskByTaskId(payCallBackNotify);
         return new Result();
     }
 }

@@ -1,5 +1,6 @@
 package com.jn.park.repair.service.impl;
 
+import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.park.repair.dao.TbPmRepairMapper;
 import com.jn.park.repair.entity.TbPmRepair;
 import com.jn.park.repair.enums.PaymentBillEnum;
@@ -37,15 +38,14 @@ public class RepairServiceImpl implements RepairService {
 
     /**
      * 自动执行ibps处理节点任务
-     * @param jsonObject 请求id
+     * @param payCallBackNotify 请求id
      */
     @Override
     @ServiceLog(doAction = "物业服务-创建报修缴费单,支付成功回调")
 
-    public void automaticApprovalTaskByTaskId(JSONObject jsonObject) {
+    public void automaticApprovalTaskByTaskId(PayCallBackNotify  payCallBackNotify) {
 
-        String billId=(String) jsonObject.get("billId");
-        //String paymentState=(String) jsonObject.get("paymentState");
+        String billId=payCallBackNotify.getBillId();
         PayBillParams payBillParams=new PayBillParams();
         payBillParams.setBillId(billId);
         PayBill PayBillDetails= payClient.getBillBasicInfo(billId);

@@ -2,7 +2,7 @@ package com.jn.park.api;
 
 
 import com.jn.common.model.Result;
-import org.json.simple.JSONObject;
+import com.jn.park.property.model.PayCallBackNotify;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface PropertyCenterClient {
 
     /**
-     * 获取政策中心首页列表
+     * 物业服务-自动执行ibps处理节点任务
      * @param
      * @return
      */
     @RequestMapping(value = "/api/property/repair/automaticApprovalTaskByTaskId", method = RequestMethod.POST)
-    Result<String> automaticApprovalTaskByTaskId(JSONObject jsonObject);
+    Result<String> automaticApprovalTaskByTaskId(PayCallBackNotify payCallBackNotify);
 
 }

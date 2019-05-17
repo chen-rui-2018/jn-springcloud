@@ -310,7 +310,18 @@ export default {
     },
     getData() {
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/target/getTargetTree`).then(data => {
-        this.targetTreeData = data.data
+        const treeList = data.data
+        this.sortTree(treeList)
+        this.targetTreeData = treeList
+        console.dir(treeList)
+      })
+    },
+    sortTree(tree) {
+      tree.sort((a, b) => {
+        if (a.children && a.children.length > 0) {
+          this.sortTree(a.children)
+        }
+        return a.orderNumber - b.orderNumber
       })
     },
     addFormType(index) {

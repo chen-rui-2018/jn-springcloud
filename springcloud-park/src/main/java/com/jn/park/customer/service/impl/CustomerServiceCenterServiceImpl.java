@@ -67,7 +67,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     /**
      * 在线客服流程id
      */
-    @Value(value="${onlineCustomerProcessId}")
+    @Value(value = "${onlineCustomerProcessId}")
     private String onlineCustomerProcessId;
 
 
@@ -185,7 +185,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         //修改时间
         tbClientServiceCenter.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //修改人
-        tbClientServiceCenter.setCreatorAccount(loginAccount);
+        tbClientServiceCenter.setModifierAccount(loginAccount);
         return tbClientServiceCenterMapper.updateByExampleSelective(tbClientServiceCenter, example);
     }
 
@@ -203,6 +203,16 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         if(param.getQuesUrl()!=null){
             //把数组转为字符串，用";"分隔
             ibpsParam.setQuesUrl(StringUtils.join(param.getQuesUrl(),";"));
+        }
+        //服务模块名称设置
+        List<ServiceModuleShow> serviceModuleShows = serviceModules();
+        if(!serviceModuleShows.isEmpty()){
+            for(ServiceModuleShow serviceModuleShow:serviceModuleShows){
+                if(StringUtils.equals(param.getServiceModule(), serviceModuleShow.getServiceModule())){
+                    ibpsParam.setServiceModuleName(serviceModuleShow.getServiceModuleName());
+                    break;
+                }
+            }
         }
         //创建人
         ibpsParam.setCreatorAccount(loginAccount);

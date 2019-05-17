@@ -10,9 +10,7 @@ import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.PayOrderQueryReq;
 import com.jn.pay.model.PayOrderQueryRsp;
 import com.jn.pay.model.PayOrderReq;
-import com.jn.pay.model.alipay.AlipayMobilePayRsp;
-import com.jn.pay.model.alipay.AlipayPcPayRsp;
-import com.jn.pay.model.alipay.AlipayWapPayRsp;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.pay.model.wx.PayParams;
 import com.jn.pay.model.wx.WxMwebPayRsp;
 import com.jn.pay.model.wx.WxNativePayRsp;
@@ -76,7 +74,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
      * @return
      */
     @Override
-    public Result createPayOrder(@RequestBody @Validated PayOrderReq payOrderReq) {
+    public Result<PayOrderRsp> createPayOrder(@RequestBody @Validated PayOrderReq payOrderReq) {
         _log.info("###### 开始接收商户统一下单请求 ######");
         String logPrefix = "【商户统一下单】";
         ServiceInstance instance = client.getLocalServiceInstance();
@@ -467,11 +465,17 @@ public class PayOrderController extends BaseController implements PayOrderClient
             String errCodeDes = paramObj.getString("errCodeDes");
             return new Result(errCode,errCodeDes);
         }
-        //响应签名
-        String sign ;
+
+        //JSON字符串转对象
+        PayOrderRsp payOrderRsp = JSON.parseObject(jsonParam, PayOrderRsp.class);
+        //生成响应签名
+        String sign =  PayDigestUtil.getSign(BeanToMap.toMap(payOrderRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
+        payOrderRsp.setSign(sign);
+
+        return  new Result(payOrderRsp);
 
         //根据渠道ID返回对应的实体类
-        switch (channelIdEnum) {
+       /* switch (channelIdEnum) {
                 case WX_APP :
                     WxAppPayRsp wxAppPayRsp = JSON.parseObject(jsonParam, WxAppPayRsp.class);
                     sign =  PayDigestUtil.getSign(BeanToMap.toMap(wxAppPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
@@ -509,7 +513,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
                     return new Result(alipayWapPayRsp);
             default:
                 return new Result(PayEnum.ERR_0010.getCode(),PayEnum.ERR_0010.getMessage());
-        }
+        }*/
     }
 
 

@@ -2,7 +2,7 @@ package com.jn.pay.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -47,7 +47,7 @@ public class RefundOrderReq implements Serializable {
     /**
      * 退款金额,单位分
      */
-    @NotBlank(message = "支付金额不能为空！")
+    @NotNull(message = "支付金额不能为空！")
     private Long amount;
     /**
      * 客户端IP

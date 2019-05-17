@@ -34,7 +34,7 @@ public class TbClientServiceCenter implements Serializable {
     /*@ApiModelProperty("联系方式（手机号码/邮箱）")*/
     private String contactWay;
 
-    /*@ApiModelProperty("处理状态(0：待处理  1:处理中 2：已处理)")*/
+    /*@ApiModelProperty("处理状态(0：待处理  1:处理中 2：已处理,3:无法处理)")*/
     private String status;
 
     /*@ApiModelProperty("当前来电")*/
@@ -53,10 +53,10 @@ public class TbClientServiceCenter implements Serializable {
     private String isTranPie;
 
     /*@ApiModelProperty("执行部门id(角色id)")*/
-    private String executedeptid;
+    private String executeDeptId;
 
-    /*@ApiModelProperty("执行人(预留字段)")*/
-    private String executeperson;
+    /*@ApiModelProperty("执行人id")*/
+    private String executePerson;
 
     /*@ApiModelProperty("创建时间")*/
     private Date createdTime;
@@ -203,20 +203,20 @@ public class TbClientServiceCenter implements Serializable {
         this.isTranPie = isTranPie == null ? null : isTranPie.trim();
     }
 
-    public String getExecutedeptid() {
-        return executedeptid;
+    public String getExecuteDeptId() {
+        return executeDeptId;
     }
 
-    public void setExecutedeptid(String executedeptid) {
-        this.executedeptid = executedeptid == null ? null : executedeptid.trim();
+    public void setExecuteDeptId(String executeDeptId) {
+        this.executeDeptId = executeDeptId == null ? null : executeDeptId.trim();
     }
 
-    public String getExecuteperson() {
-        return executeperson;
+    public String getExecutePerson() {
+        return executePerson;
     }
 
-    public void setExecuteperson(String executeperson) {
-        this.executeperson = executeperson == null ? null : executeperson.trim();
+    public void setExecutePerson(String executePerson) {
+        this.executePerson = executePerson == null ? null : executePerson.trim();
     }
 
     public Date getCreatedTime() {
@@ -287,8 +287,8 @@ public class TbClientServiceCenter implements Serializable {
             && (this.getCustName() == null ? other.getCustName() == null : this.getCustName().equals(other.getCustName()))
             && (this.getCustSex() == null ? other.getCustSex() == null : this.getCustSex().equals(other.getCustSex()))
             && (this.getIsTranPie() == null ? other.getIsTranPie() == null : this.getIsTranPie().equals(other.getIsTranPie()))
-            && (this.getExecutedeptid() == null ? other.getExecutedeptid() == null : this.getExecutedeptid().equals(other.getExecutedeptid()))
-            && (this.getExecuteperson() == null ? other.getExecuteperson() == null : this.getExecuteperson().equals(other.getExecuteperson()))
+            && (this.getExecuteDeptId() == null ? other.getExecuteDeptId() == null : this.getExecuteDeptId().equals(other.getExecuteDeptId()))
+            && (this.getExecutePerson() == null ? other.getExecutePerson() == null : this.getExecutePerson().equals(other.getExecutePerson()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -316,8 +316,8 @@ public class TbClientServiceCenter implements Serializable {
         result = prime * result + ((getCustName() == null) ? 0 : getCustName().hashCode());
         result = prime * result + ((getCustSex() == null) ? 0 : getCustSex().hashCode());
         result = prime * result + ((getIsTranPie() == null) ? 0 : getIsTranPie().hashCode());
-        result = prime * result + ((getExecutedeptid() == null) ? 0 : getExecutedeptid().hashCode());
-        result = prime * result + ((getExecuteperson() == null) ? 0 : getExecuteperson().hashCode());
+        result = prime * result + ((getExecuteDeptId() == null) ? 0 : getExecuteDeptId().hashCode());
+        result = prime * result + ((getExecutePerson() == null) ? 0 : getExecutePerson().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -348,8 +348,8 @@ public class TbClientServiceCenter implements Serializable {
         sb.append(", custName=").append(custName);
         sb.append(", custSex=").append(custSex);
         sb.append(", isTranPie=").append(isTranPie);
-        sb.append(", executedeptid=").append(executedeptid);
-        sb.append(", executeperson=").append(executeperson);
+        sb.append(", executeDeptId=").append(executeDeptId);
+        sb.append(", executePerson=").append(executePerson);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

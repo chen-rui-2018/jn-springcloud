@@ -1,16 +1,13 @@
 package com.jn.park.repair.service.impl;
 
-import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.park.repair.dao.TbPmRepairMapper;
 import com.jn.park.repair.entity.TbPmRepair;
 import com.jn.park.repair.enums.PaymentBillEnum;
 import com.jn.park.repair.service.RepairService;
 import com.jn.pay.api.PayClient;
-import com.jn.pay.model.PayBillDetails;
+import com.jn.pay.model.PayBill;
 import com.jn.pay.model.PayBillParams;
 import com.jn.pay.vo.PayBillCreateParamVo;
-import com.jn.pay.vo.PayBillVo;
 import com.jn.system.log.annotation.ServiceLog;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -18,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 /**
  * 物业服务-企业报修流程serviceimpl
@@ -52,10 +48,9 @@ public class RepairServiceImpl implements RepairService {
         //String paymentState=(String) jsonObject.get("paymentState");
         PayBillParams payBillParams=new PayBillParams();
         payBillParams.setBillId(billId);
-        Result<PaginationData<List<PayBillVo>>> PayBillDetails= payClient.billQuery(payBillParams);
-        if(PayBillDetails!=null&&PayBillDetails.getData()!=null&&PayBillDetails.getData().getRows().size()>0){
-            List<PayBillVo> payBillVoList=PayBillDetails.getData().getRows();
-            String paymentState=payBillVoList.get(0).getPaymentState();
+        PayBill PayBillDetails= payClient.getBillBasicInfo(billId);
+        if(PayBillDetails!=null){
+            String paymentState=PayBillDetails.getPaymentState();
             logger.info("物业服务-创建报修缴费单回调,billId:{},paymentState:{}",billId,paymentState);
             //账单已支付，执行自动审核跳转节点
             if(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode().equals(paymentState)){

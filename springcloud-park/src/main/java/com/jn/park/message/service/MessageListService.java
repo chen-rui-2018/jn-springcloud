@@ -1,10 +1,7 @@
 package com.jn.park.message.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.message.model.AddMessageModel;
-import com.jn.park.message.model.FindAllMessageListVo;
-import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.findAllMessageListModel;
+import com.jn.park.message.model.*;
 import com.jn.system.model.User;
 
 import java.util.List;
@@ -16,12 +13,23 @@ import java.util.List;
  */
 public interface MessageListService {
 
+
+    /**
+     * 获取二级消息类别
+     * @param messageOneTort 一级消息类别
+     * @return
+     */
+    List<MessageTowListModel> getMessageOneTort(String messageOneTort,User user);
+
+
+    PaginationData<List<MessageListModel>> findAllApp(findAllAppMessageListModel findAllAppMessageListModel, User user);
+
     /**
      * 查询所有消息
      * @param findAllMessageListModel
      * @return
      */
-    PaginationData<List<FindAllMessageListVo>> findAll(findAllMessageListModel findAllMessageListModel, User user);
+    PaginationData<List<MessageListModel>> findAll(findAllMessageListModel findAllMessageListModel, User user);
 
     /**
      * 获取是否有已读消息

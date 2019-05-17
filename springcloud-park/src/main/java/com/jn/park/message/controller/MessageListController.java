@@ -7,10 +7,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.vo.FinanceExpendHistoryVo;
-import com.jn.park.message.model.AddMessageModel;
-import com.jn.park.message.model.FindAllMessageListVo;
-import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.findAllMessageListModel;
+import com.jn.park.message.model.*;
 import com.jn.park.message.service.MessageListService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -39,11 +36,37 @@ public class MessageListController extends BaseController {
     @Autowired
     private MessageListService messageListService;
 
+
+    @ControllerLog(doAction = "获取二级消息类别")
+    @ApiOperation(value = "获取二级消息类别",notes = "获取二级消息类别,查询消息列表", httpMethod = "GET")
+    @GetMapping(value = "/getMessageOneTort")
+    @RequiresPermissions("/message/list/getMessageOneTort")
+    @ApiImplicitParam(name = "messageOneTort",value = "一级消息类别(不可为空), 0:个人动态;1:企业空间;",dataType = "String",paramType = "query")
+    public Result<List<MessageTowListModel>> getMessageOneTort(String messageOneTort){
+
+        //PaginationData findAllMessageListVoList = messageListService.findAll(findAllMessageListModel,getUser());
+        List<MessageTowListModel> getMessageOneTort=messageListService.getMessageOneTort(messageOneTort,getUser());
+        return new Result(getMessageOneTort);
+    }
+
+
+    @ControllerLog(doAction = "获取一级消息类别下所有消息(APP端)")
+    @ApiOperation(value = "获取一级消息类别下所有消息(APP端)",notes = "提供给app端查询一级类别下的所有二级类别消息", httpMethod = "GET")
+    @GetMapping(value = "/findAllApp")
+    @RequiresPermissions("/message/list/findAllApp")
+
+    public Result<PaginationData<List<MessageListModel>>> findAllApp(findAllAppMessageListModel findAllAppMessageListModel){
+
+        PaginationData findAllApp =messageListService.findAllApp(findAllAppMessageListModel,getUser());
+
+        return new Result(findAllApp);
+    }
+
     @ControllerLog(doAction = "消息列表")
     @ApiOperation(value = "消息列表",notes = "查询消息列表", httpMethod = "GET")
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/message/list/findAll")
-    public Result<PaginationData<List<FindAllMessageListVo>>> findAll(findAllMessageListModel findAllMessageListModel){
+    public Result<PaginationData<List<MessageListModel>>> findAll(findAllMessageListModel findAllMessageListModel){
 
         PaginationData findAllMessageListVoList = messageListService.findAll(findAllMessageListModel,getUser());
         return new Result(findAllMessageListVoList);

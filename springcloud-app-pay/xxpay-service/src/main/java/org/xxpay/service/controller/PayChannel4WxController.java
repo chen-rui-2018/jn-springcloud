@@ -85,18 +85,27 @@ public class PayChannel4WxController{
             try {
                 wxPayUnifiedOrderResult = wxPayService.unifiedOrder(wxPayUnifiedOrderRequest);
                 _log.info("{} >>> 下单成功", logPrefix);
-                Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
-                map.put("payOrderId", payOrderId);
-                map.put("prepayId", wxPayUnifiedOrderResult.getPrepayId());
+
+                //更新订单状态
                 int result = payOrderService.updateStatus4Ing(payOrderId, wxPayUnifiedOrderResult.getPrepayId());
                 _log.info("更新第三方支付订单号:payOrderId={},prepayId={},result={}", payOrderId, wxPayUnifiedOrderResult.getPrepayId(), result);
+
+                //----------------------封装返回参数----------------------------------------
+                Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
+                map.put("payOrderId", payOrderId);
+                map.put("channelId", payOrder.getChannelId());
+                //封装orderInfo(发起支付需要的参数JSON格式)
+                JSONObject orderInfo = new JSONObject();
+                //预支付会话ID
+                orderInfo.put("prepayId",wxPayUnifiedOrderResult.getPrepayId());
+
                 switch (tradeType) {
                     case PayConstant.WxConstant.TRADE_TYPE_NATIVE : {
-                        map.put("codeUrl", wxPayUnifiedOrderResult.getCodeURL());   // 二维码支付链接
+                        // 二维码支付链接
+                        orderInfo.put("codeUrl",wxPayUnifiedOrderResult.getCodeURL());
                         break;
                     }
                     case PayConstant.WxConstant.TRADE_TYPE_APP : {
-                        Map<String, String> payInfo = new HashMap<>();
                         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
                         String nonceStr = String.valueOf(System.currentTimeMillis());
                         // APP支付绑定的是微信开放平台上的账号，APPID为开放平台上绑定APP后发放的参数
@@ -111,36 +120,37 @@ public class PayChannel4WxController{
                         configMap.put("timestamp", timestamp);
                         configMap.put("noncestr", nonceStr);
                         configMap.put("appid", appId);
-                        // 此map用于客户端与微信服务器交互
-                        payInfo.put("sign", SignUtils.createSign(configMap, wxPayConfig.getMchKey(), null));
-                        payInfo.put("prepayId", wxPayUnifiedOrderResult.getPrepayId());
-                        payInfo.put("partnerId", partnerId);
-                        payInfo.put("appId", appId);
-                        payInfo.put("packageValue", packageValue);
-                        payInfo.put("timeStamp", timestamp);
-                        payInfo.put("nonceStr", nonceStr);
-                        map.put("payParams", payInfo);
+                        // 此信息用于客户端与微信服务器交互
+                        orderInfo.put("paySign", SignUtils.createSign(configMap, wxPayConfig.getMchKey(), null));
+                        orderInfo.put("partnerId", partnerId);
+                        orderInfo.put("appId", appId);
+                        orderInfo.put("packageValue", packageValue);
+                        orderInfo.put("timeStamp", timestamp);
+                        orderInfo.put("nonceStr", nonceStr);
                         break;
                     }
                     case PayConstant.WxConstant.TRADE_TYPE_JSPAI : {
                         Map<String, String> payInfo = new HashMap<>();
                         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
                         String nonceStr = String.valueOf(System.currentTimeMillis());
-                        payInfo.put("appId", wxPayUnifiedOrderResult.getAppid());
+
+                        orderInfo.put("appId", wxPayUnifiedOrderResult.getAppid());
                         // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                        payInfo.put("timeStamp", timestamp);
-                        payInfo.put("nonceStr", nonceStr);
-                        payInfo.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
-                        payInfo.put("signType", WxPayConstants.SignType.MD5);
-                        payInfo.put("paySign", SignUtils.createSign(payInfo, wxPayConfig.getMchKey(), null));
-                        map.put("payParams", payInfo);
+                        orderInfo.put("timeStamp", timestamp);
+                        orderInfo.put("nonceStr", nonceStr);
+                        orderInfo.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
+                        orderInfo.put("signType", WxPayConstants.SignType.MD5);
+                        orderInfo.put("paySign", SignUtils.createSign(payInfo, wxPayConfig.getMchKey(), null));
                         break;
                     }
                     case PayConstant.WxConstant.TRADE_TYPE_MWEB : {
-                        map.put("payUrl", wxPayUnifiedOrderResult.getMwebUrl());    // h5支付链接地址
+                        // h5支付链接地址
+                        orderInfo.put("payUrl", wxPayUnifiedOrderResult.getMwebUrl());
                         break;
                     }
                 }
+
+                map.put("orderInfo",orderInfo.toJSONString());
                 return XXPayUtil.makeRetData(map, resKey);
             } catch (WxPayException e) {
                 _log.error(e, "下单失败");

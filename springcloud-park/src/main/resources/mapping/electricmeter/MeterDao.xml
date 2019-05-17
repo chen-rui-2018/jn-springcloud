@@ -4,24 +4,97 @@
 
     <insert id="insertReadingData" parameterType="java.util.List">
         insert into Tb_Electric_Reading
-        (<include refid="com.jn.park.electricmeter.dao.TbElectricReadingMapper.Base_Column_List"/>)
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricReadingSourceMapper.Base_Column_List"/>)
         <foreach collection="readings"  index="index" item="item" separator="UNION ALL">
             select
-            #{item.id,jdbcType=VARCHAR},
-            #{item.meterCode,jdbcType=VARCHAR},
-            #{item.recordStatus,jdbcType=TINYINT},
-            #{item.createTime,jdbcType=TIMESTAMP},
-            #{item.dealDate,jdbcType=DATE},
-            #{item.degreeDiff,jdbcType=DECIMAL},
-            #{item.dealHour,jdbcType=TINYINT},
-            #{item.readingEnd,jdbcType=DECIMAL},
-            #{item.timeEnd,jdbcType=TIMESTAMP},
-            #{item.param,jdbcType=VARCHAR},
-            #{item.buildingId,jdbcType=VARCHAR},
-            #{item.status,jdbcType=TINYINT},
-            #{item.statusMsg,jdbcType=VARCHAR}
+            #{ item.id,jdbcType=VARCHAR},
+            #{ item.meterCode,jdbcType=VARCHAR},
+            #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.createTime,jdbcType=TIMESTAMP},
+            #{ item.dealDate,jdbcType=DATE},
+            #{ item.degreeDiff,jdbcType=DECIMAL},
+            #{ item.dealHour,jdbcType=TINYINT},
+            #{ item.readingEnd,jdbcType=DECIMAL},
+            #{ item.timeEnd,jdbcType=TIMESTAMP},
+            #{ item.param,jdbcType=VARCHAR},
+            #{ item.buildingId,jdbcType=VARCHAR},
+            #{ item.status,jdbcType=TINYINT},
+            #{ item.statusMsg,jdbcType=VARCHAR},
+            #{ item.taskBatch,jdbcType=VARCHAR}
             from  dual
         </foreach>
     </insert>
+
+    <insert id="insertData" parameterType="java.lang.String">
+        insert into tb_electric_reading
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingTaskDataMapper.Base_Column_List"/>))
+        select id,
+            meter_code,
+            record_status,
+            create_time,
+            deal_date,
+            deal_hour,
+            reading_end,
+            max(time_end),
+            param,
+            building_id,
+            status
+            from tb_electric_reading_source where task_batch=#{taskBatch}
+        group by meter_code, deal_date, deal_hour
+    </insert>
+
+
+    <update id="updateDegreeDiff" parameterType="java.lang.String"  >
+        UPDATE tb_electric_reading p
+        SET p.degree_diff = (
+            SELECT
+                degree_diff
+            FROM
+                (
+                SELECT
+                    t.id,
+                    t2.reading_end - t.reading_end degree_diff
+                FROM
+                    tb_electric_reading t
+                    INNER JOIN tb_electric_reading t2 ON t.meter_code = t2.meter_code
+                    AND date_sub(
+                        date_format(
+                            CONCAT(
+                                t.deal_date,
+                                ' ',
+                            CASE
+
+                                    WHEN length( t.deal_hour ) = 1 THEN
+                                    CONCAT( '0', t.deal_hour ) ELSE t.deal_hour
+                                END,
+                                ':00:00'
+                            ),
+                            '%Y-%m-%d %H:%i:%S'
+                        ),
+                        INTERVAL - 1 HOUR
+                        ) = date_format(
+                        CONCAT(
+                            t2.deal_date,
+                            ' ',
+                        CASE
+
+                                WHEN length( t2.deal_hour ) = 1 THEN
+                                CONCAT( '0', t2.deal_hour ) ELSE t2.deal_hour
+                            END,
+                            ':00:00'
+                        ),
+                        '%Y-%m-%d %H:%i:%S'
+                    )
+                WHERE
+                    t.status_msg = '成功'
+                    AND t2.status_msg = '成功'
+                    AND t.degree_diff IS NULL
+                ) t
+            WHERE
+                p.id = t.id
+            )
+        WHERE
+            p.degree_diff IS NULL
+    </update>
 
 </mapper>

@@ -88,10 +88,28 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        asset
+                        electric
                     </contexts>
                     <tableNames>
-                        tb_room_orders
+                        tb_electric_energy_control_person_config,
+                        tb_electric_energy_control_push_log,
+                        tb_electric_energy_control_rules,
+                        tb_electric_energy_control_target,
+                        tb_electric_energy_day_log,
+                        tb_electric_energy_group_log,
+                        tb_electric_meter_company_day,
+                        tb_electric_meter_day_log,
+                        tb_electric_meter_info,
+                        tb_electric_price_rules,
+                        tb_electric_pricerule_company,
+                        tb_electric_pricerule_company_in_day,
+                        tb_electric_reading,
+                        tb_electric_rules_content,
+                        tb_electric_turn_rules,
+                        tb_electric_warning_record,
+                        tb_electric_warning_rules,
+                        tb_electric_reading_source,
+                        tb_electric_reading_fail_log
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

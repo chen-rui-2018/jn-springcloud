@@ -88,10 +88,11 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        asset
+                        customer
                     </contexts>
                     <tableNames>
-                        tb_room_orders
+                        tb_client_service_center
+                        ,tb_client_role_person_info
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

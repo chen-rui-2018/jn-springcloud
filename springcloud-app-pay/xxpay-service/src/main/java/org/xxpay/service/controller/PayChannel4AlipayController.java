@@ -71,7 +71,9 @@ public class PayChannel4AlipayController {
         String channelId = payOrder.getChannelId();
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
         String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-        if("".equals(resKey)) return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        if("".equals(resKey)) {
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        }
         PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
         alipayConfig.init(payChannel.getParam());
         AlipayClient client = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getApp_id(), alipayConfig.getRsa_private_key(), AlipayConfig.FORMAT, AlipayConfig.CHARSET, alipayConfig.getAlipay_public_key(), AlipayConfig.SIGNTYPE);
@@ -111,9 +113,18 @@ public class PayChannel4AlipayController {
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,req={}", logPrefix, alipay_request.getBizModel());
         _log.info("###### 商户统一下单处理完成 ######");
+
+        //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
+        //支付系统订单ID
         map.put("payOrderId", payOrderId);
-        map.put("payUrl", payUrl);
+        //渠道ID
+        map.put("channelId",payOrder.getChannelId());
+        //封装orderInfo(发起支付需要的参数JSON格式)
+        JSONObject orderInfo = new JSONObject();
+        orderInfo.put("payUrl",payUrl);
+        map.put("orderInfo",orderInfo.toJSONString());
+
         return XXPayUtil.makeRetData(map, resKey);
     }
 
@@ -176,9 +187,18 @@ public class PayChannel4AlipayController {
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,req={}", logPrefix, alipay_request.getBizModel());
         _log.info("###### 商户统一下单处理完成 ######");
+
+        //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
+        //支付系统订单ID
         map.put("payOrderId", payOrderId);
-        map.put("payUrl", payUrl);
+        //渠道ID
+        map.put("channelId",payOrder.getChannelId());
+        //封装orderInfo(发起支付需要的参数JSON格式)
+        JSONObject orderInfo = new JSONObject();
+        orderInfo.put("payUrl",payUrl);
+        map.put("orderInfo",orderInfo.toJSONString());
+
         return XXPayUtil.makeRetData(map, resKey);
     }
 
@@ -225,10 +245,21 @@ public class PayChannel4AlipayController {
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,payParams={}", logPrefix, payParams);
         _log.info("###### 商户统一下单处理完成 ######");
+
+        //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
+        //支付系统订单ID
         map.put("payOrderId", payOrderId);
-        map.put("payParams", payParams);
+        //渠道ID
+        map.put("channelId",payOrder.getChannelId());
+        //封装orderInfo(发起支付需要的参数JSON格式)
+        JSONObject orderInfo = new JSONObject();
+        orderInfo.put("payParams",payParams);
+        map.put("orderInfo",orderInfo.toJSONString());
+
         return XXPayUtil.makeRetData(map, resKey);
+
+
     }
 
     /**
@@ -291,10 +322,20 @@ public class PayChannel4AlipayController {
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,req={}", logPrefix, alipay_request.getBizModel());
         _log.info("###### 商户统一下单处理完成 ######");
+
+        //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
+        //支付系统订单ID
         map.put("payOrderId", payOrderId);
-        map.put("payUrl", payUrl);
+        //渠道ID
+        map.put("channelId",payOrder.getChannelId());
+        //封装orderInfo(发起支付需要的参数JSON格式)
+        JSONObject orderInfo = new JSONObject();
+        orderInfo.put("payUrl",payUrl);
+        map.put("orderInfo",orderInfo.toJSONString());
+
         return XXPayUtil.makeRetData(map, resKey);
+
     }
 
 

@@ -1,6 +1,8 @@
 package com.jn.park.customer.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
@@ -14,6 +16,7 @@ import com.jn.park.customer.entity.TbClientServiceCenter;
 import com.jn.park.customer.entity.TbClientServiceCenterCriteria;
 import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterService;
+import com.jn.park.customer.vo.CustomerServiceCenterDetailVo;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.park.parkcode.dao.TbParkCodeMapper;
 import com.jn.park.parkcode.entity.TbParkCode;
@@ -102,13 +105,39 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     /**
      * 根据任务id获取问题详情
      * @param account 用户账号
-     * @param processId 流程实例id
+     * @param processInsId 流程实例id
      * @return
      */
     @ServiceLog(doAction = "根据任务id获取问题详情")
     @Override
-    public Object customerQuesDetail(String account,String processId){
-        JSONObject opinions = IBPSUtils.opinions(account, processId, null);
+    public Object customerQuesDetail(String account,String processInsId){
+        TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
+        example.createCriteria().andProcessInsIdEqualTo(processInsId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbClientServiceCenter> clientServiceCenterList = tbClientServiceCenterMapper.selectByExample(example);
+        if(clientServiceCenterList.isEmpty()){
+            logger.warn("根据任务id获取问题详情失败");
+            throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
+        }
+        CustomerServiceCenterDetailVo customerVo=new CustomerServiceCenterDetailVo();
+        BeanUtils.copyProperties(clientServiceCenterList.get(0),customerVo);
+        JSONObject opinions = IBPSUtils.opinions(account, processInsId, null);
+        IBPSResult ibpsResult = new Gson().fromJson(opinions.toString(), IBPSResult.class);
+        //请求响应码
+        String okStatus="200";
+        //获取审批历史成功
+        if(okStatus.equals(ibpsResult.getState())){
+            logger.info("----------------根据任务id获取问题详情获取处理历史成功------------");
+            Object data = ibpsResult.getData();
+            System.out.printf("------审批历史记录------"+data+"-----------------------");
+            LinkedTreeMap<String,ArrayList<LinkedTreeMap>> resultMap=(LinkedTreeMap)data;
+            ArrayList<LinkedTreeMap> dataList = resultMap.get("dataResult");
+            for(LinkedTreeMap linkedTreeMap:dataList){
+                LinkedTreeMap qualifiedExecutor =(LinkedTreeMap)linkedTreeMap.get("qualifiedExecutor");
+                String usrId=(String)qualifiedExecutor.get("executId");
+            }
+        }
+
         return opinions;
     }
 
@@ -161,7 +190,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("在线客服提交成功，审批流程启动成功,流程实例id为：[{}]",ibpsResult.getData());
             //将工作流返回的流程实例id更新到新增的数据中
-            int resNum = updateProcessInstanceId(loginAccount, quesCode, ibpsResult.getData());
+            int resNum = updateProcessInstanceId(loginAccount, quesCode, (String)ibpsResult.getData());
             return resNum;
         }else{
             logger.warn("在线客服启动工作流异常，{}",ibpsResult.getMessage());

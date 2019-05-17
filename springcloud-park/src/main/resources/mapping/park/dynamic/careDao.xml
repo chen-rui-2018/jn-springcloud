@@ -33,6 +33,12 @@
         where t1.care_account = #{account}
     </select>
 
-
-
+    <!--查询关注的企业-->
+    <select id="findCareCompanyList" resultType="java.lang.String">
+     SELECT
+        t1.receive_account AS "comId"
+    FROM tb_person_care t1
+    WHERE t1.care_account = #{account}
+    AND t1.receive_type = '2'
+    </select>
 </mapper>

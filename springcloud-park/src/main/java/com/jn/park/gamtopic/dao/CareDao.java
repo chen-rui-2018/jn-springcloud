@@ -1,5 +1,6 @@
 package com.jn.park.gamtopic.dao;
 
+import com.jn.park.gamtopic.model.CareCompanyShow;
 import com.jn.park.gamtopic.model.CareUserDetails;
 import com.jn.park.gamtopic.model.CareUserShow;
 import org.apache.ibatis.annotations.Param;
@@ -34,6 +35,11 @@ public interface CareDao {
      */
     CareUserDetails findCareDetails(@Param("account") String account, @Param("currentAccount")String currentAccount);
 
-
+    /**
+     * 查询关注的企业
+     * @param account
+     * @return
+     */
+    List<String> findCareCompanyList(@Param("account") String account);
 
 }

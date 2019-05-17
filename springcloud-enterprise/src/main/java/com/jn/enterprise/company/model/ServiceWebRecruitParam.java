@@ -24,6 +24,16 @@ public class ServiceWebRecruitParam extends Page implements Serializable {
     private String sortTypes;
     @ApiModelProperty(value = "数据筛选[不区分大小写]（week:最近一周 month:最近一月 ）", example = "week")
     private String whereTypes;
+    @ApiModelProperty(value = "当前用户", hidden = true)
+    private String account;
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
 
     public String getComId() {
         return comId;

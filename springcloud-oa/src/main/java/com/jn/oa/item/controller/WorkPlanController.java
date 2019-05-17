@@ -167,8 +167,8 @@ public class WorkPlanController extends BaseController {
     public Result importExcelWorkPlanInfo(@RequestParam("file") MultipartFile file) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        String result = workPlanService.importExcelWorkPlanInfo(file, user);
-        return new Result(result);
+        workPlanService.importExcelWorkPlanInfo(file, user);
+        return new Result();
     }
 
     @ControllerLog(doAction = "下载工作计划excel模板")

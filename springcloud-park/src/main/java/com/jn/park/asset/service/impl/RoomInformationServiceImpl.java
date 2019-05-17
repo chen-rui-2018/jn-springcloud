@@ -1,5 +1,6 @@
 package com.jn.park.asset.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
@@ -21,6 +22,7 @@ import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.*;
 import com.jn.pay.model.alipay.AlipayMobilePayRsp;
+import com.jn.pay.vo.wx.WxAppPayRsp;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -306,7 +308,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
          payOrderReq.setBody(tbRoomOrders.getLeaseEnterprise());
 
          //签名
-         String sign=PayDigestUtil.getSign(BeanToMap.toMap(payOrderReq),MchIdEnum.MCH_BASE.getCode());
+         String sign=PayDigestUtil.getSign(BeanToMap.toMap(payOrderReq),MchIdEnum.MCH_BASE.getReqKey());
          payOrderReq.setSign(sign);
 
         logger.info("调用 统一支付下单接口,请求参数{}",payOrderReq);
@@ -320,7 +322,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         if(payResult.getData() instanceof AlipayMobilePayRsp){
             AlipayMobilePayRsp alipayMobilePayRsp=(AlipayMobilePayRsp)payResult.getData();
         }
-
+         JSONObject jsonObject=new JSONObject();
+        JSONObject.parseObject("", WxAppPayRsp.class);
         PayBaseRsp payBaseRsp=(PayBaseRsp)payResult.getData();
         TbRoomOrdersPay tbRoomOrdersPay=new TbRoomOrdersPay();
         tbRoomOrdersPay.setPayId(payBaseRsp.getPayOrderId());
@@ -354,6 +357,9 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         //查询支付订单的支付状态
         PayOrderQueryReq req=new PayOrderQueryReq();
         req.setPayOrderId(payOrderNotify.getPayOrderId());
+        //签名
+        String sign=PayDigestUtil.getSign(BeanToMap.toMap(req),MchIdEnum.MCH_BASE.getReqKey());
+        req.setSign(sign);
         logger.info("调用支付查询接口，请求参数:{}",req);
         Result<PayOrderQueryRsp> rep=payOrderClient.payOrderQuery(req);
         logger.info("调用支付查询接口，返回参数:{}",rep);

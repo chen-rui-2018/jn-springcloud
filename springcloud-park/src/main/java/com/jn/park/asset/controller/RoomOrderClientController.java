@@ -9,6 +9,8 @@ import com.jn.common.model.Result;
 import com.jn.park.api.RoomOrderClient;
 import com.jn.park.asset.service.RoomInformationService;
 import com.jn.pay.model.PayOrderNotify;
+import com.jn.system.log.annotation.ControllerLog;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -26,8 +28,11 @@ import javax.annotation.Resource;
 public class RoomOrderClientController implements RoomOrderClient {
     @Resource
     private RoomInformationService roomInformationService;
+
+    @ControllerLog(doAction = "房间支付回调")
     @Override
-    public Result payCallBack(PayOrderNotify payOrderNotify) {
+    public Result payCallBack(@RequestBody PayOrderNotify payOrderNotify) {
         return roomInformationService.payCallBack(payOrderNotify);
     }
+
 }

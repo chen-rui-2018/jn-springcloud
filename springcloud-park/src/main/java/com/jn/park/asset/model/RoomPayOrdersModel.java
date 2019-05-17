@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.List;
 
 /**
 *
@@ -15,44 +16,41 @@ import java.sql.Date;
 */
 public class RoomPayOrdersModel implements Serializable {
     private static final long serialVersionUID = 7931481554400000727L;
+
+    @ApiModelProperty(value = "订单明细信息")
+    private List<RoomPayOrdersItemModel> roomPayOrdersItemModels;
+
     @ApiModelProperty(value ="主键",example = "")
     private String id;
 
     @ApiModelProperty(value = "时间")
     private java.util.Date createTime;
 
-    @ApiModelProperty(value = "创建时间",example = "")
+    @ApiModelProperty(value = "创建时间",example = "2019-05-04 17:22:10")
     private String Time;
 
-    @ApiModelProperty(value = "账单类型",example = "")
+    @ApiModelProperty(value = "账单类型",example = "房间租赁")
     private String ordersType;
 
-    @ApiModelProperty(value = "最迟缴费时间",example = "")
+    @ApiModelProperty(value = "最迟缴费时间",example = "2019-05-04 18:22:10")
     private String lastPayTime;
 
-    @ApiModelProperty(value = "房间id",example = "")
-    private String roomId;
-
-    @ApiModelProperty(value = "房间名称",example = "")
-    private String roomName;
-
-    @ApiModelProperty(value = "面积",example = "")
-    private String roomArea;
-
-    @ApiModelProperty(value = "单价",example = "")
-    private BigDecimal leasePrice;
-
-    @ApiModelProperty(value = "租金",example = "")
-    private BigDecimal leaseSum;
-
-    @ApiModelProperty(value = "开始时间",example = "")
+    @ApiModelProperty(value = "开始时间",example = "2019-05-01")
     private Date leaseStartTime;
 
-    @ApiModelProperty(value = "结束时间",example = "")
+    @ApiModelProperty(value = "结束时间",example = "2019-06-01")
     private Date leaseEndTime;
 
-    @ApiModelProperty(value = "合计",example = "")
+    @ApiModelProperty(value = "合计",example = "900.00")
     private String paySum ;
+
+    public List<RoomPayOrdersItemModel> getRoomPayOrdersItemModels() {
+        return roomPayOrdersItemModels;
+    }
+
+    public void setRoomPayOrdersItemModels(List<RoomPayOrdersItemModel> roomPayOrdersItemModels) {
+        this.roomPayOrdersItemModels = roomPayOrdersItemModels;
+    }
 
     public String getId() {
         return id;
@@ -94,46 +92,6 @@ public class RoomPayOrdersModel implements Serializable {
         this.lastPayTime = lastPayTime;
     }
 
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
-    }
-
-    public String getRoomName() {
-        return roomName;
-    }
-
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
-    }
-
-    public String getRoomArea() {
-        return roomArea;
-    }
-
-    public void setRoomArea(String roomArea) {
-        this.roomArea = roomArea;
-    }
-
-    public BigDecimal getLeasePrice() {
-        return leasePrice;
-    }
-
-    public void setLeasePrice(BigDecimal leasePrice) {
-        this.leasePrice = leasePrice;
-    }
-
-    public BigDecimal getLeaseSum() {
-        return leaseSum;
-    }
-
-    public void setLeaseSum(BigDecimal leaseSum) {
-        this.leaseSum = leaseSum;
-    }
-
     public Date getLeaseStartTime() {
         return leaseStartTime;
     }
@@ -156,5 +114,20 @@ public class RoomPayOrdersModel implements Serializable {
 
     public void setPaySum(String paySum) {
         this.paySum = paySum;
+    }
+
+    @Override
+    public String toString() {
+        return "RoomPayOrdersModel{" +
+                "roomPayOrdersItemModels=" + roomPayOrdersItemModels +
+                ", id='" + id + '\'' +
+                ", createTime=" + createTime +
+                ", Time='" + Time + '\'' +
+                ", ordersType='" + ordersType + '\'' +
+                ", lastPayTime='" + lastPayTime + '\'' +
+                ", leaseStartTime=" + leaseStartTime +
+                ", leaseEndTime=" + leaseEndTime +
+                ", paySum='" + paySum + '\'' +
+                '}';
     }
 }

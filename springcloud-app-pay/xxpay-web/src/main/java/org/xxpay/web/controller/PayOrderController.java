@@ -6,12 +6,14 @@ import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.ChannelIdEnum;
+import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.PayOrderQueryReq;
 import com.jn.pay.model.PayOrderQueryRsp;
 import com.jn.pay.model.PayOrderReq;
 import com.jn.pay.model.alipay.AlipayMobilePayRsp;
 import com.jn.pay.model.alipay.AlipayPcPayRsp;
 import com.jn.pay.model.alipay.AlipayWapPayRsp;
+import com.jn.pay.model.wx.PayParams;
 import com.jn.pay.model.wx.WxMwebPayRsp;
 import com.jn.pay.model.wx.WxNativePayRsp;
 import com.jn.pay.vo.wx.WxAppPayRsp;
@@ -32,6 +34,8 @@ import org.xxpay.web.service.MchInfoService;
 import org.xxpay.web.service.PayChannelServiceClient;
 import org.xxpay.web.service.PayOrderService;
 import org.xxpay.web.service.PayOrderServiceClient;
+
+import java.util.UUID;
 
 /**
  * @Description: 支付订单,包括:统一下单,订单查询,补单等接口
@@ -109,17 +113,60 @@ public class PayOrderController extends BaseController implements PayOrderClient
             //根据支付渠道ID 执行不同的支付方式
             switch (ChannelIdEnum.getCode(channelId)) {
                 case WX_APP :
-                    String wxAppParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_APP, payOrder}));
-                    return returnResult(wxAppParam,ChannelIdEnum.getCode(channelId),resKey);
+                    //String wxAppParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_APP, payOrder}));
+                    //return returnResult(wxAppParam,ChannelIdEnum.getCode(channelId),resKey);
+                    WxAppPayRsp wxAppPayRsp = new WxAppPayRsp();
+                    wxAppPayRsp.setPrepayId("wx2016081611532915ae15beab0167893571");
+                    wxAppPayRsp.setPayOrderId(UUID.randomUUID().toString().substring(0,20));
+                    PayParams payParams = new PayParams();
+                    payParams.setAppId("wxa095d1d71c33c151");
+                    payParams.setPaySign("159ABABAE6F8A0F4641A34A38251E7BB");
+                    payParams.setTimeStamp("1471319614");
+                    payParams.setNonceStr("mhctew72bf3kfrr4jmv79zigbpgrmv5h");
+                    payParams.setPartnerId("1367655402");
+                    payParams.setPackageValue("Sign=WXPay");
+                    payParams.setPrepayId("wx2016081611532915ae15beab0167893571");
+                    wxAppPayRsp.setPayParams(payParams);
+                    wxAppPayRsp.setSign(PayDigestUtil.getSign(BeanToMap.toMap(wxAppPayRsp), MchIdEnum.MCH_BASE.getRspKey()));
+
+                    return new Result(wxAppPayRsp);
                 case WX_JSAPI :
-                    String wxJsapiParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_JSPAI, payOrder}));
-                    return returnResult(wxJsapiParam,ChannelIdEnum.getCode(channelId),resKey);
+                    //String wxJsapiParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_JSPAI, payOrder}));
+                    //return returnResult(wxJsapiParam,ChannelIdEnum.getCode(channelId),resKey);
+                    WxJsapiPayRsp wxJsapiPayRsp = new WxJsapiPayRsp();
+                    wxJsapiPayRsp.setPrepayId("wx201608161255321fc59e085b0578219742");
+                    wxJsapiPayRsp.setPayOrderId(UUID.randomUUID().toString().substring(0,20));
+
+                    PayParams payParams2 = new PayParams();
+                    payParams2.setAppId("wx0ab67caf7f591834");
+                    payParams2.setPaySign("21E6BF4984030DBD2DB191F676A47DA2");
+                    payParams2.setTimeStamp("1471323332");
+                    payParams2.setSignType("MD5");
+                    payParams2.setPackageValue("prepay_id=wx201608161255321fc59e085b0578219742");
+                    payParams2.setNonceStr("08s06nujam43aot3tbl555lavvydl178");
+                    wxJsapiPayRsp.setPayParams(payParams2);
+                    wxJsapiPayRsp.setSign(PayDigestUtil.getSign(BeanToMap.toMap(wxJsapiPayRsp), MchIdEnum.MCH_BASE.getRspKey()));
+
+                    return new Result(wxJsapiPayRsp);
                 case WX_NATIVE :
-                    String wxNativeParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_NATIVE, payOrder}));
-                    return returnResult(wxNativeParam,ChannelIdEnum.getCode(channelId),resKey);
+                   // String wxNativeParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_NATIVE, payOrder}));
+                    //return returnResult(wxNativeParam,ChannelIdEnum.getCode(channelId),resKey);
+
+                    WxNativePayRsp wxNativePayRsp = new WxNativePayRsp();
+                    wxNativePayRsp.setPayOrderId(UUID.randomUUID().toString().substring(0,20));
+                    wxNativePayRsp.setCodeUrl("weixin://wxpay/bizpayurl?pr=sHYHnns");
+                    wxNativePayRsp.setPrepayId("wx20160816130510b9688b1a720825571177");
+                    wxNativePayRsp.setSign(PayDigestUtil.getSign(BeanToMap.toMap(wxNativePayRsp), MchIdEnum.MCH_BASE.getRspKey()));
+                    return new Result(wxNativePayRsp);
                 case WX_MWEB :
-                    String wxMwebParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_MWEB, payOrder}));
-                    return returnResult(wxMwebParam,ChannelIdEnum.getCode(channelId),resKey);
+                   // String wxMwebParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_MWEB, payOrder}));
+                   // return returnResult(wxMwebParam,ChannelIdEnum.getCode(channelId),resKey);
+                    WxMwebPayRsp wxMwebPayRsp = new WxMwebPayRsp();
+                    wxMwebPayRsp.setPayUrl("weixin://wxpay/bizpayurl?pr=sHYHnns");
+                    wxMwebPayRsp.setPrepayId("wx20160816130510b9688b1a720825571177");
+                    wxMwebPayRsp.setSign(PayDigestUtil.getSign(BeanToMap.toMap(wxMwebPayRsp),MchIdEnum.MCH_BASE.getRspKey()));
+                    return new Result(wxMwebPayRsp);
+
                 case ALIPAY_MOBILE :
                     String aliPayMobileParam =  payOrderServiceClient.doAliPayMobileReq(getJsonParam("payOrder", payOrder));
                     return returnResult(aliPayMobileParam,ChannelIdEnum.getCode(channelId),resKey);

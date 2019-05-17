@@ -35,7 +35,7 @@ public interface MyPayBillService {
      * @param billId
      * @return
      */
-    List<PayBillDetails> getBillInfo(String billId);
+    PaginationData<List<PayBillDetails>> getBillInfo(String billId);
 
     /**
      * 我的账单-通过账单ID查询账单【基础】信息(包含账单支付状态)

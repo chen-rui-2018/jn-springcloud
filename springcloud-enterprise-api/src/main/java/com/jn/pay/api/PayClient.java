@@ -36,7 +36,7 @@ public interface PayClient {
 
     @ApiOperation(value = "我的账单-通过账单ID查询账单【详情】信息",notes = "我的账单-通过账单ID查询账单【详情】信息")
     @RequestMapping(value = "/api/payment/payBill/getBillInfo",method = RequestMethod.GET)
-    Result<List<PayBillDetails>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId);
+    Result<PaginationData<List<PayBillDetails>>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId);
 
 
     @ApiOperation(value = "我的账单-账单催缴次数更新",notes = "我的账单-账单催缴次数更新")

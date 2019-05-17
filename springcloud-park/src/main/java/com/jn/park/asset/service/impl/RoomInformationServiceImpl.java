@@ -17,18 +17,15 @@ import com.jn.park.asset.model.RoomPayOrdersItemModel;
 import com.jn.park.asset.model.RoomPayOrdersModel;
 import com.jn.park.asset.service.RoomInformationService;
 import com.jn.park.asset.vo.AppPayDataVo;
-import com.jn.pay.api.KeyClient;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.*;
 import com.jn.pay.model.alipay.AlipayMobilePayRsp;
 import com.jn.system.log.annotation.ServiceLog;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.xxpay.common.util.BeanToMap;
 import org.xxpay.common.util.PayDigestUtil;
@@ -37,7 +34,10 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.UUID;
 
 /**
 * 房间信息impl
@@ -65,8 +65,6 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     private TbRoomOrdersPayMapper tbRoomOrdersPayMapper;
     @Autowired
     private PayOrderClient payOrderClient;
-    @Autowired
-    private KeyClient keyClient;
 
     /**
      * 返回房间信息
@@ -308,8 +306,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
          payOrderReq.setBody(tbRoomOrders.getLeaseEnterprise());
 
          //签名
-         Result<String> requestKey=keyClient.getRequestKey(MchIdEnum.MCH_BASE.getCode());
-         String sign=PayDigestUtil.getSign(BeanToMap.toMap(payOrderReq),requestKey.getData());
+         String sign=PayDigestUtil.getSign(BeanToMap.toMap(payOrderReq),MchIdEnum.MCH_BASE.getCode());
          payOrderReq.setSign(sign);
 
         logger.info("调用 统一支付下单接口,请求参数{}",payOrderReq);

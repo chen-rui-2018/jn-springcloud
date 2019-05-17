@@ -137,7 +137,7 @@
         IF(actualendtime >=201904,CONCAT(ROUND(autual4-plan4)),'') as  "completeratio4",
         IF(actualendtime >=201905,CONCAT(ROUND(autual5)),'') as "autual5",
         IF(actualendtime >=201905,CONCAT(ROUND(plan5)),'') as "plan5",
-        IF(actualendtime >=201905,CONCAT(ROUND(plan5-autual5)),'') as  "completeratio5",
+        IF(actualendtime >=201905,CONCAT(ROUND(autual5-plan5)),'') as  "completeratio5",
         IF(actualendtime >=201906,CONCAT(ROUND(autual6)),'') as "autual6",
         IF(actualendtime >=201906,CONCAT(ROUND(plan6)),'') as "plan6",
         IF(actualendtime >=201906,CONCAT(ROUND(autual6-plan6)),'') as  "completeratio6",

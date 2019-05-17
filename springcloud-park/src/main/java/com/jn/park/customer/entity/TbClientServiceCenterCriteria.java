@@ -1225,143 +1225,143 @@ public class TbClientServiceCenterCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidIsNull() {
-            addCriterion("executeDeptId is null");
+        public Criteria andExecuteDeptIdIsNull() {
+            addCriterion("execute_dept_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidIsNotNull() {
-            addCriterion("executeDeptId is not null");
+        public Criteria andExecuteDeptIdIsNotNull() {
+            addCriterion("execute_dept_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidEqualTo(String value) {
-            addCriterion("executeDeptId =", value, "executedeptid");
+        public Criteria andExecuteDeptIdEqualTo(String value) {
+            addCriterion("execute_dept_id =", value, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidNotEqualTo(String value) {
-            addCriterion("executeDeptId <>", value, "executedeptid");
+        public Criteria andExecuteDeptIdNotEqualTo(String value) {
+            addCriterion("execute_dept_id <>", value, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidGreaterThan(String value) {
-            addCriterion("executeDeptId >", value, "executedeptid");
+        public Criteria andExecuteDeptIdGreaterThan(String value) {
+            addCriterion("execute_dept_id >", value, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidGreaterThanOrEqualTo(String value) {
-            addCriterion("executeDeptId >=", value, "executedeptid");
+        public Criteria andExecuteDeptIdGreaterThanOrEqualTo(String value) {
+            addCriterion("execute_dept_id >=", value, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidLessThan(String value) {
-            addCriterion("executeDeptId <", value, "executedeptid");
+        public Criteria andExecuteDeptIdLessThan(String value) {
+            addCriterion("execute_dept_id <", value, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidLessThanOrEqualTo(String value) {
-            addCriterion("executeDeptId <=", value, "executedeptid");
+        public Criteria andExecuteDeptIdLessThanOrEqualTo(String value) {
+            addCriterion("execute_dept_id <=", value, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidLike(String value) {
-            addCriterion("executeDeptId like", value, "executedeptid");
+        public Criteria andExecuteDeptIdLike(String value) {
+            addCriterion("execute_dept_id like", value, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidNotLike(String value) {
-            addCriterion("executeDeptId not like", value, "executedeptid");
+        public Criteria andExecuteDeptIdNotLike(String value) {
+            addCriterion("execute_dept_id not like", value, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidIn(List<String> values) {
-            addCriterion("executeDeptId in", values, "executedeptid");
+        public Criteria andExecuteDeptIdIn(List<String> values) {
+            addCriterion("execute_dept_id in", values, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidNotIn(List<String> values) {
-            addCriterion("executeDeptId not in", values, "executedeptid");
+        public Criteria andExecuteDeptIdNotIn(List<String> values) {
+            addCriterion("execute_dept_id not in", values, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidBetween(String value1, String value2) {
-            addCriterion("executeDeptId between", value1, value2, "executedeptid");
+        public Criteria andExecuteDeptIdBetween(String value1, String value2) {
+            addCriterion("execute_dept_id between", value1, value2, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutedeptidNotBetween(String value1, String value2) {
-            addCriterion("executeDeptId not between", value1, value2, "executedeptid");
+        public Criteria andExecuteDeptIdNotBetween(String value1, String value2) {
+            addCriterion("execute_dept_id not between", value1, value2, "executeDeptId");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonIsNull() {
-            addCriterion("executePerson is null");
+        public Criteria andExecutePersonIsNull() {
+            addCriterion("execute_person is null");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonIsNotNull() {
-            addCriterion("executePerson is not null");
+        public Criteria andExecutePersonIsNotNull() {
+            addCriterion("execute_person is not null");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonEqualTo(String value) {
-            addCriterion("executePerson =", value, "executeperson");
+        public Criteria andExecutePersonEqualTo(String value) {
+            addCriterion("execute_person =", value, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonNotEqualTo(String value) {
-            addCriterion("executePerson <>", value, "executeperson");
+        public Criteria andExecutePersonNotEqualTo(String value) {
+            addCriterion("execute_person <>", value, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonGreaterThan(String value) {
-            addCriterion("executePerson >", value, "executeperson");
+        public Criteria andExecutePersonGreaterThan(String value) {
+            addCriterion("execute_person >", value, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonGreaterThanOrEqualTo(String value) {
-            addCriterion("executePerson >=", value, "executeperson");
+        public Criteria andExecutePersonGreaterThanOrEqualTo(String value) {
+            addCriterion("execute_person >=", value, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonLessThan(String value) {
-            addCriterion("executePerson <", value, "executeperson");
+        public Criteria andExecutePersonLessThan(String value) {
+            addCriterion("execute_person <", value, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonLessThanOrEqualTo(String value) {
-            addCriterion("executePerson <=", value, "executeperson");
+        public Criteria andExecutePersonLessThanOrEqualTo(String value) {
+            addCriterion("execute_person <=", value, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonLike(String value) {
-            addCriterion("executePerson like", value, "executeperson");
+        public Criteria andExecutePersonLike(String value) {
+            addCriterion("execute_person like", value, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonNotLike(String value) {
-            addCriterion("executePerson not like", value, "executeperson");
+        public Criteria andExecutePersonNotLike(String value) {
+            addCriterion("execute_person not like", value, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonIn(List<String> values) {
-            addCriterion("executePerson in", values, "executeperson");
+        public Criteria andExecutePersonIn(List<String> values) {
+            addCriterion("execute_person in", values, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonNotIn(List<String> values) {
-            addCriterion("executePerson not in", values, "executeperson");
+        public Criteria andExecutePersonNotIn(List<String> values) {
+            addCriterion("execute_person not in", values, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonBetween(String value1, String value2) {
-            addCriterion("executePerson between", value1, value2, "executeperson");
+        public Criteria andExecutePersonBetween(String value1, String value2) {
+            addCriterion("execute_person between", value1, value2, "executePerson");
             return (Criteria) this;
         }
 
-        public Criteria andExecutepersonNotBetween(String value1, String value2) {
-            addCriterion("executePerson not between", value1, value2, "executeperson");
+        public Criteria andExecutePersonNotBetween(String value1, String value2) {
+            addCriterion("execute_person not between", value1, value2, "executePerson");
             return (Criteria) this;
         }
 

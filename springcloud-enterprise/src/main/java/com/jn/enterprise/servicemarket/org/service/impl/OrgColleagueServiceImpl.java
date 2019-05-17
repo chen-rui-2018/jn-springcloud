@@ -159,6 +159,8 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         for(TbServiceAdvisor tbServiceAdvisor:tbServiceAdvisorList){
             //账号相同,设置毕业学校，担任职务，入驻日期
             if(StringUtils.equals(extensionInfo.getAccount(),tbServiceAdvisor.getAdvisorAccount() )){
+                //从业年限
+                orgColleagueInfo.setWorkingYears(tbServiceAdvisor.getWorkingYears().toString());
                 //毕业学校
                 orgColleagueInfo.setGraduatedSchool(tbServiceAdvisor.getGraduatedSchool());
                 //担任职务

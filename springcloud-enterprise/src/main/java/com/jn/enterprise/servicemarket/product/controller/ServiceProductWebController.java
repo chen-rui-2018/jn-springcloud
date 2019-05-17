@@ -88,6 +88,7 @@ public class ServiceProductWebController  extends BaseController {
 
     @ControllerLog(doAction = "服务产品详情")
     @ApiOperation(value ="服务产品详情(非科技金融,pc/app服务此产品详情)")
+    @RequiresPermissions("/servicemarket/product/web/findProductDetails")
     @RequestMapping(value = "/findProductDetails",method = RequestMethod.GET)
     public Result<WebServiceProductDetails> findProductDetails(@ApiParam(name = "productId", value = "服务产品id", required = true) @RequestParam String productId){
         WebServiceProductDetails details = productService.findWebProductDetails(productId);

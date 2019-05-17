@@ -26,22 +26,22 @@ public class RoomPayOrdersModel implements Serializable {
     @ApiModelProperty(value = "时间")
     private java.util.Date createTime;
 
-    @ApiModelProperty(value = "创建时间",example = "")
+    @ApiModelProperty(value = "创建时间",example = "2019-05-04 17:22:10")
     private String Time;
 
-    @ApiModelProperty(value = "账单类型",example = "")
+    @ApiModelProperty(value = "账单类型",example = "房间租赁")
     private String ordersType;
 
-    @ApiModelProperty(value = "最迟缴费时间",example = "")
+    @ApiModelProperty(value = "最迟缴费时间",example = "2019-05-04 18:22:10")
     private String lastPayTime;
 
-    @ApiModelProperty(value = "开始时间",example = "")
+    @ApiModelProperty(value = "开始时间",example = "2019-05-01")
     private Date leaseStartTime;
 
-    @ApiModelProperty(value = "结束时间",example = "")
+    @ApiModelProperty(value = "结束时间",example = "2019-06-01")
     private Date leaseEndTime;
 
-    @ApiModelProperty(value = "合计",example = "")
+    @ApiModelProperty(value = "合计",example = "900.00")
     private String paySum ;
 
     public List<RoomPayOrdersItemModel> getRoomPayOrdersItemModels() {

@@ -1479,6 +1479,9 @@ public class DataUploadServiceImpl implements DataUploadService {
                         if (dbList != null && dbList.size() > 0) {
                             targetDao.saveData(dbList);
                         }
+                    }else{
+                        //保存
+                        targetDao.saveData(dataList);
                     }
                 }
             }

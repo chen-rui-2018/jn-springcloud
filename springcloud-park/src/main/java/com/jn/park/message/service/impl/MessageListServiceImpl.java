@@ -37,7 +37,7 @@ public class MessageListServiceImpl implements MessageListService {
 
     @ServiceLog(doAction = "消息列表")
     @Override
-    public PaginationData<PaginationData<List<FindAllMessageListVo>>> findAll(findAllMessageListModel fModel, User user) {
+    public PaginationData<List<FindAllMessageListVo>> findAll(findAllMessageListModel fModel, User user) {
 
         Page<Object> objects = PageHelper.startPage(fModel.getPage(), fModel.getRows());
 

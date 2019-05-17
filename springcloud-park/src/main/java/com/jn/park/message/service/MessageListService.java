@@ -21,7 +21,7 @@ public interface MessageListService {
      * @param findAllMessageListModel
      * @return
      */
-    PaginationData<PaginationData<List<FindAllMessageListVo>>> findAll(findAllMessageListModel findAllMessageListModel, User user);
+    PaginationData<List<FindAllMessageListVo>> findAll(findAllMessageListModel findAllMessageListModel, User user);
 
     /**
      * 获取是否有已读消息

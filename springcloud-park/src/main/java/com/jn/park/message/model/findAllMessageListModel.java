@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import sun.plugin2.message.Message;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**

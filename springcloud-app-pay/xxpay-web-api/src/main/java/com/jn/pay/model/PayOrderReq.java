@@ -3,6 +3,7 @@ package com.jn.pay.model;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -45,7 +46,7 @@ public class PayOrderReq implements Serializable  {
      * 支付金额,单位分
      */
     @ApiModelProperty("支付金额,单位分")
-    @NotBlank(message = "支付金额不能为空！")
+    @NotNull(message = "支付金额不能为空！")
     private Long amount;
 
     /**
@@ -126,12 +127,19 @@ public class PayOrderReq implements Serializable  {
      * 如： {"qr_pay_mode":"4", "qrcode_width":"200"}
      * qr_pay_mode：扫码支付的方式，支持前置模式和跳转模式(4：直接显示二维码，2：跳转模式)默认为4。
      * qrcode_width：当qr_pay_mode=4时，该参数生效，表示二维码宽度。
+     *
+     * 1.当请求参数channelId = WX_MWEB （微信H5支付）时，sceneInfo 参数必填，
+     * 该字段用于上报支付的场景信息,针对H5支付有以下三种场景,请根据对应场景上报,H5支付不建议在APP端使用，针对场景1，2请接入APP支付，不然可能会出现兼容性问题
+     * 如：{"sceneInfo":"..."}  参考网址： https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_20&index=1   这个字段 scene_info
+     *  2.  订单对象 属性clientIp 也为必传
      */
     @ApiModelProperty(value = "特定渠道发起时额外参数 如：当channelId = ALIPAY_PC 返回{\"qr_pay_mode\":\"4\", \"qrcode_width\":\"200\"}",example = "{\"qr_pay_mode\":\"4\", \"qrcode_width\":\"200\"}")
     private String extra;
 
     /**
      * 签名
+     * 通过工具 PayDigestUtil.getSign(BeanToMap.toMap(请求对象),请求密钥)
+     *
      */
     @ApiModelProperty("签名,可以通过API提供的工具生成")
     @NotBlank(message = "签名不能为空！")

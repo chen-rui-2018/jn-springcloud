@@ -53,6 +53,8 @@ public class TbPayBill implements Serializable {
 
     private String callbackId;
 
+    private String billReceiver;
+
     private static final long serialVersionUID = 1L;
 
     public String getBillId() {
@@ -247,6 +249,14 @@ public class TbPayBill implements Serializable {
         this.callbackId = callbackId == null ? null : callbackId.trim();
     }
 
+    public String getBillReceiver() {
+        return billReceiver;
+    }
+
+    public void setBillReceiver(String billReceiver) {
+        this.billReceiver = billReceiver == null ? null : billReceiver.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -282,7 +292,8 @@ public class TbPayBill implements Serializable {
             && (this.getAffirmPart() == null ? other.getAffirmPart() == null : this.getAffirmPart().equals(other.getAffirmPart()))
             && (this.getAffirmTime() == null ? other.getAffirmTime() == null : this.getAffirmTime().equals(other.getAffirmTime()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
-            && (this.getCallbackId() == null ? other.getCallbackId() == null : this.getCallbackId().equals(other.getCallbackId()));
+            && (this.getCallbackId() == null ? other.getCallbackId() == null : this.getCallbackId().equals(other.getCallbackId()))
+            && (this.getBillReceiver() == null ? other.getBillReceiver() == null : this.getBillReceiver().equals(other.getBillReceiver()));
     }
 
     @Override
@@ -313,6 +324,7 @@ public class TbPayBill implements Serializable {
         result = prime * result + ((getAffirmTime() == null) ? 0 : getAffirmTime().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCallbackId() == null) ? 0 : getCallbackId().hashCode());
+        result = prime * result + ((getBillReceiver() == null) ? 0 : getBillReceiver().hashCode());
         return result;
     }
 
@@ -346,6 +358,7 @@ public class TbPayBill implements Serializable {
         sb.append(", affirmTime=").append(affirmTime);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", callbackId=").append(callbackId);
+        sb.append(", billReceiver=").append(billReceiver);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

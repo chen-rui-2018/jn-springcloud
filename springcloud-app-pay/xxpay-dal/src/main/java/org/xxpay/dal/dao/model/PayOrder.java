@@ -210,6 +210,14 @@ public class PayOrder implements Serializable {
      */
     private String serviceUrl;
 
+    /**
+     * 支付完成跳转的页面(只有支付宝才有)
+     * 买家在支付成功后会看到一个支付宝交易提示成功的页面，该页面会停留几秒，
+     * 然后会自动跳转回商户指定的同步通知页面
+     * aliPayReturnUrl为http方式 ,且外网可访问链接不能带任何参数
+     * */
+    private String aliPayReturnUrl;
+
     private static final long serialVersionUID = 1L;
 
     public String getPayOrderId() {
@@ -452,6 +460,14 @@ public class PayOrder implements Serializable {
         this.serviceUrl = serviceUrl;
     }
 
+    public String getAliPayReturnUrl() {
+        return aliPayReturnUrl;
+    }
+
+    public void setAliPayReturnUrl(String aliPayReturnUrl) {
+        this.aliPayReturnUrl = aliPayReturnUrl;
+    }
+
     @Override
     public String toString() {
         return "PayOrder{" +
@@ -485,52 +501,7 @@ public class PayOrder implements Serializable {
                 ", payType='" + payType + '\'' +
                 ", serviceId='" + serviceId + '\'' +
                 ", serviceUrl='" + serviceUrl + '\'' +
+                ", aliPayReturnUrl='" + aliPayReturnUrl + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        PayOrder payOrder = (PayOrder) o;
-        return Objects.equals(payOrderId, payOrder.payOrderId) &&
-                Objects.equals(mchId, payOrder.mchId) &&
-                Objects.equals(mchOrderNo, payOrder.mchOrderNo) &&
-                Objects.equals(channelId, payOrder.channelId) &&
-                Objects.equals(amount, payOrder.amount) &&
-                Objects.equals(currency, payOrder.currency) &&
-                Objects.equals(status, payOrder.status) &&
-                Objects.equals(clientIp, payOrder.clientIp) &&
-                Objects.equals(device, payOrder.device) &&
-                Objects.equals(subject, payOrder.subject) &&
-                Objects.equals(body, payOrder.body) &&
-                Objects.equals(extra, payOrder.extra) &&
-                Objects.equals(channelMchId, payOrder.channelMchId) &&
-                Objects.equals(channelOrderNo, payOrder.channelOrderNo) &&
-                Objects.equals(errCode, payOrder.errCode) &&
-                Objects.equals(errMsg, payOrder.errMsg) &&
-                Objects.equals(param1, payOrder.param1) &&
-                Objects.equals(param2, payOrder.param2) &&
-                Objects.equals(notifyUrl, payOrder.notifyUrl) &&
-                Objects.equals(notifyCount, payOrder.notifyCount) &&
-                Objects.equals(lastNotifyTime, payOrder.lastNotifyTime) &&
-                Objects.equals(expireTime, payOrder.expireTime) &&
-                Objects.equals(paySuccTime, payOrder.paySuccTime) &&
-                Objects.equals(createTime, payOrder.createTime) &&
-                Objects.equals(updateTime, payOrder.updateTime) &&
-                Objects.equals(sign, payOrder.sign) &&
-                Objects.equals(backType, payOrder.backType) &&
-                Objects.equals(payType, payOrder.payType) &&
-                Objects.equals(serviceId, payOrder.serviceId) &&
-                Objects.equals(serviceUrl, payOrder.serviceUrl);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(payOrderId, mchId, mchOrderNo, channelId, amount, currency, status, clientIp, device, subject, body, extra, channelMchId, channelOrderNo, errCode, errMsg, param1, param2, notifyUrl, notifyCount, lastNotifyTime, expireTime, paySuccTime, createTime, updateTime, sign, backType, payType, serviceId, serviceUrl);
     }
 }

@@ -88,9 +88,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        electric
+                        asset
                     </contexts>
                     <tableNames>
+                        tb_room_orders
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

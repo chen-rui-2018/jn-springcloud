@@ -1,6 +1,7 @@
 package com.jn.park.asset.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.park.asset.dao.AssetArticleLeaseDao;
@@ -9,12 +10,14 @@ import com.jn.park.asset.dao.TbAssetArticleLeaseOrdersMapper;
 import com.jn.park.asset.entity.TbAssetArticleLease;
 import com.jn.park.asset.entity.TbAssetArticleLeaseCriteria;
 import com.jn.park.asset.entity.TbAssetArticleLeaseOrders;
+import com.jn.park.asset.enums.AssetExceptionEnum;
 import com.jn.park.asset.enums.AssetStatusEnums;
 import com.jn.park.asset.enums.LeaseStatusEnums;
 import com.jn.park.asset.model.AssetArticleLeaseModel;
 import com.jn.park.asset.service.AssetArticleLeaseService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,19 +43,6 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
     @Autowired
     private TbAssetArticleLeaseOrdersMapper tbAssetArticleLeaseOrdersMapper;
 
-    /**
-     * 分页返回可租借的资产列表
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "返回可租借的资产列表")
-    public PaginationData<List<AssetArticleLeaseModel>> getArticleLeaseList(Page page) {
-        //分页返回资产列表
-        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
-        List<AssetArticleLeaseModel> assetArticleLeaseModelList = assetArticleLeaseDao.getArticleLeaseList();
-        PaginationData<List<AssetArticleLeaseModel>> data = new PaginationData(assetArticleLeaseModelList,objects.getTotal());
-        return data;
-    }
 
     /**
      * 通过资产编号获取物品租赁详细信息
@@ -63,13 +53,14 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
     @ServiceLog(doAction = "根据资产编号获取物品租赁详细信息")
     public AssetArticleLeaseModel getArticleLease(String assetNumber) {
         AssetArticleLeaseModel assetArticleLeaseModel = assetArticleLeaseDao.getArticleLease(assetNumber);
+        assetArticleLeaseModel.setBarCode(assetArticleLeaseModel.getAssetNumber());
         return assetArticleLeaseModel;
     }
 
 
     @Override
     @ServiceLog(doAction = "企业填写租借资料")
-    public void leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, java.sql.Date startTime, java.sql.Date endTime) {
+    public String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, java.sql.Date startTime, java.sql.Date endTime,User user) {
         //填写租借企业资料
         AssetArticleLeaseModel articleLease = assetArticleLeaseDao.getArticleLease(assetNumber);
         articleLease.setLeaseEnterprise(leaseEnterprise);
@@ -77,17 +68,49 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
         articleLease.setContactPhone(contactPhone);
         articleLease.setStartTime(startTime);
         articleLease.setEndTime(endTime);
+        //判断租借时间是否大于最短租期
+        int days = (int) ((articleLease.getEndTime().getTime() - articleLease.getStartTime().getTime()) / (1000*3600*24)+1);
+        //最短租借时间
+        int leaseTime = Integer.parseInt(articleLease.getLeaseTime());
+        if (leaseTime > days){
+            throw new JnSpringCloudException(AssetExceptionEnum.TIME_NOT_AFTER_LEASE_TIME);
+        }
         TbAssetArticleLease tbAssetArticleLease = new TbAssetArticleLease();
         BeanUtils.copyProperties(articleLease,tbAssetArticleLease);
         tbAssetArticleLease.setApplyTime(new Date());
         TbAssetArticleLeaseCriteria example  = new TbAssetArticleLeaseCriteria();
         example.createCriteria().andAssetNumberEqualTo(tbAssetArticleLease.getAssetNumber());
+        //更新租借企业资料
         tbAssetArticleLeaseMapper.updateByExampleSelective(tbAssetArticleLease, example);
+        //新增租赁订单
+        return addLeaseOrders(assetNumber,user);
     }
 
+    /**
+     * 分页返回可租借的资产列表(可搜索)
+     * @param page
+     * @param name
+     * @return
+     */
     @Override
-    @ServiceLog(doAction = "新增租赁订单")
-    public String addLeaseOrders(String assetNumber, User user) {
+    @ServiceLog(doAction = "通过物品名称搜索物品")
+    public PaginationData<List<AssetArticleLeaseModel>> getArticleLeaseList(Page page, String name) {
+        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
+        List<AssetArticleLeaseModel> assetArticleLeaseModelList = assetArticleLeaseDao.getArticleLeaseList(name);
+        for (AssetArticleLeaseModel assetArticleLeaseModel : assetArticleLeaseModelList) {
+            assetArticleLeaseModel.setBarCode(assetArticleLeaseModel.getAssetNumber());
+        }
+        PaginationData<List<AssetArticleLeaseModel>> data = new PaginationData(assetArticleLeaseModelList,objects.getTotal());
+        return data;
+    }
+
+    /**
+     * 新增租赁订单
+     * @param assetNumber
+     * @param user
+     * @return
+     */
+    private String addLeaseOrders(String assetNumber, User user) {
         AssetArticleLeaseModel articleLease = assetArticleLeaseDao.getArticleLease(assetNumber);
         if (articleLease != null){
             TbAssetArticleLeaseOrders tbAssetArticleLeaseOrders = new TbAssetArticleLeaseOrders();

@@ -828,6 +828,12 @@
       <table tableName="tb_room_information"></table>
       <!--房间管理-房间订单-->
       <table tableName="tb_room_orders"></table>
+      <!--房间订单-支付中心关系表-->
+      <table tableName="tb_room_orders_pay"></table>
+      <!--房间管理-房间订单(子)-->
+      <table tableName="tb_room_orders_item"></table>
+      <!--房间管理-房间分组-->
+      <table tableName="tb_room_group"></table>
     </context>
 
 
@@ -1057,7 +1063,7 @@
 
     <!--客服中心表-->
     <table tableName="tb_client_service_center"></table>
-
+    <table tableName="tb_client_role_person_info"></table>
   </context>
 
     <!--招商管理-->

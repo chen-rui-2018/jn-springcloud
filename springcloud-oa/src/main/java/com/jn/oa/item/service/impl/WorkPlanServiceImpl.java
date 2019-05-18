@@ -15,10 +15,7 @@ import com.jn.news.vo.EmailVo;
 import com.jn.oa.common.enums.OaExceptionEnums;
 import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.oa.item.dao.*;
-import com.jn.oa.item.enmus.WorkPlanExceptionEnmus;
-import com.jn.oa.item.enmus.WorkPlanOperateEnmus;
-import com.jn.oa.item.enmus.WorkPlanStatusEnums;
-import com.jn.oa.item.enmus.WorkPlanTemplateEnums;
+import com.jn.oa.item.enmus.*;
 import com.jn.oa.item.entity.*;
 import com.jn.oa.item.model.*;
 import com.jn.oa.item.service.WorkPlanService;
@@ -296,7 +293,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
     @Override
     @ServiceLog(doAction = "报表导入工作计划")
     @Transactional(rollbackFor = Exception.class)
-    public String importExcelWorkPlanInfo(MultipartFile file, User user) {
+    public void importExcelWorkPlanInfo(MultipartFile file, User user) {
         String account = user.getAccount();
         //1.对文件是非为空进行判断
         List<Object> objects = importExcel(file);
@@ -304,13 +301,8 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         List<TbOaWorkPlan> tbOaWorkPlanList = new ArrayList<TbOaWorkPlan>();
         List<TbOaWorkPlanUser> tbOaWorkPlanUserList = new ArrayList<TbOaWorkPlanUser>();
         List<TbOaWorkPlanHistory> tbOaWorkPlanHistoryList = new ArrayList<TbOaWorkPlanHistory>();
-        //字符串,用于拼接导入失败数据
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("序号:");
-        Integer i = 1;
         //3.对导入数据进行解析
         for (Object object : objects) {
-            i++;
             if (object instanceof WorkPlanImport) {
                 TbOaWorkPlan tbOaWorkPlan = new TbOaWorkPlan();
                 WorkPlanImport workPlanImport1 = (WorkPlanImport) object;
@@ -318,7 +310,6 @@ public class WorkPlanServiceImpl implements WorkPlanService {
                 //空值判断
                 Boolean flag = checkImportValue(workPlanImport1);
                 if (flag) {
-                    buffer.append(i).append(",");
                     continue;
                 }
                 //1.根个项目名称获取项目id
@@ -326,8 +317,6 @@ public class WorkPlanServiceImpl implements WorkPlanService {
                 if (tbOaItems != null && tbOaItems.size() > 0) {
                     tbOaWorkPlan.setItemId(tbOaItems.get(0).getId());
                 } else {
-                    //获取不到对应id,则跳过当前数据
-                    buffer.append(i).append(",");
                     continue;
                 }
 
@@ -337,7 +326,6 @@ public class WorkPlanServiceImpl implements WorkPlanService {
                 if (accountList != null && accountList.size() > 0) {
                     userAccount = accountList.get(0);
                 } else {
-                    buffer.append(i).append(",");
                     continue;
                 }
 
@@ -345,7 +333,6 @@ public class WorkPlanServiceImpl implements WorkPlanService {
                 BeanUtils.copyProperties(workPlanImport1, tbOaWorkPlan);
                 //格式化时间
                 if (workPlanImport1.getPlanEndTime().before(workPlanImport1.getPlanStartTime())) {
-                    buffer.append(i).append(",");
                     continue;
                 }
                 getTbOaWorkPlan(account, tbOaWorkPlanList, tbOaWorkPlan);
@@ -353,12 +340,11 @@ public class WorkPlanServiceImpl implements WorkPlanService {
                 getTbOaWorkPlanUser(account, tbOaWorkPlanUserList, tbOaWorkPlan, userAccount);
                 //设置工作计划历史记录信息
                 getTbWorkPlanHistory(user, account, tbOaWorkPlanHistoryList, tbOaWorkPlan);
-
             }
         }
 
         //4.往数据库中批量导入数据
-        return insetImportData(tbOaWorkPlanList, tbOaWorkPlanUserList, tbOaWorkPlanHistoryList, buffer);
+        insetImportData(tbOaWorkPlanList, tbOaWorkPlanUserList, tbOaWorkPlanHistoryList);
 
     }
 
@@ -372,6 +358,9 @@ public class WorkPlanServiceImpl implements WorkPlanService {
     public List<TbOaItem> getItemAll() {
         TbOaItemCriteria tbOaItemCriteria = new TbOaItemCriteria();
         tbOaItemCriteria.setOrderByClause("id_ desc");
+        //添加过滤条件，只查询审批通过的项目
+        TbOaItemCriteria.Criteria criteria = tbOaItemCriteria.createCriteria();
+        criteria.andApprovalStatusEqualTo(ApprovalStatusEnums.APPROVALED.getCode());
         List<TbOaItem> itemList = tbOaItemMapper.selectByExample(tbOaItemCriteria);
         return itemList;
     }
@@ -403,11 +392,10 @@ public class WorkPlanServiceImpl implements WorkPlanService {
      * @param tbOaWorkPlanList
      * @param tbOaWorkPlanUserList
      * @param tbOaWorkPlanHistoryList
-     * @param buffer
      * @return
      */
-    private String insetImportData(List<TbOaWorkPlan> tbOaWorkPlanList, List<TbOaWorkPlanUser> tbOaWorkPlanUserList,
-                                   List<TbOaWorkPlanHistory> tbOaWorkPlanHistoryList, StringBuffer buffer) {
+    private void insetImportData(List<TbOaWorkPlan> tbOaWorkPlanList, List<TbOaWorkPlanUser> tbOaWorkPlanUserList,
+                                   List<TbOaWorkPlanHistory> tbOaWorkPlanHistoryList) {
         if (tbOaWorkPlanList.size() > 0) {
             workPlanMapper.insertBatch(tbOaWorkPlanList);
             logger.info("[工作计划] 导入工作计划,保存工作计划数据成功");
@@ -415,13 +403,6 @@ public class WorkPlanServiceImpl implements WorkPlanService {
             logger.info("[工作计划] 导入工作计划,保存工作计划负责人信息成功");
             workPlanHistoryMapper.insertBatch(tbOaWorkPlanHistoryList);
             logger.info("[工作计划] 导入工作计划,保存工作计划历史记录信息成功");
-        }
-
-        if (buffer.length() > 3) {
-            buffer.append("行数据导入失败,请检查数据后再导入");
-            return buffer.toString();
-        } else {
-            return "导入成功";
         }
     }
 
@@ -503,7 +484,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         TbOaItemCriteria tbOaItemCriteria = new TbOaItemCriteria();
         TbOaItemCriteria.Criteria criteria = tbOaItemCriteria.createCriteria();
         criteria.andItemNameEqualTo(itemName);
-        criteria.andRecordStatusEqualTo(new Byte(OaStatusEnums.EFFECTIVE.getCode()));
+        criteria.andApprovalStatusEqualTo(ApprovalStatusEnums.APPROVALED.getCode());
         return tbOaItemMapper.selectByExample(tbOaItemCriteria);
     }
 

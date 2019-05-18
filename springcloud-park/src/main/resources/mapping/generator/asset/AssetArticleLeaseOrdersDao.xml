@@ -21,7 +21,7 @@
         end_time AS endTime,
         article_status AS articleStatus
     FROM tb_asset_article_lease_orders
-    WHERE record_status = '1' and creator_account = #{account}
+    WHERE record_status = '1' and creator_account = #{account} ORDER BY create_time DESC
 </select>
     <select id="getLeaseOrders" parameterType="java.lang.String" resultType="com.jn.park.asset.model.AssetArticleLeaseOrdersModel">
         SELECT

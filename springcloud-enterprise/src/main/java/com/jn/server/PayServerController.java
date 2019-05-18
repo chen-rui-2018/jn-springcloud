@@ -48,9 +48,9 @@ public class PayServerController extends BaseController implements PayClient {
 
     @ControllerLog(doAction = "我的账单-通过账单ID查询账单详情信息")
     @Override
-    public Result<List<PayBillDetails>> getBillInfo(String billId) {
+    public Result<PaginationData<List<PayBillDetails>>> getBillInfo(String billId) {
         Assert.notNull(billId,"账单ID或编号不能为空");
-        List<PayBillDetails> data = myPayBillService.getBillInfo(billId);
+        PaginationData<List<PayBillDetails>> data = myPayBillService.getBillInfo(billId);
         return new Result<>(data);
     }
 

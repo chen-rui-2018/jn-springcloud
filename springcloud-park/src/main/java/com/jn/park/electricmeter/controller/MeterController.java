@@ -1,6 +1,8 @@
 package com.jn.park.electricmeter.controller;
 
+import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
@@ -26,10 +28,13 @@ import java.util.Date;
 @Api(tags = "物业管理-电表相关接口")
 @RestController
 @RequestMapping("/meter")
-public class MeterController  {
+public class MeterController extends BaseController {
 
     @Autowired
     private MeterService meterService;
+    @Autowired
+    private MeterRulesService meterRulesService;
+
     private static Logger logger = LoggerFactory.getLogger(MeterTimerController.class);
 
     @ControllerLog(doAction = "手动处理指定的电表读数定时入库失败的数据")
@@ -51,5 +56,34 @@ public class MeterController  {
     public void dealAllFailByHandle(){
         meterService.getDataFromHardare();
     }
+
+    @ControllerLog(doAction = "更新计价规则")
+    @ApiOperation(value = "更新计价规则",notes = "更新计价规则", httpMethod = "GET")
+    @GetMapping(value = "/updatePriceRule")
+    @RequiresPermissions("/meter/updatePriceRule")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "计价规则id",type = "String" ,example = "1",required = true)
+    })
+    public Result updatePriceRule(String id){
+        Result result = new Result();
+        Integer data  = meterRulesService.updatePriceRule(id);
+        result.setData(data);
+        return result;
+    }
+
+    @ControllerLog(doAction = "作废计价规则")
+    @ApiOperation(value = "更新计价规则",notes = "更新计价规则", httpMethod = "GET")
+    @GetMapping(value = "/deletePriceRule")
+    @RequiresPermissions("/meter/deletePriceRule")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "计价规则id",type = "String" ,example = "1",required = true)
+    })
+    public Result deletePriceRule(String id){
+        Result result = new Result();
+        Integer data = meterRulesService.deletePriceRule(id);
+        result.setData(data);
+        return result;
+    }
+
 
 }

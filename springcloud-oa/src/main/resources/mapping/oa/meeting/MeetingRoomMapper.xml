@@ -68,7 +68,7 @@
             <result column="meeting_title" jdbcType="VARCHAR" property="title" />
         </collection>
     </resultMap>
-    <resultMap id="meetingBaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeeting">
+    <resultMap id="meetingBaseResultMap" type="com.jn.oa.meeting.model.OaMeeting">
         <id column="meeting_id" jdbcType="VARCHAR" property="id" />
         <result column="meeting_start_time" jdbcType="TIMESTAMP" property="startTime" />
         <result column="meeting_end_time" jdbcType="TIMESTAMP" property="endTime" />

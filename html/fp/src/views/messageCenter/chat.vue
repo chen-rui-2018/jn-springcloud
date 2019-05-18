@@ -1,7 +1,7 @@
 <template>
   <div class="message-chat">
     <div class="chat-win">
-      <div v-if="$route.query.toUser">
+      <div v-if="$route.query.toUser" class="chat-win-cell">
         <div class="chat-header">
           <div class="chat-back">
             <i class="el-icon-arrow-left"></i>
@@ -37,7 +37,7 @@
               :rows="2"
               :maxlength="600"
               type="textarea"
-              @keyup.native.enter.prevent="() => { messageSend }"
+              @keyup.native.enter.prevent="messageSend"
               placeholder="请输入内容"
             />
             <el-button
@@ -60,7 +60,7 @@
           <el-button size="mini" @click="messageSend">发送</el-button>
         </div>
       </div>
-      <div v-else class="no-chat">选择一个好友开始聊天吧</div>
+      <div v-else-if="!$route.query.toUser && !$store.state.isMobile" class="no-chat">选择一个好友开始聊天吧</div>
     </div>
     <div v-if="$store.state.needNav" class="friend-list">
       <div class="friend-list-header">私信列表</div>
@@ -265,7 +265,8 @@
             toUser: this.param.toUser,
             nickName: this.nickName,
             msg: message,
-            chatSendId: chatSendId
+            chatSendId: chatSendId,
+            url: this.url
           },
           createTime: now,
           id: '',
@@ -347,7 +348,6 @@
           const data = JSON.parse(event.data)
           if (isArray(data) === 'Object') {
             data.content = JSON.parse(data.content)
-            console.dir(data)
             if (data.msgType === '0000' || data.msgType === '1111') {
               this.getUserList()
               if (data.sendId === this.param.toUser || data.sendId === this.param.fromUser) {
@@ -400,7 +400,7 @@
           query: {
             toUser: item.sendId,
             fromUser: this.param.fromUser,
-            nickName: this.nickName
+            nickName: this.toUserNickName
           }
         })
       },

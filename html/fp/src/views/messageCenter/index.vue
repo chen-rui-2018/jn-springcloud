@@ -69,6 +69,16 @@ $bg-gray: #f3f3f3;
       left: 0;
       .message-chat,
       .chat-win {
+        .chat-win-cell {
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          position: absolute;
+          -webkit-overflow-scrolling: touch;
+          padding: 50px 10px 50px;
+          box-sizing: border-box;
+          background-color: #fff;
+        }
         width: 100%;
         height: 100%;
         .chat-header {
@@ -81,10 +91,7 @@ $bg-gray: #f3f3f3;
         .chat-main {
           width: 100%;
           height: 100%;
-          overflow: auto;
           margin-top: 0;
-          -webkit-overflow-scrolling: touch;
-          padding: 50px 10px 80px;
           box-sizing: border-box;
         }
         /*.chat-footer {*/

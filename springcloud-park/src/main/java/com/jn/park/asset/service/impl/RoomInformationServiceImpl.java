@@ -1,6 +1,5 @@
 package com.jn.park.asset.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
@@ -17,7 +16,6 @@ import com.jn.park.asset.service.RoomInformationService;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.*;
-import com.jn.pay.vo.wx.WxAppPayRsp;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

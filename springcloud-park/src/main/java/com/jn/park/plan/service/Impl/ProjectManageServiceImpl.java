@@ -205,7 +205,7 @@ public class ProjectManageServiceImpl implements ProjectManageService {
 
         if(StringUtils.isNotBlank(projectCompleteRatioModel.getPlan4()) && StringUtils.isNotBlank(projectCompleteRatioModel.getAutual4())){
             plan.add(projectCompleteRatioModel.getPlan4());
-            autual.add(projectCompleteRatioModel.getAutual5());
+            autual.add(projectCompleteRatioModel.getAutual4());
             if(Integer.parseInt(projectCompleteRatioModel.getPlan4()) < Integer.parseInt(projectCompleteRatioModel.getAutual4())){
                 completeRatio.add(projectCompleteRatioModel.getCompleteRatio4());
             }else {
@@ -290,7 +290,7 @@ public class ProjectManageServiceImpl implements ProjectManageService {
 
         if(StringUtils.isNotBlank(projectCompleteRatioModel.getPlan11()) && StringUtils.isNotBlank(projectCompleteRatioModel.getAutual11())){
             plan.add(projectCompleteRatioModel.getPlan11());
-            autual.add(projectCompleteRatioModel.getAutual1());
+            autual.add(projectCompleteRatioModel.getAutual11());
             if(Integer.parseInt(projectCompleteRatioModel.getPlan11()) < Integer.parseInt(projectCompleteRatioModel.getAutual11())){
                 completeRatio.add(projectCompleteRatioModel.getCompleteRatio11());
             }else {

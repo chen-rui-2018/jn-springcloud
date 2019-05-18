@@ -27,6 +27,18 @@ public class IBPSDefIdConfig implements Serializable {
     @Value("${ibps.bpmnDefId.product}")
     private String product;
 
+    // 上架/编辑科技金融产品流程ID
+    @Value("${ibps.bpmnDefId.technologyProduct}")
+    private String technologyProduct;
+
+    public String getTechnologyProduct() {
+        return technologyProduct;
+    }
+
+    public void setTechnologyProduct(String technologyProduct) {
+        this.technologyProduct = technologyProduct;
+    }
+
     public String getCompanyRecruit() {
         return companyRecruit;
     }

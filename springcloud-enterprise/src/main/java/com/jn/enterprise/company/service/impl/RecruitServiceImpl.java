@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
@@ -13,6 +14,7 @@ import com.jn.enterprise.company.dao.ServiceRecruitMapper;
 import com.jn.enterprise.company.dao.TbServiceRecruitMapper;
 import com.jn.enterprise.company.entity.TbServiceRecruit;
 import com.jn.enterprise.company.entity.TbServiceRecruitCriteria;
+import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.*;
@@ -21,6 +23,8 @@ import com.jn.enterprise.company.service.RecruitService;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.api.CareClient;
+import com.jn.park.care.model.CareParam;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
@@ -57,6 +61,9 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Autowired
     private IBPSDefIdConfig ibpsDefIdConfig;
+
+    @Autowired
+    private CareClient careClient;
 
     @Override
     @ServiceLog(doAction = "根据招聘ID获取招聘详情")
@@ -144,6 +151,24 @@ public class RecruitServiceImpl implements RecruitService {
 
         Page<Object> objects = PageHelper.startPage(recruitParam.getPage(), recruitParam.getRows() == 0 ? 15 : recruitParam.getRows());
         List<RecruitVO> recruitList = serviceRecruitMapper.getRecruitList(rp);
+
+        // 如果已登录，查询关注列表
+        if (StringUtils.isNotBlank(recruitParam.getAccount())) {
+            CareParam careParam = new CareParam();
+            careParam.setCurrentAccount(recruitParam.getAccount());
+            Result<List<String>> result = careClient.findCareCompanyList(careParam);
+            if (result == null || result.getData() == null) {
+                throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SERVICE_ERROR);
+            }
+
+            // 关注的企业ID列表
+            List<String> companyList = result.getData();
+            for (RecruitVO recruit : recruitList) {
+                if (companyList.contains(recruit.getComId())) {
+                    recruit.setCareStatus("1");
+                }
+            }
+        }
         PaginationData<List<RecruitVO>> data = new PaginationData(recruitList, objects.getTotal());
         return data;
     }

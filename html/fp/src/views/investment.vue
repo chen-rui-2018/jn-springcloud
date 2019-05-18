@@ -74,7 +74,7 @@
             <div class="film-desc-title">视频展示</div>
             <div class="film-desc-subheading">VIDEO DISPLAY</div>
           </div>
-          <div class="film-desc-content">南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科</div>
+          <div class="film-desc-content">南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科技园。</div>
           <div class="square-angle-bg">
             <div class="square-angle">
               <span class="square-angle-l"></span><i class="square-angle-r el-icon-caret-right"></i>
@@ -140,7 +140,7 @@
               class="more-garden-card"
             >
               <div class="more-garden-card-cell">
-                <img class="more-garden-img" :src="item.mainPicture" alt=""/>
+                <img class="more-garden-img" :src="'http://112.94.22.222:2384/ibps'+item.coverUrl" alt=""/>
                 <div class="more-garden-desc">{{ item.content || '暂无'}}</div>
                 <div class="more-garden-footer">
                   <span class="more-garden-date">{{ item.startTime }}</span>
@@ -171,7 +171,7 @@
                 :class="{small: index !== 0}"
                 class="multi-park-card">
                 <div class="multi-park-card-cell">
-                  <img :src="index === 0 ? item.fileName ? item.fileName : '@/../static/img/multi-park-poster.png' : item.fileName ? item.fileName : '@/../static/img/multi-park-list.png'"  alt="">
+                  <img :src="index == 0 ?  '@/../static/img/multi-park-poster.png' : 'http://112.94.22.222:2384/ibps'+ item.coverUrl"  alt="">
                   <div v-if="index !== 0" class="multi-park-desc">
                     <div class="fw-title">{{ item.title }}</div>
                     <div class="gray-tips">{{ item.subTitle }}</div>
@@ -596,8 +596,10 @@
             transform: scale(1.1);
           }
           .more-garden-img {
-            width: 100%;
+            width: 200px;
             display: block;
+            height: 200px;
+            border-radius: 50%;
           }
           .more-garden-desc {
             height: 66px;

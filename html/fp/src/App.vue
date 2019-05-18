@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{'h-100': $store.state.isMobile}">
 <!--    <router-view></router-view>-->
      <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice') &&$store.state.needNav">
       <ul>
@@ -177,7 +177,15 @@ export default {
 @import url(./css/main.css);
 @import url(./css/home.css);
 @import url(./css/serviceMarket.css);
+/*html,*/
+/*body,*/
+/*#app{*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  overflow: auto;*/
+/*}*/
 #app {
+
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

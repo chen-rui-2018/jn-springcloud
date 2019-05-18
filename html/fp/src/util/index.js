@@ -308,3 +308,16 @@ export function isMobile() {
     return userAgentInfo.indexOf(str) > 0
   })
 }
+export function isArray (obj) {
+  if (Object.prototype.toString.call(obj) === '[object Object]') {
+    return 'Object'
+  } else if (Object.prototype.toString.call(obj) === '[object Array]') {
+    return 'Array'
+  } else if (Object.prototype.toString.call(obj) === '[object String]') {
+    return 'String'
+  } else if (Object.prototype.toString.call(obj) === '[object Boolean]') {
+    return 'Boolean'
+  } else if (Object.prototype.toString.call(obj) === '[object Number]') {
+    return 'Number'
+  }
+}

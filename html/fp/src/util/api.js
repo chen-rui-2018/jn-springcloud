@@ -100,7 +100,10 @@ export default {
         getCompanyExcel:"springcloud-enterprise/data/garden/getCompanyExcel", // 纵向树形指标导出模式
         getScienceHeaderExcel:"springcloud-enterprise/data/garden/getScienceHeaderExcel", // 科技园模板表头
 
-
+        //im即时聊天
+        selectMsg:"im/selectMsg", // 获取聊天记录
+        isSended:"im/isSended", // 消息设置为已读
+        selectMsgList:"im/selectMsgList", // 获取聊天列表
 
      //我的企业
         getMyBusiness:"springcloud-enterprise/guest/company/getCompanyDetailByNowAccount",//获取当前用户企业信息
@@ -166,7 +169,7 @@ export default {
         changeToCompany:"springcloud-enterprise/guest/userUpgrade/changeToCompany", // 升级员工
 
 
-       
+
         addOrEditMemorandum:"springcloud-enterprise/pd/declaration/addOrEditMemorandum",//申报平台备注
         getProductSerialNumber:"springcloud-enterprise/servicemarket/product/manage/getProductSerialNumber",//产品编号获取
         updateCommonProduct:"springcloud-enterprise/servicemarket/product/web/updateCommonProduct",

@@ -1,6 +1,6 @@
 <template>
   <div :class="{pd: $store.state.needNav}" class="message-center-bg">
-    <div class="message-center">
+    <div :class="{pc: !$store.state.isMobile}" class="message-center">
       <div class="nav-tips" v-if="$store.state.needNav">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/home' }">消息中心</el-breadcrumb-item>
@@ -10,7 +10,7 @@
         </el-breadcrumb>
       </div>
       <el-container>
-        <el-aside width="200px">
+        <el-aside style="width: 200px; margin-right: 20px" v-if="$store.state.needNav">
           <el-menu
             default-active="2"
             class="el-menu-vertical-demo">
@@ -28,7 +28,7 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main class="message-center-main">
+        <el-main :class="{app: $store.state.isMobile}" class="message-center-main">
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -37,32 +37,64 @@
 </template>
 
 <script>
-import { isMobile } from "@/util";
 export default {
-  name: "MessageCenter",
-  data() {
-    return {
-      isMobile: isMobile()
-    }
-  }
+  name: "MessageCenter"
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~@/css/r-common";
 @import "~@/css/common";
 $bg-gray: #f3f3f3;
 .message-center-bg {
-  .message-center-main {
-    margin-left: 20px;
-  }
   background-color: $bg-gray;
+  .message-center-main {
+    padding: 0;
+    &.app {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      .message-chat,
+      .chat-win {
+        width: 100%;
+        height: 100%;
+        .chat-header {
+          width: 100%;
+          position: absolute;
+          top: 0;
+          left:0;
+          z-index: 1;
+        }
+        .chat-main {
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          margin-top: 0;
+          -webkit-overflow-scrolling: touch;
+          padding: 50px 10px 80px;
+          box-sizing: border-box;
+        }
+        /*.chat-footer {*/
+        /*  width: 100%;*/
+        /*  position: absolute;*/
+        /*  bottom: 0;*/
+        /*  left:0;*/
+        /*  box-sizing: border-box;*/
+        /*  padding: 0 10px;*/
+        /*}*/
+      }
+    }
+  }
   &.pd {
-    padding-top: 66px;
+    padding: 66px 0;
   }
 }
   .message-center {
-   width: 1190px;
+    &.pc {
+      width: 1190px;
+    }
    margin: 0 auto;
    min-height: 500px;
   .el-container {

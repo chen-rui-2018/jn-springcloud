@@ -313,7 +313,6 @@ export default {
         const treeList = data.data
         this.sortTree(treeList)
         this.targetTreeData = treeList
-        console.dir(treeList)
       })
     },
     sortTree(tree) {

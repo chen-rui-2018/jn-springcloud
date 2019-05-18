@@ -79,19 +79,12 @@
     computed: {
       isCenter() {
         const list = ['portalIndex', 'enterpriseservice']
-        let flag
-        for (const item of this.$route.matched) {
-          for (const name of list) {
-            if (item.name === name) {
-              flag = true
-            }
-          }
-        }
-        return flag
+        return this.$route.matched.some(item => {
+          return list.indexOf(item.name) !== -1
+        })
       }
     },
     mounted() {
-      console.log(this.$route.path)
       this.swiperinit();
       window.addEventListener("scroll", this.handleScroll);
     },

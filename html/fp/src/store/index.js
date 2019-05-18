@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
-
+import { isMobile } from '@/util'
 const state = {
-  needNav: true // 是否隐藏导航栏，在app.vue设定
+  needNav: true, // 是否隐藏导航栏，在app.vue设定
+  isMobile: isMobile()
 }
 
 const mutations = {

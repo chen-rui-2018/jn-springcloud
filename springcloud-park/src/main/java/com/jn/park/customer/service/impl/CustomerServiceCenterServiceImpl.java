@@ -12,7 +12,10 @@ import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.customer.dao.TbClientRolePersonInfoMapper;
 import com.jn.park.customer.dao.TbClientServiceCenterMapper;
+import com.jn.park.customer.entity.TbClientRolePersonInfo;
+import com.jn.park.customer.entity.TbClientRolePersonInfoCriteria;
 import com.jn.park.customer.entity.TbClientServiceCenter;
 import com.jn.park.customer.entity.TbClientServiceCenterCriteria;
 import com.jn.park.customer.enums.IBPSOptionsStatusEnum;
@@ -65,6 +68,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     @Autowired
     private SystemClient systemClient;
 
+    @Autowired
+    private TbClientRolePersonInfoMapper personInfoMapper;
+
 
     /**
      * 字典表服务模块分组id
@@ -79,6 +85,18 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      */
     @Value(value = "${onlineCustomerProcessId}")
     private String onlineCustomerProcessId;
+    /**
+     * 客服问题处理流程节点名称
+     */
+    private static final String SEND_NODE="发起节点";
+    /**
+     * 客服问题处理流程节点名称
+     */
+    private static final String CUSTER_CENTER="客服中心";
+    /**
+     * 客服问题处理流程节点名称
+     */
+    private static final String EXECUTE_PERSON="处理人";
 
 
     /**
@@ -150,7 +168,6 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     @ServiceLog(doAction = "封装处理处理历史记录")
     private CustomerServiceCenterDetailVo getExecuteHistoryInfo(CustomerServiceCenterDetailVo customerVo,IBPSResult ibpsResult) {
         Object data = ibpsResult.getData();
-        System.out.printf("------审批历史记录------"+data+"-----------------------");
         LinkedTreeMap dataMap=(LinkedTreeMap)data;
         List<LinkedTreeMap> dataResult = (List<LinkedTreeMap> )dataMap.get("dataResult");
         List<ExecuteHistoryResult> resultList=new ArrayList<>(16);
@@ -170,18 +187,41 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
                 logger.warn("根据用户id获取用户信息失败");
                 throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
             }
-            historyShow.setTaskName(userInfo.getData().getName());
-            if(StringUtils.equals("发起节点", result.getTaskName())){
+            historyShow.setAuditorName(userInfo.getData().getName());
+            if(StringUtils.equals(SEND_NODE, result.getTaskName())){
                 //设置发起节点信息
-                setSendPersonInfo(result.getStatus(), historyShow, user);
-            }else if(StringUtils.equals("客服中心", result.getTaskName())){
+                setSendPersonInfo(result.getStatus(), historyShow, userInfo.getData());
+                historyShow.setOptionDeptName(CUSTER_CENTER);
+            }else if(StringUtils.equals(CUSTER_CENTER, result.getTaskName())
+                    || StringUtils.equals(EXECUTE_PERSON, result.getTaskName())){
                 //设置客户中心分发/处理节点信息
-                setCustomerCenterInfo(result.getQualifiedExecutor(), historyShow,result.getStatus());
-            }else if(StringUtils.equals("处理人", result.getTaskName())){
-
+                List<String> userIds = setCustomerCenterInfo(result.getQualifiedExecutor(), historyShow, result.getStatus());
+                if(!userIds.isEmpty()){
+                    TbClientRolePersonInfoCriteria example=new TbClientRolePersonInfoCriteria();
+                    example.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+                    List<TbClientRolePersonInfo> rolePersonInfoList = personInfoMapper.selectByExample(example);
+                    if(rolePersonInfoList.isEmpty()){
+                        logger.warn("------------获取客服处理角色所属用户信息失败-----------");
+                        throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
+                    }
+                    for(TbClientRolePersonInfo personInfo:rolePersonInfoList){
+                        if(StringUtils.equals(StringUtils.join(userIds,","), personInfo.getUserId())){
+                            historyShow.setOptionDeptId(personInfo.getRoleId());
+                            historyShow.setOptionDeptName(personInfo.getRoleName());
+                            break;
+                        }
+                    }
+                }
             }
-
             executeHistoryShowList.add(historyShow);
+        }
+        for(int i=0;i<executeHistoryShowList.size();i++){
+            for(int j=i+1;j<executeHistoryShowList.size();j++){
+                if(StringUtils.equals(CUSTER_CENTER, executeHistoryShowList.get(i).getTaskName())){
+                    executeHistoryShowList.get(i).setOpinion("将问题转派给"+executeHistoryShowList.get(j).getOptionDeptName());
+                    break;
+                }
+            }
         }
         customerVo.setExecuteHistoryShowList(executeHistoryShowList);
         return customerVo;
@@ -193,23 +233,34 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param historyShow       历史记录展示bean
      * @param status        操作状态
      */
-    private void setCustomerCenterInfo(List<LinkedTreeMap<String, String>> qualifiedExecutor , ExecuteHistoryShow historyShow,String status) {
+    private List<String> setCustomerCenterInfo(List<LinkedTreeMap<String, String>> qualifiedExecutor , ExecuteHistoryShow historyShow,String status) {
         List<String>accountList=new ArrayList<>();
         List<String>userIdList=new ArrayList<>();
+        List<String>ibpsUserIds=new ArrayList<>();
         for(LinkedTreeMap<String, String> linkedTreeMap:qualifiedExecutor){
-            String userId = linkedTreeMap.get("executId").replace("user", "");
-            userIdList.add(userId);
-            User user=new User();
-            user.setId(userId);
-            Result<User> userInfo  = systemClient.getUser(user);
-            if(userInfo==null||userInfo.getData()==null){
-                logger.warn("根据用户id获取用户信息失败");
-                throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
+            //执行人类型为用户
+            String role="employee";
+            if(StringUtils.equals(role, linkedTreeMap.get("type"))){
+                //获取ibps可执行用户id,用于后续操作获取所属角色/部门
+                ibpsUserIds.add(linkedTreeMap.get("executId"));
+                String userId = linkedTreeMap.get("executId").replace("user", "");
+                userIdList.add(userId);
+                User user=new User();
+                user.setId(userId);
+                Result<User> userInfo  = systemClient.getUser(user);
+                if(userInfo==null||userInfo.getData()==null){
+                    logger.warn("根据用户id获取用户信息失败");
+                    throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
+                }
+                accountList.add(user.getAccount());
             }
-            accountList.add(user.getAccount());
         }
-        historyShow.setExecuteUserIds(StringUtils.join(userIdList,"," ));
-        historyShow.setExecuteUserIds(StringUtils.join(accountList,"," ));
+        if(!userIdList.isEmpty()){
+            historyShow.setExecuteUserIds(StringUtils.join(userIdList,"," ));
+        }
+        if(!accountList.isEmpty()){
+            historyShow.setExecuteUserIds(StringUtils.join(accountList,"," ));
+        }
         if(StringUtils.equals(IBPSOptionsStatusEnum.PENDING.getCode(),status)){
             historyShow.setStatusName("待处理");
         }else if(StringUtils.equals(IBPSOptionsStatusEnum.AGREE.getCode(),status)){
@@ -219,6 +270,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }else if(StringUtils.equals(IBPSOptionsStatusEnum.REJECT_TO_PREVIOUS.getCode(), status)){
             historyShow.setStatusName("转回客服中心");
         }
+        return ibpsUserIds;
     }
 
     /**
@@ -230,6 +282,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     private void setSendPersonInfo(String status, ExecuteHistoryShow historyShow, User user) {
         historyShow.setExecuteAccounts(user.getAccount());
         historyShow.setExecuteUserIds(user.getId());
+        historyShow.setOptionDeptName(user.getAccount());
         if(StringUtils.equals(IBPSOptionsStatusEnum.SUBMIT.getCode(), status)){
             historyShow.setStatusName("已提交");
         }else if(StringUtils.equals(IBPSOptionsStatusEnum.PENDING.getCode(), status)){

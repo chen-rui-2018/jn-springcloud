@@ -11,7 +11,7 @@ import com.jn.park.asset.model.RoomInformationModel;
 import com.jn.park.asset.model.RoomPayOrdersItemModel;
 import com.jn.park.asset.model.RoomPayOrdersModel;
 import com.jn.park.asset.service.RoomInformationService;
-import com.jn.park.asset.vo.AppPayDataVo;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -110,7 +110,7 @@ public class RoomManageController {
             @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050811515490657"),
             @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE")
     })
-    public Result<AppPayDataVo> createPayOrder (String orderId, String channelId){
+    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(orderId,"订单编号不能为空");
         return roomInformationService.createPayOrder(orderId,channelId,user.getAccount());

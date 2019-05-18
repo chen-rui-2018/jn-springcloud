@@ -1,5 +1,6 @@
 package com.jn.pay.vo;
 
+import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

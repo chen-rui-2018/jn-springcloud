@@ -18,10 +18,12 @@ import javax.annotation.Resource;
 public interface RoomOrderClient {
     /**
      * 支付回调
+     * test RoomOrderClientTest.java
      * @param payOrderNotify
      * @return
      */
     @RequestMapping(value = "/api/order/payCallBack", method = RequestMethod.POST)
     Result payCallBack(@RequestBody PayOrderNotify payOrderNotify);
+
 
 }

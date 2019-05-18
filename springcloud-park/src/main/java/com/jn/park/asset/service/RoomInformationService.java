@@ -8,6 +8,7 @@ import com.jn.park.asset.model.RoomInformationModel;
 import com.jn.park.asset.model.RoomPayOrdersItemModel;
 import com.jn.park.asset.model.RoomPayOrdersModel;
 import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 
 import java.sql.Date;
 import java.util.List;
@@ -61,7 +62,7 @@ public interface RoomInformationService {
      * @param channelId
      * @return
      */
-    public Result createPayOrder(String orderId,String channelId ,String userAccount);
+    public Result<PayOrderRsp> createPayOrder(String orderId, String channelId , String userAccount);
     /**
      * 支付回调
      * @param payOrderNotify

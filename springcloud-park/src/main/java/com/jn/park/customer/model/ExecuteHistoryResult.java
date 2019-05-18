@@ -1,5 +1,6 @@
 package com.jn.park.customer.model;
 
+import com.google.gson.internal.LinkedTreeMap;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,8 +13,10 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ConsultationCustomerListParam",description = "客服中心园区用户问题处理流程历史记录出参")
+@ApiModel(value = "ConsultationCustomerListParam",description = "客服中心园区用户问题处理流程历史记录返回数据")
 public class ExecuteHistoryResult implements Serializable {
+    @ApiModelProperty("流程主键id")
+    private String id;
     @ApiModelProperty("主键")
     private String pk;
     @ApiModelProperty("创建时间")
@@ -22,12 +25,16 @@ public class ExecuteHistoryResult implements Serializable {
     private String procDefId;
     @ApiModelProperty("流程实例id")
     private String procInstId;
-    @ApiModelProperty("节点id")
+    @ApiModelProperty("父流程节点id")
+    private String supInstId;
+    @ApiModelProperty("任务key")
     private String taskKey;
-    @ApiModelProperty("节点名称")
+    @ApiModelProperty("任务名称")
     private String taskName;
-    @ApiModelProperty("节点执行人信息")
-    private List<QualFieds> qualfieds;
+    @ApiModelProperty("任务id")
+    private String taskId;
+    @ApiModelProperty("节点可执行人的信息")
+    private Object qualfieds;
     @ApiModelProperty("节点执行人用户id")
     private String auditor;
     @ApiModelProperty("操作说明")
@@ -37,11 +44,27 @@ public class ExecuteHistoryResult implements Serializable {
     @ApiModelProperty("处理时间")
     private String completeTime;
     @ApiModelProperty("总耗时")
-    private String durMs;
+    private long durMs;
     @ApiModelProperty("内部提出")
-    private String interpose;
+    private int interpose;
     @ApiModelProperty("执行人信息")
-    private List<QualifiedExecutor> qualifiedExecutor;
+    private List<LinkedTreeMap<String,String>> qualifiedExecutor;
+    @ApiModelProperty("用户图片")
+    private String userImg;
+    @ApiModelProperty("操作状态名称")
+    private String statusName;
+    @ApiModelProperty("节点执行人账号")
+    private String auditorName;
+    @ApiModelProperty("呼叫提交")
+    private boolean callSub;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getPk() {
         return pk;
@@ -75,6 +98,14 @@ public class ExecuteHistoryResult implements Serializable {
         this.procInstId = procInstId;
     }
 
+    public String getSupInstId() {
+        return supInstId;
+    }
+
+    public void setSupInstId(String supInstId) {
+        this.supInstId = supInstId;
+    }
+
     public String getTaskKey() {
         return taskKey;
     }
@@ -91,11 +122,19 @@ public class ExecuteHistoryResult implements Serializable {
         this.taskName = taskName;
     }
 
-    public List<QualFieds> getQualfieds() {
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public Object getQualfieds() {
         return qualfieds;
     }
 
-    public void setQualfieds(List<QualFieds> qualfieds) {
+    public void setQualfieds(Object qualfieds) {
         this.qualfieds = qualfieds;
     }
 
@@ -131,27 +170,86 @@ public class ExecuteHistoryResult implements Serializable {
         this.completeTime = completeTime;
     }
 
-    public String getDurMs() {
+    public long getDurMs() {
         return durMs;
     }
 
-    public void setDurMs(String durMs) {
+    public void setDurMs(long durMs) {
         this.durMs = durMs;
     }
 
-    public String getInterpose() {
+    public int getInterpose() {
         return interpose;
     }
 
-    public void setInterpose(String interpose) {
+    public void setInterpose(int interpose) {
         this.interpose = interpose;
     }
 
-    public List<QualifiedExecutor> getQualifiedExecutor() {
+    public List<LinkedTreeMap<String, String>> getQualifiedExecutor() {
         return qualifiedExecutor;
     }
 
-    public void setQualifiedExecutor(List<QualifiedExecutor> qualifiedExecutor) {
+    public void setQualifiedExecutor(List<LinkedTreeMap<String, String>> qualifiedExecutor) {
         this.qualifiedExecutor = qualifiedExecutor;
+    }
+
+    public String getUserImg() {
+        return userImg;
+    }
+
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public String getAuditorName() {
+        return auditorName;
+    }
+
+    public void setAuditorName(String auditorName) {
+        this.auditorName = auditorName;
+    }
+
+    public boolean isCallSub() {
+        return callSub;
+    }
+
+    public void setCallSub(boolean callSub) {
+        this.callSub = callSub;
+    }
+
+    @Override
+    public String toString() {
+        return "ExecuteHistoryResult{" +
+                "id='" + id + '\'' +
+                ", pk='" + pk + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", procDefId='" + procDefId + '\'' +
+                ", procInstId='" + procInstId + '\'' +
+                ", supInstId='" + supInstId + '\'' +
+                ", taskKey='" + taskKey + '\'' +
+                ", taskName='" + taskName + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", qualfieds=" + qualfieds +
+                ", auditor='" + auditor + '\'' +
+                ", opinion='" + opinion + '\'' +
+                ", status='" + status + '\'' +
+                ", completeTime='" + completeTime + '\'' +
+                ", durMs=" + durMs +
+                ", interpose=" + interpose +
+                ", qualifiedExecutor=" + qualifiedExecutor +
+                ", userImg='" + userImg + '\'' +
+                ", statusName='" + statusName + '\'' +
+                ", auditorName='" + auditorName + '\'' +
+                ", callSub=" + callSub +
+                '}';
     }
 }

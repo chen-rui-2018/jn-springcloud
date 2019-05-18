@@ -1,9 +1,11 @@
 package com.jn.park.customer.vo;
 
+import com.jn.park.customer.model.ExecuteHistoryShow;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Author: yangph
@@ -33,6 +35,8 @@ public class CustomerServiceCenterDetailVo implements Serializable {
     private String contactWay;
     @ApiModelProperty("处理状态(0：待处理  1:处理中 2：已处理,3:无法处理)")
     private String status;
+    @ApiModelProperty("问题处理记录")
+    private List<ExecuteHistoryShow> executeHistoryShowList;
 
     public String getProcessInsId() {
         return processInsId;
@@ -112,5 +116,30 @@ public class CustomerServiceCenterDetailVo implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<ExecuteHistoryShow> getExecuteHistoryShowList() {
+        return executeHistoryShowList;
+    }
+
+    public void setExecuteHistoryShowList(List<ExecuteHistoryShow> executeHistoryShowList) {
+        this.executeHistoryShowList = executeHistoryShowList;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerServiceCenterDetailVo{" +
+                "processInsId='" + processInsId + '\'' +
+                ", quesCode='" + quesCode + '\'' +
+                ", quesTitle='" + quesTitle + '\'' +
+                ", quesDetails='" + quesDetails + '\'' +
+                ", quesUrl='" + quesUrl + '\'' +
+                ", serviceModule='" + serviceModule + '\'' +
+                ", serviceModuleName='" + serviceModuleName + '\'' +
+                ", clientType='" + clientType + '\'' +
+                ", contactWay='" + contactWay + '\'' +
+                ", status='" + status + '\'' +
+                ", executeHistoryShowList=" + executeHistoryShowList +
+                '}';
     }
 }

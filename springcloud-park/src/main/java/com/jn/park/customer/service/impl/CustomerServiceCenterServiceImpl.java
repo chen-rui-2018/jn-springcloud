@@ -1,5 +1,6 @@
 package com.jn.park.customer.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
@@ -14,6 +15,7 @@ import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.customer.dao.TbClientServiceCenterMapper;
 import com.jn.park.customer.entity.TbClientServiceCenter;
 import com.jn.park.customer.entity.TbClientServiceCenterCriteria;
+import com.jn.park.customer.enums.IBPSOptionsStatusEnum;
 import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterService;
 import com.jn.park.customer.vo.CustomerServiceCenterDetailVo;
@@ -21,7 +23,9 @@ import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.park.parkcode.dao.TbParkCodeMapper;
 import com.jn.park.parkcode.entity.TbParkCode;
 import com.jn.park.parkcode.entity.TbParkCodeCriteria;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
 import org.json.simple.JSONObject;
@@ -57,6 +61,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
 
     @Autowired
     private UserExtensionClient userExtensionClient;
+
+    @Autowired
+    private SystemClient systemClient;
 
 
     /**
@@ -128,17 +135,107 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         //获取审批历史成功
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("----------------根据任务id获取问题详情获取处理历史成功------------");
-            Object data = ibpsResult.getData();
-            System.out.printf("------审批历史记录------"+data+"-----------------------");
-            LinkedTreeMap<String,ArrayList<LinkedTreeMap>> resultMap=(LinkedTreeMap)data;
-            ArrayList<LinkedTreeMap> dataList = resultMap.get("dataResult");
-            for(LinkedTreeMap linkedTreeMap:dataList){
-                LinkedTreeMap qualifiedExecutor =(LinkedTreeMap)linkedTreeMap.get("qualifiedExecutor");
-                String usrId=(String)qualifiedExecutor.get("executId");
-            }
+            CustomerServiceCenterDetailVo executeHistoryInfo = getExecuteHistoryInfo(customerVo, ibpsResult);
+            return executeHistoryInfo;
+        }else{
+            logger.warn("根据任务id获取问题详情失败，{}",ibpsResult.getMessage());
+            throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
         }
+    }
 
-        return opinions;
+    /**
+     * 封装处理处理历史记录
+     * @param ibpsResult
+     */
+    @ServiceLog(doAction = "封装处理处理历史记录")
+    private CustomerServiceCenterDetailVo getExecuteHistoryInfo(CustomerServiceCenterDetailVo customerVo,IBPSResult ibpsResult) {
+        Object data = ibpsResult.getData();
+        System.out.printf("------审批历史记录------"+data+"-----------------------");
+        LinkedTreeMap dataMap=(LinkedTreeMap)data;
+        List<LinkedTreeMap> dataResult = (List<LinkedTreeMap> )dataMap.get("dataResult");
+        List<ExecuteHistoryResult> resultList=new ArrayList<>(16);
+        for(LinkedTreeMap linkedTreeMap:dataResult){
+            ObjectMapper objectMapper = new ObjectMapper();
+            ExecuteHistoryResult executeHistoryResult = objectMapper.convertValue(linkedTreeMap, ExecuteHistoryResult.class);
+            resultList.add(executeHistoryResult);
+        }
+        List<ExecuteHistoryShow> executeHistoryShowList=new ArrayList<>(16);
+        for(ExecuteHistoryResult result:resultList){
+            ExecuteHistoryShow historyShow=new ExecuteHistoryShow();
+            BeanUtils.copyProperties(result, historyShow);
+            User user=new User();
+            user.setId(historyShow.getAuditor().replace("user", ""));
+            Result<User> userInfo = systemClient.getUser(user);
+            if(userInfo==null||userInfo.getData()==null){
+                logger.warn("根据用户id获取用户信息失败");
+                throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
+            }
+            historyShow.setTaskName(userInfo.getData().getName());
+            if(StringUtils.equals("发起节点", result.getTaskName())){
+                //设置发起节点信息
+                setSendPersonInfo(result.getStatus(), historyShow, user);
+            }else if(StringUtils.equals("客服中心", result.getTaskName())){
+                //设置客户中心分发/处理节点信息
+                setCustomerCenterInfo(result.getQualifiedExecutor(), historyShow,result.getStatus());
+            }else if(StringUtils.equals("处理人", result.getTaskName())){
+
+            }
+
+            executeHistoryShowList.add(historyShow);
+        }
+        customerVo.setExecuteHistoryShowList(executeHistoryShowList);
+        return customerVo;
+    }
+
+    /**
+     * 设置客户中心分发/处理节点信息
+     * @param qualifiedExecutor  用户可执行人信息
+     * @param historyShow       历史记录展示bean
+     * @param status        操作状态
+     */
+    private void setCustomerCenterInfo(List<LinkedTreeMap<String, String>> qualifiedExecutor , ExecuteHistoryShow historyShow,String status) {
+        List<String>accountList=new ArrayList<>();
+        List<String>userIdList=new ArrayList<>();
+        for(LinkedTreeMap<String, String> linkedTreeMap:qualifiedExecutor){
+            String userId = linkedTreeMap.get("executId").replace("user", "");
+            userIdList.add(userId);
+            User user=new User();
+            user.setId(userId);
+            Result<User> userInfo  = systemClient.getUser(user);
+            if(userInfo==null||userInfo.getData()==null){
+                logger.warn("根据用户id获取用户信息失败");
+                throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
+            }
+            accountList.add(user.getAccount());
+        }
+        historyShow.setExecuteUserIds(StringUtils.join(userIdList,"," ));
+        historyShow.setExecuteUserIds(StringUtils.join(accountList,"," ));
+        if(StringUtils.equals(IBPSOptionsStatusEnum.PENDING.getCode(),status)){
+            historyShow.setStatusName("待处理");
+        }else if(StringUtils.equals(IBPSOptionsStatusEnum.AGREE.getCode(),status)){
+            historyShow.setStatusName("已处理");
+        }else if(StringUtils.equals(IBPSOptionsStatusEnum.OPPOSE.getCode(),status)){
+            historyShow.setStatusName("无法处理");
+        }else if(StringUtils.equals(IBPSOptionsStatusEnum.REJECT_TO_PREVIOUS.getCode(), status)){
+            historyShow.setStatusName("转回客服中心");
+        }
+    }
+
+    /**
+     * 设置发起节点信息
+     * @param status      发起人节点操作状态
+     * @param historyShow  历史记录展示bean
+     * @param user        用户信息
+     */
+    private void setSendPersonInfo(String status, ExecuteHistoryShow historyShow, User user) {
+        historyShow.setExecuteAccounts(user.getAccount());
+        historyShow.setExecuteUserIds(user.getId());
+        if(StringUtils.equals(IBPSOptionsStatusEnum.SUBMIT.getCode(), status)){
+            historyShow.setStatusName("已提交");
+        }else if(StringUtils.equals(IBPSOptionsStatusEnum.PENDING.getCode(), status)){
+            historyShow.setStatusName("待处理");
+        }
+        historyShow.setOpinion("提交问题");
     }
 
     /**

@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.park.electricmeter.dao.MeterDao">
 
     <insert id="insertReadingData" parameterType="java.util.List">
-        insert into Tb_Electric_Reading
+        insert into Tb_Electric_Reading_Source
         (<include refid="com.jn.park.electricmeter.dao.TbElectricReadingSourceMapper.Base_Column_List"/>)
         <foreach collection="readings"  index="index" item="item" separator="UNION ALL">
             select
@@ -27,18 +27,10 @@
 
     <insert id="insertData" parameterType="java.lang.String">
         insert into tb_electric_reading
-        (<include refid="com.jn.enterprise.data.dao.TbDataReportingTaskDataMapper.Base_Column_List"/>))
-        select id,
-            meter_code,
-            record_status,
-            create_time,
-            deal_date,
-            deal_hour,
-            reading_end,
-            max(time_end),
-            param,
-            building_id,
-            status
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricReadingMapper.Base_Column_List"/>)
+        select
+        id, meter_code, record_status, create_time, deal_date, degree_diff, deal_hour, reading_end,
+        max(time_end) as time_end, param, building_id, status, status_msg
             from tb_electric_reading_source where task_batch=#{taskBatch}
         group by meter_code, deal_date, deal_hour
     </insert>

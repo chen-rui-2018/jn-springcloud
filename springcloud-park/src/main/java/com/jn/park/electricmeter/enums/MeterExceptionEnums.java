@@ -13,8 +13,10 @@ public enum MeterExceptionEnums implements CodeAndMsg {
     COLLECTION_DATA_DEAL_FAIL("4010201","采集数据处理失败"),
     COLLECTION_DATA_DEAL_SUCCESS("4010202","采集数据处理成功"),
     COLLECTION_DATA_ISNOT_EXIST("4010203","采集数据不存在"),
+
     FAIL_LOG_ISNOT_EXIST("4010204","错误日志不存在"),
-    NOTICE_TIME_PARSE_DEFAULT("4010205","日期解析错误")
+    NOTICE_TIME_PARSE_DEFAULT("4010205","日期解析错误"),
+    COLLECTION_DATA_ISNOT_SUCCESS("4010206","采集数据不成功")
             ;
 
 

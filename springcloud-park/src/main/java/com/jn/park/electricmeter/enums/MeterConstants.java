@@ -34,10 +34,20 @@ public class MeterConstants {
     /**
      * 每页多少条
      */
-    public final static Integer ROWS=10;
+    public final static Integer ROWS=40;
 
     /**
      * 第一页
      */
     public final static Integer FIRST_PAGE=1;
+
+    /**
+     * 循环处理次数
+     */
+    public final static Integer LOOP_NUM=10;
+
+    /**
+     * 每次保存的次数
+     */
+    public final static Integer SAVE_SIZE=40;
 }

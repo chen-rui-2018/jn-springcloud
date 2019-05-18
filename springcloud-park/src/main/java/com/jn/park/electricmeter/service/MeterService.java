@@ -2,9 +2,11 @@ package com.jn.park.electricmeter.service;
 
 import com.jn.common.model.Result;
 import com.jn.hardware.model.electricmeter.ElectricMeterDataCollectionParam;
+import com.jn.hardware.model.electricmeter.ElectricMeterWaterOrElectricShow;
 import com.jn.system.log.annotation.ServiceLog;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author： yangh
@@ -21,17 +23,21 @@ public interface MeterService {
     void getDataFromHardare();
 
     /**
-     * 电表采集数据，保存数据逻辑主流程
+     * 保存流程
+     * @param dataList
+     * @param dealDate
+     * @param hour
      * @return
      */
-    Result dealData(Date dealDate, String hour, ElectricMeterDataCollectionParam parameter);
+    public Result saveData(List<ElectricMeterWaterOrElectricShow> dataList, Date dealDate, String hour, String taskBatch);
+
 
     /**
      * 手动处理指定的电表读数定时入库失败的数据
      * @param dealDate
      * @param dealHour
      */
-    Result dealSomeOneFailByHandle(Date dealDate,String dealHour);
+    void dealSomeOneFailByHandle(Date dealDate,String dealHour);
 
     /**
      * 手动处理所有电表读数定时入库失败的数据

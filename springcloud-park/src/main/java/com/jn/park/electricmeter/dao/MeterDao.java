@@ -20,7 +20,7 @@ public interface MeterDao {
      * 保存电表的采集读数到源表中
      * @param readings
      */
-    void insertReadingData(@Param("readings")  List<TbElectricReadingSource> readings );
+    int insertReadingData(@Param("readings")  List<TbElectricReadingSource> readings );
 
     /**
      * 将源表中过滤的数据，写入到正式的读数表中

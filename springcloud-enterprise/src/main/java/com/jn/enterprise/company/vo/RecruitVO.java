@@ -1,6 +1,7 @@
 package com.jn.enterprise.company.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jn.common.util.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,6 +20,8 @@ public class RecruitVO implements Serializable {
     private Integer num;
     @ApiModelProperty(value = "状态（1：已上架 0：已下架）")
     private String status;
+    @ApiModelProperty(value = "关注状态（1：已关注 0：未关注）")
+    private String careStatus;
     @ApiModelProperty(value = "有效性")
     private String statusName;
     @ApiModelProperty(value = "浏览数")
@@ -46,6 +49,18 @@ public class RecruitVO implements Serializable {
     private Date createdTime;
 
     private static final long serialVersionUID = 1L;
+
+    {
+        this.careStatus = "0";
+    }
+
+    public String getCareStatus() {
+        return careStatus;
+    }
+
+    public void setCareStatus(String careStatus) {
+        this.careStatus = careStatus;
+    }
 
     public String getComId() {
         return comId;

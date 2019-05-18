@@ -1,6 +1,7 @@
 package com.jn.news.message;
 
 import com.jn.common.channel.MessageSink;
+import com.jn.news.app.model.JPushResult;
 import com.jn.news.app.service.AppSinkService;
 import com.jn.news.vo.AppSinkVo;
 import org.slf4j.Logger;
@@ -28,8 +29,11 @@ public class AppSink {
         log.info("收到App的信息:{}",appSinkVo.toString()) ;
        // throw new JnSpringCloudException(CommonExceptionEnum.UN_KNOW);
         // TODO: 2018/11/8 请陈苗按这个模式来完成异步的功能
-        appSinkService.pushMessage(appSinkVo.getContent(),appSinkVo.getTitle(),appSinkVo.getIds(),appSinkVo.getPlatfromType());
+        JPushResult jPushResult = appSinkService.pushMessage(appSinkVo.getContent(), appSinkVo.getTitle(), appSinkVo.getIds(),
+                appSinkVo.getPushType(), appSinkVo.getPlatFromType(), appSinkVo.getNoticeType(),
+                appSinkVo.getMessage());
 
+        log.info("极光推送返回信息：{}", jPushResult.toString());
     }
 
 

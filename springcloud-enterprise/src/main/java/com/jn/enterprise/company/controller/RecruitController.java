@@ -54,6 +54,7 @@ public class RecruitController extends BaseController {
         User user = checkUserValid();
         ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
         serviceRecruitParam.setComId(company.getId());
+        serviceRecruitParam.setAccount(user.getAccount());
         return new Result(recruitService.getRecruitList(serviceRecruitParam, null));
     }
 

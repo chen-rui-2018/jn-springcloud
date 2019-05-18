@@ -77,12 +77,12 @@ public class AssetArticleLeaseController {
             @ApiImplicitParam(name = "contactName",value = "联系人姓名",example = "先生",required = true),
             @ApiImplicitParam(name = "contactPhone",value = "联系人电话",example = "123456",required = true),
             @ApiImplicitParam(name = "startTime",value = "开始时间",example = "2019-5-1",required = true),
-            @ApiImplicitParam(name = "endTime",value = "结束时间",example = "2019-6-1",required = true)
+            @ApiImplicitParam(name = "time",value = "填写租期",example = "10",required = true)
     })
-    public Result leaseWriter(String assetNumber,String leaseEnterprise, String contactName, String contactPhone, Date startTime,Date endTime){
+    public Result leaseWriter(String assetNumber,String leaseEnterprise, String contactName, String contactPhone, Date startTime,String time){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        String ordersNumber = assetArticleLeaseService.leaseWriter(assetNumber,leaseEnterprise,contactName,contactPhone,startTime,endTime,user);
+        String ordersNumber = assetArticleLeaseService.leaseWriter(assetNumber,leaseEnterprise,contactName,contactPhone,startTime,time,user);
         if (ordersNumber.equals("-1")){
             return new Result("-1","新增租赁订单失败");
         }

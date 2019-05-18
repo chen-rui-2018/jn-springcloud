@@ -11,10 +11,7 @@ import com.jn.company.model.ServiceCompany;
 import com.jn.park.asset.dao.*;
 import com.jn.park.asset.entity.*;
 import com.jn.park.asset.enums.*;
-import com.jn.park.asset.model.RoomBaseModel;
-import com.jn.park.asset.model.RoomInformationModel;
-import com.jn.park.asset.model.RoomPayOrdersItemModel;
-import com.jn.park.asset.model.RoomPayOrdersModel;
+import com.jn.park.asset.model.*;
 import com.jn.park.asset.service.RoomInformationService;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.MchIdEnum;
@@ -94,12 +91,19 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
     @Override
     @ServiceLog(doAction ="新增房间订单")
-    public Result addRoomOrders(String roomId,  String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime,String userAccount) {
+    public Result addRoomOrders(String roomId,  String contactName, String contactPhone, Date leaseStartTime, String month,String userAccount) {
 
         TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(roomId);
         //通过用户account查询企业
-        Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
-        ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
+        //Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
+        //ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
+
+        //计算结束时间
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(leaseStartTime);
+        cal.add(Calendar.MONTH,+Integer.parseInt(month));
+        java.util.Date calTime = cal.getTime();
+        java.sql.Date leaseEndTime=new java.sql.Date(calTime.getTime());
 
         //判断租借时间是否大于最短租期
         this.validShortestLease(leaseStartTime,leaseEndTime,tbRoomInformation);
@@ -116,7 +120,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         //生成订单号
         String orderId=UUID.randomUUID().toString();
         //订单总金额
-        BigDecimal orderPaySum=new BigDecimal("0");
+        BigDecimal orderPaySum=new BigDecimal(0);
 
         //生成订单明细
         for(TbRoomInformation e:tbRoomInformationList){
@@ -139,7 +143,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             item.setCreatorAccount(userAccount);
             item.setCreateTime(new java.util.Date());
             //加到订单总金额里面
-            orderPaySum.add(item.getPaySum());
+            orderPaySum = orderPaySum.add(item.getPaySum());
             logger.info("插入订单明细数据，{}",item);
             tbRoomOrdersItemMapper.insertSelective(item);
         }
@@ -155,14 +159,14 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         orders.setIsRelet(Byte.parseByte(RoomReletStatusEnums.NO.getCode()));
         //有效
         orders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
-        orders.setEnterpriseId(data.getId());
-        orders.setLeaseEnterprise(data.getComName());
+        //orders.setEnterpriseId(data.getId());
+        //orders.setLeaseEnterprise(data.getComName());
         orders.setLeaseStartTime(leaseStartTime);
         orders.setLeaseEndTime(leaseEndTime);
         orders.setContactName(contactName);
         orders.setContactPhone(contactPhone);
         orders.setCreateTime(new java.util.Date());
-        orders.setContactName(userAccount);
+        orders.setCreatorAccount(userAccount);
         logger.info("插入订单主表数据，{}",orders);
         tbRoomOrdersMapper.insert(orders);
 
@@ -534,6 +538,48 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         RoomPayOrdersItemModel roomPayOrdersItemModel = new RoomPayOrdersItemModel();
         BeanUtils.copyProperties(tbRoomOrdersItem,roomPayOrdersItemModel);
         return roomPayOrdersItemModel;
+    }
+
+    /**
+     * 房间租借历史订单(新)
+     * @param account
+     * @param page
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "房间租借历史订单(新)")
+    public PaginationData<List<RoomLeaseRecordModel>> getNewRoomOrdersList(String account, Page page) {
+        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
+        //获取创建时间倒叙排序的子订单列表
+        List<RoomLeaseRecordModel> roomLeaseRecordModelList = roomInformationDao.getNewRoomOrdersList(account);
+        PaginationData<List<RoomLeaseRecordModel>> data = new PaginationData(roomLeaseRecordModelList,objects.getTotal());
+        return data;
+    }
+
+    /**
+     * 房间租借租借详情(新)
+     * @param itemId 子订单id
+     * @param account
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "房间租借详情(新)")
+    public RoomOrdersModle getNewRoomOrders(String itemId, String account) {
+        RoomOrdersModle result = roomInformationDao.getNewRoomOrders(itemId);
+        String creatorAccount = result.getCreatorAccount();
+        if(result==null||!StringUtils.contains(creatorAccount,account)){
+            throw new JnSpringCloudException(new Result("-1","订单不存在"));
+        }
+        //通过订单id获取所有的子订单
+        TbRoomOrdersItemCriteria criteria=new TbRoomOrdersItemCriteria();
+        criteria.createCriteria().andOrderIdEqualTo(result.getOrderId());
+        List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(criteria);
+        result.setRoomOrdersModlesList(new ArrayList<>());
+        for (TbRoomOrdersItem tbRoomOrdersItem : tbRoomOrdersItemList) {
+            RoomOrdersModle orders = roomInformationDao.getNewRoomOrders(tbRoomOrdersItem.getId());
+            result.getRoomOrdersModlesList().add(orders);
+        }
+        return result;
     }
 
 }

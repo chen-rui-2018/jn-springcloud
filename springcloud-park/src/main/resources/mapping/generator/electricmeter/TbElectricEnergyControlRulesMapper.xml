@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.electricmeter.dao.TbElectricEnergyControlRulesMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.electricmeter.entity.TbElectricEnergyControlRules">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
+    <result column="rule_desc" jdbcType="VARCHAR" property="ruleDesc" />
+    <result column="warning_model" jdbcType="VARCHAR" property="warningModel" />
+    <result column="monitor_object" jdbcType="TINYINT" property="monitorObject" />
+    <result column="target_id" jdbcType="VARCHAR" property="targetId" />
+    <result column="threshold" jdbcType="VARCHAR" property="threshold" />
+    <result column="operation" jdbcType="TINYINT" property="operation" />
+    <result column="now_value" jdbcType="VARCHAR" property="nowValue" />
+    <result column="monitor_target" jdbcType="VARCHAR" property="monitorTarget" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, rule_name, rule_desc, warning_model, monitor_object, target_id, threshold, operation, 
+    now_value, monitor_target, record_status, creator_account, created_time, modifier_account, 
+    modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyControlRulesCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_electric_energy_control_rules
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_electric_energy_control_rules
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_electric_energy_control_rules
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyControlRulesCriteria">
+    delete from tb_electric_energy_control_rules
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyControlRules">
+    insert into tb_electric_energy_control_rules (id, rule_name, rule_desc, 
+      warning_model, monitor_object, target_id, 
+      threshold, operation, now_value, 
+      monitor_target, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{ruleName,jdbcType=VARCHAR}, #{ruleDesc,jdbcType=VARCHAR}, 
+      #{warningModel,jdbcType=VARCHAR}, #{monitorObject,jdbcType=TINYINT}, #{targetId,jdbcType=VARCHAR}, 
+      #{threshold,jdbcType=VARCHAR}, #{operation,jdbcType=TINYINT}, #{nowValue,jdbcType=VARCHAR}, 
+      #{monitorTarget,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyControlRules">
+    insert into tb_electric_energy_control_rules
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="ruleName != null">
+        rule_name,
+      </if>
+      <if test="ruleDesc != null">
+        rule_desc,
+      </if>
+      <if test="warningModel != null">
+        warning_model,
+      </if>
+      <if test="monitorObject != null">
+        monitor_object,
+      </if>
+      <if test="targetId != null">
+        target_id,
+      </if>
+      <if test="threshold != null">
+        threshold,
+      </if>
+      <if test="operation != null">
+        operation,
+      </if>
+      <if test="nowValue != null">
+        now_value,
+      </if>
+      <if test="monitorTarget != null">
+        monitor_target,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleName != null">
+        #{ruleName,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleDesc != null">
+        #{ruleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="warningModel != null">
+        #{warningModel,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorObject != null">
+        #{monitorObject,jdbcType=TINYINT},
+      </if>
+      <if test="targetId != null">
+        #{targetId,jdbcType=VARCHAR},
+      </if>
+      <if test="threshold != null">
+        #{threshold,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null">
+        #{operation,jdbcType=TINYINT},
+      </if>
+      <if test="nowValue != null">
+        #{nowValue,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorTarget != null">
+        #{monitorTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyControlRulesCriteria" resultType="java.lang.Long">
+    select count(*) from tb_electric_energy_control_rules
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_electric_energy_control_rules
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ruleName != null">
+        rule_name = #{record.ruleName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ruleDesc != null">
+        rule_desc = #{record.ruleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warningModel != null">
+        warning_model = #{record.warningModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.monitorObject != null">
+        monitor_object = #{record.monitorObject,jdbcType=TINYINT},
+      </if>
+      <if test="record.targetId != null">
+        target_id = #{record.targetId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.threshold != null">
+        threshold = #{record.threshold,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operation != null">
+        operation = #{record.operation,jdbcType=TINYINT},
+      </if>
+      <if test="record.nowValue != null">
+        now_value = #{record.nowValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.monitorTarget != null">
+        monitor_target = #{record.monitorTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_electric_energy_control_rules
+    set id = #{record.id,jdbcType=VARCHAR},
+      rule_name = #{record.ruleName,jdbcType=VARCHAR},
+      rule_desc = #{record.ruleDesc,jdbcType=VARCHAR},
+      warning_model = #{record.warningModel,jdbcType=VARCHAR},
+      monitor_object = #{record.monitorObject,jdbcType=TINYINT},
+      target_id = #{record.targetId,jdbcType=VARCHAR},
+      threshold = #{record.threshold,jdbcType=VARCHAR},
+      operation = #{record.operation,jdbcType=TINYINT},
+      now_value = #{record.nowValue,jdbcType=VARCHAR},
+      monitor_target = #{record.monitorTarget,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyControlRules">
+    update tb_electric_energy_control_rules
+    <set>
+      <if test="ruleName != null">
+        rule_name = #{ruleName,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleDesc != null">
+        rule_desc = #{ruleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="warningModel != null">
+        warning_model = #{warningModel,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorObject != null">
+        monitor_object = #{monitorObject,jdbcType=TINYINT},
+      </if>
+      <if test="targetId != null">
+        target_id = #{targetId,jdbcType=VARCHAR},
+      </if>
+      <if test="threshold != null">
+        threshold = #{threshold,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null">
+        operation = #{operation,jdbcType=TINYINT},
+      </if>
+      <if test="nowValue != null">
+        now_value = #{nowValue,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorTarget != null">
+        monitor_target = #{monitorTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyControlRules">
+    update tb_electric_energy_control_rules
+    set rule_name = #{ruleName,jdbcType=VARCHAR},
+      rule_desc = #{ruleDesc,jdbcType=VARCHAR},
+      warning_model = #{warningModel,jdbcType=VARCHAR},
+      monitor_object = #{monitorObject,jdbcType=TINYINT},
+      target_id = #{targetId,jdbcType=VARCHAR},
+      threshold = #{threshold,jdbcType=VARCHAR},
+      operation = #{operation,jdbcType=TINYINT},
+      now_value = #{nowValue,jdbcType=VARCHAR},
+      monitor_target = #{monitorTarget,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

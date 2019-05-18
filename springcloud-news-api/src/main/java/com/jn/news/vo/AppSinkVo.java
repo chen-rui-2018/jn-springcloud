@@ -21,12 +21,19 @@ public class AppSinkVo implements Serializable {
     @NotBlank(message = "消息内容不能为空")
     private String content;
     @ApiModelProperty(value = "推送的消息标题")
+    @NotBlank(message = "消息标题不能为空")
     private String title;
-    @ApiModelProperty(value = "推送的目标id列表",required = true)
-    @NotBlank(message = "消息发送目标id不能为空")
+    @ApiModelProperty(value = "推送的目标列表",required = true)
     private List<String> ids;
+    @ApiModelProperty(value = "推送方式（DEVICE：设备 TAG：标签）", required = true)
+    @NotBlank(message = "推送方式不能为空")
+    private String pushType;
     @ApiModelProperty(value = "平台类型 ANDROID/IOS/null  如果为null(不给值) 则发送给所有平台")
-    private String platfromType;
+    private String platFromType;
+    @ApiModelProperty(value = "推送通知类型（ALL：全部 NOTICE：通知 MESSAGE：透传消息）", required = true)
+    private String noticeType;
+    @ApiModelProperty(value = "透传消息内容（用户APP处理业务）", required = true)
+    private String message;
 
     public String getContent() {
         return content;
@@ -52,12 +59,36 @@ public class AppSinkVo implements Serializable {
         this.ids = ids;
     }
 
-    public String getPlatfromType() {
-        return platfromType;
+    public String getPushType() {
+        return pushType;
     }
 
-    public void setPlatfromType(String platfromType) {
-        this.platfromType = platfromType;
+    public void setPushType(String pushType) {
+        this.pushType = pushType;
+    }
+
+    public String getPlatFromType() {
+        return platFromType;
+    }
+
+    public void setPlatFromType(String platFromType) {
+        this.platFromType = platFromType;
+    }
+
+    public String getNoticeType() {
+        return noticeType;
+    }
+
+    public void setNoticeType(String noticeType) {
+        this.noticeType = noticeType;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
@@ -66,7 +97,10 @@ public class AppSinkVo implements Serializable {
                 "content='" + content + '\'' +
                 ", title='" + title + '\'' +
                 ", ids=" + ids +
-                ", platfromType=" + platfromType +
+                ", pushType='" + pushType + '\'' +
+                ", platFromType='" + platFromType + '\'' +
+                ", noticeType='" + noticeType + '\'' +
+                ", message='" + message + '\'' +
                 '}';
     }
 }

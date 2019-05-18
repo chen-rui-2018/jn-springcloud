@@ -28,8 +28,8 @@ public class ImServiceImpl implements ImService {
     @Autowired
     private ImMapper imMapper;
 
-    @Autowired
-    private TbImMessageMapper tbImMessageMapper;
+//    @Autowired
+//    private TbImMessageMapper tbImMessageMapper;
 
     @Override
     public PaginationData<List<TbImMessage>> selectMsg(Message message) {
@@ -39,7 +39,7 @@ public class ImServiceImpl implements ImService {
         return data;
     }
 
-    @Override
+    /*@Override
     public void isSended(TbImMessage tbImMessage) {
         tbImMessage.setSendId(null);
         tbImMessage.setMsgType(null);
@@ -49,7 +49,7 @@ public class ImServiceImpl implements ImService {
         tbImMessage.setSendTime(new Date());
         tbImMessage.setIsSended("Y");
         tbImMessageMapper.updateByPrimaryKeySelective(tbImMessage);
-    }
+    }*/
 
     @Override
     public PaginationData<List<TbImMessage>> selectMsgList(Message message) {

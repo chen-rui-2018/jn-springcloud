@@ -138,7 +138,7 @@ public class PayChannel4WxController{
                         // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
                         orderInfo.put("timeStamp", timestamp);
                         orderInfo.put("nonceStr", nonceStr);
-                        orderInfo.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
+                        orderInfo.put("packageValue", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
                         orderInfo.put("signType", WxPayConstants.SignType.MD5);
                         orderInfo.put("paySign", SignUtils.createSign(payInfo, wxPayConfig.getMchKey(), null));
                         break;

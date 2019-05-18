@@ -73,7 +73,7 @@ public class MeetingController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改会议申请")
-    @ApiOperation(value = "修改会议室")
+    @ApiOperation(value = "修改会议申请")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/update")
     public Result update(@Validated @RequestBody OaMeetingAdd oaMeeting) {
@@ -133,8 +133,8 @@ public class MeetingController extends BaseController {
     }
 
 
-    @ControllerLog(doAction = "校验会议室主题称是否存在,fail表示名称已存在,success表示可以使用")
-    @ApiOperation(value = "校验会议室主题是否存在", notes = "fail表示名称已存在,success表示可以使用")
+    @ControllerLog(doAction = "校验会议主题称是否存在,fail表示名称已存在,success表示可以使用")
+    @ApiOperation(value = "校验会议主题是否存在", notes = "fail表示名称已存在,success表示可以使用")
     @RequestMapping(value = "/checkName", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/checkName")
     public Result<String> checkName(String meetingRoomName) {

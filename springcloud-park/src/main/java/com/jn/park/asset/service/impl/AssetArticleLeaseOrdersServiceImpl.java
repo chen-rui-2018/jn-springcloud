@@ -3,20 +3,26 @@ package com.jn.park.asset.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.park.asset.dao.AssetArticleLeaseDao;
 import com.jn.park.asset.dao.AssetArticleLeaseOrdersDao;
 import com.jn.park.asset.dao.TbAssetArticleLeaseOrdersMapper;
 import com.jn.park.asset.entity.TbAssetArticleLeaseOrders;
 import com.jn.park.asset.enums.LeaseStatusEnums;
 import com.jn.park.asset.enums.OrdersTypeEnums;
+import com.jn.park.asset.model.AssetArticleLeaseModel;
 import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.LeaseOrdersModel;
 import com.jn.park.asset.service.AssetArticleLeaseOrdersService;
+import com.jn.pay.enums.ChannelIdEnum;
+import com.jn.pay.enums.MchIdEnum;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.model.User;
-import com.netflix.discovery.converters.Auto;
+import com.jn.pay.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +40,8 @@ import java.util.Map;
 */
 @Service
 public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrdersService {
+    private static final Logger logger = LoggerFactory.getLogger(AssetArticleLeaseOrdersServiceImpl.class);
+
     @Autowired
     private  TbAssetArticleLeaseOrdersMapper tbAssetArticleLeaseOrdersMapper;
     @Autowired
@@ -77,6 +85,11 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
               cal.add(Calendar.HOUR_OF_DAY,1);
               String lastTime = sdf.format(cal.getTime());
               leaseOrdersModel.setLastPayTime(lastTime);
+              //设置条形码
+              leaseOrdersModel.setBarCode(leaseOrdersModel.getAssetNumber());
+              AssetArticleLeaseModel articleLease = assetArticleLeaseDao.getArticleLease(leaseOrdersModel.getAssetNumber());
+              //设置最低租借时间
+              leaseOrdersModel.setLeaseTime(articleLease.getLeaseTime());
           }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -112,6 +125,29 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
         List<AssetArticleLeaseOrdersModel> assetArticleLeaseOrdersModelList = assetArticleLeaseOrdersDao.getArticleLeaseOrdersList(account);
         PaginationData<List<AssetArticleLeaseOrdersModel>> data = new PaginationData<>(assetArticleLeaseOrdersModelList,objects.getTotal());
         return data;
+    }
+
+    /**
+     * 发起支付
+     * @param id
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "发起支付")
+    @Transactional(rollbackFor = RuntimeException.class)
+    public Result startPayment(String id) {
+        AssetArticleLeaseOrdersModel leaseOrders = assetArticleLeaseOrdersDao.getLeaseOrders(id);
+        /**调用支付接口发起支付*/
+        logger.info("开始调用统一缴费发起支付接口操作");
+        PayOrderReq payOrderReq = new PayOrderReq();
+        //商户id
+        payOrderReq.setMchId(MchIdEnum.MCH_BASE.getCode());
+        //商户订单号
+        payOrderReq.setMchOrderNo(leaseOrders.getId());
+        //渠道ID(APP支付)
+        payOrderReq.setChannelId(ChannelIdEnum.WX_APP.getCode());
+        //支付金额
+        return null;
     }
 
     /**

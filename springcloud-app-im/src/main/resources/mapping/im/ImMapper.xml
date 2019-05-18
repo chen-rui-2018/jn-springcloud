@@ -10,8 +10,10 @@
         im.SEND_TIME as "sendTime"
         from tb_im_message im
         where 1=1
-        and ((SEND_ID = #{fromUser} and RECEIVE_ID = #{toUser})
-        or (SEND_ID = #{toUser} and RECEIVE_ID = #{fromUser}))
+        <if test="id != null and id !=''">
+            and (CREATE_TIME &gt; (select create_time from tb_im_message where id = #{id}))
+        </if>
+        and ((SEND_ID = #{fromUser} and RECEIVE_ID = #{toUser}) or (SEND_ID = #{toUser} and RECEIVE_ID = #{fromUser}))
         order by CREATE_TIME desc
     </select>
 

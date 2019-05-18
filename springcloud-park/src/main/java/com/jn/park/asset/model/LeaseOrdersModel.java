@@ -49,6 +49,12 @@ public class LeaseOrdersModel implements Serializable {
     @ApiModelProperty(value = "押金",example = "100.00")
     private BigDecimal leaseCash;
 
+    @ApiModelProperty(value = "条形码",example = "577793928904835072")
+    private String barCode;
+
+    @ApiModelProperty(value = "最低租借时间",example = "10")
+    private String leaseTime;
+
     @ApiModelProperty(value = "开始时间",example = "2019-05-01")
     private Date startTime;
 
@@ -144,6 +150,22 @@ public class LeaseOrdersModel implements Serializable {
 
     public void setLeaseCash(BigDecimal leaseCash) {
         this.leaseCash = leaseCash;
+    }
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
+    }
+
+    public String getLeaseTime() {
+        return leaseTime;
+    }
+
+    public void setLeaseTime(String leaseTime) {
+        this.leaseTime = leaseTime;
     }
 
     public Date getStartTime() {

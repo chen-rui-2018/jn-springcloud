@@ -134,6 +134,12 @@ public class CareServiceImpl implements CareService {
         return userDetails;
     }
 
+    @Override
+    @ServiceLog(doAction = "查询关注的企业")
+    public List<String> findCareCompanyList(String account) {
+        return careDao.findCareCompanyList(account);
+    }
+
 
     /**
      * 完善用户扩展信息

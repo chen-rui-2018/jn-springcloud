@@ -6,6 +6,9 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * 点评
@@ -24,5 +27,13 @@ public interface CareClient {
      */
     @RequestMapping(value = "/api/care/findCompanyCareInfo", method = RequestMethod.POST)
     Result findCompanyCareInfo(@RequestBody CareParam careParam);
+
+    /**
+     * 查询关注的企业
+     * @param careParam
+     * @return
+     */
+    @RequestMapping(value = "/api/care/findCareCompanyList", method = RequestMethod.POST)
+    Result<List<String>> findCareCompanyList(@RequestBody CareParam careParam);
 
 }

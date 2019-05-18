@@ -28,7 +28,6 @@ import com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapp
 import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -343,7 +342,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         product.setProductId("");
 
         // 启动IBPS流程
-        String bpmnDefId = ibpsDefIdConfig.getProduct();
+        String bpmnDefId = ibpsDefIdConfig.getTechnologyProduct();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, product);
 
         // ibps启动流程失败

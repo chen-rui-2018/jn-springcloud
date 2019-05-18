@@ -98,7 +98,6 @@
 	<div>
 		<a id="btnSelectMsgList" href="javascript:void(0)">查看聊天列表<> /im/selectMsgList</a><br/>
 		<a id="btnSelectMsg" href="javascript:void(0)">查看聊天记录<> /im/selectMsg</a><br/>
-		<a id="btnIsSended" href="javascript:void(0)">更改消息为已读<> /im/isSended</a><br/>
 		<div id="selectMsgDiv">
 		<div>
 	</div>
@@ -177,12 +176,12 @@ $(function() {
 			return;
 		}
 		if('WebSocket' in window){
-			var wsUrl = "ws://localhost:8888/websocket/";
+			var wsUrl = "ws://192.168.10.31:8888/websocket";
+			var token = "IM_123_qwe**_X_Q";
 			
-			websocket = new WebSocket(wsUrl+agent+"/token");
+			websocket = new WebSocket(wsUrl+"/"+agent+"/"+token);
 		
-		    
-		     
+
 		   //连接发生错误的回调方法
 		     websocket.onerror = function(){
 		         console.log(" websocket.onerror :error");
@@ -190,11 +189,12 @@ $(function() {
  
 		     //连接成功建立的回调方法
 		     websocket.onopen = function(event){
-		     	
+				 console.log(event);
 		     }
  
 		     //接收到消息的回调方法
 		     websocket.onmessage = function(event){
+				 console.log(event)
 		    	 msg = eval('(' + event.data + ')');
 				 var content = eval('(' + msg.content + ')');
 				 if(content.fromUser == toUser){
@@ -202,24 +202,8 @@ $(function() {
 						"<p class='msgContent left title'>"+content.nickName+" ("+msg.createTime+"):</p>"+
 		   				"<p class='msgContent left p'>"+content.msg+"</p></li>"+
 		   				"<div style='clear:both'></div>";
-						$("#chatZone").append(message);
-						$("#chatRecord").scrollTop($("#chatRecord")[0].scrollHeight);
-					
-					if(msg.isSended == 'N'){
-						//更改消息为已读
-						var param = {
-							"id":msg.id
-						 };
-						$.ajax({
-							 type: "POST",
-							 url: "http://192.168.10.31:8888/im/isSended",
-							 data: JSON.stringify(param),
-							 dataType: "json",
-							 contentType: "application/json",
-							 success: function(data){
-							 }
-						 });
-					}
+					$("#chatZone").append(message);
+					$("#chatRecord").scrollTop($("#chatRecord")[0].scrollHeight);
 		    	 }
 		     	
 		     }
@@ -227,7 +211,7 @@ $(function() {
 		     //连接关闭的回调方法
 		     websocket.onclose = function(){
 		    	console.log(" websocket.onclose :close");
-		   		websocket = new WebSocket(wsUrl+agent);
+		   		websocket = new WebSocket(wsUrl+"/"+agent+"/"+token);
 		     }
  
 		     //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
@@ -245,6 +229,7 @@ $(function() {
 		var toUser = $("#toUser").val();
 		
 		var param = {
+			"id":"de328ca1-79af-4267-b228-3bf185c91668",
 			"fromUser":fromUser,
 			"toUser":toUser,
 			"page":"1",
@@ -258,10 +243,14 @@ $(function() {
 			 contentType: "application/json",
              success: function(data){
 				if(data.data.total != 0){
-					$("#selectMsgDiv").html("");
-					for(var i=0;i<data.data.rows.length;i++){
-						$("#selectMsgDiv").append(JSON.stringify(data.data.rows[i])+"</br>");
-					}
+                    $("#selectMsgDiv").html("");
+                    $("#selectMsgDiv").append(JSON.stringify(data)+"</br>");
+                    /*if(data.data.total != 0){
+                        $("#selectMsgDiv").html("");
+                        for(var i=0;i<data.data.rows.length;i++){
+                            $("#selectMsgDiv").append(JSON.stringify(data.data.rows[i])+"</br>");
+                        }
+                    }*/
 				}
              }
          });
@@ -284,12 +273,14 @@ $(function() {
 			dataType: "json",
 			contentType: "application/json",
 			success: function(data){
-				if(data.data.total != 0){
+                $("#selectMsgDiv").html("");
+                $("#selectMsgDiv").append(JSON.stringify(data)+"</br>");
+				/*if(data.data.total != 0){
 					$("#selectMsgDiv").html("");
 					for(var i=0;i<data.data.rows.length;i++){
 						$("#selectMsgDiv").append(JSON.stringify(data.data.rows[i])+"</br>");
 					}
-				}
+				}*/
 			}
 		});
 	});

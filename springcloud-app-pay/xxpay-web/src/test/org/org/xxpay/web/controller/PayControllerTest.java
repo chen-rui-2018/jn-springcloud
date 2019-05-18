@@ -7,7 +7,6 @@ import com.jn.pay.api.RefundOrderClient;
 import com.jn.pay.enums.ChannelIdEnum;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.*;
-import com.jn.pay.model.alipay.AlipayWapPayRsp;
 import com.jn.pay.utils.BeanToMap;
 import com.jn.pay.utils.PayDigestUtil;
 import com.jn.pay.utils.XXPayUtil;
@@ -49,7 +48,7 @@ public class PayControllerTest {
         payOrder.setMchId(MchIdEnum.MCH_BASE.getCode());
         //payOrder.setMchOrderNo(UUID.randomUUID().toString().substring(0,20));
         payOrder.setMchOrderNo("123");
-        payOrder.setChannelId(ChannelIdEnum.ALIPAY_WAP.getCode());
+        payOrder.setChannelId(ChannelIdEnum.WX_NATIVE.getCode());
         payOrder.setAmount(10000L);
         payOrder.setSubject("商品测试标题");
         payOrder.setBody("阳的测试消费");
@@ -58,15 +57,15 @@ public class PayControllerTest {
         payOrder.setServiceId("springcloud-enterprise");
         payOrder.setServiceUrl("/api/payment/payBill/payCallBack");
         payOrder.setAliPayReturnUrl("http://www.taobao.com");
-
-
+        payOrder.setExtra("{\"productId\":\"...\"}");
+        payOrder.setClientIp("192.168.10.80");
         /*******step 2 生成签名(签名后必须要确保参数都不变,否则影响验签结果) ********/
         //生成签名
         payOrder.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrder),MchIdEnum.MCH_BASE.getReqKey()));
 
         /*******step 3 调用接口 ********/
         //执行下单
-        Result<AlipayWapPayRsp> result  =   payOrderClient.createPayOrder(payOrder);
+        Result<PayOrderRsp> result  =   payOrderClient.createPayOrder(payOrder);
 
         /*******step 4 验证响应签名 ********/
         //验证响应签名
@@ -167,18 +166,18 @@ public class PayControllerTest {
         PayOrderReq payOrder = new PayOrderReq();
         payOrder.setMchId(MchIdEnum.MCH_BASE.getCode());
         //payOrder.setMchOrderNo(UUID.randomUUID().toString().substring(0,20));
-        payOrder.setMchOrderNo("123");
-        payOrder.setChannelId(ChannelIdEnum.WX_MWEB.getCode());
-        payOrder.setAmount(10000L);
-        payOrder.setSubject("商品测试标题");
-        payOrder.setBody("阳的测试消费");
-        payOrder.setParam1("param1");
+        payOrder.setMchOrderNo("c6855e1599bb4aeb9cf16d78c0ffe915");
+        payOrder.setChannelId(ChannelIdEnum.WX_JSAPI.getCode());
+        payOrder.setAmount(199000L);
+        payOrder.setClientIp("112.94.22.222");
+        payOrder.setDevice("web");
+        payOrder.setSubject("苏A00011[2019-01-01至2020-01-01月租卡");
+        payOrder.setBody("苏A00011[2019-01-01至2020-01-01月租卡");
         //payOrder.setNotifyUrl("http://192.168.10.80:3010/pay/notice");
-        payOrder.setServiceId("springcloud-enterprise");
-        payOrder.setServiceUrl("/api/payment/payBill/payCallBack");
-        payOrder.setAliPayReturnUrl("http://www.taobao.com");
-        payOrder.setExtra("{sceneInfo:22}");
-        payOrder.setClientIp("192.168.10.80");
+        payOrder.setServiceId("springcloud-payment");
+        payOrder.setServiceUrl("/api/pay/bill/payCallBack");
+        payOrder.setAliPayReturnUrl("http://www.baidu.com");
+        payOrder.setExtra("{\"openId\":\"o2RvowBf7sOVJf8kJksUEMceaDqo\"}");
         /*******step 2 生成签名(签名后必须要确保参数都不变,否则影响验签结果) ********/
         //生成签名
         payOrder.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrder),MchIdEnum.MCH_BASE.getReqKey()));

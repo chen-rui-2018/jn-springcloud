@@ -14,10 +14,10 @@ import java.io.Serializable;
  */
 @ApiModel(value="CareAddParam",description = "关注/取关入参")
 public class CareAddParam implements Serializable {
-    @ApiModelProperty(value= "被关注者的账号",required = true ,example = "wangsong")
+    @ApiModelProperty(value= "被关注者的账号（企业ID）",required = true ,example = "wangsong")
     @NotBlank(message = "被关注者账号不能为空")
     private String account;
-    @ApiModelProperty(value= "被关注者的账号类型 0:个人账号--1:企业账号",required = true ,example = "0")
+    @ApiModelProperty(value= "被关注者的账号类型 0:个人账号--1:企业账号--2:企业",required = true ,example = "0")
     @NotBlank(message = "被关注者账号类型不能为空")
     private String receiveType;
 

@@ -241,6 +241,6 @@ and obj_id = #{payBill.objId,jdbcType=VARCHAR}
         <if test="payBill.paymentState != null">
             and payment_state = #{payBill.paymentState,jdbcType=VARCHAR}
         </if>
-
+        order by payment_state desc
     </select>
 </mapper>

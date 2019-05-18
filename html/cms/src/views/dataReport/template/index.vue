@@ -1052,7 +1052,10 @@ export default {
                   }
                 }
                 // 勾选的树结构指标挂载到tree-table
-                this.$set(tab, 'treeTableData', list)
+                this.sortTree(list)
+                this.$nextTick(() => {
+                  this.$set(tab, 'treeTableData', list)
+                })
               })
           } else {
             //  科技园模板表头

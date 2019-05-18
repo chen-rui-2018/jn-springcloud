@@ -58,11 +58,23 @@ export default {
           if (res.code == "0000") {
             sessionStorage.token = res.data;
             sessionStorage.setItem("account",_this.loginform.account);
+            _this.api.get({
+              url: "getUserPersonInfo",
+              data: {
+                account: _this.loginform.account
+              },
+              dataFlag: false,
+              callback: function(res) {
+                if (res.code === "0000") {
+                 sessionStorage.setItem('userInfo', JSON.stringify(res.data))
+                } else {
+                  _this.$message.error(res.result);
+                }
+              }
+            });
             // _this.api.setToken(res.data);
             _this.$router.push({
-
               // path: "/userinfo",
-
               path: "/home",
               query: { account: _this.loginform.account }
             });

@@ -1,61 +1,66 @@
 <template>
   <div class="message-chat">
     <div class="chat-win">
-      <div class="chat-header">
-        <div class="chat-back">
-          <i class="el-icon-arrow-left"></i>
+      <div v-if="$route.query.toUser">
+        <div class="chat-header">
+          <div class="chat-back">
+            <i class="el-icon-arrow-left"></i>
+          </div>
+          <div class="chat-title">{{ toUserNickName }}的对话</div>
         </div>
-        <div class="chat-title">{{ $route.query.nickName }}的对话</div>
-      </div>
-      <div ref="chatMain" class="chat-main">
-        <div class="no-more" v-if="noMore">没有更多消息了</div>
-        <div class="tc" v-if="loading">
-          <i class="el-icon-loading"></i>
-          <span>正在加载...</span>
+        <div ref="chatMain" class="chat-main">
+          <div class="no-more" v-if="noMore">没有更多消息了</div>
+          <div class="tc" v-if="loading">
+            <i class="el-icon-loading"></i>
+            <span>正在加载...</span>
+          </div>
+          <!--          <div class="tc">-->
+          <!--            <div class="date-tips">04/04</div>-->
+          <!--          </div>-->
+          <message-row
+            v-for="(item, index) in messageList"
+            :key="index"
+            :message="item.content.msg"
+            :time="item.sendTime | formatTime"
+            :on-delete="deleteMessage"
+            :on-resend="() => { reSend(item) }"
+            :type="item.msgType === '0000'|| item.sendId === param.fromUser ? 'right' : 'left'"
+            :url="item.content.url"
+            :status="item.status"
+          />
         </div>
-        <!--          <div class="tc">-->
-        <!--            <div class="date-tips">04/04</div>-->
-        <!--          </div>-->
-        <message-row
-          v-for="(item, index) in messageList"
-          :key="index"
-          :message="item.content.msg"
-          :time="item.sendTime | formatTime"
-          :on-delete="deleteMessage"
-          :type="item.msgType === '0000' ? 'right' : 'left'"
-          :url="item.content.url"
-        />
-      </div>
-      <div class="chat-footer" v-if="!$store.state.isMobile">
-        <avatar class="flex-none"></avatar>
-        <div class="chat-footer-right">
+        <div class="chat-footer" v-if="!$store.state.isMobile">
+          <avatar class="flex-none" :url="url"></avatar>
+          <div class="chat-footer-right">
+            <el-input
+              v-model="message"
+              :rows="2"
+              :maxlength="600"
+              type="textarea"
+              @keyup.native.enter.prevent="() => { messageSend }"
+              placeholder="请输入内容"
+            />
+            <el-button
+              :type="message ? 'primary' : '' "
+              class="send-message"
+              @click="messageSend"
+            >回复
+            </el-button>
+          </div>
+        </div>
+        <div v-else class="app-chat-footer">
           <el-input
             v-model="message"
-            :rows="2"
-            :maxlength="600"
             type="textarea"
-            @keyup.native.enter.prevent="messageSend"
+            :rows="1"
+            :autosize="{ minRows: 1, maxRows: 4 }"
             placeholder="请输入内容"
+            class="app-input"
           />
-          <el-button
-            :type="message ? 'primary' : '' "
-            class="send-message"
-            @click="messageSend"
-          >回复
-          </el-button>
+          <el-button size="mini" @click="messageSend">发送</el-button>
         </div>
       </div>
-      <div v-else class="app-chat-footer">
-        <el-input
-          v-model="message"
-          type="textarea"
-          :rows="1"
-          :autosize="{ minRows: 1, maxRows: 4 }"
-          placeholder="请输入内容"
-          class="app-input"
-        />
-        <el-button size="mini" @click="messageSend">发送</el-button>
-      </div>
+      <div v-else class="no-chat">选择一个好友开始聊天吧</div>
     </div>
     <div v-if="$store.state.needNav" class="friend-list">
       <div class="friend-list-header">私信列表</div>
@@ -71,12 +76,15 @@
             <div class="friend-info">
               <div class="friend-name">{{ item.content.nickName }}</div>
               <div class="chat-time">
-                {{ item.sendTime | formatTime }}
+                {{ item.createTime | formatTime }}
                 <!--                  <span>星期二</span>-->
                 <!--                  <span>10:32</span>-->
               </div>
             </div>
-            <div class="message-content">{{ item.content.msg}}</div>
+            <div class="message-content">
+              <span v-if="item.issended === 'N'" class="unread"></span>
+              <span>{{ item.content.msg}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -85,11 +93,10 @@
 </template>
 
 <script>
-  import {isArray} from '@/util'
+  import { isArray, getDateString } from '@/util'
   import avatar from './common/avatar'
   import messageRow from './common/messageRow'
-  import axios from 'axios'
-
+  import sockHttp from '@/util/sockHttp'
   export default {
     name: "Chat",
     components: {
@@ -109,14 +116,24 @@
           page: 1,
           rows: 10
         },
+        url: '',
+        nickName: '',
+        toUserNickName: '',
         loading: false,
         currentHeight: 0,
         lastHeight: 0,
         noMore: false,
+        tempMessageList: [],
+        loaded: false
       }
     },
     mounted() {
       this.init()
+    },
+    watch: {
+      '$route'() {
+        this.init()
+      }
     },
     filters: {
       formatTime(d) {
@@ -125,13 +142,13 @@
         let od = new Date(d);
         const year = od.getFullYear()
         let mon = od.getMonth() + 1
-        mon = mon > 10 ? mon : '0' + mon
+        mon = mon > 9 ? mon : '0' + mon
         let day = od.getDate()
-        day = day > 10 ? day : '0' + day
+        day = day > 9 ? day : '0' + day
         let hour = od.getHours()
-        hour = hour > 10 ? hour : '0' + hour
+        hour = hour > 9 ? hour : '0' + hour
         let min = od.getMinutes()
-        min = min > 10 ? min : '0' + min
+        min = min > 9 ? min : '0' + min
 
         od = new Date(year, od.getMonth(), day);
         const xc = (od - td) / 1000 / 60 / 60 / 24;
@@ -152,7 +169,7 @@
         } else if (xc < 0) {
           tips = '昨天'
         } else if (xc === 0) {
-          tips = '今天'
+          tips = ''
         } else if (xc < 2) {
           tips = '明天'
         } else if (xc < 3) {
@@ -166,29 +183,45 @@
     methods: {
       init() {
         if (!this.$route.query.fromUser) {
-          this.$message.error('缺少发送人id')
+          this.$message.error('缺少发送人账号')
           return
         }
-        if (!this.$route.query.toUser) {
-          this.$message.error('缺少接收人id')
-          return
-        }if (!this.$route.query.nickName) {
-          this.$message.error('缺少接收人昵称')
-          return
-        }
-
+        this.toUserNickName = this.$route.query.nickName
         this.param.fromUser = this.$route.query.fromUser
-        this.param.toUser = this.$route.query.toUser
-        if (!this.param.toUser) {
-          return
+        this.getFromUserInfo()
+          .then(() => {
+            this.connect()
+            this.getUserList()
+          })
+        if (this.$route.query.toUser) {
+          this.param.toUser = this.$route.query.toUser
+          this.getHistoryMessage()
+            .then(this.setScrollTop, error => [
+              console.dir(error)
+            ])
+          this.checkHistoryMessage()
         }
-        this.connect()
-        this.getUserList()
-        this.getHistoryMessage()
-          .then(this.setScrollTop, error => [
-            console.dir(error)
-          ])
-        this.checkHistoryMessage()
+      },
+      getFromUserInfo() {
+        return new Promise(resolve => {
+          this.api.get({
+            url: "getUserPersonInfo",
+            data: {
+              account: this.$route.query.fromUser
+            },
+            dataFlag: false,
+            callback:(res) => {
+              if (res.code === "0000") {
+                const data = res.data
+                this.url = data.avatar
+                this.nickName = data.nickName
+                resolve()
+              } else {
+                this.$message.error(res.result);
+              }
+            }
+          })
+        })
       },
       setScrollTop() {
         this.lastHeight = this.$refs.chatMain.scrollHeight
@@ -199,7 +232,7 @@
       },
       checkHistoryMessage() {
         const chatMain = this.$refs.chatMain
-        chatMain.addEventListener('scroll', event => {
+        chatMain && chatMain.addEventListener('scroll', event => {
           const top = chatMain.scrollTop
           if (top <= 0 && !this.loading && !this.noMore) {
             this.param.page++
@@ -210,21 +243,48 @@
           }
         })
       },
-      messageSend() {
-        if (!this.message) {
+      messageSend(event, msg) {
+        const message = msg || this.message
+        console.dir(message)
+        if (!message) {
           return
         }
+        const now = getDateString()
+        const chatSendId = now + Math.floor(1000000 * Math.random())
         let data = {
           fromUser: this.param.fromUser,
           toUser: this.param.toUser,
-          nickName: this.$route.query.nickName,
-          msg: this.message,
-          url: 'http://img.52z.com/upload/news/image/20180801/20180801112618_87503.jpg'
+          nickName: this.nickName,
+          msg: message,
+          chatSendId: chatSendId,
+          url: this.url
         }
+        const json = {
+          content: {
+            fromUser: this.param.fromUser,
+            toUser: this.param.toUser,
+            nickName: this.nickName,
+            msg: message,
+            chatSendId: chatSendId
+          },
+          createTime: now,
+          id: '',
+          isSended: '',
+          msgType: '0000',
+          receiveId: this.param.toUser,
+          sendId: this.param.fromUser,
+          sendTime: now,
+          status: 'sending'
+        }
+        this.messageList.push(json)
+        this.tempMessageList.push(json)
         data = JSON.stringify(data)
         this.websocket.send(data)
         this.message = ''
         this.setScrollTop()
+      },
+      reSend(item) {
+        this.messageSend(1, item.content.msg)
       },
       getHistoryMessage() {
         return new Promise((resolve, reject) => {
@@ -232,19 +292,14 @@
             return
           }
           this.loading = true
-          axios({
-            method: 'post',
-            url: 'http://192.168.10.31:8888/im/selectMsg',
-            data: this.param
-          })
-            .then(res => {
-              const data = res.data
+          sockHttp.post('/im/selectMsg', this.param)
+            .then(data => {
               if (data.code === '0000') {
                 this.lastHeight = this.$refs.chatMain.scrollHeight
                 const historyList = this.formatJson(data.data.rows).reverse()
-                this.noMore = Math.ceil(data.data.total / this.param.rows) === this.param.page
+                this.noMore = historyList.length < this.param.rows
                 this.messageList = historyList.concat(this.messageList)
-                if (this.messageList.length > 0) {
+                if (historyList && historyList.length > 0) {
                   this.param.id = historyList[0].id
                 }
                 resolve()
@@ -261,13 +316,9 @@
           ...this.param
         }
         delete param.toUser
-        axios({
-          method: 'post',
-          url: 'http://192.168.10.31:8888/im/selectMsgList',
-          data: this.param
-        })
+        sockHttp.post('/im/selectMsgList', param)
           .then(res => {
-            this.userList = this.formatJson(res.data.data.rows)
+            this.userList = this.formatJson(res.data.rows)
           })
       },
       formatJson(arr) {
@@ -287,23 +338,48 @@
         this.websocket = new WebSocket(wsUrl + "/" + this.param.fromUser + "/" + token + "?accessToken=123qwe")
         //连接成功建立的回调方法
         this.websocket.onopen = function (event) {
-          console.dir('open')
+
         }
 
         //接收到消息的回调方法
         this.websocket.onmessage = event => {
 
           const data = JSON.parse(event.data)
-          console.dir(data)
           if (isArray(data) === 'Object') {
             data.content = JSON.parse(data.content)
-            if ((data.msgType === '0000' || data.msgType === '1111') && (data.sendId === this.param.toUser || data.sendId === this.param.fromUser)) {
-              vm.messageList.push(data)
-              this.setScrollTop()
+            console.dir(data)
+            if (data.msgType === '0000' || data.msgType === '1111') {
+              this.getUserList()
+              if (data.sendId === this.param.toUser || data.sendId === this.param.fromUser) {
+                // 如果发送或者接收成功
+                const isMine = this.tempMessageList.some((item, index) => {
+                  // 如果是刚刚自己发的那条信息，证明发送成功，只需要把发送状态设置成发送成功，不需要再放到消息列表
+                  if (item.content.chatSendId === data.content.chatSendId) {
+                    item.status = 'success'
+                    // 状态改变后，不需要后续逻辑操作，把消息从自己发送的临时列表里删除
+                    this.tempMessageList.splice(index, 1)
+                    return true
+                  }
+                })
+                // console.dir(isMine)
+                // 如果不是自己发的，那么就接收，并放到消息列表
+                if (!isMine) {
+                  vm.messageList.push(data)
+                  this.setScrollTop()
+                }
+              } else {
+                // 如果失败了，找到自己发送的那条，并把状态设置成功为失败
+                this.tempMessageList.forEach((item, index) => {
+                  if (item.content.chatSendId === data.content.chatSendId) {
+                    item.status = 'fail'
+                    // 状态改变后，不需要后续逻辑操作，把消息从自己发送的临时列表里删除
+                    this.tempMessageList.splice(index, 1)
+                  }
+                })
+              }
             }
           }
         }
-
         //连接关闭的回调方法
         this.websocket.onclose = function () {
           console.log(" websocket.onclose :close");
@@ -322,8 +398,9 @@
         this.$router.push({
           path: '/messageCenter/chat',
           query: {
-            nickName: item.content.nickName,
-            toUser: item.id,
+            toUser: item.sendId,
+            fromUser: this.param.fromUser,
+            nickName: this.nickName
           }
         })
       },
@@ -481,6 +558,14 @@
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
+              .unread {
+                $size: 8px;
+                display: inline-block;
+                width: $size;
+                height: $size;
+                border-radius: 50%;
+                background-color: #f56c6c;
+              }
             }
           }
         }
@@ -491,6 +576,13 @@
       text-align: center;
       color: #999;
       font-size: 12px;
+    }
+    .no-chat {
+      width: 100%;
+      height: 654px;
+      color: #666;
+      background-color: #fff;
+      @include flex-center;
     }
   }
 </style>

@@ -7,7 +7,12 @@
         <tips :text="message" :type="type === 'left' ? 'left' : 'right'"></tips>
 <!--        <div class="message-delete" @click="deleteMessage">删除</div>-->
       </div>
-      <div class="message-blank"></div>
+      <span>
+        <i v-if="status === 'fail'" class="message-warning el-icon-warning" @click="reSend"></i>
+        <i v-if="status === 'sending'" class="message-loading el-icon-loading"></i>
+      </span>
+      <div class="message-blank">
+      </div>
       <div class="message-time">{{ time }}</div>
     </div>
   </div>
@@ -25,6 +30,11 @@
         required: false,
         default: 'left'
       },
+      status: {
+        type: [String, Boolean],
+        required: false,
+        default: false
+      },
       url: {
         type: String,
         required: false
@@ -41,6 +51,11 @@
         type: Function,
         required: false,
         default() {}
+      },
+      onResend: {
+        type: Function,
+        required: false,
+        default() {}
       }
     },
     components: {
@@ -50,6 +65,9 @@
     methods: {
       deleteMessage() {
         this.onDelete()
+      },
+      reSend() {
+        this.onResend()
       }
     }
   }
@@ -92,12 +110,23 @@
       height: 1px;
     }
     .message-blank {
-      width: 30px;
+      width: 16px;
       height: 1px;
       flex: none;
     }
+    .message-loading,
+    .message-warning{
+      padding: 0 6px;
+      margin-top: 11px;
+      text-align: center;
+      flex: none;
+    }
+    .message-warning {
+      color: #f56c6c;
+      cursor: pointer;
+    }
     .message-time {
-      margin-top: 14px;
+      margin-top: 13px;
       color: #999;
       font-size: 10px;
       flex: none;

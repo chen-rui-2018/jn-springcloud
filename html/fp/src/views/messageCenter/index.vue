@@ -23,7 +23,7 @@
                 <el-menu-item index="1-2">选项2</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-menu-item index="2" @click.native="$router.push('/messageCenter/chat')">
+            <el-menu-item index="2" @click.native="toChat">
               <span slot="title">社区交流</span>
             </el-menu-item>
           </el-menu>
@@ -38,7 +38,18 @@
 
 <script>
 export default {
-  name: "MessageCenter"
+  name: "MessageCenter",
+  methods: {
+    toChat() {
+      const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+      this.$router.push({
+        path: '/messageCenter/chat',
+        query: {
+          fromUser: userInfo.account
+        }
+      })
+    }
+  }
 }
 </script>
 

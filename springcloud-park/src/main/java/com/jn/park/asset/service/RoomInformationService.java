@@ -3,10 +3,7 @@ package com.jn.park.asset.service;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.park.asset.model.RoomBaseModel;
-import com.jn.park.asset.model.RoomInformationModel;
-import com.jn.park.asset.model.RoomPayOrdersItemModel;
-import com.jn.park.asset.model.RoomPayOrdersModel;
+import com.jn.park.asset.model.*;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
 
@@ -35,11 +32,11 @@ public interface RoomInformationService {
      * @param contactName
      * @param contactPhone
      * @param leaseStartTime
-     * @param leaseEndTime
+     * @param month
      * @param userAccount
      * @return
      */
-    Result addRoomOrders(String roomId, String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime, String userAccount);
+    Result addRoomOrders(String roomId, String contactName, String contactPhone, Date leaseStartTime,  String month, String userAccount);
 
     /**
      * 获取房间基本信息
@@ -97,4 +94,20 @@ public interface RoomInformationService {
      * @return
      */
     RoomPayOrdersItemModel quitApply(String id);
+
+    /**
+     * 房间租借历史订单(新)
+     * @param account
+     * @param page
+     * @return
+     */
+    PaginationData<List<RoomLeaseRecordModel>> getNewRoomOrdersList(String account, Page page);
+
+    /**
+     * 房间租借详情(新)
+     * @param itemId 子订单id
+     * @param account
+     * @return
+     */
+    RoomOrdersModle getNewRoomOrders(String itemId, String account);
 }

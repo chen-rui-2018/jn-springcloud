@@ -59,6 +59,7 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
     @ServiceLog(doAction = "根据订单编号查询租借详情")
     public AssetArticleLeaseOrdersModel getLeaseOrders(String id) {
         AssetArticleLeaseOrdersModel assetArticleLeaseOrdersModel = assetArticleLeaseOrdersDao.getLeaseOrders(id);
+
         return assetArticleLeaseOrdersModel;
     }
 

@@ -60,13 +60,19 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
 
     @Override
     @ServiceLog(doAction = "企业填写租借资料")
-    public String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, java.sql.Date startTime, java.sql.Date endTime,User user) {
+    public String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, java.sql.Date startTime, String time,User user) {
         //填写租借企业资料
         AssetArticleLeaseModel articleLease = assetArticleLeaseDao.getArticleLease(assetNumber);
         articleLease.setLeaseEnterprise(leaseEnterprise);
         articleLease.setContactName(contactName);
         articleLease.setContactPhone(contactPhone);
         articleLease.setStartTime(startTime);
+        //计算结束时间
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startTime);
+        cal.add(Calendar.DAY_OF_MONTH,+Integer.parseInt(time));
+        Date calTime = cal.getTime();
+        java.sql.Date endTime=new java.sql.Date(calTime.getTime());
         articleLease.setEndTime(endTime);
         //判断租借时间是否大于最短租期
         int days = (int) ((articleLease.getEndTime().getTime() - articleLease.getStartTime().getTime()) / (1000*3600*24)+1);

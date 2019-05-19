@@ -58,7 +58,7 @@ public class PayBillVO implements Serializable {
     private String payId;
     @ApiModelProperty(value = "实际支付总金额")
     private Double payAmount;
-    @ApiModelProperty(value = "支付方式[0微信1支付宝2银联]")
+    @ApiModelProperty(value = "支付方式[1 银联闪付 2 微信 3 支付宝]")
     private String payType;
     @ApiModelProperty(value = "订单支付说明")
     private String payRemark;

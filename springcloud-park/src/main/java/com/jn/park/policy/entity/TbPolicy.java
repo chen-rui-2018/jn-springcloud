@@ -4,54 +4,87 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbPolicy implements Serializable {
+    /*@ApiModelProperty("政策id")*/
     private String policyId;
 
+    /*@ApiModelProperty("政策编号")*/
     private String policyCode;
 
+    /*@ApiModelProperty("政策级别编码")*/
     private String policyLevelCode;
 
+    /*@ApiModelProperty("政策级别名称")*/
     private String policyLevelName;
 
+    /*@ApiModelProperty("政策分类编码")*/
     private String policyClassCode;
 
+    /*@ApiModelProperty("政策分类名称")*/
     private String policyClassName;
 
+    /*@ApiModelProperty("政策类型(0：普通政策  1：图解政策)
+需求变更，此字段废弃")*/
     private String policyType;
 
+    /*@ApiModelProperty("图解政策url")*/
     private String policyDiagramUrl;
 
+    /*@ApiModelProperty("专题类型(0：一号专题   1：民营专题)")*/
     private String thematicType;
 
+    /*@ApiModelProperty("政策标题")*/
     private String policyTitle;
 
+    /*@ApiModelProperty("政策颁发编号")*/
+    private String policyIssuNum;
+
+    /*@ApiModelProperty("阅读次数")*/
     private Integer readNum;
 
+    /*@ApiModelProperty("发布日期")*/
     private Date releaseDate;
 
+    /*@ApiModelProperty("状态(0：无效     1：有效)")*/
     private String status;
 
+    /*@ApiModelProperty("支持方式(1：奖励     2：其他)")*/
     private String supportMethod;
 
+    /*@ApiModelProperty("支持产业(1：所有产业   2：其他)")*/
     private String supportIndustry;
 
+    /*@ApiModelProperty("发文单位")*/
     private String issueUnit;
 
+    /*@ApiModelProperty("有无关联政策图解(0：无    1：有)
+需求变更，此字段废弃")*/
     private String isPolicyDiagram;
 
+    /*@ApiModelProperty("关联的政策图解id
+需求变更，此字段废弃")*/
     private String relationPolicyDiagramId;
 
+    /*@ApiModelProperty("有无关联政策原文(0：无    1：有)
+需求变更，此字段废弃")*/
     private String isPolicyOriginal;
 
+    /*@ApiModelProperty("关联的政策原文id
+需求变更，此字段废弃")*/
     private String relationPolicyOriginalId;
 
+    /*@ApiModelProperty("创建时间")*/
     private Date createdTime;
 
+    /*@ApiModelProperty("创建者账号")*/
     private String creatorAccount;
 
+    /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
 
+    /*@ApiModelProperty("最新更新者账号")*/
     private String modifierAccount;
 
+    /*@ApiModelProperty("是否删除  0标记删除，1正常")*/
     private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
@@ -134,6 +167,14 @@ public class TbPolicy implements Serializable {
 
     public void setPolicyTitle(String policyTitle) {
         this.policyTitle = policyTitle == null ? null : policyTitle.trim();
+    }
+
+    public String getPolicyIssuNum() {
+        return policyIssuNum;
+    }
+
+    public void setPolicyIssuNum(String policyIssuNum) {
+        this.policyIssuNum = policyIssuNum == null ? null : policyIssuNum.trim();
     }
 
     public Integer getReadNum() {
@@ -278,6 +319,7 @@ public class TbPolicy implements Serializable {
             && (this.getPolicyDiagramUrl() == null ? other.getPolicyDiagramUrl() == null : this.getPolicyDiagramUrl().equals(other.getPolicyDiagramUrl()))
             && (this.getThematicType() == null ? other.getThematicType() == null : this.getThematicType().equals(other.getThematicType()))
             && (this.getPolicyTitle() == null ? other.getPolicyTitle() == null : this.getPolicyTitle().equals(other.getPolicyTitle()))
+            && (this.getPolicyIssuNum() == null ? other.getPolicyIssuNum() == null : this.getPolicyIssuNum().equals(other.getPolicyIssuNum()))
             && (this.getReadNum() == null ? other.getReadNum() == null : this.getReadNum().equals(other.getReadNum()))
             && (this.getReleaseDate() == null ? other.getReleaseDate() == null : this.getReleaseDate().equals(other.getReleaseDate()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
@@ -309,6 +351,7 @@ public class TbPolicy implements Serializable {
         result = prime * result + ((getPolicyDiagramUrl() == null) ? 0 : getPolicyDiagramUrl().hashCode());
         result = prime * result + ((getThematicType() == null) ? 0 : getThematicType().hashCode());
         result = prime * result + ((getPolicyTitle() == null) ? 0 : getPolicyTitle().hashCode());
+        result = prime * result + ((getPolicyIssuNum() == null) ? 0 : getPolicyIssuNum().hashCode());
         result = prime * result + ((getReadNum() == null) ? 0 : getReadNum().hashCode());
         result = prime * result + ((getReleaseDate() == null) ? 0 : getReleaseDate().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
@@ -343,6 +386,7 @@ public class TbPolicy implements Serializable {
         sb.append(", policyDiagramUrl=").append(policyDiagramUrl);
         sb.append(", thematicType=").append(thematicType);
         sb.append(", policyTitle=").append(policyTitle);
+        sb.append(", policyIssuNum=").append(policyIssuNum);
         sb.append(", readNum=").append(readNum);
         sb.append(", releaseDate=").append(releaseDate);
         sb.append(", status=").append(status);

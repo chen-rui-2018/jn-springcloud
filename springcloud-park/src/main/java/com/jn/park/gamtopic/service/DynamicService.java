@@ -114,4 +114,12 @@ public interface DynamicService {
      */
     PaginationData<List<DynamicCommentReplyShow>> findDynamicCommentAndReplyList(DynamicCommentsParam param);
 
+    /**
+     * 动态点赞,取消点赞
+     * @param dynamicLikeOperate
+     * @param account
+     * @return
+     */
+    int   dynamicLikeOperate(DynamicLikeOperate dynamicLikeOperate,String account);
+
 }

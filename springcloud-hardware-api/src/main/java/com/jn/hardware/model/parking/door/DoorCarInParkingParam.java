@@ -17,17 +17,17 @@ public class DoorCarInParkingParam  implements Serializable {
 
     private static final long serialVersionUID = -7894120790912162965L;
     @ApiModelProperty(value = "道尔:入场信息列表")
-    List<DoorCarInParkingShow> carinlist;
+    private String carinlist;
     @ApiModelProperty(value = "动态签名")
     private String signature;
     @ApiModelProperty(value = "时间戳")
     private String  t;
 
-    public List<DoorCarInParkingShow> getCarinlist() {
+    public String getCarinlist() {
         return carinlist;
     }
 
-    public void setCarinlist(List<DoorCarInParkingShow> carinlist) {
+    public void setCarinlist(String carinlist) {
         this.carinlist = carinlist;
     }
 

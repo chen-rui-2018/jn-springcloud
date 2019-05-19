@@ -843,62 +843,52 @@ public class TbAssetArticleLeaseCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashEqualTo(String value) {
+        public Criteria andLeaseCashEqualTo(BigDecimal value) {
             addCriterion("lease_cash =", value, "leaseCash");
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashNotEqualTo(String value) {
+        public Criteria andLeaseCashNotEqualTo(BigDecimal value) {
             addCriterion("lease_cash <>", value, "leaseCash");
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashGreaterThan(String value) {
+        public Criteria andLeaseCashGreaterThan(BigDecimal value) {
             addCriterion("lease_cash >", value, "leaseCash");
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashGreaterThanOrEqualTo(String value) {
+        public Criteria andLeaseCashGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("lease_cash >=", value, "leaseCash");
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashLessThan(String value) {
+        public Criteria andLeaseCashLessThan(BigDecimal value) {
             addCriterion("lease_cash <", value, "leaseCash");
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashLessThanOrEqualTo(String value) {
+        public Criteria andLeaseCashLessThanOrEqualTo(BigDecimal value) {
             addCriterion("lease_cash <=", value, "leaseCash");
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashLike(String value) {
-            addCriterion("lease_cash like", value, "leaseCash");
-            return (Criteria) this;
-        }
-
-        public Criteria andLeaseCashNotLike(String value) {
-            addCriterion("lease_cash not like", value, "leaseCash");
-            return (Criteria) this;
-        }
-
-        public Criteria andLeaseCashIn(List<String> values) {
+        public Criteria andLeaseCashIn(List<BigDecimal> values) {
             addCriterion("lease_cash in", values, "leaseCash");
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashNotIn(List<String> values) {
+        public Criteria andLeaseCashNotIn(List<BigDecimal> values) {
             addCriterion("lease_cash not in", values, "leaseCash");
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashBetween(String value1, String value2) {
+        public Criteria andLeaseCashBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("lease_cash between", value1, value2, "leaseCash");
             return (Criteria) this;
         }
 
-        public Criteria andLeaseCashNotBetween(String value1, String value2) {
+        public Criteria andLeaseCashNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("lease_cash not between", value1, value2, "leaseCash");
             return (Criteria) this;
         }

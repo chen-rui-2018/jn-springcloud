@@ -29,5 +29,13 @@ public interface ImService {
      *
      * @param tbImMessage
      */
-    void isSended(TbImMessage tbImMessage);
+    //void isSended(TbImMessage tbImMessage);
+
+    /**
+     * 查询聊天列表
+     *
+     * @param message
+     * @return
+     */
+    PaginationData<List<TbImMessage>> selectMsgList(Message message);
 }

@@ -23,6 +23,16 @@ public class CareUserShow implements Serializable {
     private String companyName;
     @ApiModelProperty(value = "粉丝数")
     private String fansNum;
+    @ApiModelProperty(value = "是否已关注 1是 0 否")
+    private String careStatus;
+
+    public String getCareStatus() {
+        return careStatus;
+    }
+
+    public void setCareStatus(String careStatus) {
+        this.careStatus = careStatus;
+    }
 
     public String getAccount() {
         return account;

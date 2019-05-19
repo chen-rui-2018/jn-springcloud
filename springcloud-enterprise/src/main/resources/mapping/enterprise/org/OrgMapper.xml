@@ -247,7 +247,7 @@
             <if test="businessType != null and businessType != ''">
                 and t.signory_id = #{businessType}
             </if>
-		    GROUP BY t.product_id
+		    GROUP BY t.product_id_
 	    ) AND r.record_status = '1'
     </select>
 

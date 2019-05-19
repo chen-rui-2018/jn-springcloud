@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.usercenterindex.dao.UserCenterIndexDao">
+
+    <!--企业邀请-->
+    <select id="findBusinessInvitation" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+        t.message_title
+        FROM tb_message_list t
+        WHERE t.record_status = 1
+        AND t.message_one_sort = 0
+        AND t.message_tow_sort = 8
+        AND t.message_recipient = #{account}
+        LIMIT 1
+    </select>
+
+    <!--员工申请-->
+    <select id="findEmployeeRequisition" parameterType="java.lang.String" resultType="com.jn.enterprise.usercenterindex.model.EmployeeRequisitionModel">
+        SELECT
+		SUM(CASE t.inviter_account WHEN ${account} then 1 else 0 end) as "total",
+		CONCAT(ROUND(sum( CASE  WHEN (t.check_status = 0 || t.check_status is NULL)  THEN 1 ELSE 0  END))) as "unExamine"
+        FROM
+        tb_service_company_staff t
+        WHERE t.record_status = 1
+        AND t.inviter_account=#{account}
+    </select>
+
+    <!--员工申请-->
+    <select id="findAdviserInvitation"  parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+        COUNT(t.org_id_) as "total"
+        FROM
+        tb_service_advisor t
+        WHERE t.record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(approvalStatus)">
+        AND t.approval_status=#{approvalStatus}
+        </if>
+        AND t.org_id_=#{orgId}
+    </select>
+
+</mapper>

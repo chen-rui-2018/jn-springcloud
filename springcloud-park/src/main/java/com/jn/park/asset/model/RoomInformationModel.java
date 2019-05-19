@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.List;
 
 /**
 * 房间信息model
@@ -31,10 +32,10 @@ public class RoomInformationModel implements Serializable {
     @ApiModelProperty(value = "所属楼宇名称",example = "1号楼")
     private String towerName;
 
-    @ApiModelProperty(value = "分组id",example = "")
+    @ApiModelProperty(value = "分组id",example = "2019051300020")
     private String groupId;
 
-    @ApiModelProperty(value = "所属分组",example = "")
+    @ApiModelProperty(value = "所属分组",example = "分组一")
     private String groupName;
 
     @ApiModelProperty(value = "面积(平方米)",example = "100")
@@ -50,10 +51,10 @@ public class RoomInformationModel implements Serializable {
     private BigDecimal leaseSum;
 
     @ApiModelProperty(value = "押",example = "1")
-    private String press;
+    private Integer press;
 
     @ApiModelProperty(value = "付",example = "3")
-    private String pay;
+    private Integer pay;
 
     @ApiModelProperty(value = "付款(如:押1付3)",example = "押1付3")
     private String pressPay;
@@ -73,8 +74,8 @@ public class RoomInformationModel implements Serializable {
     @ApiModelProperty(value = "介绍",example = "房间介绍")
     private String introduce;
 
-    @ApiModelProperty(value = "状态",example = "0")
-    private String state;
+    @ApiModelProperty(value = "状态(0空闲,1租借申请中,2租借中,3退租申请,4已到期)",example = "0")
+    private Byte state;
 
     @ApiModelProperty(value = "租借企业id",example = "")
     private String enterpriseId;
@@ -93,6 +94,15 @@ public class RoomInformationModel implements Serializable {
 
     @ApiModelProperty(value = "联系人电话",example = "123456")
     private String contactPhone;
+
+    @ApiModelProperty(value = "创建时间",example = "2019-05-05")
+    private java.sql.Date createTime;
+
+    @ApiModelProperty(value = "地址",example = "南京市秦淮区白下智慧园区XX街1号")
+    private String address;
+
+    @ApiModelProperty(value = "同属分组(房间id)",example = "")
+    private List<RoomInformationModel> groupRoomList;
 
     public String getId() {
         return id;
@@ -133,6 +143,7 @@ public class RoomInformationModel implements Serializable {
     public void setTowerName(String towerName) {
         this.towerName = towerName;
     }
+
 
     public String getGroupId() {
         return groupId;
@@ -182,19 +193,19 @@ public class RoomInformationModel implements Serializable {
         this.leaseSum = leaseSum;
     }
 
-    public String getPress() {
+    public Integer getPress() {
         return press;
     }
 
-    public void setPress(String press) {
+    public void setPress(Integer press) {
         this.press = press;
     }
 
-    public String getPay() {
+    public Integer getPay() {
         return pay;
     }
 
-    public void setPay(String pay) {
+    public void setPay(Integer pay) {
         this.pay = pay;
     }
 
@@ -246,11 +257,11 @@ public class RoomInformationModel implements Serializable {
         this.introduce = introduce;
     }
 
-    public String getState() {
+    public Byte getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Byte state) {
         this.state = state;
     }
 
@@ -300,5 +311,65 @@ public class RoomInformationModel implements Serializable {
 
     public void setContactPhone(String contactPhone) {
         this.contactPhone = contactPhone;
+    }
+
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public List<RoomInformationModel> getGroupRoomList() {
+        return groupRoomList;
+    }
+
+    public void setGroupRoomList(List<RoomInformationModel> groupRoomList) {
+        this.groupRoomList = groupRoomList;
+    }
+
+    @Override
+    public String toString() {
+        return "RoomInformationModel{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", floor='" + floor + '\'' +
+                ", towerId='" + towerId + '\'' +
+                ", towerName='" + towerName + '\'' +
+                ", groupId='" + groupId + '\'' +
+                ", groupName='" + groupName + '\'' +
+                ", roomArea='" + roomArea + '\'' +
+                ", shortestLease='" + shortestLease + '\'' +
+                ", leasePrice=" + leasePrice +
+                ", leaseSum=" + leaseSum +
+                ", press=" + press +
+                ", pay=" + pay +
+                ", pressPay='" + pressPay + '\'' +
+                ", houseType='" + houseType + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", floorPlan='" + floorPlan + '\'' +
+                ", roomPlan='" + roomPlan + '\'' +
+                ", introduce='" + introduce + '\'' +
+                ", state=" + state +
+                ", enterpriseId='" + enterpriseId + '\'' +
+                ", leaseEnterprise='" + leaseEnterprise + '\'' +
+                ", leaseStartTime=" + leaseStartTime +
+                ", leaseEndTime=" + leaseEndTime +
+                ", contactName='" + contactName + '\'' +
+                ", contactPhone='" + contactPhone + '\'' +
+                ", createTime=" + createTime +
+                ", address='" + address + '\'' +
+                ", groupRoomList=" + groupRoomList +
+                '}';
     }
 }

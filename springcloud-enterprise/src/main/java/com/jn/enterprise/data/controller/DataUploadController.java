@@ -141,11 +141,11 @@ public class DataUploadController  extends BaseController {
     /**企业上报数据统计**/
 
     @ControllerLog(doAction = "数据上报-企业数据上报统计-数据列表催报")
-    @GetMapping(path = "/company/setStatisticsListUrgeCompany")
+    @PostMapping(path = "/company/setStatisticsListUrgeCompany")
     @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果,正常结果为1")
     @RequiresPermissions("/data/company/setStatisticsListUrgeCompany")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001",required = true),
             @ApiImplicitParam(name="fillId",value = "填报Id",dataType = "String",paramType = "query",example = "001")
     })
     public Result<Integer> setStatisticsListUrgeCompany(String taskBatch,String fillId){
@@ -227,10 +227,7 @@ public class DataUploadController  extends BaseController {
     })
     public void getCompanyExcel(String taskbatch, String modelid, HttpServletRequest req,
                                     HttpServletResponse resp)throws IOException {
-
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
-       //List<CompanyTree> list = uploadService.getExcel(taskbatch,modelid);
-        System.out.println("================"+list);
         POICompany company = new POICompany();
        company.getTable(list,req,resp);
 
@@ -248,9 +245,7 @@ public class DataUploadController  extends BaseController {
     })
     public void getDescribeExcel(String taskbatch, String modelid, HttpServletRequest req,
                                 HttpServletResponse resp)throws IOException {
-
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
-
         POIDescribe de = new POIDescribe();
         de.getDescribeTable(list,req,resp);
 
@@ -267,14 +262,11 @@ public class DataUploadController  extends BaseController {
     })
     public void getScienceExcel(String taskbatch, String modelid, HttpServletRequest req,
                                  HttpServletResponse resp)throws IOException {
-
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
-
         POIScience science = new POIScience();
         science.getScienceTable(list,req,resp);
 
     }
-
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-科技园模板表头")
     @GetMapping(path = "/garden/getScienceHeaderExcel")
@@ -287,9 +279,7 @@ public class DataUploadController  extends BaseController {
     })
     public void getScienceHeaderExcel(String taskbatch, String modelid, HttpServletRequest req,
                                 HttpServletResponse resp)throws IOException {
-
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
-
         POIScienceHeader header = new POIScienceHeader();
         header.getScienceHeaderTable(list,req,resp);
 

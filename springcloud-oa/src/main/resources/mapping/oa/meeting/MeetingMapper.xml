@@ -313,7 +313,7 @@
             and meeting.id =#{id,jdbcType=VARCHAR}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(title)">
-            and meeting.title like CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
+            and meeting.title like CONCAT('%', trim(#{title,jdbcType=VARCHAR}), '%')
         </if>
 
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingStatus)">
@@ -324,10 +324,10 @@
         </if>
 
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomName)">
-            and meetingroom.name like CONCAT('%', #{meetingRoomName,jdbcType=VARCHAR}, '%')
+            and meetingroom.name like CONCAT('%', trim(#{meetingRoomName,jdbcType=VARCHAR}), '%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentName)">
-            and  u.department_name like CONCAT('%', #{departmentName,jdbcType=VARCHAR}, '%')
+            and  o.department_name like CONCAT('%', trim(#{departmentName,jdbcType=VARCHAR}), '%')
         </if>
 
         <if test="startTime != null">AND  Date(meeting.start_time) &gt;= #{startTime}</if>

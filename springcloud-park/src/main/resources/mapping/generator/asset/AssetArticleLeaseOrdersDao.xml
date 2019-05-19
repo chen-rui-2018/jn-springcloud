@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.asset.dao.AssetArticleLeaseOrdersDao">
-<select id="getArticleLeaseList" resultType="com.jn.park.asset.model.AssetArticleLeaseOrdersModel">
+<select id="getArticleLeaseOrdersList" parameterType="java.lang.String" resultType="com.jn.park.asset.model.AssetArticleLeaseOrdersModel">
     SELECT
         id,
         asset_number as assetNumber,
@@ -21,29 +21,35 @@
         end_time AS endTime,
         article_status AS articleStatus
     FROM tb_asset_article_lease_orders
-    WHERE record_status = '1'
+    WHERE record_status = '1' and creator_account = #{account} ORDER BY create_time DESC
 </select>
     <select id="getLeaseOrders" parameterType="java.lang.String" resultType="com.jn.park.asset.model.AssetArticleLeaseOrdersModel">
         SELECT
-            id,
-            asset_number as assetNumber,
-            article_id AS articleId,
-            type_id AS typeId,
-            asset_type AS assetType,
-            specification,
-            article_name AS articleName,
-            article_url AS articleUrl,
-            article_introduction AS articleIntroduction,
-            lease_enterprise AS leaseEnterprise,
-            contact_name AS contactName,
-            contact_phone AS contactPhone,
-            lease_cash AS leaseCash,
-            lease_price AS leasePrice,
-            start_time AS startTime,
-            end_time AS endTime,
-            article_status AS articleStatus
-        FROM tb_asset_article_lease_orders
-        WHERE record_status = '1'	AND id = #{id}
+            tb.id,
+            tb.asset_number AS assetNumber,
+            tb.asset_number AS barCode,
+            tb.article_id AS articleId,
+            tb.type_id AS typeId,
+            tb.asset_type AS assetType,
+            tb.specification,
+            tb.article_name AS articleName,
+            tb.article_url AS articleUrl,
+            tb.article_introduction AS articleIntroduction,
+            tb.lease_enterprise AS leaseEnterprise,
+            tb.contact_name AS contactName,
+            tb.contact_phone AS contactPhone,
+            tb.lease_cash AS leaseCash,
+            tb.lease_price AS leasePrice,
+            tb.start_time AS startTime,
+            tb.end_time AS endTime,
+            tb.article_status AS articleStatus,
+            ta.lease_time AS leaseTime
+        FROM
+            tb_asset_article_lease_orders tb
+                LEFT JOIN tb_asset_article_lease ta ON ta.id = tb.article_id
+        WHERE
+            tb.record_status = '1'
+          AND tb.id = #{id}
     </select>
 
     <select id="getPayOrders" parameterType="java.lang.String" resultType="com.jn.park.asset.model.LeaseOrdersModel">

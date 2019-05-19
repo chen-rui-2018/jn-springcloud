@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.plan.dao.ProjectManageDao">
+
+    <!--工程项目-->
+    <select id="findAll" resultMap="findAllProjectManageMap">
+        SELECT
+        t.project_no as "projectno", <!-- 项目编号 -->
+        t.project_name as "projectname", <!-- 项目名称-->
+        CASE
+        WHEN(t.progress=1) THEN '提前'
+        WHEN(t.progress=2) THEN '延迟'
+        ELSE '正常' END AS "progress", <!-- 项目进度-->
+        DATE_FORMAT(t.plan_start_time,'%Y-%m-%e') as "planstarttime", <!-- 项目计划开始时间-->
+        DATE_FORMAT(t.plan_stop_time,'%Y-%m-%e') as "planstoptime", <!-- 项目计划截止时间-->
+        CONCAT(ROUND(t.project_surplus_task),"%") as "projectsurplustask", <!-- 项目剩余任务量-->
+        IF(t.surplus_time = 0,'少于1',t.surplus_time) as "surplustime", <!-- 项目剩余工期-->
+        curdate() as "nowtime", <!-- 当前时间-->
+        t.project_state as "projectstate" <!-- 工程状态-->
+        <!-- CONCAT(ROUND(IF(t.surplus_time = 0,"少于一",t.surplus_time)),"天") as "surplustime"-->
+        FROM
+            tb_plan_project t
+        WHERE t.record_status = 1
+        <if test="projectName != null and projectName !='' ">
+        AND t.project_name LIKE concat(concat('%',#{projectName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="projectState != null and projectState !='' ">
+        AND t.project_state = #{projectState,jdbcType=INTEGER} <!-- 工程状态（2 已完成，1 进行中，0 未开始）-->
+        </if>
+        <if test="progress != null and progress != '' ">
+        AND t.progress = #{progress,jdbcType=DECIMAL} <!-- 进度（默认为0 ， 0 正常， 1 提前， 2 延迟 ）-->
+        </if>
+        ORDER BY #{orderByClause}
+    </select>
+
+
+    <resultMap id="findAllProjectManageMap" type="com.jn.park.plan.model.ProjectManageModel">
+        <result column="projectNo" jdbcType="VARCHAR" property="projectNo" />
+        <result column="projectName" jdbcType="VARCHAR" property="projectName" />
+        <result column="progress" jdbcType="VARCHAR" property="progress" />
+        <result column="planStartTime" jdbcType="VARCHAR" property="planStartTime" />
+        <result column="planStopTime" jdbcType="VARCHAR" property="planStopTime" />
+        <result column="projectSurplusTask" jdbcType="VARCHAR" property="projectSurplusTask" />
+        <result column="surplusTime" jdbcType="VARCHAR" property="surplusTime" />
+        <result column="nowTime" jdbcType="VARCHAR" property="nowTime" />
+        <result column="projectState" jdbcType="VARCHAR" property="projectState" />
+        <collection property="projectProgressRecordModels"
+                    ofType="com.jn.park.plan.model.ProjectProgressRecordModel"
+                    select="selectProjectProgressRecordList"
+                    column="{projectno=projectno}"></collection>
+    </resultMap>
+
+    <select id="selectProjectProgressRecordList" resultMap="findAllProgressRecordList">
+      SELECT
+    <!-- DATE_FORMAT(MAX(t.created_time),'%Y-%m-%d') as "createdtime" , 时间-->
+    DATE_FORMAT(MAX(t.created_time),'%Y-%m-%d') as "createdtime" ,<!-- 时间-->
+    t.progress as "progress", <!-- 进度 -->
+    DATE_FORMAT(CURRENT_DATE(),'%Y-%m-%d') as "currentData"
+    FROM
+        tb_plan_project_d t
+    WHERE t.record_status = 1
+    AND t.project_no=#{projectno}
+    GROUP BY t.created_time
+    </select>
+
+    <resultMap id="findAllProgressRecordList" type="com.jn.park.plan.model.ProjectProgressRecordModel">
+
+        <result column="created_time" jdbcType="VARCHAR" property="createdTime" />
+        <result column="progress" jdbcType="VARCHAR" property="progress" />
+        <result column="currentData" jdbcType="VARCHAR" property="currentData" />
+
+    </resultMap>
+
+
+    <!--查询工程项目中的任务-->
+    <select id="findProjectTask" parameterType="java.lang.String" resultType="com.jn.park.plan.model.ProjectTaskModel">
+        SELECT
+            t.task_name as "taskname", <!-- 任务名-->
+            CONCAT(ROUND(t.nowadays_progress * 1,0),"%") as "nowadaysprogress",<!-- 任务当前进度-->
+            CASE
+            WHEN(t.task_state=1) THEN '延期'
+            WHEN(t.task_state=2) THEN '正常'
+            WHEN(t.task_state=3) THEN '提前'
+            ELSE '未到期' END AS "taskstate", <!-- 项目进度  (默认 0 ，0 未到期，1延期，2正常，3提前)-->
+            <!-- 与计划相差时间  记录任务完成时与计划结束时间的相差时间-->
+            t.expect_differ_time as "expectdiffertime", <!-- 与计划相差时间 -->
+            CASE
+            WHEN(t.appraise=1) THEN '赞'
+            WHEN(t.appraise=2) THEN '倒'
+            WHEN(t.appraise=3) THEN '快'
+            WHEN(t.appraise=4) THEN '预警'
+            WHEN(t.appraise=5) THEN '慢'
+            WHEN(t.appraise=6) THEN '正常'
+            ELSE '无' END AS "appraise",<!-- 任务评价 默认 0，0 无，1赞，2倒，3快，4预警，5慢，6 正常 -->
+            IFNULL(DATE_FORMAT(t.plan_start_time,'%Y/%m/%d'),'') as "planstarttime", <!-- 计划开始时间-->
+            IFNULL(DATE_FORMAT(t.plan_stop_time,'%Y/%m/%d'),'') as "planstoptime", <!-- 计划结束时间-->
+            DATE_FORMAT(t.actual_begin_time,'%Y/%m/%d') as "actualbegintime", <!-- 实际开始时间-->
+            DATE_FORMAT(t.actual_end_time,'%Y/%m/%d') as "actualendtime" <!-- 实际结束时间-->
+            FROM
+                tb_plan_project_task t
+            WHERE t.record_status =1
+            AND t.project_number=#{projectNo}
+            ORDER BY t.task_name
+    </select>
+
+    <!--任务进展-->
+    <select id="findTaskPlan" parameterType="java.lang.String" resultType="com.jn.park.plan.model.ProjectPlanModel">
+        SELECT
+        CONCAT(ROUND(sum(1))) as "total",
+        CONCAT(ROUND(sum( CASE  WHEN t.nowadays_progress = 0  THEN 1 ELSE 0  END)/sum(1) * 100),"%") as "nostart",
+        CONCAT(ROUND(sum( CASE  WHEN t.nowadays_progress = 100  THEN 1 ELSE 0  END)/sum(1) * 100),"%") as "complete",
+        CONCAT(ROUND(sum( CASE  WHEN (t.nowadays_progress &gt; 0 &amp;&amp; t.nowadays_progress &lt; 100)  THEN 1 ELSE 0  END)/sum(1) * 100),"%") as "uncomplete"
+        FROM
+        tb_plan_project_task t
+        WHERE
+        t.record_status = 1
+        AND t.project_number=#{projectNo}
+
+    </select>
+
+
+    <!--完成及时率-->
+    <select id="findCompleteRatio" parameterType="java.lang.String" resultType="com.jn.park.plan.model.ProjectCompleteRatioModel">
+        select
+        -- 根据实际结束时间来判断是否显示,实际结束时间不为空是已完成的,并且完成时间是取填写100%进度时的系统时间
+        IF(actualendtime >=201901,CONCAT(ROUND(autual1)),'') as "autual1",
+        IF(actualendtime >=201901,CONCAT(ROUND(plan1)),'') as "plan1",
+        IF(actualendtime >=201901,CONCAT(ROUND(autual1-plan1)),'') as "completeratio1",
+        IF(actualendtime >=201902,CONCAT(ROUND(autual2)),'') as "autual2",
+        IF(actualendtime >=201902,CONCAT(ROUND(plan2)),'') as "plan2",
+        IF(actualendtime >=201902,CONCAT(ROUND(autual2-plan2)),'') as  "completeratio2",
+        IF(actualendtime >=201903,CONCAT(ROUND(autual3)),'') as "autual3",
+        IF(actualendtime >=201903,CONCAT(ROUND(plan3)),'') as "plan3",
+        IF(actualendtime >=201903,CONCAT(ROUND(autual3-plan3)),'') as "completeratio3",
+        IF(actualendtime >=201904,CONCAT(ROUND(autual4)),'') as "autual4",
+        IF(actualendtime >=201904,CONCAT(ROUND(plan4)),'') as "plan4",
+        IF(actualendtime >=201904,CONCAT(ROUND(autual4-plan4)),'') as  "completeratio4",
+        IF(actualendtime >=201905,CONCAT(ROUND(autual5)),'') as "autual5",
+        IF(actualendtime >=201905,CONCAT(ROUND(plan5)),'') as "plan5",
+        IF(actualendtime >=201905,CONCAT(ROUND(autual5-plan5)),'') as  "completeratio5",
+        IF(actualendtime >=201906,CONCAT(ROUND(autual6)),'') as "autual6",
+        IF(actualendtime >=201906,CONCAT(ROUND(plan6)),'') as "plan6",
+        IF(actualendtime >=201906,CONCAT(ROUND(autual6-plan6)),'') as  "completeratio6",
+        IF(actualendtime >=201907,CONCAT(ROUND(autual7)),'') as "autual7",
+        IF(actualendtime >=201907,CONCAT(ROUND(plan7)),'') as "plan7",
+        IF(actualendtime >=201907,CONCAT(ROUND(autual7-plan7)),'') as  "completeratio7",
+        IF(actualendtime >=201908,CONCAT(ROUND(autual8)),'') as "autual8",
+        IF(actualendtime >=201908,CONCAT(ROUND(plan8)),'') as "plan8",
+        IF(actualendtime >=201908,CONCAT(ROUND(autual8-plan8)),'') as  "completeratio8",
+        IF(actualendtime >=201909,CONCAT(ROUND(autual9)),'') as "autual9",
+        IF(actualendtime >=201909,CONCAT(ROUND(plan9)),'') as "plan9",
+        IF(actualendtime >=201909,CONCAT(ROUND(autual9-plan9)),'') as  "completeratio9",
+        IF(actualendtime >=201910,CONCAT(ROUND(autuall0)),'') as "autuall0",
+        IF(actualendtime >=201910,CONCAT(ROUND(plan10)),'') as "plan10",
+        IF(actualendtime >=201910,CONCAT(ROUND(autuall0-plan10)),'') as  "completeratio10",
+        IF(actualendtime >=201911,CONCAT(ROUND(autual11)),'') as "autual11",
+        IF(actualendtime >=201911,CONCAT(ROUND(plan11)),'') as "plan11",
+        IF(actualendtime >=201911,CONCAT(ROUND(autual11-plan11)),'') as  "completeratio11",
+        IF(actualendtime >=201912,CONCAT(ROUND(autual12)),'') as "autual12",
+        IF(actualendtime >=201912,CONCAT(ROUND(plan12)),'') as "plan12",
+        IF(actualendtime >=201912,CONCAT(ROUND(autual12-plan12)),'') as  "completeratio12"
+        from
+        (SELECT
+        -- 累计已完成数量
+        DATE_FORMAT(MAX(t.actual_end_time),'%Y%m') as "actualendtime",
+        sum(case when t.actual_end_time &lt; '20190201'  then 1 else 0 end) 'autual1',
+        sum(case when t.actual_end_time &lt; '20190301'  then 1 else 0 end) 'autual2',
+        sum(case when t.actual_end_time &lt; '20190401'  then 1 else 0 end) 'autual3',
+        sum(case when t.actual_end_time &lt; '20190501'  then 1 else 0 end) 'autual4',
+        sum(case when t.actual_end_time &lt; '20190601'  then 1 else 0 end) 'autual5',
+        sum(case when t.actual_end_time &lt; '20190701'  then 1 else 0 end) 'autual6',
+        sum(case when t.actual_end_time &lt; '20190801'  then 1 else 0 end) 'autual7',
+        sum(case when t.actual_end_time &lt; '20190901'  then 1 else 0 end) 'autual8',
+        sum(case when t.actual_end_time &lt; '20191001'  then 1 else 0 end) 'autual9',
+        sum(case when t.actual_end_time &lt; '20191101'  then 1 else 0 end) 'autuall0',
+        sum(case when t.actual_end_time &lt; '20191201'  then 1 else 0 end) 'autual11',
+        sum(case when t.actual_end_time &lt; '20200101'  then 1 else 0 end) 'autual12'
+        FROM
+        tb_plan_project_task t
+        WHERE t.record_status = 1
+        AND t.project_number=#{projectNo}
+        )t1
+        ,
+        (SELECT
+        -- 计划要完成数量
+        DATE_FORMAT(MAX(t.plan_stop_time),'%Y%m') as "planstoptime",
+        sum(case when t.plan_stop_time &lt; '20190201'  then 1 else 0 end) 'plan1',
+        sum(case when t.plan_stop_time &lt; '20190301'  then 1 else 0 end) 'plan2',
+        sum(case when t.plan_stop_time &lt; '20190401'  then 1 else 0 end) 'plan3',
+        sum(case when t.plan_stop_time &lt; '20190501'  then 1 else 0 end) 'plan4',
+        sum(case when t.plan_stop_time &lt; '20190601'  then 1 else 0 end) 'plan5',
+        sum(case when t.plan_stop_time &lt; '20190701'  then 1 else 0 end) 'plan6',
+        sum(case when t.plan_stop_time &lt; '20190801'  then 1 else 0 end) 'plan7',
+        sum(case when t.plan_stop_time &lt; '20190901'  then 1 else 0 end) 'plan8',
+        sum(case when t.plan_stop_time &lt; '20191001'  then 1 else 0 end) 'plan9',
+        sum(case when t.plan_stop_time &lt; '20191101'  then 1 else 0 end) 'plan10',
+        sum(case when t.plan_stop_time &lt; '20191201'  then 1 else 0 end) 'plan11',
+        sum(case when t.plan_stop_time &lt; '20200101'  then 1 else 0 end) 'plan12'
+        FROM
+        tb_plan_project_task t
+        WHERE t.record_status = 1
+        AND t.project_number=#{projectNo}
+        )t2
+
+
+    </select>
+
+
+</mapper>

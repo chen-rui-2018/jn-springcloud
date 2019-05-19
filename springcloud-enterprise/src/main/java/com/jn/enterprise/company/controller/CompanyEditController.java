@@ -19,6 +19,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +46,7 @@ public class CompanyEditController extends BaseController {
     @ControllerLog(doAction = "编辑企业资料")
     @ApiOperation(value = "编辑企业资料", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/updateCompanyInfo",method = RequestMethod.POST)
+    @RequiresPermissions("/enterprise/company/updateCompanyInfo")
     public Result updateCompanyInfo(@Validated @RequestBody CompanyUpdateParam companyUpdateParam){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user == null){

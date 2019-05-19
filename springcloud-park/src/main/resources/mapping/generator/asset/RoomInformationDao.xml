@@ -1,71 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.asset.dao.RoomInformationDao">
-    <select id="getRoomLeaseList" resultType="com.jn.park.asset.model.RoomInformationModel">
-        SELECT
-            id,
-            NAME,
-            floor,
-            tower_id AS towerId,
-            tower_name AS towerName,
-            group_id AS groupId,
-            group_name AS groupName,
-            room_area AS roomArea,
-            shortest_lease AS shortestLease,
-            lease_price AS leasePrice,
-            lease_sum AS leaseSum,
-            press,
-            pay,
-            press_pay AS pressPay,
-            house_type AS houseType,
-            img_url AS imgUrl,
-            floor_plan AS floorPlan,
-            room_plan AS roomPlan,
-            introduce,
-            state,
-            lease_start_time AS leaseStartTime,
-            lease_end_time leaseEndTime,
-            enterprise_id AS enterpriseId,
-            lease_enterprise AS leaseEnterprise,
-            contact_name AS contactName,
-            contact_phone AS contactPhone
-        FROM
-            tb_room_information
-        where record_status = 1 and state = 0 or state = 4
-    </select>
-
-    <select id="getRoomInformation" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomInformationModel">
-        SELECT
-            id,
-            NAME,
-            floor,
-            tower_id AS towerId,
-            tower_name AS towerName,
-            group_id AS groupId,
-            group_name AS groupName,
-            room_area AS roomArea,
-            shortest_lease AS shortestLease,
-            lease_price AS leasePrice,
-            lease_sum AS leaseSum,
-            press,
-            pay,
-            press_pay AS pressPay,
-            house_type AS houseType,
-            img_url AS imgUrl,
-            floor_plan AS floorPlan,
-            room_plan AS roomPlan,
-            introduce,
-            state,
-            lease_start_time AS leaseStartTime,
-            lease_end_time leaseEndTime,
-            enterprise_id AS enterpriseId,
-            lease_enterprise AS leaseEnterprise,
-            contact_name AS contactName,
-            contact_phone AS contactPhone
-        FROM
-            tb_room_information
-        where id = #{id}
-    </select>
 
     <update id="updateStatus" parameterType="java.util.Map">
         UPDATE tb_room_information
@@ -73,4 +8,96 @@
         WHERE
             id = #{roomId}
     </update>
+
+    <select id="getRoomLeaseList" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomInformationModel">
+        SELECT
+        tb.id,
+        tb.NAME,
+        tb.floor,
+        tb.tower_id AS towerId,
+        tb.tower_name AS towerName,
+        tb.group_id AS groupId,
+        tb.group_name AS groupName,
+        tb.room_area AS roomArea,
+        tb.shortest_lease AS shortestLease,
+        tb.lease_price AS leasePrice,
+        tb.lease_sum AS leaseSum,
+        tb.press,
+        tb.pay,
+        tb.press_pay AS pressPay,
+        tb.house_type AS houseType,
+        tb.img_url AS imgUrl,
+        tb.floor_plan AS floorPlan,
+        tb.room_plan AS roomPlan,
+        tb.introduce,
+        tb.state,
+        tb.lease_start_time AS leaseStartTime,
+        tb.lease_end_time leaseEndTime,
+        tb.enterprise_id AS enterpriseId,
+        tb.lease_enterprise AS leaseEnterprise,
+        tb.contact_name AS contactName,
+        tb.contact_phone AS contactPhone,
+        tb.create_Time AS createTime,
+        tw.address AS address
+        FROM
+        tb_room_information tb LEFT JOIN tb_tower_information tw on tb.tower_id = tw.id
+        WHERE tb.record_status = '1'
+         <if test="_parameter != null and _parameter != ''">
+             and  (tb.NAME LIKE CONCAT('%', #{name}, '%') or tb.tower_name Like CONCAT('%', #{name}, '%'))
+         </if>
+          and tb.state in ('0','4')
+    </select>
+
+    <select id="getNewRoomOrdersList" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomLeaseRecordModel">
+        select
+            ti.id,
+            ti.room_id as roomId,
+            ti.room_name as roomName,
+            ti.floor,
+            ti.tower_id as towerId,
+            ti.tower_name as towerName,
+            ti.room_url as roomUrl,
+            tr.lease_start_time as leaseStartTime,
+            tr.lease_end_time as leaseEndTime,
+            tr.pay_state as payState,
+            tm.state as roomStatus,
+            tt.address as address,
+            ti.create_time
+        from tb_room_orders_item ti LEFT JOIN tb_room_orders tr on ti.order_id = tr.id
+                                    LEFT JOIN tb_room_information tm on ti.room_id = tm.id
+                                    LEFT JOIN tb_tower_information tt on ti.tower_id = tt.id where ti.creator_account = #{account}
+        ORDER BY ti.create_time DESC
+    </select>
+
+    <select id="getNewRoomOrders" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomOrdersModle">
+        select
+            ti.id,
+            ti.order_id as orderId,
+            ti.room_id as roomId,
+            ti.room_name AS roomName,
+            ti.floor as floor,
+            ti.tower_id as towerId,
+            ti.tower_name as towerName,
+            ti.room_url as imgUrl,
+            ti.room_area as roomArea,
+            ti.lease_price as leasePrice,
+            ti.lease_sum as leaseSum,
+            ti.press_pay as pressPay,
+            ti.shortest_lease as shortestLease,
+            ti.introduce as introduce,
+            ti.creator_account as creatorAccount,
+            tr.enterprise_id as enterpriseId,
+            tr.lease_enterprise as leaseEnterprise,
+            tr.lease_start_time as leaseStartTime,
+            tr.lease_end_time as leaseEndTime,
+            tr.contact_name as contactName,
+            tr.contact_phone as  contactPhone,
+            tb.create_time as createTime,
+            tb.house_Type as houseType,
+            tb.state as roomStatus
+        from tb_room_orders_item ti
+                 LEFT JOIN tb_room_orders tr on ti.order_id = tr.id
+                 LEFT JOIN tb_room_information tb on ti.room_id = tb.id
+        WHERE ti.id = #{orderId}
+    </select>
 </mapper>

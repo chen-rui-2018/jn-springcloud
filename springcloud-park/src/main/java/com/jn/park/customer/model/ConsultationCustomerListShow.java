@@ -22,7 +22,7 @@ public class ConsultationCustomerListShow implements Serializable {
     private String quesTitle;
     @ApiModelProperty("问题详情")
     private String quesDetails;
-    @ApiModelProperty("处理状态(0：待处理 1：处理中 2：已处理)")
+    @ApiModelProperty("处理状态(0：待处理 1：处理中 2：已处理 3：无法处理)")
     private String status;
     @ApiModelProperty("发布时间")
     private Date createdTime;

@@ -54,7 +54,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-hardware-api</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>xxpay-web-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -86,6 +89,7 @@
                     <overwrite>true</overwrite>
                     <contexts>
 <<<<<<< HEAD
+<<<<<<< HEAD
                         parking,park,attractinvest
                     </contexts>
                     <tableNames>
@@ -96,6 +100,12 @@
                     <tableNames>
                         tb_hatch_enterprise_nature,tb_hatch_enterprise_tech,tb_hatch_enterprise_type,tb_hatch_home_config,
                         tb_hatch_incubator,tb_hatch_incubator_enterprise,tb_hatch_incubator_team,tb_hatch_incubator_type
+>>>>>>> develop-jn
+=======
+                        asset
+                    </contexts>
+                    <tableNames>
+                        tb_room_orders_pay
 >>>>>>> develop-jn
                     </tableNames>
                     <verbose>true</verbose>

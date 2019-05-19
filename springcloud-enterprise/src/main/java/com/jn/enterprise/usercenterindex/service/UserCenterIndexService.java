@@ -9,12 +9,7 @@ import com.jn.system.model.User;
  */
 public interface UserCenterIndexService {
 
-    /**
-     * 企业邀请
-     * @param user
-     * @return
-     */
-    String findBusinessInvitation(User user);
+
 
     /**
      *员工申请
@@ -23,12 +18,7 @@ public interface UserCenterIndexService {
      */
     String findEmployeeRequisition(User user);
 
-    /**
-     *机构邀请
-     * @param user
-     * @return
-     */
-    String findOrganizationInvitation(User user);
+
 
     /**
      *顾问管理
@@ -42,7 +32,7 @@ public interface UserCenterIndexService {
      * @param user
      * @return
      */
-    String findRequirementManage(User user);
+    String findRequirementManage(String status,User user);
 
     /**
      *评价管理

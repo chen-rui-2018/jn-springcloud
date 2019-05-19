@@ -16,6 +16,8 @@ import java.util.Date;
  */
 public class Message extends Page implements Serializable {
 
+    private String id;
+
     /**
      * 发送人
      */
@@ -68,4 +70,11 @@ public class Message extends Page implements Serializable {
         this.nickName = nickName;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

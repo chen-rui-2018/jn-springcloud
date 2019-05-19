@@ -30,7 +30,7 @@ public class IBPSOnlineCustomerParam implements Serializable {
     private String clientType;
     @ApiModelProperty("联系方式（手机号码/邮箱）")
     private String contactWay;
-    @ApiModelProperty("处理状态(0：待处理  1:处理中 2：已处理)")
+    @ApiModelProperty("处理状态(0：待处理 1：处理中 2：已处理 3：无法处理)")
     private String status;
     @ApiModelProperty("当前来电")
     private String currentCaller;

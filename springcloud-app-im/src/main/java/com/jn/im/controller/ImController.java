@@ -57,11 +57,11 @@ public class ImController {
      * @param tbImMessage
      * @return
      */
-    @RequestMapping(value = "/isSended", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/isSended", method = RequestMethod.POST)
     public Result isSended(@RequestBody TbImMessage tbImMessage) {
         imService.isSended(tbImMessage);
         return new Result();
-    }
+    }*/
 
 
 }

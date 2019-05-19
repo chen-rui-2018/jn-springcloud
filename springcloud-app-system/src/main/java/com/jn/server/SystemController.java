@@ -244,6 +244,13 @@ public class SystemController extends BaseController implements SystemClient {
     }
 
     @Override
+    @ControllerLog(doAction = "根据角色id或角色名称获取角色拥有的用户信息")
+    public Result<List<User>> getUserByRole(@RequestBody SysRole role) {
+        List<User> userList = sysRoleService.getUserByRole(role);
+        return new Result<List<User>>(userList);
+    }
+
+    @Override
     @ControllerLog(doAction = "更新用户")
     public Result updateSysUser(@Validated @RequestBody User user) {
         if (StringUtils.isNotBlank(user.getAccount())) {

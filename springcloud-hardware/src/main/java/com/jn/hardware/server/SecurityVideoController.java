@@ -47,4 +47,14 @@ public class SecurityVideoController implements SecurityVideoClient {
     public Result<SecurityPlayBackUrlShow> findSecurityPlayBackUrlList(@RequestBody SecurityPlayBackUrlParam securityPlayBackUrlParam) {
         return  securityVideoService.findSecurityPlayBackUrlList(securityPlayBackUrlParam);
     }
+    /**
+     * 获取海康威视的 接口凭证 token,返回 用于认证的url
+     * @param securityTokenParam 实体类参数
+     * @return
+     */
+    @Override
+    public Result<String> getSecurityTokenURL(@RequestBody  SecurityTokenParam securityTokenParam) {
+         return  securityVideoService.getSecurityTokenURL(securityTokenParam);
+    }
+
 }

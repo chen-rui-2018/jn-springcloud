@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class OrgDetailParameter implements Serializable {
 
     @ApiModelProperty(value = "机构简介",required = true,example = "机构成立于****")
     @NotNull(message = "机构简介不能为空")
+    @Size(max=500,message = "机构简介不能超过500字")
     private String orgSynopsis;
 
     @ApiModelProperty(value = "机构LOGO",required = true,example = "**/**/**.png")

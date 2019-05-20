@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class IBPSCompleteParam implements Serializable {
     @ApiModelProperty(value = "任务ID",required = true)
     private String taskId;
-    @ApiModelProperty(value = "工作名称",required = true)
+    @ApiModelProperty(value = "工作名称（同意：agree ,反对：oppose ,驳回上一步：rejectToPrevious,审批历史：approvalHistory）",required = true)
     private String actionName;
     @ApiModelProperty(value = "审批意见")
     private String opinion;

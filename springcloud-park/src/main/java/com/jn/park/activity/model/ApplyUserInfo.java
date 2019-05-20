@@ -22,8 +22,8 @@ public class ApplyUserInfo implements Serializable {
     private String sex;
     @ApiModelProperty(value = "公司")
     private String company;
-    @ApiModelProperty(value = "岗位")
-    private String post;
+    @ApiModelProperty(value = "岗位/职务")
+    private String position;
 
     private static final long serialVersionUID = 1L;
 
@@ -59,11 +59,11 @@ public class ApplyUserInfo implements Serializable {
         this.company = company;
     }
 
-    public String getPost() {
-        return post;
+    public String getPosition() {
+        return position;
     }
 
-    public void setPost(String post) {
-        this.post = post;
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

@@ -3,6 +3,7 @@ package com.jn.oa.meeting.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.oa.meeting.entity.TbOaMeeting;
 import com.jn.oa.meeting.entity.TbOaMeetingRoomPhoto;
+import com.jn.oa.meeting.model.OaMeeting;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -67,7 +68,7 @@ public class OaMeetingRoomOrderVo implements Serializable {
     private Date modifiedTime;
 
     @ApiModelProperty(value = "会议列表")
-    private List<TbOaMeeting> meetingList;
+    private List<OaMeeting> meetingList;
 
     public String getId() {
         return id;
@@ -181,11 +182,11 @@ public class OaMeetingRoomOrderVo implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public List<TbOaMeeting> getMeetingList() {
+    public List<OaMeeting> getMeetingList() {
         return meetingList;
     }
 
-    public void setMeetingList(List<TbOaMeeting> meetingList) {
+    public void setMeetingList(List<OaMeeting> meetingList) {
         this.meetingList = meetingList;
     }
 }

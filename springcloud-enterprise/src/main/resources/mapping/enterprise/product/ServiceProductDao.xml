@@ -292,6 +292,7 @@
 
 select
        t1.product_id_ as "productId",       <!--产品Id-->
+       t1.picture_url as "pictureUrl",     <!--产品图片路径-->
        t1.product_name as "productName",   <!--产品名称-->
        t1.signory_name as "signoryName",   <!--领域名称-->
        t1.product_type as "productType",   <!--产品类型-->

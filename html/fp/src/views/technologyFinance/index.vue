@@ -1,66 +1,66 @@
 <template>
   <div ref="box" data-class="left" class="TechnologyFinance">
     <div class="techHeah">
-        <div id="header" class="header" :class="{'headerw':showFF}">
-          <div class="headerContainer clearfix">
-            <div class="titleImg fl">
-              <img  class="pointer" src="@/../static/img/LOGO1.png" v-if="!showFF"  @click="$router.push({path:'/'})" alt="">
-              <img src="@/../static/img/login-logo.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
-              </div>
-            <div class="menu" style="display:none">
-              <i class="el-icon-close"></i>
-              <input type="text">
-              <i class="el-icon-search"></i>
+      <div id="header" class="header" :class="{'headerw':showFF}">
+        <div class="headerContainer clearfix">
+          <div class="titleImg fl">
+            <img class="pointer" src="@/../static/img/LOGO1.png" v-if="!showFF" @click="$router.push({path:'/'})" alt="">
+            <img src="@/../static/img/login-logo.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
+          </div>
+          <div class="menu" style="display:none">
+            <i class="el-icon-close"></i>
+            <input type="text">
+            <i class="el-icon-search"></i>
+          </div>
+          <div class="headerRight fr">
+            <div class="search pointer">
+              <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
             </div>
-            <div class="headerRight fr">
-              <div class="search pointer">
-                <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-              </div>
-              <div class="navlogin">
-                <a @click="$router.push({path:'/login'})">登录</a>
-                <span class="line">|</span>
-                <a @click="$router.push({path:'/register'})">注册</a>
-              </div>
+            <div class="navlogin">
+              <a @click="$router.push({path:'/login'})">登录</a>
+              <span class="line">|</span>
+              <a @click="$router.push({path:'/register'})">注册</a>
             </div>
-            <div class="nav" id="nav">
-              <!-- <transition name="fade"> -->
-                <!-- <div class="sousuo posA" v-if="sousuo">
+          </div>
+          <div class="nav" id="nav">
+            <!-- <transition name="fade"> -->
+            <!-- <div class="sousuo posA" v-if="sousuo">
                   <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
                   <input type="text" v-focus @keyup.enter="handleSearch">
                   <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
                 </div> -->
-                <ul class="posA clearfix">
-                  <li class="posLi1">
-                    <a href="javascript:void(0);">首页</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0);">投资人</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0);">金融产品</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0);">金融机构</a>
-                  </li>
-                </ul>
+            <ul class="posA clearfix">
+              <li class="posLi1">
+                <a href="javascript:void(0);">首页</a>
+              </li>
+              <li>
+                <a href="javascript:void(0);" @click="$router.push({path:'/investor'})">投资人</a>
+              </li>
+              <li>
+                <a href="javascript:void(0);" @click="$router.push({path:'/finaPro'})">金融产品</a>
+              </li>
+              <li>
+                <a href="javascript:void(0);" @click="$router.push({path:'/finaInstitution'})">金融机构</a>
+              </li>
+            </ul>
 
-              <!-- </transition> -->
-            </div>
+            <!-- </transition> -->
           </div>
         </div>
-        <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
-                <el-collapse-transition>
-                <div v-show="show4">
-                    <div class="transition-box">
-                    <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                        <el-button slot="append" icon="el-icon-search">搜索 </el-button>
-                    </el-input>
-                    </div>
-                </div>
-                </el-collapse-transition>
-        </div>
+      </div>
+      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
+        <el-collapse-transition>
+          <div v-show="show4">
+            <div class="transition-box">
+              <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
+                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+              </el-input>
+            </div>
+          </div>
+        </el-collapse-transition>
+      </div>
     </div>
-    
+
     <!-- <div id="headerW" v-if="headFlag">
       <div class="headerContainer clearfix">
         <div class="titleImg fl"><img  class="pointer" src="@/../static/img/login-logo.png" @click="$router.push({path:'/'})" alt=""></div>
@@ -107,30 +107,30 @@
     </div> -->
     <div class="techCon">
       <div class="banner pr">
-          <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide" style="width:100%">
-                            <img src="@/../static/img/techBan.png" alt="">
-                        </div>
-                        <div class="swiper-slide" style="width:100%">
-                            <img src="@/../static/img/techBan.png" alt="">
-                        </div>
-                        <div class="swiper-slide" style="width:100%">
-                            <img src="@/../static/img/techBan.png" alt="">
-                        </div>                  
-                    </div>
-                    <!-- 如果需要分页器 -->
-                         <!-- <div class="swiper-pagination"></div> -->
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" style="width:100%">
+              <img src="@/../static/img/techBan.png" alt="">
+            </div>
+            <div class="swiper-slide" style="width:100%">
+              <img src="@/../static/img/techBan.png" alt="">
+            </div>
+            <div class="swiper-slide" style="width:100%">
+              <img src="@/../static/img/techBan.png" alt="">
+            </div>
+          </div>
+          <!-- 如果需要分页器 -->
+          <!-- <div class="swiper-pagination"></div> -->
 
-                        <!-- 如果需要导航按钮 -->
-                        <!-- <div class="swiper-button-prev" @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
+          <!-- 如果需要导航按钮 -->
+          <!-- <div class="swiper-button-prev" @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
                             <i class="iconfont icon-leftarrow pointer" v-show="showBtn"></i>
                         </div>
                         <div class="swiper-button-next"  @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
                             <i class="iconfont icon-rightarrow pointer" v-show="showBtn"></i>
                         </div> -->
-          </div>
-          <!-- <div class="quickEnter">
+        </div>
+        <!-- <div class="quickEnter">
                     <ul>
                         <li>
                             <span>人才申报</span>
@@ -214,7 +214,7 @@
               <li class="clearfix">
                 <div class="liLeft fl">
                   <div class="intorImgLar" v-if="InvestorInfoList.length > 0">
-                    <img :src="InvestorInfoList[0].avatar" alt="">
+                    <img class="pointer" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
                   </div>
                   <div class="leftInfo" v-if="InvestorInfoList.length > 0">
                     <span class="color1">{{InvestorInfoList[0].investorName}}/{{InvestorInfoList[0].position}}</span>
@@ -226,7 +226,7 @@
                   <ul class="clearfix">
                     <li v-if="k<5&&k>0" v-for="(i,k) in InvestorInfoList" :key="k">
                       <div class="intorImgSma">
-                        <img :src="i.avatar" alt="头像">
+                        <img class="pointer" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
                       </div>
                       <div class="rightInfo">
                         <span class="color1">{{i.investorName}}/{{i.position}}</span>
@@ -266,7 +266,7 @@
               <li class="clearfix">
                 <div class="liLeft fl">
                   <div class="intorImgLar">
-                    <img :src="InvestorInfoList[5].avatar" alt="">
+                    <img class="pointer" :src="InvestorInfoList[5].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[5].investorAccount }})">
                   </div>
                   <div class="leftInfo" v-if="InvestorInfoList.length > 5">
                     <span class="color1">{{InvestorInfoList[5].investorName}}/{{InvestorInfoList[5].position}}</span>
@@ -278,7 +278,7 @@
                   <ul class="clearfix">
                     <li v-if="k<9&&k>5" v-for="(i,k) in InvestorInfoList" :key="k">
                       <div class="intorImgSma">
-                        <img :src="i.avatar" alt="头像">
+                        <img  class="pointer" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
                       </div>
                       <div class="rightInfo">
                         <span class="color1">{{i.investorName}}/{{i.position}}</span>
@@ -330,8 +330,8 @@
             <ul class="finaUl clearfix">
               <li class="mainBorder" v-if="k<8" v-for="(i,k) in FinancialProList" :key="k">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
-                <div class="finaProItem">
-                  <img :src="i.pictureUrl" alt="">
+                <div class="finaProItem" @click="$router.push({ path: '/finaProDetail', query: { productId: i.productId }})">
+                  <img class="pointer" :src="i.pictureUrl" alt="" >
                 </div>
                 <div class="finaDiv1">
                   <div class="finaTit">{{i.productName}}</div>
@@ -344,7 +344,7 @@
                     <p>担保方式：{{i.assureMethodName}}</p>
                   </div>
                 </div>
-                <p class="clearfix finaPP">
+                <p class="clearfix finaPP" id="finaPP">
                   <span class="fl">贷款额度：
                     <i class="mainColor">{{i.loanAmountMin}}万元-{{i.loanAmountMax}}万元</i>
                   </span>
@@ -389,11 +389,11 @@
                 <i class="el-icon-arrow-right"></i>
               </span>
             </div>
-                  <!-- <img src="@/../static/img/ins1.png" alt=""> -->
+            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <ul class="finaInsUl finaUl clearfix" id="finaInsUl">
               <li class="finaInsLi pr" v-for="(i,k) in ServiceOrgList" :key='k'>
                 <div class="finaInsItem">
-                  <img :src="i.orgLogo" alt="">
+                  <img class="pointer" :src="i.orgLogo" alt="" @click="$router.push({ path: '/finaInsDetail', query: { orgId: i.orgId } })">
                 </div>
                 <div class="finaDiv1">
                   <!-- <div class="finaTit"></div> -->
@@ -439,7 +439,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
       <el-dialog :visible.sync="financialProVisible" width="600px">
@@ -477,9 +477,9 @@ export default {
   data() {
     return {
       sousuo: false,
-      searchData:'',
-      showFF:false,
-      show4:false,
+      searchData: "",
+      showFF: false,
+      show4: false,
       headFlag: false,
       financialOrgNum: "",
       financialProductNum: "",
@@ -559,12 +559,12 @@ export default {
     };
   },
   mounted() {
-    this.techInit()
+    this.techInit();
     // console.dir(this.$refs.box)
-  
+
     this.$router.afterEach((to, from, next) => {
-        window.scrollTo(0, 0)
-    })
+      window.scrollTo(0, 0);
+    });
     window.addEventListener("scroll", this.handleScroll, true);
     this.init();
     this.getInvestorInfoList();
@@ -576,7 +576,7 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-     techInit() {
+    techInit() {
       var mySwiper = new swiper(".swiper-container", {
         direction: "horizontal", // 垂直切换选项
         loop: true, // 循环模式选项
@@ -607,13 +607,15 @@ export default {
       this.getFinancialProList();
     },
     handleScroll() {
-      const osTop = document.documentElement.scrollTop || document.documentElement.scrollTop
+      const osTop =
+        document.documentElement.scrollTop ||
+        document.documentElement.scrollTop;
       // console.dir(this.$refs)
       for (const key in this.$refs) {
         if (osTop >= this.$refs[key].scrollTop) {
           // console.dir(node.scrollTop)
-          const name = this.$refs[key].dataset.class
-          this.$refs[key].classList.add(name)
+          const name = this.$refs[key].dataset.class;
+          this.$refs[key].classList.add(name);
         }
       }
       // console.log(this.getScrollTop())
@@ -779,137 +781,141 @@ export default {
 </script>
 <style lang="scss">
 .TechnologyFinance {
-  .techHeah{
+  #finaPP {
+    padding: 20px 10px;
+  }
+  .techHeah {
     position: fixed;
     z-index: 9;
     width: 100%;
-   .header {
-    // position: fixed;
-    // padding: 0 160px;
-    // background-color: #e9a536;
-    // width: 84%;
-    background-color: rgba(255, 255, 255, 0.2);
-    width: 100%;
-    z-index: 3;
-    .headerContainer {
-      padding: 0 160px;
+    .header {
+      // position: fixed;
+      // padding: 0 160px;
+      // background-color: #e9a536;
+      // width: 84%;
+      background-color: rgba(255, 255, 255, 0.2);
       width: 100%;
-      height: 65px;
-      line-height: 65px;
-      color: #fff;
-      // font-weight: bold;
-      font-size: 16px;
-      box-sizing: border-box;
-      .titleImg {
-        width: 155px;
-        height: 38px;
-        img {
-          width: 100%;
-          height: 100%;
-          vertical-align: middle;
-        }
-      }
-      .nav {
-        width: 600px;
-        height: 37.6px;
-        margin: 0 auto;
-        > ul {
-          overflow: hidden;
-          li {
-            float: left;
-            // color: #ccc;
-            font-size: 14px;
-            text-align: center;
-            // line-height: 52px;
-            padding: 0 38px;
-            // width: 100px;
+      z-index: 3;
+      .headerContainer {
+        padding: 0 160px;
+        width: 100%;
+        height: 65px;
+        line-height: 65px;
+        color: #fff;
+        // font-weight: bold;
+        font-size: 16px;
+        box-sizing: border-box;
+        .titleImg {
+          width: 155px;
+          height: 38px;
+          img {
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
           }
         }
-        .posLi1{
-          background: #fff;
-           color: #00a041;
-          border-radius: 5px;
-        }
-        .posA {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
-          // padding: 20px 0;
-        }
-        .sousuo {
-          font-size: 18px;
-          line-height: 48px;
-          > input {
-            border: none;
-            width: 350px;
-            height: 38px;
-            font-size: 14px;
+        .nav {
+          width: 600px;
+          height: 37.6px;
+          margin: 0 auto;
+          > ul {
+            overflow: hidden;
+            li {
+              float: left;
+              // color: #ccc;
+              font-size: 14px;
+              text-align: center;
+              // line-height: 52px;
+              padding: 0 38px;
+              // width: 100px;
+            }
           }
-          > input::-webkit-input-placeholder {
-            color: #b7b7b7;
-            font-size: 12px;
+          .posLi1 {
+            background: #fff;
+            color: #00a041;
+            border-radius: 5px;
+          }
+          .posA {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            // padding: 20px 0;
+          }
+          .sousuo {
+            font-size: 18px;
+            line-height: 48px;
+            > input {
+              border: none;
+              width: 350px;
+              height: 38px;
+              font-size: 14px;
+            }
+            > input::-webkit-input-placeholder {
+              color: #b7b7b7;
+              font-size: 12px;
+            }
           }
         }
-      }
-      .headerRight {
-        .search {
-          display: inline-block;
-          margin-right: 20px;
-          vertical-align: middle;
-          i {
-            width: 20px;
-            height: 20px;
-          }
-        }
-        .navlogin {
-          display: inline-block;
-          font-size: 14px;
-          a {
+        .headerRight {
+          .search {
             display: inline-block;
-            cursor: pointer;
+            margin-right: 20px;
+            vertical-align: middle;
+            i {
+              width: 20px;
+              height: 20px;
+            }
           }
-          .line {
+          .navlogin {
             display: inline-block;
-            height: 12px;
-            margin: 0 15px;
-          }
-          > img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            font-size: 14px;
+            a {
+              display: inline-block;
+              cursor: pointer;
+            }
+            .line {
+              display: inline-block;
+              height: 12px;
+              margin: 0 15px;
+            }
+            > img {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+            }
           }
         }
       }
     }
-   }
-   .headerw{
+    .headerw {
       background: #fff;
       border: 1px solid #eee;
-      box-shadow:0 10px 10px -10px #ccc;
+      box-shadow: 0 10px 10px -10px #ccc;
       color: #666;
-      #nav,.headerRight{
+      #nav,
+      .headerRight {
         color: #666;
-        li{
-          a{
-            color:#666;
+        li {
+          a {
+            color: #666;
           }
         }
-        li:nth-child(1){
+        li:nth-child(1) {
           background: none;
           border-radius: none;
-          a{
-            color:#00a041;
+          a {
+            color: #00a041;
           }
         }
-        li:hover{
+        li:hover {
           background: none;
           color: #00a041;
         }
-         li:hover a{
-            color:#00a041;
+        li:hover a {
+          color: #00a041;
         }
       }
-  }
+    }
     .search_box {
       background: rgba(0, 0, 0, 0.3);
       // text-align: center;
@@ -950,20 +956,26 @@ export default {
             text-align: right;
           }
         }
-        
       }
-      .input-with-select .el-input__inner{
-          border-top-left-radius: 19px;
-          border-bottom-left-radius: 19px;
-          border: 1px solid #00a041;
-        }
+      .input-with-select .el-input__inner {
+        border-top-left-radius: 19px;
+        border-bottom-left-radius: 19px;
+        border: 1px solid #00a041;
+      }
     }
-    .searchbox{
+    .searchbox {
       background: #fff;
-      box-shadow:0 10px 10px -10px #ccc;
+      box-shadow: 0 10px 10px -10px #ccc;
     }
   }
-   .techCon{}
+  .techCon {
+    .banner {
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
   // .techImg {
   //   height: 454px;
   //   background: url("../../../static/img/techbanner.png") 100% 100% / 100% 100%
@@ -1000,7 +1012,7 @@ export default {
             > p {
               font-size: 30px;
               margin-top: 5px;
-              >span{
+              > span {
                 font-size: 22px;
               }
             }
@@ -1113,7 +1125,7 @@ export default {
             }
           }
         }
-        .inverUl11{
+        .inverUl11 {
           margin-top: 20px;
         }
         .bannerImg {
@@ -1220,9 +1232,9 @@ export default {
               // width: 60%;
               // height: 114px;
               // margin: 10px 44px;
-                  width: 86%;
-    height: 114px;
-    margin: 15px auto;
+              width: 86%;
+              height: 114px;
+              margin: 15px auto;
               > img {
                 width: 100%;
                 height: 100%;
@@ -1248,9 +1260,9 @@ export default {
             > .finaPP {
               padding: 10px;
             }
-            .lejie{
+            .lejie {
               position: absolute;
-              bottom:0;
+              bottom: 0;
               width: 91%;
             }
           }

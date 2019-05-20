@@ -33,6 +33,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.xxpay.common.util.DateUtil;
 
 import java.util.*;
 
@@ -112,6 +113,10 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         content.setOrgId(orgId);
         content.setOrgName(userExtension.getAffiliateName());
 
+        if (StringUtils.isBlank(content.getViewCount())) {
+            content.setViewCount("0");
+        }
+
         //设置服务顾问
         List<TbServiceAndAdvisor> tb_service_and_advisor = new ArrayList<>();
         if (StringUtils.isNotBlank(content.getAdvisorAccount())){
@@ -132,7 +137,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
 
         // ibps启动流程失败
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
-            logger.warn("[服务超市产品] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            logger.warn("[服务超市产品] 启动ibps流程出错，错误信息：{}" + ibpsResult == null ? "" : ibpsResult.getMessage());
             throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SUBMIT_IBPS_ERROR);
         }
         logger.info("[服务超市产品] " + ibpsResult.getMessage());
@@ -384,6 +389,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         ServiceContent content = new ServiceContent();
         BeanUtils.copyProperties(tbServiceProduct, content);
         content.setAdvisorAccount(product.getAdvisorAccount());
+        content.setViewCount(tbServiceProduct.getViewCount().toString());
+        content.setModifierAccount(tbServiceProduct.getCreatorAccount());
+        content.setModifiedTime(DateUtils.formatDate(tbServiceProduct.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
         startProductIbps(content, account, tbServiceProduct.getTemplateId(), tbServiceProduct);
     }
 
@@ -399,6 +407,10 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         TbServiceProduct tbServiceProduct = getCanUpdateProduct(product.getProductId());
         BeanUtils.copyProperties(tbServiceProduct,content);
         BeanUtils.copyProperties(product,content);
+
+        content.setViewCount(tbServiceProduct.getViewCount().toString());
+        content.setModifierAccount(tbServiceProduct.getCreatorAccount());
+        content.setModifiedTime(DateUtils.formatDate(tbServiceProduct.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
         if (StringUtils.isNotEmpty(product.getAdvisorAccount())) {
             content.setAdvisorAccount(product.getAdvisorAccount());
         }

@@ -133,6 +133,26 @@ public class RestTemplateUtil {
     }
 
     /**
+     * RestTemplateUtil
+     *
+     * @param url
+     * @param method
+     * @param jsonObject
+     * @param dynamicHeaders
+     * @return
+     */
+    public static JSONObject request(String url, HttpMethod method, String jsonObject, Map<String, String> dynamicHeaders) {
+        restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        headers.setContentType(type);
+        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON.toString());
+        HttpEntity<String> request = new HttpEntity<String>(jsonObject, setHeaders(headers, dynamicHeaders));
+        ResponseEntity<JSONObject> response = restTemplate.exchange(url, method, request, JSONObject.class);
+        return response.getBody();
+    }
+
+    /**
      * createLinkStringByGet
      *
      * @param params

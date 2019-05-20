@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jn.im.dao.ImMapper;
 import com.jn.im.dao.TbImMessageMapper;
 import com.jn.im.entity.TbImMessage;
+import com.jn.im.enums.ImExceptionEnums;
 import com.jn.im.model.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -47,6 +48,7 @@ public class WebSocketService {
     }
 
     private static Map<String, Session> sessionMap = new ConcurrentHashMap<String, Session>();
+
     private static String WEBSOCKET_TOKEN = "IM_123_qwe**_X_Q";
 
     @OnOpen
@@ -66,9 +68,7 @@ public class WebSocketService {
                 logger.info("WebSocketService sendUser:{},count:{}", userId, userMap.get("count"));
                 List<TbImMessage> userSendMsg = imMapper.selectOffLineMsg(userId, userMap.get("sendId"));
                 for (TbImMessage message : userSendMsg) {
-
                     //sendMsg(session_, JSONObject.toJSONString(message));
-
                     //更新消息未已读
                     TbImMessage tbImMessage = new TbImMessage();
                     tbImMessage.setId(message.getId());
@@ -96,13 +96,13 @@ public class WebSocketService {
 
             //获取接收人session
             Session session_ = sessionMap.get(msg.getToUser());
-
             TbImMessage tbImMessage = new TbImMessage();
             tbImMessage.setId(UUID.randomUUID().toString());
             tbImMessage.setContent(message);
             tbImMessage.setSendId(msg.getFromUser());
             tbImMessage.setCreateTime(new Date());
             tbImMessage.setReceiveId(msg.getToUser());
+            tbImMessage.setMsgType(ImExceptionEnums.IM_RECEIVE_CODE.getCode());
 
             if (session_ == null) {
                 tbImMessage.setIsSended("N");
@@ -118,10 +118,10 @@ public class WebSocketService {
             Session mySession_ = sessionMap.get(msg.getFromUser());
             try {
                 tbImMessageMapper.insertSelective(tbImMessage);
-                tbImMessage.setMsgType("0000");
+                tbImMessage.setMsgType(ImExceptionEnums.IM_SEND_CODE.getCode());
             } catch (Exception e) {
                 logger.error("WebSocketService 保存发送数据出错", e);
-                tbImMessage.setMsgType("9999");
+                tbImMessage.setMsgType(ImExceptionEnums.IM_ERROR.getCode());
             }
             mySession_.getAsyncRemote().sendText(JSONObject.toJSONString(tbImMessage));
         } else {

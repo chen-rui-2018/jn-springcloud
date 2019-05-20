@@ -470,6 +470,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         //如果角色id为空,角色名称不为空,根据角色名称查询角色信息
         if (StringUtils.isBlank(roleId) && StringUtils.isNotBlank(roleName)) {
             SysRole sysRole = getRoleByName(roleName);
+            if (sysRole == null || SysStatusEnums.DELETED.getCode().equals(sysRole.getRecordStatus().toString())) {
+                logger.warn("[角色] 角色信息不存在,roleId: {}", roleId);
+                throw new JnSpringCloudException(SysExceptionEnums.ROLE_NOT_EXIST);
+            }
             roleId = sysRole.getId();
         }
         Assert.notNull(roleId, SysPermissionExceptionEnums.ROLE_ID_NOT_NULL.getMessage());

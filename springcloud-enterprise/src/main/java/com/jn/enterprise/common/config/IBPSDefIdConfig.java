@@ -16,19 +16,19 @@ import java.io.Serializable;
 public class IBPSDefIdConfig implements Serializable {
 
     // 企业招聘流程ID
-    @Value("${ibps.bpmnDefId.companyRecruit}")
+    @Value("${jn.ibps.bpmnDefId.companyRecruit}")
     private String companyRecruit;
 
     // 编辑企业信息流程ID
-    @Value("${ibps.bpmnDefId.updateCompanyInfo}")
+    @Value("${jn.ibps.bpmnDefId.updateCompanyInfo}")
     private String updateCompanyInfo;
 
     // 上架/编辑产品流程ID
-    @Value("${ibps.bpmnDefId.product}")
+    @Value("${jn.ibps.bpmnDefId.product}")
     private String product;
 
     // 上架/编辑科技金融产品流程ID
-    @Value("${ibps.bpmnDefId.technologyProduct}")
+    @Value("${jn.ibps.bpmnDefId.technologyProduct}")
     private String technologyProduct;
 
     public String getTechnologyProduct() {

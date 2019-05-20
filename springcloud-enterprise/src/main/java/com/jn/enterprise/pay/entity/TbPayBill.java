@@ -17,6 +17,8 @@ public class TbPayBill implements Serializable {
 
     private Integer reminderNumber;
 
+    private Date modifiedReminderTime;
+
     private String objType;
 
     private String objId;
@@ -103,6 +105,14 @@ public class TbPayBill implements Serializable {
 
     public void setReminderNumber(Integer reminderNumber) {
         this.reminderNumber = reminderNumber;
+    }
+
+    public Date getModifiedReminderTime() {
+        return modifiedReminderTime;
+    }
+
+    public void setModifiedReminderTime(Date modifiedReminderTime) {
+        this.modifiedReminderTime = modifiedReminderTime;
     }
 
     public String getObjType() {
@@ -275,6 +285,7 @@ public class TbPayBill implements Serializable {
             && (this.getBillSource() == null ? other.getBillSource() == null : this.getBillSource().equals(other.getBillSource()))
             && (this.getBillExpense() == null ? other.getBillExpense() == null : this.getBillExpense().equals(other.getBillExpense()))
             && (this.getReminderNumber() == null ? other.getReminderNumber() == null : this.getReminderNumber().equals(other.getReminderNumber()))
+            && (this.getModifiedReminderTime() == null ? other.getModifiedReminderTime() == null : this.getModifiedReminderTime().equals(other.getModifiedReminderTime()))
             && (this.getObjType() == null ? other.getObjType() == null : this.getObjType().equals(other.getObjType()))
             && (this.getObjId() == null ? other.getObjId() == null : this.getObjId().equals(other.getObjId()))
             && (this.getObjName() == null ? other.getObjName() == null : this.getObjName().equals(other.getObjName()))
@@ -306,6 +317,7 @@ public class TbPayBill implements Serializable {
         result = prime * result + ((getBillSource() == null) ? 0 : getBillSource().hashCode());
         result = prime * result + ((getBillExpense() == null) ? 0 : getBillExpense().hashCode());
         result = prime * result + ((getReminderNumber() == null) ? 0 : getReminderNumber().hashCode());
+        result = prime * result + ((getModifiedReminderTime() == null) ? 0 : getModifiedReminderTime().hashCode());
         result = prime * result + ((getObjType() == null) ? 0 : getObjType().hashCode());
         result = prime * result + ((getObjId() == null) ? 0 : getObjId().hashCode());
         result = prime * result + ((getObjName() == null) ? 0 : getObjName().hashCode());
@@ -340,6 +352,7 @@ public class TbPayBill implements Serializable {
         sb.append(", billSource=").append(billSource);
         sb.append(", billExpense=").append(billExpense);
         sb.append(", reminderNumber=").append(reminderNumber);
+        sb.append(", modifiedReminderTime=").append(modifiedReminderTime);
         sb.append(", objType=").append(objType);
         sb.append(", objId=").append(objId);
         sb.append(", objName=").append(objName);

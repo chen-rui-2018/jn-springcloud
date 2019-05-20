@@ -42,8 +42,7 @@ public interface PayClient {
 
     @ApiOperation(value = "我的账单-账单催缴次数更新",notes = "我的账单-账单催缴次数更新")
     @RequestMapping(value = "/api/payment/payBill/updateBillNumber",method = RequestMethod.POST)
-    Result updateBillNumber(@ApiParam(name = "billId", value = "账单ID或编号", required = true) @RequestParam(value = "billId") String billId,
-                            @ApiParam(name = "reminderNumber", value = "催缴次数", required = true) @RequestParam(value = "reminderNumber") int reminderNumber);
+    Result updateBillNumber(@RequestBody @Validated PayCheckReminderParam payCheckReminderParam);
 
 
     @ApiOperation(value = "我的账单-核查提醒录入",notes = "我的账单-核查提醒录入")

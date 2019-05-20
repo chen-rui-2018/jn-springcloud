@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Digits;
@@ -21,23 +22,23 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "PayCheckReminder" ,description = "线下核对提醒实体类")
-public class PayCheckReminder extends Page implements Serializable {
+public class PayCheckReminder implements Serializable {
     private static final long serialVersionUID = 6589486251046038120L;
 
     @ApiModelProperty(value="缴费流水ID" ,example = "JF201905041212")
-    @NotEmpty(message = "{paymentId :'缴费流水ID不能为空'}")
+    @NotBlank(message = "{paymentId :'缴费流水ID不能为空'}")
     private String paymentId;
 
     @ApiModelProperty(value="账单编号",example = "JF201905041234")
-    @NotEmpty(message = "{billId :'账单编号不能为空'}")
+    @NotBlank(message = "{billId :'账单编号不能为空'}")
     private String billId;
 
     @ApiModelProperty(value="企业名称",example = "某某科技集团")
-    @NotEmpty(message = "{enterpriseName:'企业名称不能为空'}")
+    @NotBlank(message = "{enterpriseName:'企业名称不能为空'}")
     private String enterpriseName;
 
     @ApiModelProperty(value="银行账号",example = "62220329817353521")
-    @NotEmpty(message = "{bankAccount:'银行账号不能为空'}")
+    @NotBlank(message = "{bankAccount:'银行账号不能为空'}")
     private String bankAccount;
 
     @Digits(integer = 6, fraction = 2, message = "{paymentMoney:'请检查缴费金额格式'}")
@@ -49,24 +50,6 @@ public class PayCheckReminder extends Page implements Serializable {
 
     @ApiModelProperty(value="图片地址",example = "http://baidu.com")
     private String picturePath;
-
-    @ApiModelProperty(value="创建人",example = "wangsong")
-    private String creatorAccount;
-
-    @ApiModelProperty(value="创建时间",example = "2019-05-07 12:12:12")
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-    private Date createdTime;
-
-    @ApiModelProperty(value="修改人")
-    private String modifierAccount;
-
-    @ApiModelProperty(value="修改时间")
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-    private Date modifiedTime;
-
-    @ApiModelProperty(value="记录状态   0标记删除，1正常")
-    private String recordStatus;
-
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -126,45 +109,5 @@ public class PayCheckReminder extends Page implements Serializable {
 
     public void setPicturePath(String picturePath) {
         this.picturePath = picturePath;
-    }
-
-    public String getCreatorAccount() {
-        return creatorAccount;
-    }
-
-    public void setCreatorAccount(String creatorAccount) {
-        this.creatorAccount = creatorAccount;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public String getModifierAccount() {
-        return modifierAccount;
-    }
-
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount;
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
-
-    public String getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(String recordStatus) {
-        this.recordStatus = recordStatus;
     }
 }

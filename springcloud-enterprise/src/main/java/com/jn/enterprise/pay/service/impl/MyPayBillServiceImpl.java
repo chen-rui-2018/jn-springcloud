@@ -81,6 +81,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     private TbPayAccountBookMapper tbPayAccountBookMapper;
 
     @Autowired
+    private TbPayAccountBookTypeMapper tbPayAccountBookTypeMapper;
+
+    @Autowired
     private TbPayAccountBookMoneyRecordMapper tbPayAccountBookMoneyRecordMapper;
 
     @Autowired
@@ -152,9 +155,15 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         //获取每个月份，通过月份组装返回给前端
         List<PayRecordVo> voList = new ArrayList<>();
         if(tbPayBills.size() > 0) {
+            List<TbPayAccountBookType> list = selectPayBillType();
             for (TbPayBill tbPayBill : tbPayBills) {
                 PayRecordVo payBill = new PayRecordVo();
                 payBill.setMonth(sdf.format(tbPayBill.getCreatedTime()));
+                for (TbPayAccountBookType tb:list) {
+                    if(tbPayBill.getAcBookType().equals(tb.getAcBookType())){
+                        tbPayBill.setAcBookType(tb.getAcBookDesc());
+                    }
+                }
                 BeanUtils.copyProperties(tbPayBill,payBill);
                 voList.add(payBill);
             }
@@ -162,6 +171,13 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         PaginationData paginationData = new PaginationData();
         paginationData.setRows(voList);
         return paginationData;
+    }
+
+    @ServiceLog(doAction = "查询所有账本类型")
+    public List<TbPayAccountBookType> selectPayBillType(){
+        TbPayAccountBookTypeCriteria tbCriteria = new TbPayAccountBookTypeCriteria();
+        List<TbPayAccountBookType> tbs = tbPayAccountBookTypeMapper.selectByExample(tbCriteria);
+        return tbs;
     }
 
     @ServiceLog(doAction = "我的账单-通过账单ID查询账单详情信息")
@@ -200,10 +216,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
 
 
     @Override
-    public void updateBillNumber(String billId, int reminderNumber) {
+    public void updateBillNumber(PayCheckReminderParam payCheckReminderParam) {
         TbPayBill bill = new TbPayBill();
-        bill.setBillId(billId);
-        bill.setReminderNumber(reminderNumber);
+        BeanUtils.copyProperties(payCheckReminderParam,bill);
         tbPayBillMapper.updateByPrimaryKeySelective(bill);
     }
 
@@ -211,9 +226,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @Override
     public void billCheckReminder(PayCheckReminder payCheckReminder, User user) {
         TbPayCheckReminder checkReminder = new TbPayCheckReminder();
-        payCheckReminder.setCreatorAccount(user.getAccount());
-        payCheckReminder.setCreatedTime(new Date());
-        payCheckReminder.setRecordStatus(PdStatusEnums.EFFECTIVE.getCode());
+        checkReminder.setCreatorAccount(user.getAccount());
+        checkReminder.setCreatedTime(new Date());
+        checkReminder.setRecordStatus(PdStatusEnums.EFFECTIVE.getCode());
         BeanUtils.copyProperties(payCheckReminder, checkReminder);
         tbPayCheckReminderMapper.insertSelective(checkReminder);
     }
@@ -391,7 +406,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         payOrderReq.setChannelId(ChannelIdEnum.ALIPAY_MOBILE.getCode());
         payOrderReq.setAmount(Long.parseLong(MoneyUtils.changeY2F(String.valueOf(totalAmount))));
         payOrderReq.setParam1(sb.toString());
-        payOrderReq.setMchId(MchIdEnum.MCH_BASE.getCode());
+        payOrderReq.setMchId(payBIllInitiateParam.getChannelId());
         payOrderReq.setSubject("支付标题必传");
         payOrderReq.setBody("支付描述信息必传");
         payOrderReq.setNotifyUrl("http://192.168.10.63:6101/api/payment/payBill/payCallBack");

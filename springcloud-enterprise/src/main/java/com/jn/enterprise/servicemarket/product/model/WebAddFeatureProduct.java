@@ -31,6 +31,8 @@ public class WebAddFeatureProduct implements Serializable {
 
     private String status;
 
+    private String viewCount;
+
     private String approvalAccount;
 
     private String approvalComments;
@@ -73,11 +75,23 @@ public class WebAddFeatureProduct implements Serializable {
 
     private String creatorAccount;
 
+    private String modifiedTime;
+
+    private String modifierAccount;
+
     private String productDetails;
 
     private String recordStatus;
 
     private static final long serialVersionUID = 1L;
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
 
     public String getProductId() {
         return productId;
@@ -373,5 +387,21 @@ public class WebAddFeatureProduct implements Serializable {
 
     public void setRecordStatus(String recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount;
     }
 }

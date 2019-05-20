@@ -49,8 +49,11 @@ public class PayServerController extends BaseController implements PayClient {
 
     @ControllerLog(doAction = "我的账单-账单催缴次数更新")
     @Override
-    public Result updateBillNumber(String billId, int reminderNumber) {
-        myPayBillService.updateBillNumber(billId,reminderNumber);
+    public Result updateBillNumber(PayCheckReminderParam payCheckReminderParam) {
+        Assert.notNull(payCheckReminderParam.getBillId(),"账单ID或编号不能为空");
+        Assert.notNull(payCheckReminderParam.getReminderNumber(),"催缴次数不能为空");
+        Assert.notNull(payCheckReminderParam.getModifiedReminderTime(),"最新催缴时间不能为空");
+        myPayBillService.updateBillNumber(payCheckReminderParam);
         return new Result();
     }
 

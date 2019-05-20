@@ -506,6 +506,66 @@ public class TbPayBillCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andModifiedReminderTimeIsNull() {
+            addCriterion("modified_reminder_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeIsNotNull() {
+            addCriterion("modified_reminder_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeEqualTo(Date value) {
+            addCriterion("modified_reminder_time =", value, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeNotEqualTo(Date value) {
+            addCriterion("modified_reminder_time <>", value, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeGreaterThan(Date value) {
+            addCriterion("modified_reminder_time >", value, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("modified_reminder_time >=", value, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeLessThan(Date value) {
+            addCriterion("modified_reminder_time <", value, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeLessThanOrEqualTo(Date value) {
+            addCriterion("modified_reminder_time <=", value, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeIn(List<Date> values) {
+            addCriterion("modified_reminder_time in", values, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeNotIn(List<Date> values) {
+            addCriterion("modified_reminder_time not in", values, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeBetween(Date value1, Date value2) {
+            addCriterion("modified_reminder_time between", value1, value2, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedReminderTimeNotBetween(Date value1, Date value2) {
+            addCriterion("modified_reminder_time not between", value1, value2, "modifiedReminderTime");
+            return (Criteria) this;
+        }
+
         public Criteria andObjTypeIsNull() {
             addCriterion("OBJ_TYPE is null");
             return (Criteria) this;

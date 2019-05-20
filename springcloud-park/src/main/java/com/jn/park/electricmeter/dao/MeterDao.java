@@ -31,8 +31,16 @@ public interface MeterDao {
 
     /**
      * 更新正式表中的度数
-     * @param taskBatch
      * @return
      */
-    int updateDegreeDiff(@Param("taskBatch") String taskBatch);
+    int updateDegreeDiff();
+
+    /**
+     * 删除一些数据【朱成报表使用】
+     */
+    void deleteElectricDay();
+    /**
+     * 插入一些数据【朱成报表使用】
+     */
+    void insertElectricDay();
 }

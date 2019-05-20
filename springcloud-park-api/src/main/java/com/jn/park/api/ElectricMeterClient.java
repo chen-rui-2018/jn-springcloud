@@ -15,6 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @FeignClient("springcloud-park")
 public interface ElectricMeterClient {
-    @RequestMapping(value = "/api/meter/getDataFromHardare", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/meter/getDataFromHardare", method = RequestMethod.GET)
     void getDataFromHardare();
 }

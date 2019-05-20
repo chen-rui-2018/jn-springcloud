@@ -1,5 +1,8 @@
 package com.jn.park.electricmeter.service;
 
+import com.jn.park.electricmeter.vo.PriceRuleVO;
+import com.jn.system.model.User;
+
 /**
  * @author： yangh
  * @date： Created on 2019/5/18 16:02
@@ -17,8 +20,8 @@ public interface MeterRulesService {
 
     /**
      * 更新计价规则
-     * @param id
+     * @param  priceRuleVO
      * @return
      */
-    Integer updatePriceRule(String id);
+    Integer updatePriceRule(User user,PriceRuleVO priceRuleVO);
 }

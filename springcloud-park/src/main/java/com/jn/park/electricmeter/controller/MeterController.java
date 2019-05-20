@@ -4,16 +4,20 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
+import com.jn.park.electricmeter.vo.PriceRuleVO;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,7 +50,8 @@ public class MeterController extends BaseController {
             @ApiImplicitParam(name = "dealHour",value = "小时",type = "Integer" ,example = "12",required = true)
     })
     public void dealSomeOneFailByHandle(Date dealDate,String dealHour){
-        meterService.getDataFromHardare();
+
+        meterService.dealSomeOneFailByHandle(dealDate,dealHour);
     }
 
     @ControllerLog(doAction = "手动处理所有电表读数定时入库失败的数据")
@@ -54,19 +59,17 @@ public class MeterController extends BaseController {
     @GetMapping(value = "/dealAllFailByHandle")
     @RequiresPermissions("/meter/dealAllFailByHandle")
     public void dealAllFailByHandle(){
-        meterService.getDataFromHardare();
+        meterService.dealAllFailByHandle();
     }
 
     @ControllerLog(doAction = "更新计价规则")
     @ApiOperation(value = "更新计价规则",notes = "更新计价规则", httpMethod = "GET")
     @GetMapping(value = "/updatePriceRule")
     @RequiresPermissions("/meter/updatePriceRule")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "计价规则id",type = "String" ,example = "1",required = true)
-    })
-    public Result updatePriceRule(String id){
+    public Result updatePriceRule(@RequestBody  PriceRuleVO priceRuleVO){
         Result result = new Result();
-        Integer data  = meterRulesService.updatePriceRule(id);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Integer data  = meterRulesService.updatePriceRule(user,priceRuleVO);
         result.setData(data);
         return result;
     }
@@ -85,5 +88,13 @@ public class MeterController extends BaseController {
         return result;
     }
 
+    /*
+    @ApiOperation(value = "手动定时入库",notes = "手动定时入库", httpMethod = "GET")
+    @GetMapping(value = "/getDataFromHardare")
+    @RequiresPermissions("/meter/getDataFromHardare")
+    public void getDataFromHardare(){
+        meterService.getDataFromHardare();
+    }
+     */
 
 }

@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: yangph
@@ -16,52 +17,59 @@ import java.util.List;
 @ApiModel(value = "IBPSMyTasksParam", description = "IBPS我的待办/已办事项入参")
 public class IBPSMyTasksParam implements Serializable {
     @ApiModelProperty(value = "动态参数(参数可为流程id,流程名称，流程实例id...)",required = true)
-    List<Parameter> parameters;
+    private List<Parameter> parameters;
     @ApiModelProperty(value = "分页参数",required = true)
-    RequestPage requestPage;
+    private RequestPage requestPage;
     @ApiModelProperty(value = "排序参数",required = true)
-    List<Sort>sorts;
+    private List<Sort>sorts;
+
+
 
     /**
-     * 构造函数，给动态参数赋值
-     * @param key
-     * @param value
+     * 构造函数，传动态参数、分页信息、排序信息
+     * @param dynamicParams 动态参数，可为null
+     * @param limit
+     * @param pageNo
+     * @param sortsParam   排序参数，可为null
      */
-    public IBPSMyTasksParam(String key,String value) {
-        Parameter parameter=new Parameter();
-        parameter.setKey(key);
-        parameter.setValue(value);
-        List<Parameter>parameters=new ArrayList<>();
-        parameters.add(parameter);
-        this.parameters = parameters;
-    }
-
-    /**
-     * 构造函数，给分页参数赋值
-     * @param limit 每页显示数据条数
-     * @param pageNo 显示页码（第几页）
-     */
-    public IBPSMyTasksParam(int limit,int pageNo) {
+    public IBPSMyTasksParam(List<Map<String,String>>dynamicParams,int limit,int pageNo,List<Map<String,String>>sortsParam){
+        //动态参数
+        List<Parameter> parameters=new ArrayList<>();
+        if(dynamicParams!=null && dynamicParams.size()>0){
+            for(Map<String,String>param:dynamicParams){
+                String key = param.keySet().iterator().next();
+                String value=param.get(key);
+                Parameter parameter=new Parameter();
+                parameter.setKey(key);
+                parameter.setValue(value);
+                parameters.add(parameter);
+            }
+        }else{
+            parameters.add(new Parameter());
+        }
+        this.parameters=parameters;
+        //分页信息
         RequestPage requestPage=new RequestPage();
         requestPage.setLimit(limit);
         requestPage.setPageNo(pageNo);
         this.requestPage=requestPage;
-    }
-
-    /**
-     * 构造函数，给排序参数赋值
-     * @param field  排序字段名
-     * @param order  排序方式 asc:正序   desc:倒序
-     * @param nullString  空字符串，可为null
-     */
-    public IBPSMyTasksParam(String field,String order,String nullString) {
-        Sort sort=new Sort();
-        sort.setField(field);
-        sort.setOrder(order);
+        //排序信息
         List<Sort>sorts=new ArrayList<>();
-        sorts.add(sort);
+        if(sortsParam!=null && sortsParam.size()>0){
+            for(Map<String,String>param:sortsParam){
+                String field = param.keySet().iterator().next();
+                String order=param.get(field);
+                Sort sort=new Sort();
+                sort.setField(field);
+                sort.setOrder(order);
+                sorts.add(sort);
+            }
+        }else{
+            sorts.add(new Sort());
+        }
         this.sorts = sorts;
     }
+
     /**
      * 动态参数
      */

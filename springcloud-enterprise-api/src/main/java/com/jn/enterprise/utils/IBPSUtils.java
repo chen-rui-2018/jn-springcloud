@@ -106,6 +106,23 @@ public class IBPSUtils {
     }
 
     /**
+     * 获取流程表单
+     * @param account       用户账号
+     * @param processInsId  流程实例id
+     * @return
+     */
+    public static JSONObject getInstForm(String account,String processInsId){
+        Map<String,String>param=new HashMap<>(16);
+        if(processInsId==null){
+            logger.warn("流程实例id不能为空");
+            throw new JnSpringCloudException(IBPSOperationExceptionEunm.PROCESS_INS_ID_NOT_NULL);
+        }
+        param.put("bpmInstId", processInsId);
+        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.GET_INST_FORM.getRequestUrl(), null, param,HttpMethod.GET);
+        return jsonObject;
+    }
+
+    /**
      * 处理任务
      * @param account  用户账号
      * @param ibpsCompleteParam 处理任务入参

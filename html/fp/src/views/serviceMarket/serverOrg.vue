@@ -1,7 +1,7 @@
 <template>
   <div class="serverOrg w">
     <div class="serverOrgMenu">
-      <span>首页</span>
+      <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页</span>
       <span>/</span>
       <span class="mainColor agent">服务机构</span>
     </div>
@@ -9,10 +9,10 @@
       <div class="nav1 clearfix">
         <div class="nav1Tit fl">业务领域：</div>
         <ul class="nav1Ul fl clearfix" style="width:auto;">
-          <li :class="{'active':filterFlag == ''}" @click="handleFilter('')">不限</li>
+          <li :class="{'active1':filterFlag == ''}" @click="handleFilter('')">不限</li>
         </ul>
         <ul class="nav1Ul fl clearfix" :class="{'sh':!flag1}">
-          <li class="wid1" v-for="(i,k) in businessArea" :key='k' @click="handleFilter(i.id)" :class="{'active':filterFlag == i.id}">{{i.preValue}}</li>
+          <li class="wid1" v-for="(i,k) in businessArea" :key='k' @click="handleFilter(i.id)" :class="{'active1':filterFlag == i.id}">{{i.preValue}}</li>
         </ul>
         <div class="fr" v-if="widFun('wid1')">
           <i class="el-icon-arrow-down" v-if="flag1" @click="flag1 = !flag1"></i>
@@ -27,10 +27,10 @@
           <div class="nav1Tit fl">所属行业：</div>
           <!-- <div class="fl" :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</div> -->
           <ul class="nav1Ul fl clearfix" style="width:auto;">
-            <li :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
+            <li :class="{'active1':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag2}">
-            <li class="wid2" v-for="(i,k) in industryField" :key='k' @click="handleFilter1(i.id)" :class="{'active':filterFlag1 == i.id}">{{i.preValue}}</li>
+            <li class="wid2" v-for="(i,k) in industryField" :key='k' @click="handleFilter1(i.id)" :class="{'active1':filterFlag1 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid2')">
             <i class="el-icon-arrow-down" v-if="flag2" @click="flag2 = !flag2"></i>
@@ -40,10 +40,10 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">发展阶段：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag2 == ''}" @click="handleFilter2('')">不限</li>
+            <li :class="{'active1':filterFlag2 == ''}" @click="handleFilter2('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag3}">
-            <li class="wid3" v-for="(i,k) in developStage" :key='k' @click="handleFilter2(i.id)" :class="{'active':filterFlag2 == i.id}">{{i.preValue}}</li>
+            <li class="wid3" v-for="(i,k) in developStage" :key='k' @click="handleFilter2(i.id)" :class="{'active1':filterFlag2 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid3')">
             <i class="el-icon-arrow-down" v-if="flag3" @click="flag3 = !flag3"></i>
@@ -53,10 +53,10 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">企业性质：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
+            <li :class="{'active1':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
-            <li class="wid4" v-for="(i,k) in enterpriseNature" :key='k' @click="handleFilter3(i.id)" :class="{'active':filterFlag3 == i.id}">{{i.preValue}}</li>
+            <li class="wid4" v-for="(i,k) in enterpriseNature" :key='k' @click="handleFilter3(i.id)" :class="{'active1':filterFlag3 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid4')">
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
@@ -77,10 +77,10 @@
     </div>
     <div class="serverOrgFilter mainBorder clearfix">
       <div class="filLeft fl">排序：
-        <span @click="handleFil('')" :class="{'active':colorFlag == ''}">综合</span>
-        <span @click="handleFil('popularity')" :class="{'active':colorFlag == 'popularity'}">人气</span>
+        <span @click="handleFil('')" :class="{'active2':colorFlag == ''}">综合</span>
+        <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">人气</span>
         <!-- <span>好评</span> -->
-        <span @click="handleFil('serviceNum')" :class="{'active':colorFlag == 'serviceNum'}">服务量</span>
+        <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">服务量</span>
       </div>
       <div class="filRight fr">
         <input type="text" placeholder="搜索关键字" v-model="keyW">
@@ -107,7 +107,7 @@
               </div>
               <div class="right1 fl">
                 <p>
-                  <el-rate :model="parseInt(i.attitudeScore)" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
+                  <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                   </el-rate>
                   <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
                 <p>

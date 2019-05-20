@@ -1,5 +1,6 @@
 package com.jn.system.permission.vo;
 
+import com.jn.system.model.User;
 import com.jn.system.user.model.SysTUser;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,31 +20,31 @@ import java.util.List;
 public class SysRoleUserVO implements Serializable {
     private static final long serialVersionUID = 8791813281954545136L;
     @ApiModelProperty("角色已经拥有的用户")
-    private List<SysTUser> userOfRoleList;
+    private List<User> userOfRoleList;
     @ApiModelProperty("角色未拥有的用户")
-    private List<SysTUser> otherUserList;
+    private List<User> otherUserList;
 
     public SysRoleUserVO() {
     }
 
-    public SysRoleUserVO(List<SysTUser> userOfRoleList, List<SysTUser> otherUserList) {
+    public SysRoleUserVO(List<User> userOfRoleList, List<User> otherUserList) {
         this.userOfRoleList = userOfRoleList;
         this.otherUserList = otherUserList;
     }
 
-    public List<SysTUser> getUserOfRoleList() {
+    public List<User> getUserOfRoleList() {
         return userOfRoleList;
     }
 
-    public void setUserOfRoleList(List<SysTUser> userOfRoleList) {
+    public void setUserOfRoleList(List<User> userOfRoleList) {
         this.userOfRoleList = userOfRoleList;
     }
 
-    public List<SysTUser> getOtherUserList() {
+    public List<User> getOtherUserList() {
         return otherUserList;
     }
 
-    public void setOtherUserList(List<SysTUser> otherUserList) {
+    public void setOtherUserList(List<User> otherUserList) {
         this.otherUserList = otherUserList;
     }
 

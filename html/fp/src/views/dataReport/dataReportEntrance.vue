@@ -1,12 +1,12 @@
 <template>
   <div class="data-report">
-    <div id="advertisement" class="swiper-container">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">
-          <img :src="img" class="swiper-slide-img" alt="">
-        </div>
-      </div>
-    </div>
+<!--    <div id="advertisement" class="swiper-container">-->
+<!--      <div class="swiper-wrapper">-->
+<!--        <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">-->
+<!--          <img :src="img" class="swiper-slide-img" alt="">-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
     <el-tabs
       type="border-card"
       @tab-click="changeDepartment">
@@ -52,13 +52,14 @@
     },
     data() {
       return {
+        flatteningInputList: [],
         submitting: false,
         isMobile: isMobile(),
         loadingFormData: true,
         loadingTab: true,
         formDataListTitle: [{
-          name: '企业',
-          id: ''
+          departmentName: '企业',
+          departmentId: null
         }],
         formData: {},
         columns: [ // 表头
@@ -101,10 +102,10 @@
           })
         this.getPcAd()
           .then(() => {
-            new Swiper('#advertisement', {
-              autoplay:true,
-              loop:true
-            })
+            // new Swiper('#advertisement', {
+            //   autoplay:true,
+            //   loop:true
+            // })
           })
       },
       formatFormData() {
@@ -116,7 +117,17 @@
             this.formatColumn(tab)
             // 把otherColumns的对象根据指标id挂载到树形指标上面
             this.formatTreeOtherColumnData(tab)
+            this.sortTree(tab.targetList)
+            console.dir(tab.targetList)
           }
+        })
+      },
+      sortTree(tree) {
+        tree.sort((a, b) => {
+          if (a.children && a.children.length > 0) {
+            this.sortTree(a.children)
+          }
+          return a.orderNumber - b.orderNumber
         })
       },
       formatInputFormatModel(tab) {
@@ -235,13 +246,16 @@
               }else if (item.formType === '5') {
                 item.fileList = item.value ? [{ name: item.value, url: item.value }] : []
               }
-              target.inputFormatModel[0].push(item)
+              if (!target.inputFormatModel[Number(item.rowNum)]) {
+                target.inputFormatModel[Number(item.rowNum)] = []
+              }
+              target.inputFormatModel[Number(item.rowNum)].push(item)
             }
           }
-          // 指标按行号升序
+          // 同一行的指标按按排序升序
           for (const list of target.inputFormatModel) {
             list.sort((a, b) => {
-              return a['rowNum'] - b['rowNum']
+              return a['orderNumber'] - b['orderNumber']
             })
           }
           if (target.hasOwnProperty('children') && target.children.length > 0) {
@@ -318,41 +332,61 @@
           this.validateInputFormatModel()
             .then(() => {
               this.formData.tabs.forEach(item => {
-                this.setOrder(item.targetList)
+                this.flatteningInputList = []
+                this.setOrderAndFormatInputList(item.targetList)
+                item.flatteningInputList = this.flatteningInputList
               })
+
+
               const formData = this.partDeepClone(this.formData, ['tabs'])
               // 先克隆提交表单对象
-              formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'columns']))
+              formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'inputList','columns']))
               // 把填报格式是多选的value把数组转成字符串
               formData.tabs.forEach((item, index) => {
-                for (const list of item.inputList) {
+                for (const list of item.flatteningInputList) {
                   if (list.formType === '4') {
                     list.value = list.value.join(',')
                   }
                 }
+                item.inputList = item.flatteningInputList
+                delete item.flatteningInputList
               })
               resolve(formData)
             },({ target, input }) => {
+              let text
               if (input.formName) {
-                this.$message.warning(`${target.text}指标里的${input.formName}要求必填，请填写后提交`)
+                text = `${target.text}指标里的${input.formName}要求必填，请填写后提交`
               } else {
-                this.$message.warning(`${target.text}指标要求必填，请填写后提交`)
+                text = `${target.text}指标要求必填，请填写后提交`
               }
+              this.$confirm(text,{
+                confirmButtonText: '确定',
+                type: 'warning'
+              }).then(res => {
+                console.dir(res)
+              }).catch(err => {
+                console.dir(err)
+              })
               reject()
             })
         })
       },
-      setOrder(tree) {
-        // 保存时给动态表单填报格式添加行号排序，以免回显时和填报时顺序不一样
+      setOrderAndFormatInputList(tree) {
+        /* 1 保存时给动态表单填报格式添加行号排序，以免回显时和填报时顺序不一样
+        * 2 把指标树里的填报格式取出来放到一个属性数组里，再赋值给inputList提交
+        * */
         return new Promise(resolve => {
           for (const form of tree) {
-            for (const arr of form.inputFormatModel) {
+            form.inputFormatModel.forEach((arr, arrIndex) => {
               arr.forEach((item, index) => {
-                item.rowNum = index
+                item.rowNum = arrIndex
+                item.orderNumber = index
+                // 存到一个属性的数组
+                this.flatteningInputList.push(item)
               })
-            }
+            })
             if (form.hasOwnProperty('children') && form.children.length > 0) {
-              this.setOrder(form.children)
+              this.setOrderAndFormatInputList(form.children)
             }
           }
           resolve()
@@ -363,8 +397,15 @@
           this.loadingFormData = true
           this.loadingTab = true
           const _this = this
+          const type = this.$route.query.type
+          let url
+          if (type === 'form') {
+            url = 'enterpriseGetFormStruct'
+          } else if(type === 'formed'){
+            url = 'enterpriseGetCompanyFormedStruct'
+          }
           this.api.get({
-            url: `enterpriseGetFormStruct`,
+            url: url,
             data: {
               fileId: _this.$route.query.fileId
             },
@@ -375,7 +416,6 @@
                   return a['orderNumber'] - b['orderNumber']
                 })
                 if ( _this.formData.modelType === 1) {
-                  _this.loadingFormData = false
                   _this.formDataListTitle = _this.formData.gardenFiller
                   for (const tab of  _this.formData.tabs) {
                     const departmentId = _this.formDataListTitle && _this.formDataListTitle[0].departmentId
@@ -388,6 +428,7 @@
                 _this.$message.error(res.result)
                 reject()
               }
+              _this.loadingFormData = false
             }
           })
         })
@@ -399,7 +440,7 @@
             url: 'enterpriseGetPcAd',
             callback(res) {
               if (res.code === "0000") {
-                _this.adUrls = res.data.adUrls.filter(src =>  !!src)
+                // _this.adUrls = res.data.adUrls.filter(src =>  !!src)
                 resolve()
               } else {
                 _this.$message.error(res.result)

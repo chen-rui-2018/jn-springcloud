@@ -11,6 +11,8 @@ import ElementUI from 'element-ui'
 import '@/css/theme.scss'
 // import VueAwesomeSwiper from 'vue-awesome-swiper'
 import '@/css/theme.css'
+import store from './store'
+
 Vue.use(ElementUI)
 // Vue.use(VueAwesomeSwiper, /* { default global options } */)
 
@@ -23,6 +25,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

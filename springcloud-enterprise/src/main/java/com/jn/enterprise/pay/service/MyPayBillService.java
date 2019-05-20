@@ -58,7 +58,7 @@ public interface MyPayBillService {
      * @param billId,reminderNumber
      * @return
      */
-    void updateBillNumber(String billId,int reminderNumber);
+    void updateBillNumber(PayCheckReminderParam payCheckReminderParam);
 
     /**
      * 核查提醒录入

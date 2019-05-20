@@ -10,7 +10,6 @@ import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
-import com.jn.enterprise.servicemarket.advisor.enums.ServiceRatingTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
@@ -404,8 +403,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         }
         List<TbServiceAdvisor> tbServiceAdvisors = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisors.isEmpty()){
-            logger.warn("当前顾问[{}]信息不存在",advisorAccount);
-            throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST);
+          return null;
         }
         TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisors.get(0);
         //获取系统所有业务领域

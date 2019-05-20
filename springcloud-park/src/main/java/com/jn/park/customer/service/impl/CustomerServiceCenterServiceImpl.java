@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 客服中心--园区用户咨询客服
  * @Author: yangph
  * @Date: 2019/5/14 9:42
  * @Version v1.0
@@ -239,8 +240,8 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         List<String>ibpsUserIds=new ArrayList<>();
         for(LinkedTreeMap<String, String> linkedTreeMap:qualifiedExecutor){
             //执行人类型为用户
-            String role="employee";
-            if(StringUtils.equals(role, linkedTreeMap.get("type"))){
+            String type="employee";
+            if(StringUtils.equals(type, linkedTreeMap.get("type"))){
                 //获取ibps可执行用户id,用于后续操作获取所属角色/部门
                 ibpsUserIds.add(linkedTreeMap.get("executId"));
                 String userId = linkedTreeMap.get("executId").replace("user", "");
@@ -270,6 +271,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }else if(StringUtils.equals(IBPSOptionsStatusEnum.REJECT_TO_PREVIOUS.getCode(), status)){
             historyShow.setStatusName("转回客服中心");
         }
+        //todo:根据流程实例id和任务id,从客服流程图片表获取处理过程上传的图片
         return ibpsUserIds;
     }
 

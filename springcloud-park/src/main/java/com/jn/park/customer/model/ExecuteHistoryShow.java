@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Author: yangph
@@ -39,6 +40,8 @@ public class ExecuteHistoryShow implements Serializable {
     private String optionDeptId;
     @ApiModelProperty("操作的部门名称")
     private String optionDeptName;
+    @ApiModelProperty("节点图片url")
+    private List<String>executePictureUrl;
 
     public String getProcInstId() {
         return procInstId;
@@ -142,5 +145,13 @@ public class ExecuteHistoryShow implements Serializable {
 
     public void setOptionDeptName(String optionDeptName) {
         this.optionDeptName = optionDeptName;
+    }
+
+    public List<String> getExecutePictureUrl() {
+        return executePictureUrl;
+    }
+
+    public void setExecutePictureUrl(List<String> executePictureUrl) {
+        this.executePictureUrl = executePictureUrl;
     }
 }

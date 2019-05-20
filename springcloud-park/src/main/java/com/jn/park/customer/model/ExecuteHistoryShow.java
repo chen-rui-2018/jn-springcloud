@@ -35,6 +35,10 @@ public class ExecuteHistoryShow implements Serializable {
     private String status;
     @ApiModelProperty("操作状态名称")
     private String statusName;
+    @ApiModelProperty("操作的部门id")
+    private String optionDeptId;
+    @ApiModelProperty("操作的部门名称")
+    private String optionDeptName;
 
     public String getProcInstId() {
         return procInstId;
@@ -122,5 +126,21 @@ public class ExecuteHistoryShow implements Serializable {
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getOptionDeptId() {
+        return optionDeptId;
+    }
+
+    public void setOptionDeptId(String optionDeptId) {
+        this.optionDeptId = optionDeptId;
+    }
+
+    public String getOptionDeptName() {
+        return optionDeptName;
+    }
+
+    public void setOptionDeptName(String optionDeptName) {
+        this.optionDeptName = optionDeptName;
     }
 }

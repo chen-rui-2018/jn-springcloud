@@ -32,7 +32,7 @@ public interface UserCenterIndexService {
      * @param user
      * @return
      */
-    String findRequirementManage(String status,User user);
+    String findRequirementManage(User user);
 
     /**
      *评价管理

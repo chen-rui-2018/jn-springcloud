@@ -114,14 +114,6 @@ $bg-gray: #f3f3f3;
           margin-top: 0;
           box-sizing: border-box;
         }
-        /*.chat-footer {*/
-        /*  width: 100%;*/
-        /*  position: absolute;*/
-        /*  bottom: 0;*/
-        /*  left:0;*/
-        /*  box-sizing: border-box;*/
-        /*  padding: 0 10px;*/
-        /*}*/
       }
     }
     margin-left: 20px;

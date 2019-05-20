@@ -14,20 +14,22 @@
             <i class="el-icon-loading"></i>
             <span>正在加载...</span>
           </div>
-          <!--          <div class="tc">-->
-          <!--            <div class="date-tips">04/04</div>-->
-          <!--          </div>-->
-          <message-row
+          <div
             v-for="(item, index) in messageList"
-            :key="index"
-            :message="item.content.msg"
-            :time="item.sendTime | formatTime"
-            :on-delete="deleteMessage"
-            :on-resend="() => { reSend(item) }"
-            :type="item.msgType === '0000'|| item.sendId === param.fromUser ? 'right' : 'left'"
-            :url="item.content.url"
-            :status="item.status"
-          />
+            :key="index">
+            <div v-if="item.createTime" class="tc">
+              <div class="date-tips">{{ item.createTime | formatTime }}</div>
+            </div>
+            <message-row
+              :message="item.content.msg"
+              :on-delete="deleteMessage"
+              :on-resend="() => { reSend(item) }"
+              :type="item.msgType === '0000'|| item.sendId === param.fromUser ? 'right' : 'left'"
+              :url="item.content.url"
+              :status="item.status"
+            />
+          </div>
+
         </div>
         <div class="chat-footer" v-if="!$store.state.isMobile">
           <avatar class="flex-none" :url="url"></avatar>
@@ -137,6 +139,9 @@
     },
     filters: {
       formatTime(d) {
+        if (!d) {
+          return ''
+        }
         let td = new Date();
         td = new Date(td.getFullYear(), td.getMonth(), td.getDate());
         let od = new Date(d);
@@ -300,6 +305,14 @@
                 const historyList = this.formatJson(data.data.rows).reverse()
                 this.noMore = historyList.length < this.param.rows
                 this.messageList = historyList.concat(this.messageList)
+                // 去除同一天同一个小时同一分钟的消息重复的时间
+                for (let i = 0, len = this.messageList.length; i< len - 1; i++) {
+                  const prevTime = this.messageList[i].createTime.substring(0,16)
+                  const nextTime = this.messageList[i+1].createTime.substring(0,16)
+                  if (prevTime === nextTime) {
+                    this.messageList[i+1].createTime = ''
+                  }
+                }
                 if (historyList && historyList.length > 0) {
                   this.param.id = historyList[0].id
                 }
@@ -454,7 +467,7 @@
           font-size: 12px;
           border-radius: 4px;
           padding: 2px 0;
-          background-color: #B3B3B3;
+          background-color: #ccc;
           color: #fff;
         }
       }
@@ -576,6 +589,7 @@
       text-align: center;
       color: #999;
       font-size: 12px;
+      padding: 10px;
     }
     .no-chat {
       width: 100%;

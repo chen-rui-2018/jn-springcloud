@@ -32,6 +32,8 @@ import org.xxpay.service.service.PayChannelService;
 import org.xxpay.service.service.PayOrderService;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -258,7 +260,8 @@ public class PayChannel4WxController{
         String feeType = "CNY";
         String spBillCreateIP = payOrder.getClientIp();
         String timeStart = null;
-        String timeExpire = null;
+        //订单失效时间，格式为yyyyMMddHHmmss
+        String timeExpire = createTimeExpire(payOrder.getDuration());
         String goodsTag = null;
         String notifyUrl = wxPayConfig.getNotifyUrl();
         String productId = null;
@@ -289,5 +292,24 @@ public class PayChannel4WxController{
         request.setSceneInfo(sceneInfo);
 
         return request;
+    }
+
+    /**
+     * 构建订单失效时间，格式为yyyyMMddHHmmss
+     * @param duration 订单有效时长(单位分钟)
+    * */
+    private String createTimeExpire(Integer duration){
+        //1.获取当前时间
+        long currentTime = System.currentTimeMillis() ;
+        // 2、在这个基础上加上有效时长分钟：
+        if(null == duration){
+            duration = PayConstant.PAY_ORDER_MAX_DURATION;
+        }
+        currentTime += duration * 60 * 1000;
+        //3、格式化时间，获取到的就是当前时间加有效时长之后的时间
+        Date date = new Date(currentTime);
+        // 4、建立时间格式化对象：
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        return  dateFormat.format(date);
     }
 }

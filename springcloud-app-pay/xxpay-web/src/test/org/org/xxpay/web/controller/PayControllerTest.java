@@ -48,7 +48,7 @@ public class PayControllerTest {
         payOrder.setMchId(MchIdEnum.MCH_BASE.getCode());
         //payOrder.setMchOrderNo(UUID.randomUUID().toString().substring(0,20));
         payOrder.setMchOrderNo("123");
-        payOrder.setChannelId(ChannelIdEnum.WX_NATIVE.getCode());
+        payOrder.setChannelId(ChannelIdEnum.ALIPAY_WAP.getCode());
         payOrder.setAmount(10000L);
         payOrder.setSubject("商品测试标题");
         payOrder.setBody("阳的测试消费");
@@ -59,6 +59,7 @@ public class PayControllerTest {
         payOrder.setAliPayReturnUrl("http://www.taobao.com");
         payOrder.setExtra("{\"productId\":\"...\"}");
         payOrder.setClientIp("192.168.10.80");
+        payOrder.setDuration(10);
         /*******step 2 生成签名(签名后必须要确保参数都不变,否则影响验签结果) ********/
         //生成签名
         payOrder.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrder),MchIdEnum.MCH_BASE.getReqKey()));

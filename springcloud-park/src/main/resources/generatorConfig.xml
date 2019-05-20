@@ -1063,7 +1063,11 @@
 
     <!--客服中心表-->
     <table tableName="tb_client_service_center"></table>
+    <!--客服处理角色所属用户信息-->
     <table tableName="tb_client_role_person_info"></table>
+    <!--客服处理问题图片表-->
+    <table tableName="tb_client_execute_img"></table>
+
   </context>
 
     <!--招商管理-->

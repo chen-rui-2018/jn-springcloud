@@ -1,8 +1,11 @@
 package com.jn.news.message;
 
 import com.jn.common.channel.MessageSink;
+import com.jn.common.enums.CommonExceptionEnum;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.news.app.model.JPushResult;
 import com.jn.news.app.service.AppSinkService;
+import com.jn.news.enums.NewsExceptionEnum;
 import com.jn.news.vo.AppSinkVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,19 +25,24 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 public class AppSink {
 
     private static Logger log = LoggerFactory.getLogger(AppSink.class);
+
     @Autowired
     AppSinkService appSinkService;
+
     @StreamListener(MessageSink.APP)
     public void listenApp(AppSinkVo appSinkVo) {
-        log.info("收到App的信息:{}",appSinkVo.toString()) ;
-       // throw new JnSpringCloudException(CommonExceptionEnum.UN_KNOW);
+        if (appSinkVo == null) {
+            throw new JnSpringCloudException(CommonExceptionEnum.ARGS_ERROR);
+        }
+
+        log.info("收到极光推送的信息:{}",appSinkVo.toString()) ;
+
         // TODO: 2018/11/8 请陈苗按这个模式来完成异步的功能
-        JPushResult jPushResult = appSinkService.pushMessage(appSinkVo.getContent(), appSinkVo.getTitle(), appSinkVo.getIds(),
+        JPushResult jPushResult = appSinkService.pushMessage(appSinkVo.getTitle(), appSinkVo.getContent(), appSinkVo.getIds(),
                 appSinkVo.getPushType(), appSinkVo.getPlatFromType(), appSinkVo.getNoticeType(),
                 appSinkVo.getMessage());
 
         log.info("极光推送返回信息：{}", jPushResult.toString());
     }
-
 
 }

@@ -10,7 +10,7 @@
         </el-breadcrumb>
       </div>
       <el-container>
-        <el-aside width="200px">
+        <el-aside style="width: 200px;margin-right: 20px;">
           <div class="userImg">
             <div class="imgItem">
               <img src="@/../static/img/larImg.png" alt="">
@@ -116,8 +116,6 @@ $bg-gray: #f3f3f3;
         }
       }
     }
-    margin-left: 20px;
-    padding: 0;
   }
   &.pd {
     padding: 66px 0;

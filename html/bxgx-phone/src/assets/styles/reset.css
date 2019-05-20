@@ -54,4 +54,9 @@ input {
   border: none;
   outline: none;
 }
+
+.w {
+  width: 682px;
+  margin: 0 auto;
+}
 /*# sourceMappingURL=reset.css.map */

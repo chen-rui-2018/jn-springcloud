@@ -24,7 +24,7 @@ export default {
       default: '200px'
     },
     chartopts: {
-      type: Object,
+      type: Array,
       default: null
     }
   },
@@ -46,20 +46,21 @@ export default {
   methods: {
     initChart() {
       const opts = this.chartopts
+      console.log(opts)
       this.chart = echarts.init(document.getElementById(this.id))
       const option = {
         color: ['#81ca3f', '#2181da', '#fdb409'],
         backgroundColor: ['#fff'],
         tooltip: {
           trigger: 'item',
-          formatter: '{b}'
+          formatter: '{a} <br/>{b} : {c}'
         },
         legend: {
           orient: 'vertical',
           x: 'left',
           y: 'center',
           icon: 'circle',
-          data: ['项目一', '项目二', '项目三']
+          data: ['已完成', '已开始', '未开始']
         },
         grid: {
           left: 10

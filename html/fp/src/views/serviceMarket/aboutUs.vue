@@ -1,9 +1,9 @@
 <template>
     <div class="aboutUs w">
         <div class="serverOrgMenu">
-            <span>企业服务</span>
+            <span class="pointer" @click="$routet.push({path:'/enterpriseservice'})">企业服务</span>
             <span>/</span>
-            <span>服务超市</span>
+            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">服务超市</span>
             <span>/</span>
             <span class="mainColor agent">关于我们</span>
         </div>
@@ -14,21 +14,22 @@
                     <!-- <div class="abtCot" @click="showFlag=!showFlag" :class="{'active':showFlag}">超市介绍</div> -->
                     <ul class="abtMenu">
                         <li @click="showFlag=!showFlag" :class="{'active':showFlag}">超市介绍</li>
-                        <li :class="{'active':curindex==k}" class="lis" v-for="(i,k) in abtMenu" :key="k" :data-id="i.id" @mouseover="handleLi(i,k)">{{i.name}}</li>
+                        <!-- <li :class="{'active':curindex==k}" class="lis" v-for="(i,k) in abtMenu" :key="k" :data-id="i.id" @mouseover="handleLi(i,k)">{{i.name}}</li> -->
+                        <!-- <li :class="{'active':curindex==k}" class="lis" v-for="(i,k) in abtMenu" :key="k" :data-id="i.id" @click="handleLi(i,k)">{{i.name}}</li> -->
                         <li @click="showFlag=!showFlag" :class="{'active':!showFlag}">联系我们</li>
                     </ul>
                     <!-- <div class="abtCot" @click="showFlag=!showFlag" :class="{'active':!showFlag}">联系我们</div> -->
                 </el-aside>
-                <el-aside width="150px" style="position:fixed" v-else>
-                    <div class="abtUs">关于我们</div>
+                <!-- <el-aside width="150px" style="position:fixed" v-else>
+                    <div class="abtUs">关于我们</div> -->
                     <!-- <div class="abtCot" @click="showFlag=!showFlag" :class="{'active':showFlag}">超市介绍</div> -->
-                    <ul class="abtMenu">
+                    <!-- <ul class="abtMenu">
                         <li @click="showFlag=!showFlag" :class="{'active':showFlag}">超市介绍</li>
                         <li :class="{'active':curindex==k}" class="lis" v-for="(i,k) in abtMenu" :key="k" :data-id="i.id" @mouseover="handleLi(i,k)">{{i.name}}</li>
                         <li @click="showFlag=!showFlag" :class="{'active':!showFlag}">联系我们</li>
-                    </ul>
+                    </ul> -->
                     <!-- <div class="abtCot" @click="showFlag=!showFlag" :class="{'active':!showFlag}">联系我们</div> -->
-                </el-aside>
+                <!-- </el-aside> -->
                 <el-main v-if="showFlag" class="elMain">
                     <div class="enterpriSever">
                         <div class="title mainColor">企业服务超市</div>
@@ -81,7 +82,7 @@
                             </div>
                             <div class="dataRight fl">
                                 <div>面向专业服务机构开放，具体要求详见
-                                    <a class="mainColor">《南京白下高新区企业发展服务促进会服务领域》</a>
+                                    <a class="mainColor pointer">《秦淮区“1+X”公共服务中心商务服务领域》</a>
                                 </div>
                                 <div>面向专业服务顾问开放。</div>
                                 <div>面向政府与相关行业主管部门开放。</div>
@@ -92,9 +93,6 @@
                     <div class="item enterpriSever" id="item3">
                         <div class="title mainColor">服务功能</div>
                         <p class="color2" style="width:850px">
-                            多渠道采集服务机构、服务人员信息，健全机构及顾问服务档案，建立属于口碑服务的服务供需匹配及服务质量等管理体系； 整合上下游服务链，实现供需精准对接、评价评优、政策兑现、活动培训、行业分析、咨询服务等功能； 基于服务大数据，为企业提供更专业的平台化服务，为区域高端服务业产业分析提供基础数据。
-                            多渠道采集服务机构、服务人员信息，健全机构及顾问服务档案，建立属于口碑服务的服务供需匹配及服务质量等管理体系； 整合上下游服务链，实现供需精准对接、评价评优、政策兑现、活动培训、行业分析、咨询服务等功能； 基于服务大数据，为企业提供更专业的平台化服务，为区域高端服务业产业分析提供基础数据。
-                            多渠道采集服务机构、服务人员信息，健全机构及顾问服务档案，建立属于口碑服务的服务供需匹配及服务质量等管理体系； 整合上下游服务链，实现供需精准对接、评价评优、政策兑现、活动培训、行业分析、咨询服务等功能； 基于服务大数据，为企业提供更专业的平台化服务，为区域高端服务业产业分析提供基础数据。
                             多渠道采集服务机构、服务人员信息，健全机构及顾问服务档案，建立属于口碑服务的服务供需匹配及服务质量等管理体系； 整合上下游服务链，实现供需精准对接、评价评优、政策兑现、活动培训、行业分析、咨询服务等功能； 基于服务大数据，为企业提供更专业的平台化服务，为区域高端服务业产业分析提供基础数据。
                         </p>
                     </div>
@@ -123,29 +121,31 @@
                             <div class="enterLeft fl">
                                 <div class="title mainColor">联系我们</div>
                                 <p class="p1">如您遇到任何问题，均可通过以下方式联系我们：</p>
+                                <div class="left1">秦淮区“1+X”公共服务中心</div>
                                 <div class="left1">
-                                    <p>地址：江苏省南京市白下高新园区A座1305</p>
+                                    <p>地址：南京市秦淮区紫丹路9号</p>
                                     <p>电话：
                                         <span style="color:#0C3BD5">
-                                            0510-87654321
+                                           025-69978813
                                         </span>
                                     </p>
                                     <p>邮箱：
-                                        <span class="mainColor"> service@nanjingbaixia.com</span>
+                                        <span class="mainColor"> qhq1x_gov@163.com</span>
                                     </p>
                                 </div>
                                 <div class="left1">
-                                    <p>邮编：467300</p>
+                                    <p>服务热线：025-69978843</p>
+                                    <!-- <p>邮编：467300</p>
                                     <p>咨询：
                                         <span style="color:#0C3BD5">51818518</span>
                                     </p>
                                     <p>传真：
                                         <span class="mainColor">0512-67068099</span>
-                                    </p>
+                                    </p> -->
                                 </div>
-                                <div style="margin-bottom:50px">企业发展沙龙：
+                                <!-- <div style="margin-bottom:50px">企业发展沙龙：
                                     <span class="mainColor"> 0512-67068048</span>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="enterRight fl">
                                 <p>关注微信公众号</p>
@@ -154,7 +154,7 @@
                             </div>
                         </div>
                     </div>
-                    <iframe src="/static/map2.html" frameborder="0" height="300" width="700"></iframe>
+                    <iframe src="/static/map.html" frameborder="0" height="300" width="700"></iframe>
                     <!-- <div id="allmap" style="height:300px"></div> -->
                 </el-main>
             </el-container>
@@ -238,6 +238,7 @@ export default {
 </script>
 <style lang="scss">
 .aboutUs {
+    padding-top: 65px;
   .aboutContent {
     .el-aside {
       background-color: #f5f6f8;

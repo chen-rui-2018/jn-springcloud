@@ -341,7 +341,7 @@
           this.loadingTab = true
           const _this = this
           this.api.get({
-            url: `enterpriseGetFormStruct`,
+            url: `enterpriseGetCompanyFormedStruct`,
             data: {
               fileId: _this.$route.query.fileId
             },
@@ -359,7 +359,7 @@
                     _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
                 }
-                _this.formDataListTitle.map(item => {
+                _this.formDataListTitle.forEach(item => {
                   const status  = item.status
                   const gardenExamineStatus = item.gardenExamineStatus
                   if(status === 0){
@@ -383,6 +383,9 @@
             }
           })
         })
+      },
+      getFormData() {
+        return this.formData
       },
       partDeepClone(source, arr) {
         // 因为formData.tabs存在循环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性

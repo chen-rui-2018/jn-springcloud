@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -44,7 +45,7 @@ public class IBPSUtils {
     public static IBPSResult startWorkFlow(String bpmnDefId,String account,Object data){
         Map<String,String>param=new HashMap<>();
         param.put("bpmnDefId", bpmnDefId);
-        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.START_WORK_FLOW.getRequestUrl(), data, param,HttpMethod.POST);
+        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.START_WORK_FLOW.getRequestUrl(), data, param,HttpMethod.POST,null);
         logger.info("启动ibps流程返回数据：{}",jsonObject.toString());
         return new Gson().fromJson(jsonObject.toString(), IBPSResult.class);
     }
@@ -68,7 +69,7 @@ public class IBPSUtils {
         if(StringUtils.isNotBlank(taskId)){
             param.put("taskId",taskId);
         }
-        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.OPINIONS.getRequestUrl(), null, param, HttpMethod.GET);
+        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.OPINIONS.getRequestUrl(), null, param, HttpMethod.GET,null);
         return jsonObject;
     }
 
@@ -85,7 +86,7 @@ public class IBPSUtils {
             throw new JnSpringCloudException(IBPSOperationExceptionEunm.MY_TASKS_PARAM_NOT_NULL);
         }
         param.put("request", new Gson().toJson(ibpsMyTasksParam));
-        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.MY_TASKS.getRequestUrl(), null, param,HttpMethod.POST);
+        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.MY_TASKS.getRequestUrl(), null, param,HttpMethod.POST,MediaType.APPLICATION_JSON);
         return jsonObject;
     }
 
@@ -101,7 +102,7 @@ public class IBPSUtils {
             throw new JnSpringCloudException(IBPSOperationExceptionEunm.MY_HANDLED_PARAM_NOT_NULL);
         }
         param.put("request", new Gson().toJson(ibpsMyTasksParam));
-        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.MY_HANDLED.getRequestUrl(), null, param,HttpMethod.POST);
+        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.MY_HANDLED.getRequestUrl(), null, param,HttpMethod.POST,MediaType.APPLICATION_JSON);
         return jsonObject;
     }
 
@@ -118,7 +119,7 @@ public class IBPSUtils {
             throw new JnSpringCloudException(IBPSOperationExceptionEunm.PROCESS_INS_ID_NOT_NULL);
         }
         param.put("bpmInstId", processInsId);
-        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.GET_INST_FORM.getRequestUrl(), null, param,HttpMethod.GET);
+        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.GET_INST_FORM.getRequestUrl(), null, param,HttpMethod.GET,null);
         return jsonObject;
     }
 
@@ -134,20 +135,22 @@ public class IBPSUtils {
             throw new JnSpringCloudException(IBPSOperationExceptionEunm.COMPLETE_PARAM_NOT_NULL);
         }
         Map<String,String>param=javaBeanToMap(ibpsCompleteParam);
-        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.COMPLETE.getRequestUrl(), null, param,HttpMethod.POST);
+        JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.COMPLETE.getRequestUrl(), null, param,HttpMethod.POST,null);
         return jsonObject;
     }
 
 
     /**
-     * 操作工作流方法
+     * 操作工作流方法(默认表单提交方式)
      * @param operationAccount  操作人账号
      * @param IBPSRequestUrl    操作的IBPS方法的请求url
      * @param data              表单数据
      * @param param             请求入参
+     * @param mediaType         参数请求传输方式
      * @return
      */
-    public static JSONObject operationWorkFlow(String operationAccount, String IBPSRequestUrl, Object data, Map<String, String> param,HttpMethod method){
+    public static JSONObject operationWorkFlow(String operationAccount, String IBPSRequestUrl, Object data, Map<String, String> param,
+                                               HttpMethod method, MediaType mediaType){
         MultiValueMap<String, String> map=new LinkedMultiValueMap<>();
         if(data!=null){
             Gson gson = new Gson();
@@ -158,7 +161,12 @@ public class IBPSUtils {
         if(param!=null){
             map.setAll(param);
         }
-        return CallOtherSwaggerUtils.request(operationAccount, IBPSRequestUrl, method, map);
+        if(mediaType==null){
+            return CallOtherSwaggerUtils.request(operationAccount, IBPSRequestUrl, method, map);
+        }else{
+            return CallOtherSwaggerUtils.request(operationAccount, IBPSRequestUrl, method, map,mediaType);
+        }
+
     }
 
     /**
@@ -185,6 +193,8 @@ public class IBPSUtils {
                     map.put(fieldName, new Gson().toJson(value));
                 }else if(StringUtils.isNotBlank(ObjectUtils.toString(value))){
                     map.put(fieldName,(String)value);
+                }else if(value==null){
+                   //ignore
                 }else{
                     logger.warn("当前字段：[{}]的类型不是字符串类型,请封装处理数据",fieldName);
                     throw new JnSpringCloudException(IBPSOperationExceptionEunm.NETWORK_ANOMALY);

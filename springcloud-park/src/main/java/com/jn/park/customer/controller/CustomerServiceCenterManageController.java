@@ -89,7 +89,7 @@ public class CustomerServiceCenterManageController extends BaseController {
     @ControllerLog(doAction = "问题处理")
     @ApiOperation(value = "问题处理")
     @RequiresPermissions("/customer/customerServiceCenterManageController/complete")
-    @RequestMapping(value = "/getInstForm",method = RequestMethod.POST)
+    @RequestMapping(value = "/complete",method = RequestMethod.POST)
     public Result<Integer> complete(@RequestBody @Valid IBPSCompleteCustomerParam ibpsCompleteCustomerParam) {
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();

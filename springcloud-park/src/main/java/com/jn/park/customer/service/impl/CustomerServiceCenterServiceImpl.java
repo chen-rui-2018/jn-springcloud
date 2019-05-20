@@ -12,12 +12,10 @@ import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.customer.dao.TbClientExecuteImgMapper;
 import com.jn.park.customer.dao.TbClientRolePersonInfoMapper;
 import com.jn.park.customer.dao.TbClientServiceCenterMapper;
-import com.jn.park.customer.entity.TbClientRolePersonInfo;
-import com.jn.park.customer.entity.TbClientRolePersonInfoCriteria;
-import com.jn.park.customer.entity.TbClientServiceCenter;
-import com.jn.park.customer.entity.TbClientServiceCenterCriteria;
+import com.jn.park.customer.entity.*;
 import com.jn.park.customer.enums.IBPSOptionsStatusEnum;
 import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterService;
@@ -41,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -71,6 +70,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
 
     @Autowired
     private TbClientRolePersonInfoMapper personInfoMapper;
+
+    @Autowired
+    private TbClientExecuteImgMapper imgMapper;
 
 
     /**
@@ -213,6 +215,12 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
                         }
                     }
                 }
+                //根据流程实例id和任务id去处理问题图片描述表查询图片信息
+                List<TbClientExecuteImg> images = getTbClientExecuteImg(result.getProcInstId(), result.getTaskId());
+                if(!images.isEmpty()){
+                    String[] imageUrls = images.get(0).getPictureUrl().split(";");
+                    historyShow.setExecutePictureUrl(Arrays.asList(imageUrls));
+                }
             }
             executeHistoryShowList.add(historyShow);
         }
@@ -271,8 +279,21 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }else if(StringUtils.equals(IBPSOptionsStatusEnum.REJECT_TO_PREVIOUS.getCode(), status)){
             historyShow.setStatusName("转回客服中心");
         }
-        //todo:根据流程实例id和任务id,从客服流程图片表获取处理过程上传的图片
         return ibpsUserIds;
+    }
+
+    /**
+     * 根据流程实例id和任务id获取问题处理描述图片信息
+     * @param procInstId  流程实例id
+     * @param taskId      任务id
+     * @return
+     */
+    @ServiceLog(doAction = "根据流程实例id和任务id获取问题处理描述图片信息")
+    private List<TbClientExecuteImg> getTbClientExecuteImg(String procInstId, String taskId) {
+        TbClientExecuteImgCriteria example=new TbClientExecuteImgCriteria();
+        example.createCriteria().andProcInstIdEqualTo(procInstId).andTaskIdEqualTo(taskId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        return imgMapper.selectByExample(example);
     }
 
     /**

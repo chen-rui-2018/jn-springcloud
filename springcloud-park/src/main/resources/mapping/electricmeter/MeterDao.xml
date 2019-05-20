@@ -36,7 +36,7 @@
     </insert>
 
 
-    <update id="updateDegreeDiff" parameterType="java.lang.String"  >
+    <update id="updateDegreeDiff" >
         UPDATE tb_electric_reading p
         SET p.degree_diff = (
             SELECT
@@ -89,4 +89,51 @@
             p.degree_diff IS NULL
     </update>
 
+    <!--删除一些数据【朱成报表使用】-->
+    <delete id="deleteElectricDay">
+        delete from tb_electric_day where deal_date >= CURDATE()
+    </delete>
+    <!--插入一些数据【朱成报表使用】-->
+    <insert id="insertElectricDay">
+        insert into  tb_electric_day
+        select t.meter_code ,
+               t.deal_date ,
+                     t2.is_high_energy_threshold ,
+               max(t.reading_end) - min(t.reading_end) br_reading_end,
+               t3_val sy_reading_end,
+               t4_val zr_reading_end,
+                     t5_val qn_reading_end ,
+                     replace(CONCAT(round(  (case when ((max(t.reading_end) - min(t.reading_end)) - t4_val) = 0 then null else ((max(t.reading_end) - min(t.reading_end)) - t4_val)  end )
+                        / (case when t4_val = 0 then null else t4_val end) * 100,2),'%'),'.00','') zr_hb
+          from tb_electric_reading t
+          left join tb_electric_meter_info t2
+            on t.meter_code = t2.meter_code
+          left join (select meter_code,
+                                                date_format(date_add(deal_date, INTERVAL  1 MONTH),'%Y-%m-%d') deal_date,
+                            (max(reading_end) - min(reading_end)) t3_val
+                       from tb_electric_reading
+                                    where deal_date = date_format( date_add(now(), INTERVAL -1 MONTH), '%Y-%m-%d')
+                      group by meter_code,deal_date) t3
+            on t.meter_code = t3.meter_code
+           and t.deal_date = t3.deal_date
+          left join (select meter_code,
+                                                date_format(date_add(deal_date, INTERVAL  1 day),'%Y-%m-%d') deal_date,
+                            (max(reading_end) - min(reading_end)) t4_val
+                       from tb_electric_reading
+                                    where deal_date = date_format( date_add(now(), INTERVAL -1 day), '%Y-%m-%d')
+                      group by meter_code, deal_date) t4
+            on t.meter_code = t4.meter_code
+           and t.deal_date = t4.deal_date
+          left join (select meter_code,
+                                                date_format(date_add(deal_date, INTERVAL  1 year),'%Y-%m-%d') deal_date,
+                            (max(reading_end) - min(reading_end)) t5_val
+                       from tb_electric_reading
+                                    where deal_date = date_format( date_add(now(), INTERVAL -1 year), '%Y-%m-%d')
+                      group by meter_code, deal_date) t5
+            on t.meter_code = t5.meter_code
+           and t.deal_date = t5.deal_date
+         where t.deal_date >  CURDATE()
+         group by t.meter_code, t.deal_date
+
+    </insert>
 </mapper>

@@ -30,6 +30,7 @@ public class ImController {
 
     /**
      * 查询聊天列表
+     *
      * @param message
      * @return
      */

@@ -33,12 +33,11 @@ export default {
     };
   },
   created() {
-    this.getName();
+    // this.getName();
   },
   mounted() {
-    // this.getMessageOneTort();
-    // this.getMessageList();
-    console.log(this.$route.name);
+    this.getMessageOneTort();
+    this.getMessageList();
   },
   methods: {
     //判断跳转过来的路径

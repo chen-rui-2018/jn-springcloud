@@ -97,7 +97,7 @@ export default new Router({
             },
             {
               path: '/enterpriseOrder',
-              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              component: resolve => require(['@/views/messageCenter/enterpriseOrder'], resolve),
               meta: {
                 title: '企业订单'
               },
@@ -105,7 +105,7 @@ export default new Router({
             },
             {
               path: '/informationDynamics',
-              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              component: resolve => require(['@/views/messageCenter/informationDynamics'], resolve),
               meta: {
                 title: '信息发布动态'
               },
@@ -113,11 +113,27 @@ export default new Router({
             },
             {
               path: '/paymentReminder',
-              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              component: resolve => require(['@/views/messageCenter/paymentReminder'], resolve),
               meta: {
                 title: '缴费提醒'
               },
               name:'paymentReminder',
+            },
+            {
+              path: '/guestbook',
+              component: resolve => require(['@/views/messageCenter/guestbook'], resolve),
+              meta: {
+                title: '访客留言'
+              },
+              name:'guestbook',
+            },
+            {
+              path: '/dataReminder',
+              component: resolve => require(['@/views/messageCenter/dataReminder'], resolve),
+              meta: {
+                title: '数据上报提醒'
+              },
+              name:'dataReminder',
             },
           ]
         },
@@ -532,6 +548,14 @@ export default new Router({
           },
           name: 'regData'
         },
+        {
+          path: '/incubatorEnterprises',
+          component: resolve => require(['@/views/incubatorEnterprises'], resolve),
+          meta: {
+            title: '孵化企业'
+          },
+          name: 'incubatorEnterprises'
+        },
       ]
     },
     {
@@ -830,6 +854,14 @@ export default new Router({
         title: '企业招聘列表'
       },
       name: 'recruitmentList'
+    },
+    {
+      path: '/userinfo',
+      component: resolve => require(['@/views/home/userinfo'], resolve),
+      meta: {
+        title: '用户信息'
+      },
+      name: 'userinfo'
     },
   ]
 })

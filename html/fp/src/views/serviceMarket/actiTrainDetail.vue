@@ -125,7 +125,7 @@
                 <span>{{i.createdTime}}</span>
               </div>
               <div v-if="inFlag">
-                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textData"></el-input>
+                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textData1"></el-input>
                 <el-button type="success" @click="replycom(item)" style="background:#00a040;height:38px;width:90px;margin-left: 1014px;margin-top: 10px;" round>回复</el-button>
               </div>
             </li>
@@ -145,6 +145,7 @@ export default {
     return {
       inFlag: false,
       textData: "",
+      textData1:'',
       activityDetail: {},
       currentPage1: 1,
       page: 1,
@@ -213,15 +214,16 @@ export default {
       this.api.post({
         url: "commentActivity",
         data: {
-          comContent: item.comContent,
-          comType: item.comType,
+          comContent: _this.textData1,
+          comType: 0,
           pId: item.pId,
           rootId: item.rootId
         },
         // urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            this.inFlag = false;
+            _this.inFlag = false;
+            _this.textData1=''
             _this.getCommentInfo();
           } else {
             _this.$message.error(res.result);
@@ -491,7 +493,7 @@ export default {
         > p {
           margin-top: 30px;
           .icon-recharge {
-            margin-left: 70px;
+            margin-left: 60px;
           }
         }
         .delAddress {

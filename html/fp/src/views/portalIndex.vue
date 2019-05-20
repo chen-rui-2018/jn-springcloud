@@ -45,7 +45,7 @@
               <p>HIGH-TECH&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/incubatorEnterprises'})">
               <span>孵化企业</span>
               <p>INCUBATION&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -61,9 +61,9 @@
       <div class="parkNotice w clearfix" ref="parkNotice" data-class="bottom">
         <div class="fl"><img src="@/../static/img/园区公告.png" alt=""></div>
         <span>热烈庆祝XXX公司入驻南京白下高新区XXX园区。为实现共创共收打造良好环境基础实现科技人才的引进与推动时代化做出...</span>
-        <div class="fr pointer">更多&nbsp;&nbsp;
+        <!-- <div class="fr pointer">更多&nbsp;&nbsp;
           <i class="iconfont icon-you"></i>
-        </div>
+        </div> -->
       </div>
       <div class="declarationNotice portalNotice pr" ref="portalNotice" data-class="bottom">
         <div class="w">

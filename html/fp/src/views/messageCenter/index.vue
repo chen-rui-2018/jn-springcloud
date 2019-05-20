@@ -15,7 +15,7 @@
             <div class="imgItem">
               <img src="@/../static/img/larImg.png" alt="">
             </div>
-            <p>{{account}}</p>
+            <!-- <p>{{account}}</p> -->
           </div>
           <el-menu :default-active="this.$route.path" :unique-opened="true" router class="el-menu-vertical-demo">
             <el-submenu index="/messageCenter">
@@ -24,11 +24,11 @@
               </template>
               <el-menu-item-group>
                 <el-menu-item index="/parkNotice">园区通知</el-menu-item>
-                <el-menu-item index="1-2">私人订单</el-menu-item>
+                <!-- <el-menu-item index="1-2">私人订单</el-menu-item>
                 <el-menu-item index="1-2">信用动态</el-menu-item>
                 <el-menu-item index="1-2">消费汇总</el-menu-item>
                 <el-menu-item index="1-2">收入汇总</el-menu-item>
-                <el-menu-item index="1-2">付款通知</el-menu-item>
+                <el-menu-item index="1-2">付款通知</el-menu-item> -->
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="3">
@@ -39,8 +39,8 @@
                 <el-menu-item index="/enterpriseOrder">企业订单</el-menu-item>
                 <el-menu-item index="/informationDynamics">信息发布动态</el-menu-item>
                 <el-menu-item index="/paymentReminder">缴费提醒</el-menu-item>
-                <el-menu-item index="3-2">访客留言</el-menu-item>
-                <el-menu-item index="3-2">数据上报提醒</el-menu-item>
+                <el-menu-item index="/guestbook">访客留言</el-menu-item>
+                <el-menu-item index="/dataReminder">数据上报提醒</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-menu-item index="2" @click.native="toChat">

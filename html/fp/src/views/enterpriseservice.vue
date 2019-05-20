@@ -40,7 +40,7 @@
               <p>HIGH-TECH&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/incubatorEnterprises'})">
               <span>孵化企业</span>
               <p>INCUBATION&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -363,9 +363,9 @@
           </div>
           <div ref="tech2" data-class="bottom1">
             <div class="btns" id="btns">
-              <button class="btn1" :class="{'btActive':flag44==0}" @click="flag44 = 0">投资人</button>
-              <button class="btn2 btn11" :class="{'btActive':flag44==1}" @click="flag44 = 1">金融产品</button>
-              <button class="btn2" :class="{'btActive':flag44==2}"  @click="flag44 = 2">金融机构</button>
+              <button class="btn1" :class="{'btActive':flag44=='0'}" @click="flag44 = '0'">投资人</button>
+              <button class="btn2 btn11" :class="{'btActive':flag44=='1'}" @click="flag44 = '1'">金融产品</button>
+              <button class="btn2" :class="{'btActive':flag44=='2'}" @click="flag44 = '2'">金融机构</button>
             </div>
             <div class="tecnInfo clearfix">
               <!--  <div class="info1 clearfix">
@@ -457,7 +457,7 @@
                             </li>
                         </ul>
                     </div> -->
-              <div id="conselor_info" v-if="flag44 = 0">
+              <div id="conselor_info" v-if="flag44 == '0'">
                 <ul>
                   <li class="conselor_left">
                     <div v-for="(item,index) in investorInfoList" :key="index" v-if="index<2">
@@ -498,7 +498,7 @@
                   </li>
                 </ul>
               </div>
-              <div class="finnaPro" v-if="flag44 = 1">
+              <div class="finnaPro" v-if="flag44 == '1'">
                 <ul>
                   <li class="clearfix" v-for="(i,k) in finaProList" :key='k' v-if="k<3">
                     <div class="orgImg fl">
@@ -538,11 +538,10 @@
                   </li>
                 </ul>
               </div>
-              <div class="finnaOrg" v-if="flag44 = 2">
+              <div class="finnaOrg" v-if="flag44 == '2'">
                 <ul>
                   <li class="clearfix" v-for="(i,k) in finaOrgLost" :key='k' v-if="k<3">
                     <div class="orgImg fl">
-                      <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                       <img :src="i.orgLogo" alt="">
                     </div>
                     <div class="orgCon fl">
@@ -598,7 +597,6 @@
             <ul class="infoCon" ref="human3" data-class="bottom1" v-if='flag55'>
               <li class="clearfix" v-for="(i,k) in humanResourcesList" :key="k">
                 <div class="con1 fl">
-                  <!-- <img src="@/../static/img/图层 54.png" alt=""> -->
                   <img :src="i.comAvatar" alt="">
                 </div>
                 <div class="con2 fl">
@@ -636,8 +634,6 @@
                       </div>
                       <div class="right1 fl">
                         <p>
-                          <!-- <el-rate disabled text-color="#00a041" score-template="{value}">
-                                    </el-rate> -->
                           <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                           </el-rate>
                           <span class="mainColor">{{i.evaluationNumber}}</span>条评价</p>
@@ -661,7 +657,7 @@ export default {
   data() {
     return {
       flag55: true,
-      flag44:0,
+      flag44:'0',
       showFF: false,
       show1: false,
       show11: false,
@@ -716,8 +712,10 @@ export default {
     this.getActiList(); //活动
     this.getInvestorInfoList(); //投资人
     this.getProList()//服务产品列表
-    Promise.all([this.getBanner(), this.getPolicyCenterList()]).then(() => {
-      // this.init();
+    this.getFinaOrg()//金融机构
+    this.getFinaPro()//金融产品
+    Promise.all([this.getBanner(),this.getPolicyCenterList()]).then(() => {
+      this.init();
     });
   },
   destroyed() {
@@ -726,11 +724,7 @@ export default {
   methods: {
     //招聘与服务切换翻页
     hanlepage(){
-      if(this.flag44==true&&this.flag55==false){
-        this.getRecruitList()
-      } else if(this.flag55==true&&this.flag44==false){
-
-      }
+      // if 
     },
     formatArr(arr, n) {
       const len = arr.length;
@@ -964,6 +958,7 @@ export default {
         dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
+            console.log(res.data)
             _this.finaProList = res.data.rows;
           } else {
             _this.$message.error(res.result);
@@ -1408,7 +1403,7 @@ export default {
 
           .orgCon {
             margin-left: 20px;
-
+            text-align: left;
             .conTil {
               font-size: 15px;
               color: #222;
@@ -1460,20 +1455,20 @@ export default {
         }
       }
     }
-    #btns {
-      margin: 50px 0;
-      > button:hover {
-        color: #fff;
-        background: #00a041;
-      }
-      .btn11 {
-        border-radius: 0;
-      }
-      >button.btActive{
-         color: #fff;
-        background: #00a041;
-      }
-    }
+    // #btns {
+    //   margin: 50px 0;
+    //   > button:hover {
+    //     color: #fff;
+    //     background: #00a041;
+    //   }
+    //   .btn11 {
+    //     border-radius: 0;
+    //   }
+    //   >button.btActive{
+    //      color: #fff;
+    //     background: #00a041;
+    //   }
+    // }
     .tecnInfo {
       .info1 {
         padding: 0 120px;

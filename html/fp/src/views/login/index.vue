@@ -136,6 +136,9 @@ export default {
       color: #b7b7b7;
       font-size: 12px;
     }
+    input:focus{
+      border-color: #00a041;
+    }
     // .el-form-item:nth-child(2) {
     //   margin-bottom: 0;
     // }

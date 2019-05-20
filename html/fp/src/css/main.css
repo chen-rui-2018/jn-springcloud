@@ -2222,6 +2222,7 @@ img {
 .enterpriseservice .districtGardens .btns,
 .enterpriseservice .enterpriseinfo .btns, .enterpriseservice .policyCenter .btns, .enterpriseservice .technologyFinance .btns, .enterpriseservice .humanResources .btns {
   font-size: 0;
+  margin: 50px 0;
 }
 
 .portalIndex .declarationNotice .btns > button,
@@ -2258,8 +2259,6 @@ img {
 .enterpriseservice .popularActi .btns .btn1,
 .enterpriseservice .districtGardens .btns .btn1,
 .enterpriseservice .enterpriseinfo .btns .btn1, .enterpriseservice .policyCenter .btns .btn1, .enterpriseservice .technologyFinance .btns .btn1, .enterpriseservice .humanResources .btns .btn1 {
-  color: #fff;
-  background: #00a041;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
@@ -2274,6 +2273,27 @@ img {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   border-left: none;
+}
+
+.portalIndex .declarationNotice .btns .btn11,
+.portalIndex .popularActi .btns .btn11,
+.portalIndex .districtGardens .btns .btn11,
+.portalIndex .enterpriseinfo .btns .btn11, .portalIndex .policyCenter .btns .btn11, .portalIndex .technologyFinance .btns .btn11, .portalIndex .humanResources .btns .btn11, .enterpriseservice .declarationNotice .btns .btn11,
+.enterpriseservice .popularActi .btns .btn11,
+.enterpriseservice .districtGardens .btns .btn11,
+.enterpriseservice .enterpriseinfo .btns .btn11, .enterpriseservice .policyCenter .btns .btn11, .enterpriseservice .technologyFinance .btns .btn11, .enterpriseservice .humanResources .btns .btn11 {
+  border-radius: 0;
+}
+
+.portalIndex .declarationNotice .btns > button.btActive,
+.portalIndex .popularActi .btns > button.btActive,
+.portalIndex .districtGardens .btns > button.btActive,
+.portalIndex .enterpriseinfo .btns > button.btActive, .portalIndex .policyCenter .btns > button.btActive, .portalIndex .technologyFinance .btns > button.btActive, .portalIndex .humanResources .btns > button.btActive, .enterpriseservice .declarationNotice .btns > button.btActive,
+.enterpriseservice .popularActi .btns > button.btActive,
+.enterpriseservice .districtGardens .btns > button.btActive,
+.enterpriseservice .enterpriseinfo .btns > button.btActive, .enterpriseservice .policyCenter .btns > button.btActive, .enterpriseservice .technologyFinance .btns > button.btActive, .enterpriseservice .humanResources .btns > button.btActive {
+  color: #fff;
+  background: #00a041;
 }
 
 .portalIndex .declarationNotice .info,

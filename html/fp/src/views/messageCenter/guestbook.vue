@@ -1,5 +1,5 @@
 <template>
-    <div class="enterorder">
+    <div class="guestbook">
         <div class="noticeTit">
             <span>企业订单</span>
         </div>
@@ -38,7 +38,7 @@ export default {
       this.api.get({
         url: "getMessageList",
         data: {
-          messageTowTort: 2
+          messageTowTort:5
         },
         callback: res => {
           if (res.code === "0000") {
@@ -71,7 +71,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.enterorder {
+.guestbook {
   .message-center-main {
     padding: 0;
   }

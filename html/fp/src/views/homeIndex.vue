@@ -7,24 +7,25 @@
             <img src="@/../static/img/login-logo.png" v-if="isCenter||showFF" class="pointer" alt="" @click="$router.push({path:'/'})">
             <img src="@/../static/img/LOGO1.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
           </div>
-          <!-- <div class="headerRight fr">
-            <router-link to="/allMesList" class="search" v-if="isLogin">
+          <div class="headerRight fr pr">
+            <!-- <router-link to="/allMesList" class="search" v-if="isLogin">
               <i class="el-icon-bell" style="font-size:20px"></i>
-            </router-link>
-            <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span>
+            </router-link> -->
+            <!-- <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span> -->
             <div class="search pointer">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
             </div>
-            <div class="navlogin">
+            <user-info></user-info>
+            <!-- <div class="navlogin">
               <router-link to="/parkNotice" class="" v-if="isLogin">
               <i class="el-icon-bell" style="font-size:20px" @mouseenter="showMes=!showMes"></i>
               </router-link>
               <a @click="$router.push({path:'/login'})" v-else>登录</a>
               <span class="line">|</span>
               <a @click="$router.push({path:'/register'})">注册</a>
-            </div>
-          </div> -->
-          <user-info></user-info>
+            </div> -->
+          </div>
+          
           <div class="nav" id="nav">
             <ul class="posA clearfix">
               <li class="">
@@ -43,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="mesage11" v-if="showMes"  @mouseleave="showMes=!showMes">
+      <!-- <div class="mesage11" v-if="showMes"  @mouseleave="showMes=!showMes">
         <el-card>
           <div class="firli"><span class="color1">消息中心</span><span class="pointer">清空</span></div>
           <ul>
@@ -52,7 +53,7 @@
         </ul>
         <div class="checkAll ct color1 pointer">查看全部</div>
         </el-card>
-      </div>
+      </div> -->
       <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
         <el-collapse-transition>
           <div v-show="show4">
@@ -73,7 +74,7 @@
 </template>
 <script>
   import swiper from "swiper";
-  import userInfo from './common/userInfo'
+  import userInfo from './common/userInfoData'
   export default {
      components: {
       userInfo
@@ -100,7 +101,7 @@
     },
     computed: {
       isCenter() {
-        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter';
+        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises';
         return this.$route.matched.some(item => {
           if(item.name){
             return list.indexOf(item.name) == -1
@@ -125,18 +126,18 @@
     mounted() {
       this.swiperinit();
       window.addEventListener("scroll", this.handleScroll);
-      this.islogin()
+      // this.islogin()
     },
     destroyed() {
       window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
     },
     methods: {
-      islogin(){
-        this.accoutInfo=sessionStorage.getItem('account')
-        if(this.accoutInfo){
-          this.isLogin=true
-        }
-      },
+      // islogin(){
+      //   this.accoutInfo=sessionStorage.getItem('account')
+      //   if(this.accoutInfo){
+      //     this.isLogin=true
+      //   }
+      // },
       showH(){
         this.show1 = true;
         // setTimeout(()=>{
@@ -266,36 +267,36 @@
   };
 </script>
 <style lang="scss">
- .mesage11{
-   position: relative;
-   left:70%;
-   width: 250px;
-   color:#999;
-   font-size: 12px;
-   .el-card__body{
-     padding:0;
-   }
-   .el-card{
-     color:#999;
-   }
-   .firli{
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     padding:15px 20px;
-     border-bottom:1px solid #eee;
-   }
-   .checkAll{
-     padding:15px 20px;
-   }
-   li{
-     padding:15px 20px;
-     border-bottom:1px solid #eee;
-     overflow: hidden;
-     text-overflow:ellipsis;
-     white-space: nowrap;
-   }
- }
+//  .mesage11{
+//    position: relative;
+//    left:70%;
+//    width: 250px;
+//    color:#999;
+//    font-size: 12px;
+//    .el-card__body{
+//      padding:0;
+//    }
+//    .el-card{
+//      color:#999;
+//    }
+//    .firli{
+//      display: flex;
+//      align-items: center;
+//      justify-content: space-between;
+//      padding:15px 20px;
+//      border-bottom:1px solid #eee;
+//    }
+//    .checkAll{
+//      padding:15px 20px;
+//    }
+//    li{
+//      padding:15px 20px;
+//      border-bottom:1px solid #eee;
+//      overflow: hidden;
+//      text-overflow:ellipsis;
+//      white-space: nowrap;
+//    }
+//  }
   @keyframes qfyfadeInLeft {
     0% {
       opacity: 0;

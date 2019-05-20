@@ -1,22 +1,22 @@
 <template>
-    <div class="payreminder">
-        <div class="noticeTit">
-            <span>缴费提醒v</span>
-        </div>
-        <div class="noticeContent">
-            <ul>
-                <li class="noticeLi" v-for="(item,index) in messageList" :key="index">
-                    <div class="liTit">
-                        <i class="iconfont icon-yuandian yuandian1" v-if="item.isRead=='0'"></i>
-                        <i class="iconfont icon-yuandian yuandian2" v-if="item.isRead=='1'"></i>
-                        <span class="color1 notice">{{item.messageTitle}}</span>
-                        <span class="mesTime color3">{{item.createdTime}}</span>
-                    </div>
-                    <p class="color2">{{item.messageContent}}</p>
-                </li>
-            </ul>
-        </div>
+  <div class="payreminder">
+    <div class="noticeTit">
+      <span>缴费提醒v</span>
     </div>
+    <div class="noticeContent">
+      <ul>
+        <li class="noticeLi" v-for="(item,index) in messageList" :key="index">
+          <div class="liTit">
+            <i class="iconfont icon-yuandian yuandian1" v-if="item.isRead=='0'"></i>
+            <i class="iconfont icon-yuandian yuandian2" v-if="item.isRead=='1'"></i>
+            <span class="color1 notice">{{item.messageTitle}}</span>
+            <span class="mesTime color3">{{item.createdTime}}</span>
+          </div>
+          <p class="color2">{{item.messageContent}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 <script>
 export default {
@@ -31,19 +31,53 @@ export default {
     this.getMessageList();
   },
   methods: {
+    // getMessageList() {
+    //   this.api.get({
+    //     url: "getMessageList",
+    //     data: {
+    //     //   isRead: 0,
+    //       page: this.page,
+    //       rows: this.rows,
+    //       messageOneTort: 0,
+    //       messageTowTort: 4
+    //     },
+    //     callback: res => {
+    //       if (res.code === "0000") {
+    //         this.messageList = res.data.rows[0].messageListModels;
+    //       } else {
+    //         reject();
+    //         this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // }
+    //获取消息列表
     getMessageList() {
       this.api.get({
         url: "getMessageList",
         data: {
-        //   isRead: 0,
-          page: this.page,
-          rows: this.rows,
-          messageOneTort: 0,
           messageTowTort: 4
         },
         callback: res => {
           if (res.code === "0000") {
-            this.messageList = res.data.rows[0].messageListModels;
+            this.messageList = res.data.rows;
+          } else {
+            reject();
+            this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //获取二级消息类别
+    getMessageOneTort() {
+      this.api.get({
+        url: "getMessageOneTort",
+        data: {
+          messageOneTort: 1
+        },
+        callback: res => {
+          if (res.code === "0000") {
+            // this.messageList = res.data.rows[0].messageListModels;
           } else {
             reject();
             this.$message.error(res.result);

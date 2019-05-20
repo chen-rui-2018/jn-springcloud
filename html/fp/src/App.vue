@@ -113,7 +113,7 @@ export default {
     // if(sessionStorage.token){
     //     this.api.setToken(sessionStorage.token)
     // }
-    this.init()
+    // this.init()
     let vm =this;
       window.onscroll=function(){
         if (document.documentElement.scrollTop>60) {
@@ -129,22 +129,22 @@ export default {
     }
   },
   methods:{
-    init(){
-      let _this=this
-      this.api.post({
-        url: "loginURL",
-        data: {
-          account: "wangsong",
-          password: "wangsong"
-        },
-        dataFlag: false,
-        callback: function(res) {
-          if (res.code == "0000") {
-            sessionStorage.token=res.data
-          }
-        }
-      })
-    },
+    // init(){
+    //   let _this=this
+    //   this.api.post({
+    //     url: "loginURL",
+    //     data: {
+    //       account: "wangsong",
+    //       password: "wangsong"
+    //     },
+    //     dataFlag: false,
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         sessionStorage.token=res.data
+    //       }
+    //     }
+    //   })
+    // },
     setEnvironment() {
       const token = this.$route.query.token
       if (token) {

@@ -1406,8 +1406,8 @@ img {
           // }
           .ru-active{
             background: #fff;
-              color: #00a041;
-              border-radius: 5px;
+            color: #00a041;
+            border-radius: 5px;
           }
         }
         .posA {
@@ -1654,6 +1654,7 @@ img {
     }
     .btns {
       font-size: 0;
+      margin: 50px 0;
       > button {
         padding: 5px 20px;
         background: #fff;
@@ -1668,8 +1669,6 @@ img {
         background: #00a041;
       }
       .btn1 {
-        color: #fff;
-        background: #00a041;
         border-top-left-radius: 3px;
         border-bottom-left-radius: 3px;
       }
@@ -1678,10 +1677,13 @@ img {
         border-bottom-right-radius: 3px;
         border-left: none;
       }
-      // .btn2:hover{
-      //   color: #fff;
-      //   background: #00a041;
-      // }
+      .btn11 {
+        border-radius: 0;
+      }
+      >button.btActive{
+        color: #fff;
+        background: #00a041;
+      }
     }
     .info {
       // width: 1029px;

@@ -31,19 +31,53 @@ export default {
     this.getMessageList();
   },
   methods: {
+    // getMessageList() {
+    //   this.api.get({
+    //     url: "getMessageList",
+    //     data: {
+    //     //   isRead: 0,
+    //       page: this.page,
+    //       rows: this.rows,
+    //       messageOneTort: 0,
+    //       messageTowTort: 3
+    //     },
+    //     callback: res => {
+    //       if (res.code === "0000") {
+    //         this.messageList = res.data.rows[0].messageListModels;
+    //       } else {
+    //         reject();
+    //         this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // }
+        //获取消息列表
     getMessageList() {
       this.api.get({
         url: "getMessageList",
         data: {
-        //   isRead: 0,
-          page: this.page,
-          rows: this.rows,
-          messageOneTort: 0,
           messageTowTort: 3
         },
         callback: res => {
           if (res.code === "0000") {
-            this.messageList = res.data.rows[0].messageListModels;
+            this.messageList = res.data.rows;
+          } else {
+            reject();
+            this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //获取二级消息类别
+    getMessageOneTort() {
+      this.api.get({
+        url: "getMessageOneTort",
+        data: {
+          messageOneTort: 1
+        },
+        callback: res => {
+          if (res.code === "0000") {
+            // this.messageList = res.data.rows[0].messageListModels;
           } else {
             reject();
             this.$message.error(res.result);

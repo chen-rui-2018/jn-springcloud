@@ -115,7 +115,7 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
 
     @ServiceLog(doAction = "需求管理")
     @Override
-    public String findRequirementManage(String status,User user) {
+    public String findRequirementManage(User user) {
         // 企业用户是提交   机构用户是接到
         //判断当前账号是否是企业用户或者是机构用户
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(user.getAccount());

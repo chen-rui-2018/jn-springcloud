@@ -66,10 +66,10 @@ public class UserCenterIndexController {
     @ApiOperation(value = "需求管理",notes = "需求管理小方块", httpMethod = "GET")
     @GetMapping(value = "/findRequirementManage")
     @RequiresPermissions("/userCenter/Index/findRequirementManage")
-    @ApiImplicitParam(name = "status",value = "测试返回结果, 0:我收到的需求;1:我提出的需求;",dataType = "String",paramType = "query")
-    public Result findRequirementManage(String status){
 
-        String  findRequirementManage= userCenterIndexService.findRequirementManage(status,getUser());
+    public Result findRequirementManage(){
+
+        String  findRequirementManage= userCenterIndexService.findRequirementManage(getUser());
 
         return new Result(findRequirementManage);
     }

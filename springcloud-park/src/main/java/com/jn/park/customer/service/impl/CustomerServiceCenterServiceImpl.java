@@ -40,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -156,8 +157,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         //获取审批历史成功
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("----------------根据任务id获取问题详情获取处理历史成功------------");
-            CustomerServiceCenterDetailVo executeHistoryInfo = getExecuteHistoryInfo(customerVo, ibpsResult);
-            return executeHistoryInfo;
+            return getExecuteHistoryInfo(customerVo, ibpsResult);
         }else{
             logger.warn("根据任务id获取问题详情失败，{}",ibpsResult.getMessage());
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
@@ -363,8 +363,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("在线客服提交成功，审批流程启动成功,流程实例id为：[{}]",ibpsResult.getData());
             //将工作流返回的流程实例id更新到新增的数据中
-            int resNum = updateProcessInstanceId(loginAccount, quesCode, (String)ibpsResult.getData());
-            return resNum;
+            return updateProcessInstanceId(loginAccount, quesCode, (String)ibpsResult.getData());
         }else{
             logger.warn("在线客服启动工作流异常，{}",ibpsResult.getMessage());
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
@@ -460,7 +459,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         example.setOrderByClause("created_time desc");
         List<TbClientServiceCenter> tbClientServiceCenterList = tbClientServiceCenterMapper.selectByExample(example);
         if(tbClientServiceCenterList.isEmpty()){
-            return null;
+            return Collections.emptyList();
         }else{
             List<ConsultationCustomerListShow> resultList=new ArrayList<>();
             for(TbClientServiceCenter tbClientServiceCenter:tbClientServiceCenterList){

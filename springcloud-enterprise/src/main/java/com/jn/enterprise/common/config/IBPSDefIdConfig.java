@@ -1,7 +1,8 @@
 package com.jn.enterprise.common.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -12,23 +13,23 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@Configuration
+@ConfigurationProperties(
+    prefix = "jn.ibps.bpmnDefId"
+)
+@Component
+@RefreshScope
 public class IBPSDefIdConfig implements Serializable {
 
     // 企业招聘流程ID
-    @Value("${jn.ibps.bpmnDefId.companyRecruit}")
     private String companyRecruit;
 
     // 编辑企业信息流程ID
-    @Value("${jn.ibps.bpmnDefId.updateCompanyInfo}")
     private String updateCompanyInfo;
 
     // 上架/编辑产品流程ID
-    @Value("${jn.ibps.bpmnDefId.product}")
     private String product;
 
     // 上架/编辑科技金融产品流程ID
-    @Value("${jn.ibps.bpmnDefId.technologyProduct}")
     private String technologyProduct;
 
     public String getTechnologyProduct() {

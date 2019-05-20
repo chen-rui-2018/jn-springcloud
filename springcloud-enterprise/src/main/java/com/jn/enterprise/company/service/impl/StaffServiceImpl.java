@@ -183,8 +183,8 @@ public class StaffServiceImpl implements StaffService {
 
         // 查询用户表员工信息
         SearchFiledParam searchFiledParam = new SearchFiledParam();
-        searchFiledParam.setComId(comId);
         BeanUtils.copyProperties(staffListParam, searchFiledParam);
+        searchFiledParam.setComId(comId);
 
         Map<String, Object> maps = getUserExtensionInfoList(searchFiledParam, staffListParam);
         List<UserExtensionInfo> userExtensionInfoList = (List<UserExtensionInfo>) maps.get("data");

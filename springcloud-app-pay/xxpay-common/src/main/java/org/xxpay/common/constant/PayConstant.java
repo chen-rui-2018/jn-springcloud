@@ -117,10 +117,19 @@ public class PayConstant {
 	* */
 	public static final String MCH_NOTICE_BACKSTAGE = "2";
 	/**
-	 * 请求通信标识（英文返回）
+	 * 商户通知标识（英文返回）
 	 * 返回成功
 	* */
 	public static final String MCH_NOTICE_REQUEST_SUCCESS = "success";
 
+
+	/**
+	 * 支付订单最大有效时长为：120分钟
+	* */
+	public static final Integer PAY_ORDER_MAX_DURATION = 120;
+	/**
+	 * 支付订单最小有效时长为：1分钟
+	 * */
+	public static final Integer PAY_ORDER_MIN_DURATION = 1;
 	
 }

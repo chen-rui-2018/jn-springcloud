@@ -25,28 +25,13 @@
             </div>
           </div>
           <div class="nav">
-            <!-- <transition name="fade">
-              <div class="sousuo posA">
-                <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-                <input type="text" v-focus @keyup.enter="handleSearch">
-                <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-              </div> -->
             <ul class="posA clearfix">
-              <li>
-                <a href="javascript:void(0);">首页</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);" class="mainColor">投资人</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">金融产品</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">金融机构</a>
-              </li>
+              <!-- <li :class="{'active':$route.path==i.path}" v-for="(i,k) in liArr" :key="k" @click="$router.push({path:i.path})">{{i.name}}</li> -->
+              <li :class="{'activeB':$route.path=='/tfindex'}" @click="$router.push({path:'/tfindex'})">首页</li>
+              <li :class="{'activeB':$route.path=='/investor'||$route.path=='/investorDetail'}" @click="$router.push({path:'/investor'})">投资人</li>
+              <li :class="{'activeB':$route.path=='/finaPro'||$route.path=='/finaProDetail'}" @click="$router.push({path:'/finaPro'})">金融产品</li>
+              <li :class="{'activeB':$route.path=='/finaInstitution'||$route.path=='/finaInsDetail'}" @click="$router.push({path:'/finaInstitution'})">金融机构</li>
             </ul>
-
-            <!-- </transition> -->
           </div>
         </div>
       </div>
@@ -71,12 +56,17 @@ export default {
   data() {
     return {
       show4: false,
-      searchData:'',
+      flag11: "",
+      searchData: "",
+      liArr: [
+        { path: "/tfindex", name: "首页" },
+        { path: "/investor", name: "投资人" },
+        { path: "/finaPro", name: "金融产品" },
+        { path: "/finaInstitution", name: "金融机构" }
+      ]
     };
   },
-  methods: {
-   
-  }
+  methods: {}
 };
 </script>
 
@@ -86,52 +76,52 @@ export default {
   width: 100%;
   position: fixed;
   .search_box {
-      // background: rgba(0, 0, 0, 0.3);
-       background: #fff;
-       box-shadow:0 10px 10px -10px #ccc;
-      .el-input-group {
+    // background: rgba(0, 0, 0, 0.3);
+    background: #fff;
+    box-shadow: 0 10px 10px -10px #ccc;
+    .el-input-group {
+      border-radius: 28px;
+      width: 42%;
+      margin: 43px 0;
+      position: relative;
+      transform: translateX(-50%);
+      left: 50%;
+      .el-input {
+        width: 94px;
+      }
+      .el-input__inner:focus {
+        border-color: #00a041;
+      }
+      .el-input-group__append,
+      .el-input-group__prepend {
         border-radius: 28px;
-        width: 42%;
-        margin: 43px 0;
-        position: relative;
-        transform: translateX(-50%);
-        left: 50%;
-        .el-input {
-          width: 94px;
-        }
-        .el-input__inner:focus {
-          border-color: #00a041;
-        }
-        .el-input-group__append,
-        .el-input-group__prepend {
-          border-radius: 28px;
-        }
-        .el-input-group__append {
-          /* border-top-left-radius: 0;
+      }
+      .el-input-group__append {
+        /* border-top-left-radius: 0;
         border-bottom-left-radius: 0; */
-          background: #00a041;
-          color: #fff;
-          right: 58px;
-          .el-button {
-            margin: -10px -10px;
-          }
-        }
-        .el-input-group__prepend {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          background-color: #fff;
-          padding: 0px 17px 0 9px;
-          input {
-            color: #666666;
-            text-align: right;
-          }
+        background: #00a041;
+        color: #fff;
+        right: 58px;
+        .el-button {
+          margin: -10px -10px;
         }
       }
-      .input-with-select .el-input__inner {
-        border-top-left-radius: 19px;
-        border-bottom-left-radius: 19px;
-        border: 1px solid #00a041;
+      .el-input-group__prepend {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        background-color: #fff;
+        padding: 0px 17px 0 9px;
+        input {
+          color: #666666;
+          text-align: right;
+        }
       }
+    }
+    .input-with-select .el-input__inner {
+      border-top-left-radius: 19px;
+      border-bottom-left-radius: 19px;
+      border: 1px solid #00a041;
+    }
   }
   .el-card__body {
     padding: 0;
@@ -206,6 +196,12 @@ export default {
         left: 50%;
         transform: translateX(-50%);
         // padding: 20px 0;
+        li {
+          cursor: pointer;
+        }
+        li.activeB {
+          color: #00a041;
+        }
       }
       .sousuo {
         font-size: 18px;

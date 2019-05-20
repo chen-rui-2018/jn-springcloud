@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.attractinvest.dao.ProjectInfoMapper">
+    <update id="updateProjectStatus1">
+        UPDATE tb_project_info t
+        SET t.compact_status = '0'
+        WHERE
+            t.compact_status = '1'
+        AND t.compact_end_time IS NULL
+        AND workdaynum (t.compact_start_time, NOW()) <![CDATA[ >= ]]> 3;
+    </update>
+
+    <update id="updateProjectStatus2">
+        UPDATE tb_project_info t
+        SET t.compact_status = '2'
+        WHERE
+            t.compact_status = '0'
+        AND t.compact_end_time IS NULL
+        AND workdaynum (t.compact_start_time, NOW()) <![CDATA[ >= ]]> 5;
+    </update>
+</mapper>

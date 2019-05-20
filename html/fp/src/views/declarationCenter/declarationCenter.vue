@@ -23,7 +23,7 @@
             <span @click="goplatform">查看详情<span class="el-icon-d-arrow-right"></span> </span> 
           </p>
           <div>
-            <img src="@/assets/image/矢量智能对象.png" alt="">
+            <img src="@/assets/image/platform.png" alt="">
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
                 <div class="lists" v-for="(centeritem,centerindex) in centerList" :key="centerindex" >
                   <div class="list_cont_left">
-                    <p>【{{centeritem.rangeName}}】{{centeritem.titleName}}</p> 
+                    <p>【{{centeritem.rangeId|type}}】{{centeritem.titleName}}</p> 
                     <p><span>发布日期：{{centeritem.createdTime|time}}</span><span>状态：<span class="fontcolor">{{centeritem.isRoofPlacement|isRoof}}</span></span></p>
                     <p>最近要求：{{centeritem.timeNode}}</p>
                     <p>截止时间：<span class="fontcolor">{{centeritem.deadline|time}}</span></p>
@@ -123,6 +123,19 @@ export default {
           let dateee = new Date(time).toJSON();
           return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
         }
+      },
+      type(rangeId){
+        if(rangeId==='1'){
+          return '白下高新区'
+        }else if(rangeId==='2'){
+          return '秦淮区'
+        }else if(rangeId==='3'){
+          return '南京市'
+        }else if(rangeId==='4'){
+          return '江苏省'
+        }else if(rangeId==='5'){
+          return '国家'
+        }
       }
     },
     created () {
@@ -140,7 +153,7 @@ export default {
           },
           callback: function(res) {
             if (res.code == "0000") {
-              console.log(res)
+              // console.log(res)
               let typelist=[]
               res.data.forEach((item,index)=>{
                 typelist.push({

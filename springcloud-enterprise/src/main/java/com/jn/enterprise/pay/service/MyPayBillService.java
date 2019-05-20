@@ -3,9 +3,12 @@ package com.jn.enterprise.pay.service;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.enterprise.pay.entity.TbPayBillDetails;
+import com.jn.pay.vo.PayBillDetailsVo;
 import com.jn.pay.vo.PayBillVo;
 import com.jn.pay.model.*;
 import com.jn.pay.vo.PayBillCreateParamVo;
+import com.jn.pay.vo.PayRecordVo;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,15 +30,28 @@ public interface MyPayBillService {
      * @param payBillParams
      * @return
      */
-    PaginationData<List<PayBillVo>> getBillQueryList(@Param("payBill")PayBillParams payBillParams);
+    PaginationData<List<PayBillVo>> getBillQueryList(@Param("payBill")PayBillParams payBillParams,User user);
+
+    /**
+     * 查询缴费记录
+     * @param
+     * @return
+     */
+    PaginationData<List<PayRecordVo>> billPaymentRecord(PayRecordParam payRecordParam,User user);
 
     /**
      * 通过账单ID查询账单详情信息
      * @param billId
      * @return
      */
-    List<PayBillDetails> getBillInfo(String billId);
+    PaginationData<List<PayBillDetailsVo>> getBillInfo(String billId);
 
+    /**
+     * 我的账单-通过账单ID查询账单【基础】信息(包含账单支付状态)
+     * @param billId
+     * @return
+     */
+    PayBill getBillBasicInfo(String billId);
 
     /**
      * 账单催缴次数更新
@@ -71,5 +87,5 @@ public interface MyPayBillService {
      * @param callBackParam
      * @return
      */
-    void payCallBack(HttpServletResponse response, PayOrderNotify callBackParam, User user);
+    Result payCallBack(PayOrderNotify callBackParam, User user);
 }

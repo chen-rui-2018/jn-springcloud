@@ -14,25 +14,25 @@ import java.util.Date;
  */
 @ApiModel(value = "ConsultationCustomerListShow",description = "客服中心园区用户咨询客服列表出参")
 public class ConsultationCustomerListShow implements Serializable {
-    @ApiModelProperty("任务id(启动工作流后的流程实例id)")
-    private String taskId;
+    @ApiModelProperty("流程实例id(启动工作流后的流程实例id)")
+    private String processInsId;
     @ApiModelProperty("问题编码")
     private String quesCode;
     @ApiModelProperty("问题标题")
     private String quesTitle;
     @ApiModelProperty("问题详情")
     private String quesDetails;
-    @ApiModelProperty("处理状态(1：待处理   2：已处理)")
+    @ApiModelProperty("处理状态(0：待处理 1：处理中 2：已处理 3：无法处理)")
     private String status;
     @ApiModelProperty("发布时间")
     private Date createdTime;
 
-    public String getTaskId() {
-        return taskId;
+    public String getProcessInsId() {
+        return processInsId;
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public void setProcessInsId(String processInsId) {
+        this.processInsId = processInsId;
     }
 
     public String getQuesCode() {
@@ -78,7 +78,7 @@ public class ConsultationCustomerListShow implements Serializable {
     @Override
     public String toString() {
         return "ConsultationCustomerListShow{" +
-                "taskId='" + taskId + '\'' +
+                "processInsId='" + processInsId + '\'' +
                 ", quesCode='" + quesCode + '\'' +
                 ", quesTitle='" + quesTitle + '\'' +
                 ", quesDetails='" + quesDetails + '\'' +

@@ -19,7 +19,7 @@ public class AssetArticleLeaseModel implements Serializable {
     @ApiModelProperty(value = "主键",example = "3")
     private String id;
 
-    @ApiModelProperty(value = "资产编号",example = "572058527984517120")
+    @ApiModelProperty(value = "资产编号",example = "577793928904835072")
     private String assetNumber;
 
     @ApiModelProperty(value = "物品名称",example = "空调")
@@ -42,6 +42,9 @@ public class AssetArticleLeaseModel implements Serializable {
 
     @ApiModelProperty(value = "租借单价",example = "200")
     private BigDecimal leasePrice;
+
+    @ApiModelProperty(value = "条形码",example = "577793928904835072")
+    private String barCode;
 
     @ApiModelProperty(value = "最低租借时间",example = "10")
     private String leaseTime;
@@ -67,7 +70,7 @@ public class AssetArticleLeaseModel implements Serializable {
     @ApiModelProperty(value = "结束时间",example = "2019-06-01")
     private Date endTime;
 
-    @ApiModelProperty(value = "租借状态",example = "3")
+    @ApiModelProperty(value = "租借状态(0标记为空闲,1申请中,2交付中,3租借中,4归还中,5已归还)",example = "3")
     private Byte articleStatus;
 
     public String getId() {
@@ -140,6 +143,14 @@ public class AssetArticleLeaseModel implements Serializable {
 
     public void setLeasePrice(BigDecimal leasePrice) {
         this.leasePrice = leasePrice;
+    }
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
     }
 
     public String getLeaseTime() {

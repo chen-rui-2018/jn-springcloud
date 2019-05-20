@@ -6,9 +6,11 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.pay.entity.TbPayBillDetails;
 import com.jn.enterprise.pay.service.MyPayBillService;
+import com.jn.pay.vo.PayBillDetailsVo;
 import com.jn.pay.vo.PayBillVo;
 import com.jn.pay.model.*;
 import com.jn.pay.vo.PayBillCreateParamVo;
+import com.jn.pay.vo.PayRecordVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -49,8 +51,20 @@ public class MyPayBillController extends BaseController {
     @RequestMapping(value = "/billQuery",method = RequestMethod.GET)
     @RequiresPermissions("/payment/payBill/billQuery")
     public Result<PaginationData<List<PayBillVo>>> billQuery(@Param("payBill")PayBillParams payBill){
-        Assert.notNull(payBill.getObjId(),"对象ID不能为空");
-        PaginationData<List<PayBillVo>> data = myPayBillService.getBillQueryList(payBill);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData<List<PayBillVo>> data = myPayBillService.getBillQueryList(payBill,user);
+        return new Result<>(data);
+    }
+
+    @ControllerLog(doAction = "我的账单-查询缴费记录信息")
+    @ApiOperation(value = "我的账单-查询缴费记录信息",notes = "我的账单-查询缴费记录信息")
+    @RequestMapping(value = "/billPaymentRecord",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payBill/billPaymentRecord")
+    public Result<PaginationData<List<PayRecordVo>>> billPaymentRecord(@RequestBody @Validated PayRecordParam payRecordParam){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData<List<PayRecordVo>> data = myPayBillService.billPaymentRecord(payRecordParam,user);
         return new Result<>(data);
     }
 
@@ -58,9 +72,9 @@ public class MyPayBillController extends BaseController {
     @ApiOperation(value = "我的账单-通过账单ID查询账单详情信息",notes = "我的账单-通过账单ID查询账单详情信息")
     @RequestMapping(value = "/getBillInfo",method = RequestMethod.GET)
     @RequiresPermissions("/payment/payBill/getBillInfo")
-    public Result<List<PayBillDetails>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId){
+    public Result<PaginationData<List<PayBillDetailsVo>>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId){
         Assert.notNull(billId,"账单ID或编号不能为空");
-        List<PayBillDetails> data = myPayBillService.getBillInfo(billId);
+        PaginationData<List<PayBillDetailsVo>> data = myPayBillService.getBillInfo(billId);
         return new Result<>(data);
     }
 

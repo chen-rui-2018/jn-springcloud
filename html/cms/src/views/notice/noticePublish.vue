@@ -12,10 +12,23 @@
         </div>
         <div style="display:flex">
           <el-form-item label="生效时间" prop="startTime" class="inline">
-            <el-date-picker v-model="ruleForm.startTime" type="date" placeholder="选择日期" style="width: 100%;"/>
+            <el-date-picker
+              v-model="ruleForm.startTime"
+              :picker-options="startTimePickerOptions"
+              type="date"
+              placeholder="选择日期"
+              style="width: 100%;"
+              @change="startTimeChange"/>
           </el-form-item>
           <el-form-item label="失效时间" prop="endTime" class="inline">
-            <el-date-picker v-model="ruleForm.endTime" type="date" placeholder="选择日期" style="width: 100%;"/>
+            <el-date-picker
+              v-model="ruleForm.endTime"
+              :picker-options="endTimePickerOptions"
+              :disabled="!ruleForm.startTime"
+              type="date"
+              placeholder="选择日期"
+              style="width: 100%;"
+            />
           </el-form-item>
         </div>
         <div style="display:flex">
@@ -108,6 +121,12 @@ export default {
         startTime: '',
         endTime: ''
       },
+      startTimePickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      },
+      endTimePickerOptions: {},
       rules: {
         homePopup: [
           { required: true, message: '请选择', trigger: 'change' }
@@ -150,6 +169,13 @@ export default {
   methods: {
     init() {
       this.getData()
+    },
+    startTimeChange() {
+      this.endTimePickerOptions = {
+        disabledDate: (time) => {
+          return new Date(this.ruleForm.startTime).getTime() >= time.getTime() + 8.64e7
+        }
+      }
     },
     getData() {
       // 如果路由有id，那么就查询回显
@@ -220,9 +246,8 @@ export default {
       this.$refs[formName].resetFields()
     },
     formatDate(str) {
-      const date = str
+      const date = new Date(str)
       const y = date.getFullYear()
-
       let m = date.getMonth() + 1
       m = m > 10 ? m : '0' + m
       let d = date.getDay()

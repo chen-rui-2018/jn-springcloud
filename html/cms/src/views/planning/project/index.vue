@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ opts[0][0] }}
+    <!-- {{ opts[0][0] }} -->
     <div class="flex-box filter-bar">
       <ul class="flex-item flex-box">
         <li
@@ -11,7 +11,7 @@
       </ul>
       <ul class="flex-box">
         <li><el-button size="medium" plain>+ 新增任务</el-button></li>
-        <li><a href="#">查看归档记录</a></li>
+        <li><a href="#">返回</a></li>
       </ul>
     </div>
     <div class="flex-box filter-bar">

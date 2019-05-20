@@ -14,11 +14,6 @@ import java.util.Map;
 * @modified By:
 */
 public interface AssetArticleLeaseDao {
-    /**
-     * 返回可租借的资产列表
-     * @return
-     */
-    List<AssetArticleLeaseModel> getArticleLeaseList();
 
     /**
      * 通过资产编号获取物品租赁详细信息
@@ -32,5 +27,10 @@ public interface AssetArticleLeaseDao {
      */
     void updateStatus(Map<String,Object> map);
 
-
+    /**
+     * 返回可租借的资产列表(可搜索)
+     * @param name
+     * @return
+     */
+    List<AssetArticleLeaseModel> getArticleLeaseList(String name);
 }

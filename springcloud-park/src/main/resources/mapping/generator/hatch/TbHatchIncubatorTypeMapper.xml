@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.hatch.dao.TbHatchIncubatorTypeMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.hatch.entity.TbHatchIncubatorType">
+    <id column="incubator_code" jdbcType="VARCHAR" property="incubatorCode" />
+    <result column="incubator_name" jdbcType="VARCHAR" property="incubatorName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    incubator_code, incubator_name
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.hatch.entity.TbHatchIncubatorTypeCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_hatch_incubator_type
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_hatch_incubator_type
+    where incubator_code = #{incubatorCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_hatch_incubator_type
+    where incubator_code = #{incubatorCode,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.hatch.entity.TbHatchIncubatorTypeCriteria">
+    delete from tb_hatch_incubator_type
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.hatch.entity.TbHatchIncubatorType">
+    insert into tb_hatch_incubator_type (incubator_code, incubator_name)
+    values (#{incubatorCode,jdbcType=VARCHAR}, #{incubatorName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.hatch.entity.TbHatchIncubatorType">
+    insert into tb_hatch_incubator_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="incubatorCode != null">
+        incubator_code,
+      </if>
+      <if test="incubatorName != null">
+        incubator_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="incubatorCode != null">
+        #{incubatorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="incubatorName != null">
+        #{incubatorName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.hatch.entity.TbHatchIncubatorTypeCriteria" resultType="java.lang.Long">
+    select count(*) from tb_hatch_incubator_type
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_hatch_incubator_type
+    <set>
+      <if test="record.incubatorCode != null">
+        incubator_code = #{record.incubatorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.incubatorName != null">
+        incubator_name = #{record.incubatorName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_hatch_incubator_type
+    set incubator_code = #{record.incubatorCode,jdbcType=VARCHAR},
+      incubator_name = #{record.incubatorName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.hatch.entity.TbHatchIncubatorType">
+    update tb_hatch_incubator_type
+    <set>
+      <if test="incubatorName != null">
+        incubator_name = #{incubatorName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where incubator_code = #{incubatorCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.hatch.entity.TbHatchIncubatorType">
+    update tb_hatch_incubator_type
+    set incubator_name = #{incubatorName,jdbcType=VARCHAR}
+    where incubator_code = #{incubatorCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

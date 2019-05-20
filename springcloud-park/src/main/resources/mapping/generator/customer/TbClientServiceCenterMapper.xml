@@ -3,12 +3,13 @@
 <mapper namespace="com.jn.park.customer.dao.TbClientServiceCenterMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.customer.entity.TbClientServiceCenter">
     <result column="id_" jdbcType="VARCHAR" property="id" />
-    <result column="process_id" jdbcType="VARCHAR" property="processId" />
+    <result column="process_ins_id" jdbcType="VARCHAR" property="processInsId" />
     <result column="ques_code" jdbcType="VARCHAR" property="quesCode" />
     <result column="ques_title" jdbcType="VARCHAR" property="quesTitle" />
     <result column="ques_details" jdbcType="VARCHAR" property="quesDetails" />
     <result column="ques_url" jdbcType="VARCHAR" property="quesUrl" />
     <result column="service_module" jdbcType="VARCHAR" property="serviceModule" />
+    <result column="service_module_name" jdbcType="VARCHAR" property="serviceModuleName" />
     <result column="client_type" jdbcType="VARCHAR" property="clientType" />
     <result column="contact_way" jdbcType="VARCHAR" property="contactWay" />
     <result column="STATUS" jdbcType="VARCHAR" property="status" />
@@ -17,6 +18,8 @@
     <result column="cust_name" jdbcType="VARCHAR" property="custName" />
     <result column="cust_sex" jdbcType="VARCHAR" property="custSex" />
     <result column="is_tran_pie" jdbcType="VARCHAR" property="isTranPie" />
+    <result column="execute_dept_id" jdbcType="VARCHAR" property="executeDeptId" />
+    <result column="execute_person" jdbcType="VARCHAR" property="executePerson" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -82,9 +85,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id_, process_id, ques_code, ques_title, ques_details, ques_url, service_module, client_type, 
-    contact_way, STATUS, current_caller, caller_owen, cust_name, cust_sex, is_tran_pie, 
-    created_time, creator_account, modified_time, modifier_account, record_status
+    id_, process_ins_id, ques_code, ques_title, ques_details, ques_url, service_module, 
+    service_module_name, client_type, contact_way, STATUS, current_caller, caller_owen, 
+    cust_name, cust_sex, is_tran_pie, execute_dept_id, execute_person, created_time, 
+    creator_account, modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.customer.entity.TbClientServiceCenterCriteria" resultMap="BaseResultMap">
     select
@@ -107,18 +111,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.customer.entity.TbClientServiceCenter">
-    insert into tb_client_service_center (id_, process_id, ques_code, 
+    insert into tb_client_service_center (id_, process_ins_id, ques_code, 
       ques_title, ques_details, ques_url, 
-      service_module, client_type, contact_way, 
-      STATUS, current_caller, caller_owen, 
-      cust_name, cust_sex, is_tran_pie, 
+      service_module, service_module_name, client_type, 
+      contact_way, STATUS, current_caller, 
+      caller_owen, cust_name, cust_sex, 
+      is_tran_pie, execute_dept_id, execute_person, 
       created_time, creator_account, modified_time, 
       modifier_account, record_status)
-    values (#{id,jdbcType=VARCHAR}, #{processId,jdbcType=VARCHAR}, #{quesCode,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{processInsId,jdbcType=VARCHAR}, #{quesCode,jdbcType=VARCHAR}, 
       #{quesTitle,jdbcType=VARCHAR}, #{quesDetails,jdbcType=VARCHAR}, #{quesUrl,jdbcType=VARCHAR}, 
-      #{serviceModule,jdbcType=VARCHAR}, #{clientType,jdbcType=VARCHAR}, #{contactWay,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{currentCaller,jdbcType=VARCHAR}, #{callerOwen,jdbcType=VARCHAR}, 
-      #{custName,jdbcType=VARCHAR}, #{custSex,jdbcType=VARCHAR}, #{isTranPie,jdbcType=VARCHAR}, 
+      #{serviceModule,jdbcType=VARCHAR}, #{serviceModuleName,jdbcType=VARCHAR}, #{clientType,jdbcType=VARCHAR}, 
+      #{contactWay,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{currentCaller,jdbcType=VARCHAR}, 
+      #{callerOwen,jdbcType=VARCHAR}, #{custName,jdbcType=VARCHAR}, #{custSex,jdbcType=VARCHAR}, 
+      #{isTranPie,jdbcType=VARCHAR}, #{executeDeptId,jdbcType=VARCHAR}, #{executePerson,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
@@ -128,8 +134,8 @@
       <if test="id != null">
         id_,
       </if>
-      <if test="processId != null">
-        process_id,
+      <if test="processInsId != null">
+        process_ins_id,
       </if>
       <if test="quesCode != null">
         ques_code,
@@ -145,6 +151,9 @@
       </if>
       <if test="serviceModule != null">
         service_module,
+      </if>
+      <if test="serviceModuleName != null">
+        service_module_name,
       </if>
       <if test="clientType != null">
         client_type,
@@ -170,6 +179,12 @@
       <if test="isTranPie != null">
         is_tran_pie,
       </if>
+      <if test="executeDeptId != null">
+        execute_dept_id,
+      </if>
+      <if test="executePerson != null">
+        execute_person,
+      </if>
       <if test="createdTime != null">
         created_time,
       </if>
@@ -190,8 +205,8 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="processId != null">
-        #{processId,jdbcType=VARCHAR},
+      <if test="processInsId != null">
+        #{processInsId,jdbcType=VARCHAR},
       </if>
       <if test="quesCode != null">
         #{quesCode,jdbcType=VARCHAR},
@@ -207,6 +222,9 @@
       </if>
       <if test="serviceModule != null">
         #{serviceModule,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceModuleName != null">
+        #{serviceModuleName,jdbcType=VARCHAR},
       </if>
       <if test="clientType != null">
         #{clientType,jdbcType=VARCHAR},
@@ -231,6 +249,12 @@
       </if>
       <if test="isTranPie != null">
         #{isTranPie,jdbcType=VARCHAR},
+      </if>
+      <if test="executeDeptId != null">
+        #{executeDeptId,jdbcType=VARCHAR},
+      </if>
+      <if test="executePerson != null">
+        #{executePerson,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -261,8 +285,8 @@
       <if test="record.id != null">
         id_ = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.processId != null">
-        process_id = #{record.processId,jdbcType=VARCHAR},
+      <if test="record.processInsId != null">
+        process_ins_id = #{record.processInsId,jdbcType=VARCHAR},
       </if>
       <if test="record.quesCode != null">
         ques_code = #{record.quesCode,jdbcType=VARCHAR},
@@ -278,6 +302,9 @@
       </if>
       <if test="record.serviceModule != null">
         service_module = #{record.serviceModule,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceModuleName != null">
+        service_module_name = #{record.serviceModuleName,jdbcType=VARCHAR},
       </if>
       <if test="record.clientType != null">
         client_type = #{record.clientType,jdbcType=VARCHAR},
@@ -303,6 +330,12 @@
       <if test="record.isTranPie != null">
         is_tran_pie = #{record.isTranPie,jdbcType=VARCHAR},
       </if>
+      <if test="record.executeDeptId != null">
+        execute_dept_id = #{record.executeDeptId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.executePerson != null">
+        execute_person = #{record.executePerson,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -326,12 +359,13 @@
   <update id="updateByExample" parameterType="map">
     update tb_client_service_center
     set id_ = #{record.id,jdbcType=VARCHAR},
-      process_id = #{record.processId,jdbcType=VARCHAR},
+      process_ins_id = #{record.processInsId,jdbcType=VARCHAR},
       ques_code = #{record.quesCode,jdbcType=VARCHAR},
       ques_title = #{record.quesTitle,jdbcType=VARCHAR},
       ques_details = #{record.quesDetails,jdbcType=VARCHAR},
       ques_url = #{record.quesUrl,jdbcType=VARCHAR},
       service_module = #{record.serviceModule,jdbcType=VARCHAR},
+      service_module_name = #{record.serviceModuleName,jdbcType=VARCHAR},
       client_type = #{record.clientType,jdbcType=VARCHAR},
       contact_way = #{record.contactWay,jdbcType=VARCHAR},
       STATUS = #{record.status,jdbcType=VARCHAR},
@@ -340,6 +374,8 @@
       cust_name = #{record.custName,jdbcType=VARCHAR},
       cust_sex = #{record.custSex,jdbcType=VARCHAR},
       is_tran_pie = #{record.isTranPie,jdbcType=VARCHAR},
+      execute_dept_id = #{record.executeDeptId,jdbcType=VARCHAR},
+      execute_person = #{record.executePerson,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},

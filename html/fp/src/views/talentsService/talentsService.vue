@@ -23,7 +23,7 @@
             <span >查看详情<span class="el-icon-d-arrow-right"></span> </span> 
           </p>
           <div>
-            <img src="@/assets/image/矢量智能对象.png" alt="">
+            <img src="@/assets/image/platform.png" alt="">
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
                 <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" >
                   <div class="list_cont_left">
-                    <p><span v-show="talentsitem.rangeId!='5'">【{{talentsitem.rangeName}}】</span>{{talentsitem.noticeTitle}}</p>
+                    <p><span>【{{talentsitem.rangeId|type}}】</span>{{talentsitem.noticeTitle}}</p>
                     <!-- <p v-show="talentsitem.rangeId=5">{{talentsitem.noticeTitle}} </p> -->
                     <p><span>发布日期：{{talentsitem.createdTime|time}}</span><span>状态：<span class="fontcolor">{{talentsitem.isRoofPlacement|isRoof}}</span></span></p>
                     <p>最近要求：{{talentsitem.timeNode}}</p>
@@ -123,6 +123,19 @@ export default {
           let dateee = new Date(time).toJSON();
           return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
           // return time.split("T")[0]
+        }
+      },
+      type(rangeId){
+        if(rangeId==='1'){
+          return '人才工作动态'
+        }else if(rangeId==='2'){
+          return '人才服务指南'
+        }else if(rangeId==='3'){
+          return '人才企业培训'
+        }else if(rangeId==='4'){
+          return '人才扶持计划'
+        }else if(rangeId==='5'){
+          return '常见问题'
         }
       }
     },
@@ -351,6 +364,7 @@ export default {
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 2;
                   overflow: hidden;
+                  height: 48px;
                 }
                 p:nth-child(4){
                  span{

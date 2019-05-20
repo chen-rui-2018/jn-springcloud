@@ -2,6 +2,7 @@
   <div class="publishingProduct">
     <div class="ordinary_title">
       <div>发布宣传</div>
+      <div @click="toEnterprisePropaganda">返回</div>
     </div>
     <div class="ordinary_content">
       <el-form
@@ -88,23 +89,21 @@
           <el-upload
             action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
             :headers="headers"
-            :on-exceed="handleExceed"
-            :limit="1"
-            list-type="picture-card"
+ :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
+
           >
-            <i class="el-icon-plus"></i>
+           <img v-if="publicityForm.posterUrl" :src="publicityForm.posterUrl" alt="宣传图片">
+            <i v-else class="el-icon-plus "></i>
           </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
+          <!-- <el-dialog :visible.sync="dialogVisible">
             <img
-              width="100%"
+              style="width:100%;height:200px;"
               :src="dialogImageUrl"
               alt=""
             >
-          </el-dialog>
+          </el-dialog> -->
         </el-form-item>
         <el-form-item
           label="宣传区域:"
@@ -180,7 +179,7 @@ export default {
       ],
       currentTime: "",
       proFeeRuleDetails: "",
-      dialogImageUrl: "",
+      // dialogImageUrl: "",
       dialogVisible: false,
       publicityForm: {
         issuePlatform: "",
@@ -349,6 +348,9 @@ export default {
         });
       });
     },
+    toEnterprisePropaganda(){
+         this.$router.push({ name: "enterprisePropaganda" });
+    },
     handleExceed(files, fileList) {
       this.$message.warning(`只能上传一张海报图片`);
     },
@@ -386,6 +388,7 @@ export default {
     },
     submitForm(publicityForm) {
       this.isDisabled = true;
+       console.log(this.publicityForm.posterUrl)
       this.$refs[publicityForm].validate(valid => {
         if (valid) {
           console.log(this.publicityForm);
@@ -424,10 +427,18 @@ export default {
               console.log(res);
               if (res.code === "0000") {
                 this.$message({
-                  message: "发布成功",
+                  message: "申请成功",
                   type: "success"
                 });
                 this.$router.push({ name: "enterprisePropaganda" });
+                 this.$refs[publicityForm].resetFields();
+                 this.publicityForm.posterUrl=''
+                 this.priceIndex=undefined
+                 this.index=undefined
+                this.propagandaFeeArr.forEach(val=>{
+                  val.propagandaFee=''
+                })
+                console.log(this.propagandaFeeArr)
               } else {
                 this.$message.error(res.result);
               }
@@ -489,12 +500,41 @@ border:1px solid rgba(65,215,135,1);
 }
 .publishingProduct {
   width: 100%;
+   .el-upload{
+     width: 85px;
+    height: 85px;
+    line-height: 85px;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    >i{
+      font-size: 28px;
+    color: #8c939d;
+    }
+    >img{
+      width: 85px;
+      height: 85px;
+    }
+  }
   .ordinary_title {
-    background-color: #fff;
-
-    padding: 24px 28px;
-    font-size: 13px;
-    border-radius: 5px;
+       background-color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding:17px;
+      font-size: 13px;
+      border-radius: 5px;
+      div:nth-child(2){
+        width:50px;
+height:26px;
+background:rgba(236,252,242,1);
+border:1px solid rgba(65,215,135,1);
+border-radius:4px;
+text-align: center;
+line-height: 26px;
+        font-size: 12px;
+        color:#00A041;
+        cursor: pointer;
+      }
   }
   .el-upload-list--picture-card .el-upload-list__item {
     width: 85px;

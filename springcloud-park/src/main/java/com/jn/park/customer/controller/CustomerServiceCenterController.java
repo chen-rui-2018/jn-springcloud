@@ -30,7 +30,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "客服中心")
+@Api(tags = "客服中心--园区用户咨询客服")
 @RestController
 @RequestMapping("/customer/customerServiceCenterController")
 public class CustomerServiceCenterController extends BaseController {

@@ -20,10 +20,9 @@ public class PayBIllInitiateParam implements Serializable {
     @NotBlank(message = "账单ID[数组]不能为空")
     private String[] billIds;
 
-    @NotBlank(message = "支付方式不能为空")
-    @Pattern(regexp = "^[1,2,3,4]$", message = "{payMenthed:'支付方式只能为[1、2、3、4]'}")
-    @ApiModelProperty(value = "支付方式[暂定：1:钱包 2::微信  3:支付宝  4:银行卡 ]",required = true,example = "3")
-    private String payMenthed;
+    @ApiModelProperty(value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",required = true,example = "ALIPAY_MOBILE")
+    @NotBlank(message = "支付渠道ID不能为空")
+    private String channelId;
 
     public String[] getBillIds() {
         return billIds;
@@ -33,12 +32,11 @@ public class PayBIllInitiateParam implements Serializable {
         this.billIds = billIds;
     }
 
-    public String getPayMenthed() {
-        return payMenthed;
+    public String getChannelId() {
+        return channelId;
     }
 
-    public void setPayMenthed(String payMenthed) {
-        this.payMenthed = payMenthed;
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
     }
-
 }

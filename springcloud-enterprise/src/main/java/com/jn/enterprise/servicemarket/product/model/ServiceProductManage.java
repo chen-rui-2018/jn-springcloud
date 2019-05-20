@@ -16,6 +16,8 @@ import java.io.Serializable;
 public class ServiceProductManage implements Serializable {
     @ApiModelProperty(value = "服务产品ID")
     private String productId;
+    @ApiModelProperty(value = "服务产品图片路径")
+    private String pictureUrl;
     @ApiModelProperty(value = "服务产品名称")
     private String productName;
     @ApiModelProperty(value = "服务产品类型")
@@ -36,6 +38,14 @@ public class ServiceProductManage implements Serializable {
     private String advisorName;
     @ApiModelProperty(value="参考价格")
     private String  referPrice;
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
 
     public String getReferPrice() {
         return referPrice;

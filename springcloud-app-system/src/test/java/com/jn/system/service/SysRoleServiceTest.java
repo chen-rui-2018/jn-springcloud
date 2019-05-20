@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -134,6 +135,19 @@ public class SysRoleServiceTest {
         //清除角色添加的用户
         sysUserRoleAdd.setUserId(null);
         sysRoleService.userRoleAuthorization(sysUserRoleAdd, user);
+    }
+
+    @Test
+    public void getUserByRole(){
+        //1.测试值有角色名称时
+        SysRole role = new SysRole();
+        role.setRoleName("超级管理者");
+        List<User> userList1 = sysRoleService.getUserByRole(role);
+        Assert.assertThat(userList1, Matchers.anything());
+
+        role.setId("10000");
+        List<User> userList2= sysRoleService.getUserByRole(role);
+        Assert.assertThat(userList2, Matchers.anything());
     }
 
     @Test

@@ -2,25 +2,25 @@
   <div class="report-entrance">
     <div class="en-header">
       <div class="en-banner">
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">
-              <img :src="img" class="swiper-slide-img" alt="">
-            </div>
-          </div>
-        </div>
+<!--        <div class="swiper-container">-->
+<!--          <div class="swiper-wrapper">-->
+<!--            <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">-->
+<!--              <img :src="img" class="swiper-slide-img" alt="">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
     </div>
     <div class="en-body">
       <el-tabs type="border-card" style="background-color: #f5f5f5">
         <el-tab-pane label="本月上报数据">
-          <div v-if="willFillList.length === 0" class="no-data">暂无数据</div>
+          <div v-loading="willFillListLoading" v-if="willFillList.length === 0" class="no-data">暂无数据</div>
           <div v-else>
             <div class="en-card-bg">
               <div
                    v-for="(item, index) in willFillList"
                    class="en-card"
-                   @click="toFillData(item)">
+                   @click="toFillData(item, 'form')">
                 <div class="card-cell">
                   <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
                   <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
@@ -70,7 +70,7 @@
               </el-input>
             </div>
           </div>
-          <div v-if="filledList.length === 0" style="padding: 10px" class="no-data">暂无数据</div>
+          <div v-loading="filledListLoading" v-if="filledList.length === 0" style="padding: 10px" class="no-data">暂无数据</div>
           <div v-if="filledListSearchResult.length === 0 && filledList.length > 0" style="padding: 10px" class="no-data">暂无筛选结果，换个搜索条件试试吧</div>
           <div v-else>
             <div class="en-card-bg">
@@ -79,7 +79,7 @@
                    :class="formatReported(item).class"
                    :key="index"
                    class="en-card"
-                   @click="toFillData(item)">
+                   @click="toFillData(item, 'formed')">
                 <div class="card-cell">
                   <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
                   <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
@@ -133,10 +133,17 @@
   export default {
     name: "reportEntry",
     mounted() {
-      this.init()
+
+    },
+    activated() {
+      this.$nextTick(() => {
+        this.init()
+      })
     },
     data() {
       return {
+        willFillListLoading: true,
+        filledListLoading: true,
         isMobile: isMobile(),
         searchFilled: '',
         adUrls: [],
@@ -202,23 +209,23 @@
         this.getFilledData()
         this.getPcAd()
           .then(() => {
-            let options
-            if (this.isMobile) {
-              options = {
-                autoplay:true,
-                loop:true
-              }
-            } else {
-              options = {
-                slidesPerView: 'auto',
-                spaceBetween: 10,
-                pagination: {
-                  el: '.swiper-pagination',
-                  clickable: true
-                }
-              }
-            }
-            new Swiper('.swiper-container', options)
+            // let options
+            // if (this.isMobile) {
+            //   options = {
+            //     autoplay:true,
+            //     loop:true
+            //   }
+            // } else {
+            //   options = {
+            //     slidesPerView: 'auto',
+            //     spaceBetween: 10,
+            //     pagination: {
+            //       el: '.swiper-pagination',
+            //       clickable: true
+            //     }
+            //   }
+            // }
+            // new Swiper('.swiper-container', options)
           })
       },
       filledTypeChange(data, index) {
@@ -228,6 +235,7 @@
         this.getFilledData()
       },
       getData() {
+        this.willFillListLoading = true
         const _this = this
         this.api.post({
           url: 'enterpriseGetForm',
@@ -237,10 +245,12 @@
             } else {
               _this.$message.error(res.result)
             }
+            _this.willFillListLoading = false
           }
         })
       },
       getFilledData() {
+        this.filledListLoading = true
         const _this = this
         this.api.post({
           url: 'enterpriseGetFormed',
@@ -252,6 +262,7 @@
             } else {
               _this.$message.error(res.result)
             }
+            _this.filledListLoading = false
           }
         })
       },
@@ -259,11 +270,12 @@
         this.filledData.page = page
         this.getFilledData()
       },
-      toFillData(item) {
+      toFillData(item, type) {
         this.$router.push({
           path:'/servicemarket/product/productService/report',
           query:{
-            fileId: item.fillId
+            fileId: item.fillId,
+            type: type
           }
         })
       },

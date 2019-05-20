@@ -170,9 +170,6 @@
 
 <script>
 import { deepClone } from '@/utils'
-import {
-  getAllDepartment
-} from '@/api/oa/meetingManagement'
 import targetRow from '../common/target-row'
 export default {
   name: 'TargetManagement',
@@ -310,7 +307,17 @@ export default {
     },
     getData() {
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/target/getTargetTree`).then(data => {
-        this.targetTreeData = data.data
+        const treeList = data.data
+        this.sortTree(treeList, 'orderNumber')
+        this.targetTreeData = treeList
+      })
+    },
+    sortTree(tree, key) {
+      tree.sort((a, b) => {
+        if (a.children && a.children.length > 0) {
+          this.sortTree(a.children, key)
+        }
+        return a[key] - b[key]
       })
     },
     addFormType(index) {
@@ -381,15 +388,27 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
+    easyTree(arr, tree) {
+      for (const item of tree) {
+        arr.push(item)
+        if (item.children && item.children.length > 0) {
+          this.easyTree(arr, item.children)
+        }
+      }
+      return arr
+    },
     // 获取组织部门列表
     getAllDepartment() {
-      getAllDepartment().then(({ data }) => {
-        if (data.code === '0000') {
-          this.departmentOptions = data.data.map(item => ({ value: item.departmentId, label: item.departmentName }))
-        } else {
-          this.$message.error(data.result)
-        }
-      })
+      this.$_post(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`)
+        .then(data => {
+          if (data.code === '0000') {
+            const list = []
+            this.easyTree(list, data.data)
+            this.departmentOptions = list.map(item => ({ value: item.departmentId, label: item.departmentName }))
+          } else {
+            this.$message.error('查询部门列表失败')
+          }
+        })
     },
     filterNode(value, data) {
       if (!value) return true
@@ -483,7 +502,7 @@ export default {
       min-height: 100%;
       width: 200px;
       flex: none;
-      padding: 15px 15px 100px 15px;
+      padding-bottom: 100px;
     }
     .target-management-r {
       min-height: 100%;

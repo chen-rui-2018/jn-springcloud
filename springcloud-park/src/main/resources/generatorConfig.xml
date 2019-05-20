@@ -1118,6 +1118,8 @@
     <table tableName="tb_business_ad_dynamic"></table>
     <!--招商管理-招商政策管理表-->
     <table tableName="tb_business_ad_policy"></table>
+    <!--招商管理-项目管理表-->
+    <table tableName="tb_project_info"></table>
 
   </context>
 

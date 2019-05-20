@@ -297,7 +297,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         String sign = payOrderReq.getSign();
         //支付宝支付完成的跳转页面
         String aliPayReturnUrl = payOrderReq.getAliPayReturnUrl();
-
+        //订单最晚付款时长
+        Integer duration = payOrderReq.getDuration();
 
         // 验证请求参数有效性（必选项）
         if(StringUtils.isBlank(mchId)) {
@@ -375,6 +376,18 @@ public class PayOrderController extends BaseController implements PayOrderClient
             errorMessage = "request params[sign] error.";
             return errorMessage;
         }
+        //订单最晚付款时长
+        if(null != payOrderReq.getDuration()){
+            if(duration > PayConstant.PAY_ORDER_MAX_DURATION){
+                errorMessage = "request params[duration] 订单最晚付款时长超出120分钟";
+                return errorMessage;
+            }else if(duration < PayConstant.PAY_ORDER_MIN_DURATION){
+                errorMessage = "request params[duration] 订单最晚付款时长不能小于一分钟";
+                return errorMessage;
+            }
+        }
+
+
         // 查询商户信息
         MchInfo mchInfo = mchInfoService.getMchInfoById(mchId);
         if(null == mchInfo){
@@ -448,6 +461,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         //响应密钥
         payOrder.put("resKey",mchInfo.getResKey());
         payOrder.put("aliPayReturnUrl",aliPayReturnUrl);
+        payOrder.put("duration",duration);
+
         return payOrder;
     }
 

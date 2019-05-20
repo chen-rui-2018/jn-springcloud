@@ -139,7 +139,7 @@ public class PayOrderReq implements Serializable  {
     /**
      * 签名
      * 通过工具 PayDigestUtil.getSign(BeanToMap.toMap(请求对象),请求密钥)
-     *
+     * 可参考PayControllerTest 测试类
      */
     @ApiModelProperty("签名,可以通过API提供的工具生成")
     @NotBlank(message = "签名不能为空！")
@@ -153,26 +153,21 @@ public class PayOrderReq implements Serializable  {
     @ApiModelProperty("买家付款完成以后进行自动跳转 ，returnUrl为http方式 ,且外网可访问链接不能带任何参数")
     private String aliPayReturnUrl;
 
-    @Override
-    public String toString() {
-        return "PayOrderReq{" +
-                "mchId='" + mchId + '\'' +
-                ", mchOrderNo='" + mchOrderNo + '\'' +
-                ", channelId='" + channelId + '\'' +
-                ", amount=" + amount +
-                ", clientIp='" + clientIp + '\'' +
-                ", device='" + device + '\'' +
-                ", notifyUrl='" + notifyUrl + '\'' +
-                ", serviceId='" + serviceId + '\'' +
-                ", serviceUrl='" + serviceUrl + '\'' +
-                ", subject='" + subject + '\'' +
-                ", body='" + body + '\'' +
-                ", param1='" + param1 + '\'' +
-                ", param2='" + param2 + '\'' +
-                ", extra='" + extra + '\'' +
-                ", sign='" + sign + '\'' +
-                ", aliPayReturnUrl='" + aliPayReturnUrl + '\'' +
-                '}';
+    /**
+     * 订单最晚付款时长(单位:分钟)
+     * 注意： 最大时长为120分钟,为空则默认为120分钟
+     * */
+    @ApiModelProperty("订单最晚付款时长(单位:分钟) ，注意： 最大时长为120分钟,为空则默认为120分钟")
+    private Integer duration;
+
+
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
     public String getAliPayReturnUrl() {
@@ -300,5 +295,28 @@ public class PayOrderReq implements Serializable  {
 
     public void setServiceUrl(String serviceUrl) {
         this.serviceUrl = serviceUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "PayOrderReq{" +
+                "mchId='" + mchId + '\'' +
+                ", mchOrderNo='" + mchOrderNo + '\'' +
+                ", channelId='" + channelId + '\'' +
+                ", amount=" + amount +
+                ", clientIp='" + clientIp + '\'' +
+                ", device='" + device + '\'' +
+                ", notifyUrl='" + notifyUrl + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                ", serviceUrl='" + serviceUrl + '\'' +
+                ", subject='" + subject + '\'' +
+                ", body='" + body + '\'' +
+                ", param1='" + param1 + '\'' +
+                ", param2='" + param2 + '\'' +
+                ", extra='" + extra + '\'' +
+                ", sign='" + sign + '\'' +
+                ", aliPayReturnUrl='" + aliPayReturnUrl + '\'' +
+                ", duration=" + duration +
+                '}';
     }
 }

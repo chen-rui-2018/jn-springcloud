@@ -724,4 +724,8 @@ body .el-table th.gutter {
 .write {
   background: #fff;
 }
+
+body .el-table th.gutter {
+  display: table-cell !important;
+}
 /*# sourceMappingURL=index.css.map */

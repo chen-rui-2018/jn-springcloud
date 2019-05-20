@@ -36,25 +36,25 @@ public class JPushUtil {
     private static String  MASTER_SECRET = JPushEnum.J_PUSH_MASTER_SECRET.getMessage();
 
     // 快速测试
-    public static void main(String[] args) {
-        List<String> ids = new ArrayList<>();
-//        ids.add("140fe1da9ee30f8212f"); //xiangzk
-        ids.add("140fe1da9ee7485a439"); //huxw
-        ids.add("160a3797c877a89b4f6"); //tangry
-
-        String title = "最新消息1";
-        String content = "最新内容1";
-        // 推送方式（DEVICE：设备 TAG：标签）
-        String pushType = "DEVICE";
-        // 平台类型 ANDROID/IOS/null  如果为null 则发送给所有平台
-        String platFromType = null;
-        // 推送通知类型（ALL：全部 NOTICE：通知 MESSAGE：透传消息）
-        String noticeType = "ALL";
-        // 透传消息内容
-        String message = "看看消息过来1";
-        JPushResult jPushResult = pushMessage(title,content, ids, pushType, platFromType, noticeType, message);
-        System.out.println(jPushResult.toString());
-    }
+//    public static void main(String[] args) {
+//        List<String> ids = new ArrayList<>();
+////        ids.add("140fe1da9ee30f8212f"); //xiangzk
+//        ids.add("140fe1da9ee7485a439"); //huxw
+//        ids.add("160a3797c877a89b4f6"); //tangry
+//
+//        String title = "最新消息1";
+//        String content = "最新内容1";
+//        // 推送方式（DEVICE：设备 TAG：标签）
+//        String pushType = "DEVICE";
+//        // 平台类型 ANDROID/IOS/null  如果为null 则发送给所有平台
+//        String platFromType = null;
+//        // 推送通知类型（ALL：全部 NOTICE：通知 MESSAGE：透传消息）
+//        String noticeType = "ALL";
+//        // 透传消息内容
+//        String message = "看看消息过来1";
+//        JPushResult jPushResult = pushMessage(title,content, ids, pushType, platFromType, noticeType, message);
+//        System.out.println(jPushResult.toString());
+//    }
 
     public static JPushResult pushMessage(String title, String content, List<String> ids, String pushType, String platFromType,
                                    String noticeType, String message) {

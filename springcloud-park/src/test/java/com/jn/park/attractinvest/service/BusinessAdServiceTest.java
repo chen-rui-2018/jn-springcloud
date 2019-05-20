@@ -1,4 +1,4 @@
-package com.jn.park.attractinvest.impl;
+package com.jn.park.attractinvest.service;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;

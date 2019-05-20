@@ -1,5 +1,6 @@
 package com.jn.pay.model;
 
+import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "PayBillParams" ,description = "账单查询入參实体类")
-public class PayBillParams implements Serializable {
+public class PayBillParams extends Page implements Serializable {
     private static final long serialVersionUID = -3611813821244989233L;
 
     @ApiModelProperty(value="账单编号",example = "201905090000003")

@@ -14,7 +14,7 @@ public interface CommentService {
      * 评论/回复
      * @param commentAddParam  点评信息   活动id,点评类型、点评内容
      */
-    void commentActivity(CommentAddParam commentAddParam);
+    int commentActivity(CommentAddParam commentAddParam);
 
     /**
      * 评论点赞

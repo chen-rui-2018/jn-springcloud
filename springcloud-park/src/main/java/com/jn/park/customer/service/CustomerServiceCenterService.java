@@ -25,10 +25,10 @@ public interface CustomerServiceCenterService {
     /**
      * 根据任务id获取问题详情
      * @param account 用户账号
-     * @param processId 流程实例id
+     * @param processInsId 流程实例id
      * @return
      */
-    Object customerQuesDetail(String account,String processId);
+    Object customerQuesDetail(String account,String processInsId);
 
     /**
      * 服务模块信息

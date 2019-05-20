@@ -2,6 +2,7 @@ package com.jn.enterprise.pay.service.impl;
 
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
@@ -17,14 +18,10 @@ import com.jn.enterprise.pay.enums.PaymentBillExceptionEnum;
 import com.jn.enterprise.pay.enums.PaymentBillMethodEnum;
 import com.jn.enterprise.pay.util.MoneyUtils;
 import com.jn.pay.model.*;
-import com.jn.pay.vo.PayBillReturnParamVo;
-import com.jn.pay.vo.PayBillVo;
+import com.jn.pay.vo.*;
 import com.jn.enterprise.pd.declaration.enums.PdStatusEnums;
 import com.jn.pay.enums.ChannelIdEnum;
 import com.jn.pay.enums.MchIdEnum;
-import com.jn.pay.enums.RspEnum;
-import com.jn.pay.utils.ResponseUtils;
-import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
@@ -38,9 +35,10 @@ import org.springframework.stereotype.Service;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 我的账单(业务实现层)
@@ -142,11 +140,40 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         return paginationData;
     }
 
+    @Override
+    public PaginationData<List<PayRecordVo>> billPaymentRecord(PayRecordParam payRecordParam,User user) {
+        PageHelper.startPage(payRecordParam.getPage(), payRecordParam.getRows());
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM");
+        TbPayBillCriteria tbPayBillCriteria = new TbPayBillCriteria();
+        tbPayBillCriteria.setOrderByClause("created_time desc,payment_state desc");
+        TbPayBillCriteria.Criteria criteria = tbPayBillCriteria.createCriteria();
+        criteria.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+        List<TbPayBill> tbPayBills = tbPayBillMapper.selectByExample(tbPayBillCriteria);
+        //获取每个月份，通过月份组装返回给前端
+        List<PayRecordVo> voList = new ArrayList<>();
+        if(tbPayBills.size() > 0) {
+            for (TbPayBill tbPayBill : tbPayBills) {
+                PayRecordVo payBill = new PayRecordVo();
+                payBill.setMonth(sdf.format(tbPayBill.getCreatedTime()));
+                BeanUtils.copyProperties(tbPayBill,payBill);
+                voList.add(payBill);
+            }
+        }
+        PaginationData paginationData = new PaginationData();
+        paginationData.setRows(voList);
+        return paginationData;
+    }
+
     @ServiceLog(doAction = "我的账单-通过账单ID查询账单详情信息")
     @Override
-    public PaginationData<List<PayBillDetails>> getBillInfo(String billId) {
+    public PaginationData<List<PayBillDetailsVo>> getBillInfo(String billId) {
+        PayBillDetailsVo payBillDetailsVo = new PayBillDetailsVo();
         List<PayBillDetails> list = new ArrayList<>();
+        PayBill payBill = new PayBill();
+        TbPayBill tbPayBill = tbPayBillMapper.selectByPrimaryKey(billId);
+        BeanUtils.copyProperties(tbPayBill,payBill);
         TbPayBillDetailsCriteria tbPayBillDetailsCriteria = new TbPayBillDetailsCriteria();
+        tbPayBillDetailsCriteria.setOrderByClause("sort asc");
         TbPayBillDetailsCriteria.Criteria criteria = tbPayBillDetailsCriteria.createCriteria();
         criteria.andBillIdEqualTo(billId);
         List<TbPayBillDetails> tbPayBillDetails = tbPayBillDetailsMapper.selectByExample(tbPayBillDetailsCriteria);
@@ -155,9 +182,10 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             BeanUtils.copyProperties(tbPayBillDetails.get(i),payBillDetails);
             list.add(payBillDetails);
         }
+        payBillDetailsVo.setPayBill(payBill);
+        payBillDetailsVo.setPayBillDetails(list);
         PaginationData paginationData = new PaginationData();
-        paginationData.setRows(list);
-        paginationData.setTotal(list.size());
+        paginationData.setRows(payBillDetailsVo);
         return paginationData;
     }
 
@@ -407,8 +435,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @ServiceLog(doAction = "我的账单-统一缴费回调")
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public void payCallBack(HttpServletResponse response, PayOrderNotify callBackParam, User user) {
-        String result = RspEnum.FAIL.getCode();
+    public Result payCallBack(PayOrderNotify callBackParam, User user) {
         if(StringUtils.isBlank(callBackParam.getStatus().toString())){
             /**判断回调参数支付状态是否为空*/
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_CALLBACK_IS_NULL);
@@ -501,12 +528,10 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tbPayBillMiddle.setOrderNumber(tbPayBills.get(0).getOrderNumber());
                 tbPayBillMiddle.setStatus(callBackParam.getStatus().toString());
                 tbPayBillMiddleMapper.updateByPrimaryKeySelective(tbPayBillMiddle);
-                result = RspEnum.SUCCESS.getCode();
             }
         }catch (Exception e){
-            ResponseUtils.outResult(response,result);
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_QUERY_ERROR);
         }
-        ResponseUtils.outResult(response,result);
+        return new Result();
     }
 }

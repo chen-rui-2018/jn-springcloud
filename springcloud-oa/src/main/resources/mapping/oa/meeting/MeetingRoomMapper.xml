@@ -186,15 +186,12 @@
 	meetingroom.created_time AS meetingroom_created_time,
 	meetingroom.modifier_account AS meetingroom_modifier_account,
 	meetingroom.modified_time AS meetingroom_modified_time
-
-
-FROM
+    FROM
 	tb_oa_meeting_room meetingroom
-
-
-
 	where meetingroom.record_status=1
-
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
+            and meetingroom.id =#{meetingRoomId}
+        </if>
 
 
     </select>

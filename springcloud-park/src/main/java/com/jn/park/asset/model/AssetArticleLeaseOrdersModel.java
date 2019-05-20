@@ -67,6 +67,12 @@ public class AssetArticleLeaseOrdersModel implements Serializable {
     @ApiModelProperty(value = "租借状态(0标记为空闲,1申请中,2交付中,3租借中,4归还中,5已归还)",example = "3")
     private Byte articleStatus;
 
+    @ApiModelProperty(value = "条形码",example = "577793928904835072")
+    private String barCode;
+
+    @ApiModelProperty(value = "最低租借时间",example = "10")
+    private String leaseTime;
+
     public String getId() {
         return id;
     }
@@ -201,5 +207,21 @@ public class AssetArticleLeaseOrdersModel implements Serializable {
 
     public void setArticleStatus(Byte articleStatus) {
         this.articleStatus = articleStatus;
+    }
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
+    }
+
+    public String getLeaseTime() {
+        return leaseTime;
+    }
+
+    public void setLeaseTime(String leaseTime) {
+        this.leaseTime = leaseTime;
     }
 }

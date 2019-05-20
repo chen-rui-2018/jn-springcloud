@@ -331,7 +331,7 @@
                 <div class="list-item-date"></div>
                 <!-- 上架时间 end -->
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container product nopic">
+                <div class="list-imgleft-container product nopic" @click="$router.push({path: 'serverProDetail',query: { productId: productId, signoryId: signoryId }})">
                   <img :src="i.pictureUrl" alt="">
                 </div>
                 <!-- 左侧logo end-->
@@ -399,7 +399,7 @@
             <ul class="list-imgleft adviser">
               <li class="list-item" v-for="(i,k) in serviceConsultant" :key='k'>
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container noconsultant">
+                <div class="list-imgleft-container noconsultant" @click="$router.push({path: 'serverConDetail',query: { orgId: orgId,advisorAccount:advisorAccount }})">
                   <img :src="i.avatar" alt="">
                 </div>
                 <!-- 左侧logo end-->
@@ -545,7 +545,7 @@
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
               <li v-for="(i,k) in serverActiList" :key='k'>
-                <div class="postImgItem">
+                <div class="postImgItem" @click="$router.push({path: 'actiTrainDetail',query: { activityId: id }})">
                   <img :src="i.actiPosterUrl" class="postImg" alt="活动海报图片">
                 </div>
                 <div class="actiInfo">

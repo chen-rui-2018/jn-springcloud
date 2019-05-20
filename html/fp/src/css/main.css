@@ -140,7 +140,7 @@ img {
   border-radius: 16px;
 }
 
-.actiContent .actiFilter .timeFilter > span.active {
+.actiContent .actiFilter .timeFilter > span.active0 {
   color: #fff;
   background: -webkit-gradient(linear, left top, right bottom, from(#35bf6d), to(#00a041));
   background: linear-gradient(to bottom right, #35bf6d, #00a041);
@@ -174,13 +174,13 @@ img {
   margin-left: 10px;
 }
 
-.actiContent .actiFilter .timeOrder > ul li.active {
+.actiContent .actiFilter .timeOrder > ul li.active0 {
   background-image: -webkit-linear-gradient(to bottom right, #35bf6d, #00a041);
   -webkit-text-fill-color: #00a041;
   -webkit-background-clip: text;
 }
 
-.actiContent .actiFilter .timeOrder > ul .showListLi > i.active {
+.actiContent .actiFilter .timeOrder > ul .showListLi > i.active0 {
   color: #00a041;
 }
 
@@ -198,7 +198,7 @@ img {
   color: #333;
 }
 
-.actiContent .allActi .actiFilterUl > li.active {
+.actiContent .allActi .actiFilterUl > li.active0 {
   border-bottom: 2px solid #00a041;
   color: #00a041;
 }
@@ -2321,13 +2321,13 @@ img {
   z-index: 2;
 }
 
-.portalIndex .declarationNotice .info .left .active,
-.portalIndex .popularActi .info .left .active,
-.portalIndex .districtGardens .info .left .active,
-.portalIndex .enterpriseinfo .info .left .active, .portalIndex .policyCenter .info .left .active, .portalIndex .technologyFinance .info .left .active, .portalIndex .humanResources .info .left .active, .enterpriseservice .declarationNotice .info .left .active,
-.enterpriseservice .popularActi .info .left .active,
-.enterpriseservice .districtGardens .info .left .active,
-.enterpriseservice .enterpriseinfo .info .left .active, .enterpriseservice .policyCenter .info .left .active, .enterpriseservice .technologyFinance .info .left .active, .enterpriseservice .humanResources .info .left .active {
+.portalIndex .declarationNotice .info .left .active0,
+.portalIndex .popularActi .info .left .active0,
+.portalIndex .districtGardens .info .left .active0,
+.portalIndex .enterpriseinfo .info .left .active0, .portalIndex .policyCenter .info .left .active0, .portalIndex .technologyFinance .info .left .active0, .portalIndex .humanResources .info .left .active0, .enterpriseservice .declarationNotice .info .left .active0,
+.enterpriseservice .popularActi .info .left .active0,
+.enterpriseservice .districtGardens .info .left .active0,
+.enterpriseservice .enterpriseinfo .info .left .active0, .enterpriseservice .policyCenter .info .left .active0, .enterpriseservice .technologyFinance .info .left .active0, .enterpriseservice .humanResources .info .left .active0 {
   width: 40px;
   height: 40px;
   color: #fff;

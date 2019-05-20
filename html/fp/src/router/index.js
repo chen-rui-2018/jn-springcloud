@@ -86,7 +86,39 @@ export default new Router({
               meta: {
                 title: '社区交流'
               }
-            }
+            },
+            {
+              path: '/parkNotice',
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              meta: {
+                title: '园区通知'
+              },
+              name:'parkNotice',
+            },
+            {
+              path: '/enterpriseOrder',
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              meta: {
+                title: '企业订单'
+              },
+              name:'enterpriseOrder',
+            },
+            {
+              path: '/informationDynamics',
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              meta: {
+                title: '信息发布动态'
+              },
+              name:'informationDynamics',
+            },
+            {
+              path: '/paymentReminder',
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              meta: {
+                title: '缴费提醒'
+              },
+              name:'paymentReminder',
+            },
           ]
         },
         {
@@ -467,41 +499,40 @@ export default new Router({
           component: resolve => require(['@/views/dataReport/dataReportCheck'], resolve),
           meta: {title: '数据上报审核'},
           name: 'dataReportCheck'
-        }
+        },
+        {
+          path: '/actiCenter',
+          component: resolve => require(['@/views/activityCenter/actiCenter'], resolve),
+          meta: {
+            title: '活动中心首页'
+          },
+          name: 'actiCenter'
+        },
+        {
+          path: '/actiDetail',
+          component: resolve => require(['@/views/activityCenter/actiDetail'], resolve),
+          meta: {
+            title: '活动详情'
+          },
+          name: 'actiDetail'
+        },
+        {
+          path: '/regStatus',
+          component: resolve => require(['@/views/activityCenter/regStatus'], resolve),
+          meta: {
+            title: '报名情况列表'
+          },
+          name: 'regStatus'
+        },
+        {
+          path: '/regData',
+          component: resolve => require(['@/views/activityCenter/regData'], resolve),
+          meta: {
+            title: '报名人资料'
+          },
+          name: 'regData'
+        },
       ]
-    },
-
-    {
-      path: '/actiCenter',
-      component: resolve => require(['@/views/activityCenter/actiCenter'], resolve),
-      meta: {
-        title: '活动中心首页'
-      },
-      name: 'actiCenter'
-    },
-    {
-      path: '/actiDetail',
-      component: resolve => require(['@/views/activityCenter/actiDetail'], resolve),
-      meta: {
-        title: '活动详情'
-      },
-      name: 'actiDetail'
-    },
-    {
-      path: '/regStatus',
-      component: resolve => require(['@/views/activityCenter/regStatus'], resolve),
-      meta: {
-        title: '报名情况列表'
-      },
-      name: 'regStatus'
-    },
-    {
-      path: '/regData',
-      component: resolve => require(['@/views/activityCenter/regData'], resolve),
-      meta: {
-        title: '报名人资料'
-      },
-      name: 'regData'
     },
     {
       path: '/actiTrain',
@@ -518,6 +549,22 @@ export default new Router({
         title: '活动培训详情'
       },
       name: 'actiTrain'
+    },
+    {
+      path: '/actiTrainStatus',
+      component: resolve => require(['@/views/serviceMarket/actiTrainStatus'], resolve),
+      meta: {
+        title: '活动详情报名情况'
+      },
+      name: 'actiTrainStatus'
+    },
+    {
+      path: '/actiTrainData',
+      component: resolve => require(['@/views/serviceMarket/actiTrainData'], resolve),
+      meta: {
+        title: '活动详情报名人资料'
+      },
+      name: 'actiTrainData'
     },
     {
       path: '/serMatHp',
@@ -775,6 +822,14 @@ export default new Router({
         title: '政策指南详情'
       },
       name: 'policyGuide'
+    },
+    {
+      path: '/recruitmentList',
+      component: resolve => require(['@/views/humanResource'], resolve),
+      meta: {
+        title: '企业招聘列表'
+      },
+      name: 'recruitmentList'
     },
   ]
 })

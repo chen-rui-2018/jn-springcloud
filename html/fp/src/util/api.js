@@ -202,7 +202,10 @@ export default {
 
 
         getRecruitList:"springcloud-enterprise/guest/RecruitController/getWebRecruitList",//招聘列表（门户首页）
-
+        getPromotionList:"springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList",//(门户各首页企业宣传列表查询)
+        getMessageList:"springcloud-park/message/list/findAll",//消息列表
+        getMessageOneTort:"springcloud-park/message/list/getMessageOneTort",//获取二级消息类别
+        getParkList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
 
     },
     setToken: function (obj) {   //设置token在请求头上面

@@ -5,22 +5,42 @@
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/home' }">消息中心</el-breadcrumb-item>
           <el-breadcrumb-item>
-            <span>{{this.$route.meta.title}}</span>
+            <span class="mainColor">{{this.$route.meta.title}}</span>
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <el-container>
-        <el-aside style="width: 200px; margin-right: 20px" v-if="$store.state.needNav">
-          <el-menu
-            default-active="2"
-            class="el-menu-vertical-demo">
-            <el-submenu index="1">
+        <el-aside width="200px">
+          <div class="userImg">
+            <div class="imgItem">
+              <img src="@/../static/img/larImg.png" alt="">
+            </div>
+            <p>{{account}}</p>
+          </div>
+          <el-menu :default-active="this.$route.path" :unique-opened="true" router class="el-menu-vertical-demo">
+            <el-submenu index="/messageCenter">
               <template slot="title">
                 <span>个人动态</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
+                <el-menu-item index="/parkNotice">园区通知</el-menu-item>
+                <el-menu-item index="1-2">私人订单</el-menu-item>
+                <el-menu-item index="1-2">信用动态</el-menu-item>
+                <el-menu-item index="1-2">消费汇总</el-menu-item>
+                <el-menu-item index="1-2">收入汇总</el-menu-item>
+                <el-menu-item index="1-2">付款通知</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="3">
+              <template slot="title">
+                <span>企业空间</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="/enterpriseOrder">企业订单</el-menu-item>
+                <el-menu-item index="/informationDynamics">信息发布动态</el-menu-item>
+                <el-menu-item index="/paymentReminder">缴费提醒</el-menu-item>
+                <el-menu-item index="3-2">访客留言</el-menu-item>
+                <el-menu-item index="3-2">数据上报提醒</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-menu-item index="2" @click.native="toChat">
@@ -104,6 +124,8 @@ $bg-gray: #f3f3f3;
         /*}*/
       }
     }
+    margin-left: 20px;
+    padding: 0;
   }
   &.pd {
     padding: 66px 0;
@@ -115,11 +137,16 @@ $bg-gray: #f3f3f3;
     }
    margin: 0 auto;
    min-height: 500px;
+  }
+.message-center {
+  width: 1190px;
+  margin: 0 auto;
+  min-height: 500px;
   .el-container {
     min-height: 500px;
   }
   .nav-tips {
-    padding: 10px 0;
+    padding: 15px 0;
     background-color: $bg-gray;
   }
   .el-menu {
@@ -129,6 +156,23 @@ $bg-gray: #f3f3f3;
       &.is-active {
         color: $--color-primary;
         border-left: 2px solid $--color-primary;
+      }
+    }
+  }
+  .userImg {
+    background: #fff;
+    width: 100%;
+    text-align: center;
+    .imgItem {
+      margin: 0 auto;
+      padding: 20px 0;
+      width: 84px;
+      height: 84px;
+      img {
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+        // margin: 0 auto;
       }
     }
   }

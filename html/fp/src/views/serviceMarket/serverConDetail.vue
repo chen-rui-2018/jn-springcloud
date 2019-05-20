@@ -163,7 +163,7 @@
                                 <div class="list-item-date"></div>
                                 <!-- 上架时间 end -->
                                 <!-- 左侧logo begin-->
-                                <div class="list-imgleft-container product nopic">
+                                <div class="list-imgleft-container product nopic" @click="$router.push({path: 'serverProDetail',query: { productId: productId, signoryId: signoryId }})">
                                     <img :src="i.pictureUrl" alt="">
                                 </div>
                                 <!-- 左侧logo end-->

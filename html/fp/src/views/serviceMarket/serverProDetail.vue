@@ -108,7 +108,7 @@
                                 <div class="list-item-date"></div>
                                 <!-- 上架时间 end -->
                                 <!-- 左侧logo begin-->
-                                <div class="list-imgleft-container product nopic">
+                                <div class="list-imgleft-container product nopic" @click="$router.push({path: 'serverProDetail',query: { productId: productId, signoryId: signoryId }})">
                                     <img :src="i.pictureUrl" alt="">
                                 </div>
                                 <!-- 左侧logo end-->
@@ -507,7 +507,7 @@ export default {
         padding: 10px 0;
         .agent2Con {
           height: 150px;
-          width: 80%;
+        //   width: 80%;
           overflow: hidden;
           // white-space: nowrap;
           // text-overflow: ellipsis;

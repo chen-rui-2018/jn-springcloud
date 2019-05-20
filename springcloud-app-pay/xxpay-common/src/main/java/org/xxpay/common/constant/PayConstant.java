@@ -121,12 +121,15 @@ public class PayConstant {
 	 * 返回成功
 	* */
 	public static final String MCH_NOTICE_REQUEST_SUCCESS = "success";
-	/**
-	 * 支付宝订单允许的最晚付款时间，逾期将关闭交易。
-	 * 取值范围：1m～15d。m-分钟，h-小时，d-天，1c-当天（1c-当天的情况下，无论交易何时创建，都在0点关闭）。
-	 * 该参数数值不接受小数点， 如 1.5h，可转换为 90m。注：若为空，则默认为15d。
-	* */
-	public static final String ALIPAY_ORDER_MAX_VALID_TIME = "2h";
 
+
+	/**
+	 * 支付订单最大有效时长为：120分钟
+	* */
+	public static final Integer PAY_ORDER_MAX_DURATION = 120;
+	/**
+	 * 支付订单最小有效时长为：1分钟
+	 * */
+	public static final Integer PAY_ORDER_MIN_DURATION = 1;
 	
 }

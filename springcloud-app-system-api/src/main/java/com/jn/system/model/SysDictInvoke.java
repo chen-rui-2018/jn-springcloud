@@ -30,13 +30,6 @@ public class SysDictInvoke implements Serializable {
     public SysDictInvoke() {
     }
 
-     public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
     public SysDictInvoke(String moduleCode, String parentGroupCode, String groupCode, String key) {
         this.moduleCode = moduleCode;
         this.parentGroupCode = parentGroupCode;
@@ -68,12 +61,21 @@ public class SysDictInvoke implements Serializable {
         this.groupCode = groupCode;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     @Override
     public String toString() {
         return "SysDictInvoke{" +
                 "moduleCode='" + moduleCode + '\'' +
                 ", parentGroupCode='" + parentGroupCode + '\'' +
                 ", groupCode='" + groupCode + '\'' +
+                ", key='" + key + '\'' +
                 '}';
     }
 }

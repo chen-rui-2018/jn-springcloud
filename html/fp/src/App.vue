@@ -1,7 +1,7 @@
 <template>
   <div id="app" :class="{'h-100': $store.state.isMobile}">
 <!--    <router-view></router-view>-->
-     <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice') &&$store.state.needNav">
+     <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice') && $store.state.hiddenNav">
       <ul>
         <li @click="isVisibility=true">
           <div class="right_nav_slide">
@@ -69,14 +69,14 @@
     <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'||$route.name=='declarationCenter'||$route.name=='talentsService'||$route.name=='talentPlatform'||$route.name=='talentsServiceDetail'"></adminApprove-header>
     <app-header v-if="$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'"></app-header>
 
-    <ser-header v-if="$route.name=='actiTrain'||$route.name=='actiTrainDetail'||$route.name=='serverOrg'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header>
+    <ser-header v-if="$route.name=='actiTrain'||$route.name=='actiTrainDetail'||$route.name=='actiTrainStatus'||$route.name=='serverOrg'||$route.name=='actiTrainData'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header>
     <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'||$route.name=='finaPro'||$route.name=='finaProDetail'"></technology-Header>
 
     <!-- <ser-header v-if="$route.name=='actiTrain'||$route.name=='serverOrg'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header> -->
     <!-- <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'"></technology-Header> -->
 
     <router-view class="routView"/>
-    <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& $store.state.needNav"></app-footer>
+    <app-footer v-cloak v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& $store.state.hiddenNav"></app-footer>
   </div>
 </template>
 
@@ -113,7 +113,7 @@ export default {
     // if(sessionStorage.token){
     //     this.api.setToken(sessionStorage.token)
     // }
-    this.init()
+    // this.init()
     let vm =this;
       window.onscroll=function(){
         if (document.documentElement.scrollTop>60) {
@@ -129,22 +129,22 @@ export default {
     }
   },
   methods:{
-    init(){
-      let _this=this
-      this.api.post({
-        url: "loginURL",
-        data: {
-          account: "wangsong",
-          password: "wangsong"
-        },
-        dataFlag: false,
-        callback: function(res) {
-          if (res.code == "0000") {
-            sessionStorage.token=res.data
-          }
-        }
-      })
-    },
+    // init(){
+    //   let _this=this
+    //   this.api.post({
+    //     url: "loginURL",
+    //     data: {
+    //       account: "wangsong",
+    //       password: "wangsong"
+    //     },
+    //     dataFlag: false,
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         sessionStorage.token=res.data
+    //       }
+    //     }
+    //   })
+    // },
     setEnvironment() {
       const token = this.$route.query.token
       if (token) {
@@ -152,7 +152,9 @@ export default {
       }
       const iframe = this.$route.query.iframe
       if (iframe === '1' || this.isMobile) {
-        this.$store.commit('setNeedNav', false)
+        this.$store.commit('setHiddenNav', false)
+      } else {
+        this.$store.commit('setHiddenNav', true)
       }
     },
     toTop(){
@@ -184,6 +186,11 @@ export default {
 /*  height: 100%;*/
 /*  overflow: auto;*/
 /*}*/
+[v-if],
+[v-show],
+[v-cloak]{
+  display: none !important;
+}
 #app {
 
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;

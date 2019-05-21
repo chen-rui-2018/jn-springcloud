@@ -5,7 +5,6 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
-import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.ServiceRecruitParam;

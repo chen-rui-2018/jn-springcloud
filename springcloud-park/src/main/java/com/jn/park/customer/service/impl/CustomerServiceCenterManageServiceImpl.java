@@ -18,12 +18,10 @@ import com.jn.park.customer.dao.TbClientServiceCenterMapper;
 import com.jn.park.customer.entity.TbClientExecuteImg;
 import com.jn.park.customer.entity.TbClientServiceCenter;
 import com.jn.park.customer.entity.TbClientServiceCenterCriteria;
+import com.jn.park.customer.enums.IBPSExecuteTypeEnum;
 import com.jn.park.customer.enums.IBPSMyTaskParamEnum;
 import com.jn.park.customer.enums.IBPSOptionsStatusEnum;
-import com.jn.park.customer.model.IBPSCompleteCustomerParam;
-import com.jn.park.customer.model.IBPSOnlineCustomerForm;
-import com.jn.park.customer.model.MyTasksParam;
-import com.jn.park.customer.model.MyTasksResult;
+import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterManageService;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
@@ -32,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -57,6 +56,12 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
     private TbClientExecuteImgMapper executeImgMapper;
 
     /**
+     * 在线客服流程定义key
+     */
+    @Value(value = "${procDefKey}")
+    private String procDefKey;
+
+    /**
      * 我的待办事项
      * @param myTasksParam
      * @param loginAccount
@@ -65,7 +70,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
     @Override
     public PaginationData myTasks(MyTasksParam myTasksParam, String loginAccount) {
         //设置待办事项的动态参数
-        IBPSMyTasksParam ibpsMyTasksParam = setIBPSMyTaskParamIfo(myTasksParam, loginAccount);
+        IBPSMyTasksParam ibpsMyTasksParam = setIBPSMyTaskParamIfo(myTasksParam,IBPSExecuteTypeEnum.TASKS.getCode());
         //查询我的待办事项
         JSONObject jsonObject = IBPSUtils.myTasks(loginAccount, ibpsMyTasksParam);
         IBPSResult ibpsResult = new Gson().fromJson(jsonObject.toString(), IBPSResult.class);
@@ -74,14 +79,79 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
         //获取我的待办事项
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("----------------根据查询条件获取我的待办事项成功------------");
-            //解析数据
-            List<MyTasksResult> resultList = getMyTasksResults(ibpsResult);
-            Object pageResult = ((LinkedTreeMap) ibpsResult.getData()).get("pageResult");
-            com.github.pagehelper.Page<Object> objects = PageHelper.startPage(myTasksParam.getPage(), myTasksParam.getRows());
-            return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
+            //解析封装数据
+            return processResultData(myTasksParam, ibpsResult,IBPSExecuteTypeEnum.TASKS.getCode());
+
         }else{
             logger.warn("获取我的待办事项失败，{}",ibpsResult.getMessage());
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
+
+    /**
+     * 解析并封装返回数据
+     * @param myTasksParam
+     * @param ibpsResult
+     * @param type  task:待办   handled:已办
+     * @return
+     */
+    private PaginationData processResultData(MyTasksParam myTasksParam, IBPSResult ibpsResult,String type) {
+        List<MyTasksResult> resultList = getMyTasksResults(ibpsResult);
+        if (resultList.isEmpty()) {
+            return new PaginationData(resultList, 0);
+        }
+        //流程实例id列表
+        List<String> processInsIdList = new ArrayList<>();
+        //流程实例id和任务id列表
+        List<Map<String, String>> procInsIdAndTaskIdList = new ArrayList<>();
+        if(StringUtils.equals(IBPSExecuteTypeEnum.TASKS.getCode(), type)){
+            for (MyTasksResult myTasksResult : resultList) {
+                processInsIdList.add(myTasksResult.getProcInstId());
+                Map<String, String> map = new HashMap<>();
+                map.put(myTasksResult.getProcInstId(), myTasksResult.getTaskId());
+                procInsIdAndTaskIdList.add(map);
+            }
+        }else if(StringUtils.equals(IBPSExecuteTypeEnum.HANDLED.getCode(), type)){
+            for (MyTasksResult myTasksResult : resultList) {
+                processInsIdList.add(myTasksResult.getId());
+                Map<String, String> map = new HashMap<>();
+                map.put(myTasksResult.getId(), myTasksResult.getTaskId());
+                procInsIdAndTaskIdList.add(map);
+            }
+        }
+
+        //根据流程实例id从客服问题表查询需要处理的事项
+        return getPaginationDataQuesTaskList(myTasksParam,processInsIdList, procInsIdAndTaskIdList);
+    }
+
+    /**
+     * 分页封装待处理问题数据
+     * @param myTasksParam
+     * @param processInsIdList
+     * @param procInsIdAndTaskIdList
+     * @return
+     */
+    private PaginationData getPaginationDataQuesTaskList(MyTasksParam myTasksParam,List<String> processInsIdList, List<Map<String, String>> procInsIdAndTaskIdList) {
+        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(myTasksParam.getPage(), myTasksParam.getRows());
+        TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
+        example.createCriteria().andProcessInsIdIn(processInsIdList).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbClientServiceCenter> serviceCenterList = centerMapper.selectByExample(example);
+        List<ConsultationCustomerListShow> resultTask=new ArrayList<>();
+        if(serviceCenterList==null || serviceCenterList.isEmpty()){
+            return new PaginationData(serviceCenterList, 0);
+        }else{
+            for(TbClientServiceCenter serviceCenter:serviceCenterList){
+                ConsultationCustomerListShow customerListShow=new ConsultationCustomerListShow();
+                BeanUtils.copyProperties(serviceCenter, customerListShow);
+                for(Map<String,String> map:procInsIdAndTaskIdList){
+                   if(map.containsKey(customerListShow.getProcessInsId())){
+                       customerListShow.setTaskId(map.get(customerListShow.getProcessInsId()));
+                       break;
+                   }
+                }
+                resultTask.add(customerListShow);
+            }
+            return new PaginationData(resultTask, objects==null?0:objects.getTotal());
         }
     }
 
@@ -95,7 +165,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
     @Override
     public PaginationData myHandled(MyTasksParam myTasksParam, String loginAccount) {
         //设置已办办事项的动态参数
-        IBPSMyTasksParam ibpsMyTasksParam = setIBPSMyTaskParamIfo(myTasksParam, loginAccount);
+        IBPSMyTasksParam ibpsMyTasksParam = setIBPSMyTaskParamIfo(myTasksParam,IBPSExecuteTypeEnum.HANDLED.getCode());
         //查询我的已办办事项
         JSONObject jsonObject = IBPSUtils.myHandled(loginAccount, ibpsMyTasksParam);
         IBPSResult ibpsResult = new Gson().fromJson(jsonObject.toString(), IBPSResult.class);
@@ -105,10 +175,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("----------------根据查询条件获取我的已办事项成功------------");
             //解析数据
-            List<MyTasksResult> resultList = getMyTasksResults(ibpsResult);
-            Object pageResult = ((LinkedTreeMap) ibpsResult.getData()).get("pageResult");
-            com.github.pagehelper.Page<Object> objects = PageHelper.startPage(myTasksParam.getPage(), myTasksParam.getRows());
-            return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
+          return processResultData(myTasksParam, ibpsResult,IBPSExecuteTypeEnum.HANDLED.getCode());
         }else{
             logger.warn("获取我的已办事项失败，{}",ibpsResult.getMessage());
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
@@ -116,11 +183,11 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
     }
 
     /**
-     * 解析待办事项数据
+     * 解析待办/已办事项数据
      * @param ibpsResult
      * @return
      */
-    @ServiceLog(doAction = "解析待办事项数据")
+    @ServiceLog(doAction = "解析待办/已办事项数据")
     private List<MyTasksResult> getMyTasksResults(IBPSResult ibpsResult) {
         Object data = ibpsResult.getData();
         LinkedTreeMap dataMap=(LinkedTreeMap)data;
@@ -137,10 +204,10 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
     /**
      * 设置待办/已办事项的动态参数
      * @param myTasksParam
-     * @param loginAccount
+     * @param type    task:待办   handled:已办
      */
     @ServiceLog(doAction = "设置待办/已办事项的动态参数")
-    private IBPSMyTasksParam setIBPSMyTaskParamIfo(MyTasksParam myTasksParam, String loginAccount) {
+    private IBPSMyTasksParam setIBPSMyTaskParamIfo(MyTasksParam myTasksParam, String type) {
         List<Map<String,String>> dynamicParams=new ArrayList<>(16);
         Map<String,String>dynamicMap=new HashMap<>();
         if(StringUtils.isNotBlank(myTasksParam.getProcInstId())){
@@ -170,11 +237,15 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             pageNo=myTasksParam.getPage();
             limit=myTasksParam.getRows();
         }
-        //设置排序参数 默认按照创建时间倒序排序
-        List<Map<String,String>>sortsParam=new ArrayList<>();
-        Map<String,String>sortMap=new HashMap<>(16);
-        sortMap.put("createTime","desc");
-        sortsParam.add(sortMap);
+        //设置排序字段
+        List<Map<String,String>>sortsParam=null;
+        if(StringUtils.equals(IBPSExecuteTypeEnum.TASKS.getCode(),type)){
+            //设置排序参数 默认按照创建时间倒序排序
+            sortsParam=new ArrayList<>();
+            Map<String,String>sortMap=new HashMap<>(16);
+            sortMap.put("createTime","desc");
+            sortsParam.add(sortMap);
+        }
         return new IBPSMyTasksParam(dynamicParams,limit,pageNo,sortsParam);
     }
 
@@ -198,8 +269,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             LinkedTreeMap dataMap=(LinkedTreeMap)data;
             String  boData = (String)dataMap.get("boData");
             Gson gson=new Gson();
-            IBPSOnlineCustomerForm customerForm = gson.fromJson(boData, IBPSOnlineCustomerForm.class);
-            return customerForm;
+            return gson.fromJson(boData, IBPSOnlineCustomerForm.class);
         }else{
             logger.warn("获取获取流程表单失败，{}",ibpsResult.getMessage());
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
@@ -243,6 +313,33 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
     }
 
     /**
+     * 园区客服中心
+     * @param param
+     * @param loginAccount
+     * @return
+     */
+    @Override
+    public PaginationData myTasksOrMyHandled(MyTasksOrMyHandledParam param, String loginAccount) {
+        //判断流程类型是我的待办，已办还是全部
+        if(StringUtils.equals(IBPSExecuteTypeEnum.TASKS.getCode(),param.getProcType())){
+            //待处理
+            MyTasksParam myTasksParam=new MyTasksParam();
+            BeanUtils.copyProperties(param, myTasksParam);
+            myTasksParam.setProcDefKey(procDefKey);
+            return  myTasks(myTasksParam,loginAccount);
+        }else if(StringUtils.equals(IBPSExecuteTypeEnum.HANDLED.getCode(),param.getProcType())){
+            //已处理
+            MyTasksParam myTasksParam=new MyTasksParam();
+            BeanUtils.copyProperties(param, myTasksParam);
+            myTasksParam.setProcDefKey(procDefKey);
+            return myHandled(myTasksParam,loginAccount);
+        }else{
+            logger.warn("园区客服中心获取失败，流程类型：[{}]无法识别",param.getProcType());
+            throw new JnSpringCloudException(CustomerCenterExceptionEnum.PROCESS_TYPE_NOT_ALLOW);
+        }
+    }
+
+    /**
      * 添加客服中心问题处理描述图片信息
      * @param customerParam
      * @param loginAccount
@@ -281,7 +378,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbClientServiceCenter> tbClientServiceCenters = centerMapper.selectByExample(example);
         if(tbClientServiceCenters.isEmpty()){
-            logger.warn("流程实例id：{}在系统中不传在，{}",procInstId);
+            logger.warn("流程实例id：[{}]在系统中不传在",procInstId);
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.PROCESS_INS_ID_NOT_NULL);
         }
         //判断当前操作，系统是否支持

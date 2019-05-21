@@ -155,7 +155,7 @@ img {
         border-radius: 16px;
       }
 
-      >span.active {
+      >span.active0 {
         color: #fff;
         background: linear-gradient(to bottom right, #35bf6d, #00a041);
       }
@@ -187,7 +187,7 @@ img {
           }
         }
 
-        li.active {
+        li.active0 {
           // color: #00a041;
           background-image: -webkit-linear-gradient(to bottom right, #35bf6d, #00a041);
           // -webkit-background-clip: text;
@@ -196,7 +196,7 @@ img {
           -webkit-background-clip: text;
         }
 
-        .showListLi>i.active {
+        .showListLi>i.active0 {
           color: #00a041;
         }
       }
@@ -217,7 +217,7 @@ img {
         color: #333;
       }
 
-      >li.active {
+      >li.active0 {
         border-bottom: 2px solid #00a041;
         color: #00a041;
       }
@@ -1356,9 +1356,6 @@ img {
     border: 1px solid #D9D9D9;
 }
   .header {
-    // position: absolute;
-    // padding: 0 160px;
-    // background-color: #646798;
     background-color: rgba(255, 255, 255, 0.2);
     width: 100%;
     z-index: 3;
@@ -1409,8 +1406,8 @@ img {
           // }
           .ru-active{
             background: #fff;
-              color: #00a041;
-              border-radius: 5px;
+            color: #00a041;
+            border-radius: 5px;
           }
         }
         .posA {
@@ -1657,6 +1654,7 @@ img {
     }
     .btns {
       font-size: 0;
+      margin: 50px 0;
       > button {
         padding: 5px 20px;
         background: #fff;
@@ -1671,8 +1669,6 @@ img {
         background: #00a041;
       }
       .btn1 {
-        color: #fff;
-        background: #00a041;
         border-top-left-radius: 3px;
         border-bottom-left-radius: 3px;
       }
@@ -1681,10 +1677,13 @@ img {
         border-bottom-right-radius: 3px;
         border-left: none;
       }
-      // .btn2:hover{
-      //   color: #fff;
-      //   background: #00a041;
-      // }
+      .btn11 {
+        border-radius: 0;
+      }
+      >button.btActive{
+        color: #fff;
+        background: #00a041;
+      }
     }
     .info {
       // width: 1029px;
@@ -1736,7 +1735,7 @@ img {
             margin-right: 20px;
             z-index: 2;
           }
-          .active{
+          .active0{
             width: 40px;
             height: 40px;
             color: #fff;

@@ -135,6 +135,21 @@ public class SysDictServiceTest {
     }
 
     @Test
+    public void selectDictValueByCondition(){
+        SysDictInvoke sysDictInvoke=new SysDictInvoke();
+        //数据字典模块编码
+        sysDictInvoke.setModuleCode("springcloud-oa");
+        //数据字典父分组编码
+        sysDictInvoke.setParentGroupCode("common");
+        //数据字典分组编码
+        sysDictInvoke.setGroupCode("attachment");
+        //数据字典key
+        sysDictInvoke.setKey("attachment_file_group");
+        String result = sysDictService.selectDictValueByCondition(sysDictInvoke);
+        Assert.assertThat(result, Matchers.anything());
+    }
+
+    @Test
     public void zDelete() {
         sysDictService.delete(dictId, user);
     }

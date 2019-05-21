@@ -77,7 +77,7 @@ public class CallOtherSwaggerUtils {
      * @param param   请求参数
      * @return
      */
-    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, String> param) {
+    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, Object> param) {
         return request(account, curl, method, param, MediaType.APPLICATION_FORM_URLENCODED);
     }
 
@@ -91,7 +91,7 @@ public class CallOtherSwaggerUtils {
      * @param mediaType application/x-www-form-urlencoded application/json
      * @return
      */
-    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, String> param, MediaType mediaType) {
+    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, Object> param, MediaType mediaType) {
         JSONObject result = new JSONObject();
         try {
             String token = getToken(account);
@@ -135,7 +135,7 @@ public class CallOtherSwaggerUtils {
         String token = callOtherSwaggerUtils.jedisFactory.getJedis().get(PREFIX + account);
         if (StringUtils.isEmpty(token)) {
             String accountKey = EncryptUtil.encryptSha256(account);
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
             map.add("account", account);
             map.add("accountKey", accountKey);
             JSONObject tokenJsonObject = RestTemplateUtil.request(url + LOGIN_URL, HttpMethod.POST, map, new HashMap<>(), MediaType.APPLICATION_FORM_URLENCODED);

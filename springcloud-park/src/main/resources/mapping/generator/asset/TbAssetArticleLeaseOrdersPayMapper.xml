@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.asset.dao.TbAssetArticleLeaseOrdersPayMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.asset.entity.TbAssetArticleLeaseOrdersPay">
+    <id column="pay_id" jdbcType="VARCHAR" property="payId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="pay_state" jdbcType="TINYINT" property="payState" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pay_id, order_id, pay_state, record_status, creator_account, create_time, modifier_account, 
+    modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseOrdersPayCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_asset_article_lease_orders_pay
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_asset_article_lease_orders_pay
+    where pay_id = #{payId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_asset_article_lease_orders_pay
+    where pay_id = #{payId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseOrdersPayCriteria">
+    delete from tb_asset_article_lease_orders_pay
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseOrdersPay">
+    insert into tb_asset_article_lease_orders_pay (pay_id, order_id, pay_state, 
+      record_status, creator_account, create_time, 
+      modifier_account, modified_time)
+    values (#{payId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{payState,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseOrdersPay">
+    insert into tb_asset_article_lease_orders_pay
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="payId != null">
+        pay_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="payState != null">
+        pay_state,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="payId != null">
+        #{payId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="payState != null">
+        #{payState,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseOrdersPayCriteria" resultType="java.lang.Long">
+    select count(*) from tb_asset_article_lease_orders_pay
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_asset_article_lease_orders_pay
+    <set>
+      <if test="record.payId != null">
+        pay_id = #{record.payId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payState != null">
+        pay_state = #{record.payState,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_asset_article_lease_orders_pay
+    set pay_id = #{record.payId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      pay_state = #{record.payState,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseOrdersPay">
+    update tb_asset_article_lease_orders_pay
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="payState != null">
+        pay_state = #{payState,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where pay_id = #{payId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseOrdersPay">
+    update tb_asset_article_lease_orders_pay
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      pay_state = #{payState,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where pay_id = #{payId,jdbcType=VARCHAR}
+  </update>
+</mapper>

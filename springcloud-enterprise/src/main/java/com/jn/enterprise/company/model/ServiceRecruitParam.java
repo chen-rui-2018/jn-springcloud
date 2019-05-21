@@ -53,4 +53,14 @@ public class ServiceRecruitParam extends ServiceWebRecruitParam implements Seria
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceRecruitParam{" +
+                "comId='" + comId + '\'' +
+                ", status='" + status + '\'' +
+                ", beginDate='" + beginDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                '}';
+    }
 }

@@ -5,6 +5,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.LeaseOrdersModel;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.model.User;
 import com.jn.system.model.UserPage;
 
@@ -59,9 +61,18 @@ public interface AssetArticleLeaseOrdersService {
     PaginationData<List<AssetArticleLeaseOrdersModel>> getArticleLeaseOrdersList(String account, Page page);
 
     /**
-     * 发起支付
-     * @param id
+     * 创建支付订单
+     * @param orderId
+     * @param channelId
+     * @param userAccount
      * @return
      */
-    Result startPayment(String id);
+    Result<PayOrderRsp> createPayOrder(String orderId, String channelId, String userAccount);
+
+    /**
+     * 支付回调
+     * @param payOrderNotify
+     * @return
+     */
+    Result articlePayCallBack(PayOrderNotify payOrderNotify);
 }

@@ -294,7 +294,7 @@ public class SysDictServiceImpl implements SysDictService {
     @Override
     public String selectDictValueByCondition(SysDictInvoke sysDictInvoke){
         List<TbSysDict> tbSysDictList=getTbSysDicts(sysDictInvoke);
-        if(tbSysDictList!=null||tbSysDictList.size()>0){
+        if(tbSysDictList!=null && tbSysDictList.size()>0){
             return tbSysDictList.get(0).getDictValue();
         }
         return null;

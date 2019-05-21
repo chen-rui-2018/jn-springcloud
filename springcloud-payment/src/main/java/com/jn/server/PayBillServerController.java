@@ -3,6 +3,7 @@ package com.jn.server;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.pay.model.PayOrderNotify;
 import com.jn.paybill.api.PayBillClient;
 import com.jn.paybill.model.*;
 import com.jn.system.log.annotation.ControllerLog;
@@ -67,8 +68,8 @@ public class PayBillServerController extends BaseController implements PayBillCl
     @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST")
     @RequestMapping(value = "/payCallBack")
     @Override
-    public Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam){
-        return new Result<>(payBillService.payCallBack(callBackParam));
+    public Result payCallBack(@RequestBody PayOrderNotify payOrderNotify){
+        return payBillService.payCallBack(payOrderNotify);
     }
 
     @ControllerLog(doAction = "根据账单IDs获取账单列表内容")

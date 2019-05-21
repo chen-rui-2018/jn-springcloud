@@ -2,11 +2,15 @@ package com.jn.server;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
 import com.jn.hardware.model.parking.door.DoorCarInParkingInfo;
 import com.jn.hardware.model.parking.door.DoorCarOutParkingInfo;
 import com.jn.park.api.ParkingClient;
 import com.jn.park.parking.service.ParkingServerService;
 import com.jn.park.parking.service.ParkingTemporaryService;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.paybill.enums.PayTypeEnum;
+import com.jn.paybill.model.PaymentBillCallBack;
 import com.jn.system.log.annotation.ControllerLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +59,18 @@ public class ParkingServerController extends BaseController implements ParkingCl
     @Override
     public Result<String> carOutParking(@RequestBody DoorCarOutParkingInfo doorCarOutParkingInfo){
         return new Result<>(parkingServerService.carOutParking(doorCarOutParkingInfo.getCaroutlist()));
+    }
+
+    @ControllerLog(doAction = "智慧停车支付成功回调")
+    @Override
+    public Result parkingPayCallBack(@RequestBody PaymentBillCallBack paymentBillCallBack) {
+        Boolean b = false;
+        if(StringUtils.equals(paymentBillCallBack.getBillType(),PayTypeEnum.PAYMENT_ORDER_TYPE_PARKING_MONTH.getCode())){
+           b = parkingServerService.parkingSpaceBillCallBack(paymentBillCallBack.getBillId());
+        }else if(StringUtils.equals(paymentBillCallBack.getBillType(),PayTypeEnum.PAYMENT_ORDER_TYPE_PARKING_FEE.getCode())){
+           b = parkingServerService.parkingCarBillCallBack(paymentBillCallBack.getBillId());
+        }
+        return new Result(b);
     }
 
 }

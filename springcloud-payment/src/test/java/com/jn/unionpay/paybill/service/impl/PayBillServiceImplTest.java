@@ -5,6 +5,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.pay.model.PayOrderNotify;
 import com.jn.paybill.enums.PayBillExceptionEnum;
 import com.jn.paybill.model.*;
 import com.jn.system.model.User;
@@ -150,7 +151,7 @@ public class PayBillServiceImplTest {
         payInitiateParam.setBillIds(new String[]{"48w55wwffno383915","48w55wwffno383914"});
         payInitiateParam.setPayMenthed("0");
         try {
-            Result result = payBillService.startPayment(payInitiateParam, user);
+            Result result = payBillService.createPayOrder("48w55wwffno383915","ALIPAY_MOBILE","0", user);
             assertThat(result,anything());
         }catch (JnSpringCloudException e){
             logger.warn("缴费单支付发起-- 数据错误,请核实测试对象数据。");
@@ -167,15 +168,11 @@ public class PayBillServiceImplTest {
 
     @Test
     public void payCallBack() {
-        PayCallBackParam callBackParam = new PayCallBackParam();
-        callBackParam.setOrderId("999000990");
-        callBackParam.setPayOrderId("22222222222222222");
-        callBackParam.setPayStatus("2");
-        callBackParam.setPayType("0");
-        callBackParam.setPayTime(new Date());
+        PayOrderNotify callBackParam = new PayOrderNotify();
+
         try{
-            PayCallBackVO payCallBackVO = payBillService.payCallBack(callBackParam);
-            assertThat(payCallBackVO,anything());
+            Result result = payBillService.payCallBack(callBackParam);
+            assertThat(result,anything());
         }catch (JnSpringCloudException e){
             logger.warn("统一缴费-支付回调-- 数据错误,请核实测试对象数据。");
             assertThat(e.getCode(),

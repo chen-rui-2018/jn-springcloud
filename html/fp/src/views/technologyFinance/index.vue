@@ -308,7 +308,7 @@
                     </li> -->
                     <li class="lastLi mainColor">
                       <img src="@/../static/img/xiao.png" alt="">
-                      <div class="rightInfo">认证投资人></div>
+                      <div class="rightInfo" @click="$router.push({name:'investorCertification'})">认证投资人></div>
                     </li>
                   </ul>
                 </div>

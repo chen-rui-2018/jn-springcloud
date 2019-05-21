@@ -1,9 +1,9 @@
 <template>
-  <div class="homePage" :class="{pd: $store.state.needNav}">
-    <div class="homePage_content" :class="{'w': $store.state.needNav}">
+  <div class="homePage" :class="{pd: $store.state.hiddenNav}">
+    <div class="homePage_content" :class="{'w': $store.state.hiddenNav}">
       <div class="homePage_typearea">
         <!-- 面包屑 -->
-        <div class="homePage_breadcrumb" v-if="$store.state.needNav">
+        <div class="homePage_breadcrumb" v-if="$store.state.hiddenNav">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }">用户中心</el-breadcrumb-item>
             <el-breadcrumb-item>
@@ -14,7 +14,7 @@
         <!-- 主体内容 -->
         <el-container>
           <!-- 侧边栏 -->
-          <div class="slider" v-if="$store.state.needNav">
+          <div class="slider" v-if="$store.state.hiddenNav">
             <el-aside width="135px">
               <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
                 @close="handleClose" @select="handleSelect">

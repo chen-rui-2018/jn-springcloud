@@ -404,7 +404,7 @@ export default {
           if (data.code === '0000') {
             const list = []
             this.easyTree(list, data.data)
-            this.departmentOptions = list.map(item => ({ value: item.departmentId, label: item.departmentName }))
+            this.departmentOptions = list.map(item => ({ value: item.id, label: item.departmentName }))
           } else {
             this.$message.error('查询部门列表失败')
           }

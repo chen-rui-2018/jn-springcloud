@@ -118,7 +118,6 @@
             // 把otherColumns的对象根据指标id挂载到树形指标上面
             this.formatTreeOtherColumnData(tab)
             this.sortTree(tab.targetList)
-            console.dir(tab.targetList)
           }
         })
       },

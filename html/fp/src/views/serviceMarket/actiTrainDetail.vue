@@ -131,7 +131,7 @@
             </li>
           </ul>
           <div class="pagination-container" style="margin-top:50px">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
             </el-pagination>
           </div>
         </div>
@@ -508,6 +508,10 @@ export default {
               width: 20px;
               border: 1px solid #eee;
               border-radius: 50%;
+              img{
+                width: 100%;
+                height: 100%;
+              }
             }
           }
           > span {

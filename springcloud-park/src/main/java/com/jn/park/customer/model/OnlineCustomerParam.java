@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @Author: yangph
@@ -80,5 +81,17 @@ public class OnlineCustomerParam implements Serializable {
 
     public void setContactWay(String contactWay) {
         this.contactWay = contactWay;
+    }
+
+    @Override
+    public String toString() {
+        return "OnlineCustomerParam{" +
+                "quesTitle='" + quesTitle + '\'' +
+                ", quesDetails='" + quesDetails + '\'' +
+                ", quesUrl=" + Arrays.toString(quesUrl) +
+                ", serviceModule='" + serviceModule + '\'' +
+                ", clientType='" + clientType + '\'' +
+                ", contactWay='" + contactWay + '\'' +
+                '}';
     }
 }

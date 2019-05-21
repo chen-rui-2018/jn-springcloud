@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 评论API接口
  * @author： jiangyl
@@ -35,5 +37,11 @@ public class CareServerController extends BaseController implements CareClient {
         return new Result<>(companyCareInfo);
     }
 
+    @Override
+    @ControllerLog(doAction = "查询关注的企业")
+    public Result<List<String>> findCareCompanyList(@RequestBody CareParam careParam) {
+        List<String> careCompanyList = careService.findCareCompanyList(careParam.getCurrentAccount());
+        return new Result(careCompanyList);
+    }
 
 }

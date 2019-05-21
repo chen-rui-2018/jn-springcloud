@@ -16,13 +16,15 @@ import java.util.Date;
 public class ConsultationCustomerListShow implements Serializable {
     @ApiModelProperty("流程实例id(启动工作流后的流程实例id)")
     private String processInsId;
+    @ApiModelProperty("任务id(工作流流转后的节点任务id)")
+    private String taskId;
     @ApiModelProperty("问题编码")
     private String quesCode;
     @ApiModelProperty("问题标题")
     private String quesTitle;
     @ApiModelProperty("问题详情")
     private String quesDetails;
-    @ApiModelProperty("处理状态(0：待处理 1：处理中 2：已处理)")
+    @ApiModelProperty("处理状态(0：待处理 1：处理中 2：已处理 3：无法处理)")
     private String status;
     @ApiModelProperty("发布时间")
     private Date createdTime;
@@ -33,6 +35,14 @@ public class ConsultationCustomerListShow implements Serializable {
 
     public void setProcessInsId(String processInsId) {
         this.processInsId = processInsId;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
     public String getQuesCode() {

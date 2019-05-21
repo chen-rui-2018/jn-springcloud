@@ -30,6 +30,7 @@ public class ImController {
 
     /**
      * 查询聊天列表
+     *
      * @param message
      * @return
      */
@@ -57,11 +58,11 @@ public class ImController {
      * @param tbImMessage
      * @return
      */
-    @RequestMapping(value = "/isSended", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/isSended", method = RequestMethod.POST)
     public Result isSended(@RequestBody TbImMessage tbImMessage) {
         imService.isSended(tbImMessage);
         return new Result();
-    }
+    }*/
 
 
 }

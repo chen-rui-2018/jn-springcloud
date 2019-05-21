@@ -6,16 +6,11 @@ import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.ChannelIdEnum;
+import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.PayOrderQueryReq;
 import com.jn.pay.model.PayOrderQueryRsp;
 import com.jn.pay.model.PayOrderReq;
-import com.jn.pay.model.alipay.AlipayMobilePayRsp;
-import com.jn.pay.model.alipay.AlipayPcPayRsp;
-import com.jn.pay.model.alipay.AlipayWapPayRsp;
-import com.jn.pay.model.wx.WxMwebPayRsp;
-import com.jn.pay.model.wx.WxNativePayRsp;
-import com.jn.pay.vo.wx.WxAppPayRsp;
-import com.jn.pay.vo.wx.WxJsapiPayRsp;
+import com.jn.pay.model.PayOrderRsp;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +27,8 @@ import org.xxpay.web.service.MchInfoService;
 import org.xxpay.web.service.PayChannelServiceClient;
 import org.xxpay.web.service.PayOrderService;
 import org.xxpay.web.service.PayOrderServiceClient;
+
+import java.util.UUID;
 
 /**
  * @Description: 支付订单,包括:统一下单,订单查询,补单等接口
@@ -72,7 +69,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
      * @return
      */
     @Override
-    public Result createPayOrder(@RequestBody @Validated PayOrderReq payOrderReq) {
+    public Result<PayOrderRsp> createPayOrder(@RequestBody @Validated PayOrderReq payOrderReq) {
         _log.info("###### 开始接收商户统一下单请求 ######");
         String logPrefix = "【商户统一下单】";
         ServiceInstance instance = client.getLocalServiceInstance();
@@ -109,26 +106,85 @@ public class PayOrderController extends BaseController implements PayOrderClient
             //根据支付渠道ID 执行不同的支付方式
             switch (ChannelIdEnum.getCode(channelId)) {
                 case WX_APP :
-                    String wxAppParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_APP, payOrder}));
-                    return returnResult(wxAppParam,ChannelIdEnum.getCode(channelId),resKey);
+                    //String wxAppParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_APP, payOrder}));
+                    //return returnResult(wxAppParam,resKey);
+                    PayOrderRsp payOrderRsp = new PayOrderRsp();
+                    payOrderRsp.setChannelId(channelId);
+                    payOrderRsp.setPayOrderId(UUID.randomUUID().toString().substring(0,20));
+                    //封装orderInfo(发起支付需要的参数JSON格式)
+                    JSONObject orderInfo = new JSONObject();
+                    orderInfo.put("paySign", "159ABABAE6F8A0F4641A34A38251E7BB");
+                    orderInfo.put("partnerId", "1367655402");
+                    orderInfo.put("appId", "wxa095d1d71c33c151");
+                    orderInfo.put("packageValue", "Sign=WXPay");
+                    orderInfo.put("timeStamp", "1471319614");
+                    orderInfo.put("nonceStr", "mhctew72bf3kfrr4jmv79zigbpgrmv5h");
+                    orderInfo.put("prepayId","wx2016081611532915ae15beab0167893571");
+                    payOrderRsp.setOrderInfo(orderInfo.toJSONString());
+                    payOrderRsp.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrderRsp), MchIdEnum.MCH_BASE.getRspKey()));
+                    return new Result(payOrderRsp);
+
                 case WX_JSAPI :
-                    String wxJsapiParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_JSPAI, payOrder}));
-                    return returnResult(wxJsapiParam,ChannelIdEnum.getCode(channelId),resKey);
+                    //String wxJsapiParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_JSPAI, payOrder}));
+                    //return returnResult(wxJsapiParam,resKey);
+                    PayOrderRsp payOrderRsp2 = new PayOrderRsp();
+                    payOrderRsp2.setChannelId(channelId);
+                    payOrderRsp2.setPayOrderId(UUID.randomUUID().toString().substring(0,20));
+                    //封装orderInfo(发起支付需要的参数JSON格式)
+                    JSONObject orderInfo2 = new JSONObject();
+                    orderInfo2.put("appId", "wx0ab67caf7f591834");
+                    // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                    orderInfo2.put("timeStamp", "1471323332");
+                    orderInfo2.put("nonceStr", "08s06nujam43aot3tbl555lavvydl178");
+                    orderInfo2.put("packageValue", "prepay_id=wx201608161255321fc59e085b0578219742");
+                    orderInfo2.put("signType","MD5");
+                    orderInfo2.put("paySign", "21E6BF4984030DBD2DB191F676A47DA2");
+                    orderInfo2.put("prepayId","wx2016081611532915ae15beab0167893571");
+
+                    payOrderRsp2.setOrderInfo(orderInfo2.toJSONString());
+                    payOrderRsp2.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrderRsp2), MchIdEnum.MCH_BASE.getRspKey()));
+                    return new Result(payOrderRsp2);
                 case WX_NATIVE :
-                    String wxNativeParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_NATIVE, payOrder}));
-                    return returnResult(wxNativeParam,ChannelIdEnum.getCode(channelId),resKey);
+                   // String wxNativeParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_NATIVE, payOrder}));
+                    //return returnResult(wxNativeParam,resKey);
+
+                    PayOrderRsp payOrderRsp3 = new PayOrderRsp();
+                    payOrderRsp3.setChannelId(channelId);
+                    payOrderRsp3.setPayOrderId(UUID.randomUUID().toString().substring(0,20));
+                    //封装orderInfo(发起支付需要的参数JSON格式)
+                    JSONObject orderInfo3 = new JSONObject();
+                    orderInfo3.put("prepayId","wx20160816130510b9688b1a720825571177");
+                    orderInfo3.put("codeUrl","weixin://wxpay/bizpayurl?pr=sHYHnns");
+
+                    payOrderRsp3.setOrderInfo(orderInfo3.toJSONString());
+                    payOrderRsp3.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrderRsp3), MchIdEnum.MCH_BASE.getRspKey()));
+                    return new Result(payOrderRsp3);
                 case WX_MWEB :
-                    String wxMwebParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_MWEB, payOrder}));
-                    return returnResult(wxMwebParam,ChannelIdEnum.getCode(channelId),resKey);
+                   // String wxMwebParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_MWEB, payOrder}));
+                   // return returnResult(wxMwebParam,resKey);
+
+
+                    PayOrderRsp payOrderRsp4 = new PayOrderRsp();
+                    payOrderRsp4.setChannelId(channelId);
+                    payOrderRsp4.setPayOrderId(UUID.randomUUID().toString().substring(0,20));
+                    //封装orderInfo(发起支付需要的参数JSON格式)
+                    JSONObject orderInfo4 = new JSONObject();
+                    orderInfo4.put("payUrl", "weixin://wxpay/bizpayurl?pr=sHYHnns");
+                    orderInfo4.put("prepayId","wx20160816130510b9688b1a720825571177");
+
+                    payOrderRsp4.setOrderInfo(orderInfo4.toJSONString());
+                    payOrderRsp4.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrderRsp4), MchIdEnum.MCH_BASE.getRspKey()));
+                    return new Result(payOrderRsp4);
+
                 case ALIPAY_MOBILE :
                     String aliPayMobileParam =  payOrderServiceClient.doAliPayMobileReq(getJsonParam("payOrder", payOrder));
-                    return returnResult(aliPayMobileParam,ChannelIdEnum.getCode(channelId),resKey);
+                    return returnResult(aliPayMobileParam,resKey);
                 case ALIPAY_PC :
                     String jsonParam = payOrderServiceClient.doAliPayPcReq(getJsonParam("payOrder", payOrder));
-                    return returnResult(jsonParam,ChannelIdEnum.getCode(channelId),resKey);
+                    return returnResult(jsonParam,resKey);
                case ALIPAY_WAP :
                    String aliPayWapParam =  payOrderServiceClient.doAliPayWapReq(getJsonParam("payOrder", payOrder));
-                   return returnResult(aliPayWapParam,ChannelIdEnum.getCode(channelId),resKey);
+                   return returnResult(aliPayWapParam,resKey);
                 default:
                     return new Result(PayEnum.ERR_0016.getCode(),PayEnum.ERR_0016.getMessage());
             }
@@ -241,7 +297,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         String sign = payOrderReq.getSign();
         //支付宝支付完成的跳转页面
         String aliPayReturnUrl = payOrderReq.getAliPayReturnUrl();
-
+        //订单最晚付款时长
+        Integer duration = payOrderReq.getDuration();
 
         // 验证请求参数有效性（必选项）
         if(StringUtils.isBlank(mchId)) {
@@ -319,6 +376,18 @@ public class PayOrderController extends BaseController implements PayOrderClient
             errorMessage = "request params[sign] error.";
             return errorMessage;
         }
+        //订单最晚付款时长
+        if(null != payOrderReq.getDuration()){
+            if(duration > PayConstant.PAY_ORDER_MAX_DURATION){
+                errorMessage = "request params[duration] 订单最晚付款时长超出120分钟";
+                return errorMessage;
+            }else if(duration < PayConstant.PAY_ORDER_MIN_DURATION){
+                errorMessage = "request params[duration] 订单最晚付款时长不能小于一分钟";
+                return errorMessage;
+            }
+        }
+
+
         // 查询商户信息
         MchInfo mchInfo = mchInfoService.getMchInfoById(mchId);
         if(null == mchInfo){
@@ -392,16 +461,17 @@ public class PayOrderController extends BaseController implements PayOrderClient
         //响应密钥
         payOrder.put("resKey",mchInfo.getResKey());
         payOrder.put("aliPayReturnUrl",aliPayReturnUrl);
+        payOrder.put("duration",duration);
+
         return payOrder;
     }
 
     /**
      * 封装统一支付接口返回结果
      * @param jsonParam 统一下单接口返回的参数
-     * @param channelIdEnum 渠道ID枚举
      * @[aram resKey 请求密钥(用于生成签名)
     * */
-    Result returnResult(String jsonParam, ChannelIdEnum channelIdEnum,String resKey ){
+    Result returnResult(String jsonParam,String resKey ){
         if(StringUtils.isBlank(jsonParam)){
             return new Result(PayEnum.ERR_0010.getCode(),PayEnum.ERR_0010.getMessage());
         }
@@ -420,49 +490,14 @@ public class PayOrderController extends BaseController implements PayOrderClient
             String errCodeDes = paramObj.getString("errCodeDes");
             return new Result(errCode,errCodeDes);
         }
-        //响应签名
-        String sign ;
 
-        //根据渠道ID返回对应的实体类
-        switch (channelIdEnum) {
-                case WX_APP :
-                    WxAppPayRsp wxAppPayRsp = JSON.parseObject(jsonParam, WxAppPayRsp.class);
-                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(wxAppPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
-                    wxAppPayRsp.setSign(sign);
-                    return  new Result(wxAppPayRsp);
-                case WX_JSAPI :
-                    WxJsapiPayRsp wxJsapiPayRsp = JSON.parseObject(jsonParam, WxJsapiPayRsp.class);
-                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(wxJsapiPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
-                    wxJsapiPayRsp.setSign(sign);
-                    return  new Result(wxJsapiPayRsp);
-                case WX_NATIVE :
-                    WxNativePayRsp wxNativePayRsp = JSON.parseObject(jsonParam, WxNativePayRsp.class);
-                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(wxNativePayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
-                    wxNativePayRsp.setSign(sign);
-                    return  new Result(wxNativePayRsp);
-                case WX_MWEB :
-                    WxMwebPayRsp wxMwebPayRsp = JSON.parseObject(jsonParam, WxMwebPayRsp.class);
-                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(wxMwebPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
-                    wxMwebPayRsp.setSign(sign);
-                    return  new Result(JSON.parseObject(jsonParam, WxMwebPayRsp.class));
-                case ALIPAY_MOBILE :
-                    AlipayMobilePayRsp alipayMobilePayRsp = JSON.parseObject(jsonParam, AlipayMobilePayRsp.class);
-                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(alipayMobilePayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
-                    alipayMobilePayRsp.setSign(sign);
-                    return  new Result(alipayMobilePayRsp);
-                case ALIPAY_PC :
-                    AlipayPcPayRsp alipayPcPayRsp = JSON.parseObject(jsonParam, AlipayPcPayRsp.class);
-                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(alipayPcPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
-                    alipayPcPayRsp.setSign(sign);
-                    return  new Result(alipayPcPayRsp);
-                case ALIPAY_WAP :
-                    AlipayWapPayRsp alipayWapPayRsp = JSON.parseObject(jsonParam, AlipayWapPayRsp.class);
-                    sign =  PayDigestUtil.getSign(BeanToMap.toMap(alipayWapPayRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
-                    alipayWapPayRsp.setSign(sign);
-                    return new Result(alipayWapPayRsp);
-            default:
-                return new Result(PayEnum.ERR_0010.getCode(),PayEnum.ERR_0010.getMessage());
-        }
+        //JSON字符串转对象
+        PayOrderRsp payOrderRsp = JSON.parseObject(jsonParam, PayOrderRsp.class);
+        //生成响应签名
+        String sign =  PayDigestUtil.getSign(BeanToMap.toMap(payOrderRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
+        payOrderRsp.setSign(sign);
+
+        return  new Result(payOrderRsp);
     }
 
 

@@ -8,6 +8,7 @@ import com.jn.park.customer.model.ServiceModuleShow;
 import java.util.List;
 
 /**
+ * 客服中心--园区用户咨询客服
  * @Author: yangph
  * @Date: 2019/5/14 9:42
  * @Version v1.0
@@ -25,10 +26,10 @@ public interface CustomerServiceCenterService {
     /**
      * 根据任务id获取问题详情
      * @param account 用户账号
-     * @param processId 流程实例id
+     * @param processInsId 流程实例id
      * @return
      */
-    Object customerQuesDetail(String account,String processId);
+    Object customerQuesDetail(String account,String processInsId);
 
     /**
      * 服务模块信息

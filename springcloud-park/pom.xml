@@ -91,7 +91,7 @@
                         asset
                     </contexts>
                     <tableNames>
-                        tb_room_orders
+                        tb_room_orders_pay
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

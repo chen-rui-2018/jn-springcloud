@@ -105,6 +105,76 @@ public class TbCommentSensitiveWordCriteria {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andSensitiveWordIsNull() {
+            addCriterion("sensitive_word is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordIsNotNull() {
+            addCriterion("sensitive_word is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordEqualTo(String value) {
+            addCriterion("sensitive_word =", value, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordNotEqualTo(String value) {
+            addCriterion("sensitive_word <>", value, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordGreaterThan(String value) {
+            addCriterion("sensitive_word >", value, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordGreaterThanOrEqualTo(String value) {
+            addCriterion("sensitive_word >=", value, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordLessThan(String value) {
+            addCriterion("sensitive_word <", value, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordLessThanOrEqualTo(String value) {
+            addCriterion("sensitive_word <=", value, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordLike(String value) {
+            addCriterion("sensitive_word like", value, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordNotLike(String value) {
+            addCriterion("sensitive_word not like", value, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordIn(List<String> values) {
+            addCriterion("sensitive_word in", values, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordNotIn(List<String> values) {
+            addCriterion("sensitive_word not in", values, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordBetween(String value1, String value2) {
+            addCriterion("sensitive_word between", value1, value2, "sensitiveWord");
+            return (Criteria) this;
+        }
+
+        public Criteria andSensitiveWordNotBetween(String value1, String value2) {
+            addCriterion("sensitive_word not between", value1, value2, "sensitiveWord");
+            return (Criteria) this;
+        }
+
         public Criteria andSensitiveTypeIsNull() {
             addCriterion("sensitive_type is null");
             return (Criteria) this;

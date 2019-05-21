@@ -44,7 +44,7 @@ public class LeaveServiceTest {
     public static void init() {
         //初始化添加用户
         leave = new Leave();
-       // leave.setUserId("10000");
+        leave.setUserId("10000");
 
 
         //初始化部门部门id及部门名称

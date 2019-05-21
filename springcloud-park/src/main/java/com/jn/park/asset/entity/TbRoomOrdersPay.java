@@ -10,7 +10,7 @@ public class TbRoomOrdersPay implements Serializable {
     /*@ApiModelProperty("业务订单表ID")*/
     private String orderId;
 
-    /*@ApiModelProperty("支付状态(0未付款,1已付款)(")*/
+    /*@ApiModelProperty("支付状态(0未付款,1已付款,2订单已取消)")*/
     private Byte payState;
 
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/

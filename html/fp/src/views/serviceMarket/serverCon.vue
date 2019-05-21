@@ -1,7 +1,7 @@
 <template>
     <div class="serverCon w">
         <div class="serverOrgMenu">
-            <span>首页</span>
+            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页</span>
             <span>/</span>
             <span class="mainColor agent">服务顾问</span>
         </div>
@@ -9,10 +9,10 @@
             <div class="nav1 clearfix" id="nav1">
                 <div class="nav1Tit fl">业务领域：</div>
                 <ul class="nav1Ul fl clearfix" style="width:auto;">
-                    <li :class="{'active':filterFlag == ''}" @click="handleFilter('')">不限</li>
+                    <li :class="{'active1':filterFlag == ''}" @click="handleFilter('')">不限</li>
                 </ul>
                 <ul class="nav1Ul fl clearfix">
-                    <li class="wid1" v-for="(i,k) in businessArea" :key='k' @click="handleFilter(i.id)" :class="{'active':filterFlag == i.id}">{{i.preValue}}</li>
+                    <li class="wid1" v-for="(i,k) in businessArea" :key='k' @click="handleFilter(i.id)" :class="{'active1':filterFlag == i.id}">{{i.preValue}}</li>
                 </ul>
                 <div class="fr" v-if="widFun('wid1')">
                     <i class="el-icon-arrow-down" v-if="flag1" @click="flag1=!flag1"></i>
@@ -22,10 +22,10 @@
         </div>
         <div class="serverOrgFilter mainBorder clearfix">
             <div class="filLeft fl" id="filLeft">排序：
-                <span @click="handleFil('integrate')" :class="{'active':colorFlag == 'integrate'}">综合</span>
-                <span @click="handleFil('popularity')" :class="{'active':colorFlag == 'popularity'}">人气</span>
-                <span @click="handleFil('praise')" :class="{'active':colorFlag == 'praise'}">好评</span>
-                <span @click="handleFil('serviceNum')" :class="{'active':colorFlag == 'serviceNum'}">服务量</span>
+                <span @click="handleFil('integrate')" :class="{'active1':colorFlag == 'integrate'}">综合</span>
+                <span @click="handleFil('popularity')" :class="{'active1':colorFlag == 'popularity'}">人气</span>
+                <span @click="handleFil('praise')" :class="{'active1':colorFlag == 'praise'}">好评</span>
+                <span @click="handleFil('serviceNum')" :class="{'active1':colorFlag == 'serviceNum'}">服务量</span>
             </div>
             <div class="filRight fr">
                 <input type="text" placeholder="搜索关键字" v-model="keyWords">
@@ -41,7 +41,7 @@
                         <img :src="i.avatar" alt="">
                     </div>
                     <div class="orgCon fl">
-                        <div class="conTil">{{i.orgName}}</div>
+                        <div class="conTil">{{i.advisorName}}</div>
                         <div class="conContent clearfix color3">
                             <div class="left1 fl" id="left1">
                                 <p>所属机构：{{i.orgName}}

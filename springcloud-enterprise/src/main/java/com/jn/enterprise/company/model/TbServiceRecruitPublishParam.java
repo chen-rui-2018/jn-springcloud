@@ -174,4 +174,27 @@ public class TbServiceRecruitPublishParam implements Serializable {
     public void setRecordStatus(String recordStatus) {
         this.recordStatus = recordStatus;
     }
+
+    @Override
+    public String toString() {
+        return "TbServiceRecruitPublishParam{" +
+                "id='" + id + '\'' +
+                ", recruitNo='" + recruitNo + '\'' +
+                ", comId='" + comId + '\'' +
+                ", comName='" + comName + '\'' +
+                ", post='" + post + '\'' +
+                ", salary='" + salary + '\'' +
+                ", num='" + num + '\'' +
+                ", type='" + type + '\'' +
+                ", details='" + details + '\'' +
+                ", status='" + status + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", approvalStatus='" + approvalStatus + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", recordStatus='" + recordStatus + '\'' +
+                '}';
+    }
 }

@@ -1,10 +1,8 @@
 package com.jn.im.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Message
@@ -15,6 +13,11 @@ import java.util.Date;
  * @modified By:
  */
 public class Message extends Page implements Serializable {
+
+    /**
+     * ID
+     */
+    private String id;
 
     /**
      * 发送人
@@ -68,4 +71,11 @@ public class Message extends Page implements Serializable {
         this.nickName = nickName;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

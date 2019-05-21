@@ -27,4 +27,12 @@ public interface UserCenterIndexDao {
 
 
     RequirementManageModel findRequirementManage(@Param("status") String status,@Param("account") String account);
+
+    /**
+     *顾问管理
+     * @param approvalStatus 审批状态
+     * @param orgId 机构ID
+     * @return
+     */
+    String findAdviserInvitation(@Param("approvalStatus") String approvalStatus,@Param("orgId") String orgId);
 }

@@ -48,7 +48,7 @@
           <p style="margin-top:10px">发布时间：{{this.activityDetail.issueTime}}</p>
           <p>主办方：{{this.activityDetail.actiOrganizer}}</p>
           <p>报名截止时间：{{this.activityDetail.applyEndTime}}
-            <span class="resdeadline">报名截止还有&nbsp;3天18小时59分59秒</span>
+            <span class="resdeadline">报名截止还有&nbsp;{{countDown}}</span>
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
@@ -149,7 +149,8 @@ export default {
       commentList: [],
       sysTemTime:"",
       accountIsLike: false,
-      isCommentLike: false
+      isCommentLike: false,
+      countDown:'',
     };
   },
   created(){
@@ -157,7 +158,10 @@ export default {
     this.getCommentInfo();
   },
   mounted() {    
-    this.countdown()
+    // this.countdown()
+  },
+   destroyed () {
+    clearInterval(this._interval)
   },
   methods: {
     replyFlag() {
@@ -354,18 +358,26 @@ export default {
         }
       });
     },
-    // campareTime(){ //时间比较
-    //   var t1=new Date(this.sysTemTime)
-    //   var t2=new Date(this.activityDetail.applyEndTime)
-
-    // },
     //报名倒计时
-    countdown(){
-      console.log(this.sysTemTime)
-      var s1=new Date(this.sysTemTime);
-      var s2=new Date(this.activityDetail.applyEndTime);
-      var s3 = s2.getTime() - s1.getTime();
-      console.log(s3)
+   countTime (t) {
+      var secondsTime = new Date().getTime()
+      var applyTime = new Date(t).getTime()
+      var leftTime = applyTime - secondsTime
+      if (leftTime >= 0) {
+        var d = Math.floor(leftTime / 1000 / 60 / 60 / 24)
+        var h = Math.floor((leftTime / 1000 / 60 / 60) % 24)
+        var m = Math.floor((leftTime / 1000 / 60) % 60)
+        var s = Math.floor((leftTime / 1000) % 60)
+        d = d
+        h = h > 9 ? h : '0' + h
+        m = m > 9 ? m : '0' + m
+        s = s > 9 ? s : '0' + s
+        this.countDown=d+'天'+h+'小时'+m+'分'+s+'秒'
+        return false
+      } else {
+        this.countDown='0天0时0分0秒'
+        return true
+      }
     },
     init() {
       //数据初始化
@@ -381,6 +393,12 @@ export default {
             _this.activityDetail = res.data.activityDetail;
             _this.sysTemTime=res.data.sysTemTime;
             _this.accountIsLike = res.data.accountIsLike;
+             _this._interval = setInterval(() => {
+              let data = _this.countTime(_this.applyEndTime)
+              if (data) {
+                clearInterval(_this._interval)
+              }
+            }, 1000)
           }
         }
       });

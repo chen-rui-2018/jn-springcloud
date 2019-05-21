@@ -16,28 +16,23 @@ import java.io.Serializable;
 @ApiModel(value = "AcceptInviteParam",description = "接收邀请入参")
 public class AcceptInviteParam implements Serializable {
 
-    @ApiModelProperty(value = "账号", notes = "该字段仅为测试字段", required = true)
-    @NotNull(message = "账号不能为空")
+    @ApiModelProperty(value = "账号", hidden = true)
     private String account;
 
     @ApiModelProperty(value = "企业ID", required = true)
     @NotNull(message = "企业ID不能为空")
     private String comId;
 
-    @ApiModelProperty(value = "昵称", required = true)
-    @NotNull(message = "昵称不能为空")
+    @ApiModelProperty(value = "昵称")
     private String nickName;
 
-    @ApiModelProperty(value = "真实姓名", required = true)
-    @NotNull(message = "真实姓名不能为空")
+    @ApiModelProperty(value = "真实姓名")
     private String name;
 
-    @ApiModelProperty(value = "手机号", required = true)
-    @NotNull(message = "手机不能为空")
+    @ApiModelProperty(value = "手机号")
     private String phone;
 
-    @ApiModelProperty(value = "出生年月yyyy-mm-dd", required = true, example = "2019-01-01")
-    @NotNull(message = "出生年月不能为空")
+    @ApiModelProperty(value = "出生年月yyyy-mm-dd", example = "2019-01-01")
     private String birthday;
 
     public String getComId() {
@@ -86,5 +81,17 @@ public class AcceptInviteParam implements Serializable {
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    @Override
+    public String toString() {
+        return "AcceptInviteParam{" +
+                "account='" + account + '\'' +
+                ", comId='" + comId + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", birthday='" + birthday + '\'' +
+                '}';
     }
 }

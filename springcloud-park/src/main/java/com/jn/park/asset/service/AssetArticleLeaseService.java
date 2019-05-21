@@ -32,10 +32,10 @@ public interface AssetArticleLeaseService {
      * @param contactName
      * @param contactPhone
      * @param startTime
-     * @param endTime
+     * @param time
      * @return
      */
-    String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, Date startTime, Date endTime,User user);
+    String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, Date startTime, String time,User user);
 
     /**
      * 返回可租借的资产列表(可搜索)

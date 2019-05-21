@@ -403,4 +403,49 @@ public class MyTasksResult implements Serializable {
     public void setIdentityEmpty(boolean identityEmpty) {
         this.identityEmpty = identityEmpty;
     }
+
+    @Override
+    public String toString() {
+        return "MyTasksResult{" +
+                "pk='" + pk + '\'' +
+                ", name='" + name + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", id='" + id + '\'' +
+                ", subject='" + subject + '\'' +
+                ", createBy='" + createBy + '\'' +
+                ", updateBy='" + updateBy + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", bizKey='" + bizKey + '\'' +
+                ", formType='" + formType + '\'' +
+                ", formKey='" + formKey + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", duration=" + duration +
+                ", isFormmal='" + isFormmal + '\'' +
+                ", parentInstId='" + parentInstId + '\'' +
+                ", isForbidden=" + isForbidden +
+                ", resultType='" + resultType + '\'' +
+                ", dataMode='" + dataMode + '\'' +
+                ", forbidden='" + forbidden + '\'' +
+                ", procInstId='" + procInstId + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", execId='" + execId + '\'' +
+                ", nodeId='" + nodeId + '\'' +
+                ", procDefId='" + procDefId + '\'' +
+                ", procDefKey='" + procDefKey + '\'' +
+                ", procDefName='" + procDefName + '\'' +
+                ", status='" + status + '\'' +
+                ", priority=" + priority +
+                ", suspendState=" + suspendState +
+                ", bpmnInstId='" + bpmnInstId + '\'' +
+                ", bpmnDefId='" + bpmnDefId + '\'' +
+                ", typeId='" + typeId + '\'' +
+                ", lockState=" + lockState +
+                ", lockUser=" + lockUser +
+                ", allowShfit='" + allowShfit + '\'' +
+                ", skipResult=" + skipResult +
+                ", ownerName='" + ownerName + '\'' +
+                ", remindTimes=" + remindTimes +
+                ", identityEmpty=" + identityEmpty +
+                '}';
+    }
 }

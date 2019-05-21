@@ -335,7 +335,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             return myHandled(myTasksParam,loginAccount);
         }else{
             logger.warn("园区客服中心获取失败，流程类型：[{}]无法识别",param.getProcType());
-            throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(CustomerCenterExceptionEnum.PROCESS_TYPE_NOT_ALLOW);
         }
     }
 

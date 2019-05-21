@@ -48,4 +48,13 @@ public class MyTasksOrMyHandledParam extends Page implements Serializable {
     public void setNeedPage(String needPage) {
         this.needPage = needPage;
     }
+
+    @Override
+    public String toString() {
+        return "MyTasksOrMyHandledParam{" +
+                "procInstId='" + procInstId + '\'' +
+                ", procType='" + procType + '\'' +
+                ", needPage='" + needPage + '\'' +
+                '}';
+    }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 * @version： v1.0
 * @modified By:
 */
-public class RoomOrdersModle implements Serializable {
+public class RoomOrdersModel implements Serializable {
     private static final long serialVersionUID = -6107226237211214310L;
 
     @ApiModelProperty(value = "订单编号",example = "2019051111365096306")
@@ -86,11 +86,14 @@ public class RoomOrdersModle implements Serializable {
     @ApiModelProperty(value = "房间状态(0空闲,1租借申请中,2租借中,3退租申请中,4已到期)")
     private Byte roomStatus;
 
+    @ApiModelProperty(value = "支付状态(0未付款,1已付款,2订单已取消)")
+    private Byte payState;
+
     @ApiModelProperty(value = "创建者账号")
     private String creatorAccount;
 
     @ApiModelProperty(value = "同属分组房间")
-    private List<RoomOrdersModle> roomOrdersModlesList;
+    private List<RoomOrdersModel> roomOrdersModelsList;
 
     public String getId() {
         return id;
@@ -284,17 +287,25 @@ public class RoomOrdersModle implements Serializable {
         this.creatorAccount = creatorAccount;
     }
 
-    public List<RoomOrdersModle> getRoomOrdersModlesList() {
-        return roomOrdersModlesList;
+    public List<RoomOrdersModel> getRoomOrdersModelsList() {
+        return roomOrdersModelsList;
     }
 
-    public void setRoomOrdersModlesList(List<RoomOrdersModle> roomOrdersModlesList) {
-        this.roomOrdersModlesList = roomOrdersModlesList;
+    public void setRoomOrdersModelsList(List<RoomOrdersModel> roomOrdersModelsList) {
+        this.roomOrdersModelsList = roomOrdersModelsList;
+    }
+
+    public Byte getPayState() {
+        return payState;
+    }
+
+    public void setPayState(Byte payState) {
+        this.payState = payState;
     }
 
     @Override
     public String toString() {
-        return "RoomOrdersModle{" +
+        return "RoomOrdersModel{" +
                 "id='" + id + '\'' +
                 ", orderId='" + orderId + '\'' +
                 ", roomId='" + roomId + '\'' +
@@ -318,8 +329,9 @@ public class RoomOrdersModle implements Serializable {
                 ", contactName='" + contactName + '\'' +
                 ", contactPhone='" + contactPhone + '\'' +
                 ", roomStatus=" + roomStatus +
+                ", payState=" + payState +
                 ", creatorAccount='" + creatorAccount + '\'' +
-                ", roomOrdersModlesList=" + roomOrdersModlesList +
+                ", roomOrdersModelsList=" + roomOrdersModelsList +
                 '}';
     }
 }

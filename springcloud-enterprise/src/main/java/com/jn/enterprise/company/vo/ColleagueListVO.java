@@ -38,4 +38,12 @@ public class ColleagueListVO implements Serializable {
     public void setData(PaginationData<List<StaffListVO>> data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "ColleagueListVO{" +
+                "isShow='" + isShow + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

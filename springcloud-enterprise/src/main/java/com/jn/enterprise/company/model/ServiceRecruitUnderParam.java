@@ -37,4 +37,11 @@ public class ServiceRecruitUnderParam implements Serializable {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "ServiceRecruitUnderParam{" +
+                "id='" + id + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

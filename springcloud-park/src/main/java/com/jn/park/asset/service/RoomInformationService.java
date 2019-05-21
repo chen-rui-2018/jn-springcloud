@@ -72,7 +72,7 @@ public interface RoomInformationService {
      * @param id
      * @return
      */
-    RoomPayOrdersModel getPayOrders(String id);
+    RoomPayOrdersModel getPayOrders(String orderId);
 
     /**
      * 分页返回房间租借历史
@@ -109,7 +109,7 @@ public interface RoomInformationService {
      * @param account
      * @return
      */
-    RoomOrdersModle getNewRoomOrders(String itemId, String account);
+    RoomOrdersModel getNewRoomOrders(String itemId, String account);
 
     /**
      * 取消订单

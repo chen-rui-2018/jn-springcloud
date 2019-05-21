@@ -172,6 +172,8 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
         payOrderReq.setDevice("APP");
         payOrderReq.setServiceId("springcloud-park");
         payOrderReq.setServiceUrl("/api/order/articlePayCallBack");
+        //订单最晚付款时长(60分钟)
+        payOrderReq.setDuration(60);
         //金额的单位是分，需要转换下
         payOrderReq.setAmount(tbAssetArticleLeaseOrders.getPaySum().multiply(new BigDecimal("100")).longValue());
         payOrderReq.setSubject("物品租赁订单"+tbAssetArticleLeaseOrders.getId());

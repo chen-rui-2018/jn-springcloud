@@ -108,8 +108,8 @@ public class RoomManageController {
     })
     public Result<RoomPayOrdersModel> getPayOrders (String orderId){
         Assert.notNull(orderId,"订单编号不能为空");
-        RoomPayOrdersModel payOrders = roomInformationService.getPayOrders(orderId);
-        return new Result<>(payOrders);
+        RoomPayOrdersModel roomPayOrdersModel = roomInformationService.getPayOrders(orderId);
+        return new Result<>(roomPayOrdersModel);
     }
 
 
@@ -195,11 +195,11 @@ public class RoomManageController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemId",value = "(子)订单编号",example = "2019051111365096306")
     })
-    public Result<RoomOrdersModle> getNewRoomOrders (String itemId){
+    public Result<RoomOrdersModel> getNewRoomOrders (String itemId){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(itemId,"订单编号不能为空");
-        RoomOrdersModle roomOrdersModle =  roomInformationService.getNewRoomOrders(itemId,user.getAccount());
-        return new Result<>(roomOrdersModle);
+        RoomOrdersModel roomOrdersModel =  roomInformationService.getNewRoomOrders(itemId,user.getAccount());
+        return new Result<>(roomOrdersModel);
     }
 
 }

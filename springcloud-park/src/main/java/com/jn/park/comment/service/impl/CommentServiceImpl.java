@@ -92,7 +92,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @ServiceLog(doAction ="新增评论/回复" )
     @Override
-    public void commentActivity(CommentAddParam commentAddParam) {
+    public int commentActivity(CommentAddParam commentAddParam) {
         //从redis中获取敏感词词库
         Cache<Object> cache = redisCacheFactory.getCache(SENSITIVE_WORD_CACHE, expire);
         List<String> wordList = ( List<String>) cache.get(SENSITIVE_WORD);
@@ -126,7 +126,7 @@ public class CommentServiceImpl implements CommentService {
             throw new JnSpringCloudException(CommentExceptionEnum.SENSITIVE_WORDS_IN_COMMENT);
         }
         //新增点评
-        addActivityComment(commentAddParam, commentAddParam.getAccount());
+        return addActivityComment(commentAddParam, commentAddParam.getAccount());
     }
 
     /**
@@ -231,7 +231,7 @@ public class CommentServiceImpl implements CommentService {
      * @param account    用户账号
      */
     @ServiceLog(doAction = "新增点评")
-    private void addActivityComment(CommentAddParam commentAddParam, String account) {
+    private int addActivityComment(CommentAddParam commentAddParam, String account) {
         TbComment tbComment=new TbComment();
         //id
         tbComment.setId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -262,7 +262,7 @@ public class CommentServiceImpl implements CommentService {
         //点评内容
         tbComment.setComContent(commentAddParam.getComContent());
         tbComment.setRecordStatus(RECORD_STATUS);
-        tbCommentMapper.insertSelective(tbComment);
+        return tbCommentMapper.insertSelective(tbComment);
     }
 
 

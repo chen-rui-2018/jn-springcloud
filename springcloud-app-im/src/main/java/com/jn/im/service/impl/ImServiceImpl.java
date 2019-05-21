@@ -4,14 +4,12 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.im.dao.ImMapper;
-import com.jn.im.dao.TbImMessageMapper;
 import com.jn.im.entity.TbImMessage;
 import com.jn.im.model.Message;
 import com.jn.im.service.ImService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,8 +26,8 @@ public class ImServiceImpl implements ImService {
     @Autowired
     private ImMapper imMapper;
 
-    @Autowired
-    private TbImMessageMapper tbImMessageMapper;
+//    @Autowired
+//    private TbImMessageMapper tbImMessageMapper;
 
     @Override
     public PaginationData<List<TbImMessage>> selectMsg(Message message) {
@@ -39,7 +37,7 @@ public class ImServiceImpl implements ImService {
         return data;
     }
 
-    @Override
+    /*@Override
     public void isSended(TbImMessage tbImMessage) {
         tbImMessage.setSendId(null);
         tbImMessage.setMsgType(null);
@@ -49,5 +47,13 @@ public class ImServiceImpl implements ImService {
         tbImMessage.setSendTime(new Date());
         tbImMessage.setIsSended("Y");
         tbImMessageMapper.updateByPrimaryKeySelective(tbImMessage);
+    }*/
+
+    @Override
+    public PaginationData<List<TbImMessage>> selectMsgList(Message message) {
+        Page<Object> objects = PageHelper.startPage(message.getPage(), message.getRows());
+        List<TbImMessage> selectMsgList = imMapper.selectMsgList(message);
+        PaginationData data = new PaginationData(selectMsgList, objects.getTotal());
+        return data;
     }
 }

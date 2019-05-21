@@ -18,7 +18,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "PayAccountBook" ,description = "账本实体类")
-public class PayAccountBook extends Page implements Serializable {
+public class PayAccountBook implements Serializable {
     private static final long serialVersionUID = -8404234392448710481L;
 
     @ApiModelProperty(value="账本ID")

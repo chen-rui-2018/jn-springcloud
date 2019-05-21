@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.plan.dao.TbPlanProjectTaskMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.plan.entity.TbPlanProjectTask">
+    <id column="project_task_id" jdbcType="VARCHAR" property="id" />
+    <result column="project_task_project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_task_project_number" jdbcType="VARCHAR" property="projectNumber" />
+    <result column="project_task_project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="project_task_task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="project_task_task_number" jdbcType="VARCHAR" property="taskNumber" />
+    <result column="project_task_plan_start_time" jdbcType="TIMESTAMP" property="planStartTime" />
+    <result column="project_task_plan_stop_time" jdbcType="TIMESTAMP" property="planStopTime" />
+    <result column="project_task_limit_time" jdbcType="INTEGER" property="limitTime" />
+    <result column="project_task_nowadays_progress" jdbcType="DECIMAL" property="nowadaysProgress" />
+    <result column="project_task_task_state" jdbcType="INTEGER" property="taskState" />
+    <result column="project_task_expect_differ_time" jdbcType="VARCHAR" property="expectDifferTime" />
+    <result column="project_task_appraise" jdbcType="INTEGER" property="appraise" />
+    <result column="project_task_actual_begin_time" jdbcType="TIMESTAMP" property="actualBeginTime" />
+    <result column="project_task_actual_end_time" jdbcType="TIMESTAMP" property="actualEndTime" />
+    <result column="project_task_record_status" jdbcType="INTEGER" property="recordStatus" />
+    <result column="project_task_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="project_task_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="project_task_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="project_task_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    project_task.id as project_task_id, project_task.project_id as project_task_project_id, 
+    project_task.project_number as project_task_project_number, project_task.project_name as project_task_project_name, 
+    project_task.task_name as project_task_task_name, project_task.task_number as project_task_task_number, 
+    project_task.plan_start_time as project_task_plan_start_time, project_task.plan_stop_time as project_task_plan_stop_time, 
+    project_task.limit_time as project_task_limit_time, project_task.nowadays_progress as project_task_nowadays_progress, 
+    project_task.task_state as project_task_task_state, project_task.expect_differ_time as project_task_expect_differ_time, 
+    project_task.appraise as project_task_appraise, project_task.actual_begin_time as project_task_actual_begin_time, 
+    project_task.actual_end_time as project_task_actual_end_time, project_task.record_status as project_task_record_status, 
+    project_task.creator_account as project_task_creator_account, project_task.created_time as project_task_created_time, 
+    project_task.modifier_account as project_task_modifier_account, project_task.modified_time as project_task_modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.plan.entity.TbPlanProjectTaskCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_plan_project_task project_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_plan_project_task project_task
+    where project_task.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_plan_project_task
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.plan.entity.TbPlanProjectTaskCriteria">
+    delete from tb_plan_project_task project_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.plan.entity.TbPlanProjectTask">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_plan_project_task (project_id, project_number, project_name, 
+      task_name, task_number, plan_start_time, 
+      plan_stop_time, limit_time, nowadays_progress, 
+      task_state, expect_differ_time, appraise, 
+      actual_begin_time, actual_end_time, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{projectId,jdbcType=VARCHAR}, #{projectNumber,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+      #{taskName,jdbcType=VARCHAR}, #{taskNumber,jdbcType=VARCHAR}, #{planStartTime,jdbcType=TIMESTAMP}, 
+      #{planStopTime,jdbcType=TIMESTAMP}, #{limitTime,jdbcType=INTEGER}, #{nowadaysProgress,jdbcType=DECIMAL}, 
+      #{taskState,jdbcType=INTEGER}, #{expectDifferTime,jdbcType=VARCHAR}, #{appraise,jdbcType=INTEGER}, 
+      #{actualBeginTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=INTEGER}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.plan.entity.TbPlanProjectTask">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_plan_project_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectNumber != null">
+        project_number,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
+      <if test="taskNumber != null">
+        task_number,
+      </if>
+      <if test="planStartTime != null">
+        plan_start_time,
+      </if>
+      <if test="planStopTime != null">
+        plan_stop_time,
+      </if>
+      <if test="limitTime != null">
+        limit_time,
+      </if>
+      <if test="nowadaysProgress != null">
+        nowadays_progress,
+      </if>
+      <if test="taskState != null">
+        task_state,
+      </if>
+      <if test="expectDifferTime != null">
+        expect_differ_time,
+      </if>
+      <if test="appraise != null">
+        appraise,
+      </if>
+      <if test="actualBeginTime != null">
+        actual_begin_time,
+      </if>
+      <if test="actualEndTime != null">
+        actual_end_time,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNumber != null">
+        #{projectNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskNumber != null">
+        #{taskNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="planStartTime != null">
+        #{planStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planStopTime != null">
+        #{planStopTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="limitTime != null">
+        #{limitTime,jdbcType=INTEGER},
+      </if>
+      <if test="nowadaysProgress != null">
+        #{nowadaysProgress,jdbcType=DECIMAL},
+      </if>
+      <if test="taskState != null">
+        #{taskState,jdbcType=INTEGER},
+      </if>
+      <if test="expectDifferTime != null">
+        #{expectDifferTime,jdbcType=VARCHAR},
+      </if>
+      <if test="appraise != null">
+        #{appraise,jdbcType=INTEGER},
+      </if>
+      <if test="actualBeginTime != null">
+        #{actualBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actualEndTime != null">
+        #{actualEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=INTEGER},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.plan.entity.TbPlanProjectTaskCriteria" resultType="java.lang.Long">
+    select count(*) from tb_plan_project_task project_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_plan_project_task project_task
+    <set>
+      <if test="record.id != null">
+        project_task.id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectId != null">
+        project_task.project_id = #{record.projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectNumber != null">
+        project_task.project_number = #{record.projectNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectName != null">
+        project_task.project_name = #{record.projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskName != null">
+        project_task.task_name = #{record.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskNumber != null">
+        project_task.task_number = #{record.taskNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planStartTime != null">
+        project_task.plan_start_time = #{record.planStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.planStopTime != null">
+        project_task.plan_stop_time = #{record.planStopTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.limitTime != null">
+        project_task.limit_time = #{record.limitTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.nowadaysProgress != null">
+        project_task.nowadays_progress = #{record.nowadaysProgress,jdbcType=DECIMAL},
+      </if>
+      <if test="record.taskState != null">
+        project_task.task_state = #{record.taskState,jdbcType=INTEGER},
+      </if>
+      <if test="record.expectDifferTime != null">
+        project_task.expect_differ_time = #{record.expectDifferTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appraise != null">
+        project_task.appraise = #{record.appraise,jdbcType=INTEGER},
+      </if>
+      <if test="record.actualBeginTime != null">
+        project_task.actual_begin_time = #{record.actualBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.actualEndTime != null">
+        project_task.actual_end_time = #{record.actualEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.recordStatus != null">
+        project_task.record_status = #{record.recordStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.creatorAccount != null">
+        project_task.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        project_task.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        project_task.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        project_task.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_plan_project_task project_task
+    set project_task.id = #{record.id,jdbcType=VARCHAR},
+      project_task.project_id = #{record.projectId,jdbcType=VARCHAR},
+      project_task.project_number = #{record.projectNumber,jdbcType=VARCHAR},
+      project_task.project_name = #{record.projectName,jdbcType=VARCHAR},
+      project_task.task_name = #{record.taskName,jdbcType=VARCHAR},
+      project_task.task_number = #{record.taskNumber,jdbcType=VARCHAR},
+      project_task.plan_start_time = #{record.planStartTime,jdbcType=TIMESTAMP},
+      project_task.plan_stop_time = #{record.planStopTime,jdbcType=TIMESTAMP},
+      project_task.limit_time = #{record.limitTime,jdbcType=INTEGER},
+      project_task.nowadays_progress = #{record.nowadaysProgress,jdbcType=DECIMAL},
+      project_task.task_state = #{record.taskState,jdbcType=INTEGER},
+      project_task.expect_differ_time = #{record.expectDifferTime,jdbcType=VARCHAR},
+      project_task.appraise = #{record.appraise,jdbcType=INTEGER},
+      project_task.actual_begin_time = #{record.actualBeginTime,jdbcType=TIMESTAMP},
+      project_task.actual_end_time = #{record.actualEndTime,jdbcType=TIMESTAMP},
+      project_task.record_status = #{record.recordStatus,jdbcType=INTEGER},
+      project_task.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      project_task.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      project_task.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      project_task.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.plan.entity.TbPlanProjectTask">
+    update tb_plan_project_task
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNumber != null">
+        project_number = #{projectNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null">
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskNumber != null">
+        task_number = #{taskNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="planStartTime != null">
+        plan_start_time = #{planStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planStopTime != null">
+        plan_stop_time = #{planStopTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="limitTime != null">
+        limit_time = #{limitTime,jdbcType=INTEGER},
+      </if>
+      <if test="nowadaysProgress != null">
+        nowadays_progress = #{nowadaysProgress,jdbcType=DECIMAL},
+      </if>
+      <if test="taskState != null">
+        task_state = #{taskState,jdbcType=INTEGER},
+      </if>
+      <if test="expectDifferTime != null">
+        expect_differ_time = #{expectDifferTime,jdbcType=VARCHAR},
+      </if>
+      <if test="appraise != null">
+        appraise = #{appraise,jdbcType=INTEGER},
+      </if>
+      <if test="actualBeginTime != null">
+        actual_begin_time = #{actualBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actualEndTime != null">
+        actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=INTEGER},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.plan.entity.TbPlanProjectTask">
+    update tb_plan_project_task
+    set project_id = #{projectId,jdbcType=VARCHAR},
+      project_number = #{projectNumber,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      task_number = #{taskNumber,jdbcType=VARCHAR},
+      plan_start_time = #{planStartTime,jdbcType=TIMESTAMP},
+      plan_stop_time = #{planStopTime,jdbcType=TIMESTAMP},
+      limit_time = #{limitTime,jdbcType=INTEGER},
+      nowadays_progress = #{nowadaysProgress,jdbcType=DECIMAL},
+      task_state = #{taskState,jdbcType=INTEGER},
+      expect_differ_time = #{expectDifferTime,jdbcType=VARCHAR},
+      appraise = #{appraise,jdbcType=INTEGER},
+      actual_begin_time = #{actualBeginTime,jdbcType=TIMESTAMP},
+      actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=INTEGER},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

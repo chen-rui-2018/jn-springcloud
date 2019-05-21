@@ -1,6 +1,7 @@
 package com.jn.enterprise.company.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jn.common.util.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,12 +20,18 @@ public class RecruitVO implements Serializable {
     private Integer num;
     @ApiModelProperty(value = "状态（1：已上架 0：已下架）")
     private String status;
+    @ApiModelProperty(value = "关注状态（1：已关注 0：未关注）")
+    private String careStatus;
     @ApiModelProperty(value = "有效性")
     private String statusName;
     @ApiModelProperty(value = "浏览数")
     private Integer viewCount;
-    @ApiModelProperty(value = "公司名称")
+    @ApiModelProperty(value = "企业ID")
+    private String comId;
+    @ApiModelProperty(value = "企业名称")
     private String comName;
+    @ApiModelProperty(value = "企业logo")
+    private String comAvatar;
     @ApiModelProperty(value = "招聘类型名称")
     private String typeName;
     @ApiModelProperty(value = "招聘类型")
@@ -35,11 +42,49 @@ public class RecruitVO implements Serializable {
     private String salary;
     @ApiModelProperty(value = "审批状态（0未审批 1审批中 2审批通过 3未通过审批）")
     private String approvalStatus;
+    @ApiModelProperty(value = "招聘详情")
+    private String details;
     @ApiModelProperty(value = "发布时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createdTime;
 
     private static final long serialVersionUID = 1L;
+
+    {
+        this.careStatus = "0";
+    }
+
+    public String getCareStatus() {
+        return careStatus;
+    }
+
+    public void setCareStatus(String careStatus) {
+        this.careStatus = careStatus;
+    }
+
+    public String getComId() {
+        return comId;
+    }
+
+    public void setComId(String comId) {
+        this.comId = comId;
+    }
+
+    public String getComAvatar() {
+        return comAvatar;
+    }
+
+    public void setComAvatar(String comAvatar) {
+        this.comAvatar = comAvatar;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
 
     public String getType() {
         return type;

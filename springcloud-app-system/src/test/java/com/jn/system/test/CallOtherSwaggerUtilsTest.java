@@ -10,6 +10,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author： shenph
  * @date： Created on 2019/5/6 20:15
@@ -33,7 +36,36 @@ public class CallOtherSwaggerUtilsTest {
     @Test
     public void test1() {
         //获取用戶菜單角色
-        JSONObject jsonObject2 = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/appResourcesService/getMenuData", HttpMethod.GET, new LinkedMultiValueMap<String, String>());
+        //JSONObject jsonObject2 = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/appResourcesService/getMenuData", HttpMethod.GET, new LinkedMultiValueMap<String, String>());
+
+        //获取审批历史记录
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        map.add("bpmInstId", "578164728874926080");
+        JSONObject jsonObject2 = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/bpmService/opinions", HttpMethod.GET, map);
         System.out.println(jsonObject2);
+    }
+
+    @Test
+    public void test2() {
+        //获取我的待办
+        JSONObject jsonObject = new JSONObject();
+        List list1 = new ArrayList<>();
+        JSONObject jsonObject1 = new JSONObject();
+        jsonObject1.put("key","");
+        jsonObject1.put("value","");
+        list1.add(jsonObject1);
+        jsonObject.put("parameters", list1);
+        JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("limit","0");
+        jsonObject2.put("pageNo","0");
+        jsonObject.put("requestPage", jsonObject2);
+        List list3 = new ArrayList<>();
+        JSONObject jsonObject3 = new JSONObject();
+        jsonObject3.put("field","");
+        jsonObject3.put("order","");
+        list3.add(jsonObject3);
+        jsonObject.put("sorts", list3);
+        JSONObject json = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/bpmService/myTasks", HttpMethod.POST, jsonObject.toString());
+        System.out.println(json);
     }
 }

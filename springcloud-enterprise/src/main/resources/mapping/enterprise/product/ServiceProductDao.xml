@@ -4,9 +4,10 @@
     <!--后台产品管理产品列表查询-->
     <select id="findServiceList" parameterType="hashmap" resultType = "com.jn.enterprise.servicemarket.product.model.ServiceProductManage">
         select
-           t1.product_id_ as "productId",      <!--产品Id-->
+           t1.product_id_ as "productId",     <!--产品Id-->
            t1.product_name as "productName",  <!--产品名称-->
            t1.product_type as "productType",  <!--产品类型-->
+            t1.signory_id as "signoryId",     <!--领域id-->
            t1.signory_name as "signoryName",  <!--领域名称-->
            date_format(t1.release_time,"%Y-%m-%d %H:%i:%s") as "releaseTime", <!--发布时间-->
            t1.status as "status",             <!--状态-->
@@ -153,7 +154,9 @@
     <!--服务超市首页,热门产品-->
     <select id = "findHotProducts" resultType = "com.jn.enterprise.servicemarket.product.model.HotProducts">
          select
+          t1.product_id_ as "productId",    <!--产品id-->
           t1.product_name as "productName", <!--产品名称-->
+          t1.signory_id as "signoryId",     <!--领域id-->
           t1.picture_url as "pictureUrl",   <!--产品图片-->
           (select count(tp.org_id_) from tb_service_product tp where tp.org_id_ is not null  and  tp.template_id = t1.template_id group by tp.template_id) as "orgCount", <!--机构数-->
           count(t2.advisor_account) as "advisorCount", <!--顾问数-->
@@ -289,8 +292,10 @@
     <select id="findOrgProductList" resultType="com.jn.enterprise.servicemarket.product.model.ServiceProductManage">
 
 select
-       t1.product_id_ as "productId",       <!--产品Id-->
+       t1.product_id_ as "productId",      <!--产品Id-->
+       t1.picture_url as "pictureUrl",     <!--产品图片路径-->
        t1.product_name as "productName",   <!--产品名称-->
+       t1.signory_id as "signoryId",       <!--领域名称-->
        t1.signory_name as "signoryName",   <!--领域名称-->
        t1.product_type as "productType",   <!--产品类型-->
        t2.org_name as "orgName",           <!--机构名称-->

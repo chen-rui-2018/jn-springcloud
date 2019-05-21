@@ -12,6 +12,8 @@ public class TbPayBillDetails implements Serializable {
 
     private String costValue;
 
+    private Integer sort;
+
     private String creatorAccount;
 
     private Date createdTime;
@@ -54,6 +56,14 @@ public class TbPayBillDetails implements Serializable {
 
     public void setCostValue(String costValue) {
         this.costValue = costValue == null ? null : costValue.trim();
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public String getCreatorAccount() {
@@ -112,6 +122,7 @@ public class TbPayBillDetails implements Serializable {
             && (this.getBillId() == null ? other.getBillId() == null : this.getBillId().equals(other.getBillId()))
             && (this.getCostName() == null ? other.getCostName() == null : this.getCostName().equals(other.getCostName()))
             && (this.getCostValue() == null ? other.getCostValue() == null : this.getCostValue().equals(other.getCostValue()))
+            && (this.getSort() == null ? other.getSort() == null : this.getSort().equals(other.getSort()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
@@ -127,6 +138,7 @@ public class TbPayBillDetails implements Serializable {
         result = prime * result + ((getBillId() == null) ? 0 : getBillId().hashCode());
         result = prime * result + ((getCostName() == null) ? 0 : getCostName().hashCode());
         result = prime * result + ((getCostValue() == null) ? 0 : getCostValue().hashCode());
+        result = prime * result + ((getSort() == null) ? 0 : getSort().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
@@ -145,6 +157,7 @@ public class TbPayBillDetails implements Serializable {
         sb.append(", billId=").append(billId);
         sb.append(", costName=").append(costName);
         sb.append(", costValue=").append(costValue);
+        sb.append(", sort=").append(sort);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);

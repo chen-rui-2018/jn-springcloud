@@ -815,38 +815,6 @@ export default {
       border-radius: 4px;
       color: #00a041;
     }
-    //     >span:nth-child(1){
-    //       display:inline-block;
-    //       color:rgba(0,160,65,1);
-    //       width:90px;
-    // height:29px;
-    // background:rgba(236,252,242,1);
-    // border:1px solid rgba(65,215,135,1);
-    // border-radius:4px;
-    // margin-right:85px;
-    //     }
-    //     >span:nth-child(2){
-    //        display:inline-block;
-    //       width:90px;
-    //       color:rgba(255,255,255,1);
-    // height:29px;
-    // background:rgba(0,160,65,1);
-    // border-radius:4px;
-    //     }
-
-    // display: block;
-    // margin: 0 auto;
-    // margin-top: 58px;
-    // border-radius: 4px;
-    // text-align: center;
-    // cursor: pointer;
-    // height: 29px;
-    // line-height: 29px;
-    // width: 90px;
-    // color: #41d787;
-    // background: rgba(236, 252, 242, 1);
-    // border: 1px solid rgba(65, 215, 135, 1);
-    // margin-bottom: 17px;
   }
   .el-table__header {
     border-right: 1px solid rgba(65, 215, 135, 1);

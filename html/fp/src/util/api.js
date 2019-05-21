@@ -16,6 +16,13 @@ export default {
         commentActivity:"springcloud-park/comment/review/commentActivity",//活动评论/回复
         activityApplyInfo:"springcloud-park/activity/activityApply/activityApplyInfo",//报名人资料
         findActivityRegistration:"springcloud-park/guest/activity/findActivityRegistration",//用户中心-已报名活动列表
+        basic:"springcloud-park/guest/portal/park/basic",//获取园区概况
+        getBusinessAdDynamic:"springcloud-park/guest/portal/businessAd/getBusinessAdDynamic",//获取招商动态信息
+        getBusinessAdPolicy:"springcloud-park/guest/portal/businessAd/getBusinessAdPolicy",//招商政策
+        parkList:"springcloud-park/guest/portal/park/list",//一区多园
+
+
+
         getUserCode:"springcloud-user/guest/userJoin/getUserCode",//获取短信验证码[当前用户]
         getCode:"springcloud-user/guest/userJoin/getCode",//获取短信验证码
         addUser:"springcloud-user/guest/userJoin/addUser",//用户注册
@@ -49,7 +56,6 @@ export default {
         addtalentviews:"springcloud-enterprise/guest/pd/talentNotice/trafficVolume",//增加人才公告详情访问量
         appointment:"springcloud-enterprise/pd/online/onlineBooking",//预约申报
         getTechnologyInfoNum:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getTechnologyInfoNum",//科技金融首页投资人数，金融产品数，金融机构数
-        getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",//投资人列表查询
         getFinancialProList:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductList",//金融产品列表查询
         getAssureType:"springcloud-enterprise//technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
 
@@ -81,23 +87,28 @@ export default {
         enterpriseGetForm:"springcloud-enterprise/data/company/getForm", // 获取本月待填报的任务
         enterpriseGetFormed:"springcloud-enterprise/data/company/getFormed", // 获取企业填报历史表单列表
         enterpriseGetFormStruct:"springcloud-enterprise/data/company/getFormStruct", // 获取待填报的表单结构
+        enterpriseGetCompanyFormedStruct:"springcloud-enterprise/data/company/getCompanyFormedStruct", // 获取企业已经填报的表单的结构信息和值
         enterpriseSaveCompanyFormData:"springcloud-enterprise/data/company/saveCompanyFormData", // 保存企业数据上报信息
 
         enterpriseSaveCompanyFormDataIsDraft:"springcloud-enterprise/data/company/saveCompanyFormDataIsDraft", // 保存企业数据上报保存为草稿
-        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
 
         enterpriseGetScientTabHeader:"springcloud-enterprise/data/garden/getScientTabHeader", // 科技园模板表头查询接口
         enterpriseGetImportData:"springcloud-enterprise/data/garden/getImportData", // 科技园模板查询数据接口
         enterpriseImportData:"springcloud-enterprise/data/garden/importData", // 科技园导入接口
         enterpriseGetCheckOrLookInfo:"springcloud-enterprise/data/garden/getCheckOrLookInfo", // 审核列表
+        getScienceExcel:"springcloud-enterprise/data/garden/getScienceExcel", // 科技园模板
+        getCompanyExcel:"springcloud-enterprise/data/garden/getCompanyExcel", // 纵向树形指标导出模式
+        getScienceHeaderExcel:"springcloud-enterprise/data/garden/getScienceHeaderExcel", // 科技园模板表头
 
-
-
-
-
+        //im即时聊天
+        selectMsg:"im/selectMsg", // 获取聊天记录
+        isSended:"im/isSended", // 消息设置为已读
+        selectMsgList:"im/selectMsgList", // 获取聊天列表
 
      //我的企业
         getMyBusiness:"springcloud-enterprise/guest/company/getCompanyDetailByNowAccount",//获取当前用户企业信息
+        acceptInvite:"springcloud-enterprise/enterprise/InvitationController/acceptInvite",//接受企业邀请
+        refuseInvite:"springcloud-enterprise/enterprise/InvitationController/refuseInvite",//拒绝企业邀请
         getUserAccount:"springcloud-app-system/system/sysUser/getUserInfo",//获取用户账号
         postJob:"springcloud-enterprise/enterprise/RecruitController/publishRecruitInfo",//发布招聘
         getInviteStaffList:"springcloud-enterprise/enterprise/InvitationController/getInviteStaffList",//获取邀请员工的资料
@@ -143,7 +154,6 @@ export default {
         acceptOrgInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/acceptOrgInvitation",//接受机构邀请
         refuseInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/refuseInvitation",//拒绝机构邀请
         // 角色认证
-        getInvestorMainArea:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainArea",//获取主投领域
         getInvestorMainRound:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
         getAffiliationUnit:"springcloud-enterprise/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
@@ -158,7 +168,8 @@ export default {
         changeToStaff:"springcloud-enterprise/guest/userUpgrade/changeToStaff", // 升级员工
         changeToCompany:"springcloud-enterprise/guest/userUpgrade/changeToCompany", // 升级员工
 
-        enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd", // 页面广告获取
+
+
         addOrEditMemorandum:"springcloud-enterprise/pd/declaration/addOrEditMemorandum",//申报平台备注
         getProductSerialNumber:"springcloud-enterprise/servicemarket/product/manage/getProductSerialNumber",//产品编号获取
         updateCommonProduct:"springcloud-enterprise/servicemarket/product/web/updateCommonProduct",
@@ -178,6 +189,20 @@ export default {
         getRatingCommentDetail:"springcloud-enterprise/guest/serviceMarket/comment/getRatingCommentDetail",//获取评价页详情
         getGiveMeCommentList:"springcloud-enterprise/guest/serviceMarket/comment/getGiveMeCommentList",//获取我收到的评价
         saveRatingComment:"springcloud-enterprise/guest/serviceMarket/comment/saveRatingComment",//提交评价信息
+
+        getPolicyCenterList:"springcloud-park/guest/policy/policyCenterController/getPolicyCenterList",//政策中心首页列表
+        getPolicyClassList:"springcloud-park/guest/policy/policyCenterController/getPolicyClassList",//政策分类列表
+        getPolicyLevelList:"springcloud-park/guest/policy/policyCenterController/getPolicyLevelList",//政策级别列表
+        getPolicyDetails:"springcloud-park/guest/policy/policyCenterController/getPolicyDetails",//政策指南详情
+        getPolicyDiagramDetails:"springcloud-park/guest/policy/policyCenterController/getPolicyDiagramDetails",//图解政策详情
+        selectBusinessAreaNum:"springcloud-enterprise/guest/serviceMarket/org/selectBusinessAreaStatisticalNum",//根据业务领域查询服务超市统计数据
+        getCompanyList:"springcloud-enterprise/guest/company/getCompanyList",//查询企业列表
+        getAllList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
+        getBusinessAdContent:"springcloud-park/guest/portal/businessAd/getBusinessAdContent",//获取招商信息
+
+
+        getRecruitList:"springcloud-enterprise/guest/RecruitController/getWebRecruitList",//招聘列表（门户首页）
+
 
     },
     setToken: function (obj) {   //设置token在请求头上面

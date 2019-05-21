@@ -22,8 +22,7 @@ import java.util.List;
 public interface UserExtensionClient {
     /**
      * 获取登录用户扩展信息
-     *
-     * @param account 用户账号
+     * @param account 用户账号/手机号/邮箱
      * @return
      */
     @RequestMapping(value = "/api/user/getUserExtension", method = RequestMethod.POST)

@@ -2,7 +2,6 @@ package com.jn.hardware.electricmeter.service;
 
 import com.jn.common.model.Result;
 import com.jn.hardware.model.electricmeter.*;
-import io.swagger.annotations.ApiParam;
 
 import java.util.List;
 
@@ -37,12 +36,17 @@ public interface ElectricMeterService {
      * 仪表开关操作 操作路径
      * todo 后面需写在配置文件中
      */
-    String GET_ELECTRIC_METER_SWITCH_URL = "http://api.leiyoukeji.com/api/ indicateDevice?access_token=%s&code=%s&flag=%s";
+    String GET_ELECTRIC_METER_SWITCH_URL = "http://api.leiyoukeji.com/api/indicateDevice?access_token=%s&code=%s&flag=%s";
     /**
-     * 仪表开关操作 操作路径
+     * 数据采集,有code查询
      * todo 后面需写在配置文件中
      */
-    String GET_ELECTRIC_DATA_COLLECTION_URL = "http://api.leiyoukeji.com/api/queryDeviceDate?code=%s&deviceType=%s&startTime=%s&access_token=%s";
+    String GET_ELECTRIC_DATA_COLLECTION_URL = "http://api.leiyoukeji.com/api/queryDeviceDate?code=%s&deviceType=%s&startTime=%s&access_token=%s&pageNum=%s&pageSize=%s";
+/**
+     * 数据采集,无code查询
+     * todo 后面需写在配置文件中
+     */
+    String GET_ELECTRIC_DATA_COLLECTION_NOCODE_URL = "http://api.leiyoukeji.com/api/queryDeviceDate?deviceType=%s&startTime=%s&access_token=%s&pageNum=%s&pageSize=%s";
 
     /**
      * 获取电表平台access_token接口

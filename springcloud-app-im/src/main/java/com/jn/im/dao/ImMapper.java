@@ -38,7 +38,13 @@ public interface ImMapper {
      * @param sendId
      * @return
      */
-    List<TbImMessage> selectOffLineMsg(String userId,String sendId);
+    List<TbImMessage> selectOffLineMsg(String userId, String sendId);
 
-
+    /**
+     * 查询聊天列表
+     *
+     * @param message
+     * @return
+     */
+    List<TbImMessage> selectMsgList(Message message);
 }

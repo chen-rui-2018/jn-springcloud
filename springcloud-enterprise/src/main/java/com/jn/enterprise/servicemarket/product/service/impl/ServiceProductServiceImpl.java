@@ -5,27 +5,36 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.company.model.IBPSResult;
+import com.jn.enterprise.common.config.IBPSDefIdConfig;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
-import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
 import com.jn.enterprise.servicemarket.product.dao.*;
-import com.jn.enterprise.servicemarket.product.entity.*;
+import com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor;
+import com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisorCriteria;
+import com.jn.enterprise.servicemarket.product.entity.TbServiceProduct;
+import com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria;
 import com.jn.enterprise.servicemarket.product.enums.ProductConstantEnum;
 import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.enterprise.servicemarket.product.vo.WebServiceProductDetails;
+import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.xxpay.common.util.DateUtil;
 
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
@@ -54,8 +63,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     private ServiceProductDao productDao;
     @Autowired
     private ServiceAdvisorDao advisorDao;
-     @Autowired
+    @Autowired
     private ServiceOrgDao serviceOrgDao;
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+    @Autowired
+    private IBPSDefIdConfig ibpsDefIdConfig;
 
 
     @ServiceLog(doAction = "添加服务产品")
@@ -63,60 +76,74 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public String addServiceProduct(ServiceContent content, String account,String templateId) {
 
-
-        //服务产品状态 -1(无效/下架),0(待审核),1(上架/有效/审核通过).2(审核不通过)
-        String approvalStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
-        String status = ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode();
-        // 如果为机构上架(新增)产品需要进行审批,
-        if(StringUtils.isNotBlank(content.getOrgId())){
-            status = approvalStatus;
-        }
-
-        //数据记录状态 1 有效 ---- 0 无效/删除
-        Byte recordStatus =  new Byte(ProductConstantEnum.RECORD_STATUS_EFFECTIVE.getCode());
-
-        if(ProductConstantEnum.PRODUCT_FEATURE_TYPE.equals(content.getProductType())){
-             if(StringUtils.isBlank(content.getOrgId())){
-                logger.warn("[服务产品新增]，特色服务产品机构id{}不能为空：orgId: {},特色服务产品的机构id不能为空!");
-                throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY);
-            }
+        if(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode().equals(content.getProductType())){
             TbServiceProductCriteria criteria = new TbServiceProductCriteria();
-             criteria.createCriteria().andProductNameEqualTo(content.getProductName());
-             List<TbServiceProduct> products= tbServiceProductMapper.selectByExample(criteria);
-             if(products!=null && products.size()>0){
-                 logger.warn("[服务产品新增]，特色服务产品名称{}不能重复：productName: {},特色服务产品名称{}不能重复!");
-                 throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_DUPLICATE);
-             }
+            criteria.createCriteria().andProductNameEqualTo(content.getProductName()).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                    .andStatusNotEqualTo(ProductConstantEnum.PRODUCT_STATUS_APPROVAL_NOT_PASS.getCode());
+            List<TbServiceProduct> products= tbServiceProductMapper.selectByExample(criteria);
+            if(products!=null && products.size()>0){
+                logger.warn("[服务超市产品]，特色服务产品名称{}不能重复：productName: {},特色服务产品名称{}不能重复!");
+                throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_DUPLICATE);
+            }
         }
         if (content.getReferPrice() != null) {
-              checkReferPrice(content.getReferPrice());
+            checkReferPrice(content.getReferPrice());
         }
-        TbServiceProduct tbServiceProduct = new TbServiceProduct();
-        tbServiceProduct.setTemplateId(templateId);
-        BeanUtils.copyProperties(content, tbServiceProduct);
-        tbServiceProduct.setCreatedTime(new Date());
-        tbServiceProduct.setReleaseTime(tbServiceProduct.getCreatedTime());
-        tbServiceProduct.setCreatorAccount(account);
-        tbServiceProduct.setStatus(status);
-        tbServiceProduct.setRecordStatus(recordStatus);
-        tbServiceProduct.setProductDetails(content.getProductDetails());
+
         //设置机构名称
-        if (StringUtils.isNotBlank(content.getOrgId())){
-            TbServiceOrg org= tbServiceOrgMapper.selectByPrimaryKey(content.getOrgId());
-            if(org!=null){
-                tbServiceProduct.setOrgName(org.getOrgName());
+        UserExtensionInfo userExtension = getUserExtensionByAccount(account);
+        String orgId = userExtension.getAffiliateCode();
+
+        // 常规产品添加模板ID并判断是否已发布模板
+        if (content.getProductType().equals(ProductConstantEnum.PRODUCT_COMMENT_TYPE.getCode())) {
+            if (StringUtils.isEmpty(templateId)) {
+                logger.warn("[服务超市产品] 常规产品模板ID为空");
+                throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_TEMPLE_ID_EMPTY);
+            }
+            checkTemplateProduct(templateId, orgId, content.getProductId());
+            content.setTemplateId(templateId);
+        }
+
+        // 封装IBPS表单数据
+        content.setProductId("");
+        content.setRecordStatus(ProductConstantEnum.RECORD_STATUS_EFFECTIVE.getCode());
+        content.setCreatorAccount(account);
+        content.setStatus(ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode());
+        content.setCreatedTime(DateUtils.formatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
+        content.setOrgId(orgId);
+        content.setOrgName(userExtension.getAffiliateName());
+
+        if (StringUtils.isBlank(content.getViewCount())) {
+            content.setViewCount("0");
+        }
+
+        //设置服务顾问
+        List<TbServiceAndAdvisor> tb_service_and_advisor = new ArrayList<>();
+        if (StringUtils.isNotBlank(content.getAdvisorAccount())){
+            String[] advisorArr = content.getAdvisorAccount().split(",");
+            for (int i = 0; i < advisorArr.length; i++){
+                if(StringUtils.isNotEmpty(advisorArr[i])) {
+                    TbServiceAndAdvisor tbServiceAndAdvisor = new TbServiceAndAdvisor();
+                    tbServiceAndAdvisor.setAdvisorAccount(advisorArr[i]);
+                    tb_service_and_advisor.add(tbServiceAndAdvisor);
+                }
             }
         }
-        //保存服务产品的基本信息
-        tbServiceProductMapper.insertSelective(tbServiceProduct);
+        content.setTb_service_and_advisor(tb_service_and_advisor);
 
-        //保存顾问和服务间关系
-        if(StringUtils.isNotBlank(content.getAdvisorAccount())){
-            addAdvisor(content.getAdvisorAccount(),content.getProductId());
+        // 启动IBPS流程
+        String bpmnDefId = ibpsDefIdConfig.getProduct();
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, content);
+
+        // ibps启动流程失败
+        if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
+            logger.warn("[服务超市产品] 启动ibps流程出错，错误信息：{}" + ibpsResult == null ? "" : ibpsResult.getMessage());
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SUBMIT_IBPS_ERROR);
         }
-        return content.getProductId();
-    }
+        logger.info("[服务超市产品] " + ibpsResult.getMessage());
 
+        return ibpsResult.getState();
+    }
 
     @ServiceLog(doAction = "后台服务产品管理-服务产品列表")
     @Override
@@ -137,22 +164,25 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @ServiceLog(doAction = "上架常规产品")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void  upShelfCommonService(CommonServiceShelf commonService,String account) {
+    public void upShelfCommonService(CommonServiceShelf commonService,String account) {
         if(StringUtils.isBlank(commonService.getTemplateId())){
             logger.warn("[上架常规服务产品]，服务产品模板Id{}不能为空：productId: {}上架常规服务产品时,服务产品模板Id不能为空!");
             throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY);
         }
-        if(StringUtils.isBlank(commonService.getOrgId())){
-            logger.warn("[上架常规服务产品]，机构Id{}不能为空：orgId: {}上架常规服务产品时,机构Id不能为空!");
-            throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY);
+        TbServiceProduct product = tbServiceProductMapper.selectByPrimaryKey(commonService.getTemplateId());
+
+        // 判断模板是否有效
+        if (product == null) {
+            logger.warn("[上架常规服务产品] 产品模板无效,未找到相关模板");
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_TEMPLATE_NOT_EXIST);
         }
-        TbServiceProduct product =  tbServiceProductMapper.selectByPrimaryKey(commonService.getTemplateId());
+
         ServiceContent content = new ServiceContent();
         BeanUtils.copyProperties(product,content);
         content.setOrgId(commonService.getOrgId());
         content.setProductId(commonService.getProductId());
         content.setAdvisorAccount(commonService.getAdvisorAccount());
-        addServiceProduct(content,account,commonService.getTemplateId());
+        addServiceProduct(content, account, commonService.getTemplateId());
     }
 
 
@@ -350,36 +380,42 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateCommonProduct(OrgUpdateCommonProduct product,String account) {
-        //更新产品表中信息
-        TbServiceProduct tbServiceProduct = new TbServiceProduct();
-        tbServiceProduct.setProductId(product.getProductId());
-        tbServiceProduct.setModifiedTime(new Date());
-        tbServiceProduct.setModifierAccount(account);
-        tbServiceProductMapper.updateByPrimaryKeySelective(tbServiceProduct);
-        //更新顾问信息
-        if(StringUtils.isNotBlank(product.getAdvisorAccount())){
-            addAdvisor(product.getAdvisorAccount(),product.getProductId());
+        if (StringUtils.isEmpty(product.getProductId())) {
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY);
         }
+
+        TbServiceProduct tbServiceProduct = getCanUpdateProduct(product.getProductId());
+
+        ServiceContent content = new ServiceContent();
+        BeanUtils.copyProperties(tbServiceProduct, content);
+        content.setAdvisorAccount(product.getAdvisorAccount());
+        content.setViewCount(tbServiceProduct.getViewCount().toString());
+        content.setModifierAccount(tbServiceProduct.getCreatorAccount());
+        content.setModifiedTime(DateUtils.formatDate(tbServiceProduct.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
+        startProductIbps(content, account, tbServiceProduct.getTemplateId(), tbServiceProduct);
     }
+
     @ServiceLog(doAction = "机构编辑特色服务产品")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateFeatureProduct(OrgUpdateFeatureProduct content, String account) {
-
-        TbServiceProduct tbServiceProduct = new TbServiceProduct();
-        BeanUtils.copyProperties(content,tbServiceProduct);
-        tbServiceProduct.setModifierAccount(account);
-        tbServiceProduct.setProductDetails(content.getProductDetails());
-        tbServiceProduct.setModifiedTime(new Date());
-        if (content.getReferPrice() != null) {
-            checkReferPrice(content.getReferPrice());
-        }
-        tbServiceProductMapper.updateByPrimaryKeySelective(tbServiceProduct);
-        // 更新顾问信息
-        if(StringUtils.isNotBlank(content.getAdvisorAccount())){
-            addAdvisor(content.getAdvisorAccount(),content.getProductId());
+    public void updateFeatureProduct(OrgUpdateFeatureProduct product, String account) {
+        if (StringUtils.isEmpty(product.getProductId())) {
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY);
         }
 
+        ServiceContent content = new ServiceContent();
+        TbServiceProduct tbServiceProduct = getCanUpdateProduct(product.getProductId());
+        BeanUtils.copyProperties(tbServiceProduct,content);
+        BeanUtils.copyProperties(product,content);
+
+        content.setViewCount(tbServiceProduct.getViewCount().toString());
+        content.setModifierAccount(tbServiceProduct.getCreatorAccount());
+        content.setModifiedTime(DateUtils.formatDate(tbServiceProduct.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
+        if (StringUtils.isNotEmpty(product.getAdvisorAccount())) {
+            content.setAdvisorAccount(product.getAdvisorAccount());
+        }
+
+        startProductIbps(content, account, tbServiceProduct.getTemplateId(), tbServiceProduct);
     }
     @ServiceLog(doAction = "顾问-服务产品列表")
     @Override
@@ -439,6 +475,76 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             serialNumber = "CG00"+number+dataStr+(int)((Math.random()*9+1)*1000);
         }
         return serialNumber;
+    }
+
+    /**
+     * 判断是否已发布该模板常规产品
+     * @param templateId 模板ID
+     * @param orgId 机构ID
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "判断是否已发布该模板常规产品")
+    public void checkTemplateProduct(String templateId, String orgId, String productId){
+        TbServiceProductCriteria criteria = new TbServiceProductCriteria();
+        criteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andOrgIdEqualTo(orgId).andTemplateIdEqualTo(templateId);
+
+        criteria.setOrderByClause("created_time DESC");
+        List<TbServiceProduct> tbServiceProducts = tbServiceProductMapper.selectByExample(criteria);
+
+        // 最新数据审核状态非审核不通过则抛出异常
+        if (tbServiceProducts != null && !tbServiceProducts.isEmpty() && !tbServiceProducts.get(0).getStatus().equals(ProductConstantEnum.PRODUCT_STATUS_APPROVAL_NOT_PASS.getCode())) {
+            if (StringUtils.isNotEmpty(productId)) {
+                if (!tbServiceProducts.get(0).getProductId().equals(productId)) {
+                    logger.warn("{} 机构已上架常规模板为 {} 的产品", orgId, templateId);
+                    throw new JnSpringCloudException(ServiceProductExceptionEnum.CURRENT_ORG_PUBLISH_PRODUCT);
+                }
+            } else {
+                logger.warn("{} 机构已上架常规模板为 {} 的产品", orgId, templateId);
+                throw new JnSpringCloudException(ServiceProductExceptionEnum.CURRENT_ORG_PUBLISH_PRODUCT);
+            }
+        }
+    }
+
+    /**
+     * 根据账号查询是否机构账号
+     * @param account
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "根据账号查询是否机构账号")
+    public UserExtensionInfo getUserExtensionByAccount(String account){
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
+        if (userExtension == null || userExtension.getData() == null
+                || StringUtils.isEmpty(userExtension.getData().getAffiliateCode())) {
+            logger.warn("[根据账号查询是否机构账号] {}不是机构用户", account);
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.CURRENT_ACCOUNT_NOT_ORG_USER);
+        }
+        return userExtension.getData();
+    }
+
+    @Override
+    @ServiceLog(doAction = "根据产品ID判断是否能修改")
+    public TbServiceProduct getCanUpdateProduct(String productId) {
+        TbServiceProductCriteria criteria = new TbServiceProductCriteria();
+        TbServiceProductCriteria downCriteria = new TbServiceProductCriteria();
+        TbServiceProductCriteria.Criteria criteria1 = downCriteria.createCriteria();
+        criteria.createCriteria().andProductIdEqualTo(productId)
+                .andStatusEqualTo(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+
+        criteria1.andProductIdEqualTo(productId)
+                .andStatusEqualTo(ProductConstantEnum.PRODUCT_STATUS_INVALID.getCode())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        criteria.or(criteria1);
+
+        List<TbServiceProduct> tbServiceProducts = tbServiceProductMapper.selectByExample(criteria);
+        if (tbServiceProducts == null || tbServiceProducts.isEmpty()) {
+            logger.warn("查询的产品不存在或未通过审核，productId:", productId);
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_NOT_EXIST);
+        }
+        return tbServiceProducts.get(0);
     }
 
     /**
@@ -509,5 +615,26 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         advisorDao.addServiceAdvisor(advisorList);
     }
 
+    /**
+     * 编辑产品并启动IBPS
+     * @param content 入参
+     * @param account 账号
+     * @param templateId 模板ID
+     * @param tbServiceProduct 需要删除的产品
+     */
+    public void startProductIbps(ServiceContent content, String account, String templateId, TbServiceProduct tbServiceProduct){
+        String state = addServiceProduct(content, account, templateId);
 
+        // ibps启动成功删除数据
+        if ("200".equals(state)) {
+            tbServiceProduct.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+            tbServiceProductMapper.updateByPrimaryKeySelective(tbServiceProduct);
+
+            TbServiceAndAdvisorCriteria tbServiceAndAdvisorCriteria = new TbServiceAndAdvisorCriteria();
+            tbServiceAndAdvisorCriteria.createCriteria().andProductIdEqualTo(tbServiceProduct.getProductId());
+            tbServiceAndAdvisorMapper.deleteByExample(tbServiceAndAdvisorCriteria);
+        } else {
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SEND_ERROR);
+        }
+    }
 }

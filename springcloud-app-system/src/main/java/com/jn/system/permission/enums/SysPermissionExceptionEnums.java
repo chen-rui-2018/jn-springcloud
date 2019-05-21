@@ -10,7 +10,9 @@ import com.jn.common.api.CodeAndMsg;
  **/
 public enum SysPermissionExceptionEnums implements CodeAndMsg {
     NOT_ALLOWED_DELETE_ROLE("1116501","删除失败,当前角色正在被使用"),
-    NOT_ALLOWED_DELETE_PERMISSION("1116502","删除失败,当前权限正在被使用");
+    NOT_ALLOWED_DELETE_PERMISSION("1116502","删除失败,当前权限正在被使用"),
+    ROLE_ID_NOT_NULL("1116503","角色id不能为空"),
+    ;
 
     private String code;
     private String message;

@@ -57,8 +57,9 @@
     ,t1.creator_account as "creatorAccount"
     ,t1.identity as "identity"
     ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id ),0) AS "commentsNum"
-    ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id ),0) AS "likeNum"
-    ,ifnull((SELECT SUM(1) FROM tb_person_care tc  WHERE  tc.care_account= #{currentAccount} and tc.receive_account = t1.creator_account ),0) AS "careStatus"
+    ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+    ,ifnull((SELECT SUM(1) FROM tb_person_care tc  WHERE  tc.care_account= #{currentAccount} and tc.receive_account = t1.creator_account and tc.record_status= 1),0) AS "careStatus"
+    ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{currentAccount} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
     ,group_concat(t2.img_url) as "imgUrl"
     from tb_gam_topic t1
             left join tb_file_img t2 on t1.topic_id = t2.topic_id
@@ -84,6 +85,7 @@
         <result column="likeNum" property="likeNum"/>
         <result column="identity" property="identity"/>
         <result column="imgUrl" property="imgString"/>
+        <result column="isLike" property="isLike"/>
     </resultMap>
 
     <!--关注详情动态列表-->
@@ -95,7 +97,8 @@
         ,t1.creator_account as "creatorAccount"
         ,t1.identity as "identity"
         ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id ),0) AS "commentsNum"
-        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id ),0) AS "likeNum"
+        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id  and li.like_status = "1" and li.record_status = '1'),0) AS "likeNum"
+        ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{currentAccount} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
         ,group_concat(t2.img_url) as "imgUrl"
         from tb_gam_topic t1
         left join tb_file_img t2 on t1.topic_id = t2.topic_id
@@ -115,7 +118,8 @@
         ,t1.creator_account as "creatorAccount"
         ,t1.identity as "identity"
         ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id and (com.p_id is null or com.p_id ="")),0) AS "commentsNum"
-        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id ),0) AS "likeNum"
+        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+        ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{currentAccount} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
         ,group_concat(t2.img_url) as "imgUrl"
         from tb_gam_topic t1
         left join tb_file_img t2 on t1.topic_id = t2.topic_id
@@ -129,7 +133,7 @@
        ,t1.id as "commentId"
        ,t1.com_content as "comContent"
        ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.p_id is not  null and t1.id = com.p_id),0) AS "replyNum"
-       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id ),0) AS "likeNum"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
     from tb_comment  t1 where t1.root_id = #{dynamicId} and (t1.p_id is  null or t1.p_id="")
     </select>
     <!--评论信息-->
@@ -139,7 +143,7 @@
        ,date_format(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
        ,t1.id as "commentId"
        ,t1.com_content as "comContent"
-       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id ),0) AS "likeNum"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1) ,0) AS "likeNum"
     from tb_comment  t1 where t1.id = #{commentId}
     </select>
     <!--评论回复列表-->
@@ -149,7 +153,7 @@
        ,date_format(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
        ,t1.id as "commentId"
        ,t1.com_content as "comContent"
-       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id ),0) AS "likeNum"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
     from tb_comment  t1 where t1.p_id = #{commentId}
     </select>
     <!--点赞用户列表-->
@@ -167,8 +171,9 @@
         ,t1.creator_account as "creatorAccount"
         ,t1.identity as "identity"
         ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id ),0) AS "commentsNum"
-        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id ),0) AS "likeNum"
-        ,ifnull((SELECT SUM(1) FROM tb_person_care tc  WHERE  tc.care_account= #{account} and tc.receive_account = t1.creator_account ),0) AS "careStatus"
+        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+        ,ifnull((SELECT SUM(1) FROM tb_person_care tc  WHERE  tc.care_account= #{account} and tc.receive_account = t1.creator_account and tc.record_status = 1 ),0) AS "careStatus"
+        ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{account} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
         ,group_concat(t2.img_url) as "imgUrl"
         from tb_gam_topic t1
         left join tb_file_img t2 on t1.topic_id = t2.topic_id
@@ -187,7 +192,7 @@
        ,t1.com_content as "comContent"
        ,date_format(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
        ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.p_id is not  null and t1.id = com.p_id),0) AS "replyNum"
-       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id ),0) AS "likeNum"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
     from tb_comment  t1 where t1.root_id = #{dynamicId} and (p_id is null or p_id = "")
     </select>
     <!--评论回复列表-->
@@ -199,7 +204,7 @@
        ,t1.com_content as "comContent"
        ,t1.p_id as "parentId"
        ,date_format(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
-       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id ),0) AS "likeNum"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
     from tb_comment  t1 where
     1=1
     <if test="parentIdList != null">

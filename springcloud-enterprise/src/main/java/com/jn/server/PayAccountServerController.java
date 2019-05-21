@@ -14,7 +14,9 @@ import com.jn.pay.model.PayCheckReminder;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayBillCreateParamVo;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,18 +37,10 @@ public class PayAccountServerController extends BaseController implements PayAcc
     private MyPayAccountService myPayAccountService;
 
 
+    @ControllerLog(doAction = "我的账户-查询当前账户下所有账本信息")
     @Override
     public Result<PayAccountAndAccountBookVo> queryPayAccountBook(String userId) {
         PayAccountAndAccountBookVo data = myPayAccountService.queryPayAccountBook(userId);
-        return new Result(data);
-    }
-
-    @Override
-    public Result<PaginationData<List<PayAccountBookMoneyRecord>>> queryPayAccountDetails(String acBookId, String startDate, String endDate, int page, int rows) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(acBookId,"账本编号不能为空");
-        PaginationData<List<PayAccountBookMoneyRecord>> data = myPayAccountService.queryPayAccountDetails(user,acBookId,startDate,endDate,page,rows);
         return new Result(data);
     }
 }

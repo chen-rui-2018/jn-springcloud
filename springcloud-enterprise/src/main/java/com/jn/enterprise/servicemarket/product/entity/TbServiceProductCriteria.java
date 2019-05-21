@@ -2795,6 +2795,76 @@ public class TbServiceProductCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andProductDetailsIsNull() {
+            addCriterion("product_details is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsIsNotNull() {
+            addCriterion("product_details is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsEqualTo(String value) {
+            addCriterion("product_details =", value, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsNotEqualTo(String value) {
+            addCriterion("product_details <>", value, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsGreaterThan(String value) {
+            addCriterion("product_details >", value, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsGreaterThanOrEqualTo(String value) {
+            addCriterion("product_details >=", value, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsLessThan(String value) {
+            addCriterion("product_details <", value, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsLessThanOrEqualTo(String value) {
+            addCriterion("product_details <=", value, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsLike(String value) {
+            addCriterion("product_details like", value, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsNotLike(String value) {
+            addCriterion("product_details not like", value, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsIn(List<String> values) {
+            addCriterion("product_details in", values, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsNotIn(List<String> values) {
+            addCriterion("product_details not in", values, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsBetween(String value1, String value2) {
+            addCriterion("product_details between", value1, value2, "productDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductDetailsNotBetween(String value1, String value2) {
+            addCriterion("product_details not between", value1, value2, "productDetails");
+            return (Criteria) this;
+        }
+
         public Criteria andRecordStatusIsNull() {
             addCriterion("record_status is null");
             return (Criteria) this;

@@ -156,40 +156,91 @@ and obj_id = #{payBill.objId,jdbcType=VARCHAR}
   </select>
 
     <insert id="insertList" parameterType="java.util.List">
-        insert into tb_pay_bill_details
-        <trim prefix="(" suffix=")" suffixOverrides=",">
+        insert into tb_pay_bill_details(
                 details_id,
                 bill_id,
                 COST_NAME,
                 COST_VALUE,
+                sort,
                 creator_account,
                 created_time,
-                record_status,
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <foreach item="item" index="index" collection="list" separator=",">
-                <if test="item.detailsId != null">
+                record_status)
+        values
+            <foreach item="item" index="index" collection="list" separator="," >
+                (
                     #{item.detailsId,jdbcType=VARCHAR},
-                </if>
-                <if test="item.billId != null">
                     #{item.billId,jdbcType=VARCHAR},
-                </if>
-                <if test="item.costName != null">
                     #{item.costName,jdbcType=VARCHAR},
-                </if>
-                <if test="item.costValue != null">
                     #{item.costValue,jdbcType=VARCHAR},
-                </if>
-                <if test="item.creatorAccount != null">
+                    #{item.sort,jdbcType=INTEGER},
                     #{item.creatorAccount,jdbcType=VARCHAR},
-                </if>
-                <if test="item.createdTime != null">
                     #{item.createdTime,jdbcType=TIMESTAMP},
-                </if>
-                <if test="item.recordStatus != null">
-                    #{item.recordStatus,jdbcType=CHAR},
-                </if>
+                    #{item.recordStatus,jdbcType=CHAR}
+                )
             </foreach>
-        </trim>
     </insert>
+
+    <select id="getBillAppList" parameterType="com.jn.pay.model.PayBill" resultType="com.jn.pay.vo.PayBillReturnParamVo">
+        SELECT
+        bill_id AS billId,
+        ac_book_id AS acBookId,
+        bill_name AS billName,
+        bill_source AS billSource,
+        bill_expense AS billExpense,
+        reminder_number AS reminderNumber,
+        CASE obj_type
+        WHEN '1' THEN
+        '企业'
+        WHEN '2' THEN
+        '个人'
+        ELSE
+        '其他'
+        END objType,
+        obj_id AS objId,
+        obj_name AS objName,
+        CASE payment_state
+        WHEN '1' THEN
+        '已支付'
+        WHEN '2' THEN
+        '待支付'
+        ELSE
+        '支付异常'
+        END paymentState,
+        CASE ac_book_type
+        WHEN '1' THEN
+        '电费'
+        WHEN '2' THEN
+        '物业费'
+        ELSE
+        '其他'
+        END acBookType,
+        created_time AS createdTime,
+        creator_account AS creatorAccount,
+        late_payment AS latePayment,
+        CASE payment_affirm
+        WHEN '1' THEN
+        '已确认'
+        WHEN '2' THEN
+        '未确认'
+        ELSE
+        '异常'
+        END paymentAffirm,
+        record_status AS recordStatus
+        FROM
+        tb_pay_bill
+        WHERE
+        1=1
+        and record_status = 1
+        and bill_receiver = #{payBill.billReceiver,jdbcType=VARCHAR}
+        <if test="payBill.billId != null">
+            and bill_id = #{payBill.billId,jdbcType=VARCHAR}
+        </if>
+        <if test="payBill.acBookType != null">
+            and ac_book_type = #{payBill.acBookType,jdbcType=VARCHAR}
+        </if>
+        <if test="payBill.paymentState != null">
+            and payment_state = #{payBill.paymentState,jdbcType=VARCHAR}
+        </if>
+        order by payment_state desc
+    </select>
 </mapper>

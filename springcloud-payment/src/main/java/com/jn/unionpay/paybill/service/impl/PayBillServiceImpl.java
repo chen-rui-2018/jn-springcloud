@@ -483,4 +483,30 @@ public class PayBillServiceImpl implements PayBillService {
         return i1==1?true:false;
     }
 
+    @ServiceLog(doAction = "根据账单号取消对应的账单")
+    @Override
+    public Boolean cancelPayBillByBillId(String billId){
+        TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
+        billCriteria.createCriteria().andBillNumEqualTo(billId).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
+        List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
+        if(null == tbPaymentBills && tbPaymentBills.size() != 0){
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_IS_NOT_EXIT);
+        }
+        TbPaymentBill tbPaymentBill = tbPaymentBills.get(0);
+        tbPaymentBill.setBillStatus(PayBillEnum.PAYMENT_BILL_IS_DELETE.getCode());
+        tbPaymentBill.setModifiedTime(new Date());
+        int i = tbPaymentBillMapper.updateByExampleSelective(tbPaymentBill, billCriteria);
+        logger.info("逻辑删除账单{}",billId);
+
+        if(StringUtils.isNotEmpty(tbPaymentBill.getOrderId())){
+            TbPaymentOrder tbPaymentOrder = new TbPaymentOrder();
+            tbPaymentOrder.setOrderStatus(PayBillEnum.PAYMENT_ORDER_IS_DELETE.getCode());
+            tbPaymentOrder.setModifiedTime(new Date());
+            tbPaymentOrder.setId(tbPaymentBill.getOrderId());
+            int i1 = tbPaymentOrderMapper.updateByPrimaryKeySelective(tbPaymentOrder);
+            logger.info("删除账单对应的支付订单数据，响应条数：{}",i1);
+        }
+        return i==1?true:false;
+    }
+
 }

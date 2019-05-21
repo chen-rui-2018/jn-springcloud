@@ -10,8 +10,10 @@
         im.SEND_TIME as "sendTime"
         from tb_im_message im
         where 1=1
-        and ((SEND_ID = #{fromUser} and RECEIVE_ID = #{toUser})
-        or (SEND_ID = #{toUser} and RECEIVE_ID = #{fromUser}))
+        <if test="id != null and id !=''">
+            and (CREATE_TIME &lt; (select create_time from tb_im_message where id = #{id}))
+        </if>
+        and ((SEND_ID = #{fromUser} and RECEIVE_ID = #{toUser}) or (SEND_ID = #{toUser} and RECEIVE_ID = #{fromUser}))
         order by CREATE_TIME desc
     </select>
 
@@ -37,7 +39,20 @@
         and IS_SENDED = 'N'
         and RECEIVE_ID = #{0}
         and SEND_ID = #{1}
-        order by CREATE_TIME desc
+        order by CREATE_TIME asc
+    </select>
+
+    <!-- 查询聊天列表 -->
+    <select id="selectMsgList" resultType="com.jn.im.entity.TbImMessage" parameterType="com.jn.im.model.Message">
+        SELECT im.ID "id", im.SEND_ID "sendId", im.MSG_TYPE "msgType", im.RECEIVE_ID "receiveId",
+        im.CONTENT "content", im.CREATE_TIME as "createTime", im.IS_SENDED as "isSended",
+        im.SEND_TIME as "sendTime"
+        FROM (
+            SELECT * FROM tb_im_message
+            where 1=1
+            and RECEIVE_ID = #{fromUser}
+            group BY CREATE_TIME DESC
+        ) im GROUP BY  im.SEND_ID ORDER BY im.CREATE_TIME DESC
     </select>
 
 </mapper>

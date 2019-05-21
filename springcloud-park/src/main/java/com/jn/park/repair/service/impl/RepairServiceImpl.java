@@ -1,5 +1,9 @@
 package com.jn.park.repair.service.impl;
 
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
+import com.jn.common.util.CallOtherSwaggerUtils;
+import com.jn.common.util.StringUtils;
 import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.park.repair.dao.TbPmRepairMapper;
 import com.jn.park.repair.entity.TbPmRepair;
@@ -14,7 +18,13 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
+import java.util.*;
 
 
 /**
@@ -61,8 +71,68 @@ public class RepairServiceImpl implements RepairService {
                 tbPmRepairMapper.updateByPrimaryKeySelective(tbPmRepair);
                 //todo 根据流程taskId执行自动审批节点
                 logger.info("物业服务-创建报修缴费单,支付成功回调,billId:{}",billId);
+                this.completeTask(billId);
             }
         }
+    }
+
+    /**
+     * 审批 企业报修流程-企业缴费 任务
+     * @param repairId
+     */
+    @ServiceLog(doAction ="审批 企业报修流程-企业缴费 任务" )
+    public void completeTask(String repairId){
+        TbPmRepair tbPmRepairDb=tbPmRepairMapper.selectByPrimaryKey(repairId);
+
+        JSONObject jsonObject = new JSONObject();
+        List list1 = new ArrayList<>();
+        JSONObject jsonObject1 = new JSONObject();
+        jsonObject1.put("key","Q^PROC_INST_ID_^SL");
+        jsonObject1.put("value",tbPmRepairDb.getFlowInstId());
+        list1.add(jsonObject1);
+        jsonObject.put("parameters", list1);
+
+
+        logger.info("调用ibps 查询发起人的待办任务,请求参数{}",jsonObject);
+
+        JSONObject result=CallOtherSwaggerUtils.request(tbPmRepairDb.getCreatorAccount(),"/api/webapi/bpmService/myTasks", HttpMethod.POST,jsonObject.toJSONString());
+        logger.info("调用ibps 查询发起人的待办任务,返回参数{}",result);
+        if(!StringUtils.equals(String.valueOf(result.get("state")),"200")){
+            logger.info("查询发起人的待办任务失败，失败原因：{}",result.get("message"));
+            throw new JnSpringCloudException(new Result("-1","查询发起人的待办任务失败，原因："+result.get("message")));
+        }
+        logger.info("查询发起人的待办任务成功");
+        Object dataResult=((HashMap)result.get("data")).get("dataResult");
+        if(dataResult==null){
+            logger.info("没有待办任务");
+            return;
+        }
+        List<HashMap<String,String>>dataResultList=(List<HashMap<String,String>>)dataResult;
+        if(dataResultList.size()!=1){
+            logger.info("待办任务不唯一,待办数量:{}",dataResultList);
+        }
+        String taskId=dataResultList.get(0).get("taskId");
+        this.complete(tbPmRepairDb.getCreatorAccount(),taskId,"agree");
+    }
+
+    /**
+     * 处理任务
+     * @param taskId
+     * @param actionName
+     */
+    @ServiceLog(doAction = "处理任务")
+    private void complete(String userAccount,String taskId,String actionName){
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        map.add("taskId",taskId);
+        map.add("actionName",actionName);
+        logger.info("调用ibps 处理任务 接口,请求参数{}",map);
+        JSONObject result=CallOtherSwaggerUtils.request(userAccount,"/api/webapi/bpmService/complete", HttpMethod.POST,map);
+        logger.info("调用ibps 处理任务 接口,返回参数{}",result);
+        if(!StringUtils.equals(String.valueOf(result.get("state")),"200")){
+            logger.info("处理任务失败，失败原因：{}",result.get("message"));
+            throw new JnSpringCloudException(new Result("-1","处理任务失败，原因："+result.get("message")));
+        }
+        logger.info("处理任务成功");
     }
 
     /**

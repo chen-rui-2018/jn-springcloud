@@ -56,7 +56,7 @@ public class TbPmRepair implements Serializable {
 
     private String isNeedRepairMateriel;
 
-    private Date feedbackCompleteDate;
+    private String feedbackCompleteDate;
 
     private String evaluateServiceAttitude;
 
@@ -73,6 +73,8 @@ public class TbPmRepair implements Serializable {
     private String evaluateExplain;
 
     private String evaluatePhotoUrl;
+
+    private String flowInstId;
 
     private static final long serialVersionUID = 1L;
 
@@ -284,12 +286,12 @@ public class TbPmRepair implements Serializable {
         this.isNeedRepairMateriel = isNeedRepairMateriel == null ? null : isNeedRepairMateriel.trim();
     }
 
-    public Date getFeedbackCompleteDate() {
+    public String getFeedbackCompleteDate() {
         return feedbackCompleteDate;
     }
 
-    public void setFeedbackCompleteDate(Date feedbackCompleteDate) {
-        this.feedbackCompleteDate = feedbackCompleteDate;
+    public void setFeedbackCompleteDate(String feedbackCompleteDate) {
+        this.feedbackCompleteDate = feedbackCompleteDate == null ? null : feedbackCompleteDate.trim();
     }
 
     public String getEvaluateServiceAttitude() {
@@ -356,6 +358,14 @@ public class TbPmRepair implements Serializable {
         this.evaluatePhotoUrl = evaluatePhotoUrl == null ? null : evaluatePhotoUrl.trim();
     }
 
+    public String getFlowInstId() {
+        return flowInstId;
+    }
+
+    public void setFlowInstId(String flowInstId) {
+        this.flowInstId = flowInstId == null ? null : flowInstId.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -402,7 +412,8 @@ public class TbPmRepair implements Serializable {
             && (this.getFinishPhotoUrl() == null ? other.getFinishPhotoUrl() == null : this.getFinishPhotoUrl().equals(other.getFinishPhotoUrl()))
             && (this.getIsPay() == null ? other.getIsPay() == null : this.getIsPay().equals(other.getIsPay()))
             && (this.getEvaluateExplain() == null ? other.getEvaluateExplain() == null : this.getEvaluateExplain().equals(other.getEvaluateExplain()))
-            && (this.getEvaluatePhotoUrl() == null ? other.getEvaluatePhotoUrl() == null : this.getEvaluatePhotoUrl().equals(other.getEvaluatePhotoUrl()));
+            && (this.getEvaluatePhotoUrl() == null ? other.getEvaluatePhotoUrl() == null : this.getEvaluatePhotoUrl().equals(other.getEvaluatePhotoUrl()))
+            && (this.getFlowInstId() == null ? other.getFlowInstId() == null : this.getFlowInstId().equals(other.getFlowInstId()));
     }
 
     @Override
@@ -444,6 +455,7 @@ public class TbPmRepair implements Serializable {
         result = prime * result + ((getIsPay() == null) ? 0 : getIsPay().hashCode());
         result = prime * result + ((getEvaluateExplain() == null) ? 0 : getEvaluateExplain().hashCode());
         result = prime * result + ((getEvaluatePhotoUrl() == null) ? 0 : getEvaluatePhotoUrl().hashCode());
+        result = prime * result + ((getFlowInstId() == null) ? 0 : getFlowInstId().hashCode());
         return result;
     }
 
@@ -488,6 +500,7 @@ public class TbPmRepair implements Serializable {
         sb.append(", isPay=").append(isPay);
         sb.append(", evaluateExplain=").append(evaluateExplain);
         sb.append(", evaluatePhotoUrl=").append(evaluatePhotoUrl);
+        sb.append(", flowInstId=").append(flowInstId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

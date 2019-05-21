@@ -10,6 +10,7 @@ import com.jn.enterprise.company.model.AcceptInviteParam;
 import com.jn.enterprise.company.model.ReviewStaffParam;
 import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.system.model.User;
 import org.apache.shiro.SecurityUtils;
@@ -75,7 +76,7 @@ public class StaffServiceImplTest {
     // 再次邀请员工ID
     private String inviteStaffAgainStr;
 
-    // 拒绝企业邀请员工ID
+    // 拒绝企业邀请员工账号
     private String refuseComInviteStr;
 
     // 获取待审核列表账号
@@ -166,9 +167,9 @@ public class StaffServiceImplTest {
     @Test
     public void getColleagueList() {
         try {
-            Map<String, Object> colleagueList = staffService.getColleagueList(colleagueListParam, user.getAccount());
-            PaginationData paginationData = (PaginationData) colleagueList.get("data");
-            List<StaffListVO> dataList = (List<StaffListVO>) paginationData.getRows();
+            ColleagueListVO colleagueList = staffService.getColleagueList(colleagueListParam, user.getAccount());
+            PaginationData<List<StaffListVO>> paginationData = colleagueList.getPaginationData();
+            List<StaffListVO> dataList = paginationData.getRows();
             if (dataList != null && !dataList.isEmpty()) {
                 assertThat(dataList.size(), greaterThanOrEqualTo(1));
             } else {
@@ -271,7 +272,7 @@ public class StaffServiceImplTest {
     @Test
     public void refuseInvite() {
         try {
-            staffService.refuseInvite(refuseComInviteStr);
+            staffService.refuseInvite(company.getId(), refuseComInviteStr);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("拒绝邀请失败");

@@ -1,5 +1,6 @@
 package com.jn.enterprise.company.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -76,14 +77,14 @@ public class InvitationController extends BaseController {
         return new Result(res);
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "接受邀请")
     @ApiOperation(value = "接受邀请（pc/app-接受邀请）", notes = "返回数据响应条数，正常情况为1(account仅为测试字段，实际是当前用户)")
     @RequestMapping(value = "/acceptInvite",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/acceptInvite")
     public Result<Integer> acceptInvite(@Validated @RequestBody AcceptInviteParam acceptInviteParam){
         User user = checkUserValid();
-        // TODO 打包上测试库前需设置为当前用户
-        //acceptInviteParam.setAccount(user.getAccount());
+        acceptInviteParam.setAccount(user.getAccount());
         return new Result(staffService.acceptInvite(acceptInviteParam));
     }
 
@@ -91,9 +92,9 @@ public class InvitationController extends BaseController {
     @ApiOperation(value = "拒绝邀请（pc/app-拒绝邀请）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/refuseInvite",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/refuseInvite")
-    public Result<Integer> refuseInvite(String staffId){
-        checkUserValid();
-        return new Result(staffService.refuseInvite(staffId));
+    public Result<Integer> refuseInvite(String comId){
+        User user = checkUserValid();
+        return new Result(staffService.refuseInvite(comId, user.getAccount()));
     }
 
     @ControllerLog(doAction = "待审核列表")

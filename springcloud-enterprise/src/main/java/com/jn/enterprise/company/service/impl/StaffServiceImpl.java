@@ -17,6 +17,7 @@ import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.*;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.enterprise.company.vo.StaffAuditVO;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.enterprise.company.vo.UserExtensionInfoVO;
@@ -145,8 +146,8 @@ public class StaffServiceImpl implements StaffService {
      */
     @Override
     @ServiceLog(doAction = "查询同事列表")
-    public Map<String, Object> getColleagueList(StaffListParam staffListParam, String curAccount) {
-        Map<String, Object> map = new HashMap<>();
+    public ColleagueListVO getColleagueList(StaffListParam staffListParam, String curAccount) {
+        ColleagueListVO colleagueListVO = new ColleagueListVO();
 
         // 企业ID
         String comId = "";
@@ -173,7 +174,7 @@ public class StaffServiceImpl implements StaffService {
         if (company != null && company.getComAdmin().equals(curAccount)) {
             isShowFlag = "1";
         }
-        map.put("isShow", isShowFlag);
+        colleagueListVO.setIsShowFlag(isShowFlag);
 
         List<StaffListVO> dataList = new ArrayList<>(16);
         List<String> accountList = new ArrayList<>(16);
@@ -218,8 +219,8 @@ public class StaffServiceImpl implements StaffService {
 
         }
         PaginationData paginationData = new PaginationData(dataList, staffListParam.getNeedPage().equals("1") ? (Integer) maps.get("total") : dataList.size());
-        map.put("data", paginationData);
-        return map;
+        colleagueListVO.setPaginationData(paginationData);
+        return colleagueListVO;
     }
 
     /**
@@ -484,18 +485,30 @@ public class StaffServiceImpl implements StaffService {
 
     /**
      * 拒绝企业邀请
-     * @param staffId 员工ID
+     * @param comId 企业ID
+     * @param account 账号
      * @return
      */
     @Override
     @ServiceLog(doAction = "拒绝企业邀请")
     @Transactional(rollbackFor = Exception.class)
-    public Integer refuseInvite(String staffId) {
-        TbServiceCompanyStaff tscs = new TbServiceCompanyStaff();
-        tscs.setId(staffId);
-        tscs.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode());
-        Integer responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(tscs);
-        logger.info("[企业邀请] 拒绝邀请成功,staffId:{},响应条数:{}", staffId, responseNums);
+    public Integer refuseInvite(String comId, String account) {
+        TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
+        staffCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_SEND.getCode())
+                .andAccountEqualTo(account).andComIdEqualTo(comId);
+
+        List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(staffCriteria);
+        if (staffList == null || staffList.size() == 0) {
+            logger.warn("[企业邀请] 该账号未收到企业邀请,企业ID:{}", comId);
+            throw new JnSpringCloudException(CompanyExceptionEnum.ACCOUNT_NOT_GET_INVITE);
+        }
+
+        TbServiceCompanyStaff staff = staffList.get(0);
+        staff.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode());
+        int responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(staff);
+
+        logger.info("[企业邀请] 拒绝邀请成功,account:{},响应条数:{}", account, responseNums);
         return responseNums;
     }
 

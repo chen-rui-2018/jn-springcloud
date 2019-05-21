@@ -11,6 +11,7 @@ import com.jn.enterprise.company.model.ColleagueListParam;
 import com.jn.enterprise.company.model.ColleagueUpdateParam;
 import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
@@ -51,7 +52,7 @@ public class ColleagueController extends BaseController {
     @ApiOperation(value = "同事列表（pc/app-同事列表）", notes = "按手机号或名称（模糊查询）[分页查询]")
     @RequestMapping(value = "/getColleagueList",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/ColleagueController/getColleagueList")
-    public Result<Map<String, Object>> getColleagueList(@Validated ColleagueListParam colleagueListParam){
+    public Result<ColleagueListVO> getColleagueList(@Validated ColleagueListParam colleagueListParam){
         User user = checkUserValid();
         StaffListParam staffListParam = new StaffListParam();
         BeanUtils.copyProperties(colleagueListParam, staffListParam);

@@ -7,7 +7,6 @@ import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.enterprise.company.vo.StaffAuditVO;
 import com.jn.enterprise.company.vo.UserExtensionInfoVO;
-import com.jn.system.model.User;
 
 import java.util.List;
 

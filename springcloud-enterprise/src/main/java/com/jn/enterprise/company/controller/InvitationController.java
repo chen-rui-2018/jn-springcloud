@@ -3,12 +3,9 @@ package com.jn.enterprise.company.controller;
 import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.AcceptInviteParam;
-import com.jn.enterprise.company.model.StaffInviteParam;
-import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.StaffService;
 import com.jn.enterprise.company.vo.StaffAuditVO;
 import com.jn.enterprise.company.vo.UserExtensionInfoVO;
@@ -18,12 +15,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author： huxw

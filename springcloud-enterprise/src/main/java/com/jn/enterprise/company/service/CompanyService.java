@@ -4,12 +4,10 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
-import com.jn.enterprise.company.entity.TbServiceCompanyModify;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
 import com.jn.park.activity.model.CommentAddParam;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 

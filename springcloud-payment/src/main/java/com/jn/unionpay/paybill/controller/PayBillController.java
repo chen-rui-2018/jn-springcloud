@@ -76,11 +76,12 @@ public class PayBillController extends BaseController {
      * @return
      */
     @ControllerLog(doAction = "统一缴费--发起支付")
-    @ApiOperation(value = "统一缴费--发起支付")
+    @ApiOperation(value = "统一缴费--发起支付",notes = "支付方式：WX_JSAPI：微信公众号支付，WX_NATIVE：微信原生扫码支付，WX_APP：微信APP支付，" +
+            "WX_MWEB：微信H5支付，ALIPAY_MOBILE：支付宝移动支付，ALIPAY_PC：支付宝PC支付，ALIPAY_WAP：支付宝H5支付，ALIPAY_QR：支付宝当面付之扫码支付")
     @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
-    public Result<PayResponseVO> startPayment(@RequestBody PayInitiateParam payInitiateParam){
+    public Result startPayment(@RequestBody PayInitiateParam payInitiateParam){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result<>(payBillService.startPayment(payInitiateParam,user));
+        return payBillService.startPayment(payInitiateParam,user);
     }
 
 

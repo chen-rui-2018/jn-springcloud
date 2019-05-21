@@ -3,6 +3,7 @@ package com.jn.unionpay.paybill.service.impl;
 import com.jn.SpringCloudPaymentApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.paybill.enums.PayBillExceptionEnum;
 import com.jn.paybill.model.*;
@@ -149,8 +150,8 @@ public class PayBillServiceImplTest {
         payInitiateParam.setBillIds(new String[]{"48w55wwffno383915","48w55wwffno383914"});
         payInitiateParam.setPayMenthed("0");
         try {
-            PayResponseVO payResponseVO = payBillService.startPayment(payInitiateParam, user);
-            assertThat(payResponseVO,anything());
+            Result result = payBillService.startPayment(payInitiateParam, user);
+            assertThat(result,anything());
         }catch (JnSpringCloudException e){
             logger.warn("缴费单支付发起-- 数据错误,请核实测试对象数据。");
             assertThat(e.getCode(),

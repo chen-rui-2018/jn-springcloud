@@ -2,6 +2,7 @@ package com.jn.unionpay.paybill.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.paybill.model.*;
 import com.jn.system.model.User;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,7 +58,7 @@ public interface PayBillService {
      * @param user
      * @return
      */
-    PayResponseVO startPayment(PayInitiateParam payInitiateParam, User user);
+    Result startPayment(PayInitiateParam payInitiateParam, User user);
 
     /**
      * 支付回调接口

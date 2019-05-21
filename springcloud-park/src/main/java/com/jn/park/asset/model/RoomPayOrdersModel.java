@@ -20,7 +20,7 @@ public class RoomPayOrdersModel implements Serializable {
     @ApiModelProperty(value = "订单明细信息")
     private List<RoomPayOrdersItemModel> roomPayOrdersItemModels;
 
-    @ApiModelProperty(value ="主键",example = "")
+    @ApiModelProperty(value ="主键(总订单id)",example = "")
     private String id;
 
     @ApiModelProperty(value = "时间")
@@ -42,7 +42,7 @@ public class RoomPayOrdersModel implements Serializable {
     private Date leaseEndTime;
 
     @ApiModelProperty(value = "合计",example = "900.00")
-    private String paySum ;
+    private BigDecimal paySum;
 
     public List<RoomPayOrdersItemModel> getRoomPayOrdersItemModels() {
         return roomPayOrdersItemModels;
@@ -108,11 +108,11 @@ public class RoomPayOrdersModel implements Serializable {
         this.leaseEndTime = leaseEndTime;
     }
 
-    public String getPaySum() {
+    public BigDecimal getPaySum() {
         return paySum;
     }
 
-    public void setPaySum(String paySum) {
+    public void setPaySum(BigDecimal paySum) {
         this.paySum = paySum;
     }
 
@@ -127,7 +127,7 @@ public class RoomPayOrdersModel implements Serializable {
                 ", lastPayTime='" + lastPayTime + '\'' +
                 ", leaseStartTime=" + leaseStartTime +
                 ", leaseEndTime=" + leaseEndTime +
-                ", paySum='" + paySum + '\'' +
+                ", paySum=" + paySum +
                 '}';
     }
 }

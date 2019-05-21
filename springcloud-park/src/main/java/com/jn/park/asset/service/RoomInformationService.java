@@ -110,4 +110,10 @@ public interface RoomInformationService {
      * @return
      */
     RoomOrdersModle getNewRoomOrders(String itemId, String account);
+
+    /**
+     * 取消订单
+     * @param orderId
+     */
+    void cancelOrder(String orderId);
 }

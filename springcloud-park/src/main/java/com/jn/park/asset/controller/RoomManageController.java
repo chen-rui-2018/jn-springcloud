@@ -157,7 +157,7 @@ public class RoomManageController {
     @ApiOperation(value = "房间退租",notes = "房间退租")
     @GetMapping(value = "/quitApply")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050811515490657"),
+            @ApiImplicitParam(name = "orderItemId",value = "(子)订单编号",example = "2019050811515490657"),
     })
     public Result<RoomPayOrdersItemModel> quitApply(String id){
         RoomPayOrdersItemModel roomPayOrdersItemModel = roomInformationService.quitApply(id);
@@ -171,7 +171,7 @@ public class RoomManageController {
             @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657"),
     })
     public Result cancelOrder(String orderId){
-        //todo
+       roomInformationService.cancelOrder(orderId);
         return new Result();
     }
 

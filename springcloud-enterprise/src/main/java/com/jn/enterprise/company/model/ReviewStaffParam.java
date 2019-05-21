@@ -41,4 +41,12 @@ public class ReviewStaffParam implements Serializable {
     public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
+
+    @Override
+    public String toString() {
+        return "ReviewStaffParam{" +
+                "checkStatus='" + checkStatus + '\'' +
+                ", staffId='" + staffId + '\'' +
+                '}';
+    }
 }

@@ -140,4 +140,22 @@ public class StaffListVO implements Serializable {
     public void setAccount(String account) {
         this.account = account;
     }
+
+    @Override
+    public String toString() {
+        return "StaffListVO{" +
+                "staffId='" + staffId + '\'' +
+                ", statusShow='" + statusShow + '\'' +
+                ", account='" + account + '\'' +
+                ", name='" + name + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", sex='" + sex + '\'' +
+                ", roleName='" + roleName + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", birthday=" + birthday +
+                ", checkTime=" + checkTime +
+                '}';
+    }
 }

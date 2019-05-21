@@ -74,4 +74,16 @@ public class ServiceWebRecruitParam extends Page implements Serializable {
     public void setWhereTypes(String whereTypes) {
         this.whereTypes = whereTypes;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceWebRecruitParam{" +
+                "comId='" + comId + '\'' +
+                ", searchFiled='" + searchFiled + '\'' +
+                ", type='" + type + '\'' +
+                ", sortTypes='" + sortTypes + '\'' +
+                ", whereTypes='" + whereTypes + '\'' +
+                ", account='" + account + '\'' +
+                '}';
+    }
 }

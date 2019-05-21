@@ -75,4 +75,16 @@ public class ServiceRecruitEditParam implements Serializable {
     public void setDetails(String details) {
         this.details = details;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceRecruitEditParam{" +
+                "id='" + id + '\'' +
+                ", post='" + post + '\'' +
+                ", salary='" + salary + '\'' +
+                ", num=" + num +
+                ", type='" + type + '\'' +
+                ", details='" + details + '\'' +
+                '}';
+    }
 }

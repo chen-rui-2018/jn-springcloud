@@ -5,15 +5,30 @@
       <span class="notice-title">企业邀请</span>
     </div>
     <div class="notice-main">
-      <div class="notice-dot"></div>
-      <slot/>
+      <div class="notice-content" :class="type" v-if="content">
+        <div class="notice-dot"></div>
+        <div >{{ content }}</div>
+      </div>
+      <div class="no-message" v-else>暂无咨询</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "notcie"
+  name: "notcie",
+  props: {
+    type: {
+      type: String,
+      default: 'primary',
+      required: false
+    },
+    content: {
+      type: String,
+      default: '',
+      required: false
+    }
+  }
 }
 </script>
 
@@ -38,12 +53,27 @@ export default {
   }
   .notice-main {
     width: 100%;
-    height: trsw(74);
-    padding: trsw(23);
     margin-top: trsw(21);
-    background-color: #F2F6F3;
     border-radius: 5px;
-    @include flex($h: flex-start, $v: center);
+    box-sizing: border-box;
+    .notice-content {
+      padding: trsw(23);
+      @include flex($h: flex-start, $v: center);
+      &.primary {
+        background-color: #F2F6F3;
+      }
+      &.info {
+        background-color: #FBF8F4;
+      }
+    }
+    .no-message {
+      width: 100%;
+      margin: 0 auto;
+      color: #999;
+      border-top:1px solid rgba(238,238,238,1);
+      text-align: center;
+      padding: 10px 0;
+    }
     .notice-dot {
       width: trsw(9);
       height: trsw(9);

@@ -14,13 +14,9 @@ public interface TbCommentSensitiveWordMapper {
 
     int insertSelective(TbCommentSensitiveWord record);
 
-    List<TbCommentSensitiveWord> selectByExampleWithBLOBs(TbCommentSensitiveWordCriteria example);
-
     List<TbCommentSensitiveWord> selectByExample(TbCommentSensitiveWordCriteria example);
 
     int updateByExampleSelective(@Param("record") TbCommentSensitiveWord record, @Param("example") TbCommentSensitiveWordCriteria example);
-
-    int updateByExampleWithBLOBs(@Param("record") TbCommentSensitiveWord record, @Param("example") TbCommentSensitiveWordCriteria example);
 
     int updateByExample(@Param("record") TbCommentSensitiveWord record, @Param("example") TbCommentSensitiveWordCriteria example);
 }

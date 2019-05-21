@@ -2,10 +2,7 @@ package com.jn.hardware.security.service.impl;
 
 import com.jn.common.model.Result;
 import com.jn.hardware.api.SecurityVideoClient;
-import com.jn.hardware.model.security.SecurityMonitoringPointParam;
-import com.jn.hardware.model.security.SecurityMonitoringPointShow;
-import com.jn.hardware.model.security.SecurityPlayBackUrlParam;
-import com.jn.hardware.model.security.SecurityPlayBackUrlShow;
+import com.jn.hardware.model.security.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +24,7 @@ public class SecurityVideoServiceImplTest {
 
     private SecurityMonitoringPointParam securityMonitoringPointParam;
     private SecurityPlayBackUrlParam securityPlayBackUrlParam;
+    private SecurityTokenParam securityTokenParam;
 
 
     @Autowired
@@ -40,14 +38,19 @@ public class SecurityVideoServiceImplTest {
 
         //获取回放URL
         securityPlayBackUrlParam = new SecurityPlayBackUrlParam();
-        securityPlayBackUrlParam.setCameraIndexCode("3226a7b1a4f74c55a8d57f3187a355e0");
-        securityPlayBackUrlParam.setBeginTime("2019-05-15T00:00:00.000+08:00");
-        securityPlayBackUrlParam.setEndTime("2019-05-15T10:00:00.000+08:00");
-//        securityPlayBackUrlParam.setRecordLocation("0");
-//        securityPlayBackUrlParam.setProtocol("RTSP");
-//        securityPlayBackUrlParam.setTransmode("0");
+        securityPlayBackUrlParam.setCameraIndexCode("8bb1497fe2db4929ab45091aa58050cd");
+        securityPlayBackUrlParam.setBeginTime("2019-05-09T12:00:00.000+08:00");
+        securityPlayBackUrlParam.setEndTime("2019-05-09T12:30:00.000+08:00");
+        securityPlayBackUrlParam.setRecordLocation("0");
+        securityPlayBackUrlParam.setProtocol("rtsp");
+        securityPlayBackUrlParam.setTransmode("0");
 //        securityPlayBackUrlParam.setUuid("4750e3a4a5bbad3cda5bbad3cd4af9ed5101");
         securityPlayBackUrlParam.setExpand("streamform=rtp");
+        //token验证的url获取
+        securityTokenParam = new SecurityTokenParam();
+        securityTokenParam.setUserCode("admin");
+        securityTokenParam.setService("http://192.168.30.2/portal/");
+        securityTokenParam.setLanguage("zh_CN");
     }
     @Test
     public void findSecurityMonitoringPointList() {
@@ -60,6 +63,13 @@ public class SecurityVideoServiceImplTest {
     public void findSecurityPlayBackUrlList() {
         Result<SecurityPlayBackUrlShow> show  =  securityVideoClient.findSecurityPlayBackUrlList(securityPlayBackUrlParam);
         logger.info("\n获取监控点获取回放URL,监控点获取回放URL: {}",show.getData().getUrl());
+        assertThat(anything(),anything());
+    }
+
+    @Test
+    public void getSecurityTokenURL() {
+        Result<String> show  =  securityVideoClient.getSecurityTokenURL(securityTokenParam);
+        logger.info("\n获取监控验证URL成功,验证的路径为: {}",show.getData());
         assertThat(anything(),anything());
     }
 }

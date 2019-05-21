@@ -2,6 +2,7 @@ package com.jn.enterprise.pay.service.impl;
 
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
@@ -17,14 +18,10 @@ import com.jn.enterprise.pay.enums.PaymentBillExceptionEnum;
 import com.jn.enterprise.pay.enums.PaymentBillMethodEnum;
 import com.jn.enterprise.pay.util.MoneyUtils;
 import com.jn.pay.model.*;
-import com.jn.pay.vo.PayBillReturnParamVo;
-import com.jn.pay.vo.PayBillVo;
+import com.jn.pay.vo.*;
 import com.jn.enterprise.pd.declaration.enums.PdStatusEnums;
 import com.jn.pay.enums.ChannelIdEnum;
 import com.jn.pay.enums.MchIdEnum;
-import com.jn.pay.enums.RspEnum;
-import com.jn.pay.utils.ResponseUtils;
-import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
@@ -38,9 +35,10 @@ import org.springframework.stereotype.Service;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 我的账单(业务实现层)
@@ -81,6 +79,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
 
     @Autowired
     private TbPayAccountBookMapper tbPayAccountBookMapper;
+
+    @Autowired
+    private TbPayAccountBookTypeMapper tbPayAccountBookTypeMapper;
 
     @Autowired
     private TbPayAccountBookMoneyRecordMapper tbPayAccountBookMoneyRecordMapper;
@@ -142,11 +143,53 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         return paginationData;
     }
 
+    @Override
+    public PaginationData<List<PayRecordVo>> billPaymentRecord(PayRecordParam payRecordParam,User user) {
+        PageHelper.startPage(payRecordParam.getPage(), payRecordParam.getRows());
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM");
+        TbPayBillCriteria tbPayBillCriteria = new TbPayBillCriteria();
+        tbPayBillCriteria.setOrderByClause("created_time desc,payment_state desc");
+        TbPayBillCriteria.Criteria criteria = tbPayBillCriteria.createCriteria();
+        criteria.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+        List<TbPayBill> tbPayBills = tbPayBillMapper.selectByExample(tbPayBillCriteria);
+        //获取每个月份，通过月份组装返回给前端
+        List<PayRecordVo> voList = new ArrayList<>();
+        if(tbPayBills.size() > 0) {
+            List<TbPayAccountBookType> list = selectPayBillType();
+            for (TbPayBill tbPayBill : tbPayBills) {
+                PayRecordVo payBill = new PayRecordVo();
+                payBill.setMonth(sdf.format(tbPayBill.getCreatedTime()));
+                for (TbPayAccountBookType tb:list) {
+                    if(tbPayBill.getAcBookType().equals(tb.getAcBookType())){
+                        tbPayBill.setAcBookType(tb.getAcBookDesc());
+                    }
+                }
+                BeanUtils.copyProperties(tbPayBill,payBill);
+                voList.add(payBill);
+            }
+        }
+        PaginationData paginationData = new PaginationData();
+        paginationData.setRows(voList);
+        return paginationData;
+    }
+
+    @ServiceLog(doAction = "查询所有账本类型")
+    public List<TbPayAccountBookType> selectPayBillType(){
+        TbPayAccountBookTypeCriteria tbCriteria = new TbPayAccountBookTypeCriteria();
+        List<TbPayAccountBookType> tbs = tbPayAccountBookTypeMapper.selectByExample(tbCriteria);
+        return tbs;
+    }
+
     @ServiceLog(doAction = "我的账单-通过账单ID查询账单详情信息")
     @Override
-    public PaginationData<List<PayBillDetails>> getBillInfo(String billId) {
+    public PaginationData<List<PayBillDetailsVo>> getBillInfo(String billId) {
+        PayBillDetailsVo payBillDetailsVo = new PayBillDetailsVo();
         List<PayBillDetails> list = new ArrayList<>();
+        PayBill payBill = new PayBill();
+        TbPayBill tbPayBill = tbPayBillMapper.selectByPrimaryKey(billId);
+        BeanUtils.copyProperties(tbPayBill,payBill);
         TbPayBillDetailsCriteria tbPayBillDetailsCriteria = new TbPayBillDetailsCriteria();
+        tbPayBillDetailsCriteria.setOrderByClause("sort asc");
         TbPayBillDetailsCriteria.Criteria criteria = tbPayBillDetailsCriteria.createCriteria();
         criteria.andBillIdEqualTo(billId);
         List<TbPayBillDetails> tbPayBillDetails = tbPayBillDetailsMapper.selectByExample(tbPayBillDetailsCriteria);
@@ -155,9 +198,10 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             BeanUtils.copyProperties(tbPayBillDetails.get(i),payBillDetails);
             list.add(payBillDetails);
         }
+        payBillDetailsVo.setPayBill(payBill);
+        payBillDetailsVo.setPayBillDetails(list);
         PaginationData paginationData = new PaginationData();
-        paginationData.setRows(list);
-        paginationData.setTotal(list.size());
+        paginationData.setRows(payBillDetailsVo);
         return paginationData;
     }
 
@@ -172,10 +216,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
 
 
     @Override
-    public void updateBillNumber(String billId, int reminderNumber) {
+    public void updateBillNumber(PayCheckReminderParam payCheckReminderParam) {
         TbPayBill bill = new TbPayBill();
-        bill.setBillId(billId);
-        bill.setReminderNumber(reminderNumber);
+        BeanUtils.copyProperties(payCheckReminderParam,bill);
         tbPayBillMapper.updateByPrimaryKeySelective(bill);
     }
 
@@ -183,9 +226,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @Override
     public void billCheckReminder(PayCheckReminder payCheckReminder, User user) {
         TbPayCheckReminder checkReminder = new TbPayCheckReminder();
-        payCheckReminder.setCreatorAccount(user.getAccount());
-        payCheckReminder.setCreatedTime(new Date());
-        payCheckReminder.setRecordStatus(PdStatusEnums.EFFECTIVE.getCode());
+        checkReminder.setCreatorAccount(user.getAccount());
+        checkReminder.setCreatedTime(new Date());
+        checkReminder.setRecordStatus(PdStatusEnums.EFFECTIVE.getCode());
         BeanUtils.copyProperties(payCheckReminder, checkReminder);
         tbPayCheckReminderMapper.insertSelective(checkReminder);
     }
@@ -363,7 +406,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         payOrderReq.setChannelId(ChannelIdEnum.ALIPAY_MOBILE.getCode());
         payOrderReq.setAmount(Long.parseLong(MoneyUtils.changeY2F(String.valueOf(totalAmount))));
         payOrderReq.setParam1(sb.toString());
-        payOrderReq.setMchId(MchIdEnum.MCH_BASE.getCode());
+        payOrderReq.setMchId(payBIllInitiateParam.getChannelId());
         payOrderReq.setSubject("支付标题必传");
         payOrderReq.setBody("支付描述信息必传");
         payOrderReq.setNotifyUrl("http://192.168.10.63:6101/api/payment/payBill/payCallBack");
@@ -407,8 +450,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @ServiceLog(doAction = "我的账单-统一缴费回调")
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public void payCallBack(HttpServletResponse response, PayOrderNotify callBackParam, User user) {
-        String result = RspEnum.FAIL.getCode();
+    public Result payCallBack(PayOrderNotify callBackParam, User user) {
         if(StringUtils.isBlank(callBackParam.getStatus().toString())){
             /**判断回调参数支付状态是否为空*/
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_CALLBACK_IS_NULL);
@@ -501,12 +543,10 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tbPayBillMiddle.setOrderNumber(tbPayBills.get(0).getOrderNumber());
                 tbPayBillMiddle.setStatus(callBackParam.getStatus().toString());
                 tbPayBillMiddleMapper.updateByPrimaryKeySelective(tbPayBillMiddle);
-                result = RspEnum.SUCCESS.getCode();
             }
         }catch (Exception e){
-            ResponseUtils.outResult(response,result);
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_QUERY_ERROR);
         }
-        ResponseUtils.outResult(response,result);
+        return new Result();
     }
 }

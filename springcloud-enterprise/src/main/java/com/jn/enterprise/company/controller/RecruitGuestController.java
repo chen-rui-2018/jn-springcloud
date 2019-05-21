@@ -5,6 +5,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.ServiceRecruitParam;
@@ -12,8 +13,10 @@ import com.jn.enterprise.company.model.ServiceWebRecruitParam;
 import com.jn.enterprise.company.service.RecruitService;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -45,6 +48,10 @@ public class RecruitGuestController extends BaseController {
         ServiceRecruitParam serviceRecruitParam = new ServiceRecruitParam();
         BeanUtils.copyProperties(serviceWebRecruitParam, serviceRecruitParam);
 
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user != null && StringUtils.isNotBlank(user.getAccount())){
+            serviceRecruitParam.setAccount(user.getAccount());
+        }
         //前台查询只能查有效数据
         serviceRecruitParam.setStatus(RecruitDataTypeEnum.ON_SHELVES.getCode());
         return new Result(recruitService.getRecruitList(serviceRecruitParam, RecruitDataTypeEnum.APPROVAL_STATUS_PASS.getCode()));

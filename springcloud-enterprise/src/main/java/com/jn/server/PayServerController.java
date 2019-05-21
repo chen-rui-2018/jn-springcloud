@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.pay.entity.TbPayBillDetails;
 import com.jn.enterprise.pay.service.MyPayBillService;
+import com.jn.pay.vo.PayBillDetailsVo;
 import com.jn.pay.vo.PayBillVo;
 import com.jn.pay.api.PayClient;
 import com.jn.pay.model.*;
@@ -32,14 +33,6 @@ public class PayServerController extends BaseController implements PayClient {
     @Autowired
     private MyPayBillService myPayBillService;
 
-
-    /*@ControllerLog(doAction = "我的账单-查询列表")
-    @Override
-    public Result<PaginationData<List<PayBillVo>>> billQuery(PayBillParams payBillParams) {
-        PaginationData<List<PayBillVo>> data = myPayBillService.getBillQueryList(payBillParams);
-        return new Result(data);
-    }*/
-
     @Override
     @ControllerLog(doAction = "我的账单-通过账单ID查询账单【基础】信息(包含账单支付状态)")
     public PayBill getBillBasicInfo(String billId) {
@@ -48,16 +41,19 @@ public class PayServerController extends BaseController implements PayClient {
 
     @ControllerLog(doAction = "我的账单-通过账单ID查询账单详情信息")
     @Override
-    public Result<PaginationData<List<PayBillDetails>>> getBillInfo(String billId) {
+    public Result<PaginationData<List<PayBillDetailsVo>>> getBillInfo(String billId) {
         Assert.notNull(billId,"账单ID或编号不能为空");
-        PaginationData<List<PayBillDetails>> data = myPayBillService.getBillInfo(billId);
+        PaginationData<List<PayBillDetailsVo>> data = myPayBillService.getBillInfo(billId);
         return new Result<>(data);
     }
 
     @ControllerLog(doAction = "我的账单-账单催缴次数更新")
     @Override
-    public Result updateBillNumber(String billId, int reminderNumber) {
-        myPayBillService.updateBillNumber(billId,reminderNumber);
+    public Result updateBillNumber(PayCheckReminderParam payCheckReminderParam) {
+        Assert.notNull(payCheckReminderParam.getBillId(),"账单ID或编号不能为空");
+        Assert.notNull(payCheckReminderParam.getReminderNumber(),"催缴次数不能为空");
+        Assert.notNull(payCheckReminderParam.getModifiedReminderTime(),"最新催缴时间不能为空");
+        myPayBillService.updateBillNumber(payCheckReminderParam);
         return new Result();
     }
 
@@ -93,8 +89,8 @@ public class PayServerController extends BaseController implements PayClient {
 
     @ControllerLog(doAction = "支付回调接口")
     @Override
-    public void ayCallBack(HttpServletResponse response, PayOrderNotify callBackParam) {
+    public Result payCallBack(PayOrderNotify callBackParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        myPayBillService.payCallBack(response,callBackParam,user);
+        return new Result(myPayBillService.payCallBack(callBackParam,user));
     }
 }

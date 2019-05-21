@@ -95,8 +95,11 @@ public class OaMeetingParticipantVo implements Serializable {
     @ApiModelProperty(value = "会议申请内容")
     private String content;
 
-    @ApiModelProperty(value = "创建人用户名")
+    @ApiModelProperty(value = "预约人用户名")
     private String userName;
+
+    @ApiModelProperty(value = "预约人部门")
+    private String departmentName;
 
     @ApiModelProperty(value = "组织人")
     private String organizationalUserName;
@@ -189,7 +192,13 @@ public class OaMeetingParticipantVo implements Serializable {
     }
 
 
+    public String getDepartmentName() {
+        return departmentName;
+    }
 
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
 
     public String getMeetingStatus() {
         return meetingStatus;

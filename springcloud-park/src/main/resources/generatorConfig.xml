@@ -1063,6 +1063,10 @@
 
     <!--客服中心表-->
     <table tableName="tb_client_service_center"></table>
+    <!--客服处理角色所属用户信息-->
+    <table tableName="tb_client_role_person_info"></table>
+    <!--客服处理问题图片表-->
+    <table tableName="tb_client_execute_img"></table>
 
   </context>
 
@@ -1118,6 +1122,8 @@
     <table tableName="tb_business_ad_dynamic"></table>
     <!--招商管理-招商政策管理表-->
     <table tableName="tb_business_ad_policy"></table>
+    <!--招商管理-项目管理表-->
+    <table tableName="tb_project_info"></table>
 
   </context>
 
@@ -1185,6 +1191,127 @@
     <table tableName="tb_hatch_incubator_type">
     </table>
 
+  </context>
+
+  <!--XQ00007物业服务管理子系统-电表相关-->
+  <context id="electric">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.electricmeter.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.electricmeter"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.electricmeter.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+
+    <table tableName="tb_electric_energy_control_person_config"></table>
+    <table tableName="tb_electric_energy_control_push_log"></table>
+    <table tableName="tb_electric_energy_control_rules"></table>
+    <table tableName="tb_electric_energy_control_target"></table>
+    <table tableName="tb_electric_energy_day_log"></table>
+    <table tableName="tb_electric_energy_group_log"></table>
+    <table tableName="tb_electric_meter_company_day"></table>
+    <table tableName="tb_electric_meter_day_log"></table>
+    <table tableName="tb_electric_meter_info"></table>
+    <table tableName="tb_electric_price_rules"></table>
+    <table tableName="tb_electric_pricerule_company"></table>
+    <table tableName="tb_electric_pricerule_company_in_day"></table>
+    <table tableName="tb_electric_reading"></table>
+    <table tableName="tb_electric_rules_content"></table>
+    <table tableName="tb_electric_turn_rules"></table>
+    <table tableName="tb_electric_warning_record"></table>
+    <table tableName="tb_electric_warning_rules"></table>
+    <table tableName="tb_electric_reading_source"></table>
+    <table tableName="tb_electric_reading_fail_log"></table>
+
+  </context>
+  <!--物业维修-->
+  <context id="repair">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.repair.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.repair"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.repair.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+    <table tableName="tb_pm_repair">
+    </table>
   </context>
 
 </generatorConfiguration>

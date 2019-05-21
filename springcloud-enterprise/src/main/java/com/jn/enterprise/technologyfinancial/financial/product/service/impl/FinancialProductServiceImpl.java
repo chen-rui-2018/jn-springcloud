@@ -28,7 +28,6 @@ import com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapp
 import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -314,7 +313,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
 
     }
 
-    public String addWebFinancialProduct(FinancialProductAddInfo info,String account) {
+    public String addWebFinancialProduct(FinancialProductAddInfo info, String account) {
         //记录状态
         Byte recordStatus =  RecordStatusEnum.EFFECTIVE.getValue();
         //产品类型(特色产品)
@@ -338,12 +337,21 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         product.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         product.setCreatorAccount(account);
         product.setRecordStatus(recordStatus.toString());
+        product.setStatus(ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode());
         product.setSignoryId("technology_finance");
         product.setSignoryName("科技金融");
         product.setProductId("");
 
+        if (StringUtils.isNotBlank(info.getCreatedTime())) {
+            product.setModifiedTime(info.getCreatedTime());
+            product.setModifierAccount(info.getCreatorAccount());
+        }
+        if (StringUtils.isBlank(product.getViewCount())) {
+            product.setViewCount("0");
+        }
+
         // 启动IBPS流程
-        String bpmnDefId = ibpsDefIdConfig.getProduct();
+        String bpmnDefId = ibpsDefIdConfig.getTechnologyProduct();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, product);
 
         // ibps启动流程失败
@@ -416,7 +424,8 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         info.setOrgId(orgId);
         info.setOrgName(userExtension.getAffiliateName());
         info.setProductType(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode());
-        addWebFinancialProduct(info,account);
+        info.setViewCount("0");
+        addWebFinancialProduct(info, account);
     }
 
     @ServiceLog(doAction = "更新科技金融产品")
@@ -434,6 +443,9 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         info.setOrgName(userExtension.getAffiliateName());
         info.setProductType(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode());
         BeanUtils.copyProperties(product, info);
+        info.setViewCount(tbServiceProduct.getViewCount().toString());
+        info.setCreatedTime(DateUtils.formatDate(tbServiceProduct.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+        info.setCreatorAccount(tbServiceProduct.getCreatorAccount());
         String state = addWebFinancialProduct(info, account);
 
         // ibps启动成功删除数据

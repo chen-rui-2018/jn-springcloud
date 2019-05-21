@@ -14,6 +14,7 @@ import '@/styles/index.scss' // global css
 // 引入字体图标
 import '@/assets/icon/css/font-awesome.min.css'
 import '@/assets/iconfont/iconfont.css'
+import '@/assets/iconfont/iconfont.js'
 import '../static/UE/ueditor.config'
 import '../static/UE/ueditor.all'
 import '../static/UE/lang/zh-cn/zh-cn'

@@ -23,9 +23,10 @@ export default {}
     background-color: #fff;
     align-items: stretch;
     .target-frame-l {
-      min-height: 100%;
+      max-height: 500px;
+      overflow: auto;
       width: 200px;
-      padding: 15px;
+      padding: 10px;
       flex: none;
     }
     .target-frame-r {

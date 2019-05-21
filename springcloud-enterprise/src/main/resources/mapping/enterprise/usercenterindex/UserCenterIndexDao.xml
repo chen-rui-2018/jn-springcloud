@@ -14,7 +14,7 @@
         LIMIT 1
     </select>
 
-    <!---->
+    <!--员工申请-->
     <select id="findEmployeeRequisition" parameterType="java.lang.String" resultType="com.jn.enterprise.usercenterindex.model.EmployeeRequisitionModel">
         SELECT
 		SUM(CASE t.inviter_account WHEN ${account} then 1 else 0 end) as "total",
@@ -23,6 +23,19 @@
         tb_service_company_staff t
         WHERE t.record_status = 1
         AND t.inviter_account=#{account}
+    </select>
+
+    <!--员工申请-->
+    <select id="findAdviserInvitation"  parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+        COUNT(t.org_id_) as "total"
+        FROM
+        tb_service_advisor t
+        WHERE t.record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(approvalStatus)">
+        AND t.approval_status=#{approvalStatus}
+        </if>
+        AND t.org_id_=#{orgId}
     </select>
 
 </mapper>

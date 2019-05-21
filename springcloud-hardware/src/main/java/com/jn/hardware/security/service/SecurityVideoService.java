@@ -1,10 +1,7 @@
 package com.jn.hardware.security.service;
 
 import com.jn.common.model.Result;
-import com.jn.hardware.model.security.SecurityMonitoringPointParam;
-import com.jn.hardware.model.security.SecurityMonitoringPointShow;
-import com.jn.hardware.model.security.SecurityPlayBackUrlParam;
-import com.jn.hardware.model.security.SecurityPlayBackUrlShow;
+import com.jn.hardware.model.security.*;
 
 /**
  * @author： chenr
@@ -13,6 +10,7 @@ import com.jn.hardware.model.security.SecurityPlayBackUrlShow;
  * @modified By:
  */
 public interface SecurityVideoService {
+
     /**
      * 查询监控点列表
      * @param securityMonitoringPointParam
@@ -25,4 +23,11 @@ public interface SecurityVideoService {
      * @return
      */
     Result<SecurityPlayBackUrlShow> findSecurityPlayBackUrlList(SecurityPlayBackUrlParam securityPlayBackUrlParam);
+    /**
+     *  获取海康威视的 接口凭证 token,返回 用于认证的url
+     * @param securityTokenParam 实体类参数
+     * @return
+     */
+    Result<String> getSecurityTokenURL(SecurityTokenParam securityTokenParam);
+
 }

@@ -3,7 +3,12 @@ package com.jn.enterprise.pay.dao;
 
 
 import com.jn.pay.model.PayAccountBook;
+import com.jn.pay.model.PayAccountBookMoneyRecordParam;
+import com.jn.pay.model.PayAccountBookParam;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
+import com.jn.pay.vo.PayAccountBookMoneyRecordVo;
+import com.jn.pay.vo.PayAccountBookRecordVo;
+import com.jn.pay.vo.PayAccountBookVo;
 
 import java.util.List;
 
@@ -19,5 +24,9 @@ public interface PayAccountAndAccountBookDao {
 
     PayAccountAndAccountBookVo selectPayAccountId(String userId);
 
-    List<PayAccountBook> selectPayAccountBookList(String accountId);
+    List<PayAccountBookVo> selectPayAccountBookList(String accountId);
+
+    PayAccountBookMoneyRecordVo queryPayAccountDetails(PayAccountBookMoneyRecordParam pay);
+
+    List<PayAccountBookRecordVo> queryPayAccountBookInfo(PayAccountBookParam payAccountBookParam);
 }

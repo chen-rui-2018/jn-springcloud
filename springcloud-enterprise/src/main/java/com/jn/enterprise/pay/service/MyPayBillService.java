@@ -13,6 +13,7 @@ import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public interface MyPayBillService {
 
     /**
      * 账单催缴次数更新
-     * @param billId,reminderNumber
+     * @param payCheckReminderParam
      * @return
      */
     void updateBillNumber(PayCheckReminderParam payCheckReminderParam);
@@ -80,7 +81,7 @@ public interface MyPayBillService {
      * @param user
      * @return
      */
-    Result startPayment(PayBIllInitiateParam payBIllInitiateParam, User user);
+    Result<PayOrderRsp> startPayment(PayBIllInitiateParam payBIllInitiateParam, User user);
 
     /**
      * 支付回调接口
@@ -88,4 +89,19 @@ public interface MyPayBillService {
      * @return
      */
     Result payCallBack(PayOrderNotify callBackParam, User user);
+
+    /**
+     * 账本预缴充值
+     * @param payPrepaidRechargeParam,user
+     * @param user
+     * @return
+     */
+    Result<PayOrderRsp> insertPrepaidRecharge(PayPrepaidRechargeParam payPrepaidRechargeParam, User user);
+
+    /**
+     * 预缴充值回调接口
+     * @param callBackParam
+     * @return
+     */
+    Result payAccountCallBack(PayOrderNotify callBackParam,User user);
 }

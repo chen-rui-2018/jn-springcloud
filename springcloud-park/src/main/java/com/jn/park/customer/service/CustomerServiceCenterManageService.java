@@ -3,6 +3,7 @@ package com.jn.park.customer.service;
 import com.jn.common.model.PaginationData;
 import com.jn.park.customer.model.IBPSCompleteCustomerParam;
 import com.jn.park.customer.model.IBPSOnlineCustomerForm;
+import com.jn.park.customer.model.MyTasksOrMyHandledParam;
 import com.jn.park.customer.model.MyTasksParam;
 
 /**
@@ -44,4 +45,12 @@ public interface CustomerServiceCenterManageService {
      * @return
      */
     int complete(IBPSCompleteCustomerParam customerParam, String loginAccount);
+
+    /**
+     * 园区客服中心
+     * @param param
+     * @param loginAccount
+     * @return
+     */
+    PaginationData myTasksOrMyHandled(MyTasksOrMyHandledParam param,String loginAccount);
 }

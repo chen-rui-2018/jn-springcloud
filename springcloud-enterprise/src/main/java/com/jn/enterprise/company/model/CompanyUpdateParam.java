@@ -389,4 +389,42 @@ public class CompanyUpdateParam implements Serializable {
     public void setCheckCode(String checkCode) {
         this.checkCode = checkCode;
     }
+
+    @Override
+    public String toString() {
+        return "CompanyUpdateParam{" +
+                "id='" + id + '\'' +
+                ", comId='" + comId + '\'' +
+                ", comName='" + comName + '\'' +
+                ", comNameShort='" + comNameShort + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", unifyCode='" + unifyCode + '\'' +
+                ", ownerLaw='" + ownerLaw + '\'' +
+                ", ownerPhone='" + ownerPhone + '\'' +
+                ", comProperty='" + comProperty + '\'' +
+                ", regCapital=" + regCapital +
+                ", comScale=" + comScale +
+                ", foundingTime='" + foundingTime + '\'' +
+                ", runTime='" + runTime + '\'' +
+                ", induType='" + induType + '\'' +
+                ", induCode='" + induCode + '\'' +
+                ", businessLicense='" + businessLicense + '\'' +
+                ", propagandaPicture='" + propagandaPicture + '\'' +
+                ", mainProducts='" + mainProducts + '\'' +
+                ", comAddress='" + comAddress + '\'' +
+                ", comTele='" + comTele + '\'' +
+                ", comWeb='" + comWeb + '\'' +
+                ", comServer='" + comServer + '\'' +
+                ", comDemand='" + comDemand + '\'' +
+                ", addrPark='" + addrPark + '\'' +
+                ", comSynopsis='" + comSynopsis + '\'' +
+                ", comSource='" + comSource + '\'' +
+                ", affiliatedPark='" + affiliatedPark + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", checkStatus='" + checkStatus + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", recordStatus='" + recordStatus + '\'' +
+                ", checkCode='" + checkCode + '\'' +
+                '}';
+    }
 }

@@ -72,4 +72,15 @@ public class Achievement implements Serializable {
     public void setDetails(String details) {
         this.details = details;
     }
+
+    @Override
+    public String toString() {
+        return "Achievement{" +
+                "title='" + title + '\'' +
+                ", details='" + details + '\'' +
+                ", type='" + type + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", createdTime=" + createdTime +
+                '}';
+    }
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.employee.dao.EmployeeFileMapper">
+    <select id="list" parameterType="com.jn.hr.archives.model.EmployeeFilePage"
+            resultType="com.jn.hr.archives.model.EmployeeFile">
+        SELECT
+        t1.file_id, t1.class_id, t1.node_name, t1.symbol, t1.title_name, t1.remark, t1.person_liable,
+        t1.accessory_management,
+        t1.record_status, t1.creator_account, t1.created_time, t1.modifier_account, t1.modified_time,
+        t1.reg_department
+        FROM
+        `tb_manpower_employee_file` t1
+        WHERE t1.record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(symbol)">
+            and t1.symbol  like concat('%',#{symbol,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(titleName)">
+            and t1.title_name like concat('%',#{titleName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(classId)">
+            and t1.class_id =#{classId,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileId)">
+            and t1.file_id =#{fileId,jdbcType=VARCHAR}
+        </if>
+        ORDER BY t1.created_time DESC
+    </select>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_employee_file
+        (
+        file_id, class_id, node_name, symbol, title_name, remark, person_liable, accessory_management,
+        record_status, creator_account, created_time, modifier_account, modified_time, reg_department
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.fileId},
+            #{item.classId},
+            #{item.nodeName},
+            #{item.symbol},
+            #{item.titleName},
+            #{item.remark},
+            #{item.personLiable},
+            #{item.accessoryManagement},
+            #{item.recordStatus},
+            #{item.creatorAccount},
+            #{item.createdTime},
+            #{item.modifierAccount},
+            #{item.modifiedTime},
+            #{item.regDepartment}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

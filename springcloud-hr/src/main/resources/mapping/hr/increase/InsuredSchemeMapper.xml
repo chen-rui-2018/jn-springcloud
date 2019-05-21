@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.InsuredSchemeMapper">
+  <select id="list" parameterType="com.jn.hr.increase.model.InsuredSchemePage" resultType="com.jn.hr.increase.model.InsuredScheme">
+    select * from tb_manpower_insured_scheme where record_status != 0
+  </select>
+</mapper>

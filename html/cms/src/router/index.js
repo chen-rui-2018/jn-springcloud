@@ -16,6 +16,7 @@ import planningRouter from './modules/planning'
 import menuRouter from './modules/menu'
 import portalRouter from './modules/portal'
 import oaRouter from './modules/oa'
+import hrRouter from './modules/hr'
 import financRouter from './modules/financialSynergy'
 import dataReport from './modules/dataReport'
 import noticeRouter from './modules/notice'
@@ -61,6 +62,16 @@ export const constantRouterMap = [
     hidden: true
   },
   {
+    path: '/answerHome',
+    component: () => import('@/views/answerHome/answerHome'),
+    hidden: true
+  },
+  {
+    path: '/resultPage',
+    component: () => import('@/views/answerHome/resultPage'),
+    hidden: true
+  },
+  {
     path: '/404',
     component: () => import('@/views/errorPage/404'),
     hidden: true
@@ -86,6 +97,7 @@ export const constantRouterMap = [
   menuRouter,
   portalRouter,
   oaRouter,
+  hrRouter,
   // permissionManagement,
   planningRouter,
   financRouter,

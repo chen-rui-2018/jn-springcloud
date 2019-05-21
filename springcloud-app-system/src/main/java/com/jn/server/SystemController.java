@@ -141,14 +141,14 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Override
     @ControllerLog(doAction = "添加用户")
-    public Result addSysUser(@Validated @RequestBody User user) {
+    public Result<User> addSysUser(@Validated @RequestBody User user) {
         user.setId(UUID.randomUUID().toString());
         user.setPassword(DigestUtils.md5Hex(user.getPassword()));
         user.setRecordStatus(Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode()));
         SysUserAdd SysUserAdd = new SysUserAdd();
         BeanUtils.copyProperties(user, SysUserAdd);
         sysUserService.addSysUser(SysUserAdd, new User());
-        return new Result();
+        return new Result(user);
     }
 
     @Override
@@ -241,6 +241,13 @@ public class SystemController extends BaseController implements SystemClient {
     public Result<List<SysDictKeyValue>> getDict(@RequestBody SysDictInvoke sysDictInvoke) {
         List<SysDictKeyValue> dictList = sysDictService.getDict(sysDictInvoke);
         return new Result(dictList);
+    }
+
+    @Override
+    @ControllerLog(doAction = "根据角色id或角色名称获取角色拥有的用户信息")
+    public Result<List<User>> getUserByRole(@RequestBody SysRole role) {
+        List<User> userList = sysRoleService.getUserByRole(role);
+        return new Result<List<User>>(userList);
     }
 
     @Override

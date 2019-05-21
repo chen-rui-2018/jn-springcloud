@@ -4,7 +4,6 @@ package com.jn.user.userinfo.service;
 import com.jn.common.model.PaginationData;
 import com.jn.system.model.User;
 import com.jn.user.model.*;
-import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.model.UserInfoParam;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 public interface UserInfoService {
     /**
-     * 根据账号获取用户扩展信息
+     * 根据用户账号/手机号/邮箱获取用户扩展信息
      * @param account 用户账号
      * @return
      */

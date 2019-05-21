@@ -12,6 +12,7 @@ import com.jn.park.message.model.MessageListModel;
 import com.jn.park.message.service.MessageListService;
 import com.jn.park.plan.model.*;
 import com.jn.park.plan.service.ProjectManageService;
+import com.jn.park.plan.vo.ProjectPlanVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -50,14 +51,12 @@ public class ProjectManageController extends BaseController {
     @RequiresPermissions("/planning/project/findAll")
     public Result<PaginationData<List<ProjectManageModel>> > findAll(ProjectModel projectModel){
         //输入类型限制只能输入 0 1 2
-        if(projectModel.getProjectState() != "" && projectModel.getProjectState() != null){
+        if(StringUtils.isNotBlank(projectModel.getProjectState())){
             checkIsType(projectModel.getProjectState());
         }
-        if(projectModel.getProgress() != "" && projectModel.getProgress() != null){
+        if(StringUtils.isNotBlank(projectModel.getProgress())){
             checkIsType(projectModel.getProgress());
         }
-
-
         PaginationData findAll=projectManageService.findAll(projectModel);
 
        return new Result(findAll);
@@ -85,9 +84,9 @@ public class ProjectManageController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "projectNo",value = "工程项目编号",dataType = "String",paramType = "query",example = "CS201904230001")
     })
-    public Result<ProjectPlanModel> findTaskPlan(String projectNo){
+    public Result<List<ProjectPlanVo>> findTaskPlan(String projectNo){
 
-        ProjectPlanModel findTaskPlan=projectManageService.findTaskPlan(projectNo);
+        List<ProjectPlanVo> findTaskPlan=projectManageService.findTaskPlan(projectNo);
 
         return new Result(findTaskPlan);
     }
@@ -99,9 +98,9 @@ public class ProjectManageController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "projectNo",value = "工程项目编号",dataType = "String",paramType = "query",example = "CS201904230001")
     })
-    public Result<ProjectCompleteRatioModel> findCompleteRatio(String projectNo){
+    public Result<ProjectCompleteRatioArrayModel> findCompleteRatio(String projectNo){
 
-        ProjectCompleteRatioModel findCompleteRatio=projectManageService.findCompleteRatio(projectNo);
+        ProjectCompleteRatioArrayModel findCompleteRatio=projectManageService.findCompleteRatio(projectNo);
 
         return new Result(findCompleteRatio);
     }

@@ -49,10 +49,10 @@ export default {
 }
 </script>
 <style  lang="scss">
-// #editor{
+  .ueQuidtor{
 
-//    .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
-//     line-height: 22px !important;
-// }
-// }
+    .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
+      line-height: 22px !important;
+    }
+  }
 </style>

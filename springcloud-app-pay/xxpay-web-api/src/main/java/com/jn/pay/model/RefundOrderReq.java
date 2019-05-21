@@ -2,7 +2,7 @@ package com.jn.pay.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -47,7 +47,7 @@ public class RefundOrderReq implements Serializable {
     /**
      * 退款金额,单位分
      */
-    @NotBlank(message = "支付金额不能为空！")
+    @NotNull(message = "支付金额不能为空！")
     private Long amount;
     /**
      * 客户端IP
@@ -58,10 +58,25 @@ public class RefundOrderReq implements Serializable {
      */
     private String device;
     /**
-     * 退款结果回调URL
+     * 回调地址
+     * 支付系统回调通知业务系统地址(http方式)
+     * notifyUrl如果为空,serviceId和serviceUrl为必传
      */
-    @NotBlank(message = "退款结果回调URL不能为空！")
+    @ApiModelProperty("支付系统回调通知业务系统地址(http方式)，notifyUrl如果为空,serviceId和serviceUrl为必传")
     private String notifyUrl;
+    /**
+     * 回调springCloud服务名称ID
+     * serviceId和serviceUrl如果为空,notifyUrl为必传
+     */
+    @ApiModelProperty("支付系统回调通知业务系统地址，serviceId和serviceUrl如果为空,notifyUrl为必传")
+    private String serviceId;
+
+    /**
+     * 回调springCloud服务URL
+     * serviceId和serviceUrl如果为空,notifyUrl为必传
+     */
+    @ApiModelProperty("支付系统回调通知业务系统地址，serviceId和serviceUrl如果为空,notifyUrl为必传")
+    private String serviceUrl;
     /**
      * 渠道用户标识,如微信openId,支付宝账号
      */
@@ -101,6 +116,12 @@ public class RefundOrderReq implements Serializable {
      */
     private String extra ;
 
+    /**
+     * 签名
+     */
+    @ApiModelProperty("签名,可以通过API提供的工具生成")
+    @NotBlank(message = "签名不能为空！")
+    private String sign;
 
     @Override
     public String toString() {
@@ -114,13 +135,32 @@ public class RefundOrderReq implements Serializable {
                 ", clientIp='" + clientIp + '\'' +
                 ", device='" + device + '\'' +
                 ", notifyUrl='" + notifyUrl + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                ", serviceUrl='" + serviceUrl + '\'' +
                 ", channelUser='" + channelUser + '\'' +
                 ", userName='" + userName + '\'' +
                 ", remarkInfo='" + remarkInfo + '\'' +
                 ", param1='" + param1 + '\'' +
                 ", param2='" + param2 + '\'' +
                 ", extra='" + extra + '\'' +
+                ", sign='" + sign + '\'' +
                 '}';
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
     }
 
     public String getMchId() {
@@ -243,5 +283,11 @@ public class RefundOrderReq implements Serializable {
         this.extra = extra;
     }
 
+    public String getSign() {
+        return sign;
+    }
 
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
 }

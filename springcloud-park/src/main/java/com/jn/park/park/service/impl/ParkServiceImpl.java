@@ -89,6 +89,7 @@ public class ParkServiceImpl implements ParkService {
             BeanUtils.copyProperties(tbParkCriteria,parkName);
             parkName.setId(vo.getId());
             parkName.setParkName(vo.getParkName());
+            parkName.setMainPicture(vo.getMainPicture());
             parkList.add(parkName);
         }
         return parkList;

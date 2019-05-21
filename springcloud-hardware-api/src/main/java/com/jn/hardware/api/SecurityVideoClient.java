@@ -1,10 +1,7 @@
 package com.jn.hardware.api;
 
 import com.jn.common.model.Result;
-import com.jn.hardware.model.security.SecurityMonitoringPointParam;
-import com.jn.hardware.model.security.SecurityMonitoringPointShow;
-import com.jn.hardware.model.security.SecurityPlayBackUrlParam;
-import com.jn.hardware.model.security.SecurityPlayBackUrlShow;
+import com.jn.hardware.model.security.*;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +23,19 @@ public interface SecurityVideoClient {
     @RequestMapping(value = "/api/hardware/security/findSecurityMonitoringPointList")
     Result<SecurityMonitoringPointShow> findSecurityMonitoringPointList(@RequestBody SecurityMonitoringPointParam securityMonitoringPointParam);
     /**
-     * 查询监控点列表
+     * 查询监控回放路径url列表
      * @param securityPlayBackUrlParam 实体类参数
      * @return
      */
     @RequestMapping(value = "/api/hardware/security/findSecurityPlayBackUrlList")
     Result<SecurityPlayBackUrlShow> findSecurityPlayBackUrlList(@RequestBody SecurityPlayBackUrlParam securityPlayBackUrlParam);
+    /**
+     *  获取海康威视的 接口凭证 token,返回 用于认证的url
+     * @param securityTokenParam 实体类参数
+     * @return
+     */
+    @RequestMapping(value = "/api/hardware/security/getSecurityTokenURL")
+    Result<String> getSecurityTokenURL(@RequestBody SecurityTokenParam securityTokenParam);
+
+
 }

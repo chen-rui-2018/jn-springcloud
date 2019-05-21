@@ -3,14 +3,15 @@ package com.jn.common.util;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.*;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * RestTemplateUtil 工具类
@@ -112,21 +113,67 @@ public class RestTemplateUtil {
     }
 
     /**
-     * RestTemplateUtil application/x-www-form-urlencoded
+     * RestTemplateUtil
      *
      * @param url            请求地址
      * @param method         method
      * @param map            请求参数
      * @param dynamicHeaders 动态头部
+     * @param mediaType      application/x-www-form-urlencoded application/json
      * @return
      */
-    public static JSONObject request(String url, HttpMethod method, MultiValueMap<String, String> map, Map<String, String> dynamicHeaders) {
+    public static JSONObject request(String url, HttpMethod method, MultiValueMap<String, Object> map, Map<String, String> dynamicHeaders, MediaType mediaType) {
         restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, setHeaders(headers, dynamicHeaders));
+        headers.setContentType(mediaType);
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(map, setHeaders(headers, dynamicHeaders));
+        if (HttpMethod.GET.equals(method)) {
+            url = url + createLinkStringByGet(map);
+        }
         ResponseEntity<JSONObject> response = restTemplate.exchange(url, method, request, JSONObject.class);
         return response.getBody();
+    }
+
+    /**
+     * RestTemplateUtil
+     *
+     * @param url
+     * @param method
+     * @param jsonObject
+     * @param dynamicHeaders
+     * @return
+     */
+    public static JSONObject request(String url, HttpMethod method, String jsonObject, Map<String, String> dynamicHeaders) {
+        restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        headers.setContentType(type);
+        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON.toString());
+        HttpEntity<String> request = new HttpEntity<String>(jsonObject, setHeaders(headers, dynamicHeaders));
+        ResponseEntity<JSONObject> response = restTemplate.exchange(url, method, request, JSONObject.class);
+        return response.getBody();
+    }
+
+    /**
+     * createLinkStringByGet
+     *
+     * @param params
+     * @return
+     */
+    public static String createLinkStringByGet(MultiValueMap<String, Object> params) {
+        List<String> keys = new ArrayList<String>(params.keySet());
+        Collections.sort(keys);
+        String prestr = "?";
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            String value = params.get(key).get(0).toString();
+            if (i == keys.size() - 1) {
+                prestr += key + "=" + value;
+            } else {
+                prestr += key + "=" + value + "&";
+            }
+        }
+        return prestr;
     }
 
     /**

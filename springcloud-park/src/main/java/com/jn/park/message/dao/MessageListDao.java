@@ -1,9 +1,6 @@
 package com.jn.park.message.dao;
 
-import com.jn.park.message.model.AddMessageModel;
-import com.jn.park.message.model.FindAllMessageListVo;
-import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.findAllMessageListModel;
+import com.jn.park.message.model.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -15,18 +12,24 @@ import java.util.List;
  */
 public interface MessageListDao {
 
+    List<MessageTowModel> getMessageOneTort(@Param("account") String account, @Param("messageOneTort") String messageOneTort);
+
+
+    List<MessageListModel> findAllApp(@Param("messageOneSort") String messageOneSort,@Param("isRead") Integer isRead, @Param("account") String account);
+
+
     /**
      * 查询所有消息
      * @param
      * @return
      */
-    List<FindAllMessageListVo> findAll(@Param("messageOneTort") Integer messageOneTort,@Param("messageTowTort") Integer messageTowTort,@Param("isRead") Integer isRead, @Param("account") String account);
+    List<MessageListModel> findAll(@Param("messageTowTort") String messageTowTort,@Param("isRead") Integer isRead, @Param("account") String account);
 
     /**
      * 获取是否有已读消息
      * @return
      */
-    int getIsRead(@Param("account") String account);
+    int getIsRead(@Param("messageOneTort") String messageOneTort,@Param("messageTowTort") String messageTowTort,@Param("account") String account);
 
 
     /**

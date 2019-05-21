@@ -8,6 +8,7 @@
     <result column="BILL_SOURCE" jdbcType="VARCHAR" property="billSource" />
     <result column="BILL_EXPENSE" jdbcType="DECIMAL" property="billExpense" />
     <result column="REMINDER_NUMBER" jdbcType="INTEGER" property="reminderNumber" />
+    <result column="modified_reminder_time" jdbcType="TIMESTAMP" property="modifiedReminderTime" />
     <result column="OBJ_TYPE" jdbcType="VARCHAR" property="objType" />
     <result column="obj_id" jdbcType="VARCHAR" property="objId" />
     <result column="OBJ_NAME" jdbcType="VARCHAR" property="objName" />
@@ -26,6 +27,7 @@
     <result column="AFFIRM_TIME" jdbcType="TIMESTAMP" property="affirmTime" />
     <result column="record_status" jdbcType="CHAR" property="recordStatus" />
     <result column="callback_id" jdbcType="VARCHAR" property="callbackId" />
+    <result column="bill_receiver" jdbcType="VARCHAR" property="billReceiver" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -86,10 +88,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    BILL_ID, AC_BOOK_ID, BILL_NAME, BILL_SOURCE, BILL_EXPENSE, REMINDER_NUMBER, OBJ_TYPE, 
-    obj_id, OBJ_NAME, PAYMENT_STATE, PAYMENT_TYPE, AC_BOOK_TYPE, order_number, callback_url, 
-    created_time, creator_account, modified_time, modifier_account, LATE_PAYMENT, PAYMENT_AFFIRM, 
-    AFFIRM_PART, AFFIRM_TIME, record_status, callback_id
+    BILL_ID, AC_BOOK_ID, BILL_NAME, BILL_SOURCE, BILL_EXPENSE, REMINDER_NUMBER, modified_reminder_time, 
+    OBJ_TYPE, obj_id, OBJ_NAME, PAYMENT_STATE, PAYMENT_TYPE, AC_BOOK_TYPE, order_number, 
+    callback_url, created_time, creator_account, modified_time, modifier_account, LATE_PAYMENT, 
+    PAYMENT_AFFIRM, AFFIRM_PART, AFFIRM_TIME, record_status, callback_id, bill_receiver
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayBillCriteria" resultMap="BaseResultMap">
     select
@@ -124,22 +126,22 @@
   <insert id="insert" parameterType="com.jn.enterprise.pay.entity.TbPayBill">
     insert into tb_pay_bill (BILL_ID, AC_BOOK_ID, BILL_NAME, 
       BILL_SOURCE, BILL_EXPENSE, REMINDER_NUMBER, 
-      OBJ_TYPE, obj_id, OBJ_NAME, 
-      PAYMENT_STATE, PAYMENT_TYPE, AC_BOOK_TYPE, 
-      order_number, callback_url, created_time, 
-      creator_account, modified_time, modifier_account, 
-      LATE_PAYMENT, PAYMENT_AFFIRM, AFFIRM_PART, 
-      AFFIRM_TIME, record_status, callback_id
-      )
+      modified_reminder_time, OBJ_TYPE, obj_id, 
+      OBJ_NAME, PAYMENT_STATE, PAYMENT_TYPE, 
+      AC_BOOK_TYPE, order_number, callback_url, 
+      created_time, creator_account, modified_time, 
+      modifier_account, LATE_PAYMENT, PAYMENT_AFFIRM, 
+      AFFIRM_PART, AFFIRM_TIME, record_status, 
+      callback_id, bill_receiver)
     values (#{billId,jdbcType=VARCHAR}, #{acBookId,jdbcType=VARCHAR}, #{billName,jdbcType=VARCHAR}, 
       #{billSource,jdbcType=VARCHAR}, #{billExpense,jdbcType=DECIMAL}, #{reminderNumber,jdbcType=INTEGER}, 
-      #{objType,jdbcType=VARCHAR}, #{objId,jdbcType=VARCHAR}, #{objName,jdbcType=VARCHAR}, 
-      #{paymentState,jdbcType=CHAR}, #{paymentType,jdbcType=CHAR}, #{acBookType,jdbcType=VARCHAR}, 
-      #{orderNumber,jdbcType=VARCHAR}, #{callbackUrl,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{latePayment,jdbcType=TIMESTAMP}, #{paymentAffirm,jdbcType=CHAR}, #{affirmPart,jdbcType=VARCHAR}, 
-      #{affirmTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR}, #{callbackId,jdbcType=VARCHAR}
-      )
+      #{modifiedReminderTime,jdbcType=TIMESTAMP}, #{objType,jdbcType=VARCHAR}, #{objId,jdbcType=VARCHAR}, 
+      #{objName,jdbcType=VARCHAR}, #{paymentState,jdbcType=CHAR}, #{paymentType,jdbcType=CHAR}, 
+      #{acBookType,jdbcType=VARCHAR}, #{orderNumber,jdbcType=VARCHAR}, #{callbackUrl,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{latePayment,jdbcType=TIMESTAMP}, #{paymentAffirm,jdbcType=CHAR}, 
+      #{affirmPart,jdbcType=VARCHAR}, #{affirmTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR}, 
+      #{callbackId,jdbcType=VARCHAR}, #{billReceiver,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayBill">
     insert into tb_pay_bill
@@ -161,6 +163,9 @@
       </if>
       <if test="reminderNumber != null">
         REMINDER_NUMBER,
+      </if>
+      <if test="modifiedReminderTime != null">
+        modified_reminder_time,
       </if>
       <if test="objType != null">
         OBJ_TYPE,
@@ -216,6 +221,9 @@
       <if test="callbackId != null">
         callback_id,
       </if>
+      <if test="billReceiver != null">
+        bill_receiver,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="billId != null">
@@ -235,6 +243,9 @@
       </if>
       <if test="reminderNumber != null">
         #{reminderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedReminderTime != null">
+        #{modifiedReminderTime,jdbcType=TIMESTAMP},
       </if>
       <if test="objType != null">
         #{objType,jdbcType=VARCHAR},
@@ -290,6 +301,9 @@
       <if test="callbackId != null">
         #{callbackId,jdbcType=VARCHAR},
       </if>
+      <if test="billReceiver != null">
+        #{billReceiver,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.enterprise.pay.entity.TbPayBillCriteria" resultType="java.lang.Long">
@@ -318,6 +332,9 @@
       </if>
       <if test="record.reminderNumber != null">
         REMINDER_NUMBER = #{record.reminderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.modifiedReminderTime != null">
+        modified_reminder_time = #{record.modifiedReminderTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.objType != null">
         OBJ_TYPE = #{record.objType,jdbcType=VARCHAR},
@@ -373,6 +390,9 @@
       <if test="record.callbackId != null">
         callback_id = #{record.callbackId,jdbcType=VARCHAR},
       </if>
+      <if test="record.billReceiver != null">
+        bill_receiver = #{record.billReceiver,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -386,6 +406,7 @@
       BILL_SOURCE = #{record.billSource,jdbcType=VARCHAR},
       BILL_EXPENSE = #{record.billExpense,jdbcType=DECIMAL},
       REMINDER_NUMBER = #{record.reminderNumber,jdbcType=INTEGER},
+      modified_reminder_time = #{record.modifiedReminderTime,jdbcType=TIMESTAMP},
       OBJ_TYPE = #{record.objType,jdbcType=VARCHAR},
       obj_id = #{record.objId,jdbcType=VARCHAR},
       OBJ_NAME = #{record.objName,jdbcType=VARCHAR},
@@ -403,7 +424,8 @@
       AFFIRM_PART = #{record.affirmPart,jdbcType=VARCHAR},
       AFFIRM_TIME = #{record.affirmTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=CHAR},
-      callback_id = #{record.callbackId,jdbcType=VARCHAR}
+      callback_id = #{record.callbackId,jdbcType=VARCHAR},
+      bill_receiver = #{record.billReceiver,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -425,6 +447,9 @@
       </if>
       <if test="reminderNumber != null">
         REMINDER_NUMBER = #{reminderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedReminderTime != null">
+        modified_reminder_time = #{modifiedReminderTime,jdbcType=TIMESTAMP},
       </if>
       <if test="objType != null">
         OBJ_TYPE = #{objType,jdbcType=VARCHAR},
@@ -480,6 +505,9 @@
       <if test="callbackId != null">
         callback_id = #{callbackId,jdbcType=VARCHAR},
       </if>
+      <if test="billReceiver != null">
+        bill_receiver = #{billReceiver,jdbcType=VARCHAR},
+      </if>
     </set>
     where BILL_ID = #{billId,jdbcType=VARCHAR}
   </update>
@@ -490,6 +518,7 @@
       BILL_SOURCE = #{billSource,jdbcType=VARCHAR},
       BILL_EXPENSE = #{billExpense,jdbcType=DECIMAL},
       REMINDER_NUMBER = #{reminderNumber,jdbcType=INTEGER},
+      modified_reminder_time = #{modifiedReminderTime,jdbcType=TIMESTAMP},
       OBJ_TYPE = #{objType,jdbcType=VARCHAR},
       obj_id = #{objId,jdbcType=VARCHAR},
       OBJ_NAME = #{objName,jdbcType=VARCHAR},
@@ -507,7 +536,8 @@
       AFFIRM_PART = #{affirmPart,jdbcType=VARCHAR},
       AFFIRM_TIME = #{affirmTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=CHAR},
-      callback_id = #{callbackId,jdbcType=VARCHAR}
+      callback_id = #{callbackId,jdbcType=VARCHAR},
+      bill_receiver = #{billReceiver,jdbcType=VARCHAR}
     where BILL_ID = #{billId,jdbcType=VARCHAR}
   </update>
 </mapper>

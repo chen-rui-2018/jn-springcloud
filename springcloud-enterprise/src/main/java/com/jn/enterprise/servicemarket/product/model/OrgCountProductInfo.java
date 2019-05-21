@@ -15,6 +15,10 @@ public class OrgCountProductInfo implements Serializable {
     private String productId;
     @ApiModelProperty(value = "产品名称")
     private String productName;
+    @ApiModelProperty(value = "领域id")
+    private String signoryId;
+     @ApiModelProperty(value = "领域名称")
+    private String signoryName;
     @ApiModelProperty(value ="机构名称")
     private String orgName;
     @ApiModelProperty(value = "顾问名称")
@@ -41,6 +45,22 @@ public class OrgCountProductInfo implements Serializable {
     private Integer featureTotal;
     @ApiModelProperty(value = "五星好评数")
     private Integer praiseTotal;
+
+    public String getSignoryId() {
+        return signoryId;
+    }
+
+    public void setSignoryId(String signoryId) {
+        this.signoryId = signoryId;
+    }
+
+    public String getSignoryName() {
+        return signoryName;
+    }
+
+    public void setSignoryName(String signoryName) {
+        this.signoryName = signoryName;
+    }
 
     public String getProductId() {
         return productId;

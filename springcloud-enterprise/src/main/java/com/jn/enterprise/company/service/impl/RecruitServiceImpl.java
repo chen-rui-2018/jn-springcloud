@@ -4,15 +4,17 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.company.model.ServiceCompany;
+import com.jn.enterprise.common.config.IBPSDefIdConfig;
 import com.jn.enterprise.company.dao.ServiceRecruitMapper;
 import com.jn.enterprise.company.dao.TbServiceRecruitMapper;
 import com.jn.enterprise.company.entity.TbServiceRecruit;
 import com.jn.enterprise.company.entity.TbServiceRecruitCriteria;
-import com.jn.enterprise.company.enums.CompanyDataEnum;
+import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.*;
@@ -20,8 +22,9 @@ import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.RecruitService;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.enterprise.enums.RecordStatusEnum;
-import com.jn.enterprise.enums.ServiceProductExceptionEnum;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.api.CareClient;
+import com.jn.park.care.model.CareParam;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
@@ -34,8 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 /**
  * 企业招聘Service
@@ -57,6 +58,12 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    private IBPSDefIdConfig ibpsDefIdConfig;
+
+    @Autowired
+    private CareClient careClient;
 
     @Override
     @ServiceLog(doAction = "根据招聘ID获取招聘详情")
@@ -144,6 +151,24 @@ public class RecruitServiceImpl implements RecruitService {
 
         Page<Object> objects = PageHelper.startPage(recruitParam.getPage(), recruitParam.getRows() == 0 ? 15 : recruitParam.getRows());
         List<RecruitVO> recruitList = serviceRecruitMapper.getRecruitList(rp);
+
+        // 如果已登录，查询关注列表
+        if (StringUtils.isNotBlank(recruitParam.getAccount())) {
+            CareParam careParam = new CareParam();
+            careParam.setCurrentAccount(recruitParam.getAccount());
+            Result<List<String>> result = careClient.findCareCompanyList(careParam);
+            if (result == null || result.getData() == null) {
+                throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SERVICE_ERROR);
+            }
+
+            // 关注的企业ID列表
+            List<String> companyList = result.getData();
+            for (RecruitVO recruit : recruitList) {
+                if (companyList.contains(recruit.getComId())) {
+                    recruit.setCareStatus("1");
+                }
+            }
+        }
         PaginationData<List<RecruitVO>> data = new PaginationData(recruitList, objects.getTotal());
         return data;
     }
@@ -155,8 +180,10 @@ public class RecruitServiceImpl implements RecruitService {
         TbServiceRecruitPublishParam tbServiceRecruitPublishParam = new TbServiceRecruitPublishParam();
         BeanUtils.copyProperties(serviceRecruitPublishParam, tbServiceRecruitPublishParam);
 
+        // 招聘编号
         Integer randomNo = (int)(Math.random() * 900 + 10000);
         String recruitNo = "QYZP-" + DateUtils.formatDate(new Date(), "yyyyMMddHHmmss") + randomNo;
+
         tbServiceRecruitPublishParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         tbServiceRecruitPublishParam.setCreatorAccount(user.getAccount());
         tbServiceRecruitPublishParam.setComId(company.getId());
@@ -169,12 +196,12 @@ public class RecruitServiceImpl implements RecruitService {
         tbServiceRecruitPublishParam.setViewCount("0");
         tbServiceRecruitPublishParam.setId("");
 
-        String bpmnDefId = "567739285222981632";
-        IBPSResult ibpsResult = IBPSUtils.sendRequest(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
+        String bpmnDefId = ibpsDefIdConfig.getCompanyRecruit();
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
 
         // ibps启动流程失败
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
-            logger.warn("[发布招聘信息] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            logger.warn("[发布招聘信息] 启动ibps流程出错，错误信息：{}", ibpsResult != null ? ibpsResult.getMessage() : "");
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_PUBLISH_IBPS_ERROR);
         }
         logger.info("[发布招聘信息] " + ibpsResult.getMessage());
@@ -201,12 +228,12 @@ public class RecruitServiceImpl implements RecruitService {
         tbServiceRecruitPublishParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getCode());
         tbServiceRecruitPublishParam.setId("");
 
-        String bpmnDefId = "567739285222981632";
-        IBPSResult ibpsResult = IBPSUtils.sendRequest(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
+        String bpmnDefId = ibpsDefIdConfig.getCompanyRecruit();
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, user.getAccount(), tbServiceRecruitPublishParam);
 
         // ibps启动流程失败
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {
-            logger.warn("[编辑招聘信息] 启动ibps流程出错，错误信息：" + ibpsResult.getMessage());
+            logger.warn("[编辑招聘信息] 启动ibps流程出错，错误信息：{}", ibpsResult != null ? ibpsResult.getMessage() : "");
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_PUBLISH_IBPS_ERROR);
         }
         logger.info("[编辑招聘信息] " + ibpsResult.getMessage());
@@ -237,9 +264,9 @@ public class RecruitServiceImpl implements RecruitService {
 
         // 设置上/下架状态
         if (serviceRecruitUnderParam.getStatus().equals(RecruitDataTypeEnum.ON_SHELVES.getCode())) {
-            sr.setStatus(new Byte(RecruitDataTypeEnum.OFF_SHELVES.getCode()));
+            sr.setStatus(RecruitDataTypeEnum.OFF_SHELVES.getValue());
         } else {
-            sr.setStatus(new Byte(RecruitDataTypeEnum.ON_SHELVES.getCode()));
+            sr.setStatus(RecruitDataTypeEnum.ON_SHELVES.getValue());
         }
 
         sr.setModifierAccount(user.getAccount());

@@ -11,18 +11,14 @@ import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.LeaseOrdersModel;
 import com.jn.park.asset.service.AssetArticleLeaseOrdersService;
 import com.jn.park.asset.service.AssetArticleLeaseService;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.List;
@@ -45,15 +41,19 @@ public class AssetArticleLeaseController {
     private AssetArticleLeaseOrdersService assetArticleLeaseOrdersService;
 
     @ControllerLog(doAction = "物品租赁列表")
-    @ApiOperation(value = "物品租赁列表",notes = "返回可租赁的资产列表")
+    @ApiOperation(value = "物品租赁列表",notes = "返回可租赁的资产列表(可搜索)")
     @GetMapping(value = "/articleLeaseList")
-    public Result<PaginationData<List<AssetArticleLeaseModel>>> getArticleLeaseList(Page page){
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name",value = "搜索关键字",example = "空调")
+    })
+    public Result<PaginationData<List<AssetArticleLeaseModel>>> getArticleLeaseList(Page page,String name){
         if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<AssetArticleLeaseModel>> data = assetArticleLeaseService.getArticleLeaseList(page);
+            PaginationData<List<AssetArticleLeaseModel>> data = assetArticleLeaseService.getArticleLeaseList(page ,name);
             return new Result<>(data);
         }else{
             throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
         }
+
     }
 
 
@@ -61,7 +61,7 @@ public class AssetArticleLeaseController {
     @ApiOperation(value = "获取物品租赁详细信息",notes = "根据资产编号获取物品详细信息")
     @GetMapping(value = "/getArticleLease")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "572058527984517120")
+            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "577555965931421696")
     })
     public Result<AssetArticleLeaseModel> getArticleLease (String assetNumber){
         Assert.notNull(assetNumber,"资产编号不能为空");
@@ -73,33 +73,23 @@ public class AssetArticleLeaseController {
     @ApiOperation(value = "租借资料填写",notes = "租借企业资料填写")
     @PostMapping(value = "/leaseWriter")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "572058527984517120",required = true),
+            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "577555965931421696",required = true),
             @ApiImplicitParam(name = "leaseEnterprise",value = "租借企业",example = "美的",required = true),
             @ApiImplicitParam(name = "contactName",value = "联系人姓名",example = "先生",required = true),
             @ApiImplicitParam(name = "contactPhone",value = "联系人电话",example = "123456",required = true),
             @ApiImplicitParam(name = "startTime",value = "开始时间",example = "2019-5-1",required = true),
-            @ApiImplicitParam(name = "endTime",value = "结束时间",example = "2019-6-1",required = true)
+            @ApiImplicitParam(name = "time",value = "填写租期",example = "10",required = true)
     })
-    public Result leaseWriter(String assetNumber,String leaseEnterprise, String contactName, String contactPhone, Date startTime,Date endTime){
-        assetArticleLeaseService.leaseWriter(assetNumber,leaseEnterprise,contactName,contactPhone,startTime,endTime);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "新增租赁订单")
-    @ApiOperation(value ="新增租赁订单",notes = "新增租赁订单")
-    @PostMapping(value = "/addLeaseOrders")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "572058527984517120")
-    })
-    public Result addLeaseOrders(String assetNumber){
+    public Result leaseWriter(String assetNumber,String leaseEnterprise, String contactName, String contactPhone, Date startTime,String time){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        String ordersNumber= assetArticleLeaseService.addLeaseOrders(assetNumber,user);
+        String ordersNumber = assetArticleLeaseService.leaseWriter(assetNumber,leaseEnterprise,contactName,contactPhone,startTime,time,user);
         if (ordersNumber.equals("-1")){
             return new Result("-1","新增租赁订单失败");
         }
         return new Result(ordersNumber);
     }
+
 
     @ControllerLog(doAction = "支付订单")
     @ApiOperation(value = "支付订单",notes = "支付订单")
@@ -112,7 +102,6 @@ public class AssetArticleLeaseController {
         LeaseOrdersModel leaseOrders =  assetArticleLeaseOrdersService.getPayOrders(id);
         return new Result<>(leaseOrders);
     }
-
 
 
     @ControllerLog(doAction = "物品租赁历史列表")
@@ -175,5 +164,17 @@ public class AssetArticleLeaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "创建支付订单")
+    @ApiOperation(value = "创建支付订单",notes = "创建支付订单")
+    @PostMapping(value = "/createPayOrder")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050417220960019"),
+            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE")
+    })
+    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(orderId,"订单编号不能为空");
+        return assetArticleLeaseOrdersService.createPayOrder(orderId,channelId,user.getAccount());
+    }
 
 }

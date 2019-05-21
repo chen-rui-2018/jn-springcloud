@@ -2,9 +2,70 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.message.dao.MessageListDao">
 
+    <select id="getMessageOneTort" parameterType="java.lang.String" resultType="com.jn.park.message.model.MessageTowModel" >
+        SELECT
+        t.message_tow_sort as "messageTowSort"
+        from
+        tb_message_list t
+        WHERE t.record_status =1
+        AND t.message_one_sort = #{messageOneTort}
+        AND t.message_recipient = #{account}
+        GROUP BY t.message_tow_sort
+    </select>
+
+    <select id="findAllApp" parameterType="com.jn.park.message.model.findAllAppMessageListModel" resultType="com.jn.park.message.model.MessageListModel">
+        SELECT
+        t.id as "id",
+        t.message_title as "messagetitle",
+        t.message_content as "messagecontent",
+        t.message_connect_name as "messageconnectname",
+        t.message_connect as "messageconnect",
+        t.is_read as "isread",
+        t.message_recipient as "messagerecipient",
+        t.message_sender as "messagesender",
+        t.message_one_sort as "messageonesort",
+        t.message_tow_sort as "messagetowsort",
+        t.created_time as "createdtime",
+        t.creator_account as "creatoraccount"
+        from
+        tb_message_list t
+        WHERE t.record_status = 1
+        AND t.message_one_sort =#{messageOneSort,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isRead)">
+            AND t.is_read = #{isRead}
+        </if>
+        AND t.message_recipient=#{account,jdbcType=VARCHAR}
+        ORDER BY t.created_time  DESC
+    </select>
+
+    <select id="findAll" parameterType="com.jn.park.message.model.findAllMessageListModel" resultType="com.jn.park.message.model.MessageListModel">
+      SELECT
+        t.id as "id",
+        t.message_title as "messagetitle",
+        t.message_content as "messagecontent",
+        t.message_connect_name as "messageconnectname",
+        t.message_connect as "messageconnect",
+        t.is_read as "isread",
+        t.message_recipient as "messagerecipient",
+        t.message_sender as "messagesender",
+        t.message_one_sort as "messageonesort",
+        t.message_tow_sort as "messagetowsort",
+        t.created_time as "createdtime",
+        t.creator_account as "creatoraccount"
+        from
+         tb_message_list t
+        WHERE t.record_status = 1
+        AND t.message_tow_sort =#{messageTowTort,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isRead)">
+            AND t.is_read = #{isRead}
+        </if>
+        AND t.message_recipient=#{account,jdbcType=VARCHAR}
+        ORDER BY t.created_time  DESC
+    </select>
+
 
     <!--消息列表-->
-    <select id="findAll" parameterType="com.jn.park.message.model.findAllMessageListModel"  resultMap="findAllMessageOneSortMap">
+    <!--<select id="findAll" parameterType="com.jn.park.message.model.findAllMessageListModel"  resultMap="findAllMessageOneSortMap">
         SELECT
         t.message_tow_sort as "messageTowSort",
         #{account} as "account"
@@ -65,7 +126,7 @@
         <result column="message_tow_sort" jdbcType="INTEGER" property="messagetowsort" />
         <result column="created_time" jdbcType="VARCHAR" property="createdtime" />
         <result column="creator_account" jdbcType="VARCHAR" property="creatoraccount" />
-    </resultMap>
+    </resultMap>-->
 
 
     <!--添加消息-->
@@ -178,7 +239,7 @@
     </update>
 
 
-    <!--单个查询-->
+    <!--是否有新的未读消息-->
     <select id="getIsRead" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT
             COUNT(t.id)
@@ -187,6 +248,12 @@
         WHERE
             t.record_status = 1
         AND t.is_read = 0
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageOneTort)">
+        AND t.message_one_sort=#{messageOneTort}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTowTort)">
+		AND t.message_tow_sort=#{messageTowTort}
+        </if>
         AND t.message_recipient = #{account}
     </select>
 

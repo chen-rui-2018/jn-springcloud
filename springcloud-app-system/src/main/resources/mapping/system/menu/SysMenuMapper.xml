@@ -76,39 +76,107 @@
         ORDER BY t.`sort` ASC
     </select>
 
-    <select id="getDynamicMenu" resultType="com.jn.system.menu.vo.SysMenuTreeVO"
+    <resultMap id="dynamic_menu_map" type="com.jn.system.menu.vo.SysMenuTreeVO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="menu_name" jdbcType="VARCHAR" property="label" javaType="java.lang.String"/>
+        <result column="is_dir" jdbcType="VARCHAR" property="isDir" javaType="java.lang.String"/>
+        <result column="level" jdbcType="VARCHAR" property="level" javaType="java.lang.String"/>
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" javaType="java.lang.String"/>
+        <result column="sort" jdbcType="INTEGER" property="sort" javaType="java.lang.Integer"/>
+        <result column="menu_url" jdbcType="VARCHAR" property="path" javaType="java.lang.String"/>
+        <collection property="resourcesList" javaType="java.util.List" ofType="com.jn.system.menu.model.SysResources">
+            <id column="r_id" property="id" jdbcType="VARCHAR"/>
+            <result column="resources_name" property="resourcesName" jdbcType="VARCHAR"/>
+            <result column="resources_url" property="resourcesUrl" jdbcType="VARCHAR"/>
+            <result column="menu_id" property="menuId" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <select id="getDynamicMenu" resultMap="dynamic_menu_map"
             parameterType="java.lang.String">
-        select distinct
-        sm.id,
-        sm.menu_name as label,
-        sm.is_dir as isDir,
-        sm.`level`,
-        sm.parent_id as parentId,
-        sm.sort,
-        sm.menu_url as path
-        from
-        tb_sys_user su
-        ,tb_sys_user_role sur
-        ,tb_sys_role sr
-        ,tb_sys_permission sp
-        ,tb_sys_role_permission srp
-        ,tb_sys_menu sm
-        ,tb_sys_permission_menu spm
-        where su.id = sur.user_id
-        and sr.id = sur.role_id
-        and sr.id = srp.role_id
-        and sp.id = srp.permission_id
-        and sp.id = spm.permission_id
-        and sm.id = spm.menu_id
-        and su.record_status =1
-        and sur.record_status =1
-        and sr.record_status = 1
-        and sp.record_status = 1
-        and srp.record_status = 1
-        and sm.record_status = 1
-        and spm.record_status = 1
-        and su.id = #{id,jdbcType=VARCHAR}
-        ORDER BY sm.`level` ASC , sm.sort ASC
+        SELECT DISTINCT
+            t1.id,
+            t1.menu_name,
+            t1.is_dir,
+            t1.`level`,
+            t1.parent_id,
+            t1.sort,
+            t1.menu_url,
+            t2.id as r_id,
+            t2.resources_name,
+            t2.menu_id,
+            t2.resources_url
+        FROM
+            (
+                SELECT DISTINCT
+                    sm.id,
+                    sm.menu_name,
+                    sm.is_dir,
+                    sm.`level`,
+                    sm.parent_id,
+                    sm.sort,
+                    sm.menu_url
+                FROM
+                    tb_sys_user su,
+                    tb_sys_user_role sur,
+                    tb_sys_role sr,
+                    tb_sys_permission sp,
+                    tb_sys_role_permission srp,
+                    tb_sys_menu sm,
+                    tb_sys_permission_menu spm
+                WHERE
+                    su.id = sur.user_id
+                AND sr.id = sur.role_id
+                AND sr.id = srp.role_id
+                AND sp.id = srp.permission_id
+                AND sp.id = spm.permission_id
+                AND sm.id = spm.menu_id
+                AND su.record_status = 1
+                AND sur.record_status = 1
+                AND sr.record_status = 1
+                AND sp.record_status = 1
+                AND srp.record_status = 1
+                AND sm.record_status = 1
+                AND spm.record_status = 1
+                AND su.id = #{id,jdbcType=VARCHAR}
+            ) t1
+        LEFT JOIN (
+            SELECT DISTINCT
+                tsr.id,
+                tsr.resources_url,
+                tsr.resources_name,
+                tsr.menu_id,
+                tsr.created_time
+            FROM
+                tb_sys_user su,
+                tb_sys_user_role sur,
+                tb_sys_role sr,
+                tb_sys_permission sp,
+                tb_sys_role_permission srp,
+                tb_sys_resources tsr,
+                tb_sys_permission_resources spr,
+                tb_sys_menu sm
+            WHERE
+                su.id = sur.user_id
+            AND sr.id = sur.role_id
+            AND sr.id = srp.role_id
+            AND sp.id = srp.permission_id
+            AND sp.id = spr.permission_id
+            AND tsr.id = spr.resources_id
+            AND sm.id = tsr.menu_id
+            AND su.record_status = 1
+            AND sur.record_status = 1
+            AND sr.record_status = 1
+            AND sp.record_status = 1
+            AND srp.record_status = 1
+            AND sr.record_status = 1
+            AND spr.record_status = 1
+            AND sm.record_status = 1
+            AND su.id = #{id,jdbcType=VARCHAR}
+        ) t2 ON t1.id = t2.menu_id
+        ORDER BY
+            t1.`level` ASC,
+            t1.sort ASC,
+            t2.created_time DESC
     </select>
 
     <resultMap id="menu_resources_map" type="com.jn.system.menu.vo.SysMenuTreeVO">
@@ -138,7 +206,6 @@
             <result column="r_status" property="recordStatus" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
-
     <select id="getMenuAndResources" resultMap="menu_resources_map">
         SELECT
         m.id,

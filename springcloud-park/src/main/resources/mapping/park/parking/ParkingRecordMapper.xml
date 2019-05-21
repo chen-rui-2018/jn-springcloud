@@ -32,14 +32,6 @@
                 <foreach collection="list" item="cus">
                     when car_license = #{cus.carLicense} and admission_time = STR_TO_DATE(#{cus.admissionTime}, '%Y-%m-%d %H:%i:%s')
                     then  #{cus.parkingStatus}
-                    <!--<if test="cus.admissionTime!=null">
-                        when car_license = #{item.carLicense} and admission_time = STR_TO_DATE(#{item.admissionTime}, '%Y-%m-%d %H:%i:%s')
-                        and #{cus.departureTime} is not NULL then  '1' else '0' end
-                    </if>
-                    <if test="cus.admissionTime==null">
-                        when car_license = #{item.carLicense} and admission_time = STR_TO_DATE(#{item.admissionTime}, '%Y-%m-%d %H:%i:%s')
-                        and #{cus.departureTime} is not NULL then  '1' else '0' end
-                    </if>-->
                 </foreach>
             </trim>
             <trim prefix="modified_time =case" suffix="end,">
@@ -67,5 +59,22 @@
 
     </update>
 
+    <select id="selectParkingRecordByRamp" resultType="com.jn.park.parking.model.ParkingRecordRampParam" parameterType="java.util.List">
+        select
+        r.parking_id_ as "parkingId",                                                      <!--签到信息id-->
+        r.car_license as "carLicense",                                     <!--活动ID-->
+        r.admission_time as "admissionTime",     									    <!--签到人账号-->
+        r.departure_time as "departureTime",     									    <!--签到人账号-->
+        r.parking_status as "parkingStatus"     									    <!--签到人账号-->
+        from tb_parking_record r
+        <if test="list != null and list.size()>0">
+            <where>
+                <foreach collection="list" separator="or" item="item">
+                    (r.car_license = #{item.carLicense}
+                    and r.admission_time = STR_TO_DATE(#{item.admissionTime}, '%Y-%m-%d %H:%i:%s'))
+                </foreach>
+            </where>
+        </if>
+    </select>
 
 </mapper>

@@ -22,6 +22,9 @@ public class ProjectProgressRecordModel implements Serializable {
     @ApiModelProperty(value = "进度")
     private String progress;
 
+    @ApiModelProperty(value = "当前月份")
+    private String currentData;
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -43,12 +46,21 @@ public class ProjectProgressRecordModel implements Serializable {
         this.progress = progress;
     }
 
+    public String getCurrentData() {
+        return currentData;
+    }
+
+    public void setCurrentData(String currentData) {
+        this.currentData = currentData;
+    }
+
 
     @Override
     public String toString() {
         return "ProjectProgressRecordModel{" +
                 "createdTime='" + createdTime + '\'' +
                 ", progress='" + progress + '\'' +
+                ", currentData='" + currentData + '\'' +
                 '}';
     }
 }

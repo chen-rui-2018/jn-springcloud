@@ -34,7 +34,6 @@ import java.util.List;
 @Api(tags = "用户中心-我的企业-员工管理")
 @RestController
 @RequestMapping("/enterprise/StaffController")
-@TxTransaction(isStart = true)
 public class StaffController extends BaseController {
 
     @Autowired
@@ -49,6 +48,7 @@ public class StaffController extends BaseController {
         return new Result(staffService.getStaffList(staffListParam, user.getAccount()));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "员工审核")
     @ApiOperation(value = "员工审核（app/pc-员工审核）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/reviewStaff",method = RequestMethod.POST)

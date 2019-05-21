@@ -1,6 +1,9 @@
 package com.jn.park.asset.dao;
 
 import com.jn.park.asset.model.RoomInformationModel;
+import com.jn.park.asset.model.RoomLeaseRecordModel;
+import com.jn.park.asset.model.RoomOrdersModel;
+import com.jn.park.asset.model.RoomPayOrdersModel;
 
 import java.util.List;
 import java.util.Map;
@@ -15,21 +18,24 @@ import java.util.Map;
 public interface RoomInformationDao {
 
     /**
-     * 返回可租借的房间列表
+     * 返回可租借的房间列表(可搜索)
+     * @param name
      * @return
      */
-    List<RoomInformationModel> getRoomLeaseList();
+    List<RoomInformationModel> getRoomLeaseList(String name);
 
     /**
-     * 返回房间信息
-     * @param id
+     * 房间租借历史订单(新)
+     * @param account
      * @return
      */
-    RoomInformationModel getRoomInformation(String id);
+    List<RoomLeaseRecordModel> getNewRoomOrdersList(String account);
 
     /**
-     * 更改房间信息租借状态
-     * @param map
+     * 房间租借详情(新)
+     * @param orderId
+     * @return
      */
-    void updateStatus(Map<String, Object> map);
+    RoomOrdersModel getNewRoomOrders(String orderId);
+
 }

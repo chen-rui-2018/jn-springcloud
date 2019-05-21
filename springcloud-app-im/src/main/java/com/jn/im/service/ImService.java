@@ -29,7 +29,7 @@ public interface ImService {
      *
      * @param tbImMessage
      */
-    void isSended(TbImMessage tbImMessage);
+    //void isSended(TbImMessage tbImMessage);
 
     /**
      * 查询聊天列表

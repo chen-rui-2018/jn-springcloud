@@ -30,6 +30,17 @@ public class StaffListParam extends Page implements Serializable {
     @Pattern(regexp = "^-1|[057]|\\s*$", message = "状态传值错误")
     private String status;
 
+    @ApiModelProperty(value = "企业ID", hidden = true)
+    private String comId;
+
+    public String getComId() {
+        return comId;
+    }
+
+    public void setComId(String comId) {
+        this.comId = comId;
+    }
+
     public String getSearchFiled() {
         return searchFiled;
     }
@@ -54,4 +65,13 @@ public class StaffListParam extends Page implements Serializable {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "StaffListParam{" +
+                "needPage='" + needPage + '\'' +
+                ", searchFiled='" + searchFiled + '\'' +
+                ", status='" + status + '\'' +
+                ", comId='" + comId + '\'' +
+                '}';
+    }
 }

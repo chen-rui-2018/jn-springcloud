@@ -9,6 +9,7 @@ import com.jn.park.activity.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class ActivityListController extends BaseController {
     }
     @ControllerLog(doAction = "用户中心-已报名活动列表")
     @ApiOperation(value = "用户中心-已报名活动列表" ,notes = "用户中心-已报名活动列表")
+    @RequiresPermissions("/activity/findActivityRegistration")
     @RequestMapping(value = "/guest/activity/findActivityRegistration",method = RequestMethod.GET)
     public Result<PaginationData<List<ActivityListApply>>> findActivityRegistration(@Validated ActivityApplyListParam query) {
         PaginationData  activityTypeList = activityService.findActivitySuccessfulRegistration(query,Boolean.TRUE);

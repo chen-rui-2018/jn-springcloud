@@ -1,11 +1,17 @@
 package com.jn.enterprise.usercenterindex.controller;
 
 import com.jn.common.model.Result;
+import com.jn.enterprise.servicemarket.org.controller.OrgApproveController;
 import com.jn.enterprise.usercenterindex.service.UserCenterIndexService;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,73 +24,87 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "用户中心-首页")
 @RestController
-@RequestMapping("/usercenter/index")
+@RequestMapping("/userCenter/Index")
 public class UserCenterIndexController {
     @Autowired
     private UserCenterIndexService userCenterIndexService;
 
-    @ControllerLog(doAction = "企业邀请")
-    @ApiOperation(value = "企业邀请",notes = "企业邀请小方块", httpMethod = "GET")
-    @GetMapping(value = "/findBusinessInvitation")
-    @RequiresPermissions("/usercenter/index/findBusinessInvitation")
-    public Result findBusinessInvitation(){
-        return new Result();
+    /**
+     * 日志组件
+     */
+    private static Logger logger = LoggerFactory.getLogger(UserCenterIndexController.class);
+
+    protected User getUser(){
+        return  (User) SecurityUtils.getSubject().getPrincipal();
     }
+
+
 
     @ControllerLog(doAction = "员工申请")
     @ApiOperation(value = "员工申请",notes = "员工申请小方块", httpMethod = "GET")
     @GetMapping(value = "/findEmployeeRequisition")
-    @RequiresPermissions("/usercenter/index/findEmployeeRequisition")
+    @RequiresPermissions("/userCenter/Index/findEmployeeRequisition")
     public Result findEmployeeRequisition(){
-        return new Result();
+        String  findEmployeeRequisition= userCenterIndexService.findEmployeeRequisition(getUser());
+        return new Result(findEmployeeRequisition);
     }
 
-    @ControllerLog(doAction = "机构邀请")
-    @ApiOperation(value = "企业邀请",notes = "机构邀请小方块", httpMethod = "GET")
-    @GetMapping(value = "/findOrganizationInvitation")
-    @RequiresPermissions("/usercenter/index/findOrganizationInvitation")
-    public Result findOrganizationInvitation(){
-        return new Result();
-    }
+
 
     @ControllerLog(doAction = "顾问管理")
     @ApiOperation(value = "顾问管理",notes = "顾问管理小方块", httpMethod = "GET")
     @GetMapping(value = "/findAdviserInvitation")
-    @RequiresPermissions("/usercenter/index/findAdviserInvitation")
+    @RequiresPermissions("/userCenter/Index/findAdviserInvitation")
     public Result findAdviserInvitation(){
-        return new Result();
+
+        String  findAdviserInvitation= userCenterIndexService.findAdviserInvitation(getUser());
+
+        return new Result(findAdviserInvitation);
     }
 
     @ControllerLog(doAction = "需求管理")
     @ApiOperation(value = "需求管理",notes = "需求管理小方块", httpMethod = "GET")
     @GetMapping(value = "/findRequirementManage")
-    @RequiresPermissions("/usercenter/index/findRequirementManage")
+    @RequiresPermissions("/userCenter/Index/findRequirementManage")
+
     public Result findRequirementManage(){
-        return new Result();
+
+        String  findRequirementManage= userCenterIndexService.findRequirementManage(getUser());
+
+        return new Result(findRequirementManage);
     }
 
     @ControllerLog(doAction = "评价管理")
     @ApiOperation(value = "评价管理",notes = "评价管理小方块", httpMethod = "GET")
     @GetMapping(value = "/findEvaluateManage")
-    @RequiresPermissions("/usercenter/index/findEvaluateManage")
+    @RequiresPermissions("/userCenter/Index/findEvaluateManage")
     public Result findEvaluateManage(){
-        return new Result();
+
+        String  findEvaluateManage= userCenterIndexService.findEvaluateManage(getUser());
+
+        return new Result(findEvaluateManage);
     }
 
     @ControllerLog(doAction = "活动管理")
     @ApiOperation(value = "活动管理",notes = "活动管理小方块", httpMethod = "GET")
     @GetMapping(value = "/findActivityManage")
-    @RequiresPermissions("/usercenter/index/findActivityManage")
+    @RequiresPermissions("/userCenter/Index/findActivityManage")
     public Result findActivityManage(){
-        return new Result();
+
+        String  findActivityManage= userCenterIndexService.findActivityManage(getUser());
+
+        return new Result(findActivityManage);
     }
 
     @ControllerLog(doAction = "数据上报")
     @ApiOperation(value = "数据上报",notes = "数据上报小方块", httpMethod = "GET")
     @GetMapping(value = "/findReportedData")
-    @RequiresPermissions("/usercenter/index/findReportedData")
+    @RequiresPermissions("/userCenter/Index/findReportedData")
     public Result findReportedData(){
-        return new Result();
+
+        String  findReportedData= userCenterIndexService.findReportedData(getUser());
+
+        return new Result(findReportedData);
     }
 
 }

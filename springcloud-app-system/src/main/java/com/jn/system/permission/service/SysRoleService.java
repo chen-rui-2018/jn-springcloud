@@ -114,4 +114,12 @@ public interface SysRoleService {
      * @return
      */
     SysRole getRoleByName(String roleName);
+
+    /**
+     * 根据角色id或角色名称获取角色拥有的用户信息
+     *
+     * @param role
+     * @return
+     */
+    List<User> getUserByRole(SysRole role);
 }

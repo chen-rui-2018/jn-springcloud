@@ -1,6 +1,7 @@
 package com.jn.pay.model;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @ClassName：支付接口响应基础类
@@ -23,6 +24,11 @@ public class PayBaseRsp {
 
     public void setPayOrderId(String payOrderId) {
         this.payOrderId = payOrderId;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

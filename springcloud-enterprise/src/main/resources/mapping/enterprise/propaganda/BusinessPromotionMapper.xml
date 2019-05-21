@@ -8,6 +8,7 @@
           ,sp.propaganda_type as "propagandaType"
           ,sp.propaganda_code as "propagandaCode"
           ,sp.propaganda_title as "propagandaTitle"
+          ,sp.propaganda_details as "propagandaDetails"
           ,sp.issue_platform as "issuePlatform"
           ,date_format(sp.effective_date,'%Y/%m/%d')as "effectiveDate"
           ,date_format(sp.invalid_date,'%Y/%m/%d')as "invalidDate"
@@ -49,6 +50,12 @@
         </if>
         <if test="bpp.status !=null and bpp.status!=''">
             and sp.status=#{bpp.status}
+        </if>
+        <if test="bpp.issuePlatform !=null and bpp.issuePlatform !=''">
+            and sp.issue_platform=#{bpp.issuePlatform}
+        </if>
+        <if test="bpp.propagandaArea !=null and bpp.propagandaArea !=''">
+            and sp.propaganda_area=#{bpp.propagandaArea}
         </if>
         <if test="creator !=null and creator !=''">
             and sp.creator_account=#{creator}

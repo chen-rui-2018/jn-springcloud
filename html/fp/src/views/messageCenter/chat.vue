@@ -121,7 +121,7 @@
         userListParam: {
           fromUser: '',
           page: 1,
-          rows: 10
+          rows: 500
         },
         url: '',
         nickName: '',
@@ -136,11 +136,15 @@
       }
     },
     mounted() {
-      this.init()
+      this.$nextTick(
+        this.init()
+      )
     },
     watch: {
       '$route'() {
-        this.init()
+        this.$nextTick(
+          this.init()
+        )
       }
     },
     filters: {
@@ -216,6 +220,7 @@
             ])
           // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
+
         }
       },
       getFromUserInfo() {
@@ -521,7 +526,6 @@
     .friend-list {
       width: 230px;
       flex: none;
-      overflow: auto;
       margin-left: 2px;
 
       .friend-list-header {
@@ -586,6 +590,7 @@
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
+              font-size: 12px;
               .unread {
                 $size: 8px;
                 display: inline-block;

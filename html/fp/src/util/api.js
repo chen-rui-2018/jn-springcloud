@@ -102,7 +102,11 @@ export default {
 
         // 个人中心首页
         findEmployeeRequisition:"springcloud-enterprise/userCenter/Index/findEmployeeRequisition", // 员工申请
-
+        findActivityManage:"springcloud-enterprise/userCenter/Index/findActivityManage", // 活动管理
+        findAdviserInvitation:"springcloud-enterprise/userCenter/Index/findAdviserInvitation", // 顾问管理
+        findEvaluateManage:"springcloud-enterprise/userCenter/Index/findEvaluateManage", // 评价管理
+        findReportedData:"springcloud-enterprise/userCenter/Index/findReportedData", // 数据上报
+        findRequirementManage:"springcloud-enterprise/userCenter/Index/findRequirementManage", // 需求管理
 
         //im即时聊天
         selectMsg:"im/selectMsg", // 获取聊天记录

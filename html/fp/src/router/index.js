@@ -383,7 +383,7 @@ export default new Router({
               path: '/myBody/acceptInvitation',
               name: 'acceptInvitation ',
               meta: {
-                title: '接受结构邀请'
+                title: '接受机构邀请'
               },
               component: resolve => require(['@/views/home/myBody/acceptInvitation'], resolve)
             },

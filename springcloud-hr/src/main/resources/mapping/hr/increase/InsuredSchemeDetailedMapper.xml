@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.InsuredSchemeDetailedMapper">
+  
+     <select id="selectBySchemeId" parameterType="java.lang.String"
+		resultType="com.jn.hr.increase.model.InsuredSchemeDetailed">
+
+		SELECT * FROM tb_manpower_insured_scheme_detailed t1
+		where t1.record_status = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(schemeId)">
+			and t1.scheme_id = #{schemeId,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_insured_scheme_detailed
+        ( project_id, project_name, default_cardinal_number, 
+      optional_base_start, optional_base_end, corporate_contribution_ratio, 
+      individual_contribution_ratio, scheme_id, 
+      social_security_id, provident_fund_id, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, project_type
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.projectId}, #{item.projectName}, #{item.defaultCardinalNumber}, 
+      #{item.optionalBaseStart}, #{item.optionalBaseEnd}, #{item.corporateContributionRatio}, 
+      #{item.individualContributionRatio}, #{item.schemeId}, 
+      #{item.socialSecurityId}, #{item.providentFundId}, #{item.recordStatus}, 
+      #{item.creatorAccount}, #{item.createdTime}, #{item.modifierAccount}, 
+      #{item.modifiedTime}, #{item.projectType}
+            )
+        </foreach>
+    </insert>
+    
+    <update id="updateBySchemeId" parameterType="com.jn.hr.increase.model.InsuredSchemeDetailed">
+    update tb_manpower_insured_scheme_detailed
+    <foreach collection="list" item="item" index="index" separator=",">
+    <set>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultCardinalNumber != null">
+        default_cardinal_number = #{defaultCardinalNumber,jdbcType=INTEGER},
+      </if>
+      <if test="optionalBaseStart != null">
+        optional_base_start = #{optionalBaseStart,jdbcType=INTEGER},
+      </if>
+      <if test="optionalBaseEnd != null">
+        optional_base_end = #{optionalBaseEnd,jdbcType=INTEGER},
+      </if>
+      <if test="corporateContributionRatio != null">
+        corporate_contribution_ratio = #{corporateContributionRatio,jdbcType=INTEGER},
+      </if>
+      <if test="individualContributionRatio != null">
+        individual_contribution_ratio = #{individualContributionRatio,jdbcType=INTEGER},
+      </if>
+      <if test="schemeId != null">
+        scheme_id = #{schemeId,jdbcType=VARCHAR},
+      </if>
+      <if test="socialSecurityId != null">
+        social_security_id = #{socialSecurityId,jdbcType=VARCHAR},
+      </if>
+      <if test="providentFundId != null">
+        provident_fund_id = #{providentFundId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectType != null">
+        project_type = #{projectType,jdbcType=TINYINT},
+      </if>
+    </set>
+    where project_id = #{projectId,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  
+</mapper>

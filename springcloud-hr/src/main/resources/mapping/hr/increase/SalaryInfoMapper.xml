@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.SalaryInfoMapper">
+
+   <select id="selectByJobNumber" parameterType="java.lang.String"
+		resultType="com.jn.hr.increase.model.SalaryInfo">
+		SELECT * FROM tb_manpower_salary_info t1
+		where t1.record_status != 0 
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
+			and t1.job_number = #{jobNumber,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<select id="getMap" parameterType="com.jn.hr.increase.model.SalaryInfoPage"
+		resultType="com.jn.hr.increase.model.SalaryInfo">
+		SELECT * FROM tb_manpower_salary_info t1
+		where t1.record_status != 0
+	</select>
+	
+	<select id="exportList" parameterType="com.jn.hr.increase.model.SalaryInfoPage"
+		resultType="com.jn.hr.increase.model.SalaryInfo">
+
+		SELECT * FROM tb_manpower_salary_info t1
+		where
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
+			and t1.job_number = #{jobNumber,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_salary_info
+        ( id, job_number, probation_basic_wage, 
+      probation_duty_allowance, probation_professional_title_allowance, 
+      probation_seniority_wage, probation_education_allowance, 
+      probation_work_subsidy, probation_achievement_bonus, 
+      probation_single_reward, record_status, creator_account, 
+      created_time, modifier_account, modified_time, 
+      conversion_basic_wage, conversion_duty_allowance, 
+      conversion_professional_title_allowance, conversion_seniority_wage, 
+      conversion_education_allowance, conversion_work_subsidy, 
+      conversion_achievement_bonus, conversion_single_reward, 
+      current_basic_wage, current_duty_allowance, 
+      current_professional_title_allowance, current_seniority_wage, 
+      current_education_allowance, current_work_subsidy, 
+      current_achievement_bonus, current_single_reward
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.jobNumber}, #{item.probationBasicWage}, 
+      #{item.probationDutyAllowance}, #{item.probationProfessionalTitleAllowance}, 
+      #{item.probationSeniorityWage}, #{item.probationEducationAllowance}, 
+      #{item.probationWorkSubsidy}, #{item.probationAchievementBonus}, 
+      #{item.probationSingleReward}, #{item.recordStatus}, #{item.creatorAccount}, 
+      #{item.createdTime}, #{item.modifierAccount}, #{item.modifiedTime}, 
+      #{item.conversionBasicWage}, #{item.conversionDutyAllowance}, 
+      #{item.conversionProfessionalTitleAllowance}, #{item.conversionSeniorityWage}, 
+      #{item.conversionEducationAllowance}, #{item.conversionWorkSubsidy}, 
+      #{item.conversionAchievementBonus}, #{item.conversionSingleReward}, 
+      #{item.currentBasicWage}, #{item.currentDutyAllowance}, 
+      #{item.currentProfessionalTitleAllowance}, #{item.currentSeniorityWage}, 
+      #{item.currentEducationAllowance}, #{item.currentWorkSubsidy}, 
+      #{item.currentAchievementBonus}, #{item.currentSingleReward}
+            )
+        </foreach>
+    </insert>
+    
+    
+</mapper>

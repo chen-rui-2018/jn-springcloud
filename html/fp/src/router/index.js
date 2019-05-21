@@ -74,7 +74,7 @@ export default new Router({
           name: 'enterpriseservice'
         },
         {
-          path: '/messageCenter',
+          path: 'messageCenter',
           component: resolve => require(['@/views/messageCenter/index'], resolve),
           meta: {
             title: '消息中心'

@@ -1,16 +1,16 @@
 <template>
-  <div :class="{pd: $store.state.needNav}" class="message-center-bg">
+  <div :class="{pd: $store.state.hiddenNav}" class="message-center-bg">
     <div :class="{pc: !$store.state.isMobile}" class="message-center">
-      <div class="nav-tips" v-if="$store.state.needNav">
+      <div class="nav-tips" v-if="$store.state.hiddenNav">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/home' }">消息中心</el-breadcrumb-item>
+          <el-breadcrumb-item>消息中心</el-breadcrumb-item>
           <el-breadcrumb-item>
             <span class="mainColor">{{this.$route.meta.title}}</span>
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <el-container>
-        <el-aside style="width: 200px;margin-right: 20px;">
+        <el-aside style="width: 200px;margin-right: 20px;" v-if="$store.state.hiddenNav">
           <div class="userImg">
             <div class="imgItem">
               <img src="@/../static/img/larImg.png" alt="">
@@ -43,13 +43,13 @@
                 <el-menu-item index="/dataReminder">数据上报提醒</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-menu-item index="2" @click.native="toChat">
+            <el-menu-item :index="'/messageCenter/chat?fromUser=' + fromUser">
               <span slot="title">社区交流</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
         <el-main :class="{app: $store.state.isMobile}" class="message-center-main">
-          <router-view></router-view>
+          <router-view :key="key"></router-view>
         </el-main>
       </el-container>
     </div>
@@ -59,16 +59,19 @@
 <script>
 export default {
   name: "MessageCenter",
-  methods: {
-    toChat() {
-      const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-      this.$router.push({
-        path: '/messageCenter/chat',
-        query: {
-          fromUser: userInfo.account
-        }
-      })
+  data() {
+    return {
+      fromUser: ''
     }
+  },
+  computed:{
+    key(){
+      return this.$route.path + Date.now();
+    }
+  },
+  mounted() {
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+    this.fromUser = userInfo.account
   }
 }
 </script>
@@ -112,6 +115,7 @@ $bg-gray: #f3f3f3;
           width: 100%;
           height: 100%;
           margin-top: 0;
+          padding: 0;
           box-sizing: border-box;
         }
       }
@@ -121,15 +125,10 @@ $bg-gray: #f3f3f3;
     padding: 66px 0;
   }
 }
-  .message-center {
-    &.pc {
-      width: 1190px;
-    }
-   margin: 0 auto;
-   min-height: 500px;
-  }
 .message-center {
-  width: 1190px;
+  &.pc {
+    width: 1190px;
+  }
   margin: 0 auto;
   min-height: 500px;
   .el-container {

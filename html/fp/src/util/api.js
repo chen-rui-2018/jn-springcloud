@@ -100,6 +100,10 @@ export default {
         getCompanyExcel:"springcloud-enterprise/data/garden/getCompanyExcel", // 纵向树形指标导出模式
         getScienceHeaderExcel:"springcloud-enterprise/data/garden/getScienceHeaderExcel", // 科技园模板表头
 
+        // 个人中心首页
+        findEmployeeRequisition:"springcloud-enterprise/userCenter/Index/findEmployeeRequisition", // 员工申请
+
+
         //im即时聊天
         selectMsg:"im/selectMsg", // 获取聊天记录
         isSended:"im/isSended", // 消息设置为已读

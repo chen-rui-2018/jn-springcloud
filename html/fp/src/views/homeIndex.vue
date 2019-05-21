@@ -1,6 +1,6 @@
 <template>
   <div class="portalIndex">
-    <div class="portalIndexImg" v-if="$store.state.needNav">
+    <div class="portalIndexImg" v-if="$store.state.hiddenNav">
       <div class="header" id="header" :class="{'headerw':isCenter||showFF}">
         <div class="headerContainer clearfix">
           <div class="titleImg fl">
@@ -25,7 +25,7 @@
               <a @click="$router.push({path:'/register'})">注册</a>
             </div> -->
           </div>
-          
+
           <div class="nav" id="nav">
             <ul class="posA clearfix">
               <li class="">

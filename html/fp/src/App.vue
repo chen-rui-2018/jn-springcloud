@@ -1,7 +1,7 @@
 <template>
   <div id="app" :class="{'h-100': $store.state.isMobile}">
 <!--    <router-view></router-view>-->
-     <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice') &&$store.state.needNav">
+     <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice') && $store.state.hiddenNav">
       <ul>
         <li @click="isVisibility=true">
           <div class="right_nav_slide">
@@ -76,7 +76,7 @@
     <!-- <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'"></technology-Header> -->
 
     <router-view class="routView"/>
-    <app-footer  v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& $store.state.needNav"></app-footer>
+    <app-footer v-cloak v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& $store.state.hiddenNav"></app-footer>
   </div>
 </template>
 
@@ -152,7 +152,9 @@ export default {
       }
       const iframe = this.$route.query.iframe
       if (iframe === '1' || this.isMobile) {
-        this.$store.commit('setNeedNav', false)
+        this.$store.commit('setHiddenNav', false)
+      } else {
+        this.$store.commit('setHiddenNav', true)
       }
     },
     toTop(){
@@ -184,6 +186,11 @@ export default {
 /*  height: 100%;*/
 /*  overflow: auto;*/
 /*}*/
+[v-if],
+[v-show],
+[v-cloak]{
+  display: none !important;
+}
 #app {
 
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;

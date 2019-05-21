@@ -42,7 +42,7 @@
           </div>
           <div class="liArea">
             <i>主投领域</i>
-            <div class="spanArea">
+            <div class="spanArea" v-if="i.mainAreaList!=null&&i.mainAreaList.length>0">
               <span v-for="(item,k) in i.mainAreaList.split(',')" :key="k">{{item}}</span>
             </div>
           </div>

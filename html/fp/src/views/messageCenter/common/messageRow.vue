@@ -13,7 +13,7 @@
       </span>
       <div class="message-blank">
       </div>
-      <div class="message-time">{{ time }}</div>
+      <div class="message-time" v-if="time">{{ time }}</div>
     </div>
   </div>
 </template>
@@ -44,8 +44,9 @@
         required: true
       },
       time: {
-        type: [String, Number],
-        required: true
+        type: [String, Number, Boolean],
+        required: false,
+        default: ''
       },
       onDelete: {
         type: Function,

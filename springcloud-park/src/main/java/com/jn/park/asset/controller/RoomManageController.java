@@ -108,8 +108,8 @@ public class RoomManageController {
     })
     public Result<RoomPayOrdersModel> getPayOrders (String orderId){
         Assert.notNull(orderId,"订单编号不能为空");
-        RoomPayOrdersModel payOrders = roomInformationService.getPayOrders(orderId);
-        return new Result<>(payOrders);
+        RoomPayOrdersModel roomPayOrdersModel = roomInformationService.getPayOrders(orderId);
+        return new Result<>(roomPayOrdersModel);
     }
 
 
@@ -157,7 +157,7 @@ public class RoomManageController {
     @ApiOperation(value = "房间退租",notes = "房间退租")
     @GetMapping(value = "/quitApply")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050811515490657"),
+            @ApiImplicitParam(name = "orderItemId",value = "(子)订单编号",example = "2019050811515490657"),
     })
     public Result<RoomPayOrdersItemModel> quitApply(String id){
         RoomPayOrdersItemModel roomPayOrdersItemModel = roomInformationService.quitApply(id);
@@ -171,7 +171,7 @@ public class RoomManageController {
             @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657"),
     })
     public Result cancelOrder(String orderId){
-        //todo
+       roomInformationService.cancelOrder(orderId);
         return new Result();
     }
 
@@ -195,11 +195,11 @@ public class RoomManageController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "itemId",value = "(子)订单编号",example = "2019051111365096306")
     })
-    public Result<RoomOrdersModle> getNewRoomOrders (String itemId){
+    public Result<RoomOrdersModel> getNewRoomOrders (String itemId){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(itemId,"订单编号不能为空");
-        RoomOrdersModle roomOrdersModle =  roomInformationService.getNewRoomOrders(itemId,user.getAccount());
-        return new Result<>(roomOrdersModle);
+        RoomOrdersModel roomOrdersModel =  roomInformationService.getNewRoomOrders(itemId,user.getAccount());
+        return new Result<>(roomOrdersModel);
     }
 
 }

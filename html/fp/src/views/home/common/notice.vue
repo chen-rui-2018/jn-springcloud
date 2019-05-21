@@ -2,12 +2,13 @@
   <div class="notice-bg">
     <div class="notice-header">
       <span class="space-dot"></span>
-      <span class="notice-title">企业邀请</span>
+      <span class="notice-title">{{ title }}</span>
     </div>
     <div class="notice-main">
       <div class="notice-content" :class="type" v-if="content">
         <div class="notice-dot"></div>
-        <div >{{ content }}</div>
+        <slot v-if="slotContent"/>
+        <div v-else v-html="content"></div>
       </div>
       <div class="no-message" v-else>暂无咨询</div>
     </div>
@@ -18,6 +19,16 @@
 export default {
   name: "notcie",
   props: {
+    title: {
+      type: String,
+      default: '标题',
+      required: false
+    },
+    slotContent: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
     type: {
       type: String,
       default: 'primary',

@@ -198,4 +198,27 @@ public class RecruitVO implements Serializable {
         this.viewCount = viewCount;
     }
 
+    @Override
+    public String toString() {
+        return "RecruitVO{" +
+                "id='" + id + '\'' +
+                ", recruitNo='" + recruitNo + '\'' +
+                ", post='" + post + '\'' +
+                ", num=" + num +
+                ", status='" + status + '\'' +
+                ", careStatus='" + careStatus + '\'' +
+                ", statusName='" + statusName + '\'' +
+                ", viewCount=" + viewCount +
+                ", comId='" + comId + '\'' +
+                ", comName='" + comName + '\'' +
+                ", comAvatar='" + comAvatar + '\'' +
+                ", typeName='" + typeName + '\'' +
+                ", type='" + type + '\'' +
+                ", salaryName='" + salaryName + '\'' +
+                ", salary='" + salary + '\'' +
+                ", approvalStatus='" + approvalStatus + '\'' +
+                ", details='" + details + '\'' +
+                ", createdTime=" + createdTime +
+                '}';
+    }
 }

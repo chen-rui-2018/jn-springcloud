@@ -25,7 +25,8 @@
                   <div class="search" >
                     <i class="el-icon-search" style="font-size:20px" @click="show3=true"></i>
                   </div>
-                  <div class="navlogin">
+                  <user-info></user-info>
+                  <!-- <div class="navlogin">
                     <a href="javascript:;">登录</a>
                     <span class="line">|</span>
                     <a href="javascript:;"> 注册</a>
@@ -33,7 +34,7 @@
                   <div class="navlogin">
                     <i class="el-icon-bell"></i>
                     <span class="line">|</span>
-                  </div>
+                  </div> -->
                 </div>
             </div>
         </div>
@@ -343,7 +344,11 @@
 </template>
 <script>
 import Swiper from 'swiper'
+import userInfo from '../common/userInfoData'
 export default {
+  components: {
+      userInfo
+    },
   data() {
     return {
       actiTypeList:[],
@@ -1620,6 +1625,7 @@ export default {
       .headerRight {
         font-size: 12px;
         display: flex;
+        line-height: 65px;
         .search {
           display: inline-block;
           margin-right: 20px;

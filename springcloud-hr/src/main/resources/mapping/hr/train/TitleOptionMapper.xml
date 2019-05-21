@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.train.dao.TitleOptionMapper">
+
+	<select id="list" parameterType="java.lang.String"
+		resultType="com.jn.hr.train.entity.TbManpowerTrainTitleOption">
+		SELECT * FROM tb_manpower_train_title_option t1
+		where 1=1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(titleId)">
+			and t1.title_id = #{titleId,jdbcType=VARCHAR}
+		</if>
+		ORDER BY t1.option_id
+	</select>
+
+	<delete id="deleteByTitleId" parameterType="java.lang.String">
+		DELETE FROM
+		tb_manpower_train_title_option WHERE title_id =
+		#{titleId,jdbcType=VARCHAR}
+	</delete>
+
+	<select id="listQuest" parameterType="java.lang.String"
+		resultType="com.jn.hr.train.entity.TbManpowerTrainQuestTitleOption">
+		SELECT * FROM tb_manpower_train_quest_title_option t1
+		where 1=1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(titleId)">
+			and t1.title_id = #{titleId,jdbcType=VARCHAR}
+		</if>
+		ORDER BY t1.option_id
+	</select>
+
+	<delete id="deleteQuestByTitleId" parameterType="java.lang.String">
+		DELETE FROM
+		tb_manpower_train_quest_title_option WHERE title_id =
+		#{titleId,jdbcType=VARCHAR}
+	</delete>
+
+</mapper>

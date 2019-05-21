@@ -552,4 +552,62 @@ public class CompanyCheckParam implements Serializable {
     public void setAffiliatedPark(String affiliatedPark) {
         this.affiliatedPark = affiliatedPark;
     }
+
+    @Override
+    public String toString() {
+        return "CompanyCheckParam{" +
+                "comName='" + comName + '\'' +
+                ", comNameShort='" + comNameShort + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", induType='" + induType + '\'' +
+                ", ownerLaw='" + ownerLaw + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", conPhone='" + conPhone + '\'' +
+                ", foundingTime='" + foundingTime + '\'' +
+                ", runTime='" + runTime + '\'' +
+                ", comAddress='" + comAddress + '\'' +
+                ", addrPark='" + addrPark + '\'' +
+                ", comTele='" + comTele + '\'' +
+                ", regCapital=" + regCapital +
+                ", comScale=" + comScale +
+                ", unifyCode='" + unifyCode + '\'' +
+                ", businessLicense='" + businessLicense + '\'' +
+                ", comProperty='" + comProperty + '\'' +
+                ", comSource='" + comSource + '\'' +
+                ", checkCode='" + checkCode + '\'' +
+                ", ownerWechat='" + ownerWechat + '\'' +
+                ", ownerQq='" + ownerQq + '\'' +
+                ", conWechat='" + conWechat + '\'' +
+                ", contact='" + contact + '\'' +
+                ", con_phone='" + con_phone + '\'' +
+                ", conQq='" + conQq + '\'' +
+                ", induCode='" + induCode + '\'' +
+                ", addCapital='" + addCapital + '\'' +
+                ", registerType='" + registerType + '\'' +
+                ", mainProducts='" + mainProducts + '\'' +
+                ", businessScope='" + businessScope + '\'' +
+                ", comWeb='" + comWeb + '\'' +
+                ", comServer='" + comServer + '\'' +
+                ", comDemand='" + comDemand + '\'' +
+                ", comSynopsis='" + comSynopsis + '\'' +
+                ", imgParams=" + imgParams +
+                ", owners='" + owners + '\'' +
+                ", ownerPhone='" + ownerPhone + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", bankAccount='" + bankAccount + '\'' +
+                ", products='" + products + '\'' +
+                ", material='" + material + '\'' +
+                ", licStarttime='" + licStarttime + '\'' +
+                ", licEndtime='" + licEndtime + '\'' +
+                ", orgCode='" + orgCode + '\'' +
+                ", conAddress='" + conAddress + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", parkBuildId='" + parkBuildId + '\'' +
+                ", parkBuildName='" + parkBuildName + '\'' +
+                ", creditPoints=" + creditPoints +
+                ", comType='" + comType + '\'' +
+                ", isJoinActivity='" + isJoinActivity + '\'' +
+                ", affiliatedPark='" + affiliatedPark + '\'' +
+                '}';
+    }
 }

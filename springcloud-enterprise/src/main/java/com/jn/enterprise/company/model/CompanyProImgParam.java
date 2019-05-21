@@ -36,4 +36,12 @@ public class CompanyProImgParam implements Serializable {
     public void setImgIntrod(String imgIntrod) {
         this.imgIntrod = imgIntrod;
     }
+
+    @Override
+    public String toString() {
+        return "CompanyProImgParam{" +
+                "imgUrl='" + imgUrl + '\'' +
+                ", imgIntrod='" + imgIntrod + '\'' +
+                '}';
+    }
 }

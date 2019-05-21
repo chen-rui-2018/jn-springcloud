@@ -224,5 +224,11 @@ public class SysUserServiceTest {
         Boolean result = sysUserService.updateUserRole(user1, deleRoleId, addRoleId);
         Assert.assertThat(result, Matchers.equalTo(Boolean.TRUE));
     }
+    @Test
+    public void selectUserByIds(){
+      String[] ids={"10000","3"};
+        List<SysTUser> list= sysUserService.selectUserByIds(ids);
+        Assert.assertThat(list, Matchers.anything());
+    }
 
 }

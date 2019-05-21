@@ -21,10 +21,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,38 +39,23 @@ public class InvitationController extends BaseController {
     @Autowired
     private StaffService staffService;
 
-    @ControllerLog(doAction = "邀请列表")
-    @ApiOperation(value = "邀请列表（pc/app-邀请列表）", notes = "获取邀请员工列表[不支持分页查询]")
+    @ControllerLog(doAction = "根据手机号或账号查询用户信息")
+    @ApiOperation(value = "根据手机号或账号查询用户信息（pc/app）", notes = "根据手机号或账号查询用户信息")
     @RequestMapping(value = "/getInviteStaffList",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/StaffController/getInviteStaffList")
-    public Result<PaginationData<List<UserExtensionInfoVO>>> getInviteStaffList(@Validated StaffInviteParam staffInviteParam){
+    public Result<UserExtensionInfoVO> getInviteStaffList(@RequestParam String phone){
         User user = checkUserValid();
-        StaffListParam staffListParam = new StaffListParam();
-        BeanUtils.copyProperties(staffInviteParam, staffListParam);
-        return new Result(staffService.getInviteStaffList(staffListParam, user.getAccount()));
+        return new Result(staffService.getInviteStaffList(phone, user.getAccount()));
     }
 
-    @ControllerLog(doAction = "批量邀请员工")
-    @ApiOperation(value = "批量邀请员工（pc/app-邀请员工）", notes = "企业管理员发送邀请")
+    @TxTransaction(isStart = true)
+    @ControllerLog(doAction = "邀请员工")
+    @ApiOperation(value = "邀请员工（pc/app-邀请员工）", notes = "企业管理员发送邀请")
     @RequestMapping(value = "/inviteStaff",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/InvitationController/inviteStaff")
-    public Result<Integer> inviteStaff(String[] accounts){
+    public Result<Integer> inviteStaff(String inviteAccount){
         User user = checkUserValid();
-        Integer res = staffService.inviteStaff(accounts, user);
-        //TODO 调用消息推送接口 huxw
-
-        return new Result(res);
-    }
-
-    @ControllerLog(doAction = "再次邀请员工")
-    @ApiOperation(value = "再次邀请员工（pc-再次邀请）", notes = "企业管理员再次发送邀请")
-    @RequestMapping(value = "/inviteStaffAgain",method = RequestMethod.POST)
-    @RequiresPermissions("/enterprise/InvitationController/inviteStaffAgain")
-    public Result<Integer> inviteStaffAgain(String staffId){
-        User user = checkUserValid();
-        Integer res = staffService.inviteStaffAgain(staffId, user.getAccount());
-        //TODO 调用消息推送接口 huxw
-
+        Integer res = staffService.inviteStaff(inviteAccount, user.getAccount());
         return new Result(res);
     }
 

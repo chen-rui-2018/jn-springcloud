@@ -6,6 +6,7 @@ import com.jn.enterprise.company.model.ReviewStaffParam;
 import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.enterprise.company.vo.StaffAuditVO;
+import com.jn.enterprise.company.vo.UserExtensionInfoVO;
 import com.jn.system.model.User;
 
 import java.util.List;
@@ -34,25 +35,19 @@ public interface StaffService {
     ColleagueListVO getColleagueList(StaffListParam staffListParam, String curAccount);
 
     /**
-     * 邀请新成员列表
-     * @param staffListParam 列表查询入参
+     * 根据手机号或账号查询用户信息
+     * @param phone 手机号
      * @return
      */
-    PaginationData getInviteStaffList(StaffListParam staffListParam, String curAccount);
+    UserExtensionInfoVO getInviteStaffList(String phone, String curAccount);
 
     /**
      * 邀请员工
-     * @param account 受邀请账号
+     * @param inviteAccount 受邀请账号
+     * @param curAccount 当前账号
      * @return
      */
-    Integer inviteStaff(String[] account, User user);
-
-    /**
-     * 再次邀请员工
-     * @param staffId 员工ID
-     * @return
-     */
-    Integer inviteStaffAgain(String staffId, String curAccount);
+    Integer inviteStaff(String inviteAccount, String curAccount);
 
     /**
      * 审核员工申请

@@ -375,7 +375,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
 
 
         //TODO 对接工作流返回状态，校验审核完修改机构状态。jiangyl
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String,String>();
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
         map.add("bpmnDefId","572074916870881280");
         String gson=new Gson().toJson(tbServiceOrgCopy);
         map.add("data", gson);

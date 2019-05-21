@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.train.dao.AnswerInfoMapper">
+
+	<select id="listById" parameterType="com.jn.hr.train.model.SurveyResultPage"
+		resultType="com.jn.hr.train.entity.TbManpowerTrainAnswerInfo">
+		SELECT * FROM tb_manpower_train_answer_info t1
+		where 1=1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+			and t1.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
+			and t1.job_number = #{jobNumber,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<select id="list" parameterType="java.lang.String"
+		resultType="com.jn.hr.train.entity.TbManpowerTrainAnswerInfo">
+		SELECT * FROM tb_manpower_train_answer_info t1
+		where 1=1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(titleId)">
+			and t1.title_id = #{titleId,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<select id="listQuestById" parameterType="com.jn.hr.train.model.SurveyResultPage"
+		resultType="com.jn.hr.train.entity.TbManpowerTrainQuestAnswerInfo">
+		SELECT * FROM tb_manpower_train_quest_answer_info t1
+		where 1=1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+			and t1.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
+			and t1.job_number = #{jobNumber,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<select id="listQuest" parameterType="java.lang.String"
+		resultType="com.jn.hr.train.entity.TbManpowerTrainQuestAnswerInfo">
+		SELECT * FROM tb_manpower_train_quest_answer_info t1
+		where 1=1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(titleId)">
+			and t1.title_id = #{titleId,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+
+</mapper>

@@ -17,44 +17,48 @@
     <div class="delinfo">
       <el-card style="overflow:visible">
         <div class="infotop pr">
-          <img class="infoImg" :src="this.activityDetail.actiPosterUrl" alt="">
+          <img class="infoImg" :src="activityDetail.actiPosterUrl" alt="">
           <div class="infotitle">
-            <span>{{this.activityDetail.actiName}}</span>
+            <span>{{activityDetail.actiName}}</span>
             <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
-              <span>{{this.activityDetail.actiLike}}</span>
+              <span>{{activityDetail.actiLike}}</span>
             </i>
             <!-- <i class="iconfont like" v-else @click="cancleLike(activityDetail.id)">&nbsp;
               <span>{{this.activityDetail.actiLike}}</span>
             </i> -->
             <p>
               <i class="el-icon-time"></i>
-              <span>{{this.activityDetail.actiStartTime}}-{{this.activityDetail.actiEndTime}}</span>
-              <i class="iconfont icon-mianfei free">&nbsp;免费</i>
+              <span>{{activityDetail.actiStartTime}}-{{activityDetail.actiEndTime}}</span>
+              <i class="iconfont icon-recharge">&nbsp;
+                <span v-if="activityDetail.actiCost=='0.00'">免费</span>
+                <span v-else>收费</span>
+              </i>
             </p>
             <div class="delAddress">
               <i class="el-icon-location-outline"></i>
-              <span>{{this.activityDetail.actiAddress}}</span>
+              <span>{{activityDetail.actiAddress}}</span>
             </div>
             <div class="userImg">
-              <ul>
-                <li><img src="" alt=""></li>
+              <ul v-if="actiApplyList!=null&&actiApplyList.length>0">
+                <li v-if="k<5" v-for="(i,k) in actiApplyList" :key="k"><img :src="i.avatar" alt=""></li>
               </ul>
-              <span>{{this.activityDetail.applyNum}}/{{this.activityDetail.actiNumber}}</span>
+              <span v-if="actiApplyList!=null&&actiApplyList.length>5">......</span>
+              <span>{{activityDetail.applyNum}}/{{activityDetail.actiNumber}}</span>
               <a href="javascript:void(0)" class="mainColor" @click="handCheck(activityDetail.id)">查看报名情况</a>
             </div>
           </div>
         </div>
         <div class="infobottom">
-          <p style="margin-top:10px">发布时间：{{this.activityDetail.issueTime}}</p>
-          <p>主办方：{{this.activityDetail.actiOrganizer}}</p>
-          <p>报名截止时间：{{this.activityDetail.applyEndTime}}
+          <p style="margin-top:10px">发布时间：{{activityDetail.issueTime}}</p>
+          <p>主办方：{{activityDetail.actiOrganizer}}</p>
+          <p>报名截止时间：{{activityDetail.applyEndTime}}
             <span class="resdeadline">报名截止还有&nbsp;{{countDown}}</span>
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
-            <el-button type="success" v-if="this.activityDetail.actiStatus=='2'&&this.activityDetail.isApply=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
-            <el-button type="success" v-if="this.activityDetail.actiStatus=='2'&&this.activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">停止报名</el-button>
-            <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button>
+            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
+            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">停止报名</el-button>
+            <!-- <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button> -->
             <span class="shareto">
               分享到
               <i class="iconfont icon-weixin"></i>
@@ -69,7 +73,7 @@
       <el-card>
         <div class="delContent">
           <!-- <img src="@/../static/img/detail1.png" alt=""> -->
-          <p>{{this.activityDetail.actiDetail}}</p>
+          <p>{{activityDetail.actiDetail}}</p>
           <!-- <img src="@/../static/img/detail2.png" alt=""> -->
         </div>
       </el-card>
@@ -78,9 +82,9 @@
       <div class="mesTil">留言</div>
       <el-card>
         <div class="mesContent">
-          <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textarea">
+          <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textData">
           </el-input>
-          <el-button type="success" style="background:#00a040;height:38px;width:90px" round>留言</el-button>
+          <el-button type="success" style="background:#00a040;height:38px;width:90px" round @click="leaveMessage(activityDetail.id)">留言</el-button>
         </div>
       </el-card>
     </div>
@@ -107,7 +111,7 @@
                     <!-- <i class="iconfont icon-dianzan1 mainColor" style="cursor:pointer" v-if="isClick==1" @click="comCancleLike(item)">&nbsp;赞
                     </i>
                     <span>{{item.likeNum}}</span> -->
-                    <i class="iconfont icon-liuyan" style="cursor:pointer" @click="replyFlag()">&nbsp;回复</i>
+                    <i class="iconfont icon-liuyan" style="cursor:pointer" @click="inFlag=true">&nbsp;回复</i>
                   </p>
                 </div>
               </div>
@@ -121,13 +125,13 @@
                 <span>{{i.createdTime}}</span>
               </div>
               <div v-if="inFlag">
-                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textarea"></el-input>
+                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textData1"></el-input>
                 <el-button type="success" @click="replycom(item)" style="background:#00a040;height:38px;width:90px;margin-left: 1014px;margin-top: 10px;" round>回复</el-button>
               </div>
             </li>
           </ul>
           <div class="pagination-container" style="margin-top:50px">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
             </el-pagination>
           </div>
         </div>
@@ -140,35 +144,53 @@ export default {
   data() {
     return {
       inFlag: false,
-      textarea: "",
+      textData: "",
+      textData1:'',
       activityDetail: {},
       currentPage1: 1,
       page: 1,
       row: 5,
       total: 0,
       commentList: [],
-      sysTemTime:"",
+      actiApplyList: [],
       accountIsLike: false,
       isCommentLike: false,
-      countDown:'',
+      countDown: ""
     };
   },
-  created(){
+  created() {
     this.init();
     this.getCommentInfo();
   },
-  mounted() {    
+  mounted() {
     // this.countdown()
   },
-   destroyed () {
-    clearInterval(this._interval)
+  destroyed() {
+    clearInterval(this._interval);
   },
   methods: {
-    replyFlag() {
-      this.inFlag = true;
+    //留言
+    leaveMessage(id) {
+      let _this = this;
+      this.api.post({
+        url: "commentActivity",
+        data: {
+          comContent: _this.textData,
+          comType: 0,
+          rootId: id,
+          pId:id,
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.getCommentInfo();
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
     },
+    //回复评论
     handleReply(comContent, comType, pId, rootId) {
-      //回复评论
       let _this = this;
       this.api.post({
         url: "commentActivity",
@@ -180,28 +202,29 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.getCommentInfo();
           }
         }
       });
     },
+    //回复评论
     replycom(item) {
-      //回复评论
       this.inFlag = false;
       let _this = this;
       this.api.post({
-        url: "springcloud-park/comment/review/commentActivity",
+        url: "commentActivity",
         data: {
-          comContent: item.comContent,
-          comType: item.comType,
+          comContent: _this.textData1,
+          comType: 0,
           pId: item.pId,
           rootId: item.rootId
         },
         // urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
+            _this.inFlag = false;
+            _this.textData1=''
+            _this.getCommentInfo();
           } else {
             _this.$message.error(res.result);
           }
@@ -359,24 +382,24 @@ export default {
       });
     },
     //报名倒计时
-   countTime (t) {
-      var secondsTime = new Date().getTime()
-      var applyTime = new Date(t).getTime()
-      var leftTime = applyTime - secondsTime
+    countTime(t) {
+      var secondsTime = new Date().getTime();
+      var applyTime = new Date(t).getTime();
+      var leftTime = applyTime - secondsTime;
       if (leftTime >= 0) {
-        var d = Math.floor(leftTime / 1000 / 60 / 60 / 24)
-        var h = Math.floor((leftTime / 1000 / 60 / 60) % 24)
-        var m = Math.floor((leftTime / 1000 / 60) % 60)
-        var s = Math.floor((leftTime / 1000) % 60)
-        d = d
-        h = h > 9 ? h : '0' + h
-        m = m > 9 ? m : '0' + m
-        s = s > 9 ? s : '0' + s
-        this.countDown=d+'天'+h+'小时'+m+'分'+s+'秒'
-        return false
+        var d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+        var h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
+        var m = Math.floor((leftTime / 1000 / 60) % 60);
+        var s = Math.floor((leftTime / 1000) % 60);
+        d = d;
+        h = h > 9 ? h : "0" + h;
+        m = m > 9 ? m : "0" + m;
+        s = s > 9 ? s : "0" + s;
+        this.countDown = d + "天" + h + "小时" + m + "分" + s + "秒";
+        return false;
       } else {
-        this.countDown='0天0时0分0秒'
-        return true
+        this.countDown = "0天0时0分0秒";
+        return true;
       }
     },
     init() {
@@ -391,20 +414,20 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.activityDetail = res.data.activityDetail;
-            _this.sysTemTime=res.data.sysTemTime;
+            _this.actiApplyList = res.data.activityApplyList;
             _this.accountIsLike = res.data.accountIsLike;
-             _this._interval = setInterval(() => {
-              let data = _this.countTime(_this.applyEndTime)
+            _this._interval = setInterval(() => {
+              let data = _this.countTime(res.data.activityDetail.applyEndTime);
               if (data) {
-                clearInterval(_this._interval)
+                clearInterval(_this._interval);
               }
-            }, 1000)
+            }, 1000);
           }
         }
       });
     },
+    //获取评论信息
     getCommentInfo() {
-      //获取评论信息
       let _this = this;
       this.api.post({
         url: "getCommentInfo",
@@ -416,7 +439,6 @@ export default {
         // dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.total = res.data.total;
             for (let it in res.data.rows) {
               res.data.rows[it].inFlag = false;
@@ -470,8 +492,8 @@ export default {
         }
         > p {
           margin-top: 30px;
-          .free {
-            margin-left: 70px;
+          .icon-recharge {
+            margin-left: 60px;
           }
         }
         .delAddress {
@@ -486,6 +508,10 @@ export default {
               width: 20px;
               border: 1px solid #eee;
               border-radius: 50%;
+              img{
+                width: 100%;
+                height: 100%;
+              }
             }
           }
           > span {
@@ -511,7 +537,7 @@ export default {
           height: 38px;
           width: 110px;
           line-height: 10px;
-          .icon-xihuan{
+          .icon-xihuan {
             font-size: 20px;
           }
         }

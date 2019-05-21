@@ -13,6 +13,7 @@ import com.jn.park.asset.entity.TbAssetArticleLeaseOrders;
 import com.jn.park.asset.enums.AssetExceptionEnum;
 import com.jn.park.asset.enums.AssetStatusEnums;
 import com.jn.park.asset.enums.LeaseStatusEnums;
+import com.jn.park.asset.enums.PayStatusEnums;
 import com.jn.park.asset.model.AssetArticleLeaseModel;
 import com.jn.park.asset.service.AssetArticleLeaseService;
 import com.jn.system.log.annotation.ServiceLog;
@@ -138,6 +139,8 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             tbAssetArticleLeaseOrders.setLeasePrice(articleLease.getLeasePrice());
             tbAssetArticleLeaseOrders.setStartTime(articleLease.getStartTime());
             tbAssetArticleLeaseOrders.setEndTime(articleLease.getEndTime());
+            //未付款
+            tbAssetArticleLeaseOrders.setPaymentStatus(Byte.parseByte(PayStatusEnums.NONPAYMENT.getCode()));
             //订单创建者
             tbAssetArticleLeaseOrders.setCreatorAccount(user.getAccount());
             tbAssetArticleLeaseOrders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));

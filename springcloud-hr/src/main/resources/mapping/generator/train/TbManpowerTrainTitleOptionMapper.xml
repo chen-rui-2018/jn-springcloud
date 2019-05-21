@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.train.dao.TbManpowerTrainTitleOptionMapper">
+  <resultMap id="BaseResultMap" type="com.jn.hr.train.entity.TbManpowerTrainTitleOption">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="option_id" jdbcType="VARCHAR" property="optionId" />
+    <result column="option_name" jdbcType="VARCHAR" property="optionName" />
+    <result column="title_id" jdbcType="VARCHAR" property="titleId" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, option_id, option_name, title_id, serial_number
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainTitleOptionCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_manpower_train_title_option
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_manpower_train_title_option
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_manpower_train_title_option
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainTitleOptionCriteria">
+    delete from tb_manpower_train_title_option
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.hr.train.entity.TbManpowerTrainTitleOption">
+    insert into tb_manpower_train_title_option (id, option_id, option_name, 
+      title_id, serial_number)
+    values (#{id,jdbcType=VARCHAR}, #{optionId,jdbcType=VARCHAR}, #{optionName,jdbcType=VARCHAR}, 
+      #{titleId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.hr.train.entity.TbManpowerTrainTitleOption">
+    insert into tb_manpower_train_title_option
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="optionId != null">
+        option_id,
+      </if>
+      <if test="optionName != null">
+        option_name,
+      </if>
+      <if test="titleId != null">
+        title_id,
+      </if>
+      <if test="serialNumber != null">
+        serial_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="optionId != null">
+        #{optionId,jdbcType=VARCHAR},
+      </if>
+      <if test="optionName != null">
+        #{optionName,jdbcType=VARCHAR},
+      </if>
+      <if test="titleId != null">
+        #{titleId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainTitleOptionCriteria" resultType="java.lang.Long">
+    select count(*) from tb_manpower_train_title_option
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_manpower_train_title_option
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.optionId != null">
+        option_id = #{record.optionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.optionName != null">
+        option_name = #{record.optionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.titleId != null">
+        title_id = #{record.titleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null">
+        serial_number = #{record.serialNumber,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_manpower_train_title_option
+    set id = #{record.id,jdbcType=VARCHAR},
+      option_id = #{record.optionId,jdbcType=VARCHAR},
+      option_name = #{record.optionName,jdbcType=VARCHAR},
+      title_id = #{record.titleId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.train.entity.TbManpowerTrainTitleOption">
+    update tb_manpower_train_title_option
+    <set>
+      <if test="optionId != null">
+        option_id = #{optionId,jdbcType=VARCHAR},
+      </if>
+      <if test="optionName != null">
+        option_name = #{optionName,jdbcType=VARCHAR},
+      </if>
+      <if test="titleId != null">
+        title_id = #{titleId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.hr.train.entity.TbManpowerTrainTitleOption">
+    update tb_manpower_train_title_option
+    set option_id = #{optionId,jdbcType=VARCHAR},
+      option_name = #{optionName,jdbcType=VARCHAR},
+      title_id = #{titleId,jdbcType=VARCHAR},
+      serial_number = #{serialNumber,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

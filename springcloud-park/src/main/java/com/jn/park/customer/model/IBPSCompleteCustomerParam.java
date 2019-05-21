@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @Author: yangph
@@ -64,5 +65,16 @@ public class IBPSCompleteCustomerParam implements Serializable {
 
     public void setOpinionUrl(String[] opinionUrl) {
         this.opinionUrl = opinionUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "IBPSCompleteCustomerParam{" +
+                "procInstId='" + procInstId + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", actionName='" + actionName + '\'' +
+                ", opinion='" + opinion + '\'' +
+                ", opinionUrl=" + Arrays.toString(opinionUrl) +
+                '}';
     }
 }

@@ -1,57 +1,6 @@
 <template>
     <div class="actiTrain">
-        <!-- <div class="fullNav clearfix">
-            <div class="navLeft fl">
-                <i class="iconfont icon-caidan"></i>
-                <span>网站导航</span>
-            </div>
-            <ul class="navRight fr">
-                <li>联系客服</li>
-                <li class="line"></li>
-                <li>下载APP</li>
-                <li class="line"></li>
-                <li>关注微信</li>
-                <li class="line"></li>
-                <li>登录</li>
-                <li class="line"></li>
-                <li>注册</li>
-            </ul>
-        </div> -->
         <div class="trainContent">
-            <!-- <div class="searchNav">
-                <div class="trainLogo">
-                    <img src="@/../static/img/LOGO.png" alt="">
-                </div>
-                <div class="trainSearch pr">
-                    <input type="text" placeholder="请输入搜索关键词">
-                    <div class="iconSearch">
-                        <i class="el-icon-search" style="font-size:20px;"></i>
-                        <span>搜索</span>
-                    </div>
-                    <div class="keyWord">
-                        <span>机构</span>
-                        <span>产品</span>
-                        <span>顾问</span>
-                        <span>活动</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bannerNav">
-                <div class="w clearfix">
-                    <div class="bannerSer fl">
-                        <i class="iconfont icon-menu1"></i>
-                        <span>帮您快速找服务</span>
-                    </div>
-                    <div class="bannerUl fr">
-                        <li>首页</li>
-                        <li>服务机构</li>
-                        <li>服务产品</li>
-                        <li>服务顾问</li>
-                        <li>活动培训</li>
-                        <li>关于我们</li>
-                    </div>
-                </div>
-            </div> -->
             <div class="actiContent">
                 <div class="actiNav">
                    <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
@@ -61,36 +10,36 @@
                 <div class="actiFilter clearfix">
                     <div class="timeFilter">
                         <i>时间筛选:</i>
-                        <span :class="{'active':timeIndexFlag == ''}" @click="timeSelect('','')">不限</span>
-                        <span :class="{'active':timeIndexFlag == -7}" @click="timeSelect(0,-7)">最近一周</span>
-                        <span :class="{'active':timeIndexFlag == -30}" @click="timeSelect(0,-30)">最近一月</span>
+                        <span :class="{'active0':timeIndexFlag == ''}" @click="timeSelect('','')">不限</span>
+                        <span :class="{'active0':timeIndexFlag == -7}" @click="timeSelect(0,-7)">最近一周</span>
+                        <span :class="{'active0':timeIndexFlag == -30}" @click="timeSelect(0,-30)">最近一月</span>
                     </div>
                     <div class="timeOrder">
                         <ul>
-                            <li @click="handleTime('acti_start_time')" :class="{'active':colorFlag == 'acti_start_time'}">
+                            <li @click="handleTime('acti_start_time')" :class="{'active0':colorFlag == 'acti_start_time'}">
                                 <i class="iconfont icon-clock-"></i>
                                 <span>时间排序</span>
                             </li>
-                            <li @click="handleTime('acti_Like')" :class="{'active':colorFlag == 'acti_Like'}">
+                            <li @click="handleTime('acti_Like')" :class="{'active0':colorFlag == 'acti_Like'}">
                                 <i class="iconfont icon-hot"></i>
                                 <span>热度排序</span>
                             </li>
                             <li class="showListLi">
-                                <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active':showListFlag == 'icon-menu1'}"></i>
-                                <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active':showListFlag == 'icon-menu'}"></i>
+                                <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
+                                <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="allActi clearfix">
                     <ul class="actiFilterUl fl clearfix">
-                        <li :class="{'active':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
-                        <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active':actiFilflag == v.typeName}" @click="handleFil(v.typeName)">{{v.typeName}}</li>
+                        <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
+                        <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeName}" @click="handleFil(v.typeName)">{{v.typeName}}</li>
                         <li v-if="this.actiTypeList.length>4" class="bottomLi pr">
                             <i class="iconfont icon-bottom" @click.stop="handleTypeList"></i>
                             <el-card class="box-card" v-if="showList" style="overflow:auto">
                                 <ul class="listUl clearfix">
-                                    <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active':actiFilflag == i.typeName}" @click.stop="handleFil(i.typeName)">
+                                    <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeName}" @click.stop="handleFil(i.typeName)">
                                         <i class="iconfont icon-yuandian"></i>{{i.typeName}}</li>
                                 </ul>
                             </el-card>
@@ -121,7 +70,7 @@
                             <div class="actiNum clearfix">
                                 <div class="avatar">
                                     <ul>
-                                        <li v-for="(avr,key) in avatarList" :key="key"><img :src="avr" alt=""></li>
+                                        <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
                                         <!-- <li><img src="" alt=""></li>
                                         <li><img src="" alt=""></li>
                                         <li><img src="" alt=""></li>
@@ -156,14 +105,11 @@
                                 <div class="actiNum clearfix">
                                     <div class="avatar">
                                         <ul class="clearfix">
-                                            <li><img src="@/../static/img/heng1.png" alt=""></li>
-                                            <li><img src="@/../static/img/heng2.png" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
-                                            <li><img src="" alt=""></li>
+                                            <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
+                                            <!-- <li><img src="@/../static/img/heng1.png" alt=""></li> -->
                                         </ul>
                                     </div>
-                                    <i style="margin-left:10px">{{item.actiNumber}}</i>
+                                    <i style="margin-left:10px">{{item.applyNum}}/{{item.actiNumber}}</i>
                                 </div>
                             </div>
                             <div class="verticalRight fr">
@@ -299,7 +245,6 @@ export default {
         data: {},
         // dataFlag: false,
         callback: function(res) {
-          console.log(res);
           if (res.code == "0000") {
             _this.actiTypeList = res.data.rows;
           }

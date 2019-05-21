@@ -1,9 +1,11 @@
 package com.jn.common.util.log;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.ThrowableProxy;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.common.util.DateUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.net.InetAddress;
 import java.util.Date;
@@ -41,7 +43,14 @@ public class LogBackKafkaVo {
             logBackKafkaVo.setClassName(eventObject.getLoggerName());
             logBackKafkaVo.setDateTime(DateUtils.formatDate(new Date(eventObject.getTimeStamp()),"yyyy-MM-dd HH:mm:ss:SSS"));
             logBackKafkaVo.setThreadName(eventObject.getThreadName());
-            logBackKafkaVo.setMessage(eventObject.getFormattedMessage());
+            //判断是否有异常，有就将堆栈也发过去
+            if (eventObject.getThrowableProxy() !=null){
+                ThrowableProxy throwableProxy =    (ThrowableProxy)eventObject.getThrowableProxy();
+                String stackTrace = ExceptionUtils.getStackTrace( throwableProxy.getThrowable());
+                logBackKafkaVo.setMessage(eventObject.getFormattedMessage()+"\n"+stackTrace);
+            }else {
+                logBackKafkaVo.setMessage(eventObject.getFormattedMessage());
+            }
             logBackKafkaVo.setTimestamp(eventObject.getTimeStamp());
             logBackKafkaVo.setHost(InetAddress.getLocalHost().getHostAddress());
         } catch (Exception e) {

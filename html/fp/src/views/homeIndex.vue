@@ -1,25 +1,31 @@
 <template>
   <div class="portalIndex">
-    <div class="portalIndexImg" v-if="$store.state.needNav">
-      <div class="header" id="header" :class="{'headerw':isCenter}">
+    <div class="portalIndexImg" v-if="$store.state.hiddenNav">
+      <div class="header" id="header" :class="{'headerw':isCenter||showFF}">
         <div class="headerContainer clearfix">
           <div class="titleImg fl">
-            <img src="@/../static/img/login-logo.png" v-if="isCenter" class="pointer" alt="" @click="$router.push({path:'/'})">
+            <img src="@/../static/img/login-logo.png" v-if="isCenter||showFF" class="pointer" alt="" @click="$router.push({path:'/'})">
             <img src="@/../static/img/LOGO1.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
           </div>
-          <div class="headerRight fr">
-            <router-link to="/messageCenter" class="search">
+          <div class="headerRight fr pr">
+            <!-- <router-link to="/allMesList" class="search" v-if="isLogin">
               <i class="el-icon-bell" style="font-size:20px"></i>
-            </router-link>
+            </router-link> -->
+            <!-- <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span> -->
             <div class="search pointer">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
             </div>
-            <div class="navlogin">
-              <a @click="$router.push({path:'/login'})">登录</a>
+            <user-info></user-info>
+            <!-- <div class="navlogin">
+              <router-link to="/parkNotice" class="" v-if="isLogin">
+              <i class="el-icon-bell" style="font-size:20px" @mouseenter="showMes=!showMes"></i>
+              </router-link>
+              <a @click="$router.push({path:'/login'})" v-else>登录</a>
               <span class="line">|</span>
               <a @click="$router.push({path:'/register'})">注册</a>
-            </div>
+            </div> -->
           </div>
+
           <div class="nav" id="nav">
             <ul class="posA clearfix">
               <li class="">
@@ -38,6 +44,16 @@
           </div>
         </div>
       </div>
+      <!-- <div class="mesage11" v-if="showMes"  @mouseleave="showMes=!showMes">
+        <el-card>
+          <div class="firli"><span class="color1">消息中心</span><span class="pointer">清空</span></div>
+          <ul>
+          <li class="pointer">[缴费提醒]您有1条企业缴费提醒</li>
+          <li>[园区通知]您有2条私人订单</li>
+        </ul>
+        <div class="checkAll ct color1 pointer">查看全部</div>
+        </el-card>
+      </div> -->
       <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
         <el-collapse-transition>
           <div v-show="show4">
@@ -58,9 +74,14 @@
 </template>
 <script>
   import swiper from "swiper";
+  import userInfo from './common/userInfoData'
   export default {
+     components: {
+      userInfo
+    },
     data() {
       return {
+        showMes:false,
         // sousuo: false,
         show1: false,
         show11: false,
@@ -74,24 +95,49 @@
         activeNames: ['first'],
         sw:'fir',
         showBtn:false,
+        // isLogin:false,
+        // accoutInfo:''
       };
     },
     computed: {
       isCenter() {
-        const list = ['portalIndex', 'enterpriseservice']
+        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises';
         return this.$route.matched.some(item => {
-          return list.indexOf(item.name) !== -1
+          if(item.name){
+            return list.indexOf(item.name) == -1
+          }
         })
       }
     },
+    // computed: {
+    //   isCenter() {
+    //     const list = ['portalIndex', 'enterpriseservice']
+    //     let flag
+    //     for (const item of this.$route.matched) {
+    //       for (const name of list) {
+    //         if (item.name === name) {
+    //           flag = true
+    //         }
+    //       }
+    //     }
+    //     return flag
+    //   }
+    // },
     mounted() {
       this.swiperinit();
       window.addEventListener("scroll", this.handleScroll);
+      // this.islogin()
     },
     destroyed() {
       window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
     },
     methods: {
+      // islogin(){
+      //   this.accoutInfo=sessionStorage.getItem('account')
+      //   if(this.accoutInfo){
+      //     this.isLogin=true
+      //   }
+      // },
       showH(){
         this.show1 = true;
         // setTimeout(()=>{
@@ -221,6 +267,36 @@
   };
 </script>
 <style lang="scss">
+//  .mesage11{
+//    position: relative;
+//    left:70%;
+//    width: 250px;
+//    color:#999;
+//    font-size: 12px;
+//    .el-card__body{
+//      padding:0;
+//    }
+//    .el-card{
+//      color:#999;
+//    }
+//    .firli{
+//      display: flex;
+//      align-items: center;
+//      justify-content: space-between;
+//      padding:15px 20px;
+//      border-bottom:1px solid #eee;
+//    }
+//    .checkAll{
+//      padding:15px 20px;
+//    }
+//    li{
+//      padding:15px 20px;
+//      border-bottom:1px solid #eee;
+//      overflow: hidden;
+//      text-overflow:ellipsis;
+//      white-space: nowrap;
+//    }
+//  }
   @keyframes qfyfadeInLeft {
     0% {
       opacity: 0;
@@ -284,6 +360,12 @@
       position: fixed;
       z-index: 99;
       width: 100%;
+      // .header{
+      //   background-color: #fff;
+      //   #nav{
+      //     color:#666;
+      //   }
+      // }
       .headerw {
         background: #fff;
         border-bottom:1px solid #eee;
@@ -318,6 +400,9 @@
       .search_box {
         background: rgba(0, 0, 0, 0.3);
         .el-input-group {
+          position: relative;
+          left: 50%;
+          transform: translateX(-50%);
           border-radius: 28px;
           width: 42%;
           margin: 43px 0;

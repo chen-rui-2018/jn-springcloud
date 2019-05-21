@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.employee.dao.HolidayRuleMapper">
+    <select id="list"
+            resultType="com.jn.hr.employee.model.HolidayRule">
+        SELECT
+        rule_id, reached_year, not_full_year, annual_leave, serial_number
+        FROM
+        `tb_manpower_holiday_rule` t1
+        WHERE 1=1
+        ORDER BY t1.serial_number ASC
+    </select>
+
+
+</mapper>

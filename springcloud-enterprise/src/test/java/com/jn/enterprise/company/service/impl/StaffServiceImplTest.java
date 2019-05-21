@@ -168,7 +168,7 @@ public class StaffServiceImplTest {
     public void getColleagueList() {
         try {
             ColleagueListVO colleagueList = staffService.getColleagueList(colleagueListParam, user.getAccount());
-            PaginationData<List<StaffListVO>> paginationData = colleagueList.getPaginationData();
+            PaginationData<List<StaffListVO>> paginationData = colleagueList.getData();
             List<StaffListVO> dataList = paginationData.getRows();
             if (dataList != null && !dataList.isEmpty()) {
                 assertThat(dataList.size(), greaterThanOrEqualTo(1));

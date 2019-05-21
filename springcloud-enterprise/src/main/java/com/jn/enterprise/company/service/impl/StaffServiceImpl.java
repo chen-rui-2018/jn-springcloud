@@ -174,7 +174,7 @@ public class StaffServiceImpl implements StaffService {
         if (company != null && company.getComAdmin().equals(curAccount)) {
             isShowFlag = "1";
         }
-        colleagueListVO.setIsShowFlag(isShowFlag);
+        colleagueListVO.setIsShow(isShowFlag);
 
         List<StaffListVO> dataList = new ArrayList<>(16);
         List<String> accountList = new ArrayList<>(16);
@@ -219,7 +219,7 @@ public class StaffServiceImpl implements StaffService {
 
         }
         PaginationData paginationData = new PaginationData(dataList, staffListParam.getNeedPage().equals("1") ? (Integer) maps.get("total") : dataList.size());
-        colleagueListVO.setPaginationData(paginationData);
+        colleagueListVO.setData(paginationData);
         return colleagueListVO;
     }
 

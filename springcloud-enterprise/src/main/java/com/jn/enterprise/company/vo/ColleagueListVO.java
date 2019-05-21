@@ -17,25 +17,25 @@ import java.util.List;
 @ApiModel(value = "ColleagueListVO",description = "同事列表出参")
 public class ColleagueListVO implements Serializable {
 
-    @ApiModelProperty(value = "是否展示管理列[PC]")
-    private String isShowFlag;
+    @ApiModelProperty(value = "是否展示管理列（1：显示 0：隐藏）[PC]")
+    private String isShow;
 
     @ApiModelProperty(value = "分页数据")
-    private PaginationData<List<StaffListVO>> paginationData;
+    private PaginationData<List<StaffListVO>> data;
 
-    public String getIsShowFlag() {
-        return isShowFlag;
+    public String getIsShow() {
+        return isShow;
     }
 
-    public void setIsShowFlag(String isShowFlag) {
-        this.isShowFlag = isShowFlag;
+    public void setIsShow(String isShow) {
+        this.isShow = isShow;
     }
 
-    public PaginationData<List<StaffListVO>> getPaginationData() {
-        return paginationData;
+    public PaginationData<List<StaffListVO>> getData() {
+        return data;
     }
 
-    public void setPaginationData(PaginationData<List<StaffListVO>> paginationData) {
-        this.paginationData = paginationData;
+    public void setData(PaginationData<List<StaffListVO>> data) {
+        this.data = data;
     }
 }

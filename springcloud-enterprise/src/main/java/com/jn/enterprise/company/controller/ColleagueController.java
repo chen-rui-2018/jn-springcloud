@@ -39,7 +39,6 @@ import java.util.Map;
 @Api(tags = "用户中心-我的企业-企业同事")
 @RestController
 @RequestMapping("/enterprise/ColleagueController")
-@TxTransaction(isStart = true)
 public class ColleagueController extends BaseController {
 
     @Autowired
@@ -61,6 +60,7 @@ public class ColleagueController extends BaseController {
         return new Result(staffService.getColleagueList(staffListParam, user.getAccount()));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "批量删除同事")
     @ApiOperation(value = "批量删除同事（pc/app-删除同事）", notes = "返回数据响应条数")
     @RequestMapping(value = "/delColleague",method = RequestMethod.POST)
@@ -71,6 +71,7 @@ public class ColleagueController extends BaseController {
         return new Result(staffService.delMoreStaffs(accounts, user.getAccount()));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "设置联系人")
     @ApiOperation(value = "设置联系人（pc-设为联系人）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/setContact",method = RequestMethod.POST)
@@ -81,6 +82,7 @@ public class ColleagueController extends BaseController {
         return new Result(staffService.setOrCancelContact(account, user.getAccount(), true));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "取消联系人")
     @ApiOperation(value = "取消联系人（pc-取消联系人）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/cancelContact",method = RequestMethod.POST)
@@ -91,14 +93,12 @@ public class ColleagueController extends BaseController {
         return new Result(staffService.setOrCancelContact(account, user.getAccount(), false));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "编辑同事信息")
     @ApiOperation(value = "编辑同事信息", notes = "编辑自己的信息")
     @RequestMapping(value = "/updateUserInfo",method = RequestMethod.POST)
     public Result updateUserInfo(@Validated @RequestBody ColleagueUpdateParam colleagueUpdateParam){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null) {
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(),CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
+        User user = checkUserValid();
         UserInfo userInfo = new UserInfo();
         userInfo.setAccount(user.getAccount());
         BeanUtils.copyProperties(colleagueUpdateParam, userInfo);

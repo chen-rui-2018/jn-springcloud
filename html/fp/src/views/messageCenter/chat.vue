@@ -14,20 +14,22 @@
             <i class="el-icon-loading"></i>
             <span>正在加载...</span>
           </div>
-          <!--          <div class="tc">-->
-          <!--            <div class="date-tips">04/04</div>-->
-          <!--          </div>-->
-          <message-row
+          <div
             v-for="(item, index) in messageList"
-            :key="index"
-            :message="item.content.msg"
-            :time="item.sendTime | formatTime"
-            :on-delete="deleteMessage"
-            :on-resend="() => { reSend(item) }"
-            :type="item.msgType === '0000'|| item.sendId === param.fromUser ? 'right' : 'left'"
-            :url="item.content.url"
-            :status="item.status"
-          />
+            :key="index">
+            <div v-if="item.showCreateTime" class="tc">
+              <div class="date-tips">{{ item.showCreateTime | formatTime }}</div>
+            </div>
+            <message-row
+              :message="item.content.msg"
+              :on-delete="deleteMessage"
+              :on-resend="() => { reSend(item) }"
+              :type="item.msgType === '0000'|| item.sendId === param.fromUser ? 'right' : 'left'"
+              :url="item.content.url"
+              :status="item.status"
+            />
+          </div>
+
         </div>
         <div class="chat-footer" v-if="!$store.state.isMobile">
           <avatar class="flex-none" :url="url"></avatar>
@@ -62,7 +64,7 @@
       </div>
       <div v-else-if="!$route.query.toUser && !$store.state.isMobile" class="no-chat">选择一个好友开始聊天吧</div>
     </div>
-    <div v-if="$store.state.needNav" class="friend-list">
+    <div v-if="$store.state.hiddenNav" class="friend-list">
       <div class="friend-list-header">私信列表</div>
       <router-view></router-view>
       <div class="friend-list-main">
@@ -116,6 +118,11 @@
           page: 1,
           rows: 10
         },
+        userListParam: {
+          fromUser: '',
+          page: 1,
+          rows: 500
+        },
         url: '',
         nickName: '',
         toUserNickName: '',
@@ -124,22 +131,30 @@
         lastHeight: 0,
         noMore: false,
         tempMessageList: [],
-        loaded: false
+        loaded: false,
+        lastMessageSendTime: ''
       }
     },
     mounted() {
-      this.init()
+      this.$nextTick(
+        this.init()
+      )
     },
     watch: {
       '$route'() {
-        this.init()
+        this.$nextTick(
+          this.init()
+        )
       }
     },
     filters: {
       formatTime(d) {
-        let td = new Date();
-        td = new Date(td.getFullYear(), td.getMonth(), td.getDate());
-        let od = new Date(d);
+        if (!d) {
+          return ''
+        }
+        let td = new Date()
+        td = new Date(td.getFullYear(), td.getMonth(), td.getDate())
+        let od = new Date(d)
         const year = od.getFullYear()
         let mon = od.getMonth() + 1
         mon = mon > 9 ? mon : '0' + mon
@@ -150,7 +165,7 @@
         let min = od.getMinutes()
         min = min > 9 ? min : '0' + min
 
-        od = new Date(year, od.getMonth(), day);
+        od = new Date(year, od.getMonth(), day)
         const xc = (od - td) / 1000 / 60 / 60 / 24;
 
         let tips
@@ -182,24 +197,30 @@
     },
     methods: {
       init() {
+        /*  1.app路由要求传参发送人账号fromUser, 接收人账号toUser, 发送人昵称nickName(仅用于对话框显示与xxx在聊天)
+         *  2.pc端路由参数可以只有发送人账号fromUser, 因为pc端有联系人列表
+         */
         if (!this.$route.query.fromUser) {
           this.$message.error('缺少发送人账号')
           return
         }
         this.toUserNickName = this.$route.query.nickName
-        this.param.fromUser = this.$route.query.fromUser
+        this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser
         this.getFromUserInfo()
           .then(() => {
             this.connect()
             this.getUserList()
           })
+        // 如果路由参数有接收人账号才去获取第一页历史消息
         if (this.$route.query.toUser) {
           this.param.toUser = this.$route.query.toUser
           this.getHistoryMessage()
             .then(this.setScrollTop, error => [
               console.dir(error)
             ])
+          // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
+
         }
       },
       getFromUserInfo() {
@@ -277,6 +298,7 @@
           sendTime: now,
           status: 'sending'
         }
+        this.timeShowFilter(json)
         this.messageList.push(json)
         this.tempMessageList.push(json)
         data = JSON.stringify(data)
@@ -300,6 +322,10 @@
                 const historyList = this.formatJson(data.data.rows).reverse()
                 this.noMore = historyList.length < this.param.rows
                 this.messageList = historyList.concat(this.messageList)
+                // 去除同一天同一个小时同一分钟的消息重复的时间
+                for (const message of this.messageList) {
+                  this.timeShowFilter(message)
+                }
                 if (historyList && historyList.length > 0) {
                   this.param.id = historyList[0].id
                 }
@@ -313,14 +339,20 @@
         })
       },
       getUserList() {
-        const param = {
-          ...this.param
-        }
-        delete param.toUser
-        sockHttp.post('/im/selectMsgList', param)
+        sockHttp.post('/im/selectMsgList', this.userListParam)
           .then(res => {
             this.userList = this.formatJson(res.data.rows)
           })
+      },
+      timeShowFilter(message) {
+        const prevTime = message.createTime.substring(0,16)
+        if (this.lastMessageSendTime === prevTime) {
+          message.createTime = ''
+          this.$set(message, 'showCreateTime', '')
+        } else {
+          this.lastMessageSendTime = prevTime
+          this.$set(message, 'showCreateTime', prevTime)
+        }
       },
       formatJson(arr) {
         return arr.map(item => {
@@ -364,6 +396,7 @@
                 // console.dir(isMine)
                 // 如果不是自己发的，那么就接收，并放到消息列表
                 if (!isMine) {
+                  this.timeShowFilter(data)
                   vm.messageList.push(data)
                   this.setScrollTop()
                 }
@@ -400,7 +433,7 @@
           query: {
             toUser: item.sendId,
             fromUser: this.param.fromUser,
-            nickName: this.toUserNickName
+            nickName: item.content.nickName
           }
         })
       },
@@ -454,7 +487,7 @@
           font-size: 12px;
           border-radius: 4px;
           padding: 2px 0;
-          background-color: #B3B3B3;
+          background-color: #ccc;
           color: #fff;
         }
       }
@@ -493,7 +526,6 @@
     .friend-list {
       width: 230px;
       flex: none;
-      overflow: auto;
       margin-left: 2px;
 
       .friend-list-header {
@@ -558,6 +590,7 @@
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
+              font-size: 12px;
               .unread {
                 $size: 8px;
                 display: inline-block;
@@ -576,6 +609,7 @@
       text-align: center;
       color: #999;
       font-size: 12px;
+      padding: 10px;
     }
     .no-chat {
       width: 100%;

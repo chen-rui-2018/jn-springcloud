@@ -2,13 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.asset.dao.RoomInformationDao">
 
-    <update id="updateStatus" parameterType="java.util.Map">
-        UPDATE tb_room_information
-        SET state = #{roomStatus}
-        WHERE
-            id = #{roomId}
-    </update>
-
     <select id="getRoomLeaseList" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomInformationModel">
         SELECT
         tb.id,
@@ -69,7 +62,7 @@
         ORDER BY ti.create_time DESC
     </select>
 
-    <select id="getNewRoomOrders" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomOrdersModle">
+    <select id="getNewRoomOrders" parameterType="java.lang.String" resultType="com.jn.park.asset.model.RoomOrdersModel">
         select
             ti.id,
             ti.order_id as orderId,
@@ -92,6 +85,7 @@
             tr.lease_end_time as leaseEndTime,
             tr.contact_name as contactName,
             tr.contact_phone as  contactPhone,
+            tr.pay_state as payState,
             tb.create_time as createTime,
             tb.house_Type as houseType,
             tb.state as roomStatus
@@ -100,4 +94,5 @@
                  LEFT JOIN tb_room_information tb on ti.room_id = tb.id
         WHERE ti.id = #{orderId}
     </select>
+
 </mapper>

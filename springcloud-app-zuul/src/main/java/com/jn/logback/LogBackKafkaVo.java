@@ -1,10 +1,13 @@
 package com.jn.logback;
 
+
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.ThrowableProxy;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.util.ZuulUtils;
 import com.netflix.zuul.context.RequestContext;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +42,7 @@ public class LogBackKafkaVo {
 
     private String remoteIp;
 
-    public static LogBackKafkaVo build (ILoggingEvent eventObject,String sysName) {
+    public static LogBackKafkaVo build (ILoggingEvent eventObject, String sysName) {
         LogBackKafkaVo logBackKafkaVo = new LogBackKafkaVo() ;
         try {
             RequestContext ctx = RequestContext.getCurrentContext();
@@ -49,7 +52,15 @@ public class LogBackKafkaVo {
             logBackKafkaVo.setClassName(eventObject.getLoggerName());
             logBackKafkaVo.setDateTime(DateFormatUtils.format(new Date(eventObject.getTimeStamp()),"yyyy-MM-dd HH:mm:ss:SSS"));
             logBackKafkaVo.setThreadName(eventObject.getThreadName());
-            logBackKafkaVo.setMessage(eventObject.getFormattedMessage());
+            //判断是否有异常，有就将堆栈也发过去
+            if (eventObject.getThrowableProxy() !=null){
+                ThrowableProxy throwableProxy =    (ThrowableProxy)eventObject.getThrowableProxy();
+                String stackTrace = ExceptionUtils.getStackTrace( throwableProxy.getThrowable());
+                logBackKafkaVo.setMessage(eventObject.getFormattedMessage()+"\n"+stackTrace);
+            }else {
+                logBackKafkaVo.setMessage(eventObject.getFormattedMessage());
+            }
+
             logBackKafkaVo.setTimestamp(eventObject.getTimeStamp());
             logBackKafkaVo.setHost(InetAddress.getLocalHost().getHostAddress());
             logBackKafkaVo.setRemoteIp(ZuulUtils.getIpAddr(request));

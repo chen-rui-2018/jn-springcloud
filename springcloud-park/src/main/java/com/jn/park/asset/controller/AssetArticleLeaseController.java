@@ -20,6 +20,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -168,13 +169,14 @@ public class AssetArticleLeaseController {
     @ApiOperation(value = "创建支付订单",notes = "创建支付订单")
     @PostMapping(value = "/createPayOrder")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050417220960019"),
-            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE")
+            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050417220960019",required = true),
+            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE",required = true),
+            @ApiImplicitParam(name = "paySum",value = "支付金额",required = true)
     })
-    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId){
+    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId,BigDecimal paySum){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(orderId,"订单编号不能为空");
-        return assetArticleLeaseOrdersService.createPayOrder(orderId,channelId,user.getAccount());
+        return assetArticleLeaseOrdersService.createPayOrder(orderId,channelId,paySum,user.getAccount());
     }
 
 }

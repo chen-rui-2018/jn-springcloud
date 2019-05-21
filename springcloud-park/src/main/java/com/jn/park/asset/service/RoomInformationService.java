@@ -7,6 +7,7 @@ import com.jn.park.asset.model.*;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public interface RoomInformationService {
      * @param channelId
      * @return
      */
-    public Result<PayOrderRsp> createPayOrder(String orderId, String channelId , String userAccount);
+    public Result<PayOrderRsp> createPayOrder(String orderId, String channelId ,BigDecimal paySum, String userAccount);
     /**
      * 支付回调
      * @param payOrderNotify

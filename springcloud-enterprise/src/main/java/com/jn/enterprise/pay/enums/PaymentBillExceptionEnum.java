@@ -21,6 +21,7 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     COMMIT_AMOUNT_NOT_EQUAL_BILL_AMOUNT("6020509","提交金额不等于账单金额"),
     PAYMENT_STATUS_IS_PAY("6020516","账单已支付，无需再次支付。"),
     BILL_PAY_ORDER_IS_NOT_EXIT("6020521","支付账单不存在。"),
+    BILL_PAY_ORDER_MISMATCH("6020522","选择账单与查询支付账单不匹配。"),
     BILL_TYPE_IS_NOT_NULL("6020525","账单类型不能为空"),
     BILL_TYPE_IDENTICAL("6020526","账单类型需一致"),
     BILL_CALLBACK_IS_NULL("6020527","支付回调参数为空"),
@@ -30,6 +31,10 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     BILL_DEDUCTION_FEE_ERROR("6020531","账单扣费异常"),
     QUERY_ENTERPRISE_INFO_ERROR("6020532","查询企业信息异常"),
     BILL_ACCOUNT_IS_NOT_EXIT("6020533","账户查询异常或不存在"),
+    CALL_PAYMENT_EXIT("6020534","调用支付发起接口异常"),
+    BILL_MIDDLE_IS_NOT_EXIT("6020535","统一缴费下单号不存在"),
+    BILL_BOOK_ADD_ERROR("6020536","新增账本金额&插入流水记录异常"),
+    BILL_BOOK_REMOVE_ERROR("6020537","扣除账本金额&插入流水记录异常"),
     ;
     /**
      * 编码

@@ -102,31 +102,13 @@ public class MyPayBillController extends BaseController {
         return new Result();
     }
 
-
-    @ControllerLog(doAction = "我的账单-创建账单")
-    @ApiOperation(value = "我的账单-创建账单",notes = "我的账单-创建账单")
-    @RequestMapping(value = "/billCreate",method = RequestMethod.POST)
-    @RequiresPermissions("/payment/payBill/billCreate")
-    public Result billCreate(@RequestBody @Validated PayBillCreateParamVo payBillCreateParamVo){
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(payBillCreateParamVo.getAcBookType(),"账本类型ID不能为空");
-        Assert.notNull(payBillCreateParamVo.getObjName(),"对象名称不能为空");
-        Assert.notNull(payBillCreateParamVo.getBillExpense(),"账本费用不能为空");
-        Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
-        Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
-        Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
-        myPayBillService.billCreate(payBillCreateParamVo,user);
-        return new Result();
-    }
-
     @ControllerLog(doAction = "统一缴费--发起支付")
     @ApiOperation(value = "统一缴费-发起支付")
     @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
     @RequiresPermissions("/payment/payBill/startPayment")
-    public Result startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam){
+    public Result<PayOrderRsp> startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result(myPayBillService.startPayment(payBIllInitiateParam,user));
+        return myPayBillService.startPayment(payBIllInitiateParam,user);
     }
 
 

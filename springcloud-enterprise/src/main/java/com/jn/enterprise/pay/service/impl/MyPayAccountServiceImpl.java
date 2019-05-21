@@ -1,31 +1,27 @@
 package com.jn.enterprise.pay.service.impl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.LoadBalancerUtil;
-import com.jn.common.util.StringUtils;
 import com.jn.enterprise.pay.dao.PayAccountAndAccountBookDao;
 import com.jn.enterprise.pay.dao.TbPayAccountBookMoneyRecordMapper;
-import com.jn.enterprise.pay.entity.TbPayAccountBookMoneyRecordCriteria;
+import com.jn.enterprise.pay.dao.TbPayAccountBookTypeMapper;
+import com.jn.enterprise.pay.entity.*;
 import com.jn.enterprise.pay.service.MyPayAccountService;
-import com.jn.enterprise.pd.declaration.enums.PdStatusEnums;
-import com.jn.pay.model.PayAccountBook;
-import com.jn.pay.model.PayAccountBookMoneyRecord;
-import com.jn.pay.vo.PayAccountAndAccountBookVo;
+import com.jn.pay.model.PayAccountBookMoneyRecordParam;
+import com.jn.pay.model.PayAccountBookParam;
+import com.jn.pay.vo.*;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,54 +37,75 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
 
     private static final Logger logger = LoggerFactory.getLogger(MyPayAccountServiceImpl.class);
 
-    /**
-     * 获取系统的服务ID
-     */
-    private final static String ENT_CLIENT = "springcloud-app-system";
-    /**
-     * 获取查询字典信息的服务地址
-     */
-    private final static String ENT_CLIENT__SERVICE = "/api/system/selectDictValueByCondition";
-
     @Autowired
     private PayAccountAndAccountBookDao payAccountAndAccountBookDao;
 
     @Autowired
-    private TbPayAccountBookMoneyRecordMapper tbPayAccountBookMoneyRecordMapper;
+    private TbPayAccountBookMoneyRecordMapper tbayAccountBookMoneyRecordMapper;
 
     @Autowired
-    private LoadBalancerUtil loadBalancerUtils;
+    private TbPayAccountBookTypeMapper tbPayAccountBookTypeMapper;
+
+
+    @Autowired
+    private SystemClient systemClient;
 
     @ServiceLog(doAction = "我的账户-查询当前账户下所有账本信息")
     @Override
     public PayAccountAndAccountBookVo queryPayAccountBook(String userId) {
         //通过用户ID获取该用户账户并汇总余额查询
         PayAccountAndAccountBookVo abv = payAccountAndAccountBookDao.selectPayAccountId(userId);
-        List<PayAccountBook> list = payAccountAndAccountBookDao.selectPayAccountBookList(abv.getAccountId());
+        List<PayAccountBookVo> list = payAccountAndAccountBookDao.selectPayAccountBookList(abv.getAccountId());
         abv.setAccountBooksList(list);
         return abv;
     }
 
-    @ServiceLog(doAction = "我的账本-查询当前账本下所有明细信息")
     @Override
-    public PaginationData<List<PayAccountBookMoneyRecord>> queryPayAccountDetails(User user, String acBookId, String startDate, String endDate, int page, int rows) {
-        Page<Object> objects = PageHelper.startPage(page, rows);
-        TbPayAccountBookMoneyRecordCriteria payCriteria = new TbPayAccountBookMoneyRecordCriteria();
-        payCriteria.setOrderByClause("created_time desc");
-        TbPayAccountBookMoneyRecordCriteria.Criteria criteria = payCriteria.createCriteria();
-        criteria.andRecordStatusEqualTo(PdStatusEnums.EFFECTIVE.getCode());
-        criteria.andAcBookIdEqualTo(acBookId);
-        if (StringUtils.isNotEmpty(startDate) && StringUtils.isNotEmpty(endDate)) {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            ParsePosition pos = new ParsePosition(0);
-            ParsePosition pos2 = new ParsePosition(0);
-            Date strtodate = formatter.parse(startDate, pos);
-            Date strtodate2 = formatter.parse(endDate, pos2);
-            criteria.andCreatedTimeGreaterThanOrEqualTo(strtodate);
-            criteria.andCreatedTimeLessThanOrEqualTo(strtodate2);
+    @ServiceLog(doAction = "我的账户-查询当前账户下所有账本缴费明细")
+    public PaginationData<List<PayAccountBookRecordVo>> queryPayAccountBookInfo(PayAccountBookParam payAccountBookParam) {
+        PageHelper.startPage(payAccountBookParam.getPage(), payAccountBookParam.getRows());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        List<PayAccountBookRecordVo> voList = payAccountAndAccountBookDao.queryPayAccountBookInfo(payAccountBookParam);
+        //获取每个月份，通过月份组装返回给前端
+        if (voList.size() > 0) {
+            List<TbPayAccountBookType> list = selectPayBillType();
+            for (PayAccountBookRecordVo tbPayBill : voList) {
+                tbPayBill.setMonth(sdf.format(tbPayBill.getCreatedTime()));
+                for (TbPayAccountBookType tb : list) {
+                    if (tbPayBill.getAcBookType().equals(tb.getAcBookType())) {
+                        tbPayBill.setAcBookType(tb.getAcBookDesc());
+                    }
+                }
+            }
         }
-        return new PaginationData(tbPayAccountBookMoneyRecordMapper.selectByExample(payCriteria), objects.getTotal());
+        PaginationData paginationData = new PaginationData();
+        paginationData.setRows(voList);
+        return paginationData;
     }
 
-   
+    @ServiceLog(doAction = "查询所有账本类型")
+    public List<TbPayAccountBookType> selectPayBillType() {
+        TbPayAccountBookTypeCriteria tbCriteria = new TbPayAccountBookTypeCriteria();
+        List<TbPayAccountBookType> tbs = tbPayAccountBookTypeMapper.selectByExample(tbCriteria);
+        return tbs;
+    }
+
+    @ServiceLog(doAction = "我的账本-账本明细详情查询")
+    @Override
+    public PaginationData<PayAccountBookMoneyRecordVo> queryPayAccountDetails(String deductionId, User user) {
+        PayAccountBookMoneyRecordParam pay = new PayAccountBookMoneyRecordParam();
+        pay.setDeductionId(deductionId);
+        PayAccountBookMoneyRecordVo data = payAccountAndAccountBookDao.queryPayAccountDetails(pay);
+        PaginationData paginationData = new PaginationData();
+        paginationData.setRows(data);
+        return paginationData;
+    }
+
+    @ServiceLog(doAction = "我的账本-获取费用预缴协议")
+    @Override
+    public Result<String> getFeeAdvanceAgreement(SysDictInvoke sysDictInvoke, User user) {
+            Result<String> data= systemClient.selectDictValueByCondition(sysDictInvoke);
+            logger.info("【获取费用预缴协议】 字典ID:{},字典值:{}}", sysDictInvoke.getKey(),data);
+            return data;
+    }
 }

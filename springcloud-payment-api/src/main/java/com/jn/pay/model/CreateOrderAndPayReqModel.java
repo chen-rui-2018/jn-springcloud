@@ -27,10 +27,10 @@ import java.util.Arrays;
 public class CreateOrderAndPayReqModel extends CreatePayReqBaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "商品ID集合（数组）",example = "[2019050811515490657]",required = true)
+    @ApiModelProperty(value = "商品ID集合（数组）",required = true)
     private String[] goodsIdArr;
-    @ApiModelProperty(value = "商品数量集合（数组），可不传（默认全部商品都是1件），数组长度必需与goodsIdArr一致",example = "[1]",required = false)
-    private String[] goodsIds;
+    @ApiModelProperty(value = "商品数量集合（数组），可不传（默认全部商品都是1件），数组长度必需与goodsIdArr一致",required = false)
+    private String[] goodsCountArr;
 
 
     public String[] getGoodsIdArr() {
@@ -41,19 +41,19 @@ public class CreateOrderAndPayReqModel extends CreatePayReqBaseModel implements 
         this.goodsIdArr = goodsIdArr;
     }
 
-    public String[] getGoodsIds() {
-        return goodsIds;
+    public String[] getGoodsCountArr() {
+        return goodsCountArr;
     }
 
-    public void setGoodsIds(String[] goodsIds) {
-        this.goodsIds = goodsIds;
+    public void setGoodsCountArr(String[] goodsCountArr) {
+        this.goodsCountArr = goodsCountArr;
     }
 
     @Override
     public String toString() {
         return "CreateOrderAndPayReqModel{" +
                 "goodsIdArr=" + Arrays.toString(goodsIdArr) +
-                ", goodsIds=" + Arrays.toString(goodsIds) +
+                ", goodsCountArr=" + Arrays.toString(goodsCountArr) +
                 '}';
     }
 }

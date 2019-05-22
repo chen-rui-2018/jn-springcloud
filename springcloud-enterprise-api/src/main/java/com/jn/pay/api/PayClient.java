@@ -53,9 +53,9 @@ public interface PayClient {
     @RequestMapping(value = "/api/payment/payBill/billCreate",method = RequestMethod.POST)
     Result billCreate(@RequestBody @Validated PayBillCreateParamVo payBillCreateParamVo);
 
-    @ApiOperation(value = "统一缴费-发起支付")
-    @RequestMapping(value = "/api/payment/payBill/startPayment",method = RequestMethod.POST)
-    Result startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam);
+    @ApiOperation(value = "创建订单并发起支付")
+    @RequestMapping(value = "/api/payment/payBill/createOrderAndPay",method = RequestMethod.POST)
+    Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel);
 
 
     @ApiOperation(value = "统一缴费-支付回调接口")

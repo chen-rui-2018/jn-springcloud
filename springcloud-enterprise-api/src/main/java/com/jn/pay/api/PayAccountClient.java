@@ -3,10 +3,7 @@ package com.jn.pay.api;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.pay.model.PayAccountBookMoneyRecord;
-import com.jn.pay.model.PayBIllInitiateParam;
-import com.jn.pay.model.PayCheckReminder;
-import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import io.swagger.annotations.ApiOperation;
@@ -40,4 +37,11 @@ public interface PayAccountClient {
     @RequestMapping(value = "/api/payment/payAccount/payAccountCallBack",method = RequestMethod.POST)
     Result payAccountCallBack(@RequestBody PayOrderNotify callBackParam);
 
+    /**
+     * 发起支付-我的账本-预缴充值(水费)
+     * @param createOrderAndPayReqModel
+     * @return
+     */
+    @RequestMapping(value = "/api/payment/payAccount/createOrderAndPay", method = RequestMethod.POST)
+    Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel);
 }

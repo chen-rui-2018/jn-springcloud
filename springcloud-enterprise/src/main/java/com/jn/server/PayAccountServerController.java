@@ -8,10 +8,7 @@ import com.jn.enterprise.pay.service.MyPayAccountService;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import com.jn.pay.api.PayAccountClient;
 import com.jn.pay.api.PayClient;
-import com.jn.pay.model.PayAccountBookMoneyRecord;
-import com.jn.pay.model.PayBIllInitiateParam;
-import com.jn.pay.model.PayCheckReminder;
-import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.log.annotation.ControllerLog;
@@ -55,6 +52,13 @@ public class PayAccountServerController extends BaseController implements PayAcc
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return new Result(myPayBillService.payAccountCallBack(callBackParam,user));
+    }
+
+    @Override
+    public Result<PayOrderRsp> createOrderAndPay(CreateOrderAndPayReqModel createOrderAndPayReqModel) {
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return myPayBillService.insertPrepaidRecharge(createOrderAndPayReqModel,user);
     }
 
 }

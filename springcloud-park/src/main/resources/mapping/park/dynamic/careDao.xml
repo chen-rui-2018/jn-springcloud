@@ -43,5 +43,6 @@
     FROM tb_person_care t1
     WHERE t1.care_account = #{account}
     AND t1.receive_type = '2'
+    AND t1.record_status = '1'
     </select>
 </mapper>

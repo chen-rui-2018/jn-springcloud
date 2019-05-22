@@ -8,6 +8,7 @@ package com.jn.pay.model;/**
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -32,9 +33,9 @@ public class CreatePayReqBaseModel implements Serializable {
     private BigDecimal paySum;
     @ApiModelProperty(value = "缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费）",example = "4",required = true)
     private String payType;
-    @JsonIgnore
+    @ApiModelProperty(value = "用户账号",hidden = true)
     private String userAccount;
-    @JsonIgnore
+    @ApiModelProperty(value = "用户IP地址",hidden = true)
     private String userIp;
 
 

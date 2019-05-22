@@ -415,8 +415,8 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @ServiceLog(doAction = "我的账单-统一缴费发起支付")
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public Result<PayOrderRsp> startPayment(PayBIllInitiateParam payBIllInitiateParam, User user) {
-        String[] billIds = payBIllInitiateParam.getBillIds();
+    public Result<PayOrderRsp> startPayment(CreateOrderAndPayReqModel createOrderAndPayReqModel, User user) {
+        String[] billIds = createOrderAndPayReqModel.getGoodsIdArr();
         if (null == billIds || billIds.length == 0) {
             /**判断前端传的账单ID是否为空*/
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_ID_IS_NOT_NULL);
@@ -429,9 +429,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             /**判断账单是否存在*/
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
         }
-        if (tbPayBills.size() != payBIllInitiateParam.getBillIds().length) {
+        if (tbPayBills.size() != createOrderAndPayReqModel.getGoodsIdArr().length) {
             /**判断选择缴费的账单是否与实际有效账单一致*/
-            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT, "选择账单数: " + payBIllInitiateParam.getBillIds().length
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT, "选择账单数: " + createOrderAndPayReqModel.getGoodsIdArr().length
                     + " 条与实际有效账单数: " + tbPayBills.size() + " 条不匹配，请刷新页面再试。");
         }
 
@@ -453,14 +453,16 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             }
             sb.append(bill.getBillId());
         }
+        //todo 中原，校验下支付金额
+
         Result<PayOrderRsp> result;
-        try {
+
             /**调用支付接口发起支付*/
             logger.info("开始调用统一缴费发起支付接口操作");
             PayOrderReq payOrderReq = new PayOrderReq();
             payOrderReq.setMchOrderNo(UUID.randomUUID().toString().replaceAll("-", ""));
             //payOrderReq.setChannelId(payBIllInitiateParam.getChannelId());
-            payOrderReq.setChannelId("ALIPAY_PC");
+            payOrderReq.setChannelId(createOrderAndPayReqModel.getChannelId());
             payOrderReq.setAmount(Long.parseLong(MoneyUtils.changeY2F(String.valueOf(totalAmount))));
             payOrderReq.setParam1(sb.toString());
             payOrderReq.setMchId(MchIdEnum.MCH_BASE.getCode());
@@ -500,15 +502,13 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tbPayBillMiddle.setTotalMoney(totalAmount);
                 tbPayBillMiddle.setStatus(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
                 tbPayBillMiddle.setCreatedTime(new Date());
-                tbPayBillMiddle.setCreatorAccount(user.getAccount());
+                tbPayBillMiddle.setCreatorAccount(createOrderAndPayReqModel.getUserAccount());
                 tbPayBillMiddle.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，入參【{}】", tbPayBillMiddle.toString());
                 tbPayBillMiddleMapper.insertSelective(tbPayBillMiddle);
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，便于核查验证账单操作结束");
             }
-        } catch (Exception e) {
-            throw new JnSpringCloudException(PaymentBillExceptionEnum.NETWORK_ANOMALY);
-        }
+
         return result;
     }
 
@@ -600,9 +600,11 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @Override
     @ServiceLog(doAction = "预缴充值")
     @Transactional(rollbackFor = RuntimeException.class)
-    public Result<PayOrderRsp> insertPrepaidRecharge(PayPrepaidRechargeParam payPrepaidRechargeParam, User user) {
+    public Result<PayOrderRsp> insertPrepaidRecharge(CreateOrderAndPayReqModel createOrderAndPayReqModel, User user) {
+        //账本就是商品
+        String acBookId=createOrderAndPayReqModel.getGoodsIdArr()[0];
         /**查询传的账本编号是否存在*/
-        TbPayAccountBook tbPayAccountBook = tbPayAccountBookMapper.selectByPrimaryKey(payPrepaidRechargeParam.getAcBookId());
+        TbPayAccountBook tbPayAccountBook = tbPayAccountBookMapper.selectByPrimaryKey(acBookId);
         if (null == tbPayAccountBook) {
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_BOOK_IS_NOT_EXIT);
         }
@@ -612,8 +614,8 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             logger.info("开始调用发起支付接口操作");
             PayOrderReq payOrderReq = new PayOrderReq();
             payOrderReq.setMchOrderNo(UUID.randomUUID().toString().replaceAll("-", ""));
-            payOrderReq.setChannelId(payPrepaidRechargeParam.getChannelId());
-            payOrderReq.setAmount(Long.parseLong(MoneyUtils.changeY2F(String.valueOf(payPrepaidRechargeParam.getRechargeAmount()))));
+            payOrderReq.setChannelId(createOrderAndPayReqModel.getChannelId());
+            payOrderReq.setAmount(Long.parseLong(MoneyUtils.changeY2F(String.valueOf(createOrderAndPayReqModel.getPaySum()))));
             payOrderReq.setMchId(MchIdEnum.MCH_BASE.getCode());
             payOrderReq.setSubject("预缴充值");
             payOrderReq.setBody("预缴充值");
@@ -640,10 +642,10 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 /**返回成功状态，更新信息到账单中间表*/
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，便于核查验证账单操作开始");
                 TbPayBillMiddle tbPayBillMiddle = new TbPayBillMiddle();
-                tbPayBillMiddle.setBillIds(payPrepaidRechargeParam.getAcBookId());
+                tbPayBillMiddle.setBillIds(acBookId);
                 tbPayBillMiddle.setOrderNumber(payOrderReq.getMchOrderNo());
                 tbPayBillMiddle.setPayOrderId(result.getData().getPayOrderId());
-                tbPayBillMiddle.setTotalMoney(payPrepaidRechargeParam.getRechargeAmount());
+                tbPayBillMiddle.setTotalMoney(createOrderAndPayReqModel.getPaySum());
                 tbPayBillMiddle.setStatus(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
                 tbPayBillMiddle.setCreatedTime(new Date());
                 tbPayBillMiddle.setCreatorAccount(user.getAccount());

@@ -91,14 +91,6 @@ public class MyPayBillController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "统一缴费--发起支付")
-    @ApiOperation(value = "统一缴费-发起支付")
-    @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
-    @RequiresPermissions("/payment/payBill/startPayment")
-    public Result<PayOrderRsp> startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return myPayBillService.startPayment(payBIllInitiateParam,user);
-    }
 
 
 }

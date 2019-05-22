@@ -10,10 +10,10 @@ public class TbElectricRulesContent implements Serializable {
     /*@ApiModelProperty("规则id")*/
     private String ruleId;
 
-    /*@ApiModelProperty("规则Id")*/
+    /*@ApiModelProperty("规则名称")*/
     private String projectName;
 
-    /*@ApiModelProperty("规则名称")*/
+    /*@ApiModelProperty("价钱（角）")*/
     private String price;
 
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/

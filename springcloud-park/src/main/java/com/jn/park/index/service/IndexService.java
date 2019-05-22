@@ -30,9 +30,9 @@ public interface IndexService {
     List<Achievement> getAchievementList(AchievementParam achievementParam);
 
     /**
-     * 增加成果点击量
+     * 获取成果详情
      * @param achievementId 成果id
      * @return
      */
-    Integer addAchievementClick(String achievementId);
+    Achievement getAchievementDetails(String achievementId);
 }

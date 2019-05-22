@@ -103,11 +103,11 @@ public class IndexController extends BaseController {
         return new Result(new PaginationData(achievementList, objects.getTotal()));
     }
 
-    @ControllerLog(doAction = "增加成果点击量")
-    @ApiOperation(value = "增加成果点击量", notes = "成果点击量增加，成功返回1")
-    @RequestMapping(value = "/addAchievementClick",method = RequestMethod.GET)
-    public Result<Integer> addAchievementClick(@RequestParam String achievementId) {
-        return new Result(indexService.addAchievementClick(achievementId));
+    @ControllerLog(doAction = "成果详情")
+    @ApiOperation(value = "成果详情", notes = "获取成果详情")
+    @RequestMapping(value = "/getAchievementDetails",method = RequestMethod.GET)
+    public Result<Achievement> getAchievementDetails(@RequestParam String achievementId) {
+        return new Result(indexService.getAchievementDetails(achievementId));
     }
 
 }

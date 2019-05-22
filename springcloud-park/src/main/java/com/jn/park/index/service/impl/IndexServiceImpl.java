@@ -98,6 +98,7 @@ public class IndexServiceImpl implements IndexService {
         if (StringUtils.isNotBlank(achievementParam.getType())) {
             criteria.andTypeEqualTo(achievementParam.getType());
         }
+        achievementCriteria.setOrderByClause("sort ASC, created_time DESC");
 
         List<TbAchievement> achList = tbAchievementMapper.selectByExample(achievementCriteria);
         if (achList != null && !achList.isEmpty()) {
@@ -112,8 +113,8 @@ public class IndexServiceImpl implements IndexService {
     }
 
     @Override
-    @ServiceLog(doAction = "增加成果点击量")
-    public Integer addAchievementClick(String achievementId) {
+    @ServiceLog(doAction = "获取成果详情")
+    public Achievement getAchievementDetails(String achievementId) {
         if (StringUtils.isBlank(achievementId)) {
             throw new JnSpringCloudException(IndexExceptionEnum.PARAM_IS_NULL);
         }
@@ -125,6 +126,10 @@ public class IndexServiceImpl implements IndexService {
         }
         TbAchievement tbAchievement = tbAchievements.get(0);
         tbAchievement.setViewCount(tbAchievement.getViewCount() + 1);
-        return tbAchievementMapper.updateByPrimaryKeySelective(tbAchievement);
+        tbAchievementMapper.updateByPrimaryKeySelective(tbAchievement);
+
+        Achievement achievement = new Achievement();
+        BeanUtils.copyProperties(tbAchievement, achievement);
+        return achievement;
     }
 }

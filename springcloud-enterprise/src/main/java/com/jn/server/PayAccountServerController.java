@@ -51,7 +51,7 @@ public class PayAccountServerController extends BaseController implements PayAcc
 
     @Override
     @ControllerLog(doAction = "我的账本-预缴充值支付回调接口")
-    public Result payAccountCallBack(PayOrderNotify callBackParam) {
+    public Result payAccountCallBack(@RequestBody PayOrderNotify callBackParam) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return new Result(myPayBillService.payAccountCallBack(callBackParam,user));

@@ -23,12 +23,12 @@ public interface ParkingPreferentailService {
      * 前端查询优惠政策列表
      * @return
      */
-    List<ParkingPreferentialVo> getParkingPreferentialList();
+    List<ParkingPreferentialVo> getParkingPreferentialList(String account);
 
     /**
      * 查询某个停车场优惠政策
      * @param areaId
      * @return
      */
-    List<ParkingPreferentialVo> getParkingPreferentialListForArea(String areaId);
+    List<ParkingPreferentialVo> getParkingPreferentialListForArea(String areaId,String account);
 }

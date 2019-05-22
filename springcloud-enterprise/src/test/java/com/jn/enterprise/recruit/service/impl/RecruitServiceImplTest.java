@@ -180,7 +180,7 @@ public class RecruitServiceImplTest {
     @Test
     public void publishRecruitInfo() {
         try {
-            recruitService.publishRecruitInfo(serviceRecruitPublishParam, company, user);
+            recruitService.publishRecruitInfo(serviceRecruitPublishParam, user.getAccount());
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("发布招聘失败");

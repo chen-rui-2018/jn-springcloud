@@ -53,6 +53,7 @@
         <table tableName="tb_payment_bill"></table>
         <!-- 统一缴费支付订单 -->
         <table tableName="tb_payment_order"></table>
+        <table tableName="tb_payment_pay_log"></table>
 
     </context>
     <!-- 缴费字典 -->

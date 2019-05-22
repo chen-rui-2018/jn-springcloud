@@ -34,6 +34,7 @@ public enum PayBillExceptionEnum implements CodeAndMsg {
     BILL_PAY_ORDER_POINT_IS_ERROR("6020522","支付积分处理失败，请稍后重试。"),
     PAY_ORDER_POINT_IS_NOT_PAYING("6020523","订单状态为非支付中，不能进行操作"),
     PAY_ORDER_POINT_IS_NOT_CHECK("6020524","账单状态为待审核，无需进行支付"),
+    PAY_ORDER_SIGN_CHECK_ERROR("6020525","支付签名校验失败，请核实数据"),
     ;
     /**
      * 编码

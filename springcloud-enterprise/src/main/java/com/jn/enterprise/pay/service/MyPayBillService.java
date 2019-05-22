@@ -77,11 +77,11 @@ public interface MyPayBillService {
 
     /**
      * 缴费单支付发起
-     * @param payBIllInitiateParam,user
+     * @param createOrderAndPayReqModel,user
      * @param user
      * @return
      */
-    Result<PayOrderRsp> startPayment(PayBIllInitiateParam payBIllInitiateParam, User user);
+    Result<PayOrderRsp> startPayment(CreateOrderAndPayReqModel createOrderAndPayReqModel, User user);
 
     /**
      * 支付回调接口
@@ -92,11 +92,11 @@ public interface MyPayBillService {
 
     /**
      * 账本预缴充值
-     * @param payPrepaidRechargeParam,user
+     * @param createOrderAndPayReqModel,user
      * @param user
      * @return
      */
-    Result<PayOrderRsp> insertPrepaidRecharge(PayPrepaidRechargeParam payPrepaidRechargeParam, User user);
+    Result<PayOrderRsp> insertPrepaidRecharge(CreateOrderAndPayReqModel createOrderAndPayReqModel, User user);
 
     /**
      * 预缴充值回调接口

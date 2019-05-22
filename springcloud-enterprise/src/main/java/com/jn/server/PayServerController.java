@@ -81,11 +81,11 @@ public class PayServerController extends BaseController implements PayClient {
         return new Result();
     }
 
-    @ControllerLog(doAction = "统一缴费--发起支付")
+    @ControllerLog(doAction = "统一缴费-->发起支付")
     @Override
-    public Result startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam) {
+    public Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result(myPayBillService.startPayment(payBIllInitiateParam,user));
+        return new Result(myPayBillService.startPayment(createOrderAndPayReqModel,user));
     }
 
     @ControllerLog(doAction = "支付回调接口")

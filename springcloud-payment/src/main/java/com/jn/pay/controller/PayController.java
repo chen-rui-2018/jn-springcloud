@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 
 /**
- *
+ *统一发起支付-所有业务都从这里发起支付
  *<pre> 
  * 开发公司：深圳君南信息系统有限公司
  * 开发人员：huangbq
@@ -34,12 +34,14 @@ import java.math.BigDecimal;
  * 创建时间：2019/5/22
  *</pre>
  */
-@Api(tags = "统一发起支付")
+@Api(tags = "统一发起支付(所有业务都从这里发起支付)")
 @RestController
 @RequestMapping("/pay")
 public class PayController {
     @Autowired
     private LoadBalancerUtil loadBalancerUtil;
+
+    private static Result NOT_SUPPORT_RESULT=new Result<>("-1","暂不支持的此缴费类型");
 
     @ControllerLog(doAction = "发起支付")
     @ApiOperation(value = "发起支付",notes = "发起支付单")
@@ -51,28 +53,29 @@ public class PayController {
         //缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费）
         switch (createPayReqModel.getPayType()){
             case "1"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "2"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "3"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "4"://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-park","/api/order/createPay",JSONObject.toJSONString(createPayReqModel));
             case "5"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "6"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "7"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "8"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "9"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "10"://
-                break;
+                return NOT_SUPPORT_RESULT;
+                default:
+                    return NOT_SUPPORT_RESULT;
         }
 
-        return new Result<PayOrderRsp>();
     }
 
     @ControllerLog(doAction = "创建订单并发起支付")
@@ -84,27 +87,28 @@ public class PayController {
         //缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费）
         switch (createOrderAndPayReqModel.getPayType()){
             case "1"://
-                break;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payBill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
             case "2"://
-                break;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payBill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
             case "3"://
-                break;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payBill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
             case "4"://
-                break;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payBill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
             case "5"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "6"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "7"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "8"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "9"://
-                break;
+                return NOT_SUPPORT_RESULT;
             case "10"://
-                break;
+                return NOT_SUPPORT_RESULT;
+                default:
+                    return NOT_SUPPORT_RESULT;
         }
-        return new Result<PayOrderRsp>();
     }
     private User getUser(){
         return (User) SecurityUtils.getSubject().getPrincipal();

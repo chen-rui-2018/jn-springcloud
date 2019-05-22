@@ -122,9 +122,11 @@ public class RecruitServiceImpl implements RecruitService {
             recruitParam.setStatus(RecruitDataTypeEnum.ON_SHELVES.getCode());
         }
 
-        // 获取用户扩展信息
-        UserExtensionInfo userExtensionInfo = checkCompanyUser(recruitParam.getAccount());
-        recruitParam.setComId(userExtensionInfo.getCompanyCode());
+        // 用户中心列表查询当前企业招聘
+        if (StringUtils.isNotBlank(recruitParam.getAccount()) && approvalStatus == null) {
+            UserExtensionInfo userExtensionInfo = checkCompanyUser(recruitParam.getAccount());
+            recruitParam.setComId(userExtensionInfo.getCompanyCode());
+        }
 
         ServiceRecruitSearchParam rp = new ServiceRecruitSearchParam();
         BeanUtils.copyProperties(recruitParam,rp);

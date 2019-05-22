@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
@@ -25,6 +26,8 @@ import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterManageService;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +57,9 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
 
     @Autowired
     private TbClientExecuteImgMapper executeImgMapper;
+
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
     /**
      * 在线客服流程定义key
@@ -392,5 +398,29 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             logger.warn("处理问题时，问题描述最多允许上传3张图片");
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.PICTURE_URL_MORE_THAN_ALLOW);
         }
+    }
+
+    /**
+     * 根据手机号获取用户信息
+     * @param phone
+     * @return
+     */
+    @Override
+    public UserIntroInfo getUserInfo(String phone) {
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(phone);
+        if(userExtension==null || userExtension.getData()==null){
+            return null;
+        }
+        UserExtensionInfo data = userExtension.getData();
+        UserIntroInfo userIntroInfo=new UserIntroInfo();
+        BeanUtils.copyProperties(data,userIntroInfo);
+        if(StringUtils.equals("1",userIntroInfo.getSex())){
+            userIntroInfo.setSex("男");
+        }else if(StringUtils.equals("0",userIntroInfo.getSex())){
+            userIntroInfo.setSex("女");
+        }else{
+            userIntroInfo.setSex("--");
+        }
+        return userIntroInfo;
     }
 }

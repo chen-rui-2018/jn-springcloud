@@ -1,0 +1,330 @@
+#toolBarDiv {background:url(../img/bg.png);width:100%;height:115px;line-height:115px;}
+#infoDiv {width:100%;height:30px;line-height:30px;}
+#queueSpan {font-size:12px;color:#fff;margin-left:20px;margin-top:10px}
+#callerSpan {font-size:12px;color:#fff;margin-left:20px;margin-top:10px}
+/*#buttonDiv {width:100%;height:75px;line-height:75px;}*/
+#buttonDiv {float:left;width:420px;height:75px;line-height:75px;}
+#lineDiv {float:left;margin-left:5px;width:10px;height:75px;line-height:75px;}
+#monitorDiv {float:left;height:75px;line-height:75px;}
+#buttonTable {font-size:12px;color:#fff;}
+.buttonTd {width:48px;text-align:center;}
+.relativeTd {position:relative}
+.bottomDiv {position:absolute;z-index:1;left:0;top:0}
+.topDiv {position:absolute;z-index:2;left:0;top:0}
+.mask { position:absolute; top:0px; filter: alpha(opacity=100); background-color: #777; z-index: 1002; left: 0px; opacity:0.8; -moz-opacity:0.8; width:100%;height:115px;line-height:115px;}
+.dialinput {margin-left:100px;margin-top:50px}
+.consultinput {margin-left:260px;margin-top:50px}
+
+.idleButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/idle.png) no-repeat; 
+} 
+.idleButton:hover{background:url(../img/idle_p.png) no-repeat;}
+
+.idleButton_d{
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/idle_d.png) no-repeat; 
+}
+
+.busyButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/busy.png) no-repeat; 
+} 
+.busyButton:hover{background:url(../img/busy_p.png) no-repeat;}
+
+.talkButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/talk.png) no-repeat; 
+}
+
+.leaveButton{
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/leave.png) no-repeat; 
+}
+
+.leaveButton_d{
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/leave_d.png) no-repeat; 
+}
+
+.dialButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/dial.png) no-repeat; 
+} 
+.dialButton:hover{background:url(../img/dial_p.png) no-repeat;}
+
+.dialButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/dial_d.png) no-repeat; 
+}
+
+.onhookButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/onhook.png) no-repeat; 
+} 
+.onhookButton:hover{background:url(../img/onhook_p.png) no-repeat;}
+
+.onhookButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/onhook_d.png) no-repeat; 
+}
+
+.answerButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/answer.png) no-repeat; 
+} 
+.answerButton:hover{background:url(../img/answer_p.png) no-repeat;}
+
+.answerButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/answer_d.png) no-repeat; 
+} 
+
+.holdButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/hold.png) no-repeat; 
+} 
+.holdButton:hover{background:url(../img/hold_p.png) no-repeat;}
+
+.holdButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/hold_d.png) no-repeat; 
+} 
+
+.unholdButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/unhold.png) no-repeat; 
+} 
+.unholdButton:hover{background:url(../img/unhold_p.png) no-repeat;} 
+
+.unholdButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/unhold_d.png) no-repeat; 
+}
+
+.consultButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/consult.png) no-repeat; 
+} 
+.consultButton:hover{background:url(../img/consult_p.png) no-repeat;}
+
+.consultButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/consult_d.png) no-repeat; 
+} 
+
+.unconsultButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/unconsult.png) no-repeat; 
+} 
+.unconsultButton:hover{background:url(../img/unconsult_p.png) no-repeat;}
+
+.transferButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/transfer.png) no-repeat; 
+} 
+.transferButton:hover{background:url(../img/transfer_p.png) no-repeat;} 
+
+.transferButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/transfer_d.png) no-repeat; 
+} 
+
+.conferenceButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/conference.png) no-repeat; 
+} 
+.conferenceButton:hover{background:url(../img/conference_p.png) no-repeat;}
+
+.conferenceButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/conference_d.png) no-repeat; 
+} 
+
+.evalButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/eval.png) no-repeat; 
+} 
+.evalButton:hover{background:url(../img/eval_p.png) no-repeat;}
+
+.evalButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/eval_d.png) no-repeat; 
+} 
+
+.ForceReleaseButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/forceRelease.png) no-repeat; 
+} 
+.ForceReleaseButton:hover{background:url(../img/forceRelease_p.png) no-repeat;}
+
+.ForceReleaseButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/forceRelease_d.png) no-repeat; 
+} 
+
+.ForceJoinButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/forceJoin.png) no-repeat; 
+} 
+.ForceJoinButton:hover{background:url(../img/forceJoin_p.png) no-repeat;}
+
+.ForceJoinButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/forceJoin_d.png) no-repeat; 
+} 
+
+.HiJackButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/hiJack.png) no-repeat; 
+} 
+.HiJackButton:hover{background:url(../img/hiJack_p.png) no-repeat;}
+
+.HiJackButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/hiJack_d.png) no-repeat; 
+} 
+
+.StartlistenChannelButton{
+display:inline-block;
+width:48px;
+height:48px;
+margin:0 0;
+background:url(../img/startlisten.png) no-repeat;	
+}
+.StartlistenChannelButton:hover{background:url(../img/startlisten_p.png)no-repeat;}
+
+.StartlistenChannelButton_d{
+	display:inline-block;
+	width:48px;
+	height:48px;
+	margin:0 0;
+	background:url(../img/startlisten_d.png) no-repeat;
+}
+
+.StoplistenChannelButton{
+display:inline-block;
+width:48px;
+height:48px;
+margin:0 0;
+background:url(../img/stoplisten.png) no-repeat;	
+}
+.StoplistenChannelButton:hover{background:url(../img/stoplisten_p.png)no-repeat;}
+
+.StoplistenChannelButton_d{
+	display:inline-block;
+	width:48px;
+	height:48px;
+	margin:0 0;
+	background:url(../img/stoplisten_d.png) no-repeat;
+}
+
+.forceStateButton { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/forceState.png) no-repeat; 
+} 
+.forceStateButton:hover{background:url(../img/forceState_p.png) no-repeat;}
+
+.forceStateButton_d { 
+display:inline-block;
+width:48px; 
+height:48px; 
+margin:0 0; 
+background:url(../img/forceState_d.png) no-repeat; 
+} 

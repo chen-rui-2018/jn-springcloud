@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class AchievementParam extends Page implements Serializable {
 
     @ApiModelProperty(value = "类型（科技：technology 学术：science）[不传查询全部]")
-    @Pattern(regexp = "^(technology)|(science)$", message = "平台类型校检错误")
+    @Pattern(regexp = "^(technology)|(science)|\\s*$", message = "类型校检错误")
     private String type;
 
     public String getType() {

@@ -98,6 +98,9 @@ public class IndexServiceImpl implements IndexService {
         if (StringUtils.isNotBlank(achievementParam.getType())) {
             criteria.andTypeEqualTo(achievementParam.getType());
         }
+        if (StringUtils.isNotBlank(achievementParam.getTitle())) {
+            criteria.andTitleLike("%" + achievementParam.getTitle() + "%");
+        }
         achievementCriteria.setOrderByClause("sort ASC, created_time DESC");
 
         List<TbAchievement> achList = tbAchievementMapper.selectByExample(achievementCriteria);

@@ -21,6 +21,17 @@ public class AchievementParam extends Page implements Serializable {
     @Pattern(regexp = "^(technology)|(science)|\\s*$", message = "类型校检错误")
     private String type;
 
+    @ApiModelProperty(value = "标题")
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getType() {
         return type;
     }
@@ -33,6 +44,7 @@ public class AchievementParam extends Page implements Serializable {
     public String toString() {
         return "AchievementParam{" +
                 "type='" + type + '\'' +
+                ", title='" + title + '\'' +
                 '}';
     }
 }

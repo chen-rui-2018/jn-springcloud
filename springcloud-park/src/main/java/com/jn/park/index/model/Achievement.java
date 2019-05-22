@@ -33,7 +33,7 @@ public class Achievement implements Serializable {
     private Integer viewCount;
 
     @ApiModelProperty(value = "发布时间")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date createdTime;
 
     public String getId() {

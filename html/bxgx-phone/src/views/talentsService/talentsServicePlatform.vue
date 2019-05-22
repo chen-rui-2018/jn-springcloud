@@ -1,42 +1,38 @@
 <template>
   <div class="talentsServicePlatform">
-    <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom">
-      <div class="box2">
-        <div class="banner"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
-        <div class="talentsServicePlatform_list">
-          <div class="talentsServicePlatform_tab">
-            <tab>
-              <tab-item v-for="(item,$index) in typeList" :key="$index" :selected="$index===typeId">
-                <span :class="{'active':item.id===sendData.subordinatePlatformName}" @click="toggle(item.id)">{{item.name}}</span>
-              </tab-item>
-            </tab>
-          </div>
-          <div class="talentsServicePlatform_cont">
-            <ul>
-              <li v-for="(item,index) in platFormList " :key="index" >
-                <p>{{item.platformTitle}}</p>
-                <p>
-                  <span>业务咨询：</span>
-                  <span v-html="item.businessConsult"></span>
-                </p>
-                <p>
-                  <span>系统支持：</span>
-                  <span v-html="item.systemSupport"></span></p>
-                <p>{{item.remark}} </p>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <load-more tip="loading" v-if="onFetching"></load-more>
+    <div class="banner"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
+    <div class="talentsServicePlatform_list">
+      <div class="talentsServicePlatform_tab">
+        <tab>
+          <tab-item v-for="(item,$index) in typeList" :key="$index" :selected="$index===typeId">
+            <span :class="{'active':item.id===sendData.subordinatePlatformName}" @click="toggle(item.id)">{{item.name}}</span>
+          </tab-item>
+          <tab-item></tab-item>
+        </tab>
       </div>
-    </scroller>
+      <div class="talentsServicePlatform_cont">
+        <ul>
+          <li v-for="(item,index) in platFormList " :key="index" >
+            <p>{{item.platformTitle}}</p>
+            <p>
+              <span>业务咨询：</span>
+              <span v-html="item.businessConsult"></span>
+            </p>
+            <p>
+              <span>系统支持：</span>
+              <span v-html="item.systemSupport"></span></p>
+            <p>{{item.remark}} </p>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import {Tab, TabItem, Scroller, LoadMore} from 'vux'
+import {Tab, TabItem} from 'vux'
 export default {
   components: {
-    Tab, TabItem, Scroller, LoadMore
+    Tab, TabItem
   },
   data () {
     return {
@@ -48,7 +44,6 @@ export default {
         subordinatePlatformName: '1'
       },
       platFormList: [],
-      onFetching: false,
       total: 0
     }
   },
@@ -57,6 +52,29 @@ export default {
     this.getPlatformList()
   },
   methods: {
+    scrollBottom () {
+      // let _this = this
+      window.onscroll = () => {
+        var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        var clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
+        if (clientHeight + scrollTop >= scrollHeight) {
+          if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
+            this.sendData.page++
+            this.api.get({
+              url: 'getPlatformList',
+              data: this.sendData,
+              callback: res => {
+                if (res.code === '0000') {
+                  this.platFormList.push(...res.data.rows)
+                  // console.log(...res.data.rows)
+                }
+              }
+            })
+          }
+        }
+      }
+    },
     getTypeList () {
       this.api.get({
         url: 'platformType',
@@ -81,28 +99,6 @@ export default {
           }
         }
       })
-    },
-    onScrollBottom () {
-      if (this.onFetching === false) {
-        if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
-          this.onFetching = true
-          setTimeout(() => {
-            this.sendData.page++
-            this.api.get({
-              url: 'getPlatformList',
-              data: this.sendData,
-              callback: res => {
-                if (res.code === '0000') {
-                  this.onFetching = false
-                  this.platFormList.push(...res.data.rows)
-                  // console.log(...res.data.rows)
-                }
-              }
-            })
-          }, 1000)
-        } else {
-        }
-      }
     },
     toggle (id) {
       this.sendData.subordinatePlatformName = id

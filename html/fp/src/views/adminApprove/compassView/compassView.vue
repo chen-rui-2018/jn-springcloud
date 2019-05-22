@@ -3,9 +3,15 @@
     <div class="banner" ref="banner">
       <div class="swiper-container">
           <div class="swiper-wrapper">
-              <div class="swiper-slide"> <img src="@/assets/image/approv.png" alt=""> </div>
+              <div class="swiper-slide" v-for="(item,index) in bannerList"> <img :src="item.adUrl" alt=""> </div>
           </div>
           <div class="swiper-pagination"></div>
+           <div class="swiper-button-prev">
+            <i class="el-icon-arrow-left"></i>
+          </div>
+          <div class="swiper-button-next">
+            <i class="el-icon-arrow-right"></i>
+          </div>
       </div>
     </div>
     <div class="approve_content"><!-- 版心 -->
@@ -64,6 +70,7 @@
   </div>
 </template>
 <script>
+import Swiper from 'swiper'
 export default {
   data () {
     return {
@@ -75,14 +82,46 @@ export default {
       page:1,
       rows:6,
       total:0,
-      loading:true
+      loading:true,
+      bannerList:[]
     }
   },
   created () {
     this.getAllCate()
     this.getPowerList()
+    this.getImg()
+    
   },
   methods: {
+    // 初始化swiper
+    swiperInit(){
+        var mySwiper = new Swiper ('.swiper-container', {
+        loop: true, 
+        pagination: {
+          el: '.swiper-pagination',
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      })
+    },
+    getImg(){
+      this.api.get({
+        url: "SpAdvertising",
+        data: {
+          name:this.name
+         },
+        callback: (res)=>{
+          if (res.code == "0000") {
+          this.bannerList=res.data
+          this.$nextTick(() => {
+            this.swiperInit()  
+          })
+          }
+        }
+      });
+    },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
       this.rows=val

@@ -13,7 +13,7 @@
       <!-- 面包屑 -->
       <div class="talentsService_breadcrumb">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/enterpriseservice' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
             <a href="javascript:;">人才服务</a>
           </el-breadcrumb-item>
@@ -414,6 +414,7 @@ export default {
           ul{
             display: flex;
             li{
+              cursor: pointer;
               width:25%;
               margin-right: 35px;
               border: solid 1px #eeeeee;

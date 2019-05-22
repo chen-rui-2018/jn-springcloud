@@ -54,23 +54,18 @@
             <span @touchstart="filter('2')" :class="{'greenColor':sendData.sortType==='2'}"><i class="iconfont icon-tiaozheng"></i>时间节点排序 </span>
             <span @touchstart="filter('3')" :class="{'greenColor':sendData.sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
           </div>
-          <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" style="height:auto">
-            <div class="box2">
-              <div class="talentsService_cont_box">
-                <div class="talentsService_cont" v-for="(item,index) in talentsList " :key="index" @click="$router.push({path:'/guest/pd/talentNotice/talentsServiceDetail',query:{id:item.id}}) ">
-                  <div class="talentsService_cont_left">
-                    <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.noticeTitle}} </div>
-                    <div class="cont_detail">
-                      <div><span>开始 {{item.createdTime|time}}</span><span>截止 {{item.deadline|time}}</span></div>
-                      <span class="greenColor">{{item.isRoofPlacement===1?'置顶':'不置顶'}}</span>
-                    </div>
-                  </div>
-                  <div class="talentsService_cont_right"><span class="iconfont icon-jiantou"></span> </div>
+          <div class="talentsService_cont_box">
+            <div class="talentsService_cont" v-for="(item,index) in talentsList " :key="index" @click="$router.push({path:'/guest/pd/talentNotice/talentsServiceDetail',query:{id:item.id}}) ">
+              <div class="talentsService_cont_left">
+                <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.noticeTitle}} </div>
+                <div class="cont_detail">
+                  <div><span>开始 {{item.createdTime|time}}</span><span>截止 {{item.deadline|time}}</span></div>
+                  <span class="greenColor">{{item.isRoofPlacement===1?'置顶':'不置顶'}}</span>
                 </div>
-                <load-more tip="loading" v-if="onFetching"></load-more>
               </div>
+              <div class="talentsService_cont_right"><span class="iconfont icon-jiantou"></span> </div>
             </div>
-          </scroller>
+          </div>
         </div>
   </div>
 </template>
@@ -91,8 +86,7 @@ export default {
         rangeId: '1',
         rows: 2,
         sortType: '1'
-      },
-      onFetching: false
+      }
     }
   },
   filters: {
@@ -119,8 +113,30 @@ export default {
     this.getperennialList()// 常年申报
     this.getTypeList()
     this.gettalentsList()
+    this.scrollBottom()
   },
   methods: {
+    scrollBottom () {
+      window.onscroll = () => {
+        var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        var clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
+        if (clientHeight + scrollTop >= scrollHeight) {
+          if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
+            this.sendData.page++
+            this.api.get({
+              url: 'talentsList',
+              data: this.sendData,
+              callback: res => {
+                if (res.code === '0000') {
+                  this.talentsList.push(...res.data.rows)
+                }
+              }
+            })
+          }
+        }
+      }
+    },
     getperennialList () {
       this.api.get({
         url: 'perennialList',
@@ -157,7 +173,6 @@ export default {
             // console.log(res)
             this.talentsList = res.data.rows
             this.total = res.data.total
-            this.onFetching = false
           }
         }
       })
@@ -178,16 +193,6 @@ export default {
           this.onFetching = true
           setTimeout(() => {
             this.sendData.page++
-            this.api.get({
-              url: 'talentsList',
-              data: this.sendData,
-              callback: res => {
-                if (res.code === '0000') {
-                  this.onFetching = false
-                  this.talentsList.push(...res.data.rows)
-                }
-              }
-            })
           }, 1000)
         } else {
         }
@@ -226,7 +231,7 @@ export default {
             display: flex;
             width: 100%;
             li{
-              width:44%;
+              width:49%;
               flex:0 0  auto;
               margin-right: 21px;
               border: solid 1px #eeeeee;
@@ -257,13 +262,13 @@ export default {
                 p:nth-child(2){
                   color:black;
                   font-size: 16px;
-                  margin-top: 18px;
-                  line-height: 26px;
+                  padding-top: 18px;
+                  line-height: 29px;
                   display: -webkit-box;
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 2;
                   overflow: hidden;
-                  height: 48px;
+                  height: 46px;
 
                 }
                 p:nth-child(4){
@@ -416,7 +421,7 @@ export default {
               -webkit-line-clamp: 1;
               overflow: hidden;
               font-size: 26px;
-              margin-top: 37px;
+              padding-top: 37px;
               line-height: 28px;
             }
             .cont_detail{

@@ -18,7 +18,7 @@
       <!-- 面包屑 -->
       <div class="approve_breadcrumb">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/enterpriseservice' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
             <a href="javascript:;">申报中心</a>
           </el-breadcrumb-item>
@@ -368,6 +368,7 @@ export default {
           margin-top: 23px;
           display: flex;
           justify-content: space-between;
+          cursor: pointer;
           p{
             margin: 51px 0 51px 60px;
             line-height: 24px;
@@ -413,6 +414,7 @@ export default {
           ul{
             display: flex;
             li{
+              cursor: pointer;
               width:25%;
               margin-right: 35px;
               border: solid 1px #eeeeee;

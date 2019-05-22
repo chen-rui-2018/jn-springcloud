@@ -59,9 +59,8 @@ export default new Router({
       name: 'declarationconsult',
       meta: {title: '我要咨询'},
       component: () => import('@/views/declarationCenter/consult')
-
-	},
-	{
+    },
+    {
       path: '/serverProDetail',
       name: 'serverProDetail',
       component: () => import('@/views/serverProDetail'),

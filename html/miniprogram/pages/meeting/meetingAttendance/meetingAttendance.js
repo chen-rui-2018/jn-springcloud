@@ -115,6 +115,7 @@ Page({
       complete: ()=>{}
     });
   },
+  // ?userIds='+this.data.userIds,
   getMeetingPerson(){
     wx.request({
       url: 'http://192.168.10.31:1101/springcloud-app-system/system/sysUser/selectUserByIds?userIds='+this.data.userIds,

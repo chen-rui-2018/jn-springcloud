@@ -30,7 +30,6 @@ public class PayAccountBookMoneyRecord extends Page implements Serializable {
     private String billId;
 
     @ApiModelProperty(value="账本ID",example = "20190504123")
-    @NotBlank(message = "{acBookId :'账本ID不能为空'}")
     private String acBookId;
 
     @ApiModelProperty(value="备注说明")

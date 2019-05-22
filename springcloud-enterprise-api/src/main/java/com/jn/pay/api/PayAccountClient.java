@@ -36,5 +36,8 @@ public interface PayAccountClient {
     @RequestMapping(value = "/api/payment/payAccount/queryPayAccountBook",method = RequestMethod.GET)
     Result<PayAccountAndAccountBookVo> queryPayAccountBook(@ApiParam(name="userId",value = "登录人账号",required = true,example = "wangsong") @RequestParam(value = "userId") String userId);
 
+    @ApiOperation(value = "预缴充值-支付回调接口")
+    @RequestMapping(value = "/api/payment/payAccount/payAccountCallBack",method = RequestMethod.POST)
+    Result payAccountCallBack(@RequestBody PayOrderNotify callBackParam);
 
 }

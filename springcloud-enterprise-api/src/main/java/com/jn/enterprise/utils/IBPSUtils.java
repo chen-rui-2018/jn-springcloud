@@ -42,7 +42,7 @@ public class IBPSUtils {
      * @return
      */
     public static IBPSResult startWorkFlow(String bpmnDefId,String account,Object data){
-        Map<String,String>param=new HashMap<>();
+        Map<String,Object>param=new HashMap<>();
         param.put("bpmnDefId", bpmnDefId);
         JSONObject jsonObject = operationWorkFlow(account, IBPSRequestUrlEnum.START_WORK_FLOW.getRequestUrl(), data, param,HttpMethod.POST,null);
         logger.info("启动ibps流程返回数据：{}",jsonObject.toString());
@@ -57,7 +57,7 @@ public class IBPSUtils {
      * @return
      */
     public static JSONObject opinions(String account,String bpmInstId,String taskId){
-        Map<String,String>param=new HashMap<>(16);
+        Map<String,Object>param=new HashMap<>(16);
         if(StringUtils.isBlank(bpmInstId)&& StringUtils.isBlank(taskId)){
             logger.warn("IBPS获取审批历史的流程实例ID和任务id不能都为空，至少一个要有值");
             throw new JnSpringCloudException(IBPSOperationExceptionEunm.MY_TASKS_PARAM_NOT_NULL);
@@ -105,7 +105,7 @@ public class IBPSUtils {
      * @return
      */
     public static JSONObject getInstForm(String account,String processInsId){
-        Map<String,String>param=new HashMap<>(16);
+        Map<String,Object>param=new HashMap<>(16);
         if(processInsId==null){
             logger.warn("流程实例id不能为空");
             throw new JnSpringCloudException(IBPSOperationExceptionEunm.PROCESS_INS_ID_NOT_NULL);
@@ -125,7 +125,7 @@ public class IBPSUtils {
             logger.warn("IBPS处理任务入参不能为空");
             throw new JnSpringCloudException(IBPSOperationExceptionEunm.COMPLETE_PARAM_NOT_NULL);
         }
-        Map<String,String>param=javaBeanToMap(ibpsCompleteParam);
+        Map<String,Object>param=javaBeanToMap(ibpsCompleteParam);
         return  operationWorkFlow(account, IBPSRequestUrlEnum.COMPLETE.getRequestUrl(), null, param,HttpMethod.POST,null);
     }
 
@@ -139,9 +139,9 @@ public class IBPSUtils {
      * @param jsonObject        json格式请求参数
      * @return
      */
-    public static JSONObject operationWorkFlow(String operationAccount, String ibpsRequestUrl, Object data, Map<String, String> param,
+    public static JSONObject operationWorkFlow(String operationAccount, String ibpsRequestUrl, Object data, Map<String, Object> param,
                                                HttpMethod method, String jsonObject){
-        MultiValueMap<String, String> map=new LinkedMultiValueMap<>();
+        MultiValueMap<String, Object> map=new LinkedMultiValueMap<>();
         if(data!=null){
             Gson gson = new Gson();
             String jsonData = gson.toJson(data);
@@ -164,8 +164,8 @@ public class IBPSUtils {
      * @param obj
      * @return
      */
-    public static Map<String,String>javaBeanToMap(Object obj){
-        Map<String,String> map=new HashMap<>();
+    public static Map<String,Object>javaBeanToMap(Object obj){
+        Map<String,Object> map=new HashMap<>();
         if(obj==null){
             return null;
         }

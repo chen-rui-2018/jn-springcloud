@@ -78,6 +78,7 @@ public class CallOtherSwaggerUtilsTest {
 
     @Test
     public void test3() throws FileNotFoundException {
+        //调用IBSP上传图片
         File file = ResourceUtils.getFile("classpath:test/12345.png");
         FileSystemResource resource = new FileSystemResource(file);
         MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.employee.dao.EducationExperienceMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_education_experience
+        (
+        id, school, major, admission_time, completion_time, education_code, education_name,
+        is_academic_degree, certificate_educa_url_one, certificate_educa_url_two, job_number
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.school},
+            #{item.major},
+            #{item.admissionTime},
+            #{item.completionTime},
+            #{item.educationCode},
+            #{item.educationName},
+            #{item.isAcademicDegree},
+            #{item.certificateEducaUrlOne},
+            #{item.certificateEducaUrlTwo},
+            #{item.jobNumber}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteByJobNumber" parameterType="map">
+        delete from tb_manpower_education_experience where job_number=#{jobNumber}
+    </delete>
+
+    <select id="selectByJobNumber" parameterType="map" resultType="com.jn.hr.employee.model.EducationExperience">
+        select id, school, major, admission_time, completion_time, education_code, education_name,
+        is_academic_degree, certificate_educa_url_one, certificate_educa_url_two, job_number from
+        tb_manpower_education_experience where job_number=#{jobNumber} order by admission_time asc
+    </select>
+
+</mapper>

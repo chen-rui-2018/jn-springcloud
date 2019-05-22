@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.assessment.dao.AssessManageMapper">
+   <select id="list" parameterType="com.jn.hr.assessment.model.AssessmentManagePage"
+		resultType="com.jn.hr.assessment.model.AssessmentManageVo">
+		SELECT * FROM tb_manpower_assessment_manage
+	</select>
+	
+	<select id="selectGroupByAssessmentName" parameterType="com.jn.hr.assessment.model.AssessmentManagePage"
+		resultType="com.jn.hr.assessment.model.AssessmentManageVo">
+		SELECT * FROM tb_manpower_assessment_manage t1
+		group by t1.assessment_name
+	</select>
+	
+	 <select id="selectByStatusAndRecordStatus" parameterType="com.jn.hr.assessment.model.AssessmentManagePage"
+		resultType="com.jn.hr.assessment.model.AssessmentManageVo">
+		SELECT * FROM tb_manpower_assessment_manage t1
+		where t1.assessment_job_number = #{assessmentObjectJobNumber,jdbcType=VARCHAR}
+		and t1.status = 1 and t1.record_status = 1
+	</select>
+	
+	<insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_assessment_manage
+        ( id, assessment_id,assessment_name, assessment_start_time, 
+      assessment_end_time, assessment_object, 
+      assessment_people, status, template_id, 
+      template_name, record_status, assessment_job_number,creator_account, 
+      created_time, modifier_account, modified_time
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.assessmentId},#{item.assessmentName}, #{item.assessmentStartTime,jdbcType=DATE}, 
+      #{item.assessmentEndTime,jdbcType=DATE}, #{item.assessmentObject}, 
+      #{item.assessmentPeople}, #{item.status}, #{item.templateId}, 
+      #{item.templateName}, #{item.recordStatus},#{item.assessmentJobNumber}, #{item.creatorAccount}, 
+      #{item.createdTime,jdbcType=DATE}, #{item.modifierAccount}, #{item.modifiedTime,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+
+  <update id="updateBatch" parameterType="com.jn.hr.assessment.model.AssessmentManageAdd">
+    update tb_manpower_assessment_manage t1
+    <set>
+      <if test="assessmentStartTime != null">
+        assessment_start_time = #{assessmentStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="assessmentName != null">
+        assessment_name = #{record.assessmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentEndTime != null">
+        assessment_end_time = #{assessmentEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="assessmentObject != null">
+        assessment_object = #{assessmentObject,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentPeople != null">
+        assessment_people = #{assessmentPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="templateId != null">
+        template_id = #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="templateName != null">
+        template_name = #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
+    and t1.status != 2
+  </update>
+  
+  <select id="selectByAssessmentName" parameterType="map"
+		resultType="com.jn.hr.assessment.model.AssessmentManageVo">
+		SELECT * FROM tb_manpower_assessment_manage t1
+		where t1.record_status != 0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentId)">
+			and t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<select id="selectCountNumber" parameterType="map"
+		resultType="java.lang.Integer">
+		SELECT count(*) FROM tb_manpower_assessment_manage t1
+		where t1.status = 1 and t1.record_status = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentId)">
+			and t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<update id="updateByAssessmentName" parameterType="map">
+    update tb_manpower_assessment_manage t1
+    <set>
+        t1.record_status = 0
+    </set>
+    where t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
+    and t1.status = 2
+  </update>
+  
+  <update id="updateByStatus" parameterType="com.jn.hr.assessment.model.AssessmentManagePage">
+    update tb_manpower_assessment_manage t1
+    set t1.status = 2
+    where t1.assessment_job_number = #{assessmentObjectJobNumber,jdbcType=VARCHAR}
+    and t1.record_status = 1 
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentId)">
+			and t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
+		</if>
+  </update>
+  
+  <update id="updateByRecordStatus" parameterType="com.jn.hr.assessment.model.AssessmentManagePage">
+    update tb_manpower_assessment_manage t1
+    <set>
+        t1.record_status = 0
+    </set>
+    where t1.assessment_job_number = #{assessmentObjectJobNumber,jdbcType=VARCHAR}
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentId)">
+			and t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
+		</if>
+  </update>
+	
+</mapper>

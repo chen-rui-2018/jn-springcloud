@@ -90,7 +90,7 @@
         <div style="display:flex">
           <el-form-item label="所属园区:" lass="inline" prop="affiliatedPark">
             <el-select v-model="businessForm.affiliatedPark" placeholder="请选择所属园区">
-              <el-option v-for="item in comSourceOptions" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in parkList" :key="item.id" :label="item.parkName" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -146,8 +146,8 @@
           <!-- <div class="tipPsw">请输入收到短信中的验证码</div> -->
         </el-form-item>
       </el-form>
-      <div class="business_footer">
-        <span @click="submitCompany('businessForm')">提交公司负责人审核申请</span>
+      <div class="businessFooter">
+        <span @click="submitCompany('businessForm')">提交审核</span>
       </div>
     </div>
 
@@ -185,6 +185,7 @@ export default {
           label: "招商企业"
         }
       ],
+      parkList:[],
       imgParamsDialogVisible: false,
       imgParamsUrl: "",
       businessLicenseDialogVisible: false,
@@ -297,6 +298,7 @@ export default {
   mounted() {
     this.selectIndustryList();
     this.getComPropertyOptions();
+    this.getParkList()
   },
   methods: {
     submitCompany(formName) {
@@ -340,8 +342,23 @@ export default {
         }
       });
     },
+    //所属园区
+    getParkList() {
+      let _this = this;
+      this.api.get({
+        url: "getParkList",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+           _this.parkList=res.data
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
     //获取验证码
-      getCode() {
+    getCode() {
       let _this = this;
       this.api.get({
         url: "getCode",
@@ -626,7 +643,7 @@ export default {
       }
     }
   }
-  .business_footer {
+  .businessFooter {
     margin-top: 58px;
     text-align: center;
     margin-bottom: 17px;

@@ -55,11 +55,41 @@ public class ServiceContent  implements Serializable {
     private String createdTime;
     @ApiModelProperty(value = "创建者账号", hidden = true)
     private String creatorAccount;
+    @ApiModelProperty(value = "修改时间", hidden = true)
+    private String modifiedTime;
+    @ApiModelProperty(value = "修改者账号", hidden = true)
+    private String modifierAccount;
+    @ApiModelProperty(value = "浏览数", hidden = true)
+    private String viewCount;
 
     @ApiModelProperty(value = "顾问")
     private List<TbServiceAndAdvisor> tb_service_and_advisor;
 
     private static final long serialVersionUID = 1L;
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount;
+    }
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
 
     public List<TbServiceAndAdvisor> getTb_service_and_advisor() {
         return tb_service_and_advisor;

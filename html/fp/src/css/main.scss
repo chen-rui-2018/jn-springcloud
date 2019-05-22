@@ -155,7 +155,7 @@ img {
         border-radius: 16px;
       }
 
-      >span.active {
+      >span.active0 {
         color: #fff;
         background: linear-gradient(to bottom right, #35bf6d, #00a041);
       }
@@ -187,7 +187,7 @@ img {
           }
         }
 
-        li.active {
+        li.active0 {
           // color: #00a041;
           background-image: -webkit-linear-gradient(to bottom right, #35bf6d, #00a041);
           // -webkit-background-clip: text;
@@ -196,7 +196,7 @@ img {
           -webkit-background-clip: text;
         }
 
-        .showListLi>i.active {
+        .showListLi>i.active0 {
           color: #00a041;
         }
       }
@@ -217,7 +217,7 @@ img {
         color: #333;
       }
 
-      >li.active {
+      >li.active0 {
         border-bottom: 2px solid #00a041;
         color: #00a041;
       }
@@ -573,7 +573,7 @@ img {
           line-height: 17px;
         }
 
-        >li.active {
+        >li.active1 {
           background: #009f42;
           border-radius: 4px;
           color: #fff;
@@ -614,7 +614,7 @@ img {
         color: #999;
       }
 
-      >span.active {
+      >span.active2 {
         color: #00a041;
       }
     }
@@ -1074,7 +1074,7 @@ img {
         >li {
           float: left;
         }
-        >li.active{
+        >li.active3{
           color:#00a041;
         }
 
@@ -1356,9 +1356,6 @@ img {
     border: 1px solid #D9D9D9;
 }
   .header {
-    // position: absolute;
-    // padding: 0 160px;
-    // background-color: #646798;
     background-color: rgba(255, 255, 255, 0.2);
     width: 100%;
     z-index: 3;
@@ -1402,7 +1399,12 @@ img {
             color: #00a041;
             border-radius: 5px;
           }
-          >li:first-child{
+          // >li:first-child{
+          //   background: #fff;
+          //   color: #00a041;
+          //   border-radius: 5px;
+          // }
+          .ru-active{
             background: #fff;
             color: #00a041;
             border-radius: 5px;
@@ -1460,100 +1462,97 @@ img {
       }
     }
   }
-  .portalIndexImg {
-    // height: 650px;
-    position: fixed;
-    z-index: 99;
-    width: 100%;
-    // background: url("../../static/img/c11.png") 100% 100% / 100% 100% no-repeat;
+  // .portalIndexImg {
+  //   // height: 650px;
+  //   position: fixed;
+  //   z-index: 99;
+  //   width: 100%;
 
-    .el-carousel__button {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-    .el-carousel__indicator {
-      display: block;
-      padding: 8px 4px;
-      width: 8px;
-    }
-    .el-carousel__indicator.is-active .el-carousel__button {
-      width: 10px;
-      height: 80px;
-      border-radius: 15px;
-      // color:red;
-      // color:#fff;
-    }
-    .el-carousel__indicators {
-      bottom: 35%;
-      left: 92%;
-    }
-    .el-carousel__arrow--right {
-      right: 60px;
-    }
-    .el-carousel__arrow--left {
-      left: 60px;
-    }
-    .el-carousel__arrow {
-      font-size: 20px;
-      border: 2px solid #fff;
-      height: 38px;
-      width: 38px;
-      background: rgba(255, 255, 255, 0.2);
-    }
-    .search_box {
-      background: rgba(0, 0, 0, 0.3);
-      // text-align: center;
-      .el-input-group {
-        border-radius: 28px;
-        width: 42%;
-        margin: 43px 0;
-        position: relative;
-        transform: translateX(-50%);
-        left: 50%;
-        .el-input {
-          width: 94px;
-        }
-        .el-input__inner:focus {
-          border-color: #00a041;
-        }
-        .el-input-group__append,
-        .el-input-group__prepend {
-          border-radius: 28px;
-        }
-        .el-input-group__append {
-          /* border-top-left-radius: 0;
-      border-bottom-left-radius: 0; */
-          background: #00a041;
-          color: #fff;
-          right: 58px;
-          .el-button {
-            margin: -10px -10px;
-          }
-        }
-        .el-input-group__prepend {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          background-color: #fff;
-          padding: 0px 17px 0 9px;
-          input {
-            color: #666666;
-            text-align: right;
-          }
-        }
+  //   .el-carousel__button {
+  //     width: 10px;
+  //     height: 10px;
+  //     border-radius: 50%;
+  //   }
+  //   .el-carousel__indicator {
+  //     display: block;
+  //     padding: 8px 4px;
+  //     width: 8px;
+  //   }
+  //   .el-carousel__indicator.is-active .el-carousel__button {
+  //     width: 10px;
+  //     height: 80px;
+  //     border-radius: 15px;
+  //   }
+  //   .el-carousel__indicators {
+  //     bottom: 35%;
+  //     left: 92%;
+  //   }
+  //   .el-carousel__arrow--right {
+  //     right: 60px;
+  //   }
+  //   .el-carousel__arrow--left {
+  //     left: 60px;
+  //   }
+  //   .el-carousel__arrow {
+  //     font-size: 20px;
+  //     border: 2px solid #fff;
+  //     height: 38px;
+  //     width: 38px;
+  //     background: rgba(255, 255, 255, 0.2);
+  //   }
+  //   .search_box {
+  //     background: rgba(0, 0, 0, 0.3);
+  //     // text-align: center;
+  //     .el-input-group {
+  //       border-radius: 28px;
+  //       width: 42%;
+  //       margin: 43px 0;
+  //       position: relative;
+  //       transform: translateX(-50%);
+  //       left: 50%;
+  //       .el-input {
+  //         width: 94px;
+  //       }
+  //       .el-input__inner:focus {
+  //         border-color: #00a041;
+  //       }
+  //       .el-input-group__append,
+  //       .el-input-group__prepend {
+  //         border-radius: 28px;
+  //       }
+  //       .el-input-group__append {
+  //         /* border-top-left-radius: 0;
+  //     border-bottom-left-radius: 0; */
+  //         background: #00a041;
+  //         color: #fff;
+  //         right: 58px;
+  //         .el-button {
+  //           margin: -10px -10px;
+  //         }
+  //       }
+  //       .el-input-group__prepend {
+  //         border-top-right-radius: 0;
+  //         border-bottom-right-radius: 0;
+  //         background-color: #fff;
+  //         padding: 0px 17px 0 9px;
+  //         input {
+  //           color: #666666;
+  //           text-align: right;
+  //         }
+  //       }
 
-      }
-      .input-with-select .el-input__inner{
-          border-top-left-radius: 19px;
-          border-bottom-left-radius: 19px;
-          border: 1px solid #00a041;
-        }
-    }
-    .searchbox{
-      background: #fff;
-      box-shadow:0 10px 10px -10px #ccc;
-    }
-  }
+  //     }
+  //     .input-with-select .el-input__inner{
+  //         border-top-left-radius: 19px;
+  //         border-bottom-left-radius: 19px;
+  //         border: 1px solid #00a041;
+  //       }
+  //   }
+  //   .searchbox{
+  //     background: #fff;
+  //     box-shadow:0 10px 10px -10px #ccc;
+  //   }
+  // }
   .banner{
     .quickEnter {
       position: absolute;
@@ -1655,6 +1654,7 @@ img {
     }
     .btns {
       font-size: 0;
+      margin: 50px 0;
       > button {
         padding: 5px 20px;
         background: #fff;
@@ -1669,8 +1669,6 @@ img {
         background: #00a041;
       }
       .btn1 {
-        color: #fff;
-        background: #00a041;
         border-top-left-radius: 3px;
         border-bottom-left-radius: 3px;
       }
@@ -1679,10 +1677,13 @@ img {
         border-bottom-right-radius: 3px;
         border-left: none;
       }
-      // .btn2:hover{
-      //   color: #fff;
-      //   background: #00a041;
-      // }
+      .btn11 {
+        border-radius: 0;
+      }
+      >button.btActive{
+        color: #fff;
+        background: #00a041;
+      }
     }
     .info {
       // width: 1029px;
@@ -1734,7 +1735,7 @@ img {
             margin-right: 20px;
             z-index: 2;
           }
-          .active{
+          .active0{
             width: 40px;
             height: 40px;
             color: #fff;
@@ -2183,6 +2184,7 @@ img {
     }
   }
   .enterpriseinfo {
+    // text-align: left;
     .enterPriseCon {
       .con1,
       .conlef1 {
@@ -2199,7 +2201,7 @@ img {
         }
         .conInfo {
           text-align: left;
-          font-size: 14px;
+          font-size: 13px;
           color: #b6b6b6;
           > img {
             width: 53px;
@@ -2227,6 +2229,7 @@ img {
         display: inline-block;
         margin-left: 20px;
         vertical-align: top;
+        text-align: left;
         .conlef1 {
           text-align: left;
           width: 192px;
@@ -2245,7 +2248,10 @@ img {
             text-align: center;
           }
         }
-        .conlef2 {
+        // .conlef2 {
+        //   margin-left: 20px;
+        // }
+        .conlef1:nth-child(2) {
           margin-left: 20px;
         }
         .conT2 {

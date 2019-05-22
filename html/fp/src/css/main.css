@@ -8,9 +8,6 @@ ul {
   list-style: none;
 }
 
-body .el-table th.gutter{
-  display: table-cell!important;
-}
 a {
   text-decoration: none;
   color: inherit;
@@ -22,6 +19,10 @@ i {
 
 input {
   outline-style: none;
+}
+
+img {
+  vertical-align: middle;
 }
 
 .clearfix:after {
@@ -139,7 +140,7 @@ input {
   border-radius: 16px;
 }
 
-.actiContent .actiFilter .timeFilter > span.active {
+.actiContent .actiFilter .timeFilter > span.active0 {
   color: #fff;
   background: -webkit-gradient(linear, left top, right bottom, from(#35bf6d), to(#00a041));
   background: linear-gradient(to bottom right, #35bf6d, #00a041);
@@ -173,13 +174,13 @@ input {
   margin-left: 10px;
 }
 
-.actiContent .actiFilter .timeOrder > ul li.active {
+.actiContent .actiFilter .timeOrder > ul li.active0 {
   background-image: -webkit-linear-gradient(to bottom right, #35bf6d, #00a041);
   -webkit-text-fill-color: #00a041;
   -webkit-background-clip: text;
 }
 
-.actiContent .actiFilter .timeOrder > ul .showListLi > i.active {
+.actiContent .actiFilter .timeOrder > ul .showListLi > i.active0 {
   color: #00a041;
 }
 
@@ -197,7 +198,7 @@ input {
   color: #333;
 }
 
-.actiContent .allActi .actiFilterUl > li.active {
+.actiContent .allActi .actiFilterUl > li.active0 {
   border-bottom: 2px solid #00a041;
   color: #00a041;
 }
@@ -547,9 +548,9 @@ input {
   line-height: 17px;
 }
 
-.serverOrg .serverOrgNav .nav1 .nav1Ul > li.active,
-.serverPro .serverOrgNav .nav1 .nav1Ul > li.active,
-.serverCon .serverOrgNav .nav1 .nav1Ul > li.active, .quickSearch .serverOrgNav .nav1 .nav1Ul > li.active, .aboutUs .serverOrgNav .nav1 .nav1Ul > li.active, .finaInstitution .serverOrgNav .nav1 .nav1Ul > li.active, .finaPro .serverOrgNav .nav1 .nav1Ul > li.active {
+.serverOrg .serverOrgNav .nav1 .nav1Ul > li.active1,
+.serverPro .serverOrgNav .nav1 .nav1Ul > li.active1,
+.serverCon .serverOrgNav .nav1 .nav1Ul > li.active1, .quickSearch .serverOrgNav .nav1 .nav1Ul > li.active1, .aboutUs .serverOrgNav .nav1 .nav1Ul > li.active1, .finaInstitution .serverOrgNav .nav1 .nav1Ul > li.active1, .finaPro .serverOrgNav .nav1 .nav1Ul > li.active1 {
   background: #009f42;
   border-radius: 4px;
   color: #fff;
@@ -610,9 +611,9 @@ input {
   color: #999;
 }
 
-.serverOrg .serverOrgFilter .filLeft > span.active,
-.serverPro .serverOrgFilter .filLeft > span.active,
-.serverCon .serverOrgFilter .filLeft > span.active, .quickSearch .serverOrgFilter .filLeft > span.active, .aboutUs .serverOrgFilter .filLeft > span.active, .finaInstitution .serverOrgFilter .filLeft > span.active, .finaPro .serverOrgFilter .filLeft > span.active {
+.serverOrg .serverOrgFilter .filLeft > span.active2,
+.serverPro .serverOrgFilter .filLeft > span.active2,
+.serverCon .serverOrgFilter .filLeft > span.active2, .quickSearch .serverOrgFilter .filLeft > span.active2, .aboutUs .serverOrgFilter .filLeft > span.active2, .finaInstitution .serverOrgFilter .filLeft > span.active2, .finaPro .serverOrgFilter .filLeft > span.active2 {
   color: #00a041;
 }
 
@@ -1393,10 +1394,10 @@ input {
   float: left;
 }
 
-.serverOrgDetail .agentCon .agentFil .select-list > li.active,
-.serverProDetail .agentCon .agentFil .select-list > li.active,
-.serverConDetail .agentCon .agentFil .select-list > li.active,
-.quickSearch .agentCon .agentFil .select-list > li.active, .finaInsDetail .agentCon .agentFil .select-list > li.active, .finaProDetail .agentCon .agentFil .select-list > li.active {
+.serverOrgDetail .agentCon .agentFil .select-list > li.active3,
+.serverProDetail .agentCon .agentFil .select-list > li.active3,
+.serverConDetail .agentCon .agentFil .select-list > li.active3,
+.quickSearch .agentCon .agentFil .select-list > li.active3, .finaInsDetail .agentCon .agentFil .select-list > li.active3, .finaProDetail .agentCon .agentFil .select-list > li.active3 {
   color: #00a041;
 }
 
@@ -1999,7 +2000,7 @@ input {
   border-radius: 5px;
 }
 
-.portalIndex .header .headerContainer .nav > ul > li:first-child, .enterpriseservice .header .headerContainer .nav > ul > li:first-child {
+.portalIndex .header .headerContainer .nav > ul .ru-active, .enterpriseservice .header .headerContainer .nav > ul .ru-active {
   background: #fff;
   color: #00a041;
   border-radius: 5px;
@@ -2061,115 +2062,6 @@ input {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-}
-
-.portalIndex .portalIndexImg, .enterpriseservice .portalIndexImg {
-  position: fixed;
-  z-index: 99;
-  width: 100%;
-}
-
-.portalIndex .portalIndexImg .el-carousel__button, .enterpriseservice .portalIndexImg .el-carousel__button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.portalIndex .portalIndexImg .el-carousel__indicator, .enterpriseservice .portalIndexImg .el-carousel__indicator {
-  display: block;
-  padding: 8px 4px;
-  width: 8px;
-}
-
-.portalIndex .portalIndexImg .el-carousel__indicator.is-active .el-carousel__button, .enterpriseservice .portalIndexImg .el-carousel__indicator.is-active .el-carousel__button {
-  width: 10px;
-  height: 80px;
-  border-radius: 15px;
-}
-
-.portalIndex .portalIndexImg .el-carousel__indicators, .enterpriseservice .portalIndexImg .el-carousel__indicators {
-  bottom: 35%;
-  left: 92%;
-}
-
-.portalIndex .portalIndexImg .el-carousel__arrow--right, .enterpriseservice .portalIndexImg .el-carousel__arrow--right {
-  right: 60px;
-}
-
-.portalIndex .portalIndexImg .el-carousel__arrow--left, .enterpriseservice .portalIndexImg .el-carousel__arrow--left {
-  left: 60px;
-}
-
-.portalIndex .portalIndexImg .el-carousel__arrow, .enterpriseservice .portalIndexImg .el-carousel__arrow {
-  font-size: 20px;
-  border: 2px solid #fff;
-  height: 38px;
-  width: 38px;
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.portalIndex .portalIndexImg .search_box, .enterpriseservice .portalIndexImg .search_box {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.portalIndex .portalIndexImg .search_box .el-input-group, .enterpriseservice .portalIndexImg .search_box .el-input-group {
-  border-radius: 28px;
-  width: 42%;
-  margin: 43px 0;
-  position: relative;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  left: 50%;
-}
-
-.portalIndex .portalIndexImg .search_box .el-input-group .el-input, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input {
-  width: 94px;
-}
-
-.portalIndex .portalIndexImg .search_box .el-input-group .el-input__inner:focus, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input__inner:focus {
-  border-color: #00a041;
-}
-
-.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__append,
-.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__prepend, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__append,
-.enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__prepend {
-  border-radius: 28px;
-}
-
-.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__append, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__append {
-  /* border-top-left-radius: 0;
-      border-bottom-left-radius: 0; */
-  background: #00a041;
-  color: #fff;
-  right: 58px;
-}
-
-.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__append .el-button, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__append .el-button {
-  margin: -10px -10px;
-}
-
-.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__prepend, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__prepend {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  background-color: #fff;
-  padding: 0px 17px 0 9px;
-}
-
-.portalIndex .portalIndexImg .search_box .el-input-group .el-input-group__prepend input, .enterpriseservice .portalIndexImg .search_box .el-input-group .el-input-group__prepend input {
-  color: #666666;
-  text-align: right;
-}
-
-.portalIndex .portalIndexImg .search_box .input-with-select .el-input__inner, .enterpriseservice .portalIndexImg .search_box .input-with-select .el-input__inner {
-  border-top-left-radius: 19px;
-  border-bottom-left-radius: 19px;
-  border: 1px solid #00a041;
-}
-
-.portalIndex .portalIndexImg .searchbox, .enterpriseservice .portalIndexImg .searchbox {
-  background: #fff;
-  -webkit-box-shadow: 0 10px 10px -10px #ccc;
-          box-shadow: 0 10px 10px -10px #ccc;
 }
 
 .portalIndex .banner .quickEnter, .enterpriseservice .banner .quickEnter {
@@ -2330,6 +2222,7 @@ input {
 .enterpriseservice .districtGardens .btns,
 .enterpriseservice .enterpriseinfo .btns, .enterpriseservice .policyCenter .btns, .enterpriseservice .technologyFinance .btns, .enterpriseservice .humanResources .btns {
   font-size: 0;
+  margin: 50px 0;
 }
 
 .portalIndex .declarationNotice .btns > button,
@@ -2366,8 +2259,6 @@ input {
 .enterpriseservice .popularActi .btns .btn1,
 .enterpriseservice .districtGardens .btns .btn1,
 .enterpriseservice .enterpriseinfo .btns .btn1, .enterpriseservice .policyCenter .btns .btn1, .enterpriseservice .technologyFinance .btns .btn1, .enterpriseservice .humanResources .btns .btn1 {
-  color: #fff;
-  background: #00a041;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
@@ -2382,6 +2273,27 @@ input {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   border-left: none;
+}
+
+.portalIndex .declarationNotice .btns .btn11,
+.portalIndex .popularActi .btns .btn11,
+.portalIndex .districtGardens .btns .btn11,
+.portalIndex .enterpriseinfo .btns .btn11, .portalIndex .policyCenter .btns .btn11, .portalIndex .technologyFinance .btns .btn11, .portalIndex .humanResources .btns .btn11, .enterpriseservice .declarationNotice .btns .btn11,
+.enterpriseservice .popularActi .btns .btn11,
+.enterpriseservice .districtGardens .btns .btn11,
+.enterpriseservice .enterpriseinfo .btns .btn11, .enterpriseservice .policyCenter .btns .btn11, .enterpriseservice .technologyFinance .btns .btn11, .enterpriseservice .humanResources .btns .btn11 {
+  border-radius: 0;
+}
+
+.portalIndex .declarationNotice .btns > button.btActive,
+.portalIndex .popularActi .btns > button.btActive,
+.portalIndex .districtGardens .btns > button.btActive,
+.portalIndex .enterpriseinfo .btns > button.btActive, .portalIndex .policyCenter .btns > button.btActive, .portalIndex .technologyFinance .btns > button.btActive, .portalIndex .humanResources .btns > button.btActive, .enterpriseservice .declarationNotice .btns > button.btActive,
+.enterpriseservice .popularActi .btns > button.btActive,
+.enterpriseservice .districtGardens .btns > button.btActive,
+.enterpriseservice .enterpriseinfo .btns > button.btActive, .enterpriseservice .policyCenter .btns > button.btActive, .enterpriseservice .technologyFinance .btns > button.btActive, .enterpriseservice .humanResources .btns > button.btActive {
+  color: #fff;
+  background: #00a041;
 }
 
 .portalIndex .declarationNotice .info,
@@ -2429,13 +2341,13 @@ input {
   z-index: 2;
 }
 
-.portalIndex .declarationNotice .info .left .active,
-.portalIndex .popularActi .info .left .active,
-.portalIndex .districtGardens .info .left .active,
-.portalIndex .enterpriseinfo .info .left .active, .portalIndex .policyCenter .info .left .active, .portalIndex .technologyFinance .info .left .active, .portalIndex .humanResources .info .left .active, .enterpriseservice .declarationNotice .info .left .active,
-.enterpriseservice .popularActi .info .left .active,
-.enterpriseservice .districtGardens .info .left .active,
-.enterpriseservice .enterpriseinfo .info .left .active, .enterpriseservice .policyCenter .info .left .active, .enterpriseservice .technologyFinance .info .left .active, .enterpriseservice .humanResources .info .left .active {
+.portalIndex .declarationNotice .info .left .active0,
+.portalIndex .popularActi .info .left .active0,
+.portalIndex .districtGardens .info .left .active0,
+.portalIndex .enterpriseinfo .info .left .active0, .portalIndex .policyCenter .info .left .active0, .portalIndex .technologyFinance .info .left .active0, .portalIndex .humanResources .info .left .active0, .enterpriseservice .declarationNotice .info .left .active0,
+.enterpriseservice .popularActi .info .left .active0,
+.enterpriseservice .districtGardens .info .left .active0,
+.enterpriseservice .enterpriseinfo .info .left .active0, .enterpriseservice .policyCenter .info .left .active0, .enterpriseservice .technologyFinance .info .left .active0, .enterpriseservice .humanResources .info .left .active0 {
   width: 40px;
   height: 40px;
   color: #fff;
@@ -2929,7 +2841,7 @@ input {
 .portalIndex .enterpriseinfo .enterPriseCon .conlef1 .conInfo, .enterpriseservice .enterpriseinfo .enterPriseCon .con1 .conInfo,
 .enterpriseservice .enterpriseinfo .enterPriseCon .conlef1 .conInfo {
   text-align: left;
-  font-size: 14px;
+  font-size: 13px;
   color: #b6b6b6;
 }
 
@@ -2965,6 +2877,7 @@ input {
   display: inline-block;
   margin-left: 20px;
   vertical-align: top;
+  text-align: left;
 }
 
 .portalIndex .enterpriseinfo .enterPriseCon .con2 .conlef1, .enterpriseservice .enterpriseinfo .enterPriseCon .con2 .conlef1 {
@@ -2990,7 +2903,7 @@ input {
   text-align: center;
 }
 
-.portalIndex .enterpriseinfo .enterPriseCon .con2 .conlef2, .enterpriseservice .enterpriseinfo .enterPriseCon .con2 .conlef2 {
+.portalIndex .enterpriseinfo .enterPriseCon .con2 .conlef1:nth-child(2), .enterpriseservice .enterpriseinfo .enterPriseCon .con2 .conlef1:nth-child(2) {
   margin-left: 20px;
 }
 

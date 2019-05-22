@@ -5,9 +5,14 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.pay.service.MyPayAccountService;
-import com.jn.pay.model.PayAccountBookMoneyRecord;
+import com.jn.enterprise.pay.service.MyPayBillService;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
+import com.jn.pay.vo.PayAccountBookMoneyRecordVo;
+import com.jn.pay.vo.PayAccountBookRecordVo;
+import com.jn.pay.vo.PayRecordVo;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,8 +22,10 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -39,6 +46,9 @@ public class MyPayAccountController extends BaseController {
     @Autowired
     private MyPayAccountService myPayAccountService;
 
+    @Autowired
+    private MyPayBillService myPayBillService;
+
     @ControllerLog(doAction = "我的账户-查询当前账户下所有账本信息")
     @ApiOperation(value = "我的账户-查询当前账户下所有账本信息",notes = "我的账户-查询当前账户下所有账本信息")
     @RequestMapping(value = "/queryPayAccountBook",method = RequestMethod.GET)
@@ -52,23 +62,55 @@ public class MyPayAccountController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "我的账本-查询当前账本下所有明细信息")
-    @ApiOperation(value = "我的账本-查询当前账本下所有明细信息",notes = "我的账本-查询当前账本下所有明细信息")
-    @RequestMapping(value = "/queryPayAccountDetails",method = RequestMethod.GET)
-    @RequiresPermissions("/payment/payAccount/queryPayAccountDetails")
-    public Result<PaginationData<List<PayAccountBookMoneyRecord>>> queryPayAccountDetails(@ApiParam(name="acBookId",value = "账本编号",required = true,example = "20190504123") @RequestParam(value = "acBookId") String acBookId,
-                                                                                          @ApiParam(name="startDate",value = "查询时间起",example = "2019-05-10 11:28:48") @RequestParam(value = "startDate",required = false) String startDate,
-                                                                                          @ApiParam(name="endDate",value = "查询时间止",example = "2019-05-13 11:28:48") @RequestParam(value = "endDate",required = false) String endDate,
-                                                                                          @ApiParam(name="page",value = "当前页数",required = true,example = "1") @RequestParam(value = "page") int page,
-                                                                                          @ApiParam(name="rows",value = "每页显示数量",required = true,example = "10") @RequestParam(value = "rows") int rows){
+    @ControllerLog(doAction = "我的账本-查询账本明细")
+    @ApiOperation(value = "我的账本-查询账本明细",notes = "我的账本-查询账本明细")
+    @RequestMapping(value = "/queryPayAccountBookInfo",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payAccount/queryPayAccountBookInfo")
+    public Result<PaginationData<List<PayAccountBookRecordVo>>> queryPayAccountBookInfo(@RequestBody PayAccountBookParam payAccountBookParam){
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(acBookId,"账本编号不能为空");
-        PaginationData<List<PayAccountBookMoneyRecord>> data = myPayAccountService.queryPayAccountDetails(user,acBookId,startDate,endDate,page,rows);
+        PaginationData<List<PayAccountBookRecordVo>> data = myPayAccountService.queryPayAccountBookInfo(payAccountBookParam);
+        return new Result<>(data);
+    }
+
+    @ControllerLog(doAction = "我的账本-账本明细详情查询")
+    @ApiOperation(value = "我的账本-账本明细详情查询",notes = "我的账本-账本明细详情查询")
+    @RequestMapping(value = "/queryPayAccountDetails",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payAccount/queryPayAccountDetails")
+    public Result<PaginationData<PayAccountBookMoneyRecordVo>> queryPayAccountDetails(@ApiParam(name="deductionId",value = "流水号",required = true,example = "0619e44f712048b7b2c49ac2d7769ee6") @RequestParam(value = "deductionId") String deductionId){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData<PayAccountBookMoneyRecordVo> data = myPayAccountService.queryPayAccountDetails(deductionId,user);
+        return new Result<>(data);
+    }
+
+    @ControllerLog(doAction = "我的账本-获取费用预缴协议")
+    @ApiOperation(value = "我的账本-获取费用预缴协议",notes = "我的账本-获取费用预缴协议")
+    @RequestMapping(value = "/getFeeAdvanceAgreement",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payAccount/getFeeAdvanceAgreement")
+    public Result<String> getFeeAdvanceAgreement(@RequestBody @Validated SysDictInvoke sysDictInvoke){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(sysDictInvoke.getKey(),"数据字典键不能为空");
+        Assert.notNull(sysDictInvoke.getParentGroupCode(),"父分组不能为空");
+        Assert.notNull(sysDictInvoke.getGroupCode(),"分组不能为空");
+        Assert.notNull(sysDictInvoke.getModuleCode(),"模块编码不能为空");
+        Result<String> data = myPayAccountService.getFeeAdvanceAgreement(sysDictInvoke,user);
         return new Result(data);
     }
 
-
+    @ControllerLog(doAction = "我的账本-预缴充值")
+    @ApiOperation(value = "我的账本-预缴充值",notes = "我的账本-预缴充值")
+    @RequestMapping(value = "/insertPrepaidRecharge",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payAccount/insertPrepaidRecharge")
+    public  Result<PayOrderRsp> insertPrepaidRecharge(@RequestBody @Validated PayPrepaidRechargeParam payPrepaidRechargeParam){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payPrepaidRechargeParam.getRechargeAmount(),"充值金额不能为空");
+        Assert.notNull(payPrepaidRechargeParam.getAcBookId(),"账本编号不能为空");
+        Assert.notNull(payPrepaidRechargeParam.getChannelId(),"支付渠道ID不能为空");
+        return myPayBillService.insertPrepaidRecharge(payPrepaidRechargeParam,user);
+    }
 
 
 }

@@ -1,7 +1,7 @@
 <template>
-  <div class="investor w">
+  <div class="investor w" id="investor">
     <div class="investorMenu">
-      <span>首页</span>
+      <span class="pointer" @click="$routet.push({path:'/tfindex'})">首页</span>
       <span>/</span>
       <span class="mainColor agent">投资人</span>
     </div>
@@ -9,10 +9,10 @@
       <div class="nav1 clearfix" id="nav1">
         <div class="nav1Tit fl">主投领域：</div>
         <ul class="nav1Ul fl clearfix" style="width:auto;">
-          <li :class="{'active':filterFlag == ''}" @click="handleFilter('')">全部</li>
+          <li :class="{'active4':filterFlag == ''}" @click="handleFilter('')">全部</li>
         </ul>
         <ul class="nav1Ul fl clearfix" :class="{'sh':!flag1}">
-          <li class="wid1" v-for="(i,k) in investorMainArea" :key="k" :class="{'active':filterFlag == i.mainCode}" @click="handleFilter(i.mainCode)">{{i.mainName}}</li>
+          <li class="wid1" v-for="(i,k) in investorMainArea" :key="k" :class="{'active4':filterFlag == i.mainCode}" @click="handleFilter(i.mainCode)">{{i.mainName}}</li>
         </ul>
         <div class="fr" v-if="widFun('wid1')">
           <i class="el-icon-arrow-down" v-if="flag1" @click="flag1=!flag1"></i>
@@ -42,7 +42,7 @@
           </div>
           <div class="liArea">
             <i>主投领域</i>
-            <div class="spanArea">
+            <div class="spanArea" v-if="i.mainAreaList!=null&&i.mainAreaList.length>0">
               <span v-for="(item,k) in i.mainAreaList.split(',')" :key="k">{{item}}</span>
             </div>
           </div>
@@ -121,7 +121,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.investorInfoList = res.data.rows;
             _this.total = res.data.total;
           } else {
@@ -138,7 +137,6 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.investorMainArea = res.data;
           } else {
             _this.$message.error(res.result);
@@ -150,8 +148,10 @@ export default {
 };
 </script>
 <style lang="scss">
+#investor{
+padding-top: 65px;
+}
 .investor {
-  padding-top: 65px;
   .investorMenu {
     padding: 20px 0;
     font-size: 13px;
@@ -194,7 +194,7 @@ export default {
           line-height: 17px;
         }
 
-        > li.active {
+        > li.active4 {
           background: #009f42;
           border-radius: 4px;
           color: #fff;

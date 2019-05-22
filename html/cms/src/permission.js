@@ -13,8 +13,7 @@ function hasPermission(roles, permissionRoles) {
   if (!permissionRoles) return true
   return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
-
-// const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
+// const whiteList = ['/login', '/auth-redirect', '/answerHome']// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
@@ -54,7 +53,7 @@ router.beforeEach((to, from, next) => {
     } else {
       next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
       NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
-    }*/
+    } */
     next()
   }
 })

@@ -233,6 +233,7 @@
           <a
             href="/static/file/workplanTemplate.xlsx"
             class="download"
+            download
           >下载模板</a>
         </div>
         <!-- <div>
@@ -672,6 +673,11 @@ export default {
         'post'
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
+          this.$message({
+            message: '导入成功',
+            type: 'success'
+          })
+          this.initList()
           this.dialogVisible = false
         } else {
           this.$message.error('导入失败,' + res.data.result)

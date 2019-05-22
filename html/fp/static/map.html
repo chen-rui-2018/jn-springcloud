@@ -30,7 +30,8 @@
     //创建地图函数：
     function createMap(){
         var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
-        var point = new BMap.Point(118.881087,32.016461);//定义一个中心点坐标
+        // var point = new BMap.Point(118.881087,32.016461);//定义一个中心点坐标
+        var point = new BMap.Point(118.882183,32.018711);//定义一个中心点坐标
         map.centerAndZoom(point,17);//设定地图的中心点和坐标并将地图显示在地图容器中
         window.map = map;//将map变量存储在全局
     }
@@ -57,7 +58,7 @@
     }
     
     //标注点数组
-    var markerArr = [{title:"江苏省南京市白下高新园区A座1305",content:"",point:"118.879937|32.016384",isOpen:1,icon:{w:21,h:21,l:46,t:0,x:6,lb:5}}
+    var markerArr = [{title:"南京市秦淮区紫丹路9号",content:"",point:"118.882183|32.018711",isOpen:1,icon:{w:21,h:21,l:46,t:0,x:6,lb:5}}
 		 ];
     //创建marker
     function addMarker(){

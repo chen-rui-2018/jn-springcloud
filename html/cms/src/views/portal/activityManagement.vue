@@ -1,7 +1,7 @@
 <template>
   <div v-loading="listLoading" class="activity">
     <el-row>
-      <el-col :span="5"><div class="grid-content bg-purple">
+      <el-col :span="4"><div class="grid-content bg-purple">
         <el-radio-group v-model="listQuery.actiStatus">
           <el-radio-button label="">全部</el-radio-button>
           <el-radio-button label= "1">待发布</el-radio-button>
@@ -17,7 +17,7 @@
         </el-radio-group>
       </div></el-col>
       <el-col :span="15"><div class="grid-content bg-purple"><el-form :inline="true" :model="listQuery" class="filter-bar">
-        <el-form-item label="活动类型" style="margin-left:10px;line-height: 34px;">
+        <el-form-item label="活动类型" style="line-height: 34px;">
           <el-select v-model="listQuery.actiType" placeholder="请选择活动类型" clearable class="filter-item" @change="selecteType">
             <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
@@ -165,8 +165,8 @@ export default {
         actiType: undefined,
         page: 1,
         rows: 10,
-        actiStatus: undefined,
-        isIndex: undefined
+        actiStatus: '',
+        isIndex: ''
       }
     }
   },
@@ -255,7 +255,7 @@ export default {
           res.data.data.rows.forEach(val => {
             this.typeOptions.push({
               value: val.typeId,
-              label: val.actiType
+              label: val.typeName
             })
           })
         } else {
@@ -335,5 +335,18 @@ export default {
 .appNum{
   cursor: pointer;
   text-decoration:underline
+}
+.activity{
+  .el-radio-group .el-radio-button--medium .el-radio-button__inner {
+    padding: 10px 5px;
+    font-size: 13px;
+}
+.el-form--inline .el-form-item{
+  margin-right:0;
+}
+.el-input--suffix .el-input__inner {
+    padding-right: 0;
+    width: 170px;
+}
 }
 </style>

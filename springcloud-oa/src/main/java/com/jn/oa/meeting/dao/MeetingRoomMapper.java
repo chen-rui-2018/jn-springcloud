@@ -2,6 +2,7 @@ package com.jn.oa.meeting.dao;
 
 
 import com.jn.oa.meeting.entity.TbOaMeeting;
+import com.jn.oa.meeting.model.OaMeeting;
 import com.jn.oa.meeting.model.OaMeetingRoomOrderPage;
 import com.jn.oa.meeting.model.OaMeetingRoomPage;
 import com.jn.oa.meeting.vo.OaMeetingRoomOrderVo;
@@ -30,5 +31,5 @@ public interface MeetingRoomMapper {
 
     List<OaMeetingRoomOrderVo> selectAvailableMeetingRoomList(OaMeetingRoomPage oaMeetingRoomPage );
 
-   List<TbOaMeeting> selectMeetingByTimeAndId(OaMeetingRoomOrderPage oaMeetingRoomOrderPage );
+   List<OaMeeting> selectMeetingByTimeAndId(OaMeetingRoomOrderPage oaMeetingRoomOrderPage );
 }

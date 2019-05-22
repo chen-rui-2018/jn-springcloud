@@ -6,26 +6,23 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.asset.enums.PageExceptionEnums;
-import com.jn.park.asset.model.RoomBaseModel;
-import com.jn.park.asset.model.RoomInformationModel;
-import com.jn.park.asset.model.RoomPayOrdersItemModel;
-import com.jn.park.asset.model.RoomPayOrdersModel;
+import com.jn.park.asset.model.*;
 import com.jn.park.asset.service.RoomInformationService;
 import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,7 +81,6 @@ public class RoomManageController {
     }
 
 
-
    @ControllerLog(doAction = "新增房间租赁订单")
     @ApiOperation(value ="新增房间租赁订单",notes = "新增房间租赁订单")
     @PostMapping(value = "/addRoomOrders")
@@ -93,13 +89,25 @@ public class RoomManageController {
            @ApiImplicitParam(name = "contactName",value = "联系人姓名",example = "先生",required = true),
            @ApiImplicitParam(name = "contactPhone",value = "联系人电话",example = "123456",required = true),
            @ApiImplicitParam(name = "leaseStartTime",value = "开始时间",example = "2018-5-1",required = true),
-           @ApiImplicitParam(name = "leaseEndTime",value = "结束时间",example = "2019-5-1",required = true)
+           @ApiImplicitParam(name = "month",value = "填写租期(月份)",example = "6",required = true)
    })
-    public Result addRoomOrders(String id,  String contactName, String contactPhone, Date leaseStartTime, Date leaseEndTime){
+    public Result addRoomOrders(String id,  String contactName, String contactPhone, Date leaseStartTime, String month){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        Result ordersNumber= roomInformationService.addRoomOrders(id,contactName,contactPhone,leaseStartTime,leaseEndTime,user.getAccount());
+        Result ordersNumber= roomInformationService.addRoomOrders(id,contactName,contactPhone,leaseStartTime,month,user.getAccount());
         return ordersNumber;
+    }
+
+    @ControllerLog(doAction = "返回支付订单")
+    @ApiOperation(value = "返回支付订单",notes = "返回支付订单")
+    @PostMapping(value = "/getPayOrders")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050811515490657"),
+    })
+    public Result<RoomPayOrdersModel> getPayOrders (String orderId){
+        Assert.notNull(orderId,"订单编号不能为空");
+        RoomPayOrdersModel roomPayOrdersModel = roomInformationService.getPayOrders(orderId);
+        return new Result<>(roomPayOrdersModel);
     }
 
 
@@ -107,13 +115,14 @@ public class RoomManageController {
     @ApiOperation(value = "创建支付订单",notes = "创建支付订单")
     @PostMapping(value = "/createPayOrder")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050811515490657"),
-            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE")
+            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050811515490657",required = true),
+            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE",required = true),
+            @ApiImplicitParam(name = "paySum",value = "支付金额",required = true)
     })
-    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId){
+    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId, BigDecimal paySum){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(orderId,"订单编号不能为空");
-        return roomInformationService.createPayOrder(orderId,channelId,user.getAccount());
+        return roomInformationService.createPayOrder(orderId,channelId,paySum,user.getAccount());
     }
 
     @ControllerLog(doAction = "房间租赁历史列表")
@@ -147,7 +156,7 @@ public class RoomManageController {
     @ApiOperation(value = "房间退租",notes = "房间退租")
     @GetMapping(value = "/quitApply")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050811515490657"),
+            @ApiImplicitParam(name = "orderItemId",value = "(子)订单编号",example = "2019050811515490657"),
     })
     public Result<RoomPayOrdersItemModel> quitApply(String id){
         RoomPayOrdersItemModel roomPayOrdersItemModel = roomInformationService.quitApply(id);
@@ -161,7 +170,35 @@ public class RoomManageController {
             @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657"),
     })
     public Result cancelOrder(String orderId){
-        //todo zhuyongze
+       roomInformationService.cancelOrder(orderId);
         return new Result();
     }
+
+    @ControllerLog(doAction = "房间租赁历史列表(新)")
+    @ApiOperation(value = "房间租赁历史列表(新)",notes = "获取房间租赁历史列表")
+    @GetMapping(value = "/getNewRoomOrdersList")
+    public Result<PaginationData<List<RoomLeaseRecordModel>>> getNewRoomOrdersList(Page page){
+        //获取登录信息
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        if (page.getPage() > 0 && page.getRows() > 0){
+            PaginationData<List<RoomLeaseRecordModel>> roomLeaseRecordModel= roomInformationService.getNewRoomOrdersList(user.getAccount(),page);
+            return new Result<>(roomLeaseRecordModel);
+        }else{
+            throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
+        }
+    }
+
+    @ControllerLog(doAction = "房间租借详情(新)")
+    @ApiOperation(value = "房间租借详情(新)",notes = "根据订单编号获取租借详情(新)")
+    @GetMapping(value = "/getNewRoomOrders")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "itemId",value = "(子)订单编号",example = "2019051111365096306")
+    })
+    public Result<RoomOrdersModel> getNewRoomOrders (String itemId){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(itemId,"订单编号不能为空");
+        RoomOrdersModel roomOrdersModel =  roomInformationService.getNewRoomOrders(itemId,user.getAccount());
+        return new Result<>(roomOrdersModel);
+    }
+
 }

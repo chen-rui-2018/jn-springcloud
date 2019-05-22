@@ -34,5 +34,25 @@ public class BusinessAdScheduledController {
         businessAdClient.updateBusinessAdStatus();
     }
 
+    /**
+     * 每天凌晨两点执行执行,项目管理,拟制合同状态
+     */
+    @Scheduled(cron = " 0 0 2 * * ? ")
+    public void updateProjectInfoStatus() {
+        //更新会议状态
+        logger.info("执行更新项目管理,拟制合同状态");
+        businessAdClient.updateProjectInfoStatus();
+    }
+
+    /**
+     * 每天凌晨两点执行执行,项目管理,拟制合同状态
+     */
+    @Scheduled(cron = " 0 30 8 * * ? ")
+    public void projectRemind() {
+        //更新会议状态
+        logger.info("执行更新项目管理,拟制合同状态异常提醒功能");
+        businessAdClient.projectRemind();
+    }
+
 
 }

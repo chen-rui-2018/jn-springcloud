@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.oa.meeting.entity.TbOaMeetingRoom;
+import com.jn.oa.meeting.model.OaMeeting;
 import com.jn.oa.meeting.model.OaMeetingRoomAdd;
 import com.jn.oa.meeting.model.OaMeetingRoomOrderPage;
 import com.jn.oa.meeting.model.OaMeetingRoomPage;
@@ -64,7 +65,7 @@ public class MeetingRoomController extends BaseController {
     @ApiOperation(value = "查询会议室可用列表")
     @RequestMapping(value = "/availableList", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeetingRoom/availableList")
-    public Result<PaginationData<List<OaMeetingRoomOrderVo>>> availableList(@Validated @RequestBody OaMeetingRoomPage oaMeetingRoomPage) {
+    public Result<PaginationData<List<OaMeeting>>> availableList(@Validated @RequestBody OaMeetingRoomPage oaMeetingRoomPage) {
         Assert.notNull(oaMeetingRoomPage.getStartTime(), "会议开始时间不能为空");
         Assert.notNull(oaMeetingRoomPage.getEndTime(), "会议结束时间不能为空");
         PaginationData data = meetingRoomService.selectAvailableMeetingRoomList(oaMeetingRoomPage);

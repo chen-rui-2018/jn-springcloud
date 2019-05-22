@@ -1,10 +1,9 @@
 package com.jn.user.userjoin.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
-import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.user.userjoin.enums.UserJoinExceptionEnum;
@@ -52,6 +51,7 @@ public class UserJoinController extends BaseController {
     @ControllerLog(doAction = "用户注册")
     @ApiOperation(value = "用户注册")
     @RequestMapping(value = "/addUser",method = RequestMethod.POST)
+    @TxTransaction(isStart = true)
     public Result addUser(@RequestBody @Validated UserRegister userRegister){
         return userJoinService.addUser(userRegister);
     }

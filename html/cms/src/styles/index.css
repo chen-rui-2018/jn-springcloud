@@ -689,6 +689,7 @@ code a:hover {
 
 .app-main {
   padding: 15px;
+  background: #ebebeb;
 }
 
 .bgc {
@@ -719,9 +720,5 @@ body .el-table th.gutter {
 .el-table .cell {
   position: relative;
   word-wrap: normal;
-}
-
-.write {
-  background: #fff;
 }
 /*# sourceMappingURL=index.css.map */

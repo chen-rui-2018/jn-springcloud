@@ -216,7 +216,7 @@
     <!--机构的顾问数,产品数统计-->
     <select id="getMyOrgInfo" resultType="com.jn.enterprise.servicemarket.org.model.OrgCount">
         select count(t1.org_id_) as "productNum",
-       (select count(t2.org_id_) from tb_service_advisor t2 where t2.org_id_=#{orgId}) as "advisorNum"
+        (select count(t2.org_id_) from tb_service_advisor t2 where t2.org_id_=#{orgId} and t2.approval_status = '2') as "advisorNum"
             from tb_service_product t1
                where t1.org_id_ = #{orgId}
     </select>

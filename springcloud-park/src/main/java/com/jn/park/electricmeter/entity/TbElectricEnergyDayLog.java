@@ -11,7 +11,7 @@ public class TbElectricEnergyDayLog implements Serializable {
     /*@ApiModelProperty("规则Id")*/
     private String ruleId;
 
-    /*@ApiModelProperty("规则名称")*/
+    /*@ApiModelProperty("企业Id")*/
     private String companyId;
 
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
@@ -40,6 +40,9 @@ public class TbElectricEnergyDayLog implements Serializable {
 
     /*@ApiModelProperty("规则名称")*/
     private String ruleName;
+
+    /*@ApiModelProperty("企业名称")*/
+    private String companyName;
 
     private static final long serialVersionUID = 1L;
 
@@ -139,6 +142,14 @@ public class TbElectricEnergyDayLog implements Serializable {
         this.ruleName = ruleName == null ? null : ruleName.trim();
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -162,7 +173,8 @@ public class TbElectricEnergyDayLog implements Serializable {
             && (this.getDay() == null ? other.getDay() == null : this.getDay().equals(other.getDay()))
             && (this.getDegree() == null ? other.getDegree() == null : this.getDegree().equals(other.getDegree()))
             && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
-            && (this.getRuleName() == null ? other.getRuleName() == null : this.getRuleName().equals(other.getRuleName()));
+            && (this.getRuleName() == null ? other.getRuleName() == null : this.getRuleName().equals(other.getRuleName()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()));
     }
 
     @Override
@@ -181,6 +193,7 @@ public class TbElectricEnergyDayLog implements Serializable {
         result = prime * result + ((getDegree() == null) ? 0 : getDegree().hashCode());
         result = prime * result + ((getPrice() == null) ? 0 : getPrice().hashCode());
         result = prime * result + ((getRuleName() == null) ? 0 : getRuleName().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         return result;
     }
 
@@ -202,6 +215,7 @@ public class TbElectricEnergyDayLog implements Serializable {
         sb.append(", degree=").append(degree);
         sb.append(", price=").append(price);
         sb.append(", ruleName=").append(ruleName);
+        sb.append(", companyName=").append(companyName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

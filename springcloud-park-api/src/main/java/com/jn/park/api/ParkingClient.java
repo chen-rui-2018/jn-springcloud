@@ -3,6 +3,8 @@ package com.jn.park.api;
 import com.jn.common.model.Result;
 import com.jn.hardware.model.parking.door.DoorCarInParkingInfo;
 import com.jn.hardware.model.parking.door.DoorCarOutParkingInfo;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.paybill.model.PaymentBillCallBack;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,4 +51,13 @@ public interface ParkingClient {
      */
     @RequestMapping(value = "/api/parking/carOutParking", method = RequestMethod.POST)
     Result<String> carOutParking(@RequestBody  DoorCarOutParkingInfo doorCarOutParkingInfo);
+
+    /**
+     * 智慧停车支付成功回调 - （由统一缴费侧回调）
+     * @param paymentBillCallBack
+     * @return
+     */
+    @RequestMapping(value = "/api/order/parkingPayCallBack", method = RequestMethod.POST)
+    Result parkingPayCallBack(@RequestBody PaymentBillCallBack paymentBillCallBack);
+
 }

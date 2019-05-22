@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.TbManpowerSalaryInfoMapper">
+  <resultMap id="BaseResultMap" type="com.jn.hr.increase.entity.TbManpowerSalaryInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
+    <result column="probation_basic_wage" jdbcType="DOUBLE" property="probationBasicWage" />
+    <result column="probation_duty_allowance" jdbcType="DOUBLE" property="probationDutyAllowance" />
+    <result column="probation_professional_title_allowance" jdbcType="DOUBLE" property="probationProfessionalTitleAllowance" />
+    <result column="probation_seniority_wage" jdbcType="DOUBLE" property="probationSeniorityWage" />
+    <result column="probation_education_allowance" jdbcType="DOUBLE" property="probationEducationAllowance" />
+    <result column="probation_work_subsidy" jdbcType="DOUBLE" property="probationWorkSubsidy" />
+    <result column="probation_achievement_bonus" jdbcType="DOUBLE" property="probationAchievementBonus" />
+    <result column="probation_single_reward" jdbcType="DECIMAL" property="probationSingleReward" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="conversion_basic_wage" jdbcType="DOUBLE" property="conversionBasicWage" />
+    <result column="conversion_duty_allowance" jdbcType="DOUBLE" property="conversionDutyAllowance" />
+    <result column="conversion_professional_title_allowance" jdbcType="DOUBLE" property="conversionProfessionalTitleAllowance" />
+    <result column="conversion_seniority_wage" jdbcType="DOUBLE" property="conversionSeniorityWage" />
+    <result column="conversion_education_allowance" jdbcType="DOUBLE" property="conversionEducationAllowance" />
+    <result column="conversion_work_subsidy" jdbcType="DOUBLE" property="conversionWorkSubsidy" />
+    <result column="conversion_achievement_bonus" jdbcType="DOUBLE" property="conversionAchievementBonus" />
+    <result column="conversion_single_reward" jdbcType="DOUBLE" property="conversionSingleReward" />
+    <result column="current_basic_wage" jdbcType="VARCHAR" property="currentBasicWage" />
+    <result column="current_duty_allowance" jdbcType="VARCHAR" property="currentDutyAllowance" />
+    <result column="current_professional_title_allowance" jdbcType="VARCHAR" property="currentProfessionalTitleAllowance" />
+    <result column="current_seniority_wage" jdbcType="VARCHAR" property="currentSeniorityWage" />
+    <result column="current_education_allowance" jdbcType="VARCHAR" property="currentEducationAllowance" />
+    <result column="current_work_subsidy" jdbcType="VARCHAR" property="currentWorkSubsidy" />
+    <result column="current_achievement_bonus" jdbcType="VARCHAR" property="currentAchievementBonus" />
+    <result column="current_single_reward" jdbcType="VARCHAR" property="currentSingleReward" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, job_number, probation_basic_wage, probation_duty_allowance, probation_professional_title_allowance, 
+    probation_seniority_wage, probation_education_allowance, probation_work_subsidy, 
+    probation_achievement_bonus, probation_single_reward, record_status, creator_account, 
+    created_time, modifier_account, modified_time, conversion_basic_wage, conversion_duty_allowance, 
+    conversion_professional_title_allowance, conversion_seniority_wage, conversion_education_allowance, 
+    conversion_work_subsidy, conversion_achievement_bonus, conversion_single_reward, 
+    current_basic_wage, current_duty_allowance, current_professional_title_allowance, 
+    current_seniority_wage, current_education_allowance, current_work_subsidy, current_achievement_bonus, 
+    current_single_reward
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryInfoCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_manpower_salary_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_manpower_salary_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_manpower_salary_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryInfoCriteria">
+    delete from tb_manpower_salary_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryInfo">
+    insert into tb_manpower_salary_info (id, job_number, probation_basic_wage, 
+      probation_duty_allowance, probation_professional_title_allowance, 
+      probation_seniority_wage, probation_education_allowance, 
+      probation_work_subsidy, probation_achievement_bonus, 
+      probation_single_reward, record_status, creator_account, 
+      created_time, modifier_account, modified_time, 
+      conversion_basic_wage, conversion_duty_allowance, 
+      conversion_professional_title_allowance, conversion_seniority_wage, 
+      conversion_education_allowance, conversion_work_subsidy, 
+      conversion_achievement_bonus, conversion_single_reward, 
+      current_basic_wage, current_duty_allowance, 
+      current_professional_title_allowance, current_seniority_wage, 
+      current_education_allowance, current_work_subsidy, 
+      current_achievement_bonus, current_single_reward
+      )
+    values (#{id,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, #{probationBasicWage,jdbcType=DOUBLE}, 
+      #{probationDutyAllowance,jdbcType=DOUBLE}, #{probationProfessionalTitleAllowance,jdbcType=DOUBLE}, 
+      #{probationSeniorityWage,jdbcType=DOUBLE}, #{probationEducationAllowance,jdbcType=DOUBLE}, 
+      #{probationWorkSubsidy,jdbcType=DOUBLE}, #{probationAchievementBonus,jdbcType=DOUBLE}, 
+      #{probationSingleReward,jdbcType=DECIMAL}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{conversionBasicWage,jdbcType=DOUBLE}, #{conversionDutyAllowance,jdbcType=DOUBLE}, 
+      #{conversionProfessionalTitleAllowance,jdbcType=DOUBLE}, #{conversionSeniorityWage,jdbcType=DOUBLE}, 
+      #{conversionEducationAllowance,jdbcType=DOUBLE}, #{conversionWorkSubsidy,jdbcType=DOUBLE}, 
+      #{conversionAchievementBonus,jdbcType=DOUBLE}, #{conversionSingleReward,jdbcType=DOUBLE}, 
+      #{currentBasicWage,jdbcType=VARCHAR}, #{currentDutyAllowance,jdbcType=VARCHAR}, 
+      #{currentProfessionalTitleAllowance,jdbcType=VARCHAR}, #{currentSeniorityWage,jdbcType=VARCHAR}, 
+      #{currentEducationAllowance,jdbcType=VARCHAR}, #{currentWorkSubsidy,jdbcType=VARCHAR}, 
+      #{currentAchievementBonus,jdbcType=VARCHAR}, #{currentSingleReward,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryInfo">
+    insert into tb_manpower_salary_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="jobNumber != null">
+        job_number,
+      </if>
+      <if test="probationBasicWage != null">
+        probation_basic_wage,
+      </if>
+      <if test="probationDutyAllowance != null">
+        probation_duty_allowance,
+      </if>
+      <if test="probationProfessionalTitleAllowance != null">
+        probation_professional_title_allowance,
+      </if>
+      <if test="probationSeniorityWage != null">
+        probation_seniority_wage,
+      </if>
+      <if test="probationEducationAllowance != null">
+        probation_education_allowance,
+      </if>
+      <if test="probationWorkSubsidy != null">
+        probation_work_subsidy,
+      </if>
+      <if test="probationAchievementBonus != null">
+        probation_achievement_bonus,
+      </if>
+      <if test="probationSingleReward != null">
+        probation_single_reward,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="conversionBasicWage != null">
+        conversion_basic_wage,
+      </if>
+      <if test="conversionDutyAllowance != null">
+        conversion_duty_allowance,
+      </if>
+      <if test="conversionProfessionalTitleAllowance != null">
+        conversion_professional_title_allowance,
+      </if>
+      <if test="conversionSeniorityWage != null">
+        conversion_seniority_wage,
+      </if>
+      <if test="conversionEducationAllowance != null">
+        conversion_education_allowance,
+      </if>
+      <if test="conversionWorkSubsidy != null">
+        conversion_work_subsidy,
+      </if>
+      <if test="conversionAchievementBonus != null">
+        conversion_achievement_bonus,
+      </if>
+      <if test="conversionSingleReward != null">
+        conversion_single_reward,
+      </if>
+      <if test="currentBasicWage != null">
+        current_basic_wage,
+      </if>
+      <if test="currentDutyAllowance != null">
+        current_duty_allowance,
+      </if>
+      <if test="currentProfessionalTitleAllowance != null">
+        current_professional_title_allowance,
+      </if>
+      <if test="currentSeniorityWage != null">
+        current_seniority_wage,
+      </if>
+      <if test="currentEducationAllowance != null">
+        current_education_allowance,
+      </if>
+      <if test="currentWorkSubsidy != null">
+        current_work_subsidy,
+      </if>
+      <if test="currentAchievementBonus != null">
+        current_achievement_bonus,
+      </if>
+      <if test="currentSingleReward != null">
+        current_single_reward,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="jobNumber != null">
+        #{jobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="probationBasicWage != null">
+        #{probationBasicWage,jdbcType=DOUBLE},
+      </if>
+      <if test="probationDutyAllowance != null">
+        #{probationDutyAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="probationProfessionalTitleAllowance != null">
+        #{probationProfessionalTitleAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="probationSeniorityWage != null">
+        #{probationSeniorityWage,jdbcType=DOUBLE},
+      </if>
+      <if test="probationEducationAllowance != null">
+        #{probationEducationAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="probationWorkSubsidy != null">
+        #{probationWorkSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="probationAchievementBonus != null">
+        #{probationAchievementBonus,jdbcType=DOUBLE},
+      </if>
+      <if test="probationSingleReward != null">
+        #{probationSingleReward,jdbcType=DECIMAL},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="conversionBasicWage != null">
+        #{conversionBasicWage,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionDutyAllowance != null">
+        #{conversionDutyAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionProfessionalTitleAllowance != null">
+        #{conversionProfessionalTitleAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionSeniorityWage != null">
+        #{conversionSeniorityWage,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionEducationAllowance != null">
+        #{conversionEducationAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionWorkSubsidy != null">
+        #{conversionWorkSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionAchievementBonus != null">
+        #{conversionAchievementBonus,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionSingleReward != null">
+        #{conversionSingleReward,jdbcType=DOUBLE},
+      </if>
+      <if test="currentBasicWage != null">
+        #{currentBasicWage,jdbcType=VARCHAR},
+      </if>
+      <if test="currentDutyAllowance != null">
+        #{currentDutyAllowance,jdbcType=VARCHAR},
+      </if>
+      <if test="currentProfessionalTitleAllowance != null">
+        #{currentProfessionalTitleAllowance,jdbcType=VARCHAR},
+      </if>
+      <if test="currentSeniorityWage != null">
+        #{currentSeniorityWage,jdbcType=VARCHAR},
+      </if>
+      <if test="currentEducationAllowance != null">
+        #{currentEducationAllowance,jdbcType=VARCHAR},
+      </if>
+      <if test="currentWorkSubsidy != null">
+        #{currentWorkSubsidy,jdbcType=VARCHAR},
+      </if>
+      <if test="currentAchievementBonus != null">
+        #{currentAchievementBonus,jdbcType=VARCHAR},
+      </if>
+      <if test="currentSingleReward != null">
+        #{currentSingleReward,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryInfoCriteria" resultType="java.lang.Long">
+    select count(*) from tb_manpower_salary_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_manpower_salary_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jobNumber != null">
+        job_number = #{record.jobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.probationBasicWage != null">
+        probation_basic_wage = #{record.probationBasicWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.probationDutyAllowance != null">
+        probation_duty_allowance = #{record.probationDutyAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.probationProfessionalTitleAllowance != null">
+        probation_professional_title_allowance = #{record.probationProfessionalTitleAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.probationSeniorityWage != null">
+        probation_seniority_wage = #{record.probationSeniorityWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.probationEducationAllowance != null">
+        probation_education_allowance = #{record.probationEducationAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.probationWorkSubsidy != null">
+        probation_work_subsidy = #{record.probationWorkSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="record.probationAchievementBonus != null">
+        probation_achievement_bonus = #{record.probationAchievementBonus,jdbcType=DOUBLE},
+      </if>
+      <if test="record.probationSingleReward != null">
+        probation_single_reward = #{record.probationSingleReward,jdbcType=DECIMAL},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.conversionBasicWage != null">
+        conversion_basic_wage = #{record.conversionBasicWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.conversionDutyAllowance != null">
+        conversion_duty_allowance = #{record.conversionDutyAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.conversionProfessionalTitleAllowance != null">
+        conversion_professional_title_allowance = #{record.conversionProfessionalTitleAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.conversionSeniorityWage != null">
+        conversion_seniority_wage = #{record.conversionSeniorityWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.conversionEducationAllowance != null">
+        conversion_education_allowance = #{record.conversionEducationAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.conversionWorkSubsidy != null">
+        conversion_work_subsidy = #{record.conversionWorkSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="record.conversionAchievementBonus != null">
+        conversion_achievement_bonus = #{record.conversionAchievementBonus,jdbcType=DOUBLE},
+      </if>
+      <if test="record.conversionSingleReward != null">
+        conversion_single_reward = #{record.conversionSingleReward,jdbcType=DOUBLE},
+      </if>
+      <if test="record.currentBasicWage != null">
+        current_basic_wage = #{record.currentBasicWage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentDutyAllowance != null">
+        current_duty_allowance = #{record.currentDutyAllowance,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentProfessionalTitleAllowance != null">
+        current_professional_title_allowance = #{record.currentProfessionalTitleAllowance,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentSeniorityWage != null">
+        current_seniority_wage = #{record.currentSeniorityWage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentEducationAllowance != null">
+        current_education_allowance = #{record.currentEducationAllowance,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentWorkSubsidy != null">
+        current_work_subsidy = #{record.currentWorkSubsidy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentAchievementBonus != null">
+        current_achievement_bonus = #{record.currentAchievementBonus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentSingleReward != null">
+        current_single_reward = #{record.currentSingleReward,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_manpower_salary_info
+    set id = #{record.id,jdbcType=VARCHAR},
+      job_number = #{record.jobNumber,jdbcType=VARCHAR},
+      probation_basic_wage = #{record.probationBasicWage,jdbcType=DOUBLE},
+      probation_duty_allowance = #{record.probationDutyAllowance,jdbcType=DOUBLE},
+      probation_professional_title_allowance = #{record.probationProfessionalTitleAllowance,jdbcType=DOUBLE},
+      probation_seniority_wage = #{record.probationSeniorityWage,jdbcType=DOUBLE},
+      probation_education_allowance = #{record.probationEducationAllowance,jdbcType=DOUBLE},
+      probation_work_subsidy = #{record.probationWorkSubsidy,jdbcType=DOUBLE},
+      probation_achievement_bonus = #{record.probationAchievementBonus,jdbcType=DOUBLE},
+      probation_single_reward = #{record.probationSingleReward,jdbcType=DECIMAL},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      conversion_basic_wage = #{record.conversionBasicWage,jdbcType=DOUBLE},
+      conversion_duty_allowance = #{record.conversionDutyAllowance,jdbcType=DOUBLE},
+      conversion_professional_title_allowance = #{record.conversionProfessionalTitleAllowance,jdbcType=DOUBLE},
+      conversion_seniority_wage = #{record.conversionSeniorityWage,jdbcType=DOUBLE},
+      conversion_education_allowance = #{record.conversionEducationAllowance,jdbcType=DOUBLE},
+      conversion_work_subsidy = #{record.conversionWorkSubsidy,jdbcType=DOUBLE},
+      conversion_achievement_bonus = #{record.conversionAchievementBonus,jdbcType=DOUBLE},
+      conversion_single_reward = #{record.conversionSingleReward,jdbcType=DOUBLE},
+      current_basic_wage = #{record.currentBasicWage,jdbcType=VARCHAR},
+      current_duty_allowance = #{record.currentDutyAllowance,jdbcType=VARCHAR},
+      current_professional_title_allowance = #{record.currentProfessionalTitleAllowance,jdbcType=VARCHAR},
+      current_seniority_wage = #{record.currentSeniorityWage,jdbcType=VARCHAR},
+      current_education_allowance = #{record.currentEducationAllowance,jdbcType=VARCHAR},
+      current_work_subsidy = #{record.currentWorkSubsidy,jdbcType=VARCHAR},
+      current_achievement_bonus = #{record.currentAchievementBonus,jdbcType=VARCHAR},
+      current_single_reward = #{record.currentSingleReward,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryInfo">
+    update tb_manpower_salary_info
+    <set>
+      <if test="jobNumber != null">
+        job_number = #{jobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="probationBasicWage != null">
+        probation_basic_wage = #{probationBasicWage,jdbcType=DOUBLE},
+      </if>
+      <if test="probationDutyAllowance != null">
+        probation_duty_allowance = #{probationDutyAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="probationProfessionalTitleAllowance != null">
+        probation_professional_title_allowance = #{probationProfessionalTitleAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="probationSeniorityWage != null">
+        probation_seniority_wage = #{probationSeniorityWage,jdbcType=DOUBLE},
+      </if>
+      <if test="probationEducationAllowance != null">
+        probation_education_allowance = #{probationEducationAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="probationWorkSubsidy != null">
+        probation_work_subsidy = #{probationWorkSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="probationAchievementBonus != null">
+        probation_achievement_bonus = #{probationAchievementBonus,jdbcType=DOUBLE},
+      </if>
+      <if test="probationSingleReward != null">
+        probation_single_reward = #{probationSingleReward,jdbcType=DECIMAL},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="conversionBasicWage != null">
+        conversion_basic_wage = #{conversionBasicWage,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionDutyAllowance != null">
+        conversion_duty_allowance = #{conversionDutyAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionProfessionalTitleAllowance != null">
+        conversion_professional_title_allowance = #{conversionProfessionalTitleAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionSeniorityWage != null">
+        conversion_seniority_wage = #{conversionSeniorityWage,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionEducationAllowance != null">
+        conversion_education_allowance = #{conversionEducationAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionWorkSubsidy != null">
+        conversion_work_subsidy = #{conversionWorkSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionAchievementBonus != null">
+        conversion_achievement_bonus = #{conversionAchievementBonus,jdbcType=DOUBLE},
+      </if>
+      <if test="conversionSingleReward != null">
+        conversion_single_reward = #{conversionSingleReward,jdbcType=DOUBLE},
+      </if>
+      <if test="currentBasicWage != null">
+        current_basic_wage = #{currentBasicWage,jdbcType=VARCHAR},
+      </if>
+      <if test="currentDutyAllowance != null">
+        current_duty_allowance = #{currentDutyAllowance,jdbcType=VARCHAR},
+      </if>
+      <if test="currentProfessionalTitleAllowance != null">
+        current_professional_title_allowance = #{currentProfessionalTitleAllowance,jdbcType=VARCHAR},
+      </if>
+      <if test="currentSeniorityWage != null">
+        current_seniority_wage = #{currentSeniorityWage,jdbcType=VARCHAR},
+      </if>
+      <if test="currentEducationAllowance != null">
+        current_education_allowance = #{currentEducationAllowance,jdbcType=VARCHAR},
+      </if>
+      <if test="currentWorkSubsidy != null">
+        current_work_subsidy = #{currentWorkSubsidy,jdbcType=VARCHAR},
+      </if>
+      <if test="currentAchievementBonus != null">
+        current_achievement_bonus = #{currentAchievementBonus,jdbcType=VARCHAR},
+      </if>
+      <if test="currentSingleReward != null">
+        current_single_reward = #{currentSingleReward,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryInfo">
+    update tb_manpower_salary_info
+    set job_number = #{jobNumber,jdbcType=VARCHAR},
+      probation_basic_wage = #{probationBasicWage,jdbcType=DOUBLE},
+      probation_duty_allowance = #{probationDutyAllowance,jdbcType=DOUBLE},
+      probation_professional_title_allowance = #{probationProfessionalTitleAllowance,jdbcType=DOUBLE},
+      probation_seniority_wage = #{probationSeniorityWage,jdbcType=DOUBLE},
+      probation_education_allowance = #{probationEducationAllowance,jdbcType=DOUBLE},
+      probation_work_subsidy = #{probationWorkSubsidy,jdbcType=DOUBLE},
+      probation_achievement_bonus = #{probationAchievementBonus,jdbcType=DOUBLE},
+      probation_single_reward = #{probationSingleReward,jdbcType=DECIMAL},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      conversion_basic_wage = #{conversionBasicWage,jdbcType=DOUBLE},
+      conversion_duty_allowance = #{conversionDutyAllowance,jdbcType=DOUBLE},
+      conversion_professional_title_allowance = #{conversionProfessionalTitleAllowance,jdbcType=DOUBLE},
+      conversion_seniority_wage = #{conversionSeniorityWage,jdbcType=DOUBLE},
+      conversion_education_allowance = #{conversionEducationAllowance,jdbcType=DOUBLE},
+      conversion_work_subsidy = #{conversionWorkSubsidy,jdbcType=DOUBLE},
+      conversion_achievement_bonus = #{conversionAchievementBonus,jdbcType=DOUBLE},
+      conversion_single_reward = #{conversionSingleReward,jdbcType=DOUBLE},
+      current_basic_wage = #{currentBasicWage,jdbcType=VARCHAR},
+      current_duty_allowance = #{currentDutyAllowance,jdbcType=VARCHAR},
+      current_professional_title_allowance = #{currentProfessionalTitleAllowance,jdbcType=VARCHAR},
+      current_seniority_wage = #{currentSeniorityWage,jdbcType=VARCHAR},
+      current_education_allowance = #{currentEducationAllowance,jdbcType=VARCHAR},
+      current_work_subsidy = #{currentWorkSubsidy,jdbcType=VARCHAR},
+      current_achievement_bonus = #{currentAchievementBonus,jdbcType=VARCHAR},
+      current_single_reward = #{currentSingleReward,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

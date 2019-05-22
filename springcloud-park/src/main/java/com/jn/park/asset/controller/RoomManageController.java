@@ -110,21 +110,6 @@ public class RoomManageController {
         return new Result<>(roomPayOrdersModel);
     }
 
-
-    @ControllerLog(doAction = "创建支付订单")
-    @ApiOperation(value = "创建支付订单",notes = "创建支付订单")
-    @PostMapping(value = "/createPayOrder")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050811515490657",required = true),
-            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE",required = true),
-            @ApiImplicitParam(name = "paySum",value = "支付金额",required = true)
-    })
-    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId, BigDecimal paySum){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(orderId,"订单编号不能为空");
-        return roomInformationService.createPayOrder(orderId,channelId,paySum,user.getAccount());
-    }
-
     @ControllerLog(doAction = "房间租赁历史列表")
     @ApiOperation(value = "房间租赁历史列表",notes = "获取房间租赁历史列表")
     @GetMapping(value = "/getRoomOrdersList")

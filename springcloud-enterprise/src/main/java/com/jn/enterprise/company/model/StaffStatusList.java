@@ -55,4 +55,14 @@ public class StaffStatusList extends Page implements Serializable {
     public void setAccount(String account) {
         this.account = account;
     }
+
+    @Override
+    public String toString() {
+        return "StaffStatusList{" +
+                "staffId='" + staffId + '\'' +
+                ", statusShow='" + statusShow + '\'' +
+                ", account='" + account + '\'' +
+                ", checkTime=" + checkTime +
+                '}';
+    }
 }

@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.train.dao.TbManpowerTrainInvestigaMapper">
+  <resultMap id="BaseResultMap" type="com.jn.hr.train.entity.TbManpowerTrainInvestiga">
+    <id column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="research_project" jdbcType="VARCHAR" property="researchProject" />
+    <result column="effective_time_start" jdbcType="TIMESTAMP" property="effectiveTimeStart" />
+    <result column="effective_time_end" jdbcType="TIMESTAMP" property="effectiveTimeEnd" />
+    <result column="trainer" jdbcType="VARCHAR" property="trainer" />
+    <result column="is_show_trainer" jdbcType="TINYINT" property="isShowTrainer" />
+    <result column="train_date" jdbcType="TIMESTAMP" property="trainDate" />
+    <result column="is_show_train_date" jdbcType="TINYINT" property="isShowTrainDate" />
+    <result column="survey_dimensional" jdbcType="VARCHAR" property="surveyDimensional" />
+    <result column="survey_url" jdbcType="VARCHAR" property="surveyUrl" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.hr.train.entity.TbManpowerTrainInvestiga">
+    <result column="project_note" jdbcType="LONGVARBINARY" property="projectNote" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    project_id, research_project, effective_time_start, effective_time_end, trainer, 
+    is_show_trainer, train_date, is_show_train_date, survey_dimensional, survey_url, 
+    status, record_status, creator_account, created_time, modifier_account, modified_time
+  </sql>
+  <sql id="Blob_Column_List">
+    project_note
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.hr.train.entity.TbManpowerTrainInvestigaCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_manpower_train_investiga
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainInvestigaCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_manpower_train_investiga
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_manpower_train_investiga
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_manpower_train_investiga
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainInvestigaCriteria">
+    delete from tb_manpower_train_investiga
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.hr.train.entity.TbManpowerTrainInvestiga">
+    insert into tb_manpower_train_investiga (project_id, research_project, effective_time_start, 
+      effective_time_end, trainer, is_show_trainer, 
+      train_date, is_show_train_date, survey_dimensional, 
+      survey_url, status, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, project_note)
+    values (#{projectId,jdbcType=VARCHAR}, #{researchProject,jdbcType=VARCHAR}, #{effectiveTimeStart,jdbcType=TIMESTAMP}, 
+      #{effectiveTimeEnd,jdbcType=TIMESTAMP}, #{trainer,jdbcType=VARCHAR}, #{isShowTrainer,jdbcType=TINYINT}, 
+      #{trainDate,jdbcType=TIMESTAMP}, #{isShowTrainDate,jdbcType=TINYINT}, #{surveyDimensional,jdbcType=VARCHAR}, 
+      #{surveyUrl,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{projectNote,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.hr.train.entity.TbManpowerTrainInvestiga">
+    insert into tb_manpower_train_investiga
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="researchProject != null">
+        research_project,
+      </if>
+      <if test="effectiveTimeStart != null">
+        effective_time_start,
+      </if>
+      <if test="effectiveTimeEnd != null">
+        effective_time_end,
+      </if>
+      <if test="trainer != null">
+        trainer,
+      </if>
+      <if test="isShowTrainer != null">
+        is_show_trainer,
+      </if>
+      <if test="trainDate != null">
+        train_date,
+      </if>
+      <if test="isShowTrainDate != null">
+        is_show_train_date,
+      </if>
+      <if test="surveyDimensional != null">
+        survey_dimensional,
+      </if>
+      <if test="surveyUrl != null">
+        survey_url,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="projectNote != null">
+        project_note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="researchProject != null">
+        #{researchProject,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveTimeStart != null">
+        #{effectiveTimeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveTimeEnd != null">
+        #{effectiveTimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainer != null">
+        #{trainer,jdbcType=VARCHAR},
+      </if>
+      <if test="isShowTrainer != null">
+        #{isShowTrainer,jdbcType=TINYINT},
+      </if>
+      <if test="trainDate != null">
+        #{trainDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isShowTrainDate != null">
+        #{isShowTrainDate,jdbcType=TINYINT},
+      </if>
+      <if test="surveyDimensional != null">
+        #{surveyDimensional,jdbcType=VARCHAR},
+      </if>
+      <if test="surveyUrl != null">
+        #{surveyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectNote != null">
+        #{projectNote,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainInvestigaCriteria" resultType="java.lang.Long">
+    select count(*) from tb_manpower_train_investiga
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_manpower_train_investiga
+    <set>
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.researchProject != null">
+        research_project = #{record.researchProject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.effectiveTimeStart != null">
+        effective_time_start = #{record.effectiveTimeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.effectiveTimeEnd != null">
+        effective_time_end = #{record.effectiveTimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.trainer != null">
+        trainer = #{record.trainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isShowTrainer != null">
+        is_show_trainer = #{record.isShowTrainer,jdbcType=TINYINT},
+      </if>
+      <if test="record.trainDate != null">
+        train_date = #{record.trainDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isShowTrainDate != null">
+        is_show_train_date = #{record.isShowTrainDate,jdbcType=TINYINT},
+      </if>
+      <if test="record.surveyDimensional != null">
+        survey_dimensional = #{record.surveyDimensional,jdbcType=VARCHAR},
+      </if>
+      <if test="record.surveyUrl != null">
+        survey_url = #{record.surveyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.projectNote != null">
+        project_note = #{record.projectNote,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_manpower_train_investiga
+    set project_id = #{record.projectId,jdbcType=VARCHAR},
+      research_project = #{record.researchProject,jdbcType=VARCHAR},
+      effective_time_start = #{record.effectiveTimeStart,jdbcType=TIMESTAMP},
+      effective_time_end = #{record.effectiveTimeEnd,jdbcType=TIMESTAMP},
+      trainer = #{record.trainer,jdbcType=VARCHAR},
+      is_show_trainer = #{record.isShowTrainer,jdbcType=TINYINT},
+      train_date = #{record.trainDate,jdbcType=TIMESTAMP},
+      is_show_train_date = #{record.isShowTrainDate,jdbcType=TINYINT},
+      survey_dimensional = #{record.surveyDimensional,jdbcType=VARCHAR},
+      survey_url = #{record.surveyUrl,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      project_note = #{record.projectNote,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_manpower_train_investiga
+    set project_id = #{record.projectId,jdbcType=VARCHAR},
+      research_project = #{record.researchProject,jdbcType=VARCHAR},
+      effective_time_start = #{record.effectiveTimeStart,jdbcType=TIMESTAMP},
+      effective_time_end = #{record.effectiveTimeEnd,jdbcType=TIMESTAMP},
+      trainer = #{record.trainer,jdbcType=VARCHAR},
+      is_show_trainer = #{record.isShowTrainer,jdbcType=TINYINT},
+      train_date = #{record.trainDate,jdbcType=TIMESTAMP},
+      is_show_train_date = #{record.isShowTrainDate,jdbcType=TINYINT},
+      survey_dimensional = #{record.surveyDimensional,jdbcType=VARCHAR},
+      survey_url = #{record.surveyUrl,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.train.entity.TbManpowerTrainInvestiga">
+    update tb_manpower_train_investiga
+    <set>
+      <if test="researchProject != null">
+        research_project = #{researchProject,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveTimeStart != null">
+        effective_time_start = #{effectiveTimeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveTimeEnd != null">
+        effective_time_end = #{effectiveTimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainer != null">
+        trainer = #{trainer,jdbcType=VARCHAR},
+      </if>
+      <if test="isShowTrainer != null">
+        is_show_trainer = #{isShowTrainer,jdbcType=TINYINT},
+      </if>
+      <if test="trainDate != null">
+        train_date = #{trainDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isShowTrainDate != null">
+        is_show_train_date = #{isShowTrainDate,jdbcType=TINYINT},
+      </if>
+      <if test="surveyDimensional != null">
+        survey_dimensional = #{surveyDimensional,jdbcType=VARCHAR},
+      </if>
+      <if test="surveyUrl != null">
+        survey_url = #{surveyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectNote != null">
+        project_note = #{projectNote,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.hr.train.entity.TbManpowerTrainInvestiga">
+    update tb_manpower_train_investiga
+    set research_project = #{researchProject,jdbcType=VARCHAR},
+      effective_time_start = #{effectiveTimeStart,jdbcType=TIMESTAMP},
+      effective_time_end = #{effectiveTimeEnd,jdbcType=TIMESTAMP},
+      trainer = #{trainer,jdbcType=VARCHAR},
+      is_show_trainer = #{isShowTrainer,jdbcType=TINYINT},
+      train_date = #{trainDate,jdbcType=TIMESTAMP},
+      is_show_train_date = #{isShowTrainDate,jdbcType=TINYINT},
+      survey_dimensional = #{surveyDimensional,jdbcType=VARCHAR},
+      survey_url = #{surveyUrl,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      project_note = #{projectNote,jdbcType=LONGVARBINARY}
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.hr.train.entity.TbManpowerTrainInvestiga">
+    update tb_manpower_train_investiga
+    set research_project = #{researchProject,jdbcType=VARCHAR},
+      effective_time_start = #{effectiveTimeStart,jdbcType=TIMESTAMP},
+      effective_time_end = #{effectiveTimeEnd,jdbcType=TIMESTAMP},
+      trainer = #{trainer,jdbcType=VARCHAR},
+      is_show_trainer = #{isShowTrainer,jdbcType=TINYINT},
+      train_date = #{trainDate,jdbcType=TIMESTAMP},
+      is_show_train_date = #{isShowTrainDate,jdbcType=TINYINT},
+      survey_dimensional = #{surveyDimensional,jdbcType=VARCHAR},
+      survey_url = #{surveyUrl,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </update>
+</mapper>

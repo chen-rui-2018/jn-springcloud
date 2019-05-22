@@ -12,12 +12,10 @@ import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.customer.dao.TbClientExecuteImgMapper;
 import com.jn.park.customer.dao.TbClientRolePersonInfoMapper;
 import com.jn.park.customer.dao.TbClientServiceCenterMapper;
-import com.jn.park.customer.entity.TbClientRolePersonInfo;
-import com.jn.park.customer.entity.TbClientRolePersonInfoCriteria;
-import com.jn.park.customer.entity.TbClientServiceCenter;
-import com.jn.park.customer.entity.TbClientServiceCenterCriteria;
+import com.jn.park.customer.entity.*;
 import com.jn.park.customer.enums.IBPSOptionsStatusEnum;
 import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterService;
@@ -41,6 +39,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -71,6 +71,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
 
     @Autowired
     private TbClientRolePersonInfoMapper personInfoMapper;
+
+    @Autowired
+    private TbClientExecuteImgMapper imgMapper;
 
 
     /**
@@ -154,8 +157,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         //获取审批历史成功
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("----------------根据任务id获取问题详情获取处理历史成功------------");
-            CustomerServiceCenterDetailVo executeHistoryInfo = getExecuteHistoryInfo(customerVo, ibpsResult);
-            return executeHistoryInfo;
+            return getExecuteHistoryInfo(customerVo, ibpsResult);
         }else{
             logger.warn("根据任务id获取问题详情失败，{}",ibpsResult.getMessage());
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
@@ -181,6 +183,16 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         for(ExecuteHistoryResult result:resultList){
             ExecuteHistoryShow historyShow=new ExecuteHistoryShow();
             BeanUtils.copyProperties(result, historyShow);
+            //ibps待处理状态“pending”
+            if(StringUtils.equals("pending",result.getStatus())){
+                List<LinkedTreeMap<String, String>> qualifiedExecutor = result.getQualifiedExecutor();
+                for(LinkedTreeMap<String, String> linkedTreeMap:qualifiedExecutor){
+                    if(linkedTreeMap.containsKey("executId")){
+                        historyShow.setAuditor(linkedTreeMap.get("executId"));
+                        break;
+                    }
+                }
+            }
             User user=new User();
             user.setId(historyShow.getAuditor().replace("user", ""));
             Result<User> userInfo = systemClient.getUser(user);
@@ -212,6 +224,12 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
                             break;
                         }
                     }
+                }
+                //根据流程实例id和任务id去处理问题图片描述表查询图片信息
+                List<TbClientExecuteImg> images = getTbClientExecuteImg(result.getProcInstId(), result.getTaskId());
+                if(!images.isEmpty()){
+                    String[] imageUrls = images.get(0).getPictureUrl().split(";");
+                    historyShow.setExecutePictureUrl(Arrays.asList(imageUrls));
                 }
             }
             executeHistoryShowList.add(historyShow);
@@ -271,8 +289,21 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }else if(StringUtils.equals(IBPSOptionsStatusEnum.REJECT_TO_PREVIOUS.getCode(), status)){
             historyShow.setStatusName("转回客服中心");
         }
-        //todo:根据流程实例id和任务id,从客服流程图片表获取处理过程上传的图片
         return ibpsUserIds;
+    }
+
+    /**
+     * 根据流程实例id和任务id获取问题处理描述图片信息
+     * @param procInstId  流程实例id
+     * @param taskId      任务id
+     * @return
+     */
+    @ServiceLog(doAction = "根据流程实例id和任务id获取问题处理描述图片信息")
+    private List<TbClientExecuteImg> getTbClientExecuteImg(String procInstId, String taskId) {
+        TbClientExecuteImgCriteria example=new TbClientExecuteImgCriteria();
+        example.createCriteria().andProcInstIdEqualTo(procInstId).andTaskIdEqualTo(taskId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        return imgMapper.selectByExample(example);
     }
 
     /**
@@ -342,8 +373,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("在线客服提交成功，审批流程启动成功,流程实例id为：[{}]",ibpsResult.getData());
             //将工作流返回的流程实例id更新到新增的数据中
-            int resNum = updateProcessInstanceId(loginAccount, quesCode, (String)ibpsResult.getData());
-            return resNum;
+            return updateProcessInstanceId(loginAccount, quesCode, (String)ibpsResult.getData());
         }else{
             logger.warn("在线客服启动工作流异常，{}",ibpsResult.getMessage());
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
@@ -439,7 +469,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         example.setOrderByClause("created_time desc");
         List<TbClientServiceCenter> tbClientServiceCenterList = tbClientServiceCenterMapper.selectByExample(example);
         if(tbClientServiceCenterList.isEmpty()){
-            return null;
+            return Collections.emptyList();
         }else{
             List<ConsultationCustomerListShow> resultList=new ArrayList<>();
             for(TbClientServiceCenter tbClientServiceCenter:tbClientServiceCenterList){

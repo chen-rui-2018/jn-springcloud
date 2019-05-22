@@ -243,4 +243,33 @@ public class IBPSOnlineCustomerForm implements Serializable {
     public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
     }
+
+    @Override
+    public String toString() {
+        return "IBPSOnlineCustomerForm{" +
+                "id='" + id + '\'' +
+                ", processInsId='" + processInsId + '\'' +
+                ", quesCode='" + quesCode + '\'' +
+                ", quesTitle='" + quesTitle + '\'' +
+                ", quesDetails='" + quesDetails + '\'' +
+                ", quesUrl='" + quesUrl + '\'' +
+                ", serviceModule='" + serviceModule + '\'' +
+                ", serviceModuleName='" + serviceModuleName + '\'' +
+                ", clientType='" + clientType + '\'' +
+                ", contactWay='" + contactWay + '\'' +
+                ", status='" + status + '\'' +
+                ", currentCaller='" + currentCaller + '\'' +
+                ", callerOwen='" + callerOwen + '\'' +
+                ", custName='" + custName + '\'' +
+                ", custSex='" + custSex + '\'' +
+                ", isTranPie='" + isTranPie + '\'' +
+                ", executeDeptId='" + executeDeptId + '\'' +
+                ", executePerson='" + executePerson + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", recordStatus=" + recordStatus +
+                '}';
+    }
 }

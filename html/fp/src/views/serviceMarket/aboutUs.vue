@@ -13,10 +13,10 @@
                     <div class="abtUs">关于我们</div>
                     <!-- <div class="abtCot" @click="showFlag=!showFlag" :class="{'active':showFlag}">超市介绍</div> -->
                     <ul class="abtMenu">
-                        <li @click="showFlag=!showFlag" :class="{'active':showFlag}">超市介绍</li>
+                        <li @click="showFlag=!showFlag" :class="{'active0':showFlag}">超市介绍</li>
                         <!-- <li :class="{'active':curindex==k}" class="lis" v-for="(i,k) in abtMenu" :key="k" :data-id="i.id" @mouseover="handleLi(i,k)">{{i.name}}</li> -->
                         <!-- <li :class="{'active':curindex==k}" class="lis" v-for="(i,k) in abtMenu" :key="k" :data-id="i.id" @click="handleLi(i,k)">{{i.name}}</li> -->
-                        <li @click="showFlag=!showFlag" :class="{'active':!showFlag}">联系我们</li>
+                        <li @click="showFlag=!showFlag" :class="{'active0':!showFlag}">联系我们</li>
                     </ul>
                     <!-- <div class="abtCot" @click="showFlag=!showFlag" :class="{'active':!showFlag}">联系我们</div> -->
                 </el-aside>
@@ -271,7 +271,7 @@ export default {
         padding: 14px 0;
         cursor: pointer;
       }
-      > li.active {
+      > li.active0 {
         color: #00a041;
       }
     }

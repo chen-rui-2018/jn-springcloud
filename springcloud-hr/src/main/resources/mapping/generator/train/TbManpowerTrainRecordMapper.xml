@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.train.dao.TbManpowerTrainRecordMapper">
+  <resultMap id="BaseResultMap" type="com.jn.hr.train.entity.TbManpowerTrainRecord">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="management_id" jdbcType="VARCHAR" property="managementId" />
+    <result column="trainer_department" jdbcType="VARCHAR" property="trainerDepartment" />
+    <result column="trainer_job_number" jdbcType="VARCHAR" property="trainerJobNumber" />
+    <result column="trainer_name" jdbcType="VARCHAR" property="trainerName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, management_id, trainer_department, trainer_job_number, trainer_name
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainRecordCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_manpower_train_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_manpower_train_record
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_manpower_train_record
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainRecordCriteria">
+    delete from tb_manpower_train_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.hr.train.entity.TbManpowerTrainRecord">
+    insert into tb_manpower_train_record (id, management_id, trainer_department, 
+      trainer_job_number, trainer_name)
+    values (#{id,jdbcType=VARCHAR}, #{managementId,jdbcType=VARCHAR}, #{trainerDepartment,jdbcType=VARCHAR}, 
+      #{trainerJobNumber,jdbcType=VARCHAR}, #{trainerName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.hr.train.entity.TbManpowerTrainRecord">
+    insert into tb_manpower_train_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="managementId != null">
+        management_id,
+      </if>
+      <if test="trainerDepartment != null">
+        trainer_department,
+      </if>
+      <if test="trainerJobNumber != null">
+        trainer_job_number,
+      </if>
+      <if test="trainerName != null">
+        trainer_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="managementId != null">
+        #{managementId,jdbcType=VARCHAR},
+      </if>
+      <if test="trainerDepartment != null">
+        #{trainerDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="trainerJobNumber != null">
+        #{trainerJobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="trainerName != null">
+        #{trainerName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainRecordCriteria" resultType="java.lang.Long">
+    select count(*) from tb_manpower_train_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_manpower_train_record
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.managementId != null">
+        management_id = #{record.managementId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainerDepartment != null">
+        trainer_department = #{record.trainerDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainerJobNumber != null">
+        trainer_job_number = #{record.trainerJobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainerName != null">
+        trainer_name = #{record.trainerName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_manpower_train_record
+    set id = #{record.id,jdbcType=VARCHAR},
+      management_id = #{record.managementId,jdbcType=VARCHAR},
+      trainer_department = #{record.trainerDepartment,jdbcType=VARCHAR},
+      trainer_job_number = #{record.trainerJobNumber,jdbcType=VARCHAR},
+      trainer_name = #{record.trainerName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.train.entity.TbManpowerTrainRecord">
+    update tb_manpower_train_record
+    <set>
+      <if test="managementId != null">
+        management_id = #{managementId,jdbcType=VARCHAR},
+      </if>
+      <if test="trainerDepartment != null">
+        trainer_department = #{trainerDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="trainerJobNumber != null">
+        trainer_job_number = #{trainerJobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="trainerName != null">
+        trainer_name = #{trainerName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.hr.train.entity.TbManpowerTrainRecord">
+    update tb_manpower_train_record
+    set management_id = #{managementId,jdbcType=VARCHAR},
+      trainer_department = #{trainerDepartment,jdbcType=VARCHAR},
+      trainer_job_number = #{trainerJobNumber,jdbcType=VARCHAR},
+      trainer_name = #{trainerName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

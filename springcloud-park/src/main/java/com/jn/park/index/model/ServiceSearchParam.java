@@ -78,4 +78,15 @@ public class ServiceSearchParam extends Page implements Serializable {
     public void setPolicyType(String policyType) {
         this.policyType = policyType;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceSearchParam{" +
+                "needPage='" + needPage + '\'' +
+                ", searchFiled='" + searchFiled + '\'' +
+                ", serviceType='" + serviceType + '\'' +
+                ", tableType='" + tableType + '\'' +
+                ", policyType='" + policyType + '\'' +
+                '}';
+    }
 }

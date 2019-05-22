@@ -68,8 +68,9 @@
             <result column="meeting_title" jdbcType="VARCHAR" property="title" />
         </collection>
     </resultMap>
-    <resultMap id="meetingBaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeeting">
+    <resultMap id="meetingBaseResultMap" type="com.jn.oa.meeting.vo.OaMeetingVo">
         <id column="meeting_id" jdbcType="VARCHAR" property="id" />
+        <result column="meeting_start_date" jdbcType="TIMESTAMP" property="startDate" />
         <result column="meeting_start_time" jdbcType="TIMESTAMP" property="startTime" />
         <result column="meeting_end_time" jdbcType="TIMESTAMP" property="endTime" />
         <result column="meeting_title" jdbcType="VARCHAR" property="title" />
@@ -199,8 +200,9 @@
         select
         m.id as meeting_id,
         m.title  as meeting_title,
-       m.start_time as meeting_start_time,
-       m.end_time as meeting_end_time,
+        date_format(m.start_time,'%Y-%m-%d') AS meeting_start_date,
+        date_format(m.start_time,'%k:%i')  AS meeting_start_time,
+        date_format(m.end_time,'%k:%i') AS meeting_end_time,
         t.name as organizationalUser
 
         FROM

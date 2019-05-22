@@ -1,76 +1,26 @@
 <template>
   <div class="portalIndex">
-    <!-- <div class="portalIndexImg">
-      <div class="header" id="header" :class="{'headerw':showFF}">
-        <div class="headerContainer clearfix">
-          <div class="titleImg fl">
-            <img src="@/../static/img/LOGO1.png" v-if="!showFF" class="pointer" alt="" @click="$router.push({path:'/'})">
-            <img src="@/../static/img/login-logo.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
-          </div>
-          <div class="headerRight fr">
-            <div class="search pointer">
-              <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
-            <div class="navlogin">
-              <a @click="$router.push({path:'/login'})">登录</a>
-              <span class="line">|</span>
-              <a @click="$router.push({path:'/register'})">注册</a>
-            </div>
-          </div>
-          <div class="nav" id="nav">
-            <ul class="posA clearfix">
-              <li>
-                <a href="javascript:void(0);">首页</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">招商引资</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">智慧党建</a>
-              </li>
-              <li @click="$router.push({path:'/enterpriseservice'})">
-                <a href="javascript:void(0);">企业服务</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
-        <el-collapse-transition>
-          <div v-show="show4">
-            <div class="transition-box">
-              <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
-              </el-input>
-            </div>
-          </div>
-        </el-collapse-transition>
-      </div>
-
-    </div> -->
     <div class="portalCon">
       <div class="banner pr">
         <div class="swiper-container">
           <div class="swiper-wrapper">
             <!-- <div class="swiper-slide swiper-no-swiping" > -->
-            <!-- <div class="swiper-slide" v-for="(banner, index) in bannerList"
-              :key="index"> -->
-              <!-- <img :src="banner.posterUrl" alt=""> -->
-              <!-- <img src="@/../static/img/c11.png" alt="">
+            <div class="swiper-slide" v-for="(banner, index) in bannerList" :key="index">
+              <img :src="banner.posterUrl" alt="">
+              <!-- <img src="@/../static/img/c11.png" alt=""> -->
+            </div>
+            <!-- <div class="swiper-slide" style="width:100%">
+              <img src="@/../static/img/c11.png" alt="" @click="$router.push({path:'/serMatHp'})">
+            </div>
+            <div class="swiper-slide" style="width:100%">
+              <img src="@/../static/img/c11.png" alt="" @click="$router.push({path:'/serMatHp'})">
+            </div>
+            <div class="swiper-slide" style="width:100%">
+              <img src="@/../static/img/c11.png" alt="" @click="$router.push({path:'/serMatHp'})">
             </div> -->
-             <div class="swiper-slide" style="width:100%">
-              <img src="@/../static/img/c11.png" alt="" @click="$router.push({path:'/serMatHp'})">
-            </div>
-            <div class="swiper-slide" style="width:100%">
-              <img src="@/../static/img/c11.png" alt="" @click="$router.push({path:'/serMatHp'})">
-            </div>
-            <div class="swiper-slide" style="width:100%">
-              <img src="@/../static/img/c11.png" alt="" @click="$router.push({path:'/serMatHp'})">
-            </div>
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
-
 
           <!-- 如果需要导航按钮 -->
           <div class="swiper-button-prev" @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
@@ -95,7 +45,7 @@
               <p>HIGH-TECH&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/incubatorEnterprises'})">
               <span>孵化企业</span>
               <p>INCUBATION&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -111,9 +61,9 @@
       <div class="parkNotice w clearfix" ref="parkNotice" data-class="bottom">
         <div class="fl"><img src="@/../static/img/园区公告.png" alt=""></div>
         <span>热烈庆祝XXX公司入驻南京白下高新区XXX园区。为实现共创共收打造良好环境基础实现科技人才的引进与推动时代化做出...</span>
-        <div class="fr pointer">更多&nbsp;&nbsp;
+        <!-- <div class="fr pointer">更多&nbsp;&nbsp;
           <i class="iconfont icon-you"></i>
-        </div>
+        </div> -->
       </div>
       <div class="declarationNotice portalNotice pr" ref="portalNotice" data-class="bottom">
         <div class="w">
@@ -137,15 +87,15 @@
             <div class="info clearfix">
               <div class="left fl pr">
                 <el-collapse accordion v-model="activeNames" @change="handleChangeName">
-                  <!-- <el-collapse-item :name="k+1" v-for="(i,k) in declarationNotice" :key="k">
+                  <el-collapse-item :name="k+1" v-for="(i,k) in declarationNotice" :key="k">
                     <template slot="title">
-                      <div class="li1 aa" :class="{'active':sw==k}">{{'0'+(k+1)}}</div>
+                      <div class="li1 aa" :class="{'active0':sw==k}">{{'0'+(k+1)}}</div>
                       <span>{{i.noticeTitle}}</span>
                     </template>
                     <div v-html="i.announcementContent">
                     </div>
-                  </el-collapse-item> -->
-                  <el-collapse-item name="1">
+                  </el-collapse-item>
+                  <!-- <el-collapse-item name="1">
                     <template slot="title">
                       <div class="li3 aa" :class="{'active':sw=='0'}">01</div>
                       <span>申报高新技术产品认定,是国家高新技术企业认定的加分项。</span>
@@ -170,15 +120,14 @@
                     </template>
                     <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
                     <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
-                  </el-collapse-item>
+                  </el-collapse-item> -->
                 </el-collapse>
               </div>
               <div class="right fl"></div>
 
             </div>
             <div class="pagination-container">
-              <el-pagination :page-sizes="[3, 6, 9, 12]" :page-size="rows1" background layout="prev, pager, next" :total="total1"
-              @size-change="handleSizeChange" @current-change="handleCurrentChange">
+              <el-pagination :page-sizes="[3, 6, 9, 12]" :page-size="rows1" background layout="prev, pager, next" :total="total1" @size-change="handleSizeChange" @current-change="handleCurrentChange">
               </el-pagination>
             </div>
           </div>
@@ -197,53 +146,17 @@
               <div class="swiper-slide" style="width:100%" v-for="(bannerList, k) in policyCenterList" :key="k">
                 <ul class="qiehuan1" id="qiehuan1">
                   <li v-for="(banner, index) in bannerList" :key="index">
-                    <p class="liTit">2323</p>
+                    <p class="liTit">{{banner.policyTitle}}</p>
                     <p class="liInfo">
                       {{ banner.policyTitle }}
                     </p>
                     <div class="liBom clearfix">
                       <p class="fl">
-                        <i class="el-icon-view"></i>&nbsp;53</p>
+                        <i class="el-icon-view"></i>&nbsp;{{banner.readNum}}</p>
                       <span class="fr">{{banner.policyLevelName}}</span>
                       <i class="fr">{{banner.policyClassName}}</i>
                     </div>
                   </li>
-                  <!-- <li>
-                                        <p class="liTit">白下高新区金融扶持政策</p>
-                                        <p class="liInfo">
-                                            中央政府发布国发5号文，进一步 扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....
-                                        </p>
-                                        <div class="liBom clearfix">
-                                            <p class="fl">
-                                                <i class="el-icon-view"></i>&nbsp;89</p>
-                                            <span class="fr">南京市级</span>
-                                            <i class="fr">财政引导</i>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p class="liTit">白下高新区金融扶持政策</p>
-                                        <p class="liInfo">
-                                            中央政府发布国发5号文，进一步 扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....
-                                        </p>
-                                        <div class="liBom clearfix">
-                                            <p class="fl">
-                                                <i class="el-icon-view"></i>&nbsp;89</p>
-                                            <span class="fr">南京市级</span>
-                                            <i class="fr">财政引导</i>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p class="liTit">白下高新区金融扶持政策</p>
-                                        <p class="liInfo">
-                                            中央政府发布国发5号文，进一步 扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....
-                                        </p>
-                                        <div class="liBom clearfix">
-                                            <p class="fl">
-                                                <i class="el-icon-view"></i>&nbsp;89</p>
-                                            <span class="fr">南京市级</span>
-                                            <i class="fr">财政引导</i>
-                                        </div>
-                                    </li> -->
                 </ul>
               </div>
             </div>
@@ -251,8 +164,8 @@
             <div class="swiper-pagination"></div>
 
             <!-- 如果需要导航按钮 -->
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev" v-if="policyCenterList.length>1"></div>
+            <div class="swiper-button-next" v-if="policyCenterList.length>1"></div>
           </div>
         </div>
       </div>
@@ -320,58 +233,31 @@
           <div class="line"></div>
         </div>
         <div class="card pr" ref="disGardens1" data-class="bottom1">
-          <!-- <div class="swiper-container">
+          <div class="swiper-container">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" style="width:100%"> -->
-                 <!-- <i class="iconfont icon-zuo pointer" @click="leftChange1"></i>
-                 <i class="iconfont icon-you pointer" @click="rightChange2"></i> -->
+              <div class="swiper-slide" style="width:100%" v-for="(item,index) in CompanyList" :key="index">
+                <!-- <i class="iconfont icon-zuo pointer" @click="leftChange1"></i>
+          <i class="iconfont icon-you pointer" @click="rightChange2"></i> -->
                 <ul class="cardUl">
-                  <!-- <li v-for="(i,k) in CompanyList" :key="k">
-                    <el-card>                     
+                  <li v-for="(i,k) in item" :key="k">
+                    <el-card>
                       <div class="cardImg" style="width:200px;height:200px">
                         <img :src="i.adCover[0].fileName" alt="" style="width:100%;height:100%">
                       </div>
                       <p class="mainColor">{{i.title}}</p>
                       <div>{{i.content}}</div>
                     </el-card>
-                  </li> -->
-                     <li>
-                    <el-card>
-                       <div class="cardImg" style="width:200px;height:200px">
-                        <img src="@/../static/img/tuceng 49.png" alt="" style="width:100%;height:100%">
-                       </div>
-                      <p class="mainColor">白下高新A园</p>
-                      <div>Baixia high-tech zone A</div>
-                    </el-card>
-                  </li>
-                     <li>
-                    <el-card>
-                       <div class="cardImg" style="width:200px;height:200px">
-                        <img src="@/../static/img/tuceng 49.png" alt="" style="width:100%;height:100%">
-                       </div>
-                      <p class="mainColor">白下高新A园</p>
-                      <div>Baixia high-tech zone A</div>
-                    </el-card>
-                  </li>
-                     <li>
-                    <el-card>
-                       <div class="cardImg" style="width:200px;height:200px">
-                        <img src="@/../static/img/tuceng 49.png" alt="" style="width:100%;height:100%">
-                       </div>
-                      <p class="mainColor">白下高新A园</p>
-                      <div>Baixia high-tech zone A</div>
-                    </el-card>
                   </li>
                 </ul>
-              <!-- </div>
-            </div> -->
+              </div>
+            </div>
             <!-- 如果需要分页器 -->
             <div class="swiper-pagination" style="display:none"></div>
 
             <!-- 如果需要导航按钮 -->
-            <div class="swiper-button-prev" ></div>
-            <div class="swiper-button-next" ></div>
-          <!-- </div> -->
+            <div class="swiper-button-prev" v-if="CompanyList.length>1"></div>
+            <div class="swiper-button-next" v-if="CompanyList.length>1"></div>
+          </div>
           <!-- <div class="arrow">
             <div class="arrow1"></div>
             <div class="arrow2"></div>
@@ -431,7 +317,7 @@
               </div> -->
             </div>
             <div class="conT2">
-              <div class="contop1 clearfix"  v-for="(i,k) in recruitmentTable" :key="k" v-if="k>2&&k<5">
+              <div class="contop1 clearfix" v-for="(i,k) in recruitmentTable" :key="k" v-if="k>2&&k<5">
                 <div class="fl">
                   <i></i>
                   <span class="color1" style="text-align:left">{{i.propagandaTitle}}</span>
@@ -554,7 +440,7 @@ export default {
       page3: 1,
       rows3: 3,
       total3: 0,
-      actiListSlim: "",
+      actiListSlim: [],
       page4: 1,
       rows4: 3,
       total4: 0,
@@ -562,15 +448,15 @@ export default {
       page5: 1,
       rows5: 3,
       total5: 0,
-      CompanyList: "",
-      bannerList:[],//首页轮播图
+      CompanyList: [],
+      bannerList: [] //首页轮播图
     };
   },
   mounted() {
     this.swiperinit();
     window.addEventListener("scroll", this.handleScroll);
     this.gettalentsList();
-    Promise.all([this.getPolicyCenterList(),this.getBannerList()]).then(() => {
+    Promise.all([this.getPolicyCenterList(), this.getBannerList()]).then(() => {
       this.swiperinit();
     });
     // this.getPolicyCenterList()
@@ -578,9 +464,9 @@ export default {
     this.getActiList();
     this.getBusinessPromotionList();
     this.getPropagandaTypeList();
-    this.getCompanyList();
+    // this.getCompanyList();
     this.getBusinessAdContent();
-    this.getAllList();
+    // this.getAllList();
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
@@ -718,16 +604,16 @@ export default {
       return scroll_top;
     },
     formatArr(arr, n) {
-        const len = arr.length;
-        let lineNum = len % 4 === 0 ? len / 4 : Math.floor( (len / 4) + 1 );
-        const result = [];
-        for (let i = 0; i < lineNum; i++) {
-          // slice() 方法返回一个从开始到结束（不包括结束）选择的数组的一部分浅拷贝到一个新数组对象。且原始数组不会被修改。
-          let temp = arr.slice(i*n, i*n+n);
-          result.push(temp);
-        }
-        return result
-      },
+      const len = arr.length;
+      let lineNum = len % 4 === 0 ? len / 4 : Math.floor(len / 4 + 1);
+      const result = [];
+      for (let i = 0; i < lineNum; i++) {
+        // slice() 方法返回一个从开始到结束（不包括结束）选择的数组的一部分浅拷贝到一个新数组对象。且原始数组不会被修改。
+        let temp = arr.slice(i * n, i * n + n);
+        result.push(temp);
+      }
+      return result;
+    },
     //人才服务公告列表
     gettalentsList() {
       let _this = this;
@@ -749,7 +635,7 @@ export default {
       });
     },
     //申报公告分页
-      handleSizeChange(val) {
+    handleSizeChange(val) {
       this.rows1 = val;
       this.page1 = 1;
       this.gettalentsList();
@@ -774,17 +660,19 @@ export default {
           },
           callback: function(res) {
             if (res.code == "0000") {
-              let baseArray = res.data.rows;
-              let len = baseArray.length;
-              let n = 4; //假设每行显示4个
-              let lineNum = len % 4 === 0 ? len / 4 : Math.floor(len / 4 + 1);
-              for (let i = 0; i < lineNum; i++) {
-                // slice() 方法返回一个从开始到结束（不包括结束）选择的数组的一部分浅拷贝到一个新数组对象。且原始数组不会被修改。
-                let temp = baseArray.slice(i * n, i * n + n);
-                _this.policyCenterList.push(temp);
-              }
-              console.dir(_this.policyCenterList)
+              _this.policyCenterList=_this.formatArr(res.data.rows, 4);
+              // let baseArray = res.data.rows;
+              // let len = baseArray.length;
+              // let n = 4;
+              // let lineNum = len % 4 === 0 ? len / 4 : Math.floor(len / 4 + 1);
+              // for (let i = 0; i < lineNum; i++) {
+              //   let temp = baseArray.slice(i * n, i * n + n);
+              //   _this.policyCenterList.push(temp);
+              // }
               _this.total2 = res.data.total;
+              setTimeout(()=>{
+                _this.swiperinit();
+              },0)
               resolve(2);
             } else {
               _this.$message.error(res.result);
@@ -830,27 +718,26 @@ export default {
     },
     // 首页轮播图
     getBannerList() {
-       return new Promise((resolve, reject) => {
-          this.api.get({
-            url: 'getBusinessPromotionList',
-            data: {
-              approvalStatus: 6,
-              status: 1,
-              // propagandaType: 'home_promotion',//没有图片，暂时先用招商的测试
-              propagandaType: 'investment_banner',
-              needPage: 0
-            },
-            callback: (res) => {
-              if (res.code === "0000") {
-                this.bannerList = res.data.rows
-                resolve()
-              } else {
-                reject()
-                this.$message.error(res.result)
-              }
+      return new Promise((resolve, reject) => {
+        this.api.get({
+          url: "getPromotionList",
+          data: {
+            issuePlatform: 2,
+            // propagandaType: 'home_banner_pc',//没有图片，暂时先用招商的测试
+            propagandaType: "home_banner",
+            needPage: 0
+          },
+          callback: res => {
+            if (res.code === "0000") {
+              this.bannerList = res.data.rows;
+              resolve();
+            } else {
+              reject();
+              this.$message.error(res.result);
             }
-          })
-        })
+          }
+        });
+      });
     },
     // 企业咨讯  企业宣传列表查询   资讯详情没有返回，日期前边的图标还没确定
     getBusinessPromotionList() {
@@ -891,22 +778,22 @@ export default {
       });
     },
     // 园内企业--机构字典
-    getCompanyList() {
-      let _this = this;
-      this.api.get({
-        url: "selectTeamList",
-        data: {
-          preType: 1
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.CompanyList = res.data.rows;
-          } else {
-            _this.$message.error(res.result);
-          }
-        }
-      });
-    },
+    // getCompanyList() {
+    //   let _this = this;
+    //   this.api.get({
+    //     url: "selectTeamList",
+    //     data: {
+    //       preType: 1
+    //     },
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         _this.CompanyList = res.data.rows;
+    //       } else {
+    //         _this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // },
     // 一区多园
     getBusinessAdContent() {
       let _this = this;
@@ -915,53 +802,37 @@ export default {
         data: {
           // parkId: "576809512829190144"
           parkId: "570329542049136640",
-          page:_this.page5,
-          rows:_this.rows5,
+          page: _this.page5,
+          rows: _this.rows5
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.CompanyList = res.data.rows;
-            _this.total5=res.data.total
+             _this.CompanyList = _this.formatArr(res.data.rows, 3);
+            _this.total5 = res.data.total;
+             setTimeout(()=>{
+                _this.swiperinit();
+              },0)
           } else {
             _this.$message.error(res.result);
           }
         }
       });
-    },
-     //一区多园左翻页
-    leftChange1() {
-      if (this.page5 <= 1) {
-        this.$message.error("已经是第一页了");
-        return;
-      }
-      this.page5--;
-      this.getBusinessAdContent();
-    },
-    //一区多园右翻页
-    rightChange2() {
-      if (this.page5 >= this.total5) {
-        debugger
-        this.$message.error("没有更多数据了");
-        return;
-      }
-      this.page5++;
-      this.getBusinessAdContent();
     },
     // 获取全部园区数据列表
-    getAllList() {
-      let _this = this;
-      this.api.get({
-        url: "getAllList",
-        data: {},
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.CompanyList = res.data.rows;
-          } else {
-            _this.$message.error(res.result);
-          }
-        }
-      });
-    }
+    // getAllList() {
+    //   let _this = this;
+    //   this.api.get({
+    //     url: "getAllList",
+    //     data: {},
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         _this.CompanyList = res.data.rows;
+    //       } else {
+    //         _this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // }
   }
 };
 </script>
@@ -1168,7 +1039,7 @@ export default {
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp:4;
+        -webkit-line-clamp: 4;
         overflow: hidden;
       }
       .liBom {
@@ -1292,14 +1163,14 @@ export default {
   }
 
   .districtGardens {
-     .icon-zuo {
+    .icon-zuo {
       position: absolute;
       left: 6%;
       top: 42%;
       font-size: 34px;
       height: 34px;
       color: #d0d0d0;
-      border:none;
+      border: none;
       //   top: 440px;
     }
     .icon-you {
@@ -1309,7 +1180,7 @@ export default {
       height: 34px;
       color: #d0d0d0;
       top: 42%;
-      border:none;
+      border: none;
     }
     .card {
       .swiper-container {

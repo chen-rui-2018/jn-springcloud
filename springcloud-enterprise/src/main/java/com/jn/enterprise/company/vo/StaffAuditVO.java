@@ -68,4 +68,15 @@ public class StaffAuditVO implements Serializable {
     public void setInviteTime(Date inviteTime) {
         this.inviteTime = inviteTime;
     }
+
+    @Override
+    public String toString() {
+        return "StaffAuditVO{" +
+                "staffId='" + staffId + '\'' +
+                ", account='" + account + '\'' +
+                ", comId='" + comId + '\'' +
+                ", comName='" + comName + '\'' +
+                ", inviteTime=" + inviteTime +
+                '}';
+    }
 }

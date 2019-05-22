@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class TbPayCheckReminder implements Serializable {
-    private String paymentId;
-
     private String billId;
 
     private String enterpriseName;
@@ -32,14 +30,6 @@ public class TbPayCheckReminder implements Serializable {
     private String recordStatus;
 
     private static final long serialVersionUID = 1L;
-
-    public String getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId == null ? null : paymentId.trim();
-    }
 
     public String getBillId() {
         return billId;
@@ -149,8 +139,7 @@ public class TbPayCheckReminder implements Serializable {
             return false;
         }
         TbPayCheckReminder other = (TbPayCheckReminder) that;
-        return (this.getPaymentId() == null ? other.getPaymentId() == null : this.getPaymentId().equals(other.getPaymentId()))
-            && (this.getBillId() == null ? other.getBillId() == null : this.getBillId().equals(other.getBillId()))
+        return (this.getBillId() == null ? other.getBillId() == null : this.getBillId().equals(other.getBillId()))
             && (this.getEnterpriseName() == null ? other.getEnterpriseName() == null : this.getEnterpriseName().equals(other.getEnterpriseName()))
             && (this.getBankAccount() == null ? other.getBankAccount() == null : this.getBankAccount().equals(other.getBankAccount()))
             && (this.getPaymentMoney() == null ? other.getPaymentMoney() == null : this.getPaymentMoney().equals(other.getPaymentMoney()))
@@ -168,7 +157,6 @@ public class TbPayCheckReminder implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getPaymentId() == null) ? 0 : getPaymentId().hashCode());
         result = prime * result + ((getBillId() == null) ? 0 : getBillId().hashCode());
         result = prime * result + ((getEnterpriseName() == null) ? 0 : getEnterpriseName().hashCode());
         result = prime * result + ((getBankAccount() == null) ? 0 : getBankAccount().hashCode());
@@ -190,7 +178,6 @@ public class TbPayCheckReminder implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", paymentId=").append(paymentId);
         sb.append(", billId=").append(billId);
         sb.append(", enterpriseName=").append(enterpriseName);
         sb.append(", bankAccount=").append(bankAccount);

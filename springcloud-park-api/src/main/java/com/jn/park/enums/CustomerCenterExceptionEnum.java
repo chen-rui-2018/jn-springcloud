@@ -16,6 +16,8 @@ public enum CustomerCenterExceptionEnum implements CodeAndMsg {
     PROCESS_INS_ID_NOT_NULL("5020554","流程实例id不能为空"),
     ACTION_NAME_NOT_SUPPORT("5020555","当前操作名称不是系统所支持的"),
     PICTURE_URL_MORE_THAN_ALLOW("5020556","处理问题时，问题描述最多允许上传3张图片"),
+    CURRENT_ROLE_NOT_HAVE_USER("5020556","当前角色没有所属用户"),
+    PROCESS_TYPE_NOT_ALLOW("5020557","流程类型系统无法识别，请输入正确的类型"),
     ;
     /**
      * 编码

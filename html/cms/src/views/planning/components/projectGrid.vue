@@ -14,21 +14,21 @@
             <p>截止 {{ iData.planStopTime }} 剩余任务</p>
             <p><span class="value"><strong> {{ iData.projectSurplusTask }} </strong></span></p>
           </div>
-          <table>
-            <tbody>
-              <tr class="text-nowrap">
-                <td class="text-left">剩余任务量</td>
-                <td class="text-right" colspan="2">进度：<b class="text-green"> {{ iData.progress }} </b>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <chart :id="'chart_'+gIndex" :chartopts="iData" height="200px" width="100%" />
-                </td>
-                <!-- <td width="18" valign="bottom">工期</td> -->
-              </tr>
-            </tbody>
-          </table>
+          <!-- <table>
+            <tbody> -->
+          <div class="text-nowrap">
+            <span class="fl">剩余任务量</span>
+            <span class="fr text-right">进度：<span class="text-green"> {{ iData.progress }} </span>
+            </span>
+          </div>
+          <div>
+            <div >
+              <chart :id="'chart_'+gIndex" :chartopts="iData" height="200px" width="100%" />
+            </div>
+            <!-- <td width="18" valign="bottom">工期</td> -->
+          </div>
+          <!-- </tbody>
+          </table> -->
         </div>
         <div class="r3">
           <p class="text-muted f-14">距离计划工期余剩</p>
@@ -69,6 +69,16 @@ export default {
 }
 </script>
 <style lang="scss" scoped  >
+.bulb {
+  width: 24px;
+  height: 20px;
+  float: left;
+  margin-left: 20px;
+}
+.bot {
+  background: rgb(203, 203, 203);
+  color:#666;
+}
 .c-item-grid {
   display: block;
   margin-bottom: 15px;

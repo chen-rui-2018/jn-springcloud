@@ -10,10 +10,9 @@ import com.jn.enterprise.company.model.AcceptInviteParam;
 import com.jn.enterprise.company.model.ReviewStaffParam;
 import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.system.model.User;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +24,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -67,7 +65,7 @@ public class StaffServiceImplTest {
     private User user = new User();
 
     // 邀请员工数组
-    private String[] inviteAccounts;
+    private String inviteAccounts;
 
     // 批量删除成员账号数组
     private String[] delAccounts;
@@ -75,7 +73,7 @@ public class StaffServiceImplTest {
     // 再次邀请员工ID
     private String inviteStaffAgainStr;
 
-    // 拒绝企业邀请员工ID
+    // 拒绝企业邀请员工账号
     private String refuseComInviteStr;
 
     // 获取待审核列表账号
@@ -126,7 +124,7 @@ public class StaffServiceImplTest {
         acceptInviteParam.setBirthday("1995-08-09");
 
         // 邀请账号数组
-        inviteAccounts = new String[]{"qianqi","18520626964","wangsong1","zhaoliu","account01","18175905071"};
+        inviteAccounts ="17300000001";
 
         // 删除账号数组
         delAccounts = new String[]{"13560342716","13265603090","17724520214"};
@@ -166,9 +164,9 @@ public class StaffServiceImplTest {
     @Test
     public void getColleagueList() {
         try {
-            Map<String, Object> colleagueList = staffService.getColleagueList(colleagueListParam, user.getAccount());
-            PaginationData paginationData = (PaginationData) colleagueList.get("data");
-            List<StaffListVO> dataList = (List<StaffListVO>) paginationData.getRows();
+            ColleagueListVO colleagueList = staffService.getColleagueList(colleagueListParam, user.getAccount());
+            PaginationData<List<StaffListVO>> paginationData = colleagueList.getData();
+            List<StaffListVO> dataList = paginationData.getRows();
             if (dataList != null && !dataList.isEmpty()) {
                 assertThat(dataList.size(), greaterThanOrEqualTo(1));
             } else {
@@ -187,13 +185,8 @@ public class StaffServiceImplTest {
     @Test
     public void getInviteStaffList() {
         try {
-            PaginationData staffList = staffService.getInviteStaffList(waitInviteStaffListParam, user.getAccount());
-            List<StaffListVO> dataList = (List<StaffListVO>) staffList.getRows();
-            if (dataList != null && !dataList.isEmpty()) {
-                assertThat(dataList.size(), greaterThanOrEqualTo(1));
-            } else {
-                assertThat(anything(), anything());
-            }
+            staffService.getInviteStaffList("17300000001", user.getAccount());
+            assertThat(anything(), anything());
         } catch (JnSpringCloudException e) {
             logger.info("查询待邀请列表失败");
             assertThat(e.getCode(),
@@ -207,7 +200,7 @@ public class StaffServiceImplTest {
     @Test
     public void inviteStaff() {
         try {
-            staffService.inviteStaff(inviteAccounts, user);
+            staffService.inviteStaff(inviteAccounts, user.getAccount());
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("批量邀請失敗");
@@ -215,22 +208,6 @@ public class StaffServiceImplTest {
                     Matchers.anyOf(
                             Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode()),
                             Matchers.containsString(CompanyExceptionEnum.ACCOUNT_LIST_IS_NULL.getCode())
-                    )
-            );
-        }
-    }
-
-    @Test
-    public void inviteStaffAgain() {
-        try {
-            staffService.inviteStaffAgain(inviteStaffAgainStr, user.getAccount());
-            assertThat(anything(),anything());
-        } catch (JnSpringCloudException e) {
-            logger.info("再次邀请员工失败");
-            assertThat(e.getCode(),
-                    Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode()),
-                            Matchers.containsString(CompanyExceptionEnum.USER_NOT_INVITE_AGAIN.getCode())
                     )
             );
         }
@@ -271,7 +248,7 @@ public class StaffServiceImplTest {
     @Test
     public void refuseInvite() {
         try {
-            staffService.refuseInvite(refuseComInviteStr);
+            staffService.refuseInvite(company.getId(), refuseComInviteStr);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("拒绝邀请失败");

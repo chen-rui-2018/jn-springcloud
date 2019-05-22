@@ -1,11 +1,9 @@
 package com.jn.park.customer.model;
 
-import com.google.gson.internal.LinkedTreeMap;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @Author: yangph
@@ -25,6 +23,34 @@ public class MyTasksResult implements Serializable {
     private String id;
     @ApiModelProperty("流程提交说明")
     private String subject;
+    @ApiModelProperty("创建人id")
+    private String createBy;
+    @ApiModelProperty("更新人id")
+    private String updateBy;
+    @ApiModelProperty("更新时间")
+    private String updateTime;
+    @ApiModelProperty("bizKey")
+    private String bizKey;
+    @ApiModelProperty("表单类型")
+    private String formType;
+    @ApiModelProperty("表单key")
+    private String formKey;
+    @ApiModelProperty("最后时间")
+    private String endTime;
+    @ApiModelProperty("响应时间")
+    private int duration;
+    @ApiModelProperty("是否普通")
+    private String isFormmal;
+    @ApiModelProperty("父流程节点id")
+    private String parentInstId;
+    @ApiModelProperty("是否禁止")
+    private int isForbidden;
+    @ApiModelProperty("结果类型")
+    private String resultType;
+    @ApiModelProperty("数据模型")
+    private String dataMode;
+    @ApiModelProperty("禁止")
+    private String forbidden;
     @ApiModelProperty("流程实例id")
     private String procInstId;
     @ApiModelProperty("任务id")
@@ -58,7 +84,7 @@ public class MyTasksResult implements Serializable {
     @ApiModelProperty("允许释放")
     private String allowShfit;
     @ApiModelProperty("跳转结果")
-    private List<LinkedTreeMap<String,String>>  skipResult;
+    private Object  skipResult;
     @ApiModelProperty("可执行人名称")
     private String ownerName;
     @ApiModelProperty("提醒时间")
@@ -106,6 +132,110 @@ public class MyTasksResult implements Serializable {
         this.subject = subject;
     }
 
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getBizKey() {
+        return bizKey;
+    }
+
+    public void setBizKey(String bizKey) {
+        this.bizKey = bizKey;
+    }
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
+    }
+
+    public String getFormKey() {
+        return formKey;
+    }
+
+    public void setFormKey(String formKey) {
+        this.formKey = formKey;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getIsFormmal() {
+        return isFormmal;
+    }
+
+    public void setIsFormmal(String isFormmal) {
+        this.isFormmal = isFormmal;
+    }
+
+    public String getParentInstId() {
+        return parentInstId;
+    }
+
+    public void setParentInstId(String parentInstId) {
+        this.parentInstId = parentInstId;
+    }
+
+    public int getIsForbidden() {
+        return isForbidden;
+    }
+
+    public void setIsForbidden(int isForbidden) {
+        this.isForbidden = isForbidden;
+    }
+
+    public String getDataMode() {
+        return dataMode;
+    }
+
+    public void setDataMode(String dataMode) {
+        this.dataMode = dataMode;
+    }
+
+    public String getForbidden() {
+        return forbidden;
+    }
+
+    public void setForbidden(String forbidden) {
+        this.forbidden = forbidden;
+    }
+
     public String getProcInstId() {
         return procInstId;
     }
@@ -128,6 +258,14 @@ public class MyTasksResult implements Serializable {
 
     public void setExecId(String execId) {
         this.execId = execId;
+    }
+
+    public String getResultType() {
+        return resultType;
+    }
+
+    public void setResultType(String resultType) {
+        this.resultType = resultType;
     }
 
     public String getNodeId() {
@@ -234,11 +372,11 @@ public class MyTasksResult implements Serializable {
         this.allowShfit = allowShfit;
     }
 
-    public List<LinkedTreeMap<String, String>> getSkipResult() {
+    public Object getSkipResult() {
         return skipResult;
     }
 
-    public void setSkipResult(List<LinkedTreeMap<String, String>> skipResult) {
+    public void setSkipResult(Object skipResult) {
         this.skipResult = skipResult;
     }
 
@@ -264,5 +402,50 @@ public class MyTasksResult implements Serializable {
 
     public void setIdentityEmpty(boolean identityEmpty) {
         this.identityEmpty = identityEmpty;
+    }
+
+    @Override
+    public String toString() {
+        return "MyTasksResult{" +
+                "pk='" + pk + '\'' +
+                ", name='" + name + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", id='" + id + '\'' +
+                ", subject='" + subject + '\'' +
+                ", createBy='" + createBy + '\'' +
+                ", updateBy='" + updateBy + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", bizKey='" + bizKey + '\'' +
+                ", formType='" + formType + '\'' +
+                ", formKey='" + formKey + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", duration=" + duration +
+                ", isFormmal='" + isFormmal + '\'' +
+                ", parentInstId='" + parentInstId + '\'' +
+                ", isForbidden=" + isForbidden +
+                ", resultType='" + resultType + '\'' +
+                ", dataMode='" + dataMode + '\'' +
+                ", forbidden='" + forbidden + '\'' +
+                ", procInstId='" + procInstId + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", execId='" + execId + '\'' +
+                ", nodeId='" + nodeId + '\'' +
+                ", procDefId='" + procDefId + '\'' +
+                ", procDefKey='" + procDefKey + '\'' +
+                ", procDefName='" + procDefName + '\'' +
+                ", status='" + status + '\'' +
+                ", priority=" + priority +
+                ", suspendState=" + suspendState +
+                ", bpmnInstId='" + bpmnInstId + '\'' +
+                ", bpmnDefId='" + bpmnDefId + '\'' +
+                ", typeId='" + typeId + '\'' +
+                ", lockState=" + lockState +
+                ", lockUser=" + lockUser +
+                ", allowShfit='" + allowShfit + '\'' +
+                ", skipResult=" + skipResult +
+                ", ownerName='" + ownerName + '\'' +
+                ", remindTimes=" + remindTimes +
+                ", identityEmpty=" + identityEmpty +
+                '}';
     }
 }

@@ -1,9 +1,7 @@
 package com.jn.park.customer.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.customer.model.IBPSCompleteCustomerParam;
-import com.jn.park.customer.model.IBPSOnlineCustomerForm;
-import com.jn.park.customer.model.MyTasksParam;
+import com.jn.park.customer.model.*;
 
 /**
  * 客服中心--园区客服中心
@@ -44,4 +42,26 @@ public interface CustomerServiceCenterManageService {
      * @return
      */
     int complete(IBPSCompleteCustomerParam customerParam, String loginAccount);
+
+    /**
+     * 园区客服中心
+     * @param param
+     * @param loginAccount
+     * @return
+     */
+    PaginationData myTasksOrMyHandled(MyTasksOrMyHandledParam param,String loginAccount);
+
+    /**
+     * 根据手机号获取用户信息
+     * @param phone
+     * @return
+     */
+    UserIntroInfo getUserInfo(String phone);
+
+    /**
+     * 获取服务模块信息
+     * @param phone
+     * @return
+     */
+    PaginationData getCalledHistory(String phone);
 }

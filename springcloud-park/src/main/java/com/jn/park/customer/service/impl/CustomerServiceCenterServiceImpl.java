@@ -183,6 +183,16 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         for(ExecuteHistoryResult result:resultList){
             ExecuteHistoryShow historyShow=new ExecuteHistoryShow();
             BeanUtils.copyProperties(result, historyShow);
+            //ibps待处理状态“pending”
+            if(StringUtils.equals("pending",result.getStatus())){
+                List<LinkedTreeMap<String, String>> qualifiedExecutor = result.getQualifiedExecutor();
+                for(LinkedTreeMap<String, String> linkedTreeMap:qualifiedExecutor){
+                    if(linkedTreeMap.containsKey("executId")){
+                        historyShow.setAuditor(linkedTreeMap.get("executId"));
+                        break;
+                    }
+                }
+            }
             User user=new User();
             user.setId(historyShow.getAuditor().replace("user", ""));
             Result<User> userInfo = systemClient.getUser(user);

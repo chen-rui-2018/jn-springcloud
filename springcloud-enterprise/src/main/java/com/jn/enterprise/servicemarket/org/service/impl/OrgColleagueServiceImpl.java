@@ -107,6 +107,9 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
             affiliateParam.setPage(orgColleagueParam.getPage());
             affiliateParam.setRows(orgColleagueParam.getRows() == 0 ? 15 : orgColleagueParam.getRows());
             affiliateParam.setNeedPage(orgColleagueParam.getNeedPage());
+        }else{
+            //跨服务调用需要分页，前端不分页查询直接查询200条数据
+            objects = PageHelper.startPage(1,200);
         }
         //跨服务根据所属机构编码批量获取用户信息
         Result userExtensionByAffiliateCode = userExtensionClient.getUserExtensionByAffiliateCode(affiliateParam);

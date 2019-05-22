@@ -185,9 +185,9 @@ public class PmVideoServiceImpl implements PmVideoService {
                             //录像地址
                             String PlayBackUrl = "暂无录像";
                             Result<SecurityPlayBackUrlShow> securityPlayBackUrl = getSecurityPlayBackUrlShowResult(beginTime, endTime, videoIndexCode);
-
+                            logger.info("[安防录像] 调用安防录像接口成功,返回数据{}", securityPlayBackUrl.getData());
                             //获取返回的旅行播放地址
-                            if (StringUtils.isNotBlank(securityPlayBackUrl.getData().getUrl())) {
+                            if (securityPlayBackUrl.getData() != null && StringUtils.isNotBlank(securityPlayBackUrl.getData().getUrl())) {
                                 PlayBackUrl = securityPlayBackUrl.getData().getUrl();
                             }
 

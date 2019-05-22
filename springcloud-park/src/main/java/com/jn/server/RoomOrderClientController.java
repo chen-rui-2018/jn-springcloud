@@ -1,4 +1,4 @@
-package com.jn.park.asset.controller;/**
+package com.jn.server;/**
  * @author： huangbq
  * @date： Created on 2019/5/15 21:11
  * @version： v1.0
@@ -8,7 +8,9 @@ package com.jn.park.asset.controller;/**
 import com.jn.common.model.Result;
 import com.jn.park.api.RoomOrderClient;
 import com.jn.park.asset.service.RoomInformationService;
+import com.jn.pay.model.CreatePayReqModel;
 import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- *
+ *房间租赁controller
  *<pre> 
  * 开发公司：深圳君南信息系统有限公司
  * 开发人员：huangbq
@@ -33,6 +35,11 @@ public class RoomOrderClientController implements RoomOrderClient {
     @Override
     public Result payCallBack(@RequestBody PayOrderNotify payOrderNotify) {
         return roomInformationService.payCallBack(payOrderNotify);
+    }
+
+    @Override
+    public Result<PayOrderRsp> createPay(@RequestBody CreatePayReqModel createPayReqModel) {
+        return roomInformationService.createPayOrder(createPayReqModel.getOrderId(),createPayReqModel.getChannelId(),createPayReqModel.getPaySum(),createPayReqModel.getUserAccount());
     }
 
 }

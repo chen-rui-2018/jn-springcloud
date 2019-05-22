@@ -25,6 +25,7 @@ public enum PaymentBillEnum implements CodeAndMsg {
     BILL_AC_BOOK_TYPE_2("2","物业费账单"),
     BILL_AC_BOOK_CHECK_1("1","缴费已确认"),
     BILL_AC_BOOK_CHECK_2("2","缴费未确认"),
+    BILL_ACCOUNT_BOOK_RECHARGE("1","电费充值"),
     ;
 
 

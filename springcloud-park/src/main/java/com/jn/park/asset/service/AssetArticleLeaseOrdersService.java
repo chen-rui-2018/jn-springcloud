@@ -10,6 +10,7 @@ import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.model.User;
 import com.jn.system.model.UserPage;
 
+import java.math.BigDecimal;
 import java.util.List;
 /**
 * 物品租赁订单service
@@ -67,7 +68,7 @@ public interface AssetArticleLeaseOrdersService {
      * @param userAccount
      * @return
      */
-    Result<PayOrderRsp> createPayOrder(String orderId, String channelId, String userAccount);
+    Result<PayOrderRsp> createPayOrder(String orderId, String channelId, BigDecimal paySum, String userAccount);
 
     /**
      * 支付回调

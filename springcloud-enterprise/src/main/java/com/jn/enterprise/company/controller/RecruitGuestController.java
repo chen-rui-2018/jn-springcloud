@@ -63,7 +63,13 @@ public class RecruitGuestController extends BaseController {
         if (StringUtils.isBlank(recruitId)) {
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_ID_IS_NULL);
         }
-        return new Result(recruitService.getRecruitDetailsById(recruitId));
+
+        String account = null;
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user != null && StringUtils.isNotBlank(user.getAccount())){
+            account= user.getAccount();
+        }
+        return new Result(recruitService.getRecruitDetailsById(recruitId, account));
     }
 
 }

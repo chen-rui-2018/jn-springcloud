@@ -24,7 +24,7 @@ public interface RecruitService {
      * @param id
      * @return
      */
-    RecruitVO getRecruitDetailsById(String id);
+    RecruitVO getRecruitDetailsById(String id, String curAccount);
 
     /**
      * 根据编号获取招聘详情

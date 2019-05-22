@@ -66,10 +66,17 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Override
     @ServiceLog(doAction = "根据招聘ID获取招聘详情")
-    public RecruitVO getRecruitDetailsById(String id) {
+    public RecruitVO getRecruitDetailsById(String id, String curAccount) {
         RecruitVO recruitDetails = checkRecruitExist(id);
         if (1 == serviceRecruitMapper.addRecruitClickById(id)) {
             logger.info("[招聘管理] 招聘信息浏览量增加,recruitId:{}",id);
+        }
+        // 如果已登录，查询关注列表
+        if (StringUtils.isNotBlank(curAccount)) {
+            List<String> companyList = getCareCompany(curAccount);
+            if (companyList.contains(recruitDetails.getComId())) {
+                recruitDetails.setCareStatus("1");
+            }
         }
         return recruitDetails;
     }
@@ -151,15 +158,7 @@ public class RecruitServiceImpl implements RecruitService {
 
         // 如果已登录，查询关注列表
         if (StringUtils.isNotBlank(recruitParam.getAccount())) {
-            CareParam careParam = new CareParam();
-            careParam.setCurrentAccount(recruitParam.getAccount());
-            Result<List<String>> result = careClient.findCareCompanyList(careParam);
-            if (result == null || result.getData() == null) {
-                throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SERVICE_ERROR);
-            }
-
-            // 关注的企业ID列表
-            List<String> companyList = result.getData();
+            List<String> companyList = getCareCompany(recruitParam.getAccount());
             for (RecruitVO recruit : recruitList) {
                 if (companyList.contains(recruit.getComId())) {
                     recruit.setCareStatus("1");
@@ -300,6 +299,23 @@ public class RecruitServiceImpl implements RecruitService {
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_INFO_IS_NOT_EXIST);
         }
         return recruitDetails;
+    }
+
+    /**
+     * 获取关注的企业ID列表
+     * @param account 账号
+     * @return
+     */
+    public List<String> getCareCompany(String account) {
+        CareParam careParam = new CareParam();
+        careParam.setCurrentAccount(account);
+        Result<List<String>> result = careClient.findCareCompanyList(careParam);
+        if (result == null || result.getData() == null) {
+            throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SERVICE_ERROR);
+        }
+
+        // 关注的企业ID列表
+        return result.getData();
     }
 
     /**

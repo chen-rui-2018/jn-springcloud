@@ -17,6 +17,9 @@ import java.util.Date;
 @ApiModel(value = "Achievement",description = "园区成果出参")
 public class Achievement implements Serializable {
 
+    @ApiModelProperty(value = "id")
+    private String id;
+
     @ApiModelProperty(value = "标题")
     private String title;
 
@@ -27,11 +30,19 @@ public class Achievement implements Serializable {
     private String type;
 
     @ApiModelProperty(value = "浏览数")
-    private String viewCount;
+    private Integer viewCount;
 
     @ApiModelProperty(value = "发布时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getType() {
         return type;
@@ -41,11 +52,11 @@ public class Achievement implements Serializable {
         this.type = type;
     }
 
-    public String getViewCount() {
+    public Integer getViewCount() {
         return viewCount;
     }
 
-    public void setViewCount(String viewCount) {
+    public void setViewCount(Integer viewCount) {
         this.viewCount = viewCount;
     }
 
@@ -76,10 +87,11 @@ public class Achievement implements Serializable {
     @Override
     public String toString() {
         return "Achievement{" +
-                "title='" + title + '\'' +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", details='" + details + '\'' +
                 ", type='" + type + '\'' +
-                ", viewCount='" + viewCount + '\'' +
+                ", viewCount=" + viewCount +
                 ", createdTime=" + createdTime +
                 '}';
     }

@@ -13,55 +13,123 @@
 
 
 	<body>
+	<table align='left'>
+		<tr style="display:none" >
+			<td>
+				CTI服务器地址:<input type='text' value='112.94.22.222' id='serverip' size='20'>
+				CTI服务器端口:<input type='text' value='13000' id='serverport' size='6'>
+				<input type='button' value='连接服务器' onclick='connectACD()'/>
+				<input type='button' value='断开服务器' onclick='disconnectACD()'/>
+			</td>
+		</tr>
+		<tr style="padding-left: 20px">
+			<td style="padding-left: 20px">
+				分机号码:<input type='text' value='1001' id='extension' size='6'>
+			</td>
+			<td style="padding-left: 20px">
+				登陆工号:<input type='text' value='200' id='agentid' size='15'>
+			</td>
+			<td style="padding-left: 20px">
+				坐席名称:<input type='text' value='李波' id='agentname' size='15'>
+				<br/><br/>
+			</td>
+			<td style="padding-left: 20px">
+				登陆组号:<input type='text' value='1' id='groupid' size='6'>
+			</td>
+			<td style="padding-left: 20px">
+				坐席级别:<input type='text' value='1' id='levelId' size='6'>
+			</td>
+			<td style="display: none">
+				<input type='checkbox' id='rightId'>班长权限
+			</td>
+			<td style="padding-left: 20px">
+				<input type='button' id="login" value='登陆坐席' onclick='connectACDAndLogin()'>
+				<input type='button' id="logout" value='登出坐席' style="display:none"  onclick='disconnectACDAndLogout()'>
+				<span id="optionOKDesc" style="color:green;"></span>
+				<span id="optionNGDesc" style="color:red;">......请登录.....</span>
+			</td>
+		</tr>
+		<tr style="display:none">
+			<td>
+				<textarea id='logArea' rows='20' cols='80'></textarea>
+				<br/><br/>
+				<input type='button' value='清除日志信息' onclick='clearLog()'>
+			</td>
+		</tr>
+	</table>
+	<br/>
+	<br/>
+	    <!--来电插件-->
 		<div id="mySoftphone" style='width:100%'></div>
 		<br/>
-		<table align='left'>
-			<tr style="display:none" >
-				<td>
-					CTI服务器地址:<input type='text' value='112.94.22.222' id='serverip' size='20'>
-					CTI服务器端口:<input type='text' value='13000' id='serverport' size='6'>
-					<input type='button' value='连接服务器' onclick='connectACD()'/>
-					<input type='button' value='断开服务器' onclick='disconnectACD()'/>
-				</td>
-			</tr>
-			<tr style="padding-left: 20px">
-				<td style="padding-left: 20px">
-					分机号码:<input type='text' value='1001' id='extension' size='6'>
-				</td>
-				<td style="padding-left: 20px">
-					登陆工号:<input type='text' value='200' id='agentid' size='15'>
-				</td>
-				<td style="padding-left: 20px">
-					坐席名称:<input type='text' value='李波' id='agentname' size='15'>
-					<br/><br/>
-				</td>
-				<td style="padding-left: 20px">
-					登陆组号:<input type='text' value='1' id='groupid' size='6'>
-				</td>
-				<td style="padding-left: 20px">
-					坐席级别:<input type='text' value='1' id='levelId' size='6'>
-				</td>
-				<td style="display: none">
-					<input type='checkbox' id='rightId'>班长权限
-				</td>
-				<td style="padding-left: 20px">
-					<input type='button' id="login" value='登陆坐席' onclick='connectACDAndLogin()'>
-					<input type='button' id="logout" value='登出坐席' style="display:none"  onclick='disconnectACDAndLogout()'>
-					<span id="optionOKDesc" style="color:green;"></span>
-					<span id="optionNGDesc" style="color:red;">......请登录.....</span>
-				</td>
-			</tr>
-			<tr style="display:none">
-				<td>
-					<textarea id='logArea' rows='20' cols='80'></textarea>
-					<br/><br/>
-					<input type='button' value='清除日志信息' onclick='clearLog()'>
-				</td>
-			</tr>
-		</table>
-		<script type="text/javascript" src="js/jquery-easyui-1.5/jquery.min.js"charset="utf8"></script>
-		<script type="text/javascript" src="monitor/iccomingTelEnter.js"charset="utf8"></script>
 
+		<!--来电信息-->
+		<div id="calledInfo" style="display: none">
+			<table>
+				<tr>
+					<td style="padding-left: 20px">
+						当前来电号码:<input type='text' value='' id='currentCallShow' size='15'>
+					</td>
+					<td style="padding-left: 20px">
+						当前被叫号码:<input type='text' value='' id='calledNumberShow' size='15'>
+					</td>
+					<td style="padding-left: 20px">
+						地区:<input type='text' value='' id='callerOwenShow' size='15'>
+					</td>
+					<td style="padding-left: 20px">
+						联系方式:<input type='text' value='' id='phoneShow' size='15'>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!--历史信息-->
+		<div class="content"  style="padding: 20px">
+			<span style="background-color:red; color:white;width: 90px;height: 20px;padding: 10px">历史信息(<span id="historyNum">0</span>)</span>
+			<div id="history" style="display: none">
+
+			</div>
+		</div>
+
+
+		<!--来电录入-->
+		<div id="calledEnter" style="display: none">
+			<table>
+				<tr>
+					<td style="padding-left: 20px">
+						问题标题:<input type='text' value='' id='quesTitle' size='15'>
+					</td>
+					<td style="padding-left: 20px">
+						业务模块:<select value='' id='serviceModule' >
+									<option value="service_consulting">系统咨询</option>
+									<option value="complaints_suggestions">投诉建议处理</option>
+								</select>
+					</td>
+				</tr>
+				<tr>
+					问题描述<textarea  id='quesDetails' rows='10' cols='120'></textarea>
+				</tr>
+				<br/>
+				<tr>
+					用户类型:<select value='' id='clientType' style="width: 100px">
+								<option value="1">个人</option>
+								<option value="2">企业</option>
+							</select>
+				<tr>
+					<td style="padding-left: 20px">
+						客户姓名:<input type='text' value='' id='custName' size='15'>
+					</td>
+					<td style="padding-left: 20px">
+						联系方式:<input type='text' value='' id='contactWay' size='15'>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div style="padding: 50px;">
+			<button type="button" onclick="submit()"style="width: 100px" >提交</button>
+		</div>
+
+	    <!--弹出框-->
 		<div class="popLayer"></div>
 		<div class="popBox">
 			<div class="close">
@@ -71,32 +139,37 @@
 				<table>
 					<tr>
 						<td style="padding-left: 20px">
-							当前来电号码:<input type='text' value='' id='currentCall' size='15'>
+							当前来电号码:<input type='text' value='' id='currentCall' size='15' readonly="true">
 						</td>
 					</tr>
 					<tr>
 						<td style="padding-left: 20px">
-							当前被叫号码:<input type='text' value='' id='calledNumber' size='15'>
+							当前被叫号码:<input type='text' value='' id='calledNumber' size='15' readonly="true">
 						</td>
 					</tr>
 					<tr>
 						<td style="padding-left: 20px">
-							来电归属地:<input type='text' value='' id='callerOwen' size='15'>
+							来电归属地:<input type='text' value='' id='callerOwen' size='15' readonly="true">
 						</td>
 					</tr>
+					<input type="hidden" id="contact">
 				</table>
 			</div>
 			<div class="content" id="userInfo">
 
 			</div>
+			<div id="commit" style="padding: 50px">
+				<button type="button" style="width: 100px;height: 50px"  onclick="okSubmit()"  value="确定">确定</button>
+			</div>
 		</div>
-
 
 		<div class="audiocontent" id="audiocontent">
 		<audio id="mySound" >
 			浏览器不支持audio标签(browser nonsupport)
 		</audio>
 		</div>
+	<script type="text/javascript" src="js/jquery-easyui-1.5/jquery.min.js"charset="utf8"></script>
+	<script type="text/javascript" src="monitor/iccomingTelEnter.js"charset="utf8"></script>
 	</body>
 </html>
 	

@@ -57,4 +57,11 @@ public interface CustomerServiceCenterManageService {
      * @return
      */
     UserIntroInfo getUserInfo(String phone);
+
+    /**
+     * 获取服务模块信息
+     * @param phone
+     * @return
+     */
+    PaginationData getCalledHistory(String phone);
 }

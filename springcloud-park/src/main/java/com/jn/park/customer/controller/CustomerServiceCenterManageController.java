@@ -3,9 +3,7 @@ package com.jn.park.customer.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.park.customer.model.IBPSCompleteCustomerParam;
-import com.jn.park.customer.model.IBPSOnlineCustomerForm;
-import com.jn.park.customer.model.MyTasksParam;
+import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterManageService;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.system.log.annotation.ControllerLog;
@@ -21,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 /**
@@ -45,7 +44,7 @@ public class CustomerServiceCenterManageController extends BaseController {
     @ApiOperation(value = "我的待办事项")
     @RequiresPermissions("/customer/customerServiceCenterManageController/myTasks")
     @RequestMapping(value = "/myTasks",method = RequestMethod.GET)
-    public Result<PaginationData> myTasks(@Valid MyTasksParam myTasksParam) {
+    public Result<PaginationData<List<ConsultationCustomerListShow>>> myTasks(@Valid MyTasksParam myTasksParam) {
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -60,7 +59,7 @@ public class CustomerServiceCenterManageController extends BaseController {
     @ApiOperation(value = "我的已办事项")
     @RequiresPermissions("/customer/customerServiceCenterManageController/myHandled")
     @RequestMapping(value = "/myHandled",method = RequestMethod.GET)
-    public Result<PaginationData> myHandled(@Valid MyTasksParam myTasksParam) {
+    public Result<PaginationData<List<ConsultationCustomerListShow>>> myHandled(@Valid MyTasksParam myTasksParam) {
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -85,6 +84,23 @@ public class CustomerServiceCenterManageController extends BaseController {
         }
         return new Result(manageService.getInstForm(processInsId, user.getAccount()));
     }
+
+
+    @ControllerLog(doAction = "园区客服中心")
+    @ApiOperation(value = "园区客服中心")
+    @RequiresPermissions("/customer/customerServiceCenterManageController/myTasksOrMyHandled")
+    @RequestMapping(value = "/myTasksOrMyHandled",method = RequestMethod.GET)
+    public Result<PaginationData<List<ConsultationCustomerListShow>>> myTasksOrMyHandled(@Valid MyTasksOrMyHandledParam  param) {
+        //获取当前登录用户基本信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("园区客服中心获取当前登录用户信息失败");
+            return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        PaginationData paginationData = manageService.myTasksOrMyHandled(param, user.getAccount());
+        return new Result(paginationData);
+    }
+
 
     @ControllerLog(doAction = "问题处理")
     @ApiOperation(value = "问题处理")

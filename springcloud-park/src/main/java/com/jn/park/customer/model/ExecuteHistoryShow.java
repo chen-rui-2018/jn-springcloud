@@ -154,4 +154,24 @@ public class ExecuteHistoryShow implements Serializable {
     public void setExecutePictureUrl(List<String> executePictureUrl) {
         this.executePictureUrl = executePictureUrl;
     }
+
+    @Override
+    public String toString() {
+        return "ExecuteHistoryShow{" +
+                "procInstId='" + procInstId + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", taskName='" + taskName + '\'' +
+                ", executeAccounts='" + executeAccounts + '\'' +
+                ", executeUserIds='" + executeUserIds + '\'' +
+                ", auditor='" + auditor + '\'' +
+                ", auditorName='" + auditorName + '\'' +
+                ", opinion='" + opinion + '\'' +
+                ", status='" + status + '\'' +
+                ", statusName='" + statusName + '\'' +
+                ", optionDeptId='" + optionDeptId + '\'' +
+                ", optionDeptName='" + optionDeptName + '\'' +
+                ", executePictureUrl=" + executePictureUrl +
+                '}';
+    }
 }

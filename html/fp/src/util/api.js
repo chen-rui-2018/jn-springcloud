@@ -31,7 +31,7 @@ export default {
         modifyUserPassword:"springcloud-user/user/center/modifyUserPassword",//修改用户密码
         saveUserInfo:"springcloud-user/guest/userInfo/saveUserInfo",//保存用户资料
         getTagCodeList:"springcloud-user/guest/userTag/getTagCodeList",//获取用户字典列表
-        findHotProducts:"springcloud-enterprise/servicemarket/product/web/findHotProducts",//热门产品
+        findHotProducts:"springcloud-enterprise/guest/servicemarket/product/web/findHotProducts",//热门产品
         selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//顾问领域列表
         getServiceConsultantList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//机构服务顾问
         selectTeamList:"springcloud-enterprise/guest/serviceMarket/industryManage/selectIndustryList",//机构字典
@@ -61,10 +61,10 @@ export default {
 
         getActivityDetailsFm:"springcloud-enterprise/guest/serviceMarket/org/getActivityDetailsForManage",//获取服务机构详情
         findOrgProductList:"springcloud-enterprise/servicemarket/product/web/findOrgProductList",//机构-服务产品列表
-        findOrgCountProductList:"springcloud-enterprise/servicemarket/product/web/findOrgCountProductList",//机构详情下-服务产品列表
-        findProductList:"springcloud-enterprise/servicemarket/product/web/findProductList",//服务产品列表
-        findProductDetails:"springcloud-enterprise/servicemarket/product/web/findProductDetails",//服务产品详情
-        sameTypeProductList:"springcloud-enterprise/servicemarket/product/web/sameTypeProductList",//服务产品详情下的同类型服务列表
+        findOrgCountProductList:"springcloud-enterprise/guest/servicemarket/product/web/findOrgCountProductList",//机构详情下-服务产品列表
+        findProductList:"springcloud-enterprise/guest/servicemarket/product/web/findProductList",//服务产品列表
+        findProductDetails:"springcloud-enterprise/guest/servicemarket/product/web/findProductDetails",//服务产品详情
+        sameTypeProductList:"springcloud-enterprise/guest/servicemarket/product/web/sameTypeProductList",//服务产品详情下的同类型服务列表
         getServiceConList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//服务顾问列表
         getEvaluationCountInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getEvaluationCountInfo",//服务评价统计信息
         // selActiList:"springcloud-park/activity/selectActivityList",//获取活动资讯
@@ -72,7 +72,7 @@ export default {
         userDemandTechnology:"springcloud-enterprise/serviceMarket/requireManagementController/userDemandTechnology",//用户提需求(科技金融)
         userDemand:"springcloud-enterprise/serviceMarket/requireManagementController/userDemand",// 用户提需求(非科技金融)(pc/app新增需求)
         getServiceAdvisorInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceAdvisorInfo",// 服务顾问详情
-        advisorProductList:"springcloud-enterprise/servicemarket/product/web/advisorProductList",// 服务顾问-服务产品列表
+        advisorProductList:"springcloud-enterprise/guest/servicemarket/product/web/advisorProductList",// 服务顾问-服务产品列表
         getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",// 科技金融-投资人列表
         getInvestorMainArea:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainArea",// 科技金融-查询投资人主投领域
         getInvestorInfoDetails:"springcloud-enterprise/technologyFinancial/investorController/getInvestorInfoDetails",// 投资人详情/投资人查看
@@ -99,6 +99,14 @@ export default {
         getScienceExcel:"springcloud-enterprise/data/garden/getScienceExcel", // 科技园模板
         getCompanyExcel:"springcloud-enterprise/data/garden/getCompanyExcel", // 纵向树形指标导出模式
         getScienceHeaderExcel:"springcloud-enterprise/data/garden/getScienceHeaderExcel", // 科技园模板表头
+
+        // 个人中心首页
+        findEmployeeRequisition:"springcloud-enterprise/userCenter/Index/findEmployeeRequisition", // 员工申请
+        findActivityManage:"springcloud-enterprise/userCenter/Index/findActivityManage", // 活动管理
+        findAdviserInvitation:"springcloud-enterprise/userCenter/Index/findAdviserInvitation", // 顾问管理
+        findEvaluateManage:"springcloud-enterprise/userCenter/Index/findEvaluateManage", // 评价管理
+        findReportedData:"springcloud-enterprise/userCenter/Index/findReportedData", // 数据上报
+        findRequirementManage:"springcloud-enterprise/userCenter/Index/findRequirementManage", // 需求管理
 
         //im即时聊天
         selectMsg:"im/selectMsg", // 获取聊天记录
@@ -202,7 +210,11 @@ export default {
 
 
         getRecruitList:"springcloud-enterprise/guest/RecruitController/getWebRecruitList",//招聘列表（门户首页）
-
+        getPromotionList:"springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList",//(门户各首页企业宣传列表查询)
+        getMessageList:"springcloud-park/message/list/findAll",//消息列表
+        getMessageOneTort:"springcloud-park/message/list/getMessageOneTort",//获取二级消息类别
+        getParkList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
+        getIncubatorList:"springcloud-park/guest/hatch/incubator/list",//众创空间-首页信息查询
 
     },
     setToken: function (obj) {   //设置token在请求头上面

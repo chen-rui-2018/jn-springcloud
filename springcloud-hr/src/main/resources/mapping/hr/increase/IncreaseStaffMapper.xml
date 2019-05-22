@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.IncreaseStaffMapper">
+    <select id="increaseSelectByMonth" parameterType="com.jn.hr.increase.model.IncreaseStaff"
+		resultType="java.lang.Integer">
+		select count(*) from tb_manpower_increase_staff t1
+		where t1.insured_month = #{insuredMonth,jdbcType=VARCHAR}
+		and t1.is_effective = 1 and t1.record_status != 0 and t1.plan_type = '增员'
+	</select>
+	
+	<select id="reduceSelectByMonth" parameterType="com.jn.hr.increase.model.IncreaseStaff"
+		resultType="java.lang.Integer">
+		select count(*) from tb_manpower_increase_staff t1
+		where t1.insured_month = #{insuredMonth,jdbcType=VARCHAR}
+		and t1.is_effective = 2 and t1.plan_type = '减员'
+	</select>
+	
+	<select id="list" parameterType="com.jn.hr.increase.model.IncreaseStaff"
+		resultType="com.jn.hr.increase.model.IncreaseStaff">
+		select * from tb_manpower_increase_staff t1
+		where  t1.record_status = 1 and t1.record_status != 0
+	</select>
+	
+	<select id="selectByMonth" parameterType="com.jn.hr.increase.model.IncreaseStaff"
+		resultType="com.jn.hr.increase.model.IncreaseStaff">
+		select * from tb_manpower_increase_staff t1
+		where  t1.record_status = 1 and t1.record_status != 0
+		group by t1.insured_month
+	</select>
+	
+	<insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_increase_staff
+        ( id, plan_type, insured_month, 
+      job_number, name, department, 
+      insured_city_id, insured_city_name, insured_programme_id, 
+      insured_programme_name, is_effective, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.planType}, #{item.insuredMonth}, 
+      #{item.jobNumber}, #{item.name}, #{item.department}, 
+      #{item.insuredCityId}, #{item.insuredCityName}, #{item.insuredProgrammeId}, 
+      #{item.insuredProgrammeName}, #{item.isEffective}, #{item.recordStatus}, 
+      #{item.creatorAccount}, #{item.createdTime}, #{item.modifierAccount}, 
+      #{item.modifiedTime}
+            )
+        </foreach>
+    </insert>
+</mapper>

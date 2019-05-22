@@ -3,17 +3,9 @@ package com.jn.enterprise.company.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
-import com.jn.common.util.DateUtils;
-import com.jn.common.util.StringUtils;
-import com.jn.company.model.IBPSResult;
-import com.jn.company.model.ServiceCompany;
-import com.jn.enterprise.company.entity.TbServiceCompanyModify;
-import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.service.CompanyService;
-import com.jn.enterprise.enums.JoinParkExceptionEnum;
-import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -26,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 /**
  * @author： huxw

@@ -33,8 +33,8 @@
             <div class="tipPsw">请输入收到短信中的验证码</div>
           </el-form-item>
         </el-form>
-        <div class="business_footer">
-          <span @click="submit('ruleForm')">提交公司负责人审核申请</span>
+        <div class="businessFooter">
+          <span @click="submit('ruleForm')">提交审核</span>
         </div>
       </div>
     </div>
@@ -268,7 +268,7 @@ export default {
       font-size: 14px;
       line-height: 5px;
     }
-    .business_footer {
+    .businessFooter {
       margin-top: 58px;
       text-align: center;
       margin-bottom: 17px;

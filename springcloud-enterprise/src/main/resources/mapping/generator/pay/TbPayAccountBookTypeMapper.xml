@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pay.entity.TbPayAccountBookType">
     <id column="AC_BOOK_TYPE" jdbcType="VARCHAR" property="acBookType" />
     <result column="AC_BOOK_DESC" jdbcType="VARCHAR" property="acBookDesc" />
+    <result column="ac_book_scope" jdbcType="VARCHAR" property="acBookScope" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
@@ -69,8 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    AC_BOOK_TYPE, AC_BOOK_DESC, creator_account, created_time, modifier_account, modified_time, 
-    record_status
+    AC_BOOK_TYPE, AC_BOOK_DESC, ac_book_scope, creator_account, created_time, modifier_account, 
+    modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayAccountBookTypeCriteria" resultMap="BaseResultMap">
     select
@@ -103,12 +104,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pay.entity.TbPayAccountBookType">
-    insert into tb_pay_account_book_type (AC_BOOK_TYPE, AC_BOOK_DESC, creator_account, 
-      created_time, modifier_account, modified_time, 
-      record_status)
-    values (#{acBookType,jdbcType=VARCHAR}, #{acBookDesc,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{recordStatus,jdbcType=CHAR})
+    insert into tb_pay_account_book_type (AC_BOOK_TYPE, AC_BOOK_DESC, ac_book_scope, 
+      creator_account, created_time, modifier_account, 
+      modified_time, record_status)
+    values (#{acBookType,jdbcType=VARCHAR}, #{acBookDesc,jdbcType=VARCHAR}, #{acBookScope,jdbcType=VARCHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayAccountBookType">
     insert into tb_pay_account_book_type
@@ -118,6 +119,9 @@
       </if>
       <if test="acBookDesc != null">
         AC_BOOK_DESC,
+      </if>
+      <if test="acBookScope != null">
+        ac_book_scope,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -141,6 +145,9 @@
       </if>
       <if test="acBookDesc != null">
         #{acBookDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="acBookScope != null">
+        #{acBookScope,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -174,6 +181,9 @@
       <if test="record.acBookDesc != null">
         AC_BOOK_DESC = #{record.acBookDesc,jdbcType=VARCHAR},
       </if>
+      <if test="record.acBookScope != null">
+        ac_book_scope = #{record.acBookScope,jdbcType=VARCHAR},
+      </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -198,6 +208,7 @@
     update tb_pay_account_book_type
     set AC_BOOK_TYPE = #{record.acBookType,jdbcType=VARCHAR},
       AC_BOOK_DESC = #{record.acBookDesc,jdbcType=VARCHAR},
+      ac_book_scope = #{record.acBookScope,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
@@ -212,6 +223,9 @@
     <set>
       <if test="acBookDesc != null">
         AC_BOOK_DESC = #{acBookDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="acBookScope != null">
+        ac_book_scope = #{acBookScope,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -234,6 +248,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pay.entity.TbPayAccountBookType">
     update tb_pay_account_book_type
     set AC_BOOK_DESC = #{acBookDesc,jdbcType=VARCHAR},
+      ac_book_scope = #{acBookScope,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},

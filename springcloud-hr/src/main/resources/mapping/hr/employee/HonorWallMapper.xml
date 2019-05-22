@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.employee.dao.HonorWallMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_honor_wall
+        (
+        id, job_number, honorary_pictures, honorary_file
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.jobNumber},
+            #{item.honoraryPictures},
+            #{item.honoraryFile}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteByJobNumber" parameterType="map">
+        delete from tb_manpower_honor_wall where job_number=#{jobNumber}
+    </delete>
+
+    <select id="selectByJobNumber" parameterType="map" resultType="com.jn.hr.employee.model.HonorWall">
+        select id, job_number, honorary_pictures, honorary_file from
+        tb_manpower_honor_wall where job_number=#{jobNumber}
+    </select>
+
+</mapper>

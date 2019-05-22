@@ -1,0 +1,15 @@
+<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<view class="orgDepartment" >
+  <!-- 多选 -->
+  <view class="select_box" >
+
+    <view class="select" wx:for="{{departmentList}}" bindtap='selectDepart' data-id="{{item.departmentId}}" data-name="{{item.departmentName}}">
+        {{item.departmentName}}
+      <text wx:if="{{item.departmentId===id }}" class="icon-select"></text>
+    </view>
+    
+  </view>
+  <view class="btnBox">
+    <button form-type="submit" class="submit" bindtap="goback">完成</button>
+  </view>
+</view>

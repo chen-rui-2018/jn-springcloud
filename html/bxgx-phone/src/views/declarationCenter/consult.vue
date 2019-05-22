@@ -1,9 +1,9 @@
 <template>
-  <div class="declarationconsult">
-    <div class="declarationconsult_main">
-      <div class="declarationconsult_cont">
-        <div class="declarationconsult_title">留言内容</div>
-        <div class="declarationconsult_form" >
+  <div class="declartionConsult">
+    <div class="declartionConsult_main">
+      <div class="declartionConsult_cont">
+        <div class="declartionConsult_title">咨询内容</div>
+        <div class="declartionConsult_form" >
           <group label-align="left" label-width="4.5em" label-margin-right="2em">
             <x-input title="企业名称" placeholder="请输入内容" v-model="messageform.companyName" ></x-input>
             <x-input title="联系人" placeholder="请输入内容" v-model="messageform.concatName"></x-input>
@@ -16,7 +16,7 @@
         <x-textarea placeholder="1、问题描述 2、诉求目的" :show-counter="false" :rows="3" v-model="messageform.message"></x-textarea>
       </div>
       <div class="sumbmit">
-        <span @touchstart="sumbmit">提交</span>
+        <span @click="sumbmit">提交</span>
       </div>
       <div>
         <confirm v-model="isVisible"
@@ -25,7 +25,7 @@
         @on-cancel="onCancel"
         @on-confirm="this.$router.go(-1)"
        >
-          <p style="text-align:center;">{{ $t('I miss u sunyi') }}</p>
+          <p style="text-align:center;"></p>
         </confirm>
       </div>
     </div>
@@ -42,11 +42,16 @@ export default {
   data () {
     return {
       messageform: {
-        companyName: '',
-        concatName: '',
-        concatPhone: '',
-        fromBusiId: '',
-        message: ''
+        appointmentItemId: '',
+        appointmentItemName: '',
+        contactName: '',
+        contactPhone: '',
+        declareEnterprise: '',
+        declareItem: '',
+        email: '',
+        fileUrl: '',
+        id: '',
+        remark: ''
       },
       isVisible: false
     }
@@ -60,7 +65,6 @@ export default {
       data: this.messageform,
       callback: res => {
         if (res.code === '0000') {
-          // console.log(res)
           this.isVisible = true
         }
       }
@@ -77,19 +81,19 @@ export default {
 </script>
 
 <style lang="scss">
-  .declarationconsult{
+  .declartionConsult{
     height: 100vh;
     background-color: #f5f5f5;
-    .declarationconsult_main{
-      padding-top:26px;
-      .declarationconsult_cont{
+    .declartionConsult_main{
+      padding-top:130px;
+      .declartionConsult_cont{
         background-color: #fff;
         padding: 0 31px;
-        .declarationconsult_title{
+        .declartionConsult_title{
           font-size: 35px;
           padding-top: 28px;
         }
-        .declarationconsult_form{
+        .declartionConsult_form{
           .weui-cells{
             margin-top: 0;
           }
@@ -119,6 +123,9 @@ export default {
         margin-top: 26px;
         padding: 0 31px;
         // margin-bottom: 100px;
+        .weui-textarea{
+          height: 180px;
+        }
         .form_textarea_title{
           font-size: 26px;
           padding-top: 27px;

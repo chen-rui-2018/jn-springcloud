@@ -1,0 +1,59 @@
+.meetingPerson{
+  margin-bottom:152rpx;
+}
+.search{
+  /* margin-top:138rpx; */
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+.search text{
+  position: absolute;
+  left:59rpx;
+  top:50rpx;
+}
+.search input{
+  width:91%;
+  background-color: #fff;
+  margin: 37rpx 0;
+  padding:0 58rpx;
+  border-radius: 30rpx;
+  box-shadow: 0px 2px 18px 0px 
+    rgba(121, 121, 121, 0.15);
+}
+/* 选择框 */
+.select{
+  background-color: #fff;
+  padding: 28rpx 30rpx;
+  border-bottom: 2px solid #efefef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 26rpx;
+}
+.select text{
+  font-size: 35rpx;
+  color: #07ab50;
+}
+.meetingPerson .btnBox{
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  box-shadow: 0px -1px 25px 0px #efefef;
+}
+.select_box{
+  background-color: #fff;
+  margin-bottom:152rpx;
+}
+.submit{
+  background-color: #ecfcf2;
+	border-radius: 41px;
+  border: solid 1px #009966;
+  color: #07ab50;
+  margin:33rpx;
+  font-size: 30rpx;
+  line-height: 1;
+  padding:27rpx 312rpx;
+}

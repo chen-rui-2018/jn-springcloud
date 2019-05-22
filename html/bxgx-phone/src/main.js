@@ -5,6 +5,11 @@ import App from './App'
 import router from './router'
 import './assets/iconfont/iconfont.css'
 import {XHeader} from 'vux'
+
+import api from '@/api/api'
+
+Vue.prototype.api = api
+
 Vue.component('x-header', XHeader)
 
 // import { get, post} from '@/api/http'
@@ -14,8 +19,6 @@ import './assets/iconfont/iconfont.css'
 import './assets/font-awesome/css/font-awesome.min.css'
 // Vue.prototype.$get = get
 // Vue.prototype.$post = post
-import api from '@/api/api'
-Vue.prototype.api = api
 Vue.config.productionTip = false
 
 // Vue.use(MintUI)

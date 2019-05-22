@@ -54,7 +54,7 @@
             <span @touchstart="filter('3')" :class="{'greenColor':sendData.sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
           </div>
           <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" style="height:auto">
-                <div class="box2">
+            <div class="box2">
               <!-- <div class="declaration_cont_box">
                 <div class="declaration_cont" v-for="(item,index) in declarationList " :key="index">
                   <div class="declaration_cont_left">
@@ -70,7 +70,7 @@
               <div class="declaration_cont_box">
                 <div class="declaration_cont" v-for="(item,index) in declarationList " :key="index" @click="$router.push({path:'/guest/pd/declarationDetail',query:{id:item.id}}) ">
                   <div class="declaration_cont_left">
-                    <div class="cont_title"><span class="greenColor" v-if="item.rangeName">[{{item.rangeName}}] </span>{{item.titleName}} </div>
+                    <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.titleName}} </div>
                     <div class="cont_detail">
                       <div><span>开始 {{item.createdTime|time}}</span><span>截止 {{item.deadline|time}}</span></div>
                       <span class="greenColor">{{item.isRoofPlacement===1?'置顶':'不置顶'}}</span>
@@ -110,6 +110,19 @@ export default {
     time (time) {
       if (time) {
         return time.split('T')[0]
+      }
+    },
+    type (rangeId) {
+      if (rangeId === '1') {
+        return '白下高新区'
+      } else if (rangeId === '2') {
+        return '秦淮区'
+      } else if (rangeId === '3') {
+        return '南京市'
+      } else if (rangeId === '4') {
+        return '江苏省'
+      } else if (rangeId === '5') {
+        return '国家'
       }
     }
   },

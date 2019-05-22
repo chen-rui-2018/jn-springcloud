@@ -19,7 +19,14 @@ export default {
     findProductDetails: 'springcloud-enterprise/servicemarket/product/web/findProductDetails', // 服务产品详情
     sameTypeProductList: 'springcloud-enterprise/servicemarket/product/web/sameTypeProductList', // 同类型产品
     activityLike: 'springcloud-park/activity/activityLike/activityLike', // 活动点赞
-    CancelLike: 'springcloud-park/activity/activityLike/cancelLike' // 取消点赞
+    CancelLike: 'springcloud-park/activity/activityLike/cancelLike', // 取消点赞
+    trafficVolume: 'springcloud-enterprise/guest/pd/declarationNotice/trafficVolume', // 申报中心访问量
+    onlineBooking: 'springcloud-enterprise/pd/online/onlineBooking', // 申报中心预约申报
+    talentsTypeList: 'springcloud-enterprise/guest/pd/talentNotice/typeList', // 人才服务公告所属类型列表
+    talentsList: 'springcloud-enterprise/guest/pd/talentNotice/list', // 人才服务公告列表
+    talentsDetail: 'springcloud-enterprise/guest/pd/talentNotice/selectByTalentNotice', // 人才服务详情
+    talentsVolume: 'springcloud-enterprise/guest/pd/talentNotice/trafficVolume', // 人才服务访问量
+    loginURL: 'springcloud-app-system/login'
   },
   setToken: function (obj) { // 设置token在请求头上面
     axios.interceptors.request.use(function (config) {

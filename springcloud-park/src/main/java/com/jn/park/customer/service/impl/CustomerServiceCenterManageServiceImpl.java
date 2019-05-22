@@ -73,6 +73,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
      * @param loginAccount
      * @return
      */
+    @ServiceLog(doAction = "我的待办事项")
     @Override
     public PaginationData myTasks(MyTasksParam myTasksParam, String loginAccount) {
         //设置待办事项的动态参数
@@ -101,6 +102,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
      * @param type  task:待办   handled:已办
      * @return
      */
+    @ServiceLog(doAction = "解析并封装返回数据")
     private PaginationData processResultData(MyTasksParam myTasksParam, IBPSResult ibpsResult,String type) {
         List<MyTasksResult> resultList = getMyTasksResults(ibpsResult);
         if (resultList.isEmpty()) {
@@ -125,7 +127,6 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
                 procInsIdAndTaskIdList.add(map);
             }
         }
-
         //根据流程实例id从客服问题表查询需要处理的事项
         return getPaginationDataQuesTaskList(myTasksParam,processInsIdList, procInsIdAndTaskIdList);
     }
@@ -137,6 +138,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
      * @param procInsIdAndTaskIdList
      * @return
      */
+    @ServiceLog(doAction = "分页封装待处理问题数据")
     private PaginationData getPaginationDataQuesTaskList(MyTasksParam myTasksParam,List<String> processInsIdList, List<Map<String, String>> procInsIdAndTaskIdList) {
         com.github.pagehelper.Page<Object> objects = PageHelper.startPage(myTasksParam.getPage(), myTasksParam.getRows());
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
@@ -324,6 +326,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
      * @param loginAccount
      * @return
      */
+    @ServiceLog(doAction = "园区客服中心")
     @Override
     public PaginationData myTasksOrMyHandled(MyTasksOrMyHandledParam param, String loginAccount) {
         //判断流程类型是我的待办，已办还是全部
@@ -405,6 +408,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
      * @param phone
      * @return
      */
+    @ServiceLog(doAction = "根据手机号获取用户信息")
     @Override
     public UserIntroInfo getUserInfo(String phone) {
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(phone);
@@ -421,6 +425,21 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
         }else{
             userIntroInfo.setSex("--");
         }
+        if(userIntroInfo.getEmail()==null){
+            userIntroInfo.setEmail("");
+        }
         return userIntroInfo;
+    }
+
+    /**
+     * 获取服务模块信息
+     * @param phone
+     * @return
+     */
+    @ServiceLog(doAction = "获取服务模块信息")
+    @Override
+    public PaginationData getCalledHistory(String phone) {
+
+        return null;
     }
 }

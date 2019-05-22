@@ -1,6 +1,37 @@
 ﻿var curl="http://localhost/springcloud-park/";
 var toolbar = new ghToolbar( "mySoftphone" );
 
+$(function () {
+	//获取服务模块信息
+	getServiceModule();
+});
+
+
+//获取服务模块信息
+function getServiceModule(){
+	$.ajax({
+		type: 'get',
+		url: curl + '/guest/customer/customerCalledInfoEnterController/serviceModules',
+		dataType: "json",
+		data: {},
+		success: function (data) {
+			if(data==undefined ||data==null ||data.data==null){
+				alert("网络异常，请稍后重试...");
+			}else if(data.code='0000'){
+				var modules=data.data;
+				var options="";
+				for(var i=0;i<modules.length;i++){
+					options=options+"<option value="+modules[i].serviceModule+">"+modules[i].serviceModuleName+"</option>";
+				}
+				if(options.length>0)
+				$("#serviceModule").html("");
+				$("#serviceModule").html(options);
+			}
+
+		}
+	});
+}
+
 //连接ACD服务器
 function connectACD(){
 	var ip = document.getElementById("serverip").value;
@@ -344,6 +375,10 @@ toolbar.OnDialConnected(function() {
 
 toolbar.OnTelephoneRing(function( szCaller, szCallid ) {
 	addLog( "坐席来电振铃事件，szCaller=" + szCaller + ",szCallid=" + szCallid );
+
+	//调试使用，篡改来电
+	szCaller=18674398739;
+
 	//弹出对话框
 	$(".popBox").show();
 	$(".popLayer").show();
@@ -354,26 +389,90 @@ toolbar.OnTelephoneRing(function( szCaller, szCallid ) {
 	//给当前来电电话,被叫电话，来电归属赋值
 	$("#currentCall").val(szCaller);
 	$("#calledNumber").val(getCalled());
+	//获取来电归属地
+	getCallerOwen(szCaller);
+	//根据手机号获取来电用户信息
+	getUserIno(szCaller);
+	//获取来电用户历史信息
+	getCalledHistory(szCaller);
+
+});
+
+//获取来电归属
+function getCallerOwen(obj){
+	$.ajax({
+		type: 'get',
+		url: 'http://mobsec-dianhua.baidu.com/dianhua_api/open/location',
+		dataType: "jsonp",
+		data: {
+			"tel": ""+obj+""
+		},
+		success: function (data) {
+			console.log(data);
+			var phoneInfo=JSON.toLocaleString(data);
+			console.log(phoneInfo);
+
+
+		}
+	});
+}
+
+//根据手机号获取来电用户信息
+function getUserIno(obj){
 	$.ajax({
 		type: 'get',
 		url: curl + '/guest/customer/customerCalledInfoEnterController/getUserInfo',
 		dataType: "json",
 		data: {
-			phone: szCaller,
+			phone: obj,
 		},
 		success: function (data) {
 			var table="<table border='1'>";
 			table=table+"<tr><td style='width:80px'>行号</td><td style='width:80px'>性别</td>" +
 				"<td style='width: 120px'>用户账号</td><td style='width: 80px'>邮箱</td><td style='width: 100px'>手机号</td></tr>";
-			if(data==undefined ||data==null){
-				table=table+"<tr><td colspan='4'>当前来电非系统用户，暂无用户信息</td></tr>>";
+			if(data==undefined ||data==null ||data.data==null){
+				table=table+"<tr><td colspan='5' style='text-align: center'>当前来电非系统用户，暂无用户信息</td></tr>";
+			}else if(data.code='0000'){
+				var user=data.data;
+				table=table+"<tr><td style='width:80px'>1</td><td style='width:80px'>"+user.sex+"</td>" +
+					"<td style='width: 120px'>"+user.account+"</td><td style='width: 80px'>"+user.email+"</td><td style='width: 100px'>"+user.phone+"</td></tr>";
+				//给隐藏域赋值
+				$("#contact").val(user.phone);
 			}
 			table=table+"</table>";
 			$("#userInfo").html(table);
 		}
 	});
+}
 
-});
+//获取来电用户历史信息
+function getCalledHistory(obj){
+	$.ajax({
+		type: 'get',
+		url: curl + '/guest/customer/customerCalledInfoEnterController/getUserInfo',
+		dataType: "json",
+		data: {
+			phone: obj,
+		},
+		success: function (data) {
+			var table="<table border='1'>";
+			table=table+"<tr><td style='width:80px'>行号</td><td style='width:80px'>性别</td>" +
+				"<td style='width: 120px'>用户账号</td><td style='width: 80px'>邮箱</td><td style='width: 100px'>手机号</td></tr>";
+			if(data==undefined ||data==null ||data.data==null){
+				table=table+"<tr><td colspan='5' style='text-align: center'>当前来电非系统用户，暂无用户信息</td></tr>";
+			}else if(data.code='0000'){
+				var user=data.data;
+				table=table+"<tr><td style='width:80px'>1</td><td style='width:80px'>"+user.sex+"</td>" +
+					"<td style='width: 120px'>"+user.account+"</td><td style='width: 80px'>"+user.email+"</td><td style='width: 100px'>"+user.phone+"</td></tr>";
+				//给隐藏域赋值
+				$("#contact").val(user.phone);
+			}
+			table=table+"</table>";
+			$("#userInfo").html(table);
+		}
+	});
+}
+
 
 //弹出框关闭方法
 function closeBox() {
@@ -383,13 +482,33 @@ function closeBox() {
 	}
 }
 
-
-
-
-
-
-
-
+//点击弹窗确定按钮
+function okSubmit(){
+	//判断当前来电号码和来电归属地是否为空
+	if($("#currentCall").val()==''){
+		alert("当前来电号码不能为空");
+		return false;
+	}
+	//清空来电信息
+	$("#currentCallShow").val("");
+	$("#calledNumberShow").val("");
+	$("#callerOwenShow").val("");
+	$("#phoneShow").val("");
+	//给来电信息赋值
+	$("#currentCallShow").val($("#currentCall").val());
+	$("#calledNumberShow").val($("#calledNumber").val());
+	$("#callerOwenShow").val($("#callerOwen").val());
+	$("#phoneShow").val($("#contact").val());
+	//关闭弹窗
+	$(".popBox").hide();
+	$(".popLayer").hide();
+	//来电信息显示
+	$("#calledInfo").show();
+	//历史信息显示
+	$("#history").show();
+	//来电录入显示
+	$("#calledEnter").show();
+}
 
 toolbar.OnAnswerConnected(function() {
 	addLog( "坐席来电接通事件" );

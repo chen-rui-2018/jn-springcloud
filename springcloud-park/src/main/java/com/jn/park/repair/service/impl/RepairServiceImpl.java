@@ -1,13 +1,16 @@
 package com.jn.park.repair.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.CallOtherSwaggerUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.property.model.PayCallBackNotify;
+import com.jn.park.repair.dao.RepairMapper;
 import com.jn.park.repair.dao.TbPmRepairMapper;
 import com.jn.park.repair.entity.TbPmRepair;
 import com.jn.park.repair.enums.PaymentBillEnum;
+import com.jn.park.repair.model.Repair;
 import com.jn.park.repair.service.RepairService;
 import com.jn.pay.api.PayClient;
 import com.jn.pay.model.PayBill;
@@ -23,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.xxpay.common.util.JsonUtil;
 
 import java.util.*;
 
@@ -45,6 +49,9 @@ public class RepairServiceImpl implements RepairService {
 
     @Autowired
     private TbPmRepairMapper tbPmRepairMapper;
+
+    @Autowired
+    private RepairMapper repairMapper;
 
     /**
      * 自动执行ibps处理节点任务
@@ -82,7 +89,7 @@ public class RepairServiceImpl implements RepairService {
      */
     @ServiceLog(doAction ="审批 企业报修流程-企业缴费 任务" )
     public void completeTask(String repairId){
-        TbPmRepair tbPmRepairDb=tbPmRepairMapper.selectByPrimaryKey(repairId);
+        Repair tbPmRepairDb=repairMapper.selectRepairById(repairId);
 
         JSONObject jsonObject = new JSONObject();
         List list1 = new ArrayList<>();
@@ -112,7 +119,7 @@ public class RepairServiceImpl implements RepairService {
             logger.info("待办任务不唯一,待办数量:{}",dataResultList);
         }
         String taskId=dataResultList.get(0).get("taskId");
-        this.complete(tbPmRepairDb.getCreatorAccount(),taskId,"agree");
+        this.complete(tbPmRepairDb.getCreatorAccount(),taskId,"agree",JsonUtil.object2Json(tbPmRepairDb));
     }
 
     /**
@@ -121,10 +128,17 @@ public class RepairServiceImpl implements RepairService {
      * @param actionName
      */
     @ServiceLog(doAction = "处理任务")
-    private void complete(String userAccount,String taskId,String actionName){
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+    private void complete(String userAccount,String taskId,String actionName,String data){
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
         map.add("taskId",taskId);
         map.add("actionName",actionName);
+        //流程动态参数
+        Map procVars=new HashMap();
+        procVars.put("approval_action","agree");
+        map.add("procVars",JsonUtil.object2Json(procVars) );
+        //流程表单数据
+        map.add("data",data);
+        
         logger.info("调用ibps 处理任务 接口,请求参数{}",map);
         JSONObject result=CallOtherSwaggerUtils.request(userAccount,"/api/webapi/bpmService/complete", HttpMethod.POST,map);
         logger.info("调用ibps 处理任务 接口,返回参数{}",result);

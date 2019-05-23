@@ -3,8 +3,11 @@ package com.jn.park.api;
 import com.jn.common.model.Result;
 import com.jn.hardware.model.parking.door.DoorCarInParkingInfo;
 import com.jn.hardware.model.parking.door.DoorCarOutParkingInfo;
+import com.jn.park.parking.model.ParkingCount;
+import com.jn.park.parking.model.ParkingCountParam;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.paybill.model.PaymentBillCallBack;
+import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,7 +60,15 @@ public interface ParkingClient {
      * @param paymentBillCallBack
      * @return
      */
-    @RequestMapping(value = "/api/order/parkingPayCallBack", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/parking/parkingPayCallBack", method = RequestMethod.POST)
     Result parkingPayCallBack(@RequestBody PaymentBillCallBack paymentBillCallBack);
+
+    /**
+     * 统计停车场数据
+     * @param parkingCountParam
+     * @return
+     */
+    @RequestMapping(value = "/api/parking/countParking",method = RequestMethod.POST)
+    Result<ParkingCount> countParking(@RequestBody ParkingCountParam parkingCountParam);
 
 }

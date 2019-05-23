@@ -1,4 +1,4 @@
-package com.jn.park.asset.controller;
+package com.jn.server;
 
 import com.jn.common.model.Result;
 import com.jn.park.api.ArticleOrderClient;

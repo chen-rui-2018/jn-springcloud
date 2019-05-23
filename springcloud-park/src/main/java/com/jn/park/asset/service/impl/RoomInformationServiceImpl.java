@@ -13,12 +13,10 @@ import com.jn.park.asset.entity.*;
 import com.jn.park.asset.enums.*;
 import com.jn.park.asset.model.*;
 import com.jn.park.asset.service.RoomInformationService;
-import com.jn.park.repair.model.model;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.*;
 import com.jn.system.log.annotation.ServiceLog;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -281,9 +279,15 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     }
 
      @ServiceLog(doAction = "创建支付订单")
-    public Result<PayOrderRsp> createPayOrder(String orderId, String channelId , String userAccount){
+    public Result<PayOrderRsp> createPayOrder(String orderId, String channelId , BigDecimal paySum, String userAccount){
         logger.info("创建支付订单,orderId={}",orderId);
         TbRoomOrders tbRoomOrders=tbRoomOrdersMapper.selectByPrimaryKey(orderId);
+
+         BigDecimal ordersPaySum = tbRoomOrders.getPaySum();
+         if (!StringUtils.equals(String.valueOf(ordersPaySum),String.valueOf(paySum))){
+            logger.info("支付金额与订单支付金额不一致,无法支付,传入金额:paySum={},订单金额:orderPaySum={}",paySum,ordersPaySum);
+            return new Result("-1","支付金额不一致,支付失败");
+        }
 
         if(null==tbRoomOrders){
             logger.info("订单不存在,orderId={}",orderId);

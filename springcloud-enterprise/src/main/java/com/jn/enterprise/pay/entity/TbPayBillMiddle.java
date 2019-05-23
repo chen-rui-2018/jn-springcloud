@@ -1,12 +1,17 @@
 package com.jn.enterprise.pay.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class TbPayBillMiddle implements Serializable {
     private String orderNumber;
 
-    private String billId;
+    private String billIds;
+
+    private String payOrderId;
+
+    private BigDecimal totalMoney;
 
     private String status;
 
@@ -30,12 +35,28 @@ public class TbPayBillMiddle implements Serializable {
         this.orderNumber = orderNumber == null ? null : orderNumber.trim();
     }
 
-    public String getBillId() {
-        return billId;
+    public String getBillIds() {
+        return billIds;
     }
 
-    public void setBillId(String billId) {
-        this.billId = billId == null ? null : billId.trim();
+    public void setBillIds(String billIds) {
+        this.billIds = billIds == null ? null : billIds.trim();
+    }
+
+    public String getPayOrderId() {
+        return payOrderId;
+    }
+
+    public void setPayOrderId(String payOrderId) {
+        this.payOrderId = payOrderId == null ? null : payOrderId.trim();
+    }
+
+    public BigDecimal getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(BigDecimal totalMoney) {
+        this.totalMoney = totalMoney;
     }
 
     public String getStatus() {
@@ -99,7 +120,9 @@ public class TbPayBillMiddle implements Serializable {
         }
         TbPayBillMiddle other = (TbPayBillMiddle) that;
         return (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()))
-            && (this.getBillId() == null ? other.getBillId() == null : this.getBillId().equals(other.getBillId()))
+            && (this.getBillIds() == null ? other.getBillIds() == null : this.getBillIds().equals(other.getBillIds()))
+            && (this.getPayOrderId() == null ? other.getPayOrderId() == null : this.getPayOrderId().equals(other.getPayOrderId()))
+            && (this.getTotalMoney() == null ? other.getTotalMoney() == null : this.getTotalMoney().equals(other.getTotalMoney()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -113,7 +136,9 @@ public class TbPayBillMiddle implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getOrderNumber() == null) ? 0 : getOrderNumber().hashCode());
-        result = prime * result + ((getBillId() == null) ? 0 : getBillId().hashCode());
+        result = prime * result + ((getBillIds() == null) ? 0 : getBillIds().hashCode());
+        result = prime * result + ((getPayOrderId() == null) ? 0 : getPayOrderId().hashCode());
+        result = prime * result + ((getTotalMoney() == null) ? 0 : getTotalMoney().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -130,7 +155,9 @@ public class TbPayBillMiddle implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", orderNumber=").append(orderNumber);
-        sb.append(", billId=").append(billId);
+        sb.append(", billIds=").append(billIds);
+        sb.append(", payOrderId=").append(payOrderId);
+        sb.append(", totalMoney=").append(totalMoney);
         sb.append(", status=").append(status);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

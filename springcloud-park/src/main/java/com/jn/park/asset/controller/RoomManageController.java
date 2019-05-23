@@ -11,10 +11,7 @@ import com.jn.park.asset.service.RoomInformationService;
 import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,20 +108,6 @@ public class RoomManageController {
         Assert.notNull(orderId,"订单编号不能为空");
         RoomPayOrdersModel roomPayOrdersModel = roomInformationService.getPayOrders(orderId);
         return new Result<>(roomPayOrdersModel);
-    }
-
-
-    @ControllerLog(doAction = "创建支付订单")
-    @ApiOperation(value = "创建支付订单",notes = "创建支付订单")
-    @PostMapping(value = "/createPayOrder")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050811515490657"),
-            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE")
-    })
-    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(orderId,"订单编号不能为空");
-        return roomInformationService.createPayOrder(orderId,channelId,user.getAccount());
     }
 
     @ControllerLog(doAction = "房间租赁历史列表")

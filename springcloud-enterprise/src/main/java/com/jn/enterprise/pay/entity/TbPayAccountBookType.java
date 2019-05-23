@@ -8,6 +8,8 @@ public class TbPayAccountBookType implements Serializable {
 
     private String acBookDesc;
 
+    private String acBookScope;
+
     private String creatorAccount;
 
     private Date createdTime;
@@ -34,6 +36,14 @@ public class TbPayAccountBookType implements Serializable {
 
     public void setAcBookDesc(String acBookDesc) {
         this.acBookDesc = acBookDesc == null ? null : acBookDesc.trim();
+    }
+
+    public String getAcBookScope() {
+        return acBookScope;
+    }
+
+    public void setAcBookScope(String acBookScope) {
+        this.acBookScope = acBookScope == null ? null : acBookScope.trim();
     }
 
     public String getCreatorAccount() {
@@ -90,6 +100,7 @@ public class TbPayAccountBookType implements Serializable {
         TbPayAccountBookType other = (TbPayAccountBookType) that;
         return (this.getAcBookType() == null ? other.getAcBookType() == null : this.getAcBookType().equals(other.getAcBookType()))
             && (this.getAcBookDesc() == null ? other.getAcBookDesc() == null : this.getAcBookDesc().equals(other.getAcBookDesc()))
+            && (this.getAcBookScope() == null ? other.getAcBookScope() == null : this.getAcBookScope().equals(other.getAcBookScope()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
@@ -103,6 +114,7 @@ public class TbPayAccountBookType implements Serializable {
         int result = 1;
         result = prime * result + ((getAcBookType() == null) ? 0 : getAcBookType().hashCode());
         result = prime * result + ((getAcBookDesc() == null) ? 0 : getAcBookDesc().hashCode());
+        result = prime * result + ((getAcBookScope() == null) ? 0 : getAcBookScope().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
@@ -119,6 +131,7 @@ public class TbPayAccountBookType implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", acBookType=").append(acBookType);
         sb.append(", acBookDesc=").append(acBookDesc);
+        sb.append(", acBookScope=").append(acBookScope);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);

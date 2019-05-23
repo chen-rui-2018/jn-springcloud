@@ -18,10 +18,8 @@ import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -47,10 +45,10 @@ public class PayController {
     @ApiOperation(value = "发起支付",notes = "发起支付单")
     @PostMapping(value = "/createPay")
     @RequiresPermissions("/pay/createPay")
-    public Result<PayOrderRsp> createPay(CreatePayReqModel createPayReqModel){
+    public Result<PayOrderRsp> createPay(@Validated @RequestBody CreatePayReqModel createPayReqModel){
         createPayReqModel.setUserAccount(getUser().getAccount());
         createPayReqModel.setUserIp("");//todo 需要获取用户IP
-        //缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费）
+        //缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费，11预缴充值电费）
         switch (createPayReqModel.getPayType()){
             case "1"://
                 return NOT_SUPPORT_RESULT;
@@ -82,9 +80,9 @@ public class PayController {
     @ApiOperation(value = "创建订单并发起支付",notes = "创建订单并发起支付单")
     @PostMapping(value = "/createOrderAndPay")
     @RequiresPermissions("/pay/createOrderAndPay")
-    public Result<PayOrderRsp> createOrderAndPay(CreateOrderAndPayReqModel createOrderAndPayReqModel){
+    public Result<PayOrderRsp> createOrderAndPay(@Validated @RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel){
         createOrderAndPayReqModel.setUserAccount(getUser().getAccount());
-        //缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费）
+        //缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费，11预缴充值电费）
         switch (createOrderAndPayReqModel.getPayType()){
             case "1"://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payBill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
@@ -106,6 +104,8 @@ public class PayController {
                 return NOT_SUPPORT_RESULT;
             case "10"://
                 return NOT_SUPPORT_RESULT;
+            case "11":
+                return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payAccount/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
                 default:
                     return NOT_SUPPORT_RESULT;
         }

@@ -47,6 +47,9 @@ public class TbElectricEnergyGroupLog implements Serializable {
     /*@ApiModelProperty("规则名称")*/
     private String ruleName;
 
+    /*@ApiModelProperty("企业名称")*/
+    private String companyName;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -161,6 +164,14 @@ public class TbElectricEnergyGroupLog implements Serializable {
         this.ruleName = ruleName == null ? null : ruleName.trim();
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -186,7 +197,8 @@ public class TbElectricEnergyGroupLog implements Serializable {
             && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
             && (this.getDay() == null ? other.getDay() == null : this.getDay().equals(other.getDay()))
             && (this.getMeterId() == null ? other.getMeterId() == null : this.getMeterId().equals(other.getMeterId()))
-            && (this.getRuleName() == null ? other.getRuleName() == null : this.getRuleName().equals(other.getRuleName()));
+            && (this.getRuleName() == null ? other.getRuleName() == null : this.getRuleName().equals(other.getRuleName()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()));
     }
 
     @Override
@@ -207,6 +219,7 @@ public class TbElectricEnergyGroupLog implements Serializable {
         result = prime * result + ((getDay() == null) ? 0 : getDay().hashCode());
         result = prime * result + ((getMeterId() == null) ? 0 : getMeterId().hashCode());
         result = prime * result + ((getRuleName() == null) ? 0 : getRuleName().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         return result;
     }
 
@@ -230,6 +243,7 @@ public class TbElectricEnergyGroupLog implements Serializable {
         sb.append(", day=").append(day);
         sb.append(", meterId=").append(meterId);
         sb.append(", ruleName=").append(ruleName);
+        sb.append(", companyName=").append(companyName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

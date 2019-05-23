@@ -35,6 +35,9 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     BILL_MIDDLE_IS_NOT_EXIT("6020535","统一缴费下单号不存在"),
     BILL_BOOK_ADD_ERROR("6020536","新增账本金额&插入流水记录异常"),
     BILL_BOOK_REMOVE_ERROR("6020537","扣除账本金额&插入流水记录异常"),
+    BILL_ACCOUNT_NOT_EXIT("6020538","当前登录用户与账单所属用户不一致"),
+    PAYMENT_STATUS_IS_PAY_REMIND("6020539","账单已支付，无需核对提醒"),
+    PAYMENT_REMIND_IS_SEND_OUT("6020540","已发送核对提醒，无需重复发送"),
     ;
     /**
      * 编码

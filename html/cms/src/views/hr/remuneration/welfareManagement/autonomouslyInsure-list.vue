@@ -36,7 +36,7 @@
 </template>
 <script>
 import {
-  api, paramApi, exportExcelByObj
+  api
 } from '@/api/hr/common'
 import UE from '@/components/ue.vue'
 export default {
@@ -49,7 +49,7 @@ export default {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
       },
-      delayTime:'',
+      delayTime: '',
       autonomouslyInsuranceList: [],
       total: 0,
       listLoading: false,
@@ -78,31 +78,31 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          api('hr/SalaryWelfareManagement/deleteInsurancescheme', row).then(res => {
-            if (res.data.code === '0000') {
-              this.$message({
-                message: '删除成功',
-                type: 'success'
-              })
-              if (this.total % this.listQuery.rows === 1) {
-                this.listQuery.page = this.listQuery.page - 1
-              }
-              this.initList()
-            } else {
-              this.$message.error(res.data.result)
+        api('hr/SalaryWelfareManagement/deleteInsurancescheme', row).then(res => {
+          if (res.data.code === '0000') {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            if (this.total % this.listQuery.rows === 1) {
+              this.listQuery.page = this.listQuery.page - 1
             }
-          })
+            this.initList()
+          } else {
+            this.$message.error(res.data.result)
+          }
         })
+      })
         .catch(() => {
         })
     },
     // 修改
     updateAutonomouslyInsurance(row) {
-      this.$router.push({ name: 'insurance-edit', query: { title: '修改参保方案',row: row}})
+      this.$router.push({ name: 'insurance-edit', query: { title: '修改参保方案', row: row }})
     },
     // 点击新增按钮的时候
     handleCreate() {
-      this.$router.push({ name: 'insurance-add', query: { title: '新增参保方案'}})
+      this.$router.push({ name: 'insurance-add', query: { title: '新增参保方案' }})
     },
     // 表格分页功能
     handleSizeChange(val) {
@@ -122,7 +122,7 @@ export default {
     // 初始化
     initList() {
       this.listLoading = true
-      api('hr/SalaryWelfareManagement/paginationInquireInsurance',this.listQuery).then(res => {
+      api('hr/SalaryWelfareManagement/paginationInquireInsurance', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.autonomouslyInsuranceList = res.data.data.rows
           this.total = res.data.data.total

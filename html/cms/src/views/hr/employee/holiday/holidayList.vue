@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="部门">
         <el-select v-model="listQuery.departmentId" placeholder="请选择" clearable style="width: 150px" class="filter-item">
-          <el-option  label="请选择" value="" />
+          <el-option label="请选择" value="" />
           <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName" :value="item.departmentId" />
         </el-select>
       </el-form-item>
@@ -40,79 +40,79 @@
 </template>
 
 <script>
-  import {
-    api, getDepartMents, exportExcel
-  } from '@/api/hr/holidayList'
-  export default {
-    data() {
-      return {
-        departmentList: [],
-        holidayList: [],
-        listLoading: false,
-        listQuery: {
-          name: '',
-          page: 1,
-          rows: 10,
-          departmentId: ''
-        },
-        total: 0
-      }
+import {
+  api, getDepartMents, exportExcel
+} from '@/api/hr/holidayList'
+export default {
+  data() {
+    return {
+      departmentList: [],
+      holidayList: [],
+      listLoading: false,
+      listQuery: {
+        name: '',
+        page: 1,
+        rows: 10,
+        departmentId: ''
+      },
+      total: 0
+    }
+  },
+  mounted() {
+    this.initDepartMents()
+    this.initList()
+  },
+  methods: {
+    // 导出功能
+    handleExcel() {
+      exportExcel(this.listQuery).then(res => {
+        console.log('导出。。。')
+        window.location.href = res.request.responseURL
+      })
     },
-    mounted() {
-      this.initDepartMents()
+    initDepartMents() {
+      getDepartMents().then(res => {
+        if (res.data.code === '0000') {
+          this.departmentList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
       this.initList()
     },
-    methods: {
-      // 导出功能
-      handleExcel() {
-        exportExcel(this.listQuery).then(res => {
-          console.log("导出。。。")
-          window.location.href = res.request.responseURL
-        })
-      },
-      initDepartMents() {
-        getDepartMents().then(res => {
-          if (res.data.code === '0000') {
-            this.departmentList = res.data.data
-          } else {
-            this.$message.error(res.data.result)
+    initList() {
+      console.log('查询。。。')
+      this.listLoading = true
+      api('hr/holidayRule/list', this.listQuery).then(res => {
+        if (res.data.code === '0000') {
+          this.holidayList = res.data.data.rows
+          this.total = res.data.data.total
+          if (this.holidayList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
           }
-        })
-      },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.initList()
-      },
-      initList() {
-        console.log('查询。。。')
-        this.listLoading = true
-        api('hr/holidayRule/list', this.listQuery).then(res => {
-          if (res.data.code === '0000') {
-            this.holidayList = res.data.data.rows
-            this.total = res.data.data.total
-            if (this.holidayList.length === 0 && this.total > 0) {
-              this.listQuery.page = 1
-              this.initList()
-            }
-          } else {
-            this.$message.error(res.data.result)
-          }
-          this.listLoading = false
-        })
-      },
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.listLoading = false
+      })
+    },
 
-      // 表格分页功能
-      handleSizeChange(val) {
-        this.listQuery.rows = val
-        this.initList()
-      },
-      // 表格分页功能
-      handleCurrentChange(val) {
-        this.listQuery.page = val
-        this.initList()
-      }
+    // 表格分页功能
+    handleSizeChange(val) {
+      this.listQuery.rows = val
+      this.initList()
+    },
+    // 表格分页功能
+    handleCurrentChange(val) {
+      this.listQuery.page = val
+      this.initList()
     }
   }
+}
 </script>
 
 <style lang="scss">

@@ -1,8 +1,8 @@
 <template>
     <div class="serverProDetail w">
         <div class="serverOrgMenu">
-            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页/</span>
-            <span class="pointer" @click="$routet.push({path:'/serverPro'})">服务产品</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
+            <span class="pointer" @click="$router.push({path:'/serverPro'})">服务产品</span>
             <span>/</span>
             <span class="mainColor agent">服务产品详情</span>
         </div>

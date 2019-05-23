@@ -6,6 +6,7 @@ package com.jn.pay.model;/**
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jn.pay.enums.PayTypeEnums;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.hibernate.validator.constraints.NotBlank;
@@ -37,9 +38,9 @@ public class CreatePayReqBaseModel implements Serializable {
     @NotNull
     private BigDecimal paySum;
 
-    @ApiModelProperty(value = "缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体检费，11预缴充值电费）",example = "4",required = true)
-    @NotBlank
-    private String payType;
+    @ApiModelProperty("费用类型（ELECTRIC:电费，PROPERTY:物业费，REPAIR:维修费，ROOM_LEASE:房租费，GOODS_LEASE:物品租赁费，TEMPORARY_PARKING:停车费，PARKING_LEASE:车位费，WATER:水费，PROMOTION:宣传费，HEALTH:体检费，ELECTRIC_RECHARGE:预缴充值电费）")
+    @NotNull
+    private PayTypeEnums payType;
 
     @ApiModelProperty(value = "用户账号",hidden = true)
     private String userAccount;
@@ -65,11 +66,11 @@ public class CreatePayReqBaseModel implements Serializable {
         this.paySum = paySum;
     }
 
-    public String getPayType() {
+    public PayTypeEnums getPayType() {
         return payType;
     }
 
-    public void setPayType(String payType) {
+    public void setPayType(PayTypeEnums payType) {
         this.payType = payType;
     }
 

@@ -25,31 +25,34 @@ public interface AssessmentManagementService {
     //获取部门树
     public List<DepartmentTree> ObtainDepartmentTree(EmployeeBasicInfoPage employeeBasicInfoPage);
     //考核延期
-    public void assessmentExtension(AssessmentManageAdd assessmentManageAdd,User user);
+    public String assessmentExtension(AssessmentManageAdd assessmentManageAdd,User user);
     //删除考核记录
-    public void deleteAssessmentRecord(AssessmentManagePage assessmentManagePage);
+    public String deleteAssessmentRecord(AssessmentManagePage assessmentManagePage);
     //导出
     public PaginationData<List<AssessmentManageVo>> exportAssessment(AssessmentManagePage assessmentManagePage);
     
     //查看页面的分页
     public PaginationData<List<AssessmentManageVo>> viewPageInfo(AssessmentManagePage assessmentManagePage);
     //开始考核-保存
-    public void saveStartAssessmentPage(AssessmentManageAdd assessmentManageAdd);
+    public String saveStartAssessmentPage(AssessmentManageAdd assessmentManageAdd);
     //开始考核-界面显示
     public List<AssessmentTemplateDetailVo> startAssessmentPageDetails(AssessmentManageAdd assessmentManageAdd);
     //归档生效
     public String updateAssessment(AssessmentManageAdd assessmentManageAdd);
     //删除被考核人记录
-    public void deleteAppraisedPersonRecord(AssessmentManagePage assessmentManagePage);
+    public String deleteAppraisedPersonRecord(AssessmentManagePage assessmentManagePage);
     //开始考核详细页面显示
     public List<AssessmentTemplateDetailVo> viewAssessmentDetails(AssessmentManageAdd assessmentManageAdd);
     //结束归档
     public String finishAndArchive(AssessmentManageAdd assessmentManageAdd);
     
+   //结束
+    public String assessmentEnd(AssessmentManageAdd assessmentManageAdd);
+    
     //考核模板分页显示
     public PaginationData<List<AssessmentTemplateVo>> assessmentTemplatePaginationDisplay(AssessmentTemplatePage assessmentTemplatePage);
     //删除考核模板
-    public void deleteAssessmentTemplate(AssessmentTemplatePage assessmentTemplatePage);
+    public String deleteAssessmentTemplate(AssessmentTemplatePage assessmentTemplatePage);
     //考核模板详情
     public AssessmentTemplateVo assessmentTemplateDetails(AssessmentTemplatePage assessmentTemplatePage);
     //新增模板

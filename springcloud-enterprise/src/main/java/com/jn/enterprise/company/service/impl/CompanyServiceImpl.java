@@ -218,13 +218,15 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public  ServiceCompany getCompanyDetailByAccountOrId(String account,String currentAccount){
         ServiceCompany companyDetailByAccountOrId = this.getCompanyDetailByAccountOrId(account);
-        CareParam careParam = new CareParam();
-        careParam.setAccount(account);
-        careParam.setCurrentAccount(currentAccount);
-        Result companyCareInfo = careClient.findCompanyCareInfo(careParam);
-        if(null !=companyCareInfo && null != companyCareInfo.getData()){
-            CareUserDetails data = (CareUserDetails)companyCareInfo.getData();
-            companyDetailByAccountOrId.setCareUserDetails(data);
+        if (currentAccount != null) {
+            CareParam careParam = new CareParam();
+            careParam.setAccount(account);
+            careParam.setCurrentAccount(currentAccount);
+            Result companyCareInfo = careClient.findCompanyCareInfo(careParam);
+            if(null != companyCareInfo && null != companyCareInfo.getData()){
+                CareUserDetails data = (CareUserDetails)companyCareInfo.getData();
+                companyDetailByAccountOrId.setCareUserDetails(data);
+            }
         }
         return companyDetailByAccountOrId;
     }

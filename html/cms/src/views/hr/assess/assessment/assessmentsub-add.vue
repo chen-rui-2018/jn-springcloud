@@ -2,13 +2,13 @@
   <div v-loading="listLoading" class="assessmentList">
     <el-form :inline="true" class="filter-bar">
       <el-form-item label="考核名称" prop="assessmentName" class="inline">
-        <el-input disabled="disabled" clearable placeholder v-model="assessmentSubObj.assessmentName" />
+        <el-input v-model="assessmentSubObj.assessmentName" disabled="disabled" clearable placeholder />
       </el-form-item>
       <el-form-item label="考核对象" prop="assessmentObject" class="inline">
-        <el-input disabled="disabled" clearable placeholder style="width: 150px" v-model="assessmentSubObj.assessmentObject"/>
+        <el-input v-model="assessmentSubObj.assessmentObject" disabled="disabled" clearable placeholder style="width: 150px"/>
       </el-form-item>
       <el-form-item label="考核人" prop="assessmentPeople" class="inline">
-        <el-input disabled="disabled" clearable placeholder style="width: 150px" v-model="assessmentSubObj.assessmentPeople"/>
+        <el-input v-model="assessmentSubObj.assessmentPeople" disabled="disabled" clearable placeholder style="width: 150px"/>
       </el-form-item>
       <el-form-item>
         <div v-show="operateBtVisible">
@@ -20,46 +20,46 @@
       </el-form-item>
     </el-form>
     <!-- 表格 -->
-    <el-table :data="assessmentSubList" ref="table" tooltip-effect="dark" border stripe style="width: 95%" @selection-change='selectRow'>
-      <el-table-column type="selection" width="45" align="center"></el-table-column>
-      <el-table-column  label="目标类别" align="center">
+    <el-table ref="table" :data="assessmentSubList" tooltip-effect="dark" border stripe style="width: 95%" @selection-change="selectRow">
+      <el-table-column type="selection" width="45" align="center"/>
+      <el-table-column label="目标类别" align="center">
         <template slot-scope="scope">
-          <el-input disabled="disabled" v-model="scope.row.targetCategory"></el-input>
+          <el-input v-model="scope.row.targetCategory" disabled="disabled"/>
         </template>
       </el-table-column>
       <el-table-column label="序号">
         <template slot-scope="scope">
-          <el-input disabled="disabled"  v-model="scope.row.serialNumber"></el-input>
+          <el-input v-model="scope.row.serialNumber" disabled="disabled"/>
         </template>
       </el-table-column>
       <el-table-column label="考核目标">
         <template slot-scope="scope">
-          <el-input disabled="disabled"  v-model="scope.row.assessmentTarget"></el-input>
+          <el-input v-model="scope.row.assessmentTarget" disabled="disabled"/>
         </template>
       </el-table-column>
       <el-table-column label="分值">
         <template slot-scope="scope">
-          <el-input disabled="disabled"  v-model="scope.row.score"></el-input>
+          <el-input v-model="scope.row.score" disabled="disabled"/>
         </template>
       </el-table-column>
       <el-table-column label="评分细则">
         <template slot-scope="scope">
-          <el-input disabled="disabled"  v-model="scope.row.scoreRubric"></el-input>
+          <el-input v-model="scope.row.scoreRubric" disabled="disabled"/>
         </template>
       </el-table-column>
       <el-table-column label="牵头考核部门">
         <template slot-scope="scope">
-          <el-input disabled="disabled" v-model="scope.row.leadAssessmentDepartment"></el-input>
+          <el-input v-model="scope.row.leadAssessmentDepartment" disabled="disabled"/>
         </template>
       </el-table-column>
       <el-table-column label="得分">
         <template slot-scope="scope">
-          <el-input :disabled="!operateBtVisible" v-model="scope.row.assessmentScore"></el-input>
+          <el-input :disabled="!operateBtVisible" v-model="scope.row.assessmentScore"/>
         </template>
       </el-table-column>
       <el-table-column label="扣分原因">
         <template slot-scope="scope">
-          <el-input :disabled="!operateBtVisible" v-model="scope.row.causeDeduction"></el-input>
+          <el-input :disabled="!operateBtVisible" v-model="scope.row.causeDeduction"/>
         </template>
       </el-table-column>
       <!--<el-table-column v-if="operateBtVisible" label="操作" align="center" min-width="100" class-name="small-padding fixed-width">
@@ -93,7 +93,7 @@
 
 <script>
 import {
-  api, paramApi
+  api
 } from '@/api/hr/common'
 import UE from '@/components/ue.vue'
 export default {
@@ -104,26 +104,25 @@ export default {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
       },
-      assessmentSubObj:{
-        assessmentName:'',
-        assessmentObject:'',
-        assessmentPeople:''
+      assessmentSubObj: {
+        assessmentName: '',
+        assessmentObject: '',
+        assessmentPeople: ''
       },
       assessmentSubList: [],
       operateBtVisible: false,
       total: 0,
       listLoading: false,
       selectlistRow: [],
-      commitRows:[],
-      jobNumber:'',
-      templateId:'',
-      templateName:'',
-      prePageRow:{},
+      commitRows: [],
+      jobNumber: '',
+      templateId: '',
+      templateName: '',
+      prePageRow: {},
       listQuery: {
         page: 1,
         rows: 10
       },
-      prePageRow:{},
       code: {
         groupCode: 'platform_type',
         moduleCode: 'springcloud-hr',
@@ -138,7 +137,7 @@ export default {
     this.getPrePageRow()
   },
   methods: {
-    selectRow (val) {
+    selectRow(val) {
       this.selectlistRow = val
     },
     // 表格分页功能
@@ -151,21 +150,21 @@ export default {
       this.listQuery.page = val
       this.initList()
     },
-    getPrePageRow(){
+    getPrePageRow() {
       this.prePageRow = this.$route.query.row
     },
     // 初始化
     initList() {
-      let title = this.$route.query.title
+      const title = this.$route.query.title
       this.assessmentSubObj.assessmentPeople = this.$route.query.row.assessmentPeople
       this.assessmentSubObj.assessmentName = this.$route.query.row.assessmentName
       this.assessmentSubObj.assessmentObject = this.$route.query.row.assessmentObject
       let url = ''
-      if (title == '开始考核') {
+      if (title === '开始考核') {
         this.operateBtVisible = true
         url = 'hr/AssessmentManagement/startAssessmentPageDetails'
         // url = 'hr/AssessmentManagement/viewAssessmentDetails'
-      }else{//查看考核
+      } else { // 查看考核
         this.operateBtVisible = false
         url = 'hr/AssessmentManagement/viewAssessmentDetails'
       }
@@ -189,11 +188,11 @@ export default {
     goBack(view) {
       this.$store.dispatch('delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
-          this.$router.push({ name: 'assessment-detail', query: {row:this.prePageRow }})
+          this.$router.push({ name: 'assessment-detail', query: { row: this.prePageRow }})
         }
       })
     },
-    endAarchive(){
+    endAarchive() {
       this.listQuery.jobNumber = this.jobNumber
       delete this.listQuery.rows
       delete this.listQuery.page
@@ -209,7 +208,7 @@ export default {
         }
       })
     },
-    submitForm(){
+    submitForm() {
       // if (this.selectlistRow.length<1) {
       //   this.$message.error('至少填写并勾选一项考核指标')
       //   return

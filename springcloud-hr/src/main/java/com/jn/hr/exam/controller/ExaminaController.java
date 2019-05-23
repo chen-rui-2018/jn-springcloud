@@ -123,7 +123,7 @@ public class ExaminaController extends BaseController {
 
 	@ControllerLog(doAction = "提交答案")
 	// @RequiresPermissions("/hr/exam/insterAnswerCard")
-	@ApiOperation(value = "提交答案", notes = "交卷功能")
+	@ApiOperation(value = "提交答案", notes = "提交答案功能")
 	@RequestMapping(value = "/insterAnswerCard", method = RequestMethod.POST)
 	public Result<ExaminaManagementAdd> insterAnswerCard(@Validated @RequestBody ExaminaManagement examinaManagement) {
 		ExaminaManagementAdd data = examinaService.insterAnswerCard(examinaManagement);
@@ -132,10 +132,19 @@ public class ExaminaController extends BaseController {
 
 	@ControllerLog(doAction = "更新成绩")
 	// @RequiresPermissions("/hr/exam/updateResult")
-	@ApiOperation(value = "更新成绩", notes = "交卷功能")
+	@ApiOperation(value = "更新成绩", notes = "更新成绩功能")
 	@RequestMapping(value = "/updateResult", method = RequestMethod.POST)
 	public Result updateResult(@Validated @RequestBody ExaminaManagement examinaManagement) {
 		examinaService.updateResult(examinaManagement);
+		return new Result();
+	}
+
+	@ControllerLog(doAction = "删除成绩")
+	// @RequiresPermissions("/hr/exam/deleteResult")
+	@ApiOperation(value = "删除成绩", notes = "删除成绩功能")
+	@RequestMapping(value = "/deleteResult", method = RequestMethod.POST)
+	public Result deleteResult(@Validated @RequestBody ExaminaManagement examinaManagement) {
+		examinaService.deleteResult(examinaManagement);
 		return new Result();
 	}
 

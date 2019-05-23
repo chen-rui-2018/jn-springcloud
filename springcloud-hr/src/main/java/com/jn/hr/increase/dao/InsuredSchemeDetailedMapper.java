@@ -12,6 +12,10 @@ public interface InsuredSchemeDetailedMapper {
 	
 	void updateBySchemeId(List<InsuredSchemeDetailed> record);
 	
+	void updateBystatus(@Param("schemeId") String schemeId);
+	
+	void deleteBySchemeId(@Param("schemeId") String schemeId);
+	
 	void insertBatch(List<InsuredSchemeDetailed> list);
 	
 	List<InsuredSchemeDetailed> selectBySchemeId(@Param("schemeId") String schemeId);

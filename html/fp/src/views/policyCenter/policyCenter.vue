@@ -1,6 +1,6 @@
 <template>
-  <div class="policyCenter">
-    <div class="techHeah">
+  <div class="policyCenter0">
+    <!-- <div class="techHeah">
       <div id="header" class="header" :class="{'headerw':showFF}">
         <div class="headerContainer clearfix">
           <div class="titleImg fl">
@@ -11,11 +11,7 @@
             <div class="search pointer">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
             </div>
-            <div class="navlogin">
-              <a @click="$router.push({path:'/login'})">登录</a>
-              <span class="line">|</span>
-              <a @click="$router.push({path:'/register'})">注册</a>
-            </div>
+            <user-info></user-info>
           </div>
           <div class="nav" id="nav">
             <ul class="posA clearfix">
@@ -37,7 +33,7 @@
           </div>
         </el-collapse-transition>
       </div>
-    </div>
+    </div> -->
     <div class="policyCon">
       <div class="banner pr">
         <div class="swiper-container">
@@ -64,10 +60,10 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">政策级别：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto;">
-            <li :class="{'active':filterFlag == ''}" @click="handleFilter('')">不限</li>
+            <li :class="{'active0':filterFlag == ''}" @click="handleFilter('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag1}">
-            <li class="wid1" v-for="(i,k) in policyLevel" :key='k' @click="handleFilter(i.policyLevelCode)" :class="{'active':filterFlag == i.policyLevelCode}">{{i.policyLevelName}}</li>
+            <li class="wid1" v-for="(i,k) in policyLevel" :key='k' @click="handleFilter(i.policyLevelCode)" :class="{'active0':filterFlag == i.policyLevelCode}">{{i.policyLevelName}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid1')">
             <i class="el-icon-arrow-down" v-if="flag1" @click="flag1 = !flag1"></i>
@@ -78,10 +74,10 @@
           <div class="nav1Tit fl">政策分类：</div>
           <!-- <div class="fl" :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</div> -->
           <ul class="nav1Ul fl clearfix" style="width:auto;">
-            <li :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
+            <li :class="{'active0':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag2}">
-            <li class="wid2" v-for="(i,k) in policyClass" :key='k' @click="handleFilter1(i.policyClassCode)" :class="{'active':filterFlag1 == i.policyClassCode}">{{i.policyClassName}}</li>
+            <li class="wid2" v-for="(i,k) in policyClass" :key='k' @click="handleFilter1(i.policyClassCode)" :class="{'active0':filterFlag1 == i.policyClassCode}">{{i.policyClassName}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid2')">
             <i class="el-icon-arrow-down" v-if="flag2" @click="flag2 = !flag2"></i>
@@ -91,8 +87,8 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">政策类型：</div>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag3}">
-            <li class="wid3" @click="handleFilter2('0')" :class="{'active':filterFlag2 == '0'}">普通政策</li>
-            <li class="wid3" @click="handleFilter2('1')" :class="{'active':filterFlag2 == '1'}">图解政策</li>
+            <li class="wid3" @click="handleFilter2('0')" :class="{'active0':filterFlag2 == '0'}">普通政策</li>
+            <li class="wid3" @click="handleFilter2('1')" :class="{'active0':filterFlag2 == '1'}">图解政策</li>
           </ul>
           <div class="fr" v-if="widFun('wid3')">
             <i class="el-icon-arrow-down" v-if="flag3" @click="flag3 = !flag3"></i>
@@ -102,11 +98,11 @@
         <div class="nav1 nav2 clearfix">
           <div class="nav1Tit fl">发布时间：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
+            <li :class="{'active0':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
-            <li class="wid4" v-for="(i,k) in arrYear" v-if='k<9' :key='k' @click="handleFilter3(i)" :class="{'active':filterFlag3 == i}">{{i}}年</li>
-            <li class="wid4" id="lastLi" @click="handleFilter3('1')" :class="{'active':filterFlag3 == '1'}">{{arrYear[arrYear.length-1]}}年及以前</li>
+            <li class="wid4" v-for="(i,k) in arrYear" v-if='k<9' :key='k' @click="handleFilter3(i)" :class="{'active0':filterFlag3 == i}">{{i}}年</li>
+            <li class="wid4" id="lastLi" @click="handleFilter3('1')" :class="{'active0':filterFlag3 == '1'}">{{arrYear[arrYear.length-1]}}年及以前</li>
           </ul>
           <!-- <ul class="nav1Ul fl clearfix" style="width:auto">
             <li @click="handleFilter3('1')" :class="{'active':filterFlag3 == '1'}">{{arrYear[arrYear.length-1]}}年及以前</li>
@@ -235,7 +231,11 @@
 </template>
 <script>
 import swiper from "swiper";
+import userInfo from '.././common/userInfoData'
 export default {
+   components: {
+      userInfo
+    },
   data() {
     return {
       sousuo: false,
@@ -440,7 +440,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.policyCenter {
+.policyCenter0 {
   #lastLi {
     float: right;
     margin-top: -26px;
@@ -449,172 +449,172 @@ export default {
     margin-top: 50px;
     margin-bottom: 10px;
   }
-  .techHeah {
-    position: fixed;
-    z-index: 9;
-    width: 100%;
-    .header {
-      //   background-color: rgba(255, 255, 255, 0.2);
-      background-color: #3281a9;
-      width: 100%;
-      z-index: 3;
-      .headerContainer {
-        padding: 0 160px;
-        width: 100%;
-        height: 65px;
-        line-height: 65px;
-        color: #fff;
-        font-size: 16px;
-        box-sizing: border-box;
-        .titleImg {
-          width: 155px;
-          height: 38px;
-          img {
-            width: 100%;
-            height: 100%;
-            vertical-align: middle;
-          }
-        }
-        .nav {
-          width: 600px;
-          height: 37.6px;
-          margin: 0 auto;
-          > ul {
-            overflow: hidden;
-            li {
-              float: left;
-              // color: #ccc;
-              font-size: 14px;
-              text-align: center;
-              // line-height: 52px;
-              padding: 0 38px;
-              // width: 100px;
-            }
-          }
-          //   .posLi1 {
-          //     background: #fff;
-          //     color: #00a041;
-          //     border-radius: 5px;
-          //   }
-          .posA {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            // padding: 20px 0;
-          }
-          .sousuo {
-            font-size: 18px;
-            line-height: 48px;
-            > input {
-              border: none;
-              width: 350px;
-              height: 38px;
-              font-size: 14px;
-            }
-            > input::-webkit-input-placeholder {
-              color: #b7b7b7;
-              font-size: 12px;
-            }
-          }
-        }
-        .headerRight {
-          .search {
-            display: inline-block;
-            margin-right: 20px;
-            vertical-align: middle;
-            i {
-              width: 20px;
-              height: 20px;
-            }
-          }
-          .navlogin {
-            display: inline-block;
-            font-size: 14px;
-            a {
-              display: inline-block;
-              cursor: pointer;
-            }
-            .line {
-              display: inline-block;
-              height: 12px;
-              margin: 0 15px;
-            }
-            > img {
-              width: 50px;
-              height: 50px;
-              border-radius: 50%;
-            }
-          }
-        }
-      }
-    }
-    .headerw {
-      background: #fff;
-      border: 1px solid #eee;
-      box-shadow: 0 10px 10px -10px #ccc;
-      color: #666;
-      #nav,
-      .headerRight {
-        color: #666;
-        li {
-          a {
-            color: #00a041;
-          }
-        }
-      }
-    }
-    .search_box {
-      background: rgba(0, 0, 0, 0.3);
-      // text-align: center;
-      .el-input-group {
-        border-radius: 28px;
-        width: 42%;
-        margin: 43px 0;
-        position: relative;
-        transform: translateX(-50%);
-        left: 50%;
-        .el-input {
-          width: 94px;
-        }
-        .el-input__inner:focus {
-          border-color: #00a041;
-        }
-        .el-input-group__append,
-        .el-input-group__prepend {
-          border-radius: 28px;
-        }
-        .el-input-group__append {
-          /* border-top-left-radius: 0;
-      border-bottom-left-radius: 0; */
-          background: #00a041;
-          color: #fff;
-          right: 58px;
-          .el-button {
-            margin: -10px -10px;
-          }
-        }
-        .el-input-group__prepend {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          background-color: #fff;
-          padding: 0px 17px 0 9px;
-          input {
-            color: #666666;
-            text-align: right;
-          }
-        }
-      }
-      .input-with-select .el-input__inner {
-        border-top-left-radius: 19px;
-        border-bottom-left-radius: 19px;
-        border: 1px solid #00a041;
-      }
-    }
-    .searchbox {
-      background: #fff;
-      box-shadow: 0 10px 10px -10px #ccc;
-    }
-  }
+  // .techHeah {
+  //   position: fixed;
+  //   z-index: 9;
+  //   width: 100%;
+  //   .header {
+  //     //   background-color: rgba(255, 255, 255, 0.2);
+  //     background-color: #3281a9;
+  //     width: 100%;
+  //     z-index: 3;
+  //     .headerContainer {
+  //       padding: 0 160px;
+  //       width: 100%;
+  //       height: 65px;
+  //       line-height: 65px;
+  //       color: #fff;
+  //       font-size: 16px;
+  //       box-sizing: border-box;
+  //       .titleImg {
+  //         width: 155px;
+  //         height: 38px;
+  //         img {
+  //           width: 100%;
+  //           height: 100%;
+  //           vertical-align: middle;
+  //         }
+  //       }
+  //       .nav {
+  //         width: 600px;
+  //         height: 37.6px;
+  //         margin: 0 auto;
+  //         > ul {
+  //           overflow: hidden;
+  //           li {
+  //             float: left;
+  //             // color: #ccc;
+  //             font-size: 14px;
+  //             text-align: center;
+  //             // line-height: 52px;
+  //             padding: 0 38px;
+  //             // width: 100px;
+  //           }
+  //         }
+  //         //   .posLi1 {
+  //         //     background: #fff;
+  //         //     color: #00a041;
+  //         //     border-radius: 5px;
+  //         //   }
+  //         .posA {
+  //           position: absolute;
+  //           left: 50%;
+  //           transform: translateX(-50%);
+  //           // padding: 20px 0;
+  //         }
+  //         .sousuo {
+  //           font-size: 18px;
+  //           line-height: 48px;
+  //           > input {
+  //             border: none;
+  //             width: 350px;
+  //             height: 38px;
+  //             font-size: 14px;
+  //           }
+  //           > input::-webkit-input-placeholder {
+  //             color: #b7b7b7;
+  //             font-size: 12px;
+  //           }
+  //         }
+  //       }
+  //       .headerRight {
+  //         .search {
+  //           display: inline-block;
+  //           margin-right: 20px;
+  //           vertical-align: middle;
+  //           i {
+  //             width: 20px;
+  //             height: 20px;
+  //           }
+  //         }
+  //         .navlogin {
+  //           display: inline-block;
+  //           font-size: 14px;
+  //           a {
+  //             display: inline-block;
+  //             cursor: pointer;
+  //           }
+  //           .line {
+  //             display: inline-block;
+  //             height: 12px;
+  //             margin: 0 15px;
+  //           }
+  //           > img {
+  //             width: 50px;
+  //             height: 50px;
+  //             border-radius: 50%;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  //   .headerw {
+  //     background: #fff;
+  //     border: 1px solid #eee;
+  //     box-shadow: 0 10px 10px -10px #ccc;
+  //     color: #666;
+  //     #nav,
+  //     .headerRight {
+  //       color: #666;
+  //       li {
+  //         a {
+  //           color: #00a041;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   .search_box {
+  //     background: rgba(0, 0, 0, 0.3);
+  //     // text-align: center;
+  //     .el-input-group {
+  //       border-radius: 28px;
+  //       width: 42%;
+  //       margin: 43px 0;
+  //       position: relative;
+  //       transform: translateX(-50%);
+  //       left: 50%;
+  //       .el-input {
+  //         width: 94px;
+  //       }
+  //       .el-input__inner:focus {
+  //         border-color: #00a041;
+  //       }
+  //       .el-input-group__append,
+  //       .el-input-group__prepend {
+  //         border-radius: 28px;
+  //       }
+  //       .el-input-group__append {
+  //         /* border-top-left-radius: 0;
+  //     border-bottom-left-radius: 0; */
+  //         background: #00a041;
+  //         color: #fff;
+  //         right: 58px;
+  //         .el-button {
+  //           margin: -10px -10px;
+  //         }
+  //       }
+  //       .el-input-group__prepend {
+  //         border-top-right-radius: 0;
+  //         border-bottom-right-radius: 0;
+  //         background-color: #fff;
+  //         padding: 0px 17px 0 9px;
+  //         input {
+  //           color: #666666;
+  //           text-align: right;
+  //         }
+  //       }
+  //     }
+  //     .input-with-select .el-input__inner {
+  //       border-top-left-radius: 19px;
+  //       border-bottom-left-radius: 19px;
+  //       border: 1px solid #00a041;
+  //     }
+  //   }
+  //   .searchbox {
+  //     background: #fff;
+  //     box-shadow: 0 10px 10px -10px #ccc;
+  //   }
+  // }
   .policyCon {
     .banner {
       img {
@@ -668,7 +668,7 @@ export default {
             line-height: 17px;
           }
 
-          > li.active {
+          > li.active0 {
             background: #009f42;
             border-radius: 4px;
             color: #fff;

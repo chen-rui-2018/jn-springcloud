@@ -13,6 +13,10 @@ public class TbManpowerExaminaAnswerCard implements Serializable {
 
     private String answer;
 
+    private String titleScore;
+
+    private String answerType;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -55,6 +59,22 @@ public class TbManpowerExaminaAnswerCard implements Serializable {
         this.answer = answer == null ? null : answer.trim();
     }
 
+    public String getTitleScore() {
+        return titleScore;
+    }
+
+    public void setTitleScore(String titleScore) {
+        this.titleScore = titleScore == null ? null : titleScore.trim();
+    }
+
+    public String getAnswerType() {
+        return answerType;
+    }
+
+    public void setAnswerType(String answerType) {
+        this.answerType = answerType == null ? null : answerType.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -71,7 +91,9 @@ public class TbManpowerExaminaAnswerCard implements Serializable {
             && (this.getJobNumber() == null ? other.getJobNumber() == null : this.getJobNumber().equals(other.getJobNumber()))
             && (this.getTestPaperId() == null ? other.getTestPaperId() == null : this.getTestPaperId().equals(other.getTestPaperId()))
             && (this.getTestQuestId() == null ? other.getTestQuestId() == null : this.getTestQuestId().equals(other.getTestQuestId()))
-            && (this.getAnswer() == null ? other.getAnswer() == null : this.getAnswer().equals(other.getAnswer()));
+            && (this.getAnswer() == null ? other.getAnswer() == null : this.getAnswer().equals(other.getAnswer()))
+            && (this.getTitleScore() == null ? other.getTitleScore() == null : this.getTitleScore().equals(other.getTitleScore()))
+            && (this.getAnswerType() == null ? other.getAnswerType() == null : this.getAnswerType().equals(other.getAnswerType()));
     }
 
     @Override
@@ -83,6 +105,8 @@ public class TbManpowerExaminaAnswerCard implements Serializable {
         result = prime * result + ((getTestPaperId() == null) ? 0 : getTestPaperId().hashCode());
         result = prime * result + ((getTestQuestId() == null) ? 0 : getTestQuestId().hashCode());
         result = prime * result + ((getAnswer() == null) ? 0 : getAnswer().hashCode());
+        result = prime * result + ((getTitleScore() == null) ? 0 : getTitleScore().hashCode());
+        result = prime * result + ((getAnswerType() == null) ? 0 : getAnswerType().hashCode());
         return result;
     }
 
@@ -97,6 +121,8 @@ public class TbManpowerExaminaAnswerCard implements Serializable {
         sb.append(", testPaperId=").append(testPaperId);
         sb.append(", testQuestId=").append(testQuestId);
         sb.append(", answer=").append(answer);
+        sb.append(", titleScore=").append(titleScore);
+        sb.append(", answerType=").append(answerType);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -7,8 +7,8 @@
     </div>
     <div class="approvalGuide_main">
       <div class="approvalGuide_tab">
-         <span class="slider_btn" @click="isSlider=true"><i class="iconfont icon-icon-"></i> </span>
-         <tab>
+        <span class="slider_btn" @click="isSlider=true"><i class="iconfont icon-icon-"></i> </span>
+        <tab>
           <tab-item :selected="active===''" ><span :class="{active:active===''}" @click="toggle('','')">全部</span></tab-item>
           <tab-item v-for="(item,$index) in departList" :key="$index" :selected="$index===active">
             <span :class="{active:$index===active}" @click="toggle($index,item.id)">{{item.name}}</span>
@@ -16,49 +16,45 @@
         </tab>
       </div>
       <!-- 侧边栏-->
-        <popup v-model="isSlider" position="right" width="81%">
-          <div class="slider_box">
-            <div class="slider_title"><span>部门</span> <span @click="toggle('','')">全部</span> </div>
-            <div class="slider_cont">
-              <div v-for="(item,index) in departList" :key="index"  @click="toggle(index,item.id)">{{item.name}}</div>
-            </div>
-            <div class="slider_sure">
-              <span>重置</span>
-              <span>确定</span>
-            </div>
+      <popup v-model="isSlider" position="right" width="81%">
+        <div class="slider_box">
+          <div class="slider_title"><span>部门</span> <span @click="toggle('','')">全部</span> </div>
+          <div class="slider_cont">
+            <div v-for="(item,index) in departList" :key="index"  @click="toggle(index,item.id)">{{item.name}}</div>
           </div>
-        </popup>
-      <div class="approvalGuide_cont">
-        <group v-for="(powerItem,powerIndex) in poweList" :key="powerIndex">
-          <div class="approvalGuide_box" >
-            <cell
-              :title="powerItem.name"
-              :border-intent="false"
-              @click.native="powerItem.isfold = !powerItem.isfold"
-              v-if="powerItem.childs.length!=0"
-              >
-              <div>
-                <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
-                <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
+        </div>
+      </popup>
+        <div class="approvalGuide_cont ">
+          <group v-for="(powerItem,powerIndex) in poweList" :key="powerIndex">
+            <div class="approvalGuide_box" >
+              <cell
+                :title="powerItem.name"
+                :border-intent="false"
+                @click.native="powerItem.isfold = !powerItem.isfold"
+                v-if="powerItem.childs.length!=0"
+                >
+                <div>
+                  <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
+                  <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
+                </div>
+              </cell>
+              <cell
+                :title="powerItem.name"
+                :border-intent="false"
+                @click.native="goPower(powerItem.id)"
+                v-else
+                >
+                <div>
+                  <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
+                  <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
+                </div>
+              </cell>
+              <div class="fold_cont" :class="powerItem.isfold?'animate':''" v-for="(childItem,childIndex) in powerItem.childs " :key="childIndex">
+                <div @click="goPower(childItem.id)"><span>{{childItem.name}} </span><span class="iconfont icon-jiantou" ></span></div>
               </div>
-            </cell>
-            <cell
-              :title="powerItem.name"
-              :border-intent="false"
-              @click.native="goPower(powerItem.id)"
-              v-else
-              >
-              <div>
-                <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
-                <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
-              </div>
-            </cell>
-            <div class="fold_cont" :class="powerItem.isfold?'animate':''" v-for="(childItem,childIndex) in powerItem.childs " :key="childIndex">
-              <div @click="goPower(childItem.id)"><span>{{childItem.name}} </span><span class="iconfont icon-jiantou" ></span></div>
             </div>
-          </div>
-        </group>
-      </div>
+          </group>
+        </div>
     </div>
   </div>
 </template>
@@ -69,7 +65,6 @@ export default {
     return {
       active: '',
       value: '',
-      // isfold: false,
       isSlider: false,
       departList: [],
       sendData: {
@@ -78,20 +73,49 @@ export default {
         name: '',
         page: 1,
         parentId: '',
-        rows: 20,
+        rows: 10,
         type: ''
       },
-      poweList: []
-
+      poweList: [],
+      total: 0
     }
   },
   components: { Group, Cell, CellFormPreview, CellBox, Badge, Search, Popup, Tab, TabItem },
   mounted () {
     this.getdepartList()
     this.getPoweList()
+    this.scrollBottom()
   },
   methods: {
     // tab栏
+    scrollBottom () {
+      // let _this = this
+      window.onscroll = () => {
+        var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        var clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
+        if (clientHeight + scrollTop >= scrollHeight) {
+          // console.log(this)
+          if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
+            this.sendData.page++
+            this.api.get({
+              url: 'powerList',
+              data: this.sendData,
+              callback: res => {
+                if (res.code === '0000') {
+                  this.poweList.push(...res.data.rows)
+                  this.total = res.data.total
+                  this.poweList.forEach(ele => {
+                    this.$set(ele, 'isfold', false)
+                  })
+                  this.isSlider = false
+                }
+              }
+            })
+          }
+        }
+      }
+    },
     getdepartList () {
       let _this = this
       this.api.get({
@@ -107,12 +131,15 @@ export default {
     },
     // 列表
     getPoweList () {
+      this.sendData.page = 1
       this.api.get({
         url: 'powerList',
         data: this.sendData,
         callback: res => {
           if (res.code === '0000') {
+            // this.poweList.push(...res.data.rows)
             this.poweList = res.data.rows
+            this.total = res.data.total
             this.poweList.forEach(ele => {
               this.$set(ele, 'isfold', false)
             })
@@ -237,6 +264,8 @@ export default {
       .approvalGuide_cont{
         margin:30px;
         margin-top: 44%;
+        height: 100%;
+        overflow: auto;
         .weui-cells{
           box-shadow: 0px 2px 18px 0px rgba(121, 121, 121, 0.15);
           border-radius: 20px;
@@ -318,24 +347,7 @@ export default {
               margin-bottom: 18px;
             }
           }
-          .slider_sure{
-            display: flex;
-            justify-content: space-between;
-            font-size: 27px;
-            span:nth-child(1){
-              padding:24px 104px;
-              color: #666666;
-              background-color: #f0f0f0;
-              border-radius: 35px;
-            }
-            span:nth-child(2){
-              padding:24px 104px;
-              background-color: #ecfcf2;
-              border-radius: 35px;
-              border: solid 2px #07ab50;
-              color:#07ab50;
-            }
-          }
+
         }
       }
     }

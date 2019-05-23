@@ -31,7 +31,7 @@
 
 <script>
 import {
-  api, paramApi
+  api
 } from '@/api/hr/common'
 import UE from '@/components/ue.vue'
 export default {
@@ -93,11 +93,11 @@ export default {
     },
     // 查看数据
     viewassessmenttemp(row) {
-      this.$router.push({ name: 'assessmenttemp-detail', query: { title: '查看详情', row:row }})
+      this.$router.push({ name: 'assessmenttemp-detail', query: { title: '查看详情', row: row }})
     },
     // 点击新增按钮的时候
     handleCreate() {
-      this.$router.push({ name: 'assessmenttemp-add', query: { title: '新增模板',}})
+      this.$router.push({ name: 'assessmenttemp-add', query: { title: '新增模板' }})
     },
     // 表格分页功能
     handleSizeChange(val) {

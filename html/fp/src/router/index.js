@@ -244,7 +244,7 @@ export default new Router({
               component: resolve => require(['@/views/home/productService/myApply'], resolve)
             },
             {
-              path: '/myBusiness/index',
+              path: 'home/myBusiness/index',
               name: 'business',
               meta: {
                 title: '我的企业'
@@ -258,6 +258,14 @@ export default new Router({
                 title: '编辑企业'
               },
               component: resolve => require(['@/views/home/myBusiness/editBusiness'], resolve)
+            },
+            {
+              path: '/myBusiness/businesInvitation',
+              name: 'businesInvitation',
+              meta: {
+                title: '企业邀请'
+              },
+              component: resolve => require(['@/views/home/myBusiness/businesInvitation'], resolve)
             },
             {
               path: '/myBusiness/recruitmentManagement',
@@ -549,12 +557,92 @@ export default new Router({
           name: 'regData'
         },
         {
+          path: '/policyCenter',
+          component: resolve => require(['@/views/policyCenter/policyCenter'], resolve),
+          meta: {
+            title: '政策中心首页'
+          },
+          name: 'policyCenter'
+        },
+        {
+          path: '/graphicPolicy',
+          component: resolve => require(['@/views/policyCenter/graphicPolicy'], resolve),
+          meta: {
+            title: '图解政策详情'
+          },
+          name: 'graphicPolicy'
+        },
+        {
+          path: '/policyGuide',
+          component: resolve => require(['@/views/policyCenter/policyGuide'], resolve),
+          meta: {
+            title: '政策指南详情'
+          },
+          name: 'policyGuide'
+        },
+        {
+          path: '/recruitmentList',
+          component: resolve => require(['@/views/humanResource'], resolve),
+          meta: {
+            title: '企业招聘列表'
+          },
+          name: 'recruitmentList'
+        },
+        {
           path: '/incubatorEnterprises',
           component: resolve => require(['@/views/incubatorEnterprises'], resolve),
           meta: {
             title: '孵化企业'
           },
           name: 'incubatorEnterprises'
+        },
+        {
+          path: '/announcementDetails',
+          component: resolve => require(['@/views/announcementDetails'], resolve),
+          meta: {
+            title: '公告详情'
+          },
+          name: 'announcementDetails'
+        },
+        {
+          path: '/academicExchange',
+          component: resolve => require(['@/views/academicExchange'], resolve),
+          meta: {
+            title: '学术科技'
+          },
+          name: 'academicExchange'
+        },
+        {
+          path: '/technologyDetails',
+          component: resolve => require(['@/views/academicExchange/technologyDetails'], resolve),
+          meta: {
+            title: '学术科技详情'
+          },
+          name: 'technologyDetails'
+        },
+        {
+          path: '/parkDetails',
+          component: resolve => require(['@/views/parkDetails'], resolve),
+          meta: {
+            title: '园区详情'
+          },
+          name: 'parkDetails'
+        },
+        {
+          path: '/enterpriseInformation',
+          component: resolve => require(['@/views/enterpriseInformation'], resolve),
+          meta: {
+            title: '企业资讯'
+          },
+          name: 'enterpriseInformation'
+        },
+        {
+          path: '/enterpriseInfoDetails',
+          component: resolve => require(['@/views/enterpriseInformation/enterpriseInfoDetails'], resolve),
+          meta: {
+            title: '企业资讯详情'
+          },
+          name: 'enterpriseInfoDetails'
         },
       ]
     },
@@ -822,38 +910,6 @@ export default new Router({
         title: '金融产品详情'
       },
       name: 'finaProDetail'
-    },
-    {
-      path: '/policyCenter',
-      component: resolve => require(['@/views/policyCenter/policyCenter'], resolve),
-      meta: {
-        title: '政策中心首页'
-      },
-      name: 'policyCenter'
-    },
-    {
-      path: '/graphicPolicy',
-      component: resolve => require(['@/views/policyCenter/graphicPolicy'], resolve),
-      meta: {
-        title: '图解政策详情'
-      },
-      name: 'graphicPolicy'
-    },
-    {
-      path: '/policyGuide',
-      component: resolve => require(['@/views/policyCenter/policyGuide'], resolve),
-      meta: {
-        title: '政策指南详情'
-      },
-      name: 'policyGuide'
-    },
-    {
-      path: '/recruitmentList',
-      component: resolve => require(['@/views/humanResource'], resolve),
-      meta: {
-        title: '企业招聘列表'
-      },
-      name: 'recruitmentList'
     },
     {
       path: '/userinfo',

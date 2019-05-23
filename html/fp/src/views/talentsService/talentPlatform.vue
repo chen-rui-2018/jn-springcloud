@@ -20,9 +20,9 @@
       <!-- 平台列表 -->
       <div class="talentPlatform_list">
         <div class="platform_recommend">
-          <el-tabs v-model="subordinatePlatformName" @tab-click="switchtype">
+          <el-tabs>
             <el-tab-pane v-for="(typeitem,typeindex) in platformType" :key="typeindex">
-              <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
+              <div slot="label" @click="switchtype(typeitem.id)">{{typeitem.name}}</div>
               <div class="platform_titile"><span></span>平台介绍</div>
               <!-- 表格 -->
               <div class="platform_table">
@@ -90,7 +90,7 @@
 export default {
   data () {
     return {
-      subordinatePlatformName:'',
+      subordinatePlatformName:'1',
       platformType:[],
       pladformList:[],
       page:1,
@@ -156,7 +156,8 @@ export default {
       });
     },
     //切换平台
-    switchtype(){
+    switchtype(id){
+      this.subordinatePlatformName =id
       this.getPlatformList()
     },
     handleSizeChange(val) {
@@ -173,7 +174,7 @@ export default {
 
 <style lang="scss">
   .talentPlatform{
-    margin-top: 230px;
+    // margin-top: 230px;
     .talentPlatform_content{
       width: 1190px;
       margin: 0 auto;

@@ -381,7 +381,7 @@ toolbar.OnTelephoneRing(function( szCaller, szCallid ) {
 	addLog( "坐席来电振铃事件，szCaller=" + szCaller + ",szCallid=" + szCallid );
 
 	//调试使用，篡改来电
-	szCaller=18674398739;
+	szCaller=18073856620;
 
 	//弹出对话框
 	$(".popBox").show();
@@ -415,11 +415,9 @@ function getCallerOwen(obj){
 			"X-Authorization-access_token":token
 		},
 		success: function (data) {
-			console.log(data);
-			var phoneInfo=JSON.toLocaleString(data);
-			console.log(phoneInfo);
-
-
+			if(data!=null && data.data!=null && data.code=='0000'){
+				$("#callerOwen").val(data.data);
+			}
 		}
 	});
 }
@@ -446,8 +444,6 @@ function getUserIno(obj){
 				var user=data.data;
 				table=table+"<tr><td style='width:80px'>1</td><td style='width:80px'>"+user.sex+"</td>" +
 					"<td style='width: 120px'>"+user.account+"</td><td style='width: 80px'>"+user.email+"</td><td style='width: 100px'>"+user.phone+"</td></tr>";
-				//给隐藏域赋值
-				$("#contact").val(user.phone);
 			}
 			table=table+"</table>";
 			$("#userInfo").html(table);
@@ -459,7 +455,7 @@ function getUserIno(obj){
 function getCalledHistory(obj){
 	$.ajax({
 		type: 'get',
-		url: curl + '/guest/customer/customerCalledInfoEnterController//getCalledHistory',
+		url: curl + '/guest/customer/customerCalledInfoEnterController/getCalledHistory',
 		dataType: "json",
 		data: {
 			phone: obj,
@@ -469,9 +465,9 @@ function getCalledHistory(obj){
 		},
 		success: function (data) {
 			var table="<table>";
-			table=table+"<tr><td style='width:100px'>问题编号</td><td style='width:100px'>业务模块</td>" +
-				"<td style='width: 100px'>处理状态</td><td style='width: 200px'>问题标题</td>" +
-				"<td style='width: 160px'>时间</td><td style='width: 80px'>详情</td></tr>";
+			table=table+"<tr><td style='width:200px'>问题编号</td><td style='width:100px'>业务模块</td>" +
+				"<td style='width: 100px'>处理状态</td><td style='width: 250px'>问题标题</td>" +
+				"<td style='width: 160px'>时间</td><td style='width: 100px'>详情</td></tr>";
 			if(data==undefined ||data==null ||data.data==null ||data.data.rows.length==0){
 				table=table+"<tr><td colspan='6' style='text-align: center'>当前来电用户暂无历史信息</td></tr>";
 			}else if(data.code='0000'){
@@ -484,10 +480,10 @@ function getCalledHistory(obj){
 					if(info.status=='1'){showStatus="处理中"}
 					if(info.status=='2'){showStatus="已处理"}
 					if(info.status=='3'){showStatus="无法处理"}
-					table=table+"<tr><td style='width:80px'>"+info.quesCode+"</td><td style='width:80px'>"+info.serviceModuleName+"</td>" +
-						"<td style='width: 120px'>"+showStatus+"</td><td style='width: 80px'>"+info.quesTitle+"</td>" +
-						"<td style='width: 100px'>"+info.createdTime+"</td>" +
-						"<td style='width: 80px'><a href='javascript:void(0);' onclick='getHistoryDetails(this)' value=''+info.processInsId+''>详情></a></td></tr>";
+					table=table+"<tr><td style='width:200px'>"+info.quesCode+"</td><td style='width:100px'>"+info.serviceModuleName+"</td>" +
+						"<td style='width: 100px'>"+showStatus+"</td><td style='width: 250px'>"+info.quesTitle+"</td>" +
+						"<td style='width: 160px'>"+info.createdTime+"</td>" +
+						"<td style='width: 100px'><a href='javascript:void(0);' onclick='getHistoryDetails(this)' value='"+info.processInsId+"'>详情></a></td></tr>";
 				}
 			}
 			table=table+"</table>";
@@ -498,12 +494,36 @@ function getCalledHistory(obj){
 
 //根据流程实例id查看客服问题详情
 function getHistoryDetails(obj){
-	alert("问题详情"+obj);
+	//根据流程实例id,用户账号查看问题详情
+	var processInsId = $(obj).attr("value");
+	$.ajax({
+		type: 'get',
+		url: curl + '/guest/customer/customerCalledInfoEnterController/customerQuesDetail',
+		dataType: "json",
+		data: {
+			processInsId: processInsId,
+		},
+		headers: {
+			"X-Authorization-access_token":token
+		},
+		success: function (data) {
+			if(data!=undefined && data!=null && data.data!=null && data.code=='0000'){
+				console.log(data.data);
+			}
+			$(".quesLayer").show();
+			$(".quesBox").show();
+		}
+	});
+}
+//问题详情弹出框关闭
+function closeQuesBox(){
+	$(".quesLayer").hide();
+	$(".popquesBoxLayer").hide();
+
 }
 
 
-
-//弹出框关闭方法
+//来电弹出框关闭方法
 function closeBox() {
 	if(confirm("确认是否放弃本次编辑")){
 		$(".popBox").hide();
@@ -527,7 +547,7 @@ function okSubmit(){
 	$("#currentCallShow").val($("#currentCall").val());
 	$("#calledNumberShow").val($("#calledNumber").val());
 	$("#callerOwenShow").val($("#callerOwen").val());
-	$("#phoneShow").val($("#contact").val());
+	$("#phoneShow").val($("#currentCall").val());
 	//关闭弹窗
 	$(".popBox").hide();
 	$(".popLayer").hide();

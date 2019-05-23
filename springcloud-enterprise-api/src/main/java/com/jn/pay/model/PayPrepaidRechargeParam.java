@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Digits;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -28,7 +29,7 @@ public class PayPrepaidRechargeParam implements Serializable {
     private String channelId;
 
     @ApiModelProperty(value = "充值金额",required = true,example = "123.00")
-    @NotBlank(message = "充值金额不能为空")
+    @Digits(integer = 6, fraction = 2, message = "{rechargeAmount:'请检查充值金额格式'}")
     private BigDecimal rechargeAmount;
 
     public static long getSerialVersionUID() {

@@ -48,6 +48,10 @@ public enum ParkingEnums implements CodeAndMsg {
     PARKING_AREA_GATE_DAOER("daoer","道尔道闸"),
     PARKING_AREA_GATE_FUSHI("fushi","富士道闸"),
     PARKING_AREA_MONTHS_11("11","月租卡类型11"),
+    PARKING_USER_TYPE_COMPANY("company","用户类型-企业"),
+    PARKING_USER_TYPE_USER("user","用户类型-用户"),
+    PARKING_USER_TYPE_ORG_ROLE("机构管理员","用户类型-用户"),
+    PARKING_USER_TYPE_COMPANY_ROLE("企业管理员","用户类型-用户"),
 
 
 

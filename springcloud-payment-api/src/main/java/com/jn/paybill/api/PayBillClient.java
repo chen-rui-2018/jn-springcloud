@@ -2,6 +2,7 @@ package com.jn.paybill.api;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.pay.model.PayOrderNotify;
 import com.jn.paybill.model.*;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,11 +64,11 @@ public interface PayBillClient {
 
     /**
      * 支付回调接口
-     * @param callBackParam
+     * @param payOrderNotify
      * @return
      */
     @RequestMapping(value = "/api/pay/bill/payCallBack", method = RequestMethod.POST)
-    Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam);
+    Result payCallBack(@RequestBody PayOrderNotify payOrderNotify);
 
     /**
      * 根据账单IDs获取账单列表内容

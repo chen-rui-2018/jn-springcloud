@@ -29,6 +29,8 @@ public class AdvisorManagementShow implements Serializable {
     private String createdTime;
     @ApiModelProperty(value = "邀请状态(- 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除)")
     private String approvalStatus;
+    @ApiModelProperty(value = "头像")
+    private String avatar;
 
     public String getAdvisorName() {
         return advisorName;
@@ -94,6 +96,15 @@ public class AdvisorManagementShow implements Serializable {
         this.approvalStatus = approvalStatus;
     }
 
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     @Override
     public String toString() {
         return "AdvisorManagementShow{" +
@@ -105,6 +116,7 @@ public class AdvisorManagementShow implements Serializable {
                 ", education='" + education + '\'' +
                 ", createdTime='" + createdTime + '\'' +
                 ", approvalStatus='" + approvalStatus + '\'' +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

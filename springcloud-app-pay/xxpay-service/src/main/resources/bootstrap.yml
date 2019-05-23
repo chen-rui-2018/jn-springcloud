@@ -3,7 +3,7 @@ ali:
   return_url: http://www.baidu.com
 cert:
   root:
-    path: /Users/dingzhiwei/java/tmp/cert
+    path: /Users/chenmiao/java/tmp/cert
 wx:
   notify_url: http://2agrvi.natappfree.cc/xxpay-service/pay/wxPayNotifyRes
 
@@ -14,6 +14,7 @@ eureka:
       defaultZone: http://springcloud:springcloud@localhost:1025/eureka/
   instance:
     prefer-ip-address: true
+
 spring:
   application:
     name: xxpay-service
@@ -24,6 +25,13 @@ spring:
         serviceId: springcloud-app-config
       label: master
       profile: master
+  sleuth:
+    sampler:
+      percentage: 1.0
+
+management:
+  security:
+    enabled: false
 
 server:
   port: 3000

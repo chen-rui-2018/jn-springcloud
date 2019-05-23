@@ -51,9 +51,9 @@
 </template>
 
 <script>
-import store from '@/store'
+// import store from '@/store'
 import {
-  api, paramApi, exportExcel
+  api, exportExcel
 } from '@/api/hr/train'
 export default {
   data() {
@@ -67,14 +67,14 @@ export default {
         rows: 10
       },
       courseList: [],
-      total: 1,
+      total: 1
     }
   },
   created() {
-      this.init()
+    this.init()
   },
   methods: {
-    //初始化
+    // 初始化
     init() {
       this.listLoading = true
       this.listQuery['id'] = this.$route.query.id

@@ -6,24 +6,24 @@
           <el-form :model="formData" :inline="true">
             <el-col :span="12">
               <el-form-item label="课程名称" prop="courseTitle">
-                <el-input v-model="formData.courseTitle" :disabled="true"></el-input>
+                <el-input v-model="formData.courseTitle" :disabled="true"/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="培训老师" prop="trainTeacher">
-                <el-input v-model="formData.trainTeacher" :disabled="true"></el-input>
+                <el-input v-model="formData.trainTeacher" :disabled="true"/>
               </el-form-item>
             </el-col>
             <el-form-item label="培训地点" prop="trainVenue">
-              <el-input v-model="formData.trainVenue" :disabled="true"></el-input>
+              <el-input v-model="formData.trainVenue" :disabled="true"/>
             </el-form-item>
             <el-form-item label="培训时间">
               <el-col :span="11">
                 <el-date-picker
                   v-model="formData.trainStartTime"
+                  :disabled="true"
                   type="datetime"
                   placeholder="开始时间"
-									:disabled="true"
                   style="width: 100%;"
                 />
               </el-col>
@@ -31,15 +31,15 @@
               <el-col :span="11">
                 <el-date-picker
                   v-model="formData.trainEndTime"
+                  :disabled="true"
                   type="datetime"
                   placeholder="结束时间"
-									:disabled="true"
                   style="width: 100%;"
                 />
               </el-col>
             </el-form-item>
             <el-form-item label="课程内容" prop="content">
-              <el-input type="textarea" v-model="formData.trainInfo" :rows="3":disabled="true"></el-input>
+              <el-input v-model="formData.trainInfo" :rows="3" :disabled="true" type="textarea"/>
             </el-form-item>
             <el-row type="flex" justify="center" style="margin-top:20px;">
               <el-form-item>
@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import store from '@/store'
+// import store from '@/store'
 import {
-  api, paramApi
+  api
 } from '@/api/hr/train'
 export default {
   data() {
@@ -66,19 +66,19 @@ export default {
   },
   created() {
     this.init()
-	},
-	methods: {
-		// 初始化
+  },
+  methods: {
+    // 初始化
     init() {
-      let query = this.$route.query
+      const query = this.$route.query
       if (query.id) {
         this.formData.id = query.id
-        let data = {
-          id : query.id
+        const data = {
+          id: query.id
         }
         api('hr/train/list/selectManagement', data).then(res => {
           if (res.data.code === '0000') {
-            let data = res.data.data
+            const data = res.data.data
             this.formData = data
             this.defaultMsg = this.formData.trainInfo
           } else {
@@ -87,7 +87,7 @@ export default {
         })
       }
     },
-		// 返回
+    // 返回
     goBack(view) {
       this.$store.dispatch('delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
@@ -103,7 +103,6 @@ export default {
     isActive(route) {
       return route.path === this.$route.path
     }
-	}
+  }
 }
 </script>
-

@@ -55,7 +55,7 @@
 
 <script>
 import {
-  api, paramApi
+  api
 } from '@/api/hr/common'
 import UE from '@/components/ue.vue'
 export default {
@@ -75,7 +75,7 @@ export default {
         page: 1,
         rows: 10
       },
-      prePageRow:{},
+      prePageRow: {},
       code: {
         groupCode: 'platform_type',
         moduleCode: 'springcloud-hr',
@@ -98,7 +98,7 @@ export default {
       })
         .then(() => {
           const delRow = {
-            assessmentObjectJobNumber:row.assessmentJobNumber
+            assessmentObjectJobNumber: row.assessmentJobNumber
           }
           api('hr/AssessmentManagement/deleteAppraisedPersonRecord', delRow).then(res => {
             if (res.data.code === '0000') {
@@ -120,7 +120,7 @@ export default {
     },
     // 开始考核
     beginassessment(row) {
-      this.$router.push({ name: 'assessmentsub-add', query: { title: '开始考核',row:row,prePageRow:this.prePageRow }})
+      this.$router.push({ name: 'assessmentsub-add', query: { title: '开始考核', row: row, prePageRow: this.prePageRow }})
     },
     isActive(route) {
       return route.path === this.$route.path
@@ -175,8 +175,8 @@ export default {
       })
       return PlatformTypeArr.join('、')
     },
-    //归档生效
-    endAarchive(row){
+    // 归档生效
+    endAarchive(row) {
       // api('hr/AssessmentManagement/updateAssessment', row).then(res => {
       api('hr/AssessmentManagement/finishAndArchive', row).then(res => {
         if (res.data.code === '0000') {

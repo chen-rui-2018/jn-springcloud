@@ -2,30 +2,29 @@ import request from '@/utils/request'
 var baseurl = 'springcloud-hr/'
 
 export function api(url, query) {
-    return request({
-      url: baseurl + url,
-      method: 'post',
-      data: query
-    })
-  }
-export function paramApi(url, query, parameter) {
-    const param = new URLSearchParams()
-    param.append(parameter, query)
-    return request({
-      url: baseurl + url,
-      method: 'post',
-      data: param
-    })
+  return request({
+    url: baseurl + url,
+    method: 'post',
+    data: query
+  })
 }
-
+export function paramApi(url, query, parameter) {
+  const param = new URLSearchParams()
+  param.append(parameter, query)
+  return request({
+    url: baseurl + url,
+    method: 'post',
+    data: param
+  })
+}
 
 // 新建课程
 export function addManagement(query) {
-    return request({
-      url: 'hr/train/list/addManagement',
-      method: 'post',
-      data: query
-    })
+  return request({
+    url: 'hr/train/list/addManagement',
+    method: 'post',
+    data: query
+  })
 }
 
 // 结束课程
@@ -48,9 +47,9 @@ export function emailList(query) {
 
 // 导出培训记录
 export function exportExcel(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/train/list/exportManagement?${params}`,
@@ -103,7 +102,7 @@ export function managemenRecordtList(query) {
   })
 }
 
-/***调研部分******************************************** */
+/** *调研部分******************************************** */
 
 // web端-新增答题记录
 export function addAnswerInfo(query) {
@@ -240,7 +239,7 @@ export function updateQuestion(query) {
   })
 }
 
-/*问卷部分*************************************************************** */
+/* 问卷部分*************************************************************** */
 
 // web端/app 新增答题记录
 export function addAnswerInfoQuest(query) {

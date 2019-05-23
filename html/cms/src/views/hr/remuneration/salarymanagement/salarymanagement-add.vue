@@ -1,192 +1,192 @@
 <template>
   <div>
-  <div style="border:1px solid #00a0e9">
-    <el-form ref="salaryInfoAdd" :model="salaryInfoAdd" :rules="rules" label-width="200px">
-      <div  align="left">
-        <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
-          员工薪资薪资
-        </div>
-        <div style="margin-left: 30px;">
-          员工基本信息：
-          <div style="display:flex">
-            <el-form-item label="姓名">
-              <el-input v-model="employeeBasicInfo.name" :disabled="editFlag" :style="{width:(editFlag==true?'205px':'170px')}"/>
-              <el-button v-if="!editFlag" type="text" @click="selJobNumber">选择</el-button>
-            </el-form-item>
-            <el-form-item label="部门">
-              <el-input v-model="employeeBasicInfo.departmentName" disabled="disabled" style="width: 205px;"/>
-            </el-form-item>
+    <div style="border:1px solid #00a0e9">
+      <el-form ref="salaryInfoAdd" :model="salaryInfoAdd" :rules="rules" label-width="200px">
+        <div align="left">
+          <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
+            员工薪资薪资
           </div>
-          <div style="display:flex">
-            <el-form-item label="职级">
-              <el-input v-model="employeeBasicInfo.rankName" disabled="disabled" style="width: 205px;"/>
-            </el-form-item>
-            <el-form-item label="职位">
-              <el-input v-model="employeeBasicInfo.jobName" disabled="disabled"  style="width: 205px;"/>
-            </el-form-item>
-          </div>
-          <div style="display:flex">
-            <el-form-item label="证件号">
-              <el-input v-model="employeeBasicInfo.certificateNumber" disabled="disabled" style="width: 205px;"/>
-            </el-form-item>
-            <el-form-item label="入职时间">
+          <div style="margin-left: 30px;">
+            员工基本信息：
+            <div style="display:flex">
+              <el-form-item label="姓名">
+                <el-input v-model="employeeBasicInfo.name" :disabled="editFlag" :style="{width:(editFlag==true?'205px':'170px')}"/>
+                <el-button v-if="!editFlag" type="text" @click="selJobNumber">选择</el-button>
+              </el-form-item>
+              <el-form-item label="部门">
+                <el-input v-model="employeeBasicInfo.departmentName" disabled="disabled" style="width: 205px;"/>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="职级">
+                <el-input v-model="employeeBasicInfo.rankName" disabled="disabled" style="width: 205px;"/>
+              </el-form-item>
+              <el-form-item label="职位">
+                <el-input v-model="employeeBasicInfo.jobName" disabled="disabled" style="width: 205px;"/>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="证件号">
+                <el-input v-model="employeeBasicInfo.certificateNumber" disabled="disabled" style="width: 205px;"/>
+              </el-form-item>
+              <el-form-item label="入职时间">
                 <el-input v-model="employeeBasicInfo.entryDate" disabled="disabled" style="width: 205px;"/>
-            </el-form-item>
-          </div>
-          <div style="display:flex">
-            <el-form-item label="试用期工资">
-              <el-input v-model="changeTrialPeriodWagesComp" disabled="disabled"  style="width: 205px;"/>
-            </el-form-item>
-            <el-form-item label="转正工资">
-              <el-input v-model="changePositiveWageComp" disabled="disabled" style="width: 205px;"/>
-            </el-form-item>
-          </div>
-          <div style="display:flex">
-            <el-form-item label="当前工资">
-              <el-input v-model="changeCurrentSalaryComp" disabled="disabled" style="width: 205px;"/>
-            </el-form-item>
-          </div>
-        </div>
-      </div>
-      <div  align="left">
-        <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
-          试用期工资组成
-          <el-button type="text" style="font-weight: bold;color: black" v-show="trialPeriodWagesFlag" @click="onHideObj('trialPeriodWagesFlag')">隐藏</el-button>
-          <el-button type="text" style="font-weight: bold;color: black" v-show="!trialPeriodWagesFlag" @click="onHideObj('trialPeriodWagesFlag')">显示</el-button>
-        </div>
-        <div id="trialPeriodWagesDiv" v-show="trialPeriodWagesFlag"  style="margin-left: 30px; margin-top: 3px;">
-          基本工资组成：
-          <div style="display:flex">
-            <el-form-item label="基础工资" prop="probationBasicWage" class="inline">
-              <el-input v-model="salaryInfoAdd.probationBasicWage" :disabled="disableAll" type="number"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="职务津贴" prop="probationDutyAllowance" class="inline">
-              <el-input v-model="salaryInfoAdd.probationDutyAllowance" :disabled="disableAll" type="number"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-          <div style="display:flex">
-            <el-form-item label="职称津贴" prop="probationProfessionalTitleAllowance" class="inline">
-              <el-input v-model="salaryInfoAdd.probationProfessionalTitleAllowance" :disabled="disableAll" type="number"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="工龄工资" prop="probationSeniorityWage" class="inline">
-              <el-input v-model="salaryInfoAdd.probationSeniorityWage" :disabled="disableAll" type="number"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-          <div style="display:flex">
-            <el-form-item label="学历津贴" prop="probationEducationAllowance" class="inline">
-              <el-input v-model="salaryInfoAdd.probationEducationAllowance" :disabled="disableAll" type="number"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="工资性补贴" prop="probationWorkSubsidy" class="inline">
-              <el-input v-model="salaryInfoAdd.probationWorkSubsidy" :disabled="disableAll"type="number"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-          其他：
-          <div style="display:flex">
-            <el-form-item label="绩效奖金" prop="probationAchievementBonus" class="inline">
-              <el-input v-model="salaryInfoAdd.probationAchievementBonus" :disabled="disableAll" type="number"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="单项奖励" prop="probationSingleReward" class="inline">
-              <el-input v-model="salaryInfoAdd.probationSingleReward" :disabled="disableAll" type="number"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="试用期工资">
+                <el-input v-model="changeTrialPeriodWagesComp" disabled="disabled" style="width: 205px;"/>
+              </el-form-item>
+              <el-form-item label="转正工资">
+                <el-input v-model="changePositiveWageComp" disabled="disabled" style="width: 205px;"/>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="当前工资">
+                <el-input v-model="changeCurrentSalaryComp" disabled="disabled" style="width: 205px;"/>
+              </el-form-item>
+            </div>
           </div>
         </div>
-      </div>
+        <div align="left">
+          <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
+            试用期工资组成
+            <el-button v-show="trialPeriodWagesFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('trialPeriodWagesFlag')">隐藏</el-button>
+            <el-button v-show="!trialPeriodWagesFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('trialPeriodWagesFlag')">显示</el-button>
+          </div>
+          <div v-show="trialPeriodWagesFlag" id="trialPeriodWagesDiv" style="margin-left: 30px; margin-top: 3px;">
+            基本工资组成：
+            <div style="display:flex">
+              <el-form-item label="基础工资" prop="probationBasicWage" class="inline">
+                <el-input v-model="salaryInfoAdd.probationBasicWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="职务津贴" prop="probationDutyAllowance" class="inline">
+                <el-input v-model="salaryInfoAdd.probationDutyAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="职称津贴" prop="probationProfessionalTitleAllowance" class="inline">
+                <el-input v-model="salaryInfoAdd.probationProfessionalTitleAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="工龄工资" prop="probationSeniorityWage" class="inline">
+                <el-input v-model="salaryInfoAdd.probationSeniorityWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="学历津贴" prop="probationEducationAllowance" class="inline">
+                <el-input v-model="salaryInfoAdd.probationEducationAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="工资性补贴" prop="probationWorkSubsidy" class="inline">
+                <el-input v-model="salaryInfoAdd.probationWorkSubsidy" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+            其他：
+            <div style="display:flex">
+              <el-form-item label="绩效奖金" prop="probationAchievementBonus" class="inline">
+                <el-input v-model="salaryInfoAdd.probationAchievementBonus" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="单项奖励" prop="probationSingleReward" class="inline">
+                <el-input v-model="salaryInfoAdd.probationSingleReward" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+          </div>
+        </div>
 
-      <div  align="left" style="margin-top: 5px;">
-        <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
-          转正工资组成
-          <el-button type="text" style="font-weight: bold;color: black" v-show="positiveWageFlag" @click="onHideObj('positiveWageFlag')">隐藏</el-button>
-          <el-button type="text" style="font-weight: bold;color: black" v-show="!positiveWageFlag" @click="onHideObj('positiveWageFlag')">显示</el-button>
-<!--          <img v-show="!positiveWageFlag" src="@/assets/images/search_up.gif" alt="图片">-->
-<!--          <img v-show="positiveWageFlag" src="@/assets/images/search_down.gif" alt="图片">-->
+        <div align="left" style="margin-top: 5px;">
+          <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
+            转正工资组成
+            <el-button v-show="positiveWageFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('positiveWageFlag')">隐藏</el-button>
+            <el-button v-show="!positiveWageFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('positiveWageFlag')">显示</el-button>
+            <!--          <img v-show="!positiveWageFlag" src="@/assets/images/search_up.gif" alt="图片">-->
+            <!--          <img v-show="positiveWageFlag" src="@/assets/images/search_down.gif" alt="图片">-->
+          </div>
+          <div v-show="positiveWageFlag" id="positiveWageDiv" style="margin-left: 30px; margin-top: 3px;">
+            基本工资组成：
+            <div style="display:flex">
+              <el-form-item label="基础工资" prop="conversionBasicWage" class="inline">
+                <el-input v-model="salaryInfoAdd.conversionBasicWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="职务津贴" prop="conversionDutyAllowance" class="inline">
+                <el-input v-model="salaryInfoAdd.conversionDutyAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="职称津贴" prop="conversionProfessionalTitleAllowance" class="inline">
+                <el-input v-model="salaryInfoAdd.conversionProfessionalTitleAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="工龄工资" prop="conversionSeniorityWage" class="inline">
+                <el-input v-model="salaryInfoAdd.conversionSeniorityWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="学历津贴" prop="conversionEducationAllowance" class="inline">
+                <el-input v-model="salaryInfoAdd.conversionEducationAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="工资性补贴" prop="conversionWorkSubsidy" class="inline">
+                <el-input v-model="salaryInfoAdd.conversionWorkSubsidy" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+            其他：
+            <div style="display:flex">
+              <el-form-item label="绩效奖金" prop="conversionAchievementBonus" class="inline">
+                <el-input v-model="salaryInfoAdd.conversionAchievementBonus" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="单项奖励" prop="conversionSingleReward" class="inline">
+                <el-input v-model="salaryInfoAdd.conversionSingleReward" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+          </div>
         </div>
-        <div id="positiveWageDiv" v-show="positiveWageFlag" style="margin-left: 30px; margin-top: 3px;">
-          基本工资组成：
-          <div style="display:flex">
-            <el-form-item label="基础工资" prop="conversionBasicWage" class="inline">
-              <el-input v-model="salaryInfoAdd.conversionBasicWage" :disabled="disableAll" type="number"   clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="职务津贴" prop="conversionDutyAllowance" class="inline">
-              <el-input v-model="salaryInfoAdd.conversionDutyAllowance" :disabled="disableAll" type="number"   clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-          <div style="display:flex">
-            <el-form-item label="职称津贴" prop="conversionProfessionalTitleAllowance" class="inline">
-              <el-input v-model="salaryInfoAdd.conversionProfessionalTitleAllowance" :disabled="disableAll" type="number"   clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="工龄工资" prop="conversionSeniorityWage" class="inline">
-              <el-input v-model="salaryInfoAdd.conversionSeniorityWage" :disabled="disableAll" type="number"   clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-          <div style="display:flex">
-            <el-form-item label="学历津贴" prop="conversionEducationAllowance" class="inline">
-              <el-input v-model="salaryInfoAdd.conversionEducationAllowance" type="number"  :disabled="disableAll"   clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="工资性补贴" prop="conversionWorkSubsidy" class="inline">
-              <el-input v-model="salaryInfoAdd.conversionWorkSubsidy" type="number"  :disabled="disableAll"   clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-          其他：
-          <div style="display:flex">
-            <el-form-item label="绩效奖金" prop="conversionAchievementBonus" class="inline">
-              <el-input v-model="salaryInfoAdd.conversionAchievementBonus" type="number"  :disabled="disableAll"   clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="单项奖励" prop="conversionSingleReward" class="inline">
-              <el-input v-model="salaryInfoAdd.conversionSingleReward" type="number"  :disabled="disableAll"   clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-        </div>
-      </div>
-      <div  align="left" style="margin-top: 5px;">
-        <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
-          当前工资组成
-          <el-button type="text" style="font-weight: bold;color: black" v-show="currentSalaryFlag" @click="onHideObj('currentSalaryFlag')">隐藏</el-button>
-          <el-button type="text" style="font-weight: bold;color: black" v-show="!currentSalaryFlag" @click="onHideObj('currentSalaryFlag')">显示</el-button>
+        <div align="left" style="margin-top: 5px;">
+          <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
+            当前工资组成
+            <el-button v-show="currentSalaryFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('currentSalaryFlag')">隐藏</el-button>
+            <el-button v-show="!currentSalaryFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('currentSalaryFlag')">显示</el-button>
           <!--<img v-show="!currentSalaryFlag" src="@/assets/images/search_up.gif" alt="图片">
           <img v-show="currentSalaryFlag" src="@/assets/images/search_down.gif" alt="图片">-->
+          </div>
+          <div v-show="currentSalaryFlag" id="currentSalaryDiv" style="margin-left: 30px;margin-top: 3px;">
+            基本工资组成：
+            <div style="display:flex">
+              <el-form-item label="基础工资" prop="currentBasicWage" class="inline">
+                <el-input v-model="salaryInfoAdd.currentBasicWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="职务津贴" prop="currentDutyAllowance" class="inline">
+                <el-input v-model="salaryInfoAdd.currentDutyAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="职称津贴" prop="currentProfessionalTitleAllowance" class="inline">
+                <el-input v-model="salaryInfoAdd.currentProfessionalTitleAllowance" :disabled="disableAll" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="工龄工资" prop="currentSeniorityWage" class="inline">
+                <el-input v-model="salaryInfoAdd.currentSeniorityWage" :disabled="disableAll" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+            <div style="display:flex">
+              <el-form-item label="学历津贴" prop="currentEducationAllowance" class="inline">
+                <el-input v-model="salaryInfoAdd.currentEducationAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="工资性补贴" prop="currentWorkSubsidy" class="inline">
+                <el-input v-model="salaryInfoAdd.currentWorkSubsidy" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+            其他：
+            <div style="display:flex">
+              <el-form-item label="绩效奖金" prop="currentAchievementBonus" class="inline">
+                <el-input v-model="salaryInfoAdd.currentAchievementBonus" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+              <el-form-item label="单项奖励" prop="currentSingleReward" class="inline">
+                <el-input v-model="salaryInfoAdd.currentSingleReward" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+              </el-form-item>
+            </div>
+          </div>
         </div>
-        <div id="currentSalaryDiv" v-show="currentSalaryFlag" style="margin-left: 30px;margin-top: 3px;">
-          基本工资组成：
-          <div style="display:flex">
-            <el-form-item label="基础工资" prop="currentBasicWage" class="inline">
-              <el-input v-model="salaryInfoAdd.currentBasicWage" type="number"  :disabled="disableAll"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="职务津贴" prop="currentDutyAllowance" class="inline">
-              <el-input v-model="salaryInfoAdd.currentDutyAllowance" type="number" :disabled="disableAll"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-          <div style="display:flex">
-            <el-form-item label="职称津贴" prop="currentProfessionalTitleAllowance" class="inline">
-              <el-input v-model="salaryInfoAdd.currentProfessionalTitleAllowance" :disabled="disableAll"  clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="工龄工资" prop="currentSeniorityWage" class="inline">
-              <el-input v-model="salaryInfoAdd.currentSeniorityWage"  :disabled="disableAll" clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-          <div style="display:flex">
-            <el-form-item label="学历津贴" prop="currentEducationAllowance" class="inline">
-              <el-input v-model="salaryInfoAdd.currentEducationAllowance" :disabled="disableAll"  type="number" clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="工资性补贴" prop="currentWorkSubsidy" class="inline">
-              <el-input v-model="salaryInfoAdd.currentWorkSubsidy"  :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-          其他：
-          <div style="display:flex">
-            <el-form-item label="绩效奖金" prop="currentAchievementBonus" class="inline">
-              <el-input v-model="salaryInfoAdd.currentAchievementBonus" :disabled="disableAll"  type="number" clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-            <el-form-item label="单项奖励" prop="currentSingleReward" class="inline">
-              <el-input v-model="salaryInfoAdd.currentSingleReward"  :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
-            </el-form-item>
-          </div>
-        </div>
-      </div>
-    </el-form>
-  </div>
+      </el-form>
+    </div>
     <div class="primaryList" style="margin-top: 20px;">
       <el-button v-if="isupdatesalary" :disabled="isDisabled" type="primary" @click="title==='新增薪资'?submitForm():updateData()">提交</el-button>
-      <el-button v-if="isupdatesalary" type="primary"  @click="goBack($route)" >返回</el-button>
+      <el-button v-if="isupdatesalary" type="primary" @click="goBack($route)" >返回</el-button>
     </div>
     <!-- 用户信息选择框 -->
     <template v-if="employeeBasicInfoFormVisible">
@@ -225,39 +225,39 @@
 
 <script>
 import {
-  api, paramApi,apiGet
+  api
 } from '@/api/hr/common'
 
 import UE from '@/components/ue.vue'
 export default {
   components: { UE },
   data() {
-    var checknoticeTitle = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
-      if (!reg.test(value)) {
-        callback(new Error('名称只允许数字、中文、字母及下划线'))
-      } else {
-        callback()
-      }
-    }
+    // var checknoticeTitle = (rule, value, callback) => {
+    //   const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+    //   if (!reg.test(value)) {
+    //     callback(new Error('名称只允许数字、中文、字母及下划线'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       defaultMsg: '',
       config: {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
       },
-      departmentList:[],
+      departmentList: [],
       total: 0,
-      empTotal:0,
+      empTotal: 0,
       listQuery: {
         page: 1,
-        rows: 10,
+        rows: 10
       },
       empListQuery: {
         page: 1,
-        rows: 10,
+        rows: 10
       },
-      preRowData:{},
+      preRowData: {},
       trialPeriodWagesFlag: false,
       positiveWageFlag: false,
       currentSalaryFlag: false,
@@ -266,10 +266,10 @@ export default {
       isDisabled: false,
       title: '',
       isupdatesalary: true,
-      editFlag:false,
-      employeeBasicInfo:{
+      editFlag: false,
+      employeeBasicInfo: {
       },
-      disableAll:false,
+      disableAll: false,
       employeeBasicInfoList: [],
       salaryInfoAdd: {
         jobNumber: 0,
@@ -283,7 +283,7 @@ export default {
         conversionWorkSubsidy: 0,
         currentAchievementBonus: 0,
         currentBasicWage: 0,
-        currentDutyAllowance:0,
+        currentDutyAllowance: 0,
         currentEducationAllowance: 0,
         currentProfessionalTitleAllowance: 0,
         currentSeniorityWage: 0,
@@ -304,45 +304,45 @@ export default {
         parentGroupCode: 'assess'
       },
       rules: {
-        probationBasicWage:[{required:true,message:'请填写基础工资(试用期)',trigger:'blur'}],
-        probationDutyAllowance:[{required:true,message:'请填写职务津贴(试用期)',trigger:'blur'}],
-        probationProfessionalTitleAllowance:[{required:true,message:'请填写职称津贴(试用期)',trigger:'blur'}],
-        probationSeniorityWage:[{required:true,message:'请填写工龄工资(试用期)',trigger:'blur'}],
-        probationEducationAllowance:[{required:true,message:'请填写学历津贴(试用期)',trigger:'blur'}],
-        probationWorkSubsidy:[{required:true,message:'请填写工作性补贴(试用期)',trigger:'blur'}]
+        probationBasicWage: [{ required: true, message: '请填写基础工资(试用期)', trigger: 'blur' }],
+        probationDutyAllowance: [{ required: true, message: '请填写职务津贴(试用期)', trigger: 'blur' }],
+        probationProfessionalTitleAllowance: [{ required: true, message: '请填写职称津贴(试用期)', trigger: 'blur' }],
+        probationSeniorityWage: [{ required: true, message: '请填写工龄工资(试用期)', trigger: 'blur' }],
+        probationEducationAllowance: [{ required: true, message: '请填写学历津贴(试用期)', trigger: 'blur' }],
+        probationWorkSubsidy: [{ required: true, message: '请填写工作性补贴(试用期)', trigger: 'blur' }]
       }
     }
   },
   computed: {
-    changeTrialPeriodWagesComp: function () {
-      return parseInt((this.salaryInfoAdd.probationBasicWage==null||this.salaryInfoAdd.probationBasicWage=='')?0:this.salaryInfoAdd.probationBasicWage)+
-        parseInt((this.salaryInfoAdd.probationDutyAllowance==null||this.salaryInfoAdd.probationDutyAllowance=='')?0:this.salaryInfoAdd.probationDutyAllowance)+
-        parseInt((this.salaryInfoAdd.probationProfessionalTitleAllowance==null||this.salaryInfoAdd.probationProfessionalTitleAllowance=='')?0:this.salaryInfoAdd.probationProfessionalTitleAllowance)+
-        parseInt((this.salaryInfoAdd.probationSeniorityWage==null||this.salaryInfoAdd.probationSeniorityWage=='')?0:this.salaryInfoAdd.probationSeniorityWage)+
-        parseInt((this.salaryInfoAdd.probationEducationAllowance==null||this.salaryInfoAdd.probationEducationAllowance=='')?0:this.salaryInfoAdd.probationEducationAllowance)+
-        parseInt((this.salaryInfoAdd.probationWorkSubsidy==null||this.salaryInfoAdd.probationWorkSubsidy=='')?0:this.salaryInfoAdd.probationWorkSubsidy)+
-        parseInt((this.salaryInfoAdd.probationAchievementBonus==null||this.salaryInfoAdd.probationAchievementBonus=='')?0:this.salaryInfoAdd.probationAchievementBonus)+
-        parseInt((this.salaryInfoAdd.probationSingleReward==null||this.salaryInfoAdd.probationSingleReward=='')?0:this.salaryInfoAdd.probationSingleReward)
+    changeTrialPeriodWagesComp: function() {
+      return parseInt((this.salaryInfoAdd.probationBasicWage == null || this.salaryInfoAdd.probationBasicWage === '') ? 0 : this.salaryInfoAdd.probationBasicWage) +
+        parseInt((this.salaryInfoAdd.probationDutyAllowance == null || this.salaryInfoAdd.probationDutyAllowance === '') ? 0 : this.salaryInfoAdd.probationDutyAllowance) +
+        parseInt((this.salaryInfoAdd.probationProfessionalTitleAllowance == null || this.salaryInfoAdd.probationProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.probationProfessionalTitleAllowance) +
+        parseInt((this.salaryInfoAdd.probationSeniorityWage == null || this.salaryInfoAdd.probationSeniorityWage === '') ? 0 : this.salaryInfoAdd.probationSeniorityWage) +
+        parseInt((this.salaryInfoAdd.probationEducationAllowance == null || this.salaryInfoAdd.probationEducationAllowance === '') ? 0 : this.salaryInfoAdd.probationEducationAllowance) +
+        parseInt((this.salaryInfoAdd.probationWorkSubsidy == null || this.salaryInfoAdd.probationWorkSubsidy === '') ? 0 : this.salaryInfoAdd.probationWorkSubsidy) +
+        parseInt((this.salaryInfoAdd.probationAchievementBonus == null || this.salaryInfoAdd.probationAchievementBonus === '') ? 0 : this.salaryInfoAdd.probationAchievementBonus) +
+        parseInt((this.salaryInfoAdd.probationSingleReward == null || this.salaryInfoAdd.probationSingleReward === '') ? 0 : this.salaryInfoAdd.probationSingleReward)
     },
-    changePositiveWageComp: function () {
-      return parseInt((this.salaryInfoAdd.conversionBasicWage==null||this.salaryInfoAdd.conversionBasicWage=='')?0:this.salaryInfoAdd.conversionBasicWage)+
-        parseInt((this.salaryInfoAdd.conversionDutyAllowance==null||this.salaryInfoAdd.conversionDutyAllowance=='')?0:this.salaryInfoAdd.conversionDutyAllowance)+
-        parseInt((this.salaryInfoAdd.conversionProfessionalTitleAllowance==null||this.salaryInfoAdd.conversionProfessionalTitleAllowance=='')?0:this.salaryInfoAdd.conversionProfessionalTitleAllowance)+
-        parseInt((this.salaryInfoAdd.conversionSeniorityWage==null||this.salaryInfoAdd.conversionSeniorityWage=='')?0:this.salaryInfoAdd.conversionSeniorityWage)+
-        parseInt((this.salaryInfoAdd.conversionEducationAllowance==null||this.salaryInfoAdd.conversionEducationAllowance=='')?0:this.salaryInfoAdd.conversionEducationAllowance)+
-        parseInt((this.salaryInfoAdd.conversionWorkSubsidy==null||this.salaryInfoAdd.conversionWorkSubsidy=='')?0:this.salaryInfoAdd.conversionWorkSubsidy)+
-        parseInt((this.salaryInfoAdd.conversionAchievementBonus==null||this.salaryInfoAdd.conversionAchievementBonus=='')?0:this.salaryInfoAdd.conversionAchievementBonus)+
-        parseInt((this.salaryInfoAdd.conversionSingleReward==null||this.salaryInfoAdd.conversionSingleReward=='')?0:this.salaryInfoAdd.conversionSingleReward)
+    changePositiveWageComp: function() {
+      return parseInt((this.salaryInfoAdd.conversionBasicWage === null || this.salaryInfoAdd.conversionBasicWage === '') ? 0 : this.salaryInfoAdd.conversionBasicWage) +
+        parseInt((this.salaryInfoAdd.conversionDutyAllowance === null || this.salaryInfoAdd.conversionDutyAllowance === '') ? 0 : this.salaryInfoAdd.conversionDutyAllowance) +
+        parseInt((this.salaryInfoAdd.conversionProfessionalTitleAllowance === null || this.salaryInfoAdd.conversionProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.conversionProfessionalTitleAllowance) +
+        parseInt((this.salaryInfoAdd.conversionSeniorityWage === null || this.salaryInfoAdd.conversionSeniorityWage === '') ? 0 : this.salaryInfoAdd.conversionSeniorityWage) +
+        parseInt((this.salaryInfoAdd.conversionEducationAllowance === null || this.salaryInfoAdd.conversionEducationAllowance === '') ? 0 : this.salaryInfoAdd.conversionEducationAllowance) +
+        parseInt((this.salaryInfoAdd.conversionWorkSubsidy === null || this.salaryInfoAdd.conversionWorkSubsidy === '') ? 0 : this.salaryInfoAdd.conversionWorkSubsidy) +
+        parseInt((this.salaryInfoAdd.conversionAchievementBonus === null || this.salaryInfoAdd.conversionAchievementBonus === '') ? 0 : this.salaryInfoAdd.conversionAchievementBonus) +
+        parseInt((this.salaryInfoAdd.conversionSingleReward === null || this.salaryInfoAdd.conversionSingleReward === '') ? 0 : this.salaryInfoAdd.conversionSingleReward)
     },
-    changeCurrentSalaryComp: function () {
-      return parseInt((this.salaryInfoAdd.currentBasicWage==null||this.salaryInfoAdd.currentBasicWage=='')?0:this.salaryInfoAdd.currentBasicWage)+
-        parseInt((this.salaryInfoAdd.currentDutyAllowance==null||this.salaryInfoAdd.currentDutyAllowance=='')?0:this.salaryInfoAdd.currentDutyAllowance)+
-        parseInt((this.salaryInfoAdd.currentProfessionalTitleAllowance==null||this.salaryInfoAdd.currentProfessionalTitleAllowance=='')?0:this.salaryInfoAdd.currentProfessionalTitleAllowance)+
-        parseInt((this.salaryInfoAdd.currentSeniorityWage==null||this.salaryInfoAdd.currentSeniorityWage=='')?0:this.salaryInfoAdd.currentSeniorityWage)+
-        parseInt((this.salaryInfoAdd.currentEducationAllowance==null||this.salaryInfoAdd.currentEducationAllowance=='')?0:this.salaryInfoAdd.currentEducationAllowance)+
-        parseInt((this.salaryInfoAdd.currentWorkSubsidy==null||this.salaryInfoAdd.currentWorkSubsidy=='')?0:this.salaryInfoAdd.currentWorkSubsidy)+
-        parseInt((this.salaryInfoAdd.currentAchievementBonus==null||this.salaryInfoAdd.currentAchievementBonus=='')?0:this.salaryInfoAdd.currentAchievementBonus)+
-        parseInt((this.salaryInfoAdd.currentSingleReward==null||this.salaryInfoAdd.currentSingleReward=='')?0:this.salaryInfoAdd.currentSingleReward)
+    changeCurrentSalaryComp: function() {
+      return parseInt((this.salaryInfoAdd.currentBasicWage === null || this.salaryInfoAdd.currentBasicWage === '') ? 0 : this.salaryInfoAdd.currentBasicWage) +
+        parseInt((this.salaryInfoAdd.currentDutyAllowance === null || this.salaryInfoAdd.currentDutyAllowance === '') ? 0 : this.salaryInfoAdd.currentDutyAllowance) +
+        parseInt((this.salaryInfoAdd.currentProfessionalTitleAllowance == null || this.salaryInfoAdd.currentProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.currentProfessionalTitleAllowance) +
+        parseInt((this.salaryInfoAdd.currentSeniorityWage === null || this.salaryInfoAdd.currentSeniorityWage === '') ? 0 : this.salaryInfoAdd.currentSeniorityWage) +
+        parseInt((this.salaryInfoAdd.currentEducationAllowance === null || this.salaryInfoAdd.currentEducationAllowance === '') ? 0 : this.salaryInfoAdd.currentEducationAllowance) +
+        parseInt((this.salaryInfoAdd.currentWorkSubsidy === null || this.salaryInfoAdd.currentWorkSubsidy === '') ? 0 : this.salaryInfoAdd.currentWorkSubsidy) +
+        parseInt((this.salaryInfoAdd.currentAchievementBonus === null || this.salaryInfoAdd.currentAchievementBonus === '') ? 0 : this.salaryInfoAdd.currentAchievementBonus) +
+        parseInt((this.salaryInfoAdd.currentSingleReward === null || this.salaryInfoAdd.currentSingleReward === '') ? 0 : this.salaryInfoAdd.currentSingleReward)
     }
   },
   created() {
@@ -351,7 +351,7 @@ export default {
     // this.getDepartmentList()
   },
   methods: {
-    getPreRows(){
+    getPreRows() {
       this.preRowData = this.$route.query.row
     },
     // getDepartmentList(){
@@ -388,8 +388,9 @@ export default {
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
-      if (this.salaryInfoAdd.jobNumber != null && this.salaryInfoAdd.jobNumber != '' && this.salaryInfoAdd.jobNumber != 0){
-      }else{
+      if (this.salaryInfoAdd.jobNumber != null && this.salaryInfoAdd.jobNumber !== '' && this.salaryInfoAdd.jobNumber !== 0) {
+        console.log(123)
+      } else {
         this.$message.error('请选择员工信息')
         return
       }
@@ -424,13 +425,13 @@ export default {
         }
       })
     },
-    selJobNumber(){
+    selJobNumber() {
       this.employeeBasicInfoFormVisible = true
       this.dialogTitle = '用户信息列表'
       this.getEmployeeObj(this.empListQuery)
     },
-    getEmployeeObj(listQuery){
-        api('hr/SalaryWelfareManagement/paginationInquireSalaryInfo', listQuery).then(res => {
+    getEmployeeObj(listQuery) {
+      api('hr/SalaryWelfareManagement/paginationInquireSalaryInfo', listQuery).then(res => {
         if (res.data.code === '0000') {
           this.employeeBasicInfoList = res.data.data.rows
           this.empTotal = res.data.data.total
@@ -439,19 +440,18 @@ export default {
         }
       })
     },
-    onHideObj(id){
-
-      if (id=='trialPeriodWagesFlag') {
+    onHideObj(id) {
+      if (id === 'trialPeriodWagesFlag') {
         this.trialPeriodWagesFlag = !this.trialPeriodWagesFlag
-      }else if (id=='positiveWageFlag') {
+      } else if (id === 'positiveWageFlag') {
         this.positiveWageFlag = !this.positiveWageFlag
-      }else if (id=='currentSalaryFlag'){
+      } else if (id === 'currentSalaryFlag') {
         this.currentSalaryFlag = !this.currentSalaryFlag
       }
     },
     chooseemployeeBasicInfo(row) {
       this.employeeBasicInfo = row
-      this.salaryInfoAdd.jobNumber=this.employeeBasicInfo.jobNumber
+      this.salaryInfoAdd.jobNumber = this.employeeBasicInfo.jobNumber
       this.employeeBasicInfoFormVisible = false
     },
     // 编辑表单
@@ -480,22 +480,22 @@ export default {
     // 页面初始化
     initList() {
       debugger
-      let query = this.$route.query
+      const query = this.$route.query
       this.title = query.title
-      if (this.title == '查看') {
-        this.isupdatesalary=false
+      if (this.title === '查看') {
+        this.isupdatesalary = false
         this.salaryInfoAdd = query.row
       }
-      if(this.title == '修改' || this.title == '查看'){
-        this.editFlag = true//选择按钮显示与否
+      if (this.title === '修改' || this.title === '查看') {
+        this.editFlag = true// 选择按钮显示与否
       }
-      if (this.title == '查看') {//其他项目是否disable
+      if (this.title === '查看') { // 其他项目是否disable
         this.disableAll = true
       }
-      if (this.title != '新增薪资') {//查询用户基本信息
+      if (this.title !== '新增薪资') { // 查询用户基本信息
         this.salaryInfoAdd = this.preRowData
         this.empListQuery.jobNumber = this.$route.query.row.jobNumber
-          api('hr/SalaryWelfareManagement/paginationInquireSalaryInfo', this.empListQuery).then(res => {
+        api('hr/SalaryWelfareManagement/paginationInquireSalaryInfo', this.empListQuery).then(res => {
           if (res.data.code === '0000') {
             this.employeeBasicInfo = res.data.data.rows[0]
           } else {

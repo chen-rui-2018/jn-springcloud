@@ -27,7 +27,7 @@ export default {
     talentsList: 'springcloud-enterprise/guest/pd/talentNotice/list', // 人才服务公告列表
     talentsDetail: 'springcloud-enterprise/guest/pd/talentNotice/selectByTalentNotice', // 人才服务详情
     talentsVolume: 'springcloud-enterprise/guest/pd/talentNotice/trafficVolume', // 人才服务访问量
-    loginURL: 'springcloud-app-system/login',
+    // loginURL: 'springcloud-app-system/login',
 
     // 工作计划管理
     getWorkList: 'springcloud-oa/oa/workPlan/list', // 获取工作计划管理列表
@@ -41,7 +41,6 @@ export default {
     downLoadAttachment: 'springcloud-oa/oa/common/downLoadAttachment', // 附件下载
     deleteBatch: 'springcloud-oa/oa/workPlan/deleteBatch', // 删除工作计划
     addRemark: 'springcloud-oa/oa/workPlan/addRemark' // 添加备注
-
 
   },
   setToken: function (obj) {

@@ -64,7 +64,7 @@
 		<br/>
 
 		<!--来电信息-->
-		<div id="calledInfo" style="display: none">
+		<div id="calledInfo">
 			<table>
 				<tr>
 					<td style="padding-left: 20px">
@@ -85,48 +85,54 @@
 
 		<!--历史信息-->
 		<div class="content"  style="padding: 20px">
-			<span style="background-color:red; color:white;width: 90px;height: 20px;padding: 10px">历史信息(<span id="historyNum">0</span>)</span>
+			<span id="historyDesc" style="background-color:red; color:white;width: 90px;height: 20px;padding: 10px;">历史信息(<span id="historyNum">0</span>)</span>
 			<div id="history" style="display: none">
-
 			</div>
 		</div>
 
 
 		<!--来电录入-->
-		<div id="calledEnter" style="display: none">
+		<div id="calledEnter">
 			<table>
 				<tr>
 					<td style="padding-left: 20px">
-						问题标题:<input type='text' value='' id='quesTitle' size='15'>
+						<label>问题标题:</label><span style="color: red">*</span>
+						<input type='text' value='' id='quesTitle' size='15' placeholder="请输入标题，不超过100字">
 					</td>
 					<td style="padding-left: 20px">
-						业务模块:<select value='' id='serviceModule' >
+						<label>业务模块:</label><span style="color: red">*</span>
+						<select value='' id='serviceModule' >
 									<option value="service_consulting">系统咨询</option>
 									<option value="complaints_suggestions">投诉建议处理</option>
 								</select>
 					</td>
 				</tr>
 				<tr>
-					问题描述<textarea  id='quesDetails' rows='10' cols='120'></textarea>
+					<label>问题描述:</label><span style="color: red">*</span>
+					<textarea  id='quesDetails' rows='10' cols='120' placeholder="请输入简要的问题描述，不超过300字"></textarea>
 				</tr>
 				<br/>
 				<tr>
-					用户类型:<select value='' id='clientType' style="width: 100px">
+					<label>用户类型:</label><span style="color: red">*</span>
+					<select value='' id='clientType' style="width: 100px">
 								<option value="1">个人</option>
 								<option value="2">企业</option>
 							</select>
 				<tr>
 					<td style="padding-left: 20px">
-						客户姓名:<input type='text' value='' id='custName' size='15'>
+						<label>客户姓名:</label><span style="color: red">*</span>
+						<input type='text' value='' id='custName' size='15' placeholder="请输入客户姓名">
 					</td>
 					<td style="padding-left: 20px">
-						联系方式:<input type='text' value='' id='contactWay' size='15'>
+						<label>联系方式:</label><span style="color: red">*</span>
+						<input type='text' value='' id='contactWay' size='15'placeholder="请输入客户联系方式">
 					</td>
 				</tr>
 			</table>
 		</div>
-		<div style="padding: 50px;">
-			<button type="button" onclick="submit()"style="width: 100px" >提交</button>
+		<div style="padding: 50px;" id="submitButton" >
+			<button type="button" id="buttons" onclick="submit()"style="width: 100px" >提交</button>
+			<span style="padding-left: 20px;color: red;display: none" id="submitDesc">加载中....</span>
 		</div>
 
 	    <!--弹出框-->

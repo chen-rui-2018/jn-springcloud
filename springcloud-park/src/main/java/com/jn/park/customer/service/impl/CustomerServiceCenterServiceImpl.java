@@ -139,7 +139,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      */
     @ServiceLog(doAction = "根据任务id获取问题详情")
     @Override
-    public Object customerQuesDetail(String account,String processInsId){
+    public CustomerServiceCenterDetailVo customerQuesDetail(String account,String processInsId){
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
         example.createCriteria().andProcessInsIdEqualTo(processInsId)
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
@@ -150,6 +150,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }
         CustomerServiceCenterDetailVo customerVo=new CustomerServiceCenterDetailVo();
         BeanUtils.copyProperties(clientServiceCenterList.get(0),customerVo);
+        if(clientServiceCenterList.get(0).getQuesUrl()!=null){
+            customerVo.setQuesUrl(Arrays.asList(clientServiceCenterList.get(0).getQuesUrl().split(";")));
+        }
         JSONObject opinions = IBPSUtils.opinions(account, processInsId, null);
         IBPSResult ibpsResult = new Gson().fromJson(opinions.toString(), IBPSResult.class);
         //请求响应码
@@ -252,6 +255,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param historyShow       历史记录展示bean
      * @param status        操作状态
      */
+    @ServiceLog(doAction = "设置客户中心分发/处理节点信息")
     private List<String> setCustomerCenterInfo(List<LinkedTreeMap<String, String>> qualifiedExecutor , ExecuteHistoryShow historyShow,String status) {
         List<String>accountList=new ArrayList<>();
         List<String>userIdList=new ArrayList<>();
@@ -312,6 +316,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param historyShow  历史记录展示bean
      * @param user        用户信息
      */
+    @ServiceLog(doAction = "设置发起节点信息")
     private void setSendPersonInfo(String status, ExecuteHistoryShow historyShow, User user) {
         historyShow.setExecuteAccounts(user.getAccount());
         historyShow.setExecuteUserIds(user.getId());
@@ -387,7 +392,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param processInstanceId  流程实例id
      * @return
      */
-    private int updateProcessInstanceId(String loginAccount, String quesCode, String processInstanceId) {
+    @ServiceLog(doAction ="更新流程实例id")
+    @Override
+    public int updateProcessInstanceId(String loginAccount, String quesCode, String processInstanceId) {
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
         example.createCriteria().andQuesCodeEqualTo(quesCode).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         TbClientServiceCenter tbClientServiceCenter=new TbClientServiceCenter();
@@ -406,6 +413,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param loginAccount
      * @param quesCode      问题编码
      */
+    @ServiceLog(doAction ="设置在线客服ibps启动流工作流表单数据")
     private IBPSOnlineCustomerParam setIBPSOnlineCustomerParam(OnlineCustomerParam param, String loginAccount,String quesCode) {
         IBPSOnlineCustomerParam ibpsParam=new IBPSOnlineCustomerParam();
         BeanUtils.copyProperties(param, ibpsParam);
@@ -453,7 +461,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * 获取问题编码
      * @return
      */
-    private String getQuesCode() {
+    @ServiceLog(doAction ="获取问题编码")
+    @Override
+    public String getQuesCode() {
         return "QE-"+DateUtils.getDate("yyyyMMddHHmmss");
     }
 
@@ -462,6 +472,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param loginAccount
      * @return
      */
+    @ServiceLog(doAction ="根据用户账号获取客服中心问题列表")
     private List<ConsultationCustomerListShow> getCustomerCenterList(String loginAccount) {
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
         example.createCriteria().andCreatorAccountEqualTo(loginAccount)
@@ -475,6 +486,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             for(TbClientServiceCenter tbClientServiceCenter:tbClientServiceCenterList){
                 ConsultationCustomerListShow customerListShow=new ConsultationCustomerListShow();
                 BeanUtils.copyProperties(tbClientServiceCenter, customerListShow);
+                customerListShow.setCreatedTime(DateUtils.formatDate(tbClientServiceCenter.getCreatedTime(),PATTERN));
                 resultList.add(customerListShow);
             }
             return resultList;

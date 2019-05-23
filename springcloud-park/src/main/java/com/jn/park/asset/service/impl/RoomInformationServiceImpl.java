@@ -556,12 +556,12 @@ public class RoomInformationServiceImpl implements RoomInformationService {
      */
     @Override
     @ServiceLog(doAction = "房间退租申请")
-    public RoomPayOrdersItemModel quitApply(String id) {
+    public RoomPayOrdersItemModel quitApply(String orderItemId) {
         //更新订单房间状态
-        TbRoomOrdersItem tbRoomOrdersItem = tbRoomOrdersItemMapper.selectByPrimaryKey(id);
+        TbRoomOrdersItem tbRoomOrdersItem = tbRoomOrdersItemMapper.selectByPrimaryKey(orderItemId);
         tbRoomOrdersItem.setRecordStatus(Byte.parseByte(RoomLeaseStatusEnums.QUIT.getValue()));
         TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
-        tbRoomOrdersItemCriteria.createCriteria().andIdEqualTo(id);
+        tbRoomOrdersItemCriteria.createCriteria().andIdEqualTo(orderItemId);
         logger.info("更新订单房间状态,{}",tbRoomOrdersItem);
         tbRoomOrdersItemMapper.updateByExampleSelective(tbRoomOrdersItem,tbRoomOrdersItemCriteria);
         //更新房间信息房间状态
@@ -719,6 +719,15 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
             }
         }*/
+    }
+
+    /**
+     * 生成房间缴费单
+     */
+    @Override
+    @ServiceLog(doAction = "生成房间缴费单")
+    public void createOrderBill() {
+        
     }
 
 }

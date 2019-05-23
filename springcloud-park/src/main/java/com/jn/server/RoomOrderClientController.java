@@ -50,4 +50,11 @@ public class RoomOrderClientController implements RoomOrderClient {
         return new Result();
     }
 
+    @Override
+    @ControllerLog(doAction = "生成缴费单")
+    public Result createOrderBill() {
+        roomInformationService.createOrderBill();
+        return null;
+    }
+
 }

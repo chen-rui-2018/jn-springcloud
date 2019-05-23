@@ -51,4 +51,14 @@ public class AssetScheduledController {
         logger.info("是否支付,未支付取消订单");
         roomOrderClient.updateRoomPayStatus();
     }
+
+    /**
+     * 每天凌晨两点执行执行,生成缴费单
+     */
+    @Scheduled(cron = "0 0 2 * * ?")
+    public void createOrderBill(){
+        logger.info("生成缴费单");
+        roomOrderClient.createOrderBill();
+    }
+
 }

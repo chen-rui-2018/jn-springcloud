@@ -42,4 +42,11 @@ public interface RoomOrderClient {
      */
     @RequestMapping(value = "/api/order/updateRoomPayStatus",method = RequestMethod.POST)
     Result updateRoomPayStatus();
+
+    /**
+     * 生成缴费单
+     * @return
+     */
+    @RequestMapping(value = "/api/order/createOrderBill",method = RequestMethod.POST)
+    Result createOrderBill();
 }

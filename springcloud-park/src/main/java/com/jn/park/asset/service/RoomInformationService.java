@@ -94,7 +94,7 @@ public interface RoomInformationService {
      * @param id
      * @return
      */
-    RoomPayOrdersItemModel quitApply(String id);
+    RoomPayOrdersItemModel quitApply(String orderItemId);
 
     /**
      * 房间租借历史订单(新)
@@ -122,4 +122,9 @@ public interface RoomInformationService {
      * 定时任务,是否支付,未支付取消订单
      */
     void updateRoomPayStatus();
+
+    /**
+     * 定时任务,生成缴费单
+     */
+    void createOrderBill();
 }

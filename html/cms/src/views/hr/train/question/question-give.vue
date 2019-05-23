@@ -3,9 +3,9 @@
     <el-card>
       <!-- 标题 -->
       <el-tabs v-model="activeName">
-        <el-tab-pane label="编辑调研" name="first"/>
-        <el-tab-pane label="发放调研" name="second"/>
-        <el-tab-pane label="调研结果" name="third"/>
+        <el-tab-pane label="编辑问卷" name="first"/>
+        <el-tab-pane label="发放问卷" name="second"/>
+        <el-tab-pane label="问卷结果" name="third"/>
       </el-tabs>
       <!-- 模块一 -->
       <div class="mode">
@@ -15,7 +15,9 @@
         </div>
         <div class="modeCon">
           <el-row class="item">
-            <el-col :span="5"><span class="item-l">二维码：</span></el-col>
+            <el-col :span="5">
+              <span class="item-l">二维码：</span>
+            </el-col>
             <el-col :span="19">
               <el-row>
                 <el-col :span="5">
@@ -26,7 +28,8 @@
                       :margin="0"
                       :auto-color="true"
                       :dot-scale="1"
-                      :text="appSrc" />
+                      :text="appSrc"
+                    />
                   </div>
                 </el-col>
                 <el-col :span="19" class="maCon">
@@ -39,13 +42,21 @@
             </el-col>
           </el-row>
           <el-row class="item">
-            <el-col :span="5"><span class="item-l">网址：</span></el-col>
+            <el-col :span="5">
+              <span class="item-l">网址：</span>
+            </el-col>
             <el-col :span="19">
               <el-row>复制链接，通过链接分享或用邮件将报名链接发送给学员</el-row>
               <el-row class="maLink">
-                <el-col :span="10"><el-input v-model="formData.surveyUrl"/></el-col>
+                <el-col :span="10">
+                  <el-input v-model="formData.surveyUrl"/>
+                </el-col>
                 <el-col :span="9" :offset="1">
-                  <el-button v-clipboard:copy="formData.surveyUrl" v-clipboard:success="clipboardSuccess" icon="el-icon-document">复制</el-button>
+                  <el-button
+                    v-clipboard:copy="formData.surveyUrl"
+                    v-clipboard:success="clipboardSuccess"
+                    icon="el-icon-document"
+                  >复制</el-button>
                   <el-button icon="el-icon-message" @click="sendEmail">邮件</el-button>
                   <el-button type="primary" plain @click="jumpPage">打开</el-button>
                 </el-col>
@@ -62,7 +73,9 @@
         </div>
         <div class="modeCon">
           <el-row class="item">
-            <el-col :span="5"><span class="item-l">调研时段：</span></el-col>
+            <el-col :span="5">
+              <span class="item-l">调研时段：</span>
+            </el-col>
             <el-col :span="19">
               <span>
                 <el-date-picker
@@ -70,7 +83,8 @@
                   format="yyyy-MM-dd HH:mm:ss"
                   value-format="yyyy-MM-dd HH:mm:ss"
                   type="datetime"
-                  placeholder="选择日期时间"/>
+                  placeholder="选择日期时间"
+                />
               </span>
               <span>到</span>
               <span>
@@ -79,19 +93,44 @@
                   format="yyyy-MM-dd HH:mm:ss"
                   value-format="yyyy-MM-dd HH:mm:ss"
                   type="datetime"
-                  placeholder="选择日期时间"/>
+                  placeholder="选择日期时间"
+                />
               </span>
             </el-col>
           </el-row>
           <el-row class="item">
-            <el-col :span="5"><span class="item-l">调研方式：</span></el-col>
+            <el-col :span="5">
+              <span class="item-l">调研方式：</span>
+            </el-col>
             <el-col :span="19">
-              <p><el-radio v-model="formData.researchMethod" :label="1">匿名调研</el-radio></p>
-              <p><el-radio v-model="formData.researchMethod" :label="2">实名调研</el-radio></p>
-              <p v-if="formData.researchMethod == 2">
-                <el-checkbox :checked="formData.isShowName===1?true:false" v-model="formData.isShowName" :true-label="1" :false-label="2" label="姓名"/>
-                <el-checkbox :checked="formData.isShowJobNumber===1?true:false" v-model="formData.isShowJobNumber" :true-label="1" :false-label="2" label="工号"/>
-                <el-checkbox :checked="formData.isShowPhone===1?true:false" v-model="formData.isShowPhone" :true-label="1" :false-label="2" label="手机"/>
+              <p>
+                <el-radio v-model="formData.researchMethod" :label="1">匿名调研</el-radio>
+              </p>
+              <p>
+                <el-radio v-model="formData.researchMethod" :label="2">实名调研</el-radio>
+              </p>
+              <p v-if="formData.researchMethod === 2">
+                <el-checkbox
+                  :checked="formData.isShowName===1?true:false"
+                  v-model="formData.isShowName"
+                  :true-label="1"
+                  :false-label="2"
+                  label="姓名"
+                />
+                <el-checkbox
+                  :checked="formData.isShowJobNumber===1?true:false"
+                  v-model="formData.isShowJobNumber"
+                  :true-label="1"
+                  :false-label="2"
+                  label="工号"
+                />
+                <el-checkbox
+                  :checked="formData.isShowPhone===1?true:false"
+                  v-model="formData.isShowPhone"
+                  :true-label="1"
+                  :false-label="2"
+                  label="手机"
+                />
               </p>
             </el-col>
           </el-row>
@@ -105,28 +144,46 @@
         </div>
         <div class="modeCon">
           <el-row class="item">
-            <el-col :span="5"><span class="item-l">次数限制：</span></el-col>
+            <el-col :span="5">
+              <span class="item-l">次数限制：</span>
+            </el-col>
             <el-col :span="19">
-              <el-checkbox :checked="formData.frequencyLimit===1?true:false" v-model="formData.frequencyLimit" :true-label="1" :false-label="2" label="每个学员只能调研一次"/>
+              <el-checkbox
+                :checked="formData.frequencyLimit===1?true:false"
+                v-model="formData.frequencyLimit"
+                :true-label="1"
+                :false-label="2"
+                label="每个学员只能调研一次"
+              />
             </el-col>
           </el-row>
           <el-row class="item">
-            <el-col :span="5"><span class="item-l">显示设置：</span></el-col>
+            <el-col :span="5">
+              <span class="item-l">显示设置：</span>
+            </el-col>
             <el-col :span="19">
-              <el-checkbox :checked="formData.isShowTips===1?true:false" v-model="formData.isShowTips" :true-label="1" :false-label="2" label="调研后提示"/>
+              <el-checkbox
+                :checked="formData.isShowTips===1?true:false"
+                v-model="formData.isShowTips"
+                :true-label="1"
+                :false-label="2"
+                label="调研后提示"
+              />
             </el-col>
           </el-row>
         </div>
       </div>
-      <el-row type="flex" justify="center"><el-col :span="1"><el-button type="primary" @click="save">保存</el-button></el-col></el-row>
+      <el-row type="flex" justify="center">
+        <el-col :span="1">
+          <el-button type="primary" @click="save">保存</el-button>
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
 
 <script>
-import {
-  api
-} from '@/api/hr/train'
+import { api } from '@/api/hr/train'
 import VueQr from 'vue-qr'
 import clipboard from '@/directive/clipboard/index.js'
 export default {
@@ -156,7 +213,9 @@ export default {
         researchMethod: 2,
         researchProject: this.$route.query.researchProject,
         surveyDimensional: 'static/QrCode/qr.jpg',
-        surveyUrl: 'http://localhost:9527/#/hr/train/question/question-page?projectId=' + this.$route.query.id
+        surveyUrl:
+          'http://localhost:9527/#/hr/train/question/question-page?projectId=' +
+          this.$route.query.id
       }
     }
   },
@@ -196,11 +255,20 @@ export default {
     },
     // 发送邮件
     sendEmail() {
-      this.$router.push({ name: 'email', query: { projectId: this.$route.query.id, status: this.$route.query.status }})
+      this.$router.push({
+        name: 'email',
+        query: {
+          projectId: this.$route.query.id,
+          status: this.$route.query.status
+        }
+      })
     },
     // 调研页面
     jumpPage() {
-      this.$router.push({ name: 'question-page', query: { projectId: this.$route.query.id }})
+      this.$router.push({
+        name: 'question-page',
+        query: { projectId: this.$route.query.id }
+      })
     },
     // 复制
     clipboardSuccess() {
@@ -226,51 +294,51 @@ export default {
 
 <style lang="scss" scoped>
 .mode {
-    padding: 10px 10px;
-    .modeTit {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 26px;
-        span {
-            display: inline-block;
-            width: 68px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .line {
-            display: inline-block;
-            width: 100%;
-            height: 2px;
-            background-color:#f5f5f5;
-        }
+  padding: 10px 10px;
+  .modeTit {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 26px;
+    span {
+      display: inline-block;
+      width: 68px;
+      font-size: 14px;
+      font-weight: bold;
     }
-    .modeCon {
-        padding: 20px;
+    .line {
+      display: inline-block;
+      width: 100%;
+      height: 2px;
+      background-color: #f5f5f5;
+    }
+  }
+  .modeCon {
+    padding: 20px;
+    font-size: 14px;
+    .item {
+      margin-bottom: 36px;
+      .item-l {
         font-size: 14px;
-        .item {
-            margin-bottom: 36px;
-           .item-l {
-               font-size: 14px;
-           }
-           .maImg {
-               width: 126px;
-               height: 126px;
-               border: 1px solid #ccc;
-               img {
-                   width: 100%;
-                   height: 100%;
-               }
-           }
-           .maCon {
-               p:first-child {
-                    margin-top: 0;
-               }
-           }
-           .maLink {
-               margin-top: 16px;
-           }
+      }
+      .maImg {
+        width: 126px;
+        height: 126px;
+        border: 1px solid #ccc;
+        img {
+          width: 100%;
+          height: 100%;
         }
+      }
+      .maCon {
+        p:first-child {
+          margin-top: 0;
+        }
+      }
+      .maLink {
+        margin-top: 16px;
+      }
     }
+  }
 }
 </style>

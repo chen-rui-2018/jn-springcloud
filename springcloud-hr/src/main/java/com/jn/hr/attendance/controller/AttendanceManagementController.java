@@ -31,6 +31,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.excel.ExcelUtil;
+import com.jn.hr.api.HrClient;
 import com.jn.hr.attendance.model.AttendanceManagementPage;
 import com.jn.hr.attendance.model.AttendanceManagementVo;
 import com.jn.hr.attendance.model.AttendanceSchedulAdd;
@@ -40,6 +41,10 @@ import com.jn.hr.attendance.model.AttendanceTimeSetAdd;
 import com.jn.hr.attendance.model.AttendanceTimeSetVo;
 import com.jn.hr.attendance.service.AttendanceManagementService;
 import com.jn.hr.increase.enums.SalaryManagementExceptionEnums;
+import com.jn.hr.model.AttendanceManageApiVo;
+import com.jn.hr.model.AttendanceManagement;
+import com.jn.hr.model.AttendanceManagementApiVo;
+import com.jn.hr.model.VacationManagement;
 import com.jn.oa.api.OaClient;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -50,7 +55,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = "考勤管理")
 @RestController
 @RequestMapping("/hr/AttendanceManagement")
-public class AttendanceManagementController extends BaseController{
+public class AttendanceManagementController extends BaseController implements HrClient{
        //OaClient
 	private static final Logger logger = LoggerFactory.getLogger(AttendanceManagementController.class);
 	@Autowired
@@ -305,5 +310,41 @@ public class AttendanceManagementController extends BaseController{
             throw new JnSpringCloudException(SalaryManagementExceptionEnums.DOWNLOAD_EXCEL_TEMPLATE_FAIL);
         }
     }
+    
+    @ControllerLog(doAction = "根据用户id与考勤年月查询历史考勤列表")
+    //@RequiresPermissions("/hr/AttendanceManagement/selectAttendanceManagementByUserId")
+	@ApiOperation(value = "根据用户id与考勤年月查询历史考勤列表", notes = "根据用户id与考勤年月查询历史考勤列表")
+    @RequestMapping(value = "/selectAttendanceManagementByUserId", method = RequestMethod.POST)
+	public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
+    	List<AttendanceManagementApiVo> list = attendanceManagementService.selectAttendanceManagementByUserId(attendanceManagement);
+		return new Result(list);
+	}
+    
+    @ControllerLog(doAction = "根据部门id与考勤年月查询历史考勤列表")
+    //@RequiresPermissions("/hr/AttendanceManagement/selectAttendanceManagementByUserId")
+	@ApiOperation(value = "根据部门id与考勤年月查询历史考勤列表", notes = "根据部门id与考勤年月查询历史考勤列表")
+    @RequestMapping(value = "/selectAttendanceManagementByDepartmentId", method = RequestMethod.POST)
+	public Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
+    	List<AttendanceManageApiVo> list = attendanceManagementService.selectAttendanceManagementByDepartmentId(attendanceManagement);
+		return new Result(list);
+	}
+
+    @ControllerLog(doAction = "加班小时")
+    //@RequiresPermissions("/hr/AttendanceManagement/insertByOverTimeVacationmanage")
+	@ApiOperation(value = "加班小时", notes = "加班小时")
+    @RequestMapping(value = "/insertByOverTimeVacationmanage", method = RequestMethod.POST)
+	public Result<String> insertByOverTimeVacationmanage(@Validated @RequestBody  VacationManagement vacationManage){
+    	String str = attendanceManagementService.insertByOverTimeVacationmanage(vacationManage);
+		return new Result(str);
+	}
+    
+    @ControllerLog(doAction = "请假扣除请假小时")
+    //@RequiresPermissions("/hr/AttendanceManagement/insertByLeaveVacationmanage")
+	@ApiOperation(value = "请假扣除请假小时", notes = "请假扣除请假小时")
+    @RequestMapping(value = "/insertByLeaveVacationmanage", method = RequestMethod.POST)
+	public Result<String> insertByLeaveVacationmanage(@Validated @RequestBody  VacationManagement vacationManage){
+    	String str = attendanceManagementService.insertByLeaveVacationmanage(vacationManage);
+		return new Result(str);
+	}
 	
 }

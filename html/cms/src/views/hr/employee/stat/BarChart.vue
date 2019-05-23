@@ -7,13 +7,11 @@ import echarts from 'echarts'
 // require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
 
-// const animationDuration = 6000
-
 export default {
   props: {
     listData: {
       type: Array,
-      default: function() {
+      default: () => {
         return []
       }
     },
@@ -90,7 +88,6 @@ export default {
             color: '#ccc'
           }
         },
-
         toolbox: {
           show: true,
           feature: {
@@ -140,3 +137,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .chart{
+    position:relative;
+  }
+</style>

@@ -94,7 +94,7 @@
         </el-row>
 
         <el-form-item label="简历：">
-          <el-button v-if="addForm.resumeInfo.length>0" type="primary" @click="download">下载</el-button>
+          <el-button v-if="addForm.resumeInfo && addForm.resumeInfo.length>0" type="primary" @click="download">下载</el-button>
           <span v-else>无</span>
         </el-form-item>
 

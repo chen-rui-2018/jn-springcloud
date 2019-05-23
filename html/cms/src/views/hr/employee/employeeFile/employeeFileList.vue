@@ -149,7 +149,6 @@ import {
   deleteEmployeeFile, exportEmployeeFile
 
 } from '@/api/hr/employeeFile'
-// import { getToken } from '@/utils/auth'
 import {
   isvalidName
 } from '@/api/hr/util'

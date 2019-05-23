@@ -22,7 +22,11 @@
                 <p v-for="(item2,index2) in item.titleOptionList" :key="index2">
                   {{ upperCase[index2] }}、{{ item2.optionName }}
                   <el-row>
-                    <el-col :span="20"><el-progress :percentage="Number((item2.optionPercent?item2.optionPercent:'0%').split('%')[0])"/></el-col>
+                    <el-col :span="20">
+                      <el-progress
+                        :percentage="Number((item2.optionPercent?item2.optionPercent:'0%').split('%')[0])"
+                      />
+                    </el-col>
                     <el-col :span="2">{{ item2.optionCount?item2.optionCount:0 }}</el-col>
                     <el-col :span="2">{{ item2.optionPercent?item2.optionPercent:'0%' }}</el-col>
                   </el-row>
@@ -34,9 +38,25 @@
         <!-- 单人统计列表 -->
         <el-tab-pane v-if="!isDetail" class="single" label="单人统计" name="single">
           <!-- 搜索 -->
-          <el-row type="flex" justify="end"><el-col :span="4"><el-input v-model="listQuery.name" class="search" placeholder="搜索学员" suffix-icon="el-icon-search" @keyup.enter.native="search"/></el-col></el-row>
-          <el-table :data="tableData" border fit highlight-current-row style="width: 100%;height:100%;">
-            <el-table-column type="index" width="60" label="序号" align="center" />
+          <el-row type="flex" justify="end">
+            <el-col :span="4">
+              <el-input
+                v-model="listQuery.name"
+                class="search"
+                placeholder="搜索学员"
+                suffix-icon="el-icon-search"
+                @keyup.enter.native="search"
+              />
+            </el-col>
+          </el-row>
+          <el-table
+            :data="tableData"
+            border
+            fit
+            highlight-current-row
+            style="width: 100%;height:100%;"
+          >
+            <el-table-column type="index" width="60" label="序号" align="center"/>
             <el-table-column prop="name" label="姓名" align="center"/>
             <el-table-column prop="isEffectiveStr" label="有效性" align="center"/>
             <el-table-column prop="submitTimeStr" label="提交时间" align="center"/>
@@ -56,7 +76,8 @@
             class="tablePagination"
             background
             layout="total, sizes, prev, pager, next, jumper"
-            @current-change="handleCurrentChange" />
+            @current-change="handleCurrentChange"
+          />
         </el-tab-pane>
         <!-- 单人统计详情 -->
         <el-tab-pane v-if="isDetail" class="single" label="单人统计" name="single">
@@ -104,20 +125,39 @@
                     <span v-if="item.titleType===1">[ 单选题 ]</span>
                     <span v-if="item.titleType===2">[ 多选题 ]</span>
                     <span v-if="item.titleType===3">[ 主观题 ]</span>
-                    {{ item.titleName }}<span v-if="item.isShowAnswer">(必答)</span>
+                    {{ item.titleName }}
+                    <span v-if="item.isShowAnswer">(必答)</span>
                     <div v-if="item.titleType===1">
-                      <p v-for="(item2,index2) in item.titleOptionList" :key="index2">
-                        <el-radio v-model="item.questionAnswerList[0].optionAnswer" :label="upperCase[index2]"/>
+                      <p
+                        v-for="(item2,index2) in item.titleOptionList"
+
+                        :key="index2"
+                      >
+                        <el-radio
+                          v-model="item.questionAnswerList[0].optionAnswer"
+                          :label="upperCase[index2]"
+                        />
                         、{{ item2.optionName }}
                       </p>
                     </div>
                     <div v-if="item.titleType===2">
-                      <p v-for="(item2,index2) in item.titleOptionList" :key="index2">
+                      <p
+                        v-for="(item2,index2) in item.titleOptionList"
+
+                        :key="index2"
+                      >
                         <el-checkbox v-model="item.questionAnswerList[0].optionAnswer"/>
                         {{ upperCase[index2] }}、{{ item2.optionName }}
                       </p>
                     </div>
-                    <el-input v-if="item.titleType===3" :value="item.questionAnswerList[0].subjectiveQuestionAnswer" :rows="3" :disabled="true" type="textarea" style="margin-top:10px;"/>
+                    <el-input
+                      v-if="item.titleType===3"
+                      :value="item.questionAnswerList[0].subjectiveQuestionAnswer"
+                      :rows="3"
+                      :disabled="true"
+                      type="textarea"
+                      style="margin-top:10px;"
+                    />
                   </el-col>
                 </el-row>
               </div>
@@ -130,16 +170,41 @@
 </template>
 
 <script>
-import {
-  api
-} from '@/api/hr/train'
+import { api } from '@/api/hr/train'
 export default {
   data() {
     return {
       activeName: 'third',
       tabName: 'total',
       Qnum: 1,
-      upperCase: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+      upperCase: [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z'
+      ],
       examList: [],
       percentMap: [],
       // 单人统计
@@ -213,52 +278,52 @@ export default {
 
 <style lang="scss" scoped>
 .invest-result {
+  font-size: 14px;
+  .total {
+    padding: 20px;
+    .examList {
+      margin-bottom: 20px;
+    }
+    .el-progress /deep/ .el-progress__text {
+      display: none;
+    }
+  }
+  .single {
+    padding: 20px;
+    min-height: 260px;
+    .search {
+      margin-bottom: 20px;
+    }
+    .see {
+      color: #409eff;
+      cursor: pointer;
+    }
+  }
+  .modeTit {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 26px;
+    span {
+      display: inline-block;
+      width: 108px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .line {
+      display: inline-block;
+      width: 100%;
+      height: 2px;
+      background-color: #f5f5f5;
+    }
+  }
+  .modeCon {
+    padding: 20px;
     font-size: 14px;
-    .total {
-        padding: 20px;
-        .examList {
-            margin-bottom: 20px;
-        }
-        .el-progress /deep/ .el-progress__text {
-            display: none;
-        }
+    margin-bottom: 36px;
+    .examList {
+      margin-bottom: 20px;
     }
-    .single {
-        padding: 20px;
-        min-height: 260px;
-        .search {
-            margin-bottom:20px;
-        }
-        .see {
-            color: #409EFF;
-            cursor: pointer;
-        }
-    }
-    .modeTit {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 26px;
-        span {
-            display: inline-block;
-            width: 108px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .line {
-            display: inline-block;
-            width: 100%;
-            height: 2px;
-            background-color:#f5f5f5;
-        }
-    }
-    .modeCon {
-        padding: 20px;
-        font-size: 14px;
-        margin-bottom: 36px;
-        .examList {
-            margin-bottom: 20px;
-        }
-    }
+  }
 }
 </style>

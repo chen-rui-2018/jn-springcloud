@@ -3,18 +3,16 @@
 </template>
 
 <script>
-// import echarts from 'echarts'
+import echarts from 'echarts'
 import { debounce } from '@/utils'
 
 // echarts相关
-const echarts = require('echarts/lib/echarts')
-require('echarts/lib/chart/bar')
-require('echarts/lib/component/tooltip')
-require('echarts/lib/component/toolbox')
-require('echarts/lib/component/legend')
-require('echarts/lib/component/markLine')
-
-// const animationDuration = 6000
+// let echarts = require('echarts/lib/echarts');
+// require('echarts/lib/chart/bar');
+// require('echarts/lib/component/tooltip');
+// require('echarts/lib/component/toolbox');
+// require('echarts/lib/component/legend');
+// require('echarts/lib/component/markLine');
 
 export default {
   props: {
@@ -197,7 +195,7 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '(千)'
+            name: '(百元)'
           }, {
             type: 'value',
             name: '(人)'

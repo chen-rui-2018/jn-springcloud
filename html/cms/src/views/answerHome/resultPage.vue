@@ -43,7 +43,6 @@
 
 <script>
 import VueQr from 'vue-qr'
-// import moment from 'moment'
 import myContainer from '../../components/responseBox/myContainer' // use clipboard by v-directive
 import {
   examSelectExamAndAnswerCard
@@ -77,7 +76,8 @@ export default {
         }
       })
     }
-  }}
+  }
+}
 </script>
 
 <style lang="scss" scoped>

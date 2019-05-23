@@ -18,11 +18,13 @@
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
       <el-button class="filter-item" type="primary" icon="el-icon-upload" @click="exportText">导出</el-button>
-    </el-form> -->
-    <el-row style="margin:20px auto;"><el-button class="filter-item" type="primary" icon="el-icon-upload" @click="exportText">导出</el-button></el-row>
+    </el-form>-->
+    <el-row style="margin:20px auto;">
+      <el-button class="filter-item" type="primary" icon="el-icon-upload" @click="exportText">导出</el-button>
+    </el-row>
     <!-- 表格 -->
     <el-table :data="courseList" border fit highlight-current-row style="width: 100%;height:100%;">
-      <el-table-column type="index" width="60" label="序号" align="center" />
+      <el-table-column type="index" width="60" label="序号" align="center"/>
       <el-table-column label="部门" align="center" prop="trainerDepartment"/>
       <el-table-column label="姓名" align="center" prop="trainerName"/>
       <el-table-column label="课程名称" align="center" prop="courseTitle"/>
@@ -42,7 +44,8 @@
       class="tablePagination"
       background
       layout="total, sizes, prev, pager, next, jumper"
-      @current-change="handleCurrentChange" />
+      @current-change="handleCurrentChange"
+    />
     <!-- 返回 -->
     <el-row type="flex" justify="center" style="margin-top:20px;">
       <el-button type="primary" @click="goBack($route)">返回</el-button>
@@ -51,10 +54,7 @@
 </template>
 
 <script>
-// import store from '@/store'
-import {
-  api, exportExcel
-} from '@/api/hr/train'
+import { api, exportExcel } from '@/api/hr/train'
 export default {
   data() {
     return {

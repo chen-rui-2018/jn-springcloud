@@ -88,8 +88,8 @@
       <el-table-column label="应聘结果" align="center" prop="applicationResultStr"/>
       <el-table-column label="操作" align="center" min-width="100" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.applicationResult!=1" type="text" @click="pass(scope.row)">通过</el-button>
-          <el-button v-if="scope.row.applicationResult!=2" type="text" @click="notPass(scope.row)">淘汰</el-button>
+          <el-button v-if="scope.row.applicationResult===3" type="text" @click="pass(scope.row)">通过</el-button>
+          <el-button v-if="scope.row.applicationResult===3" type="text" @click="notPass(scope.row)">淘汰</el-button>
           <el-button type="text" @click="update(scope.row)">编辑</el-button>
           <el-button type="text" @click="queryDetail(scope.row)">详情</el-button>
         </template>
@@ -371,12 +371,15 @@ export default {
     },
     setEducationId(educationId) {
       this.listQuery.educationId = educationId
+      this.handleFilter()
     },
     setApplicationResult(applicationResult) {
       this.listQuery.applicationResult = applicationResult
+      this.handleFilter()
     },
     setIsBackgroundInvest(isBackgroundInvest) {
       this.listQuery.isBackgroundInvest = isBackgroundInvest
+      this.handleFilter()
     },
     initEducationList() {
       getCode({ 'groupCode': 'education', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {

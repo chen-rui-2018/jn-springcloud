@@ -1,3 +1,4 @@
+/* eslint-disable vue/require-v-for-key */
 <template>
   <div class="examManagelist">
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
@@ -22,50 +23,61 @@
         <el-tab-pane name="3" style="float: right;">
           <span slot="label">全部({{ dataStatusNum.statusCount }})</span>
         </el-tab-pane>
-
-        <el-card v-for="(item,index) in dataList" :key="index" class="exambox box-card">
-          <img src="../../../../assets/images/testErweima.png" width="150" height="150" >
-          <div class="examlistleft">
-            <h6>{{ item.examinaName }}</h6>
-            <p><span>参加方式:免登陆考试</span></p>
-            <p>
-              <span>考试总分:{{ item.totalScore }}分</span>
-              <span>及格分数:{{ item.passScore }}分</span>
-              <span>答题时间:{{ item.answerTime }}分钟</span>
+        <div v-loading="examboxLoading" class="examboxF">
+          <el-card v-if="dataList.length==0">
+            <p style="text-align: center;line-height: 160px;">暂无考试信息，你可先
+              <el-button type="text" @click="addExam">创建考试</el-button>
             </p>
-            <p><span>有效时间:{{ item.effectiveTimeStart }}~{{ item.effectiveTimeEnd }}</span></p>
-          </div>
-          <div class="examListright">
-            <div class="examListrightTop">
-              <span class="participateIn">{{ item.resultCount }} 人已参加</span>
-              <el-select v-model="value" placeholder="更多操作" @change="((val)=>{selectChange(val, item)})">
-                <div v-for="(option,index) in options" :key="index">
-                  <el-option v-clipboard:copy="item.examinaUrl" v-clipboard:success="clipboardSuccess" v-if="option.value==2" :key="option.value" :label="option.label" :value="option.value"/>
-                  <el-option v-else :key="option.value" :label="option.label" :value="option.value"/>
-                </div>
+          </el-card>
+          <el-card v-for="(item,index) in dataList" :key="index" class="exambox box-card">
+            <img src="../../../../assets/images/testErweima.png" width="150" height="150" >
+            <div class="examlistleft">
+              <h6>{{ item.examinaName }}</h6>
+              <p><span>参加方式:免登陆考试</span></p>
+              <p>
+                <span>考试总分:{{ item.totalScore }}分</span>
+                <span>及格分数:{{ item.passScore }}分</span>
+                <span>答题时间:{{ item.answerTime }}分钟</span>
+              </p>
+              <p><span>有效时间:{{ item.effectiveTimeStart }}~{{ item.effectiveTimeEnd }}</span></p>
+            </div>
+            <div class="examListright">
+              <div class="examListrightTop">
+                <span class="participateIn">{{ item.resultCount }} 人已参加</span>
+                <el-select v-model="value" placeholder="更多操作" @change="((val)=>{selectChange(val, item)})">
+                  <div v-for="(option,index) in options" :key="index">
+                    <el-option v-clipboard:copy="item.examinaUrl" v-clipboard:success="clipboardSuccess" v-if="option.value==2" :key="option.value" :label="option.label" :value="option.value"/>
+                    <el-option v-else :key="option.value" :label="option.label" :value="option.value"/>
+                  </div>
 
-              </el-select>
+                </el-select>
+              </div>
+              <div class="examListrightbottom">
+                <span @click="selectChange(&quot;6&quot;, item)"><i class="el-icon-data-line" />查看成绩</span>
+                <span @click="selectChange(&quot;0&quot;, item)"><i class="el-icon-setting" />考试设置</span>
+              </div>
             </div>
-            <div class="examListrightbottom">
-              <span><i class="el-icon-data-line"/>查看成绩</span>
-              <span><i class="el-icon-setting"/>考试设置</span>
-            </div>
-          </div>
-        </el-card>
+          </el-card>
+        </div>
+
       </el-tabs>
       <div class="inputBox">
-        <el-input v-model="initFrom.examinaName" placeholder="输入名称查询" class="input-with-select">
+        <el-input v-model="initFrom.examinaName" placeholder="输入名称查询" class="input-with-select" clearable>
           <el-button slot="append" icon="el-icon-search" @click="initData()"/>
         </el-input>
       </div>
     </div>
+    <!--发送邮件-->
+    <el-dialog :visible.sync="emitDialogVisible" :modal-append-to-body="false" title="发送通知" width="80%">
+      <emit-dialog v-if="emitDialogVisible" :exam-item="examItem" @confirmEmit="confirmEmit"/>
+    </el-dialog>
 
   </div>
 
 </template>
 
 <script>
-//	import clip from '@/utils/clipboard' // use clipboard directly
+import emitDialog from '../components/emitDialog'
 import clipboard from '@/directive/clipboard/index.js' // use clipboard by v-directive
 import {
   examSelectExaminaManagementList,
@@ -75,8 +87,13 @@ export default {
   directives: {
     clipboard
   },
+  components: {
+    emitDialog
+  },
   data() {
     return {
+      examboxLoading: false,
+      emitDialogVisible: false,
       dataStatusNum: {
         notStartStatusCount: 0,
         underWayStatusCount: 0,
@@ -110,6 +127,7 @@ export default {
         label: '查看成绩'
       }],
       value: '',
+      examItem: {}, // 当前操作考试对象
       url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
       dataList: [],
       stateCode: 1,
@@ -124,9 +142,17 @@ export default {
     initData() {
       const queryFrom = {}
       /* 和后台约定状态为3时传空查询全部*/
-      queryFrom.status = this.initFrom.status === 3 ? '' : this.initFrom.status
+      // eslint-disable-next-line eqeqeq
+      queryFrom.status = this.initFrom.status == 3 ? '' : this.initFrom.status
       queryFrom.examinaName = this.initFrom.examinaName
+
+      this.examboxLoading = true
       examSelectExaminaManagementList(queryFrom).then(res => {
+        const _this = this
+        window.setTimeout(function() {
+          _this.examboxLoading = false
+        }, 500)
+
         this.dataList = []
         if (res.data.code === '0000') {
           if (res.data.data.rows.length === 1) {
@@ -140,6 +166,8 @@ export default {
             this.dataStatusNum = res.data.data.rows[0]
           }
         } else {
+          this.examboxLoading = false
+
           this.$message.error(res.data.result)
         }
       })
@@ -161,6 +189,13 @@ export default {
           break
         case '2':
           this.handleCopy(item)
+          break
+        case '3':
+          this.emitDialogVisible = true
+          this.examItem = item
+          break
+        case '4':
+          this.goViewScore(item)
           break
         case '5':
           this.delExam(item)
@@ -238,6 +273,11 @@ export default {
         }
       })
     },
+    /* 邮件弹出窗回调*/
+    confirmEmit(obj) {
+      console.log(obj)
+      this.emitDialogVisible = false
+    },
     handleClick(tab, event) {
       this.initData()
       //				this.stateCode = parseInt(this.initFrom.status)
@@ -264,6 +304,9 @@ export default {
 			position: absolute;
 			right: 20px;
 			top: 2px;
+		}
+		.examboxF {
+			min-height: 100px;
 		}
 		.exambox {
 			padding-bottom: 10px;
@@ -300,5 +343,13 @@ export default {
 				}
 			}
 		}
+	}
+
+	.examManagelist /deep/ .el-dialog__wrapper {
+		z-index: 1000 !important;
+	}
+
+	.examManagelist /deep/ .v-modal {
+		z-index: 999!important;
 	}
 </style>

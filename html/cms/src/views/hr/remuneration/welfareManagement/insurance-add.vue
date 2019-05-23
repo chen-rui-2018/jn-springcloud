@@ -87,7 +87,7 @@
         <div style="margin-left: 5px; margin-top: 10px;">
           <el-table ref="table" :data="addInsuranceData.tableData" tooltip-effect="dark" border stripe style="width: 100%" @selection-change="selectRow">
             <el-table-column type="selection" width="45" align="center"/>
-            <el-table-column label="项目" align="center"><!--:render-header="renderProvidentFundHeader"-->
+            <el-table-column label="项目" align="center">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.projectName" :disabled="accumulationFundDisabled"/>
               </template>
@@ -303,19 +303,6 @@ export default {
     this.initList()
   },
   methods: {
-    renderProvidentFundHeader(h, { column, $index }) {
-      return h('span', [
-        h('span', column.label),
-        h('span', {
-          class: 'addIcon',
-          on: {
-            click: () => {
-              this.addRow()
-            }
-          }
-        })
-      ])
-    },
     initAddData() {
       this.addInsuranceData.tableData = [{
         rowNum: 0,
@@ -614,6 +601,8 @@ export default {
         this.$message.error('请填写参保名称')
       }
       this.commitRows.schemeId = this.prePageRow.schemeId
+      this.commitRows.socialSecurityId = this.prePageRow.socialSecurityId
+      this.commitRows.accumulationFundId = this.prePageRow.accumulationFundId
       this.commitRows.schemeName = this.addInsuranceData.schemeName
       this.commitRows.insuredCityId = this.addInsuranceData.insuredCityId
       this.commitRows.insuredCityName = this.addInsuranceData.insuredCityName
@@ -702,12 +691,4 @@ export default {
   .assessmenttempadd{
     display: flex;
   }
-  .addIcon {
-    display: inline-flex;
-    flex-direction: row;
-    width: 15px;
-    height: 15px;
-    background: url("/assets/images/hr-add.png") 100% 100% no-repeat;
-  }
-
 </style>

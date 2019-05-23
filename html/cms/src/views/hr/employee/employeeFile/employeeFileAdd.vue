@@ -62,7 +62,6 @@
 </template>
 
 <script>
-// import store from '@/store'
 import {
   addEmployeeFile, updateEmployeeFile, getEmployeeFile
 } from '@/api/hr/employeeFile'

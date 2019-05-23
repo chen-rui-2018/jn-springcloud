@@ -79,10 +79,10 @@ public class AssessmentManagementController extends BaseController{
     //@RequiresPermissions("/hr/AssessmentManagement/assessmentExtension")
 	@ApiOperation(value = "考核延期", notes = "考核延期")
     @RequestMapping(value = "/assessmentExtension", method = RequestMethod.POST)
-	public Result assessmentExtension(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
+	public Result<String> assessmentExtension(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
 		User user = (User) SecurityUtils.getSubject().getPrincipal();	
-		assessmentManagementService.assessmentExtension(assessmentManageAdd, user);
-		return new Result();
+		String str = assessmentManagementService.assessmentExtension(assessmentManageAdd, user);
+		return new Result(str);
 	}
 	
 	
@@ -90,9 +90,9 @@ public class AssessmentManagementController extends BaseController{
     //@RequiresPermissions("/hr/AssessmentManagement/deleteAssessmentRecord")
 	@ApiOperation(value = "删除考核记录", notes = "删除考核记录")
     @RequestMapping(value = "/deleteAssessmentRecord", method = RequestMethod.POST)
-	public Result deleteAssessmentRecord(@Validated @RequestBody AssessmentManagePage assessmentManagePage){	
-		assessmentManagementService.deleteAssessmentRecord(assessmentManagePage);
-		return new Result();
+	public Result<String> deleteAssessmentRecord(@Validated @RequestBody AssessmentManagePage assessmentManagePage){	
+		String str = assessmentManagementService.deleteAssessmentRecord(assessmentManagePage);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "导出查看页面明细")
@@ -124,9 +124,9 @@ public class AssessmentManagementController extends BaseController{
     //@RequiresPermissions("/hr/AssessmentManagement/saveStartAssessmentPage")
 	@ApiOperation(value = "开始考核-保存", notes = "开始考核-保存")
     @RequestMapping(value = "/saveStartAssessmentPage", method = RequestMethod.POST)
-	public Result saveStartAssessmentPage(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
-		assessmentManagementService.saveStartAssessmentPage(assessmentManageAdd);
-		return new Result();
+	public Result<String> saveStartAssessmentPage(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
+		String str = assessmentManagementService.saveStartAssessmentPage(assessmentManageAdd);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "开始考核-页面明细")
@@ -156,13 +156,22 @@ public class AssessmentManagementController extends BaseController{
 		return new Result(str);
 	}
 	
+	@ControllerLog(doAction = "考核结束")
+    //@RequiresPermissions("/hr/AssessmentManagement/assessmentEnd")
+	@ApiOperation(value = "考核结束", notes = "考核结束")
+    @RequestMapping(value = "/assessmentEnd", method = RequestMethod.POST)
+	public Result<String> assessmentEnd(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
+		String str = assessmentManagementService.assessmentEnd(assessmentManageAdd);
+		return new Result(str);
+	}
+	
 	@ControllerLog(doAction = "删除被考核人记录")
     //@RequiresPermissions("/hr/AssessmentManagement/deleteAppraisedPersonRecord")
 	@ApiOperation(value = "删除被考核人记录", notes = "删除被考核人记录")
     @RequestMapping(value = "/deleteAppraisedPersonRecord", method = RequestMethod.POST)
-	public Result deleteAppraisedPersonRecord(@Validated @RequestBody AssessmentManagePage assessmentManagePage){	
-		assessmentManagementService.deleteAppraisedPersonRecord(assessmentManagePage);
-		return new Result();
+	public Result<String> deleteAppraisedPersonRecord(@Validated @RequestBody AssessmentManagePage assessmentManagePage){	
+		String str = assessmentManagementService.deleteAppraisedPersonRecord(assessmentManagePage);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "开始考核详细页面显示")
@@ -188,9 +197,9 @@ public class AssessmentManagementController extends BaseController{
     //@RequiresPermissions("/hr/AssessmentManagement/deleteAssessmentTemplate")
 	@ApiOperation(value = "删除考核模板", notes = "删除考核模板")
     @RequestMapping(value = "/deleteAssessmentTemplate", method = RequestMethod.POST)
-	public Result deleteAssessmentTemplate(@Validated @RequestBody AssessmentTemplatePage assessmentTemplatePage){	
-		assessmentManagementService.deleteAssessmentTemplate(assessmentTemplatePage);
-		return new Result();
+	public Result<String> deleteAssessmentTemplate(@Validated @RequestBody AssessmentTemplatePage assessmentTemplatePage){	
+		String str = assessmentManagementService.deleteAssessmentTemplate(assessmentTemplatePage);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "考核模板详情")

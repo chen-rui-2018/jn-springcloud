@@ -27,13 +27,11 @@
 </template>
 
 <script>
-import {
-  api
-} from '@/api/hr/train'
-// import VueQr from 'vue-qr'
+import { api } from '@/api/hr/train'
+import VueQr from 'vue-qr'
 import UE from '@/components/ue.vue'
 export default {
-  components: { UE },
+  components: { UE, VueQr },
   data() {
     return {
       // 富文本
@@ -42,7 +40,9 @@ export default {
         initialFrameHeight: 150,
         autoFloatEnabled: false
       },
-      appSrc: 'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' + this.$route.query.projectId,
+      appSrc:
+        'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
+        this.$route.query.projectId,
       formData: {
         emailSubject: '',
         emailContent: '',
@@ -56,7 +56,7 @@ export default {
   methods: {
     // 初始化
     init() {
-      // if(this.$route.query.status == 0) {
+      // if(this.$route.query.status === 0) {
       //     return false
       // }
       const data = {
@@ -66,8 +66,21 @@ export default {
         if (res.data.code === '0000') {
           const returnData = res.data.data
           this.formData = Object.assign(this.formData, returnData)
-          this.formData.emailSubject = '【考试通知】-请参加"' + returnData.researchProject + '"考试'
-          this.formData.emailContent = '你好！<br/>邀请你参加"在职测试"考试，您可以点击下面的考试链接或者扫描二维码直接参加考试<br/>点击链接参加考试：<a href="' + returnData.surveyUrl + '" style="color:purple;cursor:pointer;">' + returnData.surveyUrl + '</a><br/>或者扫描二维码参加考试：<vue-qr :logo-src="' + returnData.surveyDimensional + '" :size="88" :margin="0" :auto-color="true" :dot-scale="1" :text="' + this.appSrc + '" />'
+          this.formData.emailSubject =
+            '【考试通知】-请参加"' + returnData.researchProject + '"考试'
+          this.formData.emailContent =
+            '你好！<br/>邀请你参加"在职测试"考试，您可以点击下面的考试链接或者扫描二维码直接参加考试<br/>点击链接参加考试：<a href="' +
+            returnData.surveyUrl +
+            '" style="color:purple;cursor:pointer;">' +
+            returnData.surveyUrl +
+            '</a><br/>或者扫描二维码参加考试：<div class="maImg"><vue-qr :logo-src="' +
+            returnData.surveyDimensional +
+            '" :size="88" :margin="0" :auto-color="true" :dot-scale="1" :text="' +
+            this.appSrc +
+            '" /></div>'
+          // this.$nextTick(() => {
+          //     document.getElementById("ma").appendChild('<vue-qr :logo-src="'+returnData.surveyDimensional+'" :size="88" :margin="0" :auto-color="true" :dot-scale="1" :text="'+this.appSrc+'" />')
+          // })
         } else {
           this.$message.error(res.data.result)
         }
@@ -106,29 +119,38 @@ export default {
 
 <style lang="scss" scoped>
 .email {
-    font-size: 14px;
-    .title {
-        display: inline-block;
+  font-size: 14px;
+  .title {
+    display: inline-block;
+    width: 100%;
+    height: 36px;
+    font-size: 15px;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+  }
+  .content {
+    padding: 30px 20px;
+    .tips {
+      font-size: 12px;
+      color: rgb(170, 170, 170);
+    }
+    .btnGroup {
+      margin-top: 36px;
+      text-align: center;
+    }
+    .maImg {
+      width: 126px;
+      height: 126px;
+      border: 1px solid #ccc;
+      img {
         width: 100%;
-        height: 36px;
-        font-size: 15px;
-        font-weight: bold;
-        border-bottom: 2px solid #ccc;
+        height: 100%;
+      }
     }
-    .content {
-        padding: 30px 20px;
-        .tips {
-            font-size: 12px;
-            color: rgb(170, 170, 170)
-        }
-        .btnGroup {
-            margin-top: 36px;
-            text-align: center;
-        }
-    }
-    .form /deep/ .el-form-item__label {
-        text-align: left;
-        color: #999;
-    }
+  }
+  .form /deep/ .el-form-item__label {
+    text-align: left;
+    color: #999;
+  }
 }
 </style>

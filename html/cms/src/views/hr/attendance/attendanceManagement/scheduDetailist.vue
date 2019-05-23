@@ -109,7 +109,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number1 }}</span>
         </template>
       </el-table-column>
@@ -121,7 +121,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number2 }}</span>
         </template>
       </el-table-column>
@@ -133,7 +133,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number3 }}</span>
         </template>
       </el-table-column>
@@ -145,7 +145,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number4 }}</span>
         </template>
       </el-table-column>
@@ -157,7 +157,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number5 }}</span>
         </template>
       </el-table-column>
@@ -169,7 +169,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number6 }}</span>
         </template>
       </el-table-column>
@@ -181,7 +181,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number7 }}</span>
         </template>
       </el-table-column>
@@ -193,7 +193,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number8 }}</span>
         </template>
       </el-table-column>
@@ -205,7 +205,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number9 }}</span>
         </template>
       </el-table-column>
@@ -217,7 +217,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number10 }}</span>
         </template>
       </el-table-column>
@@ -230,7 +230,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number11 }}</span>
         </template>
       </el-table-column>
@@ -242,7 +242,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number12 }}</span>
         </template>
       </el-table-column>
@@ -254,7 +254,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number13 }}</span>
         </template>
       </el-table-column>
@@ -266,7 +266,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number14 }}</span>
         </template>
       </el-table-column>
@@ -278,7 +278,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number15 }}</span>
         </template>
       </el-table-column>
@@ -290,7 +290,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number16 }}</span>
         </template>
       </el-table-column>
@@ -302,7 +302,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number17 }}</span>
         </template>
       </el-table-column>
@@ -314,7 +314,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number18 }}</span>
         </template>
       </el-table-column>
@@ -326,7 +326,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number19 }}</span>
         </template>
       </el-table-column>
@@ -338,7 +338,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number20 }}</span>
         </template>
       </el-table-column>
@@ -351,7 +351,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number21 }}</span>
         </template>
       </el-table-column>
@@ -363,7 +363,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number22 }}</span>
         </template>
       </el-table-column>
@@ -375,7 +375,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number23 }}</span>
         </template>
       </el-table-column>
@@ -387,7 +387,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number24 }}</span>
         </template>
       </el-table-column>
@@ -399,7 +399,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number25 }}</span>
         </template>
       </el-table-column>
@@ -411,7 +411,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number26 }}</span>
         </template>
       </el-table-column>
@@ -423,7 +423,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number27 }}</span>
         </template>
       </el-table-column>
@@ -435,7 +435,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number28 }}</span>
         </template>
       </el-table-column>
@@ -447,7 +447,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number29 }}</span>
         </template>
       </el-table-column>
@@ -459,7 +459,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number30 }}</span>
         </template>
       </el-table-column>
@@ -472,7 +472,7 @@
             :disabled="scope.row.disabled"
             maxlength="50"
             placeholder=""
-            onkeypress="return event.keyCode>=48&&event.keyCode<=49"/>
+            onkeypress="return event.keyCode>=48&&event.keyCode<=49" />
           <span v-else>{{ scope.row.number31 }}</span>
         </template>
       </el-table-column>

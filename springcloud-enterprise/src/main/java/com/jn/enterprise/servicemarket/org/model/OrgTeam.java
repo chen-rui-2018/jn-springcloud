@@ -3,6 +3,7 @@ package com.jn.enterprise.servicemarket.org.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -14,22 +15,23 @@ import java.io.Serializable;
  */
 @ApiModel(value = "OrgTeam",description = "机构服务团队")
 public class OrgTeam implements Serializable {
-    @ApiModelProperty(value = "机构ID[入参前端不需要传ID]")
+    @ApiModelProperty(value = "机构ID[APP入参前端不需要传ID]")
     private String orgId;
 
-    @ApiModelProperty(value = "人员姓名")
+    @ApiModelProperty(value = "人员姓名",required = true,example = "张三")
+    @NotNull(message = "人员姓名不能为空")
     private String conName;
 
-    @ApiModelProperty(value = "职务")
+    @ApiModelProperty(value = "职务",example = "项目经理")
     private String conPosition;
 
-    @ApiModelProperty(value = "资质")
+    @ApiModelProperty(value = "资质",example = "一级项目管理证书")
     private String conQuali;
 
-    @ApiModelProperty(value = "从业起始时间yyyy-MM-dd")
+    @ApiModelProperty(value = "从业起始时间yyyy-MM",example = "2017-01")
     private String conTime;
 
-    @ApiModelProperty(value = "业务特长")
+    @ApiModelProperty(value = "业务特长",example = "项目成本管理")
     private String conSpeciality;
 
     public String getOrgId() {

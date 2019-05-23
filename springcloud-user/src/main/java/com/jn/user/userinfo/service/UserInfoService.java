@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface UserInfoService {
     /**
-     * 根据账号获取用户扩展信息
+     * 根据用户账号/手机号/邮箱获取用户扩展信息
      * @param account 用户账号
      * @return
      */
@@ -65,7 +65,6 @@ public interface UserInfoService {
      */
     boolean updateRedisUserInfo(String account);
 
-    
     /**
      * 保存/修改用户信息
      * @param userInfoParam
@@ -73,5 +72,27 @@ public interface UserInfoService {
      * @return
      */
     int saveOrUpdateUserInfo(UserInfoParam userInfoParam, User user);
+
+    /**
+     * 获取用户实名制状态
+     * @param account
+     * @return true表示已实名认证 false表示未实名认证
+     */
+    Boolean getUserRealNameStatus(String account);
+
+        /**
+     * 根据条件获取 账号列表
+     * @param param
+     *
+     * @return
+     */
+    List<String> getAccountList(UserInfoQueryParam param);
+
+    /**
+     * 根据查询字段批量获取用户信息
+     * @param searchFiledParam
+     * @return
+     */
+    PaginationData getUserExtensionBySearchFiled(SearchFiledParam searchFiledParam);
 
 }

@@ -1,6 +1,7 @@
 package com.jn.system.permission.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.permission.entity.TbSysRole;
 import com.jn.system.permission.model.*;
@@ -105,4 +106,20 @@ public interface SysRoleService {
      * @return
      */
     PaginationData<SysRolePermissionVO> findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage);
+
+    /**
+     * 根据角色名称,获取角色信息
+     *
+     * @param roleName 角色名称
+     * @return
+     */
+    SysRole getRoleByName(String roleName);
+
+    /**
+     * 根据角色id或角色名称获取角色拥有的用户信息
+     *
+     * @param role
+     * @return
+     */
+    List<User> getUserByRole(SysRole role);
 }

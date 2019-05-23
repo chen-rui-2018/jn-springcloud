@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.schedule.dao.ScheduleMapper">
+
+  <select id="list" resultType="com.jn.oa.schedule.model.Schedule" parameterType="com.jn.oa.schedule.model.ScheduleQuery">
+          SELECT
+            id,
+            start_time AS `date`,
+            title,
+            content,
+            start_time as `start`,
+            end_time as `end`,
+            remind_time as remindTime,
+            is_remind as isRemind,
+            remind_way as remindWay,
+            all_day as allDay,
+            remark
+        FROM
+            `tb_oa_schedule`
+        WHERE
+            creator_account = #{userAccount,jdbcType=VARCHAR}
+        AND record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(title)">
+          and title like CONCAT('%', trim(#{title,jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="null != date">
+          AND MONTH (start_time) = MONTH (#{date,jdbcType=TIMESTAMP})
+          AND YEAR (start_time) = YEAR (#{date,jdbcType=TIMESTAMP})
+        </if>
+        <if test="null != startTime">
+          AND start_time BETWEEN #{startTime,jdbcType=TIMESTAMP}
+          AND #{endTime,jdbcType=TIMESTAMP}
+        </if>
+  </select>
+
+</mapper>

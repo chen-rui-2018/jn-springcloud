@@ -14,10 +14,10 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "IndustryParameter",description = "业务领域查询入参")
 public class IndustryParameter extends Page {
 
-    @ApiModelProperty(value = "领域值")
+    @ApiModelProperty(value = "领域值",example = "物流快递")
     private String preValue;
 
-    @ApiModelProperty(value = "行业id")
+    @ApiModelProperty(value = "领域id",example = "ogistics")
     private String id;
 
     public String getPreValue() {

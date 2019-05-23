@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pay.dao.PayBillDao">
+    <!-- 一对多查询:一个账单包含该账单多条详细记录-->
+    <resultMap id="BaseResultMap" type="com.jn.pay.vo.PayBillVo">
+        <id column="BILL_ID" jdbcType="VARCHAR" property="billId" />
+        <result column="AC_BOOK_ID" jdbcType="VARCHAR" property="acBookId" />
+        <result column="BILL_NAME" jdbcType="VARCHAR" property="billName" />
+        <result column="BILL_SOURCE" jdbcType="VARCHAR" property="billSource" />
+        <result column="BILL_EXPENSE" jdbcType="DECIMAL" property="billExpense" />
+        <result column="REMINDER_NUMBER" jdbcType="INTEGER" property="reminderNumber" />
+        <result column="OBJ_TYPE" jdbcType="VARCHAR" property="objType" />
+        <result column="OBJ_NAME" jdbcType="VARCHAR" property="objName" />
+        <result column="PAYMENT_STATE" jdbcType="CHAR" property="paymentState" />
+        <result column="PAYMENT_TYPE" jdbcType="CHAR" property="paymentType" />
+        <result column="AC_BOOK_TYPE" jdbcType="VARCHAR" property="acBookType" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+        <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="LATE_PAYMENT" jdbcType="TIMESTAMP" property="latePayment" />
+        <result column="PAYMENT_AFFIRM" jdbcType="CHAR" property="paymentAffirm" />
+        <result column="AFFIRM_PART" jdbcType="VARCHAR" property="affirmPart" />
+        <result column="AFFIRM_TIME" jdbcType="TIMESTAMP" property="affirmTime" />
+        <result column="record_status" jdbcType="CHAR" property="recordStatus" />
+        <result column="deduction_id" jdbcType="VARCHAR" property="deductionId" />
+        <result column="money" jdbcType="DECIMAL" property="money" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="payment_method" jdbcType="VARCHAR" property="paymentMethod" />
+        <result column="payment_action" jdbcType="VARCHAR" property="paymentAction" />
+        <result column="nature_code" jdbcType="VARCHAR" property="natureCode" />
+        <!-- 多条详细记录 -->
+        <collection property="payBillDetails" ofType="com.jn.pay.model.PayBillDetails">
+            <id column="details_id" jdbcType="VARCHAR"  property="detailsId"/>
+            <result column="cost_name" jdbcType="VARCHAR" property="costName"/>
+            <result column="cost_value" jdbcType="VARCHAR" property="costValue"/>
+        </collection>
+    </resultMap>
+   <!-- <select id="getBillQueryList" parameterType="com.jn.enterprise.pay.model.PayBill" resultMap="BaseResultMap">
+    select
+	d.bill_id as billId,
+	d.ac_book_id as acBookId,
+	d.bill_name as billName,
+	d.bill_source as billSource,
+	d.bill_expense as billExpense,
+	d.reminder_number as reminderNumber,
+	d.obj_type as objType,
+	d.obj_name as objName,
+	d.payment_state as paymentState,
+	d.payment_type as paymentType,
+	d.ac_book_type as ac_bookType,
+	d.created_time as createdTime,
+	d.creator_account as creatorAccount,
+	d.modified_time as modifiedTime,
+	d.modifier_account as modifierAccount,
+	d.late_payment as latePayment,
+	d.payment_affirm as paymentAffirm,
+	d.affirm_part as affirmPart,
+	d.affirm_time as affirmTime,
+	d.record_status as recordStatus,
+	g.deduction_id as deductionId,
+	g.money as money,
+	g.remark as remark,
+	g.payment_method as paymentMethod,
+	g.payment_action as paymentAction,
+	g.nature_code as natureCode,
+	b.details_id as detailsId,
+	b.cost_name as costName,
+	b.cost_value as costValue
+from
+
+(
+		(
+			tb_pay_bill d
+			left join tb_pay_account_book_money_record g on (
+				(
+					g.bill_id = d.bill_id
+				)
+			)
+		)
+		left join tb_pay_bill_details b on (
+			(
+				b.bill_id = d.bill_id
+			)
+		)
+	)
+
+  </select>-->
+  <select id="getBillQueryList" parameterType="com.jn.pay.model.PayBillParams" resultType="com.jn.pay.vo.PayBillVo">
+    SELECT
+	id_ AS billId,
+	ac_book_id AS acBookId,
+	bill_name AS billName,
+	bill_source AS billSource,
+	bill_expense AS billExpense,
+	reminder_number AS reminderNumber,
+	CASE obj_type
+    WHEN '1' THEN
+        '企业'
+    WHEN '2' THEN
+        '个人'
+    ELSE
+        '其他'
+    END objType,
+     obj_id AS objId,
+     obj_name AS objName,
+     CASE payment_state
+    WHEN '1' THEN
+        '已支付'
+    WHEN '2' THEN
+        '待支付'
+    ELSE
+        '支付异常'
+    END paymentState,
+     payment_type AS paymentType,
+     CASE ac_book_type
+    WHEN '1' THEN
+        '电费'
+    WHEN '2' THEN
+        '物业费'
+    ELSE
+        '其他'
+    END acBookType,
+     created_time AS createdTime,
+     creator_account AS creatorAccount,
+     modified_time AS modifiedTime,
+     modifier_account AS modifierAccount,
+     late_payment AS latePayment,
+     CASE payment_affirm
+    WHEN '1' THEN
+        '已确认'
+    WHEN '2' THEN
+        '未确认'
+    ELSE
+        '异常'
+    END paymentAffirm,
+     affirm_part AS affirmPart,
+     affirm_time AS affirmTime,
+     record_status AS recordStatus,
+     deduction_id AS deductionId,
+     money AS money,
+     remark AS remark,
+     payment_method AS paymentMethod,
+     payment_action AS paymentAction,
+     nature_code AS natureCode
+FROM
+	v_pay_all
+WHERE
+	1=1
+and record_status = 1
+and obj_id = #{payBill.objId,jdbcType=VARCHAR}
+
+      <if test="payBill.billId != null">
+          and id_ = #{payBill.billId,jdbcType=VARCHAR}
+      </if>
+  </select>
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into tb_pay_bill_details(
+                details_id,
+                bill_id,
+                COST_NAME,
+                COST_VALUE,
+                sort,
+                creator_account,
+                created_time,
+                record_status)
+        values
+            <foreach item="item" index="index" collection="list" separator="," >
+                (
+                    #{item.detailsId,jdbcType=VARCHAR},
+                    #{item.billId,jdbcType=VARCHAR},
+                    #{item.costName,jdbcType=VARCHAR},
+                    #{item.costValue,jdbcType=VARCHAR},
+                    #{item.sort,jdbcType=INTEGER},
+                    #{item.creatorAccount,jdbcType=VARCHAR},
+                    #{item.createdTime,jdbcType=TIMESTAMP},
+                    #{item.recordStatus,jdbcType=CHAR}
+                )
+            </foreach>
+    </insert>
+
+    <select id="getBillAppList" parameterType="com.jn.pay.model.PayBill" resultType="com.jn.pay.vo.PayBillReturnParamVo">
+        SELECT
+        bill_id AS billId,
+        ac_book_id AS acBookId,
+        bill_name AS billName,
+        bill_source AS billSource,
+        bill_expense AS billExpense,
+        reminder_number AS reminderNumber,
+        CASE obj_type
+        WHEN '1' THEN
+        '企业'
+        WHEN '2' THEN
+        '个人'
+        ELSE
+        '其他'
+        END objType,
+        obj_id AS objId,
+        obj_name AS objName,
+        CASE payment_state
+        WHEN '1' THEN
+        '已支付'
+        WHEN '2' THEN
+        '待支付'
+        ELSE
+        '支付异常'
+        END paymentState,
+        CASE ac_book_type
+        WHEN '1' THEN
+        '电费'
+        WHEN '2' THEN
+        '物业费'
+        ELSE
+        '其他'
+        END acBookType,
+        created_time AS createdTime,
+        creator_account AS creatorAccount,
+        late_payment AS latePayment,
+        CASE payment_affirm
+        WHEN '1' THEN
+        '已确认'
+        WHEN '2' THEN
+        '未确认'
+        ELSE
+        '异常'
+        END paymentAffirm,
+        record_status AS recordStatus
+        FROM
+        tb_pay_bill
+        WHERE
+        1=1
+        and record_status = 1
+        and bill_receiver = #{payBill.billReceiver,jdbcType=VARCHAR}
+        <if test="payBill.billId != null">
+            and bill_id = #{payBill.billId,jdbcType=VARCHAR}
+        </if>
+        <if test="payBill.acBookType != null">
+            and ac_book_type = #{payBill.acBookType,jdbcType=VARCHAR}
+        </if>
+        <if test="payBill.paymentState != null">
+            and payment_state = #{payBill.paymentState,jdbcType=VARCHAR}
+        </if>
+        order by payment_state desc
+    </select>
+</mapper>

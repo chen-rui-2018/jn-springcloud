@@ -1,12 +1,10 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,29 +16,30 @@ import java.util.List;
  */
 @ApiModel(value = "AdvisorDetailParam", description = "顾问认证资料信息")
 public class AdvisorDetailParam implements Serializable {
-    @ApiModelProperty(value = "机构Id")
+    @ApiModelProperty(value = "机构Id",example = "123xxx")
     private String orgId;
-    @ApiModelProperty(value = "机构名称")
+    @ApiModelProperty(value = "机构名称",example = "xxx机构")
     private String orgName;
     @NotNull(message="业务领域不能为空")
-    @ApiModelProperty(value = "业务领域",required = true)
+    @ApiModelProperty(value = "业务领域",required = true,example = "technology_financial")
     private String businessArea;
     @NotNull(message="从业年限不能为空")
-    @ApiModelProperty(value = "从业年限",required = true)
-    private Double workingYears;
+    @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "workingYears:只能输入的数字和小数点")
+    @ApiModelProperty(value = "从业年限",required = true,example = "10")
+    private String workingYears;
     @NotNull(message="毕业学校不能为空")
-    @ApiModelProperty(value = "毕业学校",required = true)
+    @ApiModelProperty(value = "毕业学校",required = true,example = "xxx学校")
     private String graduatedSchool;
-    @ApiModelProperty(value = "学历")
+    @ApiModelProperty(value = "学历",example = "本科")
     private String education;
-    @ApiModelProperty(value = "个人简介")
+    @ApiModelProperty(value = "个人简介",example = "xxx个人简介")
     private String personalProfile;
-    @ApiModelProperty(value = "联系手机",required = true)
+    @ApiModelProperty(value = "联系手机",required = true,example = "18088888888")
     @NotNull(message="联系手机不能为空")
     @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
             message = "{phone:'手机号码验证出错'}")
     private String phone;
-    @ApiModelProperty(value = "联系邮箱")
+    @ApiModelProperty(value = "联系邮箱",example = "123@126.com")
     @Pattern(regexp = "[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?",
             message = "{email:'邮箱验证出错'}")
     private String contactEmail;
@@ -78,11 +77,11 @@ public class AdvisorDetailParam implements Serializable {
         this.businessArea = businessArea;
     }
 
-    public Double getWorkingYears() {
+    public String getWorkingYears() {
         return workingYears;
     }
 
-    public void setWorkingYears(Double workingYears) {
+    public void setWorkingYears(String workingYears) {
         this.workingYears = workingYears;
     }
 

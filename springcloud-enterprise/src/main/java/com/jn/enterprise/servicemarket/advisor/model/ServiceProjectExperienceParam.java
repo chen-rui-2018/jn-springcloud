@@ -18,24 +18,24 @@ import java.io.Serializable;
 public class ServiceProjectExperienceParam  implements Serializable {
     @ApiModelProperty(value = "主键id(新增时为空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "顾问账号",required = true)
+    @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
-    @ApiModelProperty(value = "公司名称",required = true)
+    @ApiModelProperty(value = "公司名称",required = true,example = "xxx公司")
     @NotNull(message="公司名称不能为空")
     private String companyName;
-    @ApiModelProperty(value = "项目名称",required = true)
+    @ApiModelProperty(value = "项目名称",required = true,example = "xxx项目")
     @NotNull(message="项目名称不能为空")
     private String projectName;
-    @ApiModelProperty(value = "项目开始时间(格式：201903)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @ApiModelProperty(value = "项目开始时间",example = "201903")
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{projectTime:'项目开始时间格式错误'}")
     private String projectTime;
-    @ApiModelProperty(value = "项目结束时间(格式：201904)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @ApiModelProperty(value = "项目结束时间",example = "201904")
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{projectEndTime:'项目结束时间格式错误'}")
     private String projectEndTime;
-    @ApiModelProperty(value = "个人职责")
+    @ApiModelProperty(value = "个人职责",example = "主要从事xxx...")
     @Size(max = 500, message = "个人职责描述不能超过500字")
     private String personalDuties;
 

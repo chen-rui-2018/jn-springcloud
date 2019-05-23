@@ -34,6 +34,17 @@
         </foreach>
     </update>
 
+    <update id="deleteUserRole">
+        update tb_sys_user_role
+        set
+        record_status = 0
+        where user_id = #{userId,jdbcType=VARCHAR}
+        and role_id in
+        <foreach item="roleId" collection="deleRoleIds" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </update>
+
     <!--批量插入 -->
     <insert id="insertBatch" parameterType="java.util.List">
         insert into tb_sys_user_role (id, role_id,user_id,creator_account,created_time,record_status) values
@@ -61,22 +72,28 @@
     </select>
 
     <select id="findUserByRoleId" parameterType="java.lang.String"
-            resultType="com.jn.system.user.model.SysTUser">
-      SELECT
-      t1.id,
-      t1.`name`,
-      t1.created_time
-      FROM tb_sys_user t1,
-      tb_sys_user_role t2
-      where t1.id = t2.user_id
-      and t1.`record_status` = 1
-      and t2.`record_status` = 1
-      and t2.role_id = #{id,jdbcType=VARCHAR}
-      ORDER BY t1.created_time ASC
+            resultType="com.jn.system.model.User">
+        SELECT
+            t1.id,
+            t1.account,
+            t1.`name`,
+            t1.phone,
+            t1.email,
+            t1.wechat_account as wechatAccount
+        FROM
+            tb_sys_user t1,
+            tb_sys_user_role t2
+        WHERE
+            t1.id = t2.user_id
+        AND t1.`record_status` = 1
+        AND t2.`record_status` = 1
+        AND t2.role_id = #{id,jdbcType=VARCHAR}
+        ORDER BY
+            t1.created_time ASC
     </select>
 
     <select id="findOtherUser" parameterType="com.jn.system.permission.model.SysRoleUserPage"
-            resultType="com.jn.system.user.model.SysTUser">
+            resultType="com.jn.system.model.User">
         SELECT DISTINCT
         t.id,
         t.`name`
@@ -123,5 +140,14 @@
             and t.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
         ORDER BY t.created_time DESC ,t.id DESC
+    </select>
+
+    <select id="getRoleIdByUserId" resultType="java.lang.String">
+        SELECT
+            role_id
+        FROM
+            tb_sys_user_role
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+        AND record_status = 1
     </select>
 </mapper>

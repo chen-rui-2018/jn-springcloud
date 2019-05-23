@@ -8,17 +8,16 @@ import com.jn.common.model.PaginationData;
 import com.jn.oa.common.enums.OaExceptionEnums;
 import com.jn.oa.common.enums.OaReturnMessageEnum;
 import com.jn.oa.common.enums.OaStatusEnums;
-
-import com.jn.oa.meeting.dao.OaMeetingRoomPhotoMapper;
+import com.jn.oa.meeting.dao.MeetingRoomPhotoMapper;
 import com.jn.oa.meeting.dao.TbOaMeetingRoomMapper;
-import com.jn.oa.meeting.dao.OaMeetingRoomMapper;
+import com.jn.oa.meeting.dao.MeetingRoomMapper;
 import com.jn.oa.meeting.dao.TbOaMeetingRoomPhotoMapper;
 import com.jn.oa.meeting.entity.TbOaMeeting;
 import com.jn.oa.meeting.entity.TbOaMeetingRoom;
 import com.jn.oa.meeting.entity.TbOaMeetingRoomCriteria;
 import com.jn.oa.meeting.entity.TbOaMeetingRoomPhoto;
-import com.jn.oa.meeting.enums.OaMeetingRoomStatusEnums;
-import com.jn.oa.meeting.model.OaMeetingRoom;
+import com.jn.oa.meeting.enums.MeetingRoomStatusEnums;
+import com.jn.oa.meeting.model.OaMeeting;
 import com.jn.oa.meeting.model.OaMeetingRoomAdd;
 import com.jn.oa.meeting.model.OaMeetingRoomOrderPage;
 import com.jn.oa.meeting.model.OaMeetingRoomPage;
@@ -51,13 +50,13 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     private TbOaMeetingRoomMapper tbOaMeetingRoomMapper;
 
     @Resource
-    private OaMeetingRoomMapper oaMeetingRoomMapper;
+    private MeetingRoomMapper oaMeetingRoomMapper;
 
     @Resource
     private TbOaMeetingRoomPhotoMapper tbOaMeetingRoomPhotoMapper;
 
     @Resource
-    private OaMeetingRoomPhotoMapper oaMeetingRoomPhotoMapper;
+    private MeetingRoomPhotoMapper oaMeetingRoomPhotoMapper;
 
 
     /**
@@ -221,7 +220,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         for(OaMeetingRoomOrderVo oaMeetingRoomOrderVo:oaMeetingRoomOrderVoList){
 
             oaMeetingRoomOrderPage.setMeetingRoomId(oaMeetingRoomOrderVo.getId());
-            List<TbOaMeeting> tbOaMeetingList=oaMeetingRoomMapper.selectMeetingByTimeAndId(oaMeetingRoomOrderPage);
+            List<OaMeeting> tbOaMeetingList=oaMeetingRoomMapper.selectMeetingByTimeAndId(oaMeetingRoomOrderPage);
             oaMeetingRoomOrderVo.setMeetingList(tbOaMeetingList);
         }
 
@@ -276,18 +275,18 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         TbOaMeetingRoomCriteria.Criteria criteria = tbOaMeetingRoomCriteria.createCriteria();
         criteria.andNameEqualTo(tbOaMeetingRoomName);
         //筛选已经删除的数据
-        criteria.andRecordStatusNotEqualTo(OaMeetingRoomStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(MeetingRoomStatusEnums.DELETED.getCode());
         return tbOaMeetingRoomMapper.selectByExample(tbOaMeetingRoomCriteria);
     }
 
     /**
-     * 校验文件组是否存在
+     * 校验会议室名称是否存在
      *
      * @param tbOaMeetingRoomName
      * @return
      */
     @Override
-    @ServiceLog(doAction = "校验文件组是否存在")
+    @ServiceLog(doAction = "校验会议室名称是否存在")
     public String checkMeetingRoomName(String tbOaMeetingRoomName) {
         if (org.apache.commons.lang3.StringUtils.isNotBlank(tbOaMeetingRoomName)) {
             List<TbOaMeetingRoom> tbOaMeetingRoom = checkName(tbOaMeetingRoomName);

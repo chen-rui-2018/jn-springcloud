@@ -6,7 +6,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.activity.dao.ActivityDetailsMapper;
@@ -17,7 +16,7 @@ import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.entity.TbActivityDetail;
 import com.jn.park.activity.service.ActivityApplyService;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.send.api.DelaySendMessageClient;
@@ -29,7 +28,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.jn.park.parkcode.entity.TbParkCode;
 import com.jn.park.parkcode.service.ParkCodeService;
 
 import java.text.ParseException;
@@ -71,9 +69,10 @@ public class ActivityServiceImpl implements ActivityService {
      */
     private static final String ACTIVITY_STATE_DRAFT = "1";
     /**
-     * 活动发布 - 报名中
+     * 活动发布 - 2报名中 3已结束
      */
     private static final String ACTIVITY_STATE_PUBLISH = "2";
+    private static final String ACTIVITY_STATE_FINISH = "3";
     /**
      * 正常数据（1：未删除状态）
      */
@@ -128,7 +127,7 @@ public class ActivityServiceImpl implements ActivityService {
             logger.warn("[后台管理-活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId, activityDetails == null ? 0 : activityDetails.size());
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESULT_ERROR);
         }
-        List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
+        List<ParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
         ActivityDetail activityDetail = activityDetails.get(0);
         activityDetail.setParkCodes(parkCodeByType);
         return activityDetail;
@@ -136,11 +135,11 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "修改活动报名状态")
     @Override
-    public int updateActivityApply(ActivitySataus activitySataus) {
-        if (StringUtils.equals(activitySataus.getActiStatus(), ACTIVITY_STATE_FALSE) || StringUtils.equals(activitySataus.getActiStatus(), ACTIVITY_STATE_TRUE)) {
+    public int updateActivityApply(ActivityStatus activityStatus) {
+        if (StringUtils.equals(activityStatus.getActiStatus(), ACTIVITY_STATE_FALSE) || StringUtils.equals(activityStatus.getActiStatus(), ACTIVITY_STATE_TRUE)) {
             TbActivity activity = new TbActivity();
-            activity.setId(activitySataus.getActivityId());
-            activity.setIsApply(activitySataus.getActiStatus());
+            activity.setId(activityStatus.getActivityId());
+            activity.setIsApply(activityStatus.getActiStatus());
             int i = tbActivityMapper.updateByPrimaryKeySelective(activity);
             if (i == 1) {
                 return i;
@@ -468,6 +467,8 @@ public class ActivityServiceImpl implements ActivityService {
         return activitySendMessage(activity.getId(), activity.getActiStartTime());
     }
 
+
+
     /**
      * 活动消息发送接口
      *
@@ -490,6 +491,50 @@ public class ActivityServiceImpl implements ActivityService {
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * author chenr
+     * @param query
+     * @param needPage
+     * @return
+     */
+    @ServiceLog(doAction = "查看用户报名的活动列表")
+    @Override
+    public PaginationData findActivitySuccessfulRegistration(ActivityApplyListParam query, Boolean needPage) {
+        int pageSize = query.getRows() == 0 ? 15 : query.getRows();
+        int pageNumber = query.getPage();
+        Page<Object> objects = null;
+        if(needPage){
+            objects = PageHelper.startPage(pageNumber,pageSize,true);
+        }
+        List<ActivityListApply> activityList = activityMapper.findActivitySuccessfulRegistration(query.getAccount(),query.getApplyStatus(),query.getActiName());
+
+        return new PaginationData(activityList,objects==null?0:objects.getTotal());
+    }
+    @ServiceLog(doAction = "查看机构下的活动列表")
+    @Override
+    public PaginationData findOrgActivityList(OrgActivityParam query, String activityType, boolean needPage) {
+        int pageSize = query.getRows() == 0 ? 15 : query.getRows();
+        int pageNumber = query.getPage();
+        Page<Object> objects = null;
+        if(needPage){
+            objects = PageHelper.startPage(pageNumber,pageSize,true);
+        }
+        List<OrgActivityShow> activityList =  activityMapper.findOrgActivityList(query.getStartTime(),query.getEndTime(),activityType,query.getTimeInterval());
+        return new PaginationData(activityList,objects==null?0:objects.getTotal());
+    }
+
+    @ServiceLog(doAction = "获取有效活动总数")
+    @Override
+    public String getActivityNum(){
+        TbActivityCriteria activityCriteria = new TbActivityCriteria();
+        List<String> sList = new ArrayList<>(16);
+        sList.add(ACTIVITY_STATE_PUBLISH);
+        sList.add(ACTIVITY_STATE_FINISH);
+        activityCriteria.createCriteria().andRecordStatusEqualTo(new Byte(ACTIVITY_STATE_NOT_DELETE)).andActiStatusIn(sList);
+        long activityNum = tbActivityMapper.countByExample(activityCriteria);
+        return activityNum+"";
     }
 
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.feedback.dao.FeedbackMapper">
+    <resultMap id="getUserFeedbackMap" type="com.jn.park.feedback.model.FeedbackVO">
+        <id column="f_feedId" jdbcType="VARCHAR" property="feedId" javaType="java.lang.String"/>
+        <result column="f_feedContent" jdbcType="VARCHAR" property="feedContent" javaType="java.lang.String"/>
+        <result column="f_feedTypeId" jdbcType="VARCHAR" property="feedTypeId" javaType="java.lang.String"/>
+        <result column="f_feedTypeName" jdbcType="VARCHAR" property="feedTypeName" javaType="java.lang.String"/>
+        <result column="f_createdTime" jdbcType="VARCHAR" property="createdTime" javaType="java.lang.String"/>
+        <result column="f_creatorAccount" jdbcType="VARCHAR" property="creatorAccount" javaType="java.lang.String"/>
+        <result column="f_modifiedTime" jdbcType="VARCHAR" property="modifiedTime" javaType="java.lang.String"/>
+        <result column="f_modifierAccount" jdbcType="VARCHAR" property="modifierAccount" javaType="java.lang.String"/>
+
+        <!-- 文件图片 -->
+        <collection property="fileImgs" javaType="java.util.List"
+                    ofType="com.jn.park.fileimg.model.FileImg">
+            <id column="i_imgUrl" property="imgUrl" jdbcType="VARCHAR"/>
+            <result column="i_imgRemark" property="imgRemark" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <!--获取反馈问题列表-->
+    <select id="getUserFeedbackList" resultMap="getUserFeedbackMap" parameterType="com.jn.park.feedback.model.FeedbackParam">
+        SELECT f.feed_id as "f_feedId"
+              ,f.feed_content as "f_feedContent"
+              ,f.feed_type_id as "f_feedTypeId"
+              ,f.feed_type_name as "f_feedTypeName"
+              ,date_format(f.created_time,'%Y-%m-%d %H:%i:%s') as "f_createdTime"
+              ,f.creator_account as "f_creatorAccount"
+              ,date_format(f.modified_time,'%Y-%m-%d %H:%i:%s') as "f_modifiedTime"
+              ,f.modifier_account as "f_modifierAccount"
+              ,i.img_url as "i_imgUrl"
+              ,i.img_remark as "i_imgRemark"
+          from tb_user_feedback f  left join tb_file_img i on f.feed_id = i.topic_id and i.record_status = '1'
+        where f.record_status = '1'
+        <if test="feedContent != null and feedContent != ''">
+            and f.feed_content = #{feedContent}
+        </if>
+        <if test="feedTypeId != null and feedTypeId != ''">
+            and f.feed_type_id = #{feedTypeId}
+        </if>
+        <if test="feedTypeName != null and feedTypeName != ''">
+            and f.feed_type_name = #{feedTypeName}
+        </if>
+
+    </select>
+
+
+</mapper>

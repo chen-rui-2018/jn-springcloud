@@ -21,7 +21,7 @@ import com.jn.oa.email.dao.EmailUserMapper;
 import com.jn.oa.email.dao.TbOaEmailMapper;
 import com.jn.oa.email.entity.TbOaEmail;
 import com.jn.oa.email.entity.TbOaEmailUser;
-import com.jn.oa.email.enums.EmailExceptionEnmus;
+import com.jn.oa.email.enums.EmailExceptionEnums;
 import com.jn.oa.email.enums.EmailIsDelayEnums;
 import com.jn.oa.email.enums.EmailSendStatusEnums;
 import com.jn.oa.email.model.EmailAdd;
@@ -188,21 +188,21 @@ public class EmailServiceImpl implements EmailService {
             String emailId = tbOaEmail.getId();
             //获取邮件任务接收人邮箱
             String userEmailInfo = emailUserMapper.getUserEmailInfo(emailId);
-            if (userEmailInfo == null) {
-                return;
+            boolean sendStatus = true;
+            if (userEmailInfo != null) {
+                EmailVo emailVo = new EmailVo();
+                emailVo.setEmail(userEmailInfo);
+                emailVo.setEmailSubject(tbOaEmail.getTitle());
+                emailVo.setEmailContent(tbOaEmail.getEmailContent());
+
+                //获取附件信息
+                String attachment = tbOaEmail.getAttachment();
+                //从文件服务器上下载附件
+                downlownAttachment(fileList, emailVo, attachment);
+                //发送邮件
+                sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());;
             }
 
-            EmailVo emailVo = new EmailVo();
-            emailVo.setEmail(userEmailInfo);
-            emailVo.setEmailSubject(tbOaEmail.getTitle());
-            emailVo.setEmailContent(tbOaEmail.getEmailContent());
-
-            //获取附件信息
-            String attachment = tbOaEmail.getAttachment();
-            //从文件服务器上下载附件
-            downlownAttachment(fileList, emailVo, attachment);
-
-            boolean sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
             //更新邮件发送时间
             tbOaEmail.setSendTime(new Date());
             if (user != null) {
@@ -234,7 +234,7 @@ public class EmailServiceImpl implements EmailService {
      * @throws IOException
      */
     private void downlownAttachment(List<String> fileList, EmailVo emailVo, String attachment) throws IOException {
-        if (attachment != null) {
+        if (StringUtils.isNotBlank(attachment)) {
             ObjectMapper objectMapper = new ObjectMapper();
             List<Map<String, String>> list = objectMapper.readValue(attachment, List.class);
             for (Map<String, String> map : list) {
@@ -274,7 +274,7 @@ public class EmailServiceImpl implements EmailService {
         tbOaEmail.setSendStatus(EmailSendStatusEnums.SEND_FAILURE.getCode());
         tbOaEmailMapper.updateByPrimaryKeySelective(tbOaEmail);
         logger.error("[一键Email] 邮件定时发送失败,emailId:{}", tbOaEmail.getId());
-        throw new JnSpringCloudException(EmailExceptionEnmus.EMAIL_SEND_FAIL);
+        throw new JnSpringCloudException(EmailExceptionEnums.EMAIL_SEND_FAIL);
     }
 
     /**
@@ -292,7 +292,7 @@ public class EmailServiceImpl implements EmailService {
         if (tbOaEmail == null ||
                 StringUtils.equals(OaStatusEnums.DELETED.getCode(), tbOaEmail.getRecordStatus().toString())) {
             logger.warn("[一键Email] 一键发送失败,邮件任务不存在或已被删除,emailId:{}", tbOaEmail.getId());
-            throw new JnSpringCloudException(EmailExceptionEnmus.EMAIL_NOT_EXIST);
+            throw new JnSpringCloudException(EmailExceptionEnums.EMAIL_NOT_EXIST);
         }
 
         //2.发送邮件
@@ -307,10 +307,10 @@ public class EmailServiceImpl implements EmailService {
      */
     @Override
     @ServiceLog(doAction = "一键Email列表功能")
-    public PaginationData list(EmailPage emailPage) {
+    public PaginationData<List<EmailVO>> list(EmailPage emailPage) {
         Page<Object> objects = PageHelper.startPage(emailPage.getPage(), emailPage.getRows());
         List<EmailVO> emailVOList = emailMapper.list(emailPage);
-        PaginationData data = new PaginationData(emailVOList, objects.getTotal());
+        PaginationData<List<EmailVO>> data = new PaginationData(emailVOList, objects.getTotal());
         return data;
     }
 
@@ -351,7 +351,7 @@ public class EmailServiceImpl implements EmailService {
         String sendStatus = tbOaEmail.getSendStatus();
 
         Assert.notNull(emailId, OaExceptionEnums.ID_NOT_NULL.getMessage());
-        Assert.notNull(sendStatus, EmailExceptionEnmus.SEND_STATUS_NOT_NULL.getMessage());
+        Assert.notNull(sendStatus, EmailExceptionEnums.SEND_STATUS_NOT_NULL.getMessage());
 
         //1.判断更新信息是否存在
         TbOaEmail tbOaEmail1 = tbOaEmailMapper.selectByPrimaryKey(emailId);
@@ -472,7 +472,7 @@ public class EmailServiceImpl implements EmailService {
             logger.info("[一键Email] 邮件接收人信息新增成功,emailId:{}", emailId);
         } else {
             logger.warn("[一键Email] 添加失败,邮件收件人不能为空,emailId:{}", emailId);
-            throw new JnSpringCloudException(EmailExceptionEnmus.RECIPIENTS_NOT_EMPTY);
+            throw new JnSpringCloudException(EmailExceptionEnums.RECIPIENTS_NOT_EMPTY);
         }
     }
 
@@ -484,11 +484,11 @@ public class EmailServiceImpl implements EmailService {
     private void setDelay(TbOaEmail tbOaEmail) {
         String emailId = tbOaEmail.getId();
         Date delaySendTime = tbOaEmail.getDelaySendTime();
-        Assert.notNull(delaySendTime, EmailExceptionEnmus.DELAY_SEND_TIME_NOT_NULL.getMessage());
+        Assert.notNull(delaySendTime, EmailExceptionEnums.DELAY_SEND_TIME_NOT_NULL.getMessage());
 
         if (delaySendTime.before(new Date())) {
             logger.warn("[一键Email] 定时时间需要大于当前时间,emailId:{}", emailId);
-            throw new JnSpringCloudException(EmailExceptionEnmus.DELAY_SEND_TIME_ERROR);
+            throw new JnSpringCloudException(EmailExceptionEnums.DELAY_SEND_TIME_ERROR);
         }
 
         //调用延时接口,设置定时发送;
@@ -505,14 +505,14 @@ public class EmailServiceImpl implements EmailService {
             delay.setDataString(dataString);
         } catch (JsonProcessingException e) {
             logger.error("JsonProcessingException转换异常，定时任务调用失败。", e);
-            throw new JnSpringCloudException(EmailExceptionEnmus.TIMING_FAILURE);
+            throw new JnSpringCloudException(EmailExceptionEnums.TIMING_FAILURE);
         }
         Result<Boolean> result = delaySendMessageClient.delaySend(delay);
         if (result.getData() != null && result.getData()) {
             logger.info("[一键Email] 为邮件设置定时发送,emailId:{},发送时间为delaySendendTime:{}", emailId, delayTime);
         } else {
             logger.error("[一键Email] 邮件任务定时设置失败,emailId:{}", emailId);
-            throw new JnSpringCloudException(EmailExceptionEnmus.TIMING_FAILURE);
+            throw new JnSpringCloudException(EmailExceptionEnums.TIMING_FAILURE);
         }
     }
 }

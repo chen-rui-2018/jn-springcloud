@@ -25,10 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author： jiangyl
@@ -135,7 +132,7 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         companyCriteria.createCriteria().andIdEqualTo(param.getId());
         int i = tbServiceCompanyMapper.updateByExampleSelective(serviceCompany, companyCriteria);
         UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
-        userCompanyInfo.setAccount(serviceCompany1.getComAdmin());
+        userCompanyInfo.setAccountList(Arrays.asList(serviceCompany1.getComAdmin()));
         userCompanyInfo.setCompanyCode(serviceCompany1.getId());
         userCompanyInfo.setCompanyName(serviceCompany1.getComName());
         userExtensionClient.updateCompanyInfo(userCompanyInfo);
@@ -179,7 +176,7 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
             return false;
         }
         UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
-        userCompanyInfo.setAccount(tbServiceCompanyStaff1.getAccount());
+        userCompanyInfo.setAccountList(Arrays.asList(tbServiceCompanyStaff1.getAccount()));
         userCompanyInfo.setCompanyCode(tbServiceCompanyStaff1.getComId());
         userCompanyInfo.setCompanyName(tbServiceCompanyStaff1.getComName());
         userExtensionClient.updateCompanyInfo(userCompanyInfo);

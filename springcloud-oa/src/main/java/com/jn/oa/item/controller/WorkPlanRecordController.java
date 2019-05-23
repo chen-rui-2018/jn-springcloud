@@ -15,10 +15,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,8 +38,8 @@ public class WorkPlanRecordController extends BaseController {
 
     @ControllerLog(doAction = "记录工时")
     @RequiresPermissions("/oa/workPlanRecord/addBatch")
-    @ApiOperation(value = "记录工时", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/addBatch")
+    @ApiOperation(value = "记录工时", notes = "记录工时")
+    @RequestMapping(value = "/addBatch", method = RequestMethod.POST)
     public Result addBatch(@Validated @RequestBody List<WorkPlanRecord> workPlanRecordList) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -61,8 +58,8 @@ public class WorkPlanRecordController extends BaseController {
 
     @ControllerLog(doAction = "修改工作记录")
     @RequiresPermissions("/oa/workPlanRecord/update")
-    @ApiOperation(value = "修改工作记录", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/update")
+    @ApiOperation(value = "修改工作记录", notes = "修改工作记录")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result update(@Validated @RequestBody WorkPlanRecord workPlanRecord) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -74,8 +71,8 @@ public class WorkPlanRecordController extends BaseController {
 
     @ControllerLog(doAction = "删除工作记录")
     @RequiresPermissions("/oa/workPlanRecord/delete")
-    @ApiOperation(value = "删除工作记录", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/delete")
+    @ApiOperation(value = "删除工作记录", notes = "删除工作记录")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Result delete(@RequestParam("workPlanRecordId") String workPlanRecordId) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -86,10 +83,10 @@ public class WorkPlanRecordController extends BaseController {
 
     @ControllerLog(doAction = "查看工作记录")
     @RequiresPermissions("/oa/workPlanRecord/list")
-    @ApiOperation(value = "查看工作记录", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/list")
-    public Result list(@RequestParam("workPlanId") String workPlanId) {
-        List<TbOaWorkPlanRecord> tbOaWorkPlanRecordList = workPlanRecordService.list(workPlanId);
-        return new Result(tbOaWorkPlanRecordList);
+    @ApiOperation(value = "查看工作记录", notes = "查看工作记录")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public Result<List<WorkPlanRecord>> list(@RequestParam("workPlanId") String workPlanId) {
+        List<WorkPlanRecord> workPlanRecordList = workPlanRecordService.list(workPlanId);
+        return new Result(workPlanRecordList);
     }
 }

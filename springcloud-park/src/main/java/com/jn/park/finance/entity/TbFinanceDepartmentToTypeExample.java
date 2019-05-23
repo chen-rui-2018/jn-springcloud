@@ -115,52 +115,62 @@ public class TbFinanceDepartmentToTypeExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Integer value) {
+        public Criteria andIdEqualTo(String value) {
             addCriterion("dt.id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Integer value) {
+        public Criteria andIdNotEqualTo(String value) {
             addCriterion("dt.id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Integer value) {
+        public Criteria andIdGreaterThan(String value) {
             addCriterion("dt.id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
             addCriterion("dt.id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Integer value) {
+        public Criteria andIdLessThan(String value) {
             addCriterion("dt.id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Integer value) {
+        public Criteria andIdLessThanOrEqualTo(String value) {
             addCriterion("dt.id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Integer> values) {
+        public Criteria andIdLike(String value) {
+            addCriterion("dt.id like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotLike(String value) {
+            addCriterion("dt.id not like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<String> values) {
             addCriterion("dt.id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Integer> values) {
+        public Criteria andIdNotIn(List<String> values) {
             addCriterion("dt.id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Integer value1, Integer value2) {
+        public Criteria andIdBetween(String value1, String value2) {
             addCriterion("dt.id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("dt.id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -315,52 +325,62 @@ public class TbFinanceDepartmentToTypeExample {
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdEqualTo(Integer value) {
+        public Criteria andFinanceTypeIdEqualTo(String value) {
             addCriterion("dt.finance_type_Id =", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdNotEqualTo(Integer value) {
+        public Criteria andFinanceTypeIdNotEqualTo(String value) {
             addCriterion("dt.finance_type_Id <>", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdGreaterThan(Integer value) {
+        public Criteria andFinanceTypeIdGreaterThan(String value) {
             addCriterion("dt.finance_type_Id >", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andFinanceTypeIdGreaterThanOrEqualTo(String value) {
             addCriterion("dt.finance_type_Id >=", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdLessThan(Integer value) {
+        public Criteria andFinanceTypeIdLessThan(String value) {
             addCriterion("dt.finance_type_Id <", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdLessThanOrEqualTo(Integer value) {
+        public Criteria andFinanceTypeIdLessThanOrEqualTo(String value) {
             addCriterion("dt.finance_type_Id <=", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdIn(List<Integer> values) {
+        public Criteria andFinanceTypeIdLike(String value) {
+            addCriterion("dt.finance_type_Id like", value, "financeTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceTypeIdNotLike(String value) {
+            addCriterion("dt.finance_type_Id not like", value, "financeTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceTypeIdIn(List<String> values) {
             addCriterion("dt.finance_type_Id in", values, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdNotIn(List<Integer> values) {
+        public Criteria andFinanceTypeIdNotIn(List<String> values) {
             addCriterion("dt.finance_type_Id not in", values, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdBetween(Integer value1, Integer value2) {
+        public Criteria andFinanceTypeIdBetween(String value1, String value2) {
             addCriterion("dt.finance_type_Id between", value1, value2, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceTypeIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andFinanceTypeIdNotBetween(String value1, String value2) {
             addCriterion("dt.finance_type_Id not between", value1, value2, "financeTypeId");
             return (Criteria) this;
         }

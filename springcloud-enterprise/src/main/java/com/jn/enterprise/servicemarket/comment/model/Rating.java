@@ -22,14 +22,16 @@ public class Rating {
     private String productName;
     @ApiModelProperty(value = "机构电话")
     private String orgTelephone;
-    @ApiModelProperty(value = "需求提出时间")
+    @ApiModelProperty(value = "需求提出时间 yyyy-MM-dd HH:mm:ss")
     private String issueTime;
-    @ApiModelProperty(value = "需求处理时间")
+    @ApiModelProperty(value = "需求处理时间 yyyy-MM-dd HH:mm:ss")
     private String handleTime;
     @ApiModelProperty(value = "点评状态")
     private String isComment;
     @ApiModelProperty(value = "点评时间")
     private String commentTime;
+    @ApiModelProperty(value = "领域id")
+    private String businessId;
 
     public String getId() {
         return id;
@@ -101,5 +103,13 @@ public class Rating {
 
     public void setCommentTime(String commentTime) {
         this.commentTime = commentTime;
+    }
+
+    public String getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
     }
 }

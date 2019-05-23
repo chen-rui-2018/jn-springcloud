@@ -24,13 +24,15 @@ public class AdvisorServiceInfo implements Serializable {
     private String advisorName;
     @ApiModelProperty(value = "业务领域")
     private String businessArea;
+    @ApiModelProperty(value = "业务领域名称")
+    private String businessAreaName;
     @ApiModelProperty(value = "头像")
     private String avatar;
     @ApiModelProperty(value = "职务")
     private String position;
     @ApiModelProperty(value = "所属机构名称")
     private String orgName;
-    @ApiModelProperty(value = "是否认证")
+    @ApiModelProperty(value = "是否认证(0：未认证  1：已认证)")
     private String isCertification;
     @ApiModelProperty(value = "联系手机")
     private String phone;
@@ -75,6 +77,13 @@ public class AdvisorServiceInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public String getBusinessAreaName() {
+        return businessAreaName;
+    }
+
+    public void setBusinessAreaName(String businessAreaName) {
+        this.businessAreaName = businessAreaName;
+    }
 
     public String getOrgId() {
         return orgId;
@@ -307,6 +316,7 @@ public class AdvisorServiceInfo implements Serializable {
                 ", advisorAccount='" + advisorAccount + '\'' +
                 ", advisorName='" + advisorName + '\'' +
                 ", businessArea='" + businessArea + '\'' +
+                ", businessAreaName='" + businessAreaName + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", position='" + position + '\'' +
                 ", orgName='" + orgName + '\'' +
@@ -330,7 +340,7 @@ public class AdvisorServiceInfo implements Serializable {
                 ", modifiedTime=" + modifiedTime +
                 ", modifierAccount='" + modifierAccount + '\'' +
                 ", recordStatus=" + recordStatus +
-                ", personalProfile=" + personalProfile +
+                ", personalProfile='" + personalProfile + '\'' +
                 '}';
     }
 }

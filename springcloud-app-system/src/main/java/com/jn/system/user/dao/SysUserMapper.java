@@ -3,9 +3,11 @@ package com.jn.system.user.dao;
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.User;
 import com.jn.system.model.UserPage;
+import com.jn.system.user.model.SysTUser;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.vo.SysUserDepartmentPostVO;
 import com.jn.system.user.vo.SysUserVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -80,4 +82,20 @@ public interface SysUserMapper {
      * @return
      */
     List<User> getUserAll();
+
+    /**
+     * 根据用户账号获取用户信息
+     *
+     * @param accountList
+     * @return
+     */
+    List<User> getUserInfoByAccount(@Param("accountList") List<String> accountList);
+
+    /**
+     * 根据ids查询用户信息
+     *
+     * @param ids
+     * @return
+     */
+    List<SysTUser> selectUserByIds(@Param("ids") String[] ids);
 }

@@ -86,10 +86,10 @@ public class RequireManagementServiceImplTest {
         //用户提需求(科技金融)
         requireTechnologyParam.setProductId("228043fd4f37438ea34e5a9ccdea2271");
         requireTechnologyParam.setProductName("招聘外包");
-        requireTechnologyParam.setRequireDetail("需要机构提供外包服务");
+        //requireTechnologyParam.setRequireDetail("需要机构提供外包服务");
         requireTechnologyParam.setFinancingAmount("90");
         requireTechnologyParam.setActualLoanAmount("66");
-        requireTechnologyParam.setFinancingPeriod("6");
+        requireTechnologyParam.setFinancingPeriodMax("6");
         requireTechnologyParam.setExpectedDate("2019-03-07");
         requireTechnologyParam.setFundsReqDesc("我需要先贷款付工资");
 
@@ -177,7 +177,8 @@ public class RequireManagementServiceImplTest {
                             Matchers.containsString(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT.getCode()),
                             Matchers.containsString(RequireExceptionEnum.PRODUCT_ID_NOT_EXIST.getCode()),
                             Matchers.containsString(RequireExceptionEnum.NETWORK_ANOMALY.getCode()),
-                            Matchers.containsString(RequireExceptionEnum.PRODUCT_ID_NOT_EXIST.getCode())
+                            Matchers.containsString(RequireExceptionEnum.PRODUCT_ID_NOT_EXIST.getCode()),
+                            Matchers.containsString(RequireExceptionEnum.FINANCING_PERIOD.getCode())
                     )
             );
         }

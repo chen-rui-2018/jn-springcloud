@@ -12,6 +12,7 @@ import com.jn.common.api.CodeAndMsg;
 public enum FinancialProductExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("5020901", "网络异常，请稍后重试。"),
     PRODUCT_ID_NOT_NULL("5020501","产品id不能为空"),
+    PRODUCT_NOT_EXIST("5020502","当前产品在系统中不存在"),
     ;
     /**
      * 编码

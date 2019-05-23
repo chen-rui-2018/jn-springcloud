@@ -107,6 +107,35 @@
         and su.id = #{0}
         and sf.file_url = #{1}
     </select>
+    <!-- 获取用户是否拥有该文件组的操作权限 -->
+    <select id="getUserFileGroupPermission" parameterType="java.lang.String"
+            resultType="java.lang.String">
+       select
+       sfg.id
+        from
+        tb_sys_user su
+        ,tb_sys_user_role sur
+        ,tb_sys_role sr
+        ,tb_sys_permission sp
+        ,tb_sys_role_permission srp
+        ,tb_sys_file_group sfg
+        ,tb_sys_permission_files spf
+        where su.id = sur.user_id
+        and sr.id = sur.role_id
+        and sr.id = srp.role_id
+        and sp.id = srp.permission_id
+        and sp.id = spf.permission_id
+        and sfg.id = spf.file_group_id
+        and su.record_status =1
+        and sur.record_status =1
+        and sr.record_status = 1
+        and sp.record_status = 1
+        and srp.record_status = 1
+        and sfg.record_status = 1
+        and spf.record_status = 1
+        and su.id = #{0}
+        and sfg.id = #{1}
+    </select>
 
     <select id="findFileGroupNameByFileId" parameterType="java.lang.String"
             resultType="java.lang.String">

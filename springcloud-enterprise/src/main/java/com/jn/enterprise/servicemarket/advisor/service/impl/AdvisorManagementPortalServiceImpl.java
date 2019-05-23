@@ -5,12 +5,12 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.AdvisorManagementPortalMapper;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementPortalService;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
-import com.jn.enterprise.servicemarket.advisor.vo.AdvisroManagementDetailsVo;
+import com.jn.enterprise.servicemarket.advisor.vo.AdvisorManagementDetailsVo;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,35 +83,35 @@ public class AdvisorManagementPortalServiceImpl implements AdvisorManagementPort
      */
     @ServiceLog(doAction = "服务顾问详情")
     @Override
-    public AdvisroManagementDetailsVo getAdvisorManagementDetails(String advisorAccount) {
+    public AdvisorManagementDetailsVo getAdvisorManagementDetails(String advisorAccount) {
         //根据顾问账号获取顾问简介信息
         AdvisorServiceManagementInfo advisorIntroduction = advisorManagementPortalMapper.getAdvisorIntroduction(advisorAccount);
         if(advisorIntroduction==null){
             throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
         }
-        AdvisroManagementDetailsVo advisroManagementDetailsVo=new AdvisroManagementDetailsVo();
-        advisroManagementDetailsVo.setAdvisorIntroduction(advisorIntroduction);
+        AdvisorManagementDetailsVo advisorManagementDetailsVo =new AdvisorManagementDetailsVo();
+        advisorManagementDetailsVo.setAdvisorIntroduction(advisorIntroduction);
         //顾问基本资料
-        TbServiceAdvisor tbServiceAdvisor = advisorService.getAdvisorInfoByAccount(advisorAccount);
-        AdvisorBaseInfo advisorBaseInfo=new AdvisorBaseInfo();
-        BeanUtils.copyProperties(tbServiceAdvisor, advisorBaseInfo);
-        advisroManagementDetailsVo.setAdvisorBaseInfo(advisorBaseInfo);
+        AdvisorServiceInfo advisorServiceInfo = advisorService.getAdvisorInfoByAccount(advisorAccount, ApprovalStatusEnum.APPROVED.getValue());
+        AdvisorBaseInfoParam advisorBaseInfoParam =new AdvisorBaseInfoParam();
+        BeanUtils.copyProperties(advisorServiceInfo, advisorBaseInfoParam);
+        advisorManagementDetailsVo.setAdvisorBaseInfoParam(advisorBaseInfoParam);
         //荣誉资质
         List<ServiceHonor> advisorHonorInfo = advisorService.getAdvisorHonorInfo(advisorAccount);
         if(!advisorHonorInfo.isEmpty()){
-            advisroManagementDetailsVo.setServiceHonorList(advisorHonorInfo);
+            advisorManagementDetailsVo.setServiceHonorList(advisorHonorInfo);
         }
         //服务经历
         List<ServiceExperience> serviceExperienceInfo = advisorService.getServiceExperienceInfo(advisorAccount);
         if(!serviceExperienceInfo.isEmpty()){
-            advisroManagementDetailsVo.setServiceExperienceList(serviceExperienceInfo);
+            advisorManagementDetailsVo.setServiceExperienceList(serviceExperienceInfo);
         }
         //项目经验
         List<ServiceProjectExperience> projectExperienceInfo = advisorService.getProjectExperienceInfo(advisorAccount);
         if(!projectExperienceInfo.isEmpty()){
-            advisroManagementDetailsVo.setServiceProjectExperienceList(projectExperienceInfo);
+            advisorManagementDetailsVo.setServiceProjectExperienceList(projectExperienceInfo);
         }
-        return advisroManagementDetailsVo;
+        return advisorManagementDetailsVo;
     }
 }
 

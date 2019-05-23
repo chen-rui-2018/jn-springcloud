@@ -1,5 +1,6 @@
 package com.jn.oa.meeting.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,14 +26,14 @@ public class OaMeeting implements Serializable {
     @ApiModelProperty(value = "会议主题（工单名称）")
     private String title;
 
-    @ApiModelProperty(value = "工单编号")
-    private String workOrderNum;
 
     @ApiModelProperty(value = "开始时间")
+    @JSONField(format = "yyyy/MM/dd HH:mm:ss")
     @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
     private Date startTime;
 
     @ApiModelProperty(value = "结束时间")
+    @JSONField(format = "yyyy/MM/dd HH:mm:ss")
     @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
     private Date endTime;
 
@@ -89,6 +90,20 @@ public class OaMeeting implements Serializable {
     @ApiModelProperty(value = "会议状态（0:待开始、1:进行中、2:已完成、3:已取消）")
     private String meetingStatus;
 
+    @ApiModelProperty(value = "附件url")
+    private String fileUrl;
+
+    @ApiModelProperty(value = "预约人")
+    private String organizationalUser;
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
     public String getMeetingStatus() {
         return meetingStatus;
     }
@@ -111,14 +126,6 @@ public class OaMeeting implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getWorkOrderNum() {
-        return workOrderNum;
-    }
-
-    public void setWorkOrderNum(String workOrderNum) {
-        this.workOrderNum = workOrderNum;
     }
 
     public Date getStartTime() {
@@ -263,5 +270,13 @@ public class OaMeeting implements Serializable {
 
     public void setIsRemind(String isRemind) {
         this.isRemind = isRemind;
+    }
+
+    public String getOrganizationalUser() {
+        return organizationalUser;
+    }
+
+    public void setOrganizationalUser(String organizationalUser) {
+        this.organizationalUser = organizationalUser;
     }
 }

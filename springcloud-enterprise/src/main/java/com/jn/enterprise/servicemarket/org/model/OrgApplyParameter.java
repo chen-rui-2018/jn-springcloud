@@ -16,10 +16,10 @@ import java.io.Serializable;
 @ApiModel(value = "OrgApplyParameter",description = "服务机构申请查询入参")
 public class OrgApplyParameter extends Page implements Serializable {
 
-    @ApiModelProperty(value = "审核状态[0未审核1审核通过2审核不通过]")
+    @ApiModelProperty(value = "审核状态[0未审核1审核通过2审核不通过]",example = "1")
     private String orgStatus;
 
-    @ApiModelProperty(value = "机构名称")
+    @ApiModelProperty(value = "机构名称",example = "机构1")
     private String orgName;
 
     public String getOrgStatus() {

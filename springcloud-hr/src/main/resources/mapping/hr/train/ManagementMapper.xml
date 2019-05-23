@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.train.dao.ManagementMapper">
+	<select id="listManagement" parameterType="com.jn.hr.train.model.ManagementPage"
+		resultType="com.jn.hr.train.model.Management">
+		SELECT t.id,t.course_title,t.train_teacher,t.train_venue,
+		t.train_start_time,
+		t.train_end_time,t.`status`,
+		case WHEN t.`status`= 1 THEN '已发送'
+		else '未发送' end statusStr
+		FROM
+		tb_manpower_train_management t
+		WHERE
+		t.record_status!=0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(courseTitle)">
+			and t.course_title like
+			CONCAT('%',#{courseTitle,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(trainStartTime)">
+			AND t. train_start_time &gt;=
+			#{trainStartTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(trainEndTime)">
+			AND t. train_end_time &lt;=
+			#{trainEndTime,jdbcType=TIMESTAMP}
+		</if>
+	</select>
+
+
+
+</mapper>

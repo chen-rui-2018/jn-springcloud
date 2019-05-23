@@ -3,6 +3,7 @@ package com.jn.enterprise.servicemarket.org.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -18,25 +19,28 @@ public class OrgLicense implements Serializable {
     @ApiModelProperty(value = "证书ID[作为入参时，前台无需传值]")
     private String id;
 
-    @ApiModelProperty(value = "机构ID")
+    @ApiModelProperty(value = "机构ID[app录入时，该值传空。PC分批保存，该值必填]")
     private String orgId;
 
-    @ApiModelProperty(value = "证书名称")
+    @ApiModelProperty(value = "证书名称(app原型图无此字段，需添加)",required = true,example = "营业执照")
+    @NotNull(message = "证书名称不能为空")
     private String certName;
 
-    @ApiModelProperty(value = "证书文件路径")
+    @ApiModelProperty(value = "证书文件路径",required = true,example = "**/**/**.png")
+    @NotNull(message = "证书文件路径不能为空")
     private String fileUrl;
 
-    @ApiModelProperty(value = "是否是特色标签 0否1是")
+    @ApiModelProperty(value = "是否是特色标签 0否1是(app若无此字段固定传0)",required = true,example = "0")
+    @NotNull(message = "是否是特色标签不能为空")
     private String isFeatures;
 
-    @ApiModelProperty(value = "颁发时间 yyyy-MM-dd")
+    @ApiModelProperty(value = "颁发时间 yyyy-MM-dd",example = "2017-01-01")
     private String awardTime;
 
-    @ApiModelProperty(value = "颁发部门")
+    @ApiModelProperty(value = "颁发部门",example = "长沙工商管理局")
     private String awardDepart;
 
-    @ApiModelProperty(value = "证书类型：1营业执照2执业资质3其他")
+    @ApiModelProperty(value = "证书类型：1营业执照2执业资质3其他",example = "1")
     private String certType;
 
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.exam.dao.ExaminaQuestionAnswerMapper">
+
+	<select id="answerList" parameterType="java.lang.String"
+		resultType="com.jn.hr.exam.entity.TbManpowerExaminaQuestionAnswer">
+
+		SELECT * FROM tb_manpower_examina_question_answer t1
+		where 1=1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(testQuestionId)">
+			and t1.test_question_id =
+			#{testQuestionId,jdbcType=VARCHAR}
+		</if>
+
+	</select>
+
+</mapper>

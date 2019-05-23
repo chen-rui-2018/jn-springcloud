@@ -10,10 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 账单核对
@@ -31,8 +28,8 @@ public class PayRemindController extends BaseController {
     private PayRemindService payRemindService;
 
     @ControllerLog(doAction = "保存账单核对提醒信息")
-    @ApiOperation(value = "保存账单核对提醒信息", httpMethod = "POST", response = Result.class,notes = "返回结果为响应条数")
-    @RequestMapping(value = "/saveCheckRemind")
+    @ApiOperation(value = "保存账单核对提醒信息",notes = "返回结果为响应条数")
+    @RequestMapping(value = "/saveCheckRemind",method = RequestMethod.POST)
     public Result<Integer> saveCheckRemind(@RequestBody PayRemindParam payRemindParam){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(payRemindService.saveCheckRemind(payRemindParam,user.getAccount()));

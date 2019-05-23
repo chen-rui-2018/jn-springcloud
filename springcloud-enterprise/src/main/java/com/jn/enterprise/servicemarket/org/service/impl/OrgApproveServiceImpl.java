@@ -2,12 +2,15 @@ package com.jn.enterprise.servicemarket.org.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.gson.Gson;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.CallOtherSwaggerUtils;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
@@ -16,19 +19,21 @@ import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 服务机构认证审核接口实现类
@@ -53,6 +58,10 @@ public class OrgApproveServiceImpl implements OrgApproveService {
     private TbServiceOrgTraitMapper tbServiceOrgTraitMapper;
     @Autowired
     private TbServiceOrgLicenseMapper tbServiceOrgLicenseMapper;
+    @Autowired
+    private TbServiceOrgInfoMapper tbServiceOrgInfoMapper;
+    @Autowired
+    private TbServiceOrgElementMapper tbServiceOrgElementMapper;
 
     /**
      * 数据状态 1:有效
@@ -202,7 +211,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
 
     @Override
     @ServiceLog(doAction = "机构申请审核")
-    public Boolean checkOrgApply(OrgApplyCheckData orgApplyCheckData){
+    public Boolean checkOrgApply(OrgApplyCheckData orgApplyCheckData, User user){
         String orgId = orgApplyCheckData.getOrgId();
         TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
         orgCriteria.createCriteria().andOrgIdEqualTo(orgId);
@@ -214,7 +223,166 @@ public class OrgApproveServiceImpl implements OrgApproveService {
             throw new JnSpringCloudException(OrgExceptionEnum.ORG_DATA_STATUS_IS_NOT_CHECKING);
         }
         //TODO 对接工作流返回状态，校验审核完修改机构状态。jiangyl
+        //获取tbServiceOrg的ORGID作为其子表的ORGID条件查询出关联数据
+        TbServiceOrg tbServiceOrg=tbServiceOrgs.get(0);
+        TbServiceOrgCopy tbServiceOrgCopy= new TbServiceOrgCopy();
+        BeanUtils.copyProperties(tbServiceOrg,tbServiceOrgCopy);
+        //将Date类型转换成String类型,
+        if(null != tbServiceOrg.getOrgRegisterTime()){
+            tbServiceOrgCopy.setOrgRegisterTime(DateUtils.formatDate(tbServiceOrg.getOrgRegisterTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(null != tbServiceOrg.getCheckTime()){
+            tbServiceOrgCopy.setCheckTime(DateUtils.formatDate(tbServiceOrg.getCheckTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(null != tbServiceOrg.getCreatedTime()){
+            tbServiceOrgCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrg.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(null != tbServiceOrg.getModifiedTime()){
+            tbServiceOrgCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrg.getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        //将Byte转为String类型
+        if(null != tbServiceOrg.getRecordStatus()){
+            tbServiceOrgCopy.setRecordStatus((int)tbServiceOrg.getRecordStatus()+"");
+        }
+        //=============== 获取子表信息 =====================
+        String ServiceOrgId=tbServiceOrg.getOrgId();
+        TbServiceOrgElementCriteria example=new TbServiceOrgElementCriteria();
+        example.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgElement> tbServiceOrgElements = tbServiceOrgElementMapper.selectByExample(example);
 
+        //一对一
+            TbServiceOrgElementCopy tbServiceOrgElementCopy1=new TbServiceOrgElementCopy();
+            if(tbServiceOrgElements.size() != 0){
+                //复制bean
+                BeanUtils.copyProperties(tbServiceOrgElements.get(0),tbServiceOrgElementCopy1);
+                if(null != tbServiceOrgElements.get(0).getCreatedTime()){
+                    tbServiceOrgElementCopy1.setCreatedTime(DateUtils.formatDate(tbServiceOrgElements.get(0).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+                }
+                if(null != tbServiceOrgElements.get(0).getModifiedTime()){
+                    tbServiceOrgElementCopy1.setModifiedTime(DateUtils.formatDate(tbServiceOrgElements.get(0).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+                }
+                if(null != tbServiceOrgElements.get(0).getRecordStatus()){
+                    tbServiceOrgElementCopy1.setRecordStatus((int)tbServiceOrgElements.get(0).getRecordStatus()+"");
+                }
+            }
+
+        tbServiceOrgCopy.setTb_service_org_element(tbServiceOrgElementCopy1);
+
+        //一对一
+        TbServiceOrgInfoCriteria example1=new TbServiceOrgInfoCriteria();
+        example1.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgInfo> tbServiceOrgInfos = tbServiceOrgInfoMapper.selectByExample(example1);
+
+        TbServiceOrgInfoCopy TbServiceOrgInfoCopy=new TbServiceOrgInfoCopy();
+            if(tbServiceOrgInfos.size() != 0){
+                //复制bean
+                BeanUtils.copyProperties(tbServiceOrgInfos.get(0),TbServiceOrgInfoCopy);
+                if(null != tbServiceOrgInfos.get(0).getCreatedTime()){
+                    TbServiceOrgInfoCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrgInfos.get(0).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+                }
+                if(null != tbServiceOrgInfos.get(0).getModifiedTime()){
+                    TbServiceOrgInfoCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrgInfos.get(0).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+                }
+                if(null != tbServiceOrgInfos.get(0).getRecordStatus()){
+                    TbServiceOrgInfoCopy.setRecordStatus((int)tbServiceOrgInfos.get(0).getRecordStatus()+"");
+                }
+            }
+
+            tbServiceOrgCopy.setTb_service_org_info(TbServiceOrgInfoCopy);
+
+            //一对多
+        TbServiceOrgLicenseCriteria example2=new TbServiceOrgLicenseCriteria();
+        example2.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgLicense> tbServiceOrgLicenses = tbServiceOrgLicenseMapper.selectByExample(example2);
+        List<TbServiceOrgLicenseCopy> tbServiceOrgLicenseCopies=new ArrayList<>();
+
+        for(int i=0;i<tbServiceOrgLicenses.size();i++){
+            TbServiceOrgLicenseCopy tbServiceOrgLicenseCopy=new TbServiceOrgLicenseCopy();
+            //复制bean
+            BeanUtils.copyProperties(tbServiceOrgLicenses.get(i),tbServiceOrgLicenseCopy);
+            if(null != tbServiceOrgLicenses.get(i).getCreatedTime()){
+                tbServiceOrgLicenseCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrgLicenses.get(i).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgLicenses.get(i).getModifiedTime()){
+                tbServiceOrgLicenseCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrgLicenses.get(i).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgLicenses.get(i).getRecordStatus()){
+                tbServiceOrgLicenseCopy.setRecordStatus((int)tbServiceOrgLicenses.get(i).getRecordStatus()+"");
+            }
+            tbServiceOrgLicenseCopies.add(tbServiceOrgLicenseCopy);
+        }
+        if (tbServiceOrgLicenses.size() == 0){
+            tbServiceOrgLicenseCopies.clear();
+        }
+        tbServiceOrgCopy.setTb_service_org_license(tbServiceOrgLicenseCopies);
+
+        //一对多
+        TbServiceOrgTraitCriteria example3=new TbServiceOrgTraitCriteria();
+        example3.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgTrait> tbServiceOrgTraits = tbServiceOrgTraitMapper.selectByExample(example3);
+        List<TbServiceOrgTraitCopy> tbServiceOrgTraitCopies=new ArrayList<>();
+
+        for(int i=0;i<tbServiceOrgTraits.size();i++){
+            TbServiceOrgTraitCopy tbServiceOrgLicenseCopy=new TbServiceOrgTraitCopy();
+            //复制bean
+            BeanUtils.copyProperties(tbServiceOrgTraits.get(i),tbServiceOrgLicenseCopy);
+            if(null != tbServiceOrgTraits.get(i).getCreatedTime()){
+                tbServiceOrgLicenseCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrgTraits.get(i).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgTraits.get(i).getModifiedTime()){
+                tbServiceOrgLicenseCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrgTraits.get(i).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgTraits.get(i).getRecordStatus()){
+                tbServiceOrgLicenseCopy.setRecordStatus((int)tbServiceOrgTraits.get(i).getRecordStatus()+"");
+            }
+            tbServiceOrgTraitCopies.add(tbServiceOrgLicenseCopy);
+        }
+        if (tbServiceOrgTraits.size() ==0){
+            tbServiceOrgTraitCopies.clear();
+        }
+        tbServiceOrgCopy.setTb_service_org_trait(tbServiceOrgTraitCopies);
+
+        //一对多
+        TbServiceOrgTeamCriteria example4=new TbServiceOrgTeamCriteria();
+        example4.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgTeam> tbServiceOrgTeams = tbServiceOrgTeamMapper.selectByExample(example4);
+        List<TbServiceOrgTeamCopy> tbServiceOrgTeamCopies=new ArrayList<>();
+
+        for(int i=0;i<tbServiceOrgTeams.size();i++){
+            TbServiceOrgTeamCopy tbServiceOrgLicenseCopy=new TbServiceOrgTeamCopy();
+            //复制bean
+            BeanUtils.copyProperties(tbServiceOrgTeams.get(i),tbServiceOrgLicenseCopy);
+            if(null != tbServiceOrgTeams.get(i).getCreatedTime()){
+                tbServiceOrgLicenseCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrgTeams.get(i).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgTeams.get(i).getModifiedTime()){
+                tbServiceOrgLicenseCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrgTeams.get(i).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgTeams.get(i).getRecordStatus()){
+                tbServiceOrgLicenseCopy.setRecordStatus((int)tbServiceOrgTeams.get(i).getRecordStatus()+"");
+            }
+            tbServiceOrgTeamCopies.add(tbServiceOrgLicenseCopy);
+        }
+        if (tbServiceOrgTeams.size() == 0){
+            tbServiceOrgTeamCopies.clear();
+        }
+        tbServiceOrgCopy.setTb_service_org_team(tbServiceOrgTeamCopies);
+
+
+        //TODO 对接工作流返回状态，校验审核完修改机构状态。jiangyl
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
+        map.add("bpmnDefId","572074916870881280");
+        String gson=new Gson().toJson(tbServiceOrgCopy);
+        map.add("data", gson);
+        JSONObject request = CallOtherSwaggerUtils.request(user.getAccount(), "/api/webapi/bpmService/start", HttpMethod.POST, map);
+        //return new Result(request);
+        logger.info("启动流程的date数据：==========>>>>{}",gson);
+        logger.info("启动流程返回结果：========>>>>{}",request);
         return false;
     }
 

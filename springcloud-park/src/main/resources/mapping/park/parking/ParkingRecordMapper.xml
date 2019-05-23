@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.parking.dao.ParkingRecordMapper">
+    <!--批量插入匝道系统同步过来的数据 -->
+    <insert id="insertParkingRecordByRamp" parameterType="java.util.List">
+        insert into tb_parking_record (parking_id_,admission_time,departure_time,area_id_,area_name,car_license,account,name,phone,
+        parking_status,created_time,record_status) VALUES
+
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.parkingId}
+            ,#{item.admissionTime}
+            ,#{item.departureTime}
+            ,(SELECT a.area_id_ as "areaId" FROM tb_parking_area a where a.gate_id = #{item.gateId} and a.record_status = '1' )
+            ,(SELECT a.area_name as "areaName" FROM tb_parking_area a where a.gate_id = #{item.gateId} and a.record_status = '1' )
+            ,#{item.carLicense}
+            ,(SELECT i.account AS "account" FROM tb_parking_car_info i WHERE i.car_status = '1' AND i.record_status = '1' and i.car_license = #{item.carLicense})
+            ,(SELECT i.name AS "name" FROM tb_parking_car_info i WHERE i.car_status = '1' AND i.record_status = '1' and i.car_license = #{item.carLicense})
+            ,(SELECT i.phone AS "phone" FROM tb_parking_car_info i WHERE i.car_status = '1' AND i.record_status = '1' and i.car_license = #{item.carLicense})
+
+            ,(SELECT  CASE WHEN #{item.departureTime} is NULL THEN '1' ELSE '0' END FROM tb_parking_car_info	 LIMIT 0,1)
+            ,#{item.createdTime}
+            ,'1')
+        </foreach>
+    </insert>
+
+    <!--批量修改停车场数据状态 -->
+    <update id="updateParkingRecordByRamp" parameterType="java.util.List">
+        UPDATE tb_parking_record
+
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="parking_status =case" suffix="end,">
+                <foreach collection="list" item="cus">
+                    when car_license = #{cus.carLicense} and admission_time = STR_TO_DATE(#{cus.admissionTime}, '%Y-%m-%d %H:%i:%s')
+                    then  #{cus.parkingStatus}
+                </foreach>
+            </trim>
+            <trim prefix="modified_time =case" suffix="end,">
+                <foreach collection="list" item="cus">
+                    <if test="cus.admissionTime!=null">
+                        when car_license = #{cus.carLicense} and admission_time = STR_TO_DATE(#{cus.admissionTime}, '%Y-%m-%d %H:%i:%s')
+                        then  STR_TO_DATE(#{cus.departureTime}, '%Y-%m-%d %H:%i:%s')
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="departure_time =case" suffix="end,">
+                <foreach collection="list" item="cus">
+                    <if test="cus.admissionTime!=null">
+                        when car_license = #{cus.carLicense} and admission_time = STR_TO_DATE(#{cus.admissionTime}, '%Y-%m-%d %H:%i:%s')
+                        then  STR_TO_DATE(#{cus.departureTime}, '%Y-%m-%d %H:%i:%s')
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        <where>
+            <foreach collection="list" separator="or" item="item">
+                car_license = #{item.carLicense} and admission_time = STR_TO_DATE(#{item.admissionTime}, '%Y-%m-%d %H:%i:%s')
+            </foreach>
+        </where>
+
+    </update>
+
+    <select id="selectParkingRecordByRamp" resultType="com.jn.park.parking.model.ParkingRecordRampParam" parameterType="java.util.List">
+        select
+        r.parking_id_ as "parkingId",                                                      <!--签到信息id-->
+        r.car_license as "carLicense",                                     <!--活动ID-->
+        r.admission_time as "admissionTime",     									    <!--签到人账号-->
+        r.departure_time as "departureTime",     									    <!--签到人账号-->
+        r.parking_status as "parkingStatus"     									    <!--签到人账号-->
+        from tb_parking_record r
+        <if test="list != null and list.size()>0">
+            <where>
+                <foreach collection="list" separator="or" item="item">
+                    (r.car_license = #{item.carLicense}
+                    and r.admission_time = STR_TO_DATE(#{item.admissionTime}, '%Y-%m-%d %H:%i:%s'))
+                </foreach>
+            </where>
+        </if>
+    </select>
+
+</mapper>

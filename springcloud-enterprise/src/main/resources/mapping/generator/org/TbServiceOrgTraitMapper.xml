@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.TbServiceOrgTraitMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTrait">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_id_" jdbcType="VARCHAR" property="orgId" />
     <result column="trait_type" jdbcType="VARCHAR" property="traitType" />
     <result column="trait_value" jdbcType="VARCHAR" property="traitValue" />
     <result column="status" jdbcType="VARCHAR" property="status" />
@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, org_id, trait_type, trait_value, status, created_time, creator_account, modified_time, 
+    id, org_id_, trait_type, trait_value, status, created_time, creator_account, modified_time, 
     modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTraitCriteria" resultMap="BaseResultMap">
@@ -106,7 +106,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTrait">
-    insert into tb_service_org_trait (id, org_id, trait_type, 
+    insert into tb_service_org_trait (id, org_id_, trait_type, 
       trait_value, status, created_time, 
       creator_account, modified_time, modifier_account, 
       record_status)
@@ -122,7 +122,7 @@
         id,
       </if>
       <if test="orgId != null">
-        org_id,
+        org_id_,
       </if>
       <if test="traitType != null">
         trait_type,
@@ -195,7 +195,7 @@
         id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.orgId != null">
-        org_id = #{record.orgId,jdbcType=VARCHAR},
+        org_id_ = #{record.orgId,jdbcType=VARCHAR},
       </if>
       <if test="record.traitType != null">
         trait_type = #{record.traitType,jdbcType=VARCHAR},
@@ -229,7 +229,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_service_org_trait
     set id = #{record.id,jdbcType=VARCHAR},
-      org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_id_ = #{record.orgId,jdbcType=VARCHAR},
       trait_type = #{record.traitType,jdbcType=VARCHAR},
       trait_value = #{record.traitValue,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
@@ -246,7 +246,7 @@
     update tb_service_org_trait
     <set>
       <if test="orgId != null">
-        org_id = #{orgId,jdbcType=VARCHAR},
+        org_id_ = #{orgId,jdbcType=VARCHAR},
       </if>
       <if test="traitType != null">
         trait_type = #{traitType,jdbcType=VARCHAR},
@@ -277,7 +277,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTrait">
     update tb_service_org_trait
-    set org_id = #{orgId,jdbcType=VARCHAR},
+    set org_id_ = #{orgId,jdbcType=VARCHAR},
       trait_type = #{traitType,jdbcType=VARCHAR},
       trait_value = #{traitValue,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},

@@ -16,15 +16,15 @@ import java.io.Serializable;
 @ApiModel(value = "CompanyCheckCallBackParam",description = "升级企业审核回调入参")
 public class CompanyCheckCallBackParam implements Serializable {
     @NotNull(message = "企业ID不能为空")
-    @ApiModelProperty(value = "企业ID",required = true)
+    @ApiModelProperty(value = "企业ID",required = true,example = "8afabb60045d40e485e1d4ac04666e8a")
     private String id;
-    @ApiModelProperty(value = "企业名称")
+    @ApiModelProperty(value = "企业名称",example = "***公司")
     private String comName;
     @NotNull(message = "审核人不能为空")
-    @ApiModelProperty(value = "审核人",required = true)
+    @ApiModelProperty(value = "审核人",required = true,example = "zhangsan")
     private String checkAccount;
     @NotNull(message = "审核状态不能为空")
-    @ApiModelProperty(value = "审核状态",required = true)
+    @ApiModelProperty(value = "审核状态[1:通过 0:审核中 -1:不通过]",required = true,example = "1")
     private String status;
 
     public String getId() {
@@ -57,5 +57,15 @@ public class CompanyCheckCallBackParam implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "CompanyCheckCallBackParam{" +
+                "id='" + id + '\'' +
+                ", comName='" + comName + '\'' +
+                ", checkAccount='" + checkAccount + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

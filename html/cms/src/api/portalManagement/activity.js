@@ -10,7 +10,8 @@ export function getActivityList(query) {
 // 获取活动管理类型所有数据
 export function getActivityType(query) {
   return request({
-    url: 'http://192.168.10.31:1101/springcloud-park/guest/findActivityTypeList',
+    // url: 'http://192.168.10.31:1101/springcloud-park/guest/findActivityTypeList',
+    url: 'http://192.168.10.31:1101/springcloud-park/guest/activity/findActivityTypeList',
     method: 'post',
     data: query
   })
@@ -54,25 +55,25 @@ export function cancelApply(query) {
   })
 }
 // 停止报名
-export function pushMessage(query) {
-  const param = new URLSearchParams()
-  param.append('activityId', query)
-  return request({
-    url: 'http://192.168.10.31:1101/springcloud-park/activity/sendMsgForActivate',
-    method: 'post',
-    data: param
-  })
-}
+// export function pushMessage(query) {
+//   const param = new URLSearchParams()
+//   param.append('activityId', query)
+//   return request({
+//     url: 'http://192.168.10.31:1101/springcloud-park/activity/sendMsgForActivate',
+//     method: 'post',
+//     data: param
+//   })
+// }
 // 获取活动海报
-export function getEventPoster(query) {
-  const param = new URLSearchParams()
-  param.append('typeId', query)
-  return request({
-    url: 'http://192.168.10.31:1101/springcloud-park/activity/activityType/findActivityType',
-    method: 'post',
-    data: param
-  })
-}
+// export function getEventPoster(query) {
+//   const param = new URLSearchParams()
+//   param.append('typeId', query)
+//   return request({
+//     url: 'http://192.168.10.31:1101/springcloud-park/activity/activityType/findActivityType',
+//     method: 'post',
+//     data: param
+//   })
+// }
 // 园区字典表
 export function getParkCodeByType(query) {
   return request({
@@ -82,13 +83,13 @@ export function getParkCodeByType(query) {
   })
 }
 // 保存草稿
-export function saveActivityDraft(query) {
-  return request({
-    url: 'http://192.168.10.31:1101/springcloud-park/activity/saveActivityDraft',
-    method: 'post',
-    data: query
-  })
-}
+// export function saveActivityDraft(query) {
+//   return request({
+//     url: 'http://192.168.10.31:1101/springcloud-park/activity/saveActivityDraft',
+//     method: 'post',
+//     data: query
+//   })
+// }
 // 发布
 export function publishActivity(query) {
   return request({
@@ -132,19 +133,17 @@ export function signInActivityBackend(query) {
 // 活动报名人数导出
 export function exportDataExcel(query) {
   return request({
-    url: 'http://192.168.10.31:1101/springcloud-park/activity/exportDataExcel',
-    method: 'post',
-    data: query
+    url: `http://localhost/springcloud-park/activity/exportDataExcel?activityId=${query.activityId}&exportColName=${query.exportColName}&exportTitle=${query.exportTitle}&page=${query.page}&rows=${query.rows}`,
+    method: 'get'
   })
 }
 // 获取活动详情
-export function getActivityDetailsForManage(query) {
-  const param = new URLSearchParams()
-  param.append('activityId', query)
-  return request({
-    url: 'http://192.168.10.31:1101/springcloud-park/activity/getActivityDetailsForManage',
-    method: 'post',
-    data: param
-  })
-}
-
+// export function getActivityDetailsForManage(query) {
+//   const param = new URLSearchParams()
+//   param.append('activityId', query)
+//   return request({
+//     url: 'http://192.168.10.31:1101/springcloud-park/activity/getActivityDetailsForManage',
+//     method: 'post',
+//     data: param
+//   })
+// }

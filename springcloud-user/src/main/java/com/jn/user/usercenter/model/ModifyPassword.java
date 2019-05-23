@@ -15,18 +15,15 @@ import java.io.Serializable;
  */
 @ApiModel(value ="ModifyPassword" ,description = "修改用户密码")
 public class ModifyPassword implements Serializable {
-    @ApiModelProperty(value = "用户账号" ,required = true)
+    @ApiModelProperty(value = "用户账号" ,required = true,example = "wangsong")
     @NotBlank(message="用户账号不能为空")
     private String account;
-    @ApiModelProperty(value = "旧密码",required = true)
+    @ApiModelProperty(value = "旧密码",required = true,example = "123wqe")
     @NotBlank(message="用户旧密码不能为空")
     private String oldPassword;
-    @ApiModelProperty(value = "新密码A" ,required = true)
+    @ApiModelProperty(value = "新密码" ,required = true,example = "123wqe")
     @NotBlank(message="新密码不能为空")
-    private String newPasswordA;
-    @ApiModelProperty(value = "新密码B" ,required = true)
-    @NotBlank(message="新密码不能为空")
-    private String newPasswordB;
+    private String newPassword;
 
     public String getAccount() {
         return account;
@@ -44,19 +41,11 @@ public class ModifyPassword implements Serializable {
         this.oldPassword = oldPassword;
     }
 
-    public String getNewPasswordA() {
-        return newPasswordA;
+    public String getNewPassword() {
+        return newPassword;
     }
 
-    public void setNewPasswordA(String newPasswordA) {
-        this.newPasswordA = newPasswordA;
-    }
-
-    public String getNewPasswordB() {
-        return newPasswordB;
-    }
-
-    public void setNewPasswordB(String newPasswordB) {
-        this.newPasswordB = newPasswordB;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }

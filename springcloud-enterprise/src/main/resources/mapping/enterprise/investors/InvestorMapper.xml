@@ -14,6 +14,8 @@
         left join tb_service_investor_main_area sma
         on si.investor_account=sma.investor_account
         where 1=1
+        and si.status='1'  <!--有效-->
+        and si.approval_status='2'  <!--审批通过-->
         <if test="mainCode!=null and mainCode!=''">       <!--主投领域精确搜索-->
             and sma.main_code=#{mainCode}
         </if>

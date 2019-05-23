@@ -39,7 +39,7 @@ public class OaMeetingRoom implements Serializable {
     @ApiModelProperty(value = "会议室说明")
     private String explains;
 
-    @ApiModelProperty(value = "会议室状态(0:可用、1:不可用、-1:删除)")
+    @ApiModelProperty(value = "会议室状态(0:删除、1:可用、2:不可用)")
     private Byte recordStatus;
 
     @ApiModelProperty(value = "会议室容量")

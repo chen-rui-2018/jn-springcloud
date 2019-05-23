@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>工作计划任务提醒模板</title>
+</head>
+<body>
+<div id="contentDiv" onmouseover="getTop().stopPropagation(event);" onclick="getTop().preSwapLink(event, 'spam', 'ZC1010-ycEsAavj840gKB1BiCFzR94');" style="position:relative;font-size:14px;height:auto;padding:15px 15px 10px 15px;z-index:1;zoom:1;line-height:1.7;" class="body">
+    <div id="qm_con_body">
+        <div id="mailContentContainer" class="qmbox qm_con_body_content qqmail_webmail_only" style="">
+
+
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 13px; color: #333; line-height: 20px; font-family: &quot;Helvetica Neue&quot;,Helvetica,&quot;Microsoft Yahei&quot;,&quot;Hiragino Sans GB&quot;,&quot;WenQuanYi Micro Hei&quot;,Tahoma,Arial,sans-serif;">
+                <tbody>
+                <tr>
+                    <td>
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: none; border-collapse: collapse;">
+                            <tbody>
+                            <tr>
+                                <td style="padding: 10px 0; border: none; vertical-align: middle;"><strong style="font-size: 16px"></strong></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #fff; border: 1px solid #cfcfcf; box-shadow: 0 0px 6px rgba(0, 0, 0, 0.1); margin-bottom: 20px; font-size:13px;">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <table cellpadding="0" cellspacing="0" width="600" style="border: none; border-collapse: collapse;">
+                                        <tbody>
+                                        <tr>
+                                            <td style="padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;">
+                                                <a href="#" style="color: #333; text-decoration: underline;" rel="noopener" target="_blank"><span th:text="|TASK:  ${title}|"></span></a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: none;">
+                                    <fieldset style="border: 1px solid #e5e5e5">
+                                        <legend style="color: #114f8e">任务描述</legend>
+                                        <div style="padding:5px;">
+                                            <p th:utext="${content}"></p>
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; background-color: #FFF0D5">
+                                    <span style="font-size: 16px; color: #F1A325">●</span> &nbsp;<span><span style="border-bottom:1px dashed #ccc;"><span th:text="${time}"></span></span>, 由 <strong><span th:text="${username}"></span></strong> 创建。
+													</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <style type="text/css">
+                .qmbox style,
+                .qmbox script,
+                .qmbox head,
+                .qmbox link,
+                .qmbox meta {
+                    display: none !important;
+                }
+            </style>
+        </div>
+    </div>
+    <!-- -->
+    <style>
+        #mailContentContainer .txt {
+            height: auto;
+        }
+    </style>
+</div>
+</body>
+</html>

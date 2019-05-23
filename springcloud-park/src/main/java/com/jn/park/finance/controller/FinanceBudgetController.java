@@ -67,7 +67,7 @@ public class FinanceBudgetController extends FinanceBaseController {
     }
 
     @ControllerLog(doAction = "预算录入历史查询")
-    @ApiOperation(value = "预算录入历史查询", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "预算录入历史查询", httpMethod = "GET")
     @GetMapping(value = "/selectBudgetHistory")
     @RequiresPermissions("/finance/budget/selectBudgetHistory")
     public Result<FianceDynamicTableVo<List<FinanceBudgetHistoryVo>>> selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel){
@@ -86,7 +86,7 @@ public class FinanceBudgetController extends FinanceBaseController {
 
 
     @ControllerLog(doAction = "预算录入")
-    @ApiOperation(value = "预算录入", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "预算录入", httpMethod = "POST")
     @PostMapping(value = "/add")
     @RequiresPermissions("/finance/budget/add")
     @ApiImplicitParams({
@@ -95,6 +95,13 @@ public class FinanceBudgetController extends FinanceBaseController {
             @ApiImplicitParam(name = "departmentName",value = "部门名称",required = true,dataType = "String",paramType = "query")
     })
     public Result add(@ApiParam(value = "Excel模板文件",required = true) MultipartFile file, Byte budgetType, String departmentId, String departmentName){
+        //判断文件后缀名是否为.xlsx
+        //获取文件名
+        String name=file.getOriginalFilename();
+        String fileName= name.substring(name.length()-4);
+        if(!("xlsx").equals(fileName) ){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"请导入模板文件");
+        }
         //读出excel中的所有行数据
         List<Object>rows=ExcelUtil.readExcel(file,null);
         if(null==rows||rows.size()<2){
@@ -111,7 +118,7 @@ public class FinanceBudgetController extends FinanceBaseController {
                 monthList.add(month);
             }
         }catch (ParseException e){
-            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"表头的格式为xxxx年xx月，如20190403");
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"请导入模板文件");
         }
 
         //第二行开始为数据行
@@ -133,9 +140,10 @@ public class FinanceBudgetController extends FinanceBaseController {
             financeBudgetHistoryVo.setDepartmentId(departmentId);
             financeBudgetHistoryVo.setDepartmentName(departmentName);
             List<FinanceBudgetMoneyModel>moneyModelList=new ArrayList<>();
-            for(int ii=1;ii<monthCount;ii++){
+            for(int ii=1;ii<monthCount+1;ii++){
                 BigDecimal money=new BigDecimal(data.get(ii));
-                moneyModelList.add(new FinanceBudgetMoneyModel(monthList.get(ii),money));
+                int j=ii-1;
+                moneyModelList.add(new FinanceBudgetMoneyModel(monthList.get(j),money));
             }
             financeBudgetHistoryVo.setBudgetMoneyModels(moneyModelList);
             financeBudgetHistoryVoList.add(financeBudgetHistoryVo);

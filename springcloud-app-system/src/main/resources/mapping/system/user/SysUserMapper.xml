@@ -20,6 +20,10 @@
             <result property="isDefault" column="is_default" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
+    <resultMap id="SimpleResultMap" type="com.jn.system.user.model.SysTUser">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
 
     <sql id="Get_User_Page_Column">
         t.id,
@@ -342,6 +346,154 @@
         ON t.id = tt.user_id
         WHERE t.record_status = 1
         ORDER BY t.created_time DESC
+    </select>
+    <select id="selectUserByIds" resultMap="SimpleResultMap"  parameterType="java.util.Arrays">
+          SELECT
+            t.id,
+            case when t.`name` is null  then t.account
+            else t.`name` end  name
+          FROM
+          `tb_sys_user` t
+          WHERE t.record_status = 1
+
+        and id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <resultMap id="getUserInfoMap" type="com.jn.system.model.User">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+        <result column="record_status" jdbcType="TINYINT" property="recordStatus"/>
+        <result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+
+        <collection property="sysRole" ofType="com.jn.system.model.SysRole">
+            <id column="roleId" jdbcType="VARCHAR" property="id"/>
+            <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+            <result column="r_created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+            <result column="r_creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+            <result column="r_record_status" jdbcType="TINYINT" property="recordStatus"/>
+        </collection>
+        <collection property="sysDepartmentPostVO" ofType="com.jn.system.vo.SysDepartmentPostVO"
+         select="com.jn.system.dept.dao.SysUserDepartmentPostMapper.findDepartmentAndPostByUserId" column="id">
+            <result column="departmentId" jdbcType="VARCHAR" property="departmentId"/>
+            <result column="departmentName" jdbcType="VARCHAR" property="departmentName"/>
+            <result column="parentId" jdbcType="VARCHAR" property="parentId"/>
+            <result column="level" jdbcType="VARCHAR" property="level"/>
+            <result column="postId" jdbcType="VARCHAR" property="postId"/>
+            <result column="postName" jdbcType="VARCHAR" property="postName"/>
+            <result column="isDefault" jdbcType="VARCHAR" property="isDefault"/>
+            <result column="postTypeId" jdbcType="VARCHAR" property="postTypeId"/>
+            <result column="postTypeName" jdbcType="VARCHAR" property="postTypeName"/>
+        </collection>
+        <collection property="sysGroupVO"  ofType="com.jn.system.vo.SysGroupVO" column="id" select="getGroupAndRole"/>
+    </resultMap>
+    <select id="getUserInfoByAccount" resultMap="getUserInfoMap" parameterType="java.util.List">
+        SELECT
+            t1.id,
+            t1.account,
+            t1.`name`,
+            t1.phone,
+            t1.email,
+            t1.creator_account,
+            t1.created_time,
+            t1.record_status,
+            t1.wechat_account,
+            t1.remark,
+            t2.id as roleId,
+            t2.role_name,
+            t2.created_time as r_created_time,
+            t2.creator_account as r_creator_account,
+            t2.record_status as r_record_status
+        FROM
+            (
+                SELECT
+                    id,
+                    account,
+                    `name`,
+                    phone,
+                    email,
+                    creator_account,
+                    created_time,
+                    record_status,
+                    wechat_account,
+                    remark
+                FROM
+                    tb_sys_user
+                WHERE
+                    account IN
+                    <foreach item="account" collection="accountList" open="(" separator="," close=")">
+                        #{account,jdbcType=VARCHAR}
+                    </foreach>
+                AND record_status = 1
+            ) t1
+        LEFT JOIN (
+            SELECT
+                sur.user_id,
+                tsr.id,
+                tsr.role_name,
+                tsr.created_time,
+                tsr.creator_account,
+                tsr.record_status
+            FROM
+                tb_sys_user_role sur,
+                tb_sys_role tsr
+            WHERE
+                sur.role_id = tsr.id
+            AND sur.record_status = 1
+            AND tsr.record_status = 1
+        ) t2 ON t1.id = t2.user_id
+    </select>
+
+    <resultMap id="getGroupAndRoleMap" type="com.jn.system.vo.SysGroupVO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+        <result column="record_status" jdbcType="TINYINT" property="recordStatus"/>
+
+        <collection property="sysRoleList" ofType="com.jn.system.model.SysRole">
+            <id column="roleId" jdbcType="VARCHAR" property="id"/>
+            <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+            <result column="r_created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+            <result column="r_creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+            <result column="r_record_status" jdbcType="TINYINT" property="recordStatus"/>
+        </collection>
+    </resultMap>
+    <select id="getGroupAndRole" resultMap="getGroupAndRoleMap" parameterType="java.lang.String">
+        SELECT
+            t2.id,
+            t2.group_name,
+            t2.record_status,
+            t2.created_time,
+            t2.creator_account,
+            t4.id AS roleId,
+            t4.role_name,
+            t4.created_time as r_created_time,
+            t4.creator_account as r_creator_account,
+            t4.record_status as r_record_status
+        FROM
+            tb_sys_user_group t1,
+            tb_sys_group t2,
+            tb_sys_group_role t3,
+            tb_sys_role t4
+        WHERE
+            t1.group_id = t2.id
+        AND t3.user_group_id = t2.id
+        AND t3.role_id = t4.id
+        AND t1.record_status = 1
+        AND t2.record_status = 1
+        AND t3.record_status = 1
+        AND t4.record_status = 1
+        AND t1.user_id = #{id,jdbcType=VARCHAR}
     </select>
 
     <update id="deleteUserBranch" parameterType="java.util.Map">

@@ -3,6 +3,7 @@ package com.jn.park.finance.dao;
 import com.jn.park.finance.model.FinanceExpensesHistoryPageModel;
 import com.jn.park.finance.model.FinanceExpensesPageModel;
 import com.jn.park.finance.model.FinanceExpensesTypeNameModel;
+import com.jn.park.finance.model.FinanceSaveExpensesMonthModel;
 import com.jn.park.finance.vo.FinanceExpendFinanceTypeVo;
 import com.jn.park.finance.vo.FinanceExpendFindImportDataVo;
 import com.jn.park.finance.vo.FinanceExpendHistoryVo;
@@ -56,6 +57,20 @@ public interface FinanceExpensesDao {
      * @param map
      */
     void saveMarkData(Map<String,Object> map);
+
+
+    /**
+     * 查询需要保存到月表中的数据
+     * @param excel
+     * @return
+     */
+    List<FinanceSaveExpensesMonthModel> selectSaveExpensesMonth(@Param("excel") String excel);
+
+    /**
+     * 保存到月表中
+     * @param map
+     */
+    void  saveExpensesMonth(Map<String,Object> map);
 
     /**
      * 查询财务类型

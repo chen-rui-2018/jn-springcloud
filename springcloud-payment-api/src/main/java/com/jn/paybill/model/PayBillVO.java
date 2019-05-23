@@ -21,7 +21,8 @@ public class PayBillVO implements Serializable {
     private String billNum;
     @ApiModelProperty(value = "账单名称")
     private String billName;
-    @ApiModelProperty(value = "账单类型ID")
+    @ApiModelProperty(value = "账单类型ID[从'查询账单类型数据'接口获取]"
+            ,notes = "[从'查询账单类型数据'接口获取]")
     private String billType;
     @ApiModelProperty(value = "账单类型名称")
     private String billTypeName;
@@ -57,7 +58,7 @@ public class PayBillVO implements Serializable {
     private String payId;
     @ApiModelProperty(value = "实际支付总金额")
     private Double payAmount;
-    @ApiModelProperty(value = "支付方式[0微信1支付宝2银联]")
+    @ApiModelProperty(value = "支付方式[1 银联闪付 2 微信 3 支付宝]")
     private String payType;
     @ApiModelProperty(value = "订单支付说明")
     private String payRemark;

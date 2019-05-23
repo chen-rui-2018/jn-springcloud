@@ -10,6 +10,8 @@ public class TbServiceProduct implements Serializable {
 
     private String productName;
 
+    private String isOnlineLoan;
+
     private String referPrice;
 
     private String signoryId;
@@ -44,7 +46,7 @@ public class TbServiceProduct implements Serializable {
 
     private Double refRateMax;
 
-    private String isOnlineLoan;
+    private String modifierAccount;
 
     private String isPolicyPro;
 
@@ -82,7 +84,7 @@ public class TbServiceProduct implements Serializable {
 
     private Date modifiedTime;
 
-    private String modifierAccount;
+    private String productDetails;
 
     private Byte recordStatus;
 
@@ -110,6 +112,14 @@ public class TbServiceProduct implements Serializable {
 
     public void setProductName(String productName) {
         this.productName = productName == null ? null : productName.trim();
+    }
+
+    public String getIsOnlineLoan() {
+        return isOnlineLoan;
+    }
+
+    public void setIsOnlineLoan(String isOnlineLoan) {
+        this.isOnlineLoan = isOnlineLoan == null ? null : isOnlineLoan.trim();
     }
 
     public String getReferPrice() {
@@ -248,12 +258,12 @@ public class TbServiceProduct implements Serializable {
         this.refRateMax = refRateMax;
     }
 
-    public String getIsOnlineLoan() {
-        return isOnlineLoan;
+    public String getModifierAccount() {
+        return modifierAccount;
     }
 
-    public void setIsOnlineLoan(String isOnlineLoan) {
-        this.isOnlineLoan = isOnlineLoan == null ? null : isOnlineLoan.trim();
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
     public String getIsPolicyPro() {
@@ -400,12 +410,12 @@ public class TbServiceProduct implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public String getModifierAccount() {
-        return modifierAccount;
+    public String getProductDetails() {
+        return productDetails;
     }
 
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
+    public void setProductDetails(String productDetails) {
+        this.productDetails = productDetails == null ? null : productDetails.trim();
     }
 
     public Byte getRecordStatus() {
@@ -431,6 +441,7 @@ public class TbServiceProduct implements Serializable {
         return (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
             && (this.getSerialNumber() == null ? other.getSerialNumber() == null : this.getSerialNumber().equals(other.getSerialNumber()))
             && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
+            && (this.getIsOnlineLoan() == null ? other.getIsOnlineLoan() == null : this.getIsOnlineLoan().equals(other.getIsOnlineLoan()))
             && (this.getReferPrice() == null ? other.getReferPrice() == null : this.getReferPrice().equals(other.getReferPrice()))
             && (this.getSignoryId() == null ? other.getSignoryId() == null : this.getSignoryId().equals(other.getSignoryId()))
             && (this.getSignoryName() == null ? other.getSignoryName() == null : this.getSignoryName().equals(other.getSignoryName()))
@@ -448,7 +459,7 @@ public class TbServiceProduct implements Serializable {
             && (this.getReleaseTime() == null ? other.getReleaseTime() == null : this.getReleaseTime().equals(other.getReleaseTime()))
             && (this.getRefRateMin() == null ? other.getRefRateMin() == null : this.getRefRateMin().equals(other.getRefRateMin()))
             && (this.getRefRateMax() == null ? other.getRefRateMax() == null : this.getRefRateMax().equals(other.getRefRateMax()))
-            && (this.getIsOnlineLoan() == null ? other.getIsOnlineLoan() == null : this.getIsOnlineLoan().equals(other.getIsOnlineLoan()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getIsPolicyPro() == null ? other.getIsPolicyPro() == null : this.getIsPolicyPro().equals(other.getIsPolicyPro()))
             && (this.getIsGeneralPro() == null ? other.getIsGeneralPro() == null : this.getIsGeneralPro().equals(other.getIsGeneralPro()))
             && (this.getIsRmb() == null ? other.getIsRmb() == null : this.getIsRmb().equals(other.getIsRmb()))
@@ -467,7 +478,7 @@ public class TbServiceProduct implements Serializable {
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
+            && (this.getProductDetails() == null ? other.getProductDetails() == null : this.getProductDetails().equals(other.getProductDetails()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
@@ -478,6 +489,7 @@ public class TbServiceProduct implements Serializable {
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
         result = prime * result + ((getSerialNumber() == null) ? 0 : getSerialNumber().hashCode());
         result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
+        result = prime * result + ((getIsOnlineLoan() == null) ? 0 : getIsOnlineLoan().hashCode());
         result = prime * result + ((getReferPrice() == null) ? 0 : getReferPrice().hashCode());
         result = prime * result + ((getSignoryId() == null) ? 0 : getSignoryId().hashCode());
         result = prime * result + ((getSignoryName() == null) ? 0 : getSignoryName().hashCode());
@@ -495,7 +507,7 @@ public class TbServiceProduct implements Serializable {
         result = prime * result + ((getReleaseTime() == null) ? 0 : getReleaseTime().hashCode());
         result = prime * result + ((getRefRateMin() == null) ? 0 : getRefRateMin().hashCode());
         result = prime * result + ((getRefRateMax() == null) ? 0 : getRefRateMax().hashCode());
-        result = prime * result + ((getIsOnlineLoan() == null) ? 0 : getIsOnlineLoan().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getIsPolicyPro() == null) ? 0 : getIsPolicyPro().hashCode());
         result = prime * result + ((getIsGeneralPro() == null) ? 0 : getIsGeneralPro().hashCode());
         result = prime * result + ((getIsRmb() == null) ? 0 : getIsRmb().hashCode());
@@ -514,7 +526,7 @@ public class TbServiceProduct implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
-        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
+        result = prime * result + ((getProductDetails() == null) ? 0 : getProductDetails().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
@@ -528,6 +540,7 @@ public class TbServiceProduct implements Serializable {
         sb.append(", productId=").append(productId);
         sb.append(", serialNumber=").append(serialNumber);
         sb.append(", productName=").append(productName);
+        sb.append(", isOnlineLoan=").append(isOnlineLoan);
         sb.append(", referPrice=").append(referPrice);
         sb.append(", signoryId=").append(signoryId);
         sb.append(", signoryName=").append(signoryName);
@@ -545,7 +558,7 @@ public class TbServiceProduct implements Serializable {
         sb.append(", releaseTime=").append(releaseTime);
         sb.append(", refRateMin=").append(refRateMin);
         sb.append(", refRateMax=").append(refRateMax);
-        sb.append(", isOnlineLoan=").append(isOnlineLoan);
+        sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", isPolicyPro=").append(isPolicyPro);
         sb.append(", isGeneralPro=").append(isGeneralPro);
         sb.append(", isRmb=").append(isRmb);
@@ -564,7 +577,7 @@ public class TbServiceProduct implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
-        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", productDetails=").append(productDetails);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

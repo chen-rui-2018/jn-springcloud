@@ -9,7 +9,10 @@ import com.jn.common.util.cache.service.Cache;
 import com.jn.news.vo.SmsTemplateVo;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysUserRoleVO;
+import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.userjoin.enums.UserJoinExceptionEnum;
 import com.jn.user.userjoin.model.UserRegister;
 import com.jn.user.userjoin.service.UserJoinService;
@@ -20,8 +23,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * 加入园区
@@ -74,6 +80,7 @@ public class UserJoinServiceImpl implements UserJoinService {
 
     @ServiceLog(doAction = "用户注册")
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result addUser(UserRegister userRegister){
         //从redis中取出短信验证码
         String code = this.getSendCodeByPhone(userRegister.getPhone());
@@ -81,12 +88,32 @@ public class UserJoinServiceImpl implements UserJoinService {
             //验证码有误
             throw new JnSpringCloudException(UserJoinExceptionEnum.MESSAGE_CODE_IS_WRONG);
         }
-            User user = new User();
-            user.setPhone(userRegister.getPhone());
-            user.setAccount(userRegister.getPhone());
-            user.setPassword(userRegister.getPassword());
-           return systemClient.addSysUser(user);
-
+        User user = new User();
+        user.setPhone(userRegister.getPhone());
+        user.setAccount(userRegister.getPhone());
+        user.setPassword(userRegister.getPassword());
+        user.setName(userRegister.getPhone());
+        Result result = systemClient.addSysUser(user);
+        //给用户添加"普通用户"角色
+        String roleName="普通用户";
+        Result<SysRole> sysRoleResult = systemClient.getRoleByName(roleName);
+        if(sysRoleResult==null ||sysRoleResult.getData()==null){
+            logger.warn("用户注册失败，失败原因：无法获取“普通用户”角色信息，请确认系统服务是否正常，且“普通用户”角色在系统中存在");
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+        }
+        //更新用户角色
+        SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
+        Set<String> addRoleId=new HashSet<>();
+        addRoleId.add(sysRoleResult.getData().getId());
+        sysUserRoleVO.setAddRoleId(addRoleId);
+        sysUserRoleVO.setUser(user);
+        Result<Boolean> booleanResult = systemClient.updateUserRole(sysUserRoleVO);
+        if(booleanResult.getData()==true){
+            return result;
+        }else{
+            logger.warn("用户注册失败，失败原因：更新用户角色为“普通用户”失败");
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+        }
     }
 
     @ServiceLog(doAction = "修改密码")

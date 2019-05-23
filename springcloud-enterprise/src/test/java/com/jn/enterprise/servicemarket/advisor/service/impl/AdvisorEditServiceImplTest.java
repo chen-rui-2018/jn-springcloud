@@ -3,12 +3,10 @@ package com.jn.enterprise.servicemarket.advisor.service.impl;
 import com.jn.SpringCloudEnterpriseApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -19,7 +17,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -43,7 +42,7 @@ public class AdvisorEditServiceImplTest {
     /**
      * 基本信息
      */
-    private AdvisorBaseInfo advisorBaseInfo=new AdvisorBaseInfo();
+    private AdvisorBaseInfoParam advisorBaseInfoParam =new AdvisorBaseInfoParam();
 
     /**
      * 荣誉资质
@@ -65,29 +64,35 @@ public class AdvisorEditServiceImplTest {
 
     private String advisorAccount;
 
+    private String[]businessAreaArry={"technology_finance","ogistics"};
+
 
     @Before
     public void setUp() throws Exception {
-        advisorAccount="qianqi";
+        advisorAccount="18565007009";
         //基本信息保存
+        //机构id
+        advisorBaseInfoParam.setOrgId("cbe0d8ba94844a3a8f7b44822cfc7382");
         //账号
-        advisorBaseInfo.setAdvisorAccount(advisorAccount);
+        advisorBaseInfoParam.setAdvisorAccount(advisorAccount);
         //从业年限
-        advisorBaseInfo.setWorkingYears(11d);
+        advisorBaseInfoParam.setWorkingYears("11");
         //毕业学校
-        advisorBaseInfo.setGraduatedSchool("中南大学");
+        advisorBaseInfoParam.setGraduatedSchool("中南大学");
         //学历
-        advisorBaseInfo.setEducation("硕士");
+        advisorBaseInfoParam.setEducation("硕士");
         //联系手机
-        advisorBaseInfo.setPhone("18674398739");
+        advisorBaseInfoParam.setPhone("18565007009");
         //联系邮箱
-        advisorBaseInfo.setContactEmail("123.qq.com");
+        advisorBaseInfoParam.setContactEmail("123.qq.com");
         //执业资质
-        advisorBaseInfo.setPracticeQualification("高级律师证");
+        advisorBaseInfoParam.setPracticeQualification("高级律师证");
         //业务擅长
-        advisorBaseInfo.setGoodAtBusiness("打官司，谈判");
+        advisorBaseInfoParam.setGoodAtBusiness("打官司，谈判");
         //个人简介
-        advisorBaseInfo.setPersonalProfile("从事行业十余年，未尝一败，高处不胜寒，朕寂寞啊，孤独啊");
+        advisorBaseInfoParam.setPersonalProfile("从事行业十余年，未尝一败，高处不胜寒，朕寂寞啊，孤独啊");
+        //业务领域
+        advisorBaseInfoParam.setBusinessAreas(businessAreaArry);
 
         //荣誉资质信息保存并更新
         //主键id
@@ -97,7 +102,7 @@ public class AdvisorEditServiceImplTest {
         //证书名称
         serviceHonor.setCertificateName("高级律师证");
         //证书类型  lawyerLicense:律师执业证   professionalAgentLicense：专业代理人执业证  cap：注册会计师
-        serviceHonor.setCertificateType("lawyerLicense");
+        serviceHonor.setCertificateCode("lawyerLicense");
         //获得时间
         serviceHonor.setGetTime("201707");
         //证书证件
@@ -141,10 +146,9 @@ public class AdvisorEditServiceImplTest {
      * 基本信息保存并更新
      */
     @Test
-    @Ignore
     public void saveOrUpdateAdvisorBaseInfo() {
         try {
-            advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfo);
+            advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
             assertThat(anything(),anything() );
         } catch (JnSpringCloudException e) {
             logger.warn("基本信息保存并更新失败");
@@ -152,7 +156,9 @@ public class AdvisorEditServiceImplTest {
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),
                             Matchers.containsString(AdvisorExceptionEnum.ORG_INFO_NOT_NULL.getCode()),
-                            Matchers.containsString(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL.getCode())
+                            Matchers.containsString(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.BUSINESS_AREA_NOT_EXIT.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.ORG_ID_NOT_EXIT.getCode())
                     )
             );
         }
@@ -182,11 +188,11 @@ public class AdvisorEditServiceImplTest {
      */
     @Test
     public void getCertificateTypeList() {
-        List<TbServiceCertificateType> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);
+        List<AdvisorCertificateTypeShow> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);
         if(certificateTypeList.isEmpty()){
             assertThat(certificateTypeList,anything());
         }else{
-            for(TbServiceCertificateType tbServiceCertificateType:certificateTypeList){
+            for(AdvisorCertificateTypeShow tbServiceCertificateType:certificateTypeList){
                 logger.info(tbServiceCertificateType.toString());
             }
             assertThat(certificateTypeList,notNullValue());

@@ -12,6 +12,18 @@ public class TbServiceOrg implements Serializable {
 
     private Date orgRegisterTime;
 
+    private String orgCode;
+
+    private String operateStatus;
+
+    private String orgPrincipal;
+
+    private String orgBusinType;
+
+    private String orgBusinAddress;
+
+    private String orgBusinScope;
+
     private String isApprove;
 
     private String orgSynopsis;
@@ -46,12 +58,6 @@ public class TbServiceOrg implements Serializable {
 
     private Byte recordStatus;
 
-    private String orgCode;
-
-    private String operateStatus;
-
-    private String orgPrincipal;
-
     private static final long serialVersionUID = 1L;
 
     public String getOrgId() {
@@ -84,6 +90,54 @@ public class TbServiceOrg implements Serializable {
 
     public void setOrgRegisterTime(Date orgRegisterTime) {
         this.orgRegisterTime = orgRegisterTime;
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
+
+    public String getOperateStatus() {
+        return operateStatus;
+    }
+
+    public void setOperateStatus(String operateStatus) {
+        this.operateStatus = operateStatus == null ? null : operateStatus.trim();
+    }
+
+    public String getOrgPrincipal() {
+        return orgPrincipal;
+    }
+
+    public void setOrgPrincipal(String orgPrincipal) {
+        this.orgPrincipal = orgPrincipal == null ? null : orgPrincipal.trim();
+    }
+
+    public String getOrgBusinType() {
+        return orgBusinType;
+    }
+
+    public void setOrgBusinType(String orgBusinType) {
+        this.orgBusinType = orgBusinType == null ? null : orgBusinType.trim();
+    }
+
+    public String getOrgBusinAddress() {
+        return orgBusinAddress;
+    }
+
+    public void setOrgBusinAddress(String orgBusinAddress) {
+        this.orgBusinAddress = orgBusinAddress == null ? null : orgBusinAddress.trim();
+    }
+
+    public String getOrgBusinScope() {
+        return orgBusinScope;
+    }
+
+    public void setOrgBusinScope(String orgBusinScope) {
+        this.orgBusinScope = orgBusinScope == null ? null : orgBusinScope.trim();
     }
 
     public String getIsApprove() {
@@ -222,30 +276,6 @@ public class TbServiceOrg implements Serializable {
         this.recordStatus = recordStatus;
     }
 
-    public String getOrgCode() {
-        return orgCode;
-    }
-
-    public void setOrgCode(String orgCode) {
-        this.orgCode = orgCode == null ? null : orgCode.trim();
-    }
-
-    public String getOperateStatus() {
-        return operateStatus;
-    }
-
-    public void setOperateStatus(String operateStatus) {
-        this.operateStatus = operateStatus == null ? null : operateStatus.trim();
-    }
-
-    public String getOrgPrincipal() {
-        return orgPrincipal;
-    }
-
-    public void setOrgPrincipal(String orgPrincipal) {
-        this.orgPrincipal = orgPrincipal == null ? null : orgPrincipal.trim();
-    }
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -262,6 +292,12 @@ public class TbServiceOrg implements Serializable {
             && (this.getOrgAccount() == null ? other.getOrgAccount() == null : this.getOrgAccount().equals(other.getOrgAccount()))
             && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
             && (this.getOrgRegisterTime() == null ? other.getOrgRegisterTime() == null : this.getOrgRegisterTime().equals(other.getOrgRegisterTime()))
+            && (this.getOrgCode() == null ? other.getOrgCode() == null : this.getOrgCode().equals(other.getOrgCode()))
+            && (this.getOperateStatus() == null ? other.getOperateStatus() == null : this.getOperateStatus().equals(other.getOperateStatus()))
+            && (this.getOrgPrincipal() == null ? other.getOrgPrincipal() == null : this.getOrgPrincipal().equals(other.getOrgPrincipal()))
+            && (this.getOrgBusinType() == null ? other.getOrgBusinType() == null : this.getOrgBusinType().equals(other.getOrgBusinType()))
+            && (this.getOrgBusinAddress() == null ? other.getOrgBusinAddress() == null : this.getOrgBusinAddress().equals(other.getOrgBusinAddress()))
+            && (this.getOrgBusinScope() == null ? other.getOrgBusinScope() == null : this.getOrgBusinScope().equals(other.getOrgBusinScope()))
             && (this.getIsApprove() == null ? other.getIsApprove() == null : this.getIsApprove().equals(other.getIsApprove()))
             && (this.getOrgSynopsis() == null ? other.getOrgSynopsis() == null : this.getOrgSynopsis().equals(other.getOrgSynopsis()))
             && (this.getOrgBusiness() == null ? other.getOrgBusiness() == null : this.getOrgBusiness().equals(other.getOrgBusiness()))
@@ -278,10 +314,7 @@ public class TbServiceOrg implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
-            && (this.getOrgCode() == null ? other.getOrgCode() == null : this.getOrgCode().equals(other.getOrgCode()))
-            && (this.getOperateStatus() == null ? other.getOperateStatus() == null : this.getOperateStatus().equals(other.getOperateStatus()))
-            && (this.getOrgPrincipal() == null ? other.getOrgPrincipal() == null : this.getOrgPrincipal().equals(other.getOrgPrincipal()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -292,6 +325,12 @@ public class TbServiceOrg implements Serializable {
         result = prime * result + ((getOrgAccount() == null) ? 0 : getOrgAccount().hashCode());
         result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
         result = prime * result + ((getOrgRegisterTime() == null) ? 0 : getOrgRegisterTime().hashCode());
+        result = prime * result + ((getOrgCode() == null) ? 0 : getOrgCode().hashCode());
+        result = prime * result + ((getOperateStatus() == null) ? 0 : getOperateStatus().hashCode());
+        result = prime * result + ((getOrgPrincipal() == null) ? 0 : getOrgPrincipal().hashCode());
+        result = prime * result + ((getOrgBusinType() == null) ? 0 : getOrgBusinType().hashCode());
+        result = prime * result + ((getOrgBusinAddress() == null) ? 0 : getOrgBusinAddress().hashCode());
+        result = prime * result + ((getOrgBusinScope() == null) ? 0 : getOrgBusinScope().hashCode());
         result = prime * result + ((getIsApprove() == null) ? 0 : getIsApprove().hashCode());
         result = prime * result + ((getOrgSynopsis() == null) ? 0 : getOrgSynopsis().hashCode());
         result = prime * result + ((getOrgBusiness() == null) ? 0 : getOrgBusiness().hashCode());
@@ -309,9 +348,6 @@ public class TbServiceOrg implements Serializable {
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
-        result = prime * result + ((getOrgCode() == null) ? 0 : getOrgCode().hashCode());
-        result = prime * result + ((getOperateStatus() == null) ? 0 : getOperateStatus().hashCode());
-        result = prime * result + ((getOrgPrincipal() == null) ? 0 : getOrgPrincipal().hashCode());
         return result;
     }
 
@@ -325,6 +361,12 @@ public class TbServiceOrg implements Serializable {
         sb.append(", orgAccount=").append(orgAccount);
         sb.append(", orgName=").append(orgName);
         sb.append(", orgRegisterTime=").append(orgRegisterTime);
+        sb.append(", orgCode=").append(orgCode);
+        sb.append(", operateStatus=").append(operateStatus);
+        sb.append(", orgPrincipal=").append(orgPrincipal);
+        sb.append(", orgBusinType=").append(orgBusinType);
+        sb.append(", orgBusinAddress=").append(orgBusinAddress);
+        sb.append(", orgBusinScope=").append(orgBusinScope);
         sb.append(", isApprove=").append(isApprove);
         sb.append(", orgSynopsis=").append(orgSynopsis);
         sb.append(", orgBusiness=").append(orgBusiness);
@@ -342,9 +384,6 @@ public class TbServiceOrg implements Serializable {
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
-        sb.append(", orgCode=").append(orgCode);
-        sb.append(", operateStatus=").append(operateStatus);
-        sb.append(", orgPrincipal=").append(orgPrincipal);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

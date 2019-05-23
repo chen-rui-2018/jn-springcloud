@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.message.dao.MessageListDao">
+
+    <select id="getMessageOneTort" parameterType="java.lang.String" resultType="com.jn.park.message.model.MessageTowModel" >
+        SELECT
+        t.message_tow_sort as "messageTowSort"
+        from
+        tb_message_list t
+        WHERE t.record_status =1
+        AND t.message_one_sort = #{messageOneTort}
+        AND t.message_recipient = #{account}
+        GROUP BY t.message_tow_sort
+    </select>
+
+    <select id="findAllApp" parameterType="com.jn.park.message.model.findAllAppMessageListModel" resultType="com.jn.park.message.model.MessageListModel">
+        SELECT
+        t.id as "id",
+        t.message_title as "messagetitle",
+        t.message_content as "messagecontent",
+        t.message_connect_name as "messageconnectname",
+        t.message_connect as "messageconnect",
+        t.is_read as "isread",
+        t.message_recipient as "messagerecipient",
+        t.message_sender as "messagesender",
+        t.message_one_sort as "messageonesort",
+        t.message_tow_sort as "messagetowsort",
+        t.created_time as "createdtime",
+        t.creator_account as "creatoraccount"
+        from
+        tb_message_list t
+        WHERE t.record_status = 1
+        AND t.message_one_sort =#{messageOneSort,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isRead)">
+            AND t.is_read = #{isRead}
+        </if>
+        AND t.message_recipient=#{account,jdbcType=VARCHAR}
+        ORDER BY t.created_time  DESC
+    </select>
+
+    <select id="findAll" parameterType="com.jn.park.message.model.findAllMessageListModel" resultType="com.jn.park.message.model.MessageListModel">
+      SELECT
+        t.id as "id",
+        t.message_title as "messagetitle",
+        t.message_content as "messagecontent",
+        t.message_connect_name as "messageconnectname",
+        t.message_connect as "messageconnect",
+        t.is_read as "isread",
+        t.message_recipient as "messagerecipient",
+        t.message_sender as "messagesender",
+        t.message_one_sort as "messageonesort",
+        t.message_tow_sort as "messagetowsort",
+        t.created_time as "createdtime",
+        t.creator_account as "creatoraccount"
+        from
+         tb_message_list t
+        WHERE t.record_status = 1
+        AND t.message_tow_sort =#{messageTowTort,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isRead)">
+            AND t.is_read = #{isRead}
+        </if>
+        AND t.message_recipient=#{account,jdbcType=VARCHAR}
+        ORDER BY t.created_time  DESC
+    </select>
+
+
+    <!--消息列表-->
+    <!--<select id="findAll" parameterType="com.jn.park.message.model.findAllMessageListModel"  resultMap="findAllMessageOneSortMap">
+        SELECT
+        t.message_tow_sort as "messageTowSort",
+        #{account} as "account"
+        from
+         tb_message_list t
+        WHERE t.record_status =1
+        AND t.message_one_sort = #{messageOneTort}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTowTort)">
+            AND t.message_tow_sort = #{messageTowTort}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isRead)">
+            AND t.is_read = #{isRead}
+        </if>
+        AND t.message_recipient = #{account}
+        GROUP BY t.message_tow_sort
+    </select>
+
+
+    <resultMap id="findAllMessageOneSortMap" type="com.jn.park.message.model.FindAllMessageListVo">
+        <result column="messageTowSort" jdbcType="INTEGER" property="messageTowSort" />
+        <collection property="messageListModels"
+                    ofType="com.jn.park.message.model.MessageListModel"
+                    select="selectMessageList"
+                    column="{messageTowSort=messageTowSort,account=account}"></collection>
+    </resultMap>
+
+    <select id="selectMessageList" resultMap="findAllMessageList">
+      SELECT
+        t.id as "id",
+        t.message_title as "messagetitle",
+        t.message_content as "messagecontent",
+        t.message_connect_name as "messageconnectname",
+        t.message_connect as "messageconnect",
+        t.is_read as "isread",
+        t.message_recipient as "messagerecipient",
+        t.message_sender as "messagesender",
+        t.message_one_sort as "messageonesort",
+        t.message_tow_sort as "messagetowsort",
+        t.created_time as "createdtime",
+        t.creator_account as "creatoraccount"
+        from
+         tb_message_list t
+        WHERE t.record_status = 1
+        AND t.message_tow_sort =#{messageTowSort,jdbcType=INTEGER}
+        AND t.message_recipient=#{account,jdbcType=VARCHAR}
+    </select>
+
+    <resultMap id="findAllMessageList" type="com.jn.park.message.model.MessageListModel">
+        <result column="id" jdbcType="VARCHAR" property="id" />
+        <result column="message_title" jdbcType="VARCHAR" property="messagetitle" />
+        <result column="message_content" jdbcType="VARCHAR" property="messagecontent" />
+        <result column="message_connect_name" jdbcType="VARCHAR" property="messageconnectname" />
+        <result column="message_connect" jdbcType="VARCHAR" property="messageconnect" />
+        <result column="is_read" jdbcType="INTEGER" property="isread" />
+        <result column="message_recipient" jdbcType="VARCHAR" property="messagerecipient" />
+        <result column="message_sender" jdbcType="VARCHAR" property="messagesender" />
+        <result column="message_one_sort" jdbcType="INTEGER" property="messageonesort" />
+        <result column="message_tow_sort" jdbcType="INTEGER" property="messagetowsort" />
+        <result column="created_time" jdbcType="VARCHAR" property="createdtime" />
+        <result column="creator_account" jdbcType="VARCHAR" property="creatoraccount" />
+    </resultMap>-->
+
+
+    <!--添加消息-->
+    <insert id="addMessage" parameterType="com.jn.park.message.model.AddMessageModel">
+        insert into tb_message_list (
+            id,
+            message_title,
+            message_content,
+            message_connect_name,
+            message_connect,
+            message_recipient,
+            message_sender,
+            message_one_sort,
+            message_tow_sort,
+            creator_account,
+            created_time
+            )
+            values(
+            #{id},
+            #{messageTitle,jdbcType=VARCHAR},
+            #{messageContent,jdbcType=VARCHAR},
+            #{messageConnectName,jdbcType=VARCHAR},
+            #{messageConnect,jdbcType=VARCHAR},
+            #{messageRecipien,jdbcType=VARCHAR},
+            #{messageSender,jdbcType=VARCHAR},
+            #{messageOneSort,jdbcType=VARCHAR},
+            #{messageTowSort,jdbcType=VARCHAR},
+            #{creatorAccount,jdbcType=VARCHAR},
+            SYSDATE()
+            )
+
+    </insert>
+
+    <!--单个查询-->
+    <select id="findByMessage" parameterType="java.lang.String" resultType="com.jn.park.message.model.MessageListModel">
+        SELECT
+		t.id as "id",
+        t.message_title as "messageTitle",
+        t.message_content as "messageContent",
+        t.message_connect_name as "messageConnectName",
+        t.message_connect as "messageConnect",
+        t.is_read as "isRead",
+        t.message_recipient as "messageRecipient",
+        t.message_sender as "messageSender",
+        t.message_one_sort as "messageOneSort",
+        t.message_tow_sort as "messageTowSort",
+        t.created_time as "createdTime",
+        t.creator_account as "creatorAccount"
+        from
+         tb_message_list t
+        WHERE t.record_status = 1
+        AND t.id=#{id}
+    </select>
+
+    <!--修改信息-->
+    <update id="updateMessage" parameterType="com.jn.park.message.model.MessageListModel">
+    UPDATE
+    tb_message_list
+     SET
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTitle)">
+        message_title=#{messageTitle},
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageContent)">
+        message_content=#{messageContent},
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageConnectName)">
+        message_connect_name=#{messageConnectName},
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageConnect)">
+        message_connect=#{messageConnect},
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isRead)">
+        is_read=#{isRead},
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageRecipient)">
+        message_recipient=#{messageRecipient},
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageSender)">
+        message_sender=#{messageSender},
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageOneSort)">
+        message_one_sort=#{messageOneSort},
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTowSort)">
+        message_tow_sort=#{messageTowSort},
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(creatorAccount)">
+        modifier_account=#{creatorAccount},
+        </if>
+        modified_time=SYSDATE()
+     WHERE
+      id=#{id}
+    </update>
+
+    <!--删除信息-->
+    <update id="deleteMessage" parameterType="java.lang.String">
+        UPDATE tb_message_list
+        SET record_status = '0'
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <!--修改已读状态-->
+    <update id="updateIsReadStatus" parameterType="java.lang.String">
+        UPDATE tb_message_list
+        SET is_read = '1'
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <!--是否有新的未读消息-->
+    <select id="getIsRead" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            COUNT(t.id)
+        FROM
+            tb_message_list t
+        WHERE
+            t.record_status = 1
+        AND t.is_read = 0
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageOneTort)">
+        AND t.message_one_sort=#{messageOneTort}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(messageTowTort)">
+		AND t.message_tow_sort=#{messageTowTort}
+        </if>
+        AND t.message_recipient = #{account}
+    </select>
+
+
+</mapper>

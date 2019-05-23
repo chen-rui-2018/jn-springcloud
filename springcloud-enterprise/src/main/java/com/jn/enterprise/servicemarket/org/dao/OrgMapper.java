@@ -1,5 +1,8 @@
 package com.jn.enterprise.servicemarket.org.dao;
 
+import com.jn.enterprise.servicemarket.org.model.OrgCount;
+import com.jn.enterprise.servicemarket.org.vo.BusinessStatisticalNumVO;
+import com.jn.enterprise.servicemarket.org.vo.BusinessStatisticalParam;
 import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 import com.jn.enterprise.servicemarket.org.model.OrgParameter;
 import com.jn.enterprise.model.ServiceOrg;
@@ -29,5 +32,40 @@ public interface OrgMapper {
      * @return
      */
     OrgDetailVo getServiceOrgDetail(@Param("orgId")String orgId);
+
+    /**
+     * 机构的产品/顾问数统计
+     * @param orgId
+     * @return
+     */
+    OrgCount getMyOrgInfo(@Param("orgId") String orgId);
+
+    /**
+     * 根据产品查询服务机构统计数据
+     * @param productId
+     * @return
+     */
+    String getProductOrgNum(@Param("productId") String productId);
+
+    /**
+     * 根据业务领域/产品查询评价统计数据
+     * @param businessStatisticalParam
+     * @return
+     */
+    String getProductRatingNum(BusinessStatisticalParam businessStatisticalParam);
+
+    /**
+     * 根据产品查询评价统计数据
+     * @param productId
+     * @return
+     */
+    String getProductAdvisorNum(@Param("productId") String productId);
+
+    /**
+     * 根据产品查询需求(交易量)统计数据
+     * @param productId
+     * @return
+     */
+    String getProductNum(@Param("productId") String productId);
 
 }

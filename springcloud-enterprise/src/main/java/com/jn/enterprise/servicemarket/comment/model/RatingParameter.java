@@ -13,27 +13,27 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(value = "RatingParameter",description = "对他人评价查询入参")
 public class RatingParameter extends Page {
-    @ApiModelProperty("一级业务领域")
-    private String orgId;
-    @ApiModelProperty("服务产品Id")
-    private String productId;
-    @ApiModelProperty("顾问账号")
+    @ApiModelProperty(value = "机构名称[模糊搜索]",example = "中国电信")
+    private String orgName;
+    @ApiModelProperty(value = "服务产品名称",example = "通讯服务")
+    private String productName;
+    @ApiModelProperty(value = "顾问账号",example = "wangsong")
     private String advisorAccount;
 
-    public String getOrgId() {
-        return orgId;
+    public String getOrgName() {
+        return orgName;
     }
 
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getAdvisorAccount() {

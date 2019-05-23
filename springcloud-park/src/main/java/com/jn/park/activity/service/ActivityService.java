@@ -1,7 +1,7 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 
 import java.util.List;
 
@@ -30,10 +30,10 @@ public interface ActivityService {
 
     /**
      * 活动状态管理(修改)
-     * @param activitySataus
+     * @param activityStatus
      * @return
      */
-    int updateActivityApply( ActivitySataus activitySataus);
+    int updateActivityApply( ActivityStatus activityStatus);
 
     /**
      * 发布活动/保存草稿
@@ -92,5 +92,28 @@ public interface ActivityService {
      * @return
      */
     int activitySendMessageByTimedTask(ActivityContent activity);
+
+    /**
+     * 查看用户的报名活动列表
+     * @param query
+     * @param needPage
+     * @return
+     */
+    PaginationData findActivitySuccessfulRegistration(ActivityApplyListParam query, Boolean needPage);
+
+    /**
+     * 查看机构活动资讯列表
+     * @param query
+     * @param activityType
+     * @param needPage
+     * @return
+     */
+    PaginationData findOrgActivityList( OrgActivityParam query,String activityType,boolean needPage);
+
+    /**
+     * 获取有效活动总数
+     * @return
+     */
+    String getActivityNum();
 
 }

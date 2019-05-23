@@ -1,7 +1,7 @@
 <template>
   <div v-loading="listLoading" class="activity">
     <el-row>
-      <el-col :span="5"><div class="grid-content bg-purple">
+      <el-col :span="4"><div class="grid-content bg-purple">
         <el-radio-group v-model="listQuery.actiStatus">
           <el-radio-button label="">全部</el-radio-button>
           <el-radio-button label= "1">待发布</el-radio-button>
@@ -17,7 +17,7 @@
         </el-radio-group>
       </div></el-col>
       <el-col :span="15"><div class="grid-content bg-purple"><el-form :inline="true" :model="listQuery" class="filter-bar">
-        <el-form-item label="活动类型" style="margin-left:10px;line-height: 34px;">
+        <el-form-item label="活动类型" style="line-height: 34px;">
           <el-select v-model="listQuery.actiType" placeholder="请选择活动类型" clearable class="filter-item" @change="selecteType">
             <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
@@ -144,9 +144,12 @@
 </template>
 
 <script>
+// import {
+//   getActivityList, getActivityType, cancelActivity, deleteActivity, cancelApply, pushMessage, deleteDraftActivity
+// } from '@/api/portalManagement/activity'
 import {
-  getActivityList, getActivityType, cancelActivity, deleteActivity, cancelApply, pushMessage, deleteDraftActivity
-} from '@/api/portalManagement/activity'
+  api, paramApi
+} from '@/api/axios'
 export default {
   data() {
     return {
@@ -162,8 +165,8 @@ export default {
         actiType: undefined,
         page: 1,
         rows: 10,
-        actiStatus: undefined,
-        isIndex: undefined
+        actiStatus: '',
+        isIndex: ''
       }
     }
   },
@@ -173,16 +176,16 @@ export default {
   },
   methods: {
     // 二次确认的封装函数
-    secondaryConfirmation(tooltip, successTooltip, api, parameter) {
+    secondaryConfirmation(tooltip, successTooltip, apiName, url, parameter, mothed) {
       this.$confirm(tooltip, '取消提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          api(parameter).then(res => {
+          apiName(url, parameter, mothed).then(res => {
             console.log(res)
-            if (res.data.code === '0000') {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: successTooltip,
                 type: 'success'
@@ -198,20 +201,20 @@ export default {
     },
     // 推送消息
     handlePushMessage(row) {
-      this.secondaryConfirmation('是否推送消息？', '推送消息成功', pushMessage, row.id)
+      this.secondaryConfirmation('是否推送消息？', '推送消息成功', paramApi, `${this.GLOBAL.parkUrl}activity/sendMsgForActivate`, row.id, 'activityId')
     },
     // 恢复报名
     recoverApply(row) {
-      this.secondaryConfirmation('是否恢复报名？', '恢复报名成功', cancelApply, { activityId: row.id, actiStatus: '1' })
+      this.secondaryConfirmation('是否恢复报名？', '恢复报名成功', api, `${this.GLOBAL.parkUrl}activity/updateActivityApply`, { activityId: row.id, actiStatus: '1' }, 'post')
     },
     // 停止报名
     cancelApply(row) {
-      this.secondaryConfirmation('是否停止报名？', '停止报名成功', cancelApply, { activityId: row.id, actiStatus: '0' })
+      this.secondaryConfirmation('是否停止报名？', '停止报名成功', api, `${this.GLOBAL.parkUrl}activity/updateActivityApply`, { activityId: row.id, actiStatus: '0' }, 'post')
     },
     // 批量删除
     handleBatchDeleteActivity() {
       if (this.checkActivity.length > 0) {
-        this.secondaryConfirmation('是否删除这些活动？', '删除成功', deleteActivity, this.checkActivity)
+        this.secondaryConfirmation('是否删除这些活动？', '删除成功', paramApi, `${this.GLOBAL.parkUrl}activity/deleteActivity`, this.checkActivity, 'activityId')
       } else {
         alert('请选择要删除的活动')
       }
@@ -229,14 +232,14 @@ export default {
       if (row.actiStatus !== '1') {
         const arr = []
         arr.push(row.id)
-        this.secondaryConfirmation('是否删除此活动？', '删除成功', deleteActivity, arr)
+        this.secondaryConfirmation('是否删除此活动？', '删除成功', paramApi, `${this.GLOBAL.parkUrl}activity/deleteActivity`, arr, 'activityId')
       } else {
-        this.secondaryConfirmation('是否删除此活动？', '删除成功', deleteDraftActivity, row.id)
+        this.secondaryConfirmation('是否删除此活动？', '删除成功', paramApi, `${this.GLOBAL.parkUrl}activity/deleteDraftActivity`, row.id, 'activityId')
       }
     },
     // 取消活动
     handleCancelActivity(row) {
-      this.secondaryConfirmation('是否取消此活动？', '取消成功', cancelActivity, row.id)
+      this.secondaryConfirmation('是否取消此活动？', '取消成功', paramApi, `${this.GLOBAL.parkUrl}activity/cancelActivity`, row.id, 'activityId')
     },
     handleCreate() {
       this.$router.push({ name: 'activityAdd' })
@@ -247,12 +250,12 @@ export default {
     },
     // 获取活动类型
     getActivityType() {
-      getActivityType().then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.parkUrl}guest/activity/findActivityTypeList`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           res.data.data.rows.forEach(val => {
             this.typeOptions.push({
               value: val.typeId,
-              label: val.actiType
+              label: val.typeName
             })
           })
         } else {
@@ -281,9 +284,9 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      getActivityList(this.listQuery).then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/selectActivityList`, this.listQuery, 'post').then(res => {
         console.log(res)
-        if (res.data.code === '0000') {
+        if (res.data.code === this.GLOBAL.code) {
           this.activityList = res.data.data.rows
           this.total = res.data.data.total
           if (this.activityList.length === 0 && this.total > 0) {
@@ -332,5 +335,18 @@ export default {
 .appNum{
   cursor: pointer;
   text-decoration:underline
+}
+.activity{
+  .el-radio-group .el-radio-button--medium .el-radio-button__inner {
+    padding: 10px 5px;
+    font-size: 13px;
+}
+.el-form--inline .el-form-item{
+  margin-right:0;
+}
+.el-input--suffix .el-input__inner {
+    padding-right: 0;
+    width: 170px;
+}
 }
 </style>

@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class TbFinanceDepartmentToType implements Serializable {
     /*@ApiModelProperty("")*/
-    private Integer id;
+    private String id;
 
     /*@ApiModelProperty("部门ID")*/
     private String departmentId;
@@ -14,7 +14,7 @@ public class TbFinanceDepartmentToType implements Serializable {
     private String departmentName;
 
     /*@ApiModelProperty("财务类型")*/
-    private Integer financeTypeId;
+    private String financeTypeId;
 
     /*@ApiModelProperty("是否删除0标记删除，1正常")*/
     private Byte recordStatus;
@@ -33,12 +33,12 @@ public class TbFinanceDepartmentToType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getDepartmentId() {
@@ -57,12 +57,12 @@ public class TbFinanceDepartmentToType implements Serializable {
         this.departmentName = departmentName == null ? null : departmentName.trim();
     }
 
-    public Integer getFinanceTypeId() {
+    public String getFinanceTypeId() {
         return financeTypeId;
     }
 
-    public void setFinanceTypeId(Integer financeTypeId) {
-        this.financeTypeId = financeTypeId;
+    public void setFinanceTypeId(String financeTypeId) {
+        this.financeTypeId = financeTypeId == null ? null : financeTypeId.trim();
     }
 
     public Byte getRecordStatus() {

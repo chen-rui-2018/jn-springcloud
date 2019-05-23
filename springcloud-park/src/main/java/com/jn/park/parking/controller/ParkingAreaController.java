@@ -6,6 +6,8 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.enums.ParkingExceptionEnum;
 import com.jn.park.parking.model.ParkingAreaParam;
+import com.jn.park.parking.model.ParkingCount;
+import com.jn.park.parking.model.ParkingCountParam;
 import com.jn.park.parking.service.ParkingAreaService;
 import com.jn.park.parking.vo.ParkingAreaDetailVo;
 import com.jn.park.parking.vo.ParkingAreaVo;
@@ -58,6 +60,14 @@ public class ParkingAreaController extends BaseController {
             @RequestParam(value = "areaId") String areaId){
         Assert.notNull(areaId, ParkingExceptionEnum.PARKING_AREA_ID_IS_NOT_NULL.getMessage());
         return new Result<>(parkingAreaService.getParkingAreaDetailById(areaId));
+    }
+
+    @ControllerLog(doAction = " 统计停车场数据")
+    @ApiOperation(value = "统计停车场数据", notes = "统计停车场数据[默认查询当前时间]")
+    @RequestMapping(value = "/countParking",method = RequestMethod.GET)
+    public Result<ParkingCount> countParking(ParkingCountParam parkingCountParam){
+        ParkingCount parkingCount = parkingAreaService.countParking(parkingCountParam);
+        return new Result<>(parkingCount);
     }
 
 }

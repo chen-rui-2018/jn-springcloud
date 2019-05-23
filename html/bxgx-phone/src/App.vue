@@ -16,7 +16,7 @@ export default {
     this.init()
   },
   created () {
-    this.init()
+    // this.init()
     // this.$post({
     //   url: 'http://192.168.10.31:1101/springcloud-app-system/login',
     //   data: {
@@ -28,21 +28,21 @@ export default {
     // })
   },
   methods: {
-    init () {
-      this.api.post({
-        url: 'loginURL',
-        data: {
-          account: 'wangsong',
-          password: 'wangsong'
-        },
-        dataFlag: false,
-        callback: function (res) {
-          if (res.code === '0000') {
-            sessionStorage.token = res.data
-          }
-        }
-      })
-    }
+    // init () {
+    //   this.api.post({
+    //     url: 'loginURL',
+    //     data: {
+    //       account: 'wangsong',
+    //       password: 'wangsong'
+    //     },
+    //     dataFlag: false,
+    //     callback: function (res) {
+    //       if (res.code === '0000') {
+    //         sessionStorage.token = res.data
+    //       }
+    //     }
+    //   })
+    // }
   }
 }
 </script>

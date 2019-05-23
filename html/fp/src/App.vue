@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="{'h-100': $store.state.isMobile}">
+  <div id="app" :class="{'h-100': $store.state.isMobile}" @click="closeM">
 <!--    <router-view></router-view>-->
      <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice') && $store.state.hiddenNav">
       <ul>
@@ -89,6 +89,7 @@ import TechnologyHeader from './components/technologyHeader'
 import './common/font/font.css'
 
 import { isMobile } from '@/util'
+import bus from '@/util/bus'
 
 let timer = null
 
@@ -167,6 +168,9 @@ export default {
           clearInterval(timer)
         }
       },30)
+    },
+    closeM(){
+      bus.$emit('closeKnow');
     }
   }
 }
@@ -196,9 +200,9 @@ export default {
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    .routView{
-      min-height: 500px;
-    }
+    // .routView{
+    //   min-height: 500px;
+    // }
       .fadeIn{
         animation-duration:  0.3s;
         animation-delay:0.4s;

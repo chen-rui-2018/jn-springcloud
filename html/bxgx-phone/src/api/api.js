@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 export default {
-  host: 'http://112.94.22.222:8000/', // api的域名提出来放这里
+  host: 'http://112.94.22.222:8000/',
   apiURL: {
     departList: 'springcloud-park/guest/portal/sp/power/departList', // 实施部门列表
     powerList: 'springcloud-park/guest/portal/sp/power/list', // 权利清单列表
@@ -16,8 +16,8 @@ export default {
     getPlatformList: 'springcloud-enterprise/pd/declaration/list', // 申报平台列表
     loginURL: 'springcloud-app-system/login',
     getActivityDetails: 'springcloud-park/guest/getActivityDetails', // 获取活动详情
-    findProductDetails: 'springcloud-enterprise/servicemarket/product/web/findProductDetails', // 服务产品详情
-    sameTypeProductList: 'springcloud-enterprise/servicemarket/product/web/sameTypeProductList', // 同类型产品
+    findProductDetails: 'springcloud-enterprise/guest/servicemarket/product/web/findProductDetails', // 服务产品详情
+    sameTypeProductList: 'springcloud-enterprise/guest/servicemarket/product/web/sameTypeProductList', // 同类型产品
     activityLike: 'springcloud-park/activity/activityLike/activityLike', // 活动点赞
     CancelLike: 'springcloud-park/activity/activityLike/cancelLike', // 取消点赞
     trafficVolume: 'springcloud-enterprise/guest/pd/declarationNotice/trafficVolume', // 申报中心访问量
@@ -28,7 +28,7 @@ export default {
     talentsVolume: 'springcloud-enterprise/guest/pd/talentNotice/trafficVolume', // 人才服务访问量
     loginURL: 'springcloud-app-system/login'
   },
-  setToken: function (obj) { // 设置token在请求头上面
+  setToken: function (obj) {
     axios.interceptors.request.use(function (config) {
       config.headers['token'] = obj
       return config

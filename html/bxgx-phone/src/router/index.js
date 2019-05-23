@@ -83,6 +83,7 @@ export default new Router({
       name: 'talentsServiceDetail',
       meta: {title: '服务详情'},
       component: () => import('@/views/talentsService/talentsServiceDetail')
+
     }
   ]
 })

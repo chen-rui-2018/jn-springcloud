@@ -50,4 +50,15 @@ public class MeterConstants {
      * 每次保存的次数
      */
     public final static Integer SAVE_SIZE=40;
+
+    /**
+     * 系统用户
+     */
+    public final static String SYSTEM_USER="system";
+
+
+    /**
+     * 电表账本标识
+     */
+    public final static String ELEC_BOOK="1";
 }

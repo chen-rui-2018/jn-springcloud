@@ -180,7 +180,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
             rulesContent.setStart(content.getStart());
             rulesContent.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             rulesContent.setRuleId(id);
-            rulesContent.setProjectName(priceRuleVO.getRuleName());
+            rulesContent.setRuleName(priceRuleVO.getRuleName());
             rulesContents.add(rulesContent);
         }
         //保存计价规则内容

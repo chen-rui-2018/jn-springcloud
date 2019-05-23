@@ -6,6 +6,7 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.company.dao.ServiceCompanyProImgMapper;
 import com.jn.enterprise.company.entity.*;
+import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.model.Company;
 import com.jn.enterprise.company.model.CompanyCheckCallBackParam;
 import com.jn.enterprise.company.model.CompanyCheckParam;
@@ -13,6 +14,7 @@ import com.jn.enterprise.company.model.CompanyProImgParam;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.joinpark.usermanage.model.*;
 import com.jn.enterprise.joinpark.usermanage.service.UserUpgradeService;
 import com.jn.system.log.annotation.ServiceLog;
@@ -159,7 +161,10 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         tbServiceCompanyStaff.setComId(staffCheckParam.getComId());
         tbServiceCompanyStaff.setAccount(account);
         tbServiceCompanyStaff.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
-        tbServiceCompanyStaff.setRecordStatus(new Byte(RECORD_STATUS_VALID));
+        tbServiceCompanyStaff.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_AGREE.getCode());
+        tbServiceCompanyStaff.setInviterAccount(account);
+        tbServiceCompanyStaff.setInviteTime(new Date());
+        tbServiceCompanyStaff.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
         int insert = tbServiceCompanyStaffMapper.insert(tbServiceCompanyStaff);
 
 

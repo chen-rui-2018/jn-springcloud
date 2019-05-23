@@ -1,0 +1,13 @@
+<!--pages/meeting/meetingPerson/meetingPerson.wxml-->
+<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<view class="meetingtitle" hover-class="none" hover-stop-propagation="false">
+  <form bindsubmit="bindFormSubmit" >
+    <view class="section">
+      <view class="section__title">会议主题</view>
+      <input bindinput="changeTitle" class="input" name="theme" placeholder="请输入一个主题" />
+      <text class="icon-select" selectable="false" space="false" decode="false">
+      </text>
+    </view>
+    <button form-type="submit" class="submit" bindtap="goback">完成</button>
+  </form>
+</view>

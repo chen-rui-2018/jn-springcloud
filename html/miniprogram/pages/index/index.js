@@ -1,3 +1,9 @@
+const app = getApp()
+Page({
+  data: {
+    
+  }
+})
 Component({
   data: {
     elements: [

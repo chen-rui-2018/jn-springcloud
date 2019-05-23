@@ -63,9 +63,10 @@
           <img src="@/../static/img/banner11.png" alt="">
         </div>
         <div class="park-desc">
-          <span >{{ parkDesc | formatParkDesc}}</span>
+          <span v-if="!showMore">{{ parkDesc | formatParkDesc}}</span>
+          <span v-else>{{ parkDesc }}</span>
 <!--          <div v-html="basicHtml"></div>-->
-          <more-btn class="more-desc"></more-btn>
+          <more-btn v-if="!showMore" class="more-desc" @click.native="showMore = true"></more-btn>
         </div>
       </div>
       <div class="park-film">
@@ -101,10 +102,9 @@
                 v-for="(list, listIndex) in businessAdPolicy"
                 class="swiper-slide"
               >
-                <ul class="page1 clearfix" ref="poCenter3" data-class="bottom">
+                <ul class="page1 clearfix" data-class="bottom">
                   <li
                     v-for="(item, index) in list"
-                    ref="li11"
                     data-class="left">
                     <div class="left1">N</div>
                     <div class="right1">
@@ -171,7 +171,7 @@
                 :class="{small: index !== 0}"
                 class="multi-park-card">
                 <div class="multi-park-card-cell">
-                  <img :src="index == 0 ?  '@/../static/img/multi-park-poster.png' : 'http://112.94.22.222:2384/ibps'+ item.coverUrl"  alt="">
+                  <img :src="index === 0 ?  '@/../static/img/multi-park-poster.png' : 'http://112.94.22.222:2384/ibps'+ item.coverUrl"  alt="">
                   <div v-if="index !== 0" class="multi-park-desc">
                     <div class="fw-title">{{ item.title }}</div>
                     <div class="gray-tips">{{ item.subTitle }}</div>
@@ -219,7 +219,8 @@
         show2: false,
         show3: false,
         show4: false,
-        parkDesc: '南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科...',
+        showMore: false,
+        parkDesc: '南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科',
         activeNames: ["1"],
         searchData:'',
         showBtn:false,
@@ -234,12 +235,7 @@
       }
     },
     mounted() {
-      this.$router.afterEach((to, from, next) => {
-        window.scrollTo(0, 0);
-      });
       this.init();
-      window.addEventListener("scroll", this.handleScroll);
-      this.formatScrollTop()
     },
     destroyed() {
       window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
@@ -355,6 +351,7 @@
       },
       formatScrollTop() {
         const refs = this.$refs
+        console.dir(refs)
         for (const key in refs) {
           const top = this.getElementLeft(refs[key]);
           const node = {
@@ -426,7 +423,6 @@
                 })
             })
             this.$nextTick(() => {
-              console.dir(this.parkList)
               this.loadingParkList = true
             })
           })
@@ -437,6 +433,8 @@
           this.getBusinessAdPolicy(),
         ])
           .then(() => {
+            this.formatScrollTop()
+            window.addEventListener("scroll", this.handleScroll);
             new swiper(".swiper-container", {
               direction: "horizontal", // 垂直切换选项
               loop: true, // 循环模式选项
@@ -460,7 +458,7 @@
       getBanner() {
         return new Promise((resolve, reject) => {
           this.api.get({
-            url: 'getBusinessPromotionList',
+            url: 'getPromotionList',
             data: {
               approvalStatus: 6,
               status: 1,
@@ -470,6 +468,7 @@
             callback: (res) => {
               if (res.code === "0000") {
                 this.bannerList = res.data.rows
+                console.dir(this.bannerList)
                 resolve()
               } else {
                 reject()
@@ -478,9 +477,6 @@
             }
           })
         })
-      },
-      onchange() {
-        console.log(0);
       },
       handleChange() {
         //   this.sousuo = true;

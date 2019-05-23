@@ -2,12 +2,11 @@ import request from '@/utils/request'
 const baseurl = 'springcloud-hr/'
 const baseUserurl = 'springcloud-app-system/'
 
-
-export function getApi(url,query) {
-  let params='';
-  if(query){
-    for(const i in query){
-      params+=`&${i}=${query[i]}`;
+export function getApi(url, query) {
+  let params = ''
+  if (query) {
+    for (const i in query) {
+      params += `&${i}=${query[i]}`
     }
   }
   return request({
@@ -16,8 +15,7 @@ export function getApi(url,query) {
   })
 }
 
-
-export function postApi(url,query) {
+export function postApi(url, query) {
   return request({
     url: baseurl + `${url}`,
     method: 'post',
@@ -25,7 +23,7 @@ export function postApi(url,query) {
   })
 }
 
-export function postUserApi(url,query) {
+export function postUserApi(url, query) {
   return request({
     url: baseUserurl + `${url}`,
     method: 'post',
@@ -33,8 +31,7 @@ export function postUserApi(url,query) {
   })
 }
 
-
-export function postApi2(url,query) {
+export function postApi2(url, query) {
   return request({
     url: `${url}`,
     method: 'post',
@@ -51,7 +48,6 @@ export function paramApi(url, query, parameter) {
     data: param
   })
 }
-
 
 export function getCode(query) {
   return request({
@@ -79,7 +75,6 @@ export function isvalidPhone(str) {
   return reg.test(str)
 }
 
-
 export function isvalidName(str) {
   const reg = /^[\u4e00-\u9fa5\w]{1,30}$/
   return reg.test(str)
@@ -90,26 +85,25 @@ export function isvalidZjhm(str) {
   return reg.test(str)
 }
 
-export function formatDate(objDate,format){
+export function formatDate(objDate, format) {
   var o = {
-    "M+" : objDate.getMonth()+1, //month
-    "d+" : objDate.getDate(), //day
-    "h+" : objDate.getHours(), //hour
-    "m+" : objDate.getMinutes(), //minute
-    "s+" : objDate.getSeconds(), //second
-    "q+" : Math.floor((this.getMonth()+3)/3), //quarter
-    "S" : objDate.getMilliseconds() //millisecond
+    'M+': objDate.getMonth() + 1, // month
+    'd+': objDate.getDate(), // day
+    'h+': objDate.getHours(), // hour
+    'm+': objDate.getMinutes(), // minute
+    's+': objDate.getSeconds(), // second
+    'q+': Math.floor((this.getMonth() + 3) / 3), // quarter
+    'S': objDate.getMilliseconds() // millisecond
   }
-  if(/(y+)/i.test(format)) {
-    format = format.replace(RegExp.$1, (objDate.getFullYear()+"").substr(4 - RegExp.$1.length));
+  if (/(y+)/i.test(format)) {
+    format = format.replace(RegExp.$1, (objDate.getFullYear() + '').substr(4 - RegExp.$1.length))
   }
-  for(var k in o) {
-    if(new RegExp("("+ k +")").test(format)) {
-      format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
+  for (var k in o) {
+    if (new RegExp('(' + k + ')').test(format)) {
+      format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length))
     }
   }
-  return format;
+  return format
 }
 
-
-export const uploadUrl=baseurl+`hr/common/uploadAttachment`
+export const uploadUrl = baseurl + `hr/common/uploadAttachment`

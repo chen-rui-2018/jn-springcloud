@@ -56,7 +56,7 @@
 
 <script>
 import {
-  api, paramApi
+  api
 } from '@/api/hr/train'
 export default {
   data() {
@@ -106,7 +106,7 @@ export default {
     },
     // 新增/编辑
     handleAddOrEdict(row) {
-      if (row&&row.projectId) {
+      if (row && row.projectId) {
         this.$router.push({ name: 'question-edit', query: { id: row.projectId, title: '编辑问卷' }})
       } else {
         this.$router.push({ name: 'question-add', query: { title: '新建问卷' }})
@@ -128,7 +128,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          let data = { projectId: row.projectId }
+          const data = { projectId: row.projectId }
           api('hr/train/quest/daleteInvestigateQuest', data).then(res => {
             if (res.data.code === '0000') {
               this.$message({
@@ -149,15 +149,15 @@ export default {
     },
     // 结束调研
     handleEnd(projectId) {
-      let data = {
+      const data = {
         projectId: projectId
       }
       api('hr/train/quest/endInvestiageQuest', data).then(res => {
-          if (res.data.code === '0000') {
-            this.$message.success('结束问卷成功！')
-          } else {
-            this.$message.error(res.data.result)
-          }
+        if (res.data.code === '0000') {
+          this.$message.success('结束问卷成功！')
+        } else {
+          this.$message.error(res.data.result)
+        }
       })
     }
   }

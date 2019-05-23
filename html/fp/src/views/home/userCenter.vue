@@ -2,8 +2,8 @@
   <div class="user-center">
     <div class="user-header">
       <div class="user-header-l">
-        <img :src="userInfo.avatar" alt="">
-        <span class="welcome">您好，{{ userInfo.nickName }}</span>
+        <img v-if="userInfo" :src="userInfo.avatar" alt="">
+        <span v-if="userInfo" class="welcome">您好，{{ userInfo.nickName }}</span>
       </div>
       <div class="user-header-r">
         <router-link
@@ -99,7 +99,7 @@
     data() {
       return {
         loading: true,
-        userInfo: {},
+        userInfo: '',
         tagList: [{
           type: 'blue',
           title: '用户资料设置',

@@ -59,4 +59,8 @@ input {
   width: 682px;
   margin: 0 auto;
 }
+
+a:hover {
+  text-decoration: unset;
+}
 /*# sourceMappingURL=reset.css.map */

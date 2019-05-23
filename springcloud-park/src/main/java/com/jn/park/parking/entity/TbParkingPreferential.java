@@ -10,6 +10,9 @@ public class TbParkingPreferential implements Serializable {
     /*@ApiModelProperty("优惠类型 1优惠固定金额2按比例优惠")*/
     private String policyType;
 
+    /*@ApiModelProperty("优惠对象类型[company:企业;user:个人]")*/
+    private String policyUserType;
+
     /*@ApiModelProperty("政策编码")*/
     private String policyCode;
 
@@ -59,6 +62,14 @@ public class TbParkingPreferential implements Serializable {
 
     public void setPolicyType(String policyType) {
         this.policyType = policyType == null ? null : policyType.trim();
+    }
+
+    public String getPolicyUserType() {
+        return policyUserType;
+    }
+
+    public void setPolicyUserType(String policyUserType) {
+        this.policyUserType = policyUserType == null ? null : policyUserType.trim();
     }
 
     public String getPolicyCode() {
@@ -163,6 +174,7 @@ public class TbParkingPreferential implements Serializable {
         TbParkingPreferential other = (TbParkingPreferential) that;
         return (this.getPolicyId() == null ? other.getPolicyId() == null : this.getPolicyId().equals(other.getPolicyId()))
             && (this.getPolicyType() == null ? other.getPolicyType() == null : this.getPolicyType().equals(other.getPolicyType()))
+            && (this.getPolicyUserType() == null ? other.getPolicyUserType() == null : this.getPolicyUserType().equals(other.getPolicyUserType()))
             && (this.getPolicyCode() == null ? other.getPolicyCode() == null : this.getPolicyCode().equals(other.getPolicyCode()))
             && (this.getPolicyComments() == null ? other.getPolicyComments() == null : this.getPolicyComments().equals(other.getPolicyComments()))
             && (this.getOfferPrice() == null ? other.getOfferPrice() == null : this.getOfferPrice().equals(other.getOfferPrice()))
@@ -182,6 +194,7 @@ public class TbParkingPreferential implements Serializable {
         int result = 1;
         result = prime * result + ((getPolicyId() == null) ? 0 : getPolicyId().hashCode());
         result = prime * result + ((getPolicyType() == null) ? 0 : getPolicyType().hashCode());
+        result = prime * result + ((getPolicyUserType() == null) ? 0 : getPolicyUserType().hashCode());
         result = prime * result + ((getPolicyCode() == null) ? 0 : getPolicyCode().hashCode());
         result = prime * result + ((getPolicyComments() == null) ? 0 : getPolicyComments().hashCode());
         result = prime * result + ((getOfferPrice() == null) ? 0 : getOfferPrice().hashCode());
@@ -204,6 +217,7 @@ public class TbParkingPreferential implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", policyId=").append(policyId);
         sb.append(", policyType=").append(policyType);
+        sb.append(", policyUserType=").append(policyUserType);
         sb.append(", policyCode=").append(policyCode);
         sb.append(", policyComments=").append(policyComments);
         sb.append(", offerPrice=").append(offerPrice);

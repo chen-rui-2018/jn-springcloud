@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item :inline="true" class="filter-bar">
         <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="addRow()">添加</el-button>
-        <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="delData()">删除</el-button>
+        <el-button class="filter-item" type="primary" @click="delData()">删除</el-button>
       </el-form-item>
       <div>
         <el-table ref="table" :data="tableData" tooltip-effect="dark" border stripe style="width: 95%" @selection-change="selectRow">

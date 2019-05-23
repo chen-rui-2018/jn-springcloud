@@ -29,6 +29,10 @@
             <groupId>com.jn</groupId>
             <artifactId>xxpay-web-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
     </dependencies>
 
 

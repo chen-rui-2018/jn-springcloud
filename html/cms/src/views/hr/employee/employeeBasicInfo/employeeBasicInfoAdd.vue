@@ -1306,13 +1306,11 @@ export default {
     handleAvatarSuccess(response, file, fileList) {
       console.log('success:' + response)
       let flag = false
-      if (response.code === '0000') {
-        if (response.data && response.data !== '[]') {
-          const url = JSON.parse(response.data)[0].url
-          if (url) {
-            this.addForm.employeePortrait = JSON.parse(response.data)[0].url
-            flag = true
-          }
+      if (response.code === '0000' && response.data && response.data !== '[]') {
+        const url = JSON.parse(response.data)[0].url
+        if (url) {
+          this.addForm.employeePortrait = JSON.parse(response.data)[0].url
+          flag = true
         }
       }
       if (!flag) {
@@ -1322,13 +1320,11 @@ export default {
     handleEducaSuccess(response, file, fileList, index, prop) {
       console.log('success:' + response)
       let flag = false
-      if (response.code === '0000') {
-        if (response.data && response.data !== '[]') {
-          const url = JSON.parse(response.data)[0].url
-          if (url) {
-            this.addForm.educationExperienceList[index][prop] = url
-            flag = true
-          }
+      if (response.code === '0000' && response.data && response.data !== '[]') {
+        const url = JSON.parse(response.data)[0].url
+        if (url) {
+          this.addForm.educationExperienceList[index][prop] = url
+          flag = true
         }
       }
       if (!flag) {
@@ -1661,6 +1657,7 @@ export default {
                 socialSecurityPayment: ''
               }
             }
+            this.addForm.employStatus = res.data.data.employStatus + ''
           } else {
             this.$message.error(res.data.result)
           }

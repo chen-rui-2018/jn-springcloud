@@ -3,16 +3,16 @@
 </template>
 
 <script>
-// import echarts from 'echarts'
+import echarts from 'echarts'
 
-require('echarts/theme/macarons') // echarts theme
+// require('echarts/theme/macarons') // echarts theme
 // echarts相关
-const echarts = require('echarts/lib/echarts')
-require('echarts/lib/chart/bar')
-require('echarts/lib/component/tooltip')
-require('echarts/lib/component/toolbox')
-require('echarts/lib/component/legend')
-require('echarts/lib/component/markLine')
+// let echarts = require('echarts/lib/echarts');
+// require('echarts/lib/chart/bar');
+// require('echarts/lib/component/tooltip');
+// require('echarts/lib/component/toolbox');
+// require('echarts/lib/component/legend');
+// require('echarts/lib/component/markLine');
 
 import { debounce } from '@/utils'
 

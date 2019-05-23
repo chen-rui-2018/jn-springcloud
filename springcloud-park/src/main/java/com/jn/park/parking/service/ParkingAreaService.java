@@ -3,6 +3,8 @@ package com.jn.park.parking.service;
 import com.jn.common.model.PaginationData;
 import com.jn.park.parking.model.ParkingAreaModel;
 import com.jn.park.parking.model.ParkingAreaParam;
+import com.jn.park.parking.model.ParkingCount;
+import com.jn.park.parking.model.ParkingCountParam;
 import com.jn.park.parking.vo.ParkingAreaDetailVo;
 import com.jn.park.parking.vo.ParkingAreaVo;
 import com.jn.park.parking.vo.ParkingServiceTypeVo;
@@ -60,4 +62,11 @@ public interface ParkingAreaService{
      * @return
      */
     String deleteCarPark(String areaId,String userAccount);
+
+    /**
+     * 统计停车场数据
+     * @param parkingCountParam
+     * @return
+     */
+    ParkingCount countParking(ParkingCountParam parkingCountParam);
 }

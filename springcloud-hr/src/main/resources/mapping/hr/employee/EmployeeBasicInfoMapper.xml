@@ -291,10 +291,17 @@
       t1.end_current, t1.work_mailbox, t1.work_phone,
       t1.expiration_date, t1.probation_period, t1.record_status,
       t1.creator_account, t1.created_time, t1.modifier_account,
-      t1.modified_time
+      t1.modified_time,t1.user_id,t1.user_account
         FROM
         `tb_manpower_employee_basic_info` t1
         WHERE t1.record_status != 0 and t1.job_number =#{jobNumber,jdbcType=VARCHAR}
+     </select>
+     
+     <select id="selectByUserId" parameterType="java.lang.String"
+         resultType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo">
+         SELECT * FROM
+        `tb_manpower_employee_basic_info` t1
+        WHERE t1.record_status != 0 and t1.user_id =#{userId,jdbcType=VARCHAR}
      </select>
      
      <select id="selectByDepartment" parameterType="map" resultType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo">
@@ -323,7 +330,7 @@
       t1.end_current, t1.work_mailbox, t1.work_phone,
       t1.expiration_date, t1.probation_period, t1.record_status,
       t1.creator_account, t1.created_time, t1.modifier_account,
-      t1.modified_time,employ_status, user_id, user_account
+      t1.modified_time,employ_status, t1.user_id, t1.user_account
         FROM
         `tb_manpower_employee_basic_info` t1
         WHERE t1.record_status != 0
@@ -361,7 +368,7 @@
       t1.end_current, t1.work_mailbox, t1.work_phone,
       t1.expiration_date, t1.probation_period, t1.record_status,
       t1.creator_account, t1.created_time, t1.modifier_account,
-      t1.modified_time,employ_status, user_id, user_account
+      t1.modified_time,employ_status, t1.user_id, t1.user_account
         FROM
         `tb_manpower_employee_basic_info` t1
         WHERE t1.record_status != 0

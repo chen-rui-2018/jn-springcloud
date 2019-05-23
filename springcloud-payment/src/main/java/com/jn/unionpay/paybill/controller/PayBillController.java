@@ -4,14 +4,14 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.enums.PayBillExceptionEnum;
 import com.jn.paybill.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.unionpay.paybill.service.PayBillService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,23 +72,29 @@ public class PayBillController extends BaseController {
 
     /**
      * 支付发起接口
-     * @param payInitiateParam
+     * @param billId
+     * @param channelId
      * @return
      */
-    @ControllerLog(doAction = "统一缴费--发起支付")
-    @ApiOperation(value = "统一缴费--发起支付")
-    @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
-    public Result<PayResponseVO> startPayment(@RequestBody PayInitiateParam payInitiateParam){
+    @ControllerLog(doAction = "统一缴费--创建支付订单")
+    @ApiOperation(value = "统一缴费--创建支付订单",notes = "支付方式：WX_JSAPI：微信公众号支付，WX_NATIVE：微信原生扫码支付，WX_APP：微信APP支付，" +
+            "WX_MWEB：微信H5支付，ALIPAY_MOBILE：支付宝移动支付，ALIPAY_PC：支付宝PC支付，ALIPAY_WAP：支付宝H5支付，ALIPAY_QR：支付宝当面付之扫码支付")
+    @PostMapping(value = "/createPayOrder")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "billId",value = "账单ID",example = "3054fa6cd4ba4063a447db3e14530496"),
+            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）[详细渠道请参照接口说明]",example = "ALIPAY_MOBILE")})
+    public Result<PayOrderRsp> createPayOrder (String billId, String channelId){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result<>(payBillService.startPayment(payInitiateParam,user));
+        Assert.notNull(billId,"账单编号不能为空");
+        Assert.notNull(channelId,"支付渠道不能为空");
+        return payBillService.createPayOrder(billId,channelId,"0",user);
     }
-
 
     @ControllerLog(doAction = "支付回调接口")
     @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/payCallBack")
-    public Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam){
-        return new Result<>(payBillService.payCallBack(callBackParam));
+    public Result payCallBack(@RequestBody PayOrderNotify payOrderNotify){
+        return payBillService.payCallBack(payOrderNotify);
     }
 
 

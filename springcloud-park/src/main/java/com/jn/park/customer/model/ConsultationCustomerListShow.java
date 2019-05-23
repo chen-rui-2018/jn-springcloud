@@ -20,6 +20,8 @@ public class ConsultationCustomerListShow implements Serializable {
     private String taskId;
     @ApiModelProperty("问题编码")
     private String quesCode;
+    @ApiModelProperty("业务模块名称")
+    private String serviceModuleName;
     @ApiModelProperty("问题标题")
     private String quesTitle;
     @ApiModelProperty("问题详情")
@@ -27,7 +29,7 @@ public class ConsultationCustomerListShow implements Serializable {
     @ApiModelProperty("处理状态(0：待处理 1：处理中 2：已处理 3：无法处理)")
     private String status;
     @ApiModelProperty("发布时间")
-    private Date createdTime;
+    private String createdTime;
 
     public String getProcessInsId() {
         return processInsId;
@@ -61,6 +63,14 @@ public class ConsultationCustomerListShow implements Serializable {
         this.quesTitle = quesTitle;
     }
 
+    public String getServiceModuleName() {
+        return serviceModuleName;
+    }
+
+    public void setServiceModuleName(String serviceModuleName) {
+        this.serviceModuleName = serviceModuleName;
+    }
+
     public String getQuesDetails() {
         return quesDetails;
     }
@@ -77,11 +87,11 @@ public class ConsultationCustomerListShow implements Serializable {
         this.status = status;
     }
 
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 

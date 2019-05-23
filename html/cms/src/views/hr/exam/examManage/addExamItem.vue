@@ -12,7 +12,7 @@
       <el-header style="line-height: 60px;">基本信息</el-header>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
         <el-form-item label="考试名称" prop="examinaName" style="width: 500px;">
-          <el-input v-model="ruleForm.examinaName" />
+          <el-input v-model="ruleForm.examinaName" clearable />
         </el-form-item>
         <el-form-item label="有效时间" required style="width: 500px;">
           <el-form-item prop="date1">
@@ -22,6 +22,7 @@
                 :default-time="['12:00:00']"
                 type="datetimerange"
                 value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 @change="chanageDate" />
@@ -29,15 +30,15 @@
           </el-form-item>
         </el-form-item>
         <el-form-item label="考试须知" prop="examinaNotes" style="width: 500px;">
-          <el-input v-model="ruleForm.examinaNotes" type="textarea" />
+          <el-input v-model="ruleForm.examinaNotes" type="textarea" clearable />
         </el-form-item>
       </el-form>
       <el-footer style="text-align: center;">
         <el-button type="primary" @click="submitForm('ruleForm')">保存 & 去设计试卷</el-button>
-        <el-button type="primary" @click="$router.go(-1)">返回</el-button>
+        <el-button @click="$router.go(-1)">返回</el-button>
       </el-footer>
     </div>
-    <div v-show="active===2" class="stepsBox2">
+    <div v-show="active==2" class="stepsBox2">
       <div>
         <el-header class="el-head">
           <span>第1大题</span>
@@ -53,26 +54,27 @@
           <el-table-column type="index" prop="date" label="序号" width="60" />
           <el-table-column prop="testQuestionTypeStr" label="试题类型" width="120" />
           <el-table-column prop="examinationQuestion" label="试题内容" />
-          <el-table-column prop="answerNumber" label="标准答案" width="120" />
+          <el-table-column label="标准答案" width="120">
+            <template slot-scope="scope">
+              <p v-if="scope.row.testQuestionType==3">{{ scope.row.answerHtml }}</p>
+              <p v-else>{{ scope.row.standardAnswer?scope.row.standardAnswer:scope.row.answerNumber }}</p>
+            </template>
+          </el-table-column>
           <el-table-column label="分数" width="160">
             <template slot-scope="scope">
               <el-input-number v-model="scope.row.fraction" :min="1" size="mini" label="请输入分数" />
-              <!--<el-input v-model="scope.row.fraction" placeholder="请输入内容"></el-input>-->
-              <!--<input style="width: 80px;" v-model="scope.row.fraction" type="text" />-->
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="100">
             <template slot-scope="scope">
-
               <el-button type="text" size="small" @click="addExam('edit',scope.row)">编辑</el-button>
               <el-button type="text" size="small" @click="delExam(scope.$index,scope.row)">删除</el-button>
-
             </template>
           </el-table-column>
         </el-table>
         <el-footer style="text-align: center;padding: 10px;">
           <el-button type="primary" @click="submitForm2()">完成设计&去发布考试</el-button>
-          <el-button type="primary" @click="goBack()">上一步</el-button>
+          <el-button @click="goBack()">上一步</el-button>
         </el-footer>
         <!--试卷设置-->
         <el-dialog :visible.sync="dialogFormVisible" title="考试设置">
@@ -102,7 +104,6 @@
         <!--试题选择-->
         <el-dialog :visible.sync="dialogExamVisible" title="从试题库选择" width="80%">
           <examination-lists v-if="dialogExamVisible" @confirmOption="confirmOption" />
-
         </el-dialog>
         <!--新增或者编辑试题-->
         <el-dialog :title="titleType" :visible.sync="adddialogExamVisible" width="80%">
@@ -113,7 +114,6 @@
     <div v-show="active==3" class="stepsBox3">
       <p class="stepsBox3-head">以下任意一种方式通知考生参加考试</p>
       <div class="stepsBox3-content">
-
         <el-form :model="formData3" label-width="360px" label-position="left">
           <el-form-item label="1、将二维码发给考生，扫描参加考试">
             <vue-qr :size="191" :margin="0" :auto-color="true" :dot-scale="1" :text="formData3.examinaUrl" />
@@ -131,7 +131,7 @@
               <!--</el-input>-->
           </el-form-item>
           <el-form-item label="3、发送考试邮件，通知考生参加考试">
-            <el-button icon="el-icon-message">发送考试通知</el-button>
+            <el-button icon="el-icon-message" @click="emitDialogVisible=true">发送考试通知</el-button>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -139,12 +139,16 @@
           <el-button @click="goBack()">上一步</el-button>
         </div>
       </div>
+      <!--发送邮件-->
+      <el-dialog :visible.sync="emitDialogVisible" :modal-append-to-body="false" title="发送通知" width="80%">
+        <emit-dialog v-if="emitDialogVisible" :exam-item="formData3" @confirmEmit="confirmEmit" />
+      </el-dialog>
     </div>
-
   </div>
 </template>
 
 <script>
+import emitDialog from '../components/emitDialog'
 import VueQr from 'vue-qr'
 import examinationLists from '../components/examinationList'
 import examinationAddDialog from '../components/examinationAddDialog'
@@ -158,7 +162,8 @@ export default {
   components: {
     VueQr,
     examinationAddDialog,
-    examinationLists
+    examinationLists,
+    emitDialog
   },
   data() {
     return {
@@ -166,8 +171,10 @@ export default {
       value1: '',
       dialogExamVisible: false,
       adddialogExamVisible: false,
+      emitDialogVisible: false,
       titleType: '新增试题',
       examItem: {},
+      examinaDetails: {},
       ruleForm: {
         date1: '',
         examinaName: '',
@@ -248,11 +255,12 @@ export default {
     // 计算属性的 getter
     columnTotal: function() {
       // `this` 指向 vm 实例
-      // this.ruleForm.totalScore = this.ruleForm.examinabanksList
-      //   .map(row =>
-      //     parseFloat(row.fraction) > 0 ? parseFloat(row.fraction) : 0
-      //   )
-      //   .reduce((acc, cur) => cur + acc, 0)
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.ruleForm.totalScore = this.ruleForm.examinabanksList
+        .map(row =>
+          parseFloat(row.fraction) > 0 ? parseFloat(row.fraction) : 0
+        )
+        .reduce((acc, cur) => cur + acc, 0)
       return this.ruleForm.examinabanksList
         .map(row =>
           parseFloat(row.fraction) > 0 ? parseFloat(row.fraction) : 0
@@ -413,9 +421,9 @@ export default {
       addExamSendExam(this.ruleForm).then(res => {
         if (res.data.code === '0000') {
           console.log(res)
-          this.formData3.examinaUrl = res.data.data.examinaUrl
+          this.formData3 = res.data.data
           this.dialogFormVisible = false
-          console.log(this.formData3)
+          //						this.examinaDetails = res.data.data
           this.next()
         } else {
           this.$message.error(res.data.result)
@@ -430,6 +438,11 @@ export default {
         type: 'success',
         duration: 1500
       })
+    },
+    /* 邮件弹出窗回调*/
+    confirmEmit(obj) {
+      console.log(obj)
+      this.emitDialogVisible = false
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -453,7 +466,8 @@ export default {
       .searchAroblem {
         width: 180px;
       }
-      // .addAroblem {}
+      .addAroblem {
+      }
     }
   }
   .stepsBox3 {

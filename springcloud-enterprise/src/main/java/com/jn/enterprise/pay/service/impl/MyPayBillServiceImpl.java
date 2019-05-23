@@ -235,12 +235,51 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @ServiceLog(doAction = "我的账单-我的账单-核查提醒录入")
     @Override
     public void billCheckReminder(PayCheckReminder payCheckReminder, User user) {
-        TbPayCheckReminder checkReminder = new TbPayCheckReminder();
-        checkReminder.setCreatorAccount(user.getAccount());
-        checkReminder.setCreatedTime(new Date());
-        checkReminder.setRecordStatus(PdStatusEnums.EFFECTIVE.getCode());
-        BeanUtils.copyProperties(payCheckReminder, checkReminder);
-        tbPayCheckReminderMapper.insertSelective(checkReminder);
+        TbPayBillCriteria billCriteria = new TbPayBillCriteria();
+        List<String> strings = Arrays.asList(payCheckReminder.getBillIds());
+        billCriteria.createCriteria().andBillIdIn(strings).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        List<TbPayBill> tbPayBills = tbPayBillMapper.selectByExample(billCriteria);
+        if (null == tbPayBills || tbPayBills.size() == 0) {
+            /**判断账单是否存在*/
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
+        }
+        if (tbPayBills.size() != payCheckReminder.getBillIds().length) {
+            /**判断选择核对提醒的账单是否与实际查询有效账单一致*/
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT, "选择账单数: " + payCheckReminder.getBillIds().length
+                    + " 条与实际有效账单数: " + tbPayBills.size() + " 条不匹配，请刷新页面再试。");
+        }
+        for (TbPayBill tb: tbPayBills) {
+            if(!tb.getBillReceiver().equals(user.getAccount())){
+                /**判断选择的账单是否是当前用户的账单*/
+                throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_ACCOUNT_NOT_EXIT);
+            }
+            if(tb.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode())){
+                /**验证该账单是否已支付*/
+                throw new JnSpringCloudException(PaymentBillExceptionEnum.PAYMENT_STATUS_IS_PAY_REMIND,"账单已支付，无需核对提醒,账单编号："+tb.getBillId()+",账单名称："+tb.getBillName());
+            }
+        }
+        TbPayCheckReminderCriteria tbPayCheckReminderCriteria = new TbPayCheckReminderCriteria();
+        tbPayCheckReminderCriteria.createCriteria().andBillIdIn(strings).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        List<TbPayCheckReminder> tbBooks = tbPayCheckReminderMapper.selectByExample(tbPayCheckReminderCriteria);
+        for (TbPayCheckReminder tbs: tbBooks) {
+            boolean bo = strings.contains(tbs.getBillId());
+            if(bo){
+                /**判断选择的账单是否已发送核对提醒*/
+                throw new JnSpringCloudException(PaymentBillExceptionEnum.PAYMENT_REMIND_IS_SEND_OUT,"已发送核对提醒，无需重复发送,账单编号："+tbs.getBillId());
+            }
+        }
+        /**插入核对提醒数据开始*/
+        logger.info("执行核对提醒插入信息操作,入參【{}】", payCheckReminder.toString());
+        for (String tb: strings) {
+            TbPayCheckReminder checkReminder = new TbPayCheckReminder();
+            BeanUtils.copyProperties(payCheckReminder, checkReminder);
+            checkReminder.setBillId(tb);
+            checkReminder.setCreatorAccount(user.getAccount());
+            checkReminder.setCreatedTime(new Date());
+            checkReminder.setRecordStatus(PdStatusEnums.EFFECTIVE.getCode());
+            tbPayCheckReminderMapper.insertSelective(checkReminder);
+        }
+        logger.info("执行核对提醒插入信息操作结束");
     }
 
     @ServiceLog(doAction = "我的账单-创建账单")
@@ -376,8 +415,8 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @ServiceLog(doAction = "我的账单-统一缴费发起支付")
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public Result<PayOrderRsp> startPayment(PayBIllInitiateParam payBIllInitiateParam, User user) {
-        String[] billIds = payBIllInitiateParam.getBillIds();
+    public Result<PayOrderRsp> startPayment(CreateOrderAndPayReqModel createOrderAndPayReqModel, User user) {
+        String[] billIds = createOrderAndPayReqModel.getGoodsIdArr();
         if (null == billIds || billIds.length == 0) {
             /**判断前端传的账单ID是否为空*/
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_ID_IS_NOT_NULL);
@@ -390,9 +429,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             /**判断账单是否存在*/
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
         }
-        if (tbPayBills.size() != payBIllInitiateParam.getBillIds().length) {
+        if (tbPayBills.size() != createOrderAndPayReqModel.getGoodsIdArr().length) {
             /**判断选择缴费的账单是否与实际有效账单一致*/
-            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT, "选择账单数: " + payBIllInitiateParam.getBillIds().length
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT, "选择账单数: " + createOrderAndPayReqModel.getGoodsIdArr().length
                     + " 条与实际有效账单数: " + tbPayBills.size() + " 条不匹配，请刷新页面再试。");
         }
 
@@ -414,13 +453,16 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             }
             sb.append(bill.getBillId());
         }
+        //todo 中原，校验下支付金额
+
         Result<PayOrderRsp> result;
-        try {
+
             /**调用支付接口发起支付*/
             logger.info("开始调用统一缴费发起支付接口操作");
             PayOrderReq payOrderReq = new PayOrderReq();
             payOrderReq.setMchOrderNo(UUID.randomUUID().toString().replaceAll("-", ""));
-            payOrderReq.setChannelId(payBIllInitiateParam.getChannelId());
+            //payOrderReq.setChannelId(payBIllInitiateParam.getChannelId());
+            payOrderReq.setChannelId(createOrderAndPayReqModel.getChannelId());
             payOrderReq.setAmount(Long.parseLong(MoneyUtils.changeY2F(String.valueOf(totalAmount))));
             payOrderReq.setParam1(sb.toString());
             payOrderReq.setMchId(MchIdEnum.MCH_BASE.getCode());
@@ -454,21 +496,19 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 logger.info("调用统一支付下单接口，返回成功状态，更新统一订单号到账单表操作结束");
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，便于核查验证账单操作开始");
                 TbPayBillMiddle tbPayBillMiddle = new TbPayBillMiddle();
-                tbPayBillMiddle.setBillIds(billIds.toString());
+                tbPayBillMiddle.setBillIds(sb.toString());
                 tbPayBillMiddle.setOrderNumber(payOrderReq.getMchOrderNo());
                 tbPayBillMiddle.setPayOrderId(result.getData().getPayOrderId());
                 tbPayBillMiddle.setTotalMoney(totalAmount);
                 tbPayBillMiddle.setStatus(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
                 tbPayBillMiddle.setCreatedTime(new Date());
-                tbPayBillMiddle.setCreatorAccount(user.getAccount());
+                tbPayBillMiddle.setCreatorAccount(createOrderAndPayReqModel.getUserAccount());
                 tbPayBillMiddle.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，入參【{}】", tbPayBillMiddle.toString());
                 tbPayBillMiddleMapper.insertSelective(tbPayBillMiddle);
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，便于核查验证账单操作结束");
             }
-        } catch (Exception e) {
-            throw new JnSpringCloudException(PaymentBillExceptionEnum.NETWORK_ANOMALY);
-        }
+
         return result;
     }
 
@@ -496,7 +536,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         logger.info("调用支付查询接口，返回参数:{}", rep);
 
         /**支付成功*/
-        if (rep.getData().getStatus().equals(PaymentBillCallBackEnum.BILL_CALL_BACK_OK.getCode())) {
+        if (rep.getData().getStatus().toString().equals(PaymentBillCallBackEnum.BILL_CALL_BACK_OK.getCode())) {
             try {
                 TbPayBillCriteria billCriteria = new TbPayBillCriteria();
                 billCriteria.createCriteria().andOrderNumberEqualTo(rep.getData().getMchOrderNo()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
@@ -548,7 +588,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_QUERY_ERROR);
             }
             /**支付中*/
-        } else if (rep.getData().getStatus().equals(PaymentBillCallBackEnum.BILL_CALL_BACK_WAIT.getCode())) {
+        } else if (rep.getData().getStatus().toString().equals(PaymentBillCallBackEnum.BILL_CALL_BACK_WAIT.getCode())) {
             logger.info("支付状态为支付中，无需回调");
             return new Result("-1", "支付状态为支付中，无需回调");
         } else {
@@ -560,9 +600,11 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @Override
     @ServiceLog(doAction = "预缴充值")
     @Transactional(rollbackFor = RuntimeException.class)
-    public Result<PayOrderRsp> insertPrepaidRecharge(PayPrepaidRechargeParam payPrepaidRechargeParam, User user) {
+    public Result<PayOrderRsp> insertPrepaidRecharge(CreateOrderAndPayReqModel createOrderAndPayReqModel, User user) {
+        //账本就是商品
+        String acBookId=createOrderAndPayReqModel.getGoodsIdArr()[0];
         /**查询传的账本编号是否存在*/
-        TbPayAccountBook tbPayAccountBook = tbPayAccountBookMapper.selectByPrimaryKey(payPrepaidRechargeParam.getAcBookId());
+        TbPayAccountBook tbPayAccountBook = tbPayAccountBookMapper.selectByPrimaryKey(acBookId);
         if (null == tbPayAccountBook) {
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_BOOK_IS_NOT_EXIT);
         }
@@ -572,8 +614,8 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             logger.info("开始调用发起支付接口操作");
             PayOrderReq payOrderReq = new PayOrderReq();
             payOrderReq.setMchOrderNo(UUID.randomUUID().toString().replaceAll("-", ""));
-            payOrderReq.setChannelId(ChannelIdEnum.ALIPAY_MOBILE.getCode());
-            payOrderReq.setAmount(Long.parseLong(MoneyUtils.changeY2F(String.valueOf(payPrepaidRechargeParam.getRechargeAmount()))));
+            payOrderReq.setChannelId(createOrderAndPayReqModel.getChannelId());
+            payOrderReq.setAmount(Long.parseLong(MoneyUtils.changeY2F(String.valueOf(createOrderAndPayReqModel.getPaySum()))));
             payOrderReq.setMchId(MchIdEnum.MCH_BASE.getCode());
             payOrderReq.setSubject("预缴充值");
             payOrderReq.setBody("预缴充值");
@@ -600,13 +642,13 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 /**返回成功状态，更新信息到账单中间表*/
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，便于核查验证账单操作开始");
                 TbPayBillMiddle tbPayBillMiddle = new TbPayBillMiddle();
-                tbPayBillMiddle.setBillIds(payPrepaidRechargeParam.getAcBookId());
+                tbPayBillMiddle.setBillIds(acBookId);
                 tbPayBillMiddle.setOrderNumber(payOrderReq.getMchOrderNo());
                 tbPayBillMiddle.setPayOrderId(result.getData().getPayOrderId());
-                tbPayBillMiddle.setTotalMoney(payPrepaidRechargeParam.getRechargeAmount());
+                tbPayBillMiddle.setTotalMoney(createOrderAndPayReqModel.getPaySum());
                 tbPayBillMiddle.setStatus(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
                 tbPayBillMiddle.setCreatedTime(new Date());
-                tbPayBillMiddle.setCreatorAccount(user.getAccount());
+                tbPayBillMiddle.setCreatorAccount(createOrderAndPayReqModel.getUserAccount());
                 tbPayBillMiddle.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
                 tbPayBillMiddleMapper.insertSelective(tbPayBillMiddle);
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，便于核查验证账单操作结束");
@@ -639,7 +681,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         Result<PayOrderQueryRsp> rep = payOrderClient.payOrderQuery(req);
         logger.info("调用支付查询接口，返回参数:{}", rep);
         /**支付成功*/
-        if (rep.getData().getStatus().equals(PaymentBillCallBackEnum.BILL_CALL_BACK_OK.getCode())) {
+        if (rep.getData().getStatus().toString().equals(PaymentBillCallBackEnum.BILL_CALL_BACK_OK.getCode())) {
             try {
                 TbPayBillMiddleCriteria billCriteria = new TbPayBillMiddleCriteria();
                 billCriteria.createCriteria().andOrderNumberEqualTo(rep.getData().getMchOrderNo()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
@@ -691,14 +733,13 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         try {
             /**先补充账本金额*/
             logger.info("调用统一支付下单接口回调，更新信息，先补充账本金额操作开始");
+            TbPayAccountBook tbPay = tbPayAccountBookMapper.selectByPrimaryKey(tbPayAccountBook.getAcBookId());
             BigDecimal totalAmount = new BigDecimal(0);
             BigDecimal decimal = new BigDecimal(String.valueOf(tbPayBill.getBillExpense()));
-            totalAmount = totalAmount.add(decimal).add(tbPayAccountBook.getBalance());
-            TbPayAccountBook pb = new TbPayAccountBook();
-            pb.setAcBookId(tbPayAccountBook.getAcBookId());
-            pb.setBalance(totalAmount);
-            logger.info("调用统一支付下单接口回调，更新信息，先补充账本金额操作，入參【{}】", pb.toString());
-            tbPayAccountBookMapper.updateByPrimaryKeySelective(pb);
+            totalAmount = totalAmount.add(decimal).add(tbPay.getBalance());
+            tbPay.setBalance(totalAmount);
+            logger.info("调用统一支付下单接口回调，更新信息，先补充账本金额操作，入參【{}】", tbPay.toString());
+            tbPayAccountBookMapper.updateByPrimaryKeySelective(tbPay);
             logger.info("调用统一支付下单接口回调，更新信息，先补充账本金额操作结束");
             /**插入流水表记录*/
             logger.info("调用统一支付下单接口回调，插入流水表记录操作开始");
@@ -713,12 +754,12 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tpbmr.setPaymentMethod(PaymentBillMethodEnum.BILL_STATE_ALIPAY_.getMessage());
             }
             tpbmr.setPaymentAction(PaymentBillActionEnum.BILL_STATE_MANUAL.getCode());
-            tpbmr.setNatureCode(tbPayBill.getAcBookType());
+            tpbmr.setNatureCode(PaymentBillEnum.BILL_ACCOUNT_BOOK_RECHARGE.getCode());
             tpbmr.setRemark(tbPayBill.getBillSource());
             tpbmr.setMoney(tbPayBill.getBillExpense());
             tpbmr.setBalance(totalAmount);
             tpbmr.setCreatedTime(new Date());
-            tpbmr.setCreatorAccount(user.getAccount());
+            tpbmr.setCreatorAccount("wangsong");
             tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
             logger.info("调用统一支付下单接口回调，插入流水表记录操作，入參【{}】", tpbmr.toString());
             tbPayAccountBookMoneyRecordMapper.insertSelective(tpbmr);
@@ -741,11 +782,13 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         try {
             /**再扣除账本金额*/
             logger.info("调用统一支付下单接口回调，更新信息，再减去账本金额操作开始");
-            BigDecimal totalAmount = new BigDecimal(0);
+            /**查询账本最新余额*/
+            TbPayAccountBook tbPay = tbPayAccountBookMapper.selectByPrimaryKey(tbPayAccountBook.getAcBookId());
+            BigDecimal totalAmount = new BigDecimal(tbPay.getBalance().toString());
             totalAmount = totalAmount.subtract(tbPayBill.getBillExpense());
-            tbPayAccountBook.setBalance(totalAmount);
-            logger.info("调用统一支付下单接口回调，更新信息，再减去账本金额操作,入參【{}】", tbPayAccountBook.toString());
-            tbPayAccountBookMapper.updateByPrimaryKeySelective(tbPayAccountBook);
+            tbPay.setBalance(totalAmount);
+            logger.info("调用统一支付下单接口回调，更新信息，再减去账本金额操作,入參【{}】", tbPay.toString());
+            tbPayAccountBookMapper.updateByPrimaryKeySelective(tbPay);
             logger.info("调用统一支付下单接口回调，更新信息，再减去账本金额操作结束");
             /**插入流水表记录*/
             logger.info("调用统一支付下单接口回调，插入流水表记录操作开始");
@@ -760,12 +803,12 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tpbmr.setPaymentMethod(PaymentBillMethodEnum.BILL_STATE_ALIPAY_.getMessage());
             }
             tpbmr.setPaymentAction(PaymentBillActionEnum.BILL_STATE_MANUAL.getCode());
-            tpbmr.setNatureCode(tbPayBill.getAcBookType());
+            tpbmr.setNatureCode(PaymentBillEnum.BILL_ACCOUNT_BOOK_FEE.getCode());
             tpbmr.setRemark(tbPayBill.getBillSource());
             tpbmr.setMoney(tbPayBill.getBillExpense());
             tpbmr.setBalance(totalAmount);
             tpbmr.setCreatedTime(new Date());
-            tpbmr.setCreatorAccount(user.getAccount());
+            tpbmr.setCreatorAccount("wangsong");
             tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
             logger.info("调用统一支付下单接口回调，插入流水表记录操作,入參【{}】", tpbmr.toString());
             tbPayAccountBookMoneyRecordMapper.insertSelective(tpbmr);

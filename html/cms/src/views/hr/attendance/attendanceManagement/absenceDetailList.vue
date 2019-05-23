@@ -130,7 +130,8 @@ export default {
     float: right;
     margin-bottom: 20px;
   }
-  .cl{
-    clear:both
+
+  .cl {
+    clear: both
   }
 </style>

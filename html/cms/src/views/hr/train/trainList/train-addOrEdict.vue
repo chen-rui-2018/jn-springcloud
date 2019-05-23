@@ -4,25 +4,62 @@
       <el-row type="flex" justify="center">
         <el-col :span="16">
           <el-form ref="formData" :model="formData" label-width="100px">
-            <el-form-item :rules="{required: true, message: '课程名称不能为空', trigger: 'blur'}" label="课程名称" prop="courseTitle">
-              <el-col :span="11"><el-input v-model="formData.courseTitle" clearable/></el-col>
-            </el-form-item>
-            <el-form-item :rules="{required: true, message: '培训老师不能为空', trigger: 'blur'}" label="培训老师" prop="trainTeacher">
-              <el-col :span="11"><el-input v-model="formData.trainTeacher" clearable/></el-col>
-            </el-form-item>
-            <el-form-item :rules="{required: true, message: '培训地点不能为空', trigger: 'blur'}" label="培训地点" prop="trainVenue">
-              <el-col :span="11"><el-input v-model="formData.trainVenue" clearable/></el-col>
-            </el-form-item>
-            <el-form-item :rules="{required: true, message: '培训时间不能为空', trigger: 'blur'}" label="培训时间">
+            <el-form-item
+              :rules="{required: true, message: '课程名称不能为空', trigger: 'blur'}"
+              label="课程名称"
+              prop="courseTitle"
+            >
               <el-col :span="11">
-                <el-date-picker v-model="formData.trainStartTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始时间" style="width: 100%;"/>
+                <el-input v-model="formData.courseTitle" clearable/>
+              </el-col>
+            </el-form-item>
+            <el-form-item
+              :rules="{required: true, message: '培训老师不能为空', trigger: 'blur'}"
+              label="培训老师"
+              prop="trainTeacher"
+            >
+              <el-col :span="11">
+                <el-input v-model="formData.trainTeacher" clearable/>
+              </el-col>
+            </el-form-item>
+            <el-form-item
+              :rules="{required: true, message: '培训地点不能为空', trigger: 'blur'}"
+              label="培训地点"
+              prop="trainVenue"
+            >
+              <el-col :span="11">
+                <el-input v-model="formData.trainVenue" clearable/>
+              </el-col>
+            </el-form-item>
+            <el-form-item
+              :rules="{required: true, message: '培训时间不能为空', trigger: 'blur'}"
+              label="培训时间"
+            >
+              <el-col :span="11">
+                <el-date-picker
+                  v-model="formData.trainStartTime"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="开始时间"
+                  style="width: 100%;"
+                />
               </el-col>
               <el-col :span="1" style="text-align:center;">至</el-col>
               <el-col :span="11">
-                <el-date-picker v-model="formData.trainEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束时间" style="width: 100%;"/>
+                <el-date-picker
+                  v-model="formData.trainEndTime"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="结束时间"
+                  style="width: 100%;"
+                />
               </el-col>
             </el-form-item>
-            <el-form-item :rules="{required: true, message: '课程介绍不能为空', trigger: 'blur'}" label="课程介绍" prop="trainInfo">
+            <el-form-item
+              :rules="{required: true, message: '课程介绍不能为空', trigger: 'blur'}"
+              label="课程介绍"
+              prop="trainInfo"
+            >
               <div class="editor-container">
                 <UE ref="ue" :default-msg="defaultMsg" :config="config"/>
               </div>
@@ -41,10 +78,7 @@
 
 <script>
 import UE from '@/components/ue.vue'
-// import store from '@/store'
-import {
-  api
-} from '@/api/hr/train'
+import { api } from '@/api/hr/train'
 export default {
   components: { UE },
   data() {
@@ -86,7 +120,7 @@ export default {
     submit() {
       const query = this.$route.query
       this.formData.trainInfo = this.$refs.ue.getUEContent()
-      this.$refs['formData'].validate((valid) => {
+      this.$refs['formData'].validate(valid => {
         let url
         if (valid) {
           if (query.id) {

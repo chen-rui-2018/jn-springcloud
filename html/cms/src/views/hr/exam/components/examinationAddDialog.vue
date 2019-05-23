@@ -1,5 +1,4 @@
 <template>
-
   <div class="examDialog">
     <el-card>
       <el-form ref="addForm" :model="addForm" :rules="rules" label-width="120px">
@@ -10,8 +9,9 @@
             clearable
             style="width: 200px"
             class="filter-item"
-            @change="clearForm">
-            <el-option label="请选择" value=""/>
+            @change="clearForm"
+          >
+            <el-option label="请选择" value/>
             <el-option label="单选" value="1"/>
             <el-option label="多选" value="2"/>
             <el-option label="问答题" value="3"/>
@@ -19,11 +19,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="试题内容：" prop="examinationQuestion">
-          <el-input v-model="addForm.examinationQuestion" type="textarea" placeholder="" clearable/>
+          <el-input v-model="addForm.examinationQuestion" type="textarea" placeholder clearable/>
         </el-form-item>
         <div class="exam-bg">
           <div class="exam-hd" vi-if="addForm.testQuestionType!=3">
-            <h4>设置正确答案</h4><span>选项内容</span>
+            <h4>设置正确答案</h4>
+            <span>选项内容</span>
           </div>
           <div class="cl"/>
           <div v-if="addForm.testQuestionType=='1'" class="exam-option-radio">
@@ -35,13 +36,15 @@
                       :label="item.optionId+':'"
                       :prop="'optionList.' + index + '.optionName'"
                       :rules="{required: true, message: '请输入选项内容', trigger: 'blur'}"
-                      label-width="30px">
+                      label-width="30px"
+                    >
                       <el-input
                         v-model="item.optionName"
                         type="text"
                         style="width:800px;"
-                        placeholder=""
-                        clearable/>
+                        placeholder
+                        clearable
+                      />
                     </el-form-item>
                   </el-radio>
                   <el-button
@@ -50,13 +53,13 @@
                     size="small"
                     icon="el-icon-delete"
                     circle
-                    @click="deleteOption(index)"/>
+                    @click="deleteOption(index)"
+                  />
                 </li>
               </ul>
             </el-radio-group>
             <div class="cl"/>
-            <el-button class="filter-item" type="primary" @click="addOption">添加
-            </el-button>
+            <el-button class="filter-item" type="primary" @click="addOption">添加</el-button>
           </div>
           <div v-if="addForm.testQuestionType=='2'" class="exam-option-checkbox">
             <el-checkbox-group v-model="answers">
@@ -67,13 +70,15 @@
                       :label="item.optionId+':'"
                       :prop="'optionList.' + index + '.optionName'"
                       :rules="{required: true, message: '请输入选项内容', trigger: 'blur'}"
-                      label-width="30px">
+                      label-width="30px"
+                    >
                       <el-input
                         v-model="item.optionName"
                         type="text"
                         style="width:800px;"
-                        placeholder=""
-                        clearable/>
+                        placeholder
+                        clearable
+                      />
                     </el-form-item>
                   </el-checkbox>
                   <el-button
@@ -82,20 +87,18 @@
                     size="small"
                     icon="el-icon-delete"
                     circle
-                    @click="deleteOption(index)"/>
+                    @click="deleteOption(index)"
+                  />
                 </li>
               </ul>
             </el-checkbox-group>
             <div class="cl"/>
-            <el-button class="filter-item" type="primary" @click="addOption">添加
-            </el-button>
+            <el-button class="filter-item" type="primary" @click="addOption">添加</el-button>
           </div>
           <div v-if="addForm.testQuestionType=='3'" class="exam-option-question">
-
             <el-form-item label="答案：" prop="answerHtml">
-              <el-input v-model="addForm.answerHtml" type="textarea" placeholder="" clearable/>
+              <el-input v-model="addForm.answerHtml" type="textarea" placeholder clearable/>
             </el-form-item>
-
           </div>
           <div v-if="addForm.testQuestionType=='4'" class="exam-option-judge">
             <el-form-item label="答案：">
@@ -112,9 +115,10 @@
                     v-model="addForm.fraction"
                     :maxlength="3"
                     type="number"
-                    placeholder=""
+                    placeholder
                     clearable
-                    style="width: 200px"/>
+                    style="width: 200px"
+                  />
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -124,8 +128,9 @@
                     placeholder="请选择"
                     clearable
                     style="width: 200px"
-                    class="filter-item">
-                    <el-option label="请选择" value=""/>
+                    class="filter-item"
+                  >
+                    <el-option label="请选择" value/>
                     <el-option label="不限难度" value="1"/>
                     <el-option label="容易" value="2"/>
                     <el-option label="中等" value="3"/>
@@ -135,12 +140,15 @@
               </el-col>
             </el-row>
             <el-form-item label="试题分析：" prop="itemAnalysis">
-              <el-input v-model="addForm.itemAnalysis" type="textarea" placeholder="" clearable/>
+              <el-input v-model="addForm.itemAnalysis" type="textarea" placeholder clearable/>
             </el-form-item>
 
             <el-form-item>
-              <el-button :disabled="isDisabled" type="primary" @click="addForm.testQuestionId==''?submitForm():updateData()">确定
-              </el-button>
+              <el-button
+                :disabled="isDisabled"
+                type="primary"
+                @click="addForm.testQuestionId==''?submitForm():updateData()"
+              >确定</el-button>
               <el-button @click="cancel">取消</el-button>
             </el-form-item>
           </div>
@@ -148,13 +156,13 @@
       </el-form>
     </el-card>
   </div>
-
 </template>
 
 <script>
-
 import {
-  selectExaminabank, addExaminationBank, updateExaminationbank
+  selectExaminabank,
+  addExaminationBank,
+  updateExaminationbank
 } from '@/api/hr/examinationList'
 
 export default {
@@ -180,21 +188,32 @@ export default {
       title: '',
       isDisabled: false,
       rules: {
-        testQuestionType: [{ required: true, message: '请选择试题类型', trigger: 'change' }],
-        examinationQuestion: [{ required: true, message: '请输入试题内容', trigger: 'blur' }],
+        testQuestionType: [
+          { required: true, message: '请选择试题类型', trigger: 'change' }
+        ],
+        examinationQuestion: [
+          { required: true, message: '请输入试题内容', trigger: 'blur' }
+        ],
         answerHtml: [{ validator: checkAnswerHtml, trigger: 'blur' }],
-        fraction: [{ required: true, message: '请输入分数', trigger: 'blur' }, { validator: checkRate, trigger: 'blur' }],
-        examinationDifficulty: [{ required: true, message: '请选择难易度型', trigger: 'change' }]
+        fraction: [
+          { required: true, message: '请输入分数', trigger: 'blur' },
+          { validator: checkRate, trigger: 'blur' }
+        ],
+        examinationDifficulty: [
+          { required: true, message: '请选择难易度型', trigger: 'change' }
+        ]
       },
       addForm: {
         testQuestionId: '',
         testQuestionType: '',
         examinationDifficulty: '',
         examinationQuestion: '',
-        optionList: [{ optionId: 'A', optionName: '', serialNumber: 0 },
+        optionList: [
+          { optionId: 'A', optionName: '', serialNumber: 0 },
           { optionId: 'B', optionName: '', serialNumber: 1 },
           { optionId: 'C', optionName: '', serialNumber: 2 },
-          { optionId: 'D', optionName: '', serialNumber: 3 }],
+          { optionId: 'D', optionName: '', serialNumber: 3 }
+        ],
         answerNumber: '', // 单选,多选逗号分隔,判断Y/N
         answerHtml: '', // 问答
         fraction: ''
@@ -223,21 +242,23 @@ export default {
       const query = this.examItem
       if (query.testQuestionId) {
         this.addForm.testQuestionId = query.testQuestionId
-        selectExaminabank({ testQuestionId: query.testQuestionId }).then(res => {
-          if (res.data.code === '0000') {
-            this.addForm = Object.assign({}, res.data.data)
-            if (this.addForm.testQuestionType === '2') {
-              if (this.addForm.answerNumber) {
-                this.answers = this.addForm.answerNumber.split(',')
+        selectExaminabank({ testQuestionId: query.testQuestionId }).then(
+          res => {
+            if (res.data.code === '0000') {
+              this.addForm = Object.assign({}, res.data.data)
+              if (this.addForm.testQuestionType === '2') {
+                if (this.addForm.answerNumber) {
+                  this.answers = this.addForm.answerNumber.split(',')
+                }
               }
+              this.addForm.optionList.sort((item1, item2) => {
+                return item1.serialNumber - item2.serialNumber
+              })
+            } else {
+              this.$message.error(res.data.result)
             }
-            this.addForm.optionList.sort((item1, item2) => {
-              return item1.serialNumber - item2.serialNumber
-            })
-          } else {
-            this.$message.error(res.data.result)
           }
-        })
+        )
       } else {
         this.addForm.testQuestionId = ''
       }
@@ -254,7 +275,8 @@ export default {
         return
       }
       this.addForm.optionList.push({
-        optionId: this.optionMap[this.addForm.optionList.length].label, optionName: '',
+        optionId: this.optionMap[this.addForm.optionList.length].label,
+        optionName: '',
         serialNumber: this.addForm.optionList.length
       })
     },
@@ -270,7 +292,10 @@ export default {
       this.$refs['addForm'].validate(valid => {
         if (valid) {
           // 判断单选或判断是否勾选答案
-          if (this.addForm.testQuestionType === '1' || this.addForm.testQuestionType === '4') {
+          if (
+            this.addForm.testQuestionType === '1' ||
+            this.addForm.testQuestionType === '4'
+          ) {
             if (this.addForm.answerNumber === '') {
               this.$message.error('请选择试题答案')
               this.isDisabled = false
@@ -292,7 +317,10 @@ export default {
                 message: '添加成功',
                 type: 'success'
               })
-              this.$emit('confirmAddExam', { type: 1, examItem: { ...Object.assign(this.addForm, res.data.data) }})
+              this.$emit('confirmAddExam', {
+                type: 1,
+                examItem: { ...Object.assign(this.addForm, res.data.data) }
+              })
               //              this.$router.push('examinationList')
             } else {
               this.$message.error(res.data.result)
@@ -309,7 +337,10 @@ export default {
       this.$refs['addForm'].validate(valid => {
         if (valid) {
           // 判断单选或判断是否勾选答案
-          if (this.addForm.testQuestionType === '1' || this.addForm.testQuestionType === '4') {
+          if (
+            this.addForm.testQuestionType === '1' ||
+            this.addForm.testQuestionType === '4'
+          ) {
             if (this.addForm.answerNumber === '') {
               this.$message.error('请选择试题答案')
               this.isDisabled = false
@@ -332,7 +363,10 @@ export default {
                 message: '编辑成功',
                 type: 'success'
               })
-              this.$emit('confirmAddExam', { type: 1, examItem: { ...Object.assign(this.addForm, res.data.data) }})
+              this.$emit('confirmAddExam', {
+                type: 1,
+                examItem: { ...Object.assign(this.addForm, res.data.data) }
+              })
               //              this.$router.push('examinationList')
             } else {
               this.$message.error(res.data.result)
@@ -353,70 +387,64 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.cl {
+  clear: both;
+}
 
-  .cl {
-    clear: both;
+.margin-bt {
+  margin-bottom: 20px;
+}
+
+.examDialog {
+  .exam-bg {
+    margin: 10px 20px;
+    border: 1px solid #f6f8fa;
+
+    .exam-hd {
+      background-color: #eff2f5;
+      overflow: hidden;
+      height: 64px;
+      h4 {
+        font-size: 14px;
+        width: 200px;
+        height: 64px;
+        line-height: 64px;
+        float: left;
+        margin: 0;
+        padding-left: 10px;
+      }
+      span {
+        float: left;
+        margin-left: 100px;
+        height: 64px;
+        line-height: 64px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
   }
-
-  .margin-bt {
+  .exam-option-radio .exam-option {
+    overflow: hidden;
+    padding-top: 20px;
+  }
+  .exam-option-radio {
     margin-bottom: 20px;
   }
-
-  .examDialog {
-    .exam-bg {
-      margin: 10px 20px;
-      border: 1px solid #F6F8FA;
-
-      .exam-hd {
-        background-color: #EFF2F5;
-        overflow: hidden;
-        height: 64px;
-        h4 {
-          font-size: 14px;
-          width: 200px;
-          height: 64px;
-          line-height: 64px;
-          float: left;
-          margin: 0;
-          padding-left: 10px;
-        }
-        span {
-          float: left;
-          margin-left: 100px;
-          height: 64px;
-          line-height: 64px;
-          font-size: 14px;
-          font-weight: bold;
-        }
-
-      }
-
-    }
-    .exam-option-radio .exam-option {
-      overflow: hidden;
-      padding-top: 20px;
-    }
-    .exam-option-radio {
-      margin-bottom: 20px;
-    }
-    .exam-option-radio .exam-option ul li {
-      float: left;
-      height: 80px;
-      line-height: 80px;
-      margin-bottom: 10px;
-
-    }
-    .exam-option-radio .exam-option .el-radio__label > div {
-      display: inline-block;
-    }
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-    }
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
-
+  .exam-option-radio .exam-option ul li {
+    float: left;
+    height: 80px;
+    line-height: 80px;
+    margin-bottom: 10px;
   }
-
+  .exam-option-radio .exam-option .el-radio__label > div {
+    display: inline-block;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
 </style>

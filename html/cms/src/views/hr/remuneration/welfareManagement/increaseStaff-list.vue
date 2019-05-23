@@ -61,7 +61,7 @@
             <el-button type="text" @click="accumulationFundPageVisible">编辑各项目基数</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="saveIncreaseStaff()">确定</el-button>
+            <el-button :disabled="saveIncreaseStaffDisable" type="primary" @click="saveIncreaseStaff()">确定</el-button>
             <el-button type="primary" @click="cancelIncreaseStaffAddFormVisible" >取消</el-button>
           </el-form-item>
         </el-form>
@@ -93,7 +93,7 @@
           <el-form-item label="参保方案" prop="insuredProgrammeId" class="inline">
             <el-input v-model="socialInsuranceBaseFormData.schemeName" type="text" style="width: 200px;"/>
           </el-form-item>
-          <el-form-item v-for="domain in socialInsuranceBasePageInit" :prop="domain.prop" :label="domain.label" :key="domain.key">
+          <el-form-item v-for="(domain) in socialInsuranceBasePageInit" :prop="domain.prop" :label="domain.label" :key="domain.key">
             <el-input v-model="domain.value" type="text" style="width: 200px;"/>
             <p style="height: 12px;margin-top: 0px;color:dodgerblue">基数范围[0-99999]</p>
           </el-form-item>
@@ -112,7 +112,7 @@
           <el-form-item label="参保方案" prop="insuredProgrammeId" class="inline">
             <el-input v-model="socialInsuranceBaseFormData.schemeName" type="text" style="width: 200px;"/>
           </el-form-item>
-          <el-form-item v-for="domain in reserveBasePageInit" :prop="domain.prop" :label="domain.label" :key="domain.key">
+          <el-form-item v-for="(domain) in reserveBasePageInit" :prop="domain.prop" :label="domain.label" :key="domain.key">
             <el-input v-model="domain.value" type="text" style="width: 200px;"/>
             <p style="height: 12px;margin-top: 0px;color:dodgerblue">基数范围[0-99999]</p>
           </el-form-item>
@@ -130,7 +130,6 @@
 import {
   api
 } from '@/api/hr/common'
-// import { getToken } from '@/utils/auth'
 
 import UE from '@/components/ue.vue'
 export default {
@@ -143,6 +142,7 @@ export default {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
       },
+      saveIncreaseStaffDisable: false,
       // 员工选择对话框
       filterText: '',
       rootData: [],
@@ -370,6 +370,7 @@ export default {
       })
     },
     saveIncreaseStaff() { // 保存增员计划
+      this.saveIncreaseStaffDisable = true
       const param = {
         insuredMonth: this.increaseStaffAddFromData.insuredMonth,
         insuredProgrammeId: this.increaseStaffAddFromData.insuredProgrammeId,
@@ -382,8 +383,11 @@ export default {
             type: 'success'
           })
           this.increaseStaffAddFormVisible = false
+          this.saveIncreaseStaffDisable = false
+          this.initList()
         } else {
           this.$message.error('添加增员计划失败')
+          this.saveIncreaseStaffDisable = false
         }
       })
     },

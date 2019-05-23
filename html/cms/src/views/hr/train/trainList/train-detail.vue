@@ -54,10 +54,7 @@
 </template>
 
 <script>
-// import store from '@/store'
-import {
-  api
-} from '@/api/hr/train'
+import { api } from '@/api/hr/train'
 export default {
   data() {
     return {

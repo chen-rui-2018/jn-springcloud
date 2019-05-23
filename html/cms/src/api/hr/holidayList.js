@@ -81,3 +81,4 @@ export function updateVacation(query) {
     data: query
   })
 }
+

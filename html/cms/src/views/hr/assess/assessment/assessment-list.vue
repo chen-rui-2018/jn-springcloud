@@ -26,11 +26,12 @@
           <el-button type="text" @click="delayassessment(scope.row)">延期</el-button>
           <!--考核中不能删除-->
           <el-button
-            v-if="scope.row.status==='3'"
+            v-if="scope.row.status=='2'"
             type="text"
             class="operation"
             @click="delassessment(scope.row)">删除
           </el-button>
+
           <el-button type="text" @click="downassessment(scope.row)">导出</el-button>
         </template>
       </el-table-column>
@@ -110,9 +111,6 @@ export default {
       this.dialogFormVisible = true
       this.defaultMsg = row.noticeContent
     },
-    editassessment() {
-
-    },
     downassessment(row) {
       exportExcelByObj('hr/AssessmentManagement/exportAssessment', row).then(res => {
         window.location.href = res.request.responseURL
@@ -140,19 +138,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const delRow = {
-          id: row.id,
-          assessmentName: row.assessmentName,
-          assessmentStartTime: row.assessmentStartTime,
-          assessmentEndTime: row.assessmentEndTime,
-          assessmentObject: row.assessmentObject,
-          assessmentPeople: row.assessmentPeople,
-          status: row.status,
-          templateId: row.templateId,
-          templateName: row.templateName,
-          jobNumber: row.jobNumber
-        }
-        api('hr/AssessmentManagement/deleteAssessmentRecord', delRow).then(res => {
+        api('hr/AssessmentManagement/deleteAssessmentRecord', row).then(res => {
           if (res.data.code === '0000') {
             this.$message({
               message: '删除成功',
@@ -230,7 +216,6 @@ export default {
       api('hr/AssessmentManagement/paginationInquireAssessManage', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.assessmanagementList = res.data.data.rows
-          console.log(this.assessmanagementList)
           this.total = res.data.data.total
         } else {
           this.$message.error(res.data.result)

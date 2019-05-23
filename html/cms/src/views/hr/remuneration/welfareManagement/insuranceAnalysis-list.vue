@@ -21,13 +21,13 @@
     </el-form>
 
     <el-row style="margin-top: 10px;margin-bottom: 10px;">
-      <el-col :span="5">
-        <div style="height:66px; width: 200px;">
+      <el-col :span="6">
+        <div style="height:66px; width: 220px;">
           <span style="height: 100%;width: 80px;display:inline-block; line-height: 15px;">
             <p style="color: #666666">参保人数</p>
             <p>{{ statisticalInfo.insuredNumber }}人</p>
           </span>
-          <span style="width: 120px;float: right;line-height: 66px;display:inline-block;color: #666666">
+          <span style="width: 140px;float: right;line-height: 66px;display:inline-block;color: #666666">
             环比{{ statisticalInfo.lastInsuredNumber }}人
             <img v-if="imgs.insuredNumberUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
             <img v-if="imgs.insuredNumberDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
@@ -35,12 +35,12 @@
         </div>
       </el-col>
       <el-col v-if="socialSecurityFlag" :span="6">
-        <div style="height:66px; width: 200px;">
+        <div style="height:66px; width: 220px;">
           <span style="height: 100%;width: 80px;line-height: 15px;display:  inline-block;">
             <p style="color: #666666">社保费用</p>
             <p>{{ statisticalInfo.socialSecurityCost }}元</p>
           </span>
-          <span style="width: 120px;float: right;line-height: 66px;display:inline-block;color: #666666">
+          <span style="width: 140px;float: right;line-height: 66px;display:inline-block;color: #666666">
             环比{{ statisticalInfo.lastSocialSecurityCost }}元
             <img v-if="imgs.socialSecurityUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
             <img v-if="imgs.socialSecurityDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
@@ -48,12 +48,12 @@
         </div>
       </el-col>
       <el-col v-if="accumulationFundFlag" :span="6">
-        <div style="height:66px; width: 170px;">
-          <span style="height: 100%;width: 65px;line-height: 15px;display:  inline-block;">
+        <div style="height:66px; width: 240px;">
+          <span style="height: 100%;width: 100px;line-height: 15px;display:  inline-block;">
             <p style="color: #666666">公积金</p>
             <p>{{ statisticalInfo.accumulationFund }}元</p>
           </span>
-          <span style="width: 105px;float: right;line-height: 66px;display:inline-block;color: #666666">
+          <span style="width: 140px;float: right;line-height: 66px;display:inline-block;color: #666666">
             环比{{ statisticalInfo.lastAccumulationFund }}元
             <img v-if="imgs.accumulationFundUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
             <img v-if="imgs.accumulationFundDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
@@ -61,12 +61,12 @@
         </div>
       </el-col>
       <el-col :span="6">
-        <div style="height:66px; width: 170px;">
-          <span style="height: 100%;line-height: 15px;width: 65px;display:  inline-block;">
+        <div style="height:66px; width: 240px;">
+          <span style="height: 100%;line-height: 15px;width: 100px;display:  inline-block;">
             <p style="color: #666666">总费用</p>
             <p>{{ statisticalInfo.totalCost }}元</p>
           </span>
-          <span style="width: 105px;float: right;line-height: 66px;display:inline-block; color: #666666">
+          <span style="width: 140px;float: right;line-height: 66px;display:inline-block; color: #666666">
             环比{{ statisticalInfo.lastTotalCost }}元
             <img v-if="imgs.totalCostUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
             <img v-if="imgs.totalCostDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
@@ -230,3 +230,4 @@ export default {
     }
   }
 </style>
+

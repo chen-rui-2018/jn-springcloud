@@ -123,7 +123,6 @@ export default {
         page: 1,
         rows: 10
       },
-      // prePageRow: {},
       code: {
         groupCode: 'platform_type',
         moduleCode: 'springcloud-hr',

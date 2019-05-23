@@ -77,8 +77,8 @@ public class PayServerController extends BaseController implements PayClient {
         Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
         Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
         Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
-        myPayBillService.billCreate(payBillCreateParamVo,user);
-        return new Result();
+        Result result=myPayBillService.billCreate(payBillCreateParamVo,user);
+        return result;
     }
 
     @ControllerLog(doAction = "统一缴费-->发起支付")

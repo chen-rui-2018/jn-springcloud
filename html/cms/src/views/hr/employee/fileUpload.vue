@@ -159,7 +159,8 @@ export default {
         this.$message.error(response.result)
       }
     },
-    uploadError() {
+    uploadError(err, file, fileList) {
+      console.log(err)
       this.$message.error('文件导入失败')
     }
   }

@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.hr.attendance.dao.VacationManageAttanceMapper">
 
 <select id="selectByJobNumber" parameterType="com.jn.hr.attendance.model.VacationManagePage" resultType="com.jn.hr.attendance.model.VacationManageVo">
-    select t1.id,t1.job_number,t1.vacation_type,t1.vacation_time,t2.`name`,t2.department_name,t2.department_id,t2.phone,t2.job_name from tb_manpower_vacation_manage t1,tb_manpower_employee_basic_info t2
+    select t1.user_id,t1.id,t1.job_number,t1.vacation_type,t1.vacation_time,t2.`name`,t2.department_name,t2.department_id,t2.phone,t2.job_name from tb_manpower_vacation_manage t1,tb_manpower_employee_basic_info t2
     where t1.job_number = t2.job_number 
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t2.`name` like concat('%',#{name},'%')
@@ -16,11 +16,30 @@
   
   <select id="selectByGroupByJobNumber" parameterType="com.jn.hr.attendance.model.VacationManageVo" resultType="com.jn.hr.attendance.model.VacationManageVo">
     select * from tb_manpower_vacation_manage t1
-    where 1 = 1 
+    where  t1.vacation_type = 
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
 			and t1.job_number = #{jobNumber,jdbcType=VARCHAR}
 		</if>  
      group by  job_number desc
   </select>
+  
+  <select id="selectByTypeAndUserId" parameterType="map" resultType="com.jn.hr.attendance.model.VacationManageVo">
+    select * from tb_manpower_vacation_manage t1
+    where t1.vacation_type = #{vacationType,jdbcType=VARCHAR} and t1.user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insert" parameterType="com.jn.hr.attendance.model.VacationManageVo">
+        insert into tb_manpower_vacation_manage
+        (
+        id, job_number,user_id, vacation_type,vacation_time
+        ) values
+            (
+            #{item.id},
+            #{item.jobNumber},
+            #{item.userId}
+            #{item.vacationType},
+            #{item.vacationTime}
+            )
+    </insert>
   
 </mapper>

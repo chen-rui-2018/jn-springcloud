@@ -272,11 +272,10 @@ export default {
         } else {
           this.$message.error(`文件上传失败!`)
         }
+      }).catch(error => {
+        console.log(error)
+        this.$message.error(`文件上传失败!`)
       })
-      // .catch(error => {
-      //   console.log(err)
-      //   this.$message.error(`文件上传失败!`)
-      // })
     },
     handlePreview(file) {
       const link = document.createElement('a')
@@ -344,9 +343,9 @@ export default {
 </script>
 
 <style scoped>
-  /* .attach-head {
+  .attach-head {
 
-  } */
+  }
 
   .attach-head-span {
     display: inline-block;

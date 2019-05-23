@@ -29,27 +29,45 @@
       </el-card>
       <el-card v-if="examInfo.examinabanksList" class="subjectCard">
         <div class="subject">
-          <div v-for="(item,index) of examInfo.examinabanksList" :key="index" class="examList">
-            <el-card style="margin-top: 10px;">
+          <!--试卷模式-->
+          <div v-for="(item,index) of examInfo.examinabanksList" v-show="!cardAnswer" :key="index" class="examList">
+            <!--<p v-for="i in 22">5433</p>-->
+            <el-card :id="'examID'+index" style="margin-top: 10px;">
               <p style="font-size:14px;"><span>Q{{ index+1 }}</span>&nbsp;&nbsp;<span>{{ item.examinationQuestion }}
               </span>&nbsp;&nbsp;<span v-if="item.testQuestionType==1">[ 单选题 ]</span>
                 <span v-if="item.testQuestionType==2">[ 多选题 ]</span>
                 <span v-if="item.testQuestionType==3">[ 主观题 ]</span>
-              </p><div v-if="item.testQuestionType == 1 || item.testQuestionType == 2" style="padding-left:26px;">
+                <span v-if="item.testQuestionType==4">[ 判断题 ]</span>
+              </p><div v-if="item.testQuestionType == 1 || item.testQuestionType == 2" style="padding-left:10px;">
                 <p v-for="(item2,index2) of item.optionList" :key="index2" style="font-size:14px;">
                   <el-radio v-if="item.testQuestionType == 1" v-model="examInfo.examinabanksList[index].answer" :label="item2.optionId"/>&nbsp;&nbsp;
                   <el-checkbox v-if="item.testQuestionType == 2" v-model="examInfo.examinabanksList[index].answer" :label="item2.optionId">{{ item2.optionId }}</el-checkbox>&nbsp;&nbsp;
                   <span>{{ item2.optionName }}</span>
                 </p>
               </div>
+              <div v-if="item.testQuestionType == 4" style="padding-left:10px;">
+                <el-radio v-model="examInfo.examinabanksList[index].answer" :label="'Y'">正确</el-radio>&nbsp;&nbsp;
+                <el-radio v-model="examInfo.examinabanksList[index].answer" :label="'N'">错误</el-radio>&nbsp;&nbsp;
+              </div>
               <el-input v-if="item.testQuestionType == 3" v-model="item.answer" type="textarea" rows="5"/>
+            </el-card>
+
+          </div>
+          <!--答题卡模式-->
+          <div v-show="cardAnswer" class="cardAnswer">
+            <p class="cardAnswerHead">答题卡</p>
+            <el-card>
+
+              <el-button v-for="(item,index) of examInfo.examinabanksList" :type="(item.answer!=null&&item.answer.length!=0)?'success':''" :key="index" circle @click="returnCom('#examID'+index)">
+                {{ index }}
+              </el-button>
             </el-card>
           </div>
           <div class="footerBox">
             <my-container>
               <el-button-group class="subjectCardFooter">
-                <el-button class="btn">答题卡</el-button>
-                <el-button class="btn" type="danger" @click="submit">交卷{{ countdown }}</el-button>
+                <el-button class="btn" @click="switchAnswer">{{ cardAnswer?'返回到试卷':'答题卡' }}</el-button>
+                <el-button id="examID3" :loading="submitLoadding" class="btn" type="danger" @click="submit">交卷{{ countdown }}</el-button>
               </el-button-group>
             </my-container>
           </div>
@@ -75,7 +93,9 @@ export default {
   },
   data() {
     return {
+      submitLoadding: false,
       countdown: '60分00秒',
+      cardAnswer: false,
       userFrom: {
         jobNumber: '',
         id: '',
@@ -100,7 +120,7 @@ export default {
         if (res.data.code === '0000') {
           if (res.data.data.examinabanksList && res.data.data.examinabanksList.length > 0) {
             res.data.data.examinabanksList.forEach(item => {
-              if (item.testQuestionType === 2) {
+              if (item.testQuestionType === '2') {
                 item.answer = []
               }
             })
@@ -117,6 +137,7 @@ export default {
         }
       })
     },
+    /* 倒计时时间就算*/
     countdownFun() {
       const _this = this
       var timer = setInterval(function() {
@@ -133,6 +154,7 @@ export default {
 
     /* 提交试卷*/
     submit() {
+      this.submitLoadding = true
       this.userFrom.examinaEndTime = moment().format('YYYY-MM-DD hh:mm:ss')
       let useTime = 0 // 答题时间
       const examQuery = JSON.parse(JSON.stringify(this.examInfo))
@@ -141,7 +163,7 @@ export default {
       //				examQuery.jobNumber=this.userFrom.jobNumber;
       if (examQuery.examinabanksList && examQuery.examinabanksList.length > 0) {
         examQuery.examinabanksList.forEach(item => {
-          if (item.testQuestionType === 2) {
+          if (item.testQuestionType === '2') {
             item.answer = item.answer.join()
           }
         })
@@ -152,6 +174,7 @@ export default {
       examInsterAnswerCard({ ...examQuery,
         ...this.userFrom
       }).then(res => {
+        this.submitLoadding = false
         if (res.data.code === '0000') {
           this.$router.push({
             path: '/resultPage',
@@ -174,6 +197,21 @@ export default {
           return false
         }
       })
+    },
+    /* 试卷答题卡切换*/
+    switchAnswer() {
+      //				document.querySelector("#header").scrollIntoView(true);
+      this.cardAnswer = !this.cardAnswer
+    },
+    /* 锚点跳转*/
+    returnCom(comment) {
+      this.cardAnswer = false
+      setTimeout(function() {
+        const returnEle = document.querySelector(comment)
+        if (returnEle) {
+          returnEle.scrollIntoView(true)
+        }
+      }, 50)
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -212,6 +250,13 @@ export default {
 		}
 		.subjectCard {
 			margin-bottom: 80px;
+			.cardAnswer{
+				.cardAnswerHead{
+					color: red;
+					text-align: center;
+				}
+
+			}
 			.footerBox {
 				width: 100%;
 				position: fixed;

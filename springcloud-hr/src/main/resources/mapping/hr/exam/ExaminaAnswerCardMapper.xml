@@ -3,11 +3,12 @@
 <mapper namespace="com.jn.hr.exam.dao.ExaminaAnswerCardMapper">
 
 	<select id="selectAnswerCard" parameterType="com.jn.hr.exam.model.Examinabank"
-		resultType="com.jn.hr.exam.model.Examinabank">
-		SELECT t.id cardId ,t.answer
+		resultType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard">
+		SELECT *
 		FROM
 		tb_manpower_examina_answer_card t
-		WHERE t.test_paper_id =
+		WHERE
+		t.test_paper_id =
 		#{testPaperId,jdbcType=VARCHAR}
 		AND
 		t.test_quest_id =
@@ -15,15 +16,34 @@
 		AND t.job_number =
 		#{jobNumber,jdbcType=VARCHAR}
 	</select>
+	
+	<select id="selectAnswerCardList" parameterType="com.jn.hr.exam.model.Examinabank"
+		resultType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard">
+		SELECT * FROM
+		tb_manpower_examina_answer_card t
+		WHERE t.test_paper_id = #{testPaperId,jdbcType=VARCHAR}
+		AND t.job_number = #{jobNumber,jdbcType=VARCHAR}
+	</select>
 
 	<update id="updateAnswer" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard">
 		update tb_manpower_examina_answer_card t
-		set t.answer = #{answer,jdbcType=VARCHAR}
+		set t.answer_Type = #{answerType,jdbcType=VARCHAR},
+		t.title_score =  #{titleScore,jdbcType=VARCHAR}
 		WHERE t.test_paper_id = #{testPaperId,jdbcType=VARCHAR}
 		AND t.test_quest_id = #{testQuestId,jdbcType=VARCHAR}
 		AND t.job_number = #{jobNumber,jdbcType=VARCHAR}
 	</update>
 
-
+	<select id="selectAnswer" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard"
+		resultType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard">
+		select * from
+		tb_manpower_examina_answer_card t
+		WHERE
+		t.test_paper_id = #{testPaperId,jdbcType=VARCHAR}
+		AND t.test_quest_id =
+		#{testQuestId,jdbcType=VARCHAR}
+		AND t.job_number =
+		#{jobNumber,jdbcType=VARCHAR}
+	</select>
 
 </mapper>

@@ -106,7 +106,7 @@
 </template>
 <script>
 import {
-  api, downloadTempExcel
+  api
 } from '@/api/hr/common'
 import { getToken } from '@/utils/auth'
 
@@ -223,6 +223,7 @@ export default {
     importExcel() {
       this.importFlag = 1
       this.fileList = []
+      this.errorResults = []
       this.uploadTip = '点击上传'
       this.processing = false
       this.dialogImportVisible = true
@@ -270,11 +271,6 @@ export default {
           this.$message.error(res.data.result == null ? '查询失败' : res.data.result)
         }
         this.listLoading = false
-      })
-    },
-    downloadExcelTemplate() {
-      downloadTempExcel('hr/SalaryManagement/downLoadSalaryInfoExcelTemplate').then(res => {
-        window.location.href = res.request.responseURL
       })
     },
     addNextMonth() {

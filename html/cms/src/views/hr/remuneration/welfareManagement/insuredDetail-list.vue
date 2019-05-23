@@ -83,7 +83,6 @@
 import {
   api, exportExcel, getPreMonth, getNextMonth, apiGet
 } from '@/api/hr/common'
-// import { getToken } from '@/utils/auth'
 
 import UE from '@/components/ue.vue'
 export default {
@@ -170,7 +169,6 @@ export default {
     stopInsuranceTimeSubmit() {
       const seleRow = this.$refs.insuredDetaildTab.store.states.selection[0]
       this.stopInsuranceFormData.jobNumber = seleRow.jobNumber
-      console.log(seleRow)
       this.stopInsuranceFormData.insuredProgrammeId = seleRow.schemeId
       api('hr/SalaryWelfareManagement/stopInsurance', this.stopInsuranceFormData).then(res => {
         if (res.data.code === '0000') {
@@ -179,6 +177,7 @@ export default {
             type: 'success'
           })
           this.stopInsuranceFormVisible = false
+          this.initList()
         } else {
           this.$message.error(res.data.result)
           this.stopInsuranceFormVisible = false

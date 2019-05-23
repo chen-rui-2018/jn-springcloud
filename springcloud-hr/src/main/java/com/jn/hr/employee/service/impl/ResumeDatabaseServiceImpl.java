@@ -196,6 +196,8 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
     public void finishBackgroundInvest(BackgroundInvestAdd backgroundInvestAdd,User user) {
         tbManpowerBackgroundInvestMapper.deleteByPrimaryKey(backgroundInvestAdd.getId());
         TbManpowerBackgroundInvest record=new TbManpowerBackgroundInvest();
+        backgroundInvestAdd.setInspectors(user.getName());
+        backgroundInvestAdd.setInspectorsPhone(user.getPhone());
         BeanUtils.copyProperties(backgroundInvestAdd,record);
         tbManpowerBackgroundInvestMapper.insert(record);
         TbManpowerResumeDatabase database=new TbManpowerResumeDatabase();

@@ -124,7 +124,8 @@
                 disabled
                 style="width: 200px"
                 placeholder=""
-                clearable />
+                clearable
+              />
             </el-form-item>
           </el-col>
 
@@ -612,7 +613,7 @@
 
               <el-col :span="12">
                 <el-form-item label="是否取得学位：" prop="isAcademicDegree" disabled>
-                  <el-radio-group v-model="addForm.educationExperienceList[indexEducation].isAcademicDegree">
+                  <el-radio-group v-model="addForm.educationExperienceList[indexEducation].isAcademicDegree" disabled>
                     <el-radio :label="1">是</el-radio>
                     <el-radio :label="2">否</el-radio>
                   </el-radio-group>
@@ -641,10 +642,6 @@
             </el-row>
           </li>
         </ul>
-
-        <div class="add-btn">
-          <i class="el-icon-plus" @click="addEducation()">添加教育经历</i>
-        </div>
 
         <div class="basic-info">
           <div>工作经历</div>
@@ -935,7 +932,6 @@ import {
 import {
   getCode
 } from '@/api/hr/util'
-// import { getToken } from '@/utils/auth'
 
 export default {
   data() {
@@ -1221,6 +1217,7 @@ export default {
                 directLeaderName: ''
               }
             }
+            this.addForm.employStatus = res.data.data.employStatus + ''
           } else {
             this.$message.error(res.data.result)
           }

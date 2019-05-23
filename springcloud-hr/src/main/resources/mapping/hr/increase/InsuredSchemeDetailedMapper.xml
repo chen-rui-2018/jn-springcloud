@@ -33,6 +33,17 @@
         </foreach>
     </insert>
     
+    <update id="updateBystatus" parameterType="map">
+    update tb_manpower_insured_scheme_detailed t1
+    set t1.record_status = 0
+    where scheme_id = #{schemeId,jdbcType=VARCHAR}
+    </update>
+    
+    <update id="deleteBySchemeId" parameterType="map">
+    delete from tb_manpower_insured_scheme_detailed 
+    where scheme_id = #{schemeId,jdbcType=VARCHAR}
+    </update>
+    
     <update id="updateBySchemeId" parameterType="com.jn.hr.increase.model.InsuredSchemeDetailed">
     update tb_manpower_insured_scheme_detailed
     <foreach collection="list" item="item" index="index" separator=",">

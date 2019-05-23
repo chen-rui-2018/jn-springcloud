@@ -232,14 +232,6 @@ import UE from '@/components/ue.vue'
 export default {
   components: { UE },
   data() {
-    // var checknoticeTitle = (rule, value, callback) => {
-    //   const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
-    //   if (!reg.test(value)) {
-    //     callback(new Error('名称只允许数字、中文、字母及下划线'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
     return {
       defaultMsg: '',
       config: {
@@ -325,24 +317,24 @@ export default {
         parseInt((this.salaryInfoAdd.probationSingleReward == null || this.salaryInfoAdd.probationSingleReward === '') ? 0 : this.salaryInfoAdd.probationSingleReward)
     },
     changePositiveWageComp: function() {
-      return parseInt((this.salaryInfoAdd.conversionBasicWage === null || this.salaryInfoAdd.conversionBasicWage === '') ? 0 : this.salaryInfoAdd.conversionBasicWage) +
-        parseInt((this.salaryInfoAdd.conversionDutyAllowance === null || this.salaryInfoAdd.conversionDutyAllowance === '') ? 0 : this.salaryInfoAdd.conversionDutyAllowance) +
-        parseInt((this.salaryInfoAdd.conversionProfessionalTitleAllowance === null || this.salaryInfoAdd.conversionProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.conversionProfessionalTitleAllowance) +
-        parseInt((this.salaryInfoAdd.conversionSeniorityWage === null || this.salaryInfoAdd.conversionSeniorityWage === '') ? 0 : this.salaryInfoAdd.conversionSeniorityWage) +
-        parseInt((this.salaryInfoAdd.conversionEducationAllowance === null || this.salaryInfoAdd.conversionEducationAllowance === '') ? 0 : this.salaryInfoAdd.conversionEducationAllowance) +
-        parseInt((this.salaryInfoAdd.conversionWorkSubsidy === null || this.salaryInfoAdd.conversionWorkSubsidy === '') ? 0 : this.salaryInfoAdd.conversionWorkSubsidy) +
-        parseInt((this.salaryInfoAdd.conversionAchievementBonus === null || this.salaryInfoAdd.conversionAchievementBonus === '') ? 0 : this.salaryInfoAdd.conversionAchievementBonus) +
-        parseInt((this.salaryInfoAdd.conversionSingleReward === null || this.salaryInfoAdd.conversionSingleReward === '') ? 0 : this.salaryInfoAdd.conversionSingleReward)
+      return parseInt((this.salaryInfoAdd.conversionBasicWage == null || this.salaryInfoAdd.conversionBasicWage === '') ? 0 : this.salaryInfoAdd.conversionBasicWage) +
+        parseInt((this.salaryInfoAdd.conversionDutyAllowance == null || this.salaryInfoAdd.conversionDutyAllowance === '') ? 0 : this.salaryInfoAdd.conversionDutyAllowance) +
+        parseInt((this.salaryInfoAdd.conversionProfessionalTitleAllowance == null || this.salaryInfoAdd.conversionProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.conversionProfessionalTitleAllowance) +
+        parseInt((this.salaryInfoAdd.conversionSeniorityWage == null || this.salaryInfoAdd.conversionSeniorityWage === '') ? 0 : this.salaryInfoAdd.conversionSeniorityWage) +
+        parseInt((this.salaryInfoAdd.conversionEducationAllowance == null || this.salaryInfoAdd.conversionEducationAllowance === '') ? 0 : this.salaryInfoAdd.conversionEducationAllowance) +
+        parseInt((this.salaryInfoAdd.conversionWorkSubsidy == null || this.salaryInfoAdd.conversionWorkSubsidy === '') ? 0 : this.salaryInfoAdd.conversionWorkSubsidy) +
+        parseInt((this.salaryInfoAdd.conversionAchievementBonus == null || this.salaryInfoAdd.conversionAchievementBonus === '') ? 0 : this.salaryInfoAdd.conversionAchievementBonus) +
+        parseInt((this.salaryInfoAdd.conversionSingleReward == null || this.salaryInfoAdd.conversionSingleReward === '') ? 0 : this.salaryInfoAdd.conversionSingleReward)
     },
     changeCurrentSalaryComp: function() {
-      return parseInt((this.salaryInfoAdd.currentBasicWage === null || this.salaryInfoAdd.currentBasicWage === '') ? 0 : this.salaryInfoAdd.currentBasicWage) +
-        parseInt((this.salaryInfoAdd.currentDutyAllowance === null || this.salaryInfoAdd.currentDutyAllowance === '') ? 0 : this.salaryInfoAdd.currentDutyAllowance) +
+      return parseInt((this.salaryInfoAdd.currentBasicWage == null || this.salaryInfoAdd.currentBasicWage === '') ? 0 : this.salaryInfoAdd.currentBasicWage) +
+        parseInt((this.salaryInfoAdd.currentDutyAllowance == null || this.salaryInfoAdd.currentDutyAllowance === '') ? 0 : this.salaryInfoAdd.currentDutyAllowance) +
         parseInt((this.salaryInfoAdd.currentProfessionalTitleAllowance == null || this.salaryInfoAdd.currentProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.currentProfessionalTitleAllowance) +
-        parseInt((this.salaryInfoAdd.currentSeniorityWage === null || this.salaryInfoAdd.currentSeniorityWage === '') ? 0 : this.salaryInfoAdd.currentSeniorityWage) +
-        parseInt((this.salaryInfoAdd.currentEducationAllowance === null || this.salaryInfoAdd.currentEducationAllowance === '') ? 0 : this.salaryInfoAdd.currentEducationAllowance) +
-        parseInt((this.salaryInfoAdd.currentWorkSubsidy === null || this.salaryInfoAdd.currentWorkSubsidy === '') ? 0 : this.salaryInfoAdd.currentWorkSubsidy) +
-        parseInt((this.salaryInfoAdd.currentAchievementBonus === null || this.salaryInfoAdd.currentAchievementBonus === '') ? 0 : this.salaryInfoAdd.currentAchievementBonus) +
-        parseInt((this.salaryInfoAdd.currentSingleReward === null || this.salaryInfoAdd.currentSingleReward === '') ? 0 : this.salaryInfoAdd.currentSingleReward)
+        parseInt((this.salaryInfoAdd.currentSeniorityWage == null || this.salaryInfoAdd.currentSeniorityWage === '') ? 0 : this.salaryInfoAdd.currentSeniorityWage) +
+        parseInt((this.salaryInfoAdd.currentEducationAllowance == null || this.salaryInfoAdd.currentEducationAllowance === '') ? 0 : this.salaryInfoAdd.currentEducationAllowance) +
+        parseInt((this.salaryInfoAdd.currentWorkSubsidy == null || this.salaryInfoAdd.currentWorkSubsidy === '') ? 0 : this.salaryInfoAdd.currentWorkSubsidy) +
+        parseInt((this.salaryInfoAdd.currentAchievementBonus == null || this.salaryInfoAdd.currentAchievementBonus === '') ? 0 : this.salaryInfoAdd.currentAchievementBonus) +
+        parseInt((this.salaryInfoAdd.currentSingleReward == null || this.salaryInfoAdd.currentSingleReward === '') ? 0 : this.salaryInfoAdd.currentSingleReward)
     }
   },
   created() {
@@ -388,9 +380,7 @@ export default {
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
-      if (this.salaryInfoAdd.jobNumber != null && this.salaryInfoAdd.jobNumber !== '' && this.salaryInfoAdd.jobNumber !== 0) {
-        console.log(123)
-      } else {
+      if (this.salaryInfoAdd.jobNumber === null || this.salaryInfoAdd.jobNumber === '' || this.salaryInfoAdd.jobNumber === 0) {
         this.$message.error('请选择员工信息')
         return
       }
@@ -479,7 +469,6 @@ export default {
     },
     // 页面初始化
     initList() {
-      debugger
       const query = this.$route.query
       this.title = query.title
       if (this.title === '查看') {

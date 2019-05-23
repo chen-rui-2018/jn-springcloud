@@ -67,3 +67,36 @@ export function examSelectExamAndAnswerCard(query) {
     data: query
   })
 }
+// 删除考试成绩
+export function examDeleteResult(query) {
+  return request({
+    url: baseurl + `hr/exam/deleteResult`,
+    method: 'post',
+    data: query
+  })
+}
+// 更新考试成绩
+export function examUpdateResult(query) {
+  return request({
+    url: baseurl + `hr/exam/updateResult`,
+    method: 'post',
+    data: query
+  })
+}
+// 更新考试成绩
+export function examExportResultList(query) {
+  return request({
+    url: baseurl + `hr/exam/exportResultList`,
+    method: 'post',
+    data: query
+  })
+}
+// 发送邮件
+export function examSendExaminaManagement(query) {
+  return request({
+    url: baseurl + `hr/exam/sendExaminaManagement`,
+    method: 'post',
+    data: query
+  })
+}
+

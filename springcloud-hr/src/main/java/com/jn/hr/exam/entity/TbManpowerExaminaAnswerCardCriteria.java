@@ -453,6 +453,146 @@ public class TbManpowerExaminaAnswerCardCriteria {
             addCriterion("answer not between", value1, value2, "answer");
             return (Criteria) this;
         }
+
+        public Criteria andTitleScoreIsNull() {
+            addCriterion("title_score is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreIsNotNull() {
+            addCriterion("title_score is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreEqualTo(String value) {
+            addCriterion("title_score =", value, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreNotEqualTo(String value) {
+            addCriterion("title_score <>", value, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreGreaterThan(String value) {
+            addCriterion("title_score >", value, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreGreaterThanOrEqualTo(String value) {
+            addCriterion("title_score >=", value, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreLessThan(String value) {
+            addCriterion("title_score <", value, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreLessThanOrEqualTo(String value) {
+            addCriterion("title_score <=", value, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreLike(String value) {
+            addCriterion("title_score like", value, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreNotLike(String value) {
+            addCriterion("title_score not like", value, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreIn(List<String> values) {
+            addCriterion("title_score in", values, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreNotIn(List<String> values) {
+            addCriterion("title_score not in", values, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreBetween(String value1, String value2) {
+            addCriterion("title_score between", value1, value2, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleScoreNotBetween(String value1, String value2) {
+            addCriterion("title_score not between", value1, value2, "titleScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeIsNull() {
+            addCriterion("answer_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeIsNotNull() {
+            addCriterion("answer_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeEqualTo(String value) {
+            addCriterion("answer_type =", value, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeNotEqualTo(String value) {
+            addCriterion("answer_type <>", value, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeGreaterThan(String value) {
+            addCriterion("answer_type >", value, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("answer_type >=", value, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeLessThan(String value) {
+            addCriterion("answer_type <", value, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeLessThanOrEqualTo(String value) {
+            addCriterion("answer_type <=", value, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeLike(String value) {
+            addCriterion("answer_type like", value, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeNotLike(String value) {
+            addCriterion("answer_type not like", value, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeIn(List<String> values) {
+            addCriterion("answer_type in", values, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeNotIn(List<String> values) {
+            addCriterion("answer_type not in", values, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeBetween(String value1, String value2) {
+            addCriterion("answer_type between", value1, value2, "answerType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerTypeNotBetween(String value1, String value2) {
+            addCriterion("answer_type not between", value1, value2, "answerType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

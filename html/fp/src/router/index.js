@@ -244,7 +244,7 @@ export default new Router({
               component: resolve => require(['@/views/home/productService/myApply'], resolve)
             },
             {
-              path: '/myBusiness/index',
+              path: 'home/myBusiness/index',
               name: 'business',
               meta: {
                 title: '我的企业'
@@ -258,6 +258,14 @@ export default new Router({
                 title: '编辑企业'
               },
               component: resolve => require(['@/views/home/myBusiness/editBusiness'], resolve)
+            },
+            {
+              path: '/myBusiness/businesInvitation',
+              name: 'businesInvitation',
+              meta: {
+                title: '企业邀请'
+              },
+              component: resolve => require(['@/views/home/myBusiness/businesInvitation'], resolve)
             },
             {
               path: '/myBusiness/recruitmentManagement',

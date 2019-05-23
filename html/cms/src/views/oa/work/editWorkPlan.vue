@@ -333,7 +333,6 @@ export default {
               this.isDisabled = false
               return false
             }
-            this.newArr = []
             const formData = new FormData()
             formData.append('file', this.file)
             // 调用导入文件接口

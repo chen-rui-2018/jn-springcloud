@@ -150,12 +150,12 @@ export default {
         if (valid) {
           this.isDisabled = true
           if (this.userAccount.length === 0) {
-            alert('请选择负责人')
+            this.$message.error('请选择负责人')
             this.isDisabled = false
             return
           }
           if (new Date(this.workForm.planStartTime.replace(/-/g, '\/')) > new Date(this.workForm.planEndTime.replace(/-/g, '\/'))) {
-            alert('截止时间必须大于开始时间,请重新选择')
+            this.$message.error('截止时间必须大于开始时间,请重新选择')
             this.isDisabled = false
             return false
           }

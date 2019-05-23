@@ -56,7 +56,7 @@ export default new Router({
     },
     {
       path: '/guest/pd/consult',
-      name: 'declarationconsult',
+      name: 'consult',
       meta: {title: '我要咨询'},
       component: () => import('@/views/declarationCenter/consult')
     },
@@ -82,8 +82,43 @@ export default new Router({
       path: '/guest/pd/talentNotice/talentsServiceDetail',
       name: 'talentsServiceDetail',
       meta: {title: '服务详情'},
-      component: () => import('@/views/talentsService/talentsServiceDetail')
+      component: () => import('@/views/talentsService/talentsServiceDetail')},
+{
+      path: '/demandRaise',
+      name: 'demandRaise',
+      component: () => import('@/views/demandRaise'),
+      meta: {title: '提需求'}
 
+    },
+    {
+      path: '/workPlan/workPlan',
+      name: 'workPlan',
+      component: () => import('@/views/workPlan/workPlan'),
+      meta: {title: '工作计划管理'}
+    },
+    {
+      path: '/workPlan/addWorkPlan',
+      name: 'addWorkPlan',
+      component: () => import('@/views/workPlan/addWorkPlan'),
+      meta: {title: '添加工作计划'}
+    },
+    {
+      path: '/workPlan/editWorkPlan',
+      name: 'editWorkPlan',
+      component: () => import('@/views/workPlan/editWorkPlan'),
+      meta: {title: '编辑工作计划'}
+    },
+    {
+      path: '/workPlan/editWorkStatus',
+      name: 'editWorkStatus',
+      component: () => import('@/views/workPlan/editWorkStatus'),
+      meta: {title: '修改任务状态'}
+    },
+    {
+      path: '/workPlan/workPlanDetails',
+      name: 'workPlanDetails',
+      component: () => import('@/views/workPlan/workPlanDetails'),
+      meta: {title: '工作计划详情'}
     }
   ]
 })

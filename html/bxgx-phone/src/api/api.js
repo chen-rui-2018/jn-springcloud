@@ -20,13 +20,29 @@ export default {
     sameTypeProductList: 'springcloud-enterprise/guest/servicemarket/product/web/sameTypeProductList', // 同类型产品
     activityLike: 'springcloud-park/activity/activityLike/activityLike', // 活动点赞
     CancelLike: 'springcloud-park/activity/activityLike/cancelLike', // 取消点赞
+
     trafficVolume: 'springcloud-enterprise/guest/pd/declarationNotice/trafficVolume', // 申报中心访问量
     onlineBooking: 'springcloud-enterprise/pd/online/onlineBooking', // 申报中心预约申报
     talentsTypeList: 'springcloud-enterprise/guest/pd/talentNotice/typeList', // 人才服务公告所属类型列表
     talentsList: 'springcloud-enterprise/guest/pd/talentNotice/list', // 人才服务公告列表
     talentsDetail: 'springcloud-enterprise/guest/pd/talentNotice/selectByTalentNotice', // 人才服务详情
     talentsVolume: 'springcloud-enterprise/guest/pd/talentNotice/trafficVolume', // 人才服务访问量
-    loginURL: 'springcloud-app-system/login'
+    loginURL: 'springcloud-app-system/login',
+
+    // 工作计划管理
+    getWorkList: 'springcloud-oa/oa/workPlan/list', // 获取工作计划管理列表
+    getItemAll: 'springcloud-oa/oa/workPlan/getItemAll', // 获取所有项目信息
+    uploadAttachment: 'zuul/springcloud-oa/oa/common/uploadAttachment', // 上传附件
+    getWorkPlanById: 'springcloud-oa/oa/workPlan/getWorkPlanById', // 根据id获取工作计划详情
+    getAllUser: 'springcloud-oa/oa/addressBook/list', // 获取所有用户
+    addWorkPlan: 'springcloud-oa/oa/workPlan/add', // 添加工作计划
+    update: 'springcloud-oa/oa/workPlan/update', // 编辑工作计划
+    updateWorkPlanStatus: 'springcloud-oa/oa/workPlan/updateWorkPlanStatus', // 修改任务状态
+    downLoadAttachment: 'springcloud-oa/oa/common/downLoadAttachment', // 附件下载
+    deleteBatch: 'springcloud-oa/oa/workPlan/deleteBatch', // 删除工作计划
+    addRemark: 'springcloud-oa/oa/workPlan/addRemark' // 添加备注
+
+
   },
   setToken: function (obj) {
     axios.interceptors.request.use(function (config) {
@@ -102,26 +118,29 @@ export default {
     }
     if (!urlFlag) {
       url = this.apiURL[url]
-    } else {
-      url = url
     }
+    //  else {
+    //   url = url
+    // }
 
     if (!data) data = {}
-
+    var params
+    var headerSS
     if (dataFlag) {
       var querystring = require('querystring')
-      var params = querystring.stringify(data)
-      var headerSS = 'application/x-www-form-urlencoded'
+      params = querystring.stringify(data)
+      headerSS = 'application/x-www-form-urlencoded'
     } else {
-      var params = JSON.stringify(data)
-      var headerSS = 'application/json;charset=UTF-8'
+      params = JSON.stringify(data)
+      headerSS = 'application/json;charset=UTF-8'
     }
-
     axios.post(this.host + url, headerType ? data : params, {
+
       headers: {
         'Content-Type': headerType || headerSS,
         'token': sessionStorage.token || ''
       }
+
     })
       .then(function (response) {
         if (typeof callback === 'function') {
@@ -198,28 +217,28 @@ export default {
   },
   AddMinTime (x, type, n) {
     var t = new Date(x)
-    var t_s = t.getTime() // 转化为时间戳毫秒数
-    var time = new Date(t_s + 1000 * 60 * (n || 0))
+    var tS = t.getTime() // 转化为时间戳毫秒数
+    var time = new Date(tS + 1000 * 60 * (n || 0))
 
-    if (type == 'hour') {
-      time = new Date(t_s + 1000 * 60 * (n || 0))
+    if (type === 'hour') {
+      time = new Date(tS + 1000 * 60 * (n || 0))
     }
 
-    if (type == 'day') {
-      time = new Date(t_s + 1000 * 60 * 60 * 24 * (n || 0))
+    if (type === 'day') {
+      time = new Date(tS + 1000 * 60 * 60 * 24 * (n || 0))
     };
 
-    var yyyy = time.getFullYear(),
-      MM = time.getMonth() + 1,
-      dd = time.getDate(),
-      hh = time.getHours(),
-      mm = time.getMinutes(),
-      ss = time.getSeconds()
+    var yyyy = time.getFullYear()
+    var MM = time.getMonth() + 1
+    var dd = time.getDate()
+    // hh = time.getHours(),
+    // mm = time.getMinutes(),
+    // ss = time.getSeconds()
     MM = MM < 10 ? '0' + MM : MM
     dd = dd < 10 ? '0' + dd : dd
-    hh = hh < 10 ? '0' + hh : hh
-    mm = mm < 10 ? '0' + mm : mm
-    ss = ss < 10 ? '0' + ss : ss
+    // hh = hh < 10 ? '0' + hh : hh
+    // mm = mm < 10 ? '0' + mm : mm
+    // ss = ss < 10 ? '0' + ss : ss
     return yyyy + '-' + MM + '-' + dd
   }
   //   getCurrentTime () { // 获取当前时间

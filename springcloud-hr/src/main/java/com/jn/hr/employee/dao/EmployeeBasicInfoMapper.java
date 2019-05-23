@@ -42,4 +42,6 @@ public interface EmployeeBasicInfoMapper {
     Map<String,TbManpowerEmployeeBasicInfo> map(TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo);
 
     List<EmployeeBasicInfo> selectByEntryDate(@Param("entryDate") String entryDate);
+    
+    TbManpowerEmployeeBasicInfo selectByUserId(@Param("userId")String userId);
 }

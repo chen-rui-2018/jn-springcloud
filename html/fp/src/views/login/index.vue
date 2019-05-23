@@ -67,17 +67,17 @@ export default {
               callback: function(res) {
                 if (res.code === "0000") {
                  sessionStorage.setItem('userInfo', JSON.stringify(res.data))
+                  _this.$router.push({
+                    // path: "/userinfo",
+                    path: "/home",
+                    query: { account: _this.loginform.account }
+                  });
                 } else {
                   _this.$message.error(res.result);
                 }
               }
             });
             // _this.api.setToken(res.data);
-            _this.$router.push({
-              // path: "/userinfo",
-              path: "/home",
-              query: { account: _this.loginform.account }
-            });
           } else {
             _this.$message.error(res.result);
           }

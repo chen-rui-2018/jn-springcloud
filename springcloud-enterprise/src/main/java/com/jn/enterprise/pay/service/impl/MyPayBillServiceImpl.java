@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import org.springframework.transaction.annotation.Transactional;
 import org.xxpay.common.util.BeanToMap;
+import org.xxpay.common.util.JsonUtil;
 import org.xxpay.common.util.PayDigestUtil;
 import org.xxpay.common.util.XXPayUtil;
 
@@ -287,12 +288,14 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @Transactional(rollbackFor = Exception.class)
     public Result billCreate(PayBillCreateParamVo payBillCreateParamVo, User user) {
         /**根据用户账号/企业ID查询企业信息（用户为企业管理员） */
+        logger.info("我的账单-创建账单,参数：payBillCreateParamVo={},user={}", JsonUtil.object2Json(payBillCreateParamVo),JsonUtil.object2Json(user));
         List<TbPayAccountBook> tbPayAccountBook = null;
         List<TbPayAccount> tbPayAccount = null;
         TbPayAccountBookCriteria billCriteria = new TbPayAccountBookCriteria();
         TbPayAccountCriteria accountCriteria = new TbPayAccountCriteria();
         if (payBillCreateParamVo.getObjType().equals(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode())) {
             /**如果是企业则去查询企业信息再通过查询的企业的管理员账户去查询账户表*/
+            logger.info("如果是企业则去查询企业信息再通过查询的企业的管理员账户去查询账户表,ObjId={}",payBillCreateParamVo.getObjId());
             ServiceCompany serviceCompany = companyService.getCompanyDetailByAccountOrId(payBillCreateParamVo.getObjId());
             if (serviceCompany == null || StringUtils.isBlank(serviceCompany.getComAdmin())) {
                 /**查询企业信息异常*/
@@ -311,6 +314,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_ACCOUNT_IS_NOT_EXIT);
         }
         /**通过账户表的账户ID查询账本信息*/
+        logger.info("通过账户表的账户ID查询账本信息,账户ID={}",tbPayAccount.get(0).getAccountId());
         billCriteria.createCriteria().andAccountIdEqualTo(tbPayAccount.get(0).getAccountId()).andAcBookTypeEqualTo(payBillCreateParamVo.getAcBookType()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
         tbPayAccountBook = tbPayAccountBookMapper.selectByExample(billCriteria);
         if (tbPayAccountBook.size() > Integer.parseInt(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode()) || tbPayAccountBook.size() == Integer.parseInt(PaymentBillEnum.BILL_STATE_DELETE.getCode())) {
@@ -648,7 +652,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tbPayBillMiddle.setTotalMoney(createOrderAndPayReqModel.getPaySum());
                 tbPayBillMiddle.setStatus(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
                 tbPayBillMiddle.setCreatedTime(new Date());
-                tbPayBillMiddle.setCreatorAccount(user.getAccount());
+                tbPayBillMiddle.setCreatorAccount(createOrderAndPayReqModel.getUserAccount());
                 tbPayBillMiddle.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
                 tbPayBillMiddleMapper.insertSelective(tbPayBillMiddle);
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，便于核查验证账单操作结束");

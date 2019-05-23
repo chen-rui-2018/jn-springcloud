@@ -7,6 +7,8 @@
     <result column="test_paper_id" jdbcType="VARCHAR" property="testPaperId" />
     <result column="test_quest_id" jdbcType="VARCHAR" property="testQuestId" />
     <result column="answer" jdbcType="VARCHAR" property="answer" />
+    <result column="title_score" jdbcType="VARCHAR" property="titleScore" />
+    <result column="answer_type" jdbcType="VARCHAR" property="answerType" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, job_number, test_paper_id, test_quest_id, answer
+    id, job_number, test_paper_id, test_quest_id, answer, title_score, answer_type
   </sql>
   <select id="selectByExample" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCardCriteria" resultMap="BaseResultMap">
     select
@@ -101,9 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard">
     insert into tb_manpower_examina_answer_card (id, job_number, test_paper_id, 
-      test_quest_id, answer)
+      test_quest_id, answer, title_score, 
+      answer_type)
     values (#{id,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, #{testPaperId,jdbcType=VARCHAR}, 
-      #{testQuestId,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR})
+      #{testQuestId,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, #{titleScore,jdbcType=VARCHAR}, 
+      #{answerType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard">
     insert into tb_manpower_examina_answer_card
@@ -123,6 +127,12 @@
       <if test="answer != null">
         answer,
       </if>
+      <if test="titleScore != null">
+        title_score,
+      </if>
+      <if test="answerType != null">
+        answer_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -139,6 +149,12 @@
       </if>
       <if test="answer != null">
         #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="titleScore != null">
+        #{titleScore,jdbcType=VARCHAR},
+      </if>
+      <if test="answerType != null">
+        #{answerType,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -166,6 +182,12 @@
       <if test="record.answer != null">
         answer = #{record.answer,jdbcType=VARCHAR},
       </if>
+      <if test="record.titleScore != null">
+        title_score = #{record.titleScore,jdbcType=VARCHAR},
+      </if>
+      <if test="record.answerType != null">
+        answer_type = #{record.answerType,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -177,7 +199,9 @@
       job_number = #{record.jobNumber,jdbcType=VARCHAR},
       test_paper_id = #{record.testPaperId,jdbcType=VARCHAR},
       test_quest_id = #{record.testQuestId,jdbcType=VARCHAR},
-      answer = #{record.answer,jdbcType=VARCHAR}
+      answer = #{record.answer,jdbcType=VARCHAR},
+      title_score = #{record.titleScore,jdbcType=VARCHAR},
+      answer_type = #{record.answerType,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -197,6 +221,12 @@
       <if test="answer != null">
         answer = #{answer,jdbcType=VARCHAR},
       </if>
+      <if test="titleScore != null">
+        title_score = #{titleScore,jdbcType=VARCHAR},
+      </if>
+      <if test="answerType != null">
+        answer_type = #{answerType,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -205,7 +235,9 @@
     set job_number = #{jobNumber,jdbcType=VARCHAR},
       test_paper_id = #{testPaperId,jdbcType=VARCHAR},
       test_quest_id = #{testQuestId,jdbcType=VARCHAR},
-      answer = #{answer,jdbcType=VARCHAR}
+      answer = #{answer,jdbcType=VARCHAR},
+      title_score = #{titleScore,jdbcType=VARCHAR},
+      answer_type = #{answerType,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

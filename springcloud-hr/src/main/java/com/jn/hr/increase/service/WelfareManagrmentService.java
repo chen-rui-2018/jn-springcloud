@@ -31,13 +31,13 @@ public interface WelfareManagrmentService {
 	public String importHistoryInsuranceRecord(MultipartFile file,User user);
 	
 	//添加增员计划
-	public void addAttritionPlan(IncreaseStaffAdd increaseStaffAdd,User user);
+	public String addAttritionPlan(IncreaseStaffAdd increaseStaffAdd,User user);
 	//分页查询增减员计划
 	public PaginationData<List<IncreaseStaff>> inquireAttritionPlan(IncreaseStaffPage increaseStaffPage);	
 	//修改参保基数
-	public void updateInsuredCardinalNumber(InsuredSchemeAdd insuredSchemeAdd,User user);
+	public String updateInsuredCardinalNumber(InsuredSchemeAdd insuredSchemeAdd,User user);
 	//取消 
-	public void deleteAttritionPlan(IncreaseStaffPage increaseStaffPage);
+	public String deleteAttritionPlan(IncreaseStaffPage increaseStaffPage);
 	
 	//导出参保记录
 	public PaginationData<List<InsuredDetaild>> exportInsuranceRecord(InsuredDetaildPage insuredDetaildPage);
@@ -46,17 +46,17 @@ public interface WelfareManagrmentService {
 	//参保明细页面-附属
 	public InsureManagement insuredDetailedSubsidiary(InsuredDetaildPage insuredDetaildPage);
 	//停止参保
-	public void stopInsurance(IncreaseStaffAdd increaseStaffAdd,User user);
+	public String stopInsurance(IncreaseStaffAdd increaseStaffAdd,User user);
 	
 	
 	//分页查询自主参保方案
 	public PaginationData<List<InsuredScheme>> paginationInquireInsurance(InsuredSchemePage insuredSchemePage);
 	//修改参保方案
-	public void updateInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user);
+	public String updateInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user);
 	//删除参保方案
 	public String deleteInsurancescheme(InsuredSchemePage insuredSchemePage);
 	//添加参保方案
-	public void addInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user);
+	public String addInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user);
 	//查询参保方案页面
 	public InsuredScheme insuranceSchemeDetailed(InsuredSchemePage insuredSchemePage);
 	//参保概况

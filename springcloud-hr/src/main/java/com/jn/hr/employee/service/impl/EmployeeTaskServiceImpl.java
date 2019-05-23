@@ -62,36 +62,36 @@ public class EmployeeTaskServiceImpl implements EmployeeTaskService {
              vocationList=new ArrayList<VacationManage>();
             String vacationTime=getAnnualDay(rules,employeeBasicInfo.getJobNumber());
             vocationList.add(addVacation(employeeBasicInfo.getJobNumber(),HolidayRuleEnum.ANNUAL_LEAVE.getVacationType(),
-                    vacationTime));
+                    vacationTime,employeeBasicInfo.getUserId()));
             //补休
             vocationList.add(addVacation(employeeBasicInfo.getJobNumber(),HolidayRuleEnum.COMPENSATED_LEAVE.getVacationType(),
-                    HolidayRuleEnum.COMPENSATED_LEAVE.getVacationTime()));
+                    HolidayRuleEnum.COMPENSATED_LEAVE.getVacationTime(),employeeBasicInfo.getUserId()));
             //事假
             vocationList.add(addVacation(employeeBasicInfo.getJobNumber(),HolidayRuleEnum.CASUAL_LEAVE.getVacationType(),
-                    HolidayRuleEnum.CASUAL_LEAVE.getVacationTime()));
+                    HolidayRuleEnum.CASUAL_LEAVE.getVacationTime(),employeeBasicInfo.getUserId()));
             //病假
             vocationList.add(addVacation(employeeBasicInfo.getJobNumber(),HolidayRuleEnum.SICK_LEAVE.getVacationType(),
-                    HolidayRuleEnum.SICK_LEAVE.getVacationTime()));
+                    HolidayRuleEnum.SICK_LEAVE.getVacationTime(),employeeBasicInfo.getUserId()));
             //婚假
             vocationList.add(addVacation(employeeBasicInfo.getJobNumber(),HolidayRuleEnum.MARRIAGE_LEAVE.getVacationType(),
-                    HolidayRuleEnum.MARRIAGE_LEAVE.getVacationTime()));
+                    HolidayRuleEnum.MARRIAGE_LEAVE.getVacationTime(),employeeBasicInfo.getUserId()));
             if("1".equals(employeeBasicInfo.getSex())){
                 //男 陪产假
                 vocationList.add(addVacation(employeeBasicInfo.getJobNumber(),HolidayRuleEnum.PATERNITY_LEAVE.getVacationType(),
-                        HolidayRuleEnum.PATERNITY_LEAVE.getVacationTime()));
+                        HolidayRuleEnum.PATERNITY_LEAVE.getVacationTime(),employeeBasicInfo.getUserId()));
             }
             if("2".equals(employeeBasicInfo.getSex())){
                 //女 产假
                 vocationList.add(addVacation(employeeBasicInfo.getJobNumber(),HolidayRuleEnum.MATERNITY_LEAVE.getVacationType(),
-                        HolidayRuleEnum.MATERNITY_LEAVE.getVacationTime()));
+                        HolidayRuleEnum.MATERNITY_LEAVE.getVacationTime(),employeeBasicInfo.getUserId()));
             }
 
             //工伤假
             vocationList.add(addVacation(employeeBasicInfo.getJobNumber(),HolidayRuleEnum.WORKRELATED_INJURY_LEAVE.getVacationType(),
-                    HolidayRuleEnum.WORKRELATED_INJURY_LEAVE.getVacationTime()));
+                    HolidayRuleEnum.WORKRELATED_INJURY_LEAVE.getVacationTime(),employeeBasicInfo.getUserId()));
             //丧假
             vocationList.add(addVacation(employeeBasicInfo.getJobNumber(),HolidayRuleEnum.BEREAVEMENT_LEAVE.getVacationType(),
-                    HolidayRuleEnum.BEREAVEMENT_LEAVE.getVacationTime()));
+                    HolidayRuleEnum.BEREAVEMENT_LEAVE.getVacationTime(),employeeBasicInfo.getUserId()));
 
             try{
                 vacationManageMapper.insertBatch(vocationList);
@@ -104,10 +104,11 @@ public class EmployeeTaskServiceImpl implements EmployeeTaskService {
         return result;
     }
 
-    private VacationManage addVacation(String jobNumber,String vacationType,String vacationTime){
+    private VacationManage addVacation(String jobNumber,String vacationType,String vacationTime,String userId){
         VacationManage vacationManage=new VacationManage();
         vacationManage.setId(UUID.randomUUID().toString());
         vacationManage.setJobNumber(jobNumber);
+        vacationManage.setUserId(userId);
         vacationManage.setVacationTime(vacationTime);
         vacationManage.setVacationType(vacationType);
         return vacationManage;

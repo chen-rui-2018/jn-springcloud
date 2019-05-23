@@ -1,5 +1,6 @@
 package com.jn.hr.increase.service.impl;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -110,7 +111,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			int increaseNumber = increaseStaffMapper.increaseSelectByMonth(increaseStaff);
 			//获取减员人数
 			int reduceNumber = increaseStaffMapper.reduceSelectByMonth(increaseStaff);
-			insuredDetail.setCreatDate(staff.getInsuredMonth());
+			insuredDetail.setInsuredMonth(staff.getInsuredMonth());
 			InsuredDetaild insured = new InsuredDetaild();
 			insured = insuredDetailMapper.selectSumByMonth(insuredDetail);
 			insureManagement.setInsuredMonth(staff.getInsuredMonth());
@@ -156,11 +157,12 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		StringBuffer sb=new StringBuffer();
 		List<InsuredDetaild> list = new ArrayList<InsuredDetaild>();
 		for(Object result : resultList){
+			i++;
 			InsuredDetaild insured = (InsuredDetaild)result;
 			String str = checkField(insured);
+			logger.info("----str---" + str);
 			if(!StringUtils.isBlank(str)){
-				sb.append("第i行:"+str+";");
-				i++;
+				sb.append("第"+i+"行:"+str+";");
                 continue;
 			}
 			TbManpowerEmployeeBasicInfo basic = map.get(insured.getJobNumber());
@@ -189,7 +191,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	@Override
 	@ServiceLog(doAction = "添加增员计划")
 	@Transactional(rollbackFor = Exception.class)
-	public void addAttritionPlan(IncreaseStaffAdd increaseStaffAdd,User user) {
+	public String addAttritionPlan(IncreaseStaffAdd increaseStaffAdd,User user) {
 		// TODO Auto-generated method stub
 		String[] str = increaseStaffAdd.getJobNumber().split(",");
 		List<IncreaseStaff> increaseList = new ArrayList<IncreaseStaff>();
@@ -252,11 +254,12 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		increaseStaffMapper.insertBatch(increaseList);
 		insuredDetailMapper.insertBatch(insuredetaildList);
 		logger.info("[参保管理]添加增员计划表成功!");
+		return "增员计划添加成功";
 	}
 	
 	@Override
 	@ServiceLog(doAction = "取消增员计划")
-	public void deleteAttritionPlan(IncreaseStaffPage increaseStaffPage) {
+	public String deleteAttritionPlan(IncreaseStaffPage increaseStaffPage) {
 		TbManpowerIncreaseStaff tbManpowerIncreaseStaff = new TbManpowerIncreaseStaff();
 		tbManpowerIncreaseStaff.setId(increaseStaffPage.getId());
 		tbManpowerIncreaseStaff.setIsEffective(Byte.parseByte(SalaryWelfareManagementStatus.INVALID.getCode()));
@@ -268,12 +271,13 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		tbManpowerInsuredDetail.setIsEffective(Byte.parseByte(SalaryWelfareManagementStatus.INVALID.getCode()));
 		tbManpowerInsuredDetailMapper.updateByPrimaryKeySelective(tbManpowerInsuredDetail);
 		logger.info("[参保明细表]参保明细失效成功");
+		return "取消增员计划成功";
 	}
 
 	@Override
 	@ServiceLog(doAction = "修改各项目基数")
 	@Transactional(rollbackFor = Exception.class)
-	public void updateInsuredCardinalNumber(InsuredSchemeAdd insuredSchemeAdd,User user) {
+	public String updateInsuredCardinalNumber(InsuredSchemeAdd insuredSchemeAdd,User user) {
 		TbManpowerInsuredScheme tbManpowerInsuredScheme = new TbManpowerInsuredScheme();
 		tbManpowerInsuredScheme.setSchemeId(insuredSchemeAdd.getSchemeId());
 		tbManpowerInsuredScheme.setInsuredCityName(insuredSchemeAdd.getInsuredCityName());
@@ -293,6 +297,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		}
 		
 		logger.info("[参保方案]参保方案修改成功");
+		return "基数修改成功";
 	}
 
 	@Override
@@ -301,17 +306,9 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		
 		Page<Object> objects = PageHelper.startPage(increaseStaffPage.getPage(), increaseStaffPage.getRows());
 		List<IncreaseStaff> increaseStaffPageList = increaseStaffMapper.list(increaseStaffPage);
-		InsuredDetaildPage insuredDetaildPage = new InsuredDetaildPage();
-		Map<String,InsuredDetaild> insureMap = insuredDetailMapper.map(insuredDetaildPage);
 		for(IncreaseStaff staff:increaseStaffPageList){
-			InsuredDetaild insuredDetaild = new InsuredDetaild();
-			insuredDetaild = insureMap.get(staff.getJobNumber());
-			if(insuredDetaild == null){
-				continue;
-			}
-			staff.setCompanyPayment(insuredDetaild.getCompanyPayment());
-			staff.setPersonalPayment(insuredDetaild.getPersonalPayment());
-			staff.setDetailId(insuredDetaild.getId());
+			staff.setCompanyPayment(staff.getCompanyAccumulationFund() + staff.getCompanySocialSecurity());
+			staff.setPersonalPayment(staff.getPersonalAccumulationFund() + staff.getPersonalSocialSecurity());
 		}
 		PaginationData<List<IncreaseStaff>> data = new PaginationData(increaseStaffPageList,objects.getTotal());
 		return data;
@@ -363,15 +360,24 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	@Override
 	@ServiceLog(doAction = "参保概况")
 	public InsuredDetaild insuredOverview(InsuredDetaildPage insuredDetaildPage) {
-		// TODO Auto-generated method stub
-		InsuredDetaild insuredDetaild = new InsuredDetaild();
 		//当月参保概况
-		insuredDetaild = insuredDetailMapper.selectByCountNumber(insuredDetaildPage.getInsuredMonth());
-		insuredDetaild.setNumber(insuredDetaild.getNumber());
+		InsuredDetaild insuredDetaild = insuredDetailMapper.selectByCountNumber(insuredDetaildPage.getInsuredMonth());
+		if(insuredDetaild == null){
+			insuredDetaild = new InsuredDetaild();
+			insuredDetaild.setSocialSecurity(0.0);
+			insuredDetaild.setAccumulationFund(0.0);
+		}
+		insuredDetaild.setNumber(insuredDetaild.getNumber() == null ? 0 : insuredDetaild.getNumber());
 		List<SalaryKeyValue> departmentNumber = insuredDetailMapper.selectByDepartmentNumber(insuredDetaildPage.getInsuredMonth());
+		if(departmentNumber == null){
+			departmentNumber = new ArrayList<SalaryKeyValue>();
+		}
 		insuredDetaild.setDepartmentNumber(departmentNumber);
 		List<InsuredDetaild> list = insuredDetailMapper.selectByMonthAndType(insuredDetaildPage.getInsuredMonth());
 		insuredDetaild.setTotalCost(insuredDetaild.getSocialSecurity() + insuredDetaild.getAccumulationFund());
+		//数值格式化对象
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		numberFormat.setMaximumFractionDigits(2);
 		if(insuredDetaildPage.getType().equals("1")){
 			List<SalaryKeyValue> totalCost = new ArrayList<SalaryKeyValue>();
 			List<SalaryKeyValue> companyCost = new ArrayList<SalaryKeyValue>();
@@ -379,15 +385,15 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			for(InsuredDetaild detaild : list){
 				SalaryKeyValue Value = new SalaryKeyValue();
 				Value.setName(detaild.getDepartment());
-				Value.setValue(String.valueOf(detaild.getSocialSecurity()));
+				Value.setValue(numberFormat.format(detaild.getSocialSecurity()/100));
 				totalCost.add(Value);
 				Value = new SalaryKeyValue();
 				Value.setName(detaild.getDepartment());
-				Value.setValue(String.valueOf(detaild.getCompanySocialSecurity()));
+				Value.setValue(numberFormat.format(detaild.getCompanySocialSecurity()/100));
 				companyCost.add(Value);
 				Value = new SalaryKeyValue();
 				Value.setName(detaild.getDepartment());
-				Value.setValue(String.valueOf(detaild.getPersonalSocialSecurity()));
+				Value.setValue(numberFormat.format(detaild.getPersonalSocialSecurity()/100));
 				personalCost.add(Value);
 			}
 			insuredDetaild.setDepartmentTotalCost(totalCost);
@@ -400,15 +406,15 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			for(InsuredDetaild detaild : list){
 				SalaryKeyValue Value = new SalaryKeyValue();
 				Value.setName(detaild.getDepartment());
-				Value.setValue(String.valueOf(detaild.getAccumulationFund()));
+				Value.setValue(numberFormat.format(detaild.getAccumulationFund()/100));
 				totalCost.add(Value);
 				Value = new SalaryKeyValue();
 				Value.setName(detaild.getDepartment());
-				Value.setValue(String.valueOf(detaild.getCompanyAccumulationFund()));
+				Value.setValue(numberFormat.format(detaild.getCompanyAccumulationFund()/100));
 				companyCost.add(Value);
 				Value = new SalaryKeyValue();
 				Value.setName(detaild.getDepartment());
-				Value.setValue(String.valueOf(detaild.getPersonalAccumulationFund()));
+				Value.setValue(numberFormat.format(detaild.getPersonalAccumulationFund()/100));
 				personalCost.add(Value);
 			}
 			insuredDetaild.setDepartmentTotalCost(totalCost);
@@ -416,8 +422,29 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			insuredDetaild.setDepartmentPersonalCost(personalCost);
 		}else{	
 			List<SalaryKeyValue> totalCost = insuredDetailMapper.selectByDepartmentTotalCost(insuredDetaildPage.getInsuredMonth());
+			if(totalCost == null){
+				totalCost = new ArrayList<SalaryKeyValue>();
+			}
+			for(SalaryKeyValue value : totalCost){
+				Double wage = Double.valueOf(value.getValue());
+				value.setValue(numberFormat.format(wage/100));
+			}
 			List<SalaryKeyValue> companyCost = insuredDetailMapper.selectByDepartmentCompanyCost(insuredDetaildPage.getInsuredMonth());
+			if(companyCost == null){
+				companyCost = new ArrayList<SalaryKeyValue>();
+			}
+			for(SalaryKeyValue value : companyCost){
+				Double wage = Double.valueOf(value.getValue());
+				value.setValue(numberFormat.format(wage/100));
+			}
 			List<SalaryKeyValue> personalCost = insuredDetailMapper.selectByDepartmentPersonalCost(insuredDetaildPage.getInsuredMonth());
+			if(personalCost == null){
+				personalCost = new ArrayList<SalaryKeyValue>();
+			}
+			for(SalaryKeyValue value : personalCost){
+				Double wage = Double.valueOf(value.getValue());
+				value.setValue(numberFormat.format(wage/100));
+			}
 			insuredDetaild.setDepartmentTotalCost(totalCost);
 			insuredDetaild.setDepartmentCompanyCost(companyCost);
 			insuredDetaild.setDepartmentPersonalCost(personalCost);
@@ -435,6 +462,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		Date date = HrDataUtil.getLastdayMonth(insuredMonth);
 		InsuredDetaild lastDetaild = insuredDetailMapper.selectByCountNumber(DateUtils.formatDate(date,"yyyy-MM"));
 		if(lastDetaild != null){
+			lastDetaild.setTotalCost(lastDetaild.getSocialSecurity() + lastDetaild.getAccumulationFund());
 			Integer number = 0;
 			if(insuredDetaild.getNumber() > lastDetaild.getNumber()){
 				number = insuredDetaild.getNumber() - lastDetaild.getNumber();
@@ -478,7 +506,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	}
 	@Override
 	@ServiceLog(doAction = "停止参保")
-	public void stopInsurance(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd,User user) {
+	public String stopInsurance(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd,User user) {
 		// TODO Auto-generated method stub
 		List<IncreaseStaff> increaseList = new ArrayList<IncreaseStaff>();
 		TbManpowerEmployeeBasicInfo basicInfo = employeeBasicInfoMapper.selectByJobNumber(increaseStaffAdd.getJobNumber());
@@ -503,6 +531,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		increaseStaff.setInsuredProgrammeId(increaseStaffAdd.getInsuredProgrammeId());
 		increaseList.add(increaseStaff);
 		increaseStaffMapper.insertBatch(increaseList);
+		return "减员成功";
 	}
 
 	@Override
@@ -537,7 +566,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 
 	@Override
 	@ServiceLog(doAction = "修改参保方案")
-	public void updateInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user) {
+	public String updateInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user) {
 		// TODO Auto-generated method stub
 		TbManpowerInsuredScheme tbManpowerInsuredScheme = new TbManpowerInsuredScheme();
 		tbManpowerInsuredScheme.setSchemeId(insuredSchemeAdd.getSchemeId());
@@ -548,16 +577,27 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		tbManpowerInsuredScheme.setModifierAccount(user.getAccount());
 		tbManpowerInsuredSchemeMapper.updateByPrimaryKeySelective(tbManpowerInsuredScheme);
 		
+		insuredSchemeDetailedMapper.deleteBySchemeId(insuredSchemeAdd.getSchemeId());
+		
 		List<InsuredSchemeDetailed> detailedList = insuredSchemeAdd.getInsuredSchemeDetailedList();
-		for(InsuredSchemeDetailed scheme :detailedList){
-			TbManpowerInsuredSchemeDetailed tbManpowerInsuredSchemeDetailed = new TbManpowerInsuredSchemeDetailed();
-			tbManpowerInsuredSchemeDetailed.setModifiedTime(new Date());
-			tbManpowerInsuredSchemeDetailed.setModifierAccount(user.getAccount());
-			BeanUtils.copyProperties(scheme,tbManpowerInsuredSchemeDetailed);
-			tbManpowerInsuredSchemeDetailedMapper.updateByPrimaryKeySelective(tbManpowerInsuredSchemeDetailed);
+		if(detailedList.size() > 0){
+			//插入方案明细表
+			for(InsuredSchemeDetailed insuredSchemeDetailed : detailedList){
+				insuredSchemeDetailed.setSchemeId(insuredSchemeAdd.getSchemeId());
+				insuredSchemeDetailed.setRecordStatus(Byte.parseByte(SalaryWelfareManagementStatus.NORMAL.getCode()));
+				insuredSchemeDetailed.setProjectId(UUID.randomUUID().toString());
+				insuredSchemeDetailed.setSocialSecurityId(insuredSchemeAdd.getSocialSecurityId());
+				insuredSchemeDetailed.setProvidentFundId(insuredSchemeAdd.getAccumulationFundId());
+				insuredSchemeDetailed.setCreatedTime(new Date());
+				insuredSchemeDetailed.setCreatorAccount(user.getAccount());
+				insuredSchemeDetailed.setModifiedTime(new Date());
+				insuredSchemeDetailed.setModifierAccount(user.getAccount());
+			}
+			insuredSchemeDetailedMapper.insertBatch(detailedList);
 		}
 		
 		logger.info("[参保方案]参保方案修改成功");
+		return "修改成功";
 	}
 
 	@Override
@@ -592,13 +632,13 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	
 	@Override
 	@ServiceLog(doAction = "添加参保方案")
-	public void addInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user) {
+	public String addInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user) {
 		// TODO Auto-generated method stub
 		TbManpowerInsuredScheme InsuredScheme = new TbManpowerInsuredScheme();
 		BeanUtils.copyProperties(insuredSchemeAdd,InsuredScheme);
 		InsuredScheme.setSchemeId(UUID.randomUUID().toString());
 		InsuredScheme.setSchemeName(insuredSchemeAdd.getSchemeName());
-		InsuredScheme.setInsuredCityId(UUID.randomUUID().toString());
+		InsuredScheme.setInsuredCityId(insuredSchemeAdd.getInsuredCityId());
 		InsuredScheme.setSocialSecurityId(UUID.randomUUID().toString());
 		InsuredScheme.setAccumulationFundId(UUID.randomUUID().toString());
 		InsuredScheme.setRecordStatus(Byte.parseByte(SalaryWelfareManagementStatus.EFFECTIVE.getCode()));
@@ -626,6 +666,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		}
 		
 		logger.info("[参保方案]参保方案数据添加成功，scheme{}",insuredSchemeAdd.getSchemeId());
+		return "添加成功";
 	}
 	
     //参保明细对象检测

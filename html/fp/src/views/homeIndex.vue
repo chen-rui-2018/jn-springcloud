@@ -101,7 +101,7 @@
     },
     computed: {
       isCenter() {
-        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises';
+        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,academicExchange,policyCenter,recruitmentList';
         return this.$route.matched.some(item => {
           if(item.name){
             return list.indexOf(item.name) == -1
@@ -150,16 +150,16 @@
         this.show1 = false;
         // },500)
       },
-      handleChangeName(val) {
-        console.log(val);
-        if(val=='two'){
-          this.sw='tw'
-        } else if(val=='three'){
-          this.sw='th'
-        } else{
-          this.sw='fir'
-        }
-      },
+      // handleChangeName(val) {
+      //   console.log(val);
+      //   if(val=='two'){
+      //     this.sw='tw'
+      //   } else if(val=='three'){
+      //     this.sw='th'
+      //   } else{
+      //     this.sw='fir'
+      //   }
+      // },
       swiperinit() {
         var mySwiper = new swiper(".swiper-container", {
           direction: "horizontal", // 垂直切换选项
@@ -267,36 +267,6 @@
   };
 </script>
 <style lang="scss">
-//  .mesage11{
-//    position: relative;
-//    left:70%;
-//    width: 250px;
-//    color:#999;
-//    font-size: 12px;
-//    .el-card__body{
-//      padding:0;
-//    }
-//    .el-card{
-//      color:#999;
-//    }
-//    .firli{
-//      display: flex;
-//      align-items: center;
-//      justify-content: space-between;
-//      padding:15px 20px;
-//      border-bottom:1px solid #eee;
-//    }
-//    .checkAll{
-//      padding:15px 20px;
-//    }
-//    li{
-//      padding:15px 20px;
-//      border-bottom:1px solid #eee;
-//      overflow: hidden;
-//      text-overflow:ellipsis;
-//      white-space: nowrap;
-//    }
-//  }
   @keyframes qfyfadeInLeft {
     0% {
       opacity: 0;
@@ -446,229 +416,6 @@
       .searchbox {
         background: #fff;
         box-shadow:0 10px 10px -10px #ccc;
-      }
-    }
-    .portalCon {
-      .banner {
-        .swiper-wrapper {
-          .swiper-slide {
-            width: 100%;
-          }
-          img {
-            width: 100%;
-            vertical-align: middle;
-          }
-        }
-        .swiper-button-prev,
-        .swiper-button-next {
-          background: none;
-          width: 34px;
-          height: 34px;
-          color: #fff;
-          font-size: 60px;
-          .icon-leftarrow,
-          .icon-rightarrow {
-            font-size: 45px;
-          }
-        }
-        .swiper-button-prev {
-          left: 60px;
-        }
-        .swiper-button-next {
-          right: 60px;
-        }
-        .swiper-pagination {
-          bottom: 40%;
-          left: 92%;
-          .swiper-pagination-bullet {
-            display: block;
-            margin-bottom: 10px;
-            opacity: 1;
-            background: #ccc;
-          }
-          .swiper-pagination-bullet-active {
-            background: #fff;
-            height: 50px;
-            border-radius: 4px;
-          }
-        }
-      }
-    }
-    #qiehuan1 {
-      margin: 20px 0;
-      > li {
-        display: inline-block;
-        width: 190px;
-        height: 210px;
-        padding: 30px 10px;
-        font-size: 12px;
-        text-align: left;
-        margin-right: 15px;
-        vertical-align: middle;
-        background-color: rgba(255, 255, 255, 0.2);
-        .liTit {
-          font-size: 14px;
-          text-align: center;
-        }
-        .liInfo {
-          margin: 40px 0 50px 0;
-        }
-        .liBom {
-          padding: 0 15px;
-          > i {
-            margin-right: 8px;
-          }
-        }
-      }
-      > li:hover {
-        transition: 0.3s all;
-        transform: scale(1.1);
-      }
-    }
-    .portalNotice {
-      .left {
-        text-align: left;
-        .leftLine {
-          position: absolute;
-          width: 2px;
-          height: 100%;
-          background: #000;
-        }
-        .el-collapse,
-        .el-collapse-item__header,
-        .el-collapse-item__wrap {
-          border: none;
-        }
-        .el-collapse-item__wrap {
-          // text-indent: 3.5em;
-        }
-        .el-collapse-item__arrow {
-          display: none;
-        }
-      }
-    }
-    .policyGuide {
-      .swiper-container {
-        padding-bottom: 60px;
-      }
-      // .swiper-pagination-bullet {
-      //   background: red;
-      // }
-      // .swiper-pagination-bullet-active {
-      //   background: #fff;
-      // }
-      .swiper-pagination-bullet {
-        //   display: block;
-        margin-bottom: 10px;
-        opacity: 1;
-        background: #97ecc8;
-      }
-      .swiper-pagination-bullet-active {
-        background: #fff;
-        //   height: 65px;
-        border-radius: 4px;
-      }
-      .el-carousel__button {
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-      }
-      .el-carousel__arrow {
-        background: none;
-        font-size: 30px;
-        top: 40%;
-      }
-      .el-carousel__arrow--left {
-        left: 64px;
-      }
-      .el-carousel__arrow--right {
-        right: 64px;
-      }
-      .fenye1 {
-        .swiper-button-prev,
-        .swiper-button-next {
-          width: 17px;
-          height: 31px;
-          top: 48%;
-        }
-        .swiper-button-prev,
-        .swiper-container-rtl .swiper-button-next {
-          background: url("../../static/img/zuo1.png") 100% 100% / 100% 100%
-          no-repeat;
-          left: 90px;
-          right: auto;
-        }
-        .swiper-button-next,
-        .swiper-container-rtl .swiper-button-prev {
-          background: url("../../static/img/you1.png") 100% 100% / 100% 100%
-          no-repeat;
-          right: 100px;
-          left: auto;
-        }
-      }
-    }
-    .popularActi {
-      .swiper-button-prev,
-      .swiper-button-next {
-        width: 34px;
-        height: 34px;
-      }
-    }
-
-    .districtGardens {
-      .card {
-        .swiper-container {
-          padding: 30px 0;
-        }
-      }
-      .swiper-button-next,
-      .swiper-container-rtl .swiper-button-prev {
-        background: url("../../static/img/you2.png") 100% 100% / 100% 100% no-repeat;
-        right: 95px;
-        left: auto;
-        width: 17px;
-        height: 31px;
-      }
-      .swiper-button-prev,
-      .swiper-container-rtl .swiper-button-next {
-        background: url("../../static/img/zuo2.png") 100% 100% / 100% 100% no-repeat;
-        left: 95px;
-        right: auto;
-        width: 17px;
-        height: 31px;
-      }
-      .cardUl {
-        > li {
-          transition: all 0.6s;
-        }
-        > li:hover {
-          transform: scale(1.1);
-          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
-        }
-      }
-    }
-    .enterpriseinfo {
-      .enterPriseCon {
-        .con1 {
-          overflow: hidden;
-        }
-        .con1 img {
-          transition: all 0.6s;
-        }
-        .con1 img:hover {
-          transform: scale(1.1);
-        }
-        .con2 {
-          .conlef1 {
-            overflow: hidden;
-            img {
-              transition: all 0.6s;
-            }
-            img:hover {
-              transform: scale(1.1);
-            }
-          }
-        }
       }
     }
   }

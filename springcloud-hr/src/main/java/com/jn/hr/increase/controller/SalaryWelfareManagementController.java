@@ -86,20 +86,20 @@ public class SalaryWelfareManagementController extends BaseController{
     //@RequiresPermissions("/hr/SalaryWelfareManagement/addSalaryInfo")
 	@ApiOperation(value = "添加薪资信息", notes = "添加薪资信息")
     @RequestMapping(value = "/addSalaryInfo", method = RequestMethod.POST)
-	public Result addSalaryInfo(@Validated @RequestBody SalaryInfoAdd salaryInfoAdd){
+	public Result<String> addSalaryInfo(@Validated @RequestBody SalaryInfoAdd salaryInfoAdd){
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		salaryManagementService.addSalary(salaryInfoAdd, user);
-		return new Result();
+		String str = salaryManagementService.addSalary(salaryInfoAdd, user);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "修改薪资信息")
     //@RequiresPermissions("/hr/SalaryWelfareManagement/updateSalaryInfo")
 	@ApiOperation(value = "修改薪资信息", notes = "修改薪资信息")
     @RequestMapping(value = "/updateSalaryInfo", method = RequestMethod.POST)
-	public Result updateSalaryInfo(@Validated @RequestBody SalaryInfoAdd salaryInfoAdd){
+	public Result<String> updateSalaryInfo(@Validated @RequestBody SalaryInfoAdd salaryInfoAdd){
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-        salaryManagementService.updateSalary(salaryInfoAdd, user);
-		return new Result();
+        String str = salaryManagementService.updateSalary(salaryInfoAdd, user);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "导入薪资信息")
@@ -166,6 +166,8 @@ public class SalaryWelfareManagementController extends BaseController{
 	@ApiOperation(value = "导出工资条信息", notes = "导出工资条信息")
     @RequestMapping(value = "/exportPayroll", method = RequestMethod.GET)
 	public void exportPayroll(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage, HttpServletResponse response){
+		salaryPayrollPage.setPage(1);
+		salaryPayrollPage.setRows(200000);
 		PaginationData<List<SalaryPayrollVo>> pageList = salaryManagementService.exportPayroll(salaryPayrollPage);
 		String exportTitle = "姓名,工号,部门,工资档次及金额,园区工龄工资,技术岗位津贴,职务津贴,工作性补贴,学历津贴,职称津贴,专项补贴,餐补,应发工资,代扣社会统筹保险,代扣公积金,扣个税,食堂餐费,工会会费,实发工资,入账日期";
 		String exportColName = "name,jobNumber,department,basicWage,seniorityWage,technicalAllowance,dutyAllowance,workSubsidy,educationAllowance,professionalTitleAllowance,specialSubsidy," +
@@ -179,9 +181,9 @@ public class SalaryWelfareManagementController extends BaseController{
     //@RequiresPermissions("/hr/SalaryWelfareManagement/updatePayroll")
 	@ApiOperation(value = "修改工资条", notes = "修改工资条")
     @RequestMapping(value = "/updatePayroll", method = RequestMethod.POST)
-	public Result updatePayroll(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage){
-		salaryManagementService.updatePayroll(salaryPayrollPage);
-		return new Result();
+	public Result<String> updatePayroll(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage){
+		String str = salaryManagementService.updatePayroll(salaryPayrollPage);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "薪酬分析")
@@ -280,29 +282,29 @@ public class SalaryWelfareManagementController extends BaseController{
     //@RequiresPermissions("/hr/SalaryWelfareManagement/addOrDeleteAttritionPlan")
 	@ApiOperation(value = "添加增员计划", notes = "添加增员计划")
 	@RequestMapping(value = "/addOrDeleteAttritionPlan", method = RequestMethod.POST)
-	public Result addOrDeleteAttritionPlan(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd){
+	public Result<String> addOrDeleteAttritionPlan(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd){
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		welfareManagrmentService.addAttritionPlan(increaseStaffAdd, user);
-		return new Result();
+		String str = welfareManagrmentService.addAttritionPlan(increaseStaffAdd, user);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "取消")
     //@RequiresPermissions("/hr/SalaryWelfareManagement/deleteAttritionPlan")
 	@ApiOperation(value = "取消", notes = "取消")
 	@RequestMapping(value = "/deleteAttritionPlan", method = RequestMethod.POST)
-	public Result deleteAttritionPlan(@Validated @RequestBody IncreaseStaffPage increaseStaffPage){;
-		welfareManagrmentService.deleteAttritionPlan(increaseStaffPage);
-		return new Result();
+	public Result<String> deleteAttritionPlan(@Validated @RequestBody IncreaseStaffPage increaseStaffPage){;
+		String str = welfareManagrmentService.deleteAttritionPlan(increaseStaffPage);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "修改项目基数")
     //@RequiresPermissions("/hr/SalaryWelfareManagement/updateInsuredCardinalNumber")
 	@ApiOperation(value = "修改项目基数", notes = "修改项目基数")
 	@RequestMapping(value = "/updateInsuredCardinalNumber", method = RequestMethod.POST)
-	public Result updateInsuredCardinalNumber(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
+	public Result<String> updateInsuredCardinalNumber(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		welfareManagrmentService.updateInsurancescheme(insuredSchemeAdd, user);
-		return new Result();
+		String str = welfareManagrmentService.updateInsurancescheme(insuredSchemeAdd, user);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "参保明细页面")
@@ -343,9 +345,10 @@ public class SalaryWelfareManagementController extends BaseController{
     //@RequiresPermissions("/hr/SalaryWelfareManagement/stopInsurance")
 	@ApiOperation(value = "停止参保", notes = "停止参保")
 	@RequestMapping(value = "/stopInsurance", method = RequestMethod.POST)
-	public void stopInsurance(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd){
+	public Result<String> stopInsurance(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd){
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		welfareManagrmentService.stopInsurance(increaseStaffAdd, user);
+		return new Result();
 	}
 	
 	@ControllerLog(doAction = "自主参保方案页面")
@@ -361,10 +364,10 @@ public class SalaryWelfareManagementController extends BaseController{
     //@RequiresPermissions("/hr/SalaryWelfareManagement/updateInsurancescheme")
 	@ApiOperation(value = "修改参保方案", notes = "修改参保方案")
 	@RequestMapping(value = "/updateInsurancescheme", method = RequestMethod.POST)
-	public Result updateInsurancescheme(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
+	public Result<String> updateInsurancescheme(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		welfareManagrmentService.updateInsurancescheme(insuredSchemeAdd, user);
-		return new Result();
+		String str = welfareManagrmentService.updateInsurancescheme(insuredSchemeAdd, user);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "参保方案页面明细")

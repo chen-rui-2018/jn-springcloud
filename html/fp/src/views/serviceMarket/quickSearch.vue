@@ -1,8 +1,8 @@
 <template>
   <div class="quickSearch w">
     <div class="serverOrgMenu color2">
-      <span class="pointer" @click="$routet.push({path:'/enterpriseservice'})">企业服务/</span>
-      <span class="pointer" @click="$routet.push({path:'/serMatHp'})">服务超市/</span>
+      <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务/</span>
+      <span class="pointer" @click="$router.push({path:'/serMatHp'})">服务超市/</span>
       <span class="mainColor agent">{{$route.query.preValue}}</span>
     </div>
     <div class="agentInfo">

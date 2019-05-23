@@ -882,6 +882,13 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
                 database.setIsAcademicDegree(Byte.parseByte("2"));
             }
         }
+        if(!StringUtils.isBlank(database.getEducationName())){
+            database.setEducationCode(commonService.queryDictValueByLable("employee","education",
+                    database.getEducationName()));
+            if(StringUtils.isBlank(database.getEducationCode())){
+                return "学历错误";
+            }
+        }
 
         //查询工号是否存在
         TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo=new TbManpowerEmployeeBasicInfo();

@@ -1,8 +1,8 @@
 <template>
     <div class="serverConDetail w">
         <div class="serverOrgMenu color2">
-            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页/</span>
-            <span class="pointer" @click="$routet.push({path:'/serverCon'})">服务顾问</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
+            <span class="pointer" @click="$router.push({path:'/serverCon'})">服务顾问</span>
             <span>/</span>
             <span class="mainColor agent">服务顾问详情</span>
         </div>

@@ -95,6 +95,10 @@
         <result column="s_doctorNum" jdbcType="VARCHAR" property="doctorNum" javaType="java.lang.Integer"/>
         <result column="s_returneeNum" jdbcType="VARCHAR" property="returneeNum" javaType="java.lang.Integer"/>
         <result column="s_orgPhone" jdbcType="VARCHAR" property="orgPhone" javaType="java.lang.String"/>
+        <result column="s_orgAddressDetail" jdbcType="VARCHAR" property="orgAddressDetail" javaType="java.lang.String"/>
+        <result column="s_orgProvince" jdbcType="VARCHAR" property="orgProvince" javaType="java.lang.String"/>
+        <result column="s_orgCity" jdbcType="VARCHAR" property="orgCity" javaType="java.lang.String"/>
+        <result column="s_orgArea" jdbcType="VARCHAR" property="orgArea" javaType="java.lang.String"/>
         <result column="s_orgAddress" jdbcType="VARCHAR" property="orgAddress" javaType="java.lang.String"/>
         <result column="s_conName" jdbcType="VARCHAR" property="conName" javaType="java.lang.String"/>
         <result column="s_conPhone" jdbcType="VARCHAR" property="conPhone" javaType="java.lang.String"/>
@@ -173,7 +177,11 @@
             i.org_city,
             i.org_area,
             i.org_address
-          ) AS "s_orgAddress",
+          ) AS "s_orgAddressDetail",
+          i.org_province as "orgProvince",
+          i.org_city as "orgCity",
+          i.org_area as "orgArea",
+          i.org_address as "orgAddress",
           i.con_name AS "s_conName",
           i.con_phone AS "s_conPhone",
           i.con_email AS "s_conEmail",

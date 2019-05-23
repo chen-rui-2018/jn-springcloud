@@ -38,7 +38,7 @@ public interface StaffService {
      * @param phone 手机号
      * @return
      */
-    UserExtensionInfoVO getInviteStaffList(String phone, String curAccount);
+    UserExtensionInfoVO getInviteStaffList(String phone);
 
     /**
      * 邀请员工

@@ -648,7 +648,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tbPayBillMiddle.setTotalMoney(createOrderAndPayReqModel.getPaySum());
                 tbPayBillMiddle.setStatus(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
                 tbPayBillMiddle.setCreatedTime(new Date());
-                tbPayBillMiddle.setCreatorAccount(user.getAccount());
+                tbPayBillMiddle.setCreatorAccount(createOrderAndPayReqModel.getUserAccount());
                 tbPayBillMiddle.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
                 tbPayBillMiddleMapper.insertSelective(tbPayBillMiddle);
                 logger.info("调用统一支付下单接口，插入账单信息到账单中间表，便于核查验证账单操作结束");

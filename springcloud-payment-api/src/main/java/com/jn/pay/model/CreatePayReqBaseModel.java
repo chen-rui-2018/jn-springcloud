@@ -8,8 +8,10 @@ package com.jn.pay.model;/**
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import org.hibernate.validator.constraints.NotBlank;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -28,13 +30,20 @@ public class CreatePayReqBaseModel implements Serializable {
 
 
     @ApiModelProperty(value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE",required = true)
+    @NotBlank
     private String channelId;
+
     @ApiModelProperty(value = "总支付金额",example = "1.02",required = true)
+    @NotNull
     private BigDecimal paySum;
-    @ApiModelProperty(value = "缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费）",example = "4",required = true)
+
+    @ApiModelProperty(value = "缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体检费，11预缴充值电费）",example = "4",required = true)
+    @NotBlank
     private String payType;
+
     @ApiModelProperty(value = "用户账号",hidden = true)
     private String userAccount;
+
     @ApiModelProperty(value = "用户IP地址",hidden = true)
     private String userIp;
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="adniministrativeHeader">
-      <x-header :left-options="{backText: ''}">{{this.$route.meta.title}} <span slot="right" @touchstart="goConsult">留言</span></x-header>
+      <x-header :left-options="{backText: ''}">{{this.$route.meta.title}} <span slot="right" @click="goConsult">留言</span></x-header>
     </div>
     <div class="serviceDeail">
       <div class="serviceDeail_main">
@@ -87,6 +87,7 @@ export default {
       this.dealUrl = `http://192.168.10.31:1101/springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.id}`
     },
     goConsult () {
+      console.log(1)
       this.$router.push({path: '/guest/portal/sp/power/consult', query: {id: this.id}})
     }
   }
@@ -148,13 +149,18 @@ export default {
             font-size: 26px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             &:last-child{
               border:none;
             }
-            justify-content: space-between;
             span:nth-child(1){
               padding-right: 44px;
               width:60%;
+              display: inline-block;
+            }
+            span:nth-child(2){
+              // display: inline-block;
+              // width: 60%;
             }
           }
           .online_addr{

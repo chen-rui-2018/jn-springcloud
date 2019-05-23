@@ -71,9 +71,8 @@
               :data="treeData"
               :props="defaultProps"
               style="height:186px;overflow:auto;border:1px solid #dcdfe6;"
-              @check-change="handleNodeSelect"
-              show-checkbox>
-            </el-tree>
+              show-checkbox
+              @check-change="handleNodeSelect"/>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -87,7 +86,7 @@
 
 <script>
 import {
-  api, paramApi
+  api
 } from '@/api/hr/train'
 export default {
   data() {
@@ -151,7 +150,7 @@ export default {
     },
     // 新增/编辑--制定课程
     handleAddOrEdict(row) {
-      if (row&&row.id) {
+      if (row && row.id) {
         this.$router.push({ name: 'train-addOrEdict', query: { id: row.id, title: '编辑课表' }})
       } else {
         this.$router.push({ name: 'train-addOrEdict', query: { title: '新增课表' }})
@@ -171,7 +170,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          let data = { id: row.id }
+          const data = { id: row.id }
           api('hr/train/list/deleteManagement', data).then(res => {
             if (res.data.code === '0000') {
               this.$message({
@@ -195,12 +194,12 @@ export default {
       this.$router.push({ name: 'train-record', query: { id: row.id, title: '培训记录' }})
     },
     // 发送通知--树结构
-    handleNodeSelect(data,checked) {    
-      if(!data.children&&checked) {
+    handleNodeSelect(data, checked) {
+      if (!data.children && checked) {
         this.messageForm.employeeBasicInfoList = []
         // delete data.label
         this.messageForm.employeeBasicInfoList.push(data)
-      }    
+      }
     },
     confirmSend() {
       this.dialogFormVisible = false
@@ -216,19 +215,19 @@ export default {
     selectStaff() {
       api('hr/train/list/selectUserList', this.messageForm).then(res => {
         if (res.data.code === '0000') {
-          let list = res.data.data
-          let vm = this
+          const list = res.data.data
+          const vm = this
           // 遍历一级
           list.forEach((item, index) => {
-            let labelData = {
+            const labelData = {
               label: item.departmentName,
               children: []
             }
             vm.treeData.push(labelData)
             // 遍历二级
-            item.employeeBasicInfoList.forEach((item2,index2) => {
-              let childrenData = {
-                label: item2.name+'-'+item2.jobNumber,
+            item.employeeBasicInfoList.forEach((item2, index2) => {
+              const childrenData = {
+                label: item2.name + '-' + item2.jobNumber,
                 workMailbox: item2.workMailbox,
                 jobNumber: item2.jobNumber,
                 name: item2.name,

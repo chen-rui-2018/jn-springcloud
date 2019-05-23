@@ -1,0 +1,12 @@
+<!--pages/templates/header.wxml-->
+<view class="head_box">
+  <view class="head" hover-class="none" hover-stop-propagation="false">
+    <view class="back"  bindtap='_navback' hover-class="none" hover-stop-propagation="false">
+      <image class="img" src="./../../images/back.png" mode="aspectFit|aspectFill|widthFix" lazy-load="false" binderror="" bindload="">
+      </image>
+    </view>
+    <view class="head_title" hover-class="none" hover-stop-propagation="false">
+      {{navbarData.title}}
+    </view>
+  </view>
+</view>

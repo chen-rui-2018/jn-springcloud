@@ -14,5 +14,6 @@
   @import "~@/css/common";
   .more-btn {
     color: $--color-primary;
+    cursor: pointer;
   }
 </style>

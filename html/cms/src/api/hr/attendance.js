@@ -10,18 +10,17 @@ export function list(query) {
   })
 }
 
-//导出考勤列表
+// 导出考勤列表
 export function exportAttendanceList(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/AttendanceManagement/exportAttendanceManagement?q=a${params}`,
     method: 'get'
   })
 }
-
 
 // 查询旷工明细
 export function absenceDetailList(query) {
@@ -68,7 +67,6 @@ export function leaveDetailist(query) {
   })
 }
 
-
 // 查询班次
 export function attendanceTimeSetList() {
   return request({
@@ -76,7 +74,6 @@ export function attendanceTimeSetList() {
     method: 'post'
   })
 }
-
 
 // 添加班次
 export function addAttendanceTimeSet(query) {
@@ -132,12 +129,11 @@ export function scheduDetailist(query) {
   })
 }
 
-
 // 排班明细导出
 export function exportScheduDetailist(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/AttendanceManagement/exportScheduDetailist?q=a${params}`,
@@ -154,11 +150,11 @@ export function updateScheduDetailist(query) {
   })
 }
 
-//导出旷工明细
+// 导出旷工明细
 export function exportAbsenceDetailList(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/AttendanceManagement/exportAbsenceDetailList?q=a${params}`,
@@ -166,11 +162,11 @@ export function exportAbsenceDetailList(query) {
   })
 }
 
-//导出迟到明细
+// 导出迟到明细
 export function exportComeLateDetailList(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/AttendanceManagement/exportComeLateDetailList?q=a${params}`,
@@ -178,11 +174,11 @@ export function exportComeLateDetailList(query) {
   })
 }
 
-//导出早退明细
+// 导出早退明细
 export function exportLeaveEarlyDetailList(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/AttendanceManagement/exportLeaveEarlyDetailList?q=a${params}`,
@@ -190,11 +186,11 @@ export function exportLeaveEarlyDetailList(query) {
   })
 }
 
-//导出缺卡明细
+// 导出缺卡明细
 export function exportNotCardDetailList(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/AttendanceManagement/exportNotCardDetailList?q=a${params}`,
@@ -202,18 +198,14 @@ export function exportNotCardDetailList(query) {
   })
 }
 
-//导出请假明细
+// 导出请假明细
 export function exportLeaveDetailist(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/AttendanceManagement/exportLeaveDetailist?q=a${params}`,
     method: 'get'
   })
 }
-
-
-
-

@@ -9,7 +9,7 @@
       <el-table-column :show-overflow-tooltip="true" label="考核名称" align="center" prop="assessmentName" />
       <el-table-column label="考核开始时间" align="center" prop="assessmentStartTime"/>
       <el-table-column label="考核结束时间" align="center" prop="assessmentEndTime"/>
-      <el-table-column :show-overflow-tooltip="true"  label="考核对象" align="center" prop="assessmentObject"/>
+      <el-table-column :show-overflow-tooltip="true" label="考核对象" align="center" prop="assessmentObject"/>
       <el-table-column label="考核人" align="center" prop="assessmentPeople" />
       <el-table-column label="待归档人数" width="120" align="center" prop="archiveNumber"/>
       <el-table-column label="状态" align="center" prop="status">
@@ -52,7 +52,7 @@
       <el-dialog :visible.sync="delayDialogFormVisible" :title="dialogTitle" width="650px">
         <el-form label-position="right" label-width="80px">
           <el-form-item label="延期至:">
-            <el-date-picker type="datetime" v-model="delayTime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="" style="width: 100%;" @change="getDelayTime" />
+            <el-date-picker v-model="delayTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="" style="width: 100%;" @change="getDelayTime" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer" align="center">
@@ -66,7 +66,7 @@
 </template>
 <script>
 import {
-  api, paramApi, exportExcelByObj
+  api, exportExcelByObj
 } from '@/api/hr/common'
 import UE from '@/components/ue.vue'
 export default {
@@ -79,9 +79,9 @@ export default {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
       },
-      delayTime:'',
+      delayTime: '',
       assessmanagementList: [],
-      delayLow:{},
+      delayLow: {},
       delayDialogFormVisible: false,
       total: 0,
       listLoading: false,
@@ -114,7 +114,7 @@ export default {
 
     },
     downassessment(row) {
-      exportExcelByObj('hr/AssessmentManagement/exportAssessment',row).then(res => {
+      exportExcelByObj('hr/AssessmentManagement/exportAssessment', row).then(res => {
         window.location.href = res.request.responseURL
       })
     },
@@ -141,52 +141,52 @@ export default {
         type: 'warning'
       }).then(() => {
         const delRow = {
-          id:row.id,
-          assessmentName:row.assessmentName,
-          assessmentStartTime:row.assessmentStartTime,
-          assessmentEndTime:row.assessmentEndTime,
-          assessmentObject:row.assessmentObject,
-          assessmentPeople:row.assessmentPeople,
-          status:row.status,
-          templateId:row.templateId,
-          templateName:row.templateName,
-          jobNumber:row.jobNumber,
+          id: row.id,
+          assessmentName: row.assessmentName,
+          assessmentStartTime: row.assessmentStartTime,
+          assessmentEndTime: row.assessmentEndTime,
+          assessmentObject: row.assessmentObject,
+          assessmentPeople: row.assessmentPeople,
+          status: row.status,
+          templateId: row.templateId,
+          templateName: row.templateName,
+          jobNumber: row.jobNumber
         }
-          api('hr/AssessmentManagement/deleteAssessmentRecord', delRow).then(res => {
-            if (res.data.code === '0000') {
-              this.$message({
-                message: '删除成功',
-                type: 'success'
-              })
-              if (this.total % this.listQuery.rows === 1) {
-                this.listQuery.page = this.listQuery.page - 1
-              }
-              this.initList()
-            } else {
-              this.$message.error(res.data.result)
+        api('hr/AssessmentManagement/deleteAssessmentRecord', delRow).then(res => {
+          if (res.data.code === '0000') {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            if (this.total % this.listQuery.rows === 1) {
+              this.listQuery.page = this.listQuery.page - 1
             }
-          })
+            this.initList()
+          } else {
+            this.$message.error(res.data.result)
+          }
         })
+      })
         .catch(() => {
         })
     },
     // 查看
     viewassessment(row) {
-      this.$router.push({ name: 'assessment-detail', query: { title: '查看详情',row: row}})
+      this.$router.push({ name: 'assessment-detail', query: { title: '查看详情', row: row }})
     },
-    //延期
-    delayassessment(row){
+    // 延期
+    delayassessment(row) {
       this.dialogTitle = '考核延期'
       this.delayDialogFormVisible = true
       this.delayLow = row
     },
     delayassessmentsubmit() {
-      let obj = {
+      const obj = {
         assessmentId: this.delayLow.assessmentId,
-        assessmentEndTime:this.delayTime
+        assessmentEndTime: this.delayTime
       }
       if (new Date(this.delayTime.replace(/-/g, '\/')) < new Date(this.delayLow.assessmentStartTime.replace(/-/g, '\/'))) {
-        alert('考核开始时间为：'+this.delayLow.assessmentStartTime+'延期时间必须大于生效时间,请重新选择')
+        alert('考核开始时间为：' + this.delayLow.assessmentStartTime + '延期时间必须大于生效时间,请重新选择')
         this.isDisabled = false
         return false
       }
@@ -207,7 +207,7 @@ export default {
     },
     // 点击新增按钮的时候
     handleCreate() {
-      this.$router.push({ name: 'assessment-add', query: { title: '发起考核'}})
+      this.$router.push({ name: 'assessment-add', query: { title: '发起考核' }})
     },
     // 表格分页功能
     handleSizeChange(val) {
@@ -227,7 +227,7 @@ export default {
     // 初始化
     initList() {
       this.listLoading = true
-      api('hr/AssessmentManagement/paginationInquireAssessManage',this.listQuery).then(res => {
+      api('hr/AssessmentManagement/paginationInquireAssessManage', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.assessmanagementList = res.data.data.rows
           console.log(this.assessmanagementList)

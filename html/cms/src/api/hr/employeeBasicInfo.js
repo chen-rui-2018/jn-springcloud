@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 var baseurl = 'springcloud-hr/'
 
-
 // 新增组织架构
 export function addEmployeeDepartment(query) {
   return request({
@@ -36,7 +35,6 @@ export function getTreeList() {
   })
 }
 
-
 // 新增员工花名册
 export function addEmployeeBasicInfo(query) {
   return request({
@@ -45,7 +43,6 @@ export function addEmployeeBasicInfo(query) {
     data: query
   })
 }
-
 
 // 编辑员工花名册
 export function updateEmployeeBasicInfo(query) {
@@ -73,7 +70,6 @@ export function getEmployeeBasicInfo(id) {
   })
 }
 
-
 // 删除员工花名册
 export function deleteEmployeeBasicInfo(id) {
   return request({
@@ -81,7 +77,6 @@ export function deleteEmployeeBasicInfo(id) {
     method: 'get'
   })
 }
-
 
 // 导入员工花名册excel
 export function importEmployeeBasicInfo(formData) {
@@ -94,9 +89,9 @@ export function importEmployeeBasicInfo(formData) {
 
 // 导出员工花名册
 export function exportEmployeeBasicInfo(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/employeeBasicInfo/exportEmployeeBasicInfo?q=a${params}`,

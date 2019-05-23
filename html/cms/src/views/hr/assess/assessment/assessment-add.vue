@@ -19,12 +19,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="考核对象" prop="assessmentObject" class="inline">
-        <el-input type="textarea" style="width: 500px;" readonly="readonly" v-model="assessmentObjectData"/>
+        <el-input v-model="assessmentObjectData" type="textarea" style="width: 500px;" readonly="readonly"/>
         <el-button type="text" @click="openAssessmentObjPage">选择</el-button>
       </el-form-item>
       <el-form-item label="考核人" prop="assessmentPeople" class="inline">
         <!--<el-input v-model="assessment.assessmentPeople" style="width: 205px;"/>-->
-        <el-input type="textarea" style="width: 500px;" readonly="readonly" v-model="assessmentPeopleData"/>
+        <el-input v-model="assessmentPeopleData" type="textarea" style="width: 500px;" readonly="readonly"/>
         <el-button type="text" @click="openAssessmentPeoplePage">选择</el-button>
       </el-form-item>
       <el-form-item>
@@ -34,42 +34,40 @@
     </el-form>
     <!--获取考核对象/考核人树形信息模板-->
     <!--<template v-if="assessmentObjPageVisible">-->
-    <el-dialog  :title="titleMap[dialogStatus]" :visible.sync="assessmentObjPageVisible" style="width: 950px;" >
+    <el-dialog :title="titleMap[dialogStatus]" :visible.sync="assessmentObjPageVisible" style="width: 950px;" >
       <div style="width: 100%;height: 320px;overflow: auto">
         <el-input
-          placeholder="输入员工名字"
-          v-model="filterText">
-        </el-input>
+          v-model="filterText"
+          placeholder="输入员工名字"/>
         <el-tree
-          :data="rootData"
           ref="rootTree"
+          :data="rootData"
+          :filter-node-method="filterNode"
           show-checkbox
           node-key="value"
-          :filter-node-method="filterNode"
-          >
-        </el-tree>
-        <el-button  type="primary" @click="getKeys(dialogStatus)">确定</el-button>
+        />
+        <el-button type="primary" @click="getKeys(dialogStatus)">确定</el-button>
         <el-button @click="closeDialog" >取消</el-button>
       </div>
     </el-dialog>
-   <!-- </template>-->
+    <!-- </template>-->
   </div>
 </template>
 
 <script>
 import {
-  api, paramApi
+  api
 } from '@/api/hr/common'
 import UE from '@/components/ue.vue'
 export default {
-  components: { UE},
+  components: { UE },
   data() {
     return {
       defaultMsg: '',
       filterText: '',
       rootData: [],
-      assessmentObjectData:'',
-      assessmentPeopleData:'',
+      assessmentObjectData: '',
+      assessmentPeopleData: '',
       config: {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
@@ -82,25 +80,25 @@ export default {
       isShow: false,
       isDisabled: false,
       title: '',
-      templateId:[],
-      assessmentObject:'',
+      templateId: [],
+      assessmentObject: '',
       assessment: {
         templateId: '',
         assessmentName: '',
         assessmentStartTime: '',
         assessmentEndTime: '',
         // assessmentObjectList: [],
-        assessmentJobNumber:'',
-        assessmentObjectJobNumber:'',
-        assessmentObject:'',
-        templateName:'',
+        assessmentJobNumber: '',
+        assessmentObjectJobNumber: '',
+        assessmentObject: '',
+        templateName: '',
         assessmentPeople: ''
       },
       titleMap: {
-        obj:'考核对象',
-        person: "考核人"
+        obj: '考核对象',
+        person: '考核人'
       },
-      dialogStatus: "",
+      dialogStatus: '',
       templates: [],
       assessmentObjPageVisible: false,
       assessmentObjDatas: [],
@@ -118,17 +116,17 @@ export default {
       }
     }
   },
+  watch: {
+    filterText(val) {
+      this.$refs.rootTree.filter(val)
+    }
+  },
   created() {
     this.getTemplates()
     this.getDepartmentTree()
   },
-  watch: {
-    filterText(val) {
-      this.$refs.rootTree.filter(val);
-    }
-  },
   methods: {
-    getDepartmentTree(){
+    getDepartmentTree() {
       api('hr/AssessmentManagement/ObtainDepartmentTree', {}).then(res => {
         if (res.data.code === '0000') {
           this.rootData = res.data.data
@@ -137,14 +135,14 @@ export default {
         }
       })
     },
-    templateIdSel(val){
+    templateIdSel(val) {
       this.assessment.templateId = val
-      //locations是v-for里面的也是datas里面的值
-      let obj = {};
-      obj = this.templates.find((item)=>{
-        return item.templateId === val;
-      });
-      this.assessment.templateName = obj.templateName;
+      // locations是v-for里面的也是datas里面的值
+      let obj = {}
+      obj = this.templates.find((item) => {
+        return item.templateId === val
+      })
+      this.assessment.templateName = obj.templateName
     },
     // 新增提交表单
     submitForm() {
@@ -159,8 +157,8 @@ export default {
         this.isDisabled = false
         return false
       }
-      this.assessment.assessmentObjectJobNumber = this.assessment.assessmentObject  //考核对象工号
-      this.assessment.assessmentJobNumber = this.assessment.assessmentPeople  //考核人工号
+      this.assessment.assessmentObjectJobNumber = this.assessment.assessmentObject // 考核对象工号
+      this.assessment.assessmentJobNumber = this.assessment.assessmentPeople // 考核人工号
       delete this.assessment.assessmentObject
       delete this.assessment.assessmentObjectList
       this.$refs['assessment'].validate(valid => {
@@ -184,8 +182,8 @@ export default {
       })
     },
     filterNode(value, data) {
-      if (!value) return true;
-      return data.label.indexOf(value) !== -1;
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
     },
     isActive(route) {
       return route.path === this.$route.path
@@ -201,7 +199,7 @@ export default {
     },
     // 获取考核模板
     getTemplates() {
-      let listQuery = {
+      const listQuery = {
         page: 1,
         rows: 100000
       }
@@ -213,36 +211,36 @@ export default {
         }
       })
     },
-    openAssessmentPeoplePage(){
-      this.dialogStatus="person"
-      this.assessmentObjPageVisible=true
+    openAssessmentPeoplePage() {
+      this.dialogStatus = 'person'
+      this.assessmentObjPageVisible = true
     },
-    openAssessmentObjPage(){
-      this.dialogStatus="obj"
-      this.assessmentObjPageVisible=true
+    openAssessmentObjPage() {
+      this.dialogStatus = 'obj'
+      this.assessmentObjPageVisible = true
     },
     handleNodeClick(data) {
     },
     closeDialog() {
-      this.assessmentObjPageVisible=false
+      this.assessmentObjPageVisible = false
     },
-    getKeys (key) {
-      let nodes = this.$refs.rootTree.getCheckedNodes()
-      let arr = []
+    getKeys(key) {
+      const nodes = this.$refs.rootTree.getCheckedNodes()
+      const arr = []
       let assessmentObjectArrStr = ''
-      let assessmentPeopleArr = []
+      const assessmentPeopleArr = []
       for (let j = 0; j < nodes.length; j++) {
-        if (nodes[j].parent != -1) {
+        if (nodes[j].parent !== -1) {
           arr.push(nodes[j].value)
-          if (key === 'obj'){
-            assessmentObjectArrStr = assessmentObjectArrStr + nodes[j].label+","
-          }else {
+          if (key === 'obj') {
+            assessmentObjectArrStr = assessmentObjectArrStr + nodes[j].label + ','
+          } else {
             assessmentPeopleArr.push(nodes[j].label)
           }
         }
       }
-      if (key === 'obj'){
-        assessmentObjectArrStr = assessmentObjectArrStr.substring(0,assessmentObjectArrStr.length-1)
+      if (key === 'obj') {
+        assessmentObjectArrStr = assessmentObjectArrStr.substring(0, assessmentObjectArrStr.length - 1)
         this.assessment.assessmentObject = arr.join(',')
         this.assessment.assessmentObjectList = arr
         this.assessmentObjectData = assessmentObjectArrStr

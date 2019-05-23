@@ -1,8 +1,8 @@
 <template>
   <div class="serverOrgDetail w">
     <div class="serverOrgMenu color2">
-      <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页/</span>
-      <span class="pointer" @click="$routet.push({path:'/serverOrg'})">服务机构</span>
+      <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
+      <span class="pointer" @click="$router.push({path:'/serverOrg'})">服务机构</span>
       <span>/</span>
       <span class="mainColor agent">服务机构详情</span>
     </div>
@@ -585,6 +585,7 @@
      <!-- 提需求弹框 -->
       <template v-if="serverOrgVisible">
             <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh">
+              <div v-if="islogin">
                 <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
                     <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
                         <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -593,6 +594,14 @@
                 <div class="demandLine"></div>
                 <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
                 <div class="demandDia" @click="demandDia()">提交需求</div>
+              </div>
+               <div v-else>
+                 你还未
+                 <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+                 /
+                 <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+                 企业账号
+                </div> 
             </el-dialog>
       </template>
   </div>
@@ -601,6 +610,7 @@
 export default {
   data() {
     return {
+      islogin:true,
       zankaiFlag: false,
       activeName: "baseInfo",
       activeName1: "serverPro",
@@ -640,9 +650,11 @@ export default {
       sortTypes:'',
       ratingType:'',
       timeInterval:'0',
+      token1:'',
     };
   },
   created() {
+    this.isLogin()
     this.initList();
     this.findOrgCountProductList();
     this.getServiceConList();
@@ -651,7 +663,19 @@ export default {
     this.getEvaluationCountInfo()
   },
   methods: {
+    //判断是否登录
+    isLogin(){
+      this.token1=sessionStorage.getItem('token')
+      if(!this.accout){
+        this.islogin=false
+      }
+    },
      demandRaise(i) { //提需求
+      // this.accout=sessionStorage.getItem('account')
+      // if(!this.accout){
+      //   debugger
+      //   this.islogin=false
+      // }
       this.serverOrgVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;

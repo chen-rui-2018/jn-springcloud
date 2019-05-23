@@ -1,7 +1,7 @@
 <template>
     <div class="serverPro w" style="padding-top:65px;">
         <div class="serverOrgMenu">
-            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
             <span>/</span>
             <span class="mainColor agent">服务产品</span>
         </div>
@@ -225,12 +225,8 @@ export default {
     selectIndustryList() {
       let _this = this;
       this.api.get({
-        url: "selectTeamList",
-        data: {
-          id: "",
-          preType: 0,
-          preValue: ""
-        },
+        url: "selectIndustryProductList",
+        data: {},
         callback: function(res) {
           if (res.code == "0000") {
             // for (let it in res.data) {

@@ -24,7 +24,7 @@ public class CustomerServiceCenterDetailVo implements Serializable {
     @ApiModelProperty("问题详情")
     private String quesDetails;
     @ApiModelProperty("问题描述url(最多允许三张图片)")
-    private String quesUrl;
+    private List<String> quesUrl;
     @ApiModelProperty("服务模块编码")
     private String serviceModule;
     @ApiModelProperty("服务模块名称")
@@ -70,11 +70,11 @@ public class CustomerServiceCenterDetailVo implements Serializable {
         this.quesDetails = quesDetails;
     }
 
-    public String getQuesUrl() {
+    public List<String> getQuesUrl() {
         return quesUrl;
     }
 
-    public void setQuesUrl(String quesUrl) {
+    public void setQuesUrl(List<String> quesUrl) {
         this.quesUrl = quesUrl;
     }
 

@@ -1,10 +1,12 @@
 ﻿var curl="http://localhost/springcloud-park/";
 var toolbar = new ghToolbar( "mySoftphone" );
-
+//获取token
+var token=sessionStorage.token;
 $(function () {
 	//获取服务模块信息
 	getServiceModule();
 });
+
 
 
 //获取服务模块信息
@@ -14,6 +16,9 @@ function getServiceModule(){
 		url: curl + '/guest/customer/customerCalledInfoEnterController/serviceModules',
 		dataType: "json",
 		data: {},
+		headers: {
+			"X-Authorization-access_token":token
+		},
 		success: function (data) {
 			if(data==undefined ||data==null ||data.data==null){
 				alert("网络异常，请稍后重试...");
@@ -27,7 +32,6 @@ function getServiceModule(){
 				$("#serviceModule").html("");
 				$("#serviceModule").html(options);
 			}
-
 		}
 	});
 }
@@ -321,7 +325,7 @@ toolbar.OnAgentDisConnectToACD(function( bResult, iReason ) {
 		$("#optionOKDesc").show();
 		$("#optionOKDesc").html("断开服务器成功，开始登出...");
 		$("#optionNGDesc").html("");
-		setTimeout(function(){document.getElementById("optionOKDesc").style.display="none";},3000);
+		setTimeout(function(){document.getElementById("optionOKDesc").style.display="none";},1000);
 		logout();
 	}
 });
@@ -402,10 +406,13 @@ toolbar.OnTelephoneRing(function( szCaller, szCallid ) {
 function getCallerOwen(obj){
 	$.ajax({
 		type: 'get',
-		url: 'http://mobsec-dianhua.baidu.com/dianhua_api/open/location',
-		dataType: "jsonp",
+		url: curl + '/guest/customer/customerCalledInfoEnterController/getPhoneCalledOwen',
+		dataType: "json",
 		data: {
-			"tel": ""+obj+""
+			phone: obj,
+		},
+		headers: {
+			"X-Authorization-access_token":token
 		},
 		success: function (data) {
 			console.log(data);
@@ -425,6 +432,9 @@ function getUserIno(obj){
 		dataType: "json",
 		data: {
 			phone: obj,
+		},
+		headers: {
+			"X-Authorization-access_token":token
 		},
 		success: function (data) {
 			var table="<table border='1'>";
@@ -449,29 +459,48 @@ function getUserIno(obj){
 function getCalledHistory(obj){
 	$.ajax({
 		type: 'get',
-		url: curl + '/guest/customer/customerCalledInfoEnterController/getUserInfo',
+		url: curl + '/guest/customer/customerCalledInfoEnterController//getCalledHistory',
 		dataType: "json",
 		data: {
 			phone: obj,
 		},
+		headers: {
+			"X-Authorization-access_token":token
+		},
 		success: function (data) {
-			var table="<table border='1'>";
-			table=table+"<tr><td style='width:80px'>行号</td><td style='width:80px'>性别</td>" +
-				"<td style='width: 120px'>用户账号</td><td style='width: 80px'>邮箱</td><td style='width: 100px'>手机号</td></tr>";
-			if(data==undefined ||data==null ||data.data==null){
-				table=table+"<tr><td colspan='5' style='text-align: center'>当前来电非系统用户，暂无用户信息</td></tr>";
+			var table="<table>";
+			table=table+"<tr><td style='width:100px'>问题编号</td><td style='width:100px'>业务模块</td>" +
+				"<td style='width: 100px'>处理状态</td><td style='width: 200px'>问题标题</td>" +
+				"<td style='width: 160px'>时间</td><td style='width: 80px'>详情</td></tr>";
+			if(data==undefined ||data==null ||data.data==null ||data.data.rows.length==0){
+				table=table+"<tr><td colspan='6' style='text-align: center'>当前来电用户暂无历史信息</td></tr>";
 			}else if(data.code='0000'){
-				var user=data.data;
-				table=table+"<tr><td style='width:80px'>1</td><td style='width:80px'>"+user.sex+"</td>" +
-					"<td style='width: 120px'>"+user.account+"</td><td style='width: 80px'>"+user.email+"</td><td style='width: 100px'>"+user.phone+"</td></tr>";
-				//给隐藏域赋值
-				$("#contact").val(user.phone);
+				var customerList=data.data.rows;
+				$("#historyNum").html(customerList.length);
+				for(var i=0;i<customerList.length;i++){
+					var info=customerList[i];
+					var showStatus="";
+					if(info.status=='0'){showStatus="待处理"}
+					if(info.status=='1'){showStatus="处理中"}
+					if(info.status=='2'){showStatus="已处理"}
+					if(info.status=='3'){showStatus="无法处理"}
+					table=table+"<tr><td style='width:80px'>"+info.quesCode+"</td><td style='width:80px'>"+info.serviceModuleName+"</td>" +
+						"<td style='width: 120px'>"+showStatus+"</td><td style='width: 80px'>"+info.quesTitle+"</td>" +
+						"<td style='width: 100px'>"+info.createdTime+"</td>" +
+						"<td style='width: 80px'><a href='javascript:void(0);' onclick='getHistoryDetails(this)' value=''+info.processInsId+''>详情></a></td></tr>";
+				}
 			}
 			table=table+"</table>";
-			$("#userInfo").html(table);
+			$("#history").html(table);
 		}
 	});
 }
+
+//根据流程实例id查看客服问题详情
+function getHistoryDetails(obj){
+	alert("问题详情"+obj);
+}
+
 
 
 //弹出框关闭方法
@@ -505,9 +534,105 @@ function okSubmit(){
 	//来电信息显示
 	$("#calledInfo").show();
 	//历史信息显示
+	$("#historyDesc").show();
 	$("#history").show();
 	//来电录入显示
 	$("#calledEnter").show();
+	//提交按钮显示
+	$("#submitButton").show();
+}
+
+//提交数据
+function submit(){
+	//获取来电录入数据
+	var quesTitle=$("#quesTitle").val().replace(/\s/g,"");
+	var serviceModule=$("#serviceModule").val().replace(/\s/g,"");
+	var quesDetails=$("#quesDetails").val().replace(/\s/g,"");
+	var clientType=$("#clientType").val().replace(/\s/g,"");
+	var custName=$("#custName").val().replace(/\s/g,"");
+	var contactWay=$("#contactWay").val().replace(/\s/g,"");
+
+	//判断数据是否为空
+	if(quesTitle==''){
+		alert("问题标题不能为空");
+		return false;
+	}
+	if(serviceModule==''){
+		alert("业务模块不能为空");
+		return false;
+	}
+	if(quesDetails==''){
+		alert("问题描述不能为空");
+		return false;
+	}
+	if(clientType==''){
+		alert("用户类型不能为空");
+		return false;
+	}
+	if(custName==''){
+		alert("客户姓名不能为空");
+		return false;
+	}
+	if(contactWay==''){
+		alert("联系方式不能为空");
+		return false;
+	}
+	//校验联系方式
+
+	//把数据转为json
+	 var json={
+		 "quesTitle":quesTitle,
+		 "serviceModule":serviceModule,
+		 "quesDetails":quesDetails,
+		 "clientType":clientType,
+		 "custName":custName,
+		 "contactWay":contactWay
+	 }
+	//显示加载中...
+	$("#submitDesc").show();
+	//提交按钮禁用
+	$("#buttons").attr({"disabled":"disabled"});
+	//提交数据
+	$.ajax({
+		type: 'post',
+		url: curl + '/guest/customer/customerCalledInfoEnterController/saveCalledInfo',
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		data: JSON.stringify(json),
+		headers: {
+			"X-Authorization-access_token":token
+		},
+		success: function (data) {
+			$("#submitDesc").hide();
+			$("#buttons").removeAttr("disabled");
+			if(data!=undefined &&data!=null && data.data!=null
+				&& data.code=='0000'){
+				//清空来电录入信息
+				$("#quesTitle").val("");
+				$("#serviceModule").val("");
+				$("#quesDetails").val("");
+				$("#clientType").val("");
+				$("#custName").val("");
+				$("#contactWay").val("");
+
+				//清空来电信息
+				$("#currentCallShow").val("");
+				$("#calledNumberShow").val("");
+				$("#callerOwenShow").val("");
+				$("#phoneShow").val("");
+				//历史记录 0条
+				$("#historyNum").html(0);
+				alert("提交成功");
+			}else{
+				alert(data.result);
+			}
+		},
+		error:function () {
+			$("#submitDesc").hide();
+			$("#buttons").removeAttr("disabled");
+			alert("网络异常，请稍后重试");
+		}
+	});
 }
 
 toolbar.OnAnswerConnected(function() {

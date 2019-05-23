@@ -22,7 +22,6 @@
         <result column="a_spacePicture" jdbcType="VARCHAR" property="spacePicture" javaType="java.lang.String"/>
         <result column="a_gateFactory" jdbcType="VARCHAR" property="gateFactory" javaType="java.lang.String"/>
         <result column="a_gateId" jdbcType="VARCHAR" property="gateId" javaType="java.lang.String"/>
-            <!-- 执业标签 -->
             <collection property="serviceType" javaType="java.util.List"
                         ofType="com.jn.park.parking.vo.ParkingServiceTypeVo">
                 <id column="t_id" property="id" jdbcType="VARCHAR"/>
@@ -119,5 +118,20 @@
         </if>
        )t order by  t.distance
     </select>
+
+
+    <!-- 停车场合计 -->
+    <select id="countParking" resultType="com.jn.park.parking.model.ParkingCount">
+        SELECT SUM(actual_money) AS "chargeAmount",COUNT(1) AS "parkingSum" FROM tb_parking_record WHERE
+        ( admission_time &gt; #{beginTime,jdbcType=TIMESTAMP}  AND admission_time &lt; #{endTime,jdbcType=TIMESTAMP}) or parking_status = '1'
+    </select>
+
+    <!-- 停车场明细统计数据 -->
+    <select id="countParkingDetail" resultType="com.jn.park.parking.model.ParkingAreaUseRate">
+        SELECT r.area_id_ as "chargeAmount", r.area_name as "parkingSum",COUNT(1) as "parkingCar",COUNT(1)/(SELECT a.parking_total FROM tb_parking_area a WHERE a.`area_id_` = r.`area_id_`) as "useRate"
+        FROM tb_parking_record r WHERE ( r.admission_time &gt; #{beginTime,jdbcType=TIMESTAMP}  AND r.admission_time &lt; #{endTime,jdbcType=TIMESTAMP} and r.area_id_ is not null)  OR (r.parking_status = '1'  and r.area_id_ is not null) GROUP BY r.`area_id_`
+    </select>
+
+
 
 </mapper>

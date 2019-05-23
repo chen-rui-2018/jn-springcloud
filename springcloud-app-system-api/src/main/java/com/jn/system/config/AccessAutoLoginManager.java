@@ -51,16 +51,16 @@ public class AccessAutoLoginManager implements Filter {
                 int count = 0;
                 for (String url : ignore) {
                     if (url.contains("/**")) {
-                        if (!servletPath.startsWith(url.replace("/**", ""))) {
+                        if (servletPath.startsWith(url.replace("/**", ""))) {
                             count++;
                         }
                     } else {
-                        if (!servletPath.endsWith(url)) {
+                        if (servletPath.endsWith(url)) {
                             count++;
                         }
                     }
                 }
-                if (count > 0 && com.jn.common.util.StringUtils.isBlank(account)) {
+                if (count == 0 && com.jn.common.util.StringUtils.isBlank(account)) {
                     logger.info("【oauth】 进入doFilter,ibps,account:{}", account);
                 }
             }

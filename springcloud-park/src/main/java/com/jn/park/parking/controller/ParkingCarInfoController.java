@@ -68,10 +68,9 @@ public class ParkingCarInfoController extends BaseController {
     }
 
     @ControllerLog(doAction = " 删除本人用户车辆")
-    @ApiOperation(value = "删除本人用户车辆[前端用户]", notes = "只能删除本人车辆。返回内容为数据响应条数，正常情况为1")
+    @ApiOperation(value = "删除本人用户车辆[前端用户]", notes = "入参为车辆id，只能删除本人车辆。返回内容为数据响应条数，正常情况为1")
     @RequestMapping(value = "/deleteCarInfoByUser",method = RequestMethod.POST)
-    public Result<String> deleteCarInfoByUser( @ApiParam(name="carId",value = "车辆ID",required = true,example = "51we20***")
-                                               @RequestBody String carId){
+    public Result<String> deleteCarInfoByUser(String carId){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(parkingCarInfoService.deleteCarInfoByUser(user.getAccount(),carId));
     }

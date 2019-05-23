@@ -154,9 +154,11 @@ public class RepairServiceImpl implements RepairService {
      * @param payBillCreateParamVo
      */
     @Override
-    public void generateBill(PayBillCreateParamVo payBillCreateParamVo) {
+    public Result generateBill(PayBillCreateParamVo payBillCreateParamVo) {
         logger.info("物业服务-创建报修缴费单,billId:{}",payBillCreateParamVo.getBillId());
-        payClient.billCreate(payBillCreateParamVo);
+        Result result=payClient.billCreate(payBillCreateParamVo);
+        return result;
+
     }
 
 }

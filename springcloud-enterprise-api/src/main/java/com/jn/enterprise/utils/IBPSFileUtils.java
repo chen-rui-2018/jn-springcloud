@@ -20,6 +20,7 @@ import org.springframework.util.MultiValueMap;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +33,9 @@ import java.util.List;
 public class IBPSFileUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(IBPSFileUtils.class);
+
+    // 默认拼接字符
+    private static final String DEFAULT_SEPARATOR_CHAR = ",";
 
     /**
      * 单个文件上传
@@ -65,9 +69,19 @@ public class IBPSFileUtils {
     /**
      * 获取文件全路径
      * @param ibpsUrl ibps格式路径
-     * @return 发生错误返回原字符串，成功返回全路径（多个以‘,’拼接）
+     * @return 发生错误返回原字符串，成功返回全路径（多个以逗号拼接）
      */
     public static String getFilePath(String ibpsUrl) {
+        return getFilePaths(ibpsUrl, DEFAULT_SEPARATOR_CHAR);
+    }
+
+    /**
+     * 获取文件全路径
+     * @param ibpsUrl ibps格式路径
+     * @param separator 拼接字符，默认为逗号
+     * @return 发生错误返回原字符串，成功返回全路径
+     */
+    public static String getFilePaths(String ibpsUrl, String separator) {
         String tempUrl = ibpsUrl;
         if (!StringUtils.startsWith(tempUrl, "[{") || !StringUtils.endsWith(tempUrl, "}]")) {
             logger.warn("[IBPS文件存储] 处理的路径不是IBPS文件存储格式");
@@ -75,6 +89,7 @@ public class IBPSFileUtils {
         }
 
         List<IBPSFile> ibpsFileList = new Gson().fromJson(tempUrl, new TypeToken<List<IBPSFile>>() {}.getType());
+        separator = StringUtils.isBlank(separator) ? DEFAULT_SEPARATOR_CHAR : separator;
 
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < ibpsFileList.size(); i++) {
@@ -84,12 +99,38 @@ public class IBPSFileUtils {
                 return ibpsUrl;
             }
             if (i != 0) {
-                sb.append(",");
+                sb.append(separator);
             }
             sb.append(ibpsFile.getFilePath());
         }
         logger.info("[IBPS文件存储] 处理成功");
         return sb.toString();
+    }
+
+    /**
+     * 获取文件路径列表
+     * @param ibpsUrl ibps格式路径
+     * @return 发生错误返回null
+     */
+    public static List<String> getFilePath2List(String ibpsUrl) {
+        String tempUrl = ibpsUrl;
+        if (!StringUtils.startsWith(tempUrl, "[{") || !StringUtils.endsWith(tempUrl, "}]")) {
+            logger.warn("[IBPS文件存储] 处理的路径不是IBPS文件存储格式");
+            return null;
+        }
+
+        List<IBPSFile> ibpsFileList = new Gson().fromJson(tempUrl, new TypeToken<List<IBPSFile>>() {}.getType());
+
+        List<String> fileUrlList = new ArrayList<>();
+        for (IBPSFile ibpsFile : ibpsFileList) {
+            if (ibpsFile == null || StringUtils.isAnyEmpty(ibpsFile.getId(), ibpsFile.getFileName(), ibpsFile.getFilePath())) {
+                logger.warn("[IBPS文件存储] 处理时发生异常，可能原因是字段不全 [id, fileName, filePath]");
+                return null;
+            }
+            fileUrlList.add(ibpsFile.getFilePath());
+        }
+        logger.info("[IBPS文件存储] 处理成功");
+        return fileUrlList;
     }
 
     /**

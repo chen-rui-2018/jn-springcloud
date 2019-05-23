@@ -61,7 +61,7 @@ public class PayController {
             case "4"://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-park","/api/order/createPay",JSONObject.toJSONString(createPayReqModel));
             case "5"://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-park","/api/order/createArticlePay",JSONObject.toJSONString(createPayReqModel));
             case "6"://
                 return NOT_SUPPORT_RESULT;
             case "7"://

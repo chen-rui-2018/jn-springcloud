@@ -117,4 +117,9 @@ public interface RoomInformationService {
      * @param orderId
      */
     void cancelOrder(String orderId);
+
+    /**
+     * 定时任务,是否支付,未支付取消订单
+     */
+    void updateRoomPayStatus();
 }

@@ -62,18 +62,35 @@ public interface AssetArticleLeaseOrdersService {
     PaginationData<List<AssetArticleLeaseOrdersModel>> getArticleLeaseOrdersList(String account, Page page);
 
     /**
-     * 创建支付订单
-     * @param orderId
-     * @param channelId
-     * @param userAccount
-     * @return
-     */
-    Result<PayOrderRsp> createPayOrder(String orderId, String channelId, BigDecimal paySum, String userAccount);
-
-    /**
      * 支付回调
      * @param payOrderNotify
      * @return
      */
     Result articlePayCallBack(PayOrderNotify payOrderNotify);
+
+    /**
+     * 定时调度,是否支付,未支付取消订单
+     */
+    void updateArticlePayStatus();
+
+    /**
+     * 取消订单
+     * @param orderId
+     */
+    void cancelOrder(String orderId);
+
+    /**
+     * 物品租借是否逾期,修改状态
+     */
+    void updateAssetArticleStatus();
+
+    /**
+     * 创建支付订单
+     * @param orderId
+     * @param channelId
+     * @param paySum
+     * @param userAccount
+     * @return
+     */
+    Result<PayOrderRsp> createArticlePay(String orderId, String channelId, BigDecimal paySum, String userAccount);
 }

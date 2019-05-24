@@ -4,6 +4,7 @@ package com.jn.park.api;
 import com.jn.common.model.Result;
 import com.jn.park.property.model.PayCallBackNotify;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,6 +26,6 @@ public interface PropertyCenterClient {
      * @return
      */
     @RequestMapping(value = "/api/property/repair/automaticApprovalTaskByTaskId", method = RequestMethod.POST)
-    Result<String> automaticApprovalTaskByTaskId(PayCallBackNotify payCallBackNotify);
+    Result<String> automaticApprovalTaskByTaskId(@RequestBody  PayCallBackNotify payCallBackNotify);
 
 }

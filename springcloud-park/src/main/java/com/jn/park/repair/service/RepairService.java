@@ -19,7 +19,7 @@ public interface RepairService {
      * 物业服务-自动执行ibps处理节点任务
      * @param  payCallBackNotify
      */
-    void  automaticApprovalTaskByTaskId(PayCallBackNotify  payCallBackNotify);
+    Result  automaticApprovalTaskByTaskId(PayCallBackNotify  payCallBackNotify);
 
     /**
      *物业服务-创建缴费单

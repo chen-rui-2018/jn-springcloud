@@ -3,11 +3,19 @@ package com.jn.server;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.pay.model.CreateOrderAndPayReqModel;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.api.PayBillClient;
 import com.jn.paybill.model.*;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import com.jn.unionpay.paybill.service.PayBillService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,8 +75,8 @@ public class PayBillServerController extends BaseController implements PayBillCl
     @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST")
     @RequestMapping(value = "/payCallBack")
     @Override
-    public Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam){
-        return new Result<>(payBillService.payCallBack(callBackParam));
+    public Result payCallBack(@RequestBody PayOrderNotify payOrderNotify){
+        return payBillService.payCallBack(payOrderNotify);
     }
 
     @ControllerLog(doAction = "根据账单IDs获取账单列表内容")
@@ -103,5 +111,13 @@ public class PayBillServerController extends BaseController implements PayBillCl
     @Override
     public Result<Boolean> cancelPayBillByBillId(@RequestBody String orderId){
         return new Result<>(payBillService.cancelPayBillByBillId(orderId));
+    }
+
+
+    @ControllerLog(doAction = "统一缴费-->发起支付")
+    @Override
+    @RequestMapping(value = "/createOrderAndPay")
+    public Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel) {
+        return new Result(payBillService.createPayOrder(createOrderAndPayReqModel));
     }
 }

@@ -55,4 +55,14 @@ public class JPushResult implements Serializable {
     public void setError(Error error) {
         this.error = error;
     }
+
+    @Override
+    public String toString() {
+        return "JPushResult{" +
+                "msg_id=" + msg_id +
+                ", sendno=" + sendno +
+                ", statusCode=" + statusCode +
+                ", error=" + error +
+                '}';
+    }
 }

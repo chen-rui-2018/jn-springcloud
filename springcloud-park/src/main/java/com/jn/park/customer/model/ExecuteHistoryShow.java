@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Author: yangph
@@ -35,6 +36,12 @@ public class ExecuteHistoryShow implements Serializable {
     private String status;
     @ApiModelProperty("操作状态名称")
     private String statusName;
+    @ApiModelProperty("操作的部门id")
+    private String optionDeptId;
+    @ApiModelProperty("操作的部门名称")
+    private String optionDeptName;
+    @ApiModelProperty("节点图片url")
+    private List<String>executePictureUrl;
 
     public String getProcInstId() {
         return procInstId;
@@ -122,5 +129,49 @@ public class ExecuteHistoryShow implements Serializable {
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getOptionDeptId() {
+        return optionDeptId;
+    }
+
+    public void setOptionDeptId(String optionDeptId) {
+        this.optionDeptId = optionDeptId;
+    }
+
+    public String getOptionDeptName() {
+        return optionDeptName;
+    }
+
+    public void setOptionDeptName(String optionDeptName) {
+        this.optionDeptName = optionDeptName;
+    }
+
+    public List<String> getExecutePictureUrl() {
+        return executePictureUrl;
+    }
+
+    public void setExecutePictureUrl(List<String> executePictureUrl) {
+        this.executePictureUrl = executePictureUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "ExecuteHistoryShow{" +
+                "procInstId='" + procInstId + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", taskName='" + taskName + '\'' +
+                ", executeAccounts='" + executeAccounts + '\'' +
+                ", executeUserIds='" + executeUserIds + '\'' +
+                ", auditor='" + auditor + '\'' +
+                ", auditorName='" + auditorName + '\'' +
+                ", opinion='" + opinion + '\'' +
+                ", status='" + status + '\'' +
+                ", statusName='" + statusName + '\'' +
+                ", optionDeptId='" + optionDeptId + '\'' +
+                ", optionDeptName='" + optionDeptName + '\'' +
+                ", executePictureUrl=" + executePictureUrl +
+                '}';
     }
 }

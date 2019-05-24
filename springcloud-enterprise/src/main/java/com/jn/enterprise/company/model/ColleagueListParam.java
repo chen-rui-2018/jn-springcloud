@@ -53,4 +53,12 @@ public class ColleagueListParam extends Page implements Serializable {
         this.needPage = needPage;
     }
 
+    @Override
+    public String toString() {
+        return "ColleagueListParam{" +
+                "needPage='" + needPage + '\'' +
+                ", searchFiled='" + searchFiled + '\'' +
+                ", comId='" + comId + '\'' +
+                '}';
+    }
 }

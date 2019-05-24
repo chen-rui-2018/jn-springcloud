@@ -1,56 +1,9 @@
 <template>
-  <div class="homePage">
-    <div class="header clearfix" v-if="!isMobile">
-      <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
-      <div class="headerRight fr pr">
-        <i class="el-icon-search" v-if="!sousuo" @click="handleChange" style="vertical-align: middle;font-size:18px;color:#666;"></i>
-        <i class="el-icon-bell" style="vertical-align: middle;margin-left:20px;font-size:18px;color:#666;"></i>
-        <span class="line" style="vertical-align: middle;"></span>
-        <div class="imgU" :class="{'active':menuFlag}" alt @click.stop="menuFlag=!menuFlag">
-          <img v-if="userData.avatar" :src="userData.avatar" style="vertical-align: middle;padding:20px">
-          <img v-else src="@/../static/img/smaImg.png" style="vertical-align: middle;padding:20px">
-        </div>
-
-        <div class="avaMenu" v-if="menuFlag">
-          <el-card class="box-card bxcard">
-            <ul class="avaUL">
-              <li style="border-bottom:1px solid #eee;">您好,{{userData.account}}</li>
-              <!-- <li :class="{'liActi':$route.name == i.pathName}" v-for="(i,k) in dataLeft" :key="k" @click="dianji(i)">{{i.name}}</li> -->
-              <li :class="{'liActi':$route.name == i.pathName}" v-for="(i,k) in dataTop" :key="k" @click="dianji(i)">{{i.name}}</li>
-              <li style="border-top:1px solid #eee;" @click.stop="loginOut">退出</li>
-            </ul>
-          </el-card>
-        </div>
-      </div>
-      <div class="nav">
-        <transition name="fade">
-          <div class="sousuo posA" v-if="sousuo">
-            <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-            <input type="text" v-focus @keyup.enter="handleSearch">
-            <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-          </div>
-
-          <ul class="clearfix posA" v-else>
-            <li @click="$router.push({path:'/'})">
-              <a href="javascript:void(0);">首页</a>
-            </li>
-            <li>
-              <a href="javascript:void(0);">招商引资</a>
-            </li>
-            <li>
-              <a href="javascript:void(0);">智慧党建</a>
-            </li>
-            <li @click="$router.push({path:'/enterpriseservice'})">
-              <a href="javascript:void(0);">企业服务</a>
-            </li>
-          </ul>
-        </transition>
-      </div>
-    </div>
-    <div class="homePage_content" :class="{'w': !isMobile}">
+  <div class="homePage" :class="{pd: $store.state.hiddenNav}">
+    <div class="homePage_content" :class="{'w': $store.state.hiddenNav}">
       <div class="homePage_typearea">
         <!-- 面包屑 -->
-        <div class="homePage_breadcrumb" v-if="!isMobile">
+        <div class="homePage_breadcrumb" v-if="$store.state.hiddenNav">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }">用户中心</el-breadcrumb-item>
             <el-breadcrumb-item>
@@ -61,11 +14,11 @@
         <!-- 主体内容 -->
         <el-container>
           <!-- 侧边栏 -->
-          <div class="slider" v-if="!isMobile">
+          <div class="slider" v-if="$store.state.hiddenNav">
             <el-aside width="135px">
               <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
-                <el-menu-item index="/servicemarket/product/userCenter">
+                <el-menu-item index="/home">
                   <span slot="title">首页</span>
                 </el-menu-item>
                 <el-menu-item index="/userHome">
@@ -83,7 +36,7 @@
                   </template>
                   <el-menu-item-group>
                     <el-menu-item index="/roleCertifications/investorCertification">投资人认证</el-menu-item>
-                    <el-menu-item @click="checkOrganization">服务顾问认证</el-menu-item>
+                    <el-menu-item index="" @click="checkOrganization">服务顾问认证</el-menu-item>
                     <el-menu-item index="/roleCertifications/basicInformation">服务机构认证</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
@@ -184,7 +137,6 @@ export default {
   data() {
     return {
       isMobile: isMobile(),
-
       orgArr: [],
       organizationForm: {
         orgName: "",
@@ -328,7 +280,16 @@ export default {
 };
 </script>
 <style lang="scss">
+  .header.user-center {
+    background-color: #fff;
+    .router-link {
+      color: #333;
+    }
+  }
 .homePage {
+  &.pd {
+    padding-top: 66px;
+  }
   background: #f3f3f3;
   .btn {
     text-align: center;
@@ -384,7 +345,7 @@ export default {
     padding: 10px 20px 0px 20px;
     text-align: center;
   }
-  .header {
+.header {
     padding: 0px 160px;
     box-shadow: 0px 12px 12px #e6e6e6;
     background-color: #fff;
@@ -578,4 +539,5 @@ export default {
   }
 }
 }
+
 </style>

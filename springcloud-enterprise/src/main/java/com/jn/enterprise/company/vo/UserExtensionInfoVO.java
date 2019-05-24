@@ -149,4 +149,23 @@ public class UserExtensionInfoVO implements Serializable {
     public void setJobs(List<String> jobs) {
         this.jobs = jobs;
     }
+
+    @Override
+    public String toString() {
+        return "UserExtensionInfoVO{" +
+                "id='" + id + '\'' +
+                ", account='" + account + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", sex='" + sex + '\'' +
+                ", age=" + age +
+                ", signature='" + signature + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", birthday=" + birthday +
+                ", hobbys=" + hobbys +
+                ", jobs=" + jobs +
+                '}';
+    }
 }

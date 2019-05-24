@@ -1,13 +1,13 @@
-// import request from '@/utils/request'
-// var baseurl = 'springcloud-oa/'
-// var parkBaseurl = 'springcloud-park'
-// export function api(url, query) {
-//   return request({
-//     url: baseurl + url,
-//     method: 'post',
-//     data: query
-//   })
-// }
+import request from '@/utils/request'
+var baseurl = 'springcloud-oa/'
+var parkBaseurl = 'springcloud-park'
+export function api(url, query) {
+  return request({
+    url: baseurl + url,
+    method: 'post',
+    data: query
+  })
+}
 // export function paramApi(url, query, parameter) {
 //   const param = new URLSearchParams()
 //   param.append(parameter, query)
@@ -57,9 +57,17 @@
 //   })
 // }
 // 获取组织部门列表
-// export function getAllDepartment() {
-//   return request({
-//     url: parkBaseurl + '/finance/expenses/selectDepartment',
-//     method: 'get'
-//   })
-// }
+export function getAllDepartment() {
+  return request({
+    url: parkBaseurl + '/finance/expenses/selectDepartment',
+    method: 'get'
+  })
+}
+// 获取平台类型
+export function getCode(query) {
+  return request({
+    url: 'springcloud-app-system/system/sysDict/getDict',
+    method: 'post',
+    data: query
+  })
+}

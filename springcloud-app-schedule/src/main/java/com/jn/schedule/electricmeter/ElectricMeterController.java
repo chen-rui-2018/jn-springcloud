@@ -19,7 +19,7 @@ public class ElectricMeterController {
     @Autowired
     private ElectricMeterClient getDataFromHardare;
     private static Logger logger = LoggerFactory.getLogger(ElectricMeterController.class);
-    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void getDataFromHardare(){
         getDataFromHardare.getDataFromHardare();
     }

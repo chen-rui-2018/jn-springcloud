@@ -3,10 +3,7 @@ package com.jn.pay.api;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.pay.model.PayAccountBookMoneyRecord;
-import com.jn.pay.model.PayBIllInitiateParam;
-import com.jn.pay.model.PayCheckReminder;
-import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import io.swagger.annotations.ApiOperation;
@@ -36,13 +33,15 @@ public interface PayAccountClient {
     @RequestMapping(value = "/api/payment/payAccount/queryPayAccountBook",method = RequestMethod.GET)
     Result<PayAccountAndAccountBookVo> queryPayAccountBook(@ApiParam(name="userId",value = "登录人账号",required = true,example = "wangsong") @RequestParam(value = "userId") String userId);
 
+    @ApiOperation(value = "预缴充值-支付回调接口")
+    @RequestMapping(value = "/api/payment/payAccount/payAccountCallBack",method = RequestMethod.POST)
+    Result payAccountCallBack(@RequestBody PayOrderNotify callBackParam);
 
-    @ApiOperation(value = "我的账本-查询当前账本下所有明细信息",notes = "我的账本-查询当前账本下所有明细信息")
-    @RequestMapping(value = "/api/payment/payAccount/queryPayAccountDetails",method = RequestMethod.POST)
-    Result<PaginationData<List<PayAccountBookMoneyRecord>>> queryPayAccountDetails(@ApiParam(name="acBookId",value = "账本编号",required = true,example = "20190504123") @RequestParam(value = "acBookId") String acBookId,
-                                                                                   @ApiParam(name="startDate",value = "查询时间起",example = "2019-05-10 11:28:48") @RequestParam(value = "startDate",required = false) String startDate,
-                                                                                   @ApiParam(name="endDate",value = "查询时间止",example = "2019-05-13 11:28:48") @RequestParam(value = "endDate",required = false) String endDate,
-                                                                                   @ApiParam(name="page",value = "当前页数",required = true,example = "1") @RequestParam(value = "page") int page,
-                                                                                   @ApiParam(name="rows",value = "每页显示数量",required = true,example = "10") @RequestParam(value = "rows") int rows);
-
+    /**
+     * 发起支付-我的账本-预缴充值(水费)
+     * @param createOrderAndPayReqModel
+     * @return
+     */
+    @RequestMapping(value = "/api/payment/payAccount/createOrderAndPay", method = RequestMethod.POST)
+    Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel);
 }

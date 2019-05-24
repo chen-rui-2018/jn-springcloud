@@ -1,0 +1,79 @@
+/* pages/meeting/meetingRoomDetail/meetingRoomDetail.wxss */
+.screen-swiper{
+  margin-top: 23rpx;
+}
+.detail_title{
+  padding:34rpx 40rpx ;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  font-size: 30rpx;
+  display: flex;
+  justify-content: space-between;
+}
+.detail_title text:nth-child(2){
+  font-size: 24rpx;
+}
+.detail_address{
+  background-color: #fff;
+  padding:0 63rpx;
+  color:#999999;
+  font-size: 26rpx;
+  padding-top: 25rpx;
+}
+.detail_address view:nth-child(2){
+  padding:33rpx 0;
+}
+.explain{
+  font-size: 30rpx;
+  background-color: #fff;
+  margin-top: 19rpx;
+  padding:33rpx 40rpx;
+}
+.explain text{
+  font-size: 26rpx;
+}
+.meeting_li{
+  background-color: #fff;
+  margin-top: 19rpx;
+  padding:30rpx 40rpx;
+  border-bottom: 2px solid #efefef;
+}
+.meetingList .meeting_li{
+    display: flex;
+    align-items: center;
+}
+.li_left{
+  padding-right: 30rpx;
+  border-right: 1rpx solid #ccc;
+}
+.li_left .begin_time{
+  font-size: 40rpx;
+}
+.li_right {
+  padding-left: 30rpx;
+  width: 100%;
+}
+.right_title{
+  display: flex;
+  justify-content: space-between;
+}
+.right_title text:nth-child(1){
+  font-size: 40rpx;
+}
+.right_title text:nth-child(2){
+  font-size: 26rpx;
+}
+.makeMeeting{
+  font-size: 26rpx;
+  padding: 30rpx 42rpx;
+  color:#fff;
+  width:135rpx;
+  height: 135rpx;
+  border-radius: 50%;
+  background-color: #07ab50;
+  box-shadow: 0px 2px 42px 7px 
+		rgba(27, 199, 103, 0.33);
+    position: fixed;
+    right: 38rpx;
+    bottom: 123rpx;
+}

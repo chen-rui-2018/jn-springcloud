@@ -1,28 +1,28 @@
 <template>
     <div class="investorDetail w">
         <div class="investorMenu">
-            <span>首页</span>
+            <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
             <span>/</span>
-            <span>金融机构</span>
+            <span class="pointer" @click="$router.push({path:'/investor'})">投资人</span>
             <span>/</span>
             <span class="mainColor agent">投资人详情</span>
         </div>
         <div class="investorInfo">
             <el-card>
                 <div class="agent1 clearfix">
-                    <div class="agentTil fl">{{investorInfoDetails.investorBaseInfoShow.investorName}}</div>
+                    <div class="agentTil fl">{{investorInfoDetails.investorName}}</div>
                     <div class="orgBtn fr mainColor">在线联系</div>
                 </div>
                 <div class="agent2 clearfix color2">
                     <div class="agentImg fl">
                         <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-                        <img :src="investorInfoDetails.investorBaseInfoShow.avatar" alt="">
+                        <img :src="investorInfoDetails.avatar" alt="">
                     </div>
                     <div class="agent2Info fl">
-                        <p>所属单位：{{investorInfoDetails.investorBaseInfoShow.orgName}}</p>
-                        <p>职务：{{investorInfoDetails.investorBaseInfoShow.position}}</p>
+                        <p>所属单位：{{investorInfoDetails.orgName}}</p>
+                        <p>职务：{{investorInfoDetails.position}}</p>
                         <p class="proNum">主投领域：
-                            <span class="mainColor" v-for="(i,k) in investorInfoDetails.mainAreaList" :key="k">{{i.mainName}}</span>
+                            <span class="mainColor" v-for="(i,k) in mainAreaList" :key="k">{{i.mainName}}</span>
                         </p>
                         <!-- <p class="lastP color3">
                             <span>交易量：{{investorInfoDetails.investorBaseInfoShow.orgName}}</span>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="agent2 color2" v-if="zankaiFlag">
                         <div class="agent2Con" v-if="flag1" :class="{showall:true,active:showall}">
-                            {{investorInfoDetails.investorBaseInfoShow.personalProfile}}
+                            {{investorInfoDetails.personalProfile}}
                         </div>
                         <div class="agent2Con" v-else>
                             暂无内容！
@@ -74,6 +74,7 @@ export default {
       flag2: true,
       showall: false,
       investorInfoDetails:{},
+      mainAreaList:'',
     };
   },
   mounted() {
@@ -90,11 +91,10 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
-            _this.investorInfoDetails = res.data;
+            _this.investorInfoDetails = res.data.investorBaseInfoShow;
+            _this.mainAreaList=res.data.mainAreaList
           } else {
             _this.$message.error(res.result);
-            _this.financialProVisible = false;
           }
         }
       });

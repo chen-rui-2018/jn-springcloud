@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingPreferential">
     <id column="policy_id_" jdbcType="VARCHAR" property="policyId" />
     <result column="policy_type" jdbcType="VARCHAR" property="policyType" />
+    <result column="policy_user_type" jdbcType="VARCHAR" property="policyUserType" />
     <result column="policy_code" jdbcType="VARCHAR" property="policyCode" />
     <result column="policy_comments" jdbcType="VARCHAR" property="policyComments" />
     <result column="offer_price" jdbcType="DOUBLE" property="offerPrice" />
@@ -75,9 +76,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    policy_id_, policy_type, policy_code, policy_comments, offer_price, offer_ratio, 
-    policy_status, day_conditions, creator_account, created_time, modifier_account, modified_time, 
-    record_status
+    policy_id_, policy_type, policy_user_type, policy_code, policy_comments, offer_price, 
+    offer_ratio, policy_status, day_conditions, creator_account, created_time, modifier_account, 
+    modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingPreferentialCriteria" resultMap="BaseResultMap">
     select
@@ -110,16 +111,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingPreferential">
-    insert into tb_parking_preferential (policy_id_, policy_type, policy_code, 
-      policy_comments, offer_price, offer_ratio, 
-      policy_status, day_conditions, creator_account, 
-      created_time, modifier_account, modified_time, 
-      record_status)
-    values (#{policyId,jdbcType=VARCHAR}, #{policyType,jdbcType=VARCHAR}, #{policyCode,jdbcType=VARCHAR}, 
-      #{policyComments,jdbcType=VARCHAR}, #{offerPrice,jdbcType=DOUBLE}, #{offerRatio,jdbcType=DOUBLE}, 
-      #{policyStatus,jdbcType=VARCHAR}, #{dayConditions,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{recordStatus,jdbcType=TINYINT})
+    insert into tb_parking_preferential (policy_id_, policy_type, policy_user_type, 
+      policy_code, policy_comments, offer_price, 
+      offer_ratio, policy_status, day_conditions, 
+      creator_account, created_time, modifier_account, 
+      modified_time, record_status)
+    values (#{policyId,jdbcType=VARCHAR}, #{policyType,jdbcType=VARCHAR}, #{policyUserType,jdbcType=VARCHAR}, 
+      #{policyCode,jdbcType=VARCHAR}, #{policyComments,jdbcType=VARCHAR}, #{offerPrice,jdbcType=DOUBLE}, 
+      #{offerRatio,jdbcType=DOUBLE}, #{policyStatus,jdbcType=VARCHAR}, #{dayConditions,jdbcType=INTEGER}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingPreferential">
     insert into tb_parking_preferential
@@ -129,6 +130,9 @@
       </if>
       <if test="policyType != null">
         policy_type,
+      </if>
+      <if test="policyUserType != null">
+        policy_user_type,
       </if>
       <if test="policyCode != null">
         policy_code,
@@ -170,6 +174,9 @@
       </if>
       <if test="policyType != null">
         #{policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="policyUserType != null">
+        #{policyUserType,jdbcType=VARCHAR},
       </if>
       <if test="policyCode != null">
         #{policyCode,jdbcType=VARCHAR},
@@ -221,6 +228,9 @@
       <if test="record.policyType != null">
         policy_type = #{record.policyType,jdbcType=VARCHAR},
       </if>
+      <if test="record.policyUserType != null">
+        policy_user_type = #{record.policyUserType,jdbcType=VARCHAR},
+      </if>
       <if test="record.policyCode != null">
         policy_code = #{record.policyCode,jdbcType=VARCHAR},
       </if>
@@ -263,6 +273,7 @@
     update tb_parking_preferential
     set policy_id_ = #{record.policyId,jdbcType=VARCHAR},
       policy_type = #{record.policyType,jdbcType=VARCHAR},
+      policy_user_type = #{record.policyUserType,jdbcType=VARCHAR},
       policy_code = #{record.policyCode,jdbcType=VARCHAR},
       policy_comments = #{record.policyComments,jdbcType=VARCHAR},
       offer_price = #{record.offerPrice,jdbcType=DOUBLE},
@@ -283,6 +294,9 @@
     <set>
       <if test="policyType != null">
         policy_type = #{policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="policyUserType != null">
+        policy_user_type = #{policyUserType,jdbcType=VARCHAR},
       </if>
       <if test="policyCode != null">
         policy_code = #{policyCode,jdbcType=VARCHAR},
@@ -323,6 +337,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingPreferential">
     update tb_parking_preferential
     set policy_type = #{policyType,jdbcType=VARCHAR},
+      policy_user_type = #{policyUserType,jdbcType=VARCHAR},
       policy_code = #{policyCode,jdbcType=VARCHAR},
       policy_comments = #{policyComments,jdbcType=VARCHAR},
       offer_price = #{offerPrice,jdbcType=DOUBLE},

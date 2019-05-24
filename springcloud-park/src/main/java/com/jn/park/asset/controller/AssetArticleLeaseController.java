@@ -11,6 +11,7 @@ import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.LeaseOrdersModel;
 import com.jn.park.asset.service.AssetArticleLeaseOrdersService;
 import com.jn.park.asset.service.AssetArticleLeaseService;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.*;
@@ -19,6 +20,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -103,18 +105,6 @@ public class AssetArticleLeaseController {
     }
 
 
-    @ControllerLog(doAction ="发起支付")
-    @ApiOperation(value = "发起支付",notes = "发起支付")
-    @PostMapping(value = "/startPayment")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019")
-    })
-    public Result startPayment(String id){
-        Assert.notNull(id,"订单编号不能为空");
-        return new Result(assetArticleLeaseOrdersService.startPayment(id));
-    }
-
-
     @ControllerLog(doAction = "物品租赁历史列表")
     @ApiOperation(value = "物品租赁历史列表",notes = "获取物品租赁历史列表")
     @GetMapping(value = "/LeaseOrdersList")
@@ -175,5 +165,18 @@ public class AssetArticleLeaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "创建支付订单")
+    @ApiOperation(value = "创建支付订单",notes = "创建支付订单")
+    @PostMapping(value = "/createPayOrder")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050417220960019",required = true),
+            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE",required = true),
+            @ApiImplicitParam(name = "paySum",value = "支付金额",required = true)
+    })
+    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId,BigDecimal paySum){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(orderId,"订单编号不能为空");
+        return assetArticleLeaseOrdersService.createPayOrder(orderId,channelId,paySum,user.getAccount());
+    }
 
 }

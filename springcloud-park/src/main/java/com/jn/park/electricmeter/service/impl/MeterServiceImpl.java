@@ -235,7 +235,9 @@ public class MeterServiceImpl implements MeterService {
     private void updateData(String taskBatch){
         //将临时表中的数据更新到正式的历史表中
         meterDao.insertData(taskBatch);
-        //meterDao.updateDegreeDiff(taskBatch);
+        meterDao.updateDegreeDiff();
+        meterDao.deleteElectricDay();
+        meterDao.insertElectricDay();
     }
 
     /**
@@ -304,7 +306,7 @@ public class MeterServiceImpl implements MeterService {
         //检测这条数据是失败的数据
         TbElectricReadingFailLogCriteria failLogCriteria = new TbElectricReadingFailLogCriteria();
         failLogCriteria.or().andDealDateEqualTo(dealDate).andDealHourEqualTo(new Byte(dealHour))
-                .andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+                .andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andStatusEqualTo(new Byte(MeterConstants.FAIL));
         List<TbElectricReadingFailLog>  failLogs = failLogMapper.selectByExample(failLogCriteria);
         if(failLogs ==null || failLogs.size()==0){
             throw new JnSpringCloudException(MeterExceptionEnums.FAIL_LOG_ISNOT_EXIST);
@@ -331,6 +333,7 @@ public class MeterServiceImpl implements MeterService {
                 //成功了，作废掉失败的日志记录
                 TbElectricReadingFailLog readingFailLog = new TbElectricReadingFailLog();
                 readingFailLog.setRecordStatus(new Byte(MeterConstants.INVALID));
+                readingFailLog.setStatus(new Byte(MeterConstants.SUCCESS));
                 failLogMapper.updateByExampleSelective(readingFailLog,failLogCriteria);
                 updateData(taskBatch);
             }else{
@@ -347,7 +350,7 @@ public class MeterServiceImpl implements MeterService {
     public Result dealAllFailByHandle(){
         //检测这条数据是失败的数据
         TbElectricReadingFailLogCriteria failLogCriteria = new TbElectricReadingFailLogCriteria();
-        failLogCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+        failLogCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andStatusEqualTo(new Byte(MeterConstants.FAIL));
         List<TbElectricReadingFailLog>  failLogs = failLogMapper.selectByExample(failLogCriteria);
         List<String> resultList = new ArrayList<>();
         Result result = new Result();
@@ -379,6 +382,7 @@ public class MeterServiceImpl implements MeterService {
                         //成功了，作废掉失败的日志记录
                         TbElectricReadingFailLog readingFailLog = new TbElectricReadingFailLog();
                         readingFailLog.setRecordStatus(new Byte(MeterConstants.INVALID));
+                        readingFailLog.setStatus(new Byte(MeterConstants.SUCCESS));
                         failLogMapper.updateByExampleSelective(readingFailLog,failLogCriteria);
                         updateData(taskBatch);
                     }else{
@@ -393,5 +397,6 @@ public class MeterServiceImpl implements MeterService {
         result.setData(resultList);
         return result;
     }
+
 
 }

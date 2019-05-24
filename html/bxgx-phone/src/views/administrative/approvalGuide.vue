@@ -1,60 +1,163 @@
 <template>
   <div class="approvalGuide">
     <div class="approvalGuide_search">
-      <!-- <mt-search v-model="value"></mt-search> -->
+      <search
+      v-model="value"
+      ref="search"></search>
     </div>
     <div class="approvalGuide_main">
       <div class="approvalGuide_tab">
-        <span class="slider "><i class="iconfont icon-icon-"></i> </span>
-        <ul>
-          <li v-for="(item,$index) in arr" :key="$index" @touchstart="toggle($index)" :class="{active:$index==active}">{{item}}</li>
-        </ul>
+        <span class="slider_btn" @click="isSlider=true"><i class="iconfont icon-icon-"></i> </span>
+        <tab>
+          <tab-item :selected="active===''" ><span :class="{active:active===''}" @click="toggle('','')">全部</span></tab-item>
+          <tab-item v-for="(item,$index) in departList" :key="$index" :selected="$index===active">
+            <span :class="{active:$index===active}" @click="toggle($index,item.id)">{{item.name}}</span>
+          </tab-item>
+        </tab>
       </div>
-      <div class="approvalGuide_cont">
-        <ul>
-          <li>
-            <div class="cont_title">
-              <div>建设项目安全设施设计审查</div>
-              <div>
-                <span class="iconfont icon-07jiantouxiangshang"></span>
-                <span class="iconfont icon-07jiantouxiangshang"></span>
+      <!-- 侧边栏-->
+      <popup v-model="isSlider" position="right" width="81%">
+        <div class="slider_box">
+          <div class="slider_title"><span>部门</span> <span @click="toggle('','')">全部</span> </div>
+          <div class="slider_cont">
+            <div v-for="(item,index) in departList" :key="index"  @click="toggle(index,item.id)">{{item.name}}</div>
+          </div>
+        </div>
+      </popup>
+        <div class="approvalGuide_cont ">
+          <group v-for="(powerItem,powerIndex) in poweList" :key="powerIndex">
+            <div class="approvalGuide_box" >
+              <cell
+                :title="powerItem.name"
+                :border-intent="false"
+                @click.native="powerItem.isfold = !powerItem.isfold"
+                v-if="powerItem.childs.length!=0"
+                >
+                <div>
+                  <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
+                  <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
+                </div>
+              </cell>
+              <cell
+                :title="powerItem.name"
+                :border-intent="false"
+                @click.native="goPower(powerItem.id)"
+                v-else
+                >
+                <div>
+                  <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
+                  <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
+                </div>
+              </cell>
+              <div class="fold_cont" :class="powerItem.isfold?'animate':''" v-for="(childItem,childIndex) in powerItem.childs " :key="childIndex">
+                <div @click="goPower(childItem.id)"><span>{{childItem.name}} </span><span class="iconfont icon-jiantou" ></span></div>
               </div>
             </div>
-            <div class="cont_section">
-              <div>非煤矿矿山建设项目安全设施设计审查</div>
-              <div>非煤矿矿山建设项目安全设施设计审查</div>
-              <div>非煤矿矿山建设项目安全设施设计审查</div>
-            </div>
-          </li>
-        </ul>
-      </div>
+          </group>
+        </div>
     </div>
   </div>
 </template>
 <script>
+import {Cell, CellBox, CellFormPreview, Group, Badge, Search, Popup, Tab, TabItem} from 'vux'
 export default {
   data () {
     return {
-      active: 0,
+      active: '',
       value: '',
-      arr: [
-        '新闻',
-        '视频',
-        '社会',
-        '军事',
-        '军事1',
-        '军事2',
-        '军事3',
-        '军事4',
-        '军事5',
-        '军事6',
-        '军事74555555555555555'
-      ]
+      isSlider: false,
+      departList: [],
+      sendData: {
+        code: '',
+        departId: '',
+        name: '',
+        page: 1,
+        parentId: '',
+        rows: 10,
+        type: ''
+      },
+      poweList: [],
+      total: 0
     }
   },
+  components: { Group, Cell, CellFormPreview, CellBox, Badge, Search, Popup, Tab, TabItem },
+  mounted () {
+    this.getdepartList()
+    this.getPoweList()
+    this.scrollBottom()
+  },
   methods: {
-    toggle (index) {
+    // tab栏
+    scrollBottom () {
+      // let _this = this
+      window.onscroll = () => {
+        var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        var clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
+        if (clientHeight + scrollTop >= scrollHeight) {
+          // console.log(this)
+          if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
+            this.sendData.page++
+            this.api.get({
+              url: 'powerList',
+              data: this.sendData,
+              callback: res => {
+                if (res.code === '0000') {
+                  this.poweList.push(...res.data.rows)
+                  this.total = res.data.total
+                  this.poweList.forEach(ele => {
+                    this.$set(ele, 'isfold', false)
+                  })
+                  this.isSlider = false
+                }
+              }
+            })
+          }
+        }
+      }
+    },
+    getdepartList () {
+      let _this = this
+      this.api.get({
+        url: 'departList',
+        data: this.sendData,
+        callback: function (res) {
+          if (res.code === '0000') {
+            // console.log(res)
+            _this.departList = res.data
+          }
+        }
+      })
+    },
+    // 列表
+    getPoweList () {
+      this.sendData.page = 1
+      this.api.get({
+        url: 'powerList',
+        data: this.sendData,
+        callback: res => {
+          if (res.code === '0000') {
+            // this.poweList.push(...res.data.rows)
+            this.poweList = res.data.rows
+            this.total = res.data.total
+            this.poweList.forEach(ele => {
+              this.$set(ele, 'isfold', false)
+            })
+            this.isSlider = false
+          }
+        }
+      })
+    },
+    // 去详情
+    goPower (id) {
+      // console.log(id)
+      this.$router.push({path: '/guest/portal/sp/power/powerDetail', query: {id: id}})
+    },
+    toggle (index, id) {
+      // console.log(index)
       this.active = index
+      this.sendData.departId = id
+      this.getPoweList()
     }
   }
 }
@@ -63,13 +166,51 @@ export default {
 <style lang="scss">
   .approvalGuide{
     .approvalGuide_search{
-
+      position: fixed;
+      z-index: 10;
+      top:105px;
+        width: 100%;
+      .weui-search-bar{
+        padding:28px 32px;
+      }
+      .vux-search-box{
+        position: fixed;
+        top:105px !important;
+      }
+      .weui-search-bar__input{
+        height: 63px;
+        line-height: 63px;
+        // border-radius: 30px;
+      }
+      .weui-icon-search{
+        line-height: 63px;
+      }
+       .weui-icon-clear{
+          line-height: 0.8rem;
+       }
+      .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn{
+        display: flex;
+        align-items: center;
+      }
+      .weui-search-bar__box{
+        padding:0 70px;
+        .weui-icon-search{
+          left:20px;
+        }
+        .weui-search-bar__input{
+          padding:0;
+        }
+      }
     }
     .approvalGuide_main{
-
       .approvalGuide_tab{
-        position: relative;
-         .slider{
+        margin-top: 110px;
+        position: fixed;
+        top:113px;
+        width:100%;
+        z-index: 20;
+        background-color: #fff;
+        .slider_btn{
             position: absolute;
             right: 0;
             display: flex;
@@ -79,64 +220,134 @@ export default {
             background-color: #fff;
             box-shadow: 0px 2px 18px 0px rgba(121, 121, 121, 0.15);
             // font-size: 26px;
-            padding:0 27px;
-            i{
-              font-size: 32px;
-              width: 32px;
+            padding:42px 27px;
+            z-index: 20;
+              i{
+                font-size: 32px;
+                width: 32px;
+              }
+        }
+        .vux-tab-wrap{
+          padding-top: 0;
+        }
+        .vux-tab-container{
+          height: auto;
+        }
+        .vux-tab{
+          height: auto;
+          padding-bottom: 0;
+          margin-right: 30px;
+          border-bottom: 2px solid #ccc;
+          .vux-tab-item{
+            flex:0 0 auto;
+            padding: 23px 0;
+            padding-right: 70px;
+            width:auto;
+            &:first-child{
+              margin-left: 32px;
+            }
+
+            span{
+            padding-bottom: 27px;
+            font-size: 23px;
+            }
+            .active{
+              border-bottom: 5px solid #07ab50;
+              color:#07ab50;
             }
           }
-        ul{
-          padding: 0 32px;
-          margin-right: 90px;
-          display: flex;
-          align-items: center;
-          overflow: auto;
-          border-bottom: 2px solid #cdcdcd;
-          &::-webkit-scrollbar {
-              display: none;
-            }
-        li{
-          text-align: center;
-          font-size: 23px;
-          flex-shrink: 0;
-          padding: 23px 0;
-          // margin-top: 13px;
-          margin-right: 72px;
-        }
-        .active{
-          color: #07ab50;
-          border-bottom: 5px solid #07ab50;
-        }
+           .vux-tab-ink-bar{
+             display: none !important;
+           }
         }
       }
       .approvalGuide_cont{
         margin:30px;
-        li{
+        margin-top: 44%;
+        height: 100%;
+        overflow: auto;
+        .weui-cells{
           box-shadow: 0px 2px 18px 0px rgba(121, 121, 121, 0.15);
           border-radius: 20px;
-          .cont_title{
-            padding:25px 26px 19px 26px ;
-            display: flex;
-            justify-content: space-between;
-            font-size: 26px;
-            color: #333333;
+          .weui-cell{
+            padding:19px 28px;
+            .vux-label{
+              font-size: 26px;
+            }
+          }
+          .weui-cell__ft{
             span{
               font-size: 33px;
-              color:#cdcdcd;
             }
           }
-          .cont_section{
-            border-top: 2px solid #ccc;
-            padding:0 26px ;
+        }
+
+        .fold_cont {
+          overflow: hidden;
+          max-height: 0;
+          transition: max-height .5s cubic-bezier(0, 1, 0, 1) -.1s;
+          padding:0 28px;
+          color:#666666;
+
+          div{
+          font-size: 24px;
+          border-top: 2px solid #ccc;
+          padding:23px 0;
+          display: flex;
+          justify-content: space-between;
+          .iconfont{
+            font-size: 20px;
+            color:#ccc;
+          }
+          &:first-child{
+              border:none;
+            }
+          &:last-child{
+            margin-bottom: 15px;
+          }
+          }
+        }
+         .sub-item {
+          color: #888;
+        }
+        .animate {
+          max-height: 9999px;
+          transition-timing-function: cubic-bezier(0.5, 0, 1, 0);
+          transition-delay: 0s;
+          border-top: 2px solid #ccc;
+        }
+      }
+      // 侧边栏
+      .vux-popup-dialog{
+        background-color: #fff;
+        .slider_box{
+          padding:0 31px;
+          margin-bottom: 35px;
+          .slider_title{
+            margin-top: 68px;
+            font-size: 26px;
+            display: flex;
+            justify-content: space-between;
+            span:nth-child(2){
+              color:#666666;
+            }
+          }
+          .slider_cont{
+            margin-top: 38px;
+            font-size: 24px;
+            color:#4a4a4a;
+            display: flex;
+            flex-wrap: wrap;
             div{
-              border-top: 2px solid #ccc;
-              font-size: 26px;
-              padding:26px 0;
-              &:first-child{
-                border:none;
-              }
+              padding: 13px 17px;
+              background-color: #f4f3f3;
+              border-radius: 25px;
+              border: solid 2px #535353;
+              margin-right: 15px;
+              margin-bottom: 18px;
             }
           }
+
         }
       }
     }

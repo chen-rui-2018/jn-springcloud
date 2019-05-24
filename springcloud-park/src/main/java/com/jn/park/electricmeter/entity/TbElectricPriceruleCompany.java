@@ -10,7 +10,7 @@ public class TbElectricPriceruleCompany implements Serializable {
     /*@ApiModelProperty("规则Id")*/
     private String ruleId;
 
-    /*@ApiModelProperty("规则名称")*/
+    /*@ApiModelProperty("企业Id")*/
     private String companyId;
 
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
@@ -27,6 +27,12 @@ public class TbElectricPriceruleCompany implements Serializable {
 
     /*@ApiModelProperty("更新时间")*/
     private Date modifiedTime;
+
+    /*@ApiModelProperty("企业名称")*/
+    private String companyName;
+
+    /*@ApiModelProperty("规则名称")*/
+    private String ruleName;
 
     private static final long serialVersionUID = 1L;
 
@@ -94,6 +100,22 @@ public class TbElectricPriceruleCompany implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName == null ? null : ruleName.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -113,7 +135,9 @@ public class TbElectricPriceruleCompany implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
+            && (this.getRuleName() == null ? other.getRuleName() == null : this.getRuleName().equals(other.getRuleName()));
     }
 
     @Override
@@ -128,6 +152,8 @@ public class TbElectricPriceruleCompany implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
+        result = prime * result + ((getRuleName() == null) ? 0 : getRuleName().hashCode());
         return result;
     }
 
@@ -145,6 +171,8 @@ public class TbElectricPriceruleCompany implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", companyName=").append(companyName);
+        sb.append(", ruleName=").append(ruleName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

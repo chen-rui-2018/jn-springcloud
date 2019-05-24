@@ -1,17 +1,7 @@
 <template>
-  <div
-    v-loading="listLoading"
-    class="workManagement"
-  >
-    <el-form
-      :inline="true"
-      :model="listQuery"
-      class="filter-bar"
-    >
-      <el-radio-group
-        v-model="workPlanStatus"
-        @change="checkWorkStatus"
-      >
+  <div v-loading="listLoading" class="workManagement">
+    <el-form :inline="true" :model="listQuery" class="filter-bar">
+      <el-radio-group v-model="workPlanStatus" @change="checkWorkStatus">
         <el-radio-button label="">全部</el-radio-button>
         <el-radio-button label="0">未开始</el-radio-button>
         <el-radio-button label="1">进行中</el-radio-button>
@@ -19,184 +9,71 @@
         <el-radio-button label="3">已完成</el-radio-button>
       </el-radio-group>
       <!---->
-      <el-select
-        v-model="workStatus"
-        clearable
-        class="setWidth"
-        placeholder="更多"
-        @change="checkStatus"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          clearable
-        />
+      <el-select v-model="workStatus" clearable class="setWidth" placeholder="更多" @change="checkStatus">
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" clearable />
       </el-select>
-      <el-form-item
-        label="任务名称:"
-        class="workPlanName"
-        min-width="60"
-      >
+      <el-form-item label="任务名称:" class="workPlanName" min-width="60">
         <el-input
           v-model="listQuery.workPlanName"
           placeholder="请输入名称"
           class="filter-item"
           clearable
-          @keyup.enter.native="handleFilter"
-        />
+          @keyup.enter.native="handleFilter" />
       </el-form-item>
       <el-form-item label="项目:">
-        <el-select
-          v-model="listQuery.itemId"
-          clearable
-          placeholder="请选择项目"
-        >
-          <el-option
-            v-for="item in itemOptions"
-            :key="item.id"
-            :label="item.itemName"
-            :value="item.id"
-          />
+        <el-select v-model="listQuery.itemId" clearable placeholder="请选择项目">
+          <el-option v-for="item in itemOptions" :key="item.id" :label="item.itemName" :value="item.id" />
         </el-select>
       </el-form-item>
 
-      <el-button
-        class="filter-item"
-        type="primary"
-        icon="el-icon-search"
-        @click="handleFilter"
-      >查询</el-button>
-      <el-button
-        class="filter-item"
-        type="primary"
-        icon="el-icon-plus"
-        @click="handleCreate"
-      >新增</el-button>
-      <el-button
-        class="filter-item"
-        type="primary"
-        @click="tolead"
-      >导入</el-button>
-      <el-button
-        class="filter-item"
-        type="primary"
-        @click="exportText"
-      >导出</el-button>
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+      <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
+      <el-button class="filter-item" type="primary" @click="tolead">导入</el-button>
+      <el-button class="filter-item" type="primary" @click="exportText">导出</el-button>
     </el-form>
     <!-- 表格 -->
-    <el-table
-      :data="workList"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%"
-    >
-      <el-table-column
-        type="index"
-        width="60"
-        label="序号"
-        align="center"
-      />
-      <el-table-column
-        :show-overflow-tooltip="true"
-        label="项目名称"
-        align="center"
-        prop="itemName"
-        width="100"
-      >
+    <el-table :data="workList" border fit highlight-current-row style="width: 100%">
+      <el-table-column type="index" width="60" label="序号" align="center" />
+      <el-table-column :show-overflow-tooltip="true" label="项目名称" align="center" prop="itemName" width="100">
         <template slot-scope="scope">
           {{ scope.row.itemName }}
         </template>
       </el-table-column>
-      <el-table-column
-        :show-overflow-tooltip="true"
-        label="任务名称"
-        width="100"
-        align="center"
-        prop="workPlanName"
-      >
+      <el-table-column :show-overflow-tooltip="true" label="任务名称" width="100" align="center" prop="workPlanName">
         <template slot-scope="scope">
           <el-button type="text" @click="handleDetails(scope.row)">{{ scope.row.workPlanName }}</el-button>
         </template>
       </el-table-column>
-      <el-table-column
-        label="开始时间"
-        align="center"
-        prop="planStartTime"
-      >
+      <el-table-column label="开始时间" align="center" prop="planStartTime">
         <!-- <template slot-scope="scope">
           <span :class="scope.row.signInAttendanceTime?'':'text-red'">{{ scope.row.signInAttendanceTime?scope.row.signInAttendanceTime:'未签到' }}</span>
         </template> -->
       </el-table-column>
-      <el-table-column
-        label="截止时间"
-        align="center"
-        prop="planEndTime"
-      >
+      <el-table-column label="截止时间" align="center" prop="planEndTime">
         <template slot-scope="scope">
           <span :class="scope.row.isExpire==='0'?'':'planEndStyle'">{{ scope.row.planEndTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="任务状态"
-        align="center"
-        prop="workPlanStatusMessage"
-      >
+      <el-table-column label="任务状态" align="center" prop="workPlanStatusMessage">
         <template slot-scope="scope">
-          <span v-if="scope.row.workPlanStatusMessage==='未开始'" >未开始</span>
-          <span v-if="scope.row.workPlanStatusMessage==='进行中'" class="text-red" >进行中</span>
-          <span v-if="scope.row.workPlanStatusMessage==='已暂停'" style="color:rgb(248, 180, 102)" >已暂停</span>
-          <span v-if="scope.row.workPlanStatusMessage==='已完成'" class="text-green" >已完成</span>
+          <span v-if="scope.row.workPlanStatusMessage==='未开始'">未开始</span>
+          <span v-if="scope.row.workPlanStatusMessage==='进行中'" class="text-red">进行中</span>
+          <span v-if="scope.row.workPlanStatusMessage==='已暂停'" style="color:rgb(248, 180, 102)">已暂停</span>
+          <span v-if="scope.row.workPlanStatusMessage==='已完成'" class="text-green">已完成</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="负责人"
-        align="center"
-        prop="responsibleUserName"
-      />
-      <el-table-column
-        label="预计 (小时)"
-        align="center"
-        prop="planTime"
-      />
-      <el-table-column
-        label="消耗 (小时)"
-        align="center"
-        prop="totalConsumeTime"
-      />
-      <el-table-column
-        label="剩余 (小时)"
-        align="center"
-        prop="totalRemainTime"
-      />
-      <el-table-column
-        label="操作"
-        align="center"
-        min-width="180"
-      >
+      <el-table-column label="负责人" align="center" prop="responsibleUserName" />
+      <el-table-column label="预计 (小时)" align="center" prop="planTime" />
+      <el-table-column label="消耗 (小时)" align="center" prop="totalConsumeTime" />
+      <el-table-column label="剩余 (小时)" align="center" prop="totalRemainTime" />
+      <el-table-column label="操作" align="center" min-width="180">
         <template slot-scope="scope">
-          <el-button
-            :disabled="scope.row.workPlanStatus!=='0'"
-            type="text"
-            @click="startWork(scope.row)"
-          >开始 </el-button>
-          <el-button
-            :disabled="scope.row.workPlanStatus==='2'||scope.row.workPlanStatus==='3'"
-            type="text"
-            @click="pauseWork(scope.row)"
-          >暂停 </el-button>
-          <el-button
-            :disabled="scope.row.workPlanStatus==='3'"
-            type="text"
-            @click="handlEdit(scope.row)"
-          >编辑</el-button>
-          <el-button
-            :disabled="scope.row.workPlanStatus==='3'"
-            type="text"
-            @click="completeWork(scope.row)"
-          >完成</el-button>
+          <el-button :disabled="scope.row.workPlanStatus!=='0'" type="text" @click="startWork(scope.row)">开始
+          </el-button>
+          <el-button :disabled="scope.row.workPlanStatus==='2'||scope.row.workPlanStatus==='3'" type="text" @click="pauseWork(scope.row)">暂停
+          </el-button>
+          <el-button :disabled="scope.row.workPlanStatus==='3'" type="text" @click="handlEdit(scope.row)">编辑</el-button>
+          <el-button :disabled="scope.row.workPlanStatus==='3'" type="text" @click="completeWork(scope.row)">完成</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -212,62 +89,29 @@
       layout="total, sizes, prev, pager, next, jumper"
       style="margin-top:15px;"
       @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+      @current-change="handleCurrentChange" />
     <!-- 点击导入按钮的弹框 -->
     <template v-if="dialogVisible">
-      <el-dialog
-        :visible.sync="dialogVisible"
-        title="导入"
-        class="daoru"
-      >
-        <div
-          style="display:flex;justify-content: space-between;"
-          class="demo"
-        >
-          <el-button
-            :disabled="disabled"
-            type="success"
-            @click="submit($event)"
-          >导入文件</el-button>
-          <a
-            href="/static/file/workplanTemplate.xlsx"
-            class="download"
-          >下载模板</a>
+      <el-dialog :visible.sync="dialogVisible" title="导入" class="daoru">
+        <div style="display:flex;justify-content: space-between;" class="demo">
+          <el-button :disabled="disabled" type="success" @click="submit($event)">导入文件</el-button>
+          <a href="/static/file/workplanTemplate.xlsx" class="download" download>下载模板</a>
         </div>
         <!-- <div>
           <p>注意:</p>
           <p>请先导出模板，并按照模板填入批量数据，保存后点击上传即可</p>
         </div> -->
         <div style="margin-top:30px;">
-          <input
-            type="file"
-            @change="getFile($event)"
-          >
+          <input type="file" @change="getFile($event)">
         </div>
       </el-dialog>
     </template>
     <!-- 点击开始按钮的弹框 -->
     <template v-if="startdialogVisible">
-      <el-dialog
-        :visible.sync="startdialogVisible"
-        :title=" workPlanName+' > '+ titleText"
-        class="workContent"
-      >
-        <el-form
-          id="startWork"
-          ref="workform"
-          :model="workform"
-          label-width="80px"
-          size="mini"
-        >
+      <el-dialog :visible.sync="startdialogVisible" :title=" workPlanName+' > '+ titleText" class="workContent">
+        <el-form id="startWork" ref="workform" :model="workform" label-width="80px" size="mini">
           <el-form-item v-if="titleText==='开始'" label="实际开始">
-            <el-date-picker
-              v-model="workform.startTime"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期"
-            />
+            <el-date-picker v-model="workform.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" />
           </el-form-item>
           <el-form-item v-show="titleText==='完成'" label="已消耗">
             <span>{{ workform.totalConsumeTime }}工时</span>
@@ -278,12 +122,7 @@
             </el-input>
           </el-form-item>
           <el-form-item v-if="titleText==='完成'" label="完成时间">
-            <el-date-picker
-              v-model="workform.endTime"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期"
-            />
+            <el-date-picker v-model="workform.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" />
           </el-form-item>
           <el-form-item v-show="titleText==='开始'" label="预计剩余">
             <el-input v-model="workform.totalRemainTime">
@@ -305,53 +144,29 @@
             </el-upload>
 
           </el-form-item>
-          <el-form-item
-            label="备注"
-            class="beizhu"
-          >
-            <UE
-              ref="ue"
-              :default-msg="defaultMsg"
-              :config="config"
-            />
+          <el-form-item label="备注" class="beizhu">
+            <UE ref="ue" :default-msg="defaultMsg" :config="config" />
           </el-form-item>
           <el-form-item class="start">
             <span @click="submitStatus()">{{ titleText }}</span>
           </el-form-item>
         </el-form>
         <fieldset class="fieldest">
-          <legend> <strong>历史记录</strong><a
-            v-show="unbtn"
-            href="javascript:;"
-            class="history_a"
-            @click="unfoldText"
-          > <i class="iconfont">&#xe636;</i></a>
-            <a
-              v-show="!unbtn"
-              href="javascript:;"
-              class="history_a"
-              @click="unfoldText"
-            > <i class="iconfont">&#xe608;</i></a>
+          <legend> <strong>历史记录</strong><a v-show="unbtn" href="javascript:;" class="history_a" @click="unfoldText"> <i
+            class="iconfont">&#xe636;</i></a>
+            <a v-show="!unbtn" href="javascript:;" class="history_a" @click="unfoldText"> <i class="iconfont">&#xe608;</i></a>
           </legend>
-          <ul
-            v-show="history.length>0"
-            style="margin:unset;padding:unset"
-          >
-            <li
-              v-for="(item,index) in history"
-              :key="index"
-            >
+          <ul v-show="history.length>0" style="margin:unset;padding:unset">
+            <li v-for="(item,index) in history" :key="index">
               <span v-html="(index+1)+'.  '+item.operateRecode +'' ">{{ (index+1)+'. '+ item.operateRecode }}
               </span>
-              <span > <a v-show="unbtn" href="javascript:;" class="history_a" @click="unfoldText">
+              <span> <a v-show="unbtn" href="javascript:;" class="history_a" @click="unfoldText">
                 <i class="iconfont">&#xe636;</i>
               </a>
-                <a v-show="!unbtn" href="javascript:;" class="history_a" @click="unfoldText" >
+                <a v-show="!unbtn" href="javascript:;" class="history_a" @click="unfoldText">
                   <i class="iconfont">&#xe608;</i>
               </a></span>
-              <div
-                class="historyInfo"
-              >
+              <div class="historyInfo">
                 <div v-show="unfold" v-html="item.operateDetails">{{ item.operateDetails }}</div>
                 <div v-html="item.remark">{{ item.remark }}</div>
               </div>
@@ -436,14 +251,20 @@ export default {
   },
   methods: {
     handleDetails(row) {
-      this.$router.push({ name: 'workPlanDetails', query: {
-        id: row.id
-      }})
+      this.$router.push({
+        name: 'workPlanDetails',
+        query: {
+          id: row.id
+        }
+      })
     },
     handlEdit(row) {
-      this.$router.push({ name: 'editWorkPlan', query: {
-        id: row.id
-      }})
+      this.$router.push({
+        name: 'editWorkPlan',
+        query: {
+          id: row.id
+        }
+      })
     },
     // 上传成功
     uploadDone(res, file, fileList) {
@@ -495,7 +316,18 @@ export default {
       if (seconds >= 0 && seconds <= 9) {
         seconds = '0' + seconds
       }
-      var currentTime = year + sign1 + month + sign1 + day + ' ' + hour + sign2 + minutes + sign2 + seconds
+      var currentTime =
+        year +
+        sign1 +
+        month +
+        sign1 +
+        day +
+        ' ' +
+        hour +
+        sign2 +
+        minutes +
+        sign2 +
+        seconds
       return currentTime
     },
     // 点击完成的弹框
@@ -672,6 +504,11 @@ export default {
         'post'
       ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
+          this.$message({
+            message: '导入成功',
+            type: 'success'
+          })
+          this.initList()
           this.dialogVisible = false
         } else {
           this.$message.error('导入失败,' + res.data.result)
@@ -690,9 +527,9 @@ export default {
       api(
         `${this.GLOBAL.oaUrl}oa/workPlan/exportExcelWorkPlanInfo?itemId=${
           this.listQuery.itemId
-        }&workPlanName=${
-          this.listQuery.workPlanName
-        }&workPlanStatus=${this.workPlanStatus}`,
+        }&workPlanName=${this.listQuery.workPlanName}&workPlanStatus=${
+          this.workPlanStatus
+        }`,
         '',
         'get'
       ).then(res => {
@@ -765,15 +602,15 @@ export default {
 </script>
 
 <style lang="scss" >
-.planEndStyle{
-  color:#fff;
+.planEndStyle {
+  color: #fff;
   background: rgb(232, 78, 15);
   padding: 5px;
 }
-.el-tooltip__popper{
-   text-align: center;
-    max-width: 260px;
-    word-break: break-all;
+.el-tooltip__popper {
+  text-align: center;
+  max-width: 260px;
+  word-break: break-all;
 }
 .daoru {
   .el-dialog {
@@ -793,48 +630,48 @@ export default {
   margin-left: 20px;
   border: 1px solid #f5f5f5;
 }
-.workManagement{
-.fieldest {
-  border: 1px solid #e5e5e5;
-  margin-top: 15px;
-  padding: 10px 15px 15px;
-  legend {
-    width: auto;
-    margin: 0 0 0 -5px;
-    font-size: 13px;
-    font-weight: bold;
-    border-bottom: 0;
-    padding: 0 5px;
-    color: #333;
-  }
-  .history_a {
-    background: #f1f1f1;
-    color: #666 !important;
-    //  border: 1px solid #ccc;
-    margin-left:4px;
-    padding: 2px;
-    /* height: 18px; */
-   line-height: 16px;
-    width: 18px;
-    > i {
-      border-radius: 2px;
-      display: inline-block;
-      // width: 20px;
-      // border: 0;
-      // background: 0;
-      // padding: 0;
-      // color: #4d90fe!important;
-      text-align: center;
+.workManagement {
+  .fieldest {
+    border: 1px solid #e5e5e5;
+    margin-top: 15px;
+    padding: 10px 15px 15px;
+    legend {
+      width: auto;
+      margin: 0 0 0 -5px;
+      font-size: 13px;
+      font-weight: bold;
+      border-bottom: 0;
+      padding: 0 5px;
+      color: #333;
+    }
+    .history_a {
+      background: #f1f1f1;
+      color: #666 !important;
+      //  border: 1px solid #ccc;
+      margin-left: 4px;
+      padding: 2px;
+      /* height: 18px; */
+      line-height: 16px;
+      width: 18px;
+      > i {
+        border-radius: 2px;
+        display: inline-block;
+        // width: 20px;
+        // border: 0;
+        // background: 0;
+        // padding: 0;
+        // color: #4d90fe!important;
+        text-align: center;
+      }
     }
   }
 }
-}
-.workContent{
-.el-dialog{
-    margin-top:8vh!important;
-      height: 600px;
-      overflow: auto;
-    }
+.workContent {
+  .el-dialog {
+    margin-top: 8vh !important;
+    height: 600px;
+    overflow: auto;
+  }
 }
 #startWork {
   .start {
@@ -851,20 +688,24 @@ export default {
     }
   }
   .el-form-item__content {
-    width: 220px ;
+    width: 220px;
   }
-  .accessory{
-    .accessoryStyle{
-      border:1px solid #ccc;height:28px;line-height:28px;padding-left:5px;display: inline-block;
-      margin:5px 0px;
-     input{
+  .accessory {
+    .accessoryStyle {
+      border: 1px solid #ccc;
+      height: 28px;
+      line-height: 28px;
+      padding-left: 5px;
+      display: inline-block;
+      margin: 5px 0px;
+      input {
         outline: none;
         border: none;
       }
     }
     .el-form-item__content {
-    width: 100%;
-  }
+      width: 100%;
+    }
   }
   .el-form-item--mini.el-form-item,
   .el-form-item--small.el-form-item {

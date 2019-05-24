@@ -106,9 +106,9 @@ public class PayOrderController extends BaseController implements PayOrderClient
             //根据支付渠道ID 执行不同的支付方式
             switch (ChannelIdEnum.getCode(channelId)) {
                 case WX_APP :
-                    //String wxAppParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_APP, payOrder}));
-                    //return returnResult(wxAppParam,resKey);
-                    PayOrderRsp payOrderRsp = new PayOrderRsp();
+                    String wxAppParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_APP, payOrder}));
+                    return returnResult(wxAppParam,resKey);
+                   /* PayOrderRsp payOrderRsp = new PayOrderRsp();
                     payOrderRsp.setChannelId(channelId);
                     payOrderRsp.setPayOrderId(UUID.randomUUID().toString().substring(0,20));
                     //封装orderInfo(发起支付需要的参数JSON格式)
@@ -122,7 +122,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
                     orderInfo.put("prepayId","wx2016081611532915ae15beab0167893571");
                     payOrderRsp.setOrderInfo(orderInfo.toJSONString());
                     payOrderRsp.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrderRsp), MchIdEnum.MCH_BASE.getRspKey()));
-                    return new Result(payOrderRsp);
+                    return new Result(payOrderRsp);*/
 
                 case WX_JSAPI :
                     //String wxJsapiParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_JSPAI, payOrder}));
@@ -297,7 +297,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         String sign = payOrderReq.getSign();
         //支付宝支付完成的跳转页面
         String aliPayReturnUrl = payOrderReq.getAliPayReturnUrl();
-
+        //订单最晚付款时长
+        Integer duration = payOrderReq.getDuration();
 
         // 验证请求参数有效性（必选项）
         if(StringUtils.isBlank(mchId)) {
@@ -375,6 +376,18 @@ public class PayOrderController extends BaseController implements PayOrderClient
             errorMessage = "request params[sign] error.";
             return errorMessage;
         }
+        //订单最晚付款时长
+        if(null != payOrderReq.getDuration()){
+            if(duration > PayConstant.PAY_ORDER_MAX_DURATION){
+                errorMessage = "request params[duration] 订单最晚付款时长超出120分钟";
+                return errorMessage;
+            }else if(duration < PayConstant.PAY_ORDER_MIN_DURATION){
+                errorMessage = "request params[duration] 订单最晚付款时长不能小于一分钟";
+                return errorMessage;
+            }
+        }
+
+
         // 查询商户信息
         MchInfo mchInfo = mchInfoService.getMchInfoById(mchId);
         if(null == mchInfo){
@@ -448,6 +461,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         //响应密钥
         payOrder.put("resKey",mchInfo.getResKey());
         payOrder.put("aliPayReturnUrl",aliPayReturnUrl);
+        payOrder.put("duration",duration);
+
         return payOrder;
     }
 

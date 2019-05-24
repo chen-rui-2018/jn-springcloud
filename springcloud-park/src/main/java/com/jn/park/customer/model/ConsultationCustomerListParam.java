@@ -28,4 +28,11 @@ public class ConsultationCustomerListParam extends Page implements Serializable 
     public void setNeedPage(String needPage) {
         this.needPage = needPage;
     }
+
+    @Override
+    public String toString() {
+        return "ConsultationCustomerListParam{" +
+                "needPage='" + needPage + '\'' +
+                '}';
+    }
 }

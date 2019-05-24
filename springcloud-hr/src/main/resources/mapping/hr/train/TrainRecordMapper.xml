@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.train.dao.TrainRecordMapper">
+
+	<select id="listByMangementIdAndJobNumber" parameterType="com.jn.hr.train.entity.TbManpowerTrainRecord"
+		resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM tb_manpower_train_record t
+		WHERE
+		t.management_id=#{managementId,jdbcType=VARCHAR}
+		and
+		t.trainer_job_number = #{trainerJobNumber,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByMangementId" parameterType="java.lang.String"
+		resultType="com.jn.hr.train.model.ManagementTrainRecord">
+		SELECT t.id , t.management_id , t.trainer_department ,
+		t.trainer_job_number , t.trainer_name FROM tb_manpower_train_record t
+		WHERE t.management_id=#{managementId,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectCountByMangementId" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM tb_manpower_train_record t
+		WHERE
+		t.management_id=#{managementId,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listMangementAndRecord" parameterType="com.jn.hr.train.model.ManagementPage"
+		resultType="com.jn.hr.train.model.Management">
+		SELECT
+		t1.trainer_department,t1.trainer_job_number,t1.trainer_name,
+		t2.id, t2.course_title,t2.train_start_time,t2.train_end_time,
+		t2.train_teacher,t2.creator_account,t2.created_time,
+		t2.modifier_account,t2.modified_time
+		FROM
+		tb_manpower_train_record t1 ,
+		tb_manpower_train_management t2
+		WHERE
+		t1.management_id=t2.id
+		AND
+		t2.record_status!=0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+			AND t2.id = #{id,jdbcType=TIMESTAMP}
+		</if>
+	</select>
+
+
+</mapper>

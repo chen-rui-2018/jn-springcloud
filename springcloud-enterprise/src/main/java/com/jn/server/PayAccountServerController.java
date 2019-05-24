@@ -8,10 +8,7 @@ import com.jn.enterprise.pay.service.MyPayAccountService;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import com.jn.pay.api.PayAccountClient;
 import com.jn.pay.api.PayClient;
-import com.jn.pay.model.PayAccountBookMoneyRecord;
-import com.jn.pay.model.PayBIllInitiateParam;
-import com.jn.pay.model.PayCheckReminder;
-import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.log.annotation.ControllerLog;
@@ -19,6 +16,8 @@ import com.jn.system.model.User;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +35,9 @@ public class PayAccountServerController extends BaseController implements PayAcc
     @Autowired
     private MyPayAccountService myPayAccountService;
 
+    @Autowired
+    private MyPayBillService myPayBillService;
+
 
     @ControllerLog(doAction = "我的账户-查询当前账户下所有账本信息")
     @Override
@@ -44,13 +46,19 @@ public class PayAccountServerController extends BaseController implements PayAcc
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "我的账本-查询当前账本下所有明细信息")
     @Override
-    public Result<PaginationData<List<PayAccountBookMoneyRecord>>> queryPayAccountDetails(String acBookId, String startDate, String endDate, int page, int rows) {
+    @ControllerLog(doAction = "我的账本-预缴充值支付回调接口")
+    public Result payAccountCallBack(@RequestBody PayOrderNotify callBackParam) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(acBookId,"账本编号不能为空");
-        PaginationData<List<PayAccountBookMoneyRecord>> data = myPayAccountService.queryPayAccountDetails(user,acBookId,startDate,endDate,page,rows);
-        return new Result(data);
+        return new Result(myPayBillService.payAccountCallBack(callBackParam,user));
     }
+
+    @Override
+    public Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel) {
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return myPayBillService.insertPrepaidRecharge(createOrderAndPayReqModel,user);
+    }
+
 }

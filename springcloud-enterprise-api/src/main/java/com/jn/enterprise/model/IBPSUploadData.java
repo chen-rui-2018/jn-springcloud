@@ -189,6 +189,14 @@ public class IBPSUploadData implements Serializable {
     }
 
     public String toJsonString() {
+        return "{" +
+                "\"id\":\"" + id + "\"" +
+                ",\"fileName\":\"" + fileName + "\"" +
+                ",\"filePath\":\"" + filePath + "\"" +
+                "}";
+    }
+
+    public String toSingleJsonString() {
         return "[{" +
                 "\"id\":\"" + id + "\"" +
                 ",\"fileName\":\"" + fileName + "\"" +

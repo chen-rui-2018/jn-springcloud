@@ -2,11 +2,8 @@ package com.jn.enterprise.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.util.Assert;
 import com.jn.common.util.CallOtherSwaggerUtils;
 import com.jn.common.util.StringUtils;
-import com.jn.enterprise.enums.IBPSOperationExceptionEunm;
 import com.jn.enterprise.enums.IBPSRequestUrlEnum;
 import com.jn.enterprise.model.IBPSFile;
 import com.jn.enterprise.model.IBPSUploadResult;
@@ -34,8 +31,39 @@ public class IBPSFileUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(IBPSFileUtils.class);
 
-    // 默认拼接字符
+    // 默认拼接字符，请勿修改 !important
     private static final String DEFAULT_SEPARATOR_CHAR = ",";
+
+    /**
+     * 多个文件上传
+     * @param account 账号
+     * @param fileUrlList 文件url列表
+     * @return ibps存储格式路径
+     */
+    public static String uploadFiles(String account, List<String> fileUrlList) {
+        StringBuffer sb = new StringBuffer();
+        if (fileUrlList == null || fileUrlList.size() == 0) {
+            logger.warn("[IBPS文件上传] 文件列表为空");
+            return sb.toString();
+        }
+
+        for (String fileUrl : fileUrlList) {
+            IBPSUploadResult ibpsUploadResult = uploadFile2Result(account, fileUrl);
+            if (ibpsUploadResult != null && ibpsUploadResult.getData() != null) {
+                if (StringUtils.isBlank(sb.toString())) {
+                    sb.append("[");
+                } else {
+                    sb.append(DEFAULT_SEPARATOR_CHAR);
+                }
+                sb.append(ibpsUploadResult.getData().toJsonString());
+            }
+        }
+
+        if (StringUtils.isNotBlank(sb.toString())) {
+            sb.append("]");
+        }
+        return sb.toString();
+    }
 
     /**
      * 单个文件上传
@@ -43,15 +71,18 @@ public class IBPSFileUtils {
      * @param fileUrl 文件全路径
      * @return ibps存储格式路径
      */
-    public static String uploadFile(String account, String fileUrl) {
-        Assert.notNull(fileUrl, IBPSOperationExceptionEunm.UPLOAD_FILE_URL_IS_NULL.getMessage());
+    public static IBPSUploadResult uploadFile2Result(String account, String fileUrl) {
+        if (StringUtils.isBlank(fileUrl)) {
+            logger.warn("[IBPS文件上传] 文件路径为空");
+            return null;
+        }
         if(!StringUtils.startsWith(fileUrl, "http")) {
-            logger.warn("[IBPS文件上传] 文件路径格式错误");
-            throw new JnSpringCloudException(IBPSOperationExceptionEunm.UPLOAD_FILE_FORMAT_ERROR);
+            logger.warn("[IBPS文件上传] 文件路径格式错误：{}", fileUrl);
+            return null;
         }
         if(!isExist(fileUrl)) {
-            logger.warn("[IBPS文件上传] 文件不存在");
-            throw new JnSpringCloudException(IBPSOperationExceptionEunm.UPLOAD_FILE_NOT_EXIST);
+            logger.warn("[IBPS文件上传] 文件不存在：{}", fileUrl);
+            return null;
         }
 
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
@@ -60,10 +91,22 @@ public class IBPSFileUtils {
         IBPSUploadResult ibpsUploadResult = new Gson().fromJson(jsonObject.toString(), IBPSUploadResult.class);
         if (ibpsUploadResult == null || !ibpsUploadResult.getState().equals("200") || ibpsUploadResult.getData() == null) {
             logger.warn("[IBPS文件上传] 上传文件失败，返回数据：{}", ibpsUploadResult.toString());
-            throw new JnSpringCloudException(IBPSOperationExceptionEunm.UPLOAD_FILE_ERROR);
+            return null;
         }
         logger.info("[IBPS文件上传] 上传文件成功，返回数据：{}", ibpsUploadResult.toString());
-        return ibpsUploadResult.getData().toJsonString();
+        return ibpsUploadResult;
+    }
+
+    /**
+     * 单个文件上传
+     * @param account 账号
+     * @param fileUrl 文件全路径
+     * @return 成功返回ibps存储格式路径，失败返回原路径
+     */
+    public static String uploadFile2Json(String account, String fileUrl) {
+        IBPSUploadResult ibpsUploadResult = uploadFile2Result(account, fileUrl);
+        String ibpsUrl = (ibpsUploadResult == null || ibpsUploadResult.getData() == null) ? fileUrl : ibpsUploadResult.getData().toSingleJsonString();
+        return ibpsUrl;
     }
 
     /**
@@ -72,7 +115,7 @@ public class IBPSFileUtils {
      * @return 发生错误返回原字符串，成功返回全路径（多个以逗号拼接）
      */
     public static String getFilePath(String ibpsUrl) {
-        return getFilePaths(ibpsUrl, DEFAULT_SEPARATOR_CHAR);
+        return getFilePathWithSeparator(ibpsUrl, DEFAULT_SEPARATOR_CHAR);
     }
 
     /**
@@ -81,7 +124,7 @@ public class IBPSFileUtils {
      * @param separator 拼接字符，默认为逗号
      * @return 发生错误返回原字符串，成功返回全路径
      */
-    public static String getFilePaths(String ibpsUrl, String separator) {
+    public static String getFilePathWithSeparator(String ibpsUrl, String separator) {
         String tempUrl = ibpsUrl;
         if (!StringUtils.startsWith(tempUrl, "[{") || !StringUtils.endsWith(tempUrl, "}]")) {
             logger.warn("[IBPS文件存储] 处理的路径不是IBPS文件存储格式");
@@ -138,7 +181,7 @@ public class IBPSFileUtils {
      * @param fileUrl
      * @return
      */
-    public static boolean isExist(String fileUrl) {
+    private static boolean isExist(String fileUrl) {
         try {
             URL url = new URL(fileUrl);
             URLConnection uc = url.openConnection();

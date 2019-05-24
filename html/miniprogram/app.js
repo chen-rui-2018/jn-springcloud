@@ -1,13 +1,12 @@
 const openIdUrl = require('./config').openIdUrl
-
 App({
   onLaunch(opts) {
-    console.log('App Launch', opts)
+    // console.log('App Launch', opts)
     // 登录
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        console.log(res)
+        // console.log(res)
       }
     })
     // 获取用户信息
@@ -19,7 +18,7 @@ App({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
               this.globalData.userInfo = res.userInfo
-              console.log('=====>' + res.userInfo)
+              // console.log('=====>' + res.userInfo)
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {
@@ -40,16 +39,12 @@ App({
     })
   },
   onShow(opts) {
-    console.log('App Show', opts)
+    this.getToken()
   },
   onHide() {
-    console.log('App Hide')
+    // console.log('App Hide')
   },
-  globalData: {
-    hasLogin: false,
-    openid: null,
-    urlPath: 'http://sw8cyn.natappfree.cc/springcloud-wechat-miniprogram/'
-  },
+ 
   // lazy loading openid
   getUserOpenId(callback) {
     const self = this
@@ -65,21 +60,46 @@ App({
               code: data.code
             },
             success(res) {
-              console.log('拉取openid成功', res)
+              // console.log('拉取openid成功', res)
               self.globalData.openid = res.data.openid
               callback(null, self.globalData.openid)
             },
             fail(res) {
-              console.log('拉取用户openid失败，将无法正常使用开放接口等服务', res)
+              // console.log('拉取用户openid失败，将无法正常使用开放接口等服务', res)
               callback(res)
             }
           })
         },
         fail(err) {
-          console.log('wx.login 接口调用失败，将无法正常使用开放接口等服务', err)
+          // console.log('wx.login 接口调用失败，将无法正常使用开放接口等服务', err)
           callback(err)
         }
       })
     }
+  },
+  getToken(){
+    wx.request({
+      url: 'http://192.168.10.31:1101/springcloud-app-system/login',
+      data: {
+        account:"wangsong",
+        password:"wangsong"
+      },
+      header: {'content-type':'application/json'},
+      method: 'POST',
+      dataType: 'json',
+      success: (res)=>{
+        if(res.data.code==='0000'){
+          this.globalData.token= res.data.data
+          if (this.userInfoReadyCallback) {
+            this.userInfoReadyCallback(res)
+          }
+        }
+      }
+    })
+  },
+  globalData: {
+    hasLogin: false,
+    openid: null,
+    urlPath: 'http://sw8cyn.natappfree.cc/springcloud-wechat-miniprogram/',
   }
 })

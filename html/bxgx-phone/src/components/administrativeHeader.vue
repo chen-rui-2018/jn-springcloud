@@ -1,6 +1,7 @@
 <template>
   <div class="adniministrativeHeader">
     <x-header :left-options="{backText: ''}">{{this.$route.meta.title}}</x-header>
+
   </div>
 </template>
 <script>
@@ -18,8 +19,6 @@ export default {
     top:0;
     width: 100%;
     background: #fff;
-  }
- .adniministrativeHeader{
     padding:30px 34px;
     .vux-header{
       background-color: #fff;

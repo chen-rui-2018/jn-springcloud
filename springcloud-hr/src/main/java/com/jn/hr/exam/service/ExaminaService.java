@@ -124,6 +124,14 @@ public interface ExaminaService {
 	 */
 	public void updateResult(ExaminaManagement examinaManagement);
 
+	/**
+	 *删除成绩
+	 * 
+	 * @param examinaManagement
+	 *            答案实体
+	 */
+	public void deleteResult(ExaminaManagement examinaManagement);
+
 	/**分页查看成绩
 	 * @param page 查看成绩请求实体
 	 * @return

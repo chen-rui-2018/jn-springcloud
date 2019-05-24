@@ -9,17 +9,17 @@
         <el-form label-position="right" label-width="100px" >
           <div :model="productDetail" class="">
             <el-form-item label="业务领域：">
-              <span>非科技金融</span>
+              <span>{{signoryName}}</span>
             </el-form-item>
           </div>
           <div>
             <el-form-item label="服务顾问：">
-              <span></span>
+              <span>{{productDetail.advisorName}}</span>
             </el-form-item>
           </div>
           <div>
             <el-form-item label="产品名称：">
-              <span></span>
+              <span>{{productDetail.productName}}</span>
             </el-form-item>
           </div>
           <div class="">
@@ -152,18 +152,15 @@ export default {
       advisorAccount:'',
       orgId:'',
       templateId:0,
-      businessType:''
+      businessType:'',
+      signoryName:''
     }
   },
   mounted () {
     this.orgId=this.$route.query.orgid
     this.templateId=this.$route.query.productId
+    this.signoryName=this.$route.query.signoryName
     this.getType()
-   /*  if(this.businessType==='technology_finance'){
-       this.getFinancialProductDetails()
-    }else{
-      this.getProductDetails()
-    } */
   },
   methods: {
     //通过id判断是否科技金融
@@ -174,7 +171,6 @@ export default {
       data: {orgId:this.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-            // console.log(res)
           _this.businessType= res.data.businessType
           if(_this.businessType==='technology_finance'){
             _this.getFinancialProductDetails()

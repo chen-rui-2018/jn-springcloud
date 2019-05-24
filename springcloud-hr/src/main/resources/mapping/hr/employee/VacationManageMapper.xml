@@ -5,12 +5,13 @@
     <insert id="insertBatch" parameterType="java.util.List">
         insert into tb_manpower_vacation_manage
         (
-        id, job_number, vacation_type,vacation_time
+        id, job_number,user_id, vacation_type,vacation_time
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.id},
             #{item.jobNumber},
+            #{item.userId}
             #{item.vacationType},
             #{item.vacationTime}
             )

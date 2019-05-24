@@ -1,4 +1,3 @@
-
 <swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
   <swiper-item wx:for="{{3}}" wx:key>
     <image src="../../images/swiper/4x3-{{index+1}}.jpg" mode='aspectFill'></image>

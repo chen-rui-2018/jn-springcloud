@@ -476,31 +476,62 @@ public class ExaminaServiceImpl implements ExaminaService {
 		ExaminaManagementAdd examinaAnswerAdd = new ExaminaManagementAdd();
 		TbManpowerExaminaManagement tbExaminaManagement = selectExaminaManagement(id);
 		BeanUtils.copyProperties(tbExaminaManagement, examinaAnswerAdd);
+		Examinabank examinabank = new Examinabank();
+		examinabank.setExaminaId(id);
+		List<Examinabank> examinabanksList = selectBankByExaminaIdList(examinabank);
 
 		// 查询考试题目关联信息
-		List<TbManpowerExaminaExamQuestion> tbManpowerExaminaExamQuestions = examinaExamQuestionMapper
-				.selectListByExaminaId(id);
-
-		List<Examinabank> examinabanksList = new ArrayList<Examinabank>();
-		for (TbManpowerExaminaExamQuestion tbManpowerExaminaExamQuestion : tbManpowerExaminaExamQuestions) {
-			Examinabank examinabank = new Examinabank();
-			examinabank.setExamQuestionId(tbManpowerExaminaExamQuestion.getId());
-			examinabank.setTestQuestionId(tbManpowerExaminaExamQuestion.getTestQuestionId());
-			examinabank.setExaminaId(id);
-			// 题目信息
-			ExaminabankAdd examinabankAdd = selectExaminabank(examinabank);
-			BeanUtils.copyProperties(examinabankAdd, examinabank);
-
-			// 选项列表
-			List<ExaminaOptionAdd> optionAddList = examinabankAdd.getOptionList();
-			List<ExaminaOption> optionList = BeanCopyUtil.copyList(optionAddList, ExaminaOption.class);
-			examinabank.setOptionList(optionList);
-
-			examinabanksList.add(examinabank);
-		}
+		// List<TbManpowerExaminaExamQuestion> tbManpowerExaminaExamQuestions =
+		// examinaExamQuestionMapper
+		// .selectListByExaminaId(id);
+		//
+		// List<Examinabank> examinabanksList = new ArrayList<Examinabank>();
+		// for (TbManpowerExaminaExamQuestion tbManpowerExaminaExamQuestion :
+		// tbManpowerExaminaExamQuestions) {
+		// Examinabank examinabank = new Examinabank();
+		// examinabank.setExamQuestionId(tbManpowerExaminaExamQuestion.getId());
+		// examinabank.setTestQuestionId(tbManpowerExaminaExamQuestion.getTestQuestionId());
+		// examinabank.setExaminaId(id);
+		// // 题目信息
+		// ExaminabankAdd examinabankAdd = selectExaminabank(examinabank);
+		// BeanUtils.copyProperties(examinabankAdd, examinabank);
+		//
+		// // 选项列表
+		// List<ExaminaOptionAdd> optionAddList =
+		// examinabankAdd.getOptionList();
+		// if (null != optionAddList && optionAddList.size() > 0) {
+		// List<ExaminaOption> optionList = BeanCopyUtil.copyList(optionAddList,
+		// ExaminaOption.class);
+		// examinabank.setOptionList(optionList);
+		// }
+		// examinabanksList.add(examinabank);
+		// }
 		examinaAnswerAdd.setExaminabanksList(examinabanksList);
 		logger.info("查看试卷信息成功成功.id{}", id);
 		return examinaAnswerAdd;
+	}
+
+	/**查询当前题目所有试题信息
+	 * @param examinabank
+	 * @return
+	 */
+	private List<Examinabank> selectBankByExaminaIdList(Examinabank examinabank) {
+		List<Examinabank> tbExaminaBankList = examinaBankMapper.selectBankByExaminaId(examinabank);
+		if (null != tbExaminaBankList && tbExaminaBankList.size() > 0) {
+			for (Examinabank tbExaminaBank : tbExaminaBankList) {
+				if (!StringUtils.isBlank(tbExaminaBank.getAnswerHtml())) {
+					tbExaminaBank.setStandardAnswer(tbExaminaBank.getAnswerHtml());
+				}
+				// 查询题目所有选项
+				List<TbManpowerExaminaTitleOption> tbOptionList = examinaTitleOptionMapper
+						.optionList(tbExaminaBank.getTestQuestionId());
+				if (null != tbOptionList && tbOptionList.size() > 0) {
+					List<ExaminaOption> optionList = BeanCopyUtil.copyList(tbOptionList, ExaminaOption.class);
+					tbExaminaBank.setOptionList(optionList);
+				}
+			}
+		}
+		return tbExaminaBankList;
 	}
 
 	/**
@@ -653,7 +684,7 @@ public class ExaminaServiceImpl implements ExaminaService {
 		updExaminaManagement.setModifierAccount(user.getAccount());
 		updExaminaManagement.setModifiedTime(new Date());
 		tbManpowerExaminaManagementMapper.updateByPrimaryKeySelective(updExaminaManagement);
-		logger.info("发布考试通知成功.id{},name:{}", examinaManagement.getId(), examinaManagement.getExaminaName());
+		logger.info("发布考试通知成功.id{},name:{}", tbExaminaManagement.getId(), tbExaminaManagement.getExaminaName());
 	}
 
 	/**
@@ -817,36 +848,11 @@ public class ExaminaServiceImpl implements ExaminaService {
 			}
 			examinaAnswerAdd.setJobNumber(management.getJobNumber());
 			BeanUtils.copyProperties(tbExaminaManagement, examinaAnswerAdd);
-			// 查询考试题目关联信息
-			List<TbManpowerExaminaExamQuestion> tbManpowerExaminaExamQuestions = examinaExamQuestionMapper
-					.selectListByExaminaId(id);
-			List<Examinabank> examinabanksList = new ArrayList<Examinabank>();
-			for (TbManpowerExaminaExamQuestion tbExaminaBank : tbManpowerExaminaExamQuestions) {
-				Examinabank examinabank = new Examinabank();
-				examinabank.setExamQuestionId(tbExaminaBank.getId());
-				// 题目信息
-				ExaminabankAdd examinabankAdd = selectExaminabank(tbExaminaBank.getTestQuestionId());
-				BeanUtils.copyProperties(examinabankAdd, examinabank);
-				if (!StringUtils.isBlank(tbExaminaBank.getFraction())) {
-					examinabank.setFraction(tbExaminaBank.getFraction());
-				}
-				// 选项列表
-				List<ExaminaOption> optionList = new ArrayList<ExaminaOption>();
-				List<ExaminaOptionAdd> optionAddList = examinabankAdd.getOptionList();
-				for (ExaminaOptionAdd optionAdd : optionAddList) {
-					ExaminaOption option = new ExaminaOption();
-					BeanUtils.copyProperties(optionAdd, option);
-					optionList.add(option);
-				}
-				examinabank.setOptionList(optionList);
-
-				// 答案列表
-				if (!StringUtils.isBlank(examinabank.getAnswerId())) {
-					examinabank.setAnswerId(examinabankAdd.getAnswerId());
-				}
-				examinabanksList.add(examinabank);
-				examinaAnswerAdd.setExaminabanksList(examinabanksList);
-			}
+			// 查询考试题目及答案信息
+			Examinabank examinabank = new Examinabank();
+			examinabank.setExaminaId(id);
+			List<Examinabank> examinabanksList = selectBankByExaminaIdList(examinabank);
+			examinaAnswerAdd.setExaminabanksList(examinabanksList);
 		} else {
 			BeanUtils.copyProperties(tbExaminaManagement, examinaAnswerAdd);
 			logger.info("查看试卷信息成功.id{}", id);
@@ -866,104 +872,180 @@ public class ExaminaServiceImpl implements ExaminaService {
 	@ServiceLog(doAction = "提交答案功能")
 	@Transactional(rollbackFor = Exception.class)
 	public ExaminaManagementAdd insterAnswerCard(ExaminaManagement examinaManagement) {
-		// 查询考试信息
 		ExaminaManagementAdd examinaManagementAdd = new ExaminaManagementAdd();
 		String id = examinaManagement.getId();
-		TbManpowerExaminaManagement tbManagement = selectExaminaManagement(id);
-		BeanUtils.copyProperties(tbManagement, examinaManagementAdd);
-
-		List<Examinabank> examinabankAddList = new ArrayList<Examinabank>();
-		List<Examinabank> examinabanksList = examinaManagement.getExaminabanksList();
+		if (StringUtils.isBlank(id)) {
+			logger.warn("试卷编号不能为空");
+			throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "试卷编号不能为空");
+		}
 		if (StringUtils.isBlank(examinaManagement.getJobNumber())) {
 			logger.warn("用户工号不能为空,jobNumber:{}", examinaManagement.getJobNumber());
 			throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "用户工号不能为空");
 		}
-		TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = employeeBasicInfoMapper
-				.selectByJobNumber(examinaManagement.getJobNumber());// 查询用户信息
-		if (null == tbManpowerEmployeeBasicInfo) {
-			logger.warn("参加考试失败,当前工号不存在jobNumber:{}", examinaManagement.getJobNumber());
-			throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "参加考试失败,当前工号不存在");
-		}
-		float achievement = 0;// 得分
-		Integer examinabankSize = 0;// 试题个数
-		Integer notErrorexaminBankSize = 0;// 正确个数
-
-		for (Examinabank examinabank : examinabanksList) {
-			examinabankSize++;
-			Examinabank examinabankAdd = new Examinabank();
-			// 查询试题信息
-			examinabank.setExaminaId(id);
-			ExaminabankAdd tbExaminaBank = selectExaminaBankByExaminaId(examinabank);
-			BeanUtils.copyProperties(tbExaminaBank, examinabankAdd);
-			TbManpowerExaminaAnswerCard tbManpowerExaminaAnswerCard = new TbManpowerExaminaAnswerCard();
-			tbManpowerExaminaAnswerCard.setId(UUID.randomUUID().toString());
-			tbManpowerExaminaAnswerCard.setAnswer(examinabank.getAnswer());
-			tbManpowerExaminaAnswerCard.setTestQuestId(examinabank.getTestQuestionId());
-			tbManpowerExaminaAnswerCard.setTestPaperId(examinaManagement.getId());
-			tbManpowerExaminaAnswerCard.setJobNumber(tbManpowerEmployeeBasicInfo.getJobNumber());
-			tbManpowerExaminaAnswerCardMapper.insertSelective(tbManpowerExaminaAnswerCard);
-
-			// 计算成绩
-			if (!StringUtils.isBlank(tbExaminaBank.getStandardAnswer())) {
-				String answer = examinabank.getAnswer();// 答案信息
-				float fraction = Float.parseFloat(tbExaminaBank.getFraction());// 题目分数
-				String tbAnswerStr = tbExaminaBank.getAnswerNumber();// 选择题答案
-				float achievementStr = 0;
-				if (StringUtils.isBlank(tbAnswerStr)) {
-					tbAnswerStr = tbExaminaBank.getAnswerHtml();
-					achievementStr = HrDataUtil.getSimilarityRatio(answer, tbAnswerStr, fraction);
-				} else {
-					achievementStr = HrDataUtil.examinee(answer, tbAnswerStr, fraction);
-				}
-				if (achievementStr != 0) {
-					notErrorexaminBankSize++;
-					achievement += achievementStr;
-				}
-				examinabankAddList.add(examinabankAdd);
-			}
-		}
-		examinaManagementAdd.setExaminabanksList(examinabankAddList);
-
-		TbManpowerExaminaResultInfo examinaResultInfo = new TbManpowerExaminaResultInfo();
-		BeanUtils.copyProperties(examinaManagement, examinaResultInfo);
-		examinaResultInfo.setId(UUID.randomUUID().toString());
-		examinaResultInfo.setExaminaId(examinaManagement.getId());
-		if (null != tbManpowerEmployeeBasicInfo) {
-			examinaResultInfo.setJobNumber(tbManpowerEmployeeBasicInfo.getJobNumber());
-			examinaResultInfo.setName(tbManpowerEmployeeBasicInfo.getName());
-		}
-		examinaResultInfo.setAchievement((int) Math.ceil(achievement));
-		if (tbManagement.getPassScore().compareTo(examinaResultInfo.getAchievement()) <= 0) {
-			examinaResultInfo.setIsAdopt(Byte.parseByte(ExaminaStatusEnmus.IS_ADOPT.getCode()));
+		TbManpowerExaminaResultInfo resultInfo = new TbManpowerExaminaResultInfo();
+		resultInfo.setExaminaId(examinaManagement.getId());
+		resultInfo.setJobNumber(examinaManagement.getJobNumber());
+		TbManpowerExaminaResultInfo tbResultInfo = examinaResultInfoMapper.selectUserResult(resultInfo);
+		if (null != tbResultInfo) {
+			logger.warn("用户已完成当前考试,id:{},jobNumber:{}", examinaManagement.getId(), examinaManagement.getJobNumber());
+			examinaManagementAdd = getSuccessAnswer(examinaManagement, tbResultInfo);
 		} else {
-			examinaResultInfo.setIsAdopt(Byte.parseByte(ExaminaStatusEnmus.UN_ADOPT.getCode()));
-		}
-		if (null == examinaResultInfo.getExaminaEndTime()) {
-			examinaResultInfo.setExaminaEndTime(new Date());
-		}
-		if (null == examinaResultInfo.getUseTime()) {
-			Long startTime = examinaResultInfo.getExaminaStartTime().getTime();
-			Long endTime = examinaResultInfo.getExaminaEndTime().getTime();
-			int useTime = (int) ((endTime - startTime) / 1000 / 60);
-			examinaResultInfo.setUseTime(useTime);
-		}
+			// 查询考试信息
+			TbManpowerExaminaManagement tbManagement = selectExaminaManagement(id);
+			BeanUtils.copyProperties(tbManagement, examinaManagementAdd);
 
-		if (null == examinaResultInfo.getRank()) {
-			List<Integer> achievementList = examinaResultInfoMapper.listAchievement();
-			examinaResultInfo.setRank(achievementRank(achievementList, (int) achievement));
-		}
-		examinaResultInfo.setRecordStatus(Byte.parseByte(HrStatusEnums.EFFECTIVE.getCode()));
-		tbManpowerExaminaResultInfoMapper.insertSelective(examinaResultInfo);
+			List<Examinabank> examinabankAddList = new ArrayList<Examinabank>();
+			List<Examinabank> examinabanksList = examinaManagement.getExaminabanksList();
 
-		examinaManagementAdd.setResultId(examinaResultInfo.getId());
-		examinaManagementAdd.setIsAdopt(examinaResultInfo.getIsAdopt());
-		examinaManagementAdd.setUseTime(examinaResultInfo.getUseTime());
-		examinaManagementAdd.setAchievement(examinaResultInfo.getAchievement());
+			TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = employeeBasicInfoMapper
+					.selectByJobNumber(examinaManagement.getJobNumber());// 查询用户信息
+			if (null == tbManpowerEmployeeBasicInfo) {
+				logger.warn("参加考试失败,当前工号不存在jobNumber:{}", examinaManagement.getJobNumber());
+				throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "参加考试失败,当前工号不存在");
+			}
+			float achievement = 0;// 得分
+			Integer examinabankSize = 0;// 试题个数
+			double notErrorexaminBankSize = 0;// 正确个数
+			if (null != examinabanksList && examinabanksList.size() > 0) {
+				for (Examinabank examinabank : examinabanksList) {
+					examinabankSize++;
+
+					// 查询试题信息
+					Examinabank examinabankAdd = new Examinabank();
+					examinabank.setExaminaId(id);
+					ExaminabankAdd tbExaminaBank = selectExaminaBankByExaminaId(examinabank);
+					BeanUtils.copyProperties(tbExaminaBank, examinabankAdd);
+
+					// 计算成绩
+					Float achievementStr = 0f;
+					String answerType = "1";// 题目类型--正确
+					if (!StringUtils.isBlank(tbExaminaBank.getStandardAnswer())) {
+						String answer = examinabank.getAnswer();// 答案信息
+						if (StringUtils.isBlank(answer)) {
+							answer = "";
+							examinabank.setAnswer(answer);
+						}
+						Float fraction = Float.parseFloat(tbExaminaBank.getFraction());// 题目分数
+						String tbAnswerStr = tbExaminaBank.getStandardAnswer();// 题目答案
+						if (!StringUtils.isBlank(tbExaminaBank.getAnswerHtml())) {
+							// 判断是否是问答题
+							achievementStr = HrDataUtil.getSimilarityRatio(answer, tbAnswerStr, fraction);
+						} else {
+							achievementStr = HrDataUtil.examinee(answer, tbAnswerStr, fraction);
+						}
+						if (achievementStr != 0) {
+							if (achievementStr.equals(fraction)) {
+								notErrorexaminBankSize++;
+							} else {
+								answerType = "2";
+								notErrorexaminBankSize = notErrorexaminBankSize + 0.5;
+							}
+							int achievementInt = (int) Math.ceil(achievementStr);
+							achievementStr = (float) achievementInt;
+							achievement += achievementStr;
+						} else {
+							answerType = "2";
+						}
+
+						TbManpowerExaminaAnswerCard tbManpowerExaminaAnswerCard = new TbManpowerExaminaAnswerCard();
+						tbManpowerExaminaAnswerCard.setId(UUID.randomUUID().toString());
+						tbManpowerExaminaAnswerCard.setAnswer(examinabank.getAnswer());
+						tbManpowerExaminaAnswerCard.setTestQuestId(examinabank.getTestQuestionId());
+						tbManpowerExaminaAnswerCard.setTestPaperId(examinaManagement.getId());
+						tbManpowerExaminaAnswerCard.setJobNumber(tbManpowerEmployeeBasicInfo.getJobNumber());
+						if (achievementStr.compareTo(fraction) > 0) {
+							achievementStr = fraction;
+						}
+						tbManpowerExaminaAnswerCard.setTitleScore(achievementStr.intValue() + "");
+						tbManpowerExaminaAnswerCard.setAnswerType(answerType);
+						tbManpowerExaminaAnswerCardMapper.insertSelective(tbManpowerExaminaAnswerCard);
+						examinabankAddList.add(examinabankAdd);
+					}
+				}
+			}
+			examinaManagementAdd.setExaminabanksList(examinabankAddList);
+
+			TbManpowerExaminaResultInfo examinaResultInfo = new TbManpowerExaminaResultInfo();
+			BeanUtils.copyProperties(examinaManagement, examinaResultInfo);
+			examinaResultInfo.setId(UUID.randomUUID().toString());
+			examinaResultInfo.setExaminaId(examinaManagement.getId());
+			if (null != tbManpowerEmployeeBasicInfo) {
+				examinaResultInfo.setJobNumber(tbManpowerEmployeeBasicInfo.getJobNumber());
+				examinaResultInfo.setName(tbManpowerEmployeeBasicInfo.getName());
+			}
+			examinaResultInfo.setAchievement((int) achievement);
+			if (tbManagement.getTotalScore().compareTo((int) achievement) < 0) {
+				examinaResultInfo.setAchievement(tbManagement.getTotalScore());
+			}
+			if (tbManagement.getPassScore().compareTo(examinaResultInfo.getAchievement()) <= 0) {
+				examinaResultInfo.setIsAdopt(Byte.parseByte(ExaminaStatusEnmus.IS_ADOPT.getCode()));
+			} else {
+				examinaResultInfo.setIsAdopt(Byte.parseByte(ExaminaStatusEnmus.UN_ADOPT.getCode()));
+			}
+			if (null == examinaResultInfo.getExaminaEndTime()) {
+				examinaResultInfo.setExaminaEndTime(new Date());
+			}
+			if (null == examinaResultInfo.getUseTime()) {
+				Long startTime = examinaResultInfo.getExaminaStartTime().getTime();
+				Long endTime = examinaResultInfo.getExaminaEndTime().getTime();
+				int useTime = (int) ((endTime - startTime) / 1000 / 60);
+				examinaResultInfo.setUseTime(useTime);
+			}
+			if (null == examinaResultInfo.getRank()) {
+				List<Integer> achievementList = examinaResultInfoMapper.listAchievement();
+				examinaResultInfo.setRank(achievementRank(achievementList, (int) achievement));
+			}
+			examinaResultInfo.setRecordStatus(Byte.parseByte(HrStatusEnums.EFFECTIVE.getCode()));
+			tbManpowerExaminaResultInfoMapper.insertSelective(examinaResultInfo);
+
+			examinaManagementAdd.setResultId(examinaResultInfo.getId());
+			examinaManagementAdd.setIsAdopt(examinaResultInfo.getIsAdopt());
+			examinaManagementAdd.setUseTime(examinaResultInfo.getUseTime());
+			examinaManagementAdd.setAchievement(examinaResultInfo.getAchievement());
+			examinaManagementAdd.setYesExaminaBankSize(notErrorexaminBankSize);
+			examinaManagementAdd.setExaminabankSize(examinabankSize);
+			examinaManagementAdd.setAccuracyRate(
+					HrDataUtil.getDoublePercentStr(notErrorexaminBankSize, examinabankSize.doubleValue()) + "%");
+			examinaManagementAdd.setScoreRate(
+					HrDataUtil.getPercentStr(examinaResultInfo.getAchievement(), tbManagement.getTotalScore()) + "%");
+		}
+		return examinaManagementAdd;
+	}
+
+	/**
+	 * 获取答题后界面
+	 * 
+	 * @param examinaManagement
+	 * @param tbResultInfo
+	 * @return
+	 */
+	private ExaminaManagementAdd getSuccessAnswer(ExaminaManagement examinaManagement,
+			TbManpowerExaminaResultInfo tbResultInfo) {
+		ExaminaManagementAdd examinaManagementAdd = new ExaminaManagementAdd();
+		TbManpowerExaminaManagement tbManagement = selectExaminaManagement(examinaManagement.getId());
+		BeanUtils.copyProperties(tbResultInfo, examinaManagementAdd);
+		examinaManagementAdd.setResultId(tbResultInfo.getId());
+
+		Examinabank tbExaminabank = new Examinabank();
+		tbExaminabank.setJobNumber(examinaManagement.getJobNumber());
+		tbExaminabank.setTestPaperId(examinaManagement.getId());
+		List<TbManpowerExaminaAnswerCard> tbAnswerCardList = examinaAnswerCardMapper
+				.selectAnswerCardList(tbExaminabank);
+		double notErrorexaminBankSize = 0f;
+		Integer examinabankSize = 0;
+
+		for (TbManpowerExaminaAnswerCard tbAnswerCard : tbAnswerCardList) {
+			if (tbAnswerCard.getAnswerType().equals("1")) {
+				notErrorexaminBankSize++;
+			}
+			examinabankSize++;
+		}
 		examinaManagementAdd.setYesExaminaBankSize(notErrorexaminBankSize);
 		examinaManagementAdd.setExaminabankSize(examinabankSize);
-		examinaManagementAdd.setAccuracyRate(HrDataUtil.getPercentStr(notErrorexaminBankSize, examinabankSize) + "%");
+		examinaManagementAdd.setAccuracyRate(
+				HrDataUtil.getDoublePercentStr(notErrorexaminBankSize, examinabankSize.doubleValue()) + "%");
 		examinaManagementAdd.setScoreRate(
-				HrDataUtil.getPercentStr(examinaResultInfo.getAchievement(), tbManagement.getTotalScore()) + "%");
+				HrDataUtil.getPercentStr(tbResultInfo.getAchievement(), tbManagement.getTotalScore()) + "%");
 		return examinaManagementAdd;
 	}
 
@@ -993,18 +1075,27 @@ public class ExaminaServiceImpl implements ExaminaService {
 			throw new JnSpringCloudException(ExaminaExceptionEnums.RESULT_NOT_EXIST, "该成绩不存在");
 		}
 		Integer achievement = 0;// 变更的分数
+		Float titleScore = 0f;
 		List<Examinabank> examinabanksList = examinaManagement.getExaminabanksList();
 		if (null != examinabanksList && examinabanksList.size() > 0) {
 			for (Examinabank examinabank : examinabanksList) {
-				if (examinabank.isErrorFlag() && examinabank.isUpdateFlag()) {
+				if (examinabank.isUpdateFlag()) {
 					examinabank.setExaminaId(tbManagement.getId());
 					ExaminabankAdd tbExaminabank = selectExaminaBankByExaminaId(examinabank);
-					achievement = achievement + Integer.parseInt(tbExaminabank.getFraction());
+					achievement = achievement + (int) Math.ceil(Float.parseFloat(examinabank.getTitleScore()));
 					TbManpowerExaminaAnswerCard card = new TbManpowerExaminaAnswerCard();
-					card.setAnswer(tbExaminabank.getStandardAnswer());
+					// card.setAnswer(tbExaminabank.getStandardAnswer());
 					card.setJobNumber(tbResultInfo.getJobNumber());
 					card.setTestPaperId(tbResultInfo.getExaminaId());
 					card.setTestQuestId(tbExaminabank.getTestQuestionId());
+					card.setTitleScore((int) Math.ceil(Float.parseFloat(examinabank.getTitleScore())) + "");
+					if (examinabank.isErrorFlag()) {
+						card.setAnswerType("2");
+					} else {
+						card.setAnswerType("1");
+					}
+					TbManpowerExaminaAnswerCard tbCard = examinaAnswerCardMapper.selectAnswer(card);
+					titleScore = titleScore + Float.parseFloat(tbCard.getTitleScore());
 					examinaAnswerCardMapper.updateAnswer(card);
 				}
 			}
@@ -1012,13 +1103,11 @@ public class ExaminaServiceImpl implements ExaminaService {
 
 		if (!achievement.equals(0)) {
 			// 更新成绩
-			achievement = achievement + tbResultInfo.getAchievement();
-			tbResultInfo = new TbManpowerExaminaResultInfo();
-			tbResultInfo.setId(tbResultInfo.getId());
+			achievement = achievement + tbResultInfo.getAchievement() - titleScore.intValue();
 			if (achievement.compareTo(tbManagement.getTotalScore()) > 0) {
 				achievement = tbManagement.getTotalScore();
 			}
-			tbResultInfo.setAchievement((int) Math.ceil(achievement));
+			tbResultInfo.setAchievement(achievement);
 			if (tbManagement.getPassScore().compareTo(tbResultInfo.getAchievement()) <= 0) {
 				tbResultInfo.setIsAdopt(Byte.parseByte(ExaminaStatusEnmus.IS_ADOPT.getCode()));
 			} else {
@@ -1030,20 +1119,50 @@ public class ExaminaServiceImpl implements ExaminaService {
 		}
 	}
 
-	private void authExaminBank(Examinabank examinabank) {
-		if (StringUtils.isBlank(examinabank.getFraction())) {
-			logger.warn("当前题目分数不能为空,examinabank.fraction:{}", examinabank.getFraction());
-			throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "当前题目分数不能为空");
+	/**
+	 *删除成绩
+	 * 
+	 * @param examinaManagement
+	 *            答案实体
+	 */
+	@Override
+	@ServiceLog(doAction = "删除成绩功能")
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteResult(ExaminaManagement examinaManagement) {
+		// 查询成绩信息
+		if (StringUtils.isBlank(examinaManagement.getResultId())) {
+			logger.warn("成绩表id不能为空,examinaId:{}", examinaManagement.getResultId());
+			throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "成绩表id不能为空");
 		}
-		if (StringUtils.isBlank(examinabank.getStandardAnswer())) {
-			logger.warn("当前题目标准答案不能为空,examinabank.standardAnswer:{}", examinabank.getStandardAnswer());
-			throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "当前题目标准答案不能为空");
+		TbManpowerExaminaResultInfo tbResultInfo = tbManpowerExaminaResultInfoMapper
+				.selectByPrimaryKey(examinaManagement.getResultId());
+		if (tbResultInfo == null) {
+			logger.warn("该成绩不存在,examinaId:{}", examinaManagement.getResultId());
+			throw new JnSpringCloudException(ExaminaExceptionEnums.RESULT_NOT_EXIST, "该成绩不存在");
 		}
-		if (StringUtils.isBlank(examinabank.getCardId())) {
-			logger.warn("答题卡id不能为空,examinabank.id:{}", examinabank.getCardId());
-			throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "答题卡id不能为空");
-		}
+		tbResultInfo.setRecordStatus(Byte.parseByte(HrStatusEnums.DELETED.getCode()));
+		tbManpowerExaminaResultInfoMapper.updateByPrimaryKeySelective(tbResultInfo);
 	}
+
+	// private void authExaminBank(Examinabank examinabank) {
+	// if (StringUtils.isBlank(examinabank.getFraction())) {
+	// logger.warn("当前题目分数不能为空,examinabank.fraction:{}",
+	// examinabank.getFraction());
+	// throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR,
+	// "当前题目分数不能为空");
+	// }
+	// if (StringUtils.isBlank(examinabank.getStandardAnswer())) {
+	// logger.warn("当前题目标准答案不能为空,examinabank.standardAnswer:{}",
+	// examinabank.getStandardAnswer());
+	// throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR,
+	// "当前题目标准答案不能为空");
+	// }
+	// if (StringUtils.isBlank(examinabank.getCardId())) {
+	// logger.warn("答题卡id不能为空,examinabank.id:{}", examinabank.getCardId());
+	// throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR,
+	// "答题卡id不能为空");
+	// }
+	// }
 
 	/**
 	 * 查询试卷及答题详情
@@ -1059,34 +1178,29 @@ public class ExaminaServiceImpl implements ExaminaService {
 		ExaminaManagementAdd examinaAnswerAdd = selectExamInfo(examinaManagement.getId());
 		List<Examinabank> examinabanksList = examinaAnswerAdd.getExaminabanksList();
 		// 答题卡信息
-		Integer noErrorSize = 0;
-		Integer countSize = 0;
+		double noErrorSize = 0;// 正确的题数
+		Integer countSize = 0;// 总题数
 		for (Examinabank examinabank : examinabanksList) {
 			countSize++;
 			Examinabank tbExaminabank = new Examinabank();
 			tbExaminabank.setJobNumber(examinaManagement.getJobNumber());
 			tbExaminabank.setTestQuestId(examinabank.getTestQuestionId());
 			tbExaminabank.setTestPaperId(examinaManagement.getId());
-			Examinabank tbAnswerCard = examinaAnswerCardMapper.selectAnswerCard(tbExaminabank);
-			examinabank.setCardId(tbAnswerCard.getCardId());
+			TbManpowerExaminaAnswerCard tbAnswerCard = examinaAnswerCardMapper.selectAnswerCard(tbExaminabank);
+			examinabank.setCardId(tbAnswerCard.getId());
 			examinabank.setAnswer(tbAnswerCard.getAnswer());
-
-			if (!StringUtils.isBlank(examinabank.getStandardAnswer())) {
-				String tbAnswerStr = examinabank.getAnswerNumber();
-				float achievementStr;
-				if (StringUtils.isBlank(tbAnswerStr)) {
-					tbAnswerStr = examinabank.getAnswerHtml();
-					achievementStr = HrDataUtil.getSimilarityRatio(examinabank.getAnswer(), tbAnswerStr,
-							Integer.parseInt(examinabank.getFraction()));
-				} else {
-					tbAnswerStr = HrDataUtil.getAnswerStr(tbAnswerStr);
-					achievementStr = HrDataUtil.examinee(examinabank.getAnswer(), tbAnswerStr,
-							Float.parseFloat(examinabank.getFraction()));
-				}
-				if (achievementStr != 0) {
-					noErrorSize++;
-				} else {
-					examinabank.setErrorFlag(true);
+			examinabank.setTitleScore(tbAnswerCard.getTitleScore());
+			String answerType = tbAnswerCard.getAnswerType();
+			if (answerType.equals("2")) {
+				examinabank.setErrorFlag(true);
+			}
+			String titleScore = tbAnswerCard.getTitleScore();// 题目得分
+			String fraction = examinabank.getFraction();// 题目分数
+			if (Float.parseFloat(titleScore) == Float.parseFloat(fraction)) {
+				noErrorSize++;
+			} else {
+				if (Float.parseFloat(titleScore) > 0) {
+					noErrorSize = noErrorSize + 0.5;
 				}
 			}
 		}
@@ -1103,7 +1217,7 @@ public class ExaminaServiceImpl implements ExaminaService {
 		examinaAnswerAdd.setYesExaminaBankSize(noErrorSize);
 		examinaAnswerAdd.setJobNumber(examinaManagement.getJobNumber());
 		examinaAnswerAdd.setUseTime(tbResultInfo.getUseTime());
-		examinaAnswerAdd.setAccuracyRate(HrDataUtil.getPercentStr(noErrorSize, countSize) + "%");
+		examinaAnswerAdd.setAccuracyRate(HrDataUtil.getDoublePercentStr(noErrorSize, countSize.doubleValue()) + "%");
 		if (tbResultInfo.getAchievement().compareTo(examinaAnswerAdd.getTotalScore()) > 0) {
 			resultInfo = new TbManpowerExaminaResultInfo();
 			resultInfo.setId(tbResultInfo.getId());
@@ -1159,7 +1273,6 @@ public class ExaminaServiceImpl implements ExaminaService {
 					DateUtils.formatDate(management.getExaminaStartTime(), "yyyy-MM-dd HH:mm:ss") + "~"
 							+ DateUtils.formatDate(management.getExaminaEndTime(), "yyyy-MM-dd HH:mm:ss"));
 			management.setTotalAndPassScore(management.getTotalScore() + "/" + management.getPassScore());
-
 			management.setCountStr(countStr);
 			management.setYesAdoptCountStr(yesAdoptCount + "");
 			management.setNotAdoptCountStr(notAdoptCountStr);
@@ -1253,9 +1366,12 @@ public class ExaminaServiceImpl implements ExaminaService {
 		if (!StringUtils.isBlank(tbExaminaBank.getAnswerHtml())) {
 			tbExaminaBank.setStandardAnswer(tbExaminaBank.getAnswerHtml());
 		}
-		if (!StringUtils.isBlank(tbExaminaBank.getAnswerNumber())) {
-			tbExaminaBank.setStandardAnswer(tbExaminaBank.getAnswerNumber());
+		if (StringUtils.isBlank(tbExaminaBank.getStandardAnswer())) {
+			tbExaminaBank.setStandardAnswer("");
 		}
+		// if (!StringUtils.isBlank(tbExaminaBank.getAnswerNumber())) {
+		// tbExaminaBank.setStandardAnswer(tbExaminaBank.getAnswerNumber().toUpperCase());
+		// }
 		return tbExaminaBank;
 	}
 }

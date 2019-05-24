@@ -28,8 +28,7 @@
 		CASE t2.answer_number
 		WHEN 'N' THEN '×'
 		WHEN 'Y' THEN '√'
-		ELSE
-		t2.answer_number END answerNumber
+		ELSE t2.answer_number END answerNumber
 		,t2.answer_html
 		FROM
 		tb_manpower_examina_bank
@@ -55,6 +54,7 @@
 			and t1.test_question_type =
 			#{testQuestionType,jdbcType=TIMESTAMP}
 		</if>
+		ORDER BY t1.test_question_type,t1.created_time desc
 	</select>
 
 	<select id="examinaBankList" parameterType="java.lang.String"
@@ -79,8 +79,18 @@
 		t1.test_question_id,
 		t1.examination_question,
 		t1.test_question_type,
+	    case
+		WHEN t1.test_question_type='1' THEN '单选题'
+		WHEN t1.test_question_type='2' THEN '多选题'
+		WHEN t1.test_question_type='3' THEN '问答题'
+		else '判断题' end testQuestionTypeStr,
 		t1.record_status,
-		t1.examination_difficulty,
+		t1.examination_difficulty,		
+		case 
+		WHEN t1.examination_difficulty='1' THEN '不限难度'
+		WHEN t1.examination_difficulty='2' THEN '容易'
+		WHEN t1.examination_difficulty='3' THEN '中等'
+		else '困难' end examinationDifficultyStr,
 		t1.item_analysis,
 		t1.created_time,
 		t1.creator_account,
@@ -89,7 +99,12 @@
 		t2.examina_id,
 		t2.fraction,
 		t3.answer_html,
-		t3.answer_number,
+		CASE t3.answer_number
+		WHEN 'N' THEN '×'
+		WHEN 'Y' THEN '√'
+		ELSE t3.answer_number 
+		END answerNumber,
+		t3.answer_number standardAnswer,
 		t3.id answerId
 		FROM
 		tb_manpower_examina_bank t1
@@ -108,6 +123,61 @@
 			AND t1.test_question_id =
 			#{testQuestionId,jdbcType=VARCHAR}
 		</if>
+	</select>
+
+	<select id="selectBankByExaminaId" parameterType="com.jn.hr.exam.model.Examinabank"
+		resultType="com.jn.hr.exam.model.Examinabank">
+		SELECT
+		t1.test_question_id,
+		t1.examination_question,
+		t1.test_question_type,
+		case
+		WHEN t1.test_question_type='1' THEN '单选题'
+		WHEN
+		t1.test_question_type='2' THEN '多选题'
+		WHEN t1.test_question_type='3'
+		THEN '问答题'
+		else '判断题' end testQuestionTypeStr,
+		t1.record_status,
+		t1.examination_difficulty,
+		case
+		WHEN t1.examination_difficulty='1' THEN '不限难度'
+		WHEN
+		t1.examination_difficulty='2' THEN '容易'
+		WHEN
+		t1.examination_difficulty='3' THEN '中等'
+		else '困难' end
+		examinationDifficultyStr,
+		t1.item_analysis,
+		t1.created_time,
+		t1.creator_account,
+		t1.modified_time,
+		t1.modifier_account,
+		t2.examina_id,
+		t2.fraction,
+		t3.answer_html,
+		CASE t3.answer_number
+		WHEN 'N'
+		THEN '×'
+		WHEN 'Y' THEN '√'
+		ELSE t3.answer_number
+		END answerNumber,
+		t3.answer_number standardAnswer,
+		t3.id answerId
+		FROM
+		tb_manpower_examina_bank t1
+		,tb_manpower_examina_exam_question t2
+		,tb_manpower_examina_question_answer t3
+		WHERE
+		t1.test_question_id=t2.test_question_id
+		AND
+		t1.test_question_id=t3.test_question_id
+		AND t1.record_status !=0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaId)">
+			AND
+			t2.examina_id = #{examinaId,jdbcType=VARCHAR}
+		</if>
+		ORDER BY t1.test_question_type,t1.created_time
 	</select>
 
 </mapper>

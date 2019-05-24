@@ -16,6 +16,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,7 +50,7 @@ public class PayServerController extends BaseController implements PayClient {
 
     @ControllerLog(doAction = "我的账单-账单催缴次数更新")
     @Override
-    public Result updateBillNumber(PayCheckReminderParam payCheckReminderParam) {
+    public Result updateBillNumber(@RequestBody PayCheckReminderParam payCheckReminderParam) {
         Assert.notNull(payCheckReminderParam.getBillId(),"账单ID或编号不能为空");
         Assert.notNull(payCheckReminderParam.getReminderNumber(),"催缴次数不能为空");
         Assert.notNull(payCheckReminderParam.getModifiedReminderTime(),"最新催缴时间不能为空");
@@ -59,7 +60,7 @@ public class PayServerController extends BaseController implements PayClient {
 
     @ControllerLog(doAction = "我的账单-核查提醒录入")
     @Override
-    public Result billCheckReminder(PayCheckReminder payCheckReminder) {
+    public Result billCheckReminder(@RequestBody PayCheckReminder payCheckReminder) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         myPayBillService.billCheckReminder(payCheckReminder,user);
@@ -68,7 +69,7 @@ public class PayServerController extends BaseController implements PayClient {
 
     @ControllerLog(doAction = "我的账单-创建账单")
     @Override
-    public Result billCreate(PayBillCreateParamVo payBillCreateParamVo) {
+    public Result billCreate(@RequestBody PayBillCreateParamVo payBillCreateParamVo) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(payBillCreateParamVo.getAcBookType(),"账本类型ID不能为空");
         Assert.notNull(payBillCreateParamVo.getObjName(),"对象名称不能为空");
@@ -76,20 +77,20 @@ public class PayServerController extends BaseController implements PayClient {
         Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
         Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
         Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
-        myPayBillService.billCreate(payBillCreateParamVo,user);
-        return new Result();
+        Result result=myPayBillService.billCreate(payBillCreateParamVo,user);
+        return result;
     }
 
-    @ControllerLog(doAction = "统一缴费--发起支付")
+    @ControllerLog(doAction = "统一缴费-->发起支付")
     @Override
-    public Result startPayment(PayBIllInitiateParam payBIllInitiateParam) {
+    public Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result(myPayBillService.startPayment(payBIllInitiateParam,user));
+        return new Result(myPayBillService.startPayment(createOrderAndPayReqModel,user));
     }
 
     @ControllerLog(doAction = "支付回调接口")
     @Override
-    public Result payCallBack(PayOrderNotify callBackParam) {
+    public Result payCallBack(@RequestBody PayOrderNotify callBackParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         return new Result(myPayBillService.payCallBack(callBackParam,user));
     }

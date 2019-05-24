@@ -19,6 +19,7 @@ import com.jn.hr.attendance.model.AttendanceManagementAdd;
 import com.jn.hr.attendance.model.AttendanceSchedulPage;
 import com.jn.hr.attendance.model.AttendanceSchedulVo;
 import com.jn.hr.attendance.service.AttendanceTaskService;
+import com.jn.hr.common.util.HrDataUtil;
 import com.jn.hr.employee.dao.EmployeeBasicInfoMapper;
 import com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo;
 import com.jn.oa.api.OaClient;
@@ -48,7 +49,9 @@ public class AttendanceTaskServiceImpl implements AttendanceTaskService {
 		//获取当月的排班情况
 		AttendanceSchedulPage attendanceSchedulPage = new AttendanceSchedulPage();
 		//要获取前一天的时间
-		attendanceSchedulPage.setSchedulMonth(DateUtils.formatDate(new Date(),"yyyy-MM"));
+		Date date = HrDataUtil.getBeforeDay(new Date());
+		String str = HrDataUtil.getDayBefore(date);
+		attendanceSchedulPage.setSchedulMonth(str);
 		List<AttendanceSchedulVo> schedulList = attendanceSchedulMapper.list(attendanceSchedulPage);
 		Map<String,Map<String,Integer>> userIdMap = new HashMap<String,Map<String,Integer>>();
 		Map<String,TbManpowerEmployeeBasicInfo> jobNumberMap = new HashMap<String,TbManpowerEmployeeBasicInfo>();
@@ -61,6 +64,7 @@ public class AttendanceTaskServiceImpl implements AttendanceTaskService {
 				continue;
 			}
 			userIdMap.put(basic.getUserId(), map);
+			
 			jobNumberMap.put(basic.getUserId(), basic);
 		}
 		
@@ -136,8 +140,9 @@ public class AttendanceTaskServiceImpl implements AttendanceTaskService {
 	
 	private AttendanceManagementAdd getAttendanceManagementAdd(AttendanceApiVo attendanceApi,Map<String,LeaveApiVo> leaveMap,Map<String,Map<String,Integer>> userIdMap){
 		AttendanceManagementAdd AttendanceManagementAdd = null;
-		//时间要获取前一天的时间   要改
-		String str =  DateUtils.formatDate(new Date(),"yyyy-MM-dd");
+		//获取前一天的时间
+		Date date = HrDataUtil.getBeforeDay(new Date());
+		String str = HrDataUtil.getSpecifiedDayBefore(date);
 		Map<String,Integer> map = userIdMap.get(attendanceApi.getUserId());
 		Integer i = map.get(str) == null ? 0 : map.get(str);
 		if(i != 0){

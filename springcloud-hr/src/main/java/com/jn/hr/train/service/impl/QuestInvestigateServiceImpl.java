@@ -293,9 +293,11 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 			BeanUtils.copyProperties(questionUpd, add);
 			// 拷贝选项列表
 			List<InvestigateTitleOption> titleOptionList = questionUpd.getTitleOptionList();
-			List<InvestigateTitleOptionAdd> titleOptionAddList = BeanCopyUtil.copyList(titleOptionList,
-					InvestigateTitleOptionAdd.class);
-			add.setTitleOptionList(titleOptionAddList);
+			if (null != titleOptionList && titleOptionList.size() > 0) {
+				List<InvestigateTitleOptionAdd> titleOptionAddList = BeanCopyUtil.copyList(titleOptionList,
+						InvestigateTitleOptionAdd.class);
+				add.setTitleOptionList(titleOptionAddList);
+			}
 			List<InvestigateQuestionAdd> questionList = new ArrayList<InvestigateQuestionAdd>();
 			questionList.add(add);
 			titleId = insertQuestion(questionList, projectId);
@@ -718,13 +720,14 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 
 						}
 					}
-
-					for (InvestigateTitleOptionAdd tbTitleOption : questionAnswer.getTitleOptionList()) {
-						if (null != sizeMap.get(tbTitleOption.getOptionId())) {
-							tbTitleOption.setOptionPercent(
-									HrDataUtil.getPercentStr(sizeMap.get(tbTitleOption.getOptionId()), countSize)
-											+ "%");
-							tbTitleOption.setOptionCount(sizeMap.get(tbTitleOption.getOptionId()));
+					if (null != questionAnswer.getTitleOptionList() && questionAnswer.getTitleOptionList().size() > 0) {
+						for (InvestigateTitleOptionAdd tbTitleOption : questionAnswer.getTitleOptionList()) {
+							if (null != sizeMap.get(tbTitleOption.getOptionId())) {
+								tbTitleOption.setOptionPercent(
+										HrDataUtil.getPercentStr(sizeMap.get(tbTitleOption.getOptionId()), countSize)
+												+ "%");
+								tbTitleOption.setOptionCount(sizeMap.get(tbTitleOption.getOptionId()));
+							}
 						}
 					}
 				}
@@ -924,30 +927,32 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	 */
 	private void updateOption(InvestigateQuestion questionUpd) {
 		List<InvestigateTitleOption> titleOptionList = questionUpd.getTitleOptionList();
-		for (InvestigateTitleOption titleOption : titleOptionList) {
-			if (StringUtils.isBlank(titleOption.getTitleId())) {
-				titleOption.setTitleId(questionUpd.getTitleId());
+		if (null != titleOptionList && titleOptionList.size() > 0) {
+			for (InvestigateTitleOption titleOption : titleOptionList) {
+				if (StringUtils.isBlank(titleOption.getTitleId())) {
+					titleOption.setTitleId(questionUpd.getTitleId());
+				}
+				if (StringUtils.isBlank(titleOption.getId())) {
+					TbManpowerTrainQuestTitleOption tbOption = new TbManpowerTrainQuestTitleOption();
+					BeanUtils.copyProperties(titleOption, tbOption);
+					if (StringUtils.isBlank(tbOption.getId())) {
+						tbOption.setId(UUID.randomUUID().toString());
+					}
+					if (!StringUtils.isBlank(tbOption.getOptionId())) {
+						tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
+					}
+					tbQuestTitleOptionMapper.insertSelective(tbOption);
+				} else {
+					TbManpowerTrainQuestTitleOption tbOption = new TbManpowerTrainQuestTitleOption();
+					BeanUtils.copyProperties(titleOption, tbOption);
+					if (!StringUtils.isBlank(tbOption.getOptionId())) {
+						tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
+					}
+					tbQuestTitleOptionMapper.updateByPrimaryKeySelective(tbOption);
+				}
 			}
-			if (StringUtils.isBlank(titleOption.getId())) {
-				TbManpowerTrainQuestTitleOption tbOption = new TbManpowerTrainQuestTitleOption();
-				BeanUtils.copyProperties(titleOption, tbOption);
-				if (StringUtils.isBlank(tbOption.getId())) {
-					tbOption.setId(UUID.randomUUID().toString());
-				}
-				if (!StringUtils.isBlank(tbOption.getOptionId())) {
-					tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
-				}
-				tbQuestTitleOptionMapper.insertSelective(tbOption);
-			} else {
-				TbManpowerTrainQuestTitleOption tbOption = new TbManpowerTrainQuestTitleOption();
-				BeanUtils.copyProperties(titleOption, tbOption);
-				if (!StringUtils.isBlank(tbOption.getOptionId())) {
-					tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
-				}
-				tbQuestTitleOptionMapper.updateByPrimaryKeySelective(tbOption);
-			}
-
 		}
+
 		List<InvestigateTitleOption> deltitleOptionList = questionUpd.getDeltitleOptionList();
 		if (null != deltitleOptionList && deltitleOptionList.size() > 0) {
 			for (InvestigateTitleOption deltitleOption : deltitleOptionList) {

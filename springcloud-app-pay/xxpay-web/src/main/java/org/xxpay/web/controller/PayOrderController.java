@@ -106,9 +106,9 @@ public class PayOrderController extends BaseController implements PayOrderClient
             //根据支付渠道ID 执行不同的支付方式
             switch (ChannelIdEnum.getCode(channelId)) {
                 case WX_APP :
-                    //String wxAppParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_APP, payOrder}));
-                    //return returnResult(wxAppParam,resKey);
-                    PayOrderRsp payOrderRsp = new PayOrderRsp();
+                    String wxAppParam = payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_APP, payOrder}));
+                    return returnResult(wxAppParam,resKey);
+                   /* PayOrderRsp payOrderRsp = new PayOrderRsp();
                     payOrderRsp.setChannelId(channelId);
                     payOrderRsp.setPayOrderId(UUID.randomUUID().toString().substring(0,20));
                     //封装orderInfo(发起支付需要的参数JSON格式)
@@ -122,7 +122,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
                     orderInfo.put("prepayId","wx2016081611532915ae15beab0167893571");
                     payOrderRsp.setOrderInfo(orderInfo.toJSONString());
                     payOrderRsp.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrderRsp), MchIdEnum.MCH_BASE.getRspKey()));
-                    return new Result(payOrderRsp);
+                    return new Result(payOrderRsp);*/
 
                 case WX_JSAPI :
                     //String wxJsapiParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_JSPAI, payOrder}));

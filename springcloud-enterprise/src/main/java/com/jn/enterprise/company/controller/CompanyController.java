@@ -7,10 +7,12 @@ import com.jn.common.model.Result;
 import com.jn.company.enums.CompanyExceptionEnum;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
+import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
 import com.jn.park.activity.model.CommentAddParam;
+import com.jn.park.care.model.ServiceEnterpriseCompany;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -43,14 +45,25 @@ public class CompanyController extends BaseController {
         return new Result<>(companyService.getCompanyList(serviceCompanyParam));
     }
 
+    @ControllerLog(doAction = "查询企业列表-新版")
+    @ApiOperation(value = "查询企业列表-新版")
+    @RequestMapping(value = "/getCompanyNewList",method = RequestMethod.GET)
+    public Result<PaginationData<List<ServiceEnterpriseCompany>>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam){
+        return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam));
+    }
+
     @ControllerLog(doAction = "根据用户账号/企业ID查询企业信息（用户为企业管理员）")
-    @ApiOperation(value = "根据用户账号查询企业信息",notes = "用户为企业管理员")
+    @ApiOperation(value = "根据用户账号/企业ID查询企业信息",notes = "用户为企业管理员")
     @RequestMapping(value = "/getCompanyDetailByAccountOrCompanyId",method = RequestMethod.GET)
     public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(
             @ApiParam(name="accountOrCompanyId",value = "用户账号或企业ID",required = true,example = "wangsong")
             @RequestParam(value = "accountOrCompanyId") String accountOrCompanyId){
+        String account = null;
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId,user.getAccount()));
+        if (user != null) {
+            account = user.getAccount();
+        }
+        return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId, account));
     }
 
 

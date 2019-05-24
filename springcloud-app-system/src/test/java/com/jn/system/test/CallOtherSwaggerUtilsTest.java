@@ -79,12 +79,18 @@ public class CallOtherSwaggerUtilsTest {
     @Test
     public void test3() throws FileNotFoundException {
         //调用IBSP上传图片
-        File file = ResourceUtils.getFile("classpath:test/12345.png");
+        /*File file = ResourceUtils.getFile("classpath:test/12345.png");
         FileSystemResource resource = new FileSystemResource(file);
         MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
         param.add("file", resource);
         MediaType type = MediaType.parseMediaType("multipart/form-data");
         JSONObject jsonObject = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/uploadService/uploadFile", HttpMethod.POST, param, type);
+        System.out.println(jsonObject);*/
+
+        //上传fastdfs后，保存在ibps图片表中
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+        map.add("fileUrl", "http://112.94.22.222:2020/group2/M00/00/37/wKgKFFzmFsuAWuRkAAA1WwXnJk8310.jpg");
+        JSONObject jsonObject = CallOtherSwaggerUtils.request("wangsong", "/api/webapi/uploadService/saveFileAttachment", HttpMethod.POST, map);
         System.out.println(jsonObject);
     }
 

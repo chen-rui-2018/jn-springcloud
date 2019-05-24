@@ -1,4 +1,8 @@
 <template>
+<div>
+  <div class="declarationDetailHeader">
+    <x-header :left-options="{backText: ''}">{{this.$route.meta.title}} <span slot="right" @click="$router.push({path: '/guest/pd/consult'})">咨询</span></x-header>
+  </div>
   <div class="declarationDetail">
     <div class="declarationDetail_main">
       <div class="declarationDetail_top">
@@ -8,26 +12,23 @@
         </div>
         <div class="time_node">
           <div>时间节点</div>
-          <p><i class="iconfont icon-clock-"></i>2018-12-24  反馈表递交截止</p>
-          <p><i class="iconfont icon-clock-"></i>2018-12-24  反馈表递交截止</p>
+          <p><i class="iconfont icon-clock-"></i>{{detailData.deadline|time}}  反馈表递交截止</p>
         </div>
       </div>
       <div class="declarationDetail_middle">
-sdearfgeagref
+        <span v-html="detailData.announcementContent"></span>
       </div>
       <div class="declarationDetail_downLoad">
         <div class="downLoad_title">附件下载</div>
-        <div class="accessory">
-          <span>附件</span>
-          <span>下载<i class="iconfont icon-jiantou"></i></span>
-        </div>
-        <div class="accessory">
+        <!-- fileUrl字段可能是多个 -->
+        <div class="accessory" >
           <span>附件</span>
           <span>下载<i class="iconfont icon-jiantou"></i></span>
         </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
 export default {
@@ -49,6 +50,7 @@ export default {
   mounted () {
     this.id = this.$route.query.id
     this.getDetail()
+    this.addView()
   },
   methods: {
     getDetail () {
@@ -61,11 +63,49 @@ export default {
           }
         }
       })
+    },
+    addView () {
+      this.api.get({
+        url: 'trafficVolume',
+        data: {id: this.id},
+        callback: res => {
+          if (res.code === '0000') {
+            // this.detailData = res.data
+          }
+        }
+      })
     }
+
   }
 }
 </script>
 <style lang="scss">
+ .declarationDetailHeader{
+    z-index: 10;
+    position: fixed;
+    top:0;
+    width: 100%;
+    background: #fff;
+    padding:30px 34px;
+    .vux-header{
+      background-color: #fff;
+      text-align: center;
+      .vux-header-title,.vux-header-left{
+        font-size: 32px;
+        color:#333333;
+      }
+      .vux-header-left .left-arrow:before{
+        content: "";
+        border-color:#333;
+        width:20px;
+        height: 20px;
+      }
+      .vux-header-right{
+        color:#333333;
+        font-size: 26px;
+      }
+    }
+}
   .declarationDetail{
     height: 100vh;
     background-color: #f5f5f5;

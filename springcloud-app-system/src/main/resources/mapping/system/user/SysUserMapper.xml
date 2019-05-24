@@ -20,6 +20,10 @@
             <result property="isDefault" column="is_default" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
+    <resultMap id="SimpleResultMap" type="com.jn.system.user.model.SysTUser">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
 
     <sql id="Get_User_Page_Column">
         t.id,
@@ -342,6 +346,20 @@
         ON t.id = tt.user_id
         WHERE t.record_status = 1
         ORDER BY t.created_time DESC
+    </select>
+    <select id="selectUserByIds" resultMap="SimpleResultMap"  parameterType="java.util.Arrays">
+          SELECT
+            t.id,
+            case when t.`name` is null  then t.account
+            else t.`name` end  name
+          FROM
+          `tb_sys_user` t
+          WHERE t.record_status = 1
+
+        and id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
 

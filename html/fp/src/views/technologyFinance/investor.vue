@@ -1,7 +1,7 @@
 <template>
   <div class="investor w" id="investor">
     <div class="investorMenu">
-      <span class="pointer" @click="$routet.push({path:'/tfindex'})">首页</span>
+      <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
       <span class="mainColor agent">投资人</span>
     </div>
@@ -42,7 +42,7 @@
           </div>
           <div class="liArea">
             <i>主投领域</i>
-            <div class="spanArea">
+            <div class="spanArea" v-if="i.mainAreaList!=null&&i.mainAreaList.length>0">
               <span v-for="(item,k) in i.mainAreaList.split(',')" :key="k">{{item}}</span>
             </div>
           </div>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.repair.dao.RepairMapper">
+    <resultMap id="BaseResultMap" type="com.jn.park.repair.model.Repair">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="enterprise_id" jdbcType="VARCHAR" property="enterpriseId" />
+        <result column="enterprise_name" jdbcType="VARCHAR" property="enterpriseName" />
+        <result column="contact_man" jdbcType="VARCHAR" property="contactMan" />
+        <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+        <result column="is_free_repair" jdbcType="VARCHAR" property="isFreeRepair" />
+        <result column="materiel_total_price" jdbcType="DECIMAL" property="materielTotalPrice" />
+        <result column="asset_company" jdbcType="VARCHAR" property="assetCompany" />
+        <result column="asset_complete_date" jdbcType="VARCHAR" property="assetCompleteDate" />
+        <result column="repair_depart" jdbcType="VARCHAR" property="repairDepart" />
+        <result column="flow_no" jdbcType="VARCHAR" property="flowNo" />
+        <result column="flow_title" jdbcType="VARCHAR" property="flowTitle" />
+        <result column="flow_status" jdbcType="VARCHAR" property="flowStatus" />
+        <result column="flow_node_name" jdbcType="VARCHAR" property="flowNodeName" />
+        <result column="flow_start_time" jdbcType="VARCHAR" property="flowStartTime" />
+        <result column="flow_complete_time" jdbcType="VARCHAR" property="flowCompleteTime" />
+        <result column="record_status" jdbcType="VARCHAR" property="recordStatus" />
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+        <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="photo_url" jdbcType="VARCHAR" property="photoUrl" />
+        <result column="applicant" jdbcType="VARCHAR" property="applicant" />
+        <result column="application_time" jdbcType="VARCHAR" property="applicationTime" />
+        <result column="is_need_repair_materiel" jdbcType="VARCHAR" property="isNeedRepairMateriel" />
+        <result column="feedback_complete_date" jdbcType="VARCHAR" property="feedbackCompleteDate" />
+        <result column="evaluate_service_attitude" jdbcType="VARCHAR" property="evaluateServiceAttitude" />
+        <result column="evaluate_service_efficiency" jdbcType="VARCHAR" property="evaluateServiceEfficiency" />
+        <result column="evaluate_service_quality" jdbcType="VARCHAR" property="evaluateServiceQuality" />
+        <result column="finish_explain" jdbcType="VARCHAR" property="finishExplain" />
+        <result column="finish_photo_url" jdbcType="VARCHAR" property="finishPhotoUrl" />
+        <result column="is_pay" jdbcType="VARCHAR" property="isPay" />
+        <result column="evaluate_explain" jdbcType="VARCHAR" property="evaluateExplain" />
+        <result column="evaluate_photo_url" jdbcType="VARCHAR" property="evaluatePhotoUrl" />
+        <result column="flow_inst_id" jdbcType="VARCHAR" property="flowInstId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, enterprise_id, enterprise_name, contact_man, contact_phone, address, remarks,
+    is_free_repair, materiel_total_price, asset_company,  date_format(asset_complete_date, '%Y-%m-%d %H:%i:%s') AS asset_complete_date, repair_depart,
+    flow_no, flow_title, flow_status, flow_node_name, date_format(flow_start_time, '%Y-%m-%d %H:%i:%s') AS flow_start_time,  date_format(flow_complete_time, '%Y-%m-%d %H:%i:%s') AS flow_complete_time,
+    record_status, creator_account, date_format(create_time, '%Y-%m-%d %H:%i:%s') AS create_time, modifier_account, photo_url, applicant,
+     date_format(application_time, '%Y-%m-%d %H:%i:%s') AS application_time, is_need_repair_materiel, feedback_complete_date, evaluate_service_attitude,
+    evaluate_service_efficiency, evaluate_service_quality, finish_explain, finish_photo_url,
+    is_pay, evaluate_explain, evaluate_photo_url, flow_inst_id
+  </sql>
+
+    <select id="selectRepairById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tb_pm_repair
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

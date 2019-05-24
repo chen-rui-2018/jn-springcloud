@@ -65,6 +65,12 @@ public class TbElectricMeterInfo implements Serializable {
     /*@ApiModelProperty("建筑物Id")*/
     private String buildingId;
 
+    /*@ApiModelProperty("企业名称")*/
+    private String companyName;
+
+    /*@ApiModelProperty("低耗能阈值")*/
+    private Long isLowEnergyThreshold;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -227,6 +233,22 @@ public class TbElectricMeterInfo implements Serializable {
         this.buildingId = buildingId == null ? null : buildingId.trim();
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public Long getIsLowEnergyThreshold() {
+        return isLowEnergyThreshold;
+    }
+
+    public void setIsLowEnergyThreshold(Long isLowEnergyThreshold) {
+        this.isLowEnergyThreshold = isLowEnergyThreshold;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -258,7 +280,9 @@ public class TbElectricMeterInfo implements Serializable {
             && (this.getMutualInductanceRatio() == null ? other.getMutualInductanceRatio() == null : this.getMutualInductanceRatio().equals(other.getMutualInductanceRatio()))
             && (this.getGroupId() == null ? other.getGroupId() == null : this.getGroupId().equals(other.getGroupId()))
             && (this.getSwitchStatus() == null ? other.getSwitchStatus() == null : this.getSwitchStatus().equals(other.getSwitchStatus()))
-            && (this.getBuildingId() == null ? other.getBuildingId() == null : this.getBuildingId().equals(other.getBuildingId()));
+            && (this.getBuildingId() == null ? other.getBuildingId() == null : this.getBuildingId().equals(other.getBuildingId()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
+            && (this.getIsLowEnergyThreshold() == null ? other.getIsLowEnergyThreshold() == null : this.getIsLowEnergyThreshold().equals(other.getIsLowEnergyThreshold()));
     }
 
     @Override
@@ -285,6 +309,8 @@ public class TbElectricMeterInfo implements Serializable {
         result = prime * result + ((getGroupId() == null) ? 0 : getGroupId().hashCode());
         result = prime * result + ((getSwitchStatus() == null) ? 0 : getSwitchStatus().hashCode());
         result = prime * result + ((getBuildingId() == null) ? 0 : getBuildingId().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
+        result = prime * result + ((getIsLowEnergyThreshold() == null) ? 0 : getIsLowEnergyThreshold().hashCode());
         return result;
     }
 
@@ -314,6 +340,8 @@ public class TbElectricMeterInfo implements Serializable {
         sb.append(", groupId=").append(groupId);
         sb.append(", switchStatus=").append(switchStatus);
         sb.append(", buildingId=").append(buildingId);
+        sb.append(", companyName=").append(companyName);
+        sb.append(", isLowEnergyThreshold=").append(isLowEnergyThreshold);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

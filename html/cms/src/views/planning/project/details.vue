@@ -6,8 +6,9 @@
         <span>{{ currentDay }}</span>
       </div>
       <div>
-        <el-button type="primary" round>日报填写</el-button>
-        <el-button type="primary" round class="el-radio-group">返回</el-button>
+        <el-button type="primary" round><a :href="ibpsUrl+'560993009357815808.htm'">日报填写</a>  </el-button>
+        <el-button type="primary" round class="el-radio-group" > <router-link
+          :to="{path: '/planning/project'}">返回 </router-link></el-button>
       </div>
     </div>
     <!-- <div class="container">
@@ -76,6 +77,7 @@ export default {
   components: { PieChart, BarChart },
   data() {
     return {
+      ibpsUrl: this.GLOBAL.ibpsUrl,
       position: 'inner',
       detailData: [],
       currentDay: '',
@@ -288,7 +290,7 @@ export default {
                 	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#11a0f8"></span>\
                	已完成任务：&nbsp;${data.completeRatioModels.autual[params[0].dataIndex]}<br />\
                	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgb(255, 192, 0)"></span>\
-                	超出完成：&nbsp; ${(data.completeRatioModels.completeRatio[params[0].dataIndex]) > 0 ? (data.completeRatioModels.completeRatio[params[0].dataIndex] / data.completeRatioModels.plan[params[0].dataIndex] * 100) + '%' : ''}<br />`
+                	超出完成：&nbsp; ${(data.completeRatioModels.completeRatio[params[0].dataIndex]) > 0 ? (data.completeRatioModels.completeRatio[params[0].dataIndex] / data.completeRatioModels.plan[params[0].dataIndex] * 100) + '%' : '0'}<br />`
               return res
               // var res = `<div style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#11a0f8">任务量：${data.completeRatioModels.plan[params[0].dataIndex]}<div></br><div style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgb(215, 215, 215)">已完成任务：${data.completeRatioModels.autual[params[0].dataIndex]}<div></br><div style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgb(255, 192, 0)">超出完成:${(data.completeRatioModels.completeRatio[params[0].dataIndex] / data.completeRatioModels.plan[params[0].dataIndex] * 100) + '%'}<div>`
               // return res

@@ -19,19 +19,20 @@
                     <li @click='$router.push({path:"/actiTrain"})' :class="{'active11':this.$route.name==='actiTrain'||this.$route.name==='actiTrainDetail'}">活动培训</li>
                     <li @click='$router.push({path:"/aboutUs"})' :class="{'active11':this.$route.name==='aboutUs'}">关于我们</li>
                 </div>
-                <div class="headerRight">
+                <div class="headerRight pr">
                   <div class="search" >
                     <i class="el-icon-search" style="font-size:20px" @click="show3=true"></i>
                   </div>
-                  <div class="navlogin">
+                  <user-info></user-info>
+                  <!-- <div class="navlogin">
                     <a>登录</a>
                     <span class="line">|</span>
                     <a>注册</a>
-                  </div>
-                  <div class="navlogin">
+                  </div> -->
+                  <!-- <div class="navlogin">
                     <i class="el-icon-bell"></i>
                     <span class="line">|</span>
-                  </div>
+                  </div> -->
                 </div>
             </div>
         </div>
@@ -59,7 +60,11 @@
 
 <script>
 import swiper from "swiper"
+import userInfo from '../views/common/userInfoData'
 export default {
+    components: {
+      userInfo
+    },
   data() {
     return {
       offsetTop:0,
@@ -174,7 +179,7 @@ export default {
       }
       .bannerUl {
         list-style: none;
-        line-height: 64px;
+        line-height: 65px;
         font-size: 13px;
         display: flex;
         margin: 0 7%;
@@ -193,6 +198,7 @@ export default {
       .headerRight {
         font-size: 12px;
         display: flex;
+        line-height: 65px;
         .search {
           display: inline-block;
           margin-right: 20px;

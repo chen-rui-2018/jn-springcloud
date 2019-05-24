@@ -1,6 +1,7 @@
 package com.jn.enterprise.joinpark.org.service;
 
 import com.jn.enterprise.servicemarket.org.model.OrgDetailParameter;
+import com.jn.enterprise.servicemarket.org.model.OrgDetailUpdateParameter;
 
 /**
  * 加入园区-机构认证
@@ -18,5 +19,6 @@ public interface OrgJoinService {
      * @return
      */
     int saveOrUpdateOrgDetail(OrgDetailParameter orgDetailParameter,String account);
+
 
 }

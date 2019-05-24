@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.exam.dao.ExaminaBankMapper">
+
+	<select id="list" parameterType="com.jn.hr.exam.model.ExaminabankPage"
+		resultType="com.jn.hr.exam.model.ExaminabankAdd">
+		SELECT t1.test_question_id,t1.examination_question,
+		t1.test_question_type ,
+		case
+		WHEN t1.test_question_type='1' THEN '单选题'
+		WHEN t1.test_question_type='2' THEN '多选题'
+		WHEN
+		t1.test_question_type='3' THEN '问答题'
+		else '判断题' end
+		testQuestionTypeStr,
+		t1.examination_difficulty,
+		case
+		WHEN
+		t1.examination_difficulty='1' THEN '不限难度'
+		WHEN
+		t1.examination_difficulty='2' THEN '容易'
+		WHEN
+		t1.examination_difficulty='3' THEN '中等'
+		else '困难' end
+		examinationDifficultyStr,
+		t1.fraction,t1.created_time,t2.id
+		answerId,
+		CASE t2.answer_number
+		WHEN 'N' THEN '×'
+		WHEN 'Y' THEN '√'
+		ELSE t2.answer_number END answerNumber
+		,t2.answer_html
+		FROM
+		tb_manpower_examina_bank
+		t1,tb_manpower_examina_question_answer t2
+		WHERE
+		t1.test_question_id=t2.test_question_id
+		AND t1.record_status != 0
+		<if
+			test="@org.apache.commons.lang.StringUtils@isNotBlank(examinationQuestion)">
+			and t1.examination_question like
+			CONCAT('%',#{examinationQuestion,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(startDate)">
+			and t1. created_time &gt;=
+			#{startDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(endDate)">
+			and t1. created_time &lt;=
+			#{endDate,jdbcType=TIMESTAMP}
+		</if>
+		<if
+			test="@org.apache.commons.lang.StringUtils@isNotBlank(testQuestionType)">
+			and t1.test_question_type =
+			#{testQuestionType,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY t1.test_question_type,t1.created_time desc
+	</select>
+
+	<select id="examinaBankList" parameterType="java.lang.String"
+		resultType="com.jn.hr.exam.model.Examinabank">
+		SELECT t1.test_question_id, t1.examination_question,
+		t1.test_question_type, t1.examination_difficulty,
+		t1.fraction,
+		t1.record_status, t1.creator_account, t1.created_time,
+		t1.modifier_account,
+		t1.modified_time, t1.item_analysis, t2.id
+		examQuestionId FROM
+		tb_manpower_examina_bank t1
+		,tb_manpower_examina_exam_question t2 WHERE
+		t1.test_question_id=t2.test_question_id AND
+		examina_id =
+		#{examinaId,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectBankByExaminaIdAndQuestionId" parameterType="com.jn.hr.exam.model.Examinabank"
+		resultType="com.jn.hr.exam.model.ExaminabankAdd">
+		SELECT
+		t1.test_question_id,
+		t1.examination_question,
+		t1.test_question_type,
+	    case
+		WHEN t1.test_question_type='1' THEN '单选题'
+		WHEN t1.test_question_type='2' THEN '多选题'
+		WHEN t1.test_question_type='3' THEN '问答题'
+		else '判断题' end testQuestionTypeStr,
+		t1.record_status,
+		t1.examination_difficulty,		
+		case 
+		WHEN t1.examination_difficulty='1' THEN '不限难度'
+		WHEN t1.examination_difficulty='2' THEN '容易'
+		WHEN t1.examination_difficulty='3' THEN '中等'
+		else '困难' end examinationDifficultyStr,
+		t1.item_analysis,
+		t1.created_time,
+		t1.creator_account,
+		t1.modified_time,
+		t1.modifier_account,
+		t2.examina_id,
+		t2.fraction,
+		t3.answer_html,
+		CASE t3.answer_number
+		WHEN 'N' THEN '×'
+		WHEN 'Y' THEN '√'
+		ELSE t3.answer_number 
+		END answerNumber,
+		t3.answer_number standardAnswer,
+		t3.id answerId
+		FROM
+		tb_manpower_examina_bank t1
+		,tb_manpower_examina_exam_question t2
+		,tb_manpower_examina_question_answer t3
+		WHERE
+		t1.test_question_id=t2.test_question_id
+		AND
+		t1.test_question_id=t3.test_question_id
+		AND t1.record_status !=0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaId)">
+			AND
+			t2.examina_id = #{examinaId,jdbcType=VARCHAR}
+		</if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(testQuestionId)">
+			AND t1.test_question_id =
+			#{testQuestionId,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<select id="selectBankByExaminaId" parameterType="com.jn.hr.exam.model.Examinabank"
+		resultType="com.jn.hr.exam.model.Examinabank">
+		SELECT
+		t1.test_question_id,
+		t1.examination_question,
+		t1.test_question_type,
+		case
+		WHEN t1.test_question_type='1' THEN '单选题'
+		WHEN
+		t1.test_question_type='2' THEN '多选题'
+		WHEN t1.test_question_type='3'
+		THEN '问答题'
+		else '判断题' end testQuestionTypeStr,
+		t1.record_status,
+		t1.examination_difficulty,
+		case
+		WHEN t1.examination_difficulty='1' THEN '不限难度'
+		WHEN
+		t1.examination_difficulty='2' THEN '容易'
+		WHEN
+		t1.examination_difficulty='3' THEN '中等'
+		else '困难' end
+		examinationDifficultyStr,
+		t1.item_analysis,
+		t1.created_time,
+		t1.creator_account,
+		t1.modified_time,
+		t1.modifier_account,
+		t2.examina_id,
+		t2.fraction,
+		t3.answer_html,
+		CASE t3.answer_number
+		WHEN 'N'
+		THEN '×'
+		WHEN 'Y' THEN '√'
+		ELSE t3.answer_number
+		END answerNumber,
+		t3.answer_number standardAnswer,
+		t3.id answerId
+		FROM
+		tb_manpower_examina_bank t1
+		,tb_manpower_examina_exam_question t2
+		,tb_manpower_examina_question_answer t3
+		WHERE
+		t1.test_question_id=t2.test_question_id
+		AND
+		t1.test_question_id=t3.test_question_id
+		AND t1.record_status !=0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaId)">
+			AND
+			t2.examina_id = #{examinaId,jdbcType=VARCHAR}
+		</if>
+		ORDER BY t1.test_question_type,t1.created_time
+	</select>
+
+</mapper>

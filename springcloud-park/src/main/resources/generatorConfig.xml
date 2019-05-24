@@ -816,6 +816,8 @@
       <table tableName="tb_asset_article_lease"></table>
       <!--物品租赁-物品租赁订单-->
       <table tableName="tb_asset_article_lease_orders"></table>
+      <!--物品订单-支付中心关系表-->
+      <table tableName="tb_asset_article_lease_orders_pay"></table>
       <!--资产管理-资产信息-->
       <table tableName="tb_asset_information"></table>
       <!--维保管理-维保信息-->
@@ -1263,6 +1265,7 @@
     <table tableName="tb_electric_warning_rules"></table>
     <table tableName="tb_electric_reading_source"></table>
     <table tableName="tb_electric_reading_fail_log"></table>
+    <table tableName="tb_electric_cost"></table>
 
   </context>
   <!--物业维修-->

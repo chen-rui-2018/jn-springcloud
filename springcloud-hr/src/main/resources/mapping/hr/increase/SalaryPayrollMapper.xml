@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.SalaryPayrollMapper">
+
+    <select id="list" parameterType="com.jn.hr.increase.model.SalaryPayrollPage" resultType="com.jn.hr.increase.model.SalaryPayrollVo">
+    select * from tb_manpower_salary_payroll t1
+    where 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+            and t1.name like concat('%',#{name},'%')
+    </if>
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(department)">
+            and department=#{department}
+    </if>
+  </select>
+  
+  <select id="selectByWage" parameterType="map" resultType="com.jn.hr.increase.model.SalaryPayrollVo">
+    select sum(temp.number) as number,
+       sum(temp.basic_wage) basicWage,
+       sum(temp.seniority_wage) seniorityWage,
+       sum(temp.technical_allowance) technicalAllowance,
+       sum(temp.duty_allowance) dutyAllowance,
+       sum(temp.work_subsidy) workSubsidy,
+       sum(temp.education_allowance) educationAllowance,
+       sum(temp.professional_title_allowance) professionalTitleAllowance,
+       sum(temp.special_subsidy) specialSubsidy,
+       sum(temp.meal_subsidy) mealSubsidy,
+       sum(temp.deserve_wage) deserveWage,
+       sum(temp.pending_socialpooling_Insurance) pendingSocialpoolingInsurance,
+       sum(temp.pending_providentfund) pendingProvidentfund,
+       sum(temp.canteen_meal_fee) canteenMealFee,
+       sum(temp.pending_personal_tax) pendingPersonalTax,
+       sum(temp.union_fee) unionFee,
+       sum(temp.real_wage) realWage
+       from (select basic_wage,
+               seniority_wage,
+               technical_allowance,
+               duty_allowance,
+               work_subsidy,
+               education_allowance,
+               professional_title_allowance,
+               special_subsidy,
+               meal_subsidy,
+               deserve_wage,
+               pending_socialpooling_Insurance,
+               pending_providentfund,
+               canteen_meal_fee,
+               pending_personal_tax,
+               union_fee,
+               real_wage,
+               1 number,
+               substring(account_entry_time, 1, 7) account_entry_time
+          from tb_manpower_salary_payroll t1
+         where 1 = 1
+           and t1.account_entry_time like CONCAT('%', #{accountEntryTime}, '%')) temp
+ where 1 = 1
+ group by temp.account_entry_time
+
+  </select>
+  
+  <select id="selectByDepartmentWage" parameterType="map" resultType="com.jn.hr.increase.model.SalaryKeyValue">
+    select department name,sum(real_wage) value  from tb_manpower_salary_payroll t1
+    where 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
+            and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
+    </if>
+    group by department
+  </select>
+  
+  <select id="selectByPeople" parameterType="map" resultType="com.jn.hr.increase.model.SalaryKeyValue">
+    select department name,count(1) value  from tb_manpower_salary_payroll t1
+    where 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
+            and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
+    </if>
+    group by department
+  </select>
+  
+  <select id="selectByDepartmentCost" parameterType="map" resultType="com.jn.hr.increase.model.SalaryKeyValue">
+    select department name,sum(real_wage) value  from tb_manpower_salary_payroll t1
+    where 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
+            and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
+    </if>
+    group by department
+  </select>
+  
+  <select id="selectByDepartment" parameterType="com.jn.hr.increase.model.SalaryPayrollPage" resultType="map">
+    select sum(realWage) as departmentWage from tb_manpower_salary_payroll t1
+    where 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
+            and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
+    </if>
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(department)">
+            and department=#{department}
+    </if>
+  </select>
+  
+  <insert id="insertBatch" parameterType="java.util.List">     
+       insert into tb_manpower_salary_payroll
+        ( id, name, job_number, 
+      department, basic_wage, seniority_wage, 
+      technical_allowance, duty_allowance, work_subsidy, 
+      education_allowance, professional_title_allowance, 
+      special_subsidy, meal_subsidy, deserve_wage, 
+      pending_socialpooling_Insurance, pending_providentfund, 
+      pending_personal_tax, canteen_meal_fee, union_fee, 
+      real_wage, account_entry_time
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.name}, #{item.jobNumber}, 
+      #{item.department}, #{item.basicWage}, #{item.seniorityWage}, 
+      #{item.technicalAllowance}, #{item.dutyAllowance}, #{item.workSubsidy}, 
+      #{item.educationAllowance}, #{item.professionalTitleAllowance}, 
+      #{item.specialSubsidy}, #{item.mealSubsidy}, #{item.deserveWage}, 
+      #{item.pendingSocialpoolingInsurance}, #{item.pendingProvidentfund}, 
+      #{item.pendingPersonalTax}, #{item.canteenMealFee}, #{item.unionFee}, 
+      #{item.realWage}, #{item.accountEntryTime}
+            )
+        </foreach>
+  </insert>
+
+</mapper>

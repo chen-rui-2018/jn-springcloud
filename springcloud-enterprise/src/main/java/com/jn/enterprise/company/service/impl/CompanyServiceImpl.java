@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.jn.park.care.model.ServiceEnterpriseCompany;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,6 +82,23 @@ public class CompanyServiceImpl implements CompanyService {
 
     private static final String PATTERN="yyyy-MM-dd";
     private static final String PATTERN_DETAIL="yyyy-MM-dd HH:mm:ss";
+
+
+    @Override
+    @ServiceLog(doAction = "查询企业列表New")
+    public PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam sepParam) {
+        if(StringUtils.isBlank(sepParam.getOrderByClause())){
+            sepParam.setOrderByClause("browse_number DESC");
+        }
+        Page<Object> objects = PageHelper.startPage(sepParam.getPage(), sepParam.getRows() == 0 ? 15 : sepParam.getRows());
+        List<ServiceEnterpriseCompany> getCompanyNewList=companyMapper.getCompanyNewList(sepParam);
+        //调用park,处理后再返回 getCompanyNewList
+        Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(getCompanyNewList);
+
+
+        PaginationData<List<ServiceEnterpriseCompany>> data = new PaginationData(companyNewList, objects.getTotal());
+        return data;
+    }
 
     @Override
     @ServiceLog(doAction = "查询企业列表")
@@ -218,13 +236,15 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public  ServiceCompany getCompanyDetailByAccountOrId(String account,String currentAccount){
         ServiceCompany companyDetailByAccountOrId = this.getCompanyDetailByAccountOrId(account);
-        CareParam careParam = new CareParam();
-        careParam.setAccount(account);
-        careParam.setCurrentAccount(currentAccount);
-        Result companyCareInfo = careClient.findCompanyCareInfo(careParam);
-        if(null !=companyCareInfo && null != companyCareInfo.getData()){
-            CareUserDetails data = (CareUserDetails)companyCareInfo.getData();
-            companyDetailByAccountOrId.setCareUserDetails(data);
+        if (currentAccount != null) {
+            CareParam careParam = new CareParam();
+            careParam.setAccount(account);
+            careParam.setCurrentAccount(currentAccount);
+            Result companyCareInfo = careClient.findCompanyCareInfo(careParam);
+            if(null != companyCareInfo && null != companyCareInfo.getData()){
+                CareUserDetails data = (CareUserDetails)companyCareInfo.getData();
+                companyDetailByAccountOrId.setCareUserDetails(data);
+            }
         }
         return companyDetailByAccountOrId;
     }

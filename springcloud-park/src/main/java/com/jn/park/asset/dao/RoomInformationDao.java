@@ -2,7 +2,8 @@ package com.jn.park.asset.dao;
 
 import com.jn.park.asset.model.RoomInformationModel;
 import com.jn.park.asset.model.RoomLeaseRecordModel;
-import com.jn.park.asset.model.RoomOrdersModle;
+import com.jn.park.asset.model.RoomOrdersModel;
+import com.jn.park.asset.model.RoomPayOrdersModel;
 
 import java.util.List;
 import java.util.Map;
@@ -15,13 +16,6 @@ import java.util.Map;
 * @modified By:
 */
 public interface RoomInformationDao {
-
-
-    /**
-     * 更改房间信息租借状态
-     * @param map
-     */
-    void updateStatus(Map<String, Object> map);
 
     /**
      * 返回可租借的房间列表(可搜索)
@@ -42,5 +36,6 @@ public interface RoomInformationDao {
      * @param orderId
      * @return
      */
-    RoomOrdersModle getNewRoomOrders(String orderId);
+    RoomOrdersModel getNewRoomOrders(String orderId);
+
 }

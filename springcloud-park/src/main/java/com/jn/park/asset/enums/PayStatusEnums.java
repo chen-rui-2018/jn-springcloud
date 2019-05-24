@@ -11,7 +11,8 @@ import com.jn.common.api.CodeAndMsg;
 */
 public enum PayStatusEnums implements CodeAndMsg {
     NONPAYMENT("0","未付款"),
-    PAYMENT("1","已付款");
+    PAYMENT("1","已付款"),
+    CANCEL("2","订单已取消");
     /**
      * 编码
      */

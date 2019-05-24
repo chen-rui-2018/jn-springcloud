@@ -51,12 +51,6 @@
             <artifactId>xxpay-web-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.44</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>com.jn</groupId>
             <artifactId>springcloud-app-delay-stream-api</artifactId>
         </dependency>
@@ -93,7 +87,7 @@
                         pay
                     </contexts>
                     <tableNames>
-
+                        tb_pay_check_reminder
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

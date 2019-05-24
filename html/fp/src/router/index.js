@@ -74,7 +74,7 @@ export default new Router({
           name: 'enterpriseservice'
         },
         {
-          path: '/messageCenter',
+          path: 'messageCenter',
           component: resolve => require(['@/views/messageCenter/index'], resolve),
           meta: {
             title: '消息中心'
@@ -86,7 +86,55 @@ export default new Router({
               meta: {
                 title: '社区交流'
               }
-            }
+            },
+            {
+              path: '/parkNotice',
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              meta: {
+                title: '园区通知'
+              },
+              name:'parkNotice',
+            },
+            {
+              path: '/enterpriseOrder',
+              component: resolve => require(['@/views/messageCenter/enterpriseOrder'], resolve),
+              meta: {
+                title: '企业订单'
+              },
+              name:'enterpriseOrder',
+            },
+            {
+              path: '/informationDynamics',
+              component: resolve => require(['@/views/messageCenter/informationDynamics'], resolve),
+              meta: {
+                title: '信息发布动态'
+              },
+              name:'informationDynamics',
+            },
+            {
+              path: '/paymentReminder',
+              component: resolve => require(['@/views/messageCenter/paymentReminder'], resolve),
+              meta: {
+                title: '缴费提醒'
+              },
+              name:'paymentReminder',
+            },
+            {
+              path: '/guestbook',
+              component: resolve => require(['@/views/messageCenter/guestbook'], resolve),
+              meta: {
+                title: '访客留言'
+              },
+              name:'guestbook',
+            },
+            {
+              path: '/dataReminder',
+              component: resolve => require(['@/views/messageCenter/dataReminder'], resolve),
+              meta: {
+                title: '数据上报提醒'
+              },
+              name:'dataReminder',
+            },
           ]
         },
         {
@@ -196,7 +244,7 @@ export default new Router({
               component: resolve => require(['@/views/home/productService/myApply'], resolve)
             },
             {
-              path: '/myBusiness/index',
+              path: 'home/myBusiness/index',
               name: 'business',
               meta: {
                 title: '我的企业'
@@ -210,6 +258,14 @@ export default new Router({
                 title: '编辑企业'
               },
               component: resolve => require(['@/views/home/myBusiness/editBusiness'], resolve)
+            },
+            {
+              path: '/myBusiness/businesInvitation',
+              name: 'businesInvitation',
+              meta: {
+                title: '企业邀请'
+              },
+              component: resolve => require(['@/views/home/myBusiness/businesInvitation'], resolve)
             },
             {
               path: '/myBusiness/recruitmentManagement',
@@ -335,7 +391,7 @@ export default new Router({
               path: '/myBody/acceptInvitation',
               name: 'acceptInvitation ',
               meta: {
-                title: '接受结构邀请'
+                title: '接受机构邀请'
               },
               component: resolve => require(['@/views/home/myBody/acceptInvitation'], resolve)
             },
@@ -467,41 +523,128 @@ export default new Router({
           component: resolve => require(['@/views/dataReport/dataReportCheck'], resolve),
           meta: {title: '数据上报审核'},
           name: 'dataReportCheck'
-        }
+        },
+        {
+          path: '/actiCenter',
+          component: resolve => require(['@/views/activityCenter/actiCenter'], resolve),
+          meta: {
+            title: '活动中心首页'
+          },
+          name: 'actiCenter'
+        },
+        {
+          path: '/actiDetail',
+          component: resolve => require(['@/views/activityCenter/actiDetail'], resolve),
+          meta: {
+            title: '活动详情'
+          },
+          name: 'actiDetail'
+        },
+        {
+          path: '/regStatus',
+          component: resolve => require(['@/views/activityCenter/regStatus'], resolve),
+          meta: {
+            title: '报名情况列表'
+          },
+          name: 'regStatus'
+        },
+        {
+          path: '/regData',
+          component: resolve => require(['@/views/activityCenter/regData'], resolve),
+          meta: {
+            title: '报名人资料'
+          },
+          name: 'regData'
+        },
+        {
+          path: '/policyCenter',
+          component: resolve => require(['@/views/policyCenter/policyCenter'], resolve),
+          meta: {
+            title: '政策中心首页'
+          },
+          name: 'policyCenter'
+        },
+        {
+          path: '/graphicPolicy',
+          component: resolve => require(['@/views/policyCenter/graphicPolicy'], resolve),
+          meta: {
+            title: '图解政策详情'
+          },
+          name: 'graphicPolicy'
+        },
+        {
+          path: '/policyGuide',
+          component: resolve => require(['@/views/policyCenter/policyGuide'], resolve),
+          meta: {
+            title: '政策指南详情'
+          },
+          name: 'policyGuide'
+        },
+        {
+          path: '/recruitmentList',
+          component: resolve => require(['@/views/humanResource'], resolve),
+          meta: {
+            title: '企业招聘列表'
+          },
+          name: 'recruitmentList'
+        },
+        {
+          path: '/incubatorEnterprises',
+          component: resolve => require(['@/views/incubatorEnterprises'], resolve),
+          meta: {
+            title: '孵化企业'
+          },
+          name: 'incubatorEnterprises'
+        },
+        {
+          path: '/announcementDetails',
+          component: resolve => require(['@/views/announcementDetails'], resolve),
+          meta: {
+            title: '公告详情'
+          },
+          name: 'announcementDetails'
+        },
+        {
+          path: '/academicExchange',
+          component: resolve => require(['@/views/academicExchange'], resolve),
+          meta: {
+            title: '学术科技'
+          },
+          name: 'academicExchange'
+        },
+        {
+          path: '/technologyDetails',
+          component: resolve => require(['@/views/academicExchange/technologyDetails'], resolve),
+          meta: {
+            title: '学术科技详情'
+          },
+          name: 'technologyDetails'
+        },
+        {
+          path: '/parkDetails',
+          component: resolve => require(['@/views/parkDetails'], resolve),
+          meta: {
+            title: '园区详情'
+          },
+          name: 'parkDetails'
+        },
+        {
+          path: '/enterpriseInformation',
+          component: resolve => require(['@/views/enterpriseInformation'], resolve),
+          meta: {
+            title: '企业资讯'
+          },
+          name: 'enterpriseInformation'
+        },
+        {
+          path: '/enterpriseInfoDetails',
+          component: resolve => require(['@/views/enterpriseInformation/enterpriseInfoDetails'], resolve),
+          meta: {
+            title: '企业资讯详情'
+          },
+          name: 'enterpriseInfoDetails'
+        },
       ]
-    },
-
-    {
-      path: '/actiCenter',
-      component: resolve => require(['@/views/activityCenter/actiCenter'], resolve),
-      meta: {
-        title: '活动中心首页'
-      },
-      name: 'actiCenter'
-    },
-    {
-      path: '/actiDetail',
-      component: resolve => require(['@/views/activityCenter/actiDetail'], resolve),
-      meta: {
-        title: '活动详情'
-      },
-      name: 'actiDetail'
-    },
-    {
-      path: '/regStatus',
-      component: resolve => require(['@/views/activityCenter/regStatus'], resolve),
-      meta: {
-        title: '报名情况列表'
-      },
-      name: 'regStatus'
-    },
-    {
-      path: '/regData',
-      component: resolve => require(['@/views/activityCenter/regData'], resolve),
-      meta: {
-        title: '报名人资料'
-      },
-      name: 'regData'
     },
     {
       path: '/actiTrain',
@@ -518,6 +661,22 @@ export default new Router({
         title: '活动培训详情'
       },
       name: 'actiTrain'
+    },
+    {
+      path: '/actiTrainStatus',
+      component: resolve => require(['@/views/serviceMarket/actiTrainStatus'], resolve),
+      meta: {
+        title: '活动详情报名情况'
+      },
+      name: 'actiTrainStatus'
+    },
+    {
+      path: '/actiTrainData',
+      component: resolve => require(['@/views/serviceMarket/actiTrainData'], resolve),
+      meta: {
+        title: '活动详情报名人资料'
+      },
+      name: 'actiTrainData'
     },
     {
       path: '/serMatHp',
@@ -753,28 +912,12 @@ export default new Router({
       name: 'finaProDetail'
     },
     {
-      path: '/policyCenter',
-      component: resolve => require(['@/views/policyCenter/policyCenter'], resolve),
+      path: '/userinfo',
+      component: resolve => require(['@/views/home/userinfo'], resolve),
       meta: {
-        title: '政策中心首页'
+        title: '用户信息'
       },
-      name: 'policyCenter'
-    },
-    {
-      path: '/graphicPolicy',
-      component: resolve => require(['@/views/policyCenter/graphicPolicy'], resolve),
-      meta: {
-        title: '图解政策详情'
-      },
-      name: 'graphicPolicy'
-    },
-    {
-      path: '/policyGuide',
-      component: resolve => require(['@/views/policyCenter/policyGuide'], resolve),
-      meta: {
-        title: '政策指南详情'
-      },
-      name: 'policyGuide'
+      name: 'userinfo'
     },
   ]
 })

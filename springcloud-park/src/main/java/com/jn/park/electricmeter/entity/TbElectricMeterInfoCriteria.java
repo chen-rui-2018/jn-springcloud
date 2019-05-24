@@ -1435,6 +1435,136 @@ public class TbElectricMeterInfoCriteria {
             addCriterion("building_id not between", value1, value2, "buildingId");
             return (Criteria) this;
         }
+
+        public Criteria andCompanyNameIsNull() {
+            addCriterion("company_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameIsNotNull() {
+            addCriterion("company_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameEqualTo(String value) {
+            addCriterion("company_name =", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameNotEqualTo(String value) {
+            addCriterion("company_name <>", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameGreaterThan(String value) {
+            addCriterion("company_name >", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameGreaterThanOrEqualTo(String value) {
+            addCriterion("company_name >=", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameLessThan(String value) {
+            addCriterion("company_name <", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameLessThanOrEqualTo(String value) {
+            addCriterion("company_name <=", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameLike(String value) {
+            addCriterion("company_name like", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameNotLike(String value) {
+            addCriterion("company_name not like", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameIn(List<String> values) {
+            addCriterion("company_name in", values, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameNotIn(List<String> values) {
+            addCriterion("company_name not in", values, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameBetween(String value1, String value2) {
+            addCriterion("company_name between", value1, value2, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameNotBetween(String value1, String value2) {
+            addCriterion("company_name not between", value1, value2, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdIsNull() {
+            addCriterion("is_low_energy_threshold is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdIsNotNull() {
+            addCriterion("is_low_energy_threshold is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdEqualTo(Long value) {
+            addCriterion("is_low_energy_threshold =", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdNotEqualTo(Long value) {
+            addCriterion("is_low_energy_threshold <>", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdGreaterThan(Long value) {
+            addCriterion("is_low_energy_threshold >", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdGreaterThanOrEqualTo(Long value) {
+            addCriterion("is_low_energy_threshold >=", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdLessThan(Long value) {
+            addCriterion("is_low_energy_threshold <", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdLessThanOrEqualTo(Long value) {
+            addCriterion("is_low_energy_threshold <=", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdIn(List<Long> values) {
+            addCriterion("is_low_energy_threshold in", values, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdNotIn(List<Long> values) {
+            addCriterion("is_low_energy_threshold not in", values, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdBetween(Long value1, Long value2) {
+            addCriterion("is_low_energy_threshold between", value1, value2, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdNotBetween(Long value1, Long value2) {
+            addCriterion("is_low_energy_threshold not between", value1, value2, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

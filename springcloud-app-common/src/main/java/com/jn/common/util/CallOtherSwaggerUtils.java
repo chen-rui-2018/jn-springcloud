@@ -77,7 +77,7 @@ public class CallOtherSwaggerUtils {
      * @param param   请求参数
      * @return
      */
-    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, String> param) {
+    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, Object> param) {
         return request(account, curl, method, param, MediaType.APPLICATION_FORM_URLENCODED);
     }
 
@@ -91,13 +91,21 @@ public class CallOtherSwaggerUtils {
      * @param mediaType application/x-www-form-urlencoded application/json
      * @return
      */
-    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, String> param, MediaType mediaType) {
+    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, Object> param, MediaType mediaType) {
         JSONObject result = new JSONObject();
         try {
-            String token = getToken(account);
+            String token = callOtherSwaggerUtils.jedisFactory.getJedis().get(PREFIX + account);
+            if (StringUtils.isEmpty(token)) {
+                token = getToken(account);
+            }
             Map dynamicHeaders = new HashMap<>();
             dynamicHeaders.put("X-Authorization-access_token", token);
             result = RestTemplateUtil.request(url + curl, method, param, dynamicHeaders, mediaType);
+            if(result==null){
+                token = getToken(account);
+                dynamicHeaders.put("X-Authorization-access_token", token);
+                result = RestTemplateUtil.request(url + curl, method, param, dynamicHeaders, mediaType);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,12 +121,20 @@ public class CallOtherSwaggerUtils {
      * @return
      */
     public static JSONObject request(String account, String curl, HttpMethod method, String jsonObject) {
-        JSONObject result = new JSONObject();
+        JSONObject result = null;
         try {
-            String token = getToken(account);
+            String token = callOtherSwaggerUtils.jedisFactory.getJedis().get(PREFIX + account);
+            if (StringUtils.isEmpty(token)) {
+                token = getToken(account);
+            }
             Map dynamicHeaders = new HashMap<>();
             dynamicHeaders.put("X-Authorization-access_token", token);
             result = RestTemplateUtil.request(url + curl, method, jsonObject, dynamicHeaders);
+            if(result==null){
+                token = getToken(account);
+                dynamicHeaders.put("X-Authorization-access_token", token);
+                result = RestTemplateUtil.request(url + curl, method, jsonObject, dynamicHeaders);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -132,16 +148,13 @@ public class CallOtherSwaggerUtils {
      * @return
      */
     private static String getToken(String account) {
-        String token = callOtherSwaggerUtils.jedisFactory.getJedis().get(PREFIX + account);
-        if (StringUtils.isEmpty(token)) {
-            String accountKey = EncryptUtil.encryptSha256(account);
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-            map.add("account", account);
-            map.add("accountKey", accountKey);
-            JSONObject tokenJsonObject = RestTemplateUtil.request(url + LOGIN_URL, HttpMethod.POST, map, new HashMap<>(), MediaType.APPLICATION_FORM_URLENCODED);
-            token = ((LinkedHashMap) tokenJsonObject.get("data")).get("token").toString();
-            callOtherSwaggerUtils.jedisFactory.getJedis().set(PREFIX + account, token, NXXX, EXPX, TIME);
-        }
+        String accountKey = EncryptUtil.encryptSha256(account);
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+        map.add("account", account);
+        map.add("accountKey", accountKey);
+        JSONObject tokenJsonObject = RestTemplateUtil.request(url + LOGIN_URL, HttpMethod.POST, map, new HashMap<>(), MediaType.APPLICATION_FORM_URLENCODED);
+        String token = ((LinkedHashMap) tokenJsonObject.get("data")).get("token").toString();
+        callOtherSwaggerUtils.jedisFactory.getJedis().set(PREFIX + account, token, NXXX, EXPX, TIME);
         return token;
     }
 

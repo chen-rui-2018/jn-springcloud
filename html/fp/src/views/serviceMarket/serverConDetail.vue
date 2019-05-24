@@ -1,8 +1,8 @@
 <template>
     <div class="serverConDetail w">
         <div class="serverOrgMenu color2">
-            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页/</span>
-            <span class="pointer" @click="$routet.push({path:'/serverCon'})">服务顾问</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
+            <span class="pointer" @click="$router.push({path:'/serverCon'})">服务顾问</span>
             <span>/</span>
             <span class="mainColor agent">服务顾问详情</span>
         </div>
@@ -163,7 +163,7 @@
                                 <div class="list-item-date"></div>
                                 <!-- 上架时间 end -->
                                 <!-- 左侧logo begin-->
-                                <div class="list-imgleft-container product nopic">
+                                <div class="list-imgleft-container product nopic" @click="$router.push({path: 'serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
                                     <img :src="i.pictureUrl" alt="">
                                 </div>
                                 <!-- 左侧logo end-->

@@ -90,7 +90,7 @@ public class ParkingSpaceController extends BaseController {
     }
 
     @ControllerLog(doAction = "生成支付账单")
-    @ApiOperation(value = "生成支付账单", notes = "点击去支付，调用该接口生成账单号。前端接收到账单号后，携带账单号调用统一缴费服务‘/guest/pay/bill/startPayment统一缴费--发起支付’支付")
+    @ApiOperation(value = "生成支付账单", notes = "点击去支付，调用该接口生成账单号。前端接收到账单号后，携带账单号调用统一缴费服务‘/pay/createOrderAndPay创建订单并发起支付’支付[返回参数即发起支付的goodsIdArr]")
     @RequestMapping(value = "/createParkingSpaceBill",method = RequestMethod.POST)
     public Result<String> createParkingSpaceBill(String rentId){
         Assert.notNull(rentId, ParkingExceptionEnum.REND_ID_IS_NOT_NULL.getMessage());

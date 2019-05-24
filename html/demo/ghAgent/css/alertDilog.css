@@ -14,6 +14,39 @@
     filter: alpha(opacity=80);/* 只支持IE6、7、8、9 */
     margin:auto;
 }
+
+.quesLayer {
+    display: none;
+    background-color: gray;
+    position: absolute;
+    width: 810px;
+    height: 620px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    -moz-opacity: 0.8;
+    opacity:.80;
+    filter: alpha(opacity=80);/* 只支持IE6、7、8、9 */
+    margin:auto;
+}
+
+/*弹出层*/
+.quesBox {
+    display: none;
+    background-color: white;
+    z-index: 11;
+    width: 800px;
+    height: 600px;
+    position:fixed;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    margin:auto;
+}
+
 /*弹出层*/
 .popBox {
     display: none;
@@ -29,14 +62,14 @@
     margin:auto;
 }
 
-.popBox .close{
+.popBox .close,.quesBox .close{
     text-align: right;
     margin-right: 5px;
     background-color: #F8F8F8;
 }
 
 /*关闭按钮*/
-.popBox .close a {
+.popBox .close a, .quesLayer .close a {
     text-decoration: none;
     color: #2D2C3B;
 }

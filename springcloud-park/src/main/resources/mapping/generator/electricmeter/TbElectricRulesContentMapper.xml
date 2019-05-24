@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.park.electricmeter.entity.TbElectricRulesContent">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="rule_id" jdbcType="VARCHAR" property="ruleId" />
-    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
     <result column="price" jdbcType="VARCHAR" property="price" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -73,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, rule_id, project_name, price, record_status, creator_account, created_time, modifier_account, 
+    id, rule_id, rule_name, price, record_status, creator_account, created_time, modifier_account, 
     modified_time, start, end
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContentCriteria" resultMap="BaseResultMap">
@@ -107,11 +107,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContent">
-    insert into tb_electric_rules_content (id, rule_id, project_name, 
+    insert into tb_electric_rules_content (id, rule_id, rule_name, 
       price, record_status, creator_account, 
       created_time, modifier_account, modified_time, 
       start, end)
-    values (#{id,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{ruleName,jdbcType=VARCHAR}, 
       #{price,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{start,jdbcType=INTEGER}, #{end,jdbcType=INTEGER})
@@ -125,8 +125,8 @@
       <if test="ruleId != null">
         rule_id,
       </if>
-      <if test="projectName != null">
-        project_name,
+      <if test="ruleName != null">
+        rule_name,
       </if>
       <if test="price != null">
         price,
@@ -160,8 +160,8 @@
       <if test="ruleId != null">
         #{ruleId,jdbcType=VARCHAR},
       </if>
-      <if test="projectName != null">
-        #{projectName,jdbcType=VARCHAR},
+      <if test="ruleName != null">
+        #{ruleName,jdbcType=VARCHAR},
       </if>
       <if test="price != null">
         #{price,jdbcType=VARCHAR},
@@ -204,8 +204,8 @@
       <if test="record.ruleId != null">
         rule_id = #{record.ruleId,jdbcType=VARCHAR},
       </if>
-      <if test="record.projectName != null">
-        project_name = #{record.projectName,jdbcType=VARCHAR},
+      <if test="record.ruleName != null">
+        rule_name = #{record.ruleName,jdbcType=VARCHAR},
       </if>
       <if test="record.price != null">
         price = #{record.price,jdbcType=VARCHAR},
@@ -240,7 +240,7 @@
     update tb_electric_rules_content
     set id = #{record.id,jdbcType=VARCHAR},
       rule_id = #{record.ruleId,jdbcType=VARCHAR},
-      project_name = #{record.projectName,jdbcType=VARCHAR},
+      rule_name = #{record.ruleName,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -259,8 +259,8 @@
       <if test="ruleId != null">
         rule_id = #{ruleId,jdbcType=VARCHAR},
       </if>
-      <if test="projectName != null">
-        project_name = #{projectName,jdbcType=VARCHAR},
+      <if test="ruleName != null">
+        rule_name = #{ruleName,jdbcType=VARCHAR},
       </if>
       <if test="price != null">
         price = #{price,jdbcType=VARCHAR},
@@ -292,7 +292,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContent">
     update tb_electric_rules_content
     set rule_id = #{ruleId,jdbcType=VARCHAR},
-      project_name = #{projectName,jdbcType=VARCHAR},
+      rule_name = #{ruleName,jdbcType=VARCHAR},
       price = #{price,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

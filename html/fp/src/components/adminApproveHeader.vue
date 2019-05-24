@@ -218,7 +218,6 @@ export default {
   background: rgba(0, 0, 0,0.3);
   text-align: center;
   .el-input-group{
-   
     border-radius: 28px;
     width:42%;
     margin:43px 0;
@@ -226,15 +225,12 @@ export default {
       width:94px;
     }
     .el-input__inner:focus{
-      border-color: #00a041;
-      
+      border-color: #00a041;  
     }
     .el-input-group__append, .el-input-group__prepend{
       border-radius: 28px;
     }
     .el-input-group__append{
-      /* border-top-left-radius: 0;
-      border-bottom-left-radius: 0; */
       background: #00a041;
       color:#fff;
       right: 58px;

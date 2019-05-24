@@ -318,7 +318,7 @@ public class StaffServiceImpl implements StaffService {
             addMessageModel.setMessageSender(curAccount);
             addMessageModel.setMessageRecipien(inviteAccount);
             addMessageModel.setMessageOneSort(1);
-            addMessageModel.setMessageTowSort(12);
+            addMessageModel.setMessageTowSort(8);
             addMessageModel.setMessageConnect("comId=" + company.getId() + "&comName=" + company.getComName());
             addMessageModel.setMessageConnectName("企业邀请");
             addMessageModel.setMessageTitle("企业邀请待处理通知");
@@ -422,13 +422,13 @@ public class StaffServiceImpl implements StaffService {
 
         // 修改信息成功之后接收邀请
         if ((Integer) result.getData() == 1) {
-            TbServiceCompanyStaff tscs = new TbServiceCompanyStaff();
-            tscs.setId(staff.getId());
-            tscs.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_AGREE.getCode());
-            tscs.setCheckStatus(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode());
-            tscs.setInviteTime(new Date());
-            tscs.setInviterAccount(staff.getAccount());
-            responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(tscs);
+            TbServiceCompanyStaff tbServiceCompanyStaff = new TbServiceCompanyStaff();
+            tbServiceCompanyStaff.setId(staff.getId());
+            tbServiceCompanyStaff.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_AGREE.getCode());
+            tbServiceCompanyStaff.setCheckStatus(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode());
+            tbServiceCompanyStaff.setInviteTime(new Date());
+            tbServiceCompanyStaff.setInviterAccount(staff.getAccount());
+            responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(tbServiceCompanyStaff);
             logger.info("[企业邀请] 接受邀请成功,staffId:{},响应条数:{}", staff.getId(), responseNums);
         } else {
             logger.info("[企业邀请] 接受企业邀请失败,修改用户信息失败");

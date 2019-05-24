@@ -72,8 +72,7 @@ public class InvestorController extends BaseController {
 
     @ControllerLog(doAction = "查询所属单位")
     @ApiOperation(value = "查询所属单位")
-    @RequiresPermissions("/technologyFinancial/investorController/getAffiliationUnit")
-    @RequestMapping(value = "/technologyFinancial/investorController/getAffiliationUnit",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/investorController/getAffiliationUnit",method = RequestMethod.GET)
     public Result<PaginationData<List<AffiliationUnitShow>>> getAffiliationUnit(@Validated  AffiliationUnitInfoParam affiliationUnitInfoParam){
         PaginationData result= investorService.getAffiliationUnit(affiliationUnitInfoParam);
         return  new Result(result);
@@ -81,8 +80,7 @@ public class InvestorController extends BaseController {
 
     @ControllerLog(doAction = "查询投资人主投领域")
     @ApiOperation(value = "查询投资人主投领域")
-    @RequiresPermissions("/technologyFinancial/investorController/getInvestorMainArea")
-    @RequestMapping(value = "/technologyFinancial/investorController/getInvestorMainArea",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/investorController/getInvestorMainArea",method = RequestMethod.GET)
     public Result<List<InvestorMainArea>> getInvestorMainArea(){
         List<InvestorMainArea> investorMainAreaList = investorService.getInvestorMainArea();
         return  new Result(investorMainAreaList);
@@ -90,8 +88,7 @@ public class InvestorController extends BaseController {
 
     @ControllerLog(doAction = "查询投资人主投轮次")
     @ApiOperation(value = "查询投资人主投轮次")
-    @RequiresPermissions("/technologyFinancial/investorController/getInvestorMainRound")
-    @RequestMapping(value = "/technologyFinancial/investorController/getInvestorMainRound",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/investorController/getInvestorMainRound",method = RequestMethod.GET)
     public Result<List<InvestorMainRound>> getInvestorMainRound(){
         List<InvestorMainRound> investorMainRound = investorService.getInvestorMainRound();
         return  new Result(investorMainRound);

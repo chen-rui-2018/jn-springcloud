@@ -42,7 +42,7 @@ public class ServiceConnectController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "entranceNameCode",value = "名称编号",dataType = "String",paramType = "query")
     })
-    public Result<FindAllMessageListVo> getImgAndAddress(String entranceNameCode){
+    public Result<ServiceConnectModel> getImgAndAddress(String entranceNameCode){
         // TODO: 2019/4/19
 
         ServiceConnectModel serviceConnectModel=serviceConnectService.getImgAndAddress(entranceNameCode);

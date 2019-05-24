@@ -416,7 +416,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             logger.warn("当前操作名称：[{}]不是系统所支持的",actionName);
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.PROCESS_INS_ID_NOT_NULL);
         }
-        if(pictureUrl==null || pictureUrl.length>3){
+        if(pictureUrl!=null && pictureUrl.length>3){
             logger.warn("处理问题时，问题描述最多允许上传3张图片");
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.PICTURE_URL_MORE_THAN_ALLOW);
         }
@@ -545,14 +545,13 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
     public String getPhoneCalledOwen(String phone) {
         String url="http://mobsec-dianhua.baidu.com/dianhua_api/open/location?tel="+phone;
         String queryString = RestTemplateUtil.get(url);
-        CalledOwenResult calledOwenResult = new Gson().fromJson(queryString, CalledOwenResult.class);
-        LinkedTreeMap<String,String> response =(LinkedTreeMap<String,String> ) calledOwenResult.getResponse();
-        Set<Map.Entry<String, String>> entries = response.entrySet();
-        if(entries.iterator().hasNext()){
-            Map.Entry<String, String> next = entries.iterator().next();
-            Object value=next.getValue();
-            System.out.println(value);
+        if(queryString.contains("location")){
+            queryString=queryString.substring(queryString.indexOf("location"),queryString.length()-1);
+            queryString=queryString.substring(0,queryString.indexOf("}}"));
+            String[] split = queryString.split(":");
+            return split[1].replaceAll("\"","");
+        }else{
+            return "";
         }
-        return queryString;
     }
 }

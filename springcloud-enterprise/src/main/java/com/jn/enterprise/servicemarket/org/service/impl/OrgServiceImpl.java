@@ -441,4 +441,21 @@ public class OrgServiceImpl implements OrgService {
         return businessStatisticalNumVO;
     }
 
+    @ServiceLog(doAction = "获取当前用户机构状态")
+    @Override
+    public String getOrgStatusByUser(String account){
+        if(StringUtils.isEmpty(account)){
+            throw new JnSpringCloudException(OrgExceptionEnum.USER_EXTENSION_IS_NULL);
+        }
+        TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
+        orgCriteria.createCriteria().andOrgAccountEqualTo(account).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        orgCriteria.setOrderByClause(" created_time desc ");
+        List<TbServiceOrg> tbServiceOrgs = tbServiceOrgMapper.selectByExample(orgCriteria);
+        if(null == tbServiceOrgs || tbServiceOrgs.size()==0){
+            return "-1";
+        }else{
+            return tbServiceOrgs.get(0).getOrgStatus();
+        }
+    }
+
 }

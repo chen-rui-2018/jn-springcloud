@@ -13,7 +13,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "CustomerServiceCenterDetailVo",description = "客服中心园区用户问题详情入参")
+@ApiModel(value = "CustomerServiceCenterDetailVo",description = "客服中心园区用户问题详情出参")
 public class CustomerServiceCenterDetailVo implements Serializable {
     @ApiModelProperty("流程实例id(启动工作流后的流程实例id)")
     private String processInsId;
@@ -35,6 +35,10 @@ public class CustomerServiceCenterDetailVo implements Serializable {
     private String contactWay;
     @ApiModelProperty("处理状态(0：待处理  1:处理中 2：已处理,3:无法处理)")
     private String status;
+    @ApiModelProperty("提交时间")
+    private String createdTime;
+    @ApiModelProperty("客户姓名")
+    private String custName;
     @ApiModelProperty("问题处理记录")
     private List<ExecuteHistoryShow> executeHistoryShowList;
 
@@ -116,6 +120,22 @@ public class CustomerServiceCenterDetailVo implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
     }
 
     public List<ExecuteHistoryShow> getExecuteHistoryShowList() {

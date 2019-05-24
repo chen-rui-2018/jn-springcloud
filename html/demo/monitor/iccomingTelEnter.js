@@ -477,9 +477,9 @@ function getCalledHistory(obj){
 					var info=customerList[i];
 					var showStatus="";
 					if(info.status=='0'){showStatus="待处理"}
-					if(info.status=='1'){showStatus="处理中"}
-					if(info.status=='2'){showStatus="已处理"}
-					if(info.status=='3'){showStatus="无法处理"}
+					else if(info.status=='1'){showStatus="处理中"}
+					else if(info.status=='2'){showStatus="已处理"}
+					else if(info.status=='3'){showStatus="无法处理"}
 					table=table+"<tr><td style='width:200px'>"+info.quesCode+"</td><td style='width:100px'>"+info.serviceModuleName+"</td>" +
 						"<td style='width: 100px'>"+showStatus+"</td><td style='width: 250px'>"+info.quesTitle+"</td>" +
 						"<td style='width: 160px'>"+info.createdTime+"</td>" +
@@ -496,6 +496,7 @@ function getCalledHistory(obj){
 function getHistoryDetails(obj){
 	//根据流程实例id,用户账号查看问题详情
 	var processInsId = $(obj).attr("value");
+	$("#detailLoad").show();
 	$.ajax({
 		type: 'get',
 		url: curl + '/guest/customer/customerCalledInfoEnterController/customerQuesDetail',
@@ -507,18 +508,104 @@ function getHistoryDetails(obj){
 			"X-Authorization-access_token":token
 		},
 		success: function (data) {
+			$("#detailLoad").hide();
 			if(data!=undefined && data!=null && data.data!=null && data.code=='0000'){
-				console.log(data.data);
+				$(".quesLayer").show();
+				$(".quesBox").show();
+
+				//取出查询到的信息
+				var detailInfo=data.data;
+				var quesTitle=detailInfo.quesTitle;
+				var quesDetails=detailInfo.quesDetails;
+				var quesUrl=detailInfo.quesUrl;
+				var custName=detailInfo.custName;
+				var contactWay=detailInfo.contactWay;
+				var serviceModuleName=detailInfo.serviceModuleName;
+				var createdTime=detailInfo.createdTime;
+				var status=detailInfo.status;
+				var executeHistoryShowList=detailInfo.executeHistoryShowList;
+
+				//给弹出框控件赋值
+				$("#quesTitleShow").val(quesTitle);
+				if(status=='0'){$("#status").html("待处理")}
+				else if(status=='1'){$("#status").html("处理中")}
+				else if(status=='2'){$("#status").html("已处理")}
+				else if(status=='3'){$("#status").html("无法处理")}
+				$("#quesDetailsShow").val(quesDetails);
+				if(quesUrl!=null && quesUrl.length>0){
+					for(var i=0;i<quesUrl.length;i++){
+						if(quesUrl[i]==''){
+							continue;
+						}else{
+							if(i==0){
+								$(".quesUrlShow").show();
+								$(".quesUrlShow").attr("src",quesUrl[i]);
+							}else{
+								$(".quesUrlShow").after("<img style='width: 80px;height:60px;padding-left: 5px' class='quesUrlShowAdd' src='"+quesUrl[i]+"'/>");
+							}
+						}
+					}
+				}
+				$("#custNameShow").val(custName);
+				$("#contactWayShow").val(contactWay);
+				$("#serviceModuleName").val(serviceModuleName);
+				$("#createdTime").val(createdTime);
+
+				//问题处理记录
+				if(executeHistoryShowList!=null && executeHistoryShowList.length>0){
+					var table="<table>";
+					for(var i=0;i<executeHistoryShowList.length;i++){
+						var histoyShow=executeHistoryShowList[i];
+						table=table+"<tr><td>"+histoyShow.optionDeptName+"&nbsp;&nbsp;&nbsp;</td>" +
+							"<td>"+histoyShow.opinion+"("+histoyShow.statusName+")</td></tr>";
+						if(histoyShow.executePictureUrl!=null && histoyShow.executePictureUrl.length>0 ){
+							for(var j=0;j<histoyShow.executePictureUrl.length;j++){
+								if(j==0){
+									table=table+"<tr><td></td>><td rowspan='3'><img class='executeShow' style='width: 80px;height:60px;padding-left: 5px' src='"+histoyShow.executePictureUrl[j]+"'/>";
+								}else{
+									table=table+"<img class='executeShow' style='width: 80px;height:60px;padding-left: 5px' src='"+histoyShow.executePictureUrl[j]+"'/>";
+								}
+							}
+							table=table+"</td></tr>";
+						}
+						if(i!=executeHistoryShowList.length-1){
+							table=table+"<tr><td >|</td></tr>";
+							table=table+"<tr><td >|</td></tr>";
+							table=table+"<tr><td >|</td></tr>";
+						}
+					}
+					table=table+"</table>"
+					$("#historyDetails").html(table);
+				}
+
+			}else{
+				alert("网络异常，请稍后重试");
 			}
-			$(".quesLayer").show();
-			$(".quesBox").show();
+
+		},
+		error:function () {
+			alert("网络异常，请稍后重试");
 		}
 	});
 }
 //问题详情弹出框关闭
 function closeQuesBox(){
+	//清空数据
+	$("#quesTitleShow").val("");
+	$("#status").html("")
+	$("#quesDetailsShow").val("");
+	$(".quesUrlShow").attr("src","");
+	$("#custNameShow").val("");
+	$("#contactWayShow").val("");
+	$("#serviceModuleName").val("");
+	$("#createdTime").val("");
+	$("#historyDetails").html("");
+	//隐藏问题图片
+	$(".quesUrlShow").hide();
+	$(".quesUrlShowAdd").remove();
+	//隐藏弹出框
+	$(".quesBox").hide();
 	$(".quesLayer").hide();
-	$(".popquesBoxLayer").hide();
 
 }
 

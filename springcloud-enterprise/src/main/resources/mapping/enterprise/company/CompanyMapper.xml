@@ -41,4 +41,46 @@
         ORDER BY a.created_time DESC
         LIMIT 1
     </select>
+
+
+    <!-- 查询企业列表New -->
+    <select id="getCompanyNewList" parameterType="com.jn.company.model.ServiceEnterpriseParam" resultType="com.jn.company.model.ServiceEnterpriseCompany">
+        SELECT
+        t.id as "id",
+        t.com_name as "comName",
+        t.com_name_short as "comNameShort",
+        t.avatar as "avatar",
+        t.com_admin as "comAdmin",
+        t.com_web as "comWeb",
+        t.com_synopsis as "comSynopsis",
+        t.park_build_id as "parkBuildId",
+        t.park_build_name as "parkBuildName",
+        t.com_type as "comType",
+        t.com_source as "comSource",
+        t.propaganda_picture as "proImgs",
+        t.unify_code as "unifyCode",
+        t.com_server as "comServer",
+        t.com_demand as "comDemand",
+        t.browse_number as "browseNumber",
+        t.creator_account as "creatorAccount",
+        t.created_time as "createdTime"
+        FROM
+        tb_service_company t
+        WHERE t.record_status = 1
+        AND t.check_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(comName)">
+        AND t.com_name LIKE concat(concat('%',#{comName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(comSource)">
+        AND t.com_source = #{comSource,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(affiliatedPark)">
+        AND t.affiliated_park = #{affiliatedPark,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(induType)">
+        AND t.indu_type = #{induType,jdbcType=VARCHAR}
+        </if>
+        ORDER BY ${orderByClause}
+
+    </select>
 </mapper>

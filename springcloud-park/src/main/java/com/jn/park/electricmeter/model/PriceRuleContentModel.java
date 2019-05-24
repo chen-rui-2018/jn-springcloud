@@ -13,7 +13,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "PriceRuleContent",description = "计价规则内容")
-public class PriceRuleContent implements Serializable {
+public class PriceRuleContentModel implements Serializable {
     @ApiModelProperty("记录Id")
     private String id;
 

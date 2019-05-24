@@ -14,7 +14,7 @@ import com.jn.park.electricmeter.dao.*;
 import com.jn.park.electricmeter.entity.*;
 import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
-import com.jn.park.electricmeter.model.PriceRuleContent;
+import com.jn.park.electricmeter.model.PriceRuleContentModel;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.vo.PriceRuleVO;
 import com.jn.system.log.annotation.ServiceLog;
@@ -120,7 +120,8 @@ public class MeterRulesServiceImpl implements MeterRulesService {
     public Integer updatePriceRule(User user, PriceRuleVO priceRuleVO) {
         Integer result = 0;
         String ruleIdBefore = priceRuleVO.getId();
-        List<PriceRuleContent> contents = priceRuleVO.getPriceRuleContents();
+        List<PriceRuleContentModel> contents = priceRuleVO.getPriceRuleContents();
+
         //默认计价规则是错的
         boolean wrong = true;
         if (contents != null && contents.size() > 0) {
@@ -171,7 +172,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         //TbElectricRulesContentMapper
         TbElectricRulesContent rulesContent = null;
         List<TbElectricRulesContent> rulesContents = new ArrayList<>();
-        for (PriceRuleContent content : contents) {
+        for (PriceRuleContentModel content : contents) {
             rulesContent = new TbElectricRulesContent();
             rulesContent.setRecordStatus(new Byte(MeterConstants.VALID));
             rulesContent.setCreatedTime(new Date());
@@ -241,7 +242,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
     /**
      * 检测规则是否正确
      */
-    private boolean checkRules(List<PriceRuleContent> contents) {
+    private boolean checkRules(List<PriceRuleContentModel> contents) {
         //0-7:代表的是
         // 0：0-1，
         // 1：1-2，
@@ -253,7 +254,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         // 7：7-8
         boolean wrong = true;
         List<Integer> hours = new ArrayList<>();
-        for (PriceRuleContent content : contents) {
+        for (PriceRuleContentModel content : contents) {
             for (int index = content.getStart(); index <= content.getEnd(); index++) {
                 hours.add(index);
             }
@@ -330,7 +331,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         List<TbElectricPriceruleCompany> records = priceruleCompanyMapper.selectByExample(priceruleCompanyCriteria);
         priceruleCompanyMapper.updateByExampleSelective(record, priceruleCompanyCriteria);
 
-        if (records == null && records.size() == 0) {
+        if (records == null || records.size() == 0) {
             //todo 抛出更新失败的异常
         }
         //保存数据

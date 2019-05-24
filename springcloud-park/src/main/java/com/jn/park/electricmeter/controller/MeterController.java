@@ -2,6 +2,8 @@ package com.jn.park.electricmeter.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.park.electricmeter.model.MeterInfoModel;
+import com.jn.park.electricmeter.service.MeterCalcCostService;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.electricmeter.vo.PriceRuleVO;
@@ -36,6 +38,8 @@ public class MeterController extends BaseController {
     private MeterService meterService;
     @Autowired
     private MeterRulesService meterRulesService;
+    @Autowired
+    private MeterCalcCostService meterCalcCostService;
 
     private static Logger logger = LoggerFactory.getLogger(MeterTimerController.class);
 
@@ -87,15 +91,6 @@ public class MeterController extends BaseController {
         return result;
     }
 
-    /*
-    @ApiOperation(value = "手动定时入库",notes = "手动定时入库", httpMethod = "GET")
-    @GetMapping(value = "/getDataFromHardare")
-    @RequiresPermissions("/meter/getDataFromHardare")
-    public void getDataFromHardare(){
-        meterService.getDataFromHardare();
-    }
-     */
-
     @ControllerLog(doAction = "企业计价规则维护-企业设置计价规则")
     @ApiOperation(value = "企业设置计价规则",notes = "企业设置计价规则", httpMethod = "POST")
     @PostMapping(value = "/setRule")
@@ -129,24 +124,6 @@ public class MeterController extends BaseController {
         return result;
     }
 
-    /*
-    @ControllerLog(doAction = "企业计价规则维护-批量企业设置计价规则")
-    @ApiOperation(value = "批量企业设置计价规则",notes = "批量企业设置计价规则", httpMethod = "POST")
-    @PostMapping(value = "/setBatchRule")
-    @RequiresPermissions("/meter/setBatchRule")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "companyIds",allowMultiple=true ,value = "企业id集合",type = "String" ,example = "1",required = true),
-            @ApiImplicitParam(name = "ruleId",value = "计价规则id",type = "String" ,example = "1",required = true)
-    })
-    public Result setBatchRule(List<String> companyIds , String ruleId){
-        Result result = new Result();
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        List<String> errorCompany = meterRulesService.setBatchRule(user,companyIds,ruleId);
-        result.setData(errorCompany);
-        return result;
-    }
-    */
-
     @ControllerLog(doAction = "电表拉闸与恢复")
     @ApiOperation(value = "电表拉闸与恢复",notes = "电表拉闸与恢复", httpMethod = "GET")
     @GetMapping(value = "/setSwitchMeter")
@@ -171,5 +148,75 @@ public class MeterController extends BaseController {
     }
 
 
+    //定时计价部分接口
+
+    @ControllerLog(doAction = "电费账单催缴")
+    @ApiOperation(value = "电费账单催缴",notes = "电费账单催缴", httpMethod = "GET")
+    @GetMapping(value = "/setUrgeCall")
+    @RequiresPermissions("/meter/setUrgeCall")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id" ,value = "账单id",type = "String" ,example = "1",required = true)
+    })
+    public Result setUrgeCall(String id){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterCalcCostService.setUrgeCall(user,id);
+    }
+
+    @ControllerLog(doAction = "支付成功后的回调接口")
+    @ApiOperation(value = "支付成功后的回调接口",notes = "支付成功后的回调接口", httpMethod = "GET")
+    @GetMapping(value = "/updateBillInfo")
+    @RequiresPermissions("/meter/updateBillInfo")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id" ,value = "账单id",type = "String" ,example = "1",required = true)
+    })
+    public Result updateBillInfo(String id){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterCalcCostService.updateBillInfo(user,id);
+    }
+
+    @ControllerLog(doAction = "手动调用定时计价接口，进行指定企业的电费和电量计算")
+    @ApiOperation(value = "手动调用定时计价接口，进行指定企业的电费和电量计算",notes = "手动调用定时计价接口，进行指定企业的电费和电量计算", httpMethod = "GET")
+    @GetMapping(value = "/calcCostEverdayByHandler")
+    @RequiresPermissions("/meter/calcCostEverdayByHandler")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId" ,value = "企业id",type = "String" ,example = "1",required = true),
+            @ApiImplicitParam(name = "day" ,value = "计算日期",type = "Date" ,example = "1",required = true)
+    })
+    public Result calcCostEverdayByHandler(String companyId,Date day){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterCalcCostService.calcCostEverdayByHandler( user,  companyId,  day);
+    }
+
+    //电表业主维护
+
+    @ControllerLog(doAction = "电表业主维护")
+    @ApiOperation(value = "电表业主维护",notes = "电表业主维护", httpMethod = "POST")
+    @PostMapping(value = "/insertMeterInfo")
+    @RequiresPermissions("/meter/insertMeterInfo")
+    public Result insertMeterInfo(@RequestBody MeterInfoModel model){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterService.insertMeterInfo( user,model);
+    }
+
+    @ControllerLog(doAction = "电表信息作废")
+    @ApiOperation(value = "电表信息作废",notes = "电表信息作废", httpMethod = "GET")
+    @GetMapping(value = "/deleteMeterInfo")
+    @RequiresPermissions("/meter/deleteMeterInfo")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id" ,value = "记录id",type = "String" ,example = "1",required = true)
+    })
+    public Result deleteMeterInfo(String id){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterService.deleteMeterInfo( user, id);
+    }
+
+    @ControllerLog(doAction = "电表信息更新")
+    @ApiOperation(value = "电表信息作废",notes = "电表信息作废", httpMethod = "POST")
+    @PostMapping(value = "/updateMeterInfo")
+    @RequiresPermissions("/meter/updateMeterInfo")
+    public Result updateMeterInfo(@RequestBody MeterInfoModel model){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterService.updateMeterInfo( user,model);
+    }
 
 }

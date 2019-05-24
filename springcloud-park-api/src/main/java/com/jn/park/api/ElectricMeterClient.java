@@ -17,4 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface ElectricMeterClient {
     @RequestMapping(value = "/api/meter/getDataFromHardare", method = RequestMethod.GET)
     void getDataFromHardare();
+
+
+    @RequestMapping(value = "/api/meter/setRulesInDayForCompany", method = RequestMethod.GET)
+    void setRulesInDayForCompany();
+
+    @RequestMapping(value = "/api/meter/calcCostEverday", method = RequestMethod.GET)
+    void calcCostEverday();
+
+    @RequestMapping(value = "/api/meter/setHostForMeter", method = RequestMethod.GET)
+    void setHostForMeter();
 }

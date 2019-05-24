@@ -12,7 +12,7 @@
               <i class="el-icon-bell" style="font-size:20px"></i>
             </router-link> -->
             <!-- <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span> -->
-            <div class="search pointer">
+            <div class="search pointer" v-if="luyouString.indexOf($route.name) == -1">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
             </div>
             <user-info></user-info>
@@ -84,6 +84,7 @@
     },
     data() {
       return {
+        luyouString:'portalIndex,enterpriseservice,investment',
         showMes:false,
         // sousuo: false,
         show1: false,
@@ -104,7 +105,7 @@
     },
     computed: {
       isCenter() {
-        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService';
+        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails';
         return this.$route.matched.some(item => {
           if(item.name){
             return list.indexOf(item.name) == -1
@@ -153,16 +154,16 @@
         this.show1 = false;
         // },500)
       },
-      // handleChangeName(val) {
-      //   console.log(val);
-      //   if(val=='two'){
-      //     this.sw='tw'
-      //   } else if(val=='three'){
-      //     this.sw='th'
-      //   } else{
-      //     this.sw='fir'
-      //   }
-      // },
+      handleChangeName(val) {
+        console.log(val);
+        if(val=='two'){
+          this.sw='tw'
+        } else if(val=='three'){
+          this.sw='th'
+        } else{
+          this.sw='fir'
+        }
+      },
       swiperinit() {
         var mySwiper = new swiper(".swiper-container", {
           direction: "horizontal", // 垂直切换选项
@@ -286,49 +287,6 @@
     display: inline-block;
   }
   .portalIndex {
-
-    .portalCon{
-      .portalNotice,
-      .policyGuide,
-      .popularActi,
-      .districtGardens,
-      .enterpriseinfo,
-      .enterprisesPark {
-        opacity: 0;
-      }
-    }
-    .enterPark {
-      li {
-        opacity: 0;
-      }
-    }
-    .bottom {
-      animation: fadeInUp 2s ease forwards;
-    }
-    .bottom1 {
-      animation: fadeInUp 2s ease 0.5s forwards;
-    }
-    .bottom2 {
-      animation: fadeInUp 2s ease 1s forwards;
-    }
-    .bottom3 {
-      animation: fadeInUp 1s ease 1.5s forwards;
-    }
-    .bottom4 {
-      animation: fadeInUp 1s ease 2s forwards;
-    }
-    .bottom5 {
-      animation: fadeInUp 1s ease 2.5s forwards;
-    }
-    .bottom6 {
-      animation: fadeInUp 1s ease 3s forwards;
-    }
-    .bottom7 {
-      animation: fadeInUp 1s ease 3.5s forwards;
-    }
-    .bottom8 {
-      animation: fadeInUp 1s ease 4s forwards;
-    }
     .portalIndexImg {
       position: fixed;
       z-index: 99;

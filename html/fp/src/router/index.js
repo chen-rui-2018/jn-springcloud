@@ -716,6 +716,22 @@ export default new Router({
           },
           name: 'enterpriseInfoDetails'
         },
+        {
+          path: '/companyProfile',
+          component: resolve => require(['@/views/companyProfile'], resolve),
+          meta: {
+            title: '企业简介'
+          },
+          name: 'companyProfile'
+        },
+        {
+          path: '/profileDetails',
+          component: resolve => require(['@/views/companyProfile/profileDetails'], resolve),
+          meta: {
+            title: '企业简介详情'
+          },
+          name: 'profileDetails'
+        },
       ]
     },
     {

@@ -46,7 +46,7 @@
                 <div class="con1 clearfix">
                     <div class="con1Tit fl mainColor">全部</div>
                     <div class="filRight fr">
-                        <input type="text" placeholder="搜学术" v-model="searchTitle">
+                        <input type="text" placeholder="搜学术" v-model="title">
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
                 </div>
@@ -59,15 +59,15 @@
                                     <span>阅读次数：
                                         <i class="mainColor">{{i.viewCount}}</i>次</span>
                                     <span>发布日期：{{i.createdTime}}</span>
-                                    <span style="margin-left:50px;">状态:</span>
+                                    <!-- <span style="margin-left:50px;">状态:</span> -->
                                 </p>
                                 <p class="p2">
-                                    成果类型：
+                                    成果类型：<span v-if="i.type=='technology'">科技</span><span v-if="i.type=='science'">学术</span>
                                 </p>
                                 <p class="color22">{{i.details}}</p>
                                 <!-- <div class="firInfo">{{i.briefContent}}</div> -->
                             </div>
-                            <div class="fir2 fr mainColor"  @click="$router.push({path:'/technologyDetails',query:{achievementId:i.achievementId}})">详情</div>
+                            <div class="fir2 fr mainColor"  @click="$router.push({path:'/technologyDetails',query:{achievementId:i.id}})">详情</div>
                         </li>
                     </ul>
                 </div>
@@ -89,7 +89,7 @@ export default {
       flag1: "",
       type:'',
       achievementList:[],
-      searchTitle:'',
+      title:''
     };
   },
   mounted() {
@@ -124,11 +124,13 @@ export default {
         data: {
             page:_this.page,
             rows:_this.rows,
-            type:_this.type
+            type:_this.type,
+            title:_this.title,
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.achievementList = res.data;
+            _this.achievementList = res.data.rows;
+            _this.total=res.data.total
           } else {
             _this.$message.error(res.result);
           }
@@ -187,7 +189,6 @@ export default {
 
     .nav1 {
       padding: 15px 0;
-      border-bottom: 1px solid #eee;
       color: #666;
 
       > img {
@@ -304,6 +305,9 @@ export default {
           width: 90%;
           .color22{
               color:#666;
+              overflow:hidden;     
+              white-space:nowrap;  
+              text-overflow:ellipsis;
           }
         }
         .fir2 {

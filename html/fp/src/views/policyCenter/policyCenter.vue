@@ -130,7 +130,7 @@
           <el-tab-pane label="政策一览" name="first">
             <ul class="fir">
               <li class="clearfix" v-for="(i,k) in policyCenterList" :key="k">
-                <div class="fir1 fl" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
+                <div class="fir1 fl pointer" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
                   <h3 class="color4">{{i.policyTitle}}</h3>
                   <p class="p1">
                     <span>阅读次数：

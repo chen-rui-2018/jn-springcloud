@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.assessment.dao.AssessmentSubsidiaryMapper">
+
+    <select id="map" parameterType="com.jn.hr.assessment.entity.TbManpowerAssessmentSubsidiary"
+		resultType="com.jn.hr.assessment.model.AssessmentSubsidiaryVo">
+		SELECT * FROM tb_manpower_assessment_subsidiary
+	</select>
+	
+	<select id="selectNumber" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT count(*) FROM tb_manpower_assessment_subsidiary t1
+		where t1.assessment_status != 3
+	</select>
+	
+	<select id="list" parameterType="java.lang.String"
+		resultType="com.jn.hr.assessment.model.AssessmentSubsidiaryVo">
+		SELECT * FROM tb_manpower_assessment_subsidiary t1
+		where t1.assessment_name = #{assessmentName,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectByAssessmentId" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT count(1) FROM tb_manpower_assessment_subsidiary t1
+		where t1.assessment_status != 3
+		and t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="deleteByJobNumber" parameterType="java.lang.String">
+    delete from tb_manpower_assessment_subsidiary
+    where assessment_job_number = #{assessmentJobNumber,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_assessment_subsidiary
+        ( id,assessment_id,template_id, assessment_department, assessment_name, name,
+      assessment_status, assessment_job_number
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},#{item.assessmentId}, #{item.templateId}, #{item.assessmentDepartment}, #{item.assessmentName}, #{item.name},
+      #{item.assessmentStatus}, #{item.assessmentJobNumber}
+            )
+        </foreach>
+    </insert>
+    
+    <update id="updateByAssessmentStatus" parameterType="map">
+    update tb_manpower_assessment_subsidiary t1
+    <set>
+        t1.assessment_status = 3
+    </set>
+    where 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentJobNumber)">
+			and t1.assessment_job_number = #{assessmentJobNumber,jdbcType=VARCHAR}
+		</if>
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentId)">
+			and t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
+		</if>
+  </update>
+  
+   <update id="updateByStatus" parameterType="map">
+    update tb_manpower_assessment_subsidiary t1
+    <set>
+        t1.assessment_status = 2
+    </set>
+    where t1.assessment_job_number = #{assessmentJobNumber,jdbcType=VARCHAR}
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentId)">
+			and t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
+		</if>
+  </update>
+
+</mapper>

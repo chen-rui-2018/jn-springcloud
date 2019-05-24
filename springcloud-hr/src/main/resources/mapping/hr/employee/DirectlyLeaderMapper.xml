@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.employee.dao.DirectlyLeaderMapper">
+
+
+
+    <select id="selectByJobNumber" parameterType="map" resultType="com.jn.hr.employee.model.DirectlyLeader">
+        select id, job_number, direct_leader_level, direct_leadership, direct_leader_name, direct_leader_level_name,
+    direct_leadership_name from tb_manpower_directly_leader
+         where job_number=#{jobNumber}
+    </select>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_directly_leader
+        (
+        id, job_number, direct_leader_level,
+        direct_leadership, direct_leader_name, direct_leader_level_name,
+        direct_leadership_name
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.jobNumber},
+            #{item.directLeaderLevel},
+            #{item.directLeadership},
+            #{item.directLeaderName},
+            #{item.directLeaderLevelName},
+            #{item.directLeadershipName}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

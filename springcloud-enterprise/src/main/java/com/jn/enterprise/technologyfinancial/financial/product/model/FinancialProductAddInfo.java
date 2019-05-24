@@ -18,6 +18,8 @@ import java.io.Serializable;
 public class FinancialProductAddInfo implements Serializable {
     @ApiModelProperty(value = "产品id,不要传值")
     private String productId;
+    @ApiModelProperty(value = "浏览数", hidden = true)
+    private String viewCount;
     @ApiModelProperty(value = "产品类型,(0:常规-1:特色)",example = "0",required = true)
     @NotBlank(message = "产品类型不能为空")
     @Pattern(regexp = "^[0-1]$",message = "产品类型,只能为0或1")
@@ -104,6 +106,34 @@ public class FinancialProductAddInfo implements Serializable {
     private String applicableCust;
     @ApiModelProperty(value = "模板id,机构上架产品时使用,不用传值")
     private String templateId;
+    @ApiModelProperty(value = "创建时间", hidden = true)
+    private String createdTime;
+    @ApiModelProperty(value = "创建者账号", hidden = true)
+    private String creatorAccount;
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
+
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
 
     public String getProductType() {
         return productType;

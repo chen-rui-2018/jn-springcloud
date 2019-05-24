@@ -4,12 +4,12 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
-import com.jn.enterprise.company.entity.TbServiceCompanyModify;
+import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
 import com.jn.park.activity.model.CommentAddParam;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.jn.park.care.model.ServiceEnterpriseCompany;
 
 import java.util.List;
 
@@ -28,6 +28,13 @@ public interface CompanyService {
      * @return
      */
     PaginationData<List<ServiceCompany>> getCompanyList(ServiceCompanyParam serviceCompanyParam);
+
+    /**
+     * 查询企业列表New
+     * @param serviceEnterpriseParam
+     * @return
+     */
+    PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam);
 
 
     /**

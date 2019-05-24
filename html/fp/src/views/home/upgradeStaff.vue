@@ -33,8 +33,8 @@
             <div class="tipPsw">请输入收到短信中的验证码</div>
           </el-form-item>
         </el-form>
-        <div class="business_footer">
-          <span @click="submit('ruleForm')">提交公司负责人审核申请</span>
+        <div class="businessFooter">
+          <span @click="submit('ruleForm')">提交审核</span>
         </div>
       </div>
     </div>
@@ -44,20 +44,20 @@
 export default {
   data() {
     var checkPhoneNumber = (rule, value, callback) => {
-      const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/
+      const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
       if (!reg.test(value)) {
-        callback(new Error('请输入正确的手机号码'))
+        callback(new Error("请输入正确的手机号码"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       loading: false,
       sendAuthCode: true,
       auth_time: 0,
       checkCode: "",
-      comId:'',
-      comName:'',
+      comId: "",
+      comName: "",
       companyList: "",
       sendData: {
         keyWords: "",
@@ -75,9 +75,7 @@ export default {
         joinCom: ""
       },
       rules: {
-        name: [
-          { required: true, message: "请输入名号", trigger: "blur" },
-        ],
+        name: [{ required: true, message: "请输入名号", trigger: "blur" }],
         age: [{ required: true, message: "请选择出生年月", trigger: "change" }],
         date1: [
           {
@@ -87,8 +85,10 @@ export default {
             trigger: "change"
           }
         ],
-        phone: [{ required: true, message: "请输入手机号码", trigger: "blur" },
-        { validator: checkPhoneNumber, trigger: 'blur' }],
+        phone: [
+          { required: true, message: "请输入手机号码", trigger: "blur" },
+          { validator: checkPhoneNumber, trigger: "blur" }
+        ],
         realname: [
           { required: true, message: "请输入真实姓名", trigger: "blur" }
         ],
@@ -105,8 +105,8 @@ export default {
   methods: {
     change(v) {
       console.log(v);
-      this.comName=v.comName
-      this.comId=v.id
+      this.comName = v.comName;
+      this.comId = v.id;
     },
     submit(formName) {
       // let phone = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
@@ -128,17 +128,17 @@ export default {
             data: {
               checkCode: _this.checkCode,
               comName: _this.comName,
-              comId: _this.comId,
+              comId: _this.comId
             },
             callback: function(res) {
               if (res.code == "0000") {
-                _this.$message.success('申请成功')
-                _this.ruleForm.name='',
-                _this.ruleForm.phone='',
-                _this.ruleForm.date1='',
-                _this.ruleForm.realname='',
-                _this.ruleForm.joinCom='',
-                console.log(res)
+                _this.$message.success("申请成功");
+                (_this.ruleForm.name = ""),
+                  (_this.ruleForm.phone = ""),
+                  (_this.ruleForm.date1 = ""),
+                  (_this.ruleForm.realname = ""),
+                  (_this.ruleForm.joinCom = ""),
+                  console.log(res);
               }
             }
           });
@@ -268,19 +268,19 @@ export default {
       font-size: 14px;
       line-height: 5px;
     }
-    .business_footer {
-      padding: 80px 0 100px 0;
-      width: 200px;
-      margin: 0 auto;
+    .businessFooter {
+      margin-top: 58px;
+      text-align: center;
+      margin-bottom: 17px;
       > span {
         display: inline-block;
-        color: #00a041;
+        color: rgba(0, 160, 65, 1);
         font-size: 12px;
         padding: 0 20px;
-        height: 30px;
-        line-height: 30px;
-        background: #ecfcf2;
-        border: 1px solid #41d787;
+        height: 29px;
+        line-height: 29px;
+        background: rgba(236, 252, 242, 1);
+        border: 1px solid rgba(65, 215, 135, 1);
         border-radius: 4px;
         cursor: pointer;
       }

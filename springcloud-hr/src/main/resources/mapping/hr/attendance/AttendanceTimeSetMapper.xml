@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.attendance.dao.AttendanceTimeSetMapper">
+   <insert id="insertBatch" parameterType="com.jn.hr.attendance.model.AttendanceTimeSetAdd">
+        insert into tb_manpower_attendance_time_set
+        ( id, shift, attendance_type, 
+      work_attendance_time, duty_attendance_time, 
+      remark, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+        ) values
+            (
+            #{id,jdbcType=VARCHAR}, #{shift,jdbcType=VARCHAR}, #{attendanceType,jdbcType=VARCHAR}, 
+      #{workAttendanceTime,jdbcType=VARCHAR}, #{dutyAttendanceTime,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+            )
+    </insert>
+    
+    <select id="list" parameterType="com.jn.hr.attendance.model.AttendanceTimeSetPage"
+		resultType="com.jn.hr.attendance.model.AttendanceTimeSetVo">
+		SELECT * FROM tb_manpower_attendance_time_set where record_status != 0
+	</select>
+	
+	<select id="selectByAttendanceType" parameterType="com.jn.hr.attendance.model.AttendanceTimeSetPage"
+		resultType="com.jn.hr.attendance.model.AttendanceTimeSetVo">
+		SELECT * FROM tb_manpower_attendance_time_set 
+		where shift = 1 and record_status != 0
+	</select>
+	
+	<update id="updateByStatus" parameterType="com.jn.hr.attendance.model.AttendanceTimeSetAdd">
+    update tb_manpower_attendance_time_set
+    <set>
+        record_status = 0
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+    
+</mapper>

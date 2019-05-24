@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.Assert;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -381,10 +382,10 @@ public class SysRoleServiceImpl implements SysRoleService {
     @ServiceLog(doAction = "查询角色已经具有的用户信息,且条件分页获取为角色未拥有的用户信息")
     public PaginationData<SysRoleUserVO> findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage) {
         //根据角色id获取角色已经拥有的用户信息
-        List<SysTUser> userOfRoleList = sysUserRoleMapper.findUserByRoleId(sysRoleUserPage.getRoleId());
+        List<User> userOfRoleList = sysUserRoleMapper.findUserByRoleId(sysRoleUserPage.getRoleId());
         //条件分页获取角色未拥有用户信息
         Page<Object> objects = PageHelper.startPage(sysRoleUserPage.getPage(), sysRoleUserPage.getRows());
-        List<SysTUser> otherUserList = sysUserRoleMapper.findOtherUser(sysRoleUserPage);
+        List<User> otherUserList = sysUserRoleMapper.findOtherUser(sysRoleUserPage);
         //方便前端解析,将已拥有数据添加到为拥有数据中
         otherUserList.addAll(userOfRoleList);
         SysRoleUserVO sysRoleUserVO = new SysRoleUserVO(userOfRoleList, otherUserList);
@@ -440,18 +441,46 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据角色名称,获取角色信息")
     public SysRole getRoleByName(String roleName) {
         TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
         TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
         criteria.andRecordStatusEqualTo(new Byte(SysStatusEnums.EFFECTIVE.getCode()));
         criteria.andRoleNameEqualTo(roleName);
         List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
-        if (tbSysRoles != null && tbSysRoles.size() > 0){
+        if (tbSysRoles != null && tbSysRoles.size() > 0) {
             SysRole sysRole = new SysRole();
-            BeanUtils.copyProperties(tbSysRoles.get(0),sysRole);
+            BeanUtils.copyProperties(tbSysRoles.get(0), sysRole);
             return sysRole;
         }
         return null;
+    }
+
+    /**
+     * 根据角色id或角色名称获取角色拥有的用户信息
+     *
+     * @param role
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "根据角色id或角色名称获取角色拥有的用户信息")
+    public List<User> getUserByRole(SysRole role) {
+        String roleId = role.getId();
+        String roleName = role.getRoleName();
+        //如果角色id为空,角色名称不为空,根据角色名称查询角色信息
+        if (StringUtils.isBlank(roleId) && StringUtils.isNotBlank(roleName)) {
+            SysRole sysRole = getRoleByName(roleName);
+            if (sysRole == null || SysStatusEnums.DELETED.getCode().equals(sysRole.getRecordStatus().toString())) {
+                logger.warn("[角色] 角色信息不存在,roleId: {}", roleId);
+                throw new JnSpringCloudException(SysExceptionEnums.ROLE_NOT_EXIST);
+            }
+            roleId = sysRole.getId();
+        }
+        Assert.notNull(roleId, SysPermissionExceptionEnums.ROLE_ID_NOT_NULL.getMessage());
+
+        //根据角色id,获取角色具有的用户信息
+        List<User> userList = sysUserRoleMapper.findUserByRoleId(roleId);
+        return userList;
     }
 
 }

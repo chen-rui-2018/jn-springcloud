@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class IBPSResult implements Serializable {
 
     // 流程实例ID
-    private String data;
+    private Object data;
 
     // 报错信息
     private String cause;
@@ -23,11 +23,11 @@ public class IBPSResult implements Serializable {
     // 请求返回信息
     private String message;
 
-    public String getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(Object data) {
         this.data = data;
     }
 

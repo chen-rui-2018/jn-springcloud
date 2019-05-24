@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.pay.model.*;
 import com.jn.pay.vo.PayBillCreateParamVo;
+import com.jn.pay.vo.PayBillDetailsVo;
 import com.jn.pay.vo.PayBillVo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -36,13 +37,12 @@ public interface PayClient {
 
     @ApiOperation(value = "我的账单-通过账单ID查询账单【详情】信息",notes = "我的账单-通过账单ID查询账单【详情】信息")
     @RequestMapping(value = "/api/payment/payBill/getBillInfo",method = RequestMethod.GET)
-    Result<PaginationData<List<PayBillDetails>>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId);
+    Result<PaginationData<List<PayBillDetailsVo>>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId);
 
 
     @ApiOperation(value = "我的账单-账单催缴次数更新",notes = "我的账单-账单催缴次数更新")
     @RequestMapping(value = "/api/payment/payBill/updateBillNumber",method = RequestMethod.POST)
-    Result updateBillNumber(@ApiParam(name = "billId", value = "账单ID或编号", required = true) @RequestParam(value = "billId") String billId,
-                            @ApiParam(name = "reminderNumber", value = "催缴次数", required = true) @RequestParam(value = "reminderNumber") int reminderNumber);
+    Result updateBillNumber(@RequestBody @Validated PayCheckReminderParam payCheckReminderParam);
 
 
     @ApiOperation(value = "我的账单-核查提醒录入",notes = "我的账单-核查提醒录入")
@@ -53,12 +53,12 @@ public interface PayClient {
     @RequestMapping(value = "/api/payment/payBill/billCreate",method = RequestMethod.POST)
     Result billCreate(@RequestBody @Validated PayBillCreateParamVo payBillCreateParamVo);
 
-    @ApiOperation(value = "统一缴费-发起支付")
-    @RequestMapping(value = "/api/payment/payBill/startPayment",method = RequestMethod.POST)
-    Result startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam);
+    @ApiOperation(value = "创建订单并发起支付")
+    @RequestMapping(value = "/api/payment/payBill/createOrderAndPay",method = RequestMethod.POST)
+    Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel);
 
 
-    @ApiOperation(value = "统一缴费-支付回调接口", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/api/payment/payBill/payCallBack")
-    void ayCallBack(HttpServletResponse response, @RequestBody PayOrderNotify callBackParam);
+    @ApiOperation(value = "统一缴费-支付回调接口")
+    @RequestMapping(value = "/api/payment/payBill/payCallBack", method = RequestMethod.POST)
+    Result payCallBack(@RequestBody PayOrderNotify callBackParam);
 }

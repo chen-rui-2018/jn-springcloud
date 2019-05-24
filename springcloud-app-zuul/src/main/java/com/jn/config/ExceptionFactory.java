@@ -43,7 +43,7 @@ public class ExceptionFactory {
             return ZuulExceptionEnum.COMMON_EXCEPTION;
         }
         // TODO: 2018/11/26 炮哥，这个是Zuul对异常处理的封装，我只对read time out 进行了封装，后面如果业务需要其他异常的封装，你来补充一下。
-        logger.error("Zuul 发生了异常：", e) ;
+        logger.error("Zuul 发生了异常：{}",e.getMessage(), e) ;
         return ZuulExceptionEnum.COMMON_EXCEPTION;
     }
 }

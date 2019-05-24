@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.xxpay.common.constant.AlipayConstant;
 import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.constant.PayEnum;
 import org.xxpay.common.domain.BaseParam;
@@ -71,7 +72,9 @@ public class PayChannel4AlipayController {
         String channelId = payOrder.getChannelId();
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
         String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-        if("".equals(resKey)) return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        if("".equals(resKey)) {
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        }
         PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
         alipayConfig.init(payChannel.getParam());
         AlipayClient client = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getApp_id(), alipayConfig.getRsa_private_key(), AlipayConfig.FORMAT, AlipayConfig.CHARSET, alipayConfig.getAlipay_public_key(), AlipayConfig.SIGNTYPE);
@@ -83,7 +86,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("QUICK_WAP_PAY");
-        model.setTimeoutExpress(PayConstant.ALIPAY_ORDER_MAX_VALID_TIME);
+        model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         // 获取objParams参数
         String objParams = payOrder.getExtra();
         if (StringUtils.isNotEmpty(objParams)) {
@@ -111,9 +114,18 @@ public class PayChannel4AlipayController {
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,req={}", logPrefix, alipay_request.getBizModel());
         _log.info("###### 商户统一下单处理完成 ######");
+
+        //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
+        //支付系统订单ID
         map.put("payOrderId", payOrderId);
-        map.put("payUrl", payUrl);
+        //渠道ID
+        map.put("channelId",payOrder.getChannelId());
+        //封装orderInfo(发起支付需要的参数JSON格式)
+        JSONObject orderInfo = new JSONObject();
+        orderInfo.put("payUrl",payUrl);
+        map.put("orderInfo",orderInfo.toJSONString());
+
         return XXPayUtil.makeRetData(map, resKey);
     }
 
@@ -133,7 +145,9 @@ public class PayChannel4AlipayController {
         String channelId = payOrder.getChannelId();
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
         String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-        if("".equals(resKey)) return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        if("".equals(resKey)) {
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        }
         PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
         alipayConfig.init(payChannel.getParam());
         AlipayClient client = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getApp_id(), alipayConfig.getRsa_private_key(), AlipayConfig.FORMAT, AlipayConfig.CHARSET, alipayConfig.getAlipay_public_key(), AlipayConfig.SIGNTYPE);
@@ -145,7 +159,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("FAST_INSTANT_TRADE_PAY");
-        model.setTimeoutExpress(PayConstant.ALIPAY_ORDER_MAX_VALID_TIME);
+        model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         // 获取objParams参数
         String objParams = payOrder.getExtra();
         String qr_pay_mode = "2";
@@ -176,9 +190,18 @@ public class PayChannel4AlipayController {
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,req={}", logPrefix, alipay_request.getBizModel());
         _log.info("###### 商户统一下单处理完成 ######");
+
+        //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
+        //支付系统订单ID
         map.put("payOrderId", payOrderId);
-        map.put("payUrl", payUrl);
+        //渠道ID
+        map.put("channelId",payOrder.getChannelId());
+        //封装orderInfo(发起支付需要的参数JSON格式)
+        JSONObject orderInfo = new JSONObject();
+        orderInfo.put("payUrl",payUrl);
+        map.put("orderInfo",orderInfo.toJSONString());
+
         return XXPayUtil.makeRetData(map, resKey);
     }
 
@@ -198,7 +221,9 @@ public class PayChannel4AlipayController {
         String channelId = payOrder.getChannelId();
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
         String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-        if("".equals(resKey)) return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        if("".equals(resKey)) {
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        }
         PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
         alipayConfig.init(payChannel.getParam());
         AlipayClient client = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getApp_id(), alipayConfig.getRsa_private_key(), AlipayConfig.FORMAT, AlipayConfig.CHARSET, alipayConfig.getAlipay_public_key(), AlipayConfig.SIGNTYPE);
@@ -210,7 +235,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("QUICK_MSECURITY_PAY");
-        model.setTimeoutExpress(PayConstant.ALIPAY_ORDER_MAX_VALID_TIME);
+        model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         alipay_request.setBizModel(model);
         // 设置异步通知地址
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
@@ -225,10 +250,21 @@ public class PayChannel4AlipayController {
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,payParams={}", logPrefix, payParams);
         _log.info("###### 商户统一下单处理完成 ######");
+
+        //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
+        //支付系统订单ID
         map.put("payOrderId", payOrderId);
-        map.put("payParams", payParams);
+        //渠道ID
+        map.put("channelId",payOrder.getChannelId());
+        //封装orderInfo(发起支付需要的参数JSON格式)
+        JSONObject orderInfo = new JSONObject();
+        orderInfo.put("payParams",payParams);
+        map.put("orderInfo",orderInfo.toJSONString());
+
         return XXPayUtil.makeRetData(map, resKey);
+
+
     }
 
     /**
@@ -247,7 +283,9 @@ public class PayChannel4AlipayController {
         String channelId = payOrder.getChannelId();
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
         String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-        if("".equals(resKey)) return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        if("".equals(resKey)) {
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        }
         PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
         alipayConfig.init(payChannel.getParam());
         AlipayClient client = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getApp_id(), alipayConfig.getRsa_private_key(), AlipayConfig.FORMAT, AlipayConfig.CHARSET, alipayConfig.getAlipay_public_key(), AlipayConfig.SIGNTYPE);
@@ -258,7 +296,7 @@ public class PayChannel4AlipayController {
         model.setSubject(payOrder.getSubject());
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
-        model.setTimeoutExpress(PayConstant.ALIPAY_ORDER_MAX_VALID_TIME);
+        model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         // 获取objParams参数
         String objParams = payOrder.getExtra();
         if (StringUtils.isNotEmpty(objParams)) {
@@ -291,10 +329,20 @@ public class PayChannel4AlipayController {
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,req={}", logPrefix, alipay_request.getBizModel());
         _log.info("###### 商户统一下单处理完成 ######");
+
+        //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
+        //支付系统订单ID
         map.put("payOrderId", payOrderId);
-        map.put("payUrl", payUrl);
+        //渠道ID
+        map.put("channelId",payOrder.getChannelId());
+        //封装orderInfo(发起支付需要的参数JSON格式)
+        JSONObject orderInfo = new JSONObject();
+        orderInfo.put("payUrl",payUrl);
+        map.put("orderInfo",orderInfo.toJSONString());
+
         return XXPayUtil.makeRetData(map, resKey);
+
     }
 
 
@@ -355,5 +403,24 @@ public class PayChannel4AlipayController {
             _log.error(e, "");
         }
         return RpcUtil.createBizResult(baseParam, map);
+    }
+
+
+
+    /**
+     * 构建订单允许的最晚付款时间，逾期将关闭交易。
+     * 取值范围：m-分钟 （支付宝还支持其他单位 ，请查看官方文档，这里只取分钟做单位）
+     * 为空则默认为120分钟
+     * @param duration 订单有效时长(单位分钟)
+     * */
+    private String createTimeoutExpress(Integer duration){
+        //有效时长
+        String  timeoutExpress ;
+        if(null != duration){
+            timeoutExpress = duration + AlipayConstant.ALIPAY_TIME_UNIT_MINUTE;
+        }else{
+            timeoutExpress = PayConstant.PAY_ORDER_MAX_DURATION + AlipayConstant.ALIPAY_TIME_UNIT_MINUTE;
+        }
+        return  timeoutExpress;
     }
 }

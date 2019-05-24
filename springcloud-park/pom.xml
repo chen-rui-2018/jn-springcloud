@@ -54,6 +54,7 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-hardware-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.jn</groupId>
             <artifactId>xxpay-web-api</artifactId>
@@ -88,10 +89,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        asset
+                        parking
                     </contexts>
                     <tableNames>
-                        tb_room_orders
+                        tb_parking_preferential
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.employee.dao.WorkExperienceMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_work_experience
+        (
+        id, job_number, corporate_name, assume_office, entry_date, leave_date, job_description,
+        work_type
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.jobNumber},
+            #{item.corporateName},
+            #{item.assumeOffice},
+            #{item.entryDate},
+            #{item.leaveDate},
+            #{item.jobDescription},
+            #{item.workType}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteByJobNumber" parameterType="map">
+        delete from tb_manpower_work_experience where job_number=#{jobNumber}
+    </delete>
+
+    <select id="selectByJobNumber" parameterType="map" resultType="com.jn.hr.employee.model.WorkExperience">
+        select id, job_number, corporate_name, assume_office, entry_date, leave_date, job_description,
+        work_type from
+        tb_manpower_work_experience where job_number=#{jobNumber} order by entry_date asc
+    </select>
+
+</mapper>

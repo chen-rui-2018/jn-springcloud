@@ -90,7 +90,7 @@
         <div style="display:flex">
           <el-form-item label="所属园区:" lass="inline" prop="affiliatedPark">
             <el-select v-model="businessForm.affiliatedPark" placeholder="请选择所属园区">
-              <el-option v-for="item in comSourceOptions" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in parkList" :key="item.id" :label="item.parkName" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -146,8 +146,8 @@
           <!-- <div class="tipPsw">请输入收到短信中的验证码</div> -->
         </el-form-item>
       </el-form>
-      <div class="business_footer">
-        <span @click="submitCompany('businessForm')">提交公司负责人审核申请</span>
+      <div class="businessFooter">
+        <span @click="submitCompany('businessForm')">提交审核</span>
       </div>
     </div>
 
@@ -185,6 +185,7 @@ export default {
           label: "招商企业"
         }
       ],
+      parkList:[],
       imgParamsDialogVisible: false,
       imgParamsUrl: "",
       businessLicenseDialogVisible: false,
@@ -297,6 +298,7 @@ export default {
   mounted() {
     this.selectIndustryList();
     this.getComPropertyOptions();
+    this.getParkList()
   },
   methods: {
     submitCompany(formName) {
@@ -340,8 +342,23 @@ export default {
         }
       });
     },
+    //所属园区
+    getParkList() {
+      let _this = this;
+      this.api.get({
+        url: "getParkList",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+           _this.parkList=res.data
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
     //获取验证码
-      getCode() {
+    getCode() {
       let _this = this;
       this.api.get({
         url: "getCode",
@@ -626,39 +643,21 @@ export default {
       }
     }
   }
-  .business_footer {
-    margin: 0 auto;
+  .businessFooter {
     margin-top: 58px;
-    // border-radius: 4px;
     text-align: center;
-    // cursor: pointer;
-    height: 29px;
-    line-height: 29px;
-    // width: 90px;
-    // color: #41d787;
-    // background: rgba(236, 252, 242, 1);
-    // border: 1px solid rgba(65, 215, 135, 1);
     margin-bottom: 17px;
-    > span:nth-child(1) {
+    > span { 
       display: inline-block;
       color: rgba(0, 160, 65, 1);
       font-size: 12px;
-      //   width: 90px;
       padding: 0 20px;
       height: 29px;
+      line-height: 29px;
       background: rgba(236, 252, 242, 1);
       border: 1px solid rgba(65, 215, 135, 1);
       border-radius: 4px;
-      margin-right: 85px;
-    }
-    > span:nth-child(2) {
-      display: inline-block;
-      width: 90px;
-      color: rgba(255, 255, 255, 1);
-      font-size: 12px;
-      height: 29px;
-      background: rgba(0, 160, 65, 1);
-      border-radius: 4px;
+      cursor: pointer;
     }
   }
 }

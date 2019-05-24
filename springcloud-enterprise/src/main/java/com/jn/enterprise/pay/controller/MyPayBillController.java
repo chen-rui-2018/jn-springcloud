@@ -6,9 +6,11 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.pay.entity.TbPayBillDetails;
 import com.jn.enterprise.pay.service.MyPayBillService;
+import com.jn.pay.vo.PayBillDetailsVo;
 import com.jn.pay.vo.PayBillVo;
 import com.jn.pay.model.*;
 import com.jn.pay.vo.PayBillCreateParamVo;
+import com.jn.pay.vo.PayRecordVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -55,13 +57,24 @@ public class MyPayBillController extends BaseController {
         return new Result<>(data);
     }
 
+    @ControllerLog(doAction = "我的账单-查询缴费记录信息")
+    @ApiOperation(value = "我的账单-查询缴费记录信息",notes = "我的账单-查询缴费记录信息")
+    @RequestMapping(value = "/billPaymentRecord",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payBill/billPaymentRecord")
+    public Result<PaginationData<List<PayRecordVo>>> billPaymentRecord(@RequestBody @Validated PayRecordParam payRecordParam){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData<List<PayRecordVo>> data = myPayBillService.billPaymentRecord(payRecordParam,user);
+        return new Result<>(data);
+    }
+
     @ControllerLog(doAction = "我的账单-通过账单ID查询账单详情信息")
     @ApiOperation(value = "我的账单-通过账单ID查询账单详情信息",notes = "我的账单-通过账单ID查询账单详情信息")
     @RequestMapping(value = "/getBillInfo",method = RequestMethod.GET)
     @RequiresPermissions("/payment/payBill/getBillInfo")
-    public Result<PaginationData<List<PayBillDetails>>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId){
+    public Result<PaginationData<List<PayBillDetailsVo>>> getBillInfo(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId){
         Assert.notNull(billId,"账单ID或编号不能为空");
-        PaginationData<List<PayBillDetails>> data = myPayBillService.getBillInfo(billId);
+        PaginationData<List<PayBillDetailsVo>> data = myPayBillService.getBillInfo(billId);
         return new Result<>(data);
     }
 
@@ -73,46 +86,11 @@ public class MyPayBillController extends BaseController {
     public Result billCheckReminder(@RequestBody @Validated PayCheckReminder payCheckReminder){
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payCheckReminder.getBillIds(),"账单ID或编号不能为空");
         myPayBillService.billCheckReminder(payCheckReminder,user);
         return new Result();
     }
 
-    @ControllerLog(doAction = "我的账单-账单催缴次数更新")
-    @ApiOperation(value = "我的账单-账单催缴次数更新",notes = "我的账单-账单催缴次数更新")
-    @RequestMapping(value = "/updateBillNumber",method = RequestMethod.POST)
-    @RequiresPermissions("/payment/payBill/updateBillNumber")
-    public Result updateBillNumber(@ApiParam(name="billId",value = "账单ID或编号",required = true,example = "2019050600025") @RequestParam(value = "billId") String billId,
-                                   @ApiParam(name="reminderNumber",value = "催缴次数",required = true,example = "2") @RequestParam(value = "reminderNumber") int reminderNumber){
-        myPayBillService.updateBillNumber(billId,reminderNumber);
-        return new Result();
-    }
-
-
-    @ControllerLog(doAction = "我的账单-创建账单")
-    @ApiOperation(value = "我的账单-创建账单",notes = "我的账单-创建账单")
-    @RequestMapping(value = "/billCreate",method = RequestMethod.POST)
-    @RequiresPermissions("/payment/payBill/billCreate")
-    public Result billCreate(@RequestBody @Validated PayBillCreateParamVo payBillCreateParamVo){
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(payBillCreateParamVo.getAcBookType(),"账本类型ID不能为空");
-        Assert.notNull(payBillCreateParamVo.getObjName(),"对象名称不能为空");
-        Assert.notNull(payBillCreateParamVo.getBillExpense(),"账本费用不能为空");
-        Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
-        Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
-        Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
-        myPayBillService.billCreate(payBillCreateParamVo,user);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "统一缴费--发起支付")
-    @ApiOperation(value = "统一缴费-发起支付")
-    @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
-    @RequiresPermissions("/payment/payBill/startPayment")
-    public Result startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result(myPayBillService.startPayment(payBIllInitiateParam,user));
-    }
 
 
 }

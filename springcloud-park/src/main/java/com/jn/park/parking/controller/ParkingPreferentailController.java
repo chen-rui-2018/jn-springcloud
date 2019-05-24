@@ -12,9 +12,11 @@ import com.jn.park.parking.vo.ParkingAreaDetailVo;
 import com.jn.park.parking.vo.ParkingAreaVo;
 import com.jn.park.parking.vo.ParkingPreferentialVo;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,7 +44,8 @@ public class ParkingPreferentailController extends BaseController {
     @ApiOperation(value = "查询所有优惠政策",notes = "优惠金额计算逻辑复杂，前端若不计算金额，则选择对应政策后调用‘租车位费用计算接口[前端用户]’接口，展示后台返回的金额数据")
     @RequestMapping(value = "/getParkingPreferentialList",method = RequestMethod.GET)
     public Result<List<ParkingPreferentialVo>> getParkingPreferentialList(){
-        return new Result<>(parkingPreferentailService.getParkingPreferentialList());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new Result<>(parkingPreferentailService.getParkingPreferentialList(user.getAccount()));
     }
 
 
@@ -53,7 +56,8 @@ public class ParkingPreferentailController extends BaseController {
             @ApiParam(name="areaId",value = "停车场ID",required = true,example = "51we20***")
             @RequestParam(value = "areaId") String areaId){
         Assert.notNull(areaId, ParkingExceptionEnum.PARKING_AREA_ID_IS_NOT_NULL.getMessage());
-        return new Result<>(parkingPreferentailService.getParkingPreferentialListForArea(areaId));
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new Result<>(parkingPreferentailService.getParkingPreferentialListForArea(areaId,user.getAccount()));
     }
 
 

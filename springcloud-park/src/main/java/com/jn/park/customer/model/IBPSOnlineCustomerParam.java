@@ -30,7 +30,7 @@ public class IBPSOnlineCustomerParam implements Serializable {
     private String clientType;
     @ApiModelProperty("联系方式（手机号码/邮箱）")
     private String contactWay;
-    @ApiModelProperty("处理状态(0：待处理  1:处理中 2：已处理)")
+    @ApiModelProperty("处理状态(0：待处理 1：处理中 2：已处理 3：无法处理)")
     private String status;
     @ApiModelProperty("当前来电")
     private String currentCaller;
@@ -203,5 +203,30 @@ public class IBPSOnlineCustomerParam implements Serializable {
 
     public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "IBPSOnlineCustomerParam{" +
+                "quesCode='" + quesCode + '\'' +
+                ", quesTitle='" + quesTitle + '\'' +
+                ", quesDetails='" + quesDetails + '\'' +
+                ", quesUrl='" + quesUrl + '\'' +
+                ", serviceModule='" + serviceModule + '\'' +
+                ", serviceModuleName='" + serviceModuleName + '\'' +
+                ", clientType='" + clientType + '\'' +
+                ", contactWay='" + contactWay + '\'' +
+                ", status='" + status + '\'' +
+                ", currentCaller='" + currentCaller + '\'' +
+                ", callerOwen='" + callerOwen + '\'' +
+                ", custName='" + custName + '\'' +
+                ", custSex='" + custSex + '\'' +
+                ", isTranPie='" + isTranPie + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", recordStatus=" + recordStatus +
+                '}';
     }
 }

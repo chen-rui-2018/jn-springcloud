@@ -41,9 +41,9 @@ public class CommentController extends BaseController {
     private CommentService commentService;
 
     @ControllerLog(doAction = "评论/回复")
-    @ApiOperation(value = "评论/回复", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "评论/回复", httpMethod = "POST",notes = "返回数据响应条数，正常返回1")
     @RequestMapping(value = "/commentActivity")
-    public Result commentActivity(@Validated @RequestBody CommentAddParam commentAddParam){
+    public Result<Integer> commentActivity(@Validated @RequestBody CommentAddParam commentAddParam){
         Assert.notNull(commentAddParam.getRootId(),CommentExceptionEnum.APPLY_ROOT_ID_NOT_NULL.getMessage());
         Assert.notNull(commentAddParam.getpId(),CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
         Assert.notNull(commentAddParam.getComContent(),CommentExceptionEnum.APPLY_CONTENT_NOT_EMPTY.getMessage());
@@ -54,8 +54,9 @@ public class CommentController extends BaseController {
             return new Result(CommentExceptionEnum.NETWORK_ANOMALY.getCode(),CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         commentAddParam.getAccount();
-        commentService.commentActivity(commentAddParam);
-
+        int resNum = commentService.commentActivity(commentAddParam);
+        logger.info("-------------评论/回复添加成功，数据响应条数：{}---------------",resNum);
+        result.setData(resNum);
         return result;
     }
 

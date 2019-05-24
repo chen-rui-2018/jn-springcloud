@@ -6,14 +6,17 @@
     <select id="findCareList" resultType="com.jn.park.gamtopic.model.CareUserShow">
       select
        t1.receive_account as "account",
-       (select count(1) from tb_person_care tc where tc.receive_account = t1.receive_account) as "fansNum"
-        from tb_person_care t1 where t1.care_account = #{account}
+       ifnull((select count(1) from tb_person_care tc where tc.receive_account = t1.receive_account),0) as "fansNum",
+       ifnull((SELECT SUM(1) FROM tb_person_care tpc WHERE tpc.care_account= t1. receive_account and tpc.receive_account = #{account}  and tpc.record_status = 1 ),0) AS "careStatus"
+        from tb_person_care t1
+              where t1.care_account = #{account}
     </select>
    <!--粉丝列表-->
     <select id="findFansList" resultType="com.jn.park.gamtopic.model.CareUserShow">
        select
         t1.care_account as "account",
-        (select count(1) from tb_person_care tc where tc.receive_account = t1.care_account) as "fansNum"
+        ifnull((select count(1) from tb_person_care tc where tc.receive_account = t1.care_account),0) as "fansNum",
+        ifnull((SELECT SUM(1) FROM tb_person_care tc  WHERE  tc.care_account= #{account} and tc.receive_account = t1.creator_account and tc.record_status = 1 ),0) AS "careStatus"
         from tb_person_care t1 where t1.receive_account = #{account}
     </select>
     <!--关注用户信息-->
@@ -33,6 +36,35 @@
         where t1.care_account = #{account}
     </select>
 
+    <!--查询关注的企业-->
+    <select id="findCareCompanyList" resultType="java.lang.String">
+     SELECT
+        t1.receive_account AS "comId"
+    FROM tb_person_care t1
+    WHERE t1.care_account = #{account}
+    AND t1.receive_type = '2'
+    AND t1.record_status = '1'
+    </select>
 
+    <select id="findCareComment"  resultType="com.jn.park.gamtopic.model.CommentModel">
+        SELECT t1.careUser,t2.commentNumber FROM
+        (SELECT
+        IFNULL(COUNT(care_id),0)  as "careUser"
+        FROM tb_person_care t
+        WHERE t.record_status = 1
+        AND t.receive_type = 2
+        AND t.receive_account = #{id})t1
+        INNER JOIN
+        (SELECT
+        IFNULL(COUNT(id),0) as "commentNumber"
+        FROM
+        tb_comment t
+        WHERE t.record_status = 1
+        AND t.com_status = 1
+        AND t.com_type = 3
+        AND t.root_id=#{id}) t2
+
+
+    </select>
 
 </mapper>

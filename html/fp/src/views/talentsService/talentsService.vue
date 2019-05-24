@@ -1,10 +1,19 @@
 <template>
   <div class="talentsService">
+    <div class="banner" ref="banner">
+      <div class="swiper-container">
+          <div class="swiper-wrapper">
+              <div class="swiper-slide"> <img src="@/assets/image/talents.png" alt=""> </div>
+          </div>
+          <div class="swiper-pagination"></div>
+         
+      </div>
+    </div>
     <div class="talentsService_cont">
       <!-- 面包屑 -->
       <div class="talentsService_breadcrumb">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/enterpriseservice' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
             <a href="javascript:;">人才服务</a>
           </el-breadcrumb-item>
@@ -23,7 +32,7 @@
             <span >查看详情<span class="el-icon-d-arrow-right"></span> </span> 
           </p>
           <div>
-            <img src="@/assets/image/矢量智能对象.png" alt="">
+            <img src="@/assets/image/platform.png" alt="">
           </div>
         </div>
       </div>
@@ -67,7 +76,7 @@
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
                 <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" >
                   <div class="list_cont_left">
-                    <p><span v-show="talentsitem.rangeId!='5'">【{{talentsitem.rangeName}}】</span>{{talentsitem.noticeTitle}}</p>
+                    <p><span>【{{talentsitem.rangeId|type}}】</span>{{talentsitem.noticeTitle}}</p>
                     <!-- <p v-show="talentsitem.rangeId=5">{{talentsitem.noticeTitle}} </p> -->
                     <p><span>发布日期：{{talentsitem.createdTime|time}}</span><span>状态：<span class="fontcolor">{{talentsitem.isRoofPlacement|isRoof}}</span></span></p>
                     <p>最近要求：{{talentsitem.timeNode}}</p>
@@ -123,6 +132,19 @@ export default {
           let dateee = new Date(time).toJSON();
           return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
           // return time.split("T")[0]
+        }
+      },
+      type(rangeId){
+        if(rangeId==='1'){
+          return '人才工作动态'
+        }else if(rangeId==='2'){
+          return '人才服务指南'
+        }else if(rangeId==='3'){
+          return '人才企业培训'
+        }else if(rangeId==='4'){
+          return '人才扶持计划'
+        }else if(rangeId==='5'){
+          return '常见问题'
         }
       }
     },
@@ -230,7 +252,88 @@ export default {
 
 <style lang="scss">
   .talentsService{
-    margin-top: 230px;
+    // margin-top: 230px;
+    .banner{
+      position: relative;
+      .swiper-button-prev, .swiper-button-next{
+        display: block;
+        width: 43px;
+        height: 43px;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        background-size: 0 0;
+        text-align: center;
+        i{
+          font-size: 36px;
+          line-height: 44px;
+          color:#fff;
+        }
+      }
+      .swiper-button-next{
+        right: 95px;
+      }
+      .swiper-button-prev{
+        left:95px;
+      }
+    }
+  .swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet{
+    margin: 5px 4px;
+  }
+  .swiper-pagination-bullet{
+    background-color: #fff;
+    opacity: 0.5;
+  }
+   .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets{
+      position: absolute;
+      right: 152px;
+      top: 0;
+      left: auto;
+      width: 1%;
+      }
+    .swiper-container{
+      img{
+        width:100%;
+        vertical-align: middle;
+      }
+      .swiper-pagination{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .swiper-pagination-bullet-active{
+        border-radius: 5px;
+        height: 50px;
+        background: #fff;
+        opacity: 1;
+      }
+    }
+    @keyframes bounce-up {
+    25% {
+        transform: translateY(5px);
+    }
+    50%, 100% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-5px);
+        }
+    }
+    .animate-bounce-up{
+      animation: bounce-up 2s linear infinite;
+    }
+    .approve_content{
+      width: 1190px;
+      margin: 0 auto;
+    }
+    // 加载动画
+    .el-loading-mask{
+      .el-loading-spinner .path{
+        stroke:#00a041;
+      }
+      .el-loading-spinner{
+        top:30%;
+      }
+    }
     .talentsService_cont{
       width: 1190px;
       margin: 0 auto;
@@ -311,6 +414,7 @@ export default {
           ul{
             display: flex;
             li{
+              cursor: pointer;
               width:25%;
               margin-right: 35px;
               border: solid 1px #eeeeee;
@@ -351,6 +455,7 @@ export default {
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 2;
                   overflow: hidden;
+                  height: 48px;
                 }
                 p:nth-child(4){
                  span{

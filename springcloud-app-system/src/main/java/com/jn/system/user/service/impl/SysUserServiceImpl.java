@@ -617,4 +617,16 @@ public class SysUserServiceImpl implements SysUserService {
         }
         return true;
     }
+
+    /**
+     * 根据用户id，查询用户信息
+     *
+     * @param ids 用户数组
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "根据用户id，查询用户信息")
+    public List<SysTUser> selectUserByIds(String[] ids) {
+        return sysUserMapper.selectUserByIds(ids);
+    }
 }

@@ -107,6 +107,12 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
             affiliateParam.setPage(orgColleagueParam.getPage());
             affiliateParam.setRows(orgColleagueParam.getRows() == 0 ? 15 : orgColleagueParam.getRows());
             affiliateParam.setNeedPage(orgColleagueParam.getNeedPage());
+        }else{
+            //跨服务调用需要分页，前端不分页查询直接查询200条数据
+            objects = PageHelper.startPage(1,200);
+            affiliateParam.setPage(1);
+            affiliateParam.setRows(200);
+            affiliateParam.setNeedPage("1");
         }
         //跨服务根据所属机构编码批量获取用户信息
         Result userExtensionByAffiliateCode = userExtensionClient.getUserExtensionByAffiliateCode(affiliateParam);
@@ -159,6 +165,8 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         for(TbServiceAdvisor tbServiceAdvisor:tbServiceAdvisorList){
             //账号相同,设置毕业学校，担任职务，入驻日期
             if(StringUtils.equals(extensionInfo.getAccount(),tbServiceAdvisor.getAdvisorAccount() )){
+                //从业年限
+                orgColleagueInfo.setWorkingYears(tbServiceAdvisor.getWorkingYears().toString());
                 //毕业学校
                 orgColleagueInfo.setGraduatedSchool(tbServiceAdvisor.getGraduatedSchool());
                 //担任职务

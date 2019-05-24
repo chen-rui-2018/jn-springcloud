@@ -2,7 +2,6 @@ package org.xxpay.dal.dao.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 public class PayOrder implements Serializable {
     /**
@@ -217,6 +216,13 @@ public class PayOrder implements Serializable {
      * aliPayReturnUrl为http方式 ,且外网可访问链接不能带任何参数
      * */
     private String aliPayReturnUrl;
+
+    /**
+     * 订单最晚付款时长
+     * 单位:分钟
+     * 注意： 最大时长为120分钟,为空则默认为120分钟
+    * */
+    private Integer duration;
 
     private static final long serialVersionUID = 1L;
 
@@ -468,6 +474,14 @@ public class PayOrder implements Serializable {
         this.aliPayReturnUrl = aliPayReturnUrl;
     }
 
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
     @Override
     public String toString() {
         return "PayOrder{" +
@@ -502,6 +516,7 @@ public class PayOrder implements Serializable {
                 ", serviceId='" + serviceId + '\'' +
                 ", serviceUrl='" + serviceUrl + '\'' +
                 ", aliPayReturnUrl='" + aliPayReturnUrl + '\'' +
+                ", duration=" + duration +
                 '}';
     }
 }

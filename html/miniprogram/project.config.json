@@ -13,7 +13,7 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.4.2",
-	"appid": "wx74198aaa09ddb63f",
+	"appid": "wx816ec9e5713da036",
 	"projectname": "miniprogram",
 	"debugOptions": {
 		"hidedInDevtools": []
@@ -28,13 +28,60 @@
 			"current": -1,
 			"list": []
 		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
 		"game": {
 			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 2,
+			"list": [
+				{
+					"id": 0,
+					"name": "meeting",
+					"pathName": "pages/meeting/meetingRoomDetail/meetingRoomDetail",
+					"query": "id=b954a4ea-50fb-49f1-a85a-291b0ee44dc2",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "预约",
+					"pathName": "pages/meeting/makeMeeting/makeMeeting",
+					"query": "meetingRoomId=b954a4ea-50fb-49f1-a85a-291b0ee44dc2&name=测试会议室",
+					"scene": 1001
+				},
+				{
+					"id": 2,
+					"name": "会议考勤",
+					"pathName": "pages/meeting/meetingAttendance/meetingAttendance",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "组织部门",
+					"pathName": "pages/meeting/orgDepartment/orgDepartment",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "组织人",
+					"pathName": "pages/meeting/orgPerson/orgPerson",
+					"query": "departmentId=a794452f-fad6-4697-afe1-e62542bd753a",
+					"scene": null
+				},
+				{
+					"id": 5,
+					"name": "参会人员",
+					"pathName": "pages/meeting/meetingPerson/meetingPerson",
+					"query": "",
+					"scene": null
+				}
+			]
 		}
 	}
 }

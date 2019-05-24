@@ -65,4 +65,13 @@ public class StaffListParam extends Page implements Serializable {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "StaffListParam{" +
+                "needPage='" + needPage + '\'' +
+                ", searchFiled='" + searchFiled + '\'' +
+                ", status='" + status + '\'' +
+                ", comId='" + comId + '\'' +
+                '}';
+    }
 }

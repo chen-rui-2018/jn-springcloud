@@ -3,7 +3,9 @@
 <mapper namespace="com.jn.enterprise.pay.dao.TbPayBillMiddleMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pay.entity.TbPayBillMiddle">
     <id column="order_number" jdbcType="VARCHAR" property="orderNumber" />
-    <result column="bill_id" jdbcType="VARCHAR" property="billId" />
+    <result column="bill_ids" jdbcType="VARCHAR" property="billIds" />
+    <result column="pay_order_id" jdbcType="VARCHAR" property="payOrderId" />
+    <result column="total_money" jdbcType="DECIMAL" property="totalMoney" />
     <result column="status" jdbcType="CHAR" property="status" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -70,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    order_number, bill_id, status, creator_account, created_time, modifier_account, modified_time, 
-    record_status
+    order_number, bill_ids, pay_order_id, total_money, status, creator_account, created_time, 
+    modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayBillMiddleCriteria" resultMap="BaseResultMap">
     select
@@ -104,12 +106,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pay.entity.TbPayBillMiddle">
-    insert into tb_pay_bill_middle (order_number, bill_id, status, 
-      creator_account, created_time, modifier_account, 
-      modified_time, record_status)
-    values (#{orderNumber,jdbcType=VARCHAR}, #{billId,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR})
+    insert into tb_pay_bill_middle (order_number, bill_ids, pay_order_id, 
+      total_money, status, creator_account, 
+      created_time, modifier_account, modified_time, 
+      record_status)
+    values (#{orderNumber,jdbcType=VARCHAR}, #{billIds,jdbcType=VARCHAR}, #{payOrderId,jdbcType=VARCHAR}, 
+      #{totalMoney,jdbcType=DECIMAL}, #{status,jdbcType=CHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayBillMiddle">
     insert into tb_pay_bill_middle
@@ -117,8 +121,14 @@
       <if test="orderNumber != null">
         order_number,
       </if>
-      <if test="billId != null">
-        bill_id,
+      <if test="billIds != null">
+        bill_ids,
+      </if>
+      <if test="payOrderId != null">
+        pay_order_id,
+      </if>
+      <if test="totalMoney != null">
+        total_money,
       </if>
       <if test="status != null">
         status,
@@ -143,8 +153,14 @@
       <if test="orderNumber != null">
         #{orderNumber,jdbcType=VARCHAR},
       </if>
-      <if test="billId != null">
-        #{billId,jdbcType=VARCHAR},
+      <if test="billIds != null">
+        #{billIds,jdbcType=VARCHAR},
+      </if>
+      <if test="payOrderId != null">
+        #{payOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalMoney != null">
+        #{totalMoney,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
         #{status,jdbcType=CHAR},
@@ -178,8 +194,14 @@
       <if test="record.orderNumber != null">
         order_number = #{record.orderNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.billId != null">
-        bill_id = #{record.billId,jdbcType=VARCHAR},
+      <if test="record.billIds != null">
+        bill_ids = #{record.billIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payOrderId != null">
+        pay_order_id = #{record.payOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalMoney != null">
+        total_money = #{record.totalMoney,jdbcType=DECIMAL},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=CHAR},
@@ -207,7 +229,9 @@
   <update id="updateByExample" parameterType="map">
     update tb_pay_bill_middle
     set order_number = #{record.orderNumber,jdbcType=VARCHAR},
-      bill_id = #{record.billId,jdbcType=VARCHAR},
+      bill_ids = #{record.billIds,jdbcType=VARCHAR},
+      pay_order_id = #{record.payOrderId,jdbcType=VARCHAR},
+      total_money = #{record.totalMoney,jdbcType=DECIMAL},
       status = #{record.status,jdbcType=CHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -221,8 +245,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pay.entity.TbPayBillMiddle">
     update tb_pay_bill_middle
     <set>
-      <if test="billId != null">
-        bill_id = #{billId,jdbcType=VARCHAR},
+      <if test="billIds != null">
+        bill_ids = #{billIds,jdbcType=VARCHAR},
+      </if>
+      <if test="payOrderId != null">
+        pay_order_id = #{payOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalMoney != null">
+        total_money = #{totalMoney,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=CHAR},
@@ -247,7 +277,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pay.entity.TbPayBillMiddle">
     update tb_pay_bill_middle
-    set bill_id = #{billId,jdbcType=VARCHAR},
+    set bill_ids = #{billIds,jdbcType=VARCHAR},
+      pay_order_id = #{payOrderId,jdbcType=VARCHAR},
+      total_money = #{totalMoney,jdbcType=DECIMAL},
       status = #{status,jdbcType=CHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

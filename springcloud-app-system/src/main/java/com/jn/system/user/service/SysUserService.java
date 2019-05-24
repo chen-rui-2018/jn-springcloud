@@ -135,4 +135,12 @@ public interface SysUserService {
      * @return
      */
     Boolean updateUserRole(User user, Set<String> deleRoleIds, Set<String> addRoleIds);
+
+    /**
+     * 根据用户id，查询用户信息
+     *
+     * @param ids  用户数组
+     * @return
+     */
+    List<SysTUser> selectUserByIds(String[] ids);
 }

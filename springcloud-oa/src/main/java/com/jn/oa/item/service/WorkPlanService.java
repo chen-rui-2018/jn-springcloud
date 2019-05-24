@@ -103,7 +103,7 @@ public interface WorkPlanService {
      * @param file 报表文件
      * @param user 当前用户
      */
-    String importExcelWorkPlanInfo(MultipartFile file, User user);
+    void importExcelWorkPlanInfo(MultipartFile file, User user);
 
     /**
      * 获取所有项目信息

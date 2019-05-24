@@ -1,7 +1,7 @@
 <template>
   <div class="finaInstitution w">
     <div class="serverOrgMenu">
-      <span>首页</span>
+      <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
       <span class="mainColor agent">金融产品</span>
     </div>
@@ -10,10 +10,10 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">贷款期限：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto;">
-            <li :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
+            <li :class="{'active1':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag1}">
-            <li class="wid1" v-for="(i,k) in options2" :key='k' @click="handleFilter1(i.value,i.loanTermMax,i.loanTermMin)" :class="{'active':filterFlag1 == i.value}">{{i.label}}</li>
+            <li class="wid1" v-for="(i,k) in options2" :key='k' @click="handleFilter1(i.value,i.loanTermMax,i.loanTermMin)" :class="{'active1':filterFlag1 == i.value}">{{i.label}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid1')">
             <i class="el-icon-arrow-down" v-if="flag1" @click="flag1 = !flag1"></i>
@@ -23,10 +23,10 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">担保方式：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag2 == ''}" @click="handleFilter2('')">不限</li>
+            <li :class="{'active1':filterFlag2 == ''}" @click="handleFilter2('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag2}">
-            <li class="wid2" v-for="(i,k) in guaranteeMode" :key='k' @click="handleFilter2(i.assureCode)" :class="{'active':filterFlag2 == i.assureCode}">{{i.assureName}}</li>
+            <li class="wid2" v-for="(i,k) in guaranteeMode" :key='k' @click="handleFilter2(i.assureCode)" :class="{'active1':filterFlag2 == i.assureCode}">{{i.assureName}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid2')">
             <i class="el-icon-arrow-down" v-if="flag2" @click="flag2 = !flag2"></i>
@@ -36,21 +36,21 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">网贷直联：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
+            <li :class="{'active1':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag3}">
-            <li class="wid3" @click="handleFilter3('1')" :class="{'active':filterFlag3 == '1'}">是</li>
-            <li class="wid3" @click="handleFilter3('0')" :class="{'active':filterFlag3 == '0'}">否</li>
+            <li class="wid3" @click="handleFilter3('1')" :class="{'active1':filterFlag3 == '1'}">是</li>
+            <li class="wid3" @click="handleFilter3('0')" :class="{'active1':filterFlag3 == '0'}">否</li>
           </ul>
         </div>
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">政策性产品：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag4 == ''}" @click="handleFilter4('')">不限</li>
+            <li :class="{'active1':filterFlag4 == ''}" @click="handleFilter4('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
-            <li class="wid4" @click="handleFilter4('1')" :class="{'active':filterFlag4 == '1'}">是</li>
-            <li class="wid4" @click="handleFilter4('0')" :class="{'active':filterFlag4 == '0'}">否</li>
+            <li class="wid4" @click="handleFilter4('1')" :class="{'active1':filterFlag4 == '1'}">是</li>
+            <li class="wid4" @click="handleFilter4('0')" :class="{'active1':filterFlag4 == '0'}">否</li>
           </ul>
           <div class="fr" v-if="widFun('wid4')">
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
@@ -60,10 +60,10 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">贷款额度：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag5 == ''}" @click="handleFilter5('')">不限</li>
+            <li :class="{'active1':filterFlag5 == ''}" @click="handleFilter5('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag5}">
-            <li class="wid5" v-for="(i,k) in options1" :key='k' @click="handleFilter5(i.value,i.loanAmountMax,i.loanAmountMin)" :class="{'active':filterFlag5 == i.value}">{{i.label}}</li>
+            <li class="wid5" v-for="(i,k) in options1" :key='k' @click="handleFilter5(i.value,i.loanAmountMax,i.loanAmountMin)" :class="{'active1':filterFlag5 == i.value}">{{i.label}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid5')">
             <i class="el-icon-arrow-down" v-if="flag5" @click="flag5 = !flag5"></i>
@@ -113,7 +113,7 @@
               </div>
               <div class="right1 fl">
                 <p>
-                  <el-rate :model="parseInt(i.ratingScore)" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
+                  <el-rate v-model="i.ratingScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                   </el-rate>
                   <span class="mainColor">{{i.ratingNum}}</span>条评价</p>
                 <p style="text-align:center">

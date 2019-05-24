@@ -1,8 +1,8 @@
 <template>
     <div class="serverProDetail w">
         <div class="serverOrgMenu">
-            <span>首页/</span>
-            <span>服务产品</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
+            <span class="pointer" @click="$router.push({path:'/serverPro'})">服务产品</span>
             <span>/</span>
             <span class="mainColor agent">服务产品详情</span>
         </div>
@@ -53,13 +53,16 @@
                         </div>
                     </div>
                     <div class="agent2 color2" v-if="zankaiFlag">
-                        <div class="agent2Con" v-if="proDelInfo.productDetails!=null">
+                        <div class="agent2Con" id="agent2Con" :class="{'showMore':showMoreFlag}">
+                            {{proDelInfo.productDetails}}
+                        </div>
+                        <!-- <div class="agent2Con" v-if="proDelInfo.productDetails">
                             {{proDelInfo.productDetails}}
                         </div>
                         <div class="agent2Con" v-else>
                             暂无内容！
-                        </div>
-                        <div class="orgBtn1 mainColor tx">查看更多</div>
+                        </div> -->
+                        <div class="orgBtn1 mainColor tx pointer" v-if="showMoreFlag" @click="showMoreFlag=false">查看更多</div>
                     </div>
                 </el-card>
             </div>
@@ -70,13 +73,13 @@
                     <li>
                         <a href="javascript:;">筛选：</a>
                     </li>
-                    <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')">
+                    <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')">
                         <a href="javascript:;" data="%">全部({{proDelInfo.sameTypeNum}})</a>
                     </li>
-                    <li class="list-item " :class="{'active':flag1=='0'}" @click="screenPro('0')">
+                    <li class="list-item " :class="{'active3':flag1=='0'}" @click="screenPro('0')">
                         <a href="javascript:;" data="常规服务">常规服务({{proDelInfo.commentNum}})</a>
                     </li>
-                    <li class="list-item " :class="{'active':flag1=='1'}" @click="screenPro('1')">
+                    <li class="list-item " :class="{'active3':flag1=='1'}" @click="screenPro('1')">
                         <a href="javascript:;" data="特色服务">特色服务({{proDelInfo.featureNum}})</a>
                     </li>
                 </ul>
@@ -84,16 +87,16 @@
                     <li>
                         <a href="javascript:;">筛选：</a>
                     </li>
-                    <li class="list-item current" :class="{'active':flag2==''}" @click="handleEvaluation('')">
+                    <li class="list-item current" :class="{'active3':flag2==''}" @click="handleEvaluation('')">
                         <a href="javascript:;" data="%">全部({{evaCount.evaluationTotal}})</a>
                     </li>
-                    <li class="list-item " :class="{'active':flag2=='praise'}" @click="handleEvaluation('praise')">
+                    <li class="list-item " :class="{'active3':flag2=='praise'}" @click="handleEvaluation('praise')">
                         <a href="javascript:;" data="好评">好评({{evaCount.praiseNum}})</a>
                     </li>
-                    <li class="list-item " :class="{'active':flag2=='average'}" @click="handleEvaluation('average')">
+                    <li class="list-item " :class="{'active3':flag2=='average'}" @click="handleEvaluation('average')">
                         <a href="javascript:;" data="中评">中评({{evaCount.averageNum}})</a>
                     </li>
-                    <li class="list-item" :class="{'active':flag2=='badReview'}" @click="handleEvaluation('badReview')">
+                    <li class="list-item" :class="{'active3':flag2=='badReview'}" @click="handleEvaluation('badReview')">
                         <a href="javascript:;" data="差评">差评({{evaCount.badReviewNum}})</a>
                     </li>
                 </ul>
@@ -108,7 +111,7 @@
                                 <div class="list-item-date"></div>
                                 <!-- 上架时间 end -->
                                 <!-- 左侧logo begin-->
-                                <div class="list-imgleft-container product nopic">
+                                <div class="list-imgleft-container product nopic pointer" @click="$router.push({path: 'serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
                                     <img :src="i.pictureUrl" alt="">
                                 </div>
                                 <!-- 左侧logo end-->
@@ -139,7 +142,7 @@
                                         <!-- 评价 begin -->
                                         <div class="detail-evaluate inner-product">
                                             <div class="score">
-                                                <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                                                <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                                                 </el-rate>
                                                 <span class="c_default b">{{i.evaluationNumber}}</span>
                                                 <span>条评价</span>
@@ -256,6 +259,7 @@
 export default {
   data() {
     return {
+      showMoreFlag:false,
       zankaiFlag: true,
       activeName1: "samePro",
       currentPage1: 1,
@@ -453,17 +457,25 @@ export default {
     },
     findProductDetails() {
       //服务产品详情
-      let _this = this;
+    //   let _this = this;
       this.api.get({
         url: "findProductDetails",
         data: {
-          productId: _this.$route.query.productId
+          productId: this.$route.query.productId
         },
-        callback: function(res) {
+        callback: (res)=>{
           if (res.code == "0000") {
-            _this.proDelInfo = res.data.info;
+            this.proDelInfo = res.data.info;
+            // console.log(document.getElementById('agent2Con').clientHeight)
+            // console.log(window.getComputedStyle(document.getElementById('agent2Con')).height)
+            setTimeout(()=>{
+             if(document.getElementById('agent2Con').clientHeight>=50){
+                 debugger
+                 this.showMoreFlag=true;
+             }
+            },0)
           } else {
-            _this.$message.error(res.result);
+            this.$message.error(res.result);
           }
         }
       });
@@ -506,11 +518,12 @@ export default {
       .agent2 {
         padding: 10px 0;
         .agent2Con {
-          height: 150px;
-          width: 80%;
+          transition: .2s all;
+        }
+        .agent2Con.showMore {
+          height: 50px;
           overflow: hidden;
-          // white-space: nowrap;
-          // text-overflow: ellipsis;
+        //   overflow: hidden;
         }
         .orgBtn1 {
           font-size: 13px;

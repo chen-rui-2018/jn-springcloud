@@ -38,8 +38,6 @@ public class RoomInformationModel implements Serializable {
     @ApiModelProperty(value = "所属分组",example = "分组一")
     private String groupName;
 
-
-
     @ApiModelProperty(value = "面积(平方米)",example = "100")
     private String roomArea;
 
@@ -53,10 +51,10 @@ public class RoomInformationModel implements Serializable {
     private BigDecimal leaseSum;
 
     @ApiModelProperty(value = "押",example = "1")
-    private String press;
+    private Integer press;
 
     @ApiModelProperty(value = "付",example = "3")
-    private String pay;
+    private Integer pay;
 
     @ApiModelProperty(value = "付款(如:押1付3)",example = "押1付3")
     private String pressPay;
@@ -76,8 +74,8 @@ public class RoomInformationModel implements Serializable {
     @ApiModelProperty(value = "介绍",example = "房间介绍")
     private String introduce;
 
-    @ApiModelProperty(value = "状态",example = "0")
-    private String state;
+    @ApiModelProperty(value = "状态(0空闲,1租借申请中,2租借中,3退租申请,4已到期)",example = "0")
+    private Byte state;
 
     @ApiModelProperty(value = "租借企业id",example = "")
     private String enterpriseId;
@@ -98,7 +96,10 @@ public class RoomInformationModel implements Serializable {
     private String contactPhone;
 
     @ApiModelProperty(value = "创建时间",example = "2019-05-05")
-    private Date crateTime;
+    private java.sql.Date createTime;
+
+    @ApiModelProperty(value = "地址",example = "南京市秦淮区白下智慧园区XX街1号")
+    private String address;
 
     @ApiModelProperty(value = "同属分组(房间id)",example = "")
     private List<RoomInformationModel> groupRoomList;
@@ -192,19 +193,19 @@ public class RoomInformationModel implements Serializable {
         this.leaseSum = leaseSum;
     }
 
-    public String getPress() {
+    public Integer getPress() {
         return press;
     }
 
-    public void setPress(String press) {
+    public void setPress(Integer press) {
         this.press = press;
     }
 
-    public String getPay() {
+    public Integer getPay() {
         return pay;
     }
 
-    public void setPay(String pay) {
+    public void setPay(Integer pay) {
         this.pay = pay;
     }
 
@@ -256,11 +257,11 @@ public class RoomInformationModel implements Serializable {
         this.introduce = introduce;
     }
 
-    public String getState() {
+    public Byte getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Byte state) {
         this.state = state;
     }
 
@@ -312,12 +313,21 @@ public class RoomInformationModel implements Serializable {
         this.contactPhone = contactPhone;
     }
 
-    public Date getCrateTime() {
-        return crateTime;
+
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCrateTime(Date crateTime) {
-        this.crateTime = crateTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public List<RoomInformationModel> getGroupRoomList() {
@@ -342,22 +352,23 @@ public class RoomInformationModel implements Serializable {
                 ", shortestLease='" + shortestLease + '\'' +
                 ", leasePrice=" + leasePrice +
                 ", leaseSum=" + leaseSum +
-                ", press='" + press + '\'' +
-                ", pay='" + pay + '\'' +
+                ", press=" + press +
+                ", pay=" + pay +
                 ", pressPay='" + pressPay + '\'' +
                 ", houseType='" + houseType + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
                 ", floorPlan='" + floorPlan + '\'' +
                 ", roomPlan='" + roomPlan + '\'' +
                 ", introduce='" + introduce + '\'' +
-                ", state='" + state + '\'' +
+                ", state=" + state +
                 ", enterpriseId='" + enterpriseId + '\'' +
                 ", leaseEnterprise='" + leaseEnterprise + '\'' +
                 ", leaseStartTime=" + leaseStartTime +
                 ", leaseEndTime=" + leaseEndTime +
                 ", contactName='" + contactName + '\'' +
                 ", contactPhone='" + contactPhone + '\'' +
-                ", crateTime=" + crateTime +
+                ", createTime=" + createTime +
+                ", address='" + address + '\'' +
                 ", groupRoomList=" + groupRoomList +
                 '}';
     }

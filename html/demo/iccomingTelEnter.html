@@ -86,6 +86,7 @@
 		<!--历史信息-->
 		<div class="content"  style="padding: 20px">
 			<span id="historyDesc" style="background-color:red; color:white;width: 90px;height: 20px;padding: 10px;">历史信息(<span id="historyNum">0</span>)</span>
+			<span style="display: none;color: red;padding-left: 20PX" id="detailLoad">加载中...</span>
 			<div id="history" style="display: none">
 			</div>
 		</div>
@@ -184,10 +185,10 @@
 					</tr>
 					<tr>
 						<td style="padding-left: 20px">
-							问题描述:<textarea  id='quesDetailsShow' rows='10' cols='80' readonly="ture"></textarea>
+							问题描述:<textarea  id='quesDetailsShow' rows='5' cols='60' readonly="ture"></textarea>
 						</td>
 						<td style="padding-left: 20px">
-							<image  id='quesUrlShow'></image>
+							<image style="width: 80px;height:60px;display: none;" class='quesUrlShow'/>
 						</td>
 					</tr>
 					<tr>

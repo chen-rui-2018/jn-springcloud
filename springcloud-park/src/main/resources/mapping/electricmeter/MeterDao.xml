@@ -146,7 +146,7 @@
             select
             #{ item.id,jdbcType=VARCHAR},
             #{ item.ruleId,jdbcType=VARCHAR},
-            #{ item.projectName,jdbcType=VARCHAR},
+            #{ item.ruleName,jdbcType=VARCHAR},
             #{ item.price,jdbcType=VARCHAR},
             #{ item.recordStatus,jdbcType=TINYINT},
             #{ item.creatorAccount,jdbcType=VARCHAR},
@@ -269,9 +269,6 @@
 
     </select>
 
-
-
-
     <!--查询电表最新读数-->
     <select id="getNewestReadings" >
         select
@@ -290,5 +287,102 @@
         where deal_date=str_to_date(CURRENT_DATE(), '%Y-%m-%d')
         group by meter_code
     </select>
+
+    <!--获取前一天电表的业主 或者指定日期或者指定企业-->
+    <select id="getMeterHost" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        company_id
+        from
+        tb_electric_meter_company_day
+        where record_status=1
+        <if test="companyId !=null">
+            and company_id=#{companyId}
+            and day = #{day}
+        </if>
+        <if test="companyId == null">
+            and day=date_sub(curdate(),interval 1 day)
+        </if>
+        GROUP BY company_id
+    </select>
+    <!--获取企业指定的电表-->
+    <select id="getElectricMeterByCompanyId" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        meter_code
+        from
+        tb_electric_meter_company_day
+        where record_status=1
+        <if test="companyId !=null">
+            and company_id=#{companyId}
+            and day = #{day}
+        </if>
+        <if test="companyId == null">
+            and day=date_sub(curdate(),interval 1 day)
+            and company_id=#{companyId}
+        </if>
+    </select>
+
+    <select id="getRuleIdByCompanyId"  parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        rule_id
+        from
+        tb_electric_pricerule_company_in_day
+        where record_status=1
+        <if test="companyId !=null">
+            and company_id=#{companyId}
+            and day = #{day}
+        </if>
+        <if test="companyId == null">
+            and day=date_sub(curdate(),interval 1 day)
+            and company_id=#{companyId}
+        </if>
+    </select>
+
+    <!--通过电表查询出每天的用电量-->
+    <select id="getDegreeByMeterCode" parameterType="java.lang.String" resultType="com.jn.park.electricmeter.entity.TbElectricReading">
+        select
+            meter_code as meterCode,
+            deal_date as dealDate,
+            degree_diff as degreeDiff,
+            deal_hour as dealHour,
+            reading_end as readingEnd,
+            time_end as timeEnd
+        from
+        tb_electric_reading
+        where
+        record_status =1
+        <if test="dealData !=null">
+            and deal_date=#{dealDate}
+            and meterCode=#{meterCode}
+        </if>
+        <if test="dealData ==null">
+            and deal_date=date_sub(curdate(),interval 1 day)
+            and meterCode=#{meterCode}
+        </if>
+        order by hour asc
+    </select>
+
+    <!--保存计价规则和企业之间的关系-->
+    <insert id="saveGroupLogs" parameterType="java.util.List">
+        insert into tb_electric_energy_group_log
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricEnergyGroupLogMapper.Base_Column_List"/>)
+        <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
+            select
+                #{ item.id,jdbcType=VARCHAR},
+                #{ item.ruleId,jdbcType=VARCHAR},
+                #{ item.companyId,jdbcType=VARCHAR},
+                #{ item.recordStatus,jdbcType=TINYINT},
+                #{ item.creatorAccount,jdbcType=VARCHAR},
+                #{ item.createdTime,jdbcType=TIMESTAMP},
+                #{ item.modifierAccount,jdbcType=VARCHAR},
+                #{ item.modifiedTime,jdbcType=TIMESTAMP},
+                #{ item.degree,jdbcType=DECIMAL},
+                #{ item.price,jdbcType=DECIMAL},
+                #{ item.day,jdbcType=DATE},
+                #{ item.meterId,jdbcType=VARCHAR},
+                #{ item.ruleName,jdbcType=VARCHAR},
+                #{ item.companyName,jdbcType=VARCHAR}
+            from  dual
+        </foreach>
+    </insert>
 
 </mapper>

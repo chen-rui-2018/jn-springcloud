@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.park.api.ElectricMeterClient;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
+import com.jn.park.electricmeter.service.MeterTimerService;
 import com.jn.park.message.model.AddMessageModel;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
@@ -30,6 +31,10 @@ public class MeterTimerController extends BaseController implements ElectricMete
     private MeterRulesService meterRulesService;
     private static Logger logger = LoggerFactory.getLogger(MeterTimerController.class);
 
+
+    @Autowired
+    private MeterTimerService meterTimerService;
+
     @ControllerLog(doAction = "电表数据定时采集接口")
     @Override
     public void getDataFromHardare(){
@@ -42,5 +47,9 @@ public class MeterTimerController extends BaseController implements ElectricMete
         meterRulesService.setRulesInDayForCompany();
     }
 
+    @ControllerLog(doAction = "计算企业每日的电费")
+    public void calcCostEverday(){
+        meterTimerService.calcCostEverday();
+    }
 
 }

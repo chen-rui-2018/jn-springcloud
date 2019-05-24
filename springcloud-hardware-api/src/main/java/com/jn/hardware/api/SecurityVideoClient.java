@@ -30,7 +30,7 @@ public interface SecurityVideoClient {
     @RequestMapping(value = "/api/hardware/security/findSecurityPlayBackUrlList")
     Result<SecurityPlayBackUrlShow> findSecurityPlayBackUrlList(@RequestBody SecurityPlayBackUrlParam securityPlayBackUrlParam);
     /**
-     *  获取海康威视的 接口凭证 token,返回 用于认证的url
+     *  获取海康威视的 接口凭证 token,返回 用于认证的url securityTokenParam 默认值 :userCode="admin", service="http://192.168.30.2/vms/preview",language="zh_CN;
      * @param securityTokenParam 实体类参数
      * @return
      */

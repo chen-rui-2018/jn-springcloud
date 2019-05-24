@@ -62,14 +62,14 @@
     margin:auto;
 }
 
-.popBox .close{
+.popBox .close,.quesBox .close{
     text-align: right;
     margin-right: 5px;
     background-color: #F8F8F8;
 }
 
 /*关闭按钮*/
-.popBox .close a {
+.popBox .close a, .quesLayer .close a {
     text-decoration: none;
     color: #2D2C3B;
 }

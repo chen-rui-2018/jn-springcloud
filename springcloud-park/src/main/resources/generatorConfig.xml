@@ -1266,6 +1266,7 @@
     <table tableName="tb_electric_reading_source"></table>
     <table tableName="tb_electric_reading_fail_log"></table>
     <table tableName="tb_electric_cost"></table>
+    <table tableName="tb_electric_error_log"></table>
 
   </context>
   <!--物业维修-->

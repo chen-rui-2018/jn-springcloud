@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.park.electricmeter.dao.TbElectricRulesContentMapper">
-  <resultMap id="BaseResultMap" type="com.jn.park.electricmeter.entity.TbElectricRulesContent">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="rule_id" jdbcType="VARCHAR" property="ruleId" />
-    <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
-    <result column="price" jdbcType="VARCHAR" property="price" />
+<mapper namespace="com.jn.park.electricmeter.dao.TbElectricErrorLogMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.electricmeter.entity.TbElectricErrorLog">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="day" jdbcType="DATE" property="day" />
+    <result column="error_msg" jdbcType="VARCHAR" property="errorMsg" />
+    <result column="meter_code" jdbcType="VARCHAR" property="meterCode" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
-    <result column="start" jdbcType="INTEGER" property="start" />
-    <result column="end" jdbcType="INTEGER" property="end" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,16 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, rule_id, rule_name, price, record_status, creator_account, created_time, modifier_account, 
-    modified_time, start, end
+    id, company_id, day, error_msg, meter_code, company_name, record_status, creator_account, 
+    created_time, modifier_account, modified_time
   </sql>
-  <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContentCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricErrorLogCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_electric_rules_content
+    from tb_electric_error_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,46 +90,42 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tb_electric_rules_content
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_electric_rules_content
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContentCriteria">
-    delete from tb_electric_rules_content
+  <delete id="deleteByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricErrorLogCriteria">
+    delete from tb_electric_error_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContent">
-    insert into tb_electric_rules_content (id, rule_id, rule_name, 
-      price, record_status, creator_account, 
-      created_time, modifier_account, modified_time, 
-      start, end)
-    values (#{id,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{ruleName,jdbcType=VARCHAR}, 
-      #{price,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{start,jdbcType=INTEGER}, #{end,jdbcType=INTEGER})
+  <insert id="insert" parameterType="com.jn.park.electricmeter.entity.TbElectricErrorLog">
+    insert into tb_electric_error_log (id, company_id, day, 
+      error_msg, meter_code, company_name, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{day,jdbcType=DATE}, 
+      #{errorMsg,jdbcType=VARCHAR}, #{meterCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContent">
-    insert into tb_electric_rules_content
+  <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricErrorLog">
+    insert into tb_electric_error_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="ruleId != null">
-        rule_id,
+      <if test="companyId != null">
+        company_id,
       </if>
-      <if test="ruleName != null">
-        rule_name,
+      <if test="day != null">
+        day,
       </if>
-      <if test="price != null">
-        price,
+      <if test="errorMsg != null">
+        error_msg,
+      </if>
+      <if test="meterCode != null">
+        meter_code,
+      </if>
+      <if test="companyName != null">
+        company_name,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -146,25 +142,25 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
-      <if test="start != null">
-        start,
-      </if>
-      <if test="end != null">
-        end,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="ruleId != null">
-        #{ruleId,jdbcType=VARCHAR},
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
       </if>
-      <if test="ruleName != null">
-        #{ruleName,jdbcType=VARCHAR},
+      <if test="day != null">
+        #{day,jdbcType=DATE},
       </if>
-      <if test="price != null">
-        #{price,jdbcType=VARCHAR},
+      <if test="errorMsg != null">
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        #{meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
@@ -181,34 +177,34 @@
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="start != null">
-        #{start,jdbcType=INTEGER},
-      </if>
-      <if test="end != null">
-        #{end,jdbcType=INTEGER},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContentCriteria" resultType="java.lang.Long">
-    select count(*) from tb_electric_rules_content
+  <select id="countByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricErrorLogCriteria" resultType="java.lang.Long">
+    select count(*) from tb_electric_error_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_electric_rules_content
+    update tb_electric_error_log
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.ruleId != null">
-        rule_id = #{record.ruleId,jdbcType=VARCHAR},
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
       </if>
-      <if test="record.ruleName != null">
-        rule_name = #{record.ruleName,jdbcType=VARCHAR},
+      <if test="record.day != null">
+        day = #{record.day,jdbcType=DATE},
       </if>
-      <if test="record.price != null">
-        price = #{record.price,jdbcType=VARCHAR},
+      <if test="record.errorMsg != null">
+        error_msg = #{record.errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meterCode != null">
+        meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -225,82 +221,26 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.start != null">
-        start = #{record.start,jdbcType=INTEGER},
-      </if>
-      <if test="record.end != null">
-        end = #{record.end,jdbcType=INTEGER},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_electric_rules_content
+    update tb_electric_error_log
     set id = #{record.id,jdbcType=VARCHAR},
-      rule_id = #{record.ruleId,jdbcType=VARCHAR},
-      rule_name = #{record.ruleName,jdbcType=VARCHAR},
-      price = #{record.price,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      day = #{record.day,jdbcType=DATE},
+      error_msg = #{record.errorMsg,jdbcType=VARCHAR},
+      meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      start = #{record.start,jdbcType=INTEGER},
-      end = #{record.end,jdbcType=INTEGER}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContent">
-    update tb_electric_rules_content
-    <set>
-      <if test="ruleId != null">
-        rule_id = #{ruleId,jdbcType=VARCHAR},
-      </if>
-      <if test="ruleName != null">
-        rule_name = #{ruleName,jdbcType=VARCHAR},
-      </if>
-      <if test="price != null">
-        price = #{price,jdbcType=VARCHAR},
-      </if>
-      <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=TINYINT},
-      </if>
-      <if test="creatorAccount != null">
-        creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="createdTime != null">
-        created_time = #{createdTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifierAccount != null">
-        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="modifiedTime != null">
-        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="start != null">
-        start = #{start,jdbcType=INTEGER},
-      </if>
-      <if test="end != null">
-        end = #{end,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.park.electricmeter.entity.TbElectricRulesContent">
-    update tb_electric_rules_content
-    set rule_id = #{ruleId,jdbcType=VARCHAR},
-      rule_name = #{ruleName,jdbcType=VARCHAR},
-      price = #{price,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=TINYINT},
-      creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=TIMESTAMP},
-      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      start = #{start,jdbcType=INTEGER},
-      end = #{end,jdbcType=INTEGER}
-    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

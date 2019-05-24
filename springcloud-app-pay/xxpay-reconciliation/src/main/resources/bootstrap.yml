@@ -1,3 +1,6 @@
+server:
+  port: 4010
+
 eureka:
   client:
     serviceUrl:
@@ -7,7 +10,7 @@ eureka:
 
 spring:
   application:
-    name: xxpay-mgr
+    name: xxpay-reconciliation
   cloud:
     config:
       discovery:
@@ -18,12 +21,7 @@ spring:
   sleuth:
     sampler:
       percentage: 1.0
-  mybatis:
-    mapper-locations: 'classpath:org/xxpay/dal/dao/mapper/*.xml'
 
 management:
   security:
     enabled: false
-
-server:
-  port: 8092

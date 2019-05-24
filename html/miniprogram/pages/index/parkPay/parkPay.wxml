@@ -1,0 +1,8 @@
+<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<view class="parkPay">
+  <view class="search" >
+    <text class='icon-search'></text>
+    <input type="text" placeholder="搜索会议室" bindinput="changesearch" name="meetingroom"  />
+  </view>
+  <view class="parkPay_main padding"></view>
+</view>

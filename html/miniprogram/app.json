@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/index/parkPay/parkPay",
     "pages/index/index",
     "pages/meeting/meeting",
     "pages/start/start",
@@ -30,12 +31,7 @@
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [
-      {
-        "pagePath": "pages/index/index",
-        "iconPath": "/images/meeting/index_white.png",
-        "selectedIconPath": "/images/meeting/index_green.png",
-        "text": "首页"
-      },
+     
       {
         "pagePath": "pages/meeting/meeting",
         "iconPath": "/images/meeting/meeting_white.png",

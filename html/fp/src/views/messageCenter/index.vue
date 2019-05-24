@@ -146,6 +146,8 @@ $bg-gray: #f3f3f3;
         color: $--color-primary;
         border-left: 2px solid $--color-primary;
       }
+      padding:0;
+      padding-left:20px !important;
     }
   }
   .userImg {

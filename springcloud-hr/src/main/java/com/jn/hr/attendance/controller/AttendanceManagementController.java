@@ -321,7 +321,8 @@ public class AttendanceManagementController extends BaseController implements Hr
 	}
     
     @ControllerLog(doAction = "根据部门id与考勤年月查询历史考勤列表")
-    //@RequiresPermissions("/hr/AttendanceManagement/selectAttendanceManagementByUserId")
+
+    //@RequiresPermissions("/hr/AttendanceManagement/selectAttendanceManagementByDepartmentId")
 	@ApiOperation(value = "根据部门id与考勤年月查询历史考勤列表", notes = "根据部门id与考勤年月查询历史考勤列表")
     @RequestMapping(value = "/selectAttendanceManagementByDepartmentId", method = RequestMethod.POST)
 	public Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@Validated @RequestBody  AttendanceManagement attendanceManagement){

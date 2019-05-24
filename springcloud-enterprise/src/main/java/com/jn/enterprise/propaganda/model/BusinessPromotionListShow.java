@@ -37,6 +37,8 @@ public class BusinessPromotionListShow implements Serializable {
     private String propagandaFee;
     @ApiModelProperty(value = "宣传详情")
     private String propagandaDetails;
+    @ApiModelProperty(value = "宣传摘要")
+    private String propagandaSummaries;
     @ApiModelProperty(value = "审批状态(-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)")
     private String approvalStatus;
     @ApiModelProperty(value = "宣传区域(top:顶部  central:中部  bottom:底部)")
@@ -45,14 +47,6 @@ public class BusinessPromotionListShow implements Serializable {
     private String status;
     @ApiModelProperty(value = "创建时间")
     private String createdTime;
-
-    public String getPropagandaDetails() {
-        return propagandaDetails;
-    }
-
-    public void setPropagandaDetails(String propagandaDetails) {
-        this.propagandaDetails = propagandaDetails;
-    }
 
     public String getOrderNum() {
         return orderNum;
@@ -140,6 +134,22 @@ public class BusinessPromotionListShow implements Serializable {
 
     public void setPropagandaFee(String propagandaFee) {
         this.propagandaFee = propagandaFee;
+    }
+
+    public String getPropagandaDetails() {
+        return propagandaDetails;
+    }
+
+    public void setPropagandaDetails(String propagandaDetails) {
+        this.propagandaDetails = propagandaDetails;
+    }
+
+    public String getPropagandaSummaries() {
+        return propagandaSummaries;
+    }
+
+    public void setPropagandaSummaries(String propagandaSummaries) {
+        this.propagandaSummaries = propagandaSummaries;
     }
 
     public String getApprovalStatus() {

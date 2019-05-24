@@ -1,6 +1,7 @@
 package com.jn.enterprise.pay.service.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -406,8 +407,8 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         delay.setServiceId(tbs.getCallbackId());
         delay.setServiceUrl(tbs.getCallbackUrl());
         delay.setTtl("30");
-        delay.setDataString(payCallBackNotify.toString());
-        logger.info("接收到延迟消息内容：【{}】", delay.toString());
+        delay.setDataString(JSONObject.toJSONString(payCallBackNotify));
+        logger.info("接收到延迟消息内容：【{}】", JSONObject.toJSONString(payCallBackNotify));
         logger.info("开始回调");
         Result<Boolean> result = delaySendMessageClient.delaySend(delay);
         logger.info("结束回调,返回结果，【{}】", result.toString());
@@ -573,7 +574,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     delay.setServiceId(tbPayBills.get(i).getCallbackId());
                     delay.setServiceUrl(tbPayBills.get(i).getCallbackUrl());
                     delay.setTtl("30");
-                    delay.setDataString(payCallBackNotify.toString());
+                    delay.setDataString(JSONObject.toJSONString(payCallBackNotify));
                     logger.info("接收到延迟消息内容：【{}】", delay.toString());
                     logger.info("开始回调");
                     Result<Boolean> result2 = delaySendMessageClient.delaySend(delay);

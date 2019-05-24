@@ -17,28 +17,28 @@ import java.io.Serializable;
 public class ParkingAreaUseRate implements Serializable {
     private static final long serialVersionUID = 1L;
     @ApiModelProperty(value = "停车场标识")
-    private String chargeAmount;
+    private String areaId;
     @ApiModelProperty(value = "停车场名称")
-    private String parkingSum;
+    private String areaName;
     @ApiModelProperty(value = "停车场车辆停放数")
     private Integer parkingCar;
     @ApiModelProperty(value = "停车场使用率")
     private Double useRate;
 
-    public String getChargeAmount() {
-        return chargeAmount;
+    public String getAreaId() {
+        return areaId;
     }
 
-    public void setChargeAmount(String chargeAmount) {
-        this.chargeAmount = chargeAmount;
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
     }
 
-    public String getParkingSum() {
-        return parkingSum;
+    public String getAreaName() {
+        return areaName;
     }
 
-    public void setParkingSum(String parkingSum) {
-        this.parkingSum = parkingSum;
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public Integer getParkingCar() {
@@ -60,10 +60,10 @@ public class ParkingAreaUseRate implements Serializable {
     @Override
     public String toString() {
         return "ParkingAreaUseRate{" +
-                "chargeAmount='" + chargeAmount + '\'' +
-                ", parkingSum='" + parkingSum + '\'' +
-                ", parkingCar='" + parkingCar + '\'' +
-                ", useRate='" + useRate + '\'' +
+                "areaId='" + areaId + '\'' +
+                ", areaName='" + areaName + '\'' +
+                ", parkingCar=" + parkingCar +
+                ", useRate=" + useRate +
                 '}';
     }
 }

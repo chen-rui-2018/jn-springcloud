@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterManageService;
 import com.jn.park.customer.service.CustomerServiceCenterService;
+import com.jn.park.customer.vo.CustomerServiceCenterDetailVo;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -88,5 +89,20 @@ public class CustomerCalledInfoEnterController extends BaseController {
     public Result<String> getPhoneCalledOwen(@ApiParam(name="phone",value = "来电用户电话",required = true,example = "18088888888")
                                                                                        @RequestParam(value = "phone") String phone) {
         return new Result<String>(manageService.getPhoneCalledOwen(phone));
+    }
+
+
+    @ControllerLog(doAction = "用户问题详情")
+    @ApiOperation(value = "用户问题详情")
+    @RequestMapping(value = "/customerQuesDetail",method = RequestMethod.GET)
+    public Result<CustomerServiceCenterDetailVo> customerQuesDetail(@ApiParam(name="processInsId",value = "流程实例Id",required = true,example = "f5c95f9adf714aedab3739cbc9297178")
+                                                                    @RequestParam(value = "processInsId") String processInsId) {
+        //获取当前登录用户基本信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("用户问题详情获取当前登录用户信息失败");
+            return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        return new Result<>(customerServiceCenterService.customerQuesDetail(user.getAccount(), processInsId));
     }
 }

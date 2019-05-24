@@ -1,5 +1,6 @@
 package com.jn.park.repair.service;
 
+import com.jn.common.model.Result;
 import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import org.json.simple.JSONObject;
@@ -21,9 +22,9 @@ public interface RepairService {
     void  automaticApprovalTaskByTaskId(PayCallBackNotify  payCallBackNotify);
 
     /**
-     *
+     *物业服务-创建缴费单
      * @param payBillCreateParamVo
      */
-    void generateBill(PayBillCreateParamVo payBillCreateParamVo);
+    Result generateBill(PayBillCreateParamVo payBillCreateParamVo);
 
 }

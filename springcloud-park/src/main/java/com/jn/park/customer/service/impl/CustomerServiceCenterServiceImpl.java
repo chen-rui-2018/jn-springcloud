@@ -475,7 +475,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     @ServiceLog(doAction ="根据用户账号获取客服中心问题列表")
     private List<ConsultationCustomerListShow> getCustomerCenterList(String loginAccount) {
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
-        example.createCriteria().andCreatorAccountEqualTo(loginAccount)
+        example.createCriteria().andCreatorAccountEqualTo(loginAccount).andProcessInsIdIsNotNull()
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         example.setOrderByClause("created_time desc");
         List<TbClientServiceCenter> tbClientServiceCenterList = tbClientServiceCenterMapper.selectByExample(example);

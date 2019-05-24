@@ -8,6 +8,13 @@ const axios = http.create({
     // timeout: 10000
 })
 // 全局请求拦截
+axios.interceptors.request.use(function (response) {
+  response.headers.token = window.sessionStorage.getItem('token')
+  return response;
+}, function (error) {
+  return Promise.reject(error);
+})
+// 全局请求响应拦截
 axios.interceptors.response.use(function (response) {
   // 处理响应数据
   return response

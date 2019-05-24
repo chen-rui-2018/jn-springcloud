@@ -173,7 +173,7 @@
         ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id ),0) AS "commentsNum"
         ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
         ,ifnull((SELECT SUM(1) FROM tb_person_care tc  WHERE  tc.care_account= #{account} and tc.receive_account = t1.creator_account and tc.record_status = 1 ),0) AS "careStatus"
-        ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{currentAccount} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
+        ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{account} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
         ,group_concat(t2.img_url) as "imgUrl"
         from tb_gam_topic t1
         left join tb_file_img t2 on t1.topic_id = t2.topic_id

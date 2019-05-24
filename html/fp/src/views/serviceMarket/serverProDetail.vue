@@ -1,8 +1,8 @@
 <template>
     <div class="serverProDetail w">
         <div class="serverOrgMenu">
-            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页/</span>
-            <span class="pointer" @click="$routet.push({path:'/serverPro'})">服务产品</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
+            <span class="pointer" @click="$router.push({path:'/serverPro'})">服务产品</span>
             <span>/</span>
             <span class="mainColor agent">服务产品详情</span>
         </div>
@@ -53,13 +53,16 @@
                         </div>
                     </div>
                     <div class="agent2 color2" v-if="zankaiFlag">
-                        <div class="agent2Con" v-if="proDelInfo.productDetails!=null">
+                        <div class="agent2Con" id="agent2Con" :class="{'showMore':showMoreFlag}">
+                            {{proDelInfo.productDetails}}
+                        </div>
+                        <!-- <div class="agent2Con" v-if="proDelInfo.productDetails">
                             {{proDelInfo.productDetails}}
                         </div>
                         <div class="agent2Con" v-else>
                             暂无内容！
-                        </div>
-                        <div class="orgBtn1 mainColor tx">查看更多</div>
+                        </div> -->
+                        <div class="orgBtn1 mainColor tx pointer" v-if="showMoreFlag" @click="showMoreFlag=false">查看更多</div>
                     </div>
                 </el-card>
             </div>
@@ -108,7 +111,7 @@
                                 <div class="list-item-date"></div>
                                 <!-- 上架时间 end -->
                                 <!-- 左侧logo begin-->
-                                <div class="list-imgleft-container product nopic">
+                                <div class="list-imgleft-container product nopic pointer" @click="$router.push({path: 'serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
                                     <img :src="i.pictureUrl" alt="">
                                 </div>
                                 <!-- 左侧logo end-->
@@ -256,6 +259,7 @@
 export default {
   data() {
     return {
+      showMoreFlag:false,
       zankaiFlag: true,
       activeName1: "samePro",
       currentPage1: 1,
@@ -453,17 +457,25 @@ export default {
     },
     findProductDetails() {
       //服务产品详情
-      let _this = this;
+    //   let _this = this;
       this.api.get({
         url: "findProductDetails",
         data: {
-          productId: _this.$route.query.productId
+          productId: this.$route.query.productId
         },
-        callback: function(res) {
+        callback: (res)=>{
           if (res.code == "0000") {
-            _this.proDelInfo = res.data.info;
+            this.proDelInfo = res.data.info;
+            // console.log(document.getElementById('agent2Con').clientHeight)
+            // console.log(window.getComputedStyle(document.getElementById('agent2Con')).height)
+            setTimeout(()=>{
+             if(document.getElementById('agent2Con').clientHeight>=50){
+                 debugger
+                 this.showMoreFlag=true;
+             }
+            },0)
           } else {
-            _this.$message.error(res.result);
+            this.$message.error(res.result);
           }
         }
       });
@@ -506,11 +518,12 @@ export default {
       .agent2 {
         padding: 10px 0;
         .agent2Con {
-          height: 150px;
-          width: 80%;
+          transition: .2s all;
+        }
+        .agent2Con.showMore {
+          height: 50px;
           overflow: hidden;
-          // white-space: nowrap;
-          // text-overflow: ellipsis;
+        //   overflow: hidden;
         }
         .orgBtn1 {
           font-size: 13px;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.exam.dao.ExaminaTitleOptionMapper">
+
+	<select id="optionList" parameterType="java.lang.String"
+		resultType="com.jn.hr.exam.entity.TbManpowerExaminaTitleOption">
+		SELECT * FROM tb_manpower_examina_title_option t1
+		where 1=1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(testQuestionId)">
+			and t1.test_question_id =
+			#{testQuestionId,jdbcType=VARCHAR}
+		</if>
+		GROUP BY t1.option_id
+	</select>
+
+	<delete id="deleteByTestQuestionId" parameterType="java.lang.String">
+		delete from
+		tb_manpower_examina_title_option
+		where test_question_id =
+		#{testQuestionId,jdbcType=VARCHAR}
+	</delete>
+
+</mapper>

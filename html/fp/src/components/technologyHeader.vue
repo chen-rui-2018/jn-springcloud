@@ -13,16 +13,12 @@
             <div class="search">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
             </div>
-            <div class="navlogin" v-if="this.$route.name!=='actiManagent'">
+            <!-- <div class="navlogin" v-if="this.$route.name!=='actiManagent'">
               <a @click="$router.push({path:'/login'})">登录</a>
               <span class="line">|</span>
               <a @click="$router.push({path:'/register'})">注册</a>
-            </div>
-            <div class="navlogin" v-if="this.$route.name =='actiManagent'">
-              <i class="el-icon-bell"></i>
-              <span class="line">|</span>
-              <img src="" alt="">
-            </div>
+            </div> -->
+            <user-info></user-info>
           </div>
           <div class="nav">
             <ul class="posA clearfix">
@@ -52,7 +48,11 @@
 </template>
 
 <script>
+import userInfo from '../views/common/userInfoData'
 export default {
+  components: {
+      userInfo
+    },
   data() {
     return {
       show4: false,

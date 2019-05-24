@@ -16,6 +16,7 @@
     <result column="day" jdbcType="DATE" property="day" />
     <result column="meter_id" jdbcType="VARCHAR" property="meterId" />
     <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, rule_id, project_id, company_id, record_status, creator_account, created_time, 
-    modifier_account, modified_time, degree, price, day, meter_id, rule_name
+    modifier_account, modified_time, degree, price, day, meter_id, rule_name, company_name
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyGroupLogCriteria" resultMap="BaseResultMap">
     select
@@ -114,12 +115,12 @@
       company_id, record_status, creator_account, 
       created_time, modifier_account, modified_time, 
       degree, price, day, meter_id, 
-      rule_name)
+      rule_name, company_name)
     values (#{id,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, 
       #{companyId,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{degree,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, #{day,jdbcType=DATE}, #{meterId,jdbcType=VARCHAR}, 
-      #{ruleName,jdbcType=VARCHAR})
+      #{ruleName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyGroupLog">
     insert into tb_electric_energy_group_log
@@ -166,6 +167,9 @@
       <if test="ruleName != null">
         rule_name,
       </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -209,6 +213,9 @@
       </if>
       <if test="ruleName != null">
         #{ruleName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -263,6 +270,9 @@
       <if test="record.ruleName != null">
         rule_name = #{record.ruleName,jdbcType=VARCHAR},
       </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -283,7 +293,8 @@
       price = #{record.price,jdbcType=DECIMAL},
       day = #{record.day,jdbcType=DATE},
       meter_id = #{record.meterId,jdbcType=VARCHAR},
-      rule_name = #{record.ruleName,jdbcType=VARCHAR}
+      rule_name = #{record.ruleName,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -330,6 +341,9 @@
       <if test="ruleName != null">
         rule_name = #{ruleName,jdbcType=VARCHAR},
       </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -347,7 +361,8 @@
       price = #{price,jdbcType=DECIMAL},
       day = #{day,jdbcType=DATE},
       meter_id = #{meterId,jdbcType=VARCHAR},
-      rule_name = #{ruleName,jdbcType=VARCHAR}
+      rule_name = #{ruleName,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

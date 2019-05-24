@@ -34,6 +34,9 @@ public class TbElectricPriceruleCompanyInDay implements Serializable {
     /*@ApiModelProperty("更新时间")*/
     private Date modifiedTime;
 
+    /*@ApiModelProperty("企业名称")*/
+    private String companyName;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -116,6 +119,14 @@ public class TbElectricPriceruleCompanyInDay implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -137,7 +148,8 @@ public class TbElectricPriceruleCompanyInDay implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()));
     }
 
     @Override
@@ -154,6 +166,7 @@ public class TbElectricPriceruleCompanyInDay implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         return result;
     }
 
@@ -173,6 +186,7 @@ public class TbElectricPriceruleCompanyInDay implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", companyName=").append(companyName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

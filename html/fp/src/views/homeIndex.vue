@@ -1,25 +1,31 @@
 <template>
   <div class="portalIndex">
-    <div class="portalIndexImg" v-if="$store.state.needNav">
-      <div class="header" id="header" :class="{'headerw':isCenter}">
+    <div class="portalIndexImg" v-if="$store.state.hiddenNav">
+      <div class="header" id="header" :class="{'headerw':isCenter||showFF}">
         <div class="headerContainer clearfix">
           <div class="titleImg fl">
-            <img src="@/../static/img/login-logo.png" v-if="isCenter" class="pointer" alt="" @click="$router.push({path:'/'})">
+            <img src="@/../static/img/login-logo.png" v-if="isCenter||showFF" class="pointer" alt="" @click="$router.push({path:'/'})">
             <img src="@/../static/img/LOGO1.png" v-else class="pointer" alt="" @click="$router.push({path:'/'})">
           </div>
-          <div class="headerRight fr">
-            <router-link to="/messageCenter" class="search">
+          <div class="headerRight fr pr">
+            <!-- <router-link to="/allMesList" class="search" v-if="isLogin">
               <i class="el-icon-bell" style="font-size:20px"></i>
-            </router-link>
+            </router-link> -->
+            <!-- <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span> -->
             <div class="search pointer">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
             </div>
-            <div class="navlogin">
-              <a @click="$router.push({path:'/login'})">登录</a>
+            <user-info></user-info>
+            <!-- <div class="navlogin">
+              <router-link to="/parkNotice" class="" v-if="isLogin">
+              <i class="el-icon-bell" style="font-size:20px" @mouseenter="showMes=!showMes"></i>
+              </router-link>
+              <a @click="$router.push({path:'/login'})" v-else>登录</a>
               <span class="line">|</span>
               <a @click="$router.push({path:'/register'})">注册</a>
-            </div>
+            </div> -->
           </div>
+
           <div class="nav" id="nav">
             <ul class="posA clearfix">
               <li class="">
@@ -38,6 +44,16 @@
           </div>
         </div>
       </div>
+      <!-- <div class="mesage11" v-if="showMes"  @mouseleave="showMes=!showMes">
+        <el-card>
+          <div class="firli"><span class="color1">消息中心</span><span class="pointer">清空</span></div>
+          <ul>
+          <li class="pointer">[缴费提醒]您有1条企业缴费提醒</li>
+          <li>[园区通知]您有2条私人订单</li>
+        </ul>
+        <div class="checkAll ct color1 pointer">查看全部</div>
+        </el-card>
+      </div> -->
       <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
         <el-collapse-transition>
           <div v-show="show4">
@@ -58,9 +74,14 @@
 </template>
 <script>
   import swiper from "swiper";
+  import userInfo from './common/userInfoData'
   export default {
+     components: {
+      userInfo
+    },
     data() {
       return {
+        showMes:false,
         // sousuo: false,
         show1: false,
         show11: false,
@@ -74,24 +95,49 @@
         activeNames: ['first'],
         sw:'fir',
         showBtn:false,
+        // isLogin:false,
+        // accoutInfo:''
       };
     },
     computed: {
       isCenter() {
-        const list = ['portalIndex', 'enterpriseservice']
+        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,academicExchange,policyCenter,recruitmentList';
         return this.$route.matched.some(item => {
-          return list.indexOf(item.name) !== -1
+          if(item.name){
+            return list.indexOf(item.name) == -1
+          }
         })
       }
     },
+    // computed: {
+    //   isCenter() {
+    //     const list = ['portalIndex', 'enterpriseservice']
+    //     let flag
+    //     for (const item of this.$route.matched) {
+    //       for (const name of list) {
+    //         if (item.name === name) {
+    //           flag = true
+    //         }
+    //       }
+    //     }
+    //     return flag
+    //   }
+    // },
     mounted() {
       this.swiperinit();
       window.addEventListener("scroll", this.handleScroll);
+      // this.islogin()
     },
     destroyed() {
       window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
     },
     methods: {
+      // islogin(){
+      //   this.accoutInfo=sessionStorage.getItem('account')
+      //   if(this.accoutInfo){
+      //     this.isLogin=true
+      //   }
+      // },
       showH(){
         this.show1 = true;
         // setTimeout(()=>{
@@ -104,16 +150,16 @@
         this.show1 = false;
         // },500)
       },
-      handleChangeName(val) {
-        console.log(val);
-        if(val=='two'){
-          this.sw='tw'
-        } else if(val=='three'){
-          this.sw='th'
-        } else{
-          this.sw='fir'
-        }
-      },
+      // handleChangeName(val) {
+      //   console.log(val);
+      //   if(val=='two'){
+      //     this.sw='tw'
+      //   } else if(val=='three'){
+      //     this.sw='th'
+      //   } else{
+      //     this.sw='fir'
+      //   }
+      // },
       swiperinit() {
         var mySwiper = new swiper(".swiper-container", {
           direction: "horizontal", // 垂直切换选项
@@ -284,6 +330,12 @@
       position: fixed;
       z-index: 99;
       width: 100%;
+      // .header{
+      //   background-color: #fff;
+      //   #nav{
+      //     color:#666;
+      //   }
+      // }
       .headerw {
         background: #fff;
         border-bottom:1px solid #eee;
@@ -318,6 +370,9 @@
       .search_box {
         background: rgba(0, 0, 0, 0.3);
         .el-input-group {
+          position: relative;
+          left: 50%;
+          transform: translateX(-50%);
           border-radius: 28px;
           width: 42%;
           margin: 43px 0;
@@ -361,229 +416,6 @@
       .searchbox {
         background: #fff;
         box-shadow:0 10px 10px -10px #ccc;
-      }
-    }
-    .portalCon {
-      .banner {
-        .swiper-wrapper {
-          .swiper-slide {
-            width: 100%;
-          }
-          img {
-            width: 100%;
-            vertical-align: middle;
-          }
-        }
-        .swiper-button-prev,
-        .swiper-button-next {
-          background: none;
-          width: 34px;
-          height: 34px;
-          color: #fff;
-          font-size: 60px;
-          .icon-leftarrow,
-          .icon-rightarrow {
-            font-size: 45px;
-          }
-        }
-        .swiper-button-prev {
-          left: 60px;
-        }
-        .swiper-button-next {
-          right: 60px;
-        }
-        .swiper-pagination {
-          bottom: 40%;
-          left: 92%;
-          .swiper-pagination-bullet {
-            display: block;
-            margin-bottom: 10px;
-            opacity: 1;
-            background: #ccc;
-          }
-          .swiper-pagination-bullet-active {
-            background: #fff;
-            height: 50px;
-            border-radius: 4px;
-          }
-        }
-      }
-    }
-    #qiehuan1 {
-      margin: 20px 0;
-      > li {
-        display: inline-block;
-        width: 190px;
-        height: 210px;
-        padding: 30px 10px;
-        font-size: 12px;
-        text-align: left;
-        margin-right: 15px;
-        vertical-align: middle;
-        background-color: rgba(255, 255, 255, 0.2);
-        .liTit {
-          font-size: 14px;
-          text-align: center;
-        }
-        .liInfo {
-          margin: 40px 0 50px 0;
-        }
-        .liBom {
-          padding: 0 15px;
-          > i {
-            margin-right: 8px;
-          }
-        }
-      }
-      > li:hover {
-        transition: 0.3s all;
-        transform: scale(1.1);
-      }
-    }
-    .portalNotice {
-      .left {
-        text-align: left;
-        .leftLine {
-          position: absolute;
-          width: 2px;
-          height: 100%;
-          background: #000;
-        }
-        .el-collapse,
-        .el-collapse-item__header,
-        .el-collapse-item__wrap {
-          border: none;
-        }
-        .el-collapse-item__wrap {
-          // text-indent: 3.5em;
-        }
-        .el-collapse-item__arrow {
-          display: none;
-        }
-      }
-    }
-    .policyGuide {
-      .swiper-container {
-        padding-bottom: 60px;
-      }
-      // .swiper-pagination-bullet {
-      //   background: red;
-      // }
-      // .swiper-pagination-bullet-active {
-      //   background: #fff;
-      // }
-      .swiper-pagination-bullet {
-        //   display: block;
-        margin-bottom: 10px;
-        opacity: 1;
-        background: #97ecc8;
-      }
-      .swiper-pagination-bullet-active {
-        background: #fff;
-        //   height: 65px;
-        border-radius: 4px;
-      }
-      .el-carousel__button {
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-      }
-      .el-carousel__arrow {
-        background: none;
-        font-size: 30px;
-        top: 40%;
-      }
-      .el-carousel__arrow--left {
-        left: 64px;
-      }
-      .el-carousel__arrow--right {
-        right: 64px;
-      }
-      .fenye1 {
-        .swiper-button-prev,
-        .swiper-button-next {
-          width: 17px;
-          height: 31px;
-          top: 48%;
-        }
-        .swiper-button-prev,
-        .swiper-container-rtl .swiper-button-next {
-          background: url("../../static/img/zuo1.png") 100% 100% / 100% 100%
-          no-repeat;
-          left: 90px;
-          right: auto;
-        }
-        .swiper-button-next,
-        .swiper-container-rtl .swiper-button-prev {
-          background: url("../../static/img/you1.png") 100% 100% / 100% 100%
-          no-repeat;
-          right: 100px;
-          left: auto;
-        }
-      }
-    }
-    .popularActi {
-      .swiper-button-prev,
-      .swiper-button-next {
-        width: 34px;
-        height: 34px;
-      }
-    }
-
-    .districtGardens {
-      .card {
-        .swiper-container {
-          padding: 30px 0;
-        }
-      }
-      .swiper-button-next,
-      .swiper-container-rtl .swiper-button-prev {
-        background: url("../../static/img/you2.png") 100% 100% / 100% 100% no-repeat;
-        right: 95px;
-        left: auto;
-        width: 17px;
-        height: 31px;
-      }
-      .swiper-button-prev,
-      .swiper-container-rtl .swiper-button-next {
-        background: url("../../static/img/zuo2.png") 100% 100% / 100% 100% no-repeat;
-        left: 95px;
-        right: auto;
-        width: 17px;
-        height: 31px;
-      }
-      .cardUl {
-        > li {
-          transition: all 0.6s;
-        }
-        > li:hover {
-          transform: scale(1.1);
-          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
-        }
-      }
-    }
-    .enterpriseinfo {
-      .enterPriseCon {
-        .con1 {
-          overflow: hidden;
-        }
-        .con1 img {
-          transition: all 0.6s;
-        }
-        .con1 img:hover {
-          transform: scale(1.1);
-        }
-        .con2 {
-          .conlef1 {
-            overflow: hidden;
-            img {
-              transition: all 0.6s;
-            }
-            img:hover {
-              transform: scale(1.1);
-            }
-          }
-        }
       }
     }
   }

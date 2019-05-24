@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
@@ -29,7 +30,6 @@ public class PayAccountBookMoneyRecord extends Page implements Serializable {
     private String billId;
 
     @ApiModelProperty(value="账本ID",example = "20190504123")
-    @NotEmpty(message = "{acBookId :'账本ID不能为空'}")
     private String acBookId;
 
     @ApiModelProperty(value="备注说明")

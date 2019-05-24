@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.employee.dao.MobilizationManagementMapper">
+   <select id="list" parameterType="com.jn.hr.employee.entity.TbManpowerMobilizationManagement" 
+                               resultType="com.jn.hr.employee.entity.TbManpowerMobilizationManagement">
+    select * from tb_manpower_mobilization_management t1 
+  </select>
+  
+  <select id="selectByJobNumber" parameterType="java.lang.String" 
+                               resultType="com.jn.hr.employee.entity.TbManpowerMobilizationManagement">
+    select * from tb_manpower_mobilization_management t1 
+    where t1.job_number = #{jobNumber}
+  </select>
+  
+</mapper>

@@ -14,6 +14,11 @@ public enum IBPSOperationExceptionEunm implements CodeAndMsg {
     MY_TASKS_PARAM_NOT_NULL("5020552","IBPS我的待办事项入参不能为空"),
     MY_HANDLED_PARAM_NOT_NULL("5020552","IBPS我的已办事项入参不能为空"),
     OPINIONS_PARAM_NOT_ALL_NULL("5020553","IBPS获取审批历史的流程实例ID和任务id不能都为空，至少一个要有值"),
+    PROCESS_INS_ID_NOT_NULL("5020554","流程实例id不能为空"),
+    UPLOAD_FILE_URL_IS_NULL("5020555","文件路径不能为空"),
+    UPLOAD_FILE_FORMAT_ERROR("5020556","文件路径格式错误"),
+    UPLOAD_FILE_NOT_EXIST("5020557","文件不存在"),
+    UPLOAD_FILE_ERROR("5020558","上传文件失败"),
     ;
     /**
      * 编码

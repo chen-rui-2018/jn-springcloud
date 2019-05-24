@@ -1875,52 +1875,62 @@ public class TbPmRepairCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateEqualTo(Date value) {
+        public Criteria andFeedbackCompleteDateEqualTo(String value) {
             addCriterion("feedback_complete_date =", value, "feedbackCompleteDate");
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateNotEqualTo(Date value) {
+        public Criteria andFeedbackCompleteDateNotEqualTo(String value) {
             addCriterion("feedback_complete_date <>", value, "feedbackCompleteDate");
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateGreaterThan(Date value) {
+        public Criteria andFeedbackCompleteDateGreaterThan(String value) {
             addCriterion("feedback_complete_date >", value, "feedbackCompleteDate");
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateGreaterThanOrEqualTo(Date value) {
+        public Criteria andFeedbackCompleteDateGreaterThanOrEqualTo(String value) {
             addCriterion("feedback_complete_date >=", value, "feedbackCompleteDate");
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateLessThan(Date value) {
+        public Criteria andFeedbackCompleteDateLessThan(String value) {
             addCriterion("feedback_complete_date <", value, "feedbackCompleteDate");
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateLessThanOrEqualTo(Date value) {
+        public Criteria andFeedbackCompleteDateLessThanOrEqualTo(String value) {
             addCriterion("feedback_complete_date <=", value, "feedbackCompleteDate");
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateIn(List<Date> values) {
+        public Criteria andFeedbackCompleteDateLike(String value) {
+            addCriterion("feedback_complete_date like", value, "feedbackCompleteDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackCompleteDateNotLike(String value) {
+            addCriterion("feedback_complete_date not like", value, "feedbackCompleteDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackCompleteDateIn(List<String> values) {
             addCriterion("feedback_complete_date in", values, "feedbackCompleteDate");
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateNotIn(List<Date> values) {
+        public Criteria andFeedbackCompleteDateNotIn(List<String> values) {
             addCriterion("feedback_complete_date not in", values, "feedbackCompleteDate");
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateBetween(Date value1, Date value2) {
+        public Criteria andFeedbackCompleteDateBetween(String value1, String value2) {
             addCriterion("feedback_complete_date between", value1, value2, "feedbackCompleteDate");
             return (Criteria) this;
         }
 
-        public Criteria andFeedbackCompleteDateNotBetween(Date value1, Date value2) {
+        public Criteria andFeedbackCompleteDateNotBetween(String value1, String value2) {
             addCriterion("feedback_complete_date not between", value1, value2, "feedbackCompleteDate");
             return (Criteria) this;
         }
@@ -2482,6 +2492,76 @@ public class TbPmRepairCriteria {
 
         public Criteria andEvaluatePhotoUrlNotBetween(String value1, String value2) {
             addCriterion("evaluate_photo_url not between", value1, value2, "evaluatePhotoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdIsNull() {
+            addCriterion("flow_inst_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdIsNotNull() {
+            addCriterion("flow_inst_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdEqualTo(String value) {
+            addCriterion("flow_inst_id =", value, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdNotEqualTo(String value) {
+            addCriterion("flow_inst_id <>", value, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdGreaterThan(String value) {
+            addCriterion("flow_inst_id >", value, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdGreaterThanOrEqualTo(String value) {
+            addCriterion("flow_inst_id >=", value, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdLessThan(String value) {
+            addCriterion("flow_inst_id <", value, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdLessThanOrEqualTo(String value) {
+            addCriterion("flow_inst_id <=", value, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdLike(String value) {
+            addCriterion("flow_inst_id like", value, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdNotLike(String value) {
+            addCriterion("flow_inst_id not like", value, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdIn(List<String> values) {
+            addCriterion("flow_inst_id in", values, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdNotIn(List<String> values) {
+            addCriterion("flow_inst_id not in", values, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdBetween(String value1, String value2) {
+            addCriterion("flow_inst_id between", value1, value2, "flowInstId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowInstIdNotBetween(String value1, String value2) {
+            addCriterion("flow_inst_id not between", value1, value2, "flowInstId");
             return (Criteria) this;
         }
     }

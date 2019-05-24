@@ -21,7 +21,7 @@ public class ExecuteHistoryResult implements Serializable {
     private String pk;
     @ApiModelProperty("创建时间")
     private String createTime;
-    @ApiModelProperty("流程编号")
+    @ApiModelProperty("流程定义id")
     private String procDefId;
     @ApiModelProperty("流程实例id")
     private String procInstId;

@@ -1,7 +1,7 @@
 <template>
     <div class="serverPro w" style="padding-top:65px;">
         <div class="serverOrgMenu">
-            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
             <span>/</span>
             <span class="mainColor agent">服务产品</span>
         </div>
@@ -22,9 +22,9 @@
         </div>
         <div class="serverOrgFilter mainBorder clearfix">
             <div class="filLeft fl" id="filLeft">排序：
-                <!-- <span @click="handleFil('')" :class="{'active':colorFlag == ''}">综合</span> -->
+                <!-- <span @click="handleFil('integrate')" :class="{'active2':colorFlag == 'integrate'}">综合</span> -->
                 <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">人气</span>
-                <!-- <span>好评</span> -->
+                <span @click="handleFil('praise')" :class="{'active2':colorFlag == 'praise'}">好评</span>
                 <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">服务量</span>
             </div>
             <div class="filMid fl">
@@ -96,7 +96,7 @@ export default {
     return {
       colorFlag: "",
       bgFlag: "",
-      sortTypes: "",
+      sortTypes: "integrate",
       filterFlag: "",
       filterFlag1: "",
       flag1: true,
@@ -198,8 +198,8 @@ export default {
       this.page = val;
       this.initList();
     },
-    initList() {
       //服务产品列表
+    initList() {
       let _this = this;
       this.api.get({
         url: "findProductList",
@@ -225,12 +225,8 @@ export default {
     selectIndustryList() {
       let _this = this;
       this.api.get({
-        url: "selectTeamList",
-        data: {
-          id: "",
-          preType: 0,
-          preValue: ""
-        },
+        url: "selectIndustryProductList",
+        data: {},
         callback: function(res) {
           if (res.code == "0000") {
             // for (let it in res.data) {
@@ -261,7 +257,7 @@ export default {
           >span{
               color:#919191;
           }
-          >span.active{
+          >span.active2{
             color: #00a041;
           }
       }

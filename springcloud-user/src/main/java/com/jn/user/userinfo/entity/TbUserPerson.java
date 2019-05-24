@@ -48,6 +48,8 @@ public class TbUserPerson implements Serializable {
 
     private Date birthday;
 
+    private String registrationId;
+
     private String creatorAccount;
 
     private String modifierAccount;
@@ -236,6 +238,14 @@ public class TbUserPerson implements Serializable {
         this.birthday = birthday;
     }
 
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId == null ? null : registrationId.trim();
+    }
+
     public String getCreatorAccount() {
         return creatorAccount;
     }
@@ -310,6 +320,7 @@ public class TbUserPerson implements Serializable {
             && (this.getUserType() == null ? other.getUserType() == null : this.getUserType().equals(other.getUserType()))
             && (this.getPoint() == null ? other.getPoint() == null : this.getPoint().equals(other.getPoint()))
             && (this.getBirthday() == null ? other.getBirthday() == null : this.getBirthday().equals(other.getBirthday()))
+            && (this.getRegistrationId() == null ? other.getRegistrationId() == null : this.getRegistrationId().equals(other.getRegistrationId()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -343,6 +354,7 @@ public class TbUserPerson implements Serializable {
         result = prime * result + ((getUserType() == null) ? 0 : getUserType().hashCode());
         result = prime * result + ((getPoint() == null) ? 0 : getPoint().hashCode());
         result = prime * result + ((getBirthday() == null) ? 0 : getBirthday().hashCode());
+        result = prime * result + ((getRegistrationId() == null) ? 0 : getRegistrationId().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -379,6 +391,7 @@ public class TbUserPerson implements Serializable {
         sb.append(", userType=").append(userType);
         sb.append(", point=").append(point);
         sb.append(", birthday=").append(birthday);
+        sb.append(", registrationId=").append(registrationId);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", createdTime=").append(createdTime);

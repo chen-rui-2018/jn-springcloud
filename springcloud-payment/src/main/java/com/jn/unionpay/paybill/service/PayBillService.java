@@ -2,6 +2,9 @@ package com.jn.unionpay.paybill.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.model.*;
 import com.jn.system.model.User;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,18 +56,20 @@ public interface PayBillService {
 
     /**
      * 缴费单支付发起
-     * @param payInitiateParam
+     * @param billId
+     * @param channelId
+     * @param userPoint 是否使用积分抵扣，0不使用 1使用
      * @param user
      * @return
      */
-    PayResponseVO startPayment(PayInitiateParam payInitiateParam, User user);
+    Result<PayOrderRsp> createPayOrder(String billId, String channelId, String userPoint, User user);
 
     /**
      * 支付回调接口
-     * @param callBackParam
+     * @param payOrderNotify
      * @return
      */
-    PayCallBackVO payCallBack(PayCallBackParam callBackParam);
+    Result payCallBack(PayOrderNotify payOrderNotify);
 
     /**
      * 取消支付订单接口

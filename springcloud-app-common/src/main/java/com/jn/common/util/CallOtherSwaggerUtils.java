@@ -3,6 +3,8 @@ package com.jn.common.util;
 import com.jn.common.util.encryption.EncryptUtil;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -22,8 +24,17 @@ import java.util.Map;
  * @version： v1.0
  * @modified By:
  */
+@ConfigurationProperties(
+        prefix = "jn.ibps.swagger"
+)
 @Component
+@RefreshScope
 public class CallOtherSwaggerUtils {
+
+    /**
+     * ibps.swagger的链接
+     */
+    private static String url;
 
     @Autowired
     private JedisFactory jedisFactory;
@@ -41,13 +52,9 @@ public class CallOtherSwaggerUtils {
     private static String PREFIX = "swagger:account:nj:";
 
     /**
-     * REAL_PATH
-     */
-    private static String REAL_PATH = "http://112.94.22.222:2382/ibpsApi";
-    /**
      * 获取TOKEN 请求地址
      */
-    private static String LOGIN_URL = REAL_PATH + "/api/loginService/noPwdLogin";
+    private static String LOGIN_URL = "/api/loginService/noPwdLogin";
     /**
      * 只能取NX或者XX，如果取NX，则只有当key不存在是才进行set，如果取XX，则只有当key已经存在时才进行set
      */
@@ -65,46 +72,97 @@ public class CallOtherSwaggerUtils {
      * swagger util
      *
      * @param account 账号
-     * @param url     请求URL
+     * @param curl    请求URL
      * @param method  method
      * @param param   请求参数
      * @return
      */
-    public static JSONObject request(String account, String url, HttpMethod method, MultiValueMap<String, String> param) {
-        return request(account, url, method, param, MediaType.APPLICATION_FORM_URLENCODED);
+    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, Object> param) {
+        return request(account, curl, method, param, MediaType.APPLICATION_FORM_URLENCODED);
     }
 
     /**
      * swagger util
      *
      * @param account   账号
-     * @param url       请求URL
+     * @param curl      请求URL
      * @param method    method get post
      * @param param     请求参数
      * @param mediaType application/x-www-form-urlencoded application/json
      * @return
      */
-    public static JSONObject request(String account, String url, HttpMethod method, MultiValueMap<String, String> param, MediaType mediaType) {
+    public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, Object> param, MediaType mediaType) {
         JSONObject result = new JSONObject();
         try {
             String token = callOtherSwaggerUtils.jedisFactory.getJedis().get(PREFIX + account);
             if (StringUtils.isEmpty(token)) {
-                String accountKey = EncryptUtil.encryptSha256(account);
-                MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-                map.add("account", account);
-                map.add("accountKey", accountKey);
-                JSONObject tokenJsonObject = RestTemplateUtil.request(LOGIN_URL, HttpMethod.POST, map, new HashMap<>(), MediaType.APPLICATION_FORM_URLENCODED);
-                token = ((LinkedHashMap) tokenJsonObject.get("data")).get("token").toString();
-                callOtherSwaggerUtils.jedisFactory.getJedis().set(PREFIX + account, token, NXXX, EXPX, TIME);
+                token = getToken(account);
             }
             Map dynamicHeaders = new HashMap<>();
             dynamicHeaders.put("X-Authorization-access_token", token);
-            result = RestTemplateUtil.request(REAL_PATH + url, method, param, dynamicHeaders, mediaType);
+            result = RestTemplateUtil.request(url + curl, method, param, dynamicHeaders, mediaType);
+            if(result==null){
+                token = getToken(account);
+                dynamicHeaders.put("X-Authorization-access_token", token);
+                result = RestTemplateUtil.request(url + curl, method, param, dynamicHeaders, mediaType);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
 
+    /**
+     * swagger util
+     *
+     * @param account 账号
+     * @param curl    请求URL
+     * @param method  method get post
+     * @return
+     */
+    public static JSONObject request(String account, String curl, HttpMethod method, String jsonObject) {
+        JSONObject result = null;
+        try {
+            String token = callOtherSwaggerUtils.jedisFactory.getJedis().get(PREFIX + account);
+            if (StringUtils.isEmpty(token)) {
+                token = getToken(account);
+            }
+            Map dynamicHeaders = new HashMap<>();
+            dynamicHeaders.put("X-Authorization-access_token", token);
+            result = RestTemplateUtil.request(url + curl, method, jsonObject, dynamicHeaders);
+            if(result==null){
+                token = getToken(account);
+                dynamicHeaders.put("X-Authorization-access_token", token);
+                result = RestTemplateUtil.request(url + curl, method, jsonObject, dynamicHeaders);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
+    /**
+     * 获取token
+     *
+     * @param account
+     * @return
+     */
+    private static String getToken(String account) {
+        String accountKey = EncryptUtil.encryptSha256(account);
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+        map.add("account", account);
+        map.add("accountKey", accountKey);
+        JSONObject tokenJsonObject = RestTemplateUtil.request(url + LOGIN_URL, HttpMethod.POST, map, new HashMap<>(), MediaType.APPLICATION_FORM_URLENCODED);
+        String token = ((LinkedHashMap) tokenJsonObject.get("data")).get("token").toString();
+        callOtherSwaggerUtils.jedisFactory.getJedis().set(PREFIX + account, token, NXXX, EXPX, TIME);
+        return token;
+    }
+
+    public static String getUrl() {
+        return url;
+    }
+
+    public static void setUrl(String url) {
+        CallOtherSwaggerUtils.url = url;
+    }
 }

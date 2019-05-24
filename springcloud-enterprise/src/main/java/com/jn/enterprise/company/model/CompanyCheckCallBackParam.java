@@ -58,4 +58,14 @@ public class CompanyCheckCallBackParam implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "CompanyCheckCallBackParam{" +
+                "id='" + id + '\'' +
+                ", comName='" + comName + '\'' +
+                ", checkAccount='" + checkAccount + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

@@ -54,12 +54,15 @@
         <div class="checkAll ct color1 pointer">查看全部</div>
         </el-card>
       </div> -->
-      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
+      <!-- @mouseleave="show4=!show4" -->
+      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4" >
         <el-collapse-transition>
-          <div v-show="show4">
+          <div v-show="show4" style="width:100%">
             <div class="transition-box">
-              <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+              <el-input placeholder="请输入内容" v-model="searchData">
+                <template slot="append">
+                  <el-button icon="el-icon-search">搜索 </el-button>
+                </template>
               </el-input>
             </div>
           </div>
@@ -101,7 +104,7 @@
     },
     computed: {
       isCenter() {
-        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,academicExchange,policyCenter,recruitmentList';
+        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService';
         return this.$route.matched.some(item => {
           if(item.name){
             return list.indexOf(item.name) == -1
@@ -369,15 +372,20 @@
       }
       .search_box {
         background: rgba(0, 0, 0, 0.3);
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        width:100%;
         .el-input-group {
-          position: relative;
-          left: 50%;
-          transform: translateX(-50%);
+          // position: relative;
+          // left: 50%;
+          // transform: translateX(-50%);
           border-radius: 28px;
-          width: 42%;
+          overflow: hidden;
+          width: 50%;
           margin: 43px 0;
           .el-input {
-            width: 94px;
+            // width: 94px;
           }
           .el-input__inner:focus {
             border-color: #00a041;
@@ -387,8 +395,6 @@
             border-radius: 28px;
           }
           .el-input-group__append {
-            /* border-top-left-radius: 0;
-          border-bottom-left-radius: 0; */
             background: #00a041;
             color: #fff;
             right: 58px;

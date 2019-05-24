@@ -35,9 +35,9 @@ public class RepairController extends BaseController {
     @ControllerLog(doAction = "创建报修缴费单")
     @ApiOperation(value = "创建报修缴费单",notes = "企业报修-创建报修缴费单")
     @RequestMapping(value = "/generateBill",method = RequestMethod.POST)
-    public Result<Integer> generateBill(@RequestBody PayBillCreateParamVo payBillCreateParamVo){
-        repairService.generateBill(payBillCreateParamVo);
-        return new Result<>();
+    public Result generateBill(@RequestBody PayBillCreateParamVo payBillCreateParamVo){
+        Result result=repairService.generateBill(payBillCreateParamVo);
+        return result;
     }
 
 

@@ -60,6 +60,10 @@ public class UserExtensionInfo implements Serializable {
     private Double point;
     @ApiModelProperty(value = "生日")
     private Date birthday;
+    @ApiModelProperty(value = "极光推送注册ID")
+    private String registrationId;
+    @ApiModelProperty(value = "角色名称")
+    private String roleName;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     @ApiModelProperty(value = "创建时间")
@@ -76,6 +80,22 @@ public class UserExtensionInfo implements Serializable {
     private List<String>jobs;
 
     private static final long serialVersionUID = 1L;
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
+    }
 
     public String getId() {
         return id;
@@ -334,6 +354,8 @@ public class UserExtensionInfo implements Serializable {
                 ", userType='" + userType + '\'' +
                 ", point=" + point +
                 ", birthday=" + birthday +
+                ", registrationId='" + registrationId + '\'' +
+                ", roleName='" + roleName + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", createdTime=" + createdTime +
                 ", modifierAccount='" + modifierAccount + '\'' +

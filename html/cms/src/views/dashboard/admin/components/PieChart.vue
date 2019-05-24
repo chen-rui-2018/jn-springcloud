@@ -9,6 +9,16 @@ import { debounce } from '@/utils'
 
 export default {
   props: {
+    listData: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+    title: {
+      type: String,
+      default: ''
+    },
     className: {
       type: String,
       default: 'chart'

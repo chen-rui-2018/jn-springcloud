@@ -1,10 +1,10 @@
 package com.jn.park.electricmeter.dao;
 
-import com.jn.park.electricmeter.entity.TbElectricReading;
-import com.jn.park.electricmeter.entity.TbElectricReadingSource;
+import com.jn.park.electricmeter.entity.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,8 +31,55 @@ public interface MeterDao {
 
     /**
      * 更新正式表中的度数
-     * @param taskBatch
      * @return
      */
-    int updateDegreeDiff(@Param("taskBatch") String taskBatch);
+    int updateDegreeDiff();
+
+    /**
+     * 删除一些数据【朱成报表使用】
+     */
+    void deleteElectricDay();
+    /**
+     * 插入一些数据【朱成报表使用】
+     */
+    void insertElectricDay();
+
+
+
+    /*计价规则SQL*/
+
+    /**
+     * 保存计价规则内容
+     * @param saveData
+     */
+    void saveRulesContent(@Param("saveData") List<TbElectricRulesContent> saveData);
+
+    /**
+     * 保存计价规则和企业之间的关系
+     * @param saveData
+     */
+    void saveCompanyLinks(@Param("saveData") List<TbElectricPriceruleCompany> saveData);
+
+    /**
+     * 保存计价规则和企业之间每日的关系
+     * @param saveData
+     */
+    void saveCompanyLinksInDay(@Param("saveData") List<TbElectricPriceruleCompanyInDay> saveData);
+
+    /**
+     * 保存企业和计价规则之间的每日关系表
+     * @param day
+     */
+    void saveCompanyLinkInDay(@Param("day") Date day);
+
+    /**
+     * 检测企业是否需要进行电费不足预警
+     * @param companyId
+     */
+    List<TbElectricCost> checkCompanyIsNeedWarning(@Param("companyId") String companyId);
+
+    /**
+     * saveWarningRecord
+     */
+    void saveWarningRecord(@Param("saveData") List<TbElectricWarningRecord> saveData);
 }

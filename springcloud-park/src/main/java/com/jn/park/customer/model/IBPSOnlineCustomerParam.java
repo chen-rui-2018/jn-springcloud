@@ -204,4 +204,29 @@ public class IBPSOnlineCustomerParam implements Serializable {
     public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
     }
+
+    @Override
+    public String toString() {
+        return "IBPSOnlineCustomerParam{" +
+                "quesCode='" + quesCode + '\'' +
+                ", quesTitle='" + quesTitle + '\'' +
+                ", quesDetails='" + quesDetails + '\'' +
+                ", quesUrl='" + quesUrl + '\'' +
+                ", serviceModule='" + serviceModule + '\'' +
+                ", serviceModuleName='" + serviceModuleName + '\'' +
+                ", clientType='" + clientType + '\'' +
+                ", contactWay='" + contactWay + '\'' +
+                ", status='" + status + '\'' +
+                ", currentCaller='" + currentCaller + '\'' +
+                ", callerOwen='" + callerOwen + '\'' +
+                ", custName='" + custName + '\'' +
+                ", custSex='" + custSex + '\'' +
+                ", isTranPie='" + isTranPie + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", recordStatus=" + recordStatus +
+                '}';
+    }
 }

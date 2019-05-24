@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.assessment.dao.AssessmentInfoFillMapper">
+
+    <select id="selectByJobNumber" parameterType="map"
+		resultType="com.jn.hr.assessment.entity.TbManpowerAssessmentInfoFill">
+		SELECT * FROM tb_manpower_assessment_info_fill t1
+		where t1.job_number = #{jobNumber,jdbcType=VARCHAR}
+		and t1.template_detail_id = #{templateDetailId,jdbcType=VARCHAR}
+		and t1.template_id = #{templateId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectByTemplateDetailId" parameterType="map"
+		resultType="com.jn.hr.assessment.entity.TbManpowerAssessmentInfoFill">
+		SELECT * FROM tb_manpower_assessment_info_fill t1
+		where t1.job_number = #{jobNumber,jdbcType=VARCHAR}
+		and t1.template_id = #{templateId,jdbcType=VARCHAR}
+	</select>
+	
+	<update id="updateByJobNumber" parameterType="com.jn.hr.assessment.entity.TbManpowerAssessmentInfoFill">
+    update tb_manpower_assessment_info_fill
+    set 
+      assessment_score = #{assessmentScore,jdbcType=INTEGER},
+      cause_deduction = #{causeDeduction,jdbcType=VARCHAR}
+    where job_number = #{jobNumber,jdbcType=VARCHAR}
+    and t1.template_detail_id = #{templateDetailId,jdbcType=VARCHAR}
+	and t1.template_id = #{templateId,jdbcType=VARCHAR} 
+  </update>
+</mapper>

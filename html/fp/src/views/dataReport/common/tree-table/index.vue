@@ -1,5 +1,11 @@
 <template>
-  <el-table :row-class-name="setClassName":data="formatData" :row-key="getRowKeys" :row-style="showRow" v-bind="$attrs">
+  <el-table
+    :row-class-name="setClassName"
+    :data="formatData"
+    :row-key="getRowKeys"
+    :row-style="showRow"
+    :header-cell-style="{textAlign: 'center' }"
+    v-bind="$attrs">
     <el-table-column v-if="columns.length===0" width="150">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
@@ -11,7 +17,13 @@
       </template>
     </el-table-column>
 
-    <el-table-column v-for="(column, index) in columns" v-else :key="column.value" :label="column.text" :width="column.width">
+    <el-table-column
+      v-for="(column, index) in columns"
+      :fixed="index === 0 ? 'left' : false"
+      v-else :key="column.value"
+      :label="column.text"
+      :align="index === 0 || column.value === 'inputFormatModel' ? 'left' : 'center'"
+      :width="column.width">
       <template slot-scope="scope">
         <div class="td-cell">
           <div v-if="index === 0" class="td-cell-l">

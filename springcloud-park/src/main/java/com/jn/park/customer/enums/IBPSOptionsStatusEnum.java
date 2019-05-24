@@ -3,6 +3,7 @@ package com.jn.park.customer.enums;
 import com.jn.common.api.CodeAndMsg;
 
 /**
+ * 操作状态枚举
  * @Author: yangph
  * @Date: 2019/5/18 15:33
  * @Version v1.0

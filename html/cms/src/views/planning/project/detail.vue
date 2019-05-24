@@ -2,8 +2,8 @@
   <div style="width:100%;">
     <div class="c--bar">
       <span class="title" style="font-size:32px">19号楼建设任务</span>
-      <div class="flex-item" />
       <span style="font-size:18px;margin-right:58px;color:#797c82">2018年7月17日</span>
+      <div class="flex-item" />
       <router-link to="/planning/project/index" >返回
       </router-link>
     </div>
@@ -62,8 +62,9 @@
           :label="item"
           :class="[ item==currentDate && 'current']"
           prop=""
-          width="22"
+          min-width="30"
           align="center" />
+        <span>234</span>
       </el-table-column>
     </el-table>
     <el-row :gutter="15" >
@@ -83,7 +84,7 @@
             <span>进度及时率月统计</span>
           </div>
           <div class="card-body">
-            <bar-chart id="bar-chart" :chartopts="pieData" style="width: 100%;height:300px;" />
+            <bar-chart id="bar-chart" :chartopts="barData" style="width: 100%;height:300px;" />
           </div>
         </el-card>
       </el-col>

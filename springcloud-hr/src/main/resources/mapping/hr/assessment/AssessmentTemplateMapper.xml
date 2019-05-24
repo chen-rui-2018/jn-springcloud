@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.assessment.dao.AssessmentTemplateMapper">
+
+    <select id="list" parameterType="com.jn.hr.assessment.model.AssessmentTemplatePage"
+		resultType="com.jn.hr.assessment.model.AssessmentTemplateVo">
+		SELECT * FROM tb_manpower_assessment_template t1 where t1.record_status != 0
+	</select>
+      
+    <update id="updateByTemplateId" parameterType="com.jn.hr.assessment.model.AssessmentTemplatePage">
+    update tb_manpower_assessment_template t1
+    <set>      
+        t1.record_status = 0    
+    </set>
+    where t1.template_id = #{templateId,jdbcType=VARCHAR}
+  </update>
+</mapper>

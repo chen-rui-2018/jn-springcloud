@@ -30,7 +30,7 @@ public class PayAccountAndAccountBookVo implements Serializable {
     @ApiModelProperty(value="余额（该账户下所有账本总金额）")
     private BigDecimal balance;
 
-    private List<PayAccountBook> accountBooksList;
+    private List<PayAccountBookVo> accountBooksList;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -60,11 +60,11 @@ public class PayAccountAndAccountBookVo implements Serializable {
         this.balance = balance;
     }
 
-    public List<PayAccountBook> getAccountBooksList() {
+    public List<PayAccountBookVo> getAccountBooksList() {
         return accountBooksList;
     }
 
-    public void setAccountBooksList(List<PayAccountBook> accountBooksList) {
+    public void setAccountBooksList(List<PayAccountBookVo> accountBooksList) {
         this.accountBooksList = accountBooksList;
     }
 }

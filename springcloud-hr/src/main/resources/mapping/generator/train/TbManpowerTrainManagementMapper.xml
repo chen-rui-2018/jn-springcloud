@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.train.dao.TbManpowerTrainManagementMapper">
+  <resultMap id="BaseResultMap" type="com.jn.hr.train.entity.TbManpowerTrainManagement">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="course_title" jdbcType="VARCHAR" property="courseTitle" />
+    <result column="train_teacher" jdbcType="VARCHAR" property="trainTeacher" />
+    <result column="train_venue" jdbcType="VARCHAR" property="trainVenue" />
+    <result column="train_start_time" jdbcType="TIMESTAMP" property="trainStartTime" />
+    <result column="train_end_time" jdbcType="TIMESTAMP" property="trainEndTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.hr.train.entity.TbManpowerTrainManagement">
+    <result column="train_info" jdbcType="LONGVARBINARY" property="trainInfo" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, course_title, train_teacher, train_venue, train_start_time, train_end_time, status, 
+    record_status, creator_account, created_time, modifier_account, modified_time
+  </sql>
+  <sql id="Blob_Column_List">
+    train_info
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.hr.train.entity.TbManpowerTrainManagementCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_manpower_train_management
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainManagementCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_manpower_train_management
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_manpower_train_management
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_manpower_train_management
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainManagementCriteria">
+    delete from tb_manpower_train_management
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.hr.train.entity.TbManpowerTrainManagement">
+    insert into tb_manpower_train_management (id, course_title, train_teacher, 
+      train_venue, train_start_time, train_end_time, 
+      status, record_status, creator_account, 
+      created_time, modifier_account, modified_time, 
+      train_info)
+    values (#{id,jdbcType=VARCHAR}, #{courseTitle,jdbcType=VARCHAR}, #{trainTeacher,jdbcType=VARCHAR}, 
+      #{trainVenue,jdbcType=VARCHAR}, #{trainStartTime,jdbcType=TIMESTAMP}, #{trainEndTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{trainInfo,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.hr.train.entity.TbManpowerTrainManagement">
+    insert into tb_manpower_train_management
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="courseTitle != null">
+        course_title,
+      </if>
+      <if test="trainTeacher != null">
+        train_teacher,
+      </if>
+      <if test="trainVenue != null">
+        train_venue,
+      </if>
+      <if test="trainStartTime != null">
+        train_start_time,
+      </if>
+      <if test="trainEndTime != null">
+        train_end_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="trainInfo != null">
+        train_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="courseTitle != null">
+        #{courseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="trainTeacher != null">
+        #{trainTeacher,jdbcType=VARCHAR},
+      </if>
+      <if test="trainVenue != null">
+        #{trainVenue,jdbcType=VARCHAR},
+      </if>
+      <if test="trainStartTime != null">
+        #{trainStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainEndTime != null">
+        #{trainEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainInfo != null">
+        #{trainInfo,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.hr.train.entity.TbManpowerTrainManagementCriteria" resultType="java.lang.Long">
+    select count(*) from tb_manpower_train_management
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_manpower_train_management
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.courseTitle != null">
+        course_title = #{record.courseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainTeacher != null">
+        train_teacher = #{record.trainTeacher,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainVenue != null">
+        train_venue = #{record.trainVenue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainStartTime != null">
+        train_start_time = #{record.trainStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.trainEndTime != null">
+        train_end_time = #{record.trainEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.trainInfo != null">
+        train_info = #{record.trainInfo,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_manpower_train_management
+    set id = #{record.id,jdbcType=VARCHAR},
+      course_title = #{record.courseTitle,jdbcType=VARCHAR},
+      train_teacher = #{record.trainTeacher,jdbcType=VARCHAR},
+      train_venue = #{record.trainVenue,jdbcType=VARCHAR},
+      train_start_time = #{record.trainStartTime,jdbcType=TIMESTAMP},
+      train_end_time = #{record.trainEndTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      train_info = #{record.trainInfo,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_manpower_train_management
+    set id = #{record.id,jdbcType=VARCHAR},
+      course_title = #{record.courseTitle,jdbcType=VARCHAR},
+      train_teacher = #{record.trainTeacher,jdbcType=VARCHAR},
+      train_venue = #{record.trainVenue,jdbcType=VARCHAR},
+      train_start_time = #{record.trainStartTime,jdbcType=TIMESTAMP},
+      train_end_time = #{record.trainEndTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.train.entity.TbManpowerTrainManagement">
+    update tb_manpower_train_management
+    <set>
+      <if test="courseTitle != null">
+        course_title = #{courseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="trainTeacher != null">
+        train_teacher = #{trainTeacher,jdbcType=VARCHAR},
+      </if>
+      <if test="trainVenue != null">
+        train_venue = #{trainVenue,jdbcType=VARCHAR},
+      </if>
+      <if test="trainStartTime != null">
+        train_start_time = #{trainStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainEndTime != null">
+        train_end_time = #{trainEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainInfo != null">
+        train_info = #{trainInfo,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.hr.train.entity.TbManpowerTrainManagement">
+    update tb_manpower_train_management
+    set course_title = #{courseTitle,jdbcType=VARCHAR},
+      train_teacher = #{trainTeacher,jdbcType=VARCHAR},
+      train_venue = #{trainVenue,jdbcType=VARCHAR},
+      train_start_time = #{trainStartTime,jdbcType=TIMESTAMP},
+      train_end_time = #{trainEndTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      train_info = #{trainInfo,jdbcType=LONGVARBINARY}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.hr.train.entity.TbManpowerTrainManagement">
+    update tb_manpower_train_management
+    set course_title = #{courseTitle,jdbcType=VARCHAR},
+      train_teacher = #{trainTeacher,jdbcType=VARCHAR},
+      train_venue = #{trainVenue,jdbcType=VARCHAR},
+      train_start_time = #{trainStartTime,jdbcType=TIMESTAMP},
+      train_end_time = #{trainEndTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

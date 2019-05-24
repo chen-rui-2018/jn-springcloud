@@ -53,4 +53,13 @@ public class ImportantNews implements Serializable {
     public void setDetails(String details) {
         this.details = details;
     }
+
+    @Override
+    public String toString() {
+        return "ImportantNews{" +
+                "title='" + title + '\'' +
+                ", details='" + details + '\'' +
+                ", createdTime=" + createdTime +
+                '}';
+    }
 }

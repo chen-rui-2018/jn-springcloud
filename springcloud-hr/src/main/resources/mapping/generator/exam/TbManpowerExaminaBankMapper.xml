@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.exam.dao.TbManpowerExaminaBankMapper">
+  <resultMap id="BaseResultMap" type="com.jn.hr.exam.entity.TbManpowerExaminaBank">
+    <id column="test_question_id" jdbcType="VARCHAR" property="testQuestionId" />
+    <result column="examination_question" jdbcType="VARCHAR" property="examinationQuestion" />
+    <result column="test_question_type" jdbcType="VARCHAR" property="testQuestionType" />
+    <result column="examination_difficulty" jdbcType="VARCHAR" property="examinationDifficulty" />
+    <result column="standard_answer" jdbcType="VARCHAR" property="standardAnswer" />
+    <result column="fraction" jdbcType="VARCHAR" property="fraction" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="item_analysis" jdbcType="VARCHAR" property="itemAnalysis" />
+    <result column="id" jdbcType="VARCHAR" property="id" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    test_question_id, examination_question, test_question_type, examination_difficulty, 
+    standard_answer, fraction, record_status, creator_account, created_time, modifier_account, 
+    modified_time, item_analysis, id
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaBankCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_manpower_examina_bank
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_manpower_examina_bank
+    where test_question_id = #{testQuestionId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_manpower_examina_bank
+    where test_question_id = #{testQuestionId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaBankCriteria">
+    delete from tb_manpower_examina_bank
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaBank">
+    insert into tb_manpower_examina_bank (test_question_id, examination_question, 
+      test_question_type, examination_difficulty, 
+      standard_answer, fraction, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, item_analysis, id
+      )
+    values (#{testQuestionId,jdbcType=VARCHAR}, #{examinationQuestion,jdbcType=VARCHAR}, 
+      #{testQuestionType,jdbcType=VARCHAR}, #{examinationDifficulty,jdbcType=VARCHAR}, 
+      #{standardAnswer,jdbcType=VARCHAR}, #{fraction,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{itemAnalysis,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaBank">
+    insert into tb_manpower_examina_bank
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="testQuestionId != null">
+        test_question_id,
+      </if>
+      <if test="examinationQuestion != null">
+        examination_question,
+      </if>
+      <if test="testQuestionType != null">
+        test_question_type,
+      </if>
+      <if test="examinationDifficulty != null">
+        examination_difficulty,
+      </if>
+      <if test="standardAnswer != null">
+        standard_answer,
+      </if>
+      <if test="fraction != null">
+        fraction,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="itemAnalysis != null">
+        item_analysis,
+      </if>
+      <if test="id != null">
+        id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="testQuestionId != null">
+        #{testQuestionId,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationQuestion != null">
+        #{examinationQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="testQuestionType != null">
+        #{testQuestionType,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationDifficulty != null">
+        #{examinationDifficulty,jdbcType=VARCHAR},
+      </if>
+      <if test="standardAnswer != null">
+        #{standardAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="fraction != null">
+        #{fraction,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itemAnalysis != null">
+        #{itemAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaBankCriteria" resultType="java.lang.Long">
+    select count(*) from tb_manpower_examina_bank
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_manpower_examina_bank
+    <set>
+      <if test="record.testQuestionId != null">
+        test_question_id = #{record.testQuestionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.examinationQuestion != null">
+        examination_question = #{record.examinationQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testQuestionType != null">
+        test_question_type = #{record.testQuestionType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.examinationDifficulty != null">
+        examination_difficulty = #{record.examinationDifficulty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standardAnswer != null">
+        standard_answer = #{record.standardAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fraction != null">
+        fraction = #{record.fraction,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.itemAnalysis != null">
+        item_analysis = #{record.itemAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_manpower_examina_bank
+    set test_question_id = #{record.testQuestionId,jdbcType=VARCHAR},
+      examination_question = #{record.examinationQuestion,jdbcType=VARCHAR},
+      test_question_type = #{record.testQuestionType,jdbcType=VARCHAR},
+      examination_difficulty = #{record.examinationDifficulty,jdbcType=VARCHAR},
+      standard_answer = #{record.standardAnswer,jdbcType=VARCHAR},
+      fraction = #{record.fraction,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      item_analysis = #{record.itemAnalysis,jdbcType=VARCHAR},
+      id = #{record.id,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaBank">
+    update tb_manpower_examina_bank
+    <set>
+      <if test="examinationQuestion != null">
+        examination_question = #{examinationQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="testQuestionType != null">
+        test_question_type = #{testQuestionType,jdbcType=VARCHAR},
+      </if>
+      <if test="examinationDifficulty != null">
+        examination_difficulty = #{examinationDifficulty,jdbcType=VARCHAR},
+      </if>
+      <if test="standardAnswer != null">
+        standard_answer = #{standardAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="fraction != null">
+        fraction = #{fraction,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itemAnalysis != null">
+        item_analysis = #{itemAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        id = #{id,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where test_question_id = #{testQuestionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaBank">
+    update tb_manpower_examina_bank
+    set examination_question = #{examinationQuestion,jdbcType=VARCHAR},
+      test_question_type = #{testQuestionType,jdbcType=VARCHAR},
+      examination_difficulty = #{examinationDifficulty,jdbcType=VARCHAR},
+      standard_answer = #{standardAnswer,jdbcType=VARCHAR},
+      fraction = #{fraction,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      item_analysis = #{itemAnalysis,jdbcType=VARCHAR},
+      id = #{id,jdbcType=VARCHAR}
+    where test_question_id = #{testQuestionId,jdbcType=VARCHAR}
+  </update>
+</mapper>

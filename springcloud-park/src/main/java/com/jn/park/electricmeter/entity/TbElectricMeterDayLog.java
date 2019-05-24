@@ -44,6 +44,9 @@ public class TbElectricMeterDayLog implements Serializable {
     /*@ApiModelProperty("电表设备编码")*/
     private String meterId;
 
+    /*@ApiModelProperty("企业名称")*/
+    private String companyName;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -150,6 +153,14 @@ public class TbElectricMeterDayLog implements Serializable {
         this.meterId = meterId == null ? null : meterId.trim();
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -174,7 +185,8 @@ public class TbElectricMeterDayLog implements Serializable {
             && (this.getDegree() == null ? other.getDegree() == null : this.getDegree().equals(other.getDegree()))
             && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
             && (this.getDay() == null ? other.getDay() == null : this.getDay().equals(other.getDay()))
-            && (this.getMeterId() == null ? other.getMeterId() == null : this.getMeterId().equals(other.getMeterId()));
+            && (this.getMeterId() == null ? other.getMeterId() == null : this.getMeterId().equals(other.getMeterId()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()));
     }
 
     @Override
@@ -194,6 +206,7 @@ public class TbElectricMeterDayLog implements Serializable {
         result = prime * result + ((getPrice() == null) ? 0 : getPrice().hashCode());
         result = prime * result + ((getDay() == null) ? 0 : getDay().hashCode());
         result = prime * result + ((getMeterId() == null) ? 0 : getMeterId().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         return result;
     }
 
@@ -216,6 +229,7 @@ public class TbElectricMeterDayLog implements Serializable {
         sb.append(", price=").append(price);
         sb.append(", day=").append(day);
         sb.append(", meterId=").append(meterId);
+        sb.append(", companyName=").append(companyName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

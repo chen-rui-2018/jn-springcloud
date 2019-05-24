@@ -82,6 +82,10 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         EmployeeRequisitionModel emodel=userCenterIndexDao.findEmployeeRequisition(user.getAccount());
 
         String content="已收到"+emodel.getTotal()+"条企业员工申请,"+emodel.getUnExamine()+"条仍未审批.";
+        //都为空 则返回空
+        if(StringUtils.isBlank(emodel.getTotal()) && StringUtils.isBlank(emodel.getUnExamine())){
+            content="";
+        }
 
         return content;
     }
@@ -109,13 +113,16 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         String s1=userCenterIndexDao.findAdviserInvitation("1",affiliateCode);
 
         String str="已收到"+s+"条顾问邀请的回馈,"+s1+"条仍未审批。";
+        if(StringUtils.isBlank(s) && StringUtils.isBlank(s1)){
+            str="";
+        }
 
         return str;
     }
 
     @ServiceLog(doAction = "需求管理")
     @Override
-    public String findRequirementManage(String status,User user) {
+    public String findRequirementManage(User user) {
         // 企业用户是提交   机构用户是接到
         //判断当前账号是否是企业用户或者是机构用户
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(user.getAccount());
@@ -146,6 +153,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
             PaginationData requireReceivedList1 = getRequireReceivedList.getRequireReceivedList(requireReceivedParam, user.getAccount());
             long s1=requireReceivedList1.getTotal();
             str="已接到"+s+"条服务需求,"+s1+"条仍未处理";
+            if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(Long.toString(s1))){
+                str="";
+            }
         }
         //如果企业编码不为空则查询提交的需求
         if(StringUtils.isNotBlank(companyCode)){
@@ -158,6 +168,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
             PaginationData requireOtherList1 = getRequireReceivedList.getRequireOtherList(requireOtherParam, user.getAccount());
             long s1=requireOtherList1.getTotal();
             str="已提交"+s+"条服务需求,"+s1+"条仍在处理中";
+            if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(Long.toString(s1))){
+                str="";
+            }
         }
         //测试代码
         /*if(status.equals("0")){
@@ -216,7 +229,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         PaginationData requireOtherList1 = getRequireReceivedList.getRequireOtherList(requireOtherParam, user.getAccount());
         long s1=requireOtherList1.getTotal();
         String str="已完成"+s+"笔交易,"+s1+"笔仍未评价";
-
+        if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(Long.toString(s1))){
+            str="";
+        }
         return str;
     }
 
@@ -247,6 +262,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         }
 
         String str="已报名"+s+"项活动,其中"+j+"项仍未结束。";
+        if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(String.valueOf(j))){
+            str="";
+        }
         return str;
     }
 

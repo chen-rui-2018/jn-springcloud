@@ -14,26 +14,27 @@
                   <div class="title">服务超市</div>
                 </div>
                 <div class="bannerUl">
-                  <li class="active" :class="{'liActiv':isActClass===true}">首页</li>
-                    <li>服务机构</li>
-                    <li>服务产品</li>
-                    <li>服务顾问</li>
-                    <li>活动培训</li>
-                    <li>关于我们</li>
+                  <li class="active_header" :class="{'liActiv':isActClass===true}" >首页</li>
+                    <li @click='$router.push({path:"/serverOrg"})'> 服务机构</li>
+                    <li @click='$router.push({path:"/serverPro"})'>服务产品</li>
+                    <li @click='$router.push({path:"/serverCon"})'>服务顾问</li>
+                    <li @click='$router.push({path:"/actiTrain"})'>活动培训</li>
+                    <li @click='$router.push({path:"/aboutUs"})'>关于我们</li>
                 </div>
                 <div class="headerRight">
                   <div class="search" >
                     <i class="el-icon-search" style="font-size:20px" @click="show3=true"></i>
                   </div>
-                  <div class="navlogin">
-                    <a>登录</a>
+                  <user-info></user-info>
+                  <!-- <div class="navlogin">
+                    <a href="javascript:;">登录</a>
                     <span class="line">|</span>
-                    <a>注册</a>
+                    <a href="javascript:;"> 注册</a>
                   </div>
                   <div class="navlogin">
                     <i class="el-icon-bell"></i>
                     <span class="line">|</span>
-                  </div>
+                  </div> -->
                 </div>
             </div>
         </div>
@@ -60,17 +61,13 @@
     <transition name='fade' appear  enter-active-class='animated fadeInDown' leave-active-class='animated fadeOutUp'>
       <div class="nav" v-if="!show3&&isNavShow">
         <div class="nav_cont" v-for="(slideitem,slideindex) in sliderData " :key="slideindex">
-          <a href="javascript:;">
-            <div class="nav_cont_father">{{slideitem.preValue}} <i class="el-icon-arrow-right"></i></div>
-          </a>
-            <div class="nav_cont_son" :class="{'hidder_son':slideitem.products.length===0} ">  
-                <div v-for="(item,index) in slideitem.products" :key="index" >
-                  <a href="javascript:;">
-                      <span></span>
-                      {{item.productName}}
-                  </a>
-                </div>
+          <div class="nav_cont_father" @click="$router.push({path:'/quickSearch',query:{signoryId:slideitem.id,preValue:slideitem.preValue}})">{{slideitem.preValue}} <i class="el-icon-arrow-right"></i></div>
+          <div class="nav_cont_son" :class="{'hidder_son':slideitem.products.length===0} ">  
+            <div v-for="(item,index) in slideitem.products" :key="index" @click="$router.push({path:'/serverProDetail',query:{productId:item.productId,signoryId:slideitem.id}})">
+              <span></span>
+              {{item.productName}}
             </div>
+          </div>
         </div>
       </div>
     </transition>
@@ -114,7 +111,7 @@
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou2"></i></div>
           <div class="nav_discribe"> <span>已注册买家<span class="">8929</span>个</span> </div>
-          <div class="nav_todo"><span>申请注册</span></div>
+          <div class="nav_todo"><span @click="$router.push({path:'/upgradeEnterprise'})">申请注册</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou1"></i></div>
@@ -124,7 +121,7 @@
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-huodong"></i></div>
           <div class="nav_discribe"> <span>累计举办活动<span>378</span>场</span> </div>
-          <div class="nav_todo"><span>近期活动</span></div>
+          <div class="nav_todo"><span @click='$router.push({path:"/actiTrain"})'>近期活动</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou11"></i></div>
@@ -134,7 +131,7 @@
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-shangwuqianbiqian"></i></div>
           <div class="nav_discribe"> <span>已入驻投资人<span>956</span>人</span> </div>
-          <div class="nav_todo"><span>投资人入驻</span></div>
+          <div class="nav_todo"><span @click="$router.push({path:'/roleCertifications/investorCertification'})">投资人入驻</span></div>
         </a>
       </div>
       <!-- 申请顾问弹窗 -->
@@ -152,7 +149,7 @@
       <div class="new_active" ref="new_active2" data-class="allFade">
         <div class="active_title">
           <span>最新活动</span>
-          <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
+          <span class="pointer" @click="$router.push({path:'/actiTrain'})">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="active_list">
           <div class="active_btn to_left" @click="prev"><span class="iconfont icon-zuo" ></span></div>
@@ -160,7 +157,7 @@
             <el-carousel-item v-for="(pageItem,pageIndex) in pageNum" :key='pageIndex'>
               <div class="actiTab">
                 <ul class="allActiUl clearfix">
-                  <li v-for="(item,index) in actiListSlim" :key='index'>
+                  <li v-for="(item,index) in actiListSlim" :key='index' @click="$router.push({path:'actiDetail',query:{activityId:item.id}})">
                     <div class="postImgItem"><img :src="item.actiPosterUrl" alt="活动海报图片" class="postImg">
                     </div>
                     <div class="actiInfo">
@@ -190,11 +187,11 @@
         <div class="hot_product" ref="hot_product2" data-class="allFade">
           <div class="hot_titile">
             <span>热门产品</span>
-            <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
+            <span class="pointer" @click="$router.push({path:'/serverPro'})">MORE<i class="iconfont icon-you"></i></span>
           </div>
           <div class="hot_list">
             <ul class="clearfix">
-              <li v-for="(item,index) in hotActiveList" :key="index">
+              <li v-for="(item,index) in hotActiveList" :key="index" @click="$router.push({path:'/serverProDetail',query:{productId:item.productId,signoryId:item.signoryId}})" >
                 <div class="hot_img">
                   <img :src="item.pictureUrl" alt="">
                 </div>
@@ -222,7 +219,7 @@
           <div class="partner_list">
             <ul class="partner_list_ul">
               <!-- <li  v-for="(item,index) in 18" :key="index"> <img src="../../assets/image/testsn.png" alt=""></li> -->
-              <li  v-for="(item,index) in partnerLogo" :key="index"> <img :src="item.orgLogo" alt=""></li>
+              <li  v-for="(item,index) in partnerLogo" :key="index" > <img :src="item.orgLogo" alt=""></li>
             </ul>
             <ul class="partner_list_ul2" v-if="partnerLogo.length>18"></ul>
           </div>
@@ -236,14 +233,14 @@
         </div>
         <div class="conselor_introduce">
           <ul class="conselor_tab clearfix">
-            <li :class="{'active':domain === ''}" @click="changedomain('')">全部</li>
-            <li v-for="(counseloitem,counseloindex) in IndustryList" :key="counseloindex" :class="{'active':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
+            <li :class="{'conseloractive':domain === ''}" @click="changedomain('')">全部</li>
+            <li v-for="(counseloitem,counseloindex) in IndustryList" :key="counseloindex" :class="{'conseloractive':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
           </ul>
           <div class="conselor_info">
             <ul>
               <!-- v-show控制前两个大图 -->
               <li class="conselor_left">
-                <div v-for="(counselorinfoItem,counselorinfoindex) in counselorList" :key="counselorinfoindex" v-if="counselorinfoindex<2">
+                <div v-for="(counselorinfoItem,counselorinfoindex) in counselorList" :key="counselorinfoindex" v-if="counselorinfoindex<2"  @click="$router.push({path:'/serverConDetail',query:{orgId: counselorinfoItem.orgId,advisorAccount:counselorinfoItem.advisorAccount}})">
                   <a href="javascript:;">
                     <div class="info_img">
                       <div>
@@ -263,7 +260,7 @@
                 </div>
               </li>
               <li class="conselor_mid">
-                <div v-for="(counselorinfoItem2,counselorinfoindex2) in counselorList" :key="counselorinfoindex2" class="conselor_mid_list" v-if="counselorinfoindex2>=2&&counselorinfoindex2<10">
+                <div v-for="(counselorinfoItem2,counselorinfoindex2) in counselorList" :key="counselorinfoindex2" class="conselor_mid_list" v-if="counselorinfoindex2>=2&&counselorinfoindex2<10" @click="$router.push({path:'/serverConDetail',query:{orgId: counselorinfoItem2.orgId,advisorAccount:counselorinfoItem2.advisorAccount}})">
                   <a href="javascript:;">
                     <!-- <div class="info_img"><img src="../../assets/image/test2.png" alt=""></div> -->
                     <div class="info_img"><img :src="counselorinfoItem2.avatar" alt=""></div>
@@ -287,8 +284,8 @@
           <div class="liveness_titile">机构活跃度</div>
           <div class="liveness_list">
             <ul class="team_tab clearfix">
-              <li :class="{'active':isActive === ''}" @click="changeindustry('')">全部</li>
-              <li v-for="(teamitem,teamindex) in teamIndustryList" :key="teamindex" @click="changeindustry(teamitem.id)" :class="{'active':isActive === teamitem.id}" >{{teamitem.preValue}}</li>
+              <li :class="{'teamactive':isActive === ''}" @click="changeindustry('')">全部</li>
+              <li v-for="(teamitem,teamindex) in teamIndustryList" :key="teamindex" @click="changeindustry(teamitem.id)" :class="{'teamactive':isActive === teamitem.id}" >{{teamitem.preValue}}</li>
             </ul>
             <ul class="team_tab clearfix">
               <li>筛选</li>
@@ -298,17 +295,16 @@
             </ul>
             <div class="liveness_info">
               <ul>
-                <li v-for="(item,index) in serviceOrgList " :key="index">
+                <li v-for="(item,index) in serviceOrgList " :key="index" @click="$router.push({path:'/serverOrgDetail',query:{orgId:item.orgId}})">
                   <a href="javascript:;">
                     <div class="liveness_img">
-                      <!-- <img :src="item.orgLogo" alt=""> -->
                       <img :src="item.orgLogo" alt="">
                     </div>
                     <div class="liveness_detail">
                       <p>{{item.orgName}}</p>
                       <p>{{item.orgSpeciality}}</p>
                       <p>
-                        <el-rate v-model="item.attitudeScore*1" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041">
+                        <el-rate v-model="item.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041">
                         </el-rate>
                       </p>
                     </div>
@@ -348,7 +344,11 @@
 </template>
 <script>
 import Swiper from 'swiper'
+import userInfo from '../common/userInfoData'
 export default {
+  components: {
+      userInfo
+    },
   data() {
     return {
       actiTypeList:[],
@@ -479,23 +479,6 @@ export default {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         },
-      })
-      var mySwiper2 = new Swiper ('.swiper2', {
-        /* loop : true,
-        direction: 'vertical',
-        slidesPerView: 1,
-        freeMode:true,
-        speed:150000,
-        speed:15000,
-        mousewheelControl:true,
-        autoplayDisableOnInteraction: false,
-        roundLengths:true,
-        autoplay: true,
-        spaceBetween:0 */
-        // loop: true, 
-        // speed:15000,
-        direction: 'vertical',
-        // autoplay: true
       })
     },
     // 屏幕滚动
@@ -677,7 +660,7 @@ export default {
           sortTypes:this.sortTypes
          },
         callback: function(res) {
-          console.log(res);
+          // console.log(res);
             _this.serviceOrgList = res.data.rows;
         }
       });
@@ -1309,7 +1292,7 @@ export default {
                 padding:0 5px 5px 5px;
                 cursor: pointer;
               }
-              .active{
+              .conseloractive{
                 border-bottom: 3px solid #00a041;
                 color:#00a041;
               }
@@ -1422,9 +1405,9 @@ export default {
                   color:#666666;
                   font-size: 13px;
                   padding:0 5px 5px 5px;
-                 
+                  cursor: pointer;
                 }
-                .active{
+                .teamactive{
                   border-bottom: 3px solid #00a041;
                   color:#00a041;
                 }
@@ -1630,7 +1613,7 @@ export default {
           cursor: pointer;
           border-radius: 5px;
         }
-        .active{
+        .active_header{
           background: #fff;
           color:#00a041;
         }
@@ -1642,6 +1625,7 @@ export default {
       .headerRight {
         font-size: 12px;
         display: flex;
+        line-height: 65px;
         .search {
           display: inline-block;
           margin-right: 20px;
@@ -1685,14 +1669,14 @@ export default {
     .nav_cont{
       display: flex;
       flex-wrap: wrap;
-      a{
-        width:100%;
-      }
+      // a{
+      // }
       .nav_cont_son {
         display: none;
         color:#fff;
         background: rgba(0, 0, 0,0.3);
         padding:20px 20px;
+        cursor: pointer;
         span{
             display: inline-block;
             width: 5px;
@@ -1731,11 +1715,12 @@ export default {
       .nav_cont_father{
         background: rgba(0, 0, 0,0.3);
         // position: relative;
-        // width: 100%;
+        width: 100%;
         color:#fff;
         padding:20px 20px 20px 28px;
         display: flex;
         justify-content: space-between;
+        cursor: pointer;
       }
     }
   }

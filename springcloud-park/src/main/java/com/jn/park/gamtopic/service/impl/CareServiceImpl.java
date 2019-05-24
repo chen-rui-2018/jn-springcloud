@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.park.care.model.ServiceEnterpriseCompany;
 import com.jn.park.gamtopic.dao.CareDao;
 import com.jn.park.gamtopic.dao.DynamicDao;
 import com.jn.park.gamtopic.dao.TbPersonCareMapper;
@@ -141,6 +142,34 @@ public class CareServiceImpl implements CareService {
     }
 
 
+
+    @Override
+    @ServiceLog(doAction = "企业简介")
+    public List<ServiceEnterpriseCompany> getCompanyNewList(List<ServiceEnterpriseCompany> serviceEnterpriseCompany) {
+        List<ServiceEnterpriseCompany> getCompanyNewList=new ArrayList<>();
+        //循环去通过企业ID查询相关联的评论及关注
+        for(int i=0;i<serviceEnterpriseCompany.size();i++){
+            //获取到一条数据
+            ServiceEnterpriseCompany serviceEnterpriseCompany1=serviceEnterpriseCompany.get(i);
+            //获取企业ID
+            String id = serviceEnterpriseCompany1.getId();
+            //通过企业ID去查询相关联的评论及关注
+            CommentModel commentModel=careDao.findCareComment(id);
+            //将返回的结果塞进这一条数据
+            //评论数
+            serviceEnterpriseCompany1.setCommentNumber(commentModel.getCommentNumber());
+            //关注用户数
+            serviceEnterpriseCompany1.setCareUser(commentModel.getCareUser());
+            //处理完成之后保存数据,返回
+            getCompanyNewList.add(serviceEnterpriseCompany1);
+        }
+
+        return getCompanyNewList;
+    }
+
+
+
+
     /**
      * 完善用户扩展信息
      * @param showList
@@ -166,4 +195,6 @@ public class CareServiceImpl implements CareService {
         }
         return showList;
     }
+
+
 }

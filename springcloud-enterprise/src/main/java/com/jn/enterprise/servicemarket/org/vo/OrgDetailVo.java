@@ -79,7 +79,15 @@ public class OrgDetailVo implements Serializable {
     @ApiModelProperty(value = "机构咨询电话")
     private String orgPhone;
 
-    @ApiModelProperty(value = "公司地址")
+    @ApiModelProperty(value = "公司地址[拼接好的详细地址]")
+    private String orgAddressDetail;
+    @ApiModelProperty(value = "办公地省")
+    private String orgProvince;
+    @ApiModelProperty(value = "办公地市")
+    private String orgCity;
+    @ApiModelProperty(value = "办公地区县")
+    private String orgArea;
+    @ApiModelProperty(value = "办公地地址")
     private String orgAddress;
 
     @ApiModelProperty(value = "机构LOGO")
@@ -443,5 +451,86 @@ public class OrgDetailVo implements Serializable {
 
     public void setBusinessTypeName(String businessTypeName) {
         this.businessTypeName = businessTypeName;
+    }
+
+    public String getOrgAddressDetail() {
+        return orgAddressDetail;
+    }
+
+    public void setOrgAddressDetail(String orgAddressDetail) {
+        this.orgAddressDetail = orgAddressDetail;
+    }
+
+    public String getOrgProvince() {
+        return orgProvince;
+    }
+
+    public void setOrgProvince(String orgProvince) {
+        this.orgProvince = orgProvince;
+    }
+
+    public String getOrgCity() {
+        return orgCity;
+    }
+
+    public void setOrgCity(String orgCity) {
+        this.orgCity = orgCity;
+    }
+
+    public String getOrgArea() {
+        return orgArea;
+    }
+
+    public void setOrgArea(String orgArea) {
+        this.orgArea = orgArea;
+    }
+
+    @Override
+    public String toString() {
+        return "OrgDetailVo{" +
+                "orgId='" + orgId + '\'' +
+                ", businessType='" + businessType + '\'' +
+                ", businessTypeName='" + businessTypeName + '\'' +
+                ", businessSType='" + businessSType + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", orgBusiness='" + orgBusiness + '\'' +
+                ", orgSynopsis='" + orgSynopsis + '\'' +
+                ", orgShow='" + orgShow + '\'' +
+                ", transactionCount='" + transactionCount + '\'' +
+                ", orgServiceScore='" + orgServiceScore + '\'' +
+                ", orgLicenses=" + orgLicenses +
+                ", orgHobby='" + orgHobby + '\'' +
+                ", orgSpeciality='" + orgSpeciality + '\'' +
+                ", orgStatus='" + orgStatus + '\'' +
+                ", operateStatus='" + operateStatus + '\'' +
+                ", orgCode='" + orgCode + '\'' +
+                ", orgPrincipal='" + orgPrincipal + '\'' +
+                ", orgBusinType='" + orgBusinType + '\'' +
+                ", orgBusinAddresse='" + orgBusinAddresse + '\'' +
+                ", orgBusinScope='" + orgBusinScope + '\'' +
+                ", orgPhone='" + orgPhone + '\'' +
+                ", orgAddressDetail='" + orgAddressDetail + '\'' +
+                ", orgProvince='" + orgProvince + '\'' +
+                ", orgCity='" + orgCity + '\'' +
+                ", orgArea='" + orgArea + '\'' +
+                ", orgAddress='" + orgAddress + '\'' +
+                ", orgLogo='" + orgLogo + '\'' +
+                ", orgWeb='" + orgWeb + '\'' +
+                ", orgRegisterTime='" + orgRegisterTime + '\'' +
+                ", conName='" + conName + '\'' +
+                ", conPhone='" + conPhone + '\'' +
+                ", conEmail='" + conEmail + '\'' +
+                ", staffCount=" + staffCount +
+                ", professionNum=" + professionNum +
+                ", bachelorNum=" + bachelorNum +
+                ", masterNum=" + masterNum +
+                ", doctorNum=" + doctorNum +
+                ", returneeNum=" + returneeNum +
+                ", honorLicense=" + honorLicense +
+                ", orgTeams=" + orgTeams +
+                ", evaluationScore='" + evaluationScore + '\'' +
+                ", evaluationNum=" + evaluationNum +
+                ", position='" + position + '\'' +
+                '}';
     }
 }

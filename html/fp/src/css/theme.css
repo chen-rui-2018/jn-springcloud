@@ -14,3 +14,8 @@
 .redColor{
     color:#ff0000
   }
+/* 表格头部错位问题 */
+
+body .el-table th.gutter{
+    display: table-cell!important;
+}

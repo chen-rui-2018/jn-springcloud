@@ -43,4 +43,7 @@ public interface MeterService {
      * 手动处理所有电表读数定时入库失败的数据
      */
     Result dealAllFailByHandle();
+
+
+
 }

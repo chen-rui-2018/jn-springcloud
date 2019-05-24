@@ -2,6 +2,7 @@ package com.jn.park.gamtopic.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.park.care.model.ServiceEnterpriseCompany;
 import com.jn.park.gamtopic.model.*;
 import com.jn.park.gamtopic.vo.CareDetailsVo;
 
@@ -68,4 +69,11 @@ public interface CareService {
      * @return
      */
     List<String> findCareCompanyList(String account);
+
+    /**
+     * 企业简介
+     * @param serviceEnterpriseCompany
+     * @return
+     */
+    List<ServiceEnterpriseCompany> getCompanyNewList(List<ServiceEnterpriseCompany> serviceEnterpriseCompany);
 }

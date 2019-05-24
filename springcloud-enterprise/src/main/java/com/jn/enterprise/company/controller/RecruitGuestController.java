@@ -5,7 +5,6 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
-import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.ServiceRecruitParam;
@@ -64,7 +63,13 @@ public class RecruitGuestController extends BaseController {
         if (StringUtils.isBlank(recruitId)) {
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_ID_IS_NULL);
         }
-        return new Result(recruitService.getRecruitDetailsById(recruitId));
+
+        String account = null;
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user != null && StringUtils.isNotBlank(user.getAccount())){
+            account= user.getAccount();
+        }
+        return new Result(recruitService.getRecruitDetailsById(recruitId, account));
     }
 
 }

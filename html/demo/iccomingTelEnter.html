@@ -64,7 +64,7 @@
 		<br/>
 
 		<!--来电信息-->
-		<div id="calledInfo" style="display: none">
+		<div id="calledInfo">
 			<table>
 				<tr>
 					<td style="padding-left: 20px">
@@ -85,48 +85,54 @@
 
 		<!--历史信息-->
 		<div class="content"  style="padding: 20px">
-			<span style="background-color:red; color:white;width: 90px;height: 20px;padding: 10px">历史信息(<span id="historyNum">0</span>)</span>
+			<span id="historyDesc" style="background-color:red; color:white;width: 90px;height: 20px;padding: 10px;">历史信息(<span id="historyNum">0</span>)</span>
 			<div id="history" style="display: none">
-
 			</div>
 		</div>
 
 
 		<!--来电录入-->
-		<div id="calledEnter" style="display: none">
+		<div id="calledEnter">
 			<table>
 				<tr>
 					<td style="padding-left: 20px">
-						问题标题:<input type='text' value='' id='quesTitle' size='15'>
+						<label>问题标题:</label><span style="color: red">*</span>
+						<input type='text' value='' id='quesTitle' size='15' placeholder="请输入标题，不超过100字">
 					</td>
 					<td style="padding-left: 20px">
-						业务模块:<select value='' id='serviceModule' >
+						<label>业务模块:</label><span style="color: red">*</span>
+						<select value='' id='serviceModule' >
 									<option value="service_consulting">系统咨询</option>
 									<option value="complaints_suggestions">投诉建议处理</option>
 								</select>
 					</td>
 				</tr>
 				<tr>
-					问题描述<textarea  id='quesDetails' rows='10' cols='120'></textarea>
+					<label>问题描述:</label><span style="color: red">*</span>
+					<textarea  id='quesDetails' rows='10' cols='120' placeholder="请输入简要的问题描述，不超过300字"></textarea>
 				</tr>
 				<br/>
 				<tr>
-					用户类型:<select value='' id='clientType' style="width: 100px">
+					<label>用户类型:</label><span style="color: red">*</span>
+					<select value='' id='clientType' style="width: 100px">
 								<option value="1">个人</option>
 								<option value="2">企业</option>
 							</select>
 				<tr>
 					<td style="padding-left: 20px">
-						客户姓名:<input type='text' value='' id='custName' size='15'>
+						<label>客户姓名:</label><span style="color: red">*</span>
+						<input type='text' value='' id='custName' size='15' placeholder="请输入客户姓名">
 					</td>
 					<td style="padding-left: 20px">
-						联系方式:<input type='text' value='' id='contactWay' size='15'>
+						<label>联系方式:</label><span style="color: red">*</span>
+						<input type='text' value='' id='contactWay' size='15'placeholder="请输入客户联系方式">
 					</td>
 				</tr>
 			</table>
 		</div>
-		<div style="padding: 50px;">
-			<button type="button" onclick="submit()"style="width: 100px" >提交</button>
+		<div style="padding: 50px;" id="submitButton" >
+			<button type="button" id="buttons" onclick="submit()"style="width: 100px" >提交</button>
+			<span style="padding-left: 20px;color: red;display: none" id="submitDesc">加载中....</span>
 		</div>
 
 	    <!--弹出框-->
@@ -152,7 +158,6 @@
 							来电归属地:<input type='text' value='' id='callerOwen' size='15' readonly="true">
 						</td>
 					</tr>
-					<input type="hidden" id="contact">
 				</table>
 			</div>
 			<div class="content" id="userInfo">
@@ -161,6 +166,53 @@
 			<div id="commit" style="padding: 50px">
 				<button type="button" style="width: 100px;height: 50px"  onclick="okSubmit()"  value="确定">确定</button>
 			</div>
+		</div>
+
+		<!--问题详情弹出框-->
+		<div class="quesLayer"></div>
+		<div class="quesBox">
+			<div class="close">
+				<a href="javascript:void(0)" onclick="closeQuesBox()">关闭</a>
+			</div>
+			<div class="content">
+				<table>
+					<tr>
+						<td style="padding-left: 20px">
+							问题标题:<input type='text' value='' id='quesTitleShow' size='15' readonly="true">
+						</td>
+						<span id="status" title="处理状态" style="color: green"></span>
+					</tr>
+					<tr>
+						<td style="padding-left: 20px">
+							问题描述:<textarea  id='quesDetailsShow' rows='10' cols='80' readonly="ture"></textarea>
+						</td>
+						<td style="padding-left: 20px">
+							<image  id='quesUrlShow'></image>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-left: 20px">
+							客户姓名:<input type='text' value='' id='custNameShow' size='15' readonly="true">
+						</td>
+						<td >
+							联系方式:<input type='text' value='' id='contactWayShow' size='15' readonly="true">
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-left: 20px">
+							业务模块:<input type='text' value='' id='serviceModuleName' size='15' readonly="true">
+						</td>
+						<td >
+							提交日期:<input type='text' value='' id='createdTime' size='15' readonly="true">
+						</td>
+					</tr>
+				</table>
+				<div>
+					<span style="background-color:blue; color:white;width: 100px;height: 20px;margin-left: 300px;">问题处理记录</span>
+					<div id="historyDetails"></div>
+				</div>
+			</div>
+
 		</div>
 
 		<div class="audiocontent" id="audiocontent">

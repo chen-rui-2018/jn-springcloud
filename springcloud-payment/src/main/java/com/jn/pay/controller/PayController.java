@@ -19,10 +19,8 @@ import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -50,30 +48,31 @@ public class PayController {
     @ApiOperation(value = "发起支付",notes = "发起支付单")
     @PostMapping(value = "/createPay")
     @RequiresPermissions("/pay/createPay")
-    public Result<PayOrderRsp> createPay(CreatePayReqModel createPayReqModel){
+    public Result<PayOrderRsp> createPay(@Validated @RequestBody CreatePayReqModel createPayReqModel){
         createPayReqModel.setUserAccount(getUser().getAccount());
         createPayReqModel.setUserIp("");//todo 需要获取用户IP
-        //缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费）
         switch (createPayReqModel.getPayType()){
-            case "1"://
+            case ELECTRIC://
                 return NOT_SUPPORT_RESULT;
-            case "2"://
+            case PROPERTY://
                 return NOT_SUPPORT_RESULT;
-            case "3"://
+            case REPAIR://
                 return NOT_SUPPORT_RESULT;
-            case "4"://
+            case ROOM_LEASE://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-park","/api/order/createPay",JSONObject.toJSONString(createPayReqModel));
-            case "5"://
+            case GOODS_LEASE://
                 return NOT_SUPPORT_RESULT;
-            case "6"://
+            case TEMPORARY_PARKING://
                 return NOT_SUPPORT_RESULT;
-            case "7"://
+            case PARKING_LEASE://
                 return NOT_SUPPORT_RESULT;
-            case "8"://
+            case WATER://
                 return NOT_SUPPORT_RESULT;
-            case "9"://
+            case PROMOTION://
                 return NOT_SUPPORT_RESULT;
-            case "10"://
+            case HEALTH://
+                return NOT_SUPPORT_RESULT;
+            case ELECTRIC_RECHARGE:
                 return NOT_SUPPORT_RESULT;
                 default:
                     return NOT_SUPPORT_RESULT;
@@ -85,32 +84,35 @@ public class PayController {
     @ApiOperation(value = "创建订单并发起支付",notes = "创建订单并发起支付单")
     @PostMapping(value = "/createOrderAndPay")
     @RequiresPermissions("/pay/createOrderAndPay")
-    public Result<PayOrderRsp> createOrderAndPay(CreateOrderAndPayReqModel createOrderAndPayReqModel){
+    public Result<PayOrderRsp> createOrderAndPay(@Validated @RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel){
         createOrderAndPayReqModel.setUserAccount(getUser().getAccount());
-        //缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费）
+        //缴费类型（1电费，2物业费，3维修费，4房租，5物品租赁，6停车费，7车位费，8水费，9宣传费，10体验费，11预缴充值电费）
         switch (createOrderAndPayReqModel.getPayType()){
-            case "1"://
+            case ELECTRIC://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payBill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
-            case "2"://
+            case PROPERTY://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payBill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
-            case "3"://
+            case REPAIR://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payBill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
-            case "4"://
+            case ROOM_LEASE://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payBill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
-            case "5"://
+            case GOODS_LEASE://
                 return NOT_SUPPORT_RESULT;
-            case "6"://
+            case TEMPORARY_PARKING://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
-            case "7"://
+            case PARKING_LEASE://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
-            case "8"://
+            case WATER://
                 return NOT_SUPPORT_RESULT;
-            case "9"://
+            case PROMOTION://
                 return NOT_SUPPORT_RESULT;
-            case "10"://
+            case HEALTH://
                 return NOT_SUPPORT_RESULT;
-                default:
-                    return NOT_SUPPORT_RESULT;
+            case ELECTRIC_RECHARGE:
+                return loadBalancerUtil.getClientPostForEntity("springcloud-enterprise","/api/payment/payAccount/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
+            default:
+                return NOT_SUPPORT_RESULT;
+
         }
     }
     private User getUser(){

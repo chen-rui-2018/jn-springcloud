@@ -1,7 +1,7 @@
 <template>
   <div class="finaInstitution w">
     <div class="serverOrgMenu">
-      <span class="pointer" @click="$routet.push({path:'/tfindex'})">首页</span>
+      <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
       <span class="mainColor agent">金融产品</span>
     </div>

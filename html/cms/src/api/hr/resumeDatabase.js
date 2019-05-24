@@ -46,9 +46,9 @@ export function getResumeDatabaseById(ruleId) {
 
 // 导出简历库
 export function exportResumeDatabase(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/resumeData/exportResumeDatabase?q=a${params}`,

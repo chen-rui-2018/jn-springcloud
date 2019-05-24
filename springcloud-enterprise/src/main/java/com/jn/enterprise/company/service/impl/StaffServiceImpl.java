@@ -235,15 +235,18 @@ public class StaffServiceImpl implements StaffService {
      */
     @Override
     @ServiceLog(doAction = "根据手机号或账号查询用户信息")
-    public UserExtensionInfoVO getInviteStaffList(String phone, String curAccount) {
+    public UserExtensionInfoVO getInviteStaffList(String phone) {
         if (StringUtils.isBlank(phone)) {
             throw new JnSpringCloudException(CompanyExceptionEnum.PARAM_IS_NULL);
         }
 
         Result result = userExtensionClient.getUserExtension(phone);
-        checkCallServiceSuccess(result);
-        UserExtensionInfo userExtensionInfo = (UserExtensionInfo) result.getData();
         UserExtensionInfoVO userExtensionInfoVO = new UserExtensionInfoVO();
+        if (result == null || result.getData() == null) {
+            logger.warn("[根据手机号或账号查询用户信息] 用户不存在，phone:{}", phone);
+            return null;
+        }
+        UserExtensionInfo userExtensionInfo = (UserExtensionInfo) result.getData();
         BeanUtils.copyProperties(userExtensionInfo, userExtensionInfoVO);
         return userExtensionInfoVO;
     }
@@ -374,7 +377,10 @@ public class StaffServiceImpl implements StaffService {
             userCompanyInfo.setCompanyCode(company.getId());
             userCompanyInfo.setCompanyName(company.getComName());
             Result result = userExtensionClient.updateCompanyInfo(userCompanyInfo);
-            checkCallServiceSuccess(result);
+            if (result == null || result.getData() == null) {
+                logger.warn("[审核员工] 更新用户信息发生错误");
+                throw new JnSpringCloudException(CompanyExceptionEnum.UPDATE_USER_EXTENSION_INFO_ERROR);
+            }
             logger.info("[审核员工] 更新用户扩展信息返回:{}", result.getData());
         }
 
@@ -409,7 +415,10 @@ public class StaffServiceImpl implements StaffService {
         userInfo.setAccount(staff.getAccount());
         BeanUtils.copyProperties(acceptInviteParam, userInfo);
         Result result = userExtensionClient.saveOrUpdateUserInfo(userInfo);
-        checkCallServiceSuccess(result);
+        if (result == null || result.getData() == null) {
+            logger.warn("[接受企业邀请] 更新用户扩展信息错误");
+            return responseNums;
+        }
 
         // 修改信息成功之后接收邀请
         if ((Integer) result.getData() == 1) {
@@ -498,7 +507,10 @@ public class StaffServiceImpl implements StaffService {
         userCompanyInfo.setCompanyCode("");
         userCompanyInfo.setAccountList(Arrays.asList(accountList));
         Result result1 = userExtensionClient.updateCompanyInfo(userCompanyInfo);
-        checkCallServiceSuccess(result1);
+        if (result1 == null || result1.getData() == null) {
+            logger.warn("[企业成员] 更新用户扩展信息错误");
+            throw new JnSpringCloudException(CompanyExceptionEnum.UPDATE_USER_EXTENSION_INFO_ERROR);
+        }
         logger.info("[企业成员] 批量修改用户扩展信息成功,计划删除:{},实际删除:{}", delStaffsList.size(), result1.getData());
 
 
@@ -578,8 +590,8 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "调用内部服务")
     public void checkCallServiceSuccess(Result result) {
         if (result == null || result.getData() == null) {
-            logger.warn("[服务调用] 调用内部服务出现未知错误");
-            throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SERVICE_ERROR);
+            logger.warn("[服务调用] 调用system服务出现未知错误");
+            throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR);
         }
     }
 
@@ -674,21 +686,24 @@ public class StaffServiceImpl implements StaffService {
             }
         }
 
+        Map<String, Object> map = new HashMap<>();
+
         // 批量获取用户信息
         Result userExtensionInfo = userExtensionClient.getUserExtensionBySearchFiled(searchFiledParam);
-        checkCallServiceSuccess(userExtensionInfo);
-
-        Map<String, Object> map = new HashMap<>();
-        // 获取用户列表
-        HashMap<String, Object> data = (HashMap<String, Object>) userExtensionInfo.getData();
-        List<Object> rows = (List<Object>) data.get("rows");
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<UserExtensionInfo> userExtensionInfoList = new ArrayList<>();
-        for (Object obj : rows) {
-            userExtensionInfoList.add(objectMapper.convertValue(obj, UserExtensionInfo.class));
+        if (userExtensionInfo == null || userExtensionInfo.getData() == null) {
+            logger.warn("[封装查询字段获取用户列表] 批量获取用户信息失败");
+        } else {
+            // 获取用户列表
+            HashMap<String, Object> data = (HashMap<String, Object>) userExtensionInfo.getData();
+            List<Object> rows = (List<Object>) data.get("rows");
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<UserExtensionInfo> userExtensionInfoList = new ArrayList<>();
+            for (Object obj : rows) {
+                userExtensionInfoList.add(objectMapper.convertValue(obj, UserExtensionInfo.class));
+            }
+            map.put("total", data.get("total"));
+            map.put("data", userExtensionInfoList);
         }
-        map.put("total", data.get("total"));
-        map.put("data", userExtensionInfoList);
         return map;
     }
 

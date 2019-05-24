@@ -1,0 +1,4 @@
+{
+  "usingComponents": {"nav-bar": "../templates/header"},
+  "enablePullDownRefresh": true
+}

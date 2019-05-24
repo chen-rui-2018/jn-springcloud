@@ -249,6 +249,12 @@ const hrRouter = {
               name: 'viewScore',
               meta: { title: '查看成绩', noCache: true ,icon: 'list'}
             },
+            {
+              path: 'seeAxam',
+              component: () => import('@/views/hr/exam/examManage/seeAxam'),
+              name: 'seeAxam',
+              meta: { title: '试卷详情', noCache: true ,icon: 'list'}
+            },
           ]
         },
         {

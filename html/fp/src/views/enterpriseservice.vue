@@ -28,9 +28,9 @@
             <i class="iconfont icon-rightarrow pointer" v-show="showBtn"></i>
           </div>
         </div>
-        <div class="quickEnter">
+       <div class="quickEnter">
           <ul>
-            <li>
+            <li @click="$router.push({path:'/talentsService'})">
               <span>人才申报</span>
               <p>PEOPLE&nbsp;DECLARE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -45,7 +45,7 @@
               <p>INCUBATION&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/compassView'})">
               <span>行政审批</span>
               <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="declarationNotice w pr" ref="declarationNotice" data-class="bottom">
-        <div ref="deNotice1" data-class="bottom">
+        <div ref="deNotice1" data-class="bottom" class="pointer" @click="$router.push({path:'/declarationCenter'})">
           <div class="tit color2 pr">申报中心
           </div>
           <div class="eng mainColor">Declare&nbsp;center</div>
@@ -104,7 +104,7 @@
 
       </div>
       <div class="policyCenter w" ref="policyCenter" data-class="bottom1">
-        <div ref="poCenter1" data-class="bottom">
+        <div ref="poCenter1" data-class="bottom" class="pointer" @click="$router.push({path:'/policyCenter'})">
           <div class="tit color2 pr">政策中心
           </div>
           <div class="eng mainColor">Policy&nbsp;center</div>
@@ -119,7 +119,7 @@
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{item.policyTitle}}</div>
-                      <p class="color2">{{item.briefContent}}中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                      <p class="color2">{{item.briefContent}}</p>
                       <div class="liBom clearfix">
                         <p class="fl color3">
                           <i class="el-icon-view"></i>&nbsp;{{item.readNum}}</p>
@@ -128,7 +128,7 @@
                       </div>
                     </div>
                   </li>
-               
+
                 </ul>
               </div>
               <!-- <div class="swiper-slide">
@@ -252,7 +252,7 @@
         </div>
       </div>
       <div class="approval" ref="approval" data-class="bottom">
-        <div class="approvalInfo w" ref="approval1" data-class="bottom1">
+        <div class="approvalInfo w pointer" ref="approval1" data-class="bottom1" @click="$router.push({path:'/compassView'})">
           <div class="approTit">行政审批</div>
           <div class="approEng">Administrative&nbsp;approval</div>
           <div class="line"></div>
@@ -260,7 +260,7 @@
         </div>
       </div>
       <div class="popularActi w" ref="popularActi" data-class="bottom">
-        <div ref="acti11" data-class="bottom">
+        <div ref="acti11" data-class="bottom" class="pointer" @click="$router.push({path:'/actiCenter'})">
           <div class="tit color2">活动中心</div>
           <div class="eng mainColor">Activity&nbsp;center</div>
           <div class="line"></div>
@@ -577,7 +577,7 @@
         </div>
       </div>
       <div class="humanResources" ref="humanResources" data-class="bottom">
-        <div ref="human1" data-class="bottom">
+        <div ref="human1" data-class="bottom" class="pointer" @click="$router.push({path:'/recruitmentList'})">
           <div class="tit pr">人力资源
           </div>
           <div class="eng">The&nbsp;humen&nbsp;resources</div>
@@ -595,7 +595,7 @@
               </div>
             </div>
             <ul class="infoCon" ref="human3" data-class="bottom1" v-if='flag55'>
-              <li class="clearfix" v-for="(i,k) in humanResourcesList" :key="k">
+              <li class="clearfix pr" v-for="(i,k) in humanResourcesList" :key="k">
                 <div class="con1 fl">
                   <img :src="i.comAvatar" alt="">
                 </div>
@@ -610,7 +610,16 @@
                 </div>
                 <div class="con3 fr">
                   <button class="btn1">在线联系</button>
-                  <button class="btn2">了解详情</button>
+                  <button class="btn2 pointer" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">了解详情</button>
+                </div>
+                <!-- 详情弹框 -->
+                <div class="detailRes" v-if="detailFlag==i.id">
+                  <el-card>
+                    <div class="detail">招聘详情</div>
+                    <p class="p1">企业名称：{{humanDetail.comName}}</p>
+                    <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
+                    <p class="p1">岗位详情：{{humanDetail.details}}</p>
+                  </el-card>
                 </div>
               </li>
             </ul>
@@ -653,11 +662,13 @@
 </template>
 <script>
 import swiper from "swiper";
+import bus from '@/util/bus'
 export default {
   data() {
     return {
+      detailFlag: "",
       flag55: true,
-      flag44:'0',
+      flag44: "0",
       showFF: false,
       show1: false,
       show11: false,
@@ -695,9 +706,10 @@ export default {
       rows7: 3,
       humanResourcesList: [],
       bannerList: [],
-      page8:1,
-      rows8:3,
-      serverProList:[]
+      page8: 1,
+      rows8: 3,
+      serverProList: [],
+      humanDetail: {}
     };
   },
   mounted() {
@@ -711,20 +723,27 @@ export default {
     this.getRecruitList(); //招聘
     this.getActiList(); //活动
     this.getInvestorInfoList(); //投资人
-    this.getProList()//服务产品列表
-    this.getFinaOrg()//金融机构
-    this.getFinaPro()//金融产品
-    Promise.all([this.getBanner(),this.getPolicyCenterList()]).then(() => {
+    this.getProList(); //服务产品列表
+    this.getFinaOrg(); //金融机构
+    this.getFinaPro(); //金融产品
+    Promise.all([this.getBanner(), this.getPolicyCenterList()]).then(() => {
       this.init();
     });
+    
+  },
+  created(){
+    let _this = this
+      bus.$on('closeKnow',msg => {
+          _this.detailFlag = '';
+      })
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
     //招聘与服务切换翻页
-    hanlepage(){
-      // if 
+    hanlepage() {
+      // if
     },
     formatArr(arr, n) {
       const len = arr.length;
@@ -864,29 +883,29 @@ export default {
     //政策中心首页
     getPolicyCenterList() {
       // return new Promise((resolve, reject) => {
-        this.api.get({
-          url: "getPolicyCenterList",
-          data: {
-            needPage: 1,
-            policyType: 0,
-            page: this.page2,
-            rows: this.rows2,
-            tableType: "allPolicy"
-          },
-          callback: res => {
-            if (res.code === "0000") {
-              this.policyCenterList = this.formatArr(res.data.rows, 4);
-              this.total2 = res.data.total;
-              setTimeout(()=>{
-                this.init();
-              },0)
-              // resolve();
-            } else {
-              this.$message.error(res.result);
-              // reject();
-            }
+      this.api.get({
+        url: "getPolicyCenterList",
+        data: {
+          needPage: 1,
+          policyType: 0,
+          page: this.page2,
+          rows: this.rows2,
+          tableType: "allPolicy"
+        },
+        callback: res => {
+          if (res.code === "0000") {
+            this.policyCenterList = this.formatArr(res.data.rows, 4);
+            this.total2 = res.data.total;
+            setTimeout(() => {
+              this.init();
+            }, 0);
+            // resolve();
+          } else {
+            this.$message.error(res.result);
+            // reject();
           }
-        });
+        }
+      });
       // });
     },
     //活动中心
@@ -958,7 +977,7 @@ export default {
         dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res.data)
+            console.log(res.data);
             _this.finaProList = res.data.rows;
           } else {
             _this.$message.error(res.result);
@@ -993,7 +1012,7 @@ export default {
         this.api.get({
           url: "getPromotionList",
           data: {
-            issuePlatform : 2,
+            issuePlatform: 2,
             // propagandaType: 'home_banner_pc',//没有图片，暂时先用招商的测试
             propagandaType: "enterprise_banner",
             needPage: 0
@@ -1008,6 +1027,23 @@ export default {
             }
           }
         });
+      });
+    },
+    //获取招聘详情
+    getRecruitDetails(id) {
+      let _this = this;
+      this.api.get({
+        url: "getRecruitDetails",
+        data: {
+          recruitId: id
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.humanDetail = res.data;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
       });
     },
     //获取招聘列表
@@ -1036,7 +1072,7 @@ export default {
         data: {
           page: _this.page8,
           // signoryId: _this.signoryId,
-          rows: _this.rows8,
+          rows: _this.rows8
           // keyWords: _this.keyWords,
           // sortTypes: _this.sortTypes,
           // productType: _this.productType
@@ -1050,7 +1086,7 @@ export default {
           }
         }
       });
-    },
+    }
   }
 };
 </script>
@@ -1605,7 +1641,6 @@ export default {
             background: #00a041;
           }
           .btn1 {
-            
             border-top-left-radius: 3px;
             border-bottom-left-radius: 3px;
           }
@@ -1614,8 +1649,8 @@ export default {
             border-bottom-right-radius: 3px;
             border-left: none;
           }
-          >button.btnActive{
-           color: #fff;
+          > button.btnActive {
+            color: #fff;
             background: #00a041;
           }
         }
@@ -1678,6 +1713,24 @@ export default {
         }
         > li:last-child {
           border: none;
+        }
+        .detailRes {
+          width: 500px;
+          position: absolute;
+          right: 38px;
+          top: 66px;
+          text-align: left;
+          .detail{
+            margin-bottom:10px;
+            color:#333;
+          }
+          p{
+            font-size: 13px;
+          }
+          .el-card__body {
+            padding: 20px 30px;
+            // width: 300px;
+          }
         }
       }
       .serverOrgContent {

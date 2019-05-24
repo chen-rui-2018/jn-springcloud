@@ -9,6 +9,9 @@
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t1.name like concat('%',#{name},'%')
         </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(insuredMonth)">
+            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=VARCHAR},'%')
+        </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
             and department_id=#{departmentId}
         </if>
@@ -26,7 +29,7 @@
             and department_id=#{departmentId}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(insuredMonth)">
-            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=TIMESTAMP},'%')
+            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=VARCHAR},'%')
         </if>
 	</select>
 	

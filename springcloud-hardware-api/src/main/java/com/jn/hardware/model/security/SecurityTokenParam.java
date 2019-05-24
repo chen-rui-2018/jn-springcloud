@@ -15,12 +15,10 @@ import java.io.Serializable;
 @ApiModel(value = "SecurityTokenParam",description = "海康威视获取token入参实体")
 public class SecurityTokenParam implements Serializable {
     private static final long serialVersionUID = -3481029914130723805L;
-    @ApiModelProperty(value = "登录用户的用户名。长度不能超过 64个字符",required = true,example = "admin")
-    @NotBlank(message = "用户名不能为空")
-    private String  userCode;
-    @ApiModelProperty(value = "综合安防管理平台 portl 门户地址,长度不能超过 255个字符",required = true,example = "http://192.168.30.2/portal/")
-    @NotBlank(message = "门户地址不能为空")
-    private String service;
+    @ApiModelProperty(value = "登录用户的用户名。长度不能超过 64个字符",example = "admin")
+    private String  userCode="admin";
+    @ApiModelProperty(value = "综合安防管理平台 portl 门户地址,长度不能超过 255个字符",example = "http://192.168.30.2/portal/")
+    private String service="http://192.168.30.2/vms/preview";
     @ApiModelProperty(value = "多语言key 值,格式支持：en_US、zh_CN 或者 en-US、zh-CN",example = "zh_CN")
     private String language="zh_CN";
 

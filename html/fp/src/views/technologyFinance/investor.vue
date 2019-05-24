@@ -1,7 +1,7 @@
 <template>
   <div class="investor w" id="investor">
     <div class="investorMenu">
-      <span class="pointer" @click="$routet.push({path:'/tfindex'})">首页</span>
+      <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
       <span class="mainColor agent">投资人</span>
     </div>

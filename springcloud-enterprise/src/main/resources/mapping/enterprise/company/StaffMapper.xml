@@ -47,9 +47,11 @@
         FROM tb_service_company_staff a
         LEFT JOIN tb_service_company tsc ON a.com_id = tsc.id
         WHERE a.record_status = '1'
+        AND a.invite_status = '6'
         AND a.check_status = '0'
         AND a.account = #{account}
-        ORDER BY a.invite_time DESC
+        ORDER BY a.created_time DESC
+        LIMIT 1
     </select>
 
     <!-- 批量邀请员工 -->

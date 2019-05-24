@@ -27,8 +27,10 @@ public enum CompanyExceptionEnum implements CodeAndMsg {
     COMPANY_CHECK_ING("5020592","企业信息正在审核中，请勿重复提交"),
     COMPANY_CHECK_ERROR("5020593","企业信息提交审核出错，请检查提交数据"),
     USER_IS_COMPANY_ADMIN("5020594","该账号是企业管理员，不能发出邀请"),
+    GET_USER_EXTENSION_INFO_ERROR("5020595","获取用户信息发生错误"),
+    UPDATE_USER_EXTENSION_INFO_ERROR("5020596","更新用户信息发生错误"),
 
-    CALL_SERVICE_ERROR("5020401","调用内部服务出错"),
+    CALL_SYSTEM_SERVICE_ERROR("5020401","调用system服务出错"),
     ;
     /**
      * 编码

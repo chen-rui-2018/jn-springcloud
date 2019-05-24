@@ -233,8 +233,8 @@
         </div>
         <div class="conselor_introduce">
           <ul class="conselor_tab clearfix">
-            <li :class="{'active':domain === ''}" @click="changedomain('')">全部</li>
-            <li v-for="(counseloitem,counseloindex) in IndustryList" :key="counseloindex" :class="{'active':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
+            <li :class="{'conseloractive':domain === ''}" @click="changedomain('')">全部</li>
+            <li v-for="(counseloitem,counseloindex) in IndustryList" :key="counseloindex" :class="{'conseloractive':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
           </ul>
           <div class="conselor_info">
             <ul>
@@ -284,8 +284,8 @@
           <div class="liveness_titile">机构活跃度</div>
           <div class="liveness_list">
             <ul class="team_tab clearfix">
-              <li :class="{'active':isActive === ''}" @click="changeindustry('')">全部</li>
-              <li v-for="(teamitem,teamindex) in teamIndustryList" :key="teamindex" @click="changeindustry(teamitem.id)" :class="{'active':isActive === teamitem.id}" >{{teamitem.preValue}}</li>
+              <li :class="{'teamactive':isActive === ''}" @click="changeindustry('')">全部</li>
+              <li v-for="(teamitem,teamindex) in teamIndustryList" :key="teamindex" @click="changeindustry(teamitem.id)" :class="{'teamactive':isActive === teamitem.id}" >{{teamitem.preValue}}</li>
             </ul>
             <ul class="team_tab clearfix">
               <li>筛选</li>
@@ -1292,7 +1292,7 @@ export default {
                 padding:0 5px 5px 5px;
                 cursor: pointer;
               }
-              .active{
+              .conseloractive{
                 border-bottom: 3px solid #00a041;
                 color:#00a041;
               }
@@ -1407,7 +1407,7 @@ export default {
                   padding:0 5px 5px 5px;
                   cursor: pointer;
                 }
-                .active{
+                .teamactive{
                   border-bottom: 3px solid #00a041;
                   color:#00a041;
                 }

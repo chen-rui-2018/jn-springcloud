@@ -215,6 +215,7 @@ export default {
         getMessageOneTort:"springcloud-park/message/list/getMessageOneTort",//获取二级消息类别
         getParkList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
         getIncubatorList:"springcloud-park/guest/hatch/incubator/list",//众创空间-首页信息查询
+        SpAdvertising:"springcloud-park/guest/portal/sp/power/SpAdvertising",//行政审批轮播广告
 
         SpAdvertising:"springcloud-park/guest/portal/sp/power/SpAdvertising",//行政审批轮播广告
 

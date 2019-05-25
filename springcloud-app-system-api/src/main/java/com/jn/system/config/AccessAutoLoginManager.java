@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * AccessAutoLoginManager
@@ -31,27 +33,49 @@ public class AccessAutoLoginManager implements Filter {
     @Autowired
     private LoadBalancerUtil loadBalancerUtils;
 
+    protected String exclusions_url;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        exclusions_url = filterConfig.getInitParameter("exclusions_url");
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String account = com.lc.ibps.auth.client.context.Context.getUsername();
-        logger.info("【oauth】 进入doFilter,ibps,account:{}", account);
+        if (com.jn.common.util.StringUtils.isNotBlank(exclusions_url)) {
+            List<String> ignore = Arrays.asList(exclusions_url.split(","));
+            String servletPath = httpRequest.getServletPath();
+            if (ignore != null) {
+                int count = 0;
+                for (String url : ignore) {
+                    if (url.contains("/**")) {
+                        if (servletPath.startsWith(url.replace("/**", ""))) {
+                            count++;
+                        }
+                    } else {
+                        if (servletPath.endsWith(url)) {
+                            count++;
+                        }
+                    }
+                }
+                if (count == 0 && com.jn.common.util.StringUtils.isBlank(account)) {
+                    logger.info("【oauth】 进入doFilter,ibps,account:{}", account);
+                }
+            }
+        }
         if (!StringUtils.isEmpty(account)) {
             String tokenId = httpRequest.getHeader("token");
-            logger.info("【oauth】 ibps,ccount不为空,tokenid:{}",tokenId);
+            ///logger.info("【oauth】 ibps,ccount不为空,tokenid:{}",tokenId);
             if (StringUtils.isEmpty(tokenId)) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("account", account);
                 Result result = loadBalancerUtils.getClientPostForEntity(SYSTEM_CLIENT, SYSTEM_CLIENT_NOPASSWORDLOGIN_SERVICE, jsonObject.toString());
                 String id = result.getData().toString();
                 AccessContext.setTokenContext(id);
-                logger.info("【oauth】 autoLogin user:{},id:{},token:{}", account, id, AccessContext.getTokenContext());
+                ///logger.info("【oauth】 autoLogin user:{},id:{},token:{}", account, id, AccessContext.getTokenContext());
             }
-
         }
         chain.doFilter(request, response);
     }

@@ -12,7 +12,10 @@ import com.jn.hr.attendance.model.AttendanceSchedulPage;
 import com.jn.hr.attendance.model.AttendanceSchedulVo;
 import com.jn.hr.attendance.model.AttendanceTimeSetAdd;
 import com.jn.hr.attendance.model.AttendanceTimeSetVo;
-import com.jn.hr.attendance.model.VacationManagePage;
+import com.jn.hr.model.AttendanceManageApiVo;
+import com.jn.hr.model.AttendanceManagement;
+import com.jn.hr.model.AttendanceManagementApiVo;
+import com.jn.hr.model.VacationManagement;
 import com.jn.system.model.User;
 
 @Service
@@ -50,5 +53,17 @@ public interface AttendanceManagementService {
 	public PaginationData<List<AttendanceSchedulVo>> exportScheduDetailist(AttendanceSchedulPage attendanceSchedulPage);
 	//排班明细的修改
 	public void updateScheduDetailist(List<AttendanceSchedulPage> attendanceSchedulPage,User user);
+	
+	//根据用户id与考勤年月查询历史考勤列表
+	public List<AttendanceManagementApiVo> selectAttendanceManagementByUserId(AttendanceManagement attendanceManagement);
+	
+	//根据部门id与考勤年月查询历史考勤列表
+	public List<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(AttendanceManagement attendanceManagement);
+	
+	//加班增加加班小时接口
+	public String insertByOverTimeVacationmanage(VacationManagement vacationManage);
+	
+	//请假扣除请假小时接口
+	public String insertByLeaveVacationmanage(VacationManagement vacationManage);
 	
 }

@@ -8,6 +8,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.enums.RecordStatusEnum;
@@ -24,10 +25,12 @@ import com.jn.park.customer.enums.IBPSMyTaskParamEnum;
 import com.jn.park.customer.enums.IBPSOptionsStatusEnum;
 import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterManageService;
+import com.jn.park.customer.service.CustomerServiceCenterService;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
+import org.apache.http.client.HttpClient;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +63,22 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
 
     @Autowired
     private UserExtensionClient userExtensionClient;
+
+    @Autowired
+    private CustomerServiceCenterService centerService;
+    /**
+     * 字典表服务模块分组id
+     */
+    private static final String SERVICE_MODULE="serviceModule";
+    /**
+     * 日期格式
+     */
+    private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
+    /**
+     * 在线客服流程id
+     */
+    @Value(value = "${onlineCustomerProcessId}")
+    private String onlineCustomerProcessId;
 
     /**
      * 在线客服流程定义key
@@ -397,7 +416,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             logger.warn("当前操作名称：[{}]不是系统所支持的",actionName);
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.PROCESS_INS_ID_NOT_NULL);
         }
-        if(pictureUrl==null || pictureUrl.length>3){
+        if(pictureUrl!=null && pictureUrl.length>3){
             logger.warn("处理问题时，问题描述最多允许上传3张图片");
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.PICTURE_URL_MORE_THAN_ALLOW);
         }
@@ -439,7 +458,100 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
     @ServiceLog(doAction = "获取服务模块信息")
     @Override
     public PaginationData getCalledHistory(String phone) {
+        ConsultationCustomerListParam param=new ConsultationCustomerListParam();
+        param.setNeedPage("1");
+        param.setPage(1);
+        param.setRows(10);
+        return centerService.consultationCustomerList(param, phone);
+    }
 
-        return null;
+    /**
+     * 保存来电录入信息
+     * @param calledInfoParam
+     * @param loginAccount
+     * @return
+     */
+    @ServiceLog(doAction = "保存来电录入信息")
+    @Override
+    public int saveCalledInfo(CalledInfoParam calledInfoParam,String loginAccount) {
+        //问题编码
+        String quesCode=centerService.getQuesCode();
+        IBPSOnlineCustomerParam ibpsOnlineCustomerParam = setIBPSCallInfoParam(calledInfoParam,quesCode);
+        //启动工作流
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(onlineCustomerProcessId, loginAccount, ibpsOnlineCustomerParam);
+        String okStatus="200";
+        //启动工作流成功
+        if(okStatus.equals(ibpsResult.getState())){
+            logger.info("在线客服提交成功，审批流程启动成功,流程实例id为：[{}]",ibpsResult.getData());
+            //将工作流返回的流程实例id更新到新增的数据中
+            return centerService.updateProcessInstanceId(calledInfoParam.getContactWay(), quesCode, (String)ibpsResult.getData());
+        }else{
+            logger.warn("在线客服启动工作流异常，{}",ibpsResult.getMessage());
+            throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
+
+
+
+    /**
+     * 设置在线客服ibps启动流工作流表单数据
+     * @param param
+     * @param quesCode
+     * @return
+     */
+    @ServiceLog(doAction = "设置在线客服ibps启动流工作流表单数据")
+    private IBPSOnlineCustomerParam setIBPSCallInfoParam(CalledInfoParam param, String quesCode) {
+        IBPSOnlineCustomerParam ibpsParam=new IBPSOnlineCustomerParam();
+        BeanUtils.copyProperties(param, ibpsParam);
+        //问题编码
+        ibpsParam.setQuesCode(quesCode);
+        //服务模块名称设置
+        List<ServiceModuleShow> serviceModuleShows = centerService.serviceModules();
+        if(!serviceModuleShows.isEmpty()){
+            for(ServiceModuleShow serviceModuleShow:serviceModuleShows){
+                if(StringUtils.equals(param.getServiceModule(), serviceModuleShow.getServiceModule())){
+                    ibpsParam.setServiceModuleName(serviceModuleShow.getServiceModuleName());
+                    break;
+                }
+            }
+        }
+        //创建人
+        ibpsParam.setCreatorAccount(param.getContactWay());
+        //创建时间
+        ibpsParam.setCreatedTime(DateUtils.getDate(PATTERN));
+        //处理状态(0：待处理  1:处理中 2：已处理)
+        ibpsParam.setStatus("0");
+        //是否删除
+        ibpsParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+        //当前来电
+        ibpsParam.setCurrentCaller(param.getContactWay());
+        //获取用户信息
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(param.getContactWay());
+        if(userExtension!=null && userExtension.getData()!=null){
+            UserExtensionInfo userInfo = userExtension.getData();
+            //客户性别
+            ibpsParam.setCustSex(userInfo.getSex());
+        }
+        return ibpsParam;
+    }
+
+    /**
+     * 来电归属地查询
+     * @param phone
+     * @return
+     */
+    @ServiceLog(doAction = "来电归属地查询")
+    @Override
+    public String getPhoneCalledOwen(String phone) {
+        String url="http://mobsec-dianhua.baidu.com/dianhua_api/open/location?tel="+phone;
+        String queryString = RestTemplateUtil.get(url);
+        if(queryString.contains("location")){
+            queryString=queryString.substring(queryString.indexOf("location"),queryString.length()-1);
+            queryString=queryString.substring(0,queryString.indexOf("}}"));
+            String[] split = queryString.split(":");
+            return split[1].replaceAll("\"","");
+        }else{
+            return "";
+        }
     }
 }

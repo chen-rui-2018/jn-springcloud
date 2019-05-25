@@ -5,6 +5,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.CallOtherSwaggerUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.park.enums.PropertyExceptionEnum;
 import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.park.repair.dao.RepairMapper;
 import com.jn.park.repair.dao.TbPmRepairMapper;
@@ -60,7 +61,7 @@ public class RepairServiceImpl implements RepairService {
     @Override
     @ServiceLog(doAction = "物业服务-创建报修缴费单,支付成功回调")
 
-    public void automaticApprovalTaskByTaskId(PayCallBackNotify  payCallBackNotify) {
+    public Result automaticApprovalTaskByTaskId(PayCallBackNotify  payCallBackNotify) {
 
         String billId=payCallBackNotify.getBillId();
         PayBillParams payBillParams=new PayBillParams();
@@ -76,11 +77,16 @@ public class RepairServiceImpl implements RepairService {
                 tbPmRepair.setId(billId);
                 tbPmRepair.setIsPay(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
                 tbPmRepairMapper.updateByPrimaryKeySelective(tbPmRepair);
-                //todo 根据流程taskId执行自动审批节点
                 logger.info("物业服务-创建报修缴费单,支付成功回调,billId:{}",billId);
-                this.completeTask(billId);
+                Result result= this.completeTask(billId);
+                return  result;
             }
+
+            logger.info("物业服务-创建报修缴费单回调,该缴费单未支付，不能修改报修单状态,billId:{},paymentState:{}",billId);
+            throw new JnSpringCloudException(PropertyExceptionEnum.BILL_ORDER_IS_NOT_PAY);
         }
+        logger.info("物业服务-创建报修缴费单回调,查询缴费单失败,billId:{},paymentState:{}",billId);
+        throw new JnSpringCloudException(PropertyExceptionEnum.GET_PAY_BILL_DETAIL_FAIL);
     }
 
     /**
@@ -88,7 +94,7 @@ public class RepairServiceImpl implements RepairService {
      * @param repairId
      */
     @ServiceLog(doAction ="审批 企业报修流程-企业缴费 任务" )
-    public void completeTask(String repairId){
+    public Result completeTask(String repairId){
         Repair tbPmRepairDb=repairMapper.selectRepairById(repairId);
 
         JSONObject jsonObject = new JSONObject();
@@ -104,7 +110,7 @@ public class RepairServiceImpl implements RepairService {
 
         JSONObject result=CallOtherSwaggerUtils.request(tbPmRepairDb.getCreatorAccount(),"/api/webapi/bpmService/myTasks", HttpMethod.POST,jsonObject.toJSONString());
         logger.info("调用ibps 查询发起人的待办任务,返回参数{}",result);
-        if(!StringUtils.equals(String.valueOf(result.get("state")),"200")){
+        if(result==null||!StringUtils.equals(String.valueOf(result.get("state")),"200")){
             logger.info("查询发起人的待办任务失败，失败原因：{}",result.get("message"));
             throw new JnSpringCloudException(new Result("-1","查询发起人的待办任务失败，原因："+result.get("message")));
         }
@@ -112,14 +118,16 @@ public class RepairServiceImpl implements RepairService {
         Object dataResult=((HashMap)result.get("data")).get("dataResult");
         if(dataResult==null){
             logger.info("没有待办任务");
-            return;
+            throw new JnSpringCloudException(PropertyExceptionEnum.NO_TO_DO_TASKS);
         }
         List<HashMap<String,String>>dataResultList=(List<HashMap<String,String>>)dataResult;
         if(dataResultList.size()!=1){
             logger.info("待办任务不唯一,待办数量:{}",dataResultList);
+            throw new JnSpringCloudException(PropertyExceptionEnum.COMPLETE_TASK_NUMBER_IS_NOT_UNIQUE);
         }
         String taskId=dataResultList.get(0).get("taskId");
-        this.complete(tbPmRepairDb.getCreatorAccount(),taskId,"agree",JsonUtil.object2Json(tbPmRepairDb));
+        Result resultData=this.complete(tbPmRepairDb.getCreatorAccount(),taskId,"agree",JsonUtil.object2Json(tbPmRepairDb));
+        return resultData;
     }
 
     /**
@@ -128,7 +136,7 @@ public class RepairServiceImpl implements RepairService {
      * @param actionName
      */
     @ServiceLog(doAction = "处理任务")
-    private void complete(String userAccount,String taskId,String actionName,String data){
+    private Result complete(String userAccount,String taskId,String actionName,String data){
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
         map.add("taskId",taskId);
         map.add("actionName",actionName);
@@ -146,7 +154,10 @@ public class RepairServiceImpl implements RepairService {
             logger.info("处理任务失败，失败原因：{}",result.get("message"));
             throw new JnSpringCloudException(new Result("-1","处理任务失败，原因："+result.get("message")));
         }
+        Result resultData=new Result();
+        resultData.setData(result.get("data"));
         logger.info("处理任务成功");
+        return resultData;
     }
 
     /**
@@ -154,9 +165,11 @@ public class RepairServiceImpl implements RepairService {
      * @param payBillCreateParamVo
      */
     @Override
-    public void generateBill(PayBillCreateParamVo payBillCreateParamVo) {
+    public Result generateBill(PayBillCreateParamVo payBillCreateParamVo) {
         logger.info("物业服务-创建报修缴费单,billId:{}",payBillCreateParamVo.getBillId());
-        payClient.billCreate(payBillCreateParamVo);
+        Result result=payClient.billCreate(payBillCreateParamVo);
+        return result;
+
     }
 
 }

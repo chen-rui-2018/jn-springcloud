@@ -1,5 +1,19 @@
 <template>
   <div class="compass_view" v-loading="loading">
+    <div class="banner" ref="banner">
+      <div class="swiper-container">
+          <div class="swiper-wrapper">
+              <div class="swiper-slide" v-for="(item,index) in bannerList"> <img :src="item.adUrl" alt=""> </div>
+          </div>
+          <div class="swiper-pagination"></div>
+           <div class="swiper-button-prev">
+            <i class="el-icon-arrow-left"></i>
+          </div>
+          <div class="swiper-button-next">
+            <i class="el-icon-arrow-right"></i>
+          </div>
+      </div>
+    </div>
     <div class="approve_content"><!-- 版心 -->
       <!-- 面包屑 -->
       <div class="approve_breadcrumb">
@@ -56,6 +70,7 @@
   </div>
 </template>
 <script>
+import Swiper from 'swiper'
 export default {
   data () {
     return {
@@ -67,14 +82,46 @@ export default {
       page:1,
       rows:6,
       total:0,
-      loading:true
+      loading:true,
+      bannerList:[]
     }
   },
   created () {
     this.getAllCate()
     this.getPowerList()
+    this.getImg()
+    
   },
   methods: {
+    // 初始化swiper
+    swiperInit(){
+        var mySwiper = new Swiper ('.swiper-container', {
+        loop: true, 
+        pagination: {
+          el: '.swiper-pagination',
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      })
+    },
+    getImg(){
+      this.api.get({
+        url: "SpAdvertising",
+        data: {
+          name:this.name
+         },
+        callback: (res)=>{
+          if (res.code == "0000") {
+          this.bannerList=res.data
+          this.$nextTick(() => {
+            this.swiperInit()  
+          })
+          }
+        }
+      });
+    },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
       this.rows=val
@@ -141,7 +188,75 @@ export default {
 </script>
 <style lang="scss">
   .compass_view{
-    margin-top: 230px;
+    // margin-top: 230px;
+    .banner{
+      position: relative;
+      .swiper-button-prev, .swiper-button-next{
+        display: block;
+        width: 43px;
+        height: 43px;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        background-size: 0 0;
+        text-align: center;
+        i{
+          font-size: 36px;
+          line-height: 44px;
+          color:#fff;
+        }
+      }
+      .swiper-button-next{
+        right: 95px;
+      }
+      .swiper-button-prev{
+        left:95px;
+      }
+    }
+  .swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet{
+    margin: 5px 4px;
+  }
+  .swiper-pagination-bullet{
+    background-color: #fff;
+    opacity: 0.5;
+  }
+   .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets{
+      position: absolute;
+      right: 152px;
+      top: 0;
+      left: auto;
+      width: 1%;
+      }
+    .swiper-container{
+      img{
+        width:100%;
+        vertical-align: middle;
+      }
+      .swiper-pagination{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .swiper-pagination-bullet-active{
+        border-radius: 5px;
+        height: 50px;
+        background: #fff;
+        opacity: 1;
+      }
+    }
+    @keyframes bounce-up {
+    25% {
+        transform: translateY(5px);
+    }
+    50%, 100% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-5px);
+        }
+    }
+    .animate-bounce-up{
+      animation: bounce-up 2s linear infinite;
+    }
     .approve_content{
       width: 1190px;
       margin: 0 auto;

@@ -42,6 +42,12 @@ public class Examinabank implements Serializable {
 	@ApiModelProperty(value = "试题难度（1：不限难道，2：容易，3：中等，4：困难）", required = true, example = "\"1\"")
 	private String examinationDifficulty;
 
+	@ApiModelProperty(value = "试题类型解析（1：单选题，2：多选题，3：问答题，4：判断题）")
+	private String testQuestionTypeStr;
+
+	@ApiModelProperty(value = "试题难度（1：不限难道，2：容易，3：中等，4：困难）")
+	private String examinationDifficultyStr;
+
 	@ApiModelProperty(value = "标准答案", required = true, example = "\"B\"")
 	private String standardAnswer;
 
@@ -92,6 +98,9 @@ public class Examinabank implements Serializable {
 	@ApiModelProperty(value = "更新标识", required = true, example = "true")
 	private boolean updateFlag;
 
+	@ApiModelProperty(value = "当前题目得分", required = true, example = "true")
+	private String titleScore;
+
 	// 选项信息
 	@ApiModelProperty(value = "试题选项列表", required = true, example = "[{\"id\":1}]")
 	private List<ExaminaOption> optionList;
@@ -117,10 +126,11 @@ public class Examinabank implements Serializable {
 	}
 
 	public Examinabank(String testQuestionId, String examinaId, String examinationQuestion, String testQuestionType,
-			String examinationDifficulty, String standardAnswer, String fraction, Byte recordStatus,
-			String creatorAccount, Date createdTime, String modifierAccount, Date modifiedTime, String itemAnalysis,
-			String cardId, String answer, String jobNumber, String testPaperId, String testQuestId, boolean errorFlag,
-			boolean updateFlag, List<ExaminaOption> optionList, List<ExaminaOption> delOptionList, String answerId,
+			String examinationDifficulty, String testQuestionTypeStr, String examinationDifficultyStr,
+			String standardAnswer, String fraction, Byte recordStatus, String creatorAccount, Date createdTime,
+			String modifierAccount, Date modifiedTime, String itemAnalysis, String cardId, String answer,
+			String jobNumber, String testPaperId, String testQuestId, boolean errorFlag, boolean updateFlag,
+			String titleScore, List<ExaminaOption> optionList, List<ExaminaOption> delOptionList, String answerId,
 			String answerNumber, String answerHtml, String examQuestionId) {
 		super();
 		this.testQuestionId = testQuestionId;
@@ -128,6 +138,8 @@ public class Examinabank implements Serializable {
 		this.examinationQuestion = examinationQuestion;
 		this.testQuestionType = testQuestionType;
 		this.examinationDifficulty = examinationDifficulty;
+		this.testQuestionTypeStr = testQuestionTypeStr;
+		this.examinationDifficultyStr = examinationDifficultyStr;
 		this.standardAnswer = standardAnswer;
 		this.fraction = fraction;
 		this.recordStatus = recordStatus;
@@ -143,12 +155,21 @@ public class Examinabank implements Serializable {
 		this.testQuestId = testQuestId;
 		this.errorFlag = errorFlag;
 		this.updateFlag = updateFlag;
+		this.titleScore = titleScore;
 		this.optionList = optionList;
 		this.delOptionList = delOptionList;
 		this.answerId = answerId;
 		this.answerNumber = answerNumber;
 		this.answerHtml = answerHtml;
 		this.examQuestionId = examQuestionId;
+	}
+
+	public String getTitleScore() {
+		return titleScore;
+	}
+
+	public void setTitleScore(String titleScore) {
+		this.titleScore = titleScore;
 	}
 
 	public boolean isErrorFlag() {
@@ -359,19 +380,36 @@ public class Examinabank implements Serializable {
 		this.examinaId = examinaId;
 	}
 
+	public String getTestQuestionTypeStr() {
+		return testQuestionTypeStr;
+	}
+
+	public void setTestQuestionTypeStr(String testQuestionTypeStr) {
+		this.testQuestionTypeStr = testQuestionTypeStr;
+	}
+
+	public String getExaminationDifficultyStr() {
+		return examinationDifficultyStr;
+	}
+
+	public void setExaminationDifficultyStr(String examinationDifficultyStr) {
+		this.examinationDifficultyStr = examinationDifficultyStr;
+	}
+
 	@Override
 	public String toString() {
 		return "Examinabank {testQuestionId='" + testQuestionId + "', examinaId='" + examinaId
 				+ "', examinationQuestion='" + examinationQuestion + "', testQuestionType='" + testQuestionType
-				+ "', examinationDifficulty='" + examinationDifficulty + "', standardAnswer='" + standardAnswer
-				+ "', fraction='" + fraction + "', recordStatus='" + recordStatus + "', creatorAccount='"
-				+ creatorAccount + "', createdTime='" + createdTime + "', modifierAccount='" + modifierAccount
-				+ "', modifiedTime='" + modifiedTime + "', itemAnalysis='" + itemAnalysis + "', cardId='" + cardId
-				+ "', answer='" + answer + "', jobNumber='" + jobNumber + "', testPaperId='" + testPaperId
-				+ "', testQuestId='" + testQuestId + "', errorFlag='" + errorFlag + "', updateFlag='" + updateFlag
-				+ "', optionList='" + optionList + "', delOptionList='" + delOptionList + "', answerId='" + answerId
-				+ "', answerNumber='" + answerNumber + "', answerHtml='" + answerHtml + "', examQuestionId='"
-				+ examQuestionId + "'}";
+				+ "', examinationDifficulty='" + examinationDifficulty + "', testQuestionTypeStr='"
+				+ testQuestionTypeStr + "', examinationDifficultyStr='" + examinationDifficultyStr
+				+ "', standardAnswer='" + standardAnswer + "', fraction='" + fraction + "', recordStatus='"
+				+ recordStatus + "', creatorAccount='" + creatorAccount + "', createdTime='" + createdTime
+				+ "', modifierAccount='" + modifierAccount + "', modifiedTime='" + modifiedTime + "', itemAnalysis='"
+				+ itemAnalysis + "', cardId='" + cardId + "', answer='" + answer + "', jobNumber='" + jobNumber
+				+ "', testPaperId='" + testPaperId + "', testQuestId='" + testQuestId + "', errorFlag='" + errorFlag
+				+ "', updateFlag='" + updateFlag + "', titleScore='" + titleScore + "', optionList='" + optionList
+				+ "', delOptionList='" + delOptionList + "', answerId='" + answerId + "', answerNumber='" + answerNumber
+				+ "', answerHtml='" + answerHtml + "', examQuestionId='" + examQuestionId + "'}";
 	}
 
 }

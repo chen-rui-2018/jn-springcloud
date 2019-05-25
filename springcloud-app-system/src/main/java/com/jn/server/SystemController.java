@@ -11,6 +11,7 @@ import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.service.SysDepartmentService;
+import com.jn.system.dept.service.SysPostService;
 import com.jn.system.dict.service.SysDictService;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
@@ -75,6 +76,9 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Autowired
     private SysDictService sysDictService;
+
+    @Autowired
+    private SysPostService sysPostService;
 
     @Override
     @ControllerLog(doAction = "用户登录")
@@ -251,6 +255,13 @@ public class SystemController extends BaseController implements SystemClient {
     }
 
     @Override
+    @ControllerLog(doAction = "获取所有岗位信息")
+    public Result<List<SysPost>> getPostAll() {
+        List<SysPost> sysPostAll = sysPostService.findSysPostAll();
+        return new Result<>(sysPostAll);
+    }
+
+    @Override
     @ControllerLog(doAction = "更新用户")
     public Result updateSysUser(@Validated @RequestBody User user) {
         if (StringUtils.isNotBlank(user.getAccount())) {
@@ -268,13 +279,14 @@ public class SystemController extends BaseController implements SystemClient {
 
     /**
      * 根据条件查询数据字典的值
+     *
      * @param sysDictInvoke
      * @return
      */
     @Override
     @ControllerLog(doAction = "根据条件查询数据字典的值")
-    public Result<String> selectDictValueByCondition(@RequestBody SysDictInvoke sysDictInvoke){
-       String data= sysDictService.selectDictValueByCondition(sysDictInvoke);
+    public Result<String> selectDictValueByCondition(@RequestBody SysDictInvoke sysDictInvoke) {
+        String data = sysDictService.selectDictValueByCondition(sysDictInvoke);
         return new Result(data);
     }
 

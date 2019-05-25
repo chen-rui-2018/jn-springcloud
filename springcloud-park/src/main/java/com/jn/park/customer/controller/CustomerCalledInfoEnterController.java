@@ -3,12 +3,10 @@ package com.jn.park.customer.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.park.customer.model.ConsultationCustomerListParam;
-import com.jn.park.customer.model.ConsultationCustomerListShow;
-import com.jn.park.customer.model.ServiceModuleShow;
-import com.jn.park.customer.model.UserIntroInfo;
+import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterManageService;
 import com.jn.park.customer.service.CustomerServiceCenterService;
+import com.jn.park.customer.vo.CustomerServiceCenterDetailVo;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -20,11 +18,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -64,12 +60,49 @@ public class CustomerCalledInfoEnterController extends BaseController {
         return new Result<>(customerServiceCenterService.serviceModules());
     }
 
-    @ControllerLog(doAction = "获取服务模块信息")
-    @ApiOperation(value = "获取服务模块信息")
+    @ControllerLog(doAction = "获取来电用户问题历史")
+    @ApiOperation(value = "获取来电用户问题历史")
     @RequestMapping(value = "/getCalledHistory",method = RequestMethod.GET)
-    public Result<PaginationData<List<ConsultationCustomerListShow>>> getCalledHistory(@ApiParam(name="phone",value = "来电用户电话",required = true,example = "18088888888") @RequestParam(value = "phone") String phone) {
-        //获取当前登录用户基本信息
+    public Result<PaginationData<List<ConsultationCustomerListShow>>> getCalledHistory(@ApiParam(name="phone",value = "来电用户电话",required = true,example = "18088888888")
+                                                                                           @RequestParam(value = "phone") String phone) {
         PaginationData result=manageService.getCalledHistory(phone);
         return new Result<>(result);
+    }
+
+    @ControllerLog(doAction = "保存来电录入信息")
+    @ApiOperation(value = "保存来电录入信息")
+    @RequestMapping(value = "/saveCalledInfo",method = RequestMethod.POST)
+    public Result<Integer> saveCalledInfo(@RequestBody @Valid CalledInfoParam calledInfoParam) {
+        //获取当前登录用户基本信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("保存来电录入信息获取当前登录用户信息失败");
+            return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int resNum=manageService.saveCalledInfo(calledInfoParam,user.getAccount());
+        return new Result(resNum);
+    }
+
+    @ControllerLog(doAction = "来电归属地查询")
+    @ApiOperation(value = "来电归属地查询")
+    @RequestMapping(value = "/getPhoneCalledOwen",method = RequestMethod.GET)
+    public Result<String> getPhoneCalledOwen(@ApiParam(name="phone",value = "来电用户电话",required = true,example = "18088888888")
+                                                                                       @RequestParam(value = "phone") String phone) {
+        return new Result<String>(manageService.getPhoneCalledOwen(phone));
+    }
+
+
+    @ControllerLog(doAction = "用户问题详情")
+    @ApiOperation(value = "用户问题详情")
+    @RequestMapping(value = "/customerQuesDetail",method = RequestMethod.GET)
+    public Result<CustomerServiceCenterDetailVo> customerQuesDetail(@ApiParam(name="processInsId",value = "流程实例Id",required = true,example = "f5c95f9adf714aedab3739cbc9297178")
+                                                                    @RequestParam(value = "processInsId") String processInsId) {
+        //获取当前登录用户基本信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("来电录入用户问题详情获取当前登录用户信息失败");
+            return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        return new Result<>(customerServiceCenterService.customerQuesDetail(user.getAccount(), processInsId));
     }
 }

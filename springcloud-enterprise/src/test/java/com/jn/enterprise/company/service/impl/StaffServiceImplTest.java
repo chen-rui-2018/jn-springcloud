@@ -155,7 +155,7 @@ public class StaffServiceImplTest {
             logger.info("查询员工列表失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode())
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode())
                     )
             );
         }
@@ -176,7 +176,7 @@ public class StaffServiceImplTest {
             logger.info("查询同事列表失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode())
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode())
                     )
             );
         }
@@ -185,13 +185,13 @@ public class StaffServiceImplTest {
     @Test
     public void getInviteStaffList() {
         try {
-            staffService.getInviteStaffList("17300000001", user.getAccount());
+            staffService.getInviteStaffList("17300000001");
             assertThat(anything(), anything());
         } catch (JnSpringCloudException e) {
             logger.info("查询待邀请列表失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode())
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode())
                     )
             );
         }
@@ -206,7 +206,7 @@ public class StaffServiceImplTest {
             logger.info("批量邀請失敗");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode()),
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode()),
                             Matchers.containsString(CompanyExceptionEnum.ACCOUNT_LIST_IS_NULL.getCode())
                     )
             );
@@ -222,7 +222,7 @@ public class StaffServiceImplTest {
             logger.info("审核员工失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode()),
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode()),
                             Matchers.containsString(CompanyExceptionEnum.USER_NO_STAFF.getCode())
                     )
             );
@@ -238,7 +238,7 @@ public class StaffServiceImplTest {
             logger.info("接受邀请失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode()),
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode()),
                             Matchers.containsString(CompanyExceptionEnum.ACCOUNT_NOT_GET_INVITE.getCode())
                     )
             );
@@ -254,7 +254,7 @@ public class StaffServiceImplTest {
             logger.info("拒绝邀请失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode())
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode())
                     )
             );
         }
@@ -269,7 +269,7 @@ public class StaffServiceImplTest {
             logger.info("获取待审核列表失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode())
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode())
                     )
             );
         }
@@ -284,7 +284,7 @@ public class StaffServiceImplTest {
             logger.info("设为联系人失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode()),
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode()),
                             Matchers.containsString(CompanyExceptionEnum.USER_NO_STAFF.getCode())
                     )
             );
@@ -300,7 +300,7 @@ public class StaffServiceImplTest {
             logger.info("取消联系人失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode()),
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode()),
                             Matchers.containsString(CompanyExceptionEnum.USER_NO_STAFF.getCode())
                     )
             );
@@ -316,7 +316,7 @@ public class StaffServiceImplTest {
             logger.info("批量删除员工失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(CompanyExceptionEnum.CALL_SERVICE_ERROR.getCode()),
+                            Matchers.containsString(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR.getCode()),
                             Matchers.containsString(CompanyExceptionEnum.ACCOUNT_LIST_IS_NULL.getCode()),
                             Matchers.containsString(CompanyExceptionEnum.USER_IS_NOT_COMPANY_ADMIN_OR_CONTACTS.getCode())
                     )

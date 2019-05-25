@@ -1,0 +1,35 @@
+/* pages/meeting/makeMeeting/makeMeeting.wxss */
+.meetingtitle{
+  margin-top: 31rpx;
+}
+.section{
+  display: flex;
+  background-color: #fff;
+  border-bottom: 2px solid #efefef;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 26rpx;
+  padding:28rpx 30rpx;
+}
+.section__title{
+  width:24%;
+}
+.section .input{
+  flex: 1
+}
+.section text{
+  font-size: 35rpx;
+  color:#07ab50;
+}
+.submit{
+  background-color: #ecfcf2;
+	border-radius: 41px;
+  border: solid 1px #009966;
+  color: #07ab50;
+  margin:0 33rpx;
+  margin-top: 32rpx;
+  font-size: 30rpx;
+  line-height: 1;
+  padding:27rpx 0;
+
+}

@@ -19,9 +19,9 @@ export function paramApi(url, query, parameter) {
 
 // 导出假期列表
 export function exportExcel(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/holidayRule/exportEmployeHoliday?q=a${params}`,
@@ -72,7 +72,7 @@ export function deleteHolidayRule(ruleId) {
   })
 }
 
-//假期修改
+// 假期修改
 
 export function updateVacation(query) {
   return request({

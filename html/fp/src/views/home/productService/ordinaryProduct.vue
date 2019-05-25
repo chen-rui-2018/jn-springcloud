@@ -32,7 +32,7 @@
             <template slot-scope="scope">
               <div class="ordinarybth" >
                 <span v-if="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'&&businessType!='technology_finance'" @click="goEdit(scope.row.productId)">编辑</span>
-                <span @click="goDetail(scope.row.productId)">详情</span>
+                <span @click="goDetail(scope.row)">详情</span>
                 <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'"  @click="handleshelf('-1',scope.row.productId)">下架</span>
                 <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status!='1'" @click="handleshelf('1',scope.row.productId)">上架</span>
               </div>
@@ -155,8 +155,8 @@ export default {
         this.$router.push({path:'/servicemarket/product/productService/ordinaryproductEdit',query:{orgid:this.sendData.orgId,productId:productId}})
     },
     //去详情
-    goDetail(productId){
-      this.$router.push({path:'/servicemarket/product/productService/ordinaryproductDetail',query:{orgid:this.sendData.orgId,productId:productId}})
+    goDetail(row){
+      this.$router.push({path:'/servicemarket/product/productService/ordinaryproductDetail',query:{orgid:this.sendData.orgId,productId:row.productId,signoryName:row.signoryName}})
     },
     // 下架
     handleshelf(status,productId){
@@ -203,7 +203,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      font-size: 16px;
       border-radius: 5px;
       div:nth-child(2){
         background-color: #ecfcf2;
@@ -232,6 +232,7 @@ export default {
           height: 27px;
           line-height: 27px;
           border: 1px solid #eee;
+          font-size: 12px;
         }
         .el-input-group__append{
           background-color:#00a041;

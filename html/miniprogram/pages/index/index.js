@@ -1,26 +1,56 @@
-Component({
+import request from './../../utils/http'
+Page({
   data: {
-    elements: [
-      { title: '政策指南', name: 'policy', color: 'purple', icon: 'formfill' },
-      { title: '申报公告 ', name: 'declare', color: 'mauve', icon: 'formfill' },
-      { title: '园区公告', name: 'notice', color: 'pink', icon: 'formfill' },
-      { title: '园区活动', name: 'activity', color: 'brown', icon: 'formfill' },
-      { title: '物业报修', name: 'property', color: 'red', icon: 'formfill' },
-      { title: '停车缴费', name: 'pay', color: 'orange', icon: 'timefill' },
-      { title: '会议签到', name: 'meeting', color: 'green', icon: 'messagefill' },
-      { title: '注册', name: 'register', color: 'green', icon: 'messagefill' }
-    ],
+    nvabarData: {
+      title: '首页',
+    },
+    noticeLise:[],
+    noticeSend:{
+      page:1,
+      rows:10
+    },
+    hotList:[],
+    hotSend:{
+      page:1,
+      rows:2
+    }
   },
-  onLoad: function () {
-  },
-  pageLifetimes: {
-    show() {
-      if (typeof this.getTabBar === 'function' &&
-        this.getTabBar()) {
-        this.getTabBar().setData({
-          selected: 1
+  onLoad: function (options) {
+    this.getNotice()
+    this.hotList()
+   },
+  onReady: function () { },
+  onShow: function () { },
+  onHide: function () { },
+  onPullDownRefresh: function () { },
+  onReachBottom: function () { },
+  // 轮播广告
+  getNotice(){
+    request.send({
+      url: '/springcloud-park/guest/park/notice/web/showNoticeListForApp',
+      data: this.data.sendData,
+      method: 'GET',
+    }).then(res=>{
+      // console.log(res)
+      if(res.data.code==='0000'){
+        this.setData({
+          noticeLise:res.data.data.rows,
         })
       }
-    }
+    })
+  },
+  hotList(){
+    request.send({
+      url: '/springcloud-park/guest/activity/activityListSlim',
+      data: this.data.hotSend,
+      method: 'POST',
+    }).then(res=>{
+      // console.log(res)
+      if(res.data.code==='0000'){
+        this.setData({
+          hotList:res.data.data.rows,
+        })
+      }
+    })
   }
 })

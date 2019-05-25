@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -28,7 +29,9 @@ public class CreateOrderAndPayReqModel extends CreatePayReqBaseModel implements 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "商品ID集合（数组）",required = true)
+    @NotNull
     private String[] goodsIdArr;
+
     @ApiModelProperty(value = "商品数量集合（数组），可不传（默认全部商品都是1件），数组长度必需与goodsIdArr一致",required = false)
     private String[] goodsCountArr;
 

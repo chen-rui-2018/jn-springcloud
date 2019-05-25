@@ -70,25 +70,6 @@ public class PayBillController extends BaseController {
         return new Result<>(payBillCountVO);
     }
 
-    /**
-     * 支付发起接口
-     * @param billId
-     * @param channelId
-     * @return
-     */
-    @ControllerLog(doAction = "统一缴费--创建支付订单")
-    @ApiOperation(value = "统一缴费--创建支付订单",notes = "支付方式：WX_JSAPI：微信公众号支付，WX_NATIVE：微信原生扫码支付，WX_APP：微信APP支付，" +
-            "WX_MWEB：微信H5支付，ALIPAY_MOBILE：支付宝移动支付，ALIPAY_PC：支付宝PC支付，ALIPAY_WAP：支付宝H5支付，ALIPAY_QR：支付宝当面付之扫码支付")
-    @PostMapping(value = "/createPayOrder")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "billId",value = "账单ID",example = "3054fa6cd4ba4063a447db3e14530496"),
-            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）[详细渠道请参照接口说明]",example = "ALIPAY_MOBILE")})
-    public Result<PayOrderRsp> createPayOrder (String billId, String channelId){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(billId,"账单编号不能为空");
-        Assert.notNull(channelId,"支付渠道不能为空");
-        return payBillService.createPayOrder(billId,channelId,"0",user);
-    }
 
     @ControllerLog(doAction = "支付回调接口")
     @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST", response = Result.class)

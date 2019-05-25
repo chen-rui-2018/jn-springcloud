@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -311,7 +312,7 @@ public class RecruitServiceImpl implements RecruitService {
         careParam.setCurrentAccount(account);
         Result<List<String>> result = careClient.findCareCompanyList(careParam);
         if (result == null || result.getData() == null) {
-            throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SERVICE_ERROR);
+            return new ArrayList<>();
         }
 
         // 关注的企业ID列表
@@ -326,7 +327,7 @@ public class RecruitServiceImpl implements RecruitService {
     public UserExtensionInfo checkCompanyUser (String account) {
         Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(account);
         if (result == null || result.getData() == null) {
-            throw new JnSpringCloudException(RecruitExceptionEnum.CALL_SERVICE_ERROR);
+            throw new JnSpringCloudException(CompanyExceptionEnum.GET_USER_EXTENSION_INFO_ERROR);
         }
         UserExtensionInfo userExtensionInfo = result.getData();
         if (StringUtils.isBlank(userExtensionInfo.getCompanyCode()) || StringUtils.isBlank(userExtensionInfo.getCompanyName())) {

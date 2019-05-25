@@ -12,26 +12,49 @@
         />
       </el-form-item>
       <el-form-item label="调查时间:" style="margin:0px 30px;">
-        <el-date-picker v-model="listQuery.effectiveTimeStart" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择开始时间" />
-        至
-        <el-date-picker v-model="listQuery.effectiveTimeEnd" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择结束时间" />
+        <el-date-picker
+          v-model="listQuery.effectiveTimeStart"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="请选择开始时间"
+        />至
+        <el-date-picker
+          v-model="listQuery.effectiveTimeEnd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="请选择结束时间"
+        />
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
       <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAddOrEdict">新增</el-button>
     </el-form>
     <!-- 表格 -->
     <el-table :data="investList" border fit highlight-current-row style="width: 100%;height:100%;">
-      <el-table-column type="index" width="60" label="序号" align="center" />
-      <el-table-column :show-overflow-tooltip="true" label="问卷名称" align="center" prop="researchProject">
+      <el-table-column type="index" width="60" label="序号" align="center"/>
+      <el-table-column
+        :show-overflow-tooltip="true"
+        label="问卷名称"
+        align="center"
+        prop="researchProject"
+      >
         <template slot-scope="scope">
-          <el-button class="setCursor" type="text" @click="handleAddOrEdict(scope.row)">{{ scope.row.researchProject }}</el-button>
+          <el-button
+            class="setCursor"
+            type="text"
+            @click="handleAddOrEdict(scope.row)"
+          >{{ scope.row.researchProject }}</el-button>
         </template>
       </el-table-column>
       <el-table-column label="开始时间" min-width="120" align="center" prop="effectiveTimeStartStr"/>
       <el-table-column label="结束时间" min-width="120" align="center" prop="effectiveTimeEndStr"/>
       <el-table-column label="发布人" align="center" prop="creatorAccount"/>
       <el-table-column label="状态" align="center" prop="statusStr"/>
-      <el-table-column label="操作" align="center" min-width="200" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        align="center"
+        min-width="200"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="scope">
           <el-button type="text" @click="handleEnd(scope.row.projectId)">结束问卷</el-button>
           <el-button type="text" @click="handleGive(scope.row)">发放问卷</el-button>
@@ -50,14 +73,13 @@
       class="tablePagination"
       background
       layout="total, sizes, prev, pager, next, jumper"
-      @current-change="handleCurrentChange" />
+      @current-change="handleCurrentChange"
+    />
   </div>
 </template>
 
 <script>
-import {
-  api, paramApi
-} from '@/api/hr/train'
+import { api } from '@/api/hr/train'
 export default {
   data() {
     return {
@@ -106,19 +128,36 @@ export default {
     },
     // 新增/编辑
     handleAddOrEdict(row) {
-      if (row&&row.projectId) {
-        this.$router.push({ name: 'question-edit', query: { id: row.projectId, title: '编辑问卷' }})
+      if (row && row.projectId) {
+        this.$router.push({
+          name: 'question-edit',
+          query: { id: row.projectId, title: '编辑问卷' }
+        })
       } else {
-        this.$router.push({ name: 'question-add', query: { title: '新建问卷' }})
+        this.$router.push({
+          name: 'question-add',
+          query: { title: '新建问卷' }
+        })
       }
     },
     // 发放调研
     handleGive(row) {
-      this.$router.push({ name: 'question-give', query: { id: row.projectId, researchProject: row.researchProject, status: row.status, title: '发放问卷' }})
+      this.$router.push({
+        name: 'question-give',
+        query: {
+          id: row.projectId,
+          researchProject: row.researchProject,
+          status: row.status,
+          title: '发放问卷'
+        }
+      })
     },
     // 调研结果
     handleResult(row) {
-      this.$router.push({ name: 'question-result', query: { id: row.projectId, title: '问卷结果' }})
+      this.$router.push({
+        name: 'question-result',
+        query: { id: row.projectId, title: '问卷结果' }
+      })
     },
     // 删除
     handleDelete(row) {
@@ -128,7 +167,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          let data = { projectId: row.projectId }
+          const data = { projectId: row.projectId }
           api('hr/train/quest/daleteInvestigateQuest', data).then(res => {
             if (res.data.code === '0000') {
               this.$message({
@@ -144,20 +183,19 @@ export default {
             }
           })
         })
-        .catch(() => {
-        })
+        .catch(() => {})
     },
     // 结束调研
     handleEnd(projectId) {
-      let data = {
+      const data = {
         projectId: projectId
       }
       api('hr/train/quest/endInvestiageQuest', data).then(res => {
-          if (res.data.code === '0000') {
-            this.$message.success('结束问卷成功！')
-          } else {
-            this.$message.error(res.data.result)
-          }
+        if (res.data.code === '0000') {
+          this.$message.success('结束问卷成功！')
+        } else {
+          this.$message.error(res.data.result)
+        }
       })
     }
   }

@@ -24,7 +24,7 @@ public interface SalaryManagementService {
 	//发放工资的分页查询/刷新
 	public PaginationData<List<SalaryPayrollVo>> paginationInquirePayroll(SalaryPayrollPage salaryPayrollPage);
 	//修改工资条
-	public void updatePayroll(SalaryPayrollPage salaryPayrollPage);
+	public String updatePayroll(SalaryPayrollPage salaryPayrollPage);
 	//导出工资条
 	public PaginationData<List<SalaryPayrollVo>> exportPayroll(SalaryPayrollPage salaryPayrollPage);
 	//导入工资条
@@ -32,9 +32,9 @@ public interface SalaryManagementService {
 	//分页查询薪资表信息
 	public PaginationData<List<SalaryInfo>> paginationInquireSalaryInfo(SalaryInfoPage salaryInfoPage);
 	//新增薪资表信息
-	public void addSalary(SalaryInfoAdd salaryInfoAdd,User user);
+	public String addSalary(SalaryInfoAdd salaryInfoAdd,User user);
 	//修改薪资表信息
-	public void updateSalary(SalaryInfoAdd salaryInfoAdd,User user);
+	public String updateSalary(SalaryInfoAdd salaryInfoAdd,User user);
 	//导入薪资表信息
 	public String importSalary(MultipartFile file, User user);
 	//导出薪资表信息

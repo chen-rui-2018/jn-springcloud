@@ -107,11 +107,11 @@ export function getPreMonth(date) {
  * @date 格式为yyyy-mm-dd的日期，如：2014-01-25
  */
 export function getNextMonth(date) {
-  const arr = date.split('-')
-  const year = arr[0] // 获取当前日期的年份
-  const month = arr[1] // 获取当前日期的月份
-  const day = arr[2] // 获取当前日期的日
-  // const days = new Date(year, month, 0)
+  var arr = date.split('-')
+  var year = arr[0] // 获取当前日期的年份
+  var month = arr[1] // 获取当前日期的月份
+  var day = arr[2] // 获取当前日期的日
+  // var days = new Date(year, month, 0)
   // days = days.getDate() // 获取当前日期中的月的天数
   let year2 = year
   let month2 = parseInt(month) + 1

@@ -18,6 +18,7 @@
             <el-aside width="135px">
               <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
+                <!-- <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" /> -->
                 <el-menu-item index="/home">
                   <span slot="title">首页</span>
                 </el-menu-item>
@@ -129,13 +130,16 @@
 </template>
 <script>
 import $ from "jquery";
+import SidebarItem from './common/SidebarItem'
 import { isMobile } from "@/util";
 import bus from "@/util/bus";
 import UserHome from "@/components/userHome";
 export default {
-  components: { UserHome },
+  components: { UserHome ,SidebarItem},
+  //  components: { SidebarItem },
   data() {
     return {
+      menuItems:[],
       isMobile: isMobile(),
       orgArr: [],
       organizationForm: {
@@ -179,6 +183,22 @@ export default {
     bus.$on("getUserinfoF", res => {
       this.getUserExtension();
     });
+    // var token=sessionStorage.token
+    // console.log(token)
+    //  this.api.post({
+    //     url: "getDynamicMenu",
+    //     headers: { token: token },
+    //     callback: res => {
+    //       if (res.code == "0000") {
+    //         console.log(res)
+    //         this.menuItems=res.data[0].children[0].children[8].children
+    //         console.log(this.menuItems)
+    //       } else {
+    //         this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+
   },
   mounted() {
     this.getUserExtension();

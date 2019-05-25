@@ -637,7 +637,7 @@
   </select>
 
   <!--根据日期和支付方式查询所有订单-->
-  <select id="getPaySuccessOrderByDate" parameterType="java.util.Map" resultMap="BaseResultMap" >
+  <select id="getAllPayOrderByDate" parameterType="java.util.Map" resultMap="BaseResultMap" >
       select t1.* from t_pay_order t1
       left join t_pay_channel t2
       on t1.ChannelId = t2.ChannelId

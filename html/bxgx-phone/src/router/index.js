@@ -33,7 +33,7 @@ export default new Router({
     {
       path: '/guest/portal/sp/power/consult',
       name: 'consult',
-      meta: {title: '我要咨询'},
+      meta: {title: '我要留言'},
       component: () => import('@/views/administrative/consult')
     },
     {
@@ -55,23 +55,65 @@ export default new Router({
       component: () => import('@/views/declarationCenter/declarationDetail')
     },
     {
-      path: '/guest/pd/consult ',
-      name: 'consult',
+      path: '/guest/pd/consult',
+      name: 'declarationconsult',
       meta: {title: '我要咨询'},
       component: () => import('@/views/declarationCenter/consult')
-	},
-	{
+
+    },
+    {
       path: '/serverProDetail',
       name: 'serverProDetail',
       component: () => import('@/views/serverProDetail'),
       meta: {title: '服务产品详情'}
     },
     {
-      path: '/demandRaise',
-      name: 'demandRaise',
-      component: () => import('@/views/demandRaise'),
-      meta: {title: '提需求'}
-
+      path: '/guest/pd/talentNotice/talentsService',
+      name: 'talentsService',
+      meta: {title: '人才服务'},
+      component: () => import('@/views/talentsService/talentsService')
+    },
+    {
+      path: '/guest/pd/talentNotice/talentsServicePlatform',
+      name: 'talentsServicePlatform',
+      meta: {title: '申报平台'},
+      component: () => import('@/views/talentsService/talentsServicePlatform')
+    },
+    {
+      path: '/guest/pd/talentNotice/talentsServiceDetail',
+      name: 'talentsServiceDetail',
+      meta: {title: '服务详情'},
+      component: () => import('@/views/talentsService/talentsServiceDetail')
+    },
+    {
+      path: '/workPlan/workPlan',
+      name: 'workPlan',
+      component: () => import('@/views/workPlan/workPlan'),
+      meta: {title: '工作计划管理'}
+    },
+    {
+      path: '/workPlan/addWorkPlan',
+      name: 'addWorkPlan',
+      component: () => import('@/views/workPlan/addWorkPlan'),
+      meta: {title: '添加工作计划'}
+    },
+    {
+      path: '/workPlan/editWorkPlan',
+      name: 'editWorkPlan',
+      component: () => import('@/views/workPlan/editWorkPlan'),
+      meta: {title: '编辑工作计划'}
+    },
+    {
+      path: '/workPlan/editWorkStatus',
+      name: 'editWorkStatus',
+      component: () => import('@/views/workPlan/editWorkStatus'),
+      meta: {title: '修改任务状态'}
+    },
+    {
+      path: '/workPlan/workPlanDetails',
+      name: 'workPlanDetails',
+      component: () => import('@/views/workPlan/workPlanDetails'),
+      meta: {title: '工作计划详情'}
     }
   ]
 })

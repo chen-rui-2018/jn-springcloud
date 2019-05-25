@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.park.api.CareClient;
 import com.jn.park.care.model.CareParam;
+import com.jn.park.care.model.ServiceEnterpriseCompany;
 import com.jn.park.gamtopic.model.CareUserDetails;
 import com.jn.park.gamtopic.service.CareService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -42,6 +43,13 @@ public class CareServerController extends BaseController implements CareClient {
     public Result<List<String>> findCareCompanyList(@RequestBody CareParam careParam) {
         List<String> careCompanyList = careService.findCareCompanyList(careParam.getCurrentAccount());
         return new Result(careCompanyList);
+    }
+
+    @Override
+    @ControllerLog(doAction = "查询关注的企业")
+    public Result<List<ServiceEnterpriseCompany>> getCompanyNewList(@RequestBody List<ServiceEnterpriseCompany> serviceEnterpriseCompany) {
+        List<ServiceEnterpriseCompany> getCompanyNewList = careService.getCompanyNewList(serviceEnterpriseCompany);
+        return new Result(getCompanyNewList);
     }
 
 }

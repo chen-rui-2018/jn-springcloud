@@ -19,6 +19,9 @@ public class VacationManageVo implements Serializable{
 	@ApiModelProperty(value = "工号")
     private String jobNumber;
 	
+	@ApiModelProperty(value = "用户id")
+	private String userId;
+	
 	@ApiModelProperty(value = "部门Id")
     private String departmentId;
 	
@@ -39,6 +42,14 @@ public class VacationManageVo implements Serializable{
 
 	@ApiModelProperty(value = "请假天数")
     private String vacationTime;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public String getDepartmentName() {
 		return departmentName;

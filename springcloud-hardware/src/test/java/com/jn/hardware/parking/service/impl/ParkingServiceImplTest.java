@@ -205,10 +205,10 @@ public class ParkingServiceImplTest {
         //入场入参
         String[]  strings =  new String[]{};
 //        doorCarInParkingParam.setCarinlist(strings);
-        doorCarInParkingParam.setSignature("SJDKLSJKLDJSKLSHJKSHDJKHJKHJK");
-        doorCarInParkingParam.setT("1520416876");
-        String url= "";
-        String parkId = "";
+        doorCarInParkingParam.setSignature("95004A4B6D96C4FA242586659D5F2D06");
+        doorCarInParkingParam.setT("1557927122");
+        String url= "http://112.94.22.222:8000/springcloud-hardware/hardware/parking/saveDoorCarInParkingInfo";
+        String parkId = "100010_0004";
         DoorResult result = parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url,parkId);
         logger.info("\n车场车辆入场信息,结果说明：{}",result.getBody());
 

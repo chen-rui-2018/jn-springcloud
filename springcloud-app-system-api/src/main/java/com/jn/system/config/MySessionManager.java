@@ -31,7 +31,7 @@ public class MySessionManager extends DefaultWebSessionManager {
         String id = WebUtils.toHttp(request).getHeader(AUTHORIZATION);
         if (StringUtils.isEmpty(id)) {
             String token = AccessContext.getTokenContext();
-            logger.info("【oauth】 autoLogin getSessionId,token:{},id:{}", token, id);
+            ///logger.info("【oauth】 autoLogin getSessionId,token:{},id:{}", token, id);
             if (!StringUtils.isEmpty(token)) {
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE, REFERENCED_SESSION_ID_SOURCE);
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID, token);

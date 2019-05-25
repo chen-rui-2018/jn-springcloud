@@ -49,7 +49,10 @@
     <set>
         t1.assessment_status = 3
     </set>
-    where t1.assessment_job_number = #{assessmentJobNumber,jdbcType=VARCHAR}
+    where 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentJobNumber)">
+			and t1.assessment_job_number = #{assessmentJobNumber,jdbcType=VARCHAR}
+		</if>
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentId)">
 			and t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
 		</if>

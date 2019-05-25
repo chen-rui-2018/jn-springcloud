@@ -55,7 +55,7 @@ public class PayAccountServerController extends BaseController implements PayAcc
     }
 
     @Override
-    public Result<PayOrderRsp> createOrderAndPay(CreateOrderAndPayReqModel createOrderAndPayReqModel) {
+    public Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return myPayBillService.insertPrepaidRecharge(createOrderAndPayReqModel,user);

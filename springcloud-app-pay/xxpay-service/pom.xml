@@ -17,18 +17,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.jn</groupId>
-			<artifactId>springcloud-app-common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.jn</groupId>
 			<artifactId>xxpay-dal</artifactId>
 			<version>1.0.0-RELEASE</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.jn</groupId>
-			<artifactId>xxpay-common</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>com.jn</groupId>
 			<artifactId>xxpay-web-api</artifactId>

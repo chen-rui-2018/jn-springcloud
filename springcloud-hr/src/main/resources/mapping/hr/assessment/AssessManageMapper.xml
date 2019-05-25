@@ -9,7 +9,8 @@
 	<select id="selectGroupByAssessmentName" parameterType="com.jn.hr.assessment.model.AssessmentManagePage"
 		resultType="com.jn.hr.assessment.model.AssessmentManageVo">
 		SELECT * FROM tb_manpower_assessment_manage t1
-		group by t1.assessment_name
+		where t1.record_status = 1
+		group by t1.assessment_id
 	</select>
 	
 	 <select id="selectByStatusAndRecordStatus" parameterType="com.jn.hr.assessment.model.AssessmentManagePage"
@@ -115,8 +116,7 @@
   <update id="updateByStatus" parameterType="com.jn.hr.assessment.model.AssessmentManagePage">
     update tb_manpower_assessment_manage t1
     set t1.status = 2
-    where t1.assessment_job_number = #{assessmentObjectJobNumber,jdbcType=VARCHAR}
-    and t1.record_status = 1 
+    where t1.record_status = 1 
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(assessmentId)">
 			and t1.assessment_id = #{assessmentId,jdbcType=VARCHAR}
 		</if>

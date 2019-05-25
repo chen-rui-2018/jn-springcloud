@@ -2,8 +2,11 @@ package com.jn.paybill.api;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.pay.model.CreateOrderAndPayReqModel;
 import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.model.*;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,4 +97,7 @@ public interface PayBillClient {
     @RequestMapping(value = "/api/pay/bill/cancelPayBillByBillId", method = RequestMethod.POST)
     Result<Boolean> cancelPayBillByBillId(@RequestBody String orderId);
 
+    @ApiOperation(value = "创建订单并发起支付")
+    @RequestMapping(value = "/api/pay/bill/createOrderAndPay",method = RequestMethod.POST)
+    Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel);
 }

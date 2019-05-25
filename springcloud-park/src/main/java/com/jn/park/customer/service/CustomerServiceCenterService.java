@@ -4,6 +4,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.park.customer.model.ConsultationCustomerListParam;
 import com.jn.park.customer.model.OnlineCustomerParam;
 import com.jn.park.customer.model.ServiceModuleShow;
+import com.jn.park.customer.vo.CustomerServiceCenterDetailVo;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface CustomerServiceCenterService {
      * @param processInsId 流程实例id
      * @return
      */
-    Object customerQuesDetail(String account,String processInsId);
+    CustomerServiceCenterDetailVo customerQuesDetail(String account, String processInsId);
 
     /**
      * 服务模块信息
@@ -44,4 +45,19 @@ public interface CustomerServiceCenterService {
      * @return
      */
     int onlineCustomerService(OnlineCustomerParam onlineCustomerParam,String loginAccount);
+
+    /**
+     * 获取问题编码
+     * @return
+     */
+    String getQuesCode();
+
+    /**
+     * 更新流程实例id
+     * @param loginAccount 用户账号
+     * @param quesCode    问题编号
+     * @param processInstanceId  流程实例id
+     * @return
+     */
+    int updateProcessInstanceId(String loginAccount, String quesCode, String processInstanceId);
 }

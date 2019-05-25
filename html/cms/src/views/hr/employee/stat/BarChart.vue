@@ -7,13 +7,13 @@ import echarts from 'echarts'
 // require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
 
-const animationDuration = 6000
-
 export default {
   props: {
     listData: {
       type: Array,
-      default: []
+      default: () => {
+        return []
+      }
     },
     title: {
       type: String,
@@ -39,6 +39,14 @@ export default {
       values: []
     }
   },
+  watch: {
+    listData: {
+      handler(newValue, oldValue) {
+        this.setOption()
+      },
+      deep: true
+    }
+  },
   mounted() {
     this.initChart()
     this.__resizeHandler = debounce(() => {
@@ -60,11 +68,10 @@ export default {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOption()
-
     },
     setOption() {
-      if(!this.chart){
-        return;
+      if (!this.chart) {
+        return
       }
       this.names = this.listData.map(data => {
         return data.name
@@ -80,37 +87,36 @@ export default {
           textStyle: {
             color: '#ccc'
           }
-        }
-        ,
+        },
         toolbox: {
-          show : true,
-          feature : {
-            mark : {show: true},
-            dataView : {show: true, readOnly: false},
-            magicType : {show: true, type: ['line', 'bar']},
-            restore : {show: true},
-            saveAsImage : {show: true}
+          show: true,
+          feature: {
+            mark: { show: true },
+            dataView: { show: true, readOnly: false },
+            magicType: { show: true, type: ['line', 'bar'] },
+            restore: { show: true },
+            saveAsImage: { show: true }
           },
           optionToContent: function(opt) {
-            let axisData = opt.xAxis[0].data; //坐标数据
-            let series = opt.series; //折线图数据
-            let tdHeads = '<td  style="padding: 0 10px">部门</td>'; //表头
-            let tdBodys = ''; //数据
-            series.forEach(function (item) {
-              //组装表头
-              tdHeads += `<td style="padding: 0 10px">${item.name}</td>`;
-            });
-            let table = `<table border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center"><tbody><tr>${tdHeads} </tr>`;
+            const axisData = opt.xAxis[0].data // 坐标数据
+            const series = opt.series // 折线图数据
+            let tdHeads = '<td  style="padding: 0 10px">部门</td>' // 表头
+            let tdBodys = '' // 数据
+            series.forEach(function(item) {
+              // 组装表头
+              tdHeads += `<td style="padding: 0 10px">${item.name}</td>`
+            })
+            let table = `<table border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center"><tbody><tr>${tdHeads} </tr>`
             for (let i = 0, l = axisData.length; i < l; i++) {
               for (let j = 0; j < series.length; j++) {
-                //组装表数据
-                tdBodys += `<td>${ series[j].data[i]}</td>`;
+                // 组装表数据
+                tdBodys += `<td>${series[j].data[i]}</td>`
               }
-              table += `<tr><td style="padding: 0 10px">${axisData[i]}</td>${tdBodys}</tr>`;
-              tdBodys = '';
+              table += `<tr><td style="padding: 0 10px">${axisData[i]}</td>${tdBodys}</tr>`
+              tdBodys = ''
             }
-            table += '</tbody></table>';
-            return table;
+            table += '</tbody></table>'
+            return table
           }
         },
         xAxis: {
@@ -119,23 +125,20 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name:'(人)'
+          name: '(人)'
         },
         series: [{
           data: this.values,
-          name:'人数',
+          name: '人数',
           type: 'bar'
         }]
       })
     }
-  },
-  watch: {
-    listData: {
-      handler(newValue, oldValue) {
-        this.setOption()
-      },
-      deep: true
-    },
   }
 }
 </script>
+<style scoped>
+  .chart{
+    position:relative;
+  }
+</style>

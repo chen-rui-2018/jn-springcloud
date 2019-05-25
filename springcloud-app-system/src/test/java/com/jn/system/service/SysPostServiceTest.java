@@ -5,7 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.entity.TbSysPost;
-import com.jn.system.dept.model.SysPost;
+import com.jn.system.model.SysPost;
 import com.jn.system.dept.model.SysPostPage;
 import com.jn.system.dept.service.SysPostService;
 import com.jn.system.model.User;
@@ -74,7 +74,7 @@ public class SysPostServiceTest {
 
     @Test
     public void findSysPostAll() {
-        List<TbSysPost> data = sysPostService.findSysPostAll();
+        List<SysPost> data = sysPostService.findSysPostAll();
         Assert.assertThat(data, Matchers.anything());
     }
 

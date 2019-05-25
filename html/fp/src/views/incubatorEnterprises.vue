@@ -29,27 +29,27 @@
         </div>
         <div class="enterpriseCon w">
             <div class="incubatorNav">
-                <span>首页</span>
+                <span class="pointer" @click="$router.push({path:'/'})">首页</span>
                 <span>/</span>
                 <span class="mainColor">孵化企业</span>
             </div>
             <div class="incubatorCon">
                 <ul class="conul clearfix">
                     <li class="conLi mainBorder fl" v-for="(i,k) in incubatorList" :key="k">
-                        <div class="liTit ct">{{i.incubatorId}}</div>
+                        <h3 class="liTit ct">{{i.incubatorName}}</h3>
                         <div class="tit1">
                             <h4>空间特色</h4>
-                            <p>{{i.spatialCharacter}}</p>
+                            <p v-html="i.spatialCharacter"></p>
                         </div>
                         <div class="tit1">
                             <h4>入驻标准</h4>
-                            <p>{{i.entryCriteria}}</p>
+                            <p v-html="i.entryCriteria"></p>
                         </div>
                         <div class="tit1">
                             <h4>数据特色</h4>
-                            <p>2、5000平米的办公空间</p>
+                            <p v-html="i.advantageIntroduct"></p>
                         </div>
-                        <div class="tit1">
+                        <div class="tit1 tit2">
                             <h4>申请入驻</h4>
                             <p>电话：{{i.phone}}</p>
                         </div>
@@ -198,16 +198,19 @@ export default {
     }
     .tit1 {
       padding: 0 10px;
+    }
+    .tit2{
       margin-bottom: 10px;
     }
     h4 {
       font-size: 13px;
       color: #333;
-      font-weight: normal;
+      margin-bottom: 10px;
     }
     p {
-      font-size: 13px;
+      font-size: 12px;
       color: #666;
+      line-height: 20px;
     }
     .footLi {
       height: 36px;

@@ -35,40 +35,40 @@ public class AttendanceManagementAdd implements Serializable{
 	private String userId;
 	
 	@ApiModelProperty(value = "出勤（天）")
-    private Integer attendance;
+    private Integer attendance = 0;
 
 	@ApiModelProperty(value = "迟到次数")
-    private Integer late;
+    private Integer late = 0;
 
 	@ApiModelProperty(value = "早退次数")
-    private Integer leaveEarly;
+    private Integer leaveEarly = 0;
 
 	@ApiModelProperty(value = "上班缺卡数")
-    private Integer startMissCard;
+    private Integer startMissCard = 0;
 
 	@ApiModelProperty(value = "下班缺卡数")
-    private Integer endMissCard;
+    private Integer endMissCard = 0;
 
 	@ApiModelProperty(value = "旷工（时）")
-    private Integer absenteeism;
+    private Integer absenteeism = 0;
 
 	@ApiModelProperty(value = "事假（时）")
-    private Integer compassionateLeave;
+    private Integer compassionateLeave = 0;
 
 	@ApiModelProperty(value = "病假（时）")
-    private Integer sickLeave;
+    private Integer sickLeave = 0;
 
 	@ApiModelProperty(value = "婚假（时）")
-    private Integer marriageHoliday;
+    private Integer marriageHoliday = 0;
 
 	@ApiModelProperty(value = "丧假（时）")
-    private Integer funeralLeave;
+    private Integer funeralLeave = 0;
 
 	@ApiModelProperty(value = "产假（时）")
-    private Integer maternityLeave;
+    private Integer maternityLeave = 0;
 
 	@ApiModelProperty(value = "年休假（时）")
-    private Integer annualLeave;
+    private Integer annualLeave = 0;
 	
 	@ApiModelProperty(value = "开始日期")
 	private String startTime;
@@ -142,7 +142,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setAttendance(Integer attendance) {
-		this.attendance = attendance;
+		this.attendance = attendance == null ? 0 : attendance;
 	}
 
 	public Integer getLate() {
@@ -150,7 +150,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setLate(Integer late) {
-		this.late = late;
+		this.late = late == null ? 0 : late;
 	}
 
 	public Integer getLeaveEarly() {
@@ -158,7 +158,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setLeaveEarly(Integer leaveEarly) {
-		this.leaveEarly = leaveEarly;
+		this.leaveEarly = leaveEarly == null ? 0 : leaveEarly;
 	}
 
 	public Integer getStartMissCard() {
@@ -166,7 +166,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setStartMissCard(Integer startMissCard) {
-		this.startMissCard = startMissCard;
+		this.startMissCard = startMissCard == null ? 0 : startMissCard;
 	}
 
 	public Integer getEndMissCard() {
@@ -174,7 +174,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setEndMissCard(Integer endMissCard) {
-		this.endMissCard = endMissCard;
+		this.endMissCard = endMissCard == null ? 0 : endMissCard;
 	}
 
 	public Integer getAbsenteeism() {
@@ -182,7 +182,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setAbsenteeism(Integer absenteeism) {
-		this.absenteeism = absenteeism;
+		this.absenteeism = absenteeism == null ? 0 : absenteeism;
 	}
 
 	public Integer getCompassionateLeave() {
@@ -190,7 +190,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setCompassionateLeave(Integer compassionateLeave) {
-		this.compassionateLeave = compassionateLeave;
+		this.compassionateLeave = compassionateLeave == null ? 0 : compassionateLeave;
 	}
 
 	public Integer getSickLeave() {
@@ -198,7 +198,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setSickLeave(Integer sickLeave) {
-		this.sickLeave = sickLeave;
+		this.sickLeave = sickLeave == null ? 0 : sickLeave;
 	}
 
 	public Integer getMarriageHoliday() {
@@ -206,7 +206,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setMarriageHoliday(Integer marriageHoliday) {
-		this.marriageHoliday = marriageHoliday;
+		this.marriageHoliday = marriageHoliday == null ? 0 : marriageHoliday;
 	}
 
 	public Integer getFuneralLeave() {
@@ -214,7 +214,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setFuneralLeave(Integer funeralLeave) {
-		this.funeralLeave = funeralLeave;
+		this.funeralLeave = funeralLeave == null ? 0 : funeralLeave;
 	}
 
 	public Integer getMaternityLeave() {
@@ -222,7 +222,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setMaternityLeave(Integer maternityLeave) {
-		this.maternityLeave = maternityLeave;
+		this.maternityLeave = maternityLeave == null ? 0 : maternityLeave;
 	}
 
 	public Integer getAnnualLeave() {
@@ -230,7 +230,7 @@ public class AttendanceManagementAdd implements Serializable{
 	}
 
 	public void setAnnualLeave(Integer annualLeave) {
-		this.annualLeave = annualLeave;
+		this.annualLeave = annualLeave == null ? 0 : annualLeave;
 	}
 
 	public String getStartTime() {

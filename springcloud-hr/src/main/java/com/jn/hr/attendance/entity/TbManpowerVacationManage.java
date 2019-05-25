@@ -7,6 +7,8 @@ public class TbManpowerVacationManage implements Serializable {
 
     private String jobNumber;
 
+    private String userId;
+
     private String vacationType;
 
     private String vacationTime;
@@ -27,6 +29,14 @@ public class TbManpowerVacationManage implements Serializable {
 
     public void setJobNumber(String jobNumber) {
         this.jobNumber = jobNumber == null ? null : jobNumber.trim();
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public String getVacationType() {
@@ -59,6 +69,7 @@ public class TbManpowerVacationManage implements Serializable {
         TbManpowerVacationManage other = (TbManpowerVacationManage) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getJobNumber() == null ? other.getJobNumber() == null : this.getJobNumber().equals(other.getJobNumber()))
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
             && (this.getVacationType() == null ? other.getVacationType() == null : this.getVacationType().equals(other.getVacationType()))
             && (this.getVacationTime() == null ? other.getVacationTime() == null : this.getVacationTime().equals(other.getVacationTime()));
     }
@@ -69,6 +80,7 @@ public class TbManpowerVacationManage implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getJobNumber() == null) ? 0 : getJobNumber().hashCode());
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
         result = prime * result + ((getVacationType() == null) ? 0 : getVacationType().hashCode());
         result = prime * result + ((getVacationTime() == null) ? 0 : getVacationTime().hashCode());
         return result;
@@ -82,6 +94,7 @@ public class TbManpowerVacationManage implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", jobNumber=").append(jobNumber);
+        sb.append(", userId=").append(userId);
         sb.append(", vacationType=").append(vacationType);
         sb.append(", vacationTime=").append(vacationTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

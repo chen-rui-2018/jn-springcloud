@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
@@ -72,6 +73,18 @@ public class IncreaseStaff implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifiedTime;
+	
+	@ApiModelProperty(value = "个人社保费")
+    private Double personalSocialSecurity;
+
+	@ApiModelProperty(value = "公司社保费")
+    private Double companySocialSecurity;
+
+	@ApiModelProperty(value = "个人公积金费")
+    private Double personalAccumulationFund;
+
+	@ApiModelProperty(value = "公司公积金费")
+    private Double companyAccumulationFund;
 
 	@ApiModelProperty(value = "个人缴费")
 	private Double personalPayment;
@@ -79,6 +92,38 @@ public class IncreaseStaff implements Serializable{
 	@ApiModelProperty(value = "公司缴费")
 	private Double companyPayment;
 	
+	public Double getPersonalSocialSecurity() {
+		return personalSocialSecurity;
+	}
+
+	public void setPersonalSocialSecurity(Double personalSocialSecurity) {
+		this.personalSocialSecurity = personalSocialSecurity;
+	}
+
+	public Double getCompanySocialSecurity() {
+		return companySocialSecurity;
+	}
+
+	public void setCompanySocialSecurity(Double companySocialSecurity) {
+		this.companySocialSecurity = companySocialSecurity;
+	}
+
+	public Double getPersonalAccumulationFund() {
+		return personalAccumulationFund;
+	}
+
+	public void setPersonalAccumulationFund(Double personalAccumulationFund) {
+		this.personalAccumulationFund = personalAccumulationFund;
+	}
+
+	public Double getCompanyAccumulationFund() {
+		return companyAccumulationFund;
+	}
+
+	public void setCompanyAccumulationFund(Double companyAccumulationFund) {
+		this.companyAccumulationFund = companyAccumulationFund;
+	}
+
 	public String getDetailId() {
 		return detailId;
 	}

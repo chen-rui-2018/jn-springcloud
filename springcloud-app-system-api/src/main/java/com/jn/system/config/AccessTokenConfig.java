@@ -29,7 +29,7 @@ public class AccessTokenConfig {
      * 拦截忽略地址,
      * TODO 头部带上token则不拦截,或者过滤以下地址
      */
-    private String exclusionsUrl = "/,/hystrix.stream,/login,/authLogin,/noPwdLogin,/api/**,/metaData/**,/health,/loggers/**,/dump,/info,/env,/env/reset,/metrics,/trace,/heapdump,/features,/archaius,/jolokia,/logfile,/channels,/mappings,/auditevents,/configprops,/autoconfig,/refresh,/v2/api-docs/**,/swagger-ui.html,/swagger-resources/**,/swagger/**,/webjars/springfox-swagger-ui/**,/guest/**";
+    private String exclusionsUrl = "/,/hystrix.stream,/login,/noPwdLogin,/api/**,/metaData/**,/health,/loggers/**,/dump,/info,/env,/env/reset,/metrics,/trace,/heapdump,/features,/archaius,/jolokia,/logfile,/channels,/mappings,/auditevents,/configprops,/autoconfig,/refresh,/v2/api-docs/**,/swagger-ui.html,/swagger-resources/**,/swagger/**,/webjars/springfox-swagger-ui/**,/guest/**";
 
     @Bean
     @Order(1)
@@ -54,6 +54,7 @@ public class AccessTokenConfig {
     public FilterRegistrationBean accessAutoLoginFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean(accessAutoLoginManager());
         registration.addUrlPatterns("*");
+        registration.addInitParameter("exclusions_url", exclusionsUrl);
         return registration;
     }
 }

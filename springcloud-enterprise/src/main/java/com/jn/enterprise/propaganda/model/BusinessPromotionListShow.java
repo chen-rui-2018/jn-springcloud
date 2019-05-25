@@ -37,6 +37,8 @@ public class BusinessPromotionListShow implements Serializable {
     private String propagandaFee;
     @ApiModelProperty(value = "宣传详情")
     private String propagandaDetails;
+    @ApiModelProperty(value = "宣传摘要")
+    private String propagandaSummaries;
     @ApiModelProperty(value = "审批状态(-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)")
     private String approvalStatus;
     @ApiModelProperty(value = "宣传区域(top:顶部  central:中部  bottom:底部)")
@@ -47,22 +49,6 @@ public class BusinessPromotionListShow implements Serializable {
     private String viewCount;
     @ApiModelProperty(value = "创建时间")
     private String createdTime;
-
-    public String getViewCount() {
-        return viewCount;
-    }
-
-    public void setViewCount(String viewCount) {
-        this.viewCount = viewCount;
-    }
-
-    public String getPropagandaDetails() {
-        return propagandaDetails;
-    }
-
-    public void setPropagandaDetails(String propagandaDetails) {
-        this.propagandaDetails = propagandaDetails;
-    }
 
     public String getOrderNum() {
         return orderNum;
@@ -152,6 +138,22 @@ public class BusinessPromotionListShow implements Serializable {
         this.propagandaFee = propagandaFee;
     }
 
+    public String getPropagandaDetails() {
+        return propagandaDetails;
+    }
+
+    public void setPropagandaDetails(String propagandaDetails) {
+        this.propagandaDetails = propagandaDetails;
+    }
+
+    public String getPropagandaSummaries() {
+        return propagandaSummaries;
+    }
+
+    public void setPropagandaSummaries(String propagandaSummaries) {
+        this.propagandaSummaries = propagandaSummaries;
+    }
+
     public String getApprovalStatus() {
         return approvalStatus;
     }
@@ -174,6 +176,14 @@ public class BusinessPromotionListShow implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
     }
 
     public String getCreatedTime() {
@@ -199,6 +209,7 @@ public class BusinessPromotionListShow implements Serializable {
                 ", posterUrl='" + posterUrl + '\'' +
                 ", propagandaFee='" + propagandaFee + '\'' +
                 ", propagandaDetails='" + propagandaDetails + '\'' +
+                ", propagandaSummaries='" + propagandaSummaries + '\'' +
                 ", approvalStatus='" + approvalStatus + '\'' +
                 ", propagandaArea='" + propagandaArea + '\'' +
                 ", status='" + status + '\'' +

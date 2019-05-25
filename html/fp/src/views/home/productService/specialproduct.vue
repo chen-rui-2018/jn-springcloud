@@ -219,7 +219,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 15px;
+      font-size: 16px;
       border-radius: 5px;
       div:nth-child(2){
         background-color: #ecfcf2;

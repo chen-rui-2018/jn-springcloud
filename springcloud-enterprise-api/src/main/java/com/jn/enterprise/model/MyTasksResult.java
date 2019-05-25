@@ -1,4 +1,4 @@
-package com.jn.park.customer.model;
+package com.jn.enterprise.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "MyTasksResult",description = "客服中心我的待办返回数据")
+@ApiModel(value = "MyTasksResult",description = "我的待办返回数据")
 public class MyTasksResult implements Serializable {
     @ApiModelProperty("主键")
     private String pk;

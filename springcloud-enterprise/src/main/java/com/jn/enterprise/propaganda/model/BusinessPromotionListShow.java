@@ -43,8 +43,18 @@ public class BusinessPromotionListShow implements Serializable {
     private String propagandaArea;
     @ApiModelProperty(value = "数据状态(0:无效/未上架  1:有效/以上架      审批通过，但未上架属于”待发布“，审批通过，已上架属于“已发布”)")
     private String status;
+    @ApiModelProperty(value = "浏览量")
+    private String viewCount;
     @ApiModelProperty(value = "创建时间")
     private String createdTime;
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
 
     public String getPropagandaDetails() {
         return propagandaDetails;
@@ -179,6 +189,7 @@ public class BusinessPromotionListShow implements Serializable {
         return "BusinessPromotionListShow{" +
                 "orderNum='" + orderNum + '\'' +
                 ", propagandaType='" + propagandaType + '\'' +
+                ", propagandaTypeName='" + propagandaTypeName + '\'' +
                 ", id='" + id + '\'' +
                 ", propagandaCode='" + propagandaCode + '\'' +
                 ", propagandaTitle='" + propagandaTitle + '\'' +
@@ -187,10 +198,12 @@ public class BusinessPromotionListShow implements Serializable {
                 ", invalidDate='" + invalidDate + '\'' +
                 ", posterUrl='" + posterUrl + '\'' +
                 ", propagandaFee='" + propagandaFee + '\'' +
+                ", propagandaDetails='" + propagandaDetails + '\'' +
                 ", approvalStatus='" + approvalStatus + '\'' +
                 ", propagandaArea='" + propagandaArea + '\'' +
                 ", status='" + status + '\'' +
-                ", createTime='" + createdTime + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", createdTime='" + createdTime + '\'' +
                 '}';
     }
 }

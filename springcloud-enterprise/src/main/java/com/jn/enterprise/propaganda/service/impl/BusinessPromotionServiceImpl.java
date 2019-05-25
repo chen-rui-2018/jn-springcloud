@@ -179,6 +179,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @ServiceLog(doAction = "企业宣传详情")
     @Override
     public BusinessPromotionDetailsShow getBusinessPromotionDetails(String propagandaId) {
+        businessPromotionMapper.addClickNumById(propagandaId);
         return businessPromotionMapper.getBusinessPromotionDetails(propagandaId);
     }
 

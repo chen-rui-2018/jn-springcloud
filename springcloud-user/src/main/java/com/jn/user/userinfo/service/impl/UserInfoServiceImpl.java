@@ -10,6 +10,7 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
+import com.jn.common.util.enums.EnumUtil;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
@@ -20,6 +21,7 @@ import com.jn.user.model.*;
 import com.jn.user.userinfo.dao.TbUserPersonMapper;
 import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.entity.TbUserPersonCriteria;
+import com.jn.user.userinfo.enums.HomeRoleEnum;
 import com.jn.user.userinfo.model.UserDeviceParam;
 import com.jn.user.userinfo.model.UserInfoParam;
 import com.jn.user.userinfo.service.UserInfoService;
@@ -139,6 +141,10 @@ public class UserInfoServiceImpl implements UserInfoService {
                     if (sysRole != null) {
                         if (homeRoleStr.contains(sysRole.getRoleName())) {
                             userExtensionInfo.setRoleName(sysRole.getRoleName());
+                            HomeRoleEnum homeRole = EnumUtil.getByCode(sysRole.getRoleName(), HomeRoleEnum.class);
+                            if (homeRole != null) {
+                                userExtensionInfo.setRoleCode(homeRole.getMessage());
+                            }
                             break;
                         }
                     }

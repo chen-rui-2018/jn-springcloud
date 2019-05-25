@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class AttendanceManageApiVo {
 
-	@ApiModelProperty(value = "考勤状态")
+	@ApiModelProperty(value = "考勤状态（1：迟到， 2：早退， 3：缺卡，4：加班，5：旷工，6：请假）")
 	private String attendanceType;
 	
 	@ApiModelProperty(value = "考勤部门总人数")

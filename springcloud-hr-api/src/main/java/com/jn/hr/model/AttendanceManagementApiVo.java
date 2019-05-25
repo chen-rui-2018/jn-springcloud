@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class AttendanceManagementApiVo {
 
-	@ApiModelProperty(value = "考勤状态")
+	@ApiModelProperty(value = "考勤状态（1：迟到， 2：早退， 3：缺卡，4：加班，5：旷工，6：请假）")
 	private String attendanceType;
 	
 	@ApiModelProperty(value = "次数")
@@ -21,8 +21,30 @@ public class AttendanceManagementApiVo {
 	@ApiModelProperty(value = "用户id")
 	private String userId;
 	
+	@ApiModelProperty(value = "迟到早退的分钟数")
+	private String minute;
+	
+	@ApiModelProperty(value = "签到类型（1:签到 ，2：签退）")
+	private String type;
+	
 	@ApiModelProperty(value = "状态时间明细")
 	private List<AttendanceKeyValue> statusDetailedList;
+
+	public String getMinute() {
+		return minute;
+	}
+
+	public void setMinute(String minute) {
+		this.minute = minute;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getAttendanceType() {
 		return attendanceType;

@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item :inline="true" class="filter-bar">
         <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="addRow()">添加</el-button>
-        <el-button class="filter-item" type="primary" @click="delData()">删除</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-minus" @click="delData()">删除</el-button>
       </el-form-item>
       <div>
         <el-table ref="table" :data="tableData" tooltip-effect="dark" border stripe style="width: 95%" @selection-change="selectRow">
@@ -18,7 +18,7 @@
           </el-table-column>
           <el-table-column label="序号">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.serialNumber"/>
+              <el-input v-model="scope.row.serialNumber" :maxlength="11" oninput = "value=value.replace(/[^\d]/g,'')"/>
             </template>
           </el-table-column>
           <el-table-column label="考核目标">
@@ -28,7 +28,7 @@
           </el-table-column>
           <el-table-column label="分值">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.score"/>
+              <el-input v-model="scope.row.score" :maxlength="11" oninput = "value=value.replace(/[^\d]/g,'')"/>
             </template>
           </el-table-column>
           <el-table-column label="评分细则">
@@ -43,12 +43,12 @@
           </el-table-column>
           <el-table-column label="得分">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.assessmentScore"/>
+              <el-input v-model="scope.row.assessmentScore" disabled="disabled"/>
             </template>
           </el-table-column>
           <el-table-column label="扣分原因">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.causeDeduction"/>
+              <el-input v-model="scope.row.causeDeduction" disabled="disabled"/>
             </template>
           </el-table-column>
           <el-table-column label="操作">
@@ -136,13 +136,53 @@ export default {
       this.$refs.tableData.clearSelection()
     },
     submitForm() {
+      this.isDisabled = true
       if (this.templateName === '') {
         this.$message.error('请填写模板名称')
+        this.isDisabled = false
         return
       }
       if (this.selectlistRow.length < 1) {
         this.$message.error('至少填写并勾选一项考核指标')
+        this.isDisabled = false
         return
+      }
+      let flag = true
+      for (let i = 0; i < this.selectlistRow.length; i++) {
+        const val = this.selectlistRow[i]
+        let msg = ''
+        if (val.targetCategory == null || val.targetCategory === '') {
+          msg = msg + '目标类别、'
+          flag = false
+        }
+        if (val.serialNumber == null || val.serialNumber === '') {
+          msg = msg + '序号、'
+          flag = false
+        }
+        if (val.assessmentTarget == null || val.assessmentTarget === '') {
+          msg = msg + '考核目标、'
+          flag = false
+        }
+        if (val.score == null || val.score === '') {
+          msg = msg + '分值、'
+          flag = false
+        }
+        if (val.scoreRubric == null || val.scoreRubric === '') {
+          msg = msg + '评分细则、'
+          flag = false
+        }
+        if (val.leadAssessmentDepartment == null || val.leadAssessmentDepartment === '') {
+          msg = msg + '牵头考核部门、'
+          flag = false
+        }
+        if (!flag) {
+          alert(msg.substr(0, msg.length - 1) + '为必填项，请检查')
+          break
+        }
+      }
+      if (!flag) {
+        this.isDisabled = false
+        return false
       }
       for (let i = 0; i < this.selectlistRow.length; i++) {
         const val = this.selectlistRow[i]

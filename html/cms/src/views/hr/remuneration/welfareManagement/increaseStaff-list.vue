@@ -52,13 +52,13 @@
           </el-form-item>
           <el-form-item label="社保基数" prop="socialInsuranceBase" class="inline">
             <el-input v-model="socialInsuranceBaseData" type="textarea" style="width: 350px;" readonly="readonly"/>
-            <el-button type="text" @click="socialInsuranceBaseFormPage">编辑各项目基数</el-button>
+            <el-button v-if="socialInsuranceBaseData !== ''" type="text" @click="socialInsuranceBaseFormPage">编辑各项目基数</el-button>
           </el-form-item>
           <el-form-item label="公积金基数" prop="reserveBase" class="inline">
             <!--<el-input type="text" style="width: 200px;"  v-model="increaseStaffAddFromData.increaseStaffAddFromReserveBase"/>
             <p style="height: 12px;margin-top: 0px;color:dodgerblue">基数范围[0-99999]</p>-->
             <el-input v-model="increaseStaffAddFromReserveBaseData" type="textarea" style="width: 350px;" readonly="readonly"/>
-            <el-button type="text" @click="accumulationFundPageVisible">编辑各项目基数</el-button>
+            <el-button v-if="increaseStaffAddFromReserveBaseData !== ''" type="text" @click="accumulationFundPageVisible">编辑各项目基数</el-button>
           </el-form-item>
           <el-form-item>
             <el-button :disabled="saveIncreaseStaffDisable" type="primary" @click="saveIncreaseStaff()">确定</el-button>
@@ -255,6 +255,8 @@ export default {
       let index = 1
       this.socialInsuranceBaseData = ''
       this.increaseStaffAddFromReserveBaseData = ''
+      this.socialInsuranceBasePageInit = []
+      this.reserveBasePageInit = []
       insuredSchemeDetailedList.forEach(e => {
         if (e.projectType === 1) {
           this.socialInsuranceBasePageInit.push({

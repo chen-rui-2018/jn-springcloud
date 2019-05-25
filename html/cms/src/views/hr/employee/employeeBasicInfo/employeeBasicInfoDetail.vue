@@ -38,20 +38,7 @@
 
           <el-col :span="12">
             <el-form-item label="部门：" prop="departmentId">
-              <el-select
-                v-model="addForm.departmentId"
-                placeholder="请选择"
-                clearable
-                style="width: 200px"
-                class="filter-item"
-                disabled>
-                <el-option label="请选择" value=""/>
-                <el-option
-                  v-for="item in departmentList"
-                  :key="item.departmentId"
-                  :label="item.departmentName"
-                  :value="item.departmentId"/>
-              </el-select>
+              {{ addForm.departmentName }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -73,17 +60,8 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="职务：" prop="postId">
-              <el-select
-                v-model="addForm.postId"
-                placeholder="请选择"
-                clearable
-                style="width: 200px"
-                class="filter-item"
-                disabled>
-                <el-option label="请选择" value=""/>
-                <el-option v-for="item in postList" :key="item.key" :label="item.lable" :value="item.key"/>
-              </el-select>
+            <el-form-item label="岗位：" prop="postId">
+              {{ addForm.postName }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -884,17 +862,8 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="职务：" prop="directLeadership">
-              <el-select
-                v-model="addForm.directlyLeader.directLeadership"
-                placeholder="请选择"
-                clearable
-                style="width: 200px"
-                class="filter-item"
-                disabled>
-                <el-option label="请选择" value=""/>
-                <el-option v-for="item in postList" :key="item.key" :label="item.lable" :value="item.key"/>
-              </el-select>
+            <el-form-item label="岗位：" prop="directLeadership">
+              {{ addForm.directlyLeader.directLeadershipName }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -927,7 +896,7 @@
 <script>
 
 import {
-  getTreeList, getEmployeeBasicInfo
+  getEmployeeBasicInfo
 } from '@/api/hr/employeeBasicInfo'
 import {
   getCode
@@ -1095,12 +1064,10 @@ export default {
   },
   mounted() {
     this.initJobList()
-    this.initPostList()
     this.initCertificateList()
     this.initContractList()
     this.initNationalityList()
     this.initAcademicList()
-    this.initDepartMentList()
     this.initDetail()
   },
   methods: {
@@ -1111,15 +1078,6 @@ export default {
       getCode({ 'groupCode': 'job', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
         if (res.data.code === '0000') {
           this.jobList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-    },
-    initPostList() {
-      getCode({ 'groupCode': 'post', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
-        if (res.data.code === '0000') {
-          this.postList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
@@ -1172,15 +1130,6 @@ export default {
       }).then(res => {
         if (res.data.code === '0000') {
           this.academicList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-    },
-    initDepartMentList() {
-      getTreeList().then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }

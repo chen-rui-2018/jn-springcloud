@@ -81,6 +81,10 @@
 </template>
 
 <script>
+import {
+  setToken,
+  getToken
+} from '@/utils/auth'
 import moment from 'moment'
 import myContainer from '../../components/responseBox/myContainer' // use clipboard by v-directive
 import {
@@ -109,10 +113,14 @@ export default {
       }
     }
   },
-  created() {
-    console.log(Date.parse(new Date(moment().format('YYYY-MM-DD hh:mm:ss'))))
+  beforeMount() {
     this.userFrom.id = this.$route.query.id
-    this.initData()
+    if (this.$route.query.token && !getToken()) {
+      setToken(this.$route.query.token)
+      window.location.reload()
+    } else {
+      this.initData()
+    }
   },
   methods: {
     initData() {

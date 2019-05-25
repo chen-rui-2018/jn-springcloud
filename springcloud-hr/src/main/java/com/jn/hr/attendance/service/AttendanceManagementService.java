@@ -3,6 +3,7 @@ package com.jn.hr.attendance.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jn.common.model.PaginationData;
@@ -65,5 +66,8 @@ public interface AttendanceManagementService {
 	
 	//请假扣除请假小时接口
 	public String insertByLeaveVacationmanage(VacationManagement vacationManage);
+	
+	//考勤接口
+	public AttendanceManagementApiVo selectByUserIdAndTime(AttendanceManagement attendanceManagement);
 	
 }

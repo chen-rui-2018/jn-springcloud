@@ -24,7 +24,7 @@
       <el-table-column label="操作" align="center" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.status=='1'"
+            v-if="scope.row.status=='1' && (new Date(scope.row.assessmentEndTime.replace(/-/g, '\/')) > new Date())"
             type="text"
             class="operation"
             @click="beginassessment(scope.row)">开始考核
@@ -170,6 +170,7 @@ export default {
       param.rows = this.listQuery.rows
       param.page = this.listQuery.page
       this.listLoading = false
+      this.assessmentDetailList = []
       api('hr/AssessmentManagement/viewPageInfo', param).then(res => {
         if (res.data.code === '0000') {
           this.assessmentDetailList = res.data.data.rows
@@ -179,13 +180,6 @@ export default {
         }
         this.listLoading = false
       })
-    },
-    disposePlatformType(data) {
-      const PlatformTypeArr = []
-      data.forEach(val => {
-        PlatformTypeArr.push(val.lable)
-      })
-      return PlatformTypeArr.join('、')
     },
     // 归档生效
     endAarchive(row) {

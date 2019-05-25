@@ -9,6 +9,7 @@ import com.jn.hr.archives.model.EmployeeFileClass;
 import com.jn.hr.archives.model.EmployeeFileClassAdd;
 import com.jn.hr.archives.model.TreeModel;
 import com.jn.hr.archives.service.EmployeeFileClassService;
+import com.jn.hr.common.enums.HrConstants;
 import com.jn.hr.common.util.BeanCopyUtil;
 import com.jn.hr.employee.enums.EmployeeExceptionEnums;
 import com.jn.system.log.annotation.ServiceLog;
@@ -41,8 +42,8 @@ public class EmployeeFileClassServiceImpl implements EmployeeFileClassService {
         TbManpowerEmployeeFileClass tbEmployeeFile=new TbManpowerEmployeeFileClass();
         BeanUtils.copyProperties(employeeFileClassAdd,tbEmployeeFile);
         if(StringUtils.isEmpty(employeeFileClassAdd.getParentId())){
-            tbEmployeeFile.setParentId("0");
-            tbEmployeeFile.setLevel("1");
+            tbEmployeeFile.setParentId(HrConstants.TREE_PARENT_ID);
+            tbEmployeeFile.setLevel(HrConstants.TREE_FIRST_LEVEL);
         }
         tbEmployeeFile.setClassId(UUID.randomUUID().toString());
         employeeFileClassAdd.setClassId(tbEmployeeFile.getClassId());

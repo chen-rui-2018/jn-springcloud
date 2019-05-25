@@ -1,4 +1,4 @@
-package com.jn.park.customer.enums;
+package com.jn.enterprise.enums;
 
 import com.jn.common.api.CodeAndMsg;
 

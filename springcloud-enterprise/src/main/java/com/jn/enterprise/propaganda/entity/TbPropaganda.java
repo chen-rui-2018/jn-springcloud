@@ -44,6 +44,8 @@ public class TbPropaganda implements Serializable {
 
     private String approvalDesc;
 
+    private String viewCount;
+
     private String orderCode;
 
     private Date createdTime;
@@ -218,6 +220,14 @@ public class TbPropaganda implements Serializable {
         this.approvalDesc = approvalDesc == null ? null : approvalDesc.trim();
     }
 
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount == null ? null : viewCount.trim();
+    }
+
     public String getOrderCode() {
         return orderCode;
     }
@@ -298,6 +308,7 @@ public class TbPropaganda implements Serializable {
             && (this.getIsPay() == null ? other.getIsPay() == null : this.getIsPay().equals(other.getIsPay()))
             && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
             && (this.getApprovalDesc() == null ? other.getApprovalDesc() == null : this.getApprovalDesc().equals(other.getApprovalDesc()))
+            && (this.getViewCount() == null ? other.getViewCount() == null : this.getViewCount().equals(other.getViewCount()))
             && (this.getOrderCode() == null ? other.getOrderCode() == null : this.getOrderCode().equals(other.getOrderCode()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -330,6 +341,7 @@ public class TbPropaganda implements Serializable {
         result = prime * result + ((getIsPay() == null) ? 0 : getIsPay().hashCode());
         result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
         result = prime * result + ((getApprovalDesc() == null) ? 0 : getApprovalDesc().hashCode());
+        result = prime * result + ((getViewCount() == null) ? 0 : getViewCount().hashCode());
         result = prime * result + ((getOrderCode() == null) ? 0 : getOrderCode().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -365,6 +377,7 @@ public class TbPropaganda implements Serializable {
         sb.append(", isPay=").append(isPay);
         sb.append(", approvalStatus=").append(approvalStatus);
         sb.append(", approvalDesc=").append(approvalDesc);
+        sb.append(", viewCount=").append(viewCount);
         sb.append(", orderCode=").append(orderCode);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);

@@ -1,7 +1,7 @@
 <template>
     <div class="regData w">
         <div class="regDataNav">
-            <el-breadcrumb separator="/">
+            <!-- <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
                 <el-breadcrumb-item>
                     <a href="/">活动中心</a>
@@ -9,16 +9,20 @@
                 <el-breadcrumb-item class="mainColor">活动详情</el-breadcrumb-item>
                 <el-breadcrumb-item class="mainColor">报名情况</el-breadcrumb-item>
                 <el-breadcrumb-item class="mainColor">报名人资料</el-breadcrumb-item>
-            </el-breadcrumb>
+            </el-breadcrumb> -->
+            <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">首页/</span>
+            <span class="pointer" @click="$router.push({ path: '/actiCenter'})">活动中心/</span>
+            <span class="pointer" @click="$router.push({ path: '/actiTrainDetail'})">活动详情/</span>
+            <span class="mainColor">报名人资料</span>
         </div>
         <div class="regDataContent">
             <el-card>
                 <div class="dataImg">
-                    <img :src="this.actiInfo.avatar" alt="">
-                    <div class="dataName">{{this.actiInfo.name}}</div>
-                    <i class="iconfont icon-xingbienv">{{this.actiInfo.age}}</i>
+                    <img :src="actiInfo.avatar" alt="">
+                    <div class="dataName">{{actiInfo.name}}</div>
+                    <i class="iconfont icon-xingbienv">{{actiInfo.age}}</i>
                     <p>个性签名：
-                        <span>唯爱与美食不可辜负</span>
+                        <span>{{actiInfo.signature}}</span>
                     </p>
                 </div>
                 <div class="dataInfo clearfix">
@@ -35,9 +39,9 @@
                         <div class="dataCircle"></div>
                     </div>
                     <div class="dataRight fl">
-                        <div>{{this.actiInfo.companyName}}11</div>
-                        <div>{{this.actiInfo.post}}</div>
-                        <div>南京莱斯信息技术股份有限公司</div>
+                        <div>{{actiInfo.companyName}}11</div>
+                        <div>{{actiInfo.post}}</div>
+                        <div>{{actiInfo.hobbys}}</div>
                     </div>
                 </div>
             </el-card>

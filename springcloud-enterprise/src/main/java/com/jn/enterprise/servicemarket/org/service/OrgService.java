@@ -81,4 +81,12 @@ public interface OrgService {
      * @return
      */
     BusinessStatisticalNumVO selectBusinessAreaStatisticalNum(BusinessStatisticalParam businessStatisticalParam);
+
+    /**
+     * 获取当前用户机构状态
+     * @param account
+     * @return
+     */
+    String getOrgStatusByUser(String account);
+
 }

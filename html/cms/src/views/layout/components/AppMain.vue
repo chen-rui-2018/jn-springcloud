@@ -36,5 +36,11 @@ export default {
   overflow: auto;
   /* background-color: #fff; */
 }
+@media screen and (max-width: 768px) {
+  .app-main {
+    padding: 0;
+    height:auto;
+  }
+}
 </style>
 

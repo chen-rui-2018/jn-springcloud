@@ -110,14 +110,18 @@
             <el-col :span="5">
               <el-date-picker
                 v-model="formData.taskCreateTime"
+                :picker-options="startTimePickerOptions"
                 type="date"
                 placeholder="选择日期"
-                style="width: 100%; min-width: 80px;"/>
+                style="width: 100%; min-width: 80px;"
+                @change="startTimeChange"/>
             </el-col>
             <el-col :span="6" class="tc">生成去年的模板数据，截止</el-col>
             <el-col :span="5">
               <el-date-picker
                 v-model="formData.filllInFormDeadline"
+                :picker-options="endTimePickerOptions"
+                :disabled="!formData.taskCreateTime"
                 type="date"
                 placeholder="选择日期"
                 style="width: 100%; min-width: 80px;"/>
@@ -342,6 +346,12 @@ export default {
       }
     }
     return {
+      startTimePickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      },
+      endTimePickerOptions: {},
       loading: false,
       menuStyle: {},
       currentModel: '',
@@ -359,7 +369,7 @@ export default {
       dialogVisible: false,
       templateTree: [],
       modelFormTargetOptions: [], // 填报对象列表选项
-      filllInFormDeadlineMonth: '', // 选择当月或下月
+      filllInFormDeadlineMonth: '当月', // 选择当月或下月
       originTab: { // tab表初始化数据
         tabName: '', // tab名称 表名
         tabClumnType: '', // 表填报列类型（0：累计值；1：本期值）
@@ -394,7 +404,7 @@ export default {
         departmentName: '', // 填报对象，类型是园区时候
         groupId: '', // 填报对象，类型是园区企业时候
         modelFormTargetId: '', // 填报对象 填报群组(企业群组)/园区填报部门
-        modelCycle: '', // 填报周期（1：年，0：月）
+        modelCycle: 0, // 填报周期（1：年，0：月）
         taskCreateTime: '', // 年报表：任务生成日期（YYYYMMDD）月报表：是一个01-31之间的数字
         filllInFormDeadline: '', // 年报表：截止日期（YYYYMMDD）月报表：当月/下月+01-31之间的数字
         warningBeforeDays: '', // 提前预警天数
@@ -511,6 +521,13 @@ export default {
     this.init()
   },
   methods: {
+    startTimeChange() {
+      this.endTimePickerOptions = {
+        disabledDate: (time) => {
+          return new Date(this.formData.taskCreateTime).getTime() >= time.getTime() + 8.64e7
+        }
+      }
+    },
     init() {
       this.getModelTree()
       this.getData()
@@ -520,11 +537,21 @@ export default {
     getData() {
       // 获取树形指标
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/target/getTargetTree`).then(data => {
-        this.originTab.treeData = data.data
+        const treeList = data.data
+        this.sortTree(treeList)
+        this.originTab.treeData = treeList
       })
       // 获取预警人
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/dataModel/getWarner`).then(data => {
         this.warnerOptions = data.data.map(item => ({ id: item.id, label: item.creatorAccount }))
+      })
+    },
+    sortTree(tree) {
+      tree.sort((a, b) => {
+        if (a.children && a.children.length > 0) {
+          this.sortTree(a.children)
+        }
+        return a.orderNumber - b.orderNumber
       })
     },
     getModelTree() {
@@ -610,7 +637,10 @@ export default {
               formData.appAd = this.tempAppUrl ? this.tempAppUrl : formData.appAd
               formData.otherData = this.otherDataUrl ? this.otherDataUrl : formData.otherData
               // 把填报格式是多选的value把数组转成字符串
+              // console.dir(formData)
+              // return
               formData.tabs.forEach((item, index) => {
+                console.dir(item.inputList)
                 for (const list of item.inputList) {
                   if (list.formType === '4') {
                     list.value = ''
@@ -701,7 +731,6 @@ export default {
                 formData.tabs.sort((a, b) => {
                   return a['orderNumber'] - b['orderNumber']
                 })
-                // this.ascArr(formData.tabs, 'orderNumber')
                 formData.tabs.forEach((item, index) => {
                   this.$set(item, 'treeTableData', [])
                   item.tabClumnTargetShow = item.tabClumnTargetShow.length > 0 ? item.tabClumnTargetShow.split(',') : []
@@ -723,7 +752,7 @@ export default {
                     for (const tree of treeData) {
                       // 如果不属于选择节点的最高级父指标，即兄弟指标，那么设置禁用
                       if (tree.id !== parentNode.id) {
-                        this.setBroDisabled(tree)
+                        // this.setBroDisabled(tree)
                       }
                     }
                     for (const obj of item.targetList) {
@@ -841,7 +870,6 @@ export default {
       // 切换年月填报周期时，把上次输入的值清空
       this.formData.taskCreateTime = ''
       this.formData.filllInFormDeadline = ''
-      this.filllInFormDeadlineMonth = ''
     },
     addTargetFormData(index, form) {
       if (form.tabCreateType === '1') {
@@ -1007,7 +1035,6 @@ export default {
                 formModels.sort((a, b) => {
                   return a['rowNum'] - b['rowNum']
                 })
-                // formModels = this.ascArr(formModels, 'rowNum')
                 this.treeMerge(formModels, arr)
                 // 一维的结构指标转成树结构
                 const list = []
@@ -1024,7 +1051,10 @@ export default {
                   }
                 }
                 // 勾选的树结构指标挂载到tree-table
-                this.$set(tab, 'treeTableData', list)
+                this.sortTree(list)
+                this.$nextTick(() => {
+                  this.$set(tab, 'treeTableData', list)
+                })
               })
           } else {
             //  科技园模板表头
@@ -1059,19 +1089,6 @@ export default {
         }
       }
       return children
-    },
-    ascArr(arr, key) {
-      // 升序
-      for (let i = 0, length = arr.length; i < length; i++) {
-        for (let j = i + 1; j < length; j++) {
-          if (arr[i][key] > arr[j][key]) {
-            const temp = arr[j]
-            arr[j] = arr[i]
-            arr[i] = temp
-          }
-        }
-      }
-      return arr
     },
     getInputFormat(list) {
       // 根据选中的指标，获取它们对应的填报格式

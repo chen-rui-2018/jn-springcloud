@@ -11,6 +11,7 @@ import com.jn.park.asset.model.AssetArticleLeaseOrdersModel;
 import com.jn.park.asset.model.LeaseOrdersModel;
 import com.jn.park.asset.service.AssetArticleLeaseOrdersService;
 import com.jn.park.asset.service.AssetArticleLeaseService;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.*;
@@ -19,6 +20,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -77,12 +79,12 @@ public class AssetArticleLeaseController {
             @ApiImplicitParam(name = "contactName",value = "联系人姓名",example = "先生",required = true),
             @ApiImplicitParam(name = "contactPhone",value = "联系人电话",example = "123456",required = true),
             @ApiImplicitParam(name = "startTime",value = "开始时间",example = "2019-5-1",required = true),
-            @ApiImplicitParam(name = "endTime",value = "结束时间",example = "2019-6-1",required = true)
+            @ApiImplicitParam(name = "time",value = "填写租期",example = "10",required = true)
     })
-    public Result leaseWriter(String assetNumber,String leaseEnterprise, String contactName, String contactPhone, Date startTime,Date endTime){
+    public Result leaseWriter(String assetNumber,String leaseEnterprise, String contactName, String contactPhone, Date startTime,String time){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        String ordersNumber = assetArticleLeaseService.leaseWriter(assetNumber,leaseEnterprise,contactName,contactPhone,startTime,endTime,user);
+        String ordersNumber = assetArticleLeaseService.leaseWriter(assetNumber,leaseEnterprise,contactName,contactPhone,startTime,time,user);
         if (ordersNumber.equals("-1")){
             return new Result("-1","新增租赁订单失败");
         }
@@ -100,18 +102,6 @@ public class AssetArticleLeaseController {
         Assert.notNull(id,"订单编号不能为空");
         LeaseOrdersModel leaseOrders =  assetArticleLeaseOrdersService.getPayOrders(id);
         return new Result<>(leaseOrders);
-    }
-
-
-    @ControllerLog(doAction ="发起支付")
-    @ApiOperation(value = "发起支付",notes = "发起支付")
-    @PostMapping(value = "/startPayment")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019")
-    })
-    public Result startPayment(String id){
-        Assert.notNull(id,"订单编号不能为空");
-        return new Result(assetArticleLeaseOrdersService.startPayment(id));
     }
 
 
@@ -175,5 +165,18 @@ public class AssetArticleLeaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "创建支付订单")
+    @ApiOperation(value = "创建支付订单",notes = "创建支付订单")
+    @PostMapping(value = "/createPayOrder")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050417220960019",required = true),
+            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE",required = true),
+            @ApiImplicitParam(name = "paySum",value = "支付金额",required = true)
+    })
+    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId,BigDecimal paySum){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(orderId,"订单编号不能为空");
+        return assetArticleLeaseOrdersService.createPayOrder(orderId,channelId,paySum,user.getAccount());
+    }
 
 }

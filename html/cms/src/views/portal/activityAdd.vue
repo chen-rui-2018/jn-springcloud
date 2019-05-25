@@ -166,7 +166,7 @@ export default {
         actiNumber: 0,
         actiPosterUrl: '',
         actiDetail: '',
-        actiStatus: 1,
+        actiStatus: '1',
         id: '',
         applyCheck: '0',
         page: 1,

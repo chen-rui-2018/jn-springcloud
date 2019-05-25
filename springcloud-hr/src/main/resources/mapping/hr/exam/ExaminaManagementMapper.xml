@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.exam.dao.ExaminaManagementMapper">
+
+	<select id="list" parameterType="com.jn.hr.exam.model.ExaminaManagementPage"
+		resultType="com.jn.hr.exam.model.ExaminaManagementAdd">
+		SELECT
+		t.id,t.examina_name,t.effective_time_start,t.effective_time_end,
+		t.examina_notes,t.total_score,t.pass_score,t.answer_time,t.`status`,
+		t.examina_dimensional,t.examina_url FROM
+		tb_manpower_examina_management t
+		WHERE t.record_status !=0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaName)">
+			and t.examina_name like
+			CONCAT('%',#{examinaName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+			AND t. status = #{status,jdbcType=TINYINT}
+		</if>
+		<if
+			test="@org.apache.commons.lang.StringUtils@isNotBlank(effectiveTimeStart)">
+			AND t.
+			effective_time_start &lt;=
+			#{effectiveTimeStart,jdbcType=TIMESTAMP}
+		</if>
+		<if
+			test="@org.apache.commons.lang.StringUtils@isNotBlank(effectiveTimeEnd)">
+			and t.effective_time_end &gt;=
+			#{effectiveTimeEnd,jdbcType=TIMESTAMP}
+		</if>
+	</select>
+
+	<select id="listManagement" resultType="com.jn.hr.exam.entity.TbManpowerExaminaManagement">
+		SELECT * FROM
+		tb_manpower_examina_management t
+		WHERE t.record_status != 0
+	</select>
+
+	<select id="selectByStatus" parameterType="com.jn.hr.exam.model.ExaminaManagementPage"
+		resultType="com.jn.hr.exam.model.ExaminaManagement">
+		SELECT
+		`status`,COUNT(t.`status`) statusCount FROM
+		tb_manpower_examina_management t
+		where t.record_status!=0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaName)">
+			and t.examina_name like
+			CONCAT('%',#{examinaName,jdbcType=VARCHAR},'%')
+		</if>
+		group by t.`status`
+	</select>
+
+
+
+
+
+
+</mapper>

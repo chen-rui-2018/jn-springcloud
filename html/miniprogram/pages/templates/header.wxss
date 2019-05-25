@@ -1,0 +1,33 @@
+/* pages/templates/header.wxss */
+/* pages/meeting/meeting.wxss */
+/* @import "./../../icon.wxss";
+@import "./../../colorui.wxss"; */
+
+/* 头部 搜索框 */
+.head_box{
+  padding-bottom:157rpx;
+}
+.head{
+  display: flex;
+  box-shadow: 0px 1px 25px 0px #efefef;
+  align-items: center;
+  position: fixed;
+  /* top:0; */
+  width:100%;
+  margin-top: 51rpx;
+  padding: 35rpx 0 30rpx 0rpx;
+  background-color: #fff;
+  z-index: 200;
+}
+.back{
+  padding-left: 31rpx;
+  padding-right: 20rpx;
+}
+.back .img{
+  width:26rpx;
+  height:37rpx;  
+}
+.head_title{
+  font-size: 31rpx;
+  padding-left: 30%;
+}

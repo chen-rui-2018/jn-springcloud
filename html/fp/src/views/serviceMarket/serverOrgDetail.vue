@@ -1,8 +1,8 @@
 <template>
   <div class="serverOrgDetail w">
     <div class="serverOrgMenu color2">
-      <span>首页/</span>
-      <span>服务机构</span>
+      <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
+      <span class="pointer" @click="$router.push({path:'/serverOrg'})">服务机构</span>
       <span>/</span>
       <span class="mainColor agent">服务机构详情</span>
     </div>
@@ -262,13 +262,13 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')" v-if="serverPro.length>0">
+          <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')" v-if="serverPro.length>0">
             <a href="javascript:;" data="%">全部({{serverPro[0].serviceTotal}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag1=='0'}" @click="screenPro('0')" v-if="serverPro.length>0">
+          <li class="list-item " :class="{'active3':flag1=='0'}" @click="screenPro('0')" v-if="serverPro.length>0">
             <a href="javascript:;" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag1=='1'}" @click="screenPro('1')" v-if="serverPro.length>0">
+          <li class="list-item " :class="{'active3':flag1=='1'}" @click="screenPro('1')" v-if="serverPro.length>0">
             <a href="javascript:;" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
           </li>
         </ul>
@@ -276,16 +276,16 @@
           <li >
             <a href="javascript:;">排序：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag2=='integrate'}" @click="screenSerCon('integrate')">
+          <li class="list-item current" :class="{'active3':flag2=='integrate'}" @click="screenSerCon('integrate')">
             <a href="javascript:;" >综合</a>
           </li>
-          <li class="list-item " :class="{'active':flag2=='popularity'}" @click="screenSerCon('popularity')">
+          <li class="list-item " :class="{'active3':flag2=='popularity'}" @click="screenSerCon('popularity')">
             <a href="javascript:;" >人气</a>
           </li>
-          <li class="list-item " :class="{'active':flag2=='praise'}" @click="screenSerCon('praise')">
+          <li class="list-item " :class="{'active3':flag2=='praise'}" @click="screenSerCon('praise')">
             <a href="javascript:;">好评</a>
           </li>
-          <li class="list-item " :class="{'active':flag2=='serviceNum'}" @click="screenSerCon('serviceNum')">
+          <li class="list-item " :class="{'active3':flag2=='serviceNum'}" @click="screenSerCon('serviceNum')">
             <a href="javascript:;" >服务量</a>
           </li>
         </ul>
@@ -293,16 +293,16 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag3==''}" @click="screenEva('')">
+          <li class="list-item current" :class="{'active3':flag3==''}" @click="screenEva('')">
             <a href="javascript:;" data="%">全部({{evaCount.evaluationTotal}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag3=='praise'}" @click="screenEva('praise')">
+          <li class="list-item " :class="{'active3':flag3=='praise'}" @click="screenEva('praise')">
             <a href="javascript:;">好评({{evaCount.praiseNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag3=='average'}" @click="screenEva('average')">
+          <li class="list-item " :class="{'active3':flag3=='average'}" @click="screenEva('average')">
             <a href="javascript:;">中评({{evaCount.averageNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag3=='badReview'}" @click="screenEva('badReview')">
+          <li class="list-item " :class="{'active3':flag3=='badReview'}" @click="screenEva('badReview')">
             <a href="javascript:;">差评({{evaCount.badReviewNum}})</a>
           </li>
         </ul>
@@ -310,13 +310,13 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag4=='0'}" @click="screenActi('0')">
+          <li class="list-item current" :class="{'active3':flag4=='0'}" @click="screenActi('0')">
             <a href="javascript:;">全部({{serverActiList[0].actiNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag4=='1'}" @click="screenActi('1')">
+          <li class="list-item " :class="{'active3':flag4=='1'}" @click="screenActi('1')">
             <a href="javascript:;">最近一周({{serverActiList[0].weekNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag4=='2'}" @click="screenActi('2')">
+          <li class="list-item " :class="{'active3':flag4=='2'}" @click="screenActi('2')">
             <a href="javascript:;">最近一月({{serverActiList[0].monthNum}})</a>
           </li>
         </ul>
@@ -331,7 +331,7 @@
                 <div class="list-item-date"></div>
                 <!-- 上架时间 end -->
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container product nopic">
+                <div class="list-imgleft-container product nopic" @click="$router.push({path: '/serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
                   <img :src="i.pictureUrl" alt="">
                 </div>
                 <!-- 左侧logo end-->
@@ -399,7 +399,7 @@
             <ul class="list-imgleft adviser">
               <li class="list-item" v-for="(i,k) in serviceConsultant" :key='k'>
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container noconsultant">
+                <div class="list-imgleft-container noconsultant" @click="$router.push({path: 'serverConDetail',query: { orgId: i.orgId,advisorAccount:i.advisorAccount }})">
                   <img :src="i.avatar" alt="">
                 </div>
                 <!-- 左侧logo end-->
@@ -545,7 +545,7 @@
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
               <li v-for="(i,k) in serverActiList" :key='k'>
-                <div class="postImgItem">
+                <div class="postImgItem" @click="$router.push({path: 'actiTrainDetail',query: { activityId: i.id }})">
                   <img :src="i.actiPosterUrl" class="postImg" alt="活动海报图片">
                 </div>
                 <div class="actiInfo">
@@ -585,6 +585,7 @@
      <!-- 提需求弹框 -->
       <template v-if="serverOrgVisible">
             <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh">
+              <div v-if="islogin">
                 <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
                     <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
                         <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -593,6 +594,14 @@
                 <div class="demandLine"></div>
                 <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
                 <div class="demandDia" @click="demandDia()">提交需求</div>
+              </div>
+               <div v-else>
+                 你还未
+                 <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+                 /
+                 <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+                 企业账号
+                </div> 
             </el-dialog>
       </template>
   </div>
@@ -601,6 +610,7 @@
 export default {
   data() {
     return {
+      islogin:true,
       zankaiFlag: false,
       activeName: "baseInfo",
       activeName1: "serverPro",
@@ -640,9 +650,11 @@ export default {
       sortTypes:'',
       ratingType:'',
       timeInterval:'0',
+      token1:'',
     };
   },
   created() {
+    this.isLogin()
     this.initList();
     this.findOrgCountProductList();
     this.getServiceConList();
@@ -651,7 +663,19 @@ export default {
     this.getEvaluationCountInfo()
   },
   methods: {
+    //判断是否登录
+    isLogin(){
+      this.token1=sessionStorage.getItem('token')
+      if(!this.accout){
+        this.islogin=false
+      }
+    },
      demandRaise(i) { //提需求
+      // this.accout=sessionStorage.getItem('account')
+      // if(!this.accout){
+      //   debugger
+      //   this.islogin=false
+      // }
       this.serverOrgVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;

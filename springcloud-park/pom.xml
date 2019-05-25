@@ -54,6 +54,7 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-hardware-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.jn</groupId>
             <artifactId>xxpay-web-api</artifactId>
@@ -88,11 +89,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        customer
+                        parking
                     </contexts>
                     <tableNames>
-                        tb_client_service_center
-                        ,tb_client_role_person_info
+                        tb_parking_preferential
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

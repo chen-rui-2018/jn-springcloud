@@ -15,6 +15,8 @@ public enum IBPSRequestUrlEnum  implements CodeAndMsg {
     COMPLETE("/api/webapi/bpmService/complete","处理任务"),
     GET_FORM_DATA("/api/webapi/bpmService/getFormData","任务详情页"),
     OPINIONS("/api/webapi/bpmService/opinions","获取审批历史"),
+    GET_INST_FORM("/api/webapi/bpmService/getInstForm","获取流程表单"),
+    UPLOAD_FILE("/api/webapi/uploadService/saveFileAttachment","上传文件"),
     ;
     /**
      * 编码

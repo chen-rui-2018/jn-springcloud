@@ -17,9 +17,8 @@ public class OrgCountProductInfo implements Serializable {
     private String productName;
     @ApiModelProperty(value = "领域id")
     private String signoryId;
-      @ApiModelProperty(value = "领域名称")
+     @ApiModelProperty(value = "领域名称")
     private String signoryName;
-
     @ApiModelProperty(value ="机构名称")
     private String orgName;
     @ApiModelProperty(value = "顾问名称")

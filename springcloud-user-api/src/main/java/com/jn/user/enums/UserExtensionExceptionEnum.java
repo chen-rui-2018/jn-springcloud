@@ -10,6 +10,7 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum UserExtensionExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("3020901", "网络异常，请稍后重试。"),
+    USER_LOGIN_IS_INVALID("3020902","登录已失效，请重新登录"),
     USER_ACCOUNT_NOT_NULL("3020501","用户账号不能为空"),
     AFFILIATE_PARAM_NOT_NULL("3020502","所属机构编码不能为空"),
     COMPANY_PARAM_NOT_NULL("3020503","所属企业编码不能为空"),

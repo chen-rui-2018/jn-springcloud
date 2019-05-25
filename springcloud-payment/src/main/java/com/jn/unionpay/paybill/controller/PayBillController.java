@@ -4,14 +4,14 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.enums.PayBillExceptionEnum;
 import com.jn.paybill.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.unionpay.paybill.service.PayBillService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,25 +70,12 @@ public class PayBillController extends BaseController {
         return new Result<>(payBillCountVO);
     }
 
-    /**
-     * 支付发起接口
-     * @param payInitiateParam
-     * @return
-     */
-    @ControllerLog(doAction = "统一缴费--发起支付")
-    @ApiOperation(value = "统一缴费--发起支付")
-    @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
-    public Result<PayResponseVO> startPayment(@RequestBody PayInitiateParam payInitiateParam){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result<>(payBillService.startPayment(payInitiateParam,user));
-    }
-
 
     @ControllerLog(doAction = "支付回调接口")
     @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/payCallBack")
-    public Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam){
-        return new Result<>(payBillService.payCallBack(callBackParam));
+    public Result payCallBack(@RequestBody PayOrderNotify payOrderNotify){
+        return payBillService.payCallBack(payOrderNotify);
     }
 
 

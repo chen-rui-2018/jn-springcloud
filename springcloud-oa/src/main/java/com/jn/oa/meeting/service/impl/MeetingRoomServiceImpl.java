@@ -17,6 +17,7 @@ import com.jn.oa.meeting.entity.TbOaMeetingRoom;
 import com.jn.oa.meeting.entity.TbOaMeetingRoomCriteria;
 import com.jn.oa.meeting.entity.TbOaMeetingRoomPhoto;
 import com.jn.oa.meeting.enums.MeetingRoomStatusEnums;
+import com.jn.oa.meeting.model.OaMeeting;
 import com.jn.oa.meeting.model.OaMeetingRoomAdd;
 import com.jn.oa.meeting.model.OaMeetingRoomOrderPage;
 import com.jn.oa.meeting.model.OaMeetingRoomPage;
@@ -219,7 +220,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         for(OaMeetingRoomOrderVo oaMeetingRoomOrderVo:oaMeetingRoomOrderVoList){
 
             oaMeetingRoomOrderPage.setMeetingRoomId(oaMeetingRoomOrderVo.getId());
-            List<TbOaMeeting> tbOaMeetingList=oaMeetingRoomMapper.selectMeetingByTimeAndId(oaMeetingRoomOrderPage);
+            List<OaMeeting> tbOaMeetingList=oaMeetingRoomMapper.selectMeetingByTimeAndId(oaMeetingRoomOrderPage);
             oaMeetingRoomOrderVo.setMeetingList(tbOaMeetingList);
         }
 

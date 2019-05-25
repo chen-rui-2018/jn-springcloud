@@ -31,4 +31,12 @@ public class StaffListInParam extends StaffListParam implements Serializable {
     public void setComId(String comId) {
         this.comId = comId;
     }
+
+    @Override
+    public String toString() {
+        return "StaffListInParam{" +
+                "comId='" + comId + '\'' +
+                ", accountList=" + accountList +
+                '}';
+    }
 }

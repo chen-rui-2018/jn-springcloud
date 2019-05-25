@@ -10,7 +10,7 @@ public interface TbPayCheckReminderMapper {
 
     int deleteByExample(TbPayCheckReminderCriteria example);
 
-    int deleteByPrimaryKey(String paymentId);
+    int deleteByPrimaryKey(String billId);
 
     int insert(TbPayCheckReminder record);
 
@@ -18,7 +18,7 @@ public interface TbPayCheckReminderMapper {
 
     List<TbPayCheckReminder> selectByExample(TbPayCheckReminderCriteria example);
 
-    TbPayCheckReminder selectByPrimaryKey(String paymentId);
+    TbPayCheckReminder selectByPrimaryKey(String billId);
 
     int updateByExampleSelective(@Param("record") TbPayCheckReminder record, @Param("example") TbPayCheckReminderCriteria example);
 

@@ -9,6 +9,7 @@ import com.jn.hardware.model.security.*;
 import com.jn.hardware.security.enums.SecurityEnum;
 import com.jn.hardware.security.service.SecurityVideoService;
 import com.jn.hardware.util.JsonStringToObjectUtil;
+import org.checkerframework.checker.nullness.NullnessUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -102,6 +103,45 @@ public class SecurityVideoServiceImpl implements SecurityVideoService {
                     result.setCode(securityResult.getCode());
                     result.setResult(securityResult.getMsg());
                     logger.info("\n监控点回放url获取失败：{}失败编号"+securityResult.getCode()+"失败原因{}"+securityResult.getMsg());
+                }
+            }
+        }
+        return result;
+    }
+    /**
+     * 获取海康威视的 接口凭证 token,返回 用于认证的url
+     * @param securityTokenParam 实体类参数
+     * @return
+     */
+    @Override
+    public Result<String> getSecurityTokenURL(SecurityTokenParam securityTokenParam) {
+        Result result = new Result();
+        String getCamsApi = SecurityEnum.ARTEMIS_PATH .getCode() + SecurityEnum.GET_TOKEN_URL.getCode();
+        Map<String,String> query = new HashMap<>(16);
+        query.put(SecurityEnum.GET_TOKEN_USER_CODE.getCode(),securityTokenParam.getUserCode());
+        query.put(SecurityEnum.GET_TOKEN_SERVICE.getCode(),securityTokenParam.getService());
+        query.put(SecurityEnum.GET_TOKEN_LANGUAGE.getCode(),securityTokenParam.getLanguage());
+        Map<String,String> path = new HashMap<String,String>(16){
+            {
+                put(SecurityEnum.HTTP_PROTOCOL_TYPE.getCode(),getCamsApi);
+            }
+        };
+        logger.info("\n监控认证url获取入参："+securityTokenParam.toString());
+        String resultString =ArtemisHttpUtil.doGetArtemis(path,query,null, null,null);
+        logger.info("\n监控认证url获取成功：{}海康返回的值:"+resultString);
+        if(StringUtils.isNotBlank(resultString)){
+            SecurityResult<SecurityTokenShow> securityResult = JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference< SecurityResult<SecurityTokenShow>>() {});
+            if(securityResult!=null){
+                if(SecurityEnum.SECURITY_RESULT_NORMAL.getCode().equals(securityResult.getCode())){
+                    String ttoken  =  securityResult.getData().getToken();
+                    String url =SecurityEnum.HTTP_PROTOCOL_TYPE.getCode()+SecurityEnum.ARTEMIS_CONFIG_HOST.getCode()+String.format(SecurityEnum.SECURITY_TOOKEN_URL.getCode(),ttoken,securityTokenParam.getService());
+                    logger.info("\n获取token后组装的url:"+url);
+                    result.setData(url);
+                    logger.info("\n监控认证url获取成功：{}返回状态为:"+securityResult.getMsg());
+                }else{
+                    result.setCode(securityResult.getCode());
+                    result.setResult(securityResult.getMsg());
+                    logger.info("\n监控认证url获取失败：{}失败编号"+securityResult.getCode()+"失败原因{}"+securityResult.getMsg());
                 }
             }
         }

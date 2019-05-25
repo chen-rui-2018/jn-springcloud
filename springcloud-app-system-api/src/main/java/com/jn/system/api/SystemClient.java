@@ -193,6 +193,7 @@ public interface SystemClient {
 
     /**
      * 根据条件查询数据字典的值
+     *
      * @param sysDictInvoke
      * @return
      */
@@ -201,9 +202,28 @@ public interface SystemClient {
 
     /**
      * 调用数据字典
+     *
      * @return
      */
     @RequestMapping(value = "/api/system/getDict", method = RequestMethod.POST)
-    public Result<List<SysDictKeyValue>> getDict(@RequestBody SysDictInvoke sysDictInvoke);
+    Result<List<SysDictKeyValue>> getDict(@RequestBody SysDictInvoke sysDictInvoke);
+
+    /**
+     * 根据角色id或角色名称获取角色拥有的用户信息
+     * 当id和角色名称同时存在时,优先使用id信息
+     *
+     * @param role
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserByRole", method = RequestMethod.POST)
+    Result<List<User>> getUserByRole(@RequestBody SysRole role);
+
+    /**
+     * 获取所有岗位信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getPostAll", method = RequestMethod.POST)
+    Result<List<SysPost>> getPostAll();
 
 }

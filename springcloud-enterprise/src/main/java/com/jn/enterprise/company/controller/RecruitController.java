@@ -5,13 +5,11 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.ServiceRecruitEditParam;
 import com.jn.enterprise.company.model.ServiceRecruitParam;
 import com.jn.enterprise.company.model.ServiceRecruitPublishParam;
 import com.jn.enterprise.company.model.ServiceRecruitUnderParam;
-import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.RecruitService;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.system.log.annotation.ControllerLog;
@@ -43,17 +41,13 @@ public class RecruitController extends BaseController {
     @Autowired
     private RecruitService recruitService;
 
-    @Autowired
-    private CompanyService companyService;
-
     @ControllerLog(doAction = "招聘列表（用户中心）")
     @ApiOperation(value = "招聘列表（用户中心）", notes = "分页查询[默认15条]，日期查询请传开始和结束日期[只传一个忽略]")
     @RequestMapping(value = "/getRecruitList",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/RecruitController/getRecruitList")
     public Result<PaginationData<List<RecruitVO>>> getRecruitList(@Validated ServiceRecruitParam serviceRecruitParam){
         User user = checkUserValid();
-        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        serviceRecruitParam.setComId(company.getId());
+        serviceRecruitParam.setAccount(user.getAccount());
         return new Result(recruitService.getRecruitList(serviceRecruitParam, null));
     }
 
@@ -63,8 +57,7 @@ public class RecruitController extends BaseController {
     @RequiresPermissions("/enterprise/RecruitController/publishRecruitInfo")
     public Result<Integer> publishRecruitInfo(@Validated @RequestBody ServiceRecruitPublishParam serviceRecruitPublishParam){
         User user = checkUserValid();
-        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        return new Result(recruitService.publishRecruitInfo(serviceRecruitPublishParam, company, user));
+        return new Result(recruitService.publishRecruitInfo(serviceRecruitPublishParam, user.getAccount()));
     }
 
     @ControllerLog(doAction = "编辑招聘信息")
@@ -73,9 +66,7 @@ public class RecruitController extends BaseController {
     @RequiresPermissions("/enterprise/RecruitController/editRecruitInfo")
     public Result<Integer> editRecruitInfo(@Validated @RequestBody ServiceRecruitEditParam serviceRecruitEditParam){
         User user = checkUserValid();
-        // 只有企业管理员有权限编辑
-        companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        return new Result(recruitService.editRecruitInfo(serviceRecruitEditParam, user));
+        return new Result(recruitService.editRecruitInfo(serviceRecruitEditParam, user.getAccount()));
     }
 
     @ControllerLog(doAction = "上/下架招聘信息")
@@ -84,9 +75,7 @@ public class RecruitController extends BaseController {
     @RequiresPermissions("/enterprise/RecruitController/underRecruit")
     public Result<Integer> underRecruit(@Validated @RequestBody ServiceRecruitUnderParam serviceRecruitUnderParam){
         User user = checkUserValid();
-        // 园区管理员和企业管理员都可以上下架
-        // companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        return new Result(recruitService.underRecruit(serviceRecruitUnderParam, user));
+        return new Result(recruitService.underRecruit(serviceRecruitUnderParam, user.getAccount()));
     }
 
     @ControllerLog(doAction = "删除招聘信息")
@@ -96,15 +85,8 @@ public class RecruitController extends BaseController {
     public Result<Integer> delRecruit(String recruitId){
         Assert.notNull(recruitId, CompanyExceptionEnum.PARAM_IS_NULL.getMessage());
         User user = checkUserValid();
-
-        // 园区管理员才有删除权限
-        // ServiceCompany company = companyService.getCompanyDetailByAccountOrId(user.getAccount());
-        // RecruitDetailsVO recruitDetails = recruitService.getRecruitDetailsById(recruitId);
-        // Assert.notNull(recruitDetails,RecruitExceptionEnum.RECRUIT_INFO_IS_NOT_EXIST.getMessage());
-        // Assert.isTrue(recruitDetails.getComId().equals(company.getId()),RecruitExceptionEnum.RECRUIT_USER_NOT_ENTERPRISE_ADMIN.getMessage());
-        return new Result(recruitService.delRecruitById(recruitId, user));
+        return new Result(recruitService.delRecruitById(recruitId, user.getAccount()));
     }
-
 
     /**
      * 判断当前账号是否有效

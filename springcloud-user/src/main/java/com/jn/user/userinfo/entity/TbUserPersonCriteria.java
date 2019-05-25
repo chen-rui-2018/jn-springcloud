@@ -1615,6 +1615,76 @@ public class TbUserPersonCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andRegistrationIdIsNull() {
+            addCriterion("registration_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdIsNotNull() {
+            addCriterion("registration_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdEqualTo(String value) {
+            addCriterion("registration_id =", value, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdNotEqualTo(String value) {
+            addCriterion("registration_id <>", value, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdGreaterThan(String value) {
+            addCriterion("registration_id >", value, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdGreaterThanOrEqualTo(String value) {
+            addCriterion("registration_id >=", value, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdLessThan(String value) {
+            addCriterion("registration_id <", value, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdLessThanOrEqualTo(String value) {
+            addCriterion("registration_id <=", value, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdLike(String value) {
+            addCriterion("registration_id like", value, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdNotLike(String value) {
+            addCriterion("registration_id not like", value, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdIn(List<String> values) {
+            addCriterion("registration_id in", values, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdNotIn(List<String> values) {
+            addCriterion("registration_id not in", values, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdBetween(String value1, String value2) {
+            addCriterion("registration_id between", value1, value2, "registrationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegistrationIdNotBetween(String value1, String value2) {
+            addCriterion("registration_id not between", value1, value2, "registrationId");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatorAccountIsNull() {
             addCriterion("creator_account is null");
             return (Criteria) this;

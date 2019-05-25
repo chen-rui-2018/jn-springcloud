@@ -80,6 +80,22 @@ public class BusinessPromotionDetailsShow implements Serializable {
         this.invalidDate = invalidDate;
     }
 
+    public String getPropagandaType() {
+        return propagandaType;
+    }
+
+    public void setPropagandaType(String propagandaType) {
+        this.propagandaType = propagandaType;
+    }
+
+    public String getPropagandaTypeName() {
+        return propagandaTypeName;
+    }
+
+    public void setPropagandaTypeName(String propagandaTypeName) {
+        this.propagandaTypeName = propagandaTypeName;
+    }
+
     public String getPropagandaTitle() {
         return propagandaTitle;
     }
@@ -95,6 +111,7 @@ public class BusinessPromotionDetailsShow implements Serializable {
     public void setPropagandaDetails(String propagandaDetails) {
         this.propagandaDetails = propagandaDetails;
     }
+
 
     public String getPropagandaArea() {
         return propagandaArea;
@@ -128,21 +145,6 @@ public class BusinessPromotionDetailsShow implements Serializable {
         this.propagandaFee = propagandaFee;
     }
 
-    public String getPropagandaTypeName() {
-        return propagandaTypeName;
-    }
-
-    public void setPropagandaTypeName(String propagandaTypeName) {
-        this.propagandaTypeName = propagandaTypeName;
-    }
-
-    public String getPropagandaType() {
-        return propagandaType;
-    }
-
-    public void setPropagandaType(String propagandaType) {
-        this.propagandaType = propagandaType;
-    }
 
     @Override
     public String toString() {
@@ -153,6 +155,7 @@ public class BusinessPromotionDetailsShow implements Serializable {
                 ", effectiveDate='" + effectiveDate + '\'' +
                 ", invalidDate='" + invalidDate + '\'' +
                 ", propagandaType='" + propagandaType + '\'' +
+                ", propagandaTypeName='" + propagandaTypeName + '\'' +
                 ", propagandaTitle='" + propagandaTitle + '\'' +
                 ", propagandaDetails='" + propagandaDetails + '\'' +
                 ", propagandaArea='" + propagandaArea + '\'' +

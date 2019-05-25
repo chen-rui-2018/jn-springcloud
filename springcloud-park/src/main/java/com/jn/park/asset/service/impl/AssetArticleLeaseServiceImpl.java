@@ -13,6 +13,7 @@ import com.jn.park.asset.entity.TbAssetArticleLeaseOrders;
 import com.jn.park.asset.enums.AssetExceptionEnum;
 import com.jn.park.asset.enums.AssetStatusEnums;
 import com.jn.park.asset.enums.LeaseStatusEnums;
+import com.jn.park.asset.enums.PayStatusEnums;
 import com.jn.park.asset.model.AssetArticleLeaseModel;
 import com.jn.park.asset.service.AssetArticleLeaseService;
 import com.jn.system.log.annotation.ServiceLog;
@@ -60,13 +61,19 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
 
     @Override
     @ServiceLog(doAction = "企业填写租借资料")
-    public String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, java.sql.Date startTime, java.sql.Date endTime,User user) {
+    public String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, java.sql.Date startTime, String time,User user) {
         //填写租借企业资料
         AssetArticleLeaseModel articleLease = assetArticleLeaseDao.getArticleLease(assetNumber);
         articleLease.setLeaseEnterprise(leaseEnterprise);
         articleLease.setContactName(contactName);
         articleLease.setContactPhone(contactPhone);
         articleLease.setStartTime(startTime);
+        //计算结束时间
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startTime);
+        cal.add(Calendar.DAY_OF_MONTH,+Integer.parseInt(time));
+        Date calTime = cal.getTime();
+        java.sql.Date endTime=new java.sql.Date(calTime.getTime());
         articleLease.setEndTime(endTime);
         //判断租借时间是否大于最短租期
         int days = (int) ((articleLease.getEndTime().getTime() - articleLease.getStartTime().getTime()) / (1000*3600*24)+1);
@@ -132,6 +139,8 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             tbAssetArticleLeaseOrders.setLeasePrice(articleLease.getLeasePrice());
             tbAssetArticleLeaseOrders.setStartTime(articleLease.getStartTime());
             tbAssetArticleLeaseOrders.setEndTime(articleLease.getEndTime());
+            //未付款
+            tbAssetArticleLeaseOrders.setPaymentStatus(Byte.parseByte(PayStatusEnums.NONPAYMENT.getCode()));
             //订单创建者
             tbAssetArticleLeaseOrders.setCreatorAccount(user.getAccount());
             tbAssetArticleLeaseOrders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));

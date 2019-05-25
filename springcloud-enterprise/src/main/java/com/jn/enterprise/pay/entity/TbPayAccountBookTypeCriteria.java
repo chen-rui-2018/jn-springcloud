@@ -245,6 +245,76 @@ public class TbPayAccountBookTypeCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andAcBookScopeIsNull() {
+            addCriterion("ac_book_scope is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeIsNotNull() {
+            addCriterion("ac_book_scope is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeEqualTo(String value) {
+            addCriterion("ac_book_scope =", value, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeNotEqualTo(String value) {
+            addCriterion("ac_book_scope <>", value, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeGreaterThan(String value) {
+            addCriterion("ac_book_scope >", value, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeGreaterThanOrEqualTo(String value) {
+            addCriterion("ac_book_scope >=", value, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeLessThan(String value) {
+            addCriterion("ac_book_scope <", value, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeLessThanOrEqualTo(String value) {
+            addCriterion("ac_book_scope <=", value, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeLike(String value) {
+            addCriterion("ac_book_scope like", value, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeNotLike(String value) {
+            addCriterion("ac_book_scope not like", value, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeIn(List<String> values) {
+            addCriterion("ac_book_scope in", values, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeNotIn(List<String> values) {
+            addCriterion("ac_book_scope not in", values, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeBetween(String value1, String value2) {
+            addCriterion("ac_book_scope between", value1, value2, "acBookScope");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcBookScopeNotBetween(String value1, String value2) {
+            addCriterion("ac_book_scope not between", value1, value2, "acBookScope");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatorAccountIsNull() {
             addCriterion("creator_account is null");
             return (Criteria) this;

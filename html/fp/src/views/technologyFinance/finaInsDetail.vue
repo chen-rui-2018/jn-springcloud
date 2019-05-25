@@ -1,8 +1,8 @@
 <template>
   <div class="finaInsDetail w">
     <div class="serverOrgMenu color2">
-      <span>首页/</span>
-      <span>金融机构</span>
+      <span class="pointer" @click="$router.push({path:'/tfindex'})">首页/</span>
+      <span class="pointer" @click="$router.push({path:'/finaInstitution'})">金融机构</span>
       <span>/</span>
       <span class="mainColor agent">金融机构详情</span>
     </div>
@@ -343,7 +343,7 @@
                     <!-- 评价 begin -->
                     <div class="detail-evaluate inner-product">
                       <div class="score">
-                        <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
+                        <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                         </el-rate>
                         <span class="c_default b">{{i.evaluationNumber}}</span>
                         <span>条评价</span>
@@ -374,7 +374,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="serEvaluation">
-          <span slot="label">服务评价({{evaCount.evaluationTotal}})</span>
+          <span slot="label">服务评价({{total4}})</span>
           <div class="serEvaluation">
             <ul class="list-imgleft">
               <li class="list-item pr" v-for="(i,k) in serviceRatingList" :key='k'>
@@ -413,7 +413,7 @@
                     <!-- 评价 begin -->
                     <div class="detail-evaluate inner-product">
                       <div class="score">
-                        <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
+                        <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                         </el-rate>
                         <span class="c_default b">1</span>
                         <span>条评价</span>
@@ -447,7 +447,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="actiConsultation">
-          <span slot="label">活动资讯({{total3}})</span>
+          <span slot="label">活动资讯({{serverActiList[0].actiNum}})</span>
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
               <li v-for="(i,k) in serverActiList" :key='k'>
@@ -527,10 +527,9 @@ export default {
       flag3: ""
     };
   },
-  mounted() {
+  created() {
     this.initList();
     this.findOrgCountProductList();
-    // this.getServiceConList();
     this.selActiList();
     this.getServiceRatingInfo();
     this.getEvaluationCountInfo();
@@ -566,7 +565,7 @@ export default {
         this.showFlag2=false
          this.showFlag1=false
          this.showFlag4=true
-      } else if(tab.name=='serverPro'){
+      } else {
          this.showFlag2=false
          this.showFlag1=true
          this.showFlag4=false
@@ -623,7 +622,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.evaCount = res.data;
             _this.total4 = res.data.total;
           } else {
@@ -647,7 +645,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serviceRatingList = res.data.rows;
             _this.total4 = res.data.total;
           } else {
@@ -668,7 +665,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serverActiList = res.data.rows;
             _this.total3 = res.data.total;
           } else {
@@ -690,7 +686,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
           } else {
@@ -708,7 +703,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.serverOrgDetailList = res.data;
           } else {
             _this.$message.error(res.result);

@@ -10,51 +10,52 @@
           <a href="javascript:void(0)" style="color:#00a042;font-weight:bold">活动详情</a>
         </el-breadcrumb-item>
       </el-breadcrumb> -->
-      <span>企业服务/</span>
-      <span>活动中心/</span>
+      <span class="pointer" @click="$router.push({path:'enterpriseservice'})">企业服务/</span>
+      <span class="pointer" @click="$router.push({path:'actiCenter'})">活动中心/</span>
       <span class="mainColor">活动详情</span>
     </div>
     <div class="delinfo">
       <el-card style="overflow:visible">
         <div class="infotop pr">
-          <img class="infoImg" :src="this.activityDetail.actiPosterUrl" alt="">
+          <img class="infoImg" :src="activityDetail.actiPosterUrl" alt="">
           <div class="infotitle">
-            <span>{{this.activityDetail.actiName}}</span>
+            <span>{{activityDetail.actiName}}</span>
             <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
-              <span>{{this.activityDetail.actiLike}}</span>
+              <span>{{activityDetail.actiLike}}</span>
             </i>
             <!-- <i class="iconfont like" v-else @click="cancleLike(activityDetail.id)">&nbsp;
               <span>{{this.activityDetail.actiLike}}</span>
             </i> -->
             <p>
               <i class="el-icon-time"></i>
-              <span>{{this.activityDetail.actiStartTime}}-{{this.activityDetail.actiEndTime}}</span>
-              <i class="iconfont icon-mianfei free">&nbsp;免费</i>
+              <span>{{activityDetail.actiStartTime}}-{{activityDetail.actiEndTime}}</span>
+              <i class="iconfont icon-recharge">&nbsp;<span v-if="activityDetail.actiCost=='0.00'">免费</span><span v-else>收费</span></i>
             </p>
             <div class="delAddress">
               <i class="el-icon-location-outline"></i>
-              <span>{{this.activityDetail.actiAddress}}</span>
+              <span>{{activityDetail.actiAddress}}</span>
             </div>
             <div class="userImg">
-              <ul>
-                <li><img src="" alt=""></li>
+              <ul v-if="actiApplyList!=null&&actiApplyList.length>0">
+                <li v-if="k<5" v-for="(i,k) in actiApplyList" :key="k"><img :src="i.avatar" alt=""></li>
               </ul>
-              <span>{{this.activityDetail.applyNum}}/{{this.activityDetail.actiNumber}}</span>
+              <span v-if="actiApplyList!=null&&actiApplyList.length>5">......</span>
+              <span>{{activityDetail.applyNum}}/{{activityDetail.actiNumber}}</span>
               <a href="javascript:void(0)" class="mainColor" @click="handCheck(activityDetail.id)">查看报名情况</a>
             </div>
           </div>
         </div>
         <div class="infobottom">
-          <p style="margin-top:10px">发布时间：{{this.activityDetail.issueTime}}</p>
-          <p>主办方：{{this.activityDetail.actiOrganizer}}</p>
-          <p>报名截止时间：{{this.activityDetail.applyEndTime}}
-            <span class="resdeadline">报名截止还有&nbsp;3天18小时59分59秒</span>
+          <p style="margin-top:10px">发布时间：{{activityDetail.issueTime}}</p>
+          <p>主办方：{{activityDetail.actiOrganizer}}</p>
+          <p>报名截止时间：{{activityDetail.applyEndTime}}
+            <span class="resdeadline">报名截止还有&nbsp;{{countDown}}</span>
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
-            <el-button type="success" v-if="this.activityDetail.actiStatus=='2'&&this.activityDetail.isApply=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
-            <el-button type="success" v-if="this.activityDetail.actiStatus=='2'&&this.activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">停止报名</el-button>
-            <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button>
+            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
+            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">停止报名</el-button>
+            <!-- <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button> -->
             <span class="shareto">
               分享到
               <i class="iconfont icon-weixin"></i>
@@ -147,9 +148,10 @@ export default {
       row: 5,
       total: 0,
       commentList: [],
-      sysTemTime:"",
+      actiApplyList:[],
       accountIsLike: false,
-      isCommentLike: false
+      isCommentLike: false,
+      countDown:'',
     };
   },
   created(){
@@ -157,7 +159,10 @@ export default {
     this.getCommentInfo();
   },
   mounted() {    
-    this.countdown()
+    // this.countdown()
+  },
+   destroyed () {
+    clearInterval(this._interval)
   },
   methods: {
     replyFlag() {
@@ -354,18 +359,26 @@ export default {
         }
       });
     },
-    // campareTime(){ //时间比较
-    //   var t1=new Date(this.sysTemTime)
-    //   var t2=new Date(this.activityDetail.applyEndTime)
-
-    // },
     //报名倒计时
-    countdown(){
-      console.log(this.sysTemTime)
-      var s1=new Date(this.sysTemTime);
-      var s2=new Date(this.activityDetail.applyEndTime);
-      var s3 = s2.getTime() - s1.getTime();
-      console.log(s3)
+   countTime (t) {
+      var secondsTime = new Date().getTime()
+      var applyTime = new Date(t).getTime()
+      var leftTime = applyTime - secondsTime
+      if (leftTime >= 0) {
+        var d = Math.floor(leftTime / 1000 / 60 / 60 / 24)
+        var h = Math.floor((leftTime / 1000 / 60 / 60) % 24)
+        var m = Math.floor((leftTime / 1000 / 60) % 60)
+        var s = Math.floor((leftTime / 1000) % 60)
+        d = d
+        h = h > 9 ? h : '0' + h
+        m = m > 9 ? m : '0' + m
+        s = s > 9 ? s : '0' + s
+        this.countDown=d+'天'+h+'小时'+m+'分'+s+'秒'
+        return false
+      } else {
+        this.countDown='0天0时0分0秒'
+        return true
+      }
     },
     init() {
       //数据初始化
@@ -379,8 +392,14 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.activityDetail = res.data.activityDetail;
-            _this.sysTemTime=res.data.sysTemTime;
+             _this.actiApplyList=res.data.activityApplyList
             _this.accountIsLike = res.data.accountIsLike;
+             _this._interval = setInterval(() => {
+              let data = _this.countTime(res.data.activityDetail.applyEndTime)
+              if (data) {
+                clearInterval(_this._interval)
+              }
+            }, 1000)
           }
         }
       });
@@ -452,7 +471,7 @@ export default {
         }
         > p {
           margin-top: 30px;
-          .free {
+          .icon-recharge {
             margin-left: 70px;
           }
         }

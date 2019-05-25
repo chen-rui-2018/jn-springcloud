@@ -146,35 +146,35 @@ public class OrgServiceImpl implements OrgService {
 
         tbServiceOrg.setRecordStatus(new Byte(RECORD_STATUS_VALID));
 
-        List<String> hobby = new ArrayList<>(16);
-        hobby.addAll(Arrays.asList(orgBasicData.getIndustrySector()));
-        TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
-        preferCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
-        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
-        StringBuffer sbSpeciality = new StringBuffer();
-        StringBuffer sbHobby = new StringBuffer();
-        String businessTypeStr = "";
-        for (TbServicePrefer prefer:tbServicePrefers) {
-            for (String sp:orgBasicData.getOrgSpeciality()) {
-                if(StringUtils.equals(sp,prefer.getId())){
-                    sbSpeciality.append(prefer.getPreValue()+",");
+        if(null != orgBasicData.getIndustrySector()&&orgBasicData.getIndustrySector().length>0){
+            List<String> hobby = new ArrayList<>(16);
+            hobby.addAll(Arrays.asList(orgBasicData.getIndustrySector()));
+            TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
+            preferCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
+            StringBuffer sbSpeciality = new StringBuffer();
+            StringBuffer sbHobby = new StringBuffer();
+            String businessTypeStr = "";
+            for (TbServicePrefer prefer:tbServicePrefers) {
+                for (String sp:orgBasicData.getOrgSpeciality()) {
+                    if(StringUtils.equals(sp,prefer.getId())){
+                        sbSpeciality.append(prefer.getPreValue()+",");
+                    }
+                }
+                for (String shobby :hobby) {
+                    if(StringUtils.equals(shobby,prefer.getId())){
+                        sbHobby.append(prefer.getPreValue()+",");
+                    }
                 }
             }
-            for (String shobby :hobby) {
-                if(StringUtils.equals(shobby,prefer.getId())){
-                    sbHobby.append(prefer.getPreValue()+",");
-                }
-            }
-
+            tbServiceOrg.setOrgSpeciality(sbSpeciality.toString().substring(0, sbSpeciality.toString().length() - 1));
+            tbServiceOrg.setOrgHobby(sbHobby.toString().substring(0, sbHobby.toString().length() - 1));
         }
-
-        tbServiceOrg.setOrgSpeciality(sbSpeciality.toString().substring(0, sbSpeciality.toString().length() - 1));
-        tbServiceOrg.setOrgHobby(sbHobby.toString().substring(0, sbHobby.toString().length() - 1));
 
         try {
             tbServiceOrg.setOrgRegisterTime(DateUtils.parseDate(orgBasicData.getOrgRegisterTime(),"yyyy-MM-dd"));
         } catch (ParseException e) {
-            logger.info("保存服务机构基本信息。失败原因{}", e.getMessage(), e);
+            logger.info("保存/修改服务机构基本信息。失败原因：时间转换异常{}", e.getMessage(), e);
             throw new JnSpringCloudException(OrgExceptionEnum.ORG_TIME_PARSE_ERROR);
         }
 
@@ -193,18 +193,35 @@ public class OrgServiceImpl implements OrgService {
         }
         r = tbServiceOrg.getOrgId();
         //处理机构特性列表
-        TbServiceOrgTraitCriteria traitCriteria = new TbServiceOrgTraitCriteria();
-        traitCriteria.createCriteria().andOrgIdEqualTo(tbServiceOrg.getOrgId());
-        tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
         List<TbServiceOrgTrait> traits = new ArrayList<>();
+        TbServiceOrgTraitCriteria traitCriteria = new TbServiceOrgTraitCriteria();
+        TbServiceOrgTraitCriteria.Criteria criteria = traitCriteria.createCriteria().andOrgIdEqualTo(tbServiceOrg.getOrgId());
         //trait_type : 特性类型(1业务擅长2行业领域3发展阶段4企业性质)
-        traits.addAll(setTraitBean(orgBasicData.getOrgSpeciality(),"1",tbServiceOrg.getOrgId(),account));
-        traits.addAll(setTraitBean(orgBasicData.getIndustrySector(),"2",tbServiceOrg.getOrgId(),account));
-        traits.addAll(setTraitBean(orgBasicData.getDevelopmentStage(),"3",tbServiceOrg.getOrgId(),account));
-        traits.addAll(setTraitBean(orgBasicData.getCompanyNature(),"4",tbServiceOrg.getOrgId(),account));
-        Map<String,Object> map = new HashMap<>(4);
-        map.put("list",traits);
-        orgTraitMapper.insertTraitList(map);
+        if(null != orgBasicData.getOrgSpeciality() && orgBasicData.getOrgSpeciality().length>0){
+            criteria.andTraitTypeEqualTo("1");
+            tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
+            traits.addAll(setTraitBean(orgBasicData.getOrgSpeciality(),"1",tbServiceOrg.getOrgId(),account));
+        }
+        if(null != orgBasicData.getIndustrySector() && orgBasicData.getIndustrySector().length>0){
+            criteria.andTraitTypeEqualTo("2");
+            tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
+            traits.addAll(setTraitBean(orgBasicData.getIndustrySector(),"2",tbServiceOrg.getOrgId(),account));
+        }
+        if(null != orgBasicData.getDevelopmentStage() && orgBasicData.getDevelopmentStage().length>0){
+            criteria.andTraitTypeEqualTo("3");
+            tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
+            traits.addAll(setTraitBean(orgBasicData.getDevelopmentStage(),"3",tbServiceOrg.getOrgId(),account));
+        }
+        if(null != orgBasicData.getCompanyNature() && orgBasicData.getCompanyNature().length>0){
+            criteria.andTraitTypeEqualTo("4");
+            tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
+            traits.addAll(setTraitBean(orgBasicData.getCompanyNature(),"4",tbServiceOrg.getOrgId(),account));
+        }
+        if(traits.size()>0){
+            Map<String,Object> map = new HashMap<>(4);
+            map.put("list",traits);
+            orgTraitMapper.insertTraitList(map);
+        }
         return r;
     }
 
@@ -422,6 +439,23 @@ public class OrgServiceImpl implements OrgService {
         businessStatisticalNumVO.setProductNum(productNum+"");
         businessStatisticalNumVO.setEvaluateNum(productRatingNum);
         return businessStatisticalNumVO;
+    }
+
+    @ServiceLog(doAction = "获取当前用户机构状态")
+    @Override
+    public String getOrgStatusByUser(String account){
+        if(StringUtils.isEmpty(account)){
+            throw new JnSpringCloudException(OrgExceptionEnum.USER_EXTENSION_IS_NULL);
+        }
+        TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
+        orgCriteria.createCriteria().andOrgAccountEqualTo(account).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        orgCriteria.setOrderByClause(" created_time desc ");
+        List<TbServiceOrg> tbServiceOrgs = tbServiceOrgMapper.selectByExample(orgCriteria);
+        if(null == tbServiceOrgs || tbServiceOrgs.size()==0){
+            return "-1";
+        }else{
+            return tbServiceOrgs.get(0).getOrgStatus();
+        }
     }
 
 }

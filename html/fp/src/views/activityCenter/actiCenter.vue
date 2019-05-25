@@ -1,103 +1,5 @@
 <template>
   <div class="actiCenter" @click="showList = false">
-    <div id="header11" v-if="headFlag">
-      <div class="headerContainer clearfix">
-        <div class="titleImg fl"><img src="@/../static/img/LOGO.png" alt=""></div>
-        <div class="menu" style="display:none">
-          <i class="el-icon-close"></i>
-          <input type="text">
-          <i class="el-icon-search"></i>
-        </div>
-        <div class="headerRight fr">
-          <div class="search" v-if="!sousuo">
-            <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
-          </div>
-          <div class="navlogin">
-            <a>登录</a>
-            <span class="line">|</span>
-            <a>注册</a>
-          </div>
-          <!-- <div class="navlogin" v-if="this.$route.name =='actiManagent'">
-            <i class="el-icon-bell"></i>
-            <span class="line">|</span>
-            <img src="" alt="">
-          </div> -->
-        </div>
-        <div class="nav">
-          <transition name="fade">
-            <div class="sousuo posA" v-if="sousuo">
-              <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-              <input type="text" v-focus @keyup.enter="handleSearch">
-              <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-            </div>
-            <ul class="posA clearfix" v-else>
-              <li>
-                <a href="javascript:void(0);">首页</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">招商引资</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">智慧党建</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">企业服务</a>
-              </li>
-            </ul>
-
-          </transition>
-        </div>
-      </div>
-    </div>
-    <div id="headerW11" v-else>
-      <div class="headerContainer clearfix">
-        <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
-        <div class="menu" style="display:none">
-          <i class="el-icon-close"></i>
-          <input type="text">
-          <i class="el-icon-search"></i>
-        </div>
-        <div class="headerRight fr">
-          <div class="search" v-if="!sousuo">
-            <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
-          </div>
-          <div class="navlogin">
-            <a>登录</a>
-            <span class="line">|</span>
-            <a>注册</a>
-          </div>
-          <!-- <div class="navlogin" v-if="this.$route.name =='actiManagent'">
-            <i class="el-icon-bell"></i>
-            <span class="line">|</span>
-            <img src="" alt="">
-          </div> -->
-        </div>
-        <div class="nav">
-          <transition name="fade">
-            <div class="sousuo posA" v-if="sousuo">
-              <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-              <input type="text" v-focus @keyup.enter="handleSearch">
-              <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-            </div>
-            <ul class="posA clearfix" v-else>
-              <li>
-                <a href="javascript:void(0);">首页</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">招商引资</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">智慧党建</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">企业服务</a>
-              </li>
-            </ul>
-
-          </transition>
-        </div>
-      </div>
-    </div>
     <div class="navImg"></div>
     <div class="actiContent">
       <div class="actiNav">
@@ -107,42 +9,42 @@
             <a href="/">活动中心</a>
           </el-breadcrumb-item>
         </el-breadcrumb> -->
-        <span>企业服务/</span>
+        <span class="pointer" @click="$router.push({path:'enterpriseservice'})">企业服务/</span>
         <span class="mainColor">活动中心</span>
       </div>
       <div class="actiFilter clearfix">
         <div class="timeFilter">
           <i>时间筛选:</i>
-          <span :class="{'active':timeIndexFlag == ''}" @click="timeSelect('','')">不限</span>
-          <span :class="{'active':timeIndexFlag == -7}" @click="timeSelect(0,-7)">最近一周</span>
-          <span :class="{'active':timeIndexFlag == -30}" @click="timeSelect(0,-30)">最近一月</span>
+          <span :class="{'active0':timeIndexFlag == ''}" @click="timeSelect('','')">不限</span>
+          <span :class="{'active0':timeIndexFlag == -7}" @click="timeSelect(0,-7)">最近一周</span>
+          <span :class="{'active0':timeIndexFlag == -30}" @click="timeSelect(0,-30)">最近一月</span>
         </div>
         <div class="timeOrder">
           <ul>
-            <li @click="handleTime('acti_start_time')" :class="{'active':colorFlag == 'acti_start_time'}">
+            <li @click="handleTime('acti_start_time')" :class="{'active0':colorFlag == 'acti_start_time'}">
               <i class="iconfont icon-clock-"></i>
               <span>时间排序</span>
             </li>
-            <li @click="handleTime('acti_Like')" :class="{'active':colorFlag == 'acti_Like'}">
+            <li @click="handleTime('acti_Like')" :class="{'active0':colorFlag == 'acti_Like'}">
               <i class="iconfont icon-hot"></i>
               <span>热度排序</span>
             </li>
             <li class="showListLi">
-              <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active':showListFlag == 'icon-menu1'}"></i>
-              <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active':showListFlag == 'icon-menu'}"></i>
+              <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
+              <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
             </li>
           </ul>
         </div>
       </div>
       <div class="allActi clearfix">
         <ul class="actiFilterUl fl clearfix">
-          <li :class="{'active':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
-          <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active':actiFilflag == v.typeName}" @click="handleFil(v.typeName)">{{v.typeName}}</li>
+          <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
+          <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeName}" @click="handleFil(v.typeName)">{{v.typeName}}</li>
           <li v-if="this.actiTypeList.length>4" class="bottomLi pr">
             <i class="iconfont icon-bottom" @click.stop="handleTypeList"></i>
             <el-card class="box-card" v-if="showList" style="overflow:auto">
               <ul class="listUl clearfix">
-                <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active':actiFilflag == i.typeName}" @click.stop="handleFil(i.typeName)">
+                <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeName}" @click.stop="handleFil(i.typeName)">
                   <i class="iconfont icon-yuandian"></i>{{i.typeName}}</li>
               </ul>
             </el-card>
@@ -156,7 +58,7 @@
       <div class="actiTab">
         <ul class="allActiUl clearfix" v-if="flag">
           <li v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="postImgItem">
+            <div class="postImgItem pointer">
               <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" @click="handleRout(item.id)">
             </div>
             <div class="actiInfo">
@@ -186,7 +88,7 @@
         </ul>
         <ul class="verticalUl" v-else>
           <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="verticalLeft fl" @click="handleRout(item.id)">
+            <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
               <img :src="item.actiPosterUrl" alt="活动海报图片">
             </div>
             <div class="verticalMiddle fl">
@@ -211,7 +113,7 @@
                     <li><img src="@/../static/img/heng2.png" alt=""></li> -->
                   </ul>
                 </div>
-                <i>{{item.actiNumber}}</i>
+                <i>{{item.applyNum}}/{{item.actiNumber}}</i>
               </div>
             </div>
             <div class="verticalRight fr">
@@ -384,6 +286,7 @@ export default {
 <style lang="scss">
 .actiCenter {
   margin-bottom: 100px;
+  padding-top: 65px;
   #header11 {
     position: relative;
     padding: 0 160px;

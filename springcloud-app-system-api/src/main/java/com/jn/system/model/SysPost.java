@@ -1,4 +1,4 @@
-package com.jn.system.dept.model;
+package com.jn.system.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;

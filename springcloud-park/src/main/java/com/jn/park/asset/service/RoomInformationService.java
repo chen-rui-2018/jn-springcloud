@@ -127,4 +127,11 @@ public interface RoomInformationService {
      * 定时任务,生成缴费单
      */
     void createOrderBill();
+
+    /**
+     * 查询企业租借房间信息
+     * @param enterpriseId
+     * @return
+     */
+    List<RoomEnterpriseModel> selectRoomEnterprise(List<String> enterpriseId);
 }

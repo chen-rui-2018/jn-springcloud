@@ -17,6 +17,7 @@ import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.*;
 import com.jn.system.log.annotation.ServiceLog;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -728,6 +729,50 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     @ServiceLog(doAction = "生成房间缴费单")
     public void createOrderBill() {
         
+    }
+
+    /**
+     * 查询房间租借企业信息
+     * @param enterpriseIds
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "查询房间租借企业信息")
+    public List<RoomEnterpriseModel> selectRoomEnterprise(List<String> enterpriseIds) {
+        List<RoomEnterpriseModel> roomEnterpriseModelList = new ArrayList<>();
+        if (enterpriseIds != null){
+            for (String enterpriseId : enterpriseIds) {
+                //创建查询条件
+                TbRoomOrdersCriteria tbRoomOrdersCriteria = new TbRoomOrdersCriteria();
+                //租借结束时间大于当前时间,并且企业已付款的订单信息
+                tbRoomOrdersCriteria.createCriteria().andLeaseEndTimeGreaterThanOrEqualTo(new java.util.Date()).andEnterpriseIdEqualTo(enterpriseId).andPayStateEqualTo(Byte.parseByte(PayStatusEnums.PAYMENT.getCode()));
+                List<TbRoomOrders> tbRoomOrdersList = tbRoomOrdersMapper.selectByExample(tbRoomOrdersCriteria);
+                if (tbRoomOrdersList != null){
+                    for (TbRoomOrders tbRoomOrders : tbRoomOrdersList) {
+                        RoomEnterpriseModel roomEnter = new RoomEnterpriseModel();
+                        //租借企业id
+                        roomEnter.setEnterpriseId(tbRoomOrders.getEnterpriseId());
+                        //租借企业名称
+                        roomEnter.setEnterpriseId(tbRoomOrders.getLeaseEnterprise());
+                        //查询子订单房间租借信息
+                        TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
+                        //通过订单id查询子订单,并且房间状态为租借中,
+                        tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbRoomOrders.getId()).andRoomStatusEqualTo(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue())).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode()));
+                        List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
+                        if (tbRoomOrdersItemList != null){
+                            for (TbRoomOrdersItem roomOrdersItem : tbRoomOrdersItemList) {
+                                //创建子集合model
+                                RoomPayOrdersItemModel roomPayOrdersItemModel = new RoomPayOrdersItemModel();
+                                BeanUtils.copyProperties(roomOrdersItem,roomPayOrdersItemModel);
+                                roomEnter.getChildren().add(roomPayOrdersItemModel);
+                            }
+                        }
+                        roomEnterpriseModelList.add(roomEnter);
+                    }
+                }
+            }
+        }
+        return roomEnterpriseModelList;
     }
 
 }

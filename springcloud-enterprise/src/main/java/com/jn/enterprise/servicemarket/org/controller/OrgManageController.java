@@ -103,7 +103,7 @@ public class OrgManageController extends BaseController {
 
     @ControllerLog(doAction = "获取当前用户机构状态")
     @ApiOperation(value = "获取当前用户机构状态",notes = "返回值为状态属性。【0审核中 1审核通过2审核不通过 -1无机构数据，即普通用户】")
-    @RequestMapping(value = "/saveOrgLicenseData",method = RequestMethod.POST)
+    @RequestMapping(value = "/getOrgStatusByUser",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/getOrgStatusByUser")
     public Result<String> getOrgStatusByUser(){
         User user=(User) SecurityUtils.getSubject().getPrincipal();

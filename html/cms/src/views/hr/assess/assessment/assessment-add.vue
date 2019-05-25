@@ -230,7 +230,7 @@ export default {
       let assessmentObjectArrStr = ''
       const assessmentPeopleArr = []
       for (let j = 0; j < nodes.length; j++) {
-        if (nodes[j].parent !== -1) {
+        if (nodes[j].parent !== '-1') {
           arr.push(nodes[j].value)
           if (key === 'obj') {
             assessmentObjectArrStr = assessmentObjectArrStr + nodes[j].label + ','

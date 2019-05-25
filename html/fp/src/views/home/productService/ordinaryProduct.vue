@@ -203,7 +203,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      font-size: 16px;
       border-radius: 5px;
       div:nth-child(2){
         background-color: #ecfcf2;
@@ -232,6 +232,7 @@ export default {
           height: 27px;
           line-height: 27px;
           border: 1px solid #eee;
+          font-size: 12px;
         }
         .el-input-group__append{
           background-color:#00a041;

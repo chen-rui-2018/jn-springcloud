@@ -3,12 +3,12 @@
     <el-form>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="参保城市：" prop="id">
+          <el-form-item label="参保城市：" prop="insuredCityId">
             <el-input v-model="addInsuranceData.insuredCityName" style="width: 205px;" @focus="insuranceCityPageOpen"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="方案名称：" prop="id">
+          <el-form-item label="方案名称：" prop="schemeName">
             <el-input v-model="addInsuranceData.schemeName" style="width: 205px;"/>
           </el-form-item>
         </el-col>
@@ -230,7 +230,14 @@ export default {
       socialSecurityRowIndex: 6,
       selectlistRow: [],
       commitRows: {},
-      rowIndex: 2
+      rowIndex: 2,
+      rules: {
+        assessmentName: [{ required: true, message: '请输考核名称', trigger: 'blur' }],
+        templateId: [{ required: true, message: '请选择考核模板', trigger: 'change' }],
+        // assessmentTime: [{ required: true, message: '请选择考核时间', trigger: 'change' }],
+        assessmentObject: [{ required: true, message: '请选择考核对象', trigger: 'change' }],
+        assessmentPeople: [{ required: true, message: '请选择考核人', trigger: 'change' }]
+      }
     }
   },
   computed: {
@@ -593,12 +600,43 @@ export default {
       this.$refs.socialSecurityTableData.clearSelection()
     },
     updateData() { // 修改保存
+      let flag = true
       if (this.addInsuranceData.insuredCityId === '') {
         this.$message.error('请填写要参保的城市')
+        flag = false
         return
       }
       if (this.addInsuranceData.schemeName === '') {
         this.$message.error('请填写参保名称')
+        flag = false
+        return
+      }
+      if (this.addInsuranceData.socialSecurityTableData.length < 1) {
+        this.$message.error('至少填写一项社保项目')
+        flag = false
+        return
+      }
+      if (this.addInsuranceData.socialSecurityTableData.length > 0) {
+        this.addInsuranceData.socialSecurityTableData.forEach((v, i) => {
+          if (v.defaultCardinalNumber === '') {
+            flag = false
+          }
+        })
+        if (!flag) {
+          this.$message.error('社保默认基数为必填项，请检查')
+          return
+        }
+      }
+      if (this.addInsuranceData.tableData.length > 0 && this.accumulationFundDisabled === false) {
+        this.addInsuranceData.tableData.forEach((v, i) => {
+          if (v.defaultCardinalNumber === '') {
+            flag = false
+          }
+        })
+        if (!flag) {
+          this.$message.error('公积金默认基数为必填项，请检查')
+          return
+        }
       }
       this.commitRows.schemeId = this.prePageRow.schemeId
       this.commitRows.socialSecurityId = this.prePageRow.socialSecurityId
@@ -617,33 +655,63 @@ export default {
         })
       }
       this.commitRows.insuredSchemeDetailedList = insuredSchemeDetailedList
-      api('hr/SalaryWelfareManagement/updateInsurancescheme', this.commitRows).then(res => {
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '修改成功',
-            type: 'success'
-          })
-          this.commitRows = []
-          this.goBack(this.$route)
-        } else {
-          this.$message.error(res.data.result)
-          this.commitRows = []
-        }
-        this.isDisabled = false
-      })
+      if (flag) {
+        api('hr/SalaryWelfareManagement/updateInsurancescheme', this.commitRows).then(res => {
+          if (res.data.code === '0000') {
+            this.$message({
+              message: '修改成功',
+              type: 'success'
+            })
+            this.commitRows = []
+            this.goBack(this.$route)
+          } else {
+            this.$message.error(res.data.result)
+            this.commitRows = []
+          }
+          this.isDisabled = false
+        })
+      }
     },
     submitForm() {
+      let flag = true
       if (this.addInsuranceData.insuredCityId === '') {
         this.$message.error('请填写要参保的城市')
+        flag = false
         return
       }
       if (this.addInsuranceData.schemeName === '') {
         this.$message.error('请填写参保名称')
+        flag = false
+        return
       }
       if (this.addInsuranceData.socialSecurityTableData.length < 1) {
         this.$message.error('至少填写一项社保项目')
+        flag = false
         return
       }
+      if (this.addInsuranceData.socialSecurityTableData.length > 0) {
+        this.addInsuranceData.socialSecurityTableData.forEach((v, i) => {
+          if (v.defaultCardinalNumber === '') {
+            flag = false
+          }
+        })
+        if (!flag) {
+          this.$message.error('社保默认基数为必填项，请检查')
+          return
+        }
+      }
+      if (this.addInsuranceData.tableData.length > 0 && this.accumulationFundDisabled === false) {
+        this.addInsuranceData.tableData.forEach((v, i) => {
+          if (v.defaultCardinalNumber === '') {
+            flag = false
+          }
+        })
+        if (!flag) {
+          this.$message.error('公积金默认基数为必填项，请检查')
+          return
+        }
+      }
+
       this.commitRows.insuredCityId = this.addInsuranceData.insuredCityId
       this.commitRows.insuredCityName = this.addInsuranceData.insuredCityName
       this.commitRows.schemeName = this.addInsuranceData.schemeName
@@ -657,21 +725,22 @@ export default {
         })
       }
       this.commitRows.insuredSchemeDetailedList = insuredSchemeDetailedList
-
-      api('hr/SalaryWelfareManagement/addInsurancescheme', this.commitRows).then(res => {
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '添加成功',
-            type: 'success'
-          })
-          this.commitRows = []
-          this.goBack(this.$route)
-        } else {
-          this.$message.error(res.data.result)
-          this.commitRows = []
-        }
-        this.isDisabled = false
-      })
+      if (flag) {
+        api('hr/SalaryWelfareManagement/addInsurancescheme', this.commitRows).then(res => {
+          if (res.data.code === '0000') {
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            })
+            this.commitRows = []
+            this.goBack(this.$route)
+          } else {
+            this.$message.error(res.data.result)
+            this.commitRows = []
+          }
+          this.isDisabled = false
+        })
+      }
     },
     isActive(route) {
       return route.path === this.$route.path

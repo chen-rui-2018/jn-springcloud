@@ -32,12 +32,13 @@
   </div>
 </template>
 <script>
-import { XInput, XTextarea, Group } from 'vux'
+import { XInput, XTextarea, Group, Confirm } from 'vux'
 export default {
   components: {
     XInput,
     XTextarea,
-    Group
+    Group,
+    Confirm
   },
   data () {
     return {
@@ -59,23 +60,25 @@ export default {
   mounted () {
     this.messageform.id = this.$route.query.id
   },
-  sumbmit () {
-    this.api.get({
-      url: 'spMessage',
-      data: this.messageform,
-      callback: res => {
-        if (res.code === '0000') {
-          this.isVisible = true
+  methods: {
+    sumbmit () {
+      this.api.get({
+        url: 'spMessage',
+        data: this.messageform,
+        callback: res => {
+          if (res.code === '0000') {
+            this.isVisible = true
+          }
         }
-      }
-    })
-  },
-  onCancel () {
-    this.isVisible = false
-    this.messageform.companyName = ''
-    this.messageform.concatName = ''
-    this.messageform.concatPhone = ''
-    this.messageform.message = ''
+      })
+    },
+    onCancel () {
+      this.isVisible = false
+      this.messageform.companyName = ''
+      this.messageform.concatName = ''
+      this.messageform.concatPhone = ''
+      this.messageform.message = ''
+    }
   }
 }
 </script>

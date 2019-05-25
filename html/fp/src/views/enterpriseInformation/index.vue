@@ -1,75 +1,73 @@
 <template>
-    <div class="enterpriseInformation w">
-        <div class="actiContent">
-            <div class="actiNav">
-                <span>首页/</span>
-                <span class="mainColor">企业资讯</span>
+  <div class="enterpriseInformation w">
+    <div class="actiContent">
+      <div class="actiNav">
+        <span>首页/</span>
+        <span class="mainColor">企业资讯</span>
+      </div>
+      <div class="changeIcon clearfix">
+        <div class="fr">
+          <i class="iconfont icon-menu1 pointer" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
+          <i class="iconfont icon-menu pointer" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+        </div>
+      </div>
+      <div class="actiTab">
+        <ul class="allActiUl clearfix" v-if="flag">
+          <li v-for="(item,index) in recruitmentTable" :key='index'>
+            <div class="postImgItem pointer" @click="handleRout(item.id)">
+              <img :src="item.posterUrl" class="postImg" alt="企业图片">
             </div>
-            <div class="changeIcon clearfix">
-                <div class="fr">
-                    <i class="iconfont icon-menu1 pointer" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
-                    <i class="iconfont icon-menu pointer" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+            <div class="actiInfo">
+              <p class="actiNameItem">
+                {{item.propagandaTitle}}
+              </p>
+              <p class="detail1">
+                {{item.propagandaDetails}}
+              </p>
+            </div>
+            <div class="actiNum clearfix">
+              <div class="avatar">
+                <img src="@/../static/img/图层 9.png" alt="">
+                <i class="avaTime">{{item.createdTime}}</i>
+              </div>
+              <span class="mainColor">
+                <i class="el-icon-view"></i>&nbsp;</span>
+            </div>
+          </li>
+        </ul>
+        <ul class="verticalUl" v-else>
+          <li class="clearfix" v-for="(item,index) in recruitmentTable" :key='index'>
+            <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
+              <img :src="item.posterUrl" alt="企业图片">
+            </div>
+            <div class="verticalMiddle fl">
+              <h3 class="verticalTit">{{item.propagandaTitle}}</h3>
+              <div class="xihuan mainColor">
+                <i class="el-icon-view"></i>&nbsp;111
+              </div>
+              <p class="detail1">
+                {{item.propagandaDetails}}
+              </p>
+              <div class="actiNum clearfix">
+                <div class="avatar">
+                  <img src="@/../static/img/图层 9.png" alt="">
+                  <span>{{item.createdTime}}</span>
                 </div>
+                <!-- <i>{{item.applyNum}}/{{item.actiNumber}}</i> -->
+              </div>
             </div>
-            <div class="actiTab">
-                <ul class="allActiUl clearfix" v-if="flag">
-                    <li v-for="(item,index) in recruitmentTable" :key='index'>
-                        <div class="postImgItem pointer">
-                            <img :src="item.posterUrl" class="postImg" alt="企业图片" @click="handleRout(item.id)">
-                        </div>
-                        <div class="actiInfo">
-                            <p class="actiNameItem">
-                                {{item.propagandaTitle}}
-                            </p>
-                            <p>
-                                <span>
-                                    {{item.propagandaDetails}}
-                                </span>
-                            </p>
-                        </div>
-                        <div class="actiNum clearfix">
-                            <div class="avatar">
-                                <img src="@/../static/img/图层 9.png" alt="">
-                                <i class="avaTime">{{item.createdTime}}</i>
-                            </div>
-                            <span class="mainColor">
-                                <i class="el-icon-view"></i>&nbsp;{{item.actiLike}}</span>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="verticalUl" v-else>
-                    <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
-                        <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
-                            <img :src="item.actiPosterUrl" alt="企业图片">
-                        </div>
-                        <div class="verticalMiddle fl">
-                            <h3 class="verticalTit">龙虎网“黑科技”亮相融交南京市第六届金梧桐奖颁奖典礼</h3>
-                            <div class="xihuan mainColor">
-                                <i class="el-icon-view"></i>&nbsp;111</span>
-                            </div>
-                            <p>
-                                龙虎网讯（记者 陶禹歌）“刷”一下脸就能打印参观证，手机上也能看“大片范”龙虎网讯（记者 陶禹歌）“刷”一下 脸就能打印参观证，手机上也能看“大片范”的现场直播在今龙虎网讯（记者 陶禹歌）“刷”一下脸就能打印参观”…
-                            </p>
-                            <div class="actiNum clearfix">
-                                <div class="avatar">
-                                    <img src="@/../static/img/图层 9.png" alt="">
-                                    <span>2019-7-2 10:23</span>
-                                </div>
-                                <!-- <i>{{item.applyNum}}/{{item.actiNumber}}</i> -->
-                            </div>
-                        </div>
-                        <div class="verticalRight fr">
-                            <el-button type="success" style="width:112px;border:1px solid #00a042;background:#ebfdf1;color:#00a042">查看详情</el-button>
-                        </div>
-                    </li>
-                </ul>
+            <div class="verticalRight fr">
+              <el-button type="success" style="width:112px;border:1px solid #00a042;background:#ebfdf1;color:#00a042" @click="handleRout(item.id)">查看详情</el-button>
             </div>
-        </div>
-        <div class="pagination-container">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[12, 24, 36, 48]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
-        </div>
+          </li>
+        </ul>
+      </div>
     </div>
+    <div class="pagination-container">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[12, 24, 36, 48]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      </el-pagination>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -115,8 +113,12 @@ export default {
       this.getBusinessPromotionList();
     },
     handleRout(id) {
-      this.$router.push({ path: "enterpriseInfoDetails", query: { propagandaId : id } });
+      this.$router.push({
+        path: "enterpriseInfoDetails",
+        query: { propagandaId: id }
+      });
     },
+    //(门户各首页企业宣传列表查询)  缺阅读量跟图标
     getBusinessPromotionList() {
       let _this = this;
       this.api.get({
@@ -137,29 +139,7 @@ export default {
           }
         }
       });
-    },
-    // initList() {
-    //   let _this = this;
-    //   this.api.post({
-    //     url: "activityListSlim",
-    //     data: {
-    //       endTime: this.endTime,
-    //       keyWord: this.keyWord,
-    //       orderBy: this.orderBy,
-    //       page: this.page,
-    //       rows: this.row,
-    //       startTime: this.startTime,
-    //       typeId: ""
-    //     },
-    //     dataFlag: false,
-    //     callback: function(res) {
-    //       if (res.code == "0000") {
-    //         _this.actiListSlim = res.data.rows;
-    //         _this.total = res.data.total;
-    //       }
-    //     }
-    //   });
-    // }
+    }
   }
 };
 </script>
@@ -175,8 +155,8 @@ export default {
   .changeIcon {
     padding-bottom: 20px;
     border-bottom: 1px solid #eee;
-    .iconfont.active0{
-        color:#00a041;
+    .iconfont.active0 {
+      color: #00a041;
     }
   }
   .actiTab {
@@ -299,7 +279,7 @@ export default {
         }
 
         .verticalMiddle {
-           width: 55%;
+          width: 55%;
           .verticalTit {
             color: #333;
           }
@@ -319,7 +299,7 @@ export default {
           }
 
           .actiNum {
-              margin-top:20px;
+            margin-top: 20px;
             > i {
               color: #999;
               margin-left: 10px;
@@ -363,6 +343,15 @@ export default {
       > li:first-child {
         padding-top: 0;
       }
+    }
+    .detail1 {
+      height: 33px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      color: #999;
+      font-size: 13px;
     }
   }
 }

@@ -9,7 +9,7 @@
             <a href="/">活动中心</a>
           </el-breadcrumb-item>
         </el-breadcrumb> -->
-        <span>企业服务/</span>
+        <span class="pointer" @click="$router.push({path:'enterpriseservice'})">企业服务/</span>
         <span class="mainColor">活动中心</span>
       </div>
       <div class="actiFilter clearfix">
@@ -58,7 +58,7 @@
       <div class="actiTab">
         <ul class="allActiUl clearfix" v-if="flag">
           <li v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="postImgItem">
+            <div class="postImgItem pointer">
               <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" @click="handleRout(item.id)">
             </div>
             <div class="actiInfo">
@@ -88,7 +88,7 @@
         </ul>
         <ul class="verticalUl" v-else>
           <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="verticalLeft fl" @click="handleRout(item.id)">
+            <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
               <img :src="item.actiPosterUrl" alt="活动海报图片">
             </div>
             <div class="verticalMiddle fl">

@@ -81,7 +81,7 @@ export default {
         api('hr/SalaryWelfareManagement/deleteInsurancescheme', row).then(res => {
           if (res.data.code === '0000') {
             this.$message({
-              message: '删除成功',
+              message: res.data.data,
               type: 'success'
             })
             if (this.total % this.listQuery.rows === 1) {

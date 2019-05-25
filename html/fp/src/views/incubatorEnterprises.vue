@@ -36,20 +36,20 @@
             <div class="incubatorCon">
                 <ul class="conul clearfix">
                     <li class="conLi mainBorder fl" v-for="(i,k) in incubatorList" :key="k">
-                        <h3 class="liTit ct">{{i.incubatorId}}</h3>
+                        <h3 class="liTit ct">{{i.incubatorName}}</h3>
                         <div class="tit1">
                             <h4>空间特色</h4>
-                            <p>{{i.spatialCharacter}}</p>
+                            <p v-html="i.spatialCharacter"></p>
                         </div>
                         <div class="tit1">
                             <h4>入驻标准</h4>
-                            <p>{{i.entryCriteria}}</p>
+                            <p v-html="i.entryCriteria"></p>
                         </div>
-                        <!-- <div class="tit1">
-                            <h4>数据特色</h4>
-                            <p>2、5000平米的办公空间</p>
-                        </div> -->
                         <div class="tit1">
+                            <h4>数据特色</h4>
+                            <p v-html="i.advantageIntroduct"></p>
+                        </div>
+                        <div class="tit1 tit2">
                             <h4>申请入驻</h4>
                             <p>电话：{{i.phone}}</p>
                         </div>
@@ -198,6 +198,8 @@ export default {
     }
     .tit1 {
       padding: 0 10px;
+    }
+    .tit2{
       margin-bottom: 10px;
     }
     h4 {
@@ -206,7 +208,7 @@ export default {
       margin-bottom: 10px;
     }
     p {
-      font-size: 13px;
+      font-size: 12px;
       color: #666;
       line-height: 20px;
     }

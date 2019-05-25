@@ -56,9 +56,10 @@ export default new Router({
     },
     {
       path: '/guest/pd/consult',
-      name: 'consult',
+      name: 'declarationconsult',
       meta: {title: '我要咨询'},
       component: () => import('@/views/declarationCenter/consult')
+
     },
     {
       path: '/serverProDetail',
@@ -82,13 +83,7 @@ export default new Router({
       path: '/guest/pd/talentNotice/talentsServiceDetail',
       name: 'talentsServiceDetail',
       meta: {title: '服务详情'},
-      component: () => import('@/views/talentsService/talentsServiceDetail')},
-{
-      path: '/demandRaise',
-      name: 'demandRaise',
-      component: () => import('@/views/demandRaise'),
-      meta: {title: '提需求'}
-
+      component: () => import('@/views/talentsService/talentsServiceDetail')
     },
     {
       path: '/workPlan/workPlan',

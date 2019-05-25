@@ -77,8 +77,8 @@ public class MeterController extends BaseController {
     }
 
     @ControllerLog(doAction = "作废计价规则")
-    @ApiOperation(value = "作废计价规则",notes = "作废计价规则", httpMethod = "GET")
-    @GetMapping(value = "/deletePriceRule")
+    @ApiOperation(value = "作废计价规则",notes = "作废计价规则", httpMethod = "POST")
+    @PostMapping(value = "/deletePriceRule")
     @RequiresPermissions("/meter/deletePriceRule")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "计价规则id",type = "String" ,example = "1",required = true)
@@ -137,8 +137,8 @@ public class MeterController extends BaseController {
     }
 
     @ControllerLog(doAction = "余额不足告警")
-    @ApiOperation(value = "余额不足告警",notes = "余额不足告警", httpMethod = "GET")
-    @GetMapping(value = "/warning")
+    @ApiOperation(value = "余额不足告警",notes = "余额不足告警", httpMethod = "POST")
+    @PostMapping(value = "/warning")
     @RequiresPermissions("/meter/warning")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "companyId" ,value = "企业Id",type = "String" ,example = "1",required = true)
@@ -151,8 +151,8 @@ public class MeterController extends BaseController {
     //定时计价部分接口
 
     @ControllerLog(doAction = "电费账单催缴")
-    @ApiOperation(value = "电费账单催缴",notes = "电费账单催缴", httpMethod = "GET")
-    @GetMapping(value = "/setUrgeCall")
+    @ApiOperation(value = "电费账单催缴",notes = "电费账单催缴", httpMethod = "POST")
+    @PostMapping(value = "/setUrgeCall")
     @RequiresPermissions("/meter/setUrgeCall")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id" ,value = "账单id",type = "String" ,example = "1",required = true)
@@ -163,8 +163,8 @@ public class MeterController extends BaseController {
     }
 
     @ControllerLog(doAction = "支付成功后的回调接口")
-    @ApiOperation(value = "支付成功后的回调接口",notes = "支付成功后的回调接口", httpMethod = "GET")
-    @GetMapping(value = "/updateBillInfo")
+    @ApiOperation(value = "支付成功后的回调接口",notes = "支付成功后的回调接口", httpMethod = "POST")
+    @PostMapping(value = "/updateBillInfo")
     @RequiresPermissions("/meter/updateBillInfo")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id" ,value = "账单id",type = "String" ,example = "1",required = true)
@@ -175,8 +175,8 @@ public class MeterController extends BaseController {
     }
 
     @ControllerLog(doAction = "手动调用定时计价接口，进行指定企业的电费和电量计算")
-    @ApiOperation(value = "手动调用定时计价接口，进行指定企业的电费和电量计算",notes = "手动调用定时计价接口，进行指定企业的电费和电量计算", httpMethod = "GET")
-    @GetMapping(value = "/calcCostEverdayByHandler")
+    @ApiOperation(value = "手动调用定时计价接口，进行指定企业的电费和电量计算",notes = "手动调用定时计价接口，进行指定企业的电费和电量计算", httpMethod = "POST")
+    @PostMapping(value = "/calcCostEverdayByHandler")
     @RequiresPermissions("/meter/calcCostEverdayByHandler")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "companyId" ,value = "企业id",type = "String" ,example = "1",required = true),
@@ -199,8 +199,8 @@ public class MeterController extends BaseController {
     }
 
     @ControllerLog(doAction = "电表信息作废")
-    @ApiOperation(value = "电表信息作废",notes = "电表信息作废", httpMethod = "GET")
-    @GetMapping(value = "/deleteMeterInfo")
+    @ApiOperation(value = "电表信息作废",notes = "电表信息作废", httpMethod = "POST")
+    @PostMapping(value = "/deleteMeterInfo")
     @RequiresPermissions("/meter/deleteMeterInfo")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id" ,value = "记录id",type = "String" ,example = "1",required = true)

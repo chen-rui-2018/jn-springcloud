@@ -11,7 +11,7 @@ import com.jn.system.api.SystemClient;
 import com.jn.system.model.User;
 import com.jn.user.enums.RecordStatusEnum;
 import com.jn.user.model.RegisterInfoParam;
-import com.jn.miniprogram.register.service.MiniProgramRegisterService;
+import com.jn.miniprogram.register.service.MiniProgramRegistersService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.enums.MiniProgramRegisterExceptionEnum;
 import com.jn.user.model.WeChatRequestParam;
@@ -34,11 +34,11 @@ import java.util.UUID;
  * @modified By:
  */
 @Service
-public class MiniProgramRegisterServiceImpl implements MiniProgramRegisterService {
+public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersService {
     /**
      * 日志组件
      */
-    private static final Logger logger= LoggerFactory.getLogger(MiniProgramRegisterServiceImpl.class);
+    private static final Logger logger= LoggerFactory.getLogger(MiniProgramRegistersServiceImpl.class);
 
     @Autowired
     private UserJoinService userJoinService;

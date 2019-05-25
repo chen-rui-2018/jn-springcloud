@@ -9,7 +9,7 @@ import com.jn.user.model.WeChatRequestParam;
  * @Version v1.0
  * @modified By:
  */
-public interface MiniProgramRegisterService {
+public interface MiniProgramRegistersService {
     /**
      * 判断OpenId是否已绑定账号
      * @param weChatRequestParam 微信用户信息

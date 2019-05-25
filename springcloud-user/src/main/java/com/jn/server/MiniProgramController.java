@@ -2,17 +2,13 @@ package com.jn.server;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.common.util.Assert;
-import com.jn.miniprogram.register.service.MiniProgramRegisterService;
+import com.jn.miniprogram.register.service.MiniProgramRegistersService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.api.MiniProgramRegisterClient;
-import com.jn.user.enums.MiniProgramRegisterExceptionEnum;
 import com.jn.user.model.RegisterInfoParam;
 import com.jn.user.model.WeChatRequestParam;
-import com.jn.user.userjoin.service.UserJoinService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +33,7 @@ public class MiniProgramController extends BaseController implements MiniProgram
     private static final Logger logger= LoggerFactory.getLogger(MiniProgramController.class);
 
     @Autowired
-    private MiniProgramRegisterService miniprogramRegisterService;
+    private MiniProgramRegistersService miniprogramRegistersService;
 
 
     @ControllerLog(doAction = "判断OpenId是否已绑定")
@@ -45,7 +41,7 @@ public class MiniProgramController extends BaseController implements MiniProgram
     @RequestMapping(value = "/isBindingAccountByOpenId",method = RequestMethod.POST)
     @Override
     public Result isBindingAccountByOpenId(@RequestBody @Validated WeChatRequestParam weChatRequestParam) {
-        return new Result(miniprogramRegisterService.isBindingAccountByOpenId(weChatRequestParam));
+        return new Result(miniprogramRegistersService.isBindingAccountByOpenId(weChatRequestParam));
     }
 
 
@@ -55,6 +51,6 @@ public class MiniProgramController extends BaseController implements MiniProgram
     @RequestMapping(value = "/registerAndBinding")
     @Override
     public Result registerAndBinding(@RequestBody @Validated RegisterInfoParam registerInfoParam) {
-        return new Result(miniprogramRegisterService.registerAndBinding(registerInfoParam));
+        return new Result(miniprogramRegistersService.registerAndBinding(registerInfoParam));
     }
 }

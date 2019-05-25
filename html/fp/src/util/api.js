@@ -74,8 +74,8 @@ export default {
         getServiceAdvisorInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceAdvisorInfo",// 服务顾问详情
         advisorProductList:"springcloud-enterprise/guest/servicemarket/product/web/advisorProductList",// 服务顾问-服务产品列表
         getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",// 科技金融-投资人列表
-        getInvestorMainArea:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainArea",// 科技金融-查询投资人主投领域
-        getInvestorInfoDetails:"springcloud-enterprise/technologyFinancial/investorController/getInvestorInfoDetails",// 投资人详情/投资人查看
+        getInvestorMainArea:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorMainArea",// 科技金融-查询投资人主投领域
+        getInvestorInfoDetails:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoDetails",// 投资人详情/投资人查看
 
         getOrgProductList:"springcloud-enterprise/servicemarket/product/web/findOrgProductList",//机构-服务产品列表
         getShelfProductList:"springcloud-enterprise/servicemarket/product/web/findShelfProductList",//常规-通过id获取产品名称列表
@@ -162,7 +162,7 @@ export default {
         acceptOrgInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/acceptOrgInvitation",//接受机构邀请
         refuseInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/refuseInvitation",//拒绝机构邀请
         // 角色认证
-        getInvestorMainRound:"springcloud-enterprise/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
+        getInvestorMainRound:"springcloud-enterprise//guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
         getAffiliationUnit:"springcloud-enterprise/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
         saveOrUpdateOrgDetail:"springcloud-enterprise/guest/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证
@@ -205,16 +205,18 @@ export default {
         getPolicyDiagramDetails:"springcloud-park/guest/policy/policyCenterController/getPolicyDiagramDetails",//图解政策详情
         selectBusinessAreaNum:"springcloud-enterprise/guest/serviceMarket/org/selectBusinessAreaStatisticalNum",//根据业务领域查询服务超市统计数据
         getCompanyList:"springcloud-enterprise/guest/company/getCompanyList",//查询企业列表
-        getAllList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
+        getCompanyNewList:"springcloud-enterprise/guest/company/getCompanyNewList",//查询企业列表-新版
         getBusinessAdContent:"springcloud-park/guest/portal/businessAd/getBusinessAdContent",//获取招商信息
 
 
         getRecruitList:"springcloud-enterprise/guest/RecruitController/getWebRecruitList",//招聘列表（门户首页）
         getPromotionList:"springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList",//(门户各首页企业宣传列表查询)
+        getPromotionDetails:"springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionDetails",// (门户各首页企业宣传详情)
         getMessageList:"springcloud-park/message/list/findAll",//消息列表
         getMessageOneTort:"springcloud-park/message/list/getMessageOneTort",//获取二级消息类别
         getParkList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
         getIncubatorList:"springcloud-park/guest/hatch/incubator/list",//众创空间-首页信息查询
+        SpAdvertising:"springcloud-park/guest/portal/sp/power/SpAdvertising",//行政审批轮播广告
 
         SpAdvertising:"springcloud-park/guest/portal/sp/power/SpAdvertising",//行政审批轮播广告
 
@@ -223,7 +225,10 @@ export default {
         getAchievementList:"springcloud-park/guest/IndexController/getAchievementList",//门户首页-成果展览
         achievementDetails:"springcloud-park/guest/IndexController/getAchievementDetails",//成果详情
         getParkDetails:"springcloud-park/guest/portal/park/get",// 根据ID获取对应园区详情
-
+        getCompanyDetail:"springcloud-enterprise/guest/company/getCompanyDetailByAccountOrCompanyId",//根据用户账号查询企业信息
+        getComCommentInfo:"springcloud-enterprise/guest/company/getCommentInfo",//获取评论/留言信息
+        addCareOperate:"springcloud-park/park/manage/care/addCareOperate",// 用户添加关注操作
+        cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
 
     },
     setToken: function (obj) {   //设置token在请求头上面

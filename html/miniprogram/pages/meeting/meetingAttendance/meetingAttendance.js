@@ -1,4 +1,6 @@
 import {CreateHeader} from "./../../../utils/require"
+import request from "./../../../utils/http"
+
 Page({
   data: {
     nvabarData: {
@@ -50,6 +52,7 @@ Page({
       fail: ()=>{},
       complete: ()=>{}
     });
+   
   },
   sinIn(e){
     this.setData({
@@ -115,9 +118,11 @@ Page({
       complete: ()=>{}
     });
   },
+
   // ?userIds='+this.data.userIds,
+
   getMeetingPerson(){
-    wx.request({
+   /*  wx.request({
       url: 'http://192.168.10.31:1101/springcloud-app-system/system/sysUser/selectUserByIds?userIds='+this.data.userIds,
       data:{},
       header: {'content-type':'application/json','token':this.data.token},
@@ -138,6 +143,20 @@ Page({
       },
       fail: ()=>{},
       complete: ()=>{}
-    });
+    }); */
+    request.send({
+      url: '/springcloud-app-system/system/sysUser/selectUserByIds?userIds='+this.data.userIds,
+      data:{},
+      method: 'GET',
+    }).then(res=>{
+      res.data.data.forEach(ele=> {
+        this.setData({
+          meetinguser:this.data.meetinguser.concat(ele.name)
+        })
+      });
+      this.setData({
+        meetinguser:this.data.meetinguser.toString()
+      })
+    })
   }
 })

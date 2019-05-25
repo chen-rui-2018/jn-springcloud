@@ -51,7 +51,7 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "判断当前登录用户认证顾问的状态",notes = "返回顾问的认证状态以及状态说明：0：未认证  1：认证中  2：认证通过  3：认证不通过")
     @RequestMapping(value = "/getUserApprovalStatus",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/advisorEditController/getUserApprovalStatus")
-    public Result<Map<Integer,String>> getUserApprovalStatus(){
+    public Result<AdvisorApprovalStatus> getUserApprovalStatus(){
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){

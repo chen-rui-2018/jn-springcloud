@@ -21,6 +21,7 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
@@ -65,6 +66,8 @@ public class MeterRulesServiceImpl implements MeterRulesService {
     private CompanyClient companyClient;
     @Autowired(required = false)
     private TbElectricWarningRulesMapper warningRulesMapper;
+    @Autowired(required = false)
+    private TbElectricPriceruleCompanyInDayMapper priceruleCompanyInDayMapper;
     Logger logger = LoggerFactory.getLogger(MeterServiceImpl.class);
 
     @Override
@@ -120,6 +123,8 @@ public class MeterRulesServiceImpl implements MeterRulesService {
     public Integer updatePriceRule(User user, PriceRuleVO priceRuleVO) {
         Integer result = 0;
         String ruleIdBefore = priceRuleVO.getId();
+
+        //检查计价规则
         List<PriceRuleContentModel> contents = priceRuleVO.getPriceRuleContents();
 
         //默认计价规则是错的
@@ -132,33 +137,96 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         if (wrong) {
             throw new JnSpringCloudException(MeterExceptionEnums.PRICE_RULE_WRONG);
         }
-
-        //获取之前的所有关系[企业关系]
-        TbElectricPriceruleCompanyCriteria priceruleCompanyCriteria = new TbElectricPriceruleCompanyCriteria();
-        priceruleCompanyCriteria.or().andRuleIdEqualTo(ruleIdBefore).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
-        List<TbElectricPriceruleCompany> companyList = priceruleCompanyMapper.selectByExample(priceruleCompanyCriteria);
-        //作废
-        TbElectricPriceruleCompany priceruleCompany = new TbElectricPriceruleCompany();
-        priceruleCompany.setRecordStatus(new Byte(MeterConstants.INVALID));
-        priceruleCompany.setModifiedTime(new Date());
-        priceruleCompany.setModifierAccount(user.getAccount());
-        priceruleCompanyMapper.updateByExampleSelective(priceruleCompany, priceruleCompanyCriteria);
-
-        //获取之前的所有关系[企业日关系]
-        TbElectricPriceruleCompanyInDayCriteria companyInDayCriteria = new TbElectricPriceruleCompanyInDayCriteria();
-        companyInDayCriteria.or().andRuleIdEqualTo(ruleIdBefore).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
-        List<TbElectricPriceruleCompanyInDay> companyInDaysList = companyInDayMapper.selectByExample(companyInDayCriteria);
-        //作废
-        TbElectricPriceruleCompanyInDay companyInDay = new TbElectricPriceruleCompanyInDay();
-        companyInDay.setRecordStatus(new Byte(MeterConstants.INVALID));
-        companyInDay.setModifiedTime(new Date());
-        companyInDay.setModifierAccount(user.getAccount());
-        companyInDayMapper.updateByExampleSelective(companyInDay, companyInDayCriteria);
-
-        //作废规则
-        deletePrice(user, ruleIdBefore);
-        //生成新的
         String id = UUID.randomUUID().toString().replaceAll("-", "");
+        if(StringUtils.isBlank(ruleIdBefore)){
+            //新增
+            insertPriceRule(id,priceRuleVO, user,contents);
+        }else{
+            //修改
+            //获取之前的所有关系[企业关系]
+            TbElectricPriceruleCompanyCriteria priceruleCompanyCriteria = new TbElectricPriceruleCompanyCriteria();
+            priceruleCompanyCriteria.or().andRuleIdEqualTo(ruleIdBefore).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            List<TbElectricPriceruleCompany> companyList = priceruleCompanyMapper.selectByExample(priceruleCompanyCriteria);
+            //作废
+            TbElectricPriceruleCompany priceruleCompany = new TbElectricPriceruleCompany();
+            priceruleCompany.setRecordStatus(new Byte(MeterConstants.INVALID));
+            priceruleCompany.setModifiedTime(new Date());
+            priceruleCompany.setModifierAccount(user.getAccount());
+            priceruleCompanyMapper.updateByExampleSelective(priceruleCompany, priceruleCompanyCriteria);
+
+            //获取之前的所有关系[企业日关系]
+            TbElectricPriceruleCompanyInDayCriteria companyInDayCriteria = new TbElectricPriceruleCompanyInDayCriteria();
+            companyInDayCriteria.or().andRuleIdEqualTo(ruleIdBefore).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            List<TbElectricPriceruleCompanyInDay> companyInDaysList = companyInDayMapper.selectByExample(companyInDayCriteria);
+            //作废
+            TbElectricPriceruleCompanyInDay companyInDay = new TbElectricPriceruleCompanyInDay();
+            companyInDay.setRecordStatus(new Byte(MeterConstants.INVALID));
+            companyInDay.setModifiedTime(new Date());
+            companyInDay.setModifierAccount(user.getAccount());
+            companyInDayMapper.updateByExampleSelective(companyInDay, companyInDayCriteria);
+
+            //作废规则
+            deletePrice(user, ruleIdBefore);
+            //生成新的
+            insertPriceRule(id,priceRuleVO, user,contents);
+
+            //并且重新建立关联
+            if (companyList != null && companyList.size() > 0) {
+                List<TbElectricPriceruleCompany> saveData = new ArrayList<>();
+                for (TbElectricPriceruleCompany companyBean : companyList) {
+                    companyBean.setRuleId(id);
+                    companyBean.setCreatedTime(new Date());
+                    companyBean.setCreatorAccount(user.getAccount());
+                    //companyBean.setModifiedTime(null);
+                    //companyBean.setModifierAccount(null);
+                    companyBean.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                    saveData.add(companyBean);
+                    if (saveData != null && saveData.size() == 50) {
+                        //保存数据
+                        meterDao.saveCompanyLinks(saveData);
+                        saveData = new ArrayList<>();
+
+                    }
+                }
+                if (saveData != null && saveData.size() > 0) {
+                    //保存数据
+                    meterDao.saveCompanyLinks(saveData);
+                }
+            }
+
+            if (companyInDaysList != null && companyInDaysList.size() > 0) {
+                List<TbElectricPriceruleCompanyInDay> saveData = new ArrayList<>();
+                TbElectricPriceruleCompanyInDay save = null;
+                for (TbElectricPriceruleCompanyInDay cidBean : companyInDaysList) {
+
+                    save = new TbElectricPriceruleCompanyInDay();
+                    BeanUtils.copyProperties(cidBean,save);
+                    save.setRuleId(id);
+                    save.setRuleName(priceRuleVO.getRuleName());
+                    save.setCompanyName(cidBean.getCompanyName());
+                    save.setCreatedTime(new Date());
+                    save.setCreatorAccount(user.getAccount());
+                    save.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                    saveData.add(save);
+                    if (saveData != null && saveData.size() == 50) {
+                        //保存数据
+                        meterDao.saveCompanyLinksInDay(saveData);
+                        saveData = new ArrayList<>();
+
+                    }
+                }
+                if (saveData != null && saveData.size() > 0) {
+                    //保存数据
+                    meterDao.saveCompanyLinksInDay(saveData);
+                }
+            }
+        }
+
+        return result + 1;
+    }
+
+    private void insertPriceRule(String id,PriceRuleVO priceRuleVO,User user,List<PriceRuleContentModel> contents){
+
         TbElectricPriceRules rules = new TbElectricPriceRules();
         rules.setId(id);
         rules.setRecordStatus(new Byte(MeterConstants.VALID));
@@ -181,62 +249,12 @@ public class MeterRulesServiceImpl implements MeterRulesService {
             rulesContent.setStart(content.getStart());
             rulesContent.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             rulesContent.setRuleId(id);
+            rulesContent.setPrice(content.getPrice());
             rulesContent.setRuleName(priceRuleVO.getRuleName());
             rulesContents.add(rulesContent);
         }
         //保存计价规则内容
         meterDao.saveRulesContent(rulesContents);
-
-        //并且重新建立关联
-        if (companyList != null && companyList.size() > 0) {
-            List<TbElectricPriceruleCompany> saveData = new ArrayList<>();
-            for (TbElectricPriceruleCompany companyBean : companyList) {
-                companyBean.setRuleId(id);
-                companyBean.setCreatedTime(new Date());
-                companyBean.setCreatorAccount(user.getAccount());
-                //companyBean.setModifiedTime(null);
-                //companyBean.setModifierAccount(null);
-                companyBean.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-                saveData.add(companyBean);
-                if (saveData != null && saveData.size() == 50) {
-                    //保存数据
-                    meterDao.saveCompanyLinks(saveData);
-                    saveData = new ArrayList<>();
-
-                }
-            }
-            if (saveData != null && saveData.size() > 0) {
-                //保存数据
-                meterDao.saveCompanyLinks(saveData);
-            }
-        }
-
-        if (companyInDaysList != null && companyInDaysList.size() > 0) {
-            List<TbElectricPriceruleCompanyInDay> saveData = new ArrayList<>();
-            for (TbElectricPriceruleCompanyInDay cidBean : companyInDaysList) {
-                cidBean.setRuleId(id);
-                //todo
-                cidBean.setRuleName("");
-                cidBean.setCompanyName("");
-                cidBean.setCreatedTime(new Date());
-                cidBean.setCreatorAccount(user.getAccount());
-                //cidBean.setModifiedTime(null);
-                //cidBean.setModifierAccount(null);
-                cidBean.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-                saveData.add(cidBean);
-                if (saveData != null && saveData.size() == 50) {
-                    //保存数据
-                    meterDao.saveCompanyLinksInDay(saveData);
-                    saveData = new ArrayList<>();
-
-                }
-            }
-            if (saveData != null && saveData.size() > 0) {
-                //保存数据
-                meterDao.saveCompanyLinksInDay(saveData);
-            }
-        }
-        return result + 1;
     }
 
     /**
@@ -268,6 +286,49 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         return wrong;
     }
 
+    /**
+     * 作废企业和计价规则之间的关系
+     * @param user
+     * @param id
+     * @return
+     */
+    public Integer deleteLinks(User user ,String id){
+        Integer result = 0;
+
+        TbElectricPriceruleCompanyCriteria  priceruleCompanyCriteria = new TbElectricPriceruleCompanyCriteria();
+        priceruleCompanyCriteria.or().andIdEqualTo(id);
+        TbElectricPriceruleCompany priceruleCompany = priceruleCompanyMapper.selectByPrimaryKey(id);
+        if(priceruleCompany ==null){
+            throw new JnSpringCloudException(MeterExceptionEnums.LINK_ID_ERROR);
+        }
+        TbElectricPriceruleCompany pCompany = new TbElectricPriceruleCompany();
+        pCompany.setRecordStatus(new Byte(MeterConstants.INVALID));
+        pCompany.setModifiedTime(new Date());
+        pCompany.setModifierAccount(user.getAccount());
+        priceruleCompanyMapper.updateByExampleSelective(pCompany,priceruleCompanyCriteria);
+
+        //如果今日的关系日志已经写入，也得作废
+        TbElectricPriceruleCompanyInDay priceruleCompanyInDay = new TbElectricPriceruleCompanyInDay();
+        priceruleCompanyInDay.setRecordStatus(new Byte(MeterConstants.INVALID));
+        priceruleCompanyInDay.setModifiedTime(new Date());
+        priceruleCompanyInDay.setModifierAccount(user.getAccount());
+        TbElectricPriceruleCompanyInDayCriteria priceruleCompanyInDayCriteria = new TbElectricPriceruleCompanyInDayCriteria();
+        Date nowDate = null;
+        try{
+            nowDate = DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd"),"yyyy-MM-dd");
+        }catch(ParseException e){
+            e.printStackTrace();
+            throw new JnSpringCloudException(MeterExceptionEnums.DAY_FORMATE_WRONG);
+        }
+
+        priceruleCompanyInDayCriteria.or().andDayEqualTo(nowDate).andCompanyIdEqualTo(priceruleCompany.getCompanyId())
+                .andRuleIdEqualTo(priceruleCompany.getRuleId());
+        priceruleCompanyInDayMapper.updateByExampleSelective(priceruleCompanyInDay,priceruleCompanyInDayCriteria);
+        return result+=1;
+    }
+
+
+
     @ServiceLog(doAction = "企业设置计价规则")
     @Override
     public Integer setRule(User user, String ruleId, String companyId) {
@@ -293,10 +354,13 @@ public class MeterRulesServiceImpl implements MeterRulesService {
      * @param companyId
      * @param ruleId
      */
-    public void saveCompanyPriceRule(User user, String companyId, String ruleId) {
+    public void saveCompanyPriceRule(User user, String ruleId, String companyId) {
         //保存一条计价规则和企业之间的关系数据
-        TbElectricPriceRules rules = priceRulesMapper.selectByPrimaryKey(ruleId);
-        if (rules == null) {
+        TbElectricPriceRulesCriteria priceRules = new TbElectricPriceRulesCriteria();
+        priceRules.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andIdEqualTo(ruleId);
+
+        List<TbElectricPriceRules> rules = priceRulesMapper.selectByExample(priceRules);
+        if (rules == null || rules.size()==0) {
             throw new JnSpringCloudException(MeterExceptionEnums.PRICE_RULE_ISNOT_EXIST);
         }
 
@@ -307,7 +371,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         TbElectricPriceruleCompany record = new TbElectricPriceruleCompany();
         record.setCreatedTime(new Date());
         record.setRuleId(ruleId);
-        record.setRuleName(rules.getRuleName());
+        record.setRuleName(rules.get(0).getRuleName());
         record.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         record.setCompanyId(companyId);
         record.setCompanyName(result1.getData().getComName());

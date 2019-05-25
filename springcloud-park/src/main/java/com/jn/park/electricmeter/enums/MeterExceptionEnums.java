@@ -26,7 +26,8 @@ public enum MeterExceptionEnums implements CodeAndMsg {
     CANT_REPEAT_DEAL("4010214","当日的企业计价已经正确处理了，不允许重复处理"),
     COMPANY_NO_METER("4010215","指定的企业在指定的日期上没有关联电表"),
     METER_NO_CODE("4010216","电表的code不能为空"),
-    METER_INFO_EXIST("4010217","电表信息已经存在")
+    METER_INFO_EXIST("4010217","电表信息已经存在"),
+    LINK_ID_ERROR("4010218","关系不存在")
             ;
 
 

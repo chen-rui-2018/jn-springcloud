@@ -2,7 +2,7 @@ package com.jn.park.electricmeter.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.park.electricmeter.model.MeterInfoModel;
+import com.jn.park.electricmeter.model.*;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
@@ -83,10 +83,10 @@ public class MeterController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "计价规则id",type = "String" ,example = "1",required = true)
     })
-    public Result deletePriceRule(String id){
+    public Result deletePriceRule(@RequestBody MeterInfoModel model){
         Result result = new Result();
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Integer data = meterRulesService.deletePriceRule(user,id);
+        Integer data = meterRulesService.deletePriceRule(user,model.getId());
         result.setData(data);
         return result;
     }
@@ -99,13 +99,31 @@ public class MeterController extends BaseController {
             @ApiImplicitParam(name = "ruleId",value = "计价规则id",type = "String" ,example = "1",required = true),
             @ApiImplicitParam(name = "companyId",value = "企业id",type = "String" ,example = "1",required = true)
     })
-    public Result setRule(String ruleId,String companyId){
+    public Result setRule(@RequestBody PriceRuleParam model){
         Result result = new Result();
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Integer data = meterRulesService.setRule(user,ruleId, companyId);
+        Integer data = meterRulesService.setRule(user,model.getRuleId(), model.getCompanyId());
         result.setData(data);
         return result;
     }
+
+    @ControllerLog(doAction = "企业计价规则维护-作废企业设置计价规则")
+    @ApiOperation(value = "作废企业设置计价规则",notes = "作废企业设置计价规则", httpMethod = "POST")
+    @PostMapping(value = "/deleteLinks")
+    @RequiresPermissions("/meter/deleteLinks")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "关系id",type = "String" ,example = "1",required = true)
+    })
+    public Result deleteLinks(@RequestBody PriceRuleParam model ){
+        Result result = new Result();
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Integer data = meterRulesService.deleteLinks(user,model.getId());
+        result.setData(data);
+        return result;
+    }
+
+
+
 
     @ControllerLog(doAction = "企业计价规则维护-企业更新计价规则")
     @ApiOperation(value = "企业更新计价规则",notes = "企业更新计价规则", httpMethod = "POST")
@@ -116,10 +134,10 @@ public class MeterController extends BaseController {
             @ApiImplicitParam(name = "ruleId",value = "计价规则id",type = "String" ,example = "1",required = true),
             @ApiImplicitParam(name = "companyId",value = "企业id",type = "String" ,example = "1",required = true)
     })
-    public Result updateCompanysRule(String id,String ruleId,String companyId){
+    public Result updateCompanysRule(@RequestBody PriceRuleParam model){
         Result result = new Result();
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Integer data = meterRulesService.updateCompanysRule(user,id,ruleId,companyId);
+        Integer data = meterRulesService.updateCompanysRule(user,model.getId(),model.getRuleId(), model.getCompanyId());
         result.setData(data);
         return result;
     }
@@ -132,8 +150,8 @@ public class MeterController extends BaseController {
             @ApiImplicitParam(name = "meterCode" ,value = "设备编码",type = "String" ,example = "1",required = true),
             @ApiImplicitParam(name = "status",value = "开关状态（4，5）",type = "String" ,example = "4",required = true)
     })
-    public Result setSwitchMeter(String meterCode, String status) {
-        return meterRulesService.SwitchMeter(meterCode,status);
+    public Result setSwitchMeter(@RequestBody MeterInfoParam model ) {
+        return meterRulesService.SwitchMeter(model.getMeterCode(),model.getStatus());
     }
 
     @ControllerLog(doAction = "余额不足告警")
@@ -143,8 +161,8 @@ public class MeterController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "companyId" ,value = "企业Id",type = "String" ,example = "1",required = true)
     })
-    public Result warning(String companyId) {
-        return meterRulesService.warningBalanceShort(companyId);
+    public Result warning(@RequestBody MeterCompanyIdParam model ) {
+        return meterRulesService.warningBalanceShort(model.getCompanyId());
     }
 
 
@@ -157,9 +175,9 @@ public class MeterController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id" ,value = "账单id",type = "String" ,example = "1",required = true)
     })
-    public Result setUrgeCall(String id){
+    public Result setUrgeCall(@RequestBody MeterIdParam model){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        return meterCalcCostService.setUrgeCall(user,id);
+        return meterCalcCostService.setUrgeCall(user,model.getId());
     }
 
     @ControllerLog(doAction = "支付成功后的回调接口")
@@ -205,13 +223,13 @@ public class MeterController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id" ,value = "记录id",type = "String" ,example = "1",required = true)
     })
-    public Result deleteMeterInfo(String id){
+    public Result deleteMeterInfo(@RequestBody MeterIdParam model){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        return meterService.deleteMeterInfo( user, id);
+        return meterService.deleteMeterInfo( user, model.getId());
     }
 
     @ControllerLog(doAction = "电表信息更新")
-    @ApiOperation(value = "电表信息作废",notes = "电表信息作废", httpMethod = "POST")
+    @ApiOperation(value = "电表信息更新",notes = "电表信息更新", httpMethod = "POST")
     @PostMapping(value = "/updateMeterInfo")
     @RequiresPermissions("/meter/updateMeterInfo")
     public Result updateMeterInfo(@RequestBody MeterInfoModel model){

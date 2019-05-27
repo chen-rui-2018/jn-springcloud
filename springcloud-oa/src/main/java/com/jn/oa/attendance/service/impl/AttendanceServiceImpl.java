@@ -1,9 +1,14 @@
 package com.jn.oa.attendance.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
+import com.jn.hr.api.HrClient;
+import com.jn.hr.model.*;
 import com.jn.oa.attendance.dao.AttendanceMapper;
 import com.jn.oa.attendance.dao.TbOaAttendanceMapper;
 import com.jn.oa.attendance.enmus.AttendanceExceptionEnums;
@@ -49,6 +54,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     private AttendanceMapper attendanceMapper;
 
+    @Autowired
+    private HrClient hrClient;
+
 
     /**
      * 考勤签到/签退
@@ -70,6 +78,9 @@ public class AttendanceServiceImpl implements AttendanceService {
         AttendanceResultVo attendanceResultVo=new AttendanceResultVo();
         attendanceResultVo.setType(attendanceAdd.getType());
 
+        AttendanceOverTime attendanceOverTime=new AttendanceOverTime();
+        attendanceOverTime.setUserId(user.getId());
+        attendanceOverTime.setType(attendanceAdd.getType());
         //签到
         if(AttendanceTypeEnums.SIGN_IN.getCode().equals(attendanceAdd.getType())){
             if(attendanceVo!=null){
@@ -89,6 +100,9 @@ public class AttendanceServiceImpl implements AttendanceService {
 
             attendanceResultVo.setAttendanceTime(tbOaAttendance.getSignInAttendanceTime());
 
+            attendanceOverTime.setAttendanceDate(tbOaAttendance.getSignInAttendanceTime());
+
+
             tbOaAttendanceMapper.insert(tbOaAttendance);
         }
         //签退
@@ -106,13 +120,22 @@ public class AttendanceServiceImpl implements AttendanceService {
             //签退
             attendanceResultVo.setAttendanceTime(tbOaAttendance.getSignOutAttendanceTime());
 
+            attendanceOverTime.setAttendanceDate(tbOaAttendance.getSignOutAttendanceTime());
+
             TbOaAttendanceCriteria attendanceCriteria=new TbOaAttendanceCriteria();
             TbOaAttendanceCriteria.Criteria criteria=attendanceCriteria.createCriteria();
             criteria.andIdEqualTo(attendanceVo.getId());
             tbOaAttendanceMapper.updateByExampleSelective(tbOaAttendance,attendanceCriteria);
         }
-
-
+        logger.info("进入-根据用户id查询用户考勤接口,参数：{}", JSONObject.toJSONString(attendanceOverTime));
+        Result<AttendanceOverTimeApiVo> result= hrClient.selectByUserIdAndTime(attendanceOverTime);
+        logger.info("执行结束-根据用户id查询用户考勤接口,返回参数：{}", JSONObject.toJSONString(result));
+        //查询迟到早退失败
+        if(result==null||!result.getCode().equals(GlobalConstants.SUCCESS_CODE)||result.getData()==null){
+            logger.warn("[考勤管理] 查询人力资源接口，查询用户迟到早退状态失败！,userId：{}",user.getId());
+            throw  new JnSpringCloudException(AttendanceExceptionEnums.SELECT_ATTENDANCE_STATUS_ERROR);
+        }
+        attendanceResultVo.setMinute(result.getData().getMinute());
         return attendanceResultVo;
     }
 
@@ -159,7 +182,35 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendance.setAttendanceTime(new Date());
         List<AttendanceVo> tbOaAttendanceList= attendanceMapper.selectAttendanceByCondition(attendance);
         if(tbOaAttendanceList!=null && tbOaAttendanceList.size()>0){
-            return tbOaAttendanceList.get(0);
+            AttendanceVo attendanceVo=tbOaAttendanceList.get(0);
+            if(attendanceVo.getSignInAttendanceTime()!=null){
+                AttendanceOverTime attendanceOverTime=new AttendanceOverTime();
+                attendanceOverTime.setType(AttendanceTypeEnums.SIGN_IN.getCode());
+                attendanceOverTime.setAttendanceDate(attendanceVo.getSignInAttendanceTime());
+                attendanceOverTime.setUserId(attendanceVo.getAttendanceUser());
+                Result<AttendanceOverTimeApiVo> result=this.selectByUserIdAndTime(attendanceOverTime);
+                //查询迟到早退失败
+                if(result==null||!result.getCode().equals(GlobalConstants.SUCCESS_CODE)||result.getData()==null){
+                    logger.warn("[考勤管理] 查询人力资源接口，查询用户迟到早退状态失败！,userId：{}",attendanceVo.getAttendanceUser());
+                    throw  new JnSpringCloudException(AttendanceExceptionEnums.SELECT_ATTENDANCE_STATUS_ERROR);
+                }
+                attendanceVo.setSignInAttendanceMinute(result.getData().getMinute());
+            }
+            if(attendanceVo.getSignOutAttendanceTime()!=null){
+                AttendanceOverTime attendanceOverTime=new AttendanceOverTime();
+                attendanceOverTime.setType(AttendanceTypeEnums.SIGN_OUT.getCode());
+                attendanceOverTime.setAttendanceDate(attendanceVo.getSignOutAttendanceTime());
+                attendanceOverTime.setUserId(attendanceVo.getAttendanceUser());
+                Result<AttendanceOverTimeApiVo> result=this.selectByUserIdAndTime(attendanceOverTime);
+                //查询迟到早退失败
+                if(result==null||!result.getCode().equals(GlobalConstants.SUCCESS_CODE)||result.getData()==null){
+                    logger.warn("[考勤管理] 查询人力资源查询考勤接口，查询用户迟到早退状态失败！,userId：{}",attendanceVo.getAttendanceUser());
+                    throw  new JnSpringCloudException(AttendanceExceptionEnums.SELECT_ATTENDANCE_STATUS_ERROR);
+                }
+                attendanceVo.setSignOutAttendanceMinute(result.getData().getMinute());
+            }
+
+            return attendanceVo;
         }
         return null;
     }
@@ -190,5 +241,47 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<AttendanceApiVo> selectApiAttendanceListByCondition(Attendance attendance) {
         logger.info("[考勤管理] 条件查询考勤列表，,userId：{},departmentId：{},startTime：{},endTime：{}", attendance.getUserId(),attendance.getDepartmentId(),attendance.getStartTime(),attendance.getEndTime());
         return attendanceMapper.selectAttendanceListByCondition(attendance);
+    }
+
+    /**
+     * 根据用户id查询用户考勤打卡数据
+     *
+     * @param attendanceManagement
+     * @return
+     */
+    @Override
+    public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(AttendanceManagement attendanceManagement) {
+        logger.info("进入-根据用户id查询用户考勤打卡数据,参数：{}", JSONObject.toJSONString(attendanceManagement));
+        Result result= hrClient.selectAttendanceManagementByUserId(attendanceManagement);
+        logger.info("执行结束-根据用户id查询用户考勤打卡数据,返回参数：{}", JSONObject.toJSONString(result));
+        return result;
+    }
+
+    /**
+     * 根据部门id查询部门考勤打卡数据
+     *
+     * @param attendanceManagement
+     * @return
+     */
+    @Override
+    public Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(AttendanceManagement attendanceManagement) {
+        logger.info("进入-根据部门id查询部门考勤打卡数据,参数：{}", JSONObject.toJSONString(attendanceManagement));
+        Result result= hrClient.selectAttendanceManagementByDepartmentId(attendanceManagement);
+        logger.info("执行结束-根据部门id查询部门考勤打卡数据,返回参数：{}", JSONObject.toJSONString(result));
+        return result;
+    }
+
+    /**
+     * 根据用户id查询用户考勤接口
+     *
+     * @param attendanceOverTime
+     * @return
+     */
+    @Override
+    public Result<AttendanceOverTimeApiVo> selectByUserIdAndTime(AttendanceOverTime attendanceOverTime) {
+        logger.info("进入-根据用户id查询用户考勤接口,参数：{}", JSONObject.toJSONString(attendanceOverTime));
+        Result<AttendanceOverTimeApiVo> result= hrClient.selectByUserIdAndTime(attendanceOverTime);
+        logger.info("执行结束-根据用户id查询用户考勤接口,返回参数：{}", JSONObject.toJSONString(result));
+        return result;
     }
 }

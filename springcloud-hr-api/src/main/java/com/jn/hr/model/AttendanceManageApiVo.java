@@ -3,6 +3,7 @@ package com.jn.hr.model;
 import java.io.Serializable;
 import java.util.List;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 public class AttendanceManageApiVo implements Serializable{

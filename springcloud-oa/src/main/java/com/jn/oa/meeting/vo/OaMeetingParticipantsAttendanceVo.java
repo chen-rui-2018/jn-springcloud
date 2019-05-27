@@ -68,9 +68,19 @@ public class OaMeetingParticipantsAttendanceVo implements Serializable {
     @ApiModelProperty(value = "会议申请标题")
     private String meetingTitle;
 
+    @ApiModelProperty(value = "会议室名称")
+    private String meetingRoomName;
+
     @ApiModelProperty(value = "会议室图片列表")
     private List<TbOaMeetingRoomPhoto> oaMeetingRoomPhotoList;
 
+    public String getMeetingRoomName() {
+        return meetingRoomName;
+    }
+
+    public void setMeetingRoomName(String meetingRoomName) {
+        this.meetingRoomName = meetingRoomName;
+    }
 
     public String getMeetingTitle() {
         return meetingTitle;

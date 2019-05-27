@@ -143,8 +143,8 @@ public class RoomManageController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orderItemId",value = "(子)订单编号",example = "2019050811515490657"),
     })
-    public Result<RoomPayOrdersItemModel> quitApply(String id){
-        RoomPayOrdersItemModel roomPayOrdersItemModel = roomInformationService.quitApply(id);
+    public Result<RoomPayOrdersItemModel> quitApply(String orderItemId){
+        RoomPayOrdersItemModel roomPayOrdersItemModel = roomInformationService.quitApply(orderItemId);
         return new Result(roomPayOrdersItemModel);
     }
 

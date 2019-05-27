@@ -79,7 +79,7 @@
                    :class="formatReported(item).class"
                    :key="index"
                    class="en-card"
-                   @click="toFillData(item, 'formed')">
+                   @click="toSelectFillData(item)">
                 <div class="card-cell">
                   <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
                   <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
@@ -269,6 +269,13 @@
       filledDataChange(page) {
         this.filledData.page = page
         this.getFilledData()
+      },
+      toSelectFillData(item) {
+        let type = 'formed'
+        if (this.formatReported(item).title === '我要补报') {
+          type = 'form'
+        }
+        this.toFillData(item, type)
       },
       toFillData(item, type) {
         this.$router.push({

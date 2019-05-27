@@ -61,4 +61,23 @@ public class MeterConstants {
      * 电表账本标识
      */
     public final static String ELEC_BOOK="1";
+
+    /**
+     * 电表调用标识
+     */
+    public final static String PARK_ID="springcloud-park";
+
+    /**
+     * 电表调用方法
+     */
+    public final static String METHOD_ID="/meter/updateBill";
+
+    /**
+     * 电表账本标识
+     */
+    public final static String PAYED="1";
+    /**
+     * 电表账本标识
+     */
+    public final static String NOT_PAY="1";
 }

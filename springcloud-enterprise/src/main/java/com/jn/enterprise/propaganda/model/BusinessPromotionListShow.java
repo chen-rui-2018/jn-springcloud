@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "BusinessPromotionListShow", description = "企业宣传查询列表出参")
 public class BusinessPromotionListShow implements Serializable {
-    @ApiModelProperty(value = "订单号(已付款的宣传才有订单号)")
+    @ApiModelProperty(value = "账单号(调用创建账单接口后生成)")
     private String orderNum;
     @ApiModelProperty(value = "宣传类型")
     private String propagandaType;
@@ -45,6 +45,8 @@ public class BusinessPromotionListShow implements Serializable {
     private String propagandaArea;
     @ApiModelProperty(value = "数据状态(0:无效/未上架  1:有效/以上架      审批通过，但未上架属于”待发布“，审批通过，已上架属于“已发布”)")
     private String status;
+    @ApiModelProperty(value = "浏览量")
+    private String viewCount;
     @ApiModelProperty(value = "创建时间")
     private String createdTime;
 
@@ -176,6 +178,14 @@ public class BusinessPromotionListShow implements Serializable {
         this.status = status;
     }
 
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
+
     public String getCreatedTime() {
         return createdTime;
     }
@@ -189,6 +199,7 @@ public class BusinessPromotionListShow implements Serializable {
         return "BusinessPromotionListShow{" +
                 "orderNum='" + orderNum + '\'' +
                 ", propagandaType='" + propagandaType + '\'' +
+                ", propagandaTypeName='" + propagandaTypeName + '\'' +
                 ", id='" + id + '\'' +
                 ", propagandaCode='" + propagandaCode + '\'' +
                 ", propagandaTitle='" + propagandaTitle + '\'' +
@@ -197,10 +208,13 @@ public class BusinessPromotionListShow implements Serializable {
                 ", invalidDate='" + invalidDate + '\'' +
                 ", posterUrl='" + posterUrl + '\'' +
                 ", propagandaFee='" + propagandaFee + '\'' +
+                ", propagandaDetails='" + propagandaDetails + '\'' +
+                ", propagandaSummaries='" + propagandaSummaries + '\'' +
                 ", approvalStatus='" + approvalStatus + '\'' +
                 ", propagandaArea='" + propagandaArea + '\'' +
                 ", status='" + status + '\'' +
-                ", createTime='" + createdTime + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", createdTime='" + createdTime + '\'' +
                 '}';
     }
 }

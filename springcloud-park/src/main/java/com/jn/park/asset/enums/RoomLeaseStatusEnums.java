@@ -13,7 +13,7 @@ public enum RoomLeaseStatusEnums implements CodeAndMsg {
 
     UNUSED("unused","0","空闲"),
     APPLY("apply","1","租借申请中"),
-    DELIVERY("delivery","2","交付中"),
+    DELIVERY("delivery","2","租借中"),
     QUIT("quit","3","退租申请中"),
     DEADLINE("deadline","4","已到期");
 

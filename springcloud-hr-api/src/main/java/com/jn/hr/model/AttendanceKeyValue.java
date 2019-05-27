@@ -1,8 +1,15 @@
 package com.jn.hr.model;
 
-public class AttendanceKeyValue {
+import java.io.Serializable;
 
-    private String timeKey;
+public class AttendanceKeyValue implements Serializable{
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4435895293400826035L;
+
+	private String timeKey;
 	
 	private String value;
 

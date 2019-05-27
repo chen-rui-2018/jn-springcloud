@@ -16,22 +16,30 @@
 		AND t.job_number =
 		#{jobNumber,jdbcType=VARCHAR}
 	</select>
-	
+
 	<select id="selectAnswerCardList" parameterType="com.jn.hr.exam.model.Examinabank"
 		resultType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard">
 		SELECT * FROM
 		tb_manpower_examina_answer_card t
-		WHERE t.test_paper_id = #{testPaperId,jdbcType=VARCHAR}
-		AND t.job_number = #{jobNumber,jdbcType=VARCHAR}
+		WHERE
+		t.test_paper_id = #{testPaperId,jdbcType=VARCHAR}
+		AND t.job_number =
+		#{jobNumber,jdbcType=VARCHAR}
 	</select>
 
 	<update id="updateAnswer" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard">
-		update tb_manpower_examina_answer_card t
-		set t.answer_Type = #{answerType,jdbcType=VARCHAR},
-		t.title_score =  #{titleScore,jdbcType=VARCHAR}
-		WHERE t.test_paper_id = #{testPaperId,jdbcType=VARCHAR}
-		AND t.test_quest_id = #{testQuestId,jdbcType=VARCHAR}
-		AND t.job_number = #{jobNumber,jdbcType=VARCHAR}
+		update
+		tb_manpower_examina_answer_card t
+		set t.answer_Type =
+		#{answerType,jdbcType=VARCHAR},
+		t.title_score =
+		#{titleScore,jdbcType=VARCHAR}
+		WHERE t.test_paper_id =
+		#{testPaperId,jdbcType=VARCHAR}
+		AND t.test_quest_id =
+		#{testQuestId,jdbcType=VARCHAR}
+		AND t.job_number =
+		#{jobNumber,jdbcType=VARCHAR}
 	</update>
 
 	<select id="selectAnswer" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard"
@@ -45,5 +53,30 @@
 		AND t.job_number =
 		#{jobNumber,jdbcType=VARCHAR}
 	</select>
+
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into tb_manpower_examina_answer_card
+		(
+		id,
+		job_number,
+		test_paper_id,
+		test_quest_id,
+		answer,
+		title_score,
+		answer_type
+		) values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR},
+			#{item.jobNumber,jdbcType=VARCHAR},
+			#{item.testPaperId,jdbcType=VARCHAR},
+			#{item.testQuestId,jdbcType=VARCHAR},
+			#{item.answer,jdbcType=VARCHAR},
+			#{item.titleScore,jdbcType=VARCHAR},
+			#{item.answerType,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
 
 </mapper>

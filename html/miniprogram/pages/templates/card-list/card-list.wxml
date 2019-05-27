@@ -1,0 +1,7 @@
+<view class="card-list">
+    <cover-image class="card-list-poster" src="{{ url }}"></cover-image>
+    <view class="card-list-content">
+        <view class="card-list-title">{{ title }}</view>
+        <slot/>
+    </view>
+</view>

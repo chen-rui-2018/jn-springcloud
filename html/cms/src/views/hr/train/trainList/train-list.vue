@@ -98,9 +98,10 @@
             <el-input v-model="messageForm.courseTitle" disabled/>
           </el-form-item>
           <el-form-item label="通知人员" label-width="80px">
-            <el-button type="primary" @click="selectStaff">选择</el-button>
+            <!-- <el-button type="primary" @click="selectStaff">选择</el-button> -->
+            <el-cascader-multi ref="cascader" v-model="checkList" :data="options" :only-last="true" :show-leaf-label="true" @focus="selectStaff" />
           </el-form-item>
-          <el-form-item label-width="80px">
+          <!-- <el-form-item label-width="80px">
             <el-tree
               :data="treeData"
               :props="defaultProps"
@@ -108,7 +109,7 @@
               show-checkbox
               @check-change="handleNodeSelect"
             />
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -120,7 +121,7 @@
 </template>
 
 <script>
-import { api } from '@/api/hr/train'
+import { api, apiGet } from '@/api/hr/train'
 export default {
   data() {
     return {
@@ -147,7 +148,10 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      // 层级树
+      options: [],
+      checkList: []
     }
   },
   created() {
@@ -241,7 +245,6 @@ export default {
     handleNodeSelect(data, checked) {
       if (!data.children && checked) {
         this.messageForm.employeeBasicInfoList = []
-        // delete data.label
         this.messageForm.employeeBasicInfoList.push(data)
       }
     },
@@ -250,6 +253,11 @@ export default {
       api('hr/train/list/emailList', this.messageForm).then(res => {
         if (res.data.code === '0000') {
           this.$message.success('邮件发送成功')
+          // 重置
+          // const obj = {}
+          // obj.stopPropagation = () => {}
+          // this.$refs.cascader.clearValue(this.options)
+          this.init()
         } else {
           this.$message.error(res.data.result)
         }
@@ -257,27 +265,25 @@ export default {
     },
     // 人员列表
     selectStaff() {
-      api('hr/train/list/selectUserList', this.messageForm).then(res => {
+      apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
           const list = res.data.data
           const vm = this
           // 遍历一级
           list.forEach((item, index) => {
             const labelData = {
-              label: item.departmentName,
+              label: item.label,
+              value: item.value,
               children: []
             }
-            vm.treeData.push(labelData)
+            vm.options.push(labelData)
             // 遍历二级
-            item.employeeBasicInfoList.forEach((item2, index2) => {
+            item.children.forEach((item2, index2) => {
               const childrenData = {
-                label: item2.name + '-' + item2.jobNumber,
-                workMailbox: item2.workMailbox,
-                jobNumber: item2.jobNumber,
-                name: item2.name,
-                departmentName: item.departmentName
+                label: item2.label,
+                value: item2.value
               }
-              vm.treeData[index].children.push(childrenData)
+              vm.options[index].children.push(childrenData)
             })
           })
         } else {
@@ -285,6 +291,35 @@ export default {
         }
       })
     },
+    // selectStaff2() {
+    //   api('hr/train/list/selectUserList', this.messageForm).then(res => {
+    //     if (res.data.code === '0000') {
+    //       const list = res.data.data
+    //       const vm = this
+    //       // 遍历一级
+    //       list.forEach((item, index) => {
+    //         const labelData = {
+    //           label: item.departmentName,
+    //           children: []
+    //         }
+    //         vm.treeData.push(labelData)
+    //         // 遍历二级
+    //         item.employeeBasicInfoList.forEach((item2, index2) => {
+    //           const childrenData = {
+    //             label: item2.name + '-' + item2.jobNumber,
+    //             workMailbox: item2.workMailbox,
+    //             jobNumber: item2.jobNumber,
+    //             name: item2.name,
+    //             departmentName: item.departmentName
+    //           }
+    //           vm.treeData[index].children.push(childrenData)
+    //         })
+    //       })
+    //     } else {
+    //       this.$message.error(res.data.result)
+    //     }
+    //   })
+    // },
     sendMessage(row) {
       this.dialogFormVisible = true
       this.messageForm = row

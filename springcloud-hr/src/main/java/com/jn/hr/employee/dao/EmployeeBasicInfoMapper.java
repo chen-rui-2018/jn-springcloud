@@ -44,4 +44,5 @@ public interface EmployeeBasicInfoMapper {
     List<EmployeeBasicInfo> selectByEntryDate(@Param("entryDate") String entryDate);
     
     TbManpowerEmployeeBasicInfo selectByUserId(@Param("userId")String userId);
+
 }

@@ -17,9 +17,17 @@
         <el-input v-model="listQuery.name" maxlength="20" placeholder="" class="filter-item" clearable @keyup.enter.native="handleFilter" />
       </el-form-item>
       <el-form-item label="部门:" style="margin:0px 30px;">
-        <el-select v-model="listQuery.departmentId" placeholder="请选择部门" filterable>
+        <el-cascader
+          :options="departmentList"
+          v-model="departmentIdS"
+          change-on-select
+          placeholder="请选择"
+          clearable
+          @change="handleChangeDepartment"
+        />
+        <!--<el-select v-model="listQuery.departmentId" placeholder="请选择部门" filterable>
           <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName" :value="item.departmentId" />
-        </el-select>
+        </el-select>-->
       </el-form-item>
       <el-form-item label="入职时间:" style="margin-left: 30px;" >
         <el-date-picker
@@ -104,7 +112,7 @@
 </template>
 <script>
 import {
-  api, downloadTempExcel, apiGet, exportExcelByObj
+  api, downloadTempExcel, apiGet, exportExcelByObj, systemApi
 } from '@/api/hr/common'
 import { getToken } from '@/utils/auth'
 
@@ -118,8 +126,10 @@ export default {
         initialFrameHeight: 300
       },
       salarymanagementList: [],
+      departmentListLoading: false,
       errorResults: [],
       departmentList: [],
+      departmentIdS: [],
       processing: false,
       uploadTip: '点击上传',
       importFlag: 1,
@@ -148,20 +158,40 @@ export default {
   },
   watch: {
     'listQuery.entryDate': function() {
+      this.listQuery.page = 1
       this.initList()
     },
     'listQuery.name': function() {
+      this.listQuery.page = 1
       this.initList()
     },
     'listQuery.departmentId': function() {
+      this.listQuery.page = 1
       this.initList()
     }
   },
   mounted() {
     this.initList()
-    this.getDepartmentList()
+    this.getAllDepartment()
+    // this.getDepartmentList()
   },
   methods: {
+    // 选择部门（新增用户对话框）
+    handleChangeDepartment(value) {
+      this.listQuery.departmentId = this.departmentIdS[this.departmentIdS.length - 1]
+    },
+    // 获取所有部门列表
+    getAllDepartment() {
+      this.departmentListLoading = true
+      systemApi('system/sysDepartment/findDepartmentAllByLevel').then(res => {
+        if (res.data.code === '0000') {
+          this.departmentList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
+      })
+    },
     getDepartmentList() {
       apiGet('hr/employeeDepartment/getEmployeeDepartments').then(res => {
         if (res.data.code === '0000') {

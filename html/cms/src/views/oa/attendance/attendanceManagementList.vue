@@ -160,9 +160,11 @@ export default {
           return
         }
       }
-      if (new Date(this.listQuery.startTime.replace(/-/g, '\/')) > new Date(this.listQuery.endTime.replace(/-/g, '\/'))) {
-        alert('开始时间不能大于结束时间,请重新选择 ')
-        return
+      if (this.listQuery.startTime && this.listQuery.endTime) {
+        if (new Date(this.listQuery.startTime.replace(/-/g, '\/')) > new Date(this.listQuery.endTime.replace(/-/g, '\/'))) {
+          alert('开始时间不能大于结束时间,请重新选择 ')
+          return
+        }
       }
       this.listQuery.page = 1
       this.initList()

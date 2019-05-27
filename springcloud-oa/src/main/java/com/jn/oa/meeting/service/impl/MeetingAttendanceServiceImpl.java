@@ -8,8 +8,10 @@ import com.jn.common.model.PaginationData;
 import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.oa.meeting.dao.MeetingParticipantMapper;
 import com.jn.oa.meeting.dao.TbOaMeetingParticipantsMapper;
+import com.jn.oa.meeting.dao.TbOaMeetingRoomMapper;
 import com.jn.oa.meeting.entity.TbOaMeetingParticipants;
 import com.jn.oa.meeting.entity.TbOaMeetingParticipantsCriteria;
+import com.jn.oa.meeting.entity.TbOaMeetingRoom;
 import com.jn.oa.meeting.enums.MeetingAttendanceTypeEnums;
 import com.jn.oa.meeting.enums.MeetingExceptionEnums;
 import com.jn.oa.meeting.model.OaMeetingAttendancePage;
@@ -17,6 +19,7 @@ import com.jn.oa.meeting.model.OaMeetingParticipantsAttendance;
 import com.jn.oa.meeting.service.MeetingAttendanceService;
 import com.jn.oa.meeting.vo.OaMeetingAttendanceVo;
 
+import com.jn.oa.meeting.vo.OaMeetingParticipantsAttendanceVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
@@ -47,6 +50,9 @@ public class MeetingAttendanceServiceImpl implements MeetingAttendanceService {
 
     @Autowired
     private MeetingParticipantMapper meetingParticipantMapper;
+
+    @Autowired
+    private TbOaMeetingRoomMapper tbOaMeetingRoomMapper;
 
     /**
      * 会议考勤签到、签退接口
@@ -131,8 +137,14 @@ public class MeetingAttendanceServiceImpl implements MeetingAttendanceService {
     @ServiceLog(doAction = "会议考勤列表查询")
     public PaginationData selectMeetingAttendanceList(OaMeetingAttendancePage oaMeetingAttendancePage) {
         Page<Object> objects = PageHelper.startPage(oaMeetingAttendancePage.getPage(), oaMeetingAttendancePage.getRows());
-        return  new PaginationData( meetingParticipantMapper.selectMeetingAttendanceListByCondition(oaMeetingAttendancePage)
+        List<OaMeetingParticipantsAttendanceVo> oaMeetingParticipantsAttendanceVoList= meetingParticipantMapper.selectMeetingAttendanceListByCondition(oaMeetingAttendancePage);
+        for(int i=0;i<oaMeetingParticipantsAttendanceVoList.size();i++){
+            TbOaMeetingRoom tbOaMeetingRoom=tbOaMeetingRoomMapper.selectByPrimaryKey(oaMeetingParticipantsAttendanceVoList.get(i).getMeetingRoomId());
+            oaMeetingParticipantsAttendanceVoList.get(i).setMeetingRoomName(tbOaMeetingRoom.getName());
+        }
+        return new PaginationData(oaMeetingParticipantsAttendanceVoList
                 , objects.getTotal());
+
     }
 }
 

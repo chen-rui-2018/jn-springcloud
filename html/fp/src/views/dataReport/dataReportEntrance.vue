@@ -27,8 +27,8 @@
       </el-tab-pane>
     </el-tabs>
     <div class="btn-row">
-      <el-button size="small" type="primary" :disabled="formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDraft">保存为草稿</el-button>
-      <el-button size="small" type="primary" :disabled="submitting || formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDone">提交</el-button>
+      <el-button size="small" type="primary" :disabled="formData.taskInfo && formData.taskInfo.status === 0 || !formData.departmentId" @click="submitForDraft">保存为草稿</el-button>
+      <el-button size="small" type="primary" :disabled="submitting || formData.taskInfo && formData.taskInfo.status === 0 || !formData.departmentId" @click="submitForDone">提交</el-button>
       <el-button size="small" type="primary" v-if="formData.otherData">
         <a :href="formData.otherData" download="" target="_blank">点击下载附件</a>
       </el-button>
@@ -58,7 +58,7 @@
         loadingFormData: true,
         loadingTab: true,
         formDataListTitle: [{
-          departmentName: '企业',
+          departmentName: '全部',
           departmentId: null
         }],
         formData: {},
@@ -174,6 +174,7 @@
         const departmentId = this.formDataListTitle[index].departmentId
         this.formData.departmentId = departmentId
         this.getDepartmentJurisdiction(departmentId)
+        this.loadingTab = false
       },
       getDepartmentJurisdiction(departmentId) {
         //  如果是园区报表，等待填报格式合成完毕再给指标树加上权限控制
@@ -415,13 +416,18 @@
                   return a['orderNumber'] - b['orderNumber']
                 })
                 if ( _this.formData.modelType === 1) {
-                  _this.formDataListTitle = _this.formData.gardenFiller
+                  const gardenFiller = _this.formData.gardenFiller
+                  _this.formDataListTitle = _this.formDataListTitle.concat(gardenFiller)
+                  let departmentId
+                  if (gardenFiller && gardenFiller.length > 0) {
+                    departmentId = gardenFiller[0].departmentId
+                  }
                   for (const tab of  _this.formData.tabs) {
-                    const departmentId = _this.formDataListTitle && _this.formDataListTitle[0].departmentId
                     _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
+                  _this.formData.departmentId = departmentId
                 }
-                _this.formData.departmentId = _this.formDataListTitle[0].departmentId
+
                 resolve()
               } else {
                 _this.$message.error(res.result)

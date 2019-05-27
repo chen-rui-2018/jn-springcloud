@@ -16,7 +16,7 @@ public class findAllMessageListModel extends Page implements Serializable{
     private static final long serialVersionUID = -9020107199446600992L;
 
 
-    @ApiModelProperty(value ="二级消息类别(必填)(（1级）1:个人动态;（2级）2:企业订单;3:信息发布动态;4:交费提醒;5:访客留言;6:数据上报提醒;7:机构邀请;8:企业邀请;9:机构邀请;10:私人订单);")
+    @ApiModelProperty(value ="二级消息类别(必填 从获取二级类别接口中获取二级类别编码);")
 
     private String  messageTowTort;
 

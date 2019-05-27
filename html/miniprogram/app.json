@@ -2,12 +2,14 @@
   "pages":[
     "pages/index/parkPay/parkPay",
     "pages/index/index",
+    "pages/index/maintenance/maintenance",
+    "pages/index/maintenance-detail/maintenance-detail",
+    "pages/index/maintenance-register/maintenance-register",
     "pages/meeting/meeting",
     "pages/start/start",
     "pages/authorize/authorize",
     "pages/home/home",
     "pages/register/register",
-    "pages/templates/header",
     "pages/meeting/meetingRoomDetail/meetingRoomDetail",
     "pages/meeting/makeMeeting/makeMeeting",
     "pages/meeting/meetingPerson/meetingPerson",
@@ -17,13 +19,13 @@
     "pages/meeting/orgDepartment/orgDepartment",
     "pages/meeting/orgPerson/orgPerson"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "ColorUI",
     "navigationStyle": "custom",
     "navigationBarTextStyle": "white",
-    "enablePullDownRefresh":true
+    "enablePullDownRefresh": true
   },
   "tabBar": {
     "color": "#aaa",
@@ -55,5 +57,6 @@
   "navigateToMiniProgramAppIdList": [
     "wx4f1b24bdc99fa23b"
   ],
-  "debug": false
+  "debug": false,
+  "sitemapLocation": "sitemap.json"
 }

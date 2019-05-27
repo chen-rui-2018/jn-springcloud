@@ -18,6 +18,8 @@ public enum HrExceptionEnums implements CodeAndMsg {
     TIMING_FAILURE("7000510","定时设置失败,请稍后再试"),
     FILE_IS_NULL("7013507","附件上传失败,上传文件为空"),
     UPLOAD_FILE_ERRPR("7013508","附件上传失败,请稍后再试"),
+    DEPARTMENT_QUERY_ERRPR("7013509","部门查询出错"),
+    POST_QUERY_ERRPR("7013509","岗位查询出错"),
 
     ;
 

@@ -1,0 +1,1 @@
+<view bindtap="onTap" class="sub-button">{{ title }}</view>

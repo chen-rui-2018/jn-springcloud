@@ -58,7 +58,22 @@ public class CommonServiceImpl implements CommonService {
     @Override
     @ServiceLog(doAction = "附件批量上传")
     public String uploadAttachment(List<MultipartFile> files) {
-
+        SysDictInvoke sysDictInvoke=new SysDictInvoke();
+        sysDictInvoke.setGroupCode("hr_file_group");
+        sysDictInvoke.setModuleCode("springcloud_hr");
+        sysDictInvoke.setParentGroupCode("springcloud_hr");
+        sysDictInvoke.setKey("hr_file_group_id");
+        Result dictResult=systemClient.getDict(sysDictInvoke);
+        String fileGroup="";
+        if(dictResult!=null && "0000".equals(dictResult.getCode()) && dictResult.getData()!=null) {
+            List<SysDictKeyValue> certificateTypeList = (List<SysDictKeyValue>) dictResult.getData();
+            if(!CollectionUtils.isEmpty(certificateTypeList)){
+                fileGroup=certificateTypeList.get(0).getLable();
+            }
+        }else{
+            logger.error("上传文件，查询文件组失败");
+            throw new JnSpringCloudException(EmployeeExceptionEnums.QUERYDICT_ERROR);
+        }
         List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 
         for (MultipartFile file : files) {
@@ -75,7 +90,7 @@ public class CommonServiceImpl implements CommonService {
                     String str = DateUtils.formatDate(new Date(), "yyyyMMdd");
                     String fileName = split[0] + str + RandomStringUtils.randomNumeric(4) + "." + split[1];
 
-                    Result<String> result = uploadClient.uploadFile(file, false,"hr");
+                    Result<String> result = uploadClient.uploadFile(file, true,fileGroup);
                     map.put("title", fileName);
                     map.put("url", result.getData());
                     list.add(map);
@@ -124,28 +139,16 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public String queryDictValueByLable(String parentGroupCode, String groupCode, String lable) {
-        String value="";
+    public List<SysDictKeyValue> queryDictList(String parentGroupCode, String groupCode) {
         SysDictInvoke sysDictInvoke=new SysDictInvoke();
         sysDictInvoke.setGroupCode(groupCode);
         sysDictInvoke.setModuleCode("springcloud_hr");
         sysDictInvoke.setParentGroupCode(parentGroupCode);
         Result result=systemClient.getDict(sysDictInvoke);
-        boolean flag=false;
-        if(result!=null && "0000".equals(result.getCode()) && result.getData()!=null){
-            List<SysDictKeyValue> certificateTypeList= (List<SysDictKeyValue>) result.getData();
-            if(!CollectionUtils.isEmpty(certificateTypeList)){
-                for (SysDictKeyValue dictKeyValue : certificateTypeList) {
-                    if(lable.equals(dictKeyValue.getLable())){
-                        value=dictKeyValue.getKey();
-                        flag=true;
-                        break;
-                    }
-                }
-            }
-        }else{
+        if(result==null || !"0000".equals(result.getCode()) || result.getData()!=null){
             throw new JnSpringCloudException(EmployeeExceptionEnums.QUERYDICT_ERROR);
         }
-        return value;
+        List<SysDictKeyValue> resultList= (List<SysDictKeyValue>) result.getData();
+        return resultList;
     }
 }

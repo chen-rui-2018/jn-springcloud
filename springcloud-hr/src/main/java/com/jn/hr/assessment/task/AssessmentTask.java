@@ -28,13 +28,13 @@ public class AssessmentTask {
     //@Scheduled(fixedRate=5000)
     private void configureTasks() {
         long start=System.currentTimeMillis();
-        logger.info("考勤管理定时任务开始执行");
+        logger.info("考核管理定时任务开始执行");
         try{
         	assessmentTaskService.assessmentEndScanning();
             long end=System.currentTimeMillis();
-            logger.info("考勤管理定时任务执行结束,共耗时:{}",(end-start));
+            logger.info("考核管理定时任务执行结束,共耗时:{}",(end-start));
         }catch(Exception e){
-            logger.error("考勤管理定时任务执行出现异常:"+e.getMessage(),e);
+            logger.error("考核管理定时任务执行出现异常:"+e.getMessage(),e);
         }
         System.err.println("执行静态定时任务时间: " + LocalDateTime.now());
     }

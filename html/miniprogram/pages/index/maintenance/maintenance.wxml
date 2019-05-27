@@ -1,0 +1,32 @@
+<wxs module="filter" src="../../../utils/common.wxs"></wxs>
+<nav-bar navbar-data="{{navbarData}}"></nav-bar>
+<view class="btn-row">
+<navigator
+  url="/pages/index/maintenance-register/maintenance-register"
+  hover-class="navigator-hover"
+>
+  <button class="cu-btn round lines-green button-hover">维保登记</button>
+</navigator> 
+</view>
+ <navigator
+    wx:for="{{ equipmentList }}"
+    wx:for-index="index"
+    wx:key="index"
+    wx:for-item="item"
+    url="/pages/index/maintenance-detail/maintenance-detail?assetNumber={{ item.assetNumber }}"
+    hover-class="navigator-hover"
+  >
+    <view
+      class="card-list-row">
+      <card-list url="{{ item.assetUrl }}" title="设备名称 {{ item.name }}">
+        <view class="card-list-text">设备编号 {{ item.assetNumber }}</view>
+        <view class="card-list-tips">
+          <text>维保期限 {{ filter.formatEmpty(item.maintenancePeriod) }} 天</text>
+          <text>
+            <text>本次维保时间</text>
+            <text class="card-list-warning">{{ filter.formatEmpty(item.maintenanceTime) }}</text>
+          </text>
+        </view>
+      </card-list>
+    </view>
+  </navigator>

@@ -961,7 +961,7 @@ import {
   addEmployeeBasicInfo, updateEmployeeBasicInfo, getEmployeeBasicInfo
 } from '@/api/hr/employeeBasicInfo'
 import {
-  getCode, isvalidName, isvalidMobile, isvalidPhone
+  getCode, isvalidName, isvalidMobile, isvalidPhone, isvalidZjhm, setChild, findNodeById, findP
 } from '@/api/hr/util'
 import { getToken } from '@/utils/auth'
 
@@ -976,10 +976,18 @@ export default {
     }
     const reg = /^\w{5,18}$/i
     const checkZjhm = (rule, value, callback) => {
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的证件号码'))
+      if (this.addForm.certificateName === '身份证') {
+        if (!isvalidZjhm(value)) {
+          callback(new Error('请输入正确的证件号码'))
+        } else {
+          callback()
+        }
       } else {
-        callback()
+        if (!reg.test(value)) {
+          callback(new Error('请输入正确的证件号码'))
+        } else {
+          callback()
+        }
       }
     }
     const validMobile = (rule, value, callback) => {
@@ -1024,6 +1032,8 @@ export default {
       }*/
 
     return {
+      nodes: [],
+      pNodes: [],
       currentDepartmentIds: [],
       departmentOptions: [],
       departmentListLoading: false,
@@ -1253,9 +1263,9 @@ export default {
       })
     },
     handleChangeDepartment(value) {
-      this.addForm.departmentId = this.currentDepartmentIds.join('/')
+      this.addForm.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
       const arr = this.$refs['departRef'].currentLabels
-      this.addForm.departmentName = arr.join('/')
+      this.addForm.departmentName = arr[arr.length - 1]
     },
     setDepartmentInfo() {
       const depart = this.departmentList.find(item => item.departmentId === this.addForm.departmentId)
@@ -1452,14 +1462,14 @@ export default {
         this.addForm.nationalityName = nationality['lable']
       }
 
-      const leaderjob = this.jobList.find(item => item.id === this.addForm.directlyLeader.directLeaderLevel)
+      const leaderjob = this.jobList.find(item => item.key === this.addForm.directlyLeader.directLeaderLevel)
       if (leaderjob) {
-        this.addForm.directlyLeader.directLeaderLevelName = leaderjob['postName']
+        this.addForm.directlyLeader.directLeaderLevelName = leaderjob['lable']
       }
 
-      const leaderpost = this.jobList.find(item => item.key === this.addForm.directlyLeader.directLeadership)
+      const leaderpost = this.postList.find(item => item.id === this.addForm.directlyLeader.directLeadership)
       if (leaderpost) {
-        this.addForm.directlyLeader.directLeadershipName = leaderpost['lable']
+        this.addForm.directlyLeader.directLeadershipName = leaderpost['postName']
       }
     },
     submitForm() {
@@ -1531,7 +1541,6 @@ export default {
     initPostList() {
       api(`${this.GLOBAL.systemUrl}system/sysPost/findSysPostAll`, '', 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
-          debugger
           console.log(res.data.data)
           this.postList = res.data.data
         } else {
@@ -1666,7 +1675,16 @@ export default {
             }
             this.addForm.employStatus = res.data.data.employStatus + ''
 
-            this.currentDepartmentIds = this.addForm.departmentId.split('/')
+            setChild(this.nodes, this.departmentList)
+            const currNode = findNodeById(this.nodes, this.addForm.departmentId)
+            this.pNodes.push(currNode)
+            findP(this.nodes, currNode, this.pNodes)
+            this.pNodes.reverse()
+            const arr = []
+            this.pNodes.forEach(item => {
+              arr.push(item.id)
+            })
+            this.currentDepartmentIds = arr
           } else {
             this.$message.error(res.data.result)
           }

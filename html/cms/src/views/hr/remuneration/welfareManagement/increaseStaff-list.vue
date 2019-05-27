@@ -37,10 +37,11 @@
     <!--添加增减员计划对话框-->
     <template v-if="increaseStaffAddFormVisible">
       <el-dialog :visible.sync="increaseStaffAddFormVisible" title="增减员计划" width="750px">
-        <el-form ref="increaseStaffAddForm" :model="increaseStaffAddFromData" label-width="150px">
+        <el-form ref="increaseStaffAddForm" :rules="increaseStaffAddFormRules" :model="increaseStaffAddFromData" label-width="150px">
           <el-form-item label="姓名" prop="name" class="inline">
-            <el-input v-model="increaseStaffAddFromData.name" type="textarea" style="width: 350px;" readonly="readonly"/>
-            <el-button type="text" @click="openStaffNamePage">选择</el-button>
+            <el-cascader-multi ref="assessmentObjectRef" v-model="checkList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+            <!--<el-input v-model="increaseStaffAddFromData.name" type="textarea" style="width: 350px;" readonly="readonly"/>
+            <el-button type="text" @click="openStaffNamePage">选择</el-button>-->
           </el-form-item>
           <el-form-item label="参保月份" prop="insuredMonth" class="inline">
             <el-date-picker v-model="increaseStaffAddFromData.insuredMonth" value-format="yyyy-MM" type="month" placeholder="选择参保月份" style="width: 200px;"/>
@@ -136,6 +137,15 @@ export default {
   components: { UE },
   data() {
     return {
+      increaseStaffAddFormRules: {
+        name: [{ required: true, message: '请选择增员名称', trigger: 'change' }],
+        insuredMonth: [{ required: true, message: '请选择参保月份', trigger: 'change' }],
+        insuredProgrammeId: [{ required: true, message: '请选择参保方案', trigger: 'change' }]
+      },
+      // 新部门员工树
+      deptEmployeeList: [],
+      checkList: [],
+      // 新部门员工树 end
       socialInsuranceBaseData: '',
       increaseStaffAddFromReserveBaseData: '',
       config: {
@@ -192,8 +202,86 @@ export default {
   },
   mounted() {
     this.initList()
+    this.getDeptEmployeeList()
   },
   methods: {
+    // nameSel
+    nameSel() {
+      const selectedNodes = this.$refs['assessmentObjectRef'].selectedNodes
+      this.increaseStaffAddFromData.jobNumber = ''
+      for (let i = 0; i < selectedNodes.length; i++) {
+        if (!selectedNodes.flag) {
+          this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber + selectedNodes[i].value + ','
+        }
+      }
+      if (this.increaseStaffAddFromData.jobNumber.length > 0) {
+        this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber.substring(0, this.increaseStaffAddFromData.jobNumber.length - 1)
+      }
+      console.log(this.increaseStaffAddFromData.jobNumber)
+    },
+    getDeptEmployeeList() {
+      this.deptEmployeeList = [
+        {
+          value: 'dept1',
+          label: '部门1',
+          flag: true,
+          children: [{
+            value: 'dept2',
+            label: '研发',
+            flag: true,
+            children: [{
+              flag: false,
+              value: 'NJ000001',
+              label: '张三'
+            }, {
+              flag: false,
+              value: 'NJ000007',
+              label: '李四'
+            }, {
+              flag: false,
+              value: 'NJ000006',
+              label: '赵六'
+            }]
+          }, {
+            value: 'daohang',
+            label: '导航',
+            flag: true,
+            children: [{
+              flag: false,
+              value: 'cexiangdaohang',
+              label: '侧向导航'
+            }, {
+              flag: false,
+              value: 'dingbudaohang',
+              label: '顶部导航'
+            }]
+          }]
+        }, {
+          value: 'ziyuan',
+          label: '资源',
+          flag: true,
+          children: [{
+            flag: true,
+            value: 'axure',
+            label: 'Axure Components'
+          }, {
+            flag: true,
+            value: 'sketch',
+            label: 'Sketch Templates'
+          }, {
+            flag: true,
+            value: 'jiaohu',
+            label: '组件交互文档'
+          }]
+        }]
+      // api('hr/AssessmentManagement/ObtainDepartmentTree', {}).then(res => {
+      //   if (res.data.code === '0000') {
+      //     this.rootData = res.data.data
+      //   } else {
+      //     this.$message.error(res.data.result)
+      //   }
+      // })
+    },
     cancelIncreaseStaffAddFormVisible() {
       this.increaseStaffAddFormVisible = false
     },
@@ -378,18 +466,25 @@ export default {
         insuredProgrammeId: this.increaseStaffAddFromData.insuredProgrammeId,
         jobNumber: this.increaseStaffAddFromData.jobNumber
       }
-      api('hr/SalaryWelfareManagement/addOrDeleteAttritionPlan', param).then(res => {
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '添加增员计划成功',
-            type: 'success'
+      this.$refs['increaseStaffAddForm'].validate(valid => {
+        if (valid) {
+          api('hr/SalaryWelfareManagement/addOrDeleteAttritionPlan', param).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '添加增员计划成功',
+                type: 'success'
+              })
+              this.increaseStaffAddFormVisible = false
+              this.saveIncreaseStaffDisable = false
+              this.increaseStaffAddFromData.jobNumber = ''
+              this.initList()
+            } else {
+              this.$message.error('添加增员计划失败')
+              this.saveIncreaseStaffDisable = false
+            }
           })
-          this.increaseStaffAddFormVisible = false
-          this.saveIncreaseStaffDisable = false
-          this.initList()
         } else {
-          this.$message.error('添加增员计划失败')
-          this.saveIncreaseStaffDisable = false
+          this.isDisabled = false
         }
       })
     },

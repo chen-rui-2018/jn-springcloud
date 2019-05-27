@@ -316,7 +316,7 @@ export default new Router({
               component: resolve => require(['@/views/home/productService/myApply'], resolve)
             },
             {
-              path: 'home/myBusiness/index',
+              path: '/myBusiness/index',
               name: 'business',
               meta: {
                 title: '我的企业'
@@ -378,6 +378,18 @@ export default new Router({
                 title: '邀请员工'
               },
               component: resolve => require(['@/views/home/myBusiness/InviteEmployees'], resolve)
+            },
+            {
+              path: '/roleCertifications/advisoryInformation',
+              name: 'advisoryInformation',
+              meta: {title: '填写顾问资料'},
+              component: resolve => require(['@/views/home/roleCertifications/advisoryInformation'], resolve)
+            },
+            {
+              path: '/roleCertifications/basicInformation',
+              name: 'basicInformation',
+              meta: {title: '服务机构认证'},
+              component: resolve => require(['@/views/home/roleCertifications/basicInformation'], resolve)
             },
             {
               path: '/myBusiness/enterprisePropaganda',
@@ -908,18 +920,6 @@ export default new Router({
         title: '投资人'
       },
       name: 'investor'
-    },
-    {
-      path: '/roleCertifications/advisoryInformation',
-      name: 'advisoryInformation',
-      meta: {title: '填写顾问资料'},
-      component: resolve => require(['@/views/home/roleCertifications/advisoryInformation'], resolve)
-    },
-    {
-      path: '/roleCertifications/basicInformation',
-      name: 'basicInformation',
-      meta: {title: '服务机构认证'},
-      component: resolve => require(['@/views/home/roleCertifications/basicInformation'], resolve)
     },
     {
       path: '/investorDetail',

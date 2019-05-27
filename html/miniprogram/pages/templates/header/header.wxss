@@ -1,33 +1,40 @@
-/* pages/templates/header.wxss */
+/* pages/templates/header/header.wxss */
 /* pages/meeting/meeting.wxss */
 /* @import "./../../icon.wxss";
 @import "./../../colorui.wxss"; */
 
 /* 头部 搜索框 */
 .head_box{
-  padding-bottom:157rpx;
+  padding-bottom:150rpx;
 }
 .head{
   display: flex;
   box-shadow: 0px 1px 25px 0px #efefef;
   align-items: center;
   position: fixed;
-  /* top:0; */
+  top:0;
   width:100%;
   margin-top: 51rpx;
-  padding: 35rpx 0 30rpx 0rpx;
+  padding: 20rpx 0;
   background-color: #fff;
   z-index: 200;
 }
 .back{
-  padding-left: 31rpx;
-  padding-right: 20rpx;
+  padding-left: 20rpx;
+  width: 10%;
+  display:flex;
+  align-items:center;
 }
 .back .img{
-  width:26rpx;
-  height:37rpx;  
+  width:20rpx;
+  height:30rpx;
 }
 .head_title{
   font-size: 31rpx;
-  padding-left: 30%;
+  margin-left: 15%;
+  width: 50%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
 }

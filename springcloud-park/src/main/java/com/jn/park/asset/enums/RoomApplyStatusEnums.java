@@ -10,8 +10,9 @@ import com.jn.common.api.CodeAndMsg;
 * @modified By:
 */
 public enum RoomApplyStatusEnums implements CodeAndMsg {
-    SUCCEED("1","成功"),
-    FAILURE("0","失败");
+    SUCCEED("2","申请成功"),
+    APPLY("1","申请中"),
+    FAILURE("0","申请失败");
     /**
      * 编码
      */

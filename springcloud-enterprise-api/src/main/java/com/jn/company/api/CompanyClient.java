@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 /**
- * 用户信息客户端
+ * 企业信息客户端
  *
- * @Author: yangph
- * @Date: 2018/11/28 19:30
+ * @Author: jiangyl
+ * @Date: 2019/2/27 19:30
  * @Version v1.0
  * @modified By:
  */

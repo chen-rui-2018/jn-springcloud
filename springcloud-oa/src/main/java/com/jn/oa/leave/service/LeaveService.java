@@ -1,6 +1,8 @@
 package com.jn.oa.leave.service;
 
 
+import com.jn.common.model.Result;
+import com.jn.hr.model.VacationManagement;
 import com.jn.oa.model.Leave ;
 import com.jn.oa.vo.LeaveApiVo ;
 
@@ -20,5 +22,12 @@ public interface LeaveService {
      * @return
      */
     List<LeaveApiVo> searchLeaveListByCondition(Leave leave);
+
+    /**
+     * 请假结束，记录请假小时到人力资源子系统
+     * @param leave
+     * @return
+     */
+    Result insertByLeave(VacationManagement leave);
 
 }

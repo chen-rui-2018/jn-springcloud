@@ -3,6 +3,7 @@ export default {
     host:"http://112.94.22.222:8000/",//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
         loginURL:"springcloud-app-system/login",
+        getDynamicMenu:"springcloud-app-system/system/sysMenu/getDynamicMenu",
         findActivityTypeList:"springcloud-park/guest/activity/findActivityTypeList",//查询活动类型列表
         activityListSlim:"springcloud-park/guest/activity/activityListSlim",//获取前台活动列表
         getActivityDetails:"springcloud-park/guest/getActivityDetails",//获取活动详情
@@ -115,6 +116,7 @@ export default {
 
      //我的企业
         getMyBusiness:"springcloud-enterprise/guest/company/getCompanyDetailByNowAccount",//获取当前用户企业信息
+        getCompanyDetailByAccountOrCompanyId:"springcloud-enterprise/guest/company/getCompanyDetailByAccountOrCompanyId",//根据用户账号/企业ID查询企业信息
         acceptInvite:"springcloud-enterprise/enterprise/InvitationController/acceptInvite",//接受企业邀请
         refuseInvite:"springcloud-enterprise/enterprise/InvitationController/refuseInvite",//拒绝企业邀请
         getUserAccount:"springcloud-app-system/system/sysUser/getUserInfo",//获取用户账号
@@ -161,6 +163,7 @@ export default {
         saveOrUpdateAdvisorProjectExperience:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorProjectExperience",//新增项目经验信息
         acceptOrgInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/acceptOrgInvitation",//接受机构邀请
         refuseInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/refuseInvitation",//拒绝机构邀请
+        getOrgInfoForManage:"springcloud-enterprise/guest/serviceMarket/org/getOrgInfoForManage",//获取服机构信息[机构详情+产品列表](pc/app机构信息)
         // 角色认证
         getInvestorMainRound:"springcloud-enterprise//guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
         getAffiliationUnit:"springcloud-enterprise/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位

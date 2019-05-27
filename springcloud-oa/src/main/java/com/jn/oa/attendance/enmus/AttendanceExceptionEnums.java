@@ -14,7 +14,8 @@ public enum AttendanceExceptionEnums implements CodeAndMsg {
     ATTENDANCE_SIGN_OUT__ERROR("6015501", "未签到，不能进行签退"),
     ATTENDANCE_SIGN_OUT("6015502","签退失败，未签到不能进行签退"),
     ATTENDANCE_SIGN_IN("6015503","签到失败，不能进行多次签到"),
-    ATTENDANCE_ERROR("6015504","考勤类型异常，不存在该类型")
+    ATTENDANCE_ERROR("6015504","考勤类型异常，不存在该类型"),
+    SELECT_ATTENDANCE_STATUS_ERROR("6015505","查询人力资源考勤状态异常")
         ;
 
     private String code;

@@ -55,4 +55,11 @@ public interface InvestorService {
      * @return
      */
     List<InvestorMainRound> getInvestorMainRound();
+
+    /**
+     * 添加投资人角色
+     * @param investorAccount
+     * @return
+     */
+    int addInvestorRole(String investorAccount);
 }

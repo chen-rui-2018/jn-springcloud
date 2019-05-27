@@ -13,7 +13,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "PriceRuleContent",description = "计价规则内容")
-public class PriceRuleContent implements Serializable {
+public class PriceRuleContentModel implements Serializable {
     @ApiModelProperty("记录Id")
     private String id;
 
@@ -21,7 +21,7 @@ public class PriceRuleContent implements Serializable {
     private String ruleId;
 
     @ApiModelProperty("规则Id")
-    private String projectName;
+    private String ruleName;
 
     @ApiModelProperty("规则名称")
     private String price;
@@ -53,12 +53,12 @@ public class PriceRuleContent implements Serializable {
         this.ruleId = ruleId;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getRuleName() {
+        return ruleName;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 
     public String getPrice() {

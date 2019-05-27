@@ -12,6 +12,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class EmployeeFileClassController extends BaseController {
     private EmployeeFileClassService employeeFileClassService;
 
     @ControllerLog(doAction = "添加员工档案分类")
-    //@RequiresPermissions("/hr/employeeFileClass/addEmployeeFileClass")
+    @RequiresPermissions("/hr/employeeFileClass/addEmployeeFileClass")
     @ApiOperation(value = "添加员工档案分类", notes = "添加员工档案分类")
     @PostMapping(value = "/addEmployeeFileClass")
     public Result addEmployeeFileClass(@Validated @RequestBody EmployeeFileClassAdd employeeFileClassAdd) {
@@ -42,7 +43,7 @@ public class EmployeeFileClassController extends BaseController {
         return new Result(fileClass);
     }
     @ControllerLog(doAction = "修改员工档案分类")
-    //@RequiresPermissions("/hr/employeeFileClass/updateEmployeeFileClass")
+    @RequiresPermissions("/hr/employeeFileClass/updateEmployeeFileClass")
     @ApiOperation(value = "修改员工档案分类", notes = "修改员工档案分类")
     @PostMapping(value = "/updateEmployeeFileClass")
     public Result updateResumeData(@Validated @RequestBody EmployeeFileClassAdd employeeFileClassAdd) {
@@ -54,7 +55,7 @@ public class EmployeeFileClassController extends BaseController {
 
 
     @ControllerLog(doAction = "根据父ID查询员工档案分类")
-    //@RequiresPermissions("/hr/employeeFileClass/getEmployeeFileClass")
+    @RequiresPermissions("/hr/employeeFileClass/getEmployeeFileClass")
     @ApiOperation(value = "根据父ID查询员工档案分类", notes = "根据父ID查询员工档案分类")
     @GetMapping(value = "/getEmployeeFileClass")
     public Result<List<TreeModel>> getEmployeeFileClass(@RequestParam("id") String parentId) {
@@ -65,7 +66,7 @@ public class EmployeeFileClassController extends BaseController {
 
 
     @ControllerLog(doAction = "删除员工档案分类")
-    //@RequiresPermissions("/hr/employeeFileClass/deleteEmployeeFileClass")
+    @RequiresPermissions("/hr/employeeFileClass/deleteEmployeeFileClass")
     @ApiOperation(value = "删除员工档案分类", notes = "删除员工档案分类")
     @GetMapping(value = "/deleteEmployeeFileClass")
     public Result delete(@RequestParam("id") String classId) {
@@ -76,7 +77,7 @@ public class EmployeeFileClassController extends BaseController {
     }
 
     @ControllerLog(doAction = "查询员工档案分类树")
-    //@RequiresPermissions("/hr/employeeFileClass/getTreeList")
+    @RequiresPermissions("/hr/employeeFileClass/getTreeList")
     @ApiOperation(value = "查询员工档案分类树", notes = "查询员工档案分类树")
     @GetMapping(value = "/getTreeList")
     public Result<List<EmployeeFileClass>> getTreeList() {

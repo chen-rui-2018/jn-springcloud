@@ -5,14 +5,13 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.system.dept.entity.TbSysPost;
-import com.jn.system.dept.model.SysPost;
+import com.jn.system.model.SysPost;
 import com.jn.system.dept.model.SysPostAdd;
 import com.jn.system.dept.model.SysPostPage;
 import com.jn.system.dept.service.SysPostService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,7 +48,7 @@ public class SysPostController extends BaseController {
     @ApiOperation(value = "查询所有岗位", notes = "查询所有岗位")
     @RequestMapping(value = "/findSysPostAll",method = RequestMethod.POST)
     public Result<List<TbSysPost>> findSysPostAll() {
-        List<TbSysPost> sysPostAll = sysPostService.findSysPostAll();
+        List<SysPost> sysPostAll = sysPostService.findSysPostAll();
         return new Result(sysPostAll);
     }
 

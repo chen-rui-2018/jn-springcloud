@@ -74,4 +74,12 @@ public interface MeterRulesService {
      */
     Result warningBalanceShort(String companyId);
 
+    /**
+     * 作废企业和计价规则之间的关系
+     * @param user
+     * @param id
+     * @return
+     */
+    Integer deleteLinks(User user,String id);
+
 }

@@ -48,9 +48,9 @@ public class SecurityVideoServiceImplTest {
         securityPlayBackUrlParam.setExpand("streamform=rtp");
         //token验证的url获取
         securityTokenParam = new SecurityTokenParam();
-        securityTokenParam.setUserCode("admin");
-        securityTokenParam.setService("http://192.168.30.2/portal/");
-        securityTokenParam.setLanguage("zh_CN");
+//        securityTokenParam.setUserCode("admin");
+//        securityTokenParam.setService("http://192.168.30.2/portal/");
+//        securityTokenParam.setLanguage("zh_CN");
     }
     @Test
     public void findSecurityMonitoringPointList() {

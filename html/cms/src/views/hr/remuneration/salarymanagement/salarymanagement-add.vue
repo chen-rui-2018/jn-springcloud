@@ -58,35 +58,35 @@
             基本工资组成：
             <div style="display:flex">
               <el-form-item label="基础工资" prop="probationBasicWage" class="inline">
-                <el-input v-model="salaryInfoAdd.probationBasicWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.probationBasicWage" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="职务津贴" prop="probationDutyAllowance" class="inline">
-                <el-input v-model="salaryInfoAdd.probationDutyAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.probationDutyAllowance" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
             <div style="display:flex">
               <el-form-item label="职称津贴" prop="probationProfessionalTitleAllowance" class="inline">
-                <el-input v-model="salaryInfoAdd.probationProfessionalTitleAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.probationProfessionalTitleAllowance" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="工龄工资" prop="probationSeniorityWage" class="inline">
-                <el-input v-model="salaryInfoAdd.probationSeniorityWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.probationSeniorityWage" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
             <div style="display:flex">
               <el-form-item label="学历津贴" prop="probationEducationAllowance" class="inline">
-                <el-input v-model="salaryInfoAdd.probationEducationAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.probationEducationAllowance" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="工资性补贴" prop="probationWorkSubsidy" class="inline">
-                <el-input v-model="salaryInfoAdd.probationWorkSubsidy" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.probationWorkSubsidy" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
             其他：
             <div style="display:flex">
               <el-form-item label="绩效奖金" prop="probationAchievementBonus" class="inline">
-                <el-input v-model="salaryInfoAdd.probationAchievementBonus" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.probationAchievementBonus" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="单项奖励" prop="probationSingleReward" class="inline">
-                <el-input v-model="salaryInfoAdd.probationSingleReward" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.probationSingleReward" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
           </div>
@@ -104,35 +104,35 @@
             基本工资组成：
             <div style="display:flex">
               <el-form-item label="基础工资" prop="conversionBasicWage" class="inline">
-                <el-input v-model="salaryInfoAdd.conversionBasicWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.conversionBasicWage" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="职务津贴" prop="conversionDutyAllowance" class="inline">
-                <el-input v-model="salaryInfoAdd.conversionDutyAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.conversionDutyAllowance" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
             <div style="display:flex">
               <el-form-item label="职称津贴" prop="conversionProfessionalTitleAllowance" class="inline">
-                <el-input v-model="salaryInfoAdd.conversionProfessionalTitleAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.conversionProfessionalTitleAllowance" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="工龄工资" prop="conversionSeniorityWage" class="inline">
-                <el-input v-model="salaryInfoAdd.conversionSeniorityWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.conversionSeniorityWage" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
             <div style="display:flex">
               <el-form-item label="学历津贴" prop="conversionEducationAllowance" class="inline">
-                <el-input v-model="salaryInfoAdd.conversionEducationAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.conversionEducationAllowance" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="工资性补贴" prop="conversionWorkSubsidy" class="inline">
-                <el-input v-model="salaryInfoAdd.conversionWorkSubsidy" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.conversionWorkSubsidy" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
             其他：
             <div style="display:flex">
               <el-form-item label="绩效奖金" prop="conversionAchievementBonus" class="inline">
-                <el-input v-model="salaryInfoAdd.conversionAchievementBonus" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.conversionAchievementBonus" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="单项奖励" prop="conversionSingleReward" class="inline">
-                <el-input v-model="salaryInfoAdd.conversionSingleReward" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.conversionSingleReward" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
           </div>
@@ -149,35 +149,35 @@
             基本工资组成：
             <div style="display:flex">
               <el-form-item label="基础工资" prop="currentBasicWage" class="inline">
-                <el-input v-model="salaryInfoAdd.currentBasicWage" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.currentBasicWage" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="职务津贴" prop="currentDutyAllowance" class="inline">
-                <el-input v-model="salaryInfoAdd.currentDutyAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.currentDutyAllowance" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
             <div style="display:flex">
               <el-form-item label="职称津贴" prop="currentProfessionalTitleAllowance" class="inline">
-                <el-input v-model="salaryInfoAdd.currentProfessionalTitleAllowance" :disabled="disableAll" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.currentProfessionalTitleAllowance" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="工龄工资" prop="currentSeniorityWage" class="inline">
-                <el-input v-model="salaryInfoAdd.currentSeniorityWage" :disabled="disableAll" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.currentSeniorityWage" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
             <div style="display:flex">
               <el-form-item label="学历津贴" prop="currentEducationAllowance" class="inline">
-                <el-input v-model="salaryInfoAdd.currentEducationAllowance" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.currentEducationAllowance" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="工资性补贴" prop="currentWorkSubsidy" class="inline">
-                <el-input v-model="salaryInfoAdd.currentWorkSubsidy" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.currentWorkSubsidy" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
             其他：
             <div style="display:flex">
               <el-form-item label="绩效奖金" prop="currentAchievementBonus" class="inline">
-                <el-input v-model="salaryInfoAdd.currentAchievementBonus" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.currentAchievementBonus" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
               <el-form-item label="单项奖励" prop="currentSingleReward" class="inline">
-                <el-input v-model="salaryInfoAdd.currentSingleReward" :disabled="disableAll" type="number" clearable placeholder="" maxlength="20"/>
+                <el-input v-model="salaryInfoAdd.currentSingleReward" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
           </div>
@@ -307,34 +307,34 @@ export default {
   },
   computed: {
     changeTrialPeriodWagesComp: function() {
-      return parseInt((this.salaryInfoAdd.probationBasicWage == null || this.salaryInfoAdd.probationBasicWage === '') ? 0 : this.salaryInfoAdd.probationBasicWage) +
-        parseInt((this.salaryInfoAdd.probationDutyAllowance == null || this.salaryInfoAdd.probationDutyAllowance === '') ? 0 : this.salaryInfoAdd.probationDutyAllowance) +
-        parseInt((this.salaryInfoAdd.probationProfessionalTitleAllowance == null || this.salaryInfoAdd.probationProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.probationProfessionalTitleAllowance) +
-        parseInt((this.salaryInfoAdd.probationSeniorityWage == null || this.salaryInfoAdd.probationSeniorityWage === '') ? 0 : this.salaryInfoAdd.probationSeniorityWage) +
-        parseInt((this.salaryInfoAdd.probationEducationAllowance == null || this.salaryInfoAdd.probationEducationAllowance === '') ? 0 : this.salaryInfoAdd.probationEducationAllowance) +
-        parseInt((this.salaryInfoAdd.probationWorkSubsidy == null || this.salaryInfoAdd.probationWorkSubsidy === '') ? 0 : this.salaryInfoAdd.probationWorkSubsidy) +
-        parseInt((this.salaryInfoAdd.probationAchievementBonus == null || this.salaryInfoAdd.probationAchievementBonus === '') ? 0 : this.salaryInfoAdd.probationAchievementBonus) +
-        parseInt((this.salaryInfoAdd.probationSingleReward == null || this.salaryInfoAdd.probationSingleReward === '') ? 0 : this.salaryInfoAdd.probationSingleReward)
+      return parseFloat((this.salaryInfoAdd.probationBasicWage == null || this.salaryInfoAdd.probationBasicWage === '') ? 0 : this.salaryInfoAdd.probationBasicWage) +
+        parseFloat((this.salaryInfoAdd.probationDutyAllowance == null || this.salaryInfoAdd.probationDutyAllowance === '') ? 0 : this.salaryInfoAdd.probationDutyAllowance) +
+        parseFloat((this.salaryInfoAdd.probationProfessionalTitleAllowance == null || this.salaryInfoAdd.probationProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.probationProfessionalTitleAllowance) +
+        parseFloat((this.salaryInfoAdd.probationSeniorityWage == null || this.salaryInfoAdd.probationSeniorityWage === '') ? 0 : this.salaryInfoAdd.probationSeniorityWage) +
+        parseFloat((this.salaryInfoAdd.probationEducationAllowance == null || this.salaryInfoAdd.probationEducationAllowance === '') ? 0 : this.salaryInfoAdd.probationEducationAllowance) +
+        parseFloat((this.salaryInfoAdd.probationWorkSubsidy == null || this.salaryInfoAdd.probationWorkSubsidy === '') ? 0 : this.salaryInfoAdd.probationWorkSubsidy) +
+        parseFloat((this.salaryInfoAdd.probationAchievementBonus == null || this.salaryInfoAdd.probationAchievementBonus === '') ? 0 : this.salaryInfoAdd.probationAchievementBonus) +
+        parseFloat((this.salaryInfoAdd.probationSingleReward == null || this.salaryInfoAdd.probationSingleReward === '') ? 0 : this.salaryInfoAdd.probationSingleReward)
     },
     changePositiveWageComp: function() {
-      return parseInt((this.salaryInfoAdd.conversionBasicWage == null || this.salaryInfoAdd.conversionBasicWage === '') ? 0 : this.salaryInfoAdd.conversionBasicWage) +
-        parseInt((this.salaryInfoAdd.conversionDutyAllowance == null || this.salaryInfoAdd.conversionDutyAllowance === '') ? 0 : this.salaryInfoAdd.conversionDutyAllowance) +
-        parseInt((this.salaryInfoAdd.conversionProfessionalTitleAllowance == null || this.salaryInfoAdd.conversionProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.conversionProfessionalTitleAllowance) +
-        parseInt((this.salaryInfoAdd.conversionSeniorityWage == null || this.salaryInfoAdd.conversionSeniorityWage === '') ? 0 : this.salaryInfoAdd.conversionSeniorityWage) +
-        parseInt((this.salaryInfoAdd.conversionEducationAllowance == null || this.salaryInfoAdd.conversionEducationAllowance === '') ? 0 : this.salaryInfoAdd.conversionEducationAllowance) +
-        parseInt((this.salaryInfoAdd.conversionWorkSubsidy == null || this.salaryInfoAdd.conversionWorkSubsidy === '') ? 0 : this.salaryInfoAdd.conversionWorkSubsidy) +
-        parseInt((this.salaryInfoAdd.conversionAchievementBonus == null || this.salaryInfoAdd.conversionAchievementBonus === '') ? 0 : this.salaryInfoAdd.conversionAchievementBonus) +
-        parseInt((this.salaryInfoAdd.conversionSingleReward == null || this.salaryInfoAdd.conversionSingleReward === '') ? 0 : this.salaryInfoAdd.conversionSingleReward)
+      return parseFloat((this.salaryInfoAdd.conversionBasicWage == null || this.salaryInfoAdd.conversionBasicWage === '') ? 0 : this.salaryInfoAdd.conversionBasicWage) +
+        parseFloat((this.salaryInfoAdd.conversionDutyAllowance == null || this.salaryInfoAdd.conversionDutyAllowance === '') ? 0 : this.salaryInfoAdd.conversionDutyAllowance) +
+        parseFloat((this.salaryInfoAdd.conversionProfessionalTitleAllowance == null || this.salaryInfoAdd.conversionProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.conversionProfessionalTitleAllowance) +
+        parseFloat((this.salaryInfoAdd.conversionSeniorityWage == null || this.salaryInfoAdd.conversionSeniorityWage === '') ? 0 : this.salaryInfoAdd.conversionSeniorityWage) +
+        parseFloat((this.salaryInfoAdd.conversionEducationAllowance == null || this.salaryInfoAdd.conversionEducationAllowance === '') ? 0 : this.salaryInfoAdd.conversionEducationAllowance) +
+        parseFloat((this.salaryInfoAdd.conversionWorkSubsidy == null || this.salaryInfoAdd.conversionWorkSubsidy === '') ? 0 : this.salaryInfoAdd.conversionWorkSubsidy) +
+        parseFloat((this.salaryInfoAdd.conversionAchievementBonus == null || this.salaryInfoAdd.conversionAchievementBonus === '') ? 0 : this.salaryInfoAdd.conversionAchievementBonus) +
+        parseFloat((this.salaryInfoAdd.conversionSingleReward == null || this.salaryInfoAdd.conversionSingleReward === '') ? 0 : this.salaryInfoAdd.conversionSingleReward)
     },
     changeCurrentSalaryComp: function() {
-      return parseInt((this.salaryInfoAdd.currentBasicWage == null || this.salaryInfoAdd.currentBasicWage === '') ? 0 : this.salaryInfoAdd.currentBasicWage) +
-        parseInt((this.salaryInfoAdd.currentDutyAllowance == null || this.salaryInfoAdd.currentDutyAllowance === '') ? 0 : this.salaryInfoAdd.currentDutyAllowance) +
-        parseInt((this.salaryInfoAdd.currentProfessionalTitleAllowance == null || this.salaryInfoAdd.currentProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.currentProfessionalTitleAllowance) +
-        parseInt((this.salaryInfoAdd.currentSeniorityWage == null || this.salaryInfoAdd.currentSeniorityWage === '') ? 0 : this.salaryInfoAdd.currentSeniorityWage) +
-        parseInt((this.salaryInfoAdd.currentEducationAllowance == null || this.salaryInfoAdd.currentEducationAllowance === '') ? 0 : this.salaryInfoAdd.currentEducationAllowance) +
-        parseInt((this.salaryInfoAdd.currentWorkSubsidy == null || this.salaryInfoAdd.currentWorkSubsidy === '') ? 0 : this.salaryInfoAdd.currentWorkSubsidy) +
-        parseInt((this.salaryInfoAdd.currentAchievementBonus == null || this.salaryInfoAdd.currentAchievementBonus === '') ? 0 : this.salaryInfoAdd.currentAchievementBonus) +
-        parseInt((this.salaryInfoAdd.currentSingleReward == null || this.salaryInfoAdd.currentSingleReward === '') ? 0 : this.salaryInfoAdd.currentSingleReward)
+      return parseFloat((this.salaryInfoAdd.currentBasicWage == null || this.salaryInfoAdd.currentBasicWage === '') ? 0 : this.salaryInfoAdd.currentBasicWage) +
+        parseFloat((this.salaryInfoAdd.currentDutyAllowance == null || this.salaryInfoAdd.currentDutyAllowance === '') ? 0 : this.salaryInfoAdd.currentDutyAllowance) +
+        parseFloat((this.salaryInfoAdd.currentProfessionalTitleAllowance == null || this.salaryInfoAdd.currentProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.currentProfessionalTitleAllowance) +
+        parseFloat((this.salaryInfoAdd.currentSeniorityWage == null || this.salaryInfoAdd.currentSeniorityWage === '') ? 0 : this.salaryInfoAdd.currentSeniorityWage) +
+        parseFloat((this.salaryInfoAdd.currentEducationAllowance == null || this.salaryInfoAdd.currentEducationAllowance === '') ? 0 : this.salaryInfoAdd.currentEducationAllowance) +
+        parseFloat((this.salaryInfoAdd.currentWorkSubsidy == null || this.salaryInfoAdd.currentWorkSubsidy === '') ? 0 : this.salaryInfoAdd.currentWorkSubsidy) +
+        parseFloat((this.salaryInfoAdd.currentAchievementBonus == null || this.salaryInfoAdd.currentAchievementBonus === '') ? 0 : this.salaryInfoAdd.currentAchievementBonus) +
+        parseFloat((this.salaryInfoAdd.currentSingleReward == null || this.salaryInfoAdd.currentSingleReward === '') ? 0 : this.salaryInfoAdd.currentSingleReward)
     }
   },
   created() {
@@ -382,6 +382,7 @@ export default {
       this.isDisabled = true
       if (this.salaryInfoAdd.jobNumber === null || this.salaryInfoAdd.jobNumber === '' || this.salaryInfoAdd.jobNumber === 0) {
         this.$message.error('请选择员工信息')
+        this.isDisabled = false
         return
       }
       this.$refs['salaryInfoAdd'].validate(valid => {

@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.hr.model.*;
 import com.jn.oa.attendance.entity.TbOaAttendance;
 import com.jn.oa.attendance.model.AttendanceAdd;
 import com.jn.oa.attendance.model.AttendancePage;
@@ -92,6 +93,41 @@ public class AttendanceController extends BaseController {
         Assert.notNull(userId, "用户ID不能为空");
         AttendanceVo data = attendanceService.selectByUserIdAndCurrentDate(userId);
         return new Result(data);
+    }
+
+    @ControllerLog(doAction = "根据用户id查询用户考勤打卡数据")
+    @ApiOperation(value = "根据用户id查询用户考勤打卡数据",notes = "根据用户id查询用户考勤打卡数据")
+    @PostMapping(value = "/selectAttendanceManagementByUserId")
+    @RequiresPermissions("/oa/attendance/selectAttendanceManagementByUserId")
+    public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(@RequestBody @Validated AttendanceManagement attendanceManagement) {
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        attendanceManagement.setUserId(user.getId());
+        Result<List<AttendanceManagementApiVo>> data = attendanceService.selectAttendanceManagementByUserId(attendanceManagement);
+        return data;
+    }
+
+    @ControllerLog(doAction = "根据部门id查询部门考勤打卡数据")
+    @ApiOperation(value = "根据部门id查询部门考勤打卡数据",notes = "根据部门id查询部门考勤打卡数据")
+    @PostMapping(value = "/selectAttendanceManagementByDepartmentId")
+    @RequiresPermissions("/oa/attendance/selectAttendanceManagementByDepartmentId")
+    public  Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@RequestBody @Validated  AttendanceManagement attendanceManagement) {
+        Assert.notNull(attendanceManagement.getDepartmentId(), "部门ID不能为空");
+        Result<List<AttendanceManageApiVo>> data = attendanceService.selectAttendanceManagementByDepartmentId(attendanceManagement);
+        return data;
+    }
+
+    @ControllerLog(doAction = "根据用户id查询用户考勤接口")
+    @ApiOperation(value = "根据用户id查询用户考勤接口",notes = "根据用户id查询用户考勤接口")
+    @PostMapping(value = "/selectByUserIdAndTime")
+    @RequiresPermissions("/oa/attendance/selectByUserIdAndTime")
+    public  Result<AttendanceOverTimeApiVo> selectByUserIdAndTime(@RequestBody @Validated AttendanceOverTime attendanceOverTime) {
+        Assert.notNull(attendanceOverTime.getType(), "用户打卡类型不能为空");
+        Assert.notNull(attendanceOverTime.getAttendanceDate(), "用户打卡时间不能为空");
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        attendanceOverTime.setUserId(user.getId());
+        Result<AttendanceOverTimeApiVo> data = attendanceService.selectByUserIdAndTime(attendanceOverTime);
+        return data;
     }
 
 

@@ -369,7 +369,7 @@ export default {
       dialogVisible: false,
       templateTree: [],
       modelFormTargetOptions: [], // 填报对象列表选项
-      filllInFormDeadlineMonth: '', // 选择当月或下月
+      filllInFormDeadlineMonth: '当月', // 选择当月或下月
       originTab: { // tab表初始化数据
         tabName: '', // tab名称 表名
         tabClumnType: '', // 表填报列类型（0：累计值；1：本期值）
@@ -404,7 +404,7 @@ export default {
         departmentName: '', // 填报对象，类型是园区时候
         groupId: '', // 填报对象，类型是园区企业时候
         modelFormTargetId: '', // 填报对象 填报群组(企业群组)/园区填报部门
-        modelCycle: '', // 填报周期（1：年，0：月）
+        modelCycle: 0, // 填报周期（1：年，0：月）
         taskCreateTime: '', // 年报表：任务生成日期（YYYYMMDD）月报表：是一个01-31之间的数字
         filllInFormDeadline: '', // 年报表：截止日期（YYYYMMDD）月报表：当月/下月+01-31之间的数字
         warningBeforeDays: '', // 提前预警天数
@@ -870,7 +870,6 @@ export default {
       // 切换年月填报周期时，把上次输入的值清空
       this.formData.taskCreateTime = ''
       this.formData.filllInFormDeadline = ''
-      this.filllInFormDeadlineMonth = ''
     },
     addTargetFormData(index, form) {
       if (form.tabCreateType === '1') {

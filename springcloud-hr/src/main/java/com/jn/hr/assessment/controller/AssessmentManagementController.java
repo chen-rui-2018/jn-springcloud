@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.excel.ExcelUtil;
 import com.jn.hr.assessment.model.AssessmentManageAdd;
@@ -46,7 +48,7 @@ public class AssessmentManagementController extends BaseController{
 	AssessmentManagementService assessmentManagementService;
 	
 	@ControllerLog(doAction = "分页查询考核管理")
-    //@RequiresPermissions("/hr/AssessmentManagement/paginationInquireAssessManage")
+    @RequiresPermissions("/hr/AssessmentManagement/paginationInquireAssessManage")
 	@ApiOperation(value = "分页查询考核管理", notes = "分页查询考核管理")
     @RequestMapping(value = "/paginationInquireAssessManage", method = RequestMethod.POST)
 	public Result<PaginationData<List<AssessmentManageVo>>> paginationInquireAssessManage(@Validated @RequestBody AssessmentManagePage assessmentManagePage){
@@ -56,7 +58,7 @@ public class AssessmentManagementController extends BaseController{
 	
 	
 	@ControllerLog(doAction = "发起考核")
-    //@RequiresPermissions("/hr/AssessmentManagement/initiateAssess")
+    @RequiresPermissions("/hr/AssessmentManagement/initiateAssess")
 	@ApiOperation(value = "发起考核", notes = "发起考核")
     @RequestMapping(value = "/initiateAssess", method = RequestMethod.POST)
 	public Result initiateAssess(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
@@ -66,7 +68,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "获取部门树")
-    //@RequiresPermissions("/hr/AssessmentManagement/ObtainDepartmentTree")
+    @RequiresPermissions("/hr/AssessmentManagement/ObtainDepartmentTree")
 	@ApiOperation(value = "获取部门树", notes = "获取部门树")
     @RequestMapping(value = "/ObtainDepartmentTree", method = RequestMethod.POST)
 	public Result<List<DepartmentTree>> ObtainDepartmentTree(@Validated @RequestBody EmployeeBasicInfoPage employeeBasicInfoPage){	
@@ -76,10 +78,11 @@ public class AssessmentManagementController extends BaseController{
 	
 	
 	@ControllerLog(doAction = "考核延期")
-    //@RequiresPermissions("/hr/AssessmentManagement/assessmentExtension")
+    @RequiresPermissions("/hr/AssessmentManagement/assessmentExtension")
 	@ApiOperation(value = "考核延期", notes = "考核延期")
     @RequestMapping(value = "/assessmentExtension", method = RequestMethod.POST)
-	public Result<String> assessmentExtension(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
+	public Result<String> assessmentExtension(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){
+		Assert.notNull(assessmentManageAdd.getAssessmentId(),"AssessmentId不能为空");
 		User user = (User) SecurityUtils.getSubject().getPrincipal();	
 		String str = assessmentManagementService.assessmentExtension(assessmentManageAdd, user);
 		return new Result(str);
@@ -87,7 +90,7 @@ public class AssessmentManagementController extends BaseController{
 	
 	
 	@ControllerLog(doAction = "删除考核记录")
-    //@RequiresPermissions("/hr/AssessmentManagement/deleteAssessmentRecord")
+    @RequiresPermissions("/hr/AssessmentManagement/deleteAssessmentRecord")
 	@ApiOperation(value = "删除考核记录", notes = "删除考核记录")
     @RequestMapping(value = "/deleteAssessmentRecord", method = RequestMethod.POST)
 	public Result<String> deleteAssessmentRecord(@Validated @RequestBody AssessmentManagePage assessmentManagePage){	
@@ -96,7 +99,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出查看页面明细")
-    //@RequiresPermissions("/hr/AssessmentManagement/exportAssessment")
+    @RequiresPermissions("/hr/AssessmentManagement/exportAssessment")
 	@ApiOperation(value = "导出查看页面明细", notes = "导出查看页面明细")
     @RequestMapping(value = "/exportAssessment", method = RequestMethod.GET)
 	public Result exportAssessment(AssessmentManagePage assessmentManagePage,HttpServletResponse response){	
@@ -112,7 +115,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "查看页面分页")
-    //@RequiresPermissions("/hr/AssessmentManagement/viewPageInfo")
+    @RequiresPermissions("/hr/AssessmentManagement/viewPageInfo")
 	@ApiOperation(value = "查看页面分页", notes = "查看页面分页")
     @RequestMapping(value = "/viewPageInfo", method = RequestMethod.POST)
 	public Result<PaginationData<List<AssessmentManageVo>>> viewPageInfo(@Validated @RequestBody AssessmentManagePage assessmentManagePage){	
@@ -121,7 +124,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "开始考核-保存")
-    //@RequiresPermissions("/hr/AssessmentManagement/saveStartAssessmentPage")
+    @RequiresPermissions("/hr/AssessmentManagement/saveStartAssessmentPage")
 	@ApiOperation(value = "开始考核-保存", notes = "开始考核-保存")
     @RequestMapping(value = "/saveStartAssessmentPage", method = RequestMethod.POST)
 	public Result<String> saveStartAssessmentPage(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
@@ -130,7 +133,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "开始考核-页面明细")
-    //@RequiresPermissions("/hr/AssessmentManagement/startAssessmentPageDetails")
+    @RequiresPermissions("/hr/AssessmentManagement/startAssessmentPageDetails")
 	@ApiOperation(value = "开始考核-页面明细", notes = "开始考核-页面明细")
     @RequestMapping(value = "/startAssessmentPageDetails", method = RequestMethod.POST)
 	public Result<List<AssessmentTemplateDetailVo>> startAssessmentPageDetails(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
@@ -139,7 +142,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "归档生效")
-    //@RequiresPermissions("/hr/AssessmentManagement/updateAssessment")
+    @RequiresPermissions("/hr/AssessmentManagement/updateAssessment")
 	@ApiOperation(value = "归档生效", notes = "归档生效")
     @RequestMapping(value = "/updateAssessment", method = RequestMethod.POST)
 	public Result<String> updateAssessment(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
@@ -148,7 +151,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "结束并归档")
-    //@RequiresPermissions("/hr/AssessmentManagement/finishAndArchive")
+    @RequiresPermissions("/hr/AssessmentManagement/finishAndArchive")
 	@ApiOperation(value = "结束并归档", notes = "结束并归档")
     @RequestMapping(value = "/finishAndArchive", method = RequestMethod.POST)
 	public Result<String> finishAndArchive(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
@@ -157,7 +160,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "考核结束")
-    //@RequiresPermissions("/hr/AssessmentManagement/assessmentEnd")
+    @RequiresPermissions("/hr/AssessmentManagement/assessmentEnd")
 	@ApiOperation(value = "考核结束", notes = "考核结束")
     @RequestMapping(value = "/assessmentEnd", method = RequestMethod.POST)
 	public Result<String> assessmentEnd(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
@@ -166,7 +169,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "删除被考核人记录")
-    //@RequiresPermissions("/hr/AssessmentManagement/deleteAppraisedPersonRecord")
+    @RequiresPermissions("/hr/AssessmentManagement/deleteAppraisedPersonRecord")
 	@ApiOperation(value = "删除被考核人记录", notes = "删除被考核人记录")
     @RequestMapping(value = "/deleteAppraisedPersonRecord", method = RequestMethod.POST)
 	public Result<String> deleteAppraisedPersonRecord(@Validated @RequestBody AssessmentManagePage assessmentManagePage){	
@@ -175,7 +178,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "开始考核详细页面显示")
-    //@RequiresPermissions("/hr/AssessmentManagement/viewAssessmentDetails")
+    @RequiresPermissions("/hr/AssessmentManagement/viewAssessmentDetails")
 	@ApiOperation(value = "开始考核详细页面显示", notes = "开始考核详细页面显示")
     @RequestMapping(value = "/viewAssessmentDetails", method = RequestMethod.POST)
 	public Result<List<AssessmentTemplateDetailVo>> viewAssessmentDetails(@Validated @RequestBody AssessmentManageAdd assessmentManageAdd){	
@@ -185,7 +188,7 @@ public class AssessmentManagementController extends BaseController{
 	
 	
 	@ControllerLog(doAction = "考核模板页面显示")
-    //@RequiresPermissions("/hr/AssessmentManagement/assessmentTemplatePaginationDisplay")
+    @RequiresPermissions("/hr/AssessmentManagement/assessmentTemplatePaginationDisplay")
 	@ApiOperation(value = "考核模板页面显示", notes = "考核模板页面显示")
     @RequestMapping(value = "/assessmentTemplatePaginationDisplay", method = RequestMethod.POST)
 	public Result<PaginationData<List<AssessmentTemplateVo>>> assessmentTemplatePaginationDisplay(@Validated @RequestBody AssessmentTemplatePage assessmentTemplatePage){	
@@ -194,7 +197,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "删除考核模板")
-    //@RequiresPermissions("/hr/AssessmentManagement/deleteAssessmentTemplate")
+    @RequiresPermissions("/hr/AssessmentManagement/deleteAssessmentTemplate")
 	@ApiOperation(value = "删除考核模板", notes = "删除考核模板")
     @RequestMapping(value = "/deleteAssessmentTemplate", method = RequestMethod.POST)
 	public Result<String> deleteAssessmentTemplate(@Validated @RequestBody AssessmentTemplatePage assessmentTemplatePage){	
@@ -203,7 +206,7 @@ public class AssessmentManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "考核模板详情")
-    //@RequiresPermissions("/hr/AssessmentManagement/assessmentTemplateDetails")
+    @RequiresPermissions("/hr/AssessmentManagement/assessmentTemplateDetails")
 	@ApiOperation(value = "考核模板详情", notes = "考核模板详情")
     @RequestMapping(value = "/assessmentTemplateDetails", method = RequestMethod.POST)
 	public Result<AssessmentTemplateVo> assessmentTemplateDetails(@Validated @RequestBody AssessmentTemplatePage assessmentTemplatePage){	
@@ -211,9 +214,8 @@ public class AssessmentManagementController extends BaseController{
 		return new Result(assessment);
 	}
 	
-	//添加考核模板
 	@ControllerLog(doAction = "添加考核模板")
-    //@RequiresPermissions("/hr/AssessmentManagement/addAssessmentTemplate")
+    @RequiresPermissions("/hr/AssessmentManagement/addAssessmentTemplate")
 	@ApiOperation(value = "添加考核模板", notes = "添加考核模板")
     @RequestMapping(value = "/addAssessmentTemplate", method = RequestMethod.POST)
 	public Result addAssessmentTemplate(@Validated @RequestBody AssessmentTemplatePage assessmentTemplatePage){	

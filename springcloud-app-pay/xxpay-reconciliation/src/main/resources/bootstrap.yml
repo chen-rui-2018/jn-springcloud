@@ -1,0 +1,90 @@
+server:
+  port: 4010
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://springcloud:springcloud@localhost:1025/eureka/
+  instance:
+    prefer-ip-address: true
+
+spring:
+  application:
+    name: xxpay-reconciliation
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: springcloud-app-config
+      label: master
+      profile: master
+  sleuth:
+    sampler:
+      percentage: 1.0
+
+  datasource:
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    maxWait: 60000
+    url: >-
+      jdbc:mysql://192.168.10.28:3306/dbps?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+    validationQuery: SELECT 1 FROM DUAL
+    minEvictableIdleTimeMillis: 300000
+    testOnBorrow: 'false'
+    filters: 'stat,wall,log4j'
+    testOnReturn: 'false'
+    initialSize: 5
+    password: dbps_u_123
+    driver-class-name: com.mysql.jdbc.Driver
+    maxActive: 20
+    username: dbpsuser
+    maxPoolPreparedStatementPerConnectionSize: 20
+    poolPreparedStatements: 'true'
+    testWhileIdle: 'true'
+    timeBetweenEvictionRunsMillis: 60000
+    minIdle: 5
+    type: com.alibaba.druid.pool.DruidDataSource
+
+
+management:
+  security:
+    enabled: false
+
+#对账文件存储位置
+reconciliation:
+  alipay:
+    #合作身份者ID，签约账号
+    partner:
+    #支付宝提供给商户的服务接入网关URL(新)
+    url: https\://mapi.alipay.com/gateway.do?
+    #文件存放路径
+    dir: /test/alipay/
+    #MD5密钥，安全检验码，由数字和字母组成的32位字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
+    key:
+    #加密方式
+    signType: MD5
+    #调试用，创建TXT日志文件夹路径，见AlipayCore.java类中的logResult(String sWord)打印方法。
+    logPath: C\:\\
+    #编码格式
+    charset: utf-8
+  wx:
+    #公众账号ID
+    appId:
+    #商户号
+    mchId: 1534743531
+    #微信支付密钥
+    partnerKey: d88d3INhVjJhQzuwgRXcBVrBqf23lBYr
+    #文件存放路径
+    dir: /test/wx/
+    #对账单下载地址
+    url: https\://api.mch.weixin.qq.com/pay/downloadbill
+    #编码格式
+    charset: utf-8
+    #账单类型  ：SUCCESS表示返回当日成功支付的订单
+    billType: SUCCESS
+
+logging:
+  config: 'classpath:logback-custom.xml'
+  level:
+    com:
+      jn: debug
+

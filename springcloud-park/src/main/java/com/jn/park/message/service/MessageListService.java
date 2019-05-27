@@ -14,6 +14,10 @@ import java.util.List;
 public interface MessageListService {
 
 
+
+
+    List<MessageListModel> findAllList(String messageOneSort,String isRead,User user);
+
     /**
      * 获取二级消息类别
      * @param messageOneTort 一级消息类别

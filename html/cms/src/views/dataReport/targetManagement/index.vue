@@ -448,7 +448,7 @@ export default {
       //  隐藏菜单栏
       this.menuVisible = false
     },
-    nodeClick(node) {
+    nodeClick(node, treeNode) {
       //  隐藏菜单栏
       this.menuVisible = false
       this.loadingTarget = true
@@ -457,7 +457,7 @@ export default {
         return
       }
       this.currentTarget = ''
-      this.parentName = node.text
+      this.parentName = treeNode.parent.data.text
       this.formData.parentId = id
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/target/getTargetInfo`, { targetId: id }).then(data => {
         if (data.code === '0000') {

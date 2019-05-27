@@ -1,6 +1,9 @@
 package com.jn.hr.employee.model;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jn.common.util.enums.EnumUtil;
+import com.jn.hr.employee.enums.EmploySexEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -8,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,11 +45,11 @@ public class EmployeeBasicInfoAdd implements Serializable {
     @ApiModelProperty(value = "部门名称")
     @NotNull(message = "部门名称不能为空")
     private String departmentName;
-    @ApiModelProperty(value = "职位ID")
-    @NotNull(message = "职位ID不能为空")
+    @ApiModelProperty(value = "职级ID")
+    @NotNull(message = "职级ID不能为空")
     private String jobId;
-    @ApiModelProperty(value = "职位名称")
-    @NotNull(message = "职位名称不能为空")
+    @ApiModelProperty(value = "职级名称")
+    @NotNull(message = "职级名称不能为空")
     private String jobName;
     @ApiModelProperty(value = "证件ID")
     @NotNull(message = "证件ID不能为空")
@@ -56,11 +60,11 @@ public class EmployeeBasicInfoAdd implements Serializable {
     @ApiModelProperty(value = "证件号码")
     @NotNull(message = "证件号码不能为空")
     private String certificateNumber;
-    @ApiModelProperty(value = "职务ID")
-    @NotNull(message = "职务ID不能为空")
+    @ApiModelProperty(value = "岗位ID")
+    @NotNull(message = "岗位ID不能为空")
     private String postId;
-    @ApiModelProperty(value = "职务名称")
-    @NotNull(message = "职务名称不能为空")
+    @ApiModelProperty(value = "岗位名称")
+    @NotNull(message = "岗位名称不能为空")
     private String postName;
     @ApiModelProperty(value = "工号")
     private String jobNumber;

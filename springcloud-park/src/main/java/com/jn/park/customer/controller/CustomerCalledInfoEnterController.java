@@ -100,7 +100,7 @@ public class CustomerCalledInfoEnterController extends BaseController {
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
-            logger.warn("用户问题详情获取当前登录用户信息失败");
+            logger.warn("来电录入用户问题详情获取当前登录用户信息失败");
             return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         return new Result<>(customerServiceCenterService.customerQuesDetail(user.getAccount(), processInsId));

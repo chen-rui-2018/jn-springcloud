@@ -3,50 +3,7 @@
 
     <el-container>
       <el-aside width="200px">
-        <div class="tree-search">
-          <el-button style="width:200px;" type="primary" @click="addCard">新增组织</el-button>
-        </div>
-        <el-tree
-          :data="treeList"
-          :props="defaultProps"
-          :highlight-current="true"
-          node-key="departmentId"
-          style="min-height:613px;margin-top:18px;"
-          @node-click="handleNodeClick"
-          @node-contextmenu="rightClick"/>
-        <div v-show="menuVisible" id="menu-div" class="menu-div">
-          <ul id="menu" class="menu">
-            <li class="menu__item" @click="addCard()">添加</li>
-            <li class="menu__item" @click="updateCard()">编辑</li>
-            <li class="menu__item" @click="deleteCard">删除</li>
-          </ul>
-        </div>
-
-        <template v-if="treeFormVisible">
-          <el-dialog :visible.sync="treeFormVisible" title="组织架构" width="450px">
-            <el-form
-              ref="treeForm"
-              :rules="rules"
-              :model="treeForm"
-              label-position="right"
-              label-width="130px"
-              style="max-width:400px;margin-left:20px">
-              <el-form-item label="部门名称:" prop="departmentName">
-                <el-input
-                  v-model.trim="treeForm.departmentName"
-                  maxlength="200"
-                  style="width: 200px"
-                  placeholder="请输入花名册分类名称"
-                  clearable/>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer" align="center">
-              <el-button type="primary" @click="handleTree">保存</el-button>
-              <el-button @click="cancelTree">取消</el-button>
-            </div>
-          </el-dialog>
-        </template>
-
+        <el-tree v-loading="departmentListLoading" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" default-expand-all @node-click="handleNodeClick"/>
       </el-aside>
       <el-main>
 
@@ -123,8 +80,8 @@
           <el-table-column label="姓名" align="center" prop="name"/>
           <el-table-column label="员工状态" align="center" prop="employStatusStr"/>
           <el-table-column label="性别" align="center" prop="sexStr"/>
-          <el-table-column label="职位" align="center" prop="jobName"/>
-          <el-table-column label="职级" align="center" prop="postName"/>
+          <el-table-column label="职级" align="center" prop="jobName"/>
+          <el-table-column label="岗位" align="center" prop="postName"/>
           <el-table-column label="联系电话" align="center" prop="phone"/>
           <el-table-column label="员工类型" align="center" prop="employeeTypeStr"/>
           <el-table-column label="操作" align="center" min-width="100" width="200" class-name="small-padding fixed-width">
@@ -165,7 +122,7 @@
 
 <script>
 import {
-  addEmployeeDepartment, updateEmployeeDepartment, deleteEmployeeDepartment, getTreeList, list,
+  list,
   deleteEmployeeBasicInfo, exportEmployeeBasicInfo
 
 } from '@/api/hr/employeeBasicInfo'
@@ -175,6 +132,9 @@ import {
 } from '@/api/hr/util'
 
 import FileUpload from '@/views/hr/employee/fileUpload'
+import {
+  api
+} from '@/api/axios'
 
 export default {
   components: {
@@ -189,6 +149,14 @@ export default {
       }
     }
     return {
+      departmentListLoading: false,
+
+      currentDepartmentIds: undefined,
+      departmentList: undefined,
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
       jobList: [],
       errorResults: [],
       processing: false,
@@ -219,28 +187,13 @@ export default {
       fileList: [],
       dialogImportVisible: false,
       employeeBasicInfoList: [],
-      defaultProps: {
-        label: 'departmentName',
-        children: 'children'
-      },
       menuVisible: false,
-      treeSelectNode: {},
-      treeSelect: {
-        departmentId: '',
-        departmentName: ''
-      },
-      treeForm: {
-        departmentId: '',
-        departmentName: ''
-      },
       rules: {
         departmentName: [{ required: true, message: '请输入分类名称', trigger: 'blur' }, {
           validator: checkName,
           trigger: 'blur'
         }]
       },
-      treeFormVisible: false,
-      treeList: [],
       isDisabled: false,
       listLoading: false,
       listQuery: {
@@ -248,17 +201,34 @@ export default {
         page: 1,
         rows: 10,
         name: '',
-        jobId: ''
+        jobId: '',
+        departmentId: ''
       },
       total: 0
     }
   },
   mounted() {
     this.initList()
-    this.initTree()
     this.initJobList()
+    this.getAllDepartment()
   },
   methods: {
+    getAllDepartment() {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.departmentList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
+      })
+    },
+    handleNodeClick(data) {
+      this.listQuery.page = 1
+      this.listQuery.departmentId = data.value
+      this.initList()
+    },
     initJobList() {
       getCode({ 'groupCode': 'job', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
         if (res.data.code === '0000') {
@@ -365,107 +335,6 @@ export default {
     },
     queryAttachDetail(row) {
       this.$router.push({ name: 'attachmentList', query: { fileId: row.fileId, titleName: row.titleName }})
-    },
-    initTree() {
-      getTreeList().then(res => {
-        if (res.data.code === '0000') {
-          this.treeList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-    },
-    handleNodeClick(data) {
-      this.listQuery.departmentId = data.departmentId
-      this.treeForm.departmentId = data.departmentId
-      this.treeForm.departmentName = data.departmentName
-      this.initList()
-    },
-    rightClick(MouseEvent, data, Node, element) {
-      this.menuVisible = false
-      this.menuVisible = true
-      this.treeSelect = data
-      this.treeSelectNode = Node
-      var menu = document.querySelector('#menu-div')
-      menu.style.left = MouseEvent.clientX - 200 + 'px'
-      document.addEventListener('click', this.closeTree)
-      menu.style.top = MouseEvent.clientY - 80 + 'px'
-      console.log('右键被点击的data:', data)
-    },
-    closeTree() {
-      this.menuVisible = false
-    },
-    addCard() {
-      this.treeFormVisible = true
-      this.treeForm.departmentId = ''
-      this.treeForm.departmentName = ''
-    },
-    updateCard() {
-      this.treeFormVisible = true
-      this.treeForm.departmentId = this.treeSelect.departmentId
-      this.treeForm.departmentName = this.treeSelect.departmentName
-    },
-    deleteCard() {
-      this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteEmployeeDepartment(this.treeSelect.departmentId).then(res => {
-          if (res.data.code === '0000') {
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            })
-            this.initTree()
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      })
-    },
-    handleTree() {
-      this.treeForm.departmentId !== '' ? this.updateTree() : this.saveTree()
-    },
-    saveTree() {
-      console.log('保存树')
-      this.$refs['treeForm'].validate(valid => {
-        if (valid) {
-          addEmployeeDepartment(this.treeForm).then(
-            res => {
-              if (res.data.code === '0000') {
-                this.$message.success('保存成功')
-              } else {
-                this.$message.error(res.data.result)
-              }
-              this.$refs['treeForm'].resetFields()
-              this.treeFormVisible = false
-              this.initTree()
-            }
-          )
-        }
-      })
-    },
-    updateTree() {
-      this.$refs['treeForm'].validate(valid => {
-        if (valid) {
-          updateEmployeeDepartment(this.treeForm).then(
-            res => {
-              if (res.data.code === '0000') {
-                this.$message.success('保存成功')
-              } else {
-                this.$message.error(res.data.result)
-              }
-              this.$refs['treeForm'].resetFields()
-              this.treeFormVisible = false
-              this.initTree()
-            }
-          )
-        }
-      })
-    },
-    cancelTree() {
-      this.treeFormVisible = false
     },
     initList() {
       console.log('查询员工花名册。。。')

@@ -1,0 +1,24 @@
+.uploader-bg {
+  width: 130rpx;
+  height: 130rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: rgba(242,242,242,1);
+  border-radius: 16rpx;
+  cursor: pointer;
+}
+.uploader-bg .uploader-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+.upload-plus {
+  font-size: 60rpx;
+  color: #999;
+}

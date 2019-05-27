@@ -138,6 +138,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 
 	@Override
 	@ServiceLog(doAction = "导入历史参保记录")
+	@Transactional(rollbackFor = Exception.class)
 	public String importHistoryInsuranceRecord(MultipartFile file,User user) {
 		// TODO Auto-generated method stub
 		if(file.isEmpty()){
@@ -160,7 +161,6 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			i++;
 			InsuredDetaild insured = (InsuredDetaild)result;
 			String str = checkField(insured);
-			logger.info("----str---" + str);
 			if(!StringUtils.isBlank(str)){
 				sb.append("第"+i+"行:"+str+";");
                 continue;
@@ -259,6 +259,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	
 	@Override
 	@ServiceLog(doAction = "取消增员计划")
+	@Transactional(rollbackFor = Exception.class)
 	public String deleteAttritionPlan(IncreaseStaffPage increaseStaffPage) {
 		TbManpowerIncreaseStaff tbManpowerIncreaseStaff = new TbManpowerIncreaseStaff();
 		tbManpowerIncreaseStaff.setId(increaseStaffPage.getId());
@@ -506,6 +507,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	}
 	@Override
 	@ServiceLog(doAction = "停止参保")
+	@Transactional(rollbackFor = Exception.class)
 	public String stopInsurance(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd,User user) {
 		// TODO Auto-generated method stub
 		List<IncreaseStaff> increaseList = new ArrayList<IncreaseStaff>();
@@ -566,6 +568,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 
 	@Override
 	@ServiceLog(doAction = "修改参保方案")
+	@Transactional(rollbackFor = Exception.class)
 	public String updateInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user) {
 		// TODO Auto-generated method stub
 		TbManpowerInsuredScheme tbManpowerInsuredScheme = new TbManpowerInsuredScheme();
@@ -602,13 +605,15 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 
 	@Override
 	@ServiceLog(doAction = "删除参保方案")
+	@Transactional(rollbackFor = Exception.class)
 	public String deleteInsurancescheme(InsuredSchemePage insuredSchemePage) {
 
 		//根据方案Id修改tb_manpower_insured_scheme（参保管理-参保方案表）状态为失效 
 		//根据项目id修改tb_manpower_insured_scheme_detailed（参保方案-明细表） 状态为标记删除
 		int number = insuredDetailMapper.selectBySchemeIdNumber(insuredSchemePage.getSchemeId());
 		if(number != 0){
-			return "方案正在使用，禁止删除";
+			logger.info("方案正在使用，禁止删除");
+			throw new JnSpringCloudException(SalaryManagementExceptionEnums.SCHEME_USING);
 		}
 		TbManpowerInsuredScheme tbManpowerInsuredScheme = new TbManpowerInsuredScheme();
 		tbManpowerInsuredScheme.setSchemeId(insuredSchemePage.getSchemeId());
@@ -632,6 +637,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	
 	@Override
 	@ServiceLog(doAction = "添加参保方案")
+	@Transactional(rollbackFor = Exception.class)
 	public String addInsurancescheme(InsuredSchemeAdd insuredSchemeAdd,User user) {
 		// TODO Auto-generated method stub
 		TbManpowerInsuredScheme InsuredScheme = new TbManpowerInsuredScheme();
@@ -674,14 +680,6 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		if(StringUtils.isBlank(insured.getJobNumber())){
 			return "工号不能为空";
 		}
-		
-		/*if(StringUtils.isBlank(insured.getName())){
-			return "姓名不能为空";
-		}*/
-		
-		/*if(StringUtils.isBlank(insured.getDepartment())){
-			return "部门不能为空";
-		}*/
 		
 		if(StringUtils.isBlank(insured.getCityName())){
 			return "参保城市不能为空";

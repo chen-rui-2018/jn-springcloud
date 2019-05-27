@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.jn.park.electricmeter.entity.TbElectricEnergyGroupLog">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="rule_id" jdbcType="VARCHAR" property="ruleId" />
-    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
     <result column="company_id" jdbcType="VARCHAR" property="companyId" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -77,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, rule_id, project_id, company_id, record_status, creator_account, created_time, 
-    modifier_account, modified_time, degree, price, day, meter_id, rule_name, company_name
+    id, rule_id, company_id, record_status, creator_account, created_time, modifier_account, 
+    modified_time, degree, price, day, meter_id, rule_name, company_name
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyGroupLogCriteria" resultMap="BaseResultMap">
     select
@@ -111,16 +110,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyGroupLog">
-    insert into tb_electric_energy_group_log (id, rule_id, project_id, 
-      company_id, record_status, creator_account, 
-      created_time, modifier_account, modified_time, 
-      degree, price, day, meter_id, 
-      rule_name, company_name)
-    values (#{id,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, 
-      #{companyId,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{degree,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, #{day,jdbcType=DATE}, #{meterId,jdbcType=VARCHAR}, 
-      #{ruleName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR})
+    insert into tb_electric_energy_group_log (id, rule_id, company_id, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time, degree, 
+      price, day, meter_id, rule_name, 
+      company_name)
+    values (#{id,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{degree,jdbcType=DECIMAL}, 
+      #{price,jdbcType=DECIMAL}, #{day,jdbcType=DATE}, #{meterId,jdbcType=VARCHAR}, #{ruleName,jdbcType=VARCHAR}, 
+      #{companyName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyGroupLog">
     insert into tb_electric_energy_group_log
@@ -130,9 +129,6 @@
       </if>
       <if test="ruleId != null">
         rule_id,
-      </if>
-      <if test="projectId != null">
-        project_id,
       </if>
       <if test="companyId != null">
         company_id,
@@ -177,9 +173,6 @@
       </if>
       <if test="ruleId != null">
         #{ruleId,jdbcType=VARCHAR},
-      </if>
-      <if test="projectId != null">
-        #{projectId,jdbcType=VARCHAR},
       </if>
       <if test="companyId != null">
         #{companyId,jdbcType=VARCHAR},
@@ -234,9 +227,6 @@
       <if test="record.ruleId != null">
         rule_id = #{record.ruleId,jdbcType=VARCHAR},
       </if>
-      <if test="record.projectId != null">
-        project_id = #{record.projectId,jdbcType=VARCHAR},
-      </if>
       <if test="record.companyId != null">
         company_id = #{record.companyId,jdbcType=VARCHAR},
       </if>
@@ -282,7 +272,6 @@
     update tb_electric_energy_group_log
     set id = #{record.id,jdbcType=VARCHAR},
       rule_id = #{record.ruleId,jdbcType=VARCHAR},
-      project_id = #{record.projectId,jdbcType=VARCHAR},
       company_id = #{record.companyId,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -304,9 +293,6 @@
     <set>
       <if test="ruleId != null">
         rule_id = #{ruleId,jdbcType=VARCHAR},
-      </if>
-      <if test="projectId != null">
-        project_id = #{projectId,jdbcType=VARCHAR},
       </if>
       <if test="companyId != null">
         company_id = #{companyId,jdbcType=VARCHAR},
@@ -350,7 +336,6 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyGroupLog">
     update tb_electric_energy_group_log
     set rule_id = #{ruleId,jdbcType=VARCHAR},
-      project_id = #{projectId,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

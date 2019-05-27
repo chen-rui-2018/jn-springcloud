@@ -15,6 +15,7 @@ import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.dal.dao.model.PayChannel;
 import org.xxpay.dal.dao.model.PayOrder;
+import org.xxpay.service.channel.wechat.WxPayProperties;
 import org.xxpay.service.channel.wechat.WxPayUtil;
 import org.xxpay.service.service.PayChannelService;
 import org.xxpay.service.service.PayOrderService;
@@ -44,6 +45,9 @@ public class Notify4WxPayController extends Notify4BasePay {
 
 	@Autowired
 	private PayChannelService payChannelService;
+
+	@Autowired
+	private WxPayProperties wxPayProperties;
 
 	/**
 	 * 微信支付(统一下单接口)后台通知响应
@@ -77,10 +81,14 @@ public class Notify4WxPayController extends Notify4BasePay {
 			wxPayService.setConfig(wxPayConfig);
 			// 这里做了签名校验(这里又做了一次xml转换对象,可以考虑优化)
 			wxPayService.parseOrderNotifyResult(xmlResult);
-			// 处理订单
-			byte payStatus = payOrder.getStatus(); // 0：订单生成，1：支付中，-1：支付失败，2：支付成功，3：业务处理完成，-2：订单过期
+
+			// ==============处理订单==================
+			// 0：订单生成，1：支付中，-1：支付失败，2：支付成功，3：业务处理完成，-2：订单过期
+			byte payStatus = payOrder.getStatus();
 			if (payStatus != PayConstant.PAY_STATUS_SUCCESS && payStatus != PayConstant.PAY_STATUS_COMPLETE) {
-				int updatePayOrderRows = payOrderService.updateStatus4Success(payOrder.getPayOrderId(),"");
+				//计算手续费和实际收入
+				payOrder = computationCost(payOrder,wxPayProperties.getPay_rate());
+				int updatePayOrderRows = payOrderService.updateStatus4Success(payOrder);
 				if (updatePayOrderRows != 1) {
 					_log.error("{}更新支付状态失败,将payOrderId={},更新payStatus={}失败", logPrefix, payOrder.getPayOrderId(), PayConstant.PAY_STATUS_SUCCESS);
 					return WxPayNotifyResponse.fail("处理订单失败");
@@ -151,7 +159,8 @@ public class Notify4WxPayController extends Notify4BasePay {
 			payContext.put("retMsg", "total_fee is not the same");
 			return false;
 		}
-
+		//渠道订单号
+		payOrder.setChannelOrderNo(params.getTransactionId());
 		payContext.put("payOrder", payOrder);
 		return true;
 	}

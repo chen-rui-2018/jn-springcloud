@@ -40,7 +40,11 @@ export default {
     updateWorkPlanStatus: 'springcloud-oa/oa/workPlan/updateWorkPlanStatus', // 修改任务状态
     downLoadAttachment: 'springcloud-oa/oa/common/downLoadAttachment', // 附件下载
     deleteBatch: 'springcloud-oa/oa/workPlan/deleteBatch', // 删除工作计划
-    addRemark: 'springcloud-oa/oa/workPlan/addRemark' // 添加备注
+    addRemark: 'springcloud-oa/oa/workPlan/addRemark', // 添加备注
+    //  考勤管理
+    getUserInfo: 'springcloud-app-system/system/sysUser/getUserInfo', // 获取用户id
+    selectByUserIdAndCurrentDate: 'springcloud-oa/oa/attendance/selectByUserIdAndCurrentDate', // 根据用户ID查询当天考勤详情
+    attendance: 'springcloud-oa/oa/attendance/attendance' // 考勤签到/签退
 
   },
   setToken: function (obj) {
@@ -239,15 +243,15 @@ export default {
     // mm = mm < 10 ? '0' + mm : mm
     // ss = ss < 10 ? '0' + ss : ss
     return yyyy + '-' + MM + '-' + dd
+  },
+  getCurrentTime () { // 获取当前时间
+    var date = new Date()
+    // var seperator1 = '-'
+    // var seperator2 = ':'
+    var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+    var strDate = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+    var currentdate = date.getFullYear() + '年' + month + '月' + strDate + '日'
+    return currentdate
   }
-  //   getCurrentTime () { // 获取当前时间
-  //     var date = new Date()
-  //     var seperator1 = '-'
-  //     var seperator2 = ':'
-  //     var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
-  //     var strDate = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-  //     var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-  //     return currentdate
-  //   }
 
 }

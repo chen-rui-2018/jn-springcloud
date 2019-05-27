@@ -4,9 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import './assets/iconfont/iconfont.css'
-Vue.prototype.api = api
-import { XHeader, Selector, Checker, CheckerItem, Group, Search, XInput, XTable, Scroller, Popover, Toast, ToastPlugin, LoadMore, PopupPicker, Datetime, XTextarea, Cell, XNumber } from 'vux'
-
+import { XHeader, Selector, Checker, CheckerItem, Group, Search, XInput, XTable, Scroller, Popover, Toast, ToastPlugin, LoadMore, PopupPicker, Datetime, XTextarea, Cell, XNumber, XDialog, Tab, TabItem, Swiper, SwiperItem } from 'vux'
+// import BaiduMap from 'vue-baidu-map'
 // import { get, post} from '@/api/http'
 // import MintUI from 'mint-ui'
 // import 'mint-ui/lib/style.css'
@@ -15,7 +14,16 @@ import './assets/font-awesome/css/font-awesome.min.css'
 // Vue.prototype.$get = get
 // Vue.prototype.$post = post
 import api from '@/api/api'
+// Vue.use(BaiduMap, {
+//   ak: 'KVelCif7fs2D19DQVz9W6fYEnNbEWE8k'
+// })
+Vue.prototype.api = api
 Vue.component('x-table', XTable)
+Vue.component('swiper', Swiper)
+Vue.component('swiper-item', SwiperItem)
+Vue.component('x-dialog', XDialog)
+Vue.component('tab', Tab)
+Vue.component('tab-item', TabItem)
 // Vue.use(ToastPlugin)
 Vue.use(ToastPlugin, {position: 'top'})
 Vue.component('x-header', XHeader)

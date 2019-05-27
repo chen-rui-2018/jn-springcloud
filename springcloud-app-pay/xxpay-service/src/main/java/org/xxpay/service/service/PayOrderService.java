@@ -1,5 +1,6 @@
 package org.xxpay.service.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -70,21 +71,39 @@ public class PayOrderService {
 
     /**
      *修改支付订单状态为支付完成
-     * 并且记录第三方支付系统的交易单号
-     * @param payOrderId 支付订单号
-     * @param tradeNo  第三方支付系统的交易单号
+     * 并且记录相关信息
+     * @param payOrderParam 支付对象
     * */
-    public int updateStatus4Success(String payOrderId,String tradeNo) {
-        PayOrder payOrder = new PayOrder();
-        payOrder.setPayOrderId(payOrderId);
-        payOrder.setStatus(PayConstant.PAY_STATUS_SUCCESS);
-        payOrder.setChannelOrderNo(tradeNo);
-        payOrder.setPaySuccTime(System.currentTimeMillis());
+    public int updateStatus4Success(PayOrder payOrderParam) {
+
+        PayOrder updatePayOrder = new PayOrder();
+        updatePayOrder.setPayOrderId(payOrderParam.getPayOrderId());
+        //订单状态 为支付成功
+        updatePayOrder.setStatus(PayConstant.PAY_STATUS_SUCCESS);
+        //第三方支付单号
+        if(StringUtils.isNotBlank(payOrderParam.getChannelOrderNo())){
+            updatePayOrder.setChannelOrderNo(payOrderParam.getChannelOrderNo());
+        }
+        //商户支付费率
+        if(null != payOrderParam.getPayRate()){
+           updatePayOrder.setPayRate(payOrderParam.getPayRate());
+        }
+        //手续费
+        if(null != payOrderParam.getPlatCost()){
+            updatePayOrder.setPlatCost(payOrderParam.getPlatCost());
+        }
+        //商户实际收入
+        if(null != payOrderParam.getRealIncomeAmount()){
+            updatePayOrder.setRealIncomeAmount(payOrderParam.getRealIncomeAmount());
+        }
+
+        //支付成功时间
+        updatePayOrder.setPaySuccTime(System.currentTimeMillis());
         PayOrderExample example = new PayOrderExample();
         PayOrderExample.Criteria criteria = example.createCriteria();
-        criteria.andPayOrderIdEqualTo(payOrderId);
+        criteria.andPayOrderIdEqualTo(payOrderParam.getPayOrderId());
         criteria.andStatusEqualTo(PayConstant.PAY_STATUS_PAYING);
-        return payOrderMapper.updateByExampleSelective(payOrder, example);
+        return payOrderMapper.updateByExampleSelective(updatePayOrder, example);
     }
 
     public int updateStatus4Complete(String payOrderId) {

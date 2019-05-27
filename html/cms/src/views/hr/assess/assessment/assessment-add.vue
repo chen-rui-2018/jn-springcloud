@@ -152,6 +152,11 @@ export default {
         this.isDisabled = false
         return false
       }
+      if (new Date(this.assessment.assessmentEndTime.replace(/-/g, '\/')) < new Date()) {
+        alert('失效时间必须大于当前时间,请重新选择')
+        this.isDisabled = false
+        return false
+      }
       if (new Date(this.assessment.assessmentEndTime.replace(/-/g, '\/')) < new Date(this.assessment.assessmentStartTime.replace(/-/g, '\/'))) {
         alert('失效时间必须大于生效时间,请重新选择')
         this.isDisabled = false

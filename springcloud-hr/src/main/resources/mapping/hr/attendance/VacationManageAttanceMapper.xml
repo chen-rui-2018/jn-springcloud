@@ -28,18 +28,19 @@
     where t1.vacation_type = #{vacationType,jdbcType=VARCHAR} and t1.user_id = #{userId,jdbcType=VARCHAR}
   </select>
   
+  <select id="selectByUserId" parameterType="map" resultType="com.jn.hr.attendance.model.VacationManageVo">
+    select * from tb_manpower_vacation_manage t1
+    where t1.user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  
   <insert id="insert" parameterType="com.jn.hr.attendance.model.VacationManageVo">
         insert into tb_manpower_vacation_manage
-        (
-        id, job_number,user_id, vacation_type,vacation_time
-        ) values
-            (
-            #{item.id},
+        ( id, job_number,user_id, vacation_type,vacation_time) values
+            (#{item.id},
             #{item.jobNumber},
             #{item.userId}
             #{item.vacationType},
-            #{item.vacationTime}
-            )
+            #{item.vacationTime})
     </insert>
   
 </mapper>

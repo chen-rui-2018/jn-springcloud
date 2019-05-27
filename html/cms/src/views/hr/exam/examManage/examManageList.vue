@@ -30,7 +30,9 @@
             </p>
           </el-card>
           <el-card v-for="(item,index) in dataList" :key="index" class="exambox box-card">
-            <img src="../../../../assets/images/testErweima.png" width="150" height="150" >
+            <vue-qr :size="160" :margin="0" :auto-color="true" :dot-scale="1" :text="item.examinaUrl+'&token='+token" />
+            <!-- <p> {{ item.examinaUrl }}</p>
+            <img src="../../../../assets/images/testErweima.png" width="150" height="150" > -->
             <div class="examlistleft">
               <h6>{{ item.examinaName }}</h6>
               <p><span>参加方式:免登陆考试</span></p>
@@ -77,6 +79,8 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
+import VueQr from 'vue-qr'
 import emitDialog from '../components/emitDialog'
 import clipboard from '@/directive/clipboard/index.js' // use clipboard by v-directive
 import {
@@ -88,10 +92,12 @@ export default {
     clipboard
   },
   components: {
+    VueQr,
     emitDialog
   },
   data() {
     return {
+      token: '',
       examboxLoading: false,
       emitDialogVisible: false,
       dataStatusNum: {
@@ -136,6 +142,7 @@ export default {
     }
   },
   created() {
+    this.token = getToken()
     this.initData()
   },
   methods: {
@@ -332,7 +339,7 @@ export default {
 			.examListright {
 				float: right;
 				.participateIn {
-					margin-right: 60px;
+					margin-right: 50px;
 				}
 			}
 			.examListrightbottom {

@@ -1,8 +1,15 @@
 package com.jn.hr.model;
 
+import java.io.Serializable;
+
 import io.swagger.annotations.ApiModelProperty;
 
-public class AttendanceManagement {
+public class AttendanceManagement implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2279660670449309792L;
 
 	@ApiModelProperty(value = "用户id")
 	private String userId;

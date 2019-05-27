@@ -11,6 +11,8 @@ import com.jn.common.model.Result;
 import com.jn.hr.model.AttendanceManageApiVo;
 import com.jn.hr.model.AttendanceManagement;
 import com.jn.hr.model.AttendanceManagementApiVo;
+import com.jn.hr.model.AttendanceOverTime;
+import com.jn.hr.model.AttendanceOverTimeApiVo;
 import com.jn.hr.model.VacationManagement;
 
 /**
@@ -26,15 +28,18 @@ public interface HrClient {
 
    /* @RequestMapping(value = "/api/hr/notices", method = RequestMethod.POST)
     Result<String> noticesApplicationMeeting();*/
-	@RequestMapping(value={"/hr/AttendanceManagement/insertByLeaveVacationmanage"}, method={RequestMethod.POST})
+	@RequestMapping(value={"/api/hr/insertByLeaveVacationmanage"}, method={RequestMethod.POST})
     public  Result<String> insertByLeaveVacationmanage(@RequestBody  VacationManagement vacationManagement);
 	
-	@RequestMapping(value={"/hr/AttendanceManagement/insertByOverTimeVacationmanage"}, method={RequestMethod.POST})
+	@RequestMapping(value={"/api/hr/insertByOverTimeVacationmanage"}, method={RequestMethod.POST})
     public  Result<String> insertByOverTimeVacationmanage(@RequestBody  VacationManagement vacationManagement);
 	
-	@RequestMapping(value={"/hr/AttendanceManagement/selectAttendanceManagementByUserId"}, method={RequestMethod.POST})
+	@RequestMapping(value={"/api/hr/selectAttendanceManagementByUserId"}, method={RequestMethod.POST})
 	public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(@RequestBody  AttendanceManagement attendanceManagement);
 	
-	@RequestMapping(value={"/hr/AttendanceManagement/selectAttendanceManagementByDepartmentId"}, method={RequestMethod.POST})
+	@RequestMapping(value={"/api/hr/selectAttendanceManagementByDepartmentId"}, method={RequestMethod.POST})
     public  Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@RequestBody  AttendanceManagement attendanceManagement);
+	
+	@RequestMapping(value={"/api/hr/selectByUserIdAndTime"}, method={RequestMethod.POST})
+	public Result<AttendanceOverTimeApiVo> selectByUserIdAndTime(@RequestBody  AttendanceOverTime attendanceOverTime);
 }

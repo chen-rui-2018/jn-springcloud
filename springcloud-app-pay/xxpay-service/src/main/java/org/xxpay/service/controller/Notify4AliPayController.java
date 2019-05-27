@@ -118,7 +118,10 @@ public class Notify4AliPayController extends Notify4BasePay {
 				// 第三方交易单号
 				String tradeNo = params.get("trade_no");
 				payOrder.setChannelOrderNo(tradeNo);
-				updatePayOrderRows = payOrderService.updateStatus4Success(payOrder.getPayOrderId(),tradeNo);
+				//计算手续费和实际收入
+				payOrder = computationCost(payOrder,alipayConfig.getPay_rate());
+				//更新支付状态为成功  并且更新部分信息
+				updatePayOrderRows = payOrderService.updateStatus4Success(payOrder);
 				if (updatePayOrderRows != 1) {
 					_log.error("{}更新支付状态失败,将payOrderId={},更新payStatus={}失败", logPrefix, payOrder.getPayOrderId(), PayConstant.PAY_STATUS_SUCCESS);
 					_log.info("{}响应给支付宝结果：{}", logPrefix, PayConstant.RETURN_ALIPAY_VALUE_FAIL);
@@ -198,6 +201,7 @@ public class Notify4AliPayController extends Notify4BasePay {
 			payContext.put("retMsg", "");
 			return false;
 		}
+
 		payContext.put("payOrder", payOrder);
 		return true;
 	}

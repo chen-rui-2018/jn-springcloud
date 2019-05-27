@@ -12,7 +12,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @Copyright: www.xxpay.org
  */
 @EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages={"org.xxpay","com.jn.common"})
+@SpringBootApplication(scanBasePackages={"org.xxpay","com.jn"})
 public class XxPayServiceApplication {
 
 	public static void main(String[] args) {

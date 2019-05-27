@@ -327,10 +327,10 @@ public class AttendanceManagementController extends BaseController{
     @RequiresPermissions("/hr/AttendanceManagement/selectAttendanceManagementByDepartmentId")
 	@ApiOperation(value = "根据部门id与考勤年月查询历史考勤列表", notes = "根据部门id与考勤年月查询历史考勤列表")
     @RequestMapping(value = "/selectAttendanceManagementByDepartmentId", method = RequestMethod.POST)
-	public Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
+	public Result<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
     	Assert.notNull(attendanceManagement.getAttendanceMonth(),"考勤月份不能为空");
-    	List<AttendanceManageApiVo> list = attendanceManagementService.selectAttendanceManagementByDepartmentId(attendanceManagement);
-		return new Result(list);
+		AttendanceManageApiVo attendanceManageApiVo = attendanceManagementService.selectAttendanceManagementByDepartmentId(attendanceManagement);
+		return new Result(attendanceManageApiVo);
 	}
 
     @ControllerLog(doAction = "加班小时")

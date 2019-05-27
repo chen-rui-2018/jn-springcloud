@@ -1,6 +1,7 @@
 package com.jn.hr.common.service;
 
 import com.jn.hr.common.model.DownAttachment;
+import com.jn.system.vo.SysDictKeyValue;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,5 +35,6 @@ public interface CommonService {
      */
     ResponseEntity<byte[]> downLoadAttachment(DownAttachment downAttachment, HttpServletResponse response);
 
-    String queryDictValueByLable(String parentGroupCode, String groupCode, String lable);
+
+    List<SysDictKeyValue> queryDictList(String parentGroupCode, String groupCode);
 }

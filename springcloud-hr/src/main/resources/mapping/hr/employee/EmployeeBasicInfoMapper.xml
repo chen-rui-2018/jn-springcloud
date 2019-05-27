@@ -29,7 +29,7 @@
             and employee_type=#{employeeType}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and department_id  like concat('%',#{departmentId},'%')
+            and department_id  =#{departmentId}
         </if>
         ORDER BY created_time DESC
     </select>
@@ -176,15 +176,15 @@
     </select>
 
     <select id="statByEmployeePostName" parameterType="map" resultType="com.jn.hr.employee.model.KeyValue">
-         select post_name name,count(1) value,
-         case when post_name='领导班子' then 1
-         when post_name='中层干部' then 2
+         select job_name name,count(1) value,
+         case when post_name='普通员工' then 1
+         when job_name='中层干部' then 2
          else 3 end seqno
     from tb_manpower_employee_basic_info where record_status=1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
             and department_id=#{departmentId}
         </if>
-         group by post_name order by seqno asc
+         group by job_name order by seqno asc
     </select>
 
     <select id="statByEmployeeSex" parameterType="map" resultType="com.jn.hr.employee.model.KeyValue">

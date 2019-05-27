@@ -8,6 +8,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.excel.ExcelUtil;
+import com.jn.hr.archives.model.TreeModel;
 import com.jn.hr.employee.enums.EmployeeExceptionEnums;
 import com.jn.hr.employee.model.EmployeeBasicInfo;
 import com.jn.hr.employee.model.EmployeeBasicInfoAdd;
@@ -209,6 +210,13 @@ public class EmployeeBasicInfoController extends BaseController {
         employeeBasicInfoService.updateEmployStatus(id,employStatus, user);
         return new Result();
     }
-
+    @ControllerLog(doAction = "查询部门员工树")
+    //@RequiresPermissions("/hr/employeeBasicInfo/selectDepartEmployee")
+    @ApiOperation(value = "查询部门员工树", notes = "查询部门员工树")
+    @GetMapping(value = "/selectDepartEmployee")
+    public Result selectDepartEmployee() {
+        List<TreeModel> teeList=employeeBasicInfoService.selectDepartEmployee();
+        return new Result(teeList);
+    }
 
 }

@@ -55,6 +55,22 @@ public class HrDataUtil {
 	}
 
 	/**
+	 * 获取指定日期的星期
+	 * @param num1
+	 * @param num2
+	 * @return
+	 */
+	 public static String getWeek(Date date){
+		String[] weeks = {"星期日","星期一","星期二","星期三","星期四","星期五","星期六"};
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int week_index = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if(week_index<0){
+		week_index = 0;
+		} 
+		return weeks[week_index];
+	}
+	/**
 	 * 获取指定日期当天23:59:59
 	 * 
 	 * @param time
@@ -98,6 +114,12 @@ public class HrDataUtil {
 	// 将字符串转为date时间
 	public static Date getDate(String dateStr) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.parse(dateStr);
+	}
+	
+	// 将字符串转为date时间
+	public static Date conversionDate(String dateStr) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		return sdf.parse(dateStr);
 	}
 

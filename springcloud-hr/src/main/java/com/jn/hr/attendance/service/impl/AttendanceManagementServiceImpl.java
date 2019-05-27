@@ -62,6 +62,7 @@ import com.jn.hr.employee.model.EmployeeBasicInfoPage;
 import com.jn.hr.increase.enums.SalaryManagementExceptionEnums;
 import com.jn.hr.model.AttendanceKeyValue;
 import com.jn.hr.model.AttendanceManageApiVo;
+import com.jn.hr.model.AttendanceManageObject;
 import com.jn.hr.model.AttendanceManagement;
 import com.jn.hr.model.AttendanceManagementApiVo;
 import com.jn.hr.model.AttendanceOverTime;
@@ -589,55 +590,50 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 
 	@Override
 	@ServiceLog(doAction = "根据部门id与年月获取考勤信息")
-	public List<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(
+	public AttendanceManageApiVo selectAttendanceManagementByDepartmentId(
 			AttendanceManagement attendanceManagement) {
-		List<AttendanceManageApiVo> attendancemanageList = new ArrayList<AttendanceManageApiVo>();
+		AttendanceManageApiVo attendanceObject = new AttendanceManageApiVo();
+		List<AttendanceManageObject> attendancemanageList = new ArrayList<AttendanceManageObject>();
 		EmployeeBasicInfoPage employeeBasicInfoPage = new EmployeeBasicInfoPage();
 		employeeBasicInfoPage.setDepartmentId(attendanceManagement.getDepartmentId());
 		List<EmployeeBasicInfo> basicList = employeeBasicInfoMapper.list(employeeBasicInfoPage);
-		Integer totalNumber = basicList.size();
+		attendanceObject.setTotalNumber(basicList.size());
 		// integer
 		// 迟到
-		AttendanceManageApiVo comeLateAttendanceManage = new AttendanceManageApiVo();
+		AttendanceManageObject comeLateAttendanceManage = new AttendanceManageObject();
 		comeLateAttendanceManage.setStatusAttendanceObject(new ArrayList<AttendanceManagementApiVo>());
 		attendancemanageList.add(comeLateAttendanceManage);
 		// 早退
-		AttendanceManageApiVo leaveEarlyAttendanceManage = new AttendanceManageApiVo();
+		AttendanceManageObject leaveEarlyAttendanceManage = new AttendanceManageObject();
 		leaveEarlyAttendanceManage.setStatusAttendanceObject(new ArrayList<AttendanceManagementApiVo>());
 		attendancemanageList.add(leaveEarlyAttendanceManage);
 		// 缺卡
-		AttendanceManageApiVo notCardAttendanceManage = new AttendanceManageApiVo();
+		AttendanceManageObject notCardAttendanceManage = new AttendanceManageObject();
 		notCardAttendanceManage.setStatusAttendanceObject(new ArrayList<AttendanceManagementApiVo>());
 		attendancemanageList.add(notCardAttendanceManage);
 		// 旷工
-		AttendanceManageApiVo absenceAttendanceManage = new AttendanceManageApiVo();
+		AttendanceManageObject absenceAttendanceManage = new AttendanceManageObject();
 		absenceAttendanceManage.setStatusAttendanceObject(new ArrayList<AttendanceManagementApiVo>());
 		attendancemanageList.add(absenceAttendanceManage);
 		// 加班
-		AttendanceManageApiVo overTimeAttendanceManage = new AttendanceManageApiVo();
+		AttendanceManageObject overTimeAttendanceManage = new AttendanceManageObject();
 		overTimeAttendanceManage.setStatusAttendanceObject(new ArrayList<AttendanceManagementApiVo>());
 		attendancemanageList.add(overTimeAttendanceManage);
 		// 请假
-		AttendanceManageApiVo leaveAttendanceManage = new AttendanceManageApiVo();
+		AttendanceManageObject leaveAttendanceManage = new AttendanceManageObject();
 		leaveAttendanceManage.setStatusAttendanceObject(new ArrayList<AttendanceManagementApiVo>());
 		attendancemanageList.add(leaveAttendanceManage);
 
-		comeLateAttendanceManage.setTotalNumber(totalNumber);
 		comeLateAttendanceManage.setAttendanceType(AttendanceManageTypeEnums.COME_LATE.getCode());
 
-		notCardAttendanceManage.setTotalNumber(totalNumber);
 		notCardAttendanceManage.setAttendanceType(AttendanceManageTypeEnums.MISS_CARD.getCode());
 
-		absenceAttendanceManage.setTotalNumber(totalNumber);
 		absenceAttendanceManage.setAttendanceType(AttendanceManageTypeEnums.ABSENCE.getCode());
 
-		overTimeAttendanceManage.setTotalNumber(totalNumber);
 		overTimeAttendanceManage.setAttendanceType(AttendanceManageTypeEnums.OVER_TIME.getCode());
 
-		leaveAttendanceManage.setTotalNumber(totalNumber);
 		leaveAttendanceManage.setAttendanceType(AttendanceManageTypeEnums.LEAVE.getCode());
 
-		leaveEarlyAttendanceManage.setTotalNumber(totalNumber);
 		leaveEarlyAttendanceManage.setAttendanceType(AttendanceManageTypeEnums.LEAVE_EARLY.getCode());
 
 		for (EmployeeBasicInfo basic : basicList) {
@@ -679,7 +675,8 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		leaveAttendanceManage.setNumber(leaveAttendanceManage.getStatusAttendanceObject().size());
 		leaveEarlyAttendanceManage.setNumber(leaveEarlyAttendanceManage.getStatusAttendanceObject().size());
 
-		return attendancemanageList;
+		attendanceObject.setAttendanceList(attendancemanageList);
+		return attendanceObject;
 	}
 
 	@Override
@@ -756,7 +753,7 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			if (attendanceVo.getSignInAttendanceTime() == null && attendanceVo.getSignOutAttendanceTime() != null
 					&& timeSet.getWorkAttendanceTime()
 							.compareTo(DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "HH:mm")) < 0) {
-				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "MM-dd"));
+				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "MM-dd") +"(" + HrDataUtil.getWeek(attendanceVo.getSignOutAttendanceTime()) + ")");
 				value.setValue("上班缺卡");
 				notCardLateObject.add(value);
 				continue;
@@ -765,7 +762,7 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			if (attendanceVo.getSignInAttendanceTime() != null && attendanceVo.getSignOutAttendanceTime() == null
 					&& timeSet.getDutyAttendanceTime()
 							.compareTo(DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "HH:mm")) > 0) {
-				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "MM-dd"));
+				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "MM-dd") +"(" + HrDataUtil.getWeek(attendanceVo.getSignInAttendanceTime()) + ")");
 				value.setValue("下班缺卡");
 				notCardLateObject.add(value);
 				continue;
@@ -782,7 +779,11 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			}
 			// 迟到统计
 			if (inAttendanceTime.compareTo(timeSet.getWorkAttendanceTime()) > 0) {
-				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "MM-dd HH:mm"));
+				String outTime = "";
+				if(attendanceVo.getSignOutAttendanceTime() != null){
+					outTime ="-" + DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "HH:mm");
+				}
+				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "MM-dd")+"("+ HrDataUtil.getWeek(attendanceVo.getSignInAttendanceTime()) +")"+DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "HH:mm") + outTime);
 				comeLateTotalTime += Integer.valueOf(
 						stringConversionDate(attendanceVo.getSignInAttendanceTime(), timeSet.getWorkAttendanceTime()));
 				value.setValue(
@@ -797,8 +798,12 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			}
 			// 早退统计
 			if (outAttendanceTime.compareTo(timeSet.getDutyAttendanceTime()) < 0) {
+				String inTime = "";
+				if(attendanceVo.getSignInAttendanceTime() != null){
+					inTime = DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "HH:mm") + "-";
+				}
 				value = new AttendanceKeyValue();
-				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "MM-dd HH:mm"));
+				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "MM-dd")+"("+HrDataUtil.getWeek(attendanceVo.getSignOutAttendanceTime()) +")"+ inTime +DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "HH:mm"));
 				leaveEarlyTotalTime += Integer.valueOf(
 						stringConversionDate(attendanceVo.getSignOutAttendanceTime(), timeSet.getDutyAttendanceTime()));
 				value.setValue(
@@ -809,7 +814,7 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			
 			//正常考勤
 			if(inAttendanceTime.compareTo(timeSet.getWorkAttendanceTime()) <= 0 && outAttendanceTime.compareTo(timeSet.getDutyAttendanceTime()) >= 0){
-				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "MM-dd HH:mm"));
+				value.setTimeKey(DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "MM-dd")+" (" +HrDataUtil.getWeek(attendanceVo.getSignInAttendanceTime()) +")"+DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "HH:mm") + "-" + DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "HH:mm"));
 				value.setValue("正常考勤");
 				normalLateObject.add(value);
 			}
@@ -842,6 +847,7 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		attendanceManagementList.add(attendanceManagementApiVo);
 		
 		attendanceSort(notCardLateObject);
+		attendanceManagementApiVo = new AttendanceManagementApiVo();
 		attendanceManagementApiVo.setAttendanceType(AttendanceManageTypeEnums.MISS_CARD.getCode());
 		attendanceManagementApiVo.setFrequency(String.valueOf(notCardLateObject.size()));
 		attendanceManagementApiVo.setTotalTime("0");
@@ -890,7 +896,8 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		for (String keyNumber : monthMap.keySet()) {
 			if (map.get(keyNumber) == null && monthMap.get(keyNumber) != null && monthMap.get(keyNumber) == 1) {
 				AttendanceKeyValue value = new AttendanceKeyValue();
-				value.setTimeKey(keyNumber);
+				Date date = conversionDate(keyNumber);
+				value.setTimeKey(DateUtils.formatDate(date, "MM-dd") + "(" +HrDataUtil.getWeek(date) + ")");
 				value.setValue("旷工");
 				absenceObject.add(value);
 			}
@@ -905,6 +912,7 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		return attendanceManagementApiVo;
 	}
 
+	
 	// 获取加班记录
 	private AttendanceManagementApiVo obtainoverTimeObjectList(List<AttendanceApiVo> list,
 			AttendanceSchedulVo schedul) {
@@ -933,7 +941,8 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 				AttendanceApiVo attendanceVo = new AttendanceApiVo();
 				attendanceVo = map.get(keyNumber);
 				// 格式 加班日期 13:00-14:00
-				value.setTimeKey(keyNumber + " " + DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "HH:mm")
+				Date date = conversionDate(keyNumber);
+				value.setTimeKey(DateUtils.formatDate(date, "MM-dd") + "(" + HrDataUtil.getWeek(date) + ")" + DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "HH:mm")
 						+ "-" + DateUtils.formatDate(attendanceVo.getSignOutAttendanceTime(), "HH:mm"));
 				Long overHour = HrDataUtil.betweenDates(attendanceVo.getSignInAttendanceTime(),
 						attendanceVo.getSignOutAttendanceTime()) / 3600;
@@ -960,7 +969,7 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		for (LeaveApiVo leaveVo : list) {
 			AttendanceKeyValue attendanceKeyValue = new AttendanceKeyValue();
 			attendanceKeyValue.setTimeKey(
-					DateUtils.formatDate(leaveVo.getStartTime(), "MM-dd") + " " + getLeaveType(leaveVo.getType()));
+					DateUtils.formatDate(leaveVo.getStartTime(), "yyyy-MM-dd") + "--"+ DateUtils.formatDate(leaveVo.getEndTime(), "yyyy-MM-dd")+ " " + getLeaveType(leaveVo.getType()));
 			attendanceKeyValue.setValue(leaveVo.getTotalHour() + "小时");
 			leaveTotalTime += Integer.valueOf(leaveVo.getTotalHour());
 			leaveObject.add(attendanceKeyValue);
@@ -1253,5 +1262,19 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		}
 
 		return "类型获取失败";
+	}
+	
+	/**
+	 * 时间转换
+	 */
+	private Date conversionDate(String dateStr){
+		Date date = null;
+		try {
+			date = HrDataUtil.conversionDate(dateStr);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
 	}
 }

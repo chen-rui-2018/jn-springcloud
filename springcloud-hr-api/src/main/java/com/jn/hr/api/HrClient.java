@@ -28,18 +28,38 @@ public interface HrClient {
 
    /* @RequestMapping(value = "/api/hr/notices", method = RequestMethod.POST)
     Result<String> noticesApplicationMeeting();*/
+	/**
+	 * 请假扣除请假工时
+	 *
+	 */
 	@RequestMapping(value={"/api/hr/insertByLeaveVacationmanage"}, method={RequestMethod.POST})
     public  Result<String> insertByLeaveVacationmanage(@RequestBody  VacationManagement vacationManagement);
 	
+	/**
+	 * 加班增加加班小时接口
+	 *
+	 */
 	@RequestMapping(value={"/api/hr/insertByOverTimeVacationmanage"}, method={RequestMethod.POST})
     public  Result<String> insertByOverTimeVacationmanage(@RequestBody  VacationManagement vacationManagement);
 	
+	/**
+	 * 根据用户id获取历史考勤情况
+	 *
+	 */
 	@RequestMapping(value={"/api/hr/selectAttendanceManagementByUserId"}, method={RequestMethod.POST})
 	public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(@RequestBody  AttendanceManagement attendanceManagement);
 	
+	/**
+	 * 根据部门id获取历史考勤情况
+	 *
+	 */
 	@RequestMapping(value={"/api/hr/selectAttendanceManagementByDepartmentId"}, method={RequestMethod.POST})
-    public  Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@RequestBody  AttendanceManagement attendanceManagement);
+    public  Result<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(@RequestBody  AttendanceManagement attendanceManagement);
 	
+	/**
+	 * 考勤接口
+	 *
+	 */
 	@RequestMapping(value={"/api/hr/selectByUserIdAndTime"}, method={RequestMethod.POST})
 	public Result<AttendanceOverTimeApiVo> selectByUserIdAndTime(@RequestBody  AttendanceOverTime attendanceOverTime);
 }

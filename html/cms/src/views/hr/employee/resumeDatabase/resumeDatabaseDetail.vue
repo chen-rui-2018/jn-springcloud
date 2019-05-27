@@ -24,7 +24,14 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="应聘部门：">
-              {{ addForm.departmentName }}
+              <el-cascader
+                ref="departRef"
+                :options="departmentList"
+                v-model="currentDepartmentIds"
+                change-on-select
+                placeholder="请选择"
+                disabled
+              />
             </el-form-item>
           </el-col>
 
@@ -159,12 +166,21 @@ import {
   getResumeDatabaseById
 } from '@/api/hr/resumeDatabase'
 import {
-  getCode
+  getCode, setChild, findNodeById, findP
 } from '@/api/hr/util'
+
+import {
+  api
+} from '@/api/axios'
 
 export default {
   data() {
     return {
+      nodes: [],
+      pNodes: [],
+      currentDepartmentIds: [],
+      departmentOptions: [],
+      departmentListLoading: false,
       departmentList: [],
       jobList: [],
       educationList: [],
@@ -210,6 +226,7 @@ export default {
         getResumeDatabaseById(id).then(res => {
           if (res.data.code === '0000') {
             this.addForm = res.data.data
+            this.getAllDepartment()
           } else {
             this.$message.error(res.data.result)
           }
@@ -247,6 +264,27 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
+      })
+    },
+    getAllDepartment() {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.departmentList = res.data.data
+          setChild(this.nodes, this.departmentList)
+          const currNode = findNodeById(this.nodes, this.addForm.departmentId)
+          this.pNodes.push(currNode)
+          findP(this.nodes, currNode, this.pNodes)
+          this.pNodes.reverse()
+          const arr = []
+          this.pNodes.forEach(item => {
+            arr.push(item.id)
+          })
+          this.currentDepartmentIds = arr
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
       })
     }
 

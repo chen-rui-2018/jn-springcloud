@@ -385,4 +385,24 @@
         </foreach>
     </insert>
 
+    <!--保存账单明细-->
+    <insert id="saveBillDetail" parameterType="java.util.List">
+        insert into tb_electric_energy_bill_detail
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricEnergyBillDetailMapper.Base_Column_List"/>)
+        <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
+            select
+            #{ item.id,jdbcType=VARCHAR},
+            #{ item.billId,jdbcType=VARCHAR},
+            #{ item.sort,jdbcType=INTEGER},
+            #{ item.costName,jdbcType=VARCHAR},
+            #{ item.costValue,jdbcType=VARCHAR},
+            #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.creatorAccount,jdbcType=VARCHAR},
+            #{ item.createdTime,jdbcType=TIMESTAMP},
+            #{ item.modifierAccount,jdbcType=VARCHAR},
+            #{ item.modifiedTime,jdbcType=TIMESTAMP}
+            from  dual
+        </foreach>
+    </insert>
+
 </mapper>

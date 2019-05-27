@@ -62,7 +62,7 @@
       <el-button type="primary" icon="el-icon-plus" round> <a :href="ibpsUrl+'560991999331663872.htm'">新增项目</a> </el-button>
       <el-button type="primary" round class="el-radio-group"> <a href="javascript:;">返回</a> </el-button>
       <el-input v-model="listQuery.projectName" placeholder="请输入项目名称" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search" />
+        <el-button slot="append" icon="el-icon-search" @change="handleFilter" />
       </el-input>
     </div>
     <el-row :gutter="25">
@@ -231,8 +231,8 @@ export default {
       ],
       listQuery: {
         orderByClause: 'project_no desc',
-        progress: '0', // 项目进度
-        projectState: '1', // 任务状态
+        progress: '', // 项目进度
+        projectState: '', // 任务状态
         projectName: '' // 项目名称
       }
     }
@@ -252,10 +252,10 @@ export default {
     },
     // 进度排序
     handleSort() {
-      if (this.listQuery.orderByClause === 'progress desc') {
-        this.listQuery.orderByClause = 'progress asc'
+      if (this.listQuery.orderByClause === 'project_surplus_task desc') {
+        this.listQuery.orderByClause = 'project_surplus_task asc'
       } else {
-        this.listQuery.orderByClause = 'progress desc'
+        this.listQuery.orderByClause = 'project_surplus_task desc'
       }
       this.init()
     },

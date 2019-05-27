@@ -60,7 +60,7 @@ public interface AttendanceManagementService {
 	public List<AttendanceManagementApiVo> selectAttendanceManagementByUserId(AttendanceManagement attendanceManagement);
 	
 	//根据部门id与考勤年月查询历史考勤列表
-	public List<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(AttendanceManagement attendanceManagement);
+	public AttendanceManageApiVo selectAttendanceManagementByDepartmentId(AttendanceManagement attendanceManagement);
 	
 	//加班增加加班小时接口
 	public String insertByOverTimeVacationmanage(VacationManagement vacationManage);

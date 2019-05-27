@@ -145,7 +145,7 @@ import {
   addResumeDatabase, updateResumeDatabase, getResumeDatabaseById
 } from '@/api/hr/resumeDatabase'
 import {
-  getCode, isvalidName, isvalidMobile, isvalidZjhm, uploadUrl
+  getCode, isvalidName, isvalidMobile, isvalidZjhm, uploadUrl, setChild, findNodeById, findP
 } from '@/api/hr/util'
 
 import {
@@ -170,15 +170,26 @@ export default {
         callback()
       }
     }
-    var checkZjhm = (rule, value, callback) => {
-      if (!isvalidZjhm(value)) {
-        callback(new Error('请输入正确的证件号码'))
+    const reg = /^\w{5,18}$/i
+    const checkZjhm = (rule, value, callback) => {
+      if (this.addForm.certificateName === '身份证') {
+        if (!isvalidZjhm(value)) {
+          callback(new Error('请输入正确的证件号码'))
+        } else {
+          callback()
+        }
       } else {
-        callback()
+        if (!reg.test(value)) {
+          callback(new Error('请输入正确的证件号码'))
+        } else {
+          callback()
+        }
       }
     }
 
     return {
+      nodes: [],
+      pNodes: [],
       currentDepartmentIds: [],
       departmentOptions: [],
       departmentListLoading: false,
@@ -350,7 +361,7 @@ export default {
             this.addForm.educationName = education['lable']
           }
 
-          const certificate = this.jobList.find(item => item.key === this.addForm.certificateId)
+          const certificate = this.certificateList.find(item => item.key === this.addForm.certificateId)
           if (certificate) {
             this.addForm.certificateType = certificate['lable']
           }
@@ -380,7 +391,18 @@ export default {
         getResumeDatabaseById(query.id).then(res => {
           if (res.data.code === '0000') {
             this.addForm = res.data.data
-            this.currentDepartmentIds = this.addForm.departmentId.split('/')
+
+            setChild(this.nodes, this.departmentList)
+            const currNode = findNodeById(this.nodes, this.addForm.departmentId)
+            this.pNodes.push(currNode)
+            findP(this.nodes, currNode, this.pNodes)
+            this.pNodes.reverse()
+            const arr = []
+            this.pNodes.forEach(item => {
+              arr.push(item.id)
+            })
+            this.currentDepartmentIds = arr
+
             if (this.addForm.resumeInfo && this.addForm.resumeInfo !== '') {
               var obj = {}
               const index = this.addForm.resumeInfo.lastIndexOf('\/')
@@ -396,9 +418,9 @@ export default {
       }
     },
     handleChangeDepartment(value) {
-      this.addForm.departmentId = this.currentDepartmentIds.join('/')
+      this.addForm.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
       const arr = this.$refs['departRef'].currentLabels
-      this.addForm.departmentName = arr.join('/')
+      this.addForm.departmentName = arr[arr.length - 1]
     },
     getAllDepartment() {
       this.departmentListLoading = true

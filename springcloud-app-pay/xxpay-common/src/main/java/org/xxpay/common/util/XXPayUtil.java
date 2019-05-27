@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.constant.PayEnum;
 
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -126,4 +128,19 @@ public class XXPayUtil {
         return "";
     }
 
+
+    /**
+     * 获取本机IP地址
+    * */
+    public static String getHostAddress(){
+        String ip = "";
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            ip = addr.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        return ip;
+    }
 }

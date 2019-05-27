@@ -17,37 +17,37 @@ public class MessageTowListModel implements Serializable {
 
     private static final long serialVersionUID = -6003707520844982517L;
     @ApiModelProperty(value = "消息类别Code")
-    private String messageOneTortCode;
+    private String messageTowSort;
 
     @ApiModelProperty(value = "消息类型名称")
-    private String messageOneTortName;
+    private String messageTowSortName;
 
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public String getMessageOneTortCode() {
-        return messageOneTortCode;
+    public String getMessageTowSort() {
+        return messageTowSort;
     }
 
-    public void setMessageOneTortCode(String messageOneTortCode) {
-        this.messageOneTortCode = messageOneTortCode;
+    public void setMessageTowSort(String messageTowSort) {
+        this.messageTowSort = messageTowSort;
     }
 
-    public String getMessageOneTortName() {
-        return messageOneTortName;
+    public String getMessageTowSortName() {
+        return messageTowSortName;
     }
 
-    public void setMessageOneTortName(String messageOneTortName) {
-        this.messageOneTortName = messageOneTortName;
+    public void setMessageTowSortName(String messageTowSortName) {
+        this.messageTowSortName = messageTowSortName;
     }
 
     @Override
     public String toString() {
         return "MessageTowListModel{" +
-                "messageOneTortCode='" + messageOneTortCode + '\'' +
-                ", messageOneTortName='" + messageOneTortName + '\'' +
+                "messageTowSort='" + messageTowSort + '\'' +
+                ", messageTowSortName='" + messageTowSortName + '\'' +
                 '}';
     }
 }

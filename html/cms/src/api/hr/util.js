@@ -139,4 +139,36 @@ export function formatDate(objDate, format) {
   return format
 }
 
+export function setChild(nodes, children) {
+  children.forEach(item => {
+    nodes.push({
+      'id': item.id,
+      'label': item.label,
+      'parentId': item.parentId
+    })
+    if (item.children && item.children.length > 0) {
+      setChild(nodes, item.children)
+    }
+  })
+}
+
+export function findNodeById(zNodes, id) {
+  for (var i = 0; i < zNodes.length; i++) {
+    if (zNodes[i].id === id) {
+      return zNodes[i]
+    }
+  }
+}
+
+export function findP(zNodes, node, pNodes) {
+  for (var i = 0; i < zNodes.length; i++) {
+    if (node.parentId === zNodes[i].id) {
+      pNodes.push(zNodes[i])
+      if (zNodes[i].parentId !== '1') {
+        findP(zNodes, zNodes[i], pNodes)
+      }
+    }
+  }
+}
+
 export const uploadUrl = baseurl + `hr/common/uploadAttachment`

@@ -11,20 +11,22 @@ import com.jn.hardware.model.electricmeter.ElectricMeterDataCollectionParam;
 import com.jn.hardware.model.electricmeter.ElectricMeterWaterOrElectricShow;
 import com.jn.hardware.model.electricmeter.ElectricOrWaterConditionShow;
 import com.jn.park.electricmeter.dao.MeterDao;
+import com.jn.park.electricmeter.dao.TbElectricMeterCompanyDayMapper;
+import com.jn.park.electricmeter.dao.TbElectricMeterInfoMapper;
 import com.jn.park.electricmeter.dao.TbElectricReadingFailLogMapper;
-import com.jn.park.electricmeter.entity.TbElectricReading;
-import com.jn.park.electricmeter.entity.TbElectricReadingFailLog;
-import com.jn.park.electricmeter.entity.TbElectricReadingFailLogCriteria;
-import com.jn.park.electricmeter.entity.TbElectricReadingSource;
+import com.jn.park.electricmeter.entity.*;
 import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
+import com.jn.park.electricmeter.model.MeterInfoModel;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.enums.NoticeExceptionEnum;
 import com.jn.park.notice.service.impl.NoticeManageServiceImpl;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +34,7 @@ import org.xxpay.common.util.DateUtil;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author： yangh
@@ -52,8 +51,11 @@ public class MeterServiceImpl implements MeterService {
     private MeterDao meterDao;
     @Autowired
     private TbElectricReadingFailLogMapper failLogMapper;
-
+    @Autowired
+    private TbElectricMeterInfoMapper meterInfoMapper;
     Logger logger = LoggerFactory.getLogger(MeterServiceImpl.class);
+    @Autowired
+    private TbElectricMeterCompanyDayMapper companyDayMapper;
 
     @Override
     @ServiceLog(doAction = "电表读数定时入库")
@@ -399,4 +401,175 @@ public class MeterServiceImpl implements MeterService {
     }
 
 
+    //电表信息维护接口
+    @Override
+    @ServiceLog(doAction = "电表业主维护")
+    public Result insertMeterInfo(User user, MeterInfoModel model){
+        //检查当前的表是否已经被创建过，如果已经添加则只能够更新，并抛出异常
+        if(StringUtils.isBlank(model.getMeterCode())){
+            throw new JnSpringCloudException(MeterExceptionEnums.METER_NO_CODE);
+        }
+        String meterCode = model.getMeterCode();
+        TbElectricMeterInfo meterInfo = new TbElectricMeterInfo();
+        TbElectricMeterInfoCriteria meterInfoCriteria = new TbElectricMeterInfoCriteria();
+        meterInfoCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
+        List<TbElectricMeterInfo>  meterInfos =  meterInfoMapper.selectByExample(meterInfoCriteria);
+        if(meterInfos !=null && meterInfos.size()>0){
+            throw new JnSpringCloudException(MeterExceptionEnums.METER_INFO_EXIST);
+        }
+        BeanUtils.copyProperties(model,meterInfo);
+        meterInfo.setId(UUID.randomUUID().toString().replaceAll("-",""));
+        meterInfo.setRecordStatus(new Byte(MeterConstants.VALID));
+        meterInfo.setCreatorAccount(user.getAccount());
+        meterInfo.setCreatedTime(new Date());
+        meterInfoMapper.insertSelective(meterInfo);
+
+        //表的业主设置了,创建关系
+        if(StringUtils.isNotBlank(model.getCompanyId())){
+            //检查今天的数据是否已经创建
+            TbElectricMeterCompanyDayCriteria companyDayCriteria = new TbElectricMeterCompanyDayCriteria();
+            companyDayCriteria.or().andDayEqualTo(getNowDate());
+            List<TbElectricMeterCompanyDay>  size = companyDayMapper.selectByExample(companyDayCriteria);
+            //今日关系定时器已经创建了，则插入
+            if(size !=null && size.size() >0 ){
+                //插入一条关系数据
+                TbElectricMeterCompanyDay linkDay = new TbElectricMeterCompanyDay();
+                linkDay.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                linkDay.setCompanyId(model.getCompanyId());
+                linkDay.setCreatedTime(new Date());
+                linkDay.setCreatorAccount(user.getAccount());
+                linkDay.setMeterCode(model.getMeterCode());
+                linkDay.setRecordStatus(new Byte(MeterConstants.VALID));
+                linkDay.setDay(getNowDate());
+                linkDay.setMeterName(model.getMeterName());
+                companyDayMapper.insertSelective(linkDay);
+            }
+        }
+
+        return new Result();
+    }
+
+    @Override
+    @ServiceLog(doAction = "电表信息作废")
+    public Result deleteMeterInfo(User user,String id){
+        //作废电表信息
+        TbElectricMeterInfo meterInfo = new TbElectricMeterInfo();
+        meterInfo.setModifiedTime(new Date());
+        meterInfo.setModifierAccount(user.getAccount());
+        meterInfo.setRecordStatus(new Byte(MeterConstants.INVALID));
+        TbElectricMeterInfoCriteria meterInfoCriteria = new TbElectricMeterInfoCriteria();
+        meterInfoCriteria.or().andIdEqualTo(id);
+        meterInfoMapper.updateByExampleSelective(meterInfo,meterInfoCriteria);
+        TbElectricMeterInfo meterInfos = meterInfoMapper.selectByPrimaryKey(id);
+        //作废电表信息和企业的每日关系
+        if(meterInfos ==null){
+            //throw new
+            //todo 电表不存在
+        }
+        deleteEveryDayLinks(meterInfos);
+        return new Result();
+    }
+
+    /**
+     * 获取当前的日期
+     * @return
+     */
+    private Date getNowDate(){
+        Date date =null;
+        try{
+            date =DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd"),"yyyy-MM-dd");
+        }catch(ParseException e){
+            logger.info("");
+        }
+        return date;
+    }
+
+    /**
+     * 作废电表的每日关系信息
+     */
+    private void deleteEveryDayLinks(TbElectricMeterInfo meterInfos){
+        if(StringUtils.isBlank(meterInfos.getCompanyId())){
+            //业主是空的，不用注释关系，因为没有关系数据
+            return;
+        }
+
+        Date date =getNowDate();
+        TbElectricMeterCompanyDay companyDay = new TbElectricMeterCompanyDay();
+        companyDay.setRecordStatus(new Byte(MeterConstants.INVALID));
+        TbElectricMeterCompanyDayCriteria companyDayCriteria = new TbElectricMeterCompanyDayCriteria();
+        companyDayCriteria.or().andMeterCodeEqualTo(meterInfos.getCompanyId()).andMeterCodeEqualTo(meterInfos.getMeterCode())
+                .andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andDayEqualTo(date);
+        companyDayMapper.updateByExampleSelective(companyDay,companyDayCriteria);
+    }
+
+    @Override
+    @ServiceLog(doAction = "电表信息更新")
+    public Result updateMeterInfo(User user, MeterInfoModel model){
+        //获取出之前的信息及每日关系信息
+        TbElectricMeterInfo meterInfos = meterInfoMapper.selectByPrimaryKey(model.getId());
+        //作废电表信息和企业的每日关系
+        deleteEveryDayLinks(meterInfos);
+        //更新电表信息
+        TbElectricMeterInfo meterInfo = new TbElectricMeterInfo();
+        BeanUtils.copyProperties(model,meterInfo);
+        TbElectricMeterInfoCriteria meterInfoCriteria = new TbElectricMeterInfoCriteria();
+        meterInfoCriteria.or().andIdEqualTo(model.getId()).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+        meterInfoMapper.updateByExampleSelective(meterInfo,meterInfoCriteria);
+        //每日关系，存在则创建一条，不存在则不插入，等定时器自动插入
+
+        TbElectricMeterCompanyDayCriteria companyDayCriteria = new TbElectricMeterCompanyDayCriteria();
+        companyDayCriteria.or().andDayEqualTo(getNowDate());
+        List<TbElectricMeterCompanyDay>  size = companyDayMapper.selectByExample(companyDayCriteria);
+        //企业id不为空时才创建关系数据
+        if(StringUtils.isNotBlank(model.getCompanyId())){
+            if(size !=null && size.size() >0 ){
+                //插入一条关系数据
+                TbElectricMeterCompanyDay linkDay = new TbElectricMeterCompanyDay();
+                linkDay.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                linkDay.setCompanyId(model.getCompanyId());
+                linkDay.setCreatedTime(new Date());
+                linkDay.setCreatorAccount(user.getAccount());
+                linkDay.setMeterCode(model.getMeterCode());
+                linkDay.setRecordStatus(new Byte(MeterConstants.VALID));
+                linkDay.setDay(getNowDate());
+                linkDay.setMeterName(model.getMeterName());
+                companyDayMapper.insertSelective(linkDay);
+            }
+        }
+        return new Result();
+    }
+
+    @Override
+    @ServiceLog(doAction = "电表每日的业主信息日志")
+    public void setHostForMeter() {
+        //查询出所有有效的，业主不为空的表数据
+        TbElectricMeterInfoCriteria meterInfoCriteria = new TbElectricMeterInfoCriteria();
+        meterInfoCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdIsNotNull();
+
+        List<TbElectricMeterInfo> meterInfos = meterInfoMapper.selectByExample(meterInfoCriteria);
+        if(meterInfos !=null && meterInfos.size()>0){
+            TbElectricMeterCompanyDay linkDay = null;
+            List<TbElectricMeterCompanyDay>  companyDays =new ArrayList<>();
+            for(TbElectricMeterInfo meterInfo : meterInfos){
+                linkDay = new TbElectricMeterCompanyDay();
+                linkDay.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                linkDay.setCompanyId(meterInfo.getCompanyId());
+                linkDay.setCreatedTime(new Date());
+                linkDay.setCreatorAccount(MeterConstants.SYSTEM_USER);
+                linkDay.setMeterCode(meterInfo.getMeterCode());
+                linkDay.setRecordStatus(new Byte(MeterConstants.VALID));
+                linkDay.setDay(getNowDate());
+                linkDay.setMeterName(meterInfo.getMeterName());
+                companyDays.add(linkDay);
+                if(companyDays !=null && companyDays.size()==40){
+                    meterDao.saveMeterLinkInDay(companyDays);
+                    companyDays =new ArrayList<>();
+                }
+
+            }
+            if(companyDays !=null && companyDays.size()>0){
+                meterDao.saveMeterLinkInDay(companyDays);
+            }
+        }
+    }
 }

@@ -62,6 +62,9 @@ public class RoomInformationModel implements Serializable {
     @ApiModelProperty(value = "户型",example = "2室1厅")
     private String houseType;
 
+    @ApiModelProperty(value = "图片集合")
+    private List<String> image;
+
     @ApiModelProperty(value = "实景图片",example = "实景图片")
     private String imgUrl;
 
@@ -225,6 +228,14 @@ public class RoomInformationModel implements Serializable {
         this.houseType = houseType;
     }
 
+    public List<String> getImage() {
+        return image;
+    }
+
+    public void setImage(List<String> image) {
+        this.image = image;
+    }
+
     public String getImgUrl() {
         return imgUrl;
     }
@@ -356,6 +367,7 @@ public class RoomInformationModel implements Serializable {
                 ", pay=" + pay +
                 ", pressPay='" + pressPay + '\'' +
                 ", houseType='" + houseType + '\'' +
+                ", image=" + image +
                 ", imgUrl='" + imgUrl + '\'' +
                 ", floorPlan='" + floorPlan + '\'' +
                 ", roomPlan='" + roomPlan + '\'' +

@@ -17,9 +17,6 @@ import com.jn.park.attractinvest.model.BusinessAdPage;
 import com.jn.park.attractinvest.model.BusinessAdPolicy;
 import com.jn.park.attractinvest.service.BusinessAdService;
 import com.jn.system.log.annotation.ServiceLog;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -75,22 +72,6 @@ public class BusinessAdServiceImpl implements BusinessAdService {
     public PaginationData<List<BusinessAdContent>> getBusinessAdContent(BusinessAdPage page) {
         Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
         List<BusinessAdContent> businessAdContents = businessAdContentMapper.getBusinessAdContent(page);
-        if (businessAdContents != null) {
-            //对图片路径进行处理
-            for (BusinessAdContent businessAdContent : businessAdContents) {
-                String cover = businessAdContent.getAdCover();
-
-                //拼接附件下载链接
-                Object parse = JSONValue.parse(cover);
-                JSONArray array = (JSONArray) parse;
-                JSONObject obj2 = (JSONObject) array.get(0);
-                String spring = (String) obj2.get("id");
-                String fileName = (String) obj2.get("fileName");
-                String url = "/components/upload/preview.htm?downloadId=" + spring;
-                businessAdContent.setCoverName(fileName);
-                businessAdContent.setCoverUrl(url);
-            }
-        }
         return new PaginationData(businessAdContents, objects.getTotal());
     }
 
@@ -103,23 +84,6 @@ public class BusinessAdServiceImpl implements BusinessAdService {
     @ServiceLog(doAction = "获取招商动态信息")
     public List<BusinessAdDynamic> getBusinessAdDynamic() {
         List<BusinessAdDynamic> businessAdDynamics = businessAdDynamicMapper.getBusinessAdDynamic();
-
-        if (businessAdDynamics != null) {
-            //对图片路径进行处理
-            for (BusinessAdDynamic businessAdDynamic : businessAdDynamics) {
-                String cover = businessAdDynamic.getAdCover();
-
-                //拼接附件下载链接
-                Object parse = JSONValue.parse(cover);
-                JSONArray array = (JSONArray) parse;
-                JSONObject obj2 = (JSONObject) array.get(0);
-                String spring = (String) obj2.get("id");
-                String fileName = (String) obj2.get("fileName");
-                String url = "/components/upload/preview.htm?downloadId=" + spring;
-                businessAdDynamic.setCoverName(fileName);
-                businessAdDynamic.setCoverUrl(url);
-            }
-        }
         return businessAdDynamics;
     }
 
@@ -132,22 +96,6 @@ public class BusinessAdServiceImpl implements BusinessAdService {
     @ServiceLog(doAction = "获取招商政策信息")
     public List<BusinessAdPolicy> getBusinessAdPolicy() {
         List<BusinessAdPolicy> businessAdPolicies = businessAdPolicyMapper.getBusinessAdPolicy();
-        if (businessAdPolicies != null) {
-            //对图片路径进行处理
-            for (BusinessAdPolicy businessAdPolicy : businessAdPolicies) {
-                String cover = businessAdPolicy.getAdCover();
-
-                //拼接附件下载链接
-                Object parse = JSONValue.parse(cover);
-                JSONArray array = (JSONArray) parse;
-                JSONObject obj2 = (JSONObject) array.get(0);
-                String spring = (String) obj2.get("id");
-                String fileName = (String) obj2.get("fileName");
-                String url = "/components/upload/preview.htm?downloadId=" + spring;
-                businessAdPolicy.setCoverName(fileName);
-                businessAdPolicy.setCoverUrl(url);
-            }
-        }
         return businessAdPolicies;
     }
 

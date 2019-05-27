@@ -158,12 +158,15 @@ export default {
   },
   watch: {
     'listQuery.entryDate': function() {
+      this.listQuery.page = 1
       this.initList()
     },
     'listQuery.name': function() {
+      this.listQuery.page = 1
       this.initList()
     },
     'listQuery.departmentId': function() {
+      this.listQuery.page = 1
       this.initList()
     }
   },

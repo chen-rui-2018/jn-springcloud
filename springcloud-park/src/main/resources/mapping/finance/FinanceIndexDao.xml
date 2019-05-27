@@ -140,7 +140,8 @@
         (select sum(t.budget_number) as "budgetnumber",
         department_id as "departmentid"
         from tb_finance_total_budget t
-        AND t.record_status =1
+        where
+         t.record_status =1
         group by t.department_id) t2
         ON t2.departmentid=t1.departmentid
     </select>

@@ -43,6 +43,9 @@
             and sp.is_pay='1'           <!--已付款-->
             and sp.status='1'           <!--已上架-->
         </if>
+        <if test="bpp.approvalStatus==7"><!--已撤销-->
+            and sp.record_status=0
+        </if>
         <if test="bpp.searchContent !=null and bpp.searchContent !='' ">
             and sp.propaganda_title like concat('%',#{bpp.searchContent},'%')
         </if>
@@ -61,7 +64,9 @@
         <if test="creator !=null and creator !=''">
             and sp.creator_account=#{creator}
         </if>
-        and sp.record_status=1
+        <if test="bpp.approvalStatus!=7"><!--不是已撤销-->
+            and sp.record_status=1
+        </if>
         order by sp.sort,sp.created_time desc
     </select>
 

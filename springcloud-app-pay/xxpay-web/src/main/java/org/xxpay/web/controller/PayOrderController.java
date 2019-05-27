@@ -107,6 +107,10 @@ public class PayOrderController extends BaseController implements PayOrderClient
                     String wxJsapiParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_JSPAI, payOrder}));
                     return returnResult(wxJsapiParam,resKey);
 
+                case WX_PROGRAM:
+                    String wxProgramParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_JSPAI, payOrder}));
+                    return returnResult(wxProgramParam,resKey);
+
                 case WX_NATIVE :
                     String wxNativeParam =  payOrderServiceClient.doWxPayReq(getJsonParam(new String[]{"tradeType", "payOrder"}, new Object[]{PayConstant.WxConstant.TRADE_TYPE_NATIVE, payOrder}));
                     return returnResult(wxNativeParam,resKey);
@@ -118,12 +122,15 @@ public class PayOrderController extends BaseController implements PayOrderClient
                 case ALIPAY_MOBILE :
                     String aliPayMobileParam =  payOrderServiceClient.doAliPayMobileReq(getJsonParam("payOrder", payOrder));
                     return returnResult(aliPayMobileParam,resKey);
+
                 case ALIPAY_PC :
                     String jsonParam = payOrderServiceClient.doAliPayPcReq(getJsonParam("payOrder", payOrder));
                     return returnResult(jsonParam,resKey);
-               case ALIPAY_WAP :
+
+                case ALIPAY_WAP :
                    String aliPayWapParam =  payOrderServiceClient.doAliPayWapReq(getJsonParam("payOrder", payOrder));
                    return returnResult(aliPayWapParam,resKey);
+
                 default:
                     return new Result(PayEnum.ERR_0016.getCode(),PayEnum.ERR_0016.getMessage());
             }
@@ -272,7 +279,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
             return errorMessage;
         }
         // 根据不同渠道,判断extra参数
-        if(ChannelIdEnum.WX_JSAPI.getCode().equalsIgnoreCase(channelId)) {
+        if(ChannelIdEnum.WX_JSAPI.getCode().equalsIgnoreCase(channelId)
+        || ChannelIdEnum.WX_PROGRAM.getCode().equalsIgnoreCase(channelId)) {
             if(StringUtils.isEmpty(extra)) {
                 errorMessage = "request params[extra] error.";
                 return errorMessage;

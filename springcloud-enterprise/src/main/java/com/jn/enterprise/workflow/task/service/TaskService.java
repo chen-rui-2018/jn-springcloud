@@ -7,6 +7,7 @@ import com.jn.enterprise.workflow.task.model.TaskPage;
 import com.jn.enterprise.workflow.task.model.TaskType;
 import com.jn.enterprise.workflow.task.vo.CommonTaskListVO;
 import com.jn.enterprise.workflow.task.vo.CommonTaskVO;
+import com.jn.enterprise.workflow.task.vo.TaskStatisticsVO;
 import com.jn.enterprise.workflow.task.vo.TaskTypeVo;
 import com.jn.task.model.WorkflowTaskAdd;
 
@@ -22,11 +23,18 @@ import java.util.List;
 public interface TaskService {
 
     /**
+     * 时效性待办事项预警数据统计
+     * @param userId 用户ID
+     * @return
+     */
+    TaskStatisticsVO getWorkflowTaskStatistics(String userId);
+
+    /**
      * 根据用户查询事项任务列表（待办事项、已办事项）
      * @param taskType 事项状态，1：代办、2：结办
      * @return
      */
-    List<TaskTypeVo>  searchWorkflowTaskTypeListByCondition(TaskType taskType);
+    List<TaskTypeVo> searchWorkflowTaskTypeListByCondition(TaskType taskType);
 
     /**
      * 分页根据条件查询事项任务列表

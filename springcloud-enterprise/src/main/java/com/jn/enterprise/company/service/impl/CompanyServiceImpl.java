@@ -92,9 +92,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @ServiceLog(doAction = "查询企业列表New")
     public PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam sepParam) {
-        if(StringUtils.isBlank(sepParam.getOrderByClause())){
+        /*if(StringUtils.isBlank(sepParam.getOrderByClause())){
             sepParam.setOrderByClause("browse_number DESC");
-        }
+        }*/
         Page<Object> objects = PageHelper.startPage(sepParam.getPage(), sepParam.getRows() == 0 ? 15 : sepParam.getRows());
         List<ServiceEnterpriseCompany> getCompanyNewList=companyMapper.getCompanyNewList(sepParam);
         //调用park,处理后再返回 getCompanyNewList

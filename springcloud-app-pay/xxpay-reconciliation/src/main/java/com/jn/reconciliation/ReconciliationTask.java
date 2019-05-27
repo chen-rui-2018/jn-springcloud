@@ -154,7 +154,7 @@ public class ReconciliationTask {
 			// 如果缓冲池中有三天前的数据就清理掉并记录差错
 			validateBiz.validateScratchPool();
 		} catch (Exception e) {
-			logger.error("roncoo-app-reconciliation error:", e);
+			logger.error("xxpay-reconciliation error:", e);
 		}
 
 	}

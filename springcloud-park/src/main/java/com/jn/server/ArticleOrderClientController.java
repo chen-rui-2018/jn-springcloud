@@ -3,8 +3,11 @@ package com.jn.server;
 import com.jn.common.model.Result;
 import com.jn.park.api.ArticleOrderClient;
 import com.jn.park.asset.service.AssetArticleLeaseOrdersService;
+import com.jn.pay.model.CreatePayReqModel;
 import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,5 +30,36 @@ public class ArticleOrderClientController implements ArticleOrderClient {
     @ControllerLog(doAction = "物品支付回调")
     public Result articlePayCallBack(@RequestBody PayOrderNotify payOrderNotify) {
         return assetArticleLeaseOrdersService.articlePayCallBack(payOrderNotify);
+    }
+
+    /**
+     * 是否支付,未支付取消订单
+     */
+    @Override
+    @ControllerLog(doAction = "是否支付,未支付取消订单")
+    public Result updateArticlePayStatus() {
+        assetArticleLeaseOrdersService.updateArticlePayStatus();
+        return new Result();
+    }
+
+    /**
+     * 是否逾期,修改状态
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "物品租借是否逾期,修改状态")
+    public Result updateAssetArticleStatus() {
+        assetArticleLeaseOrdersService.updateAssetArticleStatus();
+        return null;
+    }
+
+    /**
+     * 创建订单
+     * @param createPayReqModel
+     * @return
+     */
+    @Override
+    public Result<PayOrderRsp> createArticlePay(@RequestBody CreatePayReqModel createPayReqModel) {
+        return assetArticleLeaseOrdersService.createArticlePay(createPayReqModel.getOrderId(),createPayReqModel.getChannelId(),createPayReqModel.getPaySum(),createPayReqModel.getUserAccount());
     }
 }

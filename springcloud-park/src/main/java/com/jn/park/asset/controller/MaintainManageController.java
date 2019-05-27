@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.asset.enums.PageExceptionEnums;
 import com.jn.park.asset.model.MaintainManageModel;
+import com.jn.park.asset.model.MaintainRecordModel;
 import com.jn.park.asset.service.MaintainManageService;
 import com.jn.park.asset.service.MaintainRecordService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -16,10 +17,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -67,17 +66,12 @@ public class MaintainManageController {
     @ControllerLog(doAction = "维保登记")
     @ApiOperation(value = "维保登记",notes = "维保登记")
     @PostMapping(value = "/addRecord")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "572058527984517120"),
-            @ApiImplicitParam(name = "message",value = "备注",example = "加了雪种"),
-            @ApiImplicitParam(name = "imgUrl",value = "登记照片",example = "url")
-    })
-    public Result addRecord(String assetNumber,String message,String imgUrl){
+    public Result addRecord(@Validated @RequestBody MaintainRecordModel maintainRecordModel){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        Integer integer = maintainRecordService.addRecord(user,assetNumber,message,imgUrl);
+        Integer integer = maintainRecordService.addRecord(user,maintainRecordModel);
         if (integer > 0){
-            return new Result();
+            return new Result("维保登记成功");
         }
         return new Result("-1","维保登记失败");
     }

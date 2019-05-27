@@ -18,7 +18,7 @@ public interface AdvisorEditService {
      * @param loginAccount 当前登录用户
      * @return
      */
-    Map<Integer,String> getUserApprovalStatus(String loginAccount);
+    AdvisorApprovalStatus getUserApprovalStatus(String loginAccount);
 
 
     /**

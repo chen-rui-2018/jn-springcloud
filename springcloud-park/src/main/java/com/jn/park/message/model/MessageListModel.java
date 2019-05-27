@@ -43,8 +43,14 @@ public class MessageListModel implements Serializable {
     @ApiModelProperty(value = "消息一级分类")
     private String messageOneSort;
 
+    @ApiModelProperty(value = "消息一级分类名称")
+    private String messageOneSortName;
+
     @ApiModelProperty(value = "消息二级分类")
     private String messageTowSort;
+
+    @ApiModelProperty(value = "消息二级分类名称")
+    private String messageTowSortName;
 
     @ApiModelProperty(value = "创建时间")
     private String createdTime;
@@ -54,6 +60,42 @@ public class MessageListModel implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageListModel{" +
+                "id='" + id + '\'' +
+                ", messageTitle='" + messageTitle + '\'' +
+                ", messageContent='" + messageContent + '\'' +
+                ", messageConnectName='" + messageConnectName + '\'' +
+                ", messageConnect='" + messageConnect + '\'' +
+                ", isRead='" + isRead + '\'' +
+                ", messageRecipient='" + messageRecipient + '\'' +
+                ", messageSender='" + messageSender + '\'' +
+                ", messageOneSort='" + messageOneSort + '\'' +
+                ", messageOneSortName='" + messageOneSortName + '\'' +
+                ", messageTowSort='" + messageTowSort + '\'' +
+                ", messageTowSortName='" + messageTowSortName + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                '}';
+    }
+
+    public String getMessageOneSortName() {
+        return messageOneSortName;
+    }
+
+    public void setMessageOneSortName(String messageOneSortName) {
+        this.messageOneSortName = messageOneSortName;
+    }
+
+    public String getMessageTowSortName() {
+        return messageTowSortName;
+    }
+
+    public void setMessageTowSortName(String messageTowSortName) {
+        this.messageTowSortName = messageTowSortName;
     }
 
     public String getId() {
@@ -153,21 +195,4 @@ public class MessageListModel implements Serializable {
     }
 
 
-    @Override
-    public String toString() {
-        return "MessageListModel{" +
-                "id='" + id + '\'' +
-                ", messageTitle='" + messageTitle + '\'' +
-                ", messageContent='" + messageContent + '\'' +
-                ", messageConnectName='" + messageConnectName + '\'' +
-                ", messageConnect='" + messageConnect + '\'' +
-                ", isRead='" + isRead + '\'' +
-                ", messageRecipient='" + messageRecipient + '\'' +
-                ", messageSender='" + messageSender + '\'' +
-                ", messageOneSort='" + messageOneSort + '\'' +
-                ", messageTowSort='" + messageTowSort + '\'' +
-                ", createdTime='" + createdTime + '\'' +
-                ", creatorAccount='" + creatorAccount + '\'' +
-                '}';
-    }
 }

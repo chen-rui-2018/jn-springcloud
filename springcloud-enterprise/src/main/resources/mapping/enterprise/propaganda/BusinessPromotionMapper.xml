@@ -17,6 +17,7 @@
           ,sp.poster_url as "posterUrl"
           ,sp.propaganda_fee as "propagandaFee"
           ,sp.status as "status"
+          ,sp.view_count as "viewCount"
           ,date_format(sp.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
           ,sc.code_name as "propagandaTypeName"
         from tb_propaganda sp
@@ -83,6 +84,8 @@
         ,sp.propaganda_area_url as "propagandaAreaUrl"
         ,sp.poster_url as "posterUrl"
         ,sp.propaganda_fee as "propagandaFee"
+        ,sp.created_time AS "createdTime"
+        ,sp.view_count as "viewCount"
         ,sc.code_name as "propagandaTypeName"
         from tb_propaganda sp
         left join tb_service_code sc
@@ -91,5 +94,12 @@
         and sp.id_=#{propagandaId}
         and sp.record_status=1
     </select>
+
+    <!-- 增加点击量 -->
+    <update id="addClickNumById">
+        UPDATE tb_propaganda SET
+          view_count = view_count + 1
+        WHERE id_ = #{id}
+    </update>
 
 </mapper>

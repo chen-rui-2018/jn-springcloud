@@ -19,19 +19,39 @@ public class MessageTowModel implements Serializable {
     @ApiModelProperty(value = "消息类别Code")
     private String messageTowSort;
 
+    @ApiModelProperty(value = "消息类别Name")
+    private String messageTowSortName;
+
 
     public String getMessageOneTortCode() {
         return messageTowSort;
     }
 
-    public void setMessageOneTortCode(String messageOneTortCode) {
-        this.messageTowSort = messageOneTortCode;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getMessageTowSort() {
+        return messageTowSort;
+    }
+
+    public void setMessageTowSort(String messageTowSort) {
+        this.messageTowSort = messageTowSort;
+    }
+
+    public String getMessageTowSortName() {
+        return messageTowSortName;
+    }
+
+    public void setMessageTowSortName(String messageTowSortName) {
+        this.messageTowSortName = messageTowSortName;
     }
 
     @Override
     public String toString() {
         return "MessageTowModel{" +
-                "messageOneTortCode='" + messageTowSort + '\'' +
+                "messageTowSort='" + messageTowSort + '\'' +
+                ", messageTowSortName='" + messageTowSortName + '\'' +
                 '}';
     }
 }

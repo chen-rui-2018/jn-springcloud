@@ -3,12 +3,12 @@
     <el-form>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="参保城市：" prop="id">
+          <el-form-item label="参保城市：" prop="insuredCityId">
             <el-input v-model="addInsuranceData.insuredCityName" style="width: 205px;" @focus="insuranceCityPageOpen"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="方案名称：" prop="id">
+          <el-form-item label="方案名称：" prop="schemeName">
             <el-input v-model="addInsuranceData.schemeName" style="width: 205px;"/>
           </el-form-item>
         </el-col>
@@ -18,8 +18,8 @@
         <div style="width: 100%; height: 30px;">
           <span style="font-weight: bold;color: blue;margin-left: 5px; line-height: 30px;">社保</span>
           <span style="width: 220px;float: right;display:inline-block">
-            <el-button type="primary" @click="addSocialSecurityRow()">添加</el-button>
-            <el-button type="primary" @click="delSocialSecurityData()">删除</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="addSocialSecurityRow()">添加</el-button>
+            <el-button type="primary" icon="el-icon-minus" @click="delSocialSecurityData()">删除</el-button>
           </span>
         </div>
         <div style="margin-left: 5px; margin-top: 10px;">
@@ -32,27 +32,27 @@
             </el-table-column>
             <el-table-column label="默认基数">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.defaultCardinalNumber"/>
+                <el-input v-model="scope.row.defaultCardinalNumber" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="可选基数范围起">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.optionalBaseStart"/>
+                <el-input v-model="scope.row.optionalBaseStart" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="可选基数范围止">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.optionalBaseEnd"/>
+                <el-input v-model="scope.row.optionalBaseEnd" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="公司缴纳比例">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.corporateContributionRatio"/>
+                <el-input v-model="scope.row.corporateContributionRatio" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="个人缴纳比例">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.individualContributionRatio"/>
+                <el-input v-model="scope.row.individualContributionRatio" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="公司金额">
@@ -80,8 +80,8 @@
             <el-checkbox v-model="checked" @change="delAllData()">不缴公积金</el-checkbox>
           </span>
           <span style="width: 220px;float: right;display:inline-block">
-            <el-button type="primary" @click="addRow()">添加</el-button>
-            <el-button type="primary" @click="delData()">删除</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="addRow()">添加</el-button>
+            <el-button type="primary" icon="el-icon-minus" @click="delData()">删除</el-button>
           </span>
         </div>
         <div style="margin-left: 5px; margin-top: 10px;">
@@ -94,27 +94,27 @@
             </el-table-column>
             <el-table-column label="默认基数">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.defaultCardinalNumber" :disabled="accumulationFundDisabled"/>
+                <el-input v-model="scope.row.defaultCardinalNumber" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="可选基数范围起">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.optionalBaseStart" :disabled="accumulationFundDisabled"/>
+                <el-input v-model="scope.row.optionalBaseStart" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="可选基数范围止">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.optionalBaseEnd" :disabled="accumulationFundDisabled"/>
+                <el-input v-model="scope.row.optionalBaseEnd" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="公司缴纳比例">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.corporateContributionRatio" :disabled="accumulationFundDisabled"/>
+                <el-input v-model="scope.row.corporateContributionRatio" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="个人缴纳比例">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.individualContributionRatio" :disabled="accumulationFundDisabled"/>
+                <el-input v-model="scope.row.individualContributionRatio" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
               </template>
             </el-table-column>
             <el-table-column label="公司金额" style="background: #666666">
@@ -230,28 +230,39 @@ export default {
       socialSecurityRowIndex: 6,
       selectlistRow: [],
       commitRows: {},
-      rowIndex: 2
+      rowIndex: 2,
+      rules: {
+        assessmentName: [{ required: true, message: '请输考核名称', trigger: 'blur' }],
+        templateId: [{ required: true, message: '请选择考核模板', trigger: 'change' }],
+        // assessmentTime: [{ required: true, message: '请选择考核时间', trigger: 'change' }],
+        assessmentObject: [{ required: true, message: '请选择考核对象', trigger: 'change' }],
+        assessmentPeople: [{ required: true, message: '请选择考核人', trigger: 'change' }]
+      }
     }
   },
   computed: {
     getProvidentFundCompanyAmount(row) {
       return function(row) {
-        return parseInt(row.defaultCardinalNumber) * parseInt(row.corporateContributionRatio) / 100
+        return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
+          (row.corporateContributionRatio == null || row.corporateContributionRatio === '') ? 0 : row.corporateContributionRatio) / 100
       }
     },
     getProvidentFundPersonalAmount(row) {
       return function(row) {
-        return parseInt(row.defaultCardinalNumber) * parseInt(row.individualContributionRatio) / 100
+        return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
+          (row.individualContributionRatio == null || row.individualContributionRatio === '') ? 0 : row.individualContributionRatio) / 100
       }
     },
     getSocialSecurityCompanyAmount(row) {
       return function(row) {
-        return parseInt(row.defaultCardinalNumber) * parseInt(row.corporateContributionRatio) / 100
+        return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
+          (row.corporateContributionRatio == null || row.corporateContributionRatio === '') ? 0 : row.corporateContributionRatio) / 100
       }
     },
     getSocialSecurityPersonalAmount(row) {
       return function(row) {
-        return parseInt(row.defaultCardinalNumber) * parseInt(row.individualContributionRatio) / 100
+        return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
+          (row.individualContributionRatio == null || row.individualContributionRatio === '') ? 0 : row.individualContributionRatio) / 100
       }
     },
     companyAccumulationFundCom: function() { // 公司公积金总计
@@ -259,7 +270,8 @@ export default {
       if (this.accumulationFundDisabled === false) {
         if (this.addInsuranceData.tableData.length > 0) {
           this.addInsuranceData.tableData.forEach((v, i) => {
-            companyAccumulationFund = companyAccumulationFund + parseInt(v.defaultCardinalNumber) * parseInt(v.corporateContributionRatio) / 100
+            companyAccumulationFund = companyAccumulationFund + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
+              (v.corporateContributionRatio == null || v.corporateContributionRatio === '') ? 0 : v.corporateContributionRatio) / 100
           })
         }
       }
@@ -270,7 +282,8 @@ export default {
       if (this.accumulationFundDisabled === false) {
         if (this.addInsuranceData.tableData.length > 0) {
           this.addInsuranceData.tableData.forEach((v, i) => {
-            personalAccumulationFund = personalAccumulationFund + parseInt(v.defaultCardinalNumber) * parseInt(v.individualContributionRatio) / 100
+            personalAccumulationFund = personalAccumulationFund + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
+              (v.individualContributionRatio == null || v.individualContributionRatio === '') ? 0 : v.individualContributionRatio) / 100
           })
         }
       }
@@ -280,7 +293,8 @@ export default {
       let companySocialSecurity = 0
       if (this.addInsuranceData.socialSecurityTableData.length > 0) {
         this.addInsuranceData.socialSecurityTableData.forEach((v, i) => {
-          companySocialSecurity = companySocialSecurity + parseInt(v.defaultCardinalNumber) * parseInt(v.corporateContributionRatio) / 100
+          companySocialSecurity = companySocialSecurity + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
+            (v.corporateContributionRatio == null || v.corporateContributionRatio === '') ? 0 : v.corporateContributionRatio) / 100
         })
       }
       return companySocialSecurity
@@ -289,7 +303,8 @@ export default {
       let personalSocialSecurity = 0
       if (this.addInsuranceData.socialSecurityTableData.length > 0) {
         this.addInsuranceData.socialSecurityTableData.forEach((v, i) => {
-          personalSocialSecurity = personalSocialSecurity + parseInt(v.defaultCardinalNumber) * parseInt(v.individualContributionRatio) / 100
+          personalSocialSecurity = personalSocialSecurity + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
+            (v.individualContributionRatio == null || v.individualContributionRatio === '') ? 0 : v.individualContributionRatio) / 100
         })
       }
       return personalSocialSecurity
@@ -593,12 +608,49 @@ export default {
       this.$refs.socialSecurityTableData.clearSelection()
     },
     updateData() { // 修改保存
-      if (this.addInsuranceData.insuredCityId === '') {
+      this.isDisabled = true
+      let flag = true
+      if (this.addInsuranceData.insuredCityId === '' || this.addInsuranceData.insuredCityId.trim() === '/') {
         this.$message.error('请填写要参保的城市')
-        return
+        flag = false
+        this.isDisabled = false
+        return false
       }
       if (this.addInsuranceData.schemeName === '') {
         this.$message.error('请填写参保名称')
+        flag = false
+        this.isDisabled = false
+        return false
+      }
+      if (this.addInsuranceData.socialSecurityTableData.length < 1) {
+        this.$message.error('至少填写一项社保项目')
+        flag = false
+        this.isDisabled = false
+        return false
+      }
+      for (let i = 0; i < this.addInsuranceData.socialSecurityTableData.length; i++) {
+        if (this.addInsuranceData.socialSecurityTableData[i].defaultCardinalNumber === '') {
+          alert('社保默认基数为必填项，请检查')
+          flag = false
+          break
+        }
+      }
+      if (!flag) {
+        this.isDisabled = false
+        return false
+      }
+      if (this.addInsuranceData.tableData.length > 0 && this.accumulationFundDisabled === false) {
+        for (let i = 0; i < this.addInsuranceData.tableData.length; i++) {
+          if (this.addInsuranceData.tableData[i].defaultCardinalNumber === '') {
+            alert('公积金默认基数为必填项，请检查')
+            flag = false
+            break
+          }
+        }
+      }
+      if (!flag) {
+        this.isDisabled = false
+        return false
       }
       this.commitRows.schemeId = this.prePageRow.schemeId
       this.commitRows.socialSecurityId = this.prePageRow.socialSecurityId
@@ -617,32 +669,67 @@ export default {
         })
       }
       this.commitRows.insuredSchemeDetailedList = insuredSchemeDetailedList
-      api('hr/SalaryWelfareManagement/updateInsurancescheme', this.commitRows).then(res => {
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '修改成功',
-            type: 'success'
-          })
-          this.commitRows = []
-          this.goBack(this.$route)
-        } else {
-          this.$message.error(res.data.result)
-          this.commitRows = []
-        }
-        this.isDisabled = false
-      })
+      if (flag) {
+        api('hr/SalaryWelfareManagement/updateInsurancescheme', this.commitRows).then(res => {
+          if (res.data.code === '0000') {
+            this.$message({
+              message: '修改成功',
+              type: 'success'
+            })
+            this.commitRows = []
+            this.goBack(this.$route)
+          } else {
+            this.$message.error(res.data.result)
+            this.commitRows = []
+          }
+          this.isDisabled = false
+        })
+      }
     },
     submitForm() {
-      if (this.addInsuranceData.insuredCityId === '') {
+      let flag = true
+      this.isDisabled = true
+      if (this.addInsuranceData.insuredCityId === '' || this.addInsuranceData.insuredCityId === '/') {
         this.$message.error('请填写要参保的城市')
-        return
+        flag = false
+        this.isDisabled = false
+        return false
       }
       if (this.addInsuranceData.schemeName === '') {
         this.$message.error('请填写参保名称')
+        flag = false
+        this.isDisabled = false
+        return false
       }
       if (this.addInsuranceData.socialSecurityTableData.length < 1) {
         this.$message.error('至少填写一项社保项目')
-        return
+        flag = false
+        this.isDisabled = false
+        return false
+      }
+      for (let i = 0; i < this.addInsuranceData.socialSecurityTableData.length; i++) {
+        if (this.addInsuranceData.socialSecurityTableData[i].defaultCardinalNumber === '') {
+          flag = false
+          alert('社保默认基数为必填项，请检查')
+          break
+        }
+      }
+      if (!flag) {
+        this.isDisabled = false
+        return false
+      }
+      if (this.addInsuranceData.tableData.length > 0 && this.accumulationFundDisabled === false) {
+        for (let i = 0; i < this.addInsuranceData.tableData.length; i++) {
+          if (this.addInsuranceData.tableData[i].defaultCardinalNumber === '') {
+            flag = false
+            alert('公积金默认基数为必填项，请检查')
+            break
+          }
+        }
+      }
+      if (!flag) {
+        this.isDisabled = false
+        return false
       }
       this.commitRows.insuredCityId = this.addInsuranceData.insuredCityId
       this.commitRows.insuredCityName = this.addInsuranceData.insuredCityName
@@ -657,21 +744,22 @@ export default {
         })
       }
       this.commitRows.insuredSchemeDetailedList = insuredSchemeDetailedList
-
-      api('hr/SalaryWelfareManagement/addInsurancescheme', this.commitRows).then(res => {
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '添加成功',
-            type: 'success'
-          })
-          this.commitRows = []
-          this.goBack(this.$route)
-        } else {
-          this.$message.error(res.data.result)
-          this.commitRows = []
-        }
-        this.isDisabled = false
-      })
+      if (flag) {
+        api('hr/SalaryWelfareManagement/addInsurancescheme', this.commitRows).then(res => {
+          if (res.data.code === '0000') {
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            })
+            this.commitRows = []
+            this.goBack(this.$route)
+          } else {
+            this.$message.error(res.data.result)
+            this.commitRows = []
+          }
+          this.isDisabled = false
+        })
+      }
     },
     isActive(route) {
       return route.path === this.$route.path

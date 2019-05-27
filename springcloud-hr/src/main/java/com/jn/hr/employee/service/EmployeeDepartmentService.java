@@ -1,5 +1,6 @@
 package com.jn.hr.employee.service;
 
+import com.jn.hr.archives.model.TreeModel;
 import com.jn.hr.employee.model.EmployeeDepartment;
 import com.jn.hr.employee.model.EmployeeDepartmentAdd;
 import com.jn.system.model.User;
@@ -21,4 +22,5 @@ public interface EmployeeDepartmentService {
 
     //根据parentId查询组织架构分类
     public List<EmployeeDepartment> getEmployeeDepartments();
+
 }

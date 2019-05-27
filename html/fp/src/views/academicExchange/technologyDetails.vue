@@ -7,25 +7,25 @@
         </div>
         <div class="announcement1 pr">
             <el-card>
-                <div class="tit color4">这是一个关于学术科技详情的大标题大标题大标题大标题</div>
+                <div class="tit color4">{{achDetails.title}}</div>
                 <div class="type1">
                     <div class="span1">
-                        成果类型：
+                        成果类型：<span v-if="achDetails.type=='technology'">科技</span><span v-if="achDetails.type=='science'">学术</span>
                     </div>
-                    <div class="span2">
+                    <!-- <div class="span2">
                         成果类型：
-                    </div>
+                    </div> -->
                 </div>
                 <div class="timer">
-                    <span>阅读量：</span>
-                    <span>发布时间：<i class="mainColor">222</i></span>
+                    <span>阅读量：{{achDetails.viewCount}}</span>
+                    <span style="margin-left:20px">发布时间：<i class="mainColor">{{achDetails.createdTime}}</i></span>
                 </div>
             </el-card>
         </div>
         <div class="announcement2">
             <div class="title color1">学术/科技详情</div>
             <el-card>
-                <p v-html="achDetails.noticeDetails"></p>
+                <p v-html="achDetails.details"></p>
             </el-card>
         </div>
     </div>
@@ -41,13 +41,12 @@ export default {
     this.achievementDetails();
   },
   methods: {
-    //公告详情
+    //成果详情
     achievementDetails() {
       this.api.get({
         url: "achievementDetails",
         data: {
-        //   noticeId: "536d4e9c22a1465dbb1f1644f793e900"
-            achievementId  :this.$route.query.achievementId 
+            achievementId :this.$route.query.achievementId 
         },
         callback: (res)=> {
           if (res.code == "0000") {

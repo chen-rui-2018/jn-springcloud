@@ -7,6 +7,7 @@ import com.jn.hr.common.service.CommonService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,7 @@ public class CommonController extends BaseController {
     private CommonService commonService;
 
     @ControllerLog(doAction = "附件上传")
-    //@RequiresPermissions("/hr/common/uploadAttachment")
+    @RequiresPermissions("/hr/common/uploadAttachment")
     @ApiOperation(value = "附件上传", httpMethod = "POST", response = Result.class)
     @RequestMapping("/uploadAttachment")
     public Result uploadAttachment(HttpServletRequest request) {
@@ -47,7 +48,7 @@ public class CommonController extends BaseController {
     }
 
     @ControllerLog(doAction = "附件下载")
-    //@RequiresPermissions("/hr/common/downLoadAttachment")
+    @RequiresPermissions("/hr/common/downLoadAttachment")
     @ApiOperation(value = "附件下载", httpMethod = "POST", response = Result.class)
     @RequestMapping("/downLoadAttachment")
     public ResponseEntity<byte[]> downLoadAttachment(DownAttachment downAttachment, HttpServletResponse response) {

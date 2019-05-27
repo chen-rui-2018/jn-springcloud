@@ -9,8 +9,8 @@
                 <el-breadcrumb-item class="mainColor">活动详情</el-breadcrumb-item>
                 <el-breadcrumb-item class="mainColor">报名情况</el-breadcrumb-item>
             </el-breadcrumb> -->
-      <span>企业服务/</span>
-      <span>活动详情/</span>
+      <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
+      <span class="pointer" @click="$router.push({ path: '/actiDetail'})">活动详情/</span>
       <span class="mainColor">报名情况</span>
     </div>
     <el-card>

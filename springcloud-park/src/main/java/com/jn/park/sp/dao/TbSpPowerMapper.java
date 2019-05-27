@@ -16,15 +16,21 @@ public interface TbSpPowerMapper {
 
     int insertSelective(TbSpPower record);
 
+    List<TbSpPower> selectByExampleWithBLOBs(TbSpPowerCriteria example);
+
     List<TbSpPower> selectByExample(TbSpPowerCriteria example);
 
     TbSpPower selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbSpPower record, @Param("example") TbSpPowerCriteria example);
 
+    int updateByExampleWithBLOBs(@Param("record") TbSpPower record, @Param("example") TbSpPowerCriteria example);
+
     int updateByExample(@Param("record") TbSpPower record, @Param("example") TbSpPowerCriteria example);
 
     int updateByPrimaryKeySelective(TbSpPower record);
+
+    int updateByPrimaryKeyWithBLOBs(TbSpPower record);
 
     int updateByPrimaryKey(TbSpPower record);
 }

@@ -15,13 +15,17 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.hr.attendance.dao.AttendanceManagementMapper;
 import com.jn.hr.attendance.dao.AttendanceSchedulMapper;
+import com.jn.hr.attendance.dao.AttendanceTimeSetMapper;
 import com.jn.hr.attendance.model.AttendanceManagementAdd;
 import com.jn.hr.attendance.model.AttendanceSchedulPage;
 import com.jn.hr.attendance.model.AttendanceSchedulVo;
+import com.jn.hr.attendance.model.AttendanceTimeSetPage;
+import com.jn.hr.attendance.model.AttendanceTimeSetVo;
 import com.jn.hr.attendance.service.AttendanceTaskService;
 import com.jn.hr.common.util.HrDataUtil;
 import com.jn.hr.employee.dao.EmployeeBasicInfoMapper;
-import com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo;
+import com.jn.hr.employee.model.EmployeeBasicInfo;
+import com.jn.hr.employee.model.EmployeeBasicInfoPage;
 import com.jn.oa.api.OaClient;
 import com.jn.oa.model.Attendance;
 import com.jn.oa.model.Leave;
@@ -39,71 +43,151 @@ public class AttendanceTaskServiceImpl implements AttendanceTaskService {
 	EmployeeBasicInfoMapper employeeBasicInfoMapper;
 	@Autowired
 	AttendanceManagementMapper attendanceManagementMapper;
+	@Autowired
+	AttendanceTimeSetMapper attendanceTimeSetMapper;
+
 	@Override
 	public Result<Map<String, String>> summaryAttendanceInfo() {
-		Result<Map<String,String>> result=new Result<Map<String,String>>();
+		Result<Map<String, String>> result = new Result<Map<String, String>>();
 		List<AttendanceManagementAdd> attendanceManageList = new ArrayList<AttendanceManagementAdd>();
-		//获取员工基本信息
-		TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
-		Map<String,TbManpowerEmployeeBasicInfo> basicMap = employeeBasicInfoMapper.map(tbManpowerEmployeeBasicInfo);
-		//获取当月的排班情况
+		EmployeeBasicInfoPage employeeBasicInfoPage = new EmployeeBasicInfoPage();
+		List<EmployeeBasicInfo> employeeBasicInfoList = employeeBasicInfoMapper.list(employeeBasicInfoPage);
+		// 获取考勤班次时间
+		AttendanceTimeSetPage attendanceTimeSetPage = new AttendanceTimeSetPage();
+		AttendanceTimeSetVo timeSet = attendanceTimeSetMapper.selectByAttendanceType(attendanceTimeSetPage);
+
 		AttendanceSchedulPage attendanceSchedulPage = new AttendanceSchedulPage();
-		//要获取前一天的时间
+		// 获取考勤月份的排班情况（获取上一天所在月份的排班情况）
 		Date date = HrDataUtil.getBeforeDay(new Date());
 		String str = HrDataUtil.getDayBefore(date);
 		attendanceSchedulPage.setSchedulMonth(str);
-		List<AttendanceSchedulVo> schedulList = attendanceSchedulMapper.list(attendanceSchedulPage);
-		Map<String,Map<String,Integer>> userIdMap = new HashMap<String,Map<String,Integer>>();
-		Map<String,TbManpowerEmployeeBasicInfo> jobNumberMap = new HashMap<String,TbManpowerEmployeeBasicInfo>();
-		for(AttendanceSchedulVo schedul : schedulList){
-			Map<String,Integer> map = new HashMap<String,Integer>();
-			map = schedulMonthMap(schedul);
-			TbManpowerEmployeeBasicInfo basic = new TbManpowerEmployeeBasicInfo();
-			basic = basicMap.get(schedul.getJobNumber());
-			if(basic == null){
+		Map<String, AttendanceSchedulVo> attendanceSchedul = attendanceSchedulMapper.obtainMap(attendanceSchedulPage);
+
+		// 获取前一天的date时间
+		Date beforeDate = HrDataUtil.getBeforeDay(new Date());
+		String dateStr = DateUtils.formatDate(beforeDate, "yyyyMMdd");
+		for (EmployeeBasicInfo basic : employeeBasicInfoList) {
+			// 获取这个月的排班情况
+			AttendanceSchedulVo schedu = new AttendanceSchedulVo();
+			schedu = attendanceSchedul.get(basic.getJobNumber());
+			if (schedu == null) {
 				continue;
 			}
-			userIdMap.put(basic.getUserId(), map);
-			
-			jobNumberMap.put(basic.getUserId(), basic);
-		}
-		
-		//获取请假明细
-		Leave leave = new Leave();
-		Result<List<LeaveApiVo>> leaveList = oaClient.searchLeaveListByCondition(leave);
-		List<LeaveApiVo> list = leaveList.getData();
-		Map<String,LeaveApiVo> leaveMap = new HashMap<String,LeaveApiVo>();
-		for(LeaveApiVo leaveVo: list){
-			leaveMap.put(leaveVo.getUserId(), leaveVo);
-		}
-		
-		//获取考勤明细
-		Attendance attendance = new Attendance();
-		Result<List<AttendanceApiVo>> attendanceList = oaClient.selectAttendanceListByCondition(attendance);
-		List<AttendanceApiVo> attendanceApiList = attendanceList.getData();
-		for(AttendanceApiVo attendanceApi : attendanceApiList){
-			AttendanceManagementAdd attendanceManagementAdd = getAttendanceManagementAdd(attendanceApi,leaveMap,userIdMap);
-			if(attendanceManagementAdd == null){
+			// 有排班情况才记录考勤
+			Map<String, Integer> monthMap = new HashMap<String, Integer>();
+			monthMap = schedulMonthMap(schedu);
+			// 不在考勤日期继续下个用户
+			if (monthMap.get(dateStr) == null && monthMap.get(dateStr) == 0) {
 				continue;
 			}
-			TbManpowerEmployeeBasicInfo basic = jobNumberMap.get(attendanceApi.getUserId());
-			attendanceManagementAdd.setJobNumber(basic.getUserId());
+
+			AttendanceManagementAdd attendanceManagementAdd = new AttendanceManagementAdd();
+			attendanceManagementAdd.setUserId(basic.getUserId());
+			attendanceManagementAdd.setId(UUID.randomUUID().toString());
+			attendanceManagementAdd.setJobNumber(basic.getJobNumber());
 			attendanceManagementAdd.setName(basic.getName());
+			attendanceManagementAdd.setDepartment(basic.getDepartmentName());
+			attendanceManagementAdd.setAttendanceDate(DateUtils.formatDate(beforeDate, "yyyyMMdd"));
+			attendanceManagementAdd.setAttendance(1);
+
+			// 获取请假明细
+			Leave leave = new Leave();
+			leave.setUserId(basic.getUserId());
+			leave.setStartTime(beforeDate);
+			Result<List<LeaveApiVo>> leaveList = oaClient.searchLeaveListByCondition(leave);
+			List<LeaveApiVo> list = leaveList.getData();
+			for (LeaveApiVo leaveApiVo : list) {
+				obtainLeaveInfo(leaveApiVo, attendanceManagementAdd);
+			}
+
+			// 获取考勤明细
+			String key = "";
+			Map<String, Integer> attendanceMap = new HashMap<String, Integer>();
+			Attendance attendance = new Attendance();
+			attendance.setUserId(basic.getUserId());
+			attendance.setStartTime(beforeDate);
+			Result<List<AttendanceApiVo>> attendanceList = oaClient.selectAttendanceListByCondition(attendance);
+			List<AttendanceApiVo> attendanceApiList = attendanceList.getData();
+			for (AttendanceApiVo attendanceApiVo : attendanceApiList) {
+				obtainAttendanceInfo(attendanceApiVo, timeSet, attendanceManagementAdd);
+				// 旷工
+				if (attendanceApiVo.getSignInAttendanceTime() != null) {
+					key = DateUtils.formatDate(attendanceApiVo.getSignInAttendanceTime(), "yyyyMMdd");
+				} else if (attendanceApiVo.getSignOutAttendanceTime() != null) {
+					key = DateUtils.formatDate(attendanceApiVo.getSignOutAttendanceTime(), "yyyyMMdd");
+				}
+				attendanceMap.put(key, 1);
+			}
+
+			if (monthMap.get(dateStr) != null && monthMap.get(dateStr) != 0 && attendanceMap.get(dateStr) == null) {
+				attendanceManagementAdd.setAbsenteeism(1);
+			}
+
 			attendanceManageList.add(attendanceManagementAdd);
 		}
-		
-		 try{
-			 attendanceManagementMapper.insertBatch(attendanceManageList);
-         }catch(DuplicateKeyException e){
 
-         }
-		
+		try {
+			attendanceManagementMapper.insertBatch(attendanceManageList);
+		} catch (DuplicateKeyException e) {
+
+		}
+
 		return result;
 	}
 
-	//设置考勤日期
-	private Map<String,Integer> schedulMonthMap(AttendanceSchedulVo schedul){
-		Map<String,Integer> map = new HashMap<String,Integer>();
+	// 获取早退、迟到、缺卡
+	private void obtainAttendanceInfo(AttendanceApiVo attendanceApiVo, AttendanceTimeSetVo timeSet,
+			AttendanceManagementAdd attendanceManagementAdd) {
+		if (attendanceApiVo.getSignInAttendanceTime() == null && attendanceApiVo.getSignOutAttendanceTime() != null) {
+			attendanceManagementAdd.setStartMissCard(1);
+		} else if (attendanceApiVo.getSignInAttendanceTime() != null
+				&& attendanceApiVo.getSignOutAttendanceTime() == null) {
+			attendanceManagementAdd.setEndMissCard(1);
+		} else if (attendanceApiVo.getSignInAttendanceTime() == null
+				&& attendanceApiVo.getSignOutAttendanceTime() != null && timeSet.getDutyAttendanceTime()
+						.compareTo(DateUtils.formatDate(attendanceApiVo.getSignOutAttendanceTime(), "HH:mm")) > 0) {
+			attendanceManagementAdd.setStartMissCard(1);
+			attendanceManagementAdd.setLeaveEarly(1);
+		} else if (attendanceApiVo.getSignInAttendanceTime() != null
+				&& attendanceApiVo.getSignOutAttendanceTime() == null && timeSet.getWorkAttendanceTime()
+						.compareTo(DateUtils.formatDate(attendanceApiVo.getSignInAttendanceTime(), "HH:mm")) < 0) {
+			attendanceManagementAdd.setEndMissCard(1);
+			attendanceManagementAdd.setLate(1);
+		} else if (timeSet.getWorkAttendanceTime()
+				.compareTo(DateUtils.formatDate(attendanceApiVo.getSignInAttendanceTime(), "HH:mm")) < 0) {
+			attendanceManagementAdd.setLate(1);
+		} else if (timeSet.getDutyAttendanceTime()
+				.compareTo(DateUtils.formatDate(attendanceApiVo.getSignOutAttendanceTime(), "HH:mm")) > 0) {
+			attendanceManagementAdd.setLeaveEarly(1);
+		}
+	}
+
+	// 获取当日的请假情况
+	private void obtainLeaveInfo(LeaveApiVo leaveApiVo, AttendanceManagementAdd attendanceManagementAdd) {
+		if (leaveApiVo.getType().equals("1")) {
+			// 年假
+			attendanceManagementAdd.setAnnualLeave(Integer.valueOf(leaveApiVo.getTotalHour()));
+		} else if (leaveApiVo.getType().equals("3")) {
+			// 事假
+			attendanceManagementAdd.setCompassionateLeave(Integer.valueOf(leaveApiVo.getTotalHour()));
+		} else if (leaveApiVo.getType().equals("4")) {
+			// 病假
+			attendanceManagementAdd.setSickLeave(Integer.valueOf(leaveApiVo.getTotalHour()));
+		} else if (leaveApiVo.getType().equals("5")) {
+			// 婚嫁
+			attendanceManagementAdd.setMarriageHoliday(Integer.valueOf(leaveApiVo.getTotalHour()));
+		} else if (leaveApiVo.getType().equals("6")) {
+			// 产假
+			attendanceManagementAdd.setMaternityLeave(Integer.valueOf(leaveApiVo.getTotalHour()));
+		} else if (leaveApiVo.getType().equals("9")) {
+			// 丧家
+			attendanceManagementAdd.setFuneralLeave(Integer.valueOf(leaveApiVo.getTotalHour()));
+		}
+	}
+
+	// 设置考勤日期
+	private Map<String, Integer> schedulMonthMap(AttendanceSchedulVo schedul) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put(schedul.getSchedulMonth() + "-01", schedul.getNumber1());
 		map.put(schedul.getSchedulMonth() + "-02", schedul.getNumber2());
 		map.put(schedul.getSchedulMonth() + "-03", schedul.getNumber3());
@@ -136,22 +220,5 @@ public class AttendanceTaskServiceImpl implements AttendanceTaskService {
 		map.put(schedul.getSchedulMonth() + "-30", schedul.getNumber30());
 		map.put(schedul.getSchedulMonth() + "-31", schedul.getNumber31());
 		return map;
-	}
-	
-	private AttendanceManagementAdd getAttendanceManagementAdd(AttendanceApiVo attendanceApi,Map<String,LeaveApiVo> leaveMap,Map<String,Map<String,Integer>> userIdMap){
-		AttendanceManagementAdd AttendanceManagementAdd = null;
-		//获取前一天的时间
-		Date date = HrDataUtil.getBeforeDay(new Date());
-		String str = HrDataUtil.getSpecifiedDayBefore(date);
-		Map<String,Integer> map = userIdMap.get(attendanceApi.getUserId());
-		Integer i = map.get(str) == null ? 0 : map.get(str);
-		if(i != 0){
-			AttendanceManagementAdd = new AttendanceManagementAdd();
-			AttendanceManagementAdd.setId(UUID.randomUUID().toString());
-			AttendanceManagementAdd.setUserId(attendanceApi.getUserId());
-			AttendanceManagementAdd.setDepartment(attendanceApi.getDepartmentName());
-			//if(attendanceApi)
-		}
-		return AttendanceManagementAdd;
 	}
 }

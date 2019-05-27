@@ -1,7 +1,7 @@
 // let app= getApp();
 
-import {CreateHeader} from "./../../utils/require"
-
+// import {CreateHeader} from "./../../utils/require"
+import request from "./../../utils/http"
 Page({
   data: {
     nvabarData: {
@@ -11,7 +11,7 @@ Page({
     sendData:{
       name:'',
       page:1,
-      rows:20
+      rows:10
     },
     token:'',
     roomList:[]
@@ -41,17 +41,18 @@ Page({
   },
   // 生命周期函数--监听页面显示
   onShow: function () {
-    CreateHeader()
-    .then(header=>{
-      this.data.token=header.token
-      this.getMeetinRoom()
-    })
+    // CreateHeader()
+    // .then(header=>{
+    //   this.data.token=header.token
+    //   this.getMeetinRoom()
+    // })
+    this.getMeetinRoom()
   },
   // 页面上拉触底事件的处理函数
   onReachBottom: function () { 
     if(this.data.sendData.page<Math.ceil(this.data.total/this.data.sendData.rows)){
       this.data.sendData.page++
-      wx.request({
+     /*  wx.request({
         url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeetingRoom/list',
         data: this.data.sendData,
         header: {'content-type':'application/json','token':this.data.token},
@@ -67,7 +68,8 @@ Page({
         },
         fail: ()=>{},
         complete: ()=>{}
-      });
+      }); */
+      this.getMeetinRoom()
     }else{
       wx.showToast({
         title: '已到最后一页',
@@ -79,7 +81,7 @@ Page({
   },
   // 请求数据
   getMeetinRoom(){
-    wx.request({
+  /*   wx.request({
       url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeetingRoom/list',
       data: this.data.sendData,
       header: {'content-type':'application/json','token':this.data.token},
@@ -98,7 +100,18 @@ Page({
       },
       fail: ()=>{},
       complete: ()=>{}
-    });
+    }); */
+    request.send({
+      url: '/springcloud-oa/oa/oaMeetingRoom/list',
+      data: this.data.sendData,
+      method: 'POST',
+    }).then(res=>{
+      this.setData({
+        roomList:this.data.roomList.concat(res.data.data.rows),
+        total:res.data.data.total
+      })
+      wx.stopPullDownRefresh()
+    })
   },
   // 去会议详情
   goDetail(e){

@@ -56,9 +56,10 @@ export default new Router({
     },
     {
       path: '/guest/pd/consult',
-      name: 'consult',
+      name: 'declarationconsult',
       meta: {title: '我要咨询'},
       component: () => import('@/views/declarationCenter/consult')
+
     },
     {
       path: '/serverProDetail',
@@ -83,13 +84,6 @@ export default new Router({
       name: 'talentsServiceDetail',
       meta: {title: '服务详情'},
       component: () => import('@/views/talentsService/talentsServiceDetail')},
-{
-      path: '/demandRaise',
-      name: 'demandRaise',
-      component: () => import('@/views/demandRaise'),
-      meta: {title: '提需求'}
-
-    },
     {
       path: '/workPlan/workPlan',
       name: 'workPlan',
@@ -119,6 +113,18 @@ export default new Router({
       name: 'workPlanDetails',
       component: () => import('@/views/workPlan/workPlanDetails'),
       meta: {title: '工作计划详情'}
+    },
+    {
+      path: '/attendanceManagement/attendanceManagement',
+      name: 'attendanceManagement',
+      component: () => import('@/views/attendanceManagement/attendanceManagement'),
+      meta: {title: '考勤管理'}
+    },
+    {
+      path: '/attendanceManagement/attendanceDetails',
+      name: 'attendanceDetails',
+      component: () => import('@/views/attendanceManagement/attendanceDetails'),
+      meta: {title: '考勤明细'}
     }
   ]
 })

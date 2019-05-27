@@ -15,9 +15,14 @@ import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
 import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
+import com.jn.enterprise.company.model.CompanyInfoShow;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
+import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.vo.ColleagueListVO;
+import com.jn.enterprise.company.vo.CompanyDetailsVo;
+import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
@@ -94,8 +99,6 @@ public class CompanyServiceImpl implements CompanyService {
         List<ServiceEnterpriseCompany> getCompanyNewList=companyMapper.getCompanyNewList(sepParam);
         //调用park,处理后再返回 getCompanyNewList
         Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(getCompanyNewList);
-
-
         PaginationData<List<ServiceEnterpriseCompany>> data = new PaginationData(companyNewList, objects.getTotal());
         return data;
     }
@@ -285,7 +288,49 @@ public class CompanyServiceImpl implements CompanyService {
         logger.info("[编辑企业信息] " + ibpsResult.getMessage());
         return 1;
     }
-
+    @ServiceLog(doAction = "获取企业详情")
+    @Override
+    public CompanyDetailsVo getCompanyDetails(String companyId,String account) {
+        CompanyDetailsVo vo = new CompanyDetailsVo();
+        //获取企业基本信息 基本信息+ 基本资料+ 法人信息+ 产品
+        CompanyInfoShow show  = companyMapper.getCompanyDetails(companyId);
+        //获取 评论数  和 关注数信息
+        List<ServiceEnterpriseCompany> getCompanyNewList= new ArrayList<>();
+        ServiceEnterpriseCompany serviceEnterpriseCompany = new ServiceEnterpriseCompany();
+        serviceEnterpriseCompany.setId(companyId);
+        getCompanyNewList.add(serviceEnterpriseCompany);
+        Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(getCompanyNewList);
+        if(!companyNewList.getData().isEmpty()){
+            serviceEnterpriseCompany = companyNewList.getData().get(0);
+            if(serviceEnterpriseCompany != null){
+                show.setCareNumber(serviceEnterpriseCompany.getCareUser());
+                show.setCommentNumber(serviceEnterpriseCompany.getCommentNumber());
+            }
+        }
+        //获取评论信息
+        ActivityPagingParam activityPagingParam = new ActivityPagingParam();
+        activityPagingParam.setActivityId(companyId);
+        Result<PaginationData<List<Comment>>> commentRedsult = getCommentInfo(activityPagingParam);
+        if(commentRedsult.getData() != null){
+            vo.setComments(commentRedsult.getData().getRows());
+        }
+        //获取企业员工人数及头像列表信息
+        StaffListParam param = new StaffListParam();
+        param.setComId(companyId);
+        param.setNeedPage("0");
+        ColleagueListVO colleagueListVO =  staffService.getColleagueList(param,account);
+        if(colleagueListVO.getData()!=null){
+            List<String> avatarList = new ArrayList<>();
+            show.setComPerSonNumber(Long.toString(colleagueListVO.getData().getTotal()));
+            List<StaffListVO> staffListVOS = colleagueListVO.getData().getRows();
+            for(StaffListVO staffListVO: staffListVOS){
+                avatarList.add(staffListVO.getAvatar());
+            }
+            show.setPersonAvatar(avatarList);
+        }
+        vo.setCompanyInfoShow(show);
+        return vo;
+    }
 
     @ServiceLog(doAction = "获取评论信息")
     @Override
@@ -298,5 +343,7 @@ public class CompanyServiceImpl implements CompanyService {
     public Result<Boolean> saveComment(CommentAddParam commentAddParam){
         return commentClient.commentActivity(commentAddParam);
     }
+
+
 
 }

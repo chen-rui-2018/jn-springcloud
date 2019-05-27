@@ -6,6 +6,7 @@ import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
+import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
 import com.jn.park.activity.model.CommentAddParam;
@@ -74,4 +75,12 @@ public interface CompanyService {
      * @return
      */
     Result<Boolean> saveComment(CommentAddParam commentAddParam);
+
+    /**
+     * 获取企业详情
+     * @param companyId
+     * @param account
+     * @return
+     */
+    CompanyDetailsVo  getCompanyDetails(String companyId,String account);
 }

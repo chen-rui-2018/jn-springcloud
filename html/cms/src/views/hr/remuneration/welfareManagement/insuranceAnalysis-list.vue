@@ -132,9 +132,11 @@ export default {
   },
   watch: {
     'listQuery.insuredMonth': function() {
+      this.listQuery.page = 1
       this.initList()
     },
     'listQuery.type': function() {
+      this.listQuery.page = 1
       this.initList()
     }
   },

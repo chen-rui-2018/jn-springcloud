@@ -126,8 +126,7 @@ export default {
       rules: {
         assessmentName: [{ required: true, message: '请输考核名称', trigger: 'blur' }],
         templateId: [{ required: true, message: '请选择考核模板', trigger: 'change' }],
-        // assessmentTime: [{ required: true, message: '请选择考核时间', trigger: 'change' }],
-        assessmentObject: [{ required: true, message: '请选择考核对象', trigger: 'change' }],
+        // assessmentObject: [{ required: true, message: '请选择考核对象', trigger: 'change' }],
         assessmentPeople: [{ required: true, message: '请选择考核人', trigger: 'change' }]
       }
     }
@@ -158,67 +157,13 @@ export default {
       this.assessment.assessmentPeople = this.assessmentPeopleArr[this.assessmentPeopleArr.length - 1]
     },
     getDeptEmployeeList() {
-      this.deptEmployeeList = [
-        {
-          value: 'dept1',
-          label: '部门1',
-          flag: true,
-          children: [{
-            value: 'dept2',
-            label: '研发',
-            flag: true,
-            children: [{
-              flag: false,
-              value: 'NJ000001',
-              label: '张三'
-            }, {
-              flag: false,
-              value: 'NJ000007',
-              label: '李四'
-            }, {
-              flag: false,
-              value: 'NJ000006',
-              label: '赵六'
-            }]
-          }, {
-            value: 'daohang',
-            label: '导航',
-            flag: true,
-            children: [{
-              flag: false,
-              value: 'cexiangdaohang',
-              label: '侧向导航'
-            }, {
-              flag: false,
-              value: 'dingbudaohang',
-              label: '顶部导航'
-            }]
-          }]
-        }, {
-          value: 'ziyuan',
-          label: '资源',
-          flag: true,
-          children: [{
-            flag: true,
-            value: 'axure',
-            label: 'Axure Components'
-          }, {
-            flag: true,
-            value: 'sketch',
-            label: 'Sketch Templates'
-          }, {
-            flag: true,
-            value: 'jiaohu',
-            label: '组件交互文档'
-          }]
-        }]
-      // api('hr/AssessmentManagement/ObtainDepartmentTree', {}).then(res => {
-      //   if (res.data.code === '0000') {
-      //     this.rootData = res.data.data
-      //   } else {
-      //     this.$message.error(res.data.result)
-      //   }
-      // })
+      api('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
+        if (res.data.code === '0000') {
+          this.deptEmployeeList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
     },
     templateIdSel(val) {
       this.assessment.templateId = val
@@ -234,6 +179,11 @@ export default {
       this.isDisabled = true
       if (this.assessment.templateId === '') {
         alert('请选择考核模板')
+        this.isDisabled = false
+        return false
+      }
+      if (this.assessment.assessmentObject === '') {
+        alert('请选择考核对象')
         this.isDisabled = false
         return false
       }

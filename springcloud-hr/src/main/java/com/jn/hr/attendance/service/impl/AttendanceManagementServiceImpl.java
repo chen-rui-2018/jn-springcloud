@@ -107,11 +107,6 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 	@ServiceLog(doAction = "考勤管理分页查询")
 	public PaginationData<List<AttendanceManagementVo>> attendanceManagementList(
 			AttendanceManagementPage attendanceManagementPage) {
-		if (!StringUtils.isBlank(attendanceManagementPage.getDepartmentId())) {
-			TbManpowerDepartment department = tbManpowerDepartmentMapper
-					.selectByPrimaryKey(attendanceManagementPage.getDepartmentId());
-			attendanceManagementPage.setDepartment(department.getDepartmentName());
-		}
 		Page<Object> objects = PageHelper.startPage(attendanceManagementPage.getPage(),
 				attendanceManagementPage.getRows());
 		List<AttendanceManagementVo> attendanceList = attendanceManagementMapper.list(attendanceManagementPage);

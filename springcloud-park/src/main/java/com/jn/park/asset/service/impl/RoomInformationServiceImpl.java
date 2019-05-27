@@ -18,6 +18,9 @@ import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.*;
 import com.jn.system.log.annotation.ServiceLog;
 import org.apache.poi.ss.formula.functions.T;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -74,18 +77,33 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(id);
         RoomInformationModel roomInformationModel=new RoomInformationModel();
         BeanUtils.copyProperties(tbRoomInformation,roomInformationModel);
-
+        //设置图片集合
+        List<String> imgUrlList = getImgUrlList(roomInformationModel.getImgUrl());
+        //添加户型图
+        imgUrlList.add(roomInformationModel.getRoomPlan());
+        //添加流程平面图
+        imgUrlList.add(roomInformationModel.getFloorPlan());
+        roomInformationModel.setImage(imgUrlList);
         //设置同属分组房间
         roomInformationModel.setGroupRoomList(new ArrayList<>());
         List<TbRoomInformation> tbRoomInformationList=this.getRoomGroupId(tbRoomInformation.getGroupId());
         if(null==tbRoomInformationList){
             return roomInformationModel;
         }
+        List<RoomInformationModel> roomInformationModelList = new ArrayList<>();
         for(TbRoomInformation e:tbRoomInformationList){
             RoomInformationModel target=new RoomInformationModel();
             BeanUtils.copyProperties(e,target);
-            roomInformationModel.getGroupRoomList().add(target);
+            //设置图片集合
+            List<String> imgList = getImgUrlList(target.getImgUrl());
+            //添加户型图
+            imgList.add(roomInformationModel.getRoomPlan());
+            //添加流程平面图
+            imgList.add(roomInformationModel.getFloorPlan());
+            target.setImage(imgUrlList);
+            roomInformationModelList.add(target);
         }
+        roomInformationModel.setGroupRoomList(roomInformationModelList);
         return roomInformationModel;
     }
 
@@ -552,7 +570,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
     /**
      * 房间退租申请
-     * @param id
+     * @param orderItemId
      * @return
      */
     @Override
@@ -608,14 +626,32 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         if(result==null||!StringUtils.contains(creatorAccount,account)){
             throw new JnSpringCloudException(new Result("-1","订单不存在"));
         }
+
+        //设置图片
+        List<String> urlList = getImgUrlList(result.getImgUrl());
+        //设置流程图
+        urlList.add(result.getFloorPlan());
+        //设置房间平面图
+        urlList.add(result.getRoomPlan());
+        result.setImage(urlList);
         //通过订单id获取所有的子订单
         TbRoomOrdersItemCriteria criteria=new TbRoomOrdersItemCriteria();
         criteria.createCriteria().andOrderIdEqualTo(result.getOrderId());
         List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(criteria);
         result.setRoomOrdersModelsList(new ArrayList<>());
+        List<RoomOrdersModel> ordersModelList  = new ArrayList<>();
         for (TbRoomOrdersItem tbRoomOrdersItem : tbRoomOrdersItemList) {
             RoomOrdersModel orders = roomInformationDao.getNewRoomOrders(tbRoomOrdersItem.getId());
-            result.getRoomOrdersModelsList().add(orders);
+            //设置图片
+            List<String> imgUrlList = getImgUrlList(orders.getImgUrl());
+            //设置流程图
+            imgUrlList.add(orders.getFloorPlan());
+            //设置房间平面图
+            imgUrlList.add(orders.getRoomPlan());
+            //设置图片集合
+            orders.setImage(imgUrlList);
+            ordersModelList.add(orders);
+            result.setRoomOrdersModelsList(ordersModelList);
         }
         return result;
     }
@@ -760,12 +796,14 @@ public class RoomInformationServiceImpl implements RoomInformationService {
                         tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbRoomOrders.getId()).andRoomStatusEqualTo(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue())).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode()));
                         List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
                         if (tbRoomOrdersItemList != null){
+                            List<RoomPayOrdersItemModel> children = new ArrayList<>();
                             for (TbRoomOrdersItem roomOrdersItem : tbRoomOrdersItemList) {
                                 //创建子集合model
                                 RoomPayOrdersItemModel roomPayOrdersItemModel = new RoomPayOrdersItemModel();
                                 BeanUtils.copyProperties(roomOrdersItem,roomPayOrdersItemModel);
-                                roomEnter.getChildren().add(roomPayOrdersItemModel);
+                                children.add(roomPayOrdersItemModel);
                             }
+                            roomEnter.setChildren(children);
                         }
                         roomEnterpriseModelList.add(roomEnter);
                     }
@@ -775,4 +813,19 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         return roomEnterpriseModelList;
     }
 
+    /**
+     * 获取图片集合
+     * @param imgUrl
+     * @return
+     */
+    public List<String> getImgUrlList(String imgUrl){
+        List<String> imageList = new ArrayList<>();
+        if (StringUtils.isNotEmpty(imgUrl)){
+            String[] url= imgUrl.split(",");
+            for (String img : url) {
+                imageList.add(img);
+            }
+        }
+        return imageList;
+    }
 }

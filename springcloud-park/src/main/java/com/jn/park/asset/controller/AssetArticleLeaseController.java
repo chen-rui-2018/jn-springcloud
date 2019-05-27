@@ -17,6 +17,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -138,9 +139,9 @@ public class AssetArticleLeaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019"),
     })
-    public Result giveBack(String id){
-        assetArticleLeaseOrdersService.giveBack(id);
-        return new Result();
+    public Result<AssetArticleLeaseOrdersModel> giveBack(String id){
+        AssetArticleLeaseOrdersModel assetArticleLeaseOrdersModel = assetArticleLeaseOrdersService.giveBack(id);
+        return new Result<>(assetArticleLeaseOrdersModel);
     }
 
     @ControllerLog(doAction = "确认归还")

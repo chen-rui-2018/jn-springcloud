@@ -51,7 +51,7 @@ public interface AssetArticleLeaseOrdersService {
      * 归还
      * @param id
      */
-    void giveBack(String id);
+    AssetArticleLeaseOrdersModel giveBack(String id);
 
     /**
      * 返回物品租赁历史列表

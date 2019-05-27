@@ -112,14 +112,24 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
      */
     @Override
     @ServiceLog(doAction = "归还")
-    public void giveBack(String id) {
-        TbAssetArticleLeaseOrders tbAssetArticleLeaseOrders = tbAssetArticleLeaseOrdersMapper.selectByPrimaryKey(id);
-        Map<String,Object> map = new HashMap<>(16);
-        map.put("assetNumber",tbAssetArticleLeaseOrders.getAssetNumber());
-        map.put("id",id);
-        map.put("status",Byte.parseByte(LeaseStatusEnums.RETURN_ING.getValue()));
-        assetArticleLeaseDao.updateStatus(map);
-        assetArticleLeaseOrdersDao.updateStatus(map);
+    public AssetArticleLeaseOrdersModel giveBack(String id) {
+        //更新订单物品租借状态
+        TbAssetArticleLeaseOrders assetArticleLeaseOrders = tbAssetArticleLeaseOrdersMapper.selectByPrimaryKey(id);
+        assetArticleLeaseOrders.setArticleStatus(Byte.parseByte(LeaseStatusEnums.RETURN_ING.getValue()));
+        int updateCount = tbAssetArticleLeaseOrdersMapper.updateByPrimaryKeySelective(assetArticleLeaseOrders);
+        logger.info("订单表的资产状态更新为：归还中，参数：{}",assetArticleLeaseOrders);
+        if (updateCount != 1){
+            throw new JnSpringCloudException(new Result("-1","订单状态更新失败"));
+        }
+        //更新物品租借状态
+        TbAssetArticleLease tbAssetArticleLease = tbAssetArticleLeaseMapper.selectByPrimaryKey(assetArticleLeaseOrders.getArticleId());
+        tbAssetArticleLease.setArticleStatus(Byte.parseByte(LeaseStatusEnums.RETURN_ING.getValue()));
+        updateCount = tbAssetArticleLeaseMapper.updateByPrimaryKeySelective(tbAssetArticleLease);
+        logger.info("租借的资产状态更新为：归还中，参数：{}",tbAssetArticleLease);
+        if (updateCount != 1){
+            throw new JnSpringCloudException(new Result("-1","订单状态更新失败"));
+        }
+        return assetArticleLeaseOrdersDao.getLeaseOrders(id);
     }
 
     /**

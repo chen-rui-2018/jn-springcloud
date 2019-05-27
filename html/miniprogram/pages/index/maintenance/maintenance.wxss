@@ -1,0 +1,46 @@
+.maintenance-list-bg {
+  background-color: #f1f1f1;
+}
+.btn-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items:center;
+  padding: 0 20rpx;
+  margin-bottom: 20rpx;
+}
+.card-list-row {
+  margin-top: 2rpx;
+}
+.card-list-text {
+  margin-top: 16rpx;
+}
+.card-list-tips {
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color:rgba(153,153,153,1);
+}
+.card-list-warning {
+  margin-left: 8rpx;
+  color: #FF3333;
+}
+.cell-row {
+  margin-top: 6rpx;
+}
+.common-cell-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+    margin-right: 20rpx;
+    flex: none;
+}
+.common-cell-icon {
+  color: #fff;
+  font-size:52rpx;
+  width:60rpx;
+  height:60rpx;
+  text-align:center;
+  line-height:60rpx;
+}

@@ -71,7 +71,10 @@
     </div>
 
     <!--    主体内容开始-->
-    <router-view></router-view>
+    <div style="position:relative;z-index: 0">
+      <router-view></router-view>
+    </div>
+
     <!--    主体内容结束-->
   </div>
 </template>

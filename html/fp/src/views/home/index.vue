@@ -307,6 +307,12 @@ export default {
     }
   }
 .homePage {
+  .el-main {
+    padding: 0 20px;
+    &.isMobile {
+      padding: 20px;
+    }
+  }
   &.pd {
     padding-top: 66px;
   }
@@ -536,9 +542,6 @@ export default {
           flex: 1;
           .el-main {
             padding: 0 20px;
-          }
-          .el-main.isMobile{
-            padding: 0;
           }
         .el-menu-item:hover {
           color: #fff;

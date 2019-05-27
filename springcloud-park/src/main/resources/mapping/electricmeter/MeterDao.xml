@@ -321,6 +321,25 @@
         </if>
     </select>
 
+    <insert id="saveMeterLinkInDay" parameterType="java.util.List">
+        insert into tb_electric_meter_company_day
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricMeterCompanyDayMapper.Base_Column_List"/>)
+        <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
+            select
+            #{ item.id,jdbcType=VARCHAR},
+            #{ item.meterCode,jdbcType=VARCHAR},
+            #{ item.meterName,jdbcType=VARCHAR},
+            #{ item.companyId,jdbcType=VARCHAR},
+            #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.creatorAccount,jdbcType=VARCHAR},
+            #{ item.createdTime,jdbcType=TIMESTAMP},
+            #{ item.modifierAccount,jdbcType=VARCHAR},
+            #{ item.modifiedTime,jdbcType=TIMESTAMP},
+            #{ item.day,jdbcType=DATE}
+            from  dual
+        </foreach>
+    </insert>
+
     <select id="getRuleIdByCompanyId"  parameterType="java.lang.String" resultType="java.lang.String">
         select
         rule_id

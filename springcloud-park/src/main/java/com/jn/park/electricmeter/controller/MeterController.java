@@ -83,7 +83,7 @@ public class MeterController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "计价规则id",type = "String" ,example = "1",required = true)
     })
-    public Result deletePriceRule(@RequestBody MeterInfoModel model){
+    public Result deletePriceRule(@RequestBody MeterIdParam model){
         Result result = new Result();
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Integer data = meterRulesService.deletePriceRule(user,model.getId());
@@ -236,5 +236,60 @@ public class MeterController extends BaseController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return meterService.updateMeterInfo( user,model);
     }
+
+    @ControllerLog(doAction = "测试定时器:企业每日的计价规则维护接口")
+    @ApiOperation(value = "企业每日的计价规则维护接口",notes = "企业每日的计价规则维护接口", httpMethod = "POST")
+    @PostMapping(value = "/test1")
+    @RequiresPermissions("/meter/test1")
+    public Result test1(){
+        meterRulesService.setRulesInDayForCompany();
+        return new Result();
+    }
+
+    @ControllerLog(doAction = "测试定时器:计算企业每日的电费")
+    @ApiOperation(value = "计算企业每日的电费",notes = "计算企业每日的电费", httpMethod = "POST")
+    @PostMapping(value = "/test2")
+    @RequiresPermissions("/meter/test2")
+    public Result test2(){
+        meterCalcCostService.calcCostEverday();
+        return new Result();
+    }
+
+
+    @ControllerLog(doAction = "测试定时器:电表每日的业主")
+    @ApiOperation(value = "电表每日的业主",notes = "电表每日的业主", httpMethod = "POST")
+    @PostMapping(value = "/test3")
+    @RequiresPermissions("/meter/test3")
+    public Result test3(){
+        meterService.setHostForMeter();
+        return new Result();
+    }
+
+    @ControllerLog(doAction = "测试定时器:企业电费余额不足告警定时任务")
+    @ApiOperation(value = "企业电费余额不足告警定时任务",notes = "企业电费余额不足告警定时任务", httpMethod = "POST")
+    @PostMapping(value = "/test4")
+    @RequiresPermissions("/meter/test4")
+    public Result test4(){
+        meterRulesService.warningBalanceShortTimer();
+        return new Result();
+    }
+
+    @ControllerLog(doAction = "测试定时器:企业电费余额不足告警定时任务")
+    @ApiOperation(value = "企业电费余额不足告警定时任务",notes = "企业电费余额不足告警定时任务", httpMethod = "POST")
+    @PostMapping(value = "/test5")
+    @RequiresPermissions("/meter/test5")
+    public Result test5(){
+        meterRulesService.warningBalanceShortTimer();
+        return new Result();
+    }
+
+
+    /*
+
+    @ControllerLog(doAction = "电表的启动和关闭定时器接口")
+    public void setSwitch(){
+        meterService.setHostForMeter();
+    }*/
+
 
 }

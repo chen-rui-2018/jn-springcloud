@@ -54,4 +54,14 @@ public class MeterTimerController extends BaseController implements ElectricMete
         meterService.setHostForMeter();
     }
 
+    @ControllerLog(doAction = "企业电费余额不足告警定时任务")
+    public void setWarning(){
+        meterRulesService.warningBalanceShortTimer();
+    }
+
+    @ControllerLog(doAction = "电表的启动和关闭定时器接口")
+    public void setSwitch(){
+        meterService.setHostForMeter();
+    }
+
 }

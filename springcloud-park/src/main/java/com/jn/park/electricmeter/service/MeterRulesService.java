@@ -82,4 +82,9 @@ public interface MeterRulesService {
      */
     Integer deleteLinks(User user,String id);
 
+    /**
+     * 企业定时;余额不足告警
+     * @return
+     */
+    void warningBalanceShortTimer();
 }

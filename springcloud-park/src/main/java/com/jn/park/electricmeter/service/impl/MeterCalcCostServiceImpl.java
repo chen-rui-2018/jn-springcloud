@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -154,6 +155,10 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                     payBillDetails.add(billDetails);
                 }
                 // 创建账单和保存
+                //计价规则那边是角，此处要除10，才得出元
+                String ten ="10";
+                BigDecimal tenDivisor = new BigDecimal(ten);
+                allPrice.divide(tenDivisor,2, RoundingMode.HALF_UP);
                 boolean success = createBill(allPrice,companyId,companyName,account,  payBillDetails);
                 if(! success){
                     String msg =account+",创建账单失败,"+"null,"+companyId+","+ DateUtils.formatDate(dealDate,"yyyy-MM-dd")+","+companyName;
@@ -210,7 +215,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         logger.info("开始计算所有企业每日的电费");
         logger.info("所有电表的业主查询处");
         List<String> hosters  =meterDao.getMeterHost("", null);
-        if(hosters ==null && hosters.size()==0){
+        if(hosters ==null || hosters.size()==0){
             logger.info("电表不存在一个业主");
             return;
         }

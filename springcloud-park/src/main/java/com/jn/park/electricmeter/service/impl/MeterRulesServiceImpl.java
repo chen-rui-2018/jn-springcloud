@@ -559,10 +559,29 @@ public class MeterRulesServiceImpl implements MeterRulesService {
     @ServiceLog(doAction = "余额不总告警定时器")
     public void warningBalanceShortTimer() {
         //查询出所有的待预警的企业，轮休进行预警
-        List<TbElectricCost> size = meterDao.checkCompanyIsNeedWarning("");
+        List<TbElectricCost> size = meterDao.checkCompanyIsNeedWarning(null);
         if (size != null && size.size() > 0) {
             for (TbElectricCost costBean : size) {
                 warningBalanceShort(costBean.getCompanyId());
+            }
+        }
+    }
+
+    @ServiceLog(doAction = "余额不总告警定时器")
+    public void switchMeterTimer() {
+        //查询出所有已经触发了规则的企业，
+                //检查所有企业的的电表状态，关闭那些处于开启状态的电表
+        //
+        //查询出没有已经触发了规则的企业，
+        //检查所有企业的的电表状态，开启那些处于关闭状态的电表
+
+        //获取出该企业所有的电表
+
+        List<TbElectricCost> size = meterDao.checkCompanyIsNeedWarning("");
+        if (size != null && size.size() > 0) {
+            for (TbElectricCost costBean : size) {
+
+                //SwitchMeter(meterCode, status);
             }
         }
     }

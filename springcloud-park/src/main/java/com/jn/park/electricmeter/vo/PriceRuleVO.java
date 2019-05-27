@@ -1,11 +1,10 @@
 package com.jn.park.electricmeter.vo;
 
-import com.jn.park.electricmeter.model.PriceRuleContent;
+import com.jn.park.electricmeter.model.PriceRuleContentModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,13 +28,13 @@ public class PriceRuleVO implements Serializable {
     private Byte recordStatus;
 
     @ApiModelProperty("规则内容")
-    private List<PriceRuleContent> priceRuleContents;
+    private List<PriceRuleContentModel> priceRuleContents;
 
-    public List<PriceRuleContent> getPriceRuleContents() {
+    public List<PriceRuleContentModel> getPriceRuleContents() {
         return priceRuleContents;
     }
 
-    public void setPriceRuleContents(List<PriceRuleContent> priceRuleContents) {
+    public void setPriceRuleContents(List<PriceRuleContentModel> priceRuleContents) {
         this.priceRuleContents = priceRuleContents;
     }
 

@@ -83,8 +83,7 @@ export default new Router({
       path: '/guest/pd/talentNotice/talentsServiceDetail',
       name: 'talentsServiceDetail',
       meta: {title: '服务详情'},
-      component: () => import('@/views/talentsService/talentsServiceDetail')
-    },
+      component: () => import('@/views/talentsService/talentsServiceDetail')},
     {
       path: '/workPlan/workPlan',
       name: 'workPlan',
@@ -114,6 +113,18 @@ export default new Router({
       name: 'workPlanDetails',
       component: () => import('@/views/workPlan/workPlanDetails'),
       meta: {title: '工作计划详情'}
+    },
+    {
+      path: '/attendanceManagement/attendanceManagement',
+      name: 'attendanceManagement',
+      component: () => import('@/views/attendanceManagement/attendanceManagement'),
+      meta: {title: '考勤管理'}
+    },
+    {
+      path: '/attendanceManagement/attendanceDetails',
+      name: 'attendanceDetails',
+      component: () => import('@/views/attendanceManagement/attendanceDetails'),
+      meta: {title: '考勤明细'}
     }
   ]
 })

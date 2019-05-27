@@ -37,6 +37,21 @@ public class MessageListController extends BaseController {
     private MessageListService messageListService;
 
 
+    @ControllerLog(doAction = "获取所有未读消息")
+    @ApiOperation(value = "获取所有类别的未读状态的消息",notes = "获取所有类别的未读状态的消息", httpMethod = "GET")
+    @GetMapping(value = "/findAllList")
+    @RequiresPermissions("/message/list/findAllList")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "messageOneSort",value = "一级消息类别(为空查询所有消息), 0:个人动态;1:企业空间;",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "isRead",value = "是否已读(为空查询所有未读消息), 0：未读，1：已读;",dataType = "String",paramType = "query")
+    })
+    public Result<List<MessageListModel>> findAllList(String messageOneSort,String isRead){
+        //PaginationData findAllMessageListVoList = messageListService.findAll(findAllMessageListModel,getUser());
+        List<MessageListModel> getMessageOneTort=messageListService.findAllList(messageOneSort,isRead,getUser());
+        return new Result(getMessageOneTort);
+    }
+
+
     @ControllerLog(doAction = "获取二级消息类别")
     @ApiOperation(value = "获取二级消息类别",notes = "获取二级消息类别,查询消息列表", httpMethod = "GET")
     @GetMapping(value = "/getMessageOneTort")
@@ -90,8 +105,14 @@ public class MessageListController extends BaseController {
     @PostMapping(value = "/addMessage")
     @RequiresPermissions("/message/list/addMessage")
     public Result addMessage(@RequestBody AddMessageModel addMessageModel){
-        messageListService.addMessage(addMessageModel);
-        return new Result(new Result<>());
+        String message=null;
+        try {
+            messageListService.addMessage(addMessageModel);
+            message="添加消息成功";
+        }catch (Exception e){
+            message="添加失败";
+        }
+        return new Result(message);
     }
 
 

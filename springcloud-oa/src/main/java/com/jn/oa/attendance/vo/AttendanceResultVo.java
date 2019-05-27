@@ -26,6 +26,9 @@ public class AttendanceResultVo implements Serializable {
     @ApiModelProperty(value = "参会类型：1：签到，2:签退")
     private String type;
 
+    @ApiModelProperty(value = "迟到/早退的分钟")
+    private String minute;
+
     public Date getAttendanceTime() {
         return attendanceTime;
     }
@@ -40,5 +43,13 @@ public class AttendanceResultVo implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getMinute() {
+        return minute;
+    }
+
+    public void setMinute(String minute) {
+        this.minute = minute;
     }
 }

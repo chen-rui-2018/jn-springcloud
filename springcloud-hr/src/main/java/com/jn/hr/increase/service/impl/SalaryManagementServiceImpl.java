@@ -67,8 +67,10 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 	TbManpowerSalaryPayrollMapper tbManpowerSalaryPayrollMapper;
 	@Autowired
 	MobilizationManagementMapper mobilizationManagementMapper;
+	
 	@Override
 	@ServiceLog(doAction = "导入薪资信息")
+	@Transactional(rollbackFor = Exception.class)
 	public String importSalary(MultipartFile file, User user) {
 		
 		if(file.isEmpty()){
@@ -201,6 +203,7 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 
 	@Override
 	@ServiceLog(doAction = "修改薪资信息")
+	@Transactional(rollbackFor = Exception.class)
 	public String updateSalary(SalaryInfoAdd salaryInfoAdd, User user) {
 		
 		if(salaryInfoAdd.getId() == null){
@@ -314,8 +317,8 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 			}
 			number = payRoll.getNumber() - lastPayRoll.getNumber();
 		}else{
-			salaryAnalysis.setLastRealWage("+0");
-			salaryAnalysis.setLastDeserveWage("+0");
+			salaryAnalysis.setLastRealWage("0");
+			salaryAnalysis.setLastDeserveWage("0");
 		}
 		
 		
@@ -326,7 +329,7 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 		//salaryAnalysis.setLastDeserveWage();
 		salaryAnalysis.setNumber(payRoll.getNumber()== null ?0:payRoll.getNumber());
 		String lastNumber = "0";
-		if(number >= 0){
+		if(number > 0){
 			lastNumber ="+" + String.valueOf(number);
 		}else if(number < 0){
 			lastNumber = String.valueOf(number);
@@ -439,6 +442,7 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 
 	@Override
 	@ServiceLog(doAction = "更新工资条信息")
+	@Transactional(rollbackFor = Exception.class)
 	public String updatePayroll(SalaryPayrollPage salaryPayrollPage) {
 		// TODO Auto-generated method stub
 		TbManpowerSalaryPayroll tbManpowerSalaryPayroll = new TbManpowerSalaryPayroll();
@@ -464,6 +468,7 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 	
 	@Override
 	@ServiceLog(doAction = "导入工资条信息")
+	@Transactional(rollbackFor = Exception.class)
 	public String importPayroll(MultipartFile file, User user) {
 		if(file.isEmpty()){
 			logger.warn("[工资条]文件为空，导入失败");

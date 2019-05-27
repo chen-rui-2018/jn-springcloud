@@ -58,7 +58,7 @@
       <div class="flex-center">
         <arrow-down line></arrow-down>
       </div>
-      <div class="park-info">
+      <div class="park-info op-0" ref="park-info" data-class="bottom1">
         <div class="park-poster">
           <img src="@/../static/img/banner11.png" alt="">
         </div>
@@ -69,13 +69,13 @@
           <more-btn v-if="!showMore" class="more-desc" @click.native="showMore = true"></more-btn>
         </div>
       </div>
-      <div class="park-film">
+      <div class="park-film op-0" ref="park-film" data-class="bottom1">
         <div class="film-desc">
           <div>
             <div class="film-desc-title">视频展示</div>
             <div class="film-desc-subheading">VIDEO DISPLAY</div>
           </div>
-          <div class="film-desc-content">南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科技园。</div>
+          <div class="film-desc-content">南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科 技园、国家专利产业化试点基开 南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科 技园、国家专利产业化试点基开 先后被批准为国家大学科技园。</div>
           <div class="square-angle-bg">
             <div class="square-angle">
               <span class="square-angle-l"></span><i class="square-angle-r el-icon-caret-right"></i>
@@ -86,10 +86,11 @@
           <video src="" width="100%" poster="@/../static/img/banner11.png"></video>
 <!--          <img src="@/../static/img/banner11.png" alt="">-->
           <div class="film-play"></div>
+          <div class="green-frame"></div>
         </div>
       </div>
 
-      <div class="policyCenter w" ref="policyCenter" data-class="bottom1">
+      <div class="policyCenter pd-b-n w" ref="policyCenter" data-class="bottom1">
         <div ref="poCenter1" data-class="bottom">
           <div class="tit color2 pr">招商政策</div>
           <div class="eng mainColor">INVESTMENT POLICY</div>
@@ -109,7 +110,8 @@
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{ item.title }}</div>
-                      <p class="color2">{{ item.subTitle }}</p>
+<!--                      <p class="investment-card-subtitle color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政</p>-->
+                      <p class="investment-card-subtitle color2">{{ item.subTitle }}</p>
                       <div class="liBom clearfix">
                         <p class="fl color3">
                           <i class="el-icon-view"></i>
@@ -135,12 +137,12 @@
           </div>
           <div class="more-garden">
             <div
-              v-for="item in businessAdDynamic"
-              :key="item.id"
+              v-for="(item, index) in businessAdDynamic"
+              :key="index"
               class="more-garden-card"
             >
               <div class="more-garden-card-cell">
-                <img class="more-garden-img" :src="'http://112.94.22.222:2384/ibps'+item.coverUrl" alt=""/>
+                <img class="more-garden-img" :src="item.adCover" alt=""/>
                 <div class="more-garden-desc">{{ item.content || '暂无'}}</div>
                 <div class="more-garden-footer">
                   <span class="more-garden-date">{{ item.startTime }}</span>
@@ -156,9 +158,14 @@
             <div class="eng mainColor">AREA MORE GARDEN</div>
             <div class="line"></div>
           </div>
+        </div>
+      </div>
+      <div class="multi-park-frame op-0" ref="multi-park-frame" data-class="bottom1">
+        <div
+          v-for="row in parkList"
+          :key="row.id"
+          class="multi-park-bg">
           <div
-            v-for="row in parkList"
-            :key="row.id"
             class="multi-park">
             <div class="multi-park-title">
               <div class="fw-title">{{ row.parkName }}</div>
@@ -171,7 +178,7 @@
                 :class="{small: index !== 0}"
                 class="multi-park-card">
                 <div class="multi-park-card-cell">
-                  <img :src="index === 0 ?  '@/../static/img/multi-park-poster.png' : 'http://112.94.22.222:2384/ibps'+ item.coverUrl"  alt="">
+                  <img :src="item.adCover"  alt="">
                   <div v-if="index !== 0" class="multi-park-desc">
                     <div class="fw-title">{{ item.title }}</div>
                     <div class="gray-tips">{{ item.subTitle }}</div>
@@ -340,7 +347,6 @@
         return result
       },
       handleChange11(val) {
-        console.log(val);
         if(val=='2'){
           this.sw='2'
         } else if(val=='3'){
@@ -351,7 +357,6 @@
       },
       formatScrollTop() {
         const refs = this.$refs
-        console.dir(refs)
         for (const key in refs) {
           const top = this.getElementLeft(refs[key]);
           const node = {
@@ -418,10 +423,13 @@
             this.parkList.forEach((item, index) => {
               this.getPartDetail(item.id)
                 .then((data) => {
-                  data.rows.unshift(item.mainPicture)
+                  data.rows.unshift({
+                    adCover: item.mainPicture
+                  })
                   this.$set(item, 'list', data.rows)
                 })
             })
+            console.dir(this.parkList)
             this.$nextTick(() => {
               this.loadingParkList = true
             })
@@ -510,13 +518,13 @@
         }
       }
     .park-film {
-      margin-top: 68px;
+      margin: 68px auto;
       @include flex;
       color: #fff;
       .film-desc {
-        width: 50%;
+        width: 52%;
         font-size: 12px;
-        padding: 30px 30px 30px calc((100% - 900px) / 2);
+        padding: 20px 30px 20px calc((100% - 900px) / 2);
         background-color: $--color-primary;
         box-sizing: border-box;
         .film-desc-title {
@@ -527,6 +535,7 @@
         }
         .film-desc-content {
           margin-top: 20px;
+          line-height: 18px;
         }
         .square-angle-bg {
           @include flex($h: flex-end);
@@ -547,9 +556,19 @@
         }
       }
       .film-show {
-        width: 50%;
+        width: 48%;
         box-sizing: border-box;
         position: relative;
+        .green-frame {
+          width: 368px;
+          height: 286px;
+          position: absolute;
+          left: -34px;
+          top: 50%;
+          z-index: 1;
+          transform: translateY(-50%);
+          border: 1px solid $--color-primary;
+        }
         video{
           width: 100%;
           height: 100%;
@@ -575,9 +594,8 @@
       width: 900px;
       margin: 60px auto;
       flex-wrap: wrap;
-      @include flex($h: space-between);
+      @include flex;
       .more-garden-card {
-        flex: 1;
         box-sizing: border-box;
         padding: 20px;
         .more-garden-card-cell {
@@ -621,14 +639,25 @@
         }
       }
     }
+    .multi-park-frame {
+      padding-bottom: 55px;
+    }
+    .multi-park-bg {
+      padding: 15px 0;
+      border-bottom: 6px solid #fafafa;
+      &:last-of-type {
+        border-bottom: 0;
+      }
+    }
     .multi-park {
       width: 900px;
-      margin: 68px auto;
+      margin: 0 auto;
       .multi-park-title {
         padding: 10px 0;
         @include flex($h: space-between);
       }
       .multi-park-content {
+        border-top: 1px solid rgb(238,238,238);
         $bg-gray: #DEDEDE;
         @include flex($h: flex-start, $v: flex-start);
         .multi-park-card {
@@ -643,12 +672,14 @@
               height: 100%;
               border: 1px solid $bg-gray;
               img {
+                margin-top: 0;
                 height: 133px;
               }
             }
           }
           img {
             width: 100%;
+            margin-top: -1px;
             display: block;
           }
           .multi-park-desc {
@@ -816,6 +847,16 @@
       }
     }
     .policyCenter {
+      &.pd-b-n {
+        padding: 0;
+      }
+      .investment-card-subtitle {
+        height: 48px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+      }
       .paging {
         .swiper-container {
           padding: 40px 0;

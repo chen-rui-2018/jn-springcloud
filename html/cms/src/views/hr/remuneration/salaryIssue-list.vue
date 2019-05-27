@@ -14,26 +14,26 @@
       </el-form>
     </div>
     <!-- 表格 -->
-    <el-table :data="salaryPayrollList" border fit highlight-current-row style="width: 150%;height:100%;">
+    <el-table :data="salaryPayrollList" border fit highlight-current-row>
       <el-table-column type="index" width="50" label="序号" align="center" />
-      <el-table-column label="姓名" header-align="center" align="center" width="60" prop="name"/>
-      <el-table-column label="工资档次及金额" align="center" width="120px" prop="basicWage"/>
-      <el-table-column label="园区工龄工资" align="center" width="120px" prop="seniorityWage"/>
-      <el-table-column label="技术岗位津贴" align="center" width="120" prop="technicalAllowance"/>
-      <el-table-column label="职务津贴" align="center" width="100" prop="dutyAllowance"/>
-      <el-table-column label="工作性津贴" align="center" width="100" prop="workSubsidy" />
-      <el-table-column label="学历津贴" align="center" width="100" prop="educationAllowance" />
-      <el-table-column label="职称津贴" align="center" width="100" prop="professionalTitleAllowance" />
-      <el-table-column label="专项补贴" align="center" width="100" prop="specialSubsidy"/>
-      <el-table-column label="餐补" align="center" width="80" prop="mealSubsidy"/>
-      <el-table-column label="应发工资" align="center" width="100" prop="deserveWage" />
-      <el-table-column label="代扣社会统筹保险" align="center" width="150" prop="pendingSocialpoolingInsurance"/>
-      <el-table-column label="代扣公积金" align="center" width="100" prop="pendingProvidentfund" />
-      <el-table-column label="扣个税" align="center" width="80" prop="pendingPersonalTax"/>
-      <el-table-column label="食堂餐费" align="center" width="100" prop="canteenMealFee" />
-      <el-table-column label="工会会费" align="center" width="100" prop="unionFee" />
-      <el-table-column label="实发工资" align="center" width="100" prop="realWage" />
-      <el-table-column label="存入个人帐户" align="center" width="120" prop="accountEntryTime" />
+      <el-table-column label="姓名" header-align="center" align="center" prop="name"/>
+      <el-table-column label="工资档次及金额" align="center" prop="basicWage"/>
+      <el-table-column label="园区工龄工资" align="center" prop="seniorityWage"/>
+      <el-table-column label="技术岗位津贴" align="center" prop="technicalAllowance"/>
+      <el-table-column label="职务津贴" align="center" prop="dutyAllowance"/>
+      <el-table-column label="工作性津贴" align="center" prop="workSubsidy" />
+      <el-table-column label="学历津贴" align="center" prop="educationAllowance" />
+      <el-table-column label="职称津贴" align="center" prop="professionalTitleAllowance" />
+      <el-table-column label="专项补贴" align="center" prop="specialSubsidy"/>
+      <el-table-column label="餐补" align="center" prop="mealSubsidy"/>
+      <el-table-column label="应发工资" align="center" prop="deserveWage" />
+      <el-table-column label="代扣社会统筹保险" align="center" prop="pendingSocialpoolingInsurance"/>
+      <el-table-column label="代扣公积金" align="center" prop="pendingProvidentfund" />
+      <el-table-column label="扣个税" align="center" prop="pendingPersonalTax"/>
+      <el-table-column label="食堂餐费" align="center" prop="canteenMealFee" />
+      <el-table-column label="工会会费" align="center" prop="unionFee" />
+      <el-table-column label="实发工资" align="center" prop="realWage" />
+      <el-table-column label="存入个人帐户" align="center" prop="accountEntryTime" />
     </el-table>
     <!-- 分页 -->
     <el-pagination
@@ -129,6 +129,7 @@ export default {
   },
   watch: {
     'listQuery.name': function() {
+      this.listQuery.page = 1
       this.initList()
     }
   },

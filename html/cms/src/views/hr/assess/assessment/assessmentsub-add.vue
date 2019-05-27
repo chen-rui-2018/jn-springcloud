@@ -20,59 +20,75 @@
       </el-form-item>
     </el-form>
     <!-- 表格 -->
-    <el-table ref="table" :data="assessmentSubList" tooltip-effect="dark" border stripe style="width: 95%" @selection-change="selectRow">
-      <el-table-column type="selection" width="45" align="center"/>
-      <el-table-column label="目标类别" align="center">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.targetCategory" disabled="disabled"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="序号">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.serialNumber" disabled="disabled"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="考核目标">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.assessmentTarget" disabled="disabled"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="分值">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.score" disabled="disabled"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="评分细则">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.scoreRubric" disabled="disabled"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="牵头考核部门">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.leadAssessmentDepartment" disabled="disabled"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="得分">
-        <template slot-scope="scope">
-          <el-input :disabled="!operateBtVisible" v-model="scope.row.assessmentScore"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="扣分原因">
-        <template slot-scope="scope">
-          <el-input :disabled="!operateBtVisible" v-model="scope.row.causeDeduction"/>
-        </template>
-      </el-table-column>
-      <!--<el-table-column v-if="operateBtVisible" label="操作" align="center" min-width="100" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button type="text" @click="editAssessmentSub(scope.row)">编辑</el-button>
-          <el-button type="text" @click="saveAssessmentSub(scope.row)">保存</el-button>
-          <el-button type="text" @click="cancelAssessmentSub(scope.row)">取消</el-button>
-        </template>
-      </el-table-column>-->
-    </el-table>
-
+    <el-form :rules="model.rules" :model="model" :ref="assessmentSubListForm">
+      <el-table ref="table" :data="model.assessmentSubList" tooltip-effect="dark" border stripe style="width: 95%" @selection-change="selectRow">
+        <el-table-column type="selection" width="45" align="center"/>
+        <el-table-column label="目标类别" align="center">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.targetCategory" disabled="disabled"/>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="序号">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.serialNumber" disabled="disabled"/>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="考核目标">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.assessmentTarget" disabled="disabled"/>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="分值">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.score" disabled="disabled"/>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="评分细则">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.scoreRubric" disabled="disabled"/>
+          <el-form-item/></el-form-item></template>
+        </el-table-column>
+        <el-table-column label="牵头考核部门">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.leadAssessmentDepartment" disabled="disabled"/>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="得分">
+          <template slot-scope="scope">
+            <el-form-item :prop="'assessmentSubList.' + scope.$index + '.assessmentScore'" :rules="model.rules.assessmentScore">
+              <el-input :disabled="!operateBtVisible" v-model="scope.row.assessmentScore" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="扣分原因">
+          <template slot-scope="scope">
+            <el-form-item :prop="'assessmentSubList.' + scope.$index + '.causeDeduction'" :rules="model.rules.causeDeduction">
+              <el-input :disabled="!operateBtVisible" v-model="scope.row.causeDeduction" :maxlength = "500"/>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <!--<el-table-column v-if="operateBtVisible" label="操作" align="center" min-width="100" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button type="text" @click="editAssessmentSub(scope.row)">编辑</el-button>
+            <el-button type="text" @click="saveAssessmentSub(scope.row)">保存</el-button>
+            <el-button type="text" @click="cancelAssessmentSub(scope.row)">取消</el-button>
+          </template>
+        </el-table-column>-->
+      </el-table>
+    </el-form>
     <div v-show="operateBtVisible" style="margin-top: 20px">
-      <el-button type="primary" @click="submitForm()">提交</el-button>
+      <el-button :disabled="isDisabled" type="primary" @click="submitForm()">提交</el-button>
       <el-button type="primary" @click="goBack($route)">取消</el-button>
     </div>
 
@@ -100,6 +116,7 @@ export default {
   components: { UE },
   data() {
     return {
+      isDisabled: false,
       config: {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
@@ -109,7 +126,17 @@ export default {
         assessmentObject: '',
         assessmentPeople: ''
       },
-      assessmentSubList: [],
+      assessmentSubListForm: {
+        assessmentScore: '',
+        causeDeduction: ''
+      },
+      model: {
+        rules: {
+          assessmentScore: { type: 'string', required: true, message: '请填写得分', trigger: 'blur' },
+          causeDeduction: { type: 'string', required: true, message: '请填写扣分原因', trigger: 'blur' }
+        },
+        assessmentSubList: []
+      },
       operateBtVisible: false,
       total: 0,
       listLoading: false,
@@ -174,7 +201,7 @@ export default {
 
       api(url, this.listQuery).then(res => {
         if (res.data.code === '0000') {
-          this.assessmentSubList = res.data.data
+          this.model.assessmentSubList = res.data.data
           this.total = res.data.data.total
         } else {
           this.$message.error(res.data.result)
@@ -209,14 +236,29 @@ export default {
       })
     },
     submitForm() {
-      // if (this.selectlistRow.length<1) {
-      //   this.$message.error('至少填写并勾选一项考核指标')
-      //   return
-      // }
+      this.isDisabled = true
       let commitObj = {}
       commitObj = this.prePageRow
-      commitObj.templateDetailList = this.assessmentSubList
-
+      commitObj.templateDetailList = this.model.assessmentSubList
+      // this.model.assessmentSubList.forEach(val => {
+      let flag = true
+      for (let i = 0; i < this.model.assessmentSubList.length; i++) {
+        if (this.model.assessmentSubList[i].assessmentScore === '' || this.model.assessmentSubList[i].assessmentScore === null) {
+          alert('考核得分必填')
+          this.isDisabled = false
+          flag = false
+          break
+        }
+        if (this.model.assessmentSubList[i].causeDeduction === '' || this.model.assessmentSubList[i].causeDeduction === 'null') {
+          alert('扣分原因必填')
+          this.isDisabled = false
+          flag = false
+          break
+        }
+      }
+      if (!flag) {
+        return false
+      }
       api('hr/AssessmentManagement/saveStartAssessmentPage', commitObj).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -232,7 +274,6 @@ export default {
         this.isDisabled = false
       })
     }
-
   }
 }
 </script>

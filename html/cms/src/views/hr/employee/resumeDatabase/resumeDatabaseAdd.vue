@@ -5,7 +5,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="姓名：" prop="name">
-              <el-input v-model="addForm.name" style="width: 200px" placeholder="请输入姓名" clearable/>
+              <el-input v-model.trim="addForm.name" style="width: 200px" placeholder="请输入姓名" clearable/>
             </el-form-item>
           </el-col>
 
@@ -22,20 +22,16 @@
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="应聘部门：" prop="departmentId">
-              <el-select
-                v-model="addForm.departmentId"
+            <el-form-item label="部门：" prop="departmentId">
+              <el-cascader
+                ref="departRef"
+                :options="departmentList"
+                v-model="currentDepartmentIds"
+                change-on-select
                 placeholder="请选择"
                 clearable
-                style="width: 200px"
-                class="filter-item">
-                <el-option label="请选择" value=""/>
-                <el-option
-                  v-for="item in departmentList"
-                  :key="item.departmentId"
-                  :label="item.departmentName"
-                  :value="item.departmentId"/>
-              </el-select>
+                @change="handleChangeDepartment"
+              />
             </el-form-item>
           </el-col>
 
@@ -43,7 +39,7 @@
             <el-form-item label="应聘职位：" prop="jobId">
               <el-select v-model="addForm.jobId" placeholder="请选择" clearable style="width: 200px" class="filter-item">
                 <el-option label="请选择" value=""/>
-                <el-option v-for="item in jobList" :key="item.key" :label="item.lable" :value="item.key"/>
+                <el-option v-for="item in jobList" :key="item.id" :label="item.postName" :value="item.id"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -52,13 +48,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="个人邮箱：" prop="mailbox">
-              <el-input v-model="addForm.mailbox" style="width: 200px" placeholder="请输入邮箱" clearable/>
+              <el-input v-model.trim="addForm.mailbox" style="width: 200px" placeholder="请输入邮箱" clearable/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="手机号码：" prop="phone">
-              <el-input v-model="addForm.phone" style="width: 200px" placeholder="请输入联系电话" clearable/>
+              <el-input v-model.trim="addForm.phone" style="width: 200px" placeholder="请输入联系电话" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -80,7 +76,7 @@
 
           <el-col :span="12">
             <el-form-item label="毕业院校：" prop="graduaAcademy">
-              <el-input v-model="addForm.graduaAcademy" style="width: 200px" placeholder="请输入毕业院校" clearable/>
+              <el-input v-model.trim="addForm.graduaAcademy" style="width: 200px" placeholder="请输入毕业院校" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -102,7 +98,7 @@
 
           <el-col :span="12">
             <el-form-item label="证件号：" prop="certificateNumber">
-              <el-input v-model="addForm.certificateNumber" style="width: 200px" placeholder="请输入证件号"/>
+              <el-input v-model.trim="addForm.certificateNumber" style="width: 200px" placeholder="请输入证件号"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -149,14 +145,18 @@ import {
   addResumeDatabase, updateResumeDatabase, getResumeDatabaseById
 } from '@/api/hr/resumeDatabase'
 import {
-  getDepartMents, getCode, isvalidName, isvalidMobile, isvalidZjhm, uploadUrl
+  getCode, isvalidName, isvalidMobile, isvalidZjhm, uploadUrl, setChild, findNodeById, findP
 } from '@/api/hr/util'
+
+import {
+  api
+} from '@/api/axios'
 
 export default {
   data() {
     var checkName = (rule, value, callback) => {
       if (!isvalidName(value)) {
-        callback(new Error('姓名只允许数字、中文、字母及下划线'))
+        callback(new Error('只允许数字、中文、字母及下划线'))
       } else {
         callback()
       }
@@ -170,15 +170,29 @@ export default {
         callback()
       }
     }
-    var checkZjhm = (rule, value, callback) => {
-      if (!isvalidZjhm(value)) {
-        callback(new Error('请输入正确的证件号码'))
+    const reg = /^\w{5,18}$/i
+    const checkZjhm = (rule, value, callback) => {
+      if (this.addForm.certificateName === '身份证') {
+        if (!isvalidZjhm(value)) {
+          callback(new Error('请输入正确的证件号码'))
+        } else {
+          callback()
+        }
       } else {
-        callback()
+        if (!reg.test(value)) {
+          callback(new Error('请输入正确的证件号码'))
+        } else {
+          callback()
+        }
       }
     }
 
     return {
+      nodes: [],
+      pNodes: [],
+      currentDepartmentIds: [],
+      departmentOptions: [],
+      departmentListLoading: false,
       importHeaders: {
         enctype: 'multipart/form-data',
         token: getToken()
@@ -263,7 +277,6 @@ export default {
       this.fileList = fileList
     },
     beforeUpload(file) {
-      console.log('before:' + file)
       const isLt6M = file.size / 1024 / 1024 < 6
 
       if (!isLt6M) {
@@ -272,7 +285,6 @@ export default {
       return isLt6M
     },
     handleSuccess(response, file, fileList) {
-      console.log('success:' + response)
       let flag = false
       if (response.code === '0000') {
         if (response.data && response.data !== '[]') {
@@ -304,23 +316,17 @@ export default {
       const that = this
       this.$refs['addForm'].validate(valid => {
         if (valid) {
-          console.log('*****====' + this)
-          const depart = that.departmentList.find(item => item.departmentId === that.addForm.departmentId)
-          if (depart) {
-            that.addForm.departmentName = depart['departmentName']
-          }
-
-          const job = that.jobList.find(item => item.key === that.addForm.jobId)
+          const job = that.jobList.find(item => item.id === that.addForm.jobId)
           if (job) {
-            that.addForm.jobName = job['lable']
+            that.addForm.jobName = job['postName']
           }
 
-          const education = that.jobList.find(item => item.key === that.addForm.educationId)
+          const education = that.educationList.find(item => item.key === that.addForm.educationId)
           if (education) {
             that.addForm.educationName = education['lable']
           }
 
-          const certificate = that.jobList.find(item => item.key === that.addForm.certificateId)
+          const certificate = that.certificateList.find(item => item.key === that.addForm.certificateId)
           if (certificate) {
             that.addForm.certificateType = certificate['lable']
           }
@@ -345,22 +351,17 @@ export default {
       this.isDisabled = true
       this.$refs['addForm'].validate(valid => {
         if (valid) {
-          const depart = this.departmentList.find(item => item.departmentId === this.addForm.departmentId)
-          if (depart) {
-            this.addForm.departmentName = depart['departmentName']
-          }
-
-          const job = this.jobList.find(item => item.key === this.addForm.jobId)
+          const job = this.jobList.find(item => item.id === this.addForm.jobId)
           if (job) {
-            this.addForm.jobName = job['lable']
+            this.addForm.jobName = job['postName']
           }
 
-          const education = this.jobList.find(item => item.key === this.addForm.educationId)
+          const education = this.educationList.find(item => item.key === this.addForm.educationId)
           if (education) {
             this.addForm.educationName = education['lable']
           }
 
-          const certificate = this.jobList.find(item => item.key === this.addForm.certificateId)
+          const certificate = this.certificateList.find(item => item.key === this.addForm.certificateId)
           if (certificate) {
             this.addForm.certificateType = certificate['lable']
           }
@@ -390,6 +391,18 @@ export default {
         getResumeDatabaseById(query.id).then(res => {
           if (res.data.code === '0000') {
             this.addForm = res.data.data
+
+            setChild(this.nodes, this.departmentList)
+            const currNode = findNodeById(this.nodes, this.addForm.departmentId)
+            this.pNodes.push(currNode)
+            findP(this.nodes, currNode, this.pNodes)
+            this.pNodes.reverse()
+            const arr = []
+            this.pNodes.forEach(item => {
+              arr.push(item.id)
+            })
+            this.currentDepartmentIds = arr
+
             if (this.addForm.resumeInfo && this.addForm.resumeInfo !== '') {
               var obj = {}
               const index = this.addForm.resumeInfo.lastIndexOf('\/')
@@ -404,21 +417,32 @@ export default {
         })
       }
     },
-    initSelect() {
-      getDepartMents().then(res => {
-        if (res.data.code === '0000') {
+    handleChangeDepartment(value) {
+      this.addForm.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
+      const arr = this.$refs['departRef'].currentLabels
+      this.addForm.departmentName = arr[arr.length - 1]
+    },
+    getAllDepartment() {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
+        this.departmentListLoading = false
       })
-      getCode({ 'groupCode': 'job', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
-        if (res.data.code === '0000') {
+    },
+    initSelect() {
+      this.getAllDepartment()
+      api(`${this.GLOBAL.systemUrl}system/sysPost/findSysPostAll`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.jobList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
       })
+
       getCode({ 'groupCode': 'education', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
         if (res.data.code === '0000') {
           this.educationList = res.data.data

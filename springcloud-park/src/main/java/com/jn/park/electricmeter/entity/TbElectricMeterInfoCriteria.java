@@ -1,6 +1,5 @@
 package com.jn.park.electricmeter.entity;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -906,52 +905,52 @@ public class TbElectricMeterInfoCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdEqualTo(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdEqualTo(Long value) {
             addCriterion("is_high_energy_threshold =", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdNotEqualTo(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdNotEqualTo(Long value) {
             addCriterion("is_high_energy_threshold <>", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdGreaterThan(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdGreaterThan(Long value) {
             addCriterion("is_high_energy_threshold >", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdGreaterThanOrEqualTo(Long value) {
             addCriterion("is_high_energy_threshold >=", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdLessThan(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdLessThan(Long value) {
             addCriterion("is_high_energy_threshold <", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdLessThanOrEqualTo(Long value) {
             addCriterion("is_high_energy_threshold <=", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdIn(List<BigDecimal> values) {
+        public Criteria andIsHighEnergyThresholdIn(List<Long> values) {
             addCriterion("is_high_energy_threshold in", values, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdNotIn(List<BigDecimal> values) {
+        public Criteria andIsHighEnergyThresholdNotIn(List<Long> values) {
             addCriterion("is_high_energy_threshold not in", values, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andIsHighEnergyThresholdBetween(Long value1, Long value2) {
             addCriterion("is_high_energy_threshold between", value1, value2, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andIsHighEnergyThresholdNotBetween(Long value1, Long value2) {
             addCriterion("is_high_energy_threshold not between", value1, value2, "isHighEnergyThreshold");
             return (Criteria) this;
         }
@@ -1563,6 +1562,76 @@ public class TbElectricMeterInfoCriteria {
 
         public Criteria andIsLowEnergyThresholdNotBetween(Long value1, Long value2) {
             addCriterion("is_low_energy_threshold not between", value1, value2, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIsNull() {
+            addCriterion("phone is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIsNotNull() {
+            addCriterion("phone is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneEqualTo(String value) {
+            addCriterion("phone =", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotEqualTo(String value) {
+            addCriterion("phone <>", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneGreaterThan(String value) {
+            addCriterion("phone >", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneGreaterThanOrEqualTo(String value) {
+            addCriterion("phone >=", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLessThan(String value) {
+            addCriterion("phone <", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLessThanOrEqualTo(String value) {
+            addCriterion("phone <=", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLike(String value) {
+            addCriterion("phone like", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotLike(String value) {
+            addCriterion("phone not like", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIn(List<String> values) {
+            addCriterion("phone in", values, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotIn(List<String> values) {
+            addCriterion("phone not in", values, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneBetween(String value1, String value2) {
+            addCriterion("phone between", value1, value2, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotBetween(String value1, String value2) {
+            addCriterion("phone not between", value1, value2, "phone");
             return (Criteria) this;
         }
     }

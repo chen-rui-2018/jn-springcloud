@@ -14,9 +14,9 @@ import java.io.Serializable;
 public class EmployeeBasicInfoPage extends Page implements Serializable {
     @ApiModelProperty(value = "姓名")
     private String name;
-    @ApiModelProperty(value = "职位ID")
+    @ApiModelProperty(value = "职级ID")
     private String jobId;
-    @ApiModelProperty(value = "职务ID")
+    @ApiModelProperty(value = "岗位ID")
     private String postId;
     @ApiModelProperty(value = "员工类型（1：正式，2：实习生）")
     private String employeeType;

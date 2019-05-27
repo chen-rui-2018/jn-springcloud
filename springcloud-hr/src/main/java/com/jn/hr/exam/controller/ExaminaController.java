@@ -18,6 +18,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,7 +47,7 @@ public class ExaminaController extends BaseController {
 	private ExaminaService examinaService;
 
 	@ControllerLog(doAction = "试题库分页显示")
-	// @RequiresPermissions("/hr/exam/selectBankList")
+	@RequiresPermissions("/hr/exam/selectBankList")
 	@ApiOperation(value = "试题库分页显示", notes = "试题库分页显示功能")
 	@RequestMapping(value = "/selectBankList", method = RequestMethod.POST)
 	public Result<PaginationData<List<ExaminabankAdd>>> selectBankList(@Validated @RequestBody ExaminabankPage page) {
@@ -55,7 +56,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "导出试题库列表")
-	// @RequiresPermissions("/hr/exam/exportExaminabank")
+	@RequiresPermissions("/hr/exam/exportExaminabank")
 	@ApiOperation(value = "导出试题库列表", notes = "导出试题库列表")
 	@RequestMapping(value = "/exportExaminabank", method = RequestMethod.GET)
 	public Result exportExaminabank(ExaminabankPage page, HttpServletResponse response) {
@@ -71,7 +72,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "新增试题")
-	// @RequiresPermissions("/hr/exam/addExaminaBank")
+	@RequiresPermissions("/hr/exam/addExaminaBank")
 	@ApiOperation(value = "新增试题", notes = "新增试题功能")
 	@RequestMapping(value = "/addExaminaBank", method = RequestMethod.POST)
 	public Result<ExaminabankAdd> addInvestiage(@Validated @RequestBody ExaminabankAdd add) {
@@ -81,7 +82,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "查询试题详情")
-	// @RequiresPermissions("/hr/exam/selectExaminabank")
+	@RequiresPermissions("/hr/exam/selectExaminabank")
 	@ApiOperation(value = "查询试题详情", notes = "查询试题详情功能")
 	@RequestMapping(value = "/selectExaminabank", method = RequestMethod.POST)
 	public Result<ExaminabankAdd> selectExaminabank(@Validated @RequestBody Examinabank examinabank) {
@@ -90,7 +91,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "修改题目及答案")
-	// @RequiresPermissions("/hr/exam/updateExaminabank")
+	@RequiresPermissions("/hr/exam/updateExaminabank")
 	@ApiOperation(value = "修改题目及答案", notes = "[试题库]修改题目及答案功能")
 	@RequestMapping(value = "/updateExaminabank", method = RequestMethod.POST)
 	public Result updateExaminabank(@Validated @RequestBody Examinabank examinabank) {
@@ -102,7 +103,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "删除试题")
-	// @RequiresPermissions("/hr/exam/deleteExaminaBank")
+	@RequiresPermissions("/hr/exam/deleteExaminaBank")
 	@ApiOperation(value = "删除试题", notes = "删除试题功能")
 	@RequestMapping(value = "/deleteExaminaBank", method = RequestMethod.POST)
 	public Result deleteExaminaBank(@Validated @RequestBody Examinabank examinabank) {
@@ -113,7 +114,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "登录考试")
-	// @RequiresPermissions("/hr/exam/loginManagement")
+	@RequiresPermissions("/hr/exam/loginManagement")
 	@ApiOperation(value = "登录考试", notes = "登录考试功能")
 	@RequestMapping(value = "/loginManagement", method = RequestMethod.POST)
 	public Result<ExaminaManagementAdd> loginManagement(@Validated @RequestBody ExaminaManagement management) {
@@ -122,7 +123,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "提交答案")
-	// @RequiresPermissions("/hr/exam/insterAnswerCard")
+	@RequiresPermissions("/hr/exam/insterAnswerCard")
 	@ApiOperation(value = "提交答案", notes = "提交答案功能")
 	@RequestMapping(value = "/insterAnswerCard", method = RequestMethod.POST)
 	public Result<ExaminaManagementAdd> insterAnswerCard(@Validated @RequestBody ExaminaManagement examinaManagement) {
@@ -131,7 +132,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "更新成绩")
-	// @RequiresPermissions("/hr/exam/updateResult")
+	@RequiresPermissions("/hr/exam/updateResult")
 	@ApiOperation(value = "更新成绩", notes = "更新成绩功能")
 	@RequestMapping(value = "/updateResult", method = RequestMethod.POST)
 	public Result updateResult(@Validated @RequestBody ExaminaManagement examinaManagement) {
@@ -140,7 +141,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "删除成绩")
-	// @RequiresPermissions("/hr/exam/deleteResult")
+	@RequiresPermissions("/hr/exam/deleteResult")
 	@ApiOperation(value = "删除成绩", notes = "删除成绩功能")
 	@RequestMapping(value = "/deleteResult", method = RequestMethod.POST)
 	public Result deleteResult(@Validated @RequestBody ExaminaManagement examinaManagement) {
@@ -149,7 +150,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "分页查看成绩")
-	// @RequiresPermissions("/hr/exam/selectResultList")
+	@RequiresPermissions("/hr/exam/selectResultList")
 	@ApiOperation(value = "分页查看成绩", notes = "分页查看成绩功能")
 	@RequestMapping(value = "/selectResultList", method = RequestMethod.POST)
 	public Result<PaginationData<List<ExaminaManagement>>> selectResultList(
@@ -159,7 +160,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "导出成绩列表")
-	// @RequiresPermissions("/hr/exam/exportResultList")
+	@RequiresPermissions("/hr/exam/exportResultList")
 	@ApiOperation(value = "导出成绩列表", notes = "导出成绩列表")
 	@RequestMapping(value = "/exportResultList", method = RequestMethod.GET)
 	public Result exportResultList(ExaminaResultPage page, HttpServletResponse response) {
@@ -175,7 +176,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "分页查询试卷列表")
-	// @RequiresPermissions("/hr/exam/selectExaminaManagementList")
+	@RequiresPermissions("/hr/exam/selectExaminaManagementList")
 	@ApiOperation(value = "分页查询试卷列表", notes = "分页查询试卷列表功能")
 	@RequestMapping(value = "/selectExaminaManagementList", method = RequestMethod.POST)
 	public Result<PaginationData<List<ExaminaManagementAdd>>> selectExaminaManagementList(
@@ -185,7 +186,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "查询试题及答题详情")
-	// @RequiresPermissions("/hr/exam/selectExamAndAnswerCard")
+	@RequiresPermissions("/hr/exam/selectExamAndAnswerCard")
 	@ApiOperation(value = "查询试题及答题详情", notes = "查询试题及答题详情功能")
 	@RequestMapping(value = "/selectExamAndAnswerCard", method = RequestMethod.POST)
 	public Result<ExaminaManagementAdd> selectExamAndAnswerCard(
@@ -195,7 +196,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "查询试卷详情")
-	// @RequiresPermissions("/hr/exam/selectExamInfo")
+	@RequiresPermissions("/hr/exam/selectExamInfo")
 	@ApiOperation(value = "查询试卷详情", notes = "查询试卷详情功能")
 	@RequestMapping(value = "/selectExamInfo", method = RequestMethod.POST)
 	public Result<ExaminaManagementAdd> selectExamInfo(@Validated @RequestBody ExaminaManagement examinaManagement) {
@@ -204,7 +205,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "编辑试卷")
-	// @RequiresPermissions("/hr/exam/updateExamInfo")
+	@RequiresPermissions("/hr/exam/updateExamInfo")
 	@ApiOperation(value = "编辑试卷", notes = "编辑试卷功能")
 	@RequestMapping(value = "/updateExamInfo", method = RequestMethod.POST)
 	public Result updateExamInfo(@Validated @RequestBody ExaminaManagement examinaManagement) {
@@ -215,7 +216,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "新增/编辑试卷")
-	// @RequiresPermissions("/hr/exam/addExaminaManagement")
+	@RequiresPermissions("/hr/exam/addExaminaManagement")
 	@ApiOperation(value = "新增/编辑试卷", notes = "新增/编辑试卷功能")
 	@RequestMapping(value = "/addExaminaManagement", method = RequestMethod.POST)
 	public Result<ExaminaManagement> addExaminaManagement(@Validated @RequestBody ExaminaManagement add) {
@@ -225,7 +226,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "删除试卷")
-	// @RequiresPermissions("/hr/exam/deleteExamInfo")
+	@RequiresPermissions("/hr/exam/deleteExamInfo")
 	@ApiOperation(value = "删除试卷", notes = "删除试卷功能")
 	@RequestMapping(value = "/deleteExamInfo", method = RequestMethod.POST)
 	public Result deleteExamInfo(@Validated @RequestBody ExaminaManagement add) {
@@ -235,7 +236,7 @@ public class ExaminaController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "发布考试")
-	// @RequiresPermissions("/hr/exam/sendExaminaManagement")
+	@RequiresPermissions("/hr/exam/sendExaminaManagement")
 	@ApiOperation(value = "发布考试", notes = "发布考试功能")
 	@RequestMapping(value = "/sendExaminaManagement", method = RequestMethod.POST)
 	public Result sendExaminaManagement(@Validated @RequestBody ExaminaManagement examinaManagement) {

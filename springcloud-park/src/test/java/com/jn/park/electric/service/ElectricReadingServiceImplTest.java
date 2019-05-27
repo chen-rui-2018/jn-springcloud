@@ -6,11 +6,15 @@ package com.jn.park.electric.service;/**
  */
 
 import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
+import com.jn.park.electricmeter.service.MeterCalcCostService;
 import com.jn.park.electricmeter.service.MeterService;
+import com.jn.system.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.xxpay.common.util.DateUtil;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -28,13 +32,14 @@ import java.util.Date;
 @SpringBootTest
 public class ElectricReadingServiceImplTest {
     @Resource
-    private MeterService electricReadingService;
-
+    private MeterCalcCostService meterCalcCostService;
     @Test
     public void meterDataCollection(){
-        electricReadingService.getDataFromHardare();
-//        System.out.println(result);
-//        System.out.println("++++++++++++");
+        User user = new User();
+        user.setAccount("sss");
+        String companyId="";
+        Date date = DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd"));
+        meterCalcCostService.calcCostEverdayByHandler(user,companyId,date);
     }
 
 }

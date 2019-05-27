@@ -2,11 +2,13 @@ package com.jn.enterprise.workflow.task.service;
 
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.workflow.task.model.TaskPage ;
+import com.jn.enterprise.workflow.task.model.CommonTaskPage;
+import com.jn.enterprise.workflow.task.model.TaskPage;
 import com.jn.enterprise.workflow.task.model.TaskType;
+import com.jn.enterprise.workflow.task.vo.CommonTaskListVO;
+import com.jn.enterprise.workflow.task.vo.CommonTaskVO;
 import com.jn.enterprise.workflow.task.vo.TaskTypeVo;
 import com.jn.task.model.WorkflowTaskAdd;
-
 
 import java.util.List;
 
@@ -51,5 +53,19 @@ public interface TaskService {
      * @param ids
      */
     void deleteWorkflowTask(String[] ids,String userAccount);
+
+    /**
+     * 查询常规待办事项
+     * @param account 账号
+     * @return
+     */
+    List<CommonTaskListVO> searchCommonWorkflowTaskList(String account);
+
+    /**
+     * 根据待办类型查询常规待办事项
+     * @param commonTaskPage 入参
+     * @return
+     */
+    List<CommonTaskVO> searchCommonWorkflowTaskListByTaskId(CommonTaskPage commonTaskPage);
 
 }

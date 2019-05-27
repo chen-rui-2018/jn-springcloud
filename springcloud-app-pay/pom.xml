@@ -14,7 +14,7 @@
         <module>xxpay-dal</module>
         <module>xxpay-mgr</module>
         <module>xxpay-web-api</module>
-        <module>xxpay-reconciliation</module>
+        <!--<module>xxpay-reconciliation</module>-->
     </modules>
 
     <parent>

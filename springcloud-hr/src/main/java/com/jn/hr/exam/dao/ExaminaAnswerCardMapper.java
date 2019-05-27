@@ -26,6 +26,8 @@ public interface ExaminaAnswerCardMapper {
 
 	int updateAnswer(TbManpowerExaminaAnswerCard tbManpowerExaminaAnswerCard);
 
+	int insertBatch(List<TbManpowerExaminaAnswerCard> cardList);
+
 	TbManpowerExaminaAnswerCard selectAnswer(TbManpowerExaminaAnswerCard tbManpowerExaminaAnswerCard);
 
 }

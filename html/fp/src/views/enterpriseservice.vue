@@ -35,7 +35,7 @@
               <p>PEOPLE&nbsp;DECLARE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/companyProfile'})">
               <span>高新企业</span>
               <p>HIGH-TECH&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -115,7 +115,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(list, listIndex) in policyCenterList" :key="listIndex">
                 <ul class="page1 clearfix" ref="poCenter3" data-class="bottom">
-                  <li ref="li11" data-class="left" v-for="(item, index) in list" :key="index">
+                  <li ref="li11" data-class="left" class="pointer" v-for="(item, index) in list" :key="index" @click="$router.push({path:'/policyGuide',query:{policyId:item.policyId}})">
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{item.policyTitle}}</div>
@@ -345,7 +345,7 @@
           </ul>
           <!-- <i class="iconfont icon-leftarrow pointer"></i>
                 <i class="iconfont icon-rightarrow pointer"></i> -->
-          <div class="lejieDel">了解详情</div>
+          <div class="lejieDel pointer" @click="$router.push({path:'/actiCenter'})">了解详情</div>
         </div>
       </div>
       <!-- 科技金融 -->
@@ -463,7 +463,7 @@
                     <div v-for="(item,index) in investorInfoList" :key="index" v-if="index<2">
                       <a href="javascript:;">
                         <div class="info_img">
-                          <div><img :src="item.avatar" alt=""></div>
+                          <div  @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})"><img :src="item.avatar" alt=""></div>
                         </div>
                         <div class="info_all">
                           <div class="info_name">
@@ -481,7 +481,7 @@
                   <li class="conselor_mid">
                     <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list">
                       <a href="javascript:;">
-                        <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
+                        <div class="info_img" @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})"><img :src="item2.avatar" alt=""></div>
                         <div class="info_all">
                           <div class="info_name">
                             <span>{{item2.investorName}}</span>/
@@ -501,7 +501,7 @@
               <div class="finnaPro" v-if="flag44 == '1'">
                 <ul>
                   <li class="clearfix" v-for="(i,k) in finaProList" :key='k' v-if="k<3">
-                    <div class="orgImg fl">
+                    <div class="orgImg fl pointer" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
                       <img :src="i.pictureUrl" alt="">
                     </div>
                     <div class="orgCon fl">
@@ -541,11 +541,11 @@
               <div class="finnaOrg" v-if="flag44 == '2'">
                 <ul>
                   <li class="clearfix" v-for="(i,k) in finaOrgLost" :key='k' v-if="k<3">
-                    <div class="orgImg fl">
+                    <div class="orgImg fl pointer" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                       <img :src="i.orgLogo" alt="">
                     </div>
                     <div class="orgCon fl">
-                      <div class="conTil">{{i.orgName}}</div>
+                      <div class="conTil" style="margin-bottom:40px">{{i.orgName}}</div>
                       <div class="conContent clearfix color3">
                         <div class="left1 fl">
                           <p>电话：
@@ -590,8 +590,8 @@
                 <button class="btn1 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
                 <button class="btn2 pointer" :class="{'btnActive':!flag55}" @click="flag55=false">服务</button>
               </div>
-              <div class="chage fr color3 pointer">
-                <img src="@/../static/img/huanyipi.png" alt="" @click="hanlepage"> 换一批
+              <div class="chage fr color3 pointer"  @click="hanlepage">
+                <img src="@/../static/img/huanyipi.png" alt=""> 换一批
               </div>
             </div>
             <ul class="infoCon" ref="human3" data-class="bottom1" v-if='flag55'>
@@ -626,7 +626,7 @@
             <div class="serverOrgContent" v-else>
               <ul>
                 <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
-                  <div class="orgImg fl" @click="handleProDel(i.productId,i.signoryId)">
+                  <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
                     <img :src="i.pictureUrl" alt="">
                   </div>
                   <div class="orgCon fl">
@@ -741,9 +741,22 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    handleProDel(productId, signoryId) {
+      this.$router.push({
+        path: "serverProDetail",
+        query: { productId: productId, signoryId: signoryId }
+      });
+    },
     //招聘与服务切换翻页
     hanlepage() {
-      // if
+      debugger
+      if(this.flag55==true){
+         this.page7++;
+         this.getRecruitList()
+      } else{
+         this.page8++;
+         this.getProList()
+      }
     },
     formatArr(arr, n) {
       const len = arr.length;
@@ -822,7 +835,16 @@ export default {
       var mySwiper = new swiper(".swiper-container", {
         direction: "horizontal", // 垂直切换选项
         loop: true, // 循环模式选项
-
+        noSwiping: true,
+        on: {
+          click: (e) => {
+            // let url = e.target.dataset.jumpurl; 
+            // this.bannerJump(url);
+            console.log(e)
+          }
+        },
+        observer: true,
+        observeParents: true, //修改swiper的父元素时，自动初始化swiper
         // 如果需要分页器
         pagination: {
           el: ".swiper-pagination"
@@ -896,8 +918,9 @@ export default {
           if (res.code === "0000") {
             this.policyCenterList = this.formatArr(res.data.rows, 4);
             this.total2 = res.data.total;
+            let _this=this
             setTimeout(() => {
-              this.init();
+              _this.init();
             }, 0);
             // resolve();
           } else {
@@ -1444,7 +1467,7 @@ export default {
               font-size: 15px;
               color: #222;
               font-weight: bold;
-              margin-bottom: 40px;
+              margin-bottom: 13px;
             }
 
             .conContent {
@@ -1486,9 +1509,9 @@ export default {
           }
         }
 
-        > li:first-child {
-          padding-top: 10px;
-        }
+        // > li:first-child {
+        //   padding-top: 10px;
+        // }
       }
     }
     // #btns {
@@ -1760,7 +1783,7 @@ export default {
                 font-size: 15px;
                 color: #222;
                 font-weight: bold;
-                margin-bottom: 40px;
+                margin-bottom: 30px;
               }
 
               .conContent {
@@ -1849,7 +1872,8 @@ export default {
           .info_img {
             width: 27%;
             img {
-              width: 79%;
+              width: 75px;
+              height:75px;
               border-radius: 50%;
               display: block;
               margin: 6px auto;

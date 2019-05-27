@@ -110,10 +110,10 @@ export default {
               if (res.data.data) {
                 this.signInText = '已签到'
                 this.upTime = res.data.data.signInAttendanceTime.substr(11, 8)
-              }
-              if (res.data.data.signOutAttendanceTime !== null) {
-                this.signOutText = '已签退'
-                this.downTime = res.data.data.signOutAttendanceTime.substr(11, 8)
+                if (res.data.data.signOutAttendanceTime !== null) {
+                  this.signOutText = '已签退'
+                  this.downTime = res.data.data.signOutAttendanceTime.substr(11, 8)
+                }
               }
             } else {
               this.$message.error(res.data.result)

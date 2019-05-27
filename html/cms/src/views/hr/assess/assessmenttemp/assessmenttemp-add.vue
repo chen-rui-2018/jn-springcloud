@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item :inline="true" class="filter-bar">
         <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="addRow()">添加</el-button>
-        <el-button class="filter-item" type="primary" @click="delData()">删除</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-minus" @click="delData()">删除</el-button>
       </el-form-item>
       <div>
         <el-table ref="table" :data="tableData" tooltip-effect="dark" border stripe style="width: 95%" @selection-change="selectRow">
@@ -18,7 +18,7 @@
           </el-table-column>
           <el-table-column label="序号">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.serialNumber"/>
+              <el-input v-model="scope.row.serialNumber" :maxlength="11" oninput = "value=value.replace(/[^\d]/g,'')"/>
             </template>
           </el-table-column>
           <el-table-column label="考核目标">
@@ -28,7 +28,7 @@
           </el-table-column>
           <el-table-column label="分值">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.score"/>
+              <el-input v-model="scope.row.score" :maxlength="11" oninput = "value=value.replace(/[^\d]/g,'')"/>
             </template>
           </el-table-column>
           <el-table-column label="评分细则">
@@ -38,17 +38,27 @@
           </el-table-column>
           <el-table-column label="牵头考核部门">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.leadAssessmentDepartment"/>
+              <!--<el-input v-model="scope.row.leadAssessmentDepartment"/>-->
+              <!-- <el-form-item v-if="Visible" label="部门">-->
+              <el-cascader
+                :options="departmentList"
+                v-model="scope.row.leadAssessmentDepartmentS"
+                change-on-select
+                placeholder="请选择"
+                clearable
+                @change="handleChangeDepartment"
+              />
+              <!--</el-form-item>-->
             </template>
           </el-table-column>
           <el-table-column label="得分">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.assessmentScore"/>
+              <el-input v-model="scope.row.assessmentScore" disabled="disabled"/>
             </template>
           </el-table-column>
           <el-table-column label="扣分原因">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.causeDeduction"/>
+              <el-input v-model="scope.row.causeDeduction" disabled="disabled"/>
             </template>
           </el-table-column>
           <el-table-column label="操作">
@@ -69,11 +79,13 @@
 </template>
 <script>
 import {
-  api
+  api, systemApi
 } from '@/api/hr/common'
 export default {
   data() {
     return {
+      departmentListLoading: false,
+      departmentList: [],
       tableData: [{
         rowNum: 0,
         templateName: '',
@@ -81,6 +93,7 @@ export default {
         serialNumber: '',
         score: '',
         scoreRubric: '',
+        leadAssessmentDepartmentS: [],
         leadAssessmentDepartment: '',
         assessmentScore: '',
         assessmentTarget: '',
@@ -94,7 +107,29 @@ export default {
       rowIndex: 1
     }
   },
+  mounted() {
+    this.getAllDepartment()
+  },
   methods: {
+    // 获取所有部门列表
+    getAllDepartment() {
+      this.departmentListLoading = true
+      systemApi('system/sysDepartment/findDepartmentAllByLevel').then(res => {
+        if (res.data.code === '0000') {
+          this.departmentList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
+      })
+    },
+
+    // 选择部门（新增用户对话框）
+    handleChangeDepartment(value) {
+      debugger
+      // // 提交的时候拿到的部门id等于提取出来的最后一个id
+      // this.temp.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
+    },
     // 获取表格选中时的数据
     selectRow(val) {
       this.selectlistRow = val
@@ -136,18 +171,62 @@ export default {
       this.$refs.tableData.clearSelection()
     },
     submitForm() {
+      debugger
+      this.isDisabled = true
       if (this.templateName === '') {
         this.$message.error('请填写模板名称')
+        this.isDisabled = false
         return
       }
       if (this.selectlistRow.length < 1) {
         this.$message.error('至少填写并勾选一项考核指标')
+        this.isDisabled = false
         return
+      }
+      let flag = true
+      for (let i = 0; i < this.selectlistRow.length; i++) {
+        const val = this.selectlistRow[i]
+        let msg = ''
+        if (val.targetCategory == null || val.targetCategory === '') {
+          msg = msg + '目标类别、'
+          flag = false
+        }
+        if (val.serialNumber == null || val.serialNumber === '') {
+          msg = msg + '序号、'
+          flag = false
+        }
+        if (val.assessmentTarget == null || val.assessmentTarget === '') {
+          msg = msg + '考核目标、'
+          flag = false
+        }
+        if (val.score == null || val.score === '') {
+          msg = msg + '分值、'
+          flag = false
+        }
+        if (val.scoreRubric == null || val.scoreRubric === '') {
+          msg = msg + '评分细则、'
+          flag = false
+        }
+        if (val.leadAssessmentDepartmentS == null || val.leadAssessmentDepartmentS === '') {
+          msg = msg + '牵头考核部门、'
+          flag = false
+        }
+        if (!flag) {
+          alert(msg.substr(0, msg.length - 1) + '为必填项，请检查')
+          break
+        }
+      }
+      if (!flag) {
+        this.isDisabled = false
+        return false
       }
       for (let i = 0; i < this.selectlistRow.length; i++) {
         const val = this.selectlistRow[i]
         // val.templateName=this.templateName
+        // 取最后一个部门ID
+        val.leadAssessmentDepartment = this.selectlistRow[i].leadAssessmentDepartmentS[ this.selectlistRow[i].leadAssessmentDepartmentS.length - 1]
         delete val.rowNum
+        delete val.leadAssessmentDepartmentS
         this.commitRows.push(val)
       }
       const rows = { templateName: this.templateName, recordList: this.commitRows }
@@ -178,7 +257,7 @@ export default {
         'serialNumber': row.serialNumber,
         'score': row.score,
         'scoreRubric': row.scoreRubric,
-        'leadAssessmentDepartment': row.leadAssessmentDepartment,
+        'leadAssessmentDepartment': row.leadAssessmentDepartmentS[row.leadAssessmentDepartmentS.length - 1],
         'assessmentScore': row.assessmentScore,
         'assessmentTarget': row.assessmentTarget,
         'causeDeduction': row.causeDeduction

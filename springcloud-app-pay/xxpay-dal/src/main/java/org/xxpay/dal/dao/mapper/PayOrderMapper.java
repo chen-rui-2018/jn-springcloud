@@ -1,9 +1,11 @@
 package org.xxpay.dal.dao.mapper;
 
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.xxpay.dal.dao.model.PayOrder;
 import org.xxpay.dal.dao.model.PayOrderExample;
+
+import java.util.List;
+import java.util.Map;
 
 public interface PayOrderMapper {
     int countByExample(PayOrderExample example);
@@ -27,4 +29,15 @@ public interface PayOrderMapper {
     int updateByPrimaryKeySelective(PayOrder record);
 
     int updateByPrimaryKey(PayOrder record);
+
+    /**
+     * 根据日期和支付方式查询支付成功的订单
+     * */
+    List<PayOrder>  getPaySuccessOrderByDate(Map param);
+
+    /**
+     * 根据日期和支付方式查询所有订单
+     * */
+    List<PayOrder>  getAllPayOrderByDate(Map param);
+
 }

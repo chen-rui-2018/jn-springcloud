@@ -110,7 +110,7 @@ export default {
           res.data.data.forEach(val => {
             this.pieData.push({
               name: val.key,
-              value: val.value === '0%' ? '' : parseInt(val.value)
+              value: val.value === '0%' ? '0' : parseInt(val.value)
             })
           })
           // this.dataList = res.data.data.rows
@@ -158,13 +158,13 @@ export default {
       // console.log(data)
       const collect = this.$echarts.init(document.getElementById('pieChart'))
       if (data.length > 0) {
-        // console.log(data)
+        console.log(data)
         var bar = 'inner'
         var isFlag = false
         data.forEach(v => {
           if (v.value === 100) {
             isFlag = true
-            data = [v]
+            // data = [v]
           }
         })
         if (isFlag) {
@@ -201,11 +201,12 @@ export default {
                   color: '#fff',
                   verticalAlign: 'middle',
                   formatter: function(value) {
-                    if (value.data.value === '') {
-                      return value.data.value
-                    } else {
-                      return value.data.value + '%'
-                    }
+                    return value.data.value + '%'
+                  // if (value.data.value === '0') {
+                  //   return value.data.value
+                  // } else {
+                  //   return value.data.value + '%'
+                  // }
                   }
                 }
               },
@@ -255,8 +256,6 @@ export default {
       return result
     },
     initBarChart(data) {
-      // console.log(data)
-
       // const newArr = data.completeRatioModels
       var newObj = this.deepCopy(data)
       newObj.completeRatioModels.plan.map(function(item, index) {
@@ -290,7 +289,7 @@ export default {
                 	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#11a0f8"></span>\
                	已完成任务：&nbsp;${data.completeRatioModels.autual[params[0].dataIndex]}<br />\
                	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgb(255, 192, 0)"></span>\
-                	超出完成：&nbsp; ${(data.completeRatioModels.completeRatio[params[0].dataIndex]) > 0 ? (data.completeRatioModels.completeRatio[params[0].dataIndex] / data.completeRatioModels.plan[params[0].dataIndex] * 100) + '%' : '0'}<br />`
+                	超出完成：&nbsp; ${(data.completeRatioModels.completeRatio[params[0].dataIndex]) > 0 ? (data.completeRatioModels.completeRatio[params[0].dataIndex] / data.completeRatioModels.plan[params[0].dataIndex] * 100).toFixed(2) + '%' : '0'}<br />`
               return res
               // var res = `<div style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#11a0f8">任务量：${data.completeRatioModels.plan[params[0].dataIndex]}<div></br><div style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgb(215, 215, 215)">已完成任务：${data.completeRatioModels.autual[params[0].dataIndex]}<div></br><div style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgb(255, 192, 0)">超出完成:${(data.completeRatioModels.completeRatio[params[0].dataIndex] / data.completeRatioModels.plan[params[0].dataIndex] * 100) + '%'}<div>`
               // return res
@@ -370,7 +369,7 @@ export default {
                   position: 'top',
                   formatter: function(value) {
                     if (value.value > 0 && value.value !== '') {
-                      return (value.value + 100) + '%'
+                      return ((value.value + 100).toFixed(2) + '%')
                     } else {
                       return ''
                     }

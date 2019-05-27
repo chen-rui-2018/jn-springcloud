@@ -82,4 +82,56 @@ public interface MeterDao {
      * saveWarningRecord
      */
     void saveWarningRecord(@Param("saveData") List<TbElectricWarningRecord> saveData);
+
+    /**
+     * 获取电表的业主集合
+     * @param companyId
+     * @param day
+     * @return
+     */
+    List<String> getMeterHost(@Param("companyId") String companyId,@Param("day") Date day);
+
+    /**
+     * 获取企业的所有电表
+     * @param companyId
+     * @param day
+     * @return
+     */
+    List<String> getElectricMeterByCompanyId(@Param("companyId") String companyId,@Param("day") Date day);
+
+    /**
+     * 获取企业的计价规则
+     * @param companyId
+     * @param day
+     * @return
+     */
+    List<String> getRuleIdByCompanyId(@Param("companyId") String companyId,@Param("day") Date day);
+
+    /**
+     * 获取企业的电表用电量
+     * @param companyId
+     * @param dealDate
+     * @return
+     */
+    List<TbElectricReading> getDegreeByMeterCode(@Param("companyId") String companyId,@Param("dealDate") Date dealDate);
+
+    /**
+     * 获取一块电表当天按计价规则分组的费用
+     * @param saveData
+     * @return
+     */
+    void saveGroupLogs(@Param("saveData") List<TbElectricEnergyGroupLog> saveData);
+
+    /**
+     * 保存账单明细
+     * @param saveData
+     */
+    void saveBillDetail(@Param("saveData") List<TbElectricEnergyBillDetail> saveData);
+
+    /**
+     * 保存表的每日业主关系
+     * @param saveData
+     */
+    void saveMeterLinkInDay(@Param("saveData") List<TbElectricMeterCompanyDay> saveData);
+
 }

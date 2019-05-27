@@ -50,4 +50,34 @@ public class MeterConstants {
      * 每次保存的次数
      */
     public final static Integer SAVE_SIZE=40;
+
+    /**
+     * 系统用户
+     */
+    public final static String SYSTEM_USER="system";
+
+
+    /**
+     * 电表账本标识
+     */
+    public final static String ELEC_BOOK="1";
+
+    /**
+     * 电表调用标识
+     */
+    public final static String PARK_ID="springcloud-park";
+
+    /**
+     * 电表调用方法
+     */
+    public final static String METHOD_ID="/meter/updateBill";
+
+    /**
+     * 电表账本标识
+     */
+    public final static String PAYED="1";
+    /**
+     * 电表账本标识
+     */
+    public final static String NOT_PAY="1";
 }

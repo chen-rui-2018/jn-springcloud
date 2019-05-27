@@ -157,17 +157,6 @@ export default {
     completeWork (item) {
       this.$router.push({path: 'editWorkStatus', query: {id: item.id, title: '完成'}})
     },
-    // onShow () {
-    //   console.log('on show')
-    //   this.$vux.toast.text('hello', 'top')
-    // },
-    // onHide () {
-    //   console.log('on hide')
-    // },
-    // handleOperation () {
-    //   alert('123')
-    //   this.operation = true
-    // },
     handleQueryCondition () {
       // this.$vux.toast.text('hello', 'top')
       this.queryCondition = !this.queryCondition

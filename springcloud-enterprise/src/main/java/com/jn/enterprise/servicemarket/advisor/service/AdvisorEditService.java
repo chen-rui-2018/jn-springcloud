@@ -3,6 +3,7 @@ package com.jn.enterprise.servicemarket.advisor.service;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 编辑顾问资料
@@ -12,6 +13,14 @@ import java.util.List;
  * @modified By:
  */
 public interface AdvisorEditService {
+    /**
+     * 判断当前登录用户认证顾问的状态
+     * @param loginAccount 当前登录用户
+     * @return
+     */
+    AdvisorApprovalStatus getUserApprovalStatus(String loginAccount);
+
+
     /**
      * 基本信息保存并更新
      * @param advisorBaseInfoParam  顾问资料基本信息

@@ -17,10 +17,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class ElectricMeterController {
     @Autowired
-    private ElectricMeterClient getDataFromHardare;
+    private ElectricMeterClient electricMeterClient;
     private static Logger logger = LoggerFactory.getLogger(ElectricMeterController.class);
     @Scheduled(cron = "0 0 * * * ?")
     public void getDataFromHardare(){
-        getDataFromHardare.getDataFromHardare();
+        electricMeterClient.getDataFromHardare();
+    }
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void calcCostEverday(){
+        electricMeterClient.calcCostEverday();
+    }
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void setHostForMeter(){
+        electricMeterClient.setHostForMeter();
+    }
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void setRulesInDayForCompany(){
+        electricMeterClient.setRulesInDayForCompany();
     }
 }

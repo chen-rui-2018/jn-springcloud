@@ -4,10 +4,14 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.excel.ExcelUtil;
+import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.enums.HrStatusEnums;
 import com.jn.hr.common.service.CommonService;
+import com.jn.hr.common.util.DepartMentUtil;
+import com.jn.hr.common.util.SysDictKeyValueUtil;
 import com.jn.hr.common.util.ValidateUtil;
 import com.jn.hr.employee.dao.ResumeDatabaseMapper;
 import com.jn.hr.employee.dao.TbManpowerBackgroundInvestMapper;
@@ -24,7 +28,10 @@ import com.jn.hr.employee.model.*;
 import com.jn.hr.employee.service.ResumeDatabaseService;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysPost;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDepartmentPostVO;
+import com.jn.system.vo.SysDictKeyValue;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author dt
@@ -226,10 +230,25 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
         int i=0;
         StringBuffer sb=new StringBuffer();
         List<TbManpowerResumeDatabase> batchResult=new ArrayList<TbManpowerResumeDatabase>();
+        Result deptResult= systemClient.selectDeptByParentId("",true);
+        if(deptResult==null || !"0000".equals(deptResult.getCode()) || deptResult.getData()==null){
+            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+        }
+        Map<String,String>  departMap=DepartMentUtil.convertDepartList((List<HashMap<String, Object>>)deptResult.getData());
+        Result<List<SysPost>> postResult=systemClient.getPostAll();
+        if(postResult==null || !"0000".equals(postResult.getCode()) || CollectionUtils.isEmpty(postResult.getData())){
+            throw new JnSpringCloudException(HrExceptionEnums.POST_QUERY_ERRPR);
+        }
+        List<SysPost>  postList=postResult.getData();
+        List<SysDictKeyValue>  certificateTypeList= commonService.queryDictList
+                ("employee","certificate_type");
+        List<SysDictKeyValue>  educationList= commonService.queryDictList
+                ("employee","education");
+
         for(Object result:resultList){
             i++;
             ResumeDatabase database= (ResumeDatabase) result;
-            String str=checkImportValue(database);
+            String str=checkImportValue(database,departMap,postList,certificateTypeList,educationList);
             if(!StringUtils.isBlank(str)){
                 sb.append("第"+i+"行:"+str+";");
                 continue;
@@ -262,7 +281,8 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
         }
 
     }
-    private String checkImportValue(ResumeDatabase database){
+    private String checkImportValue(ResumeDatabase database,Map<String,String> departMap,List<SysPost> postList,
+                                    List<SysDictKeyValue> certificateTypeList,List<SysDictKeyValue> educationList){
         if(StringUtils.isBlank(database.getName())){
             return "姓名不能为空";
         }
@@ -288,7 +308,7 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
             return "部门名称不能为空";
         }
         if(StringUtils.isBlank(database.getJobName())){
-            return "职位名称不能为空";
+            return "岗位名称不能为空";
         }
         if(StringUtils.isBlank(database.getCertificateType())){
             return "证件类型不能为空";
@@ -312,35 +332,27 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
             return "邮箱格式不正确";
         }
 
-        database.setJobId(commonService.queryDictValueByLable("employee","job"
-                ,database.getJobName()));
+
+        database.setJobId(SysDictKeyValueUtil.getPostIdByName(postList,database.getJobName()));
         if(StringUtils.isBlank(database.getJobId())){
-            return "职位名称错误";
+            return "岗位名称错误";
         }
 
-        database.setCertificateId(commonService.queryDictValueByLable("employee","certificate_type"
-                ,database.getCertificateType()));
+        database.setCertificateId(SysDictKeyValueUtil.getKeyByLabel(certificateTypeList,database.getCertificateType()));
 
         if(StringUtils.isBlank(database.getCertificateId())){
             return "证件类型错误";
         }
 
-        database.setEducationId(commonService.queryDictValueByLable("employee","education"
-                ,database.getEducationName()));
+        database.setEducationId(SysDictKeyValueUtil.getKeyByLabel(educationList,database.getEducationName()));
 
         if(StringUtils.isBlank(database.getEducationId())){
             return "学历名称错误";
         }
-
-        TbManpowerDepartmentCriteria example=new TbManpowerDepartmentCriteria();
-        TbManpowerDepartmentCriteria.Criteria criteria=example.createCriteria();
-        criteria.andDepartmentNameEqualTo(database.getDepartmentName());
-        List<TbManpowerDepartment> departments= tbManpowerDepartmentMapper.selectByExample(example);
-
-        if(CollectionUtils.isEmpty(departments)){
+        database.setDepartmentId(departMap.get(database.getDepartmentName()));
+        if(StringUtils.isEmpty(database.getDepartmentId())){
             return "部门名称错误";
         }
-        database.setDepartmentId(departments.get(0).getDepartmentId());
         return "";
     }
 

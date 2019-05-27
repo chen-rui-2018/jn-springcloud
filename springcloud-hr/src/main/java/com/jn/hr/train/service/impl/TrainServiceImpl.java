@@ -142,7 +142,6 @@ public class TrainServiceImpl implements TrainService {
 	 */
 	@Override
 	@ServiceLog(doAction = "课程详情功能")
-	@Transactional(rollbackFor = Exception.class)
 	public ManagementAdd selectManagement(Management management) {
 		ManagementAdd managementSel = new ManagementAdd();
 		TbManpowerTrainManagement tbManagement = tbManpowerTrainManagementMapper.selectByPrimaryKey(management.getId());

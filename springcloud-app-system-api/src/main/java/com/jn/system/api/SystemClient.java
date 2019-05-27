@@ -218,4 +218,12 @@ public interface SystemClient {
     @RequestMapping(value = "/api/system/getUserByRole", method = RequestMethod.POST)
     Result<List<User>> getUserByRole(@RequestBody SysRole role);
 
+    /**
+     * 获取所有岗位信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getPostAll", method = RequestMethod.POST)
+    Result<List<SysPost>> getPostAll();
+
 }

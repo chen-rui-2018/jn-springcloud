@@ -1,10 +1,11 @@
 package com.jn.hr.employee.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author dt
@@ -30,11 +31,9 @@ public class BackgroundInvestAdd implements Serializable {
     @ApiModelProperty(value = "上家公司证明人",required = true)
     @NotNull(message = "上家公司证明人不能为空")
     private String companyCertifier;
-    @ApiModelProperty(value = "核查人",required = true)
-    @NotNull(message = "核查人不能为空")
+    @ApiModelProperty(value = "核查人")
     private String inspectors;
-    @ApiModelProperty(value = "核查人联系电话",required = true)
-    @NotNull(message = "核查人联系电话不能为空")
+    @ApiModelProperty(value = "核查人联系电话")
     private String inspectorsPhone;
 
     public String getId() {

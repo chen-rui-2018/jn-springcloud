@@ -32,6 +32,10 @@ public class AttendanceVo implements Serializable  {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date signInAttendanceTime;
 
+    @ApiModelProperty(value = "签到迟到时间（分钟）")
+    private String signInAttendanceMinute;
+
+
     @ApiModelProperty(value = "签到考勤平台：1：PC，2：APP，3：钉钉")
     private String signInAttendancePlatform;
 
@@ -47,6 +51,9 @@ public class AttendanceVo implements Serializable  {
     @ApiModelProperty(value = "签退时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date signOutAttendanceTime;
+
+    @ApiModelProperty(value = "签退早退时间（分钟）")
+    private String signOutAttendanceMinute;
 
     @ApiModelProperty(value = "签退平台")
     private String signOutAttendancePlatform;
@@ -108,6 +115,22 @@ public class AttendanceVo implements Serializable  {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public String getSignInAttendanceMinute() {
+        return signInAttendanceMinute;
+    }
+
+    public void setSignInAttendanceMinute(String signInAttendanceMinute) {
+        this.signInAttendanceMinute = signInAttendanceMinute;
+    }
+
+    public String getSignOutAttendanceMinute() {
+        return signOutAttendanceMinute;
+    }
+
+    public void setSignOutAttendanceMinute(String signOutAttendanceMinute) {
+        this.signOutAttendanceMinute = signOutAttendanceMinute;
     }
 
     public Date getSignInAttendanceTime() {

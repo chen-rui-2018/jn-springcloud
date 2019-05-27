@@ -632,7 +632,6 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "调研页面展示功能")
-	@Transactional(rollbackFor = Exception.class)
 	public ResearchSet loginInvestiage(String projectId) {
 		ResearchSet researchSet = new ResearchSet();
 		TbManpowerTrainInvestiga tbHrinvestiage = selectQuestInvestigate(projectId);
@@ -659,7 +658,6 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "汇总统计功能")
-	@Transactional(rollbackFor = Exception.class)
 	public List<AnswerVo> questionAnswerList(String projectId) {
 		List<AnswerVo> answerVos = questAnswerList(projectId);
 		return answerVos;

@@ -14,6 +14,7 @@ import com.jn.enterprise.company.entity.TbServiceCompanyStaff;
 import com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
+import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.*;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
@@ -539,7 +540,8 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "企业同事-设为/取消联系人")
     public Integer setOrCancelContact(String account, String curAccount, boolean isSet) {
         // 判断是否为企业管理员
-        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
+//        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
+        String comId = checkCompanyUser(curAccount).getCompanyCode();
         // 判断联系人账号有效性
         checkCompanyAndStaff(account, comId);
 
@@ -721,5 +723,22 @@ public class StaffServiceImpl implements StaffService {
             }
         }
         return staff;
+    }
+
+    /**
+     * 判断账号是否企业账号
+     * @param account
+     * @return
+     */
+    public UserExtensionInfo checkCompanyUser (String account) {
+        Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(account);
+        if (result == null || result.getData() == null) {
+            throw new JnSpringCloudException(CompanyExceptionEnum.GET_USER_EXTENSION_INFO_ERROR);
+        }
+        UserExtensionInfo userExtensionInfo = result.getData();
+        if (StringUtils.isBlank(userExtensionInfo.getCompanyCode()) || StringUtils.isBlank(userExtensionInfo.getCompanyName())) {
+            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_USER_NOT_COMPANY_USER);
+        }
+        return userExtensionInfo;
     }
 }

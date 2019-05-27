@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "nav-bar": "./../../templates/header/header",
+    "card-list": "./../../templates/card-list/card-list"
+  }
+}

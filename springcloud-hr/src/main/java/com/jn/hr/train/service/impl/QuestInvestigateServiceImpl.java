@@ -490,7 +490,7 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	}
 
 	/**
-	 * 结束问卷调查
+	 * 删除问卷调查
 	 * 
 	 * @param investigaDel
 	 *            问卷实体
@@ -498,7 +498,7 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	 *            当前登陆用户
 	 */
 	@Override
-	@ServiceLog(doAction = "结束问卷功能")
+	@ServiceLog(doAction = "删除问卷调查功能")
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteInvestiage(Investigate investigaDel, User user) {
 		String projectId = investigaDel.getProjectId();
@@ -630,7 +630,6 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "问卷页面展示功能")
-	@Transactional(rollbackFor = Exception.class)
 	public ResearchSet loginInvestiage(String projectId) {
 		ResearchSet researchSet = new ResearchSet();
 
@@ -658,7 +657,6 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "汇总统计功能")
-	@Transactional(rollbackFor = Exception.class)
 	public List<AnswerVo> questionAnswerList(String projectId) {
 		List<AnswerVo> answerVos = questAnswerList(projectId);
 		return answerVos;
@@ -912,7 +910,7 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 		if (null == question) {
 			logger.warn("[问卷调查] 编辑问卷项目题目失败,编辑的问卷项目问题不存在,projectId:{},titleID:{}", questionUpd.getProjectId(),
 					questionUpd.getTitleId());
-			throw new JnSpringCloudException(TrainExceptionEnums.NOT_NULL_ERROR, "编辑问卷项目题目失败,编辑的问卷项目问题不存在");
+			throw new JnSpringCloudException(TrainExceptionEnums.NOT_NULL_ERROR, "编辑问卷题目失败,问卷题目不存在");
 		}
 		TbManpowerTrainQuestQuestionnaireQuese tbQuestion = new TbManpowerTrainQuestQuestionnaireQuese();
 		BeanUtils.copyProperties(questionUpd, tbQuestion);
@@ -959,7 +957,7 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 				if (StringUtils.isBlank(deltitleOption.getId())) {
 					logger.warn("[问卷调查] 删除问卷选项失败,删除时选项id不能为空,projectId:{},titleID:{}", questionUpd.getProjectId(),
 							questionUpd.getTitleId());
-					throw new JnSpringCloudException(TrainExceptionEnums.NOT_NULL_ERROR, "删除问卷选项失败,删除时选项id不能为空");
+					throw new JnSpringCloudException(TrainExceptionEnums.NOT_NULL_ERROR, "删除题目选项失败,删除时选项id不能为空");
 				}
 				tbQuestTitleOptionMapper.deleteByPrimaryKey(deltitleOption.getId());
 			}

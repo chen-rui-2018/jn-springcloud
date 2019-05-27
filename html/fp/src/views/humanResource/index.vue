@@ -247,13 +247,15 @@ export default {
     getWebRecruitList() {
       let _this = this;
       this.api.get({
-        url: "getWebRecruitList",
+        // url: "getWebRecruitList",
+        url: "getRecruitList",
         data: {
           page: _this.page,
           rows: _this.row,
           searchFiled: _this.searchFiled,
           type: _this.type,
-          sortTypes: _this.sortTypes
+          sortTypes: _this.sortTypes,
+          comId:_this.$route.query.comId
         },
         callback: function(res) {
           if (res.code == "0000") {

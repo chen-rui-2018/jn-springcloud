@@ -23,7 +23,7 @@ public class BusinessPromotionListParam extends Page implements Serializable {
     private String status;
     @ApiModelProperty(value = "搜索内容(宣传产品名称模糊搜索))",example = "xxx产品")
     private String searchContent;
-    @ApiModelProperty(value = "审批状态（0：未审批  1：审批中   2：审批通过   3：审批不通过，4：未付款  5：待发布  6：已发布)），不传查询全部",example = "0")
+    @ApiModelProperty(value = "审批状态（0：未审批  1：审批中   2：审批通过   3：审批不通过，4：未付款  5：待发布  6：已发布  7：已撤销)），不传查询全部",example = "0")
     @Pattern(regexp = "^[0-9]$",message = "approvalStatus:只能输入0-9的数字")
     private String approvalStatus;
     @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")

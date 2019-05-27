@@ -653,20 +653,29 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @ServiceLog(doAction = "创建账单")
     @Override
     public String createBill(CreateBillParam createBillParam,String loginAccount,String userName){
-        if(createBillParam==null ||createBillParam.getPropagandaId()==null || createBillParam.getOrderNum()==null){
+        if(createBillParam==null ||createBillParam.getPropagandaId()==null){
             logger.warn("创建账单失败，请求入参为空");
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.NETWORK_ANOMALY);
+        }
+        //订单号为空或不是正确的订单号（订单号不包含"AD-"），系统调用订单号自动生成
+        if(StringUtils.isBlank(createBillParam.getOrderNum()) || !createBillParam.getOrderNum().contains("AD-")){
+            createBillParam.setOrderNum(getOrderNumber());
         }
         //根据宣传id获取宣传信息
         TbPropagandaCriteria example=new TbPropagandaCriteria();
         example.createCriteria().andIdEqualTo(createBillParam.getPropagandaId())
+                .andApprovalStatusEqualTo(ApprovalStatusEnum.APPROVED.getValue())
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbPropaganda> propagandaList = tbPropagandaMapper.selectByExample(example);
         if(propagandaList.isEmpty()){
-            logger.warn("创建账单失败，当前宣传[id:{}]在系统中不存在或已失效",createBillParam.getPropagandaId());
-            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.NETWORK_ANOMALY);
+            logger.warn("创建账单失败，当前宣传[id:{}]在系统中不存在或审批状态不为“审批通过”",createBillParam.getPropagandaId());
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.SUBMIT_AUDIT_NOT_ALLOW);
         }
         TbPropaganda tbPropaganda = propagandaList.get(0);
+        if(StringUtils.equals(tbPropaganda.getIsPay(),IsPayEnum.HAVE_PAID.getCode())){
+            logger.warn("创建账单失败，当前宣传[id:{}]已支付宣传费用",createBillParam.getPropagandaId());
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_HAVE_PAID);
+        }
         //若当前宣传已有账单号，直接返回
         if(StringUtils.isNotBlank(tbPropaganda.getOrderCode())){
             return tbPropaganda.getOrderCode();

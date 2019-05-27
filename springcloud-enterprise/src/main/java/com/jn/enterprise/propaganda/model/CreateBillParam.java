@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class CreateBillParam implements Serializable {
     @ApiModelProperty(value = "宣传id",required = true,example = "897c4077f0204df2999e7c923ccdc445")
     private String propagandaId;
-    @ApiModelProperty(value = "订单号(调用生成订单号接口获得)",required = true,example = "AD-20190527150224742")
+    @ApiModelProperty(value = "订单号(调用生成订单号接口获得，若不传，系统默认生成)",example = "AD-20190527150224742")
     private String orderNum;
 
     public String getPropagandaId() {

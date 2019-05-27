@@ -24,23 +24,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="应聘部门：">
-              <el-select v-model="addForm.departmentId" disabled placeholder="请选择" clearable style="width: 200px" class="filter-item">
-                <el-option label="请选择" value=""/>
-                <el-option
-                  v-for="item in departmentList"
-                  :key="item.departmentId"
-                  :label="item.departmentName"
-                  :value="item.departmentId"/>
-              </el-select>
+              {{ addForm.departmentName }}
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="应聘职位：">
-              <el-select v-model="addForm.jobId" disabled placeholder="请选择" clearable style="width: 200px" class="filter-item">
-                <el-option label="请选择" value=""/>
-                <el-option v-for="item in jobList" :key="item.key" :label="item.lable" :value="item.key"/>
-              </el-select>
+              {{ addForm.jobName }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -169,7 +159,7 @@ import {
   getResumeDatabaseById
 } from '@/api/hr/resumeDatabase'
 import {
-  getDepartMents, getCode
+  getCode
 } from '@/api/hr/util'
 
 export default {
@@ -240,20 +230,6 @@ export default {
       this.$router.push('resumeDatabaseList')
     },
     initSelect() {
-      getDepartMents().then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-      getCode({ 'groupCode': 'job', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
-        if (res.data.code === '0000') {
-          this.jobList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
       getCode({ 'groupCode': 'education', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
         if (res.data.code === '0000') {
           this.educationList = res.data.data

@@ -30,7 +30,7 @@
         <if test="progress != null and progress != '' ">
         AND t.progress = #{progress,jdbcType=DECIMAL} <!-- 进度（默认为0 ， 0 正常， 1 提前， 2 延迟 ）-->
         </if>
-        ORDER BY #{orderByClause}
+        ORDER BY ${orderByClause}
     </select>
 
 

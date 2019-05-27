@@ -30,7 +30,7 @@
         </el-table-column>
         <el-table-column label="考勤类型" align="center" prop="attendanceType" style="width: 120px">
           <template slot-scope="scope">
-            <el-input v-if="!scope.row.disabled" v-model="scope.row.attendanceType" :disabled="scope.row.disabled" placeholder="" clearable/>
+            <el-input v-if="!scope.row.disabled" v-model.trim="scope.row.attendanceType" :disabled="scope.row.disabled" placeholder="" clearable/>
             <span v-else>{{ scope.row.attendanceType }}</span>
           </template>
         </el-table-column>
@@ -69,7 +69,7 @@
 
         <el-table-column label="备注" align="center" prop="remark">
           <template slot-scope="scope">
-            <el-input v-if="!scope.row.disabled" v-model="scope.row.remark" :disabled="scope.row.disabled" style="width: 200px" placeholder="" clearable/>
+            <el-input v-if="!scope.row.disabled" v-model.trim="scope.row.remark" :disabled="scope.row.disabled" style="width: 200px" placeholder="" clearable/>
             <span v-else>{{ scope.row.remark }}</span>
           </template>
         </el-table-column>

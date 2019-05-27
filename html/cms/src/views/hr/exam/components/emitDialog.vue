@@ -11,7 +11,7 @@
           <el-form-item label="邮件内容">
             <div class="editor-container">
               <div v-show="false" id="vueQrEmint">
-                <vue-qr :size="191" :margin="0" :auto-color="true" :dot-scale="1" :text="returnData.examinaUrl" />
+                <vue-qr :size="191" :margin="0" :auto-color="true" :dot-scale="1" :text="returnData.examinaUrl+'&token='+token" />
               </div>
               <UE ref="ue" :default-msg="formData.emailContent" :config="config" />
             </div>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
 import VueQr from 'vue-qr'
 import {
   examLoginManagement,
@@ -45,6 +46,7 @@ export default {
   props: ['examItem'],
   data() {
     return {
+      token: '',
       // 富文本
       config: {
         initialFrameWidth: '100%',
@@ -65,6 +67,7 @@ export default {
     }
   },
   mounted() {
+    this.token = getToken()
     this.init()
   },
   methods: {

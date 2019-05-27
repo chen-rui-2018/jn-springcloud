@@ -28,6 +28,21 @@
 		</if>
 	</select>
 	
+	 <select id="obtainMap" parameterType="com.jn.hr.attendance.model.AttendanceSchedulPage"
+		resultType="com.jn.hr.attendance.model.AttendanceSchedulVo">
+		SELECT * FROM tb_manpower_attendance_schedul t1
+		where t1.record_status = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(startDate)">
+            and t1.schedul_month &gt;=#{startDate,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(endDate)">
+            and t1.schedul_month &lt;=#{endDate,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(schedulMonth)">
+            and t1.schedul_month =#{schedulMonth,jdbcType=VARCHAR}
+        </if>
+	</select>
+	
 	<select id="selectBySchedulMonth" parameterType="com.jn.hr.attendance.model.AttendanceSchedulPage"
 		resultType="com.jn.hr.attendance.model.AttendanceSchedulVo">
 		SELECT * FROM tb_manpower_attendance_schedul t1

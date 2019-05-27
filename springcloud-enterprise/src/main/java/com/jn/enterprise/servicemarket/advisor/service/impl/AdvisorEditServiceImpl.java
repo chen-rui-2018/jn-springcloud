@@ -22,6 +22,7 @@ import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
 import org.apache.axis.client.HappyClient;
 import org.apache.poi.ss.formula.functions.T;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -83,7 +84,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      */
     @ServiceLog(doAction = "判断当前登录用户认证顾问的状态")
     @Override
-    public  Map<Integer,String> getUserApprovalStatus(String loginAccount) {
+    public  AdvisorApprovalStatus getUserApprovalStatus(String loginAccount) {
         //已拒绝和已解除可以再次认证
         List<String> noApprovalStatus= Arrays.asList(ApprovalStatusEnum.REFUSED.getValue(),ApprovalStatusEnum.LIFTED.getValue());
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
@@ -91,27 +92,32 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
                 .andApprovalStatusNotIn(noApprovalStatus)
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceAdvisor> tbServiceAdvisors = tbServiceAdvisorMapper.selectByExample(example);
-        Map<Integer,String>map=new HashMap<>();
+        AdvisorApprovalStatus advisorApprovalStatus=new AdvisorApprovalStatus();
         if(tbServiceAdvisors.isEmpty()){
-            map.put(0, "未认证");
-            return map;
+            advisorApprovalStatus.setApprovalStatus(0);
+            advisorApprovalStatus.setApprovalDesc("未认证");
+            return advisorApprovalStatus;
         }
         //审批状态
         String approvalStatus=tbServiceAdvisors.get(0).getApprovalStatus();
         if(StringUtils.equals(ApprovalStatusEnum.NOT_APPROVED.getValue(),approvalStatus)){
             //未认证
-            map.put(0, "未认证");
+            advisorApprovalStatus.setApprovalStatus(0);
+            advisorApprovalStatus.setApprovalDesc("未认证");
         }else if(StringUtils.equals(ApprovalStatusEnum.APPROVAL.getValue(),approvalStatus)){
             //认证中
-            map.put(1, "认证中");
+            advisorApprovalStatus.setApprovalStatus(1);
+            advisorApprovalStatus.setApprovalDesc("认证中");
         }else if(StringUtils.equals(ApprovalStatusEnum.APPROVED.getValue(),approvalStatus)){
             //认证通过
-            map.put(2, "认证通过");
+            advisorApprovalStatus.setApprovalStatus(2);
+            advisorApprovalStatus.setApprovalDesc("认证通过");
         }else if(StringUtils.equals(ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue(),approvalStatus)){
             //认证不通过
-            map.put(3, "认证不通过");
+            advisorApprovalStatus.setApprovalStatus(3);
+            advisorApprovalStatus.setApprovalDesc("认证不通过");
         }
-        return map;
+        return advisorApprovalStatus;
     }
 
     /**

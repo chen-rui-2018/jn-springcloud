@@ -1,6 +1,6 @@
 package com.jn.system.dept.dao;
 
-import com.jn.system.dept.model.SysPost;
+import com.jn.system.model.SysPost;
 import com.jn.system.dept.model.SysPostPage;
 
 import java.util.List;
@@ -27,4 +27,11 @@ public interface SysPostMapper {
      * @return
      */
     List<SysPost> findByPage(SysPostPage sysPostPage);
+
+    /**
+     * 获取所有岗位信息
+     *
+     * @return
+     */
+    List<SysPost> getPostAll();
 }

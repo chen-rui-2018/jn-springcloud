@@ -2,7 +2,7 @@ package com.jn.hr.attendance.enums;
 
 import com.jn.common.api.CodeAndMsg;
 
-public enum attendanceManageStatusEnums implements CodeAndMsg{
+public enum AttendanceManageStatusEnums implements CodeAndMsg{
 	EFFECTIVE("1","有效"),
     INVALID("2","无效"),
     SIGN_DETELE("0","标记删除"),
@@ -14,7 +14,7 @@ public enum attendanceManageStatusEnums implements CodeAndMsg{
 
     private String message;
 
-    attendanceManageStatusEnums(String code, String message) {
+    AttendanceManageStatusEnums(String code, String message) {
         this.code = code;
         this.message = message;
     }

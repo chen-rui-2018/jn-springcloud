@@ -20,6 +20,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class ResumeDatabaseController extends BaseController {
     @Autowired
     private ResumeDatabaseService resumeDatabaseService;
     @ControllerLog(doAction = "添加简历库")
-    //@RequiresPermissions("/hr/resumeData/addResumeData")
+    @RequiresPermissions("/hr/resumeData/addResumeData")
     @ApiOperation(value = "添加简历库", notes = "添加简历库")
     @PostMapping(value = "/addResumeData")
     public Result addResumeData(@Validated @RequestBody ResumeDatabaseAdd resumeDatabaseAdd) {
@@ -60,7 +61,7 @@ public class ResumeDatabaseController extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "修改简历库")
-    //@RequiresPermissions("/hr/resumeData/updateResumeData")
+    @RequiresPermissions("/hr/resumeData/updateResumeData")
     @ApiOperation(value = "修改简历库", notes = "修改简历库")
     @PostMapping(value = "/updateResumeData")
     public Result updateResumeData(@Validated @RequestBody ResumeDatabaseAdd resumeDatabaseAdd) {
@@ -71,7 +72,7 @@ public class ResumeDatabaseController extends BaseController {
     }
 
     @ControllerLog(doAction = "简历库列表")
-    //@RequiresPermissions("/hr/resumeData/list")
+    @RequiresPermissions("/hr/resumeData/list")
     @ApiOperation(value = "简历库列表", notes = "简历库列表")
     @PostMapping(value = "/list")
     public Result<PaginationData<List<ResumeDatabase>>> list(@Validated @RequestBody ResumeDatabasePage
@@ -81,7 +82,7 @@ public class ResumeDatabaseController extends BaseController {
     }
 
     @ControllerLog(doAction = "查询简历库详情")
-    //@RequiresPermissions("/hr/resumeData/getResumeDatabaseById")
+    @RequiresPermissions("/hr/resumeData/getResumeDatabaseById")
     @ApiOperation(value = "查询简历库详情", notes = "查询简历库详情")
     @GetMapping(value = "/getResumeDatabaseById")
     public Result<ResumeDatabase> getResumeDatabaseById(@RequestParam("id") String id) {
@@ -92,7 +93,7 @@ public class ResumeDatabaseController extends BaseController {
 
 
     @ControllerLog(doAction = "删除简历库")
-    //@RequiresPermissions("/hr/resumeData/delete")
+    @RequiresPermissions("/hr/resumeData/delete")
     @ApiOperation(value = "删除简历库", notes = "删除简历库")
     @GetMapping(value = "/delete")
     public Result delete(@RequestParam("id") String id) {
@@ -101,7 +102,7 @@ public class ResumeDatabaseController extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "通过简历")
-    //@RequiresPermissions("/hr/resumeData/passResumeDatabase")
+    @RequiresPermissions("/hr/resumeData/passResumeDatabase")
     @ApiOperation(value = "通过简历", notes = "通过简历")
     @GetMapping(value = "/passResumeDatabase")
     public Result passResumeDatabase(@RequestParam("id") String id) {
@@ -111,7 +112,7 @@ public class ResumeDatabaseController extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "淘汰简历")
-    //@RequiresPermissions("/hr/resumeData/notPassResumeDatabase")
+    @RequiresPermissions("/hr/resumeData/notPassResumeDatabase")
     @ApiOperation(value = "淘汰简历", notes = "淘汰简历")
     @GetMapping(value = "/notPassResumeDatabase")
     public Result notPassResumeDatabase(@RequestParam("id") String id) {
@@ -121,7 +122,7 @@ public class ResumeDatabaseController extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "完成简历背景调查")
-    //@RequiresPermissions("/hr/resumeData/finishBackgroundInvest")
+    @RequiresPermissions("/hr/resumeData/finishBackgroundInvest")
     @ApiOperation(value = "完成简历背景调查", notes = "完成简历背景调查")
     @PostMapping(value = "/finishBackgroundInvest")
     public Result finishBackgroundInvest(@Validated @RequestBody BackgroundInvestAdd backgroundInvestAdd) {
@@ -130,7 +131,7 @@ public class ResumeDatabaseController extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "导出简历库")
-    //@RequiresPermissions("/hr/resumeData/exportResumeDatabase")
+    @RequiresPermissions("/hr/resumeData/exportResumeDatabase")
     @ApiOperation(value = "导出简历库", notes = "导出简历库")
     @GetMapping(value = "/exportResumeDatabase")
     public void exportResumeDatabase(ResumeDatabasePage resumeDatabasePage,
@@ -149,7 +150,7 @@ public class ResumeDatabaseController extends BaseController {
     }
 
     @ControllerLog(doAction = "导入简历库")
-    //@RequiresPermissions("/hr/resumeData/importResumeDatabase")
+    @RequiresPermissions("/hr/resumeData/importResumeDatabase")
     @ApiOperation(value = "导入简历库", notes = "导入简历库")
     @PostMapping(value = "/importResumeDatabase")
     public Result<String> importResumeDatabase(@RequestParam("file") MultipartFile file) {
@@ -158,7 +159,7 @@ public class ResumeDatabaseController extends BaseController {
         return new Result<String>(str);
     }
     @ControllerLog(doAction = "下载简历库excel模板")
-    //@RequiresPermissions("/hr/resumeData/downLoadResumeDatabaseExcelTemplate")
+    @RequiresPermissions("/hr/resumeData/downLoadResumeDatabaseExcelTemplate")
     @ApiOperation(value = "下载简历库excel模板", notes = "下载简历库excel模板")
     @GetMapping(value = "/downLoadResumeDatabaseExcelTemplate")
     public ResponseEntity<byte[]> downLoadResumeDatabaseExcelTemplate() {

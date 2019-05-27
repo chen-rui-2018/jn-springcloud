@@ -158,25 +158,34 @@ export default {
           if (res.data.data.lastNumber.indexOf('+') !== -1) {
             this.imgs.wageNumberUpPng = true
             this.imgs.wageNumberDownPng = false
-          } else {
+          } else if (res.data.data.lastNumber.indexOf('-') !== -1) {
             this.imgs.wageNumberUpPng = false
             this.imgs.wageNumberDownPng = true
+          } else {
+            this.imgs.wageNumberUpPng = false
+            this.imgs.wageNumberDownPng = false
           }
           this.salaryAnalysis.lastDeserveWage = res.data.data.lastDeserveWage
           if (res.data.data.lastDeserveWage.indexOf('+') !== -1) {
             this.imgs.deserveWageNumberUpPng = true
             this.imgs.deserveWageNumberDownPng = false
-          } else {
+          } else if (res.data.data.lastDeserveWage.indexOf('-') !== -1) {
             this.imgs.deserveWageNumberUpPng = false
             this.imgs.deserveWageNumberDownPng = true
+          } else {
+            this.imgs.deserveWageNumberUpPng = false
+            this.imgs.deserveWageNumberDownPng = false
           }
           this.salaryAnalysis.lastRealWage = res.data.data.lastRealWage
           if (res.data.data.lastRealWage.indexOf('+') !== -1) {
             this.imgs.realWageNumberUpPng = true
             this.imgs.realWageNumberDownPng = false
-          } else {
+          } else if (res.data.data.lastRealWage.indexOf('-') !== -1) {
             this.imgs.realWageNumberUpPng = false
             this.imgs.realWageNumberDownPng = true
+          } else {
+            this.imgs.realWageNumberUpPng = false
+            this.imgs.realWageNumberDownPng = false
           }
         } else {
           this.$message.error(res.data.result)

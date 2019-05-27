@@ -24,13 +24,19 @@ public interface ExaminaResultInfoMapper {
 	 * @param page
 	 * @return
 	 */
-	List<Integer> listAchievement();
+	List<Integer> listAchievement(@Param("examinaId") String examinaId);
 
 	/**查询答题人个数
 	 * @param examinaId
 	 * @return
 	 */
 	int resultCount(@Param("examinaId") String examinaId);
+
+	/**更新等级
+	 * @param resultInfo
+	 * @return
+	 */
+	int updateBatch(TbManpowerExaminaResultInfo resultInfoList);
 
 	/**
 	 * 查询当前用户情况

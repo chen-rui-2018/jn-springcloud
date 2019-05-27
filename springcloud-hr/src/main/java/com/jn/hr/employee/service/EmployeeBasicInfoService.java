@@ -1,6 +1,7 @@
 package com.jn.hr.employee.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.hr.archives.model.TreeModel;
 import com.jn.hr.employee.model.EmployeeBasicInfo;
 import com.jn.hr.employee.model.EmployeeBasicInfoAdd;
 import com.jn.hr.employee.model.EmployeeBasicInfoPage;
@@ -44,4 +45,8 @@ public interface EmployeeBasicInfoService {
 
 
     void updateEmployStatus(String id, String employStatus, User user);
+
+
+
+
 }

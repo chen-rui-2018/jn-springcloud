@@ -1465,6 +1465,76 @@ public class TbPropagandaCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andViewCountIsNull() {
+            addCriterion("view_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountIsNotNull() {
+            addCriterion("view_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountEqualTo(String value) {
+            addCriterion("view_count =", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountNotEqualTo(String value) {
+            addCriterion("view_count <>", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountGreaterThan(String value) {
+            addCriterion("view_count >", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountGreaterThanOrEqualTo(String value) {
+            addCriterion("view_count >=", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountLessThan(String value) {
+            addCriterion("view_count <", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountLessThanOrEqualTo(String value) {
+            addCriterion("view_count <=", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountLike(String value) {
+            addCriterion("view_count like", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountNotLike(String value) {
+            addCriterion("view_count not like", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountIn(List<String> values) {
+            addCriterion("view_count in", values, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountNotIn(List<String> values) {
+            addCriterion("view_count not in", values, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountBetween(String value1, String value2) {
+            addCriterion("view_count between", value1, value2, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountNotBetween(String value1, String value2) {
+            addCriterion("view_count not between", value1, value2, "viewCount");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderCodeIsNull() {
             addCriterion("order_code is null");
             return (Criteria) this;

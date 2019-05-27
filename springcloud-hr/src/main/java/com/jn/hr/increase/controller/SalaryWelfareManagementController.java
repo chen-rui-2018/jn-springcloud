@@ -3,12 +3,12 @@ package com.jn.hr.increase.controller;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,6 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.excel.ExcelUtil;
-import com.jn.hr.common.util.HrDataUtil;
 import com.jn.hr.increase.enums.SalaryManagementExceptionEnums;
 import com.jn.hr.increase.model.IncreaseStaff;
 import com.jn.hr.increase.model.IncreaseStaffAdd;
@@ -74,7 +73,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	
 	
 	@ControllerLog(doAction = "分页查询薪资信息")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquireSalaryInfo")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquireSalaryInfo")
 	@ApiOperation(value = "分页查询薪资信息", notes = "分页查询薪资信息")
     @RequestMapping(value = "/paginationInquireSalaryInfo", method = RequestMethod.POST)
 	public Result<PaginationData<List<SalaryInfo>>> paginationInquireSalaryInfo(@Validated @RequestBody SalaryInfoPage salaryInfoPage){
@@ -83,7 +82,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "添加薪资信息")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/addSalaryInfo")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/addSalaryInfo")
 	@ApiOperation(value = "添加薪资信息", notes = "添加薪资信息")
     @RequestMapping(value = "/addSalaryInfo", method = RequestMethod.POST)
 	public Result<String> addSalaryInfo(@Validated @RequestBody SalaryInfoAdd salaryInfoAdd){
@@ -93,7 +92,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "修改薪资信息")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/updateSalaryInfo")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/updateSalaryInfo")
 	@ApiOperation(value = "修改薪资信息", notes = "修改薪资信息")
     @RequestMapping(value = "/updateSalaryInfo", method = RequestMethod.POST)
 	public Result<String> updateSalaryInfo(@Validated @RequestBody SalaryInfoAdd salaryInfoAdd){
@@ -103,7 +102,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导入薪资信息")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/importSalaryInfo")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/importSalaryInfo")
 	@ApiOperation(value = "导入薪资信息", notes = "导入薪资信息")
     @RequestMapping(value = "/importSalaryInfo", method = RequestMethod.POST)
 	public Result<String> importSalaryInfo(@RequestParam("file") MultipartFile file){
@@ -113,7 +112,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出薪资信息")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/exportSalarInfo")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/exportSalarInfo")
 	@ApiOperation(value = "导出薪资信息", notes = "导出薪资信息")
     @RequestMapping(value = "/exportSalarInfo", method = RequestMethod.GET)
 	public void exportSalarInfo(SalaryInfoPage salaryInfo, HttpServletResponse response){
@@ -133,7 +132,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "查询薪资信息详情")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/getSalaryInfoById")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/getSalaryInfoById")
 	@ApiOperation(value = "查询薪资信息详情", notes = "查询薪资信息详情")
     @RequestMapping(value = "/getSalaryInfoById", method = RequestMethod.POST)
 	public Result<SalaryInfo> getSalaryInfoById(@Validated @RequestBody SalaryInfoPage salaryInfo){
@@ -143,7 +142,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "发放工资页面查询")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquirePayroll")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquirePayroll")
 	@ApiOperation(value = "发放工资页面查询", notes = "发放工资页面查询")
     @RequestMapping(value = "/paginationInquirePayroll", method = RequestMethod.POST)
 	public Result<PaginationData<List<SalaryPayrollVo>>> paginationInquirePayroll(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage){
@@ -152,7 +151,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导入工资条")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/importPayroll")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/importPayroll")
 	@ApiOperation(value = "导入工资条", notes = "导入工资条")
     @RequestMapping(value = "/importPayroll", method = RequestMethod.POST)
 	public Result<String> importPayroll(@RequestParam("file") MultipartFile file){
@@ -162,7 +161,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出工资条信息")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/exportPayroll")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/exportPayroll")
 	@ApiOperation(value = "导出工资条信息", notes = "导出工资条信息")
     @RequestMapping(value = "/exportPayroll", method = RequestMethod.GET)
 	public void exportPayroll(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage, HttpServletResponse response){
@@ -178,7 +177,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "修改工资条")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/updatePayroll")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/updatePayroll")
 	@ApiOperation(value = "修改工资条", notes = "修改工资条")
     @RequestMapping(value = "/updatePayroll", method = RequestMethod.POST)
 	public Result<String> updatePayroll(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage){
@@ -187,7 +186,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "薪酬分析")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/salaryAnalysis")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/salaryAnalysis")
 	@ApiOperation(value = "薪酬分析", notes = "薪酬分析")
     @RequestMapping(value = "/salaryAnalysis", method = RequestMethod.POST)
 	public Result<SalaryAnalysis> salaryAnalysis(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage){
@@ -196,7 +195,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}	
 	
 	@ControllerLog(doAction = "下载薪资表excel模板")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/downLoadSalaryInfoExcelTemplate")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/downLoadSalaryInfoExcelTemplate")
     @ApiOperation(value = "下载薪资表excel模板", notes = "下载薪资表excel模板")
     @RequestMapping(value = "/downLoadSalaryInfoExcelTemplate", method = RequestMethod.GET)
     public ResponseEntity<byte[]> downLoadSalaryInfoExcelTemplate() {
@@ -216,7 +215,7 @@ public class SalaryWelfareManagementController extends BaseController{
     }
     
     @ControllerLog(doAction = "下载参保明细表excel模板")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/downLoadInsuredDetailExcelTemplate")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/downLoadInsuredDetailExcelTemplate")
     @ApiOperation(value = "下载参保明细表excel模板", notes = "下载参保明细表excel模板")
     @RequestMapping(value = "/downLoadInsuredDetailExcelTemplate", method = RequestMethod.GET)
     public ResponseEntity<byte[]> downLoadInsuredDetailExcelTemplate() {
@@ -242,7 +241,7 @@ public class SalaryWelfareManagementController extends BaseController{
     
     
     @ControllerLog(doAction = "分页查询参保信息")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquireWelfareInfo")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquireWelfareInfo")
 	@ApiOperation(value = "分页查询参保信息", notes = "分页查询参保信息")
     @RequestMapping(value = "/paginationInquireWelfareInfo", method = RequestMethod.POST)
 	public Result<PaginationData<List<InsureManagement>>> paginationInquireWelfareInfo(@Validated @RequestBody InsureManagementPage insureManagementPage){
@@ -251,7 +250,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "添加次月账单")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/addNextMonth")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/addNextMonth")
 	@ApiOperation(value = "添加次月账单", notes = "添加次月账单")
 	@RequestMapping(value = "/addNextMonth", method = RequestMethod.POST)
 	public Result addNextMonth(){
@@ -260,7 +259,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导入历史参保记录")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/importHistoryInsuranceRecord")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/importHistoryInsuranceRecord")
 	@ApiOperation(value = "导入历史参保记录", notes = "导入历史参保记录")
 	@RequestMapping(value = "/importHistoryInsuranceRecord", method = RequestMethod.POST)
 	public Result<String> importHistoryInsuranceRecord(@RequestParam("file") MultipartFile file){
@@ -270,7 +269,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "分页查询增员计划")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/inquireAttritionPlan")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/inquireAttritionPlan")
 	@ApiOperation(value = "分页查询增员计划", notes = "分页查询增员计划")
 	@RequestMapping(value = "/inquireAttritionPlan", method = RequestMethod.POST)
 	public Result<PaginationData<List<IncreaseStaff>>> inquireAttritionPlan(@Validated @RequestBody IncreaseStaffPage increaseStaffPage){
@@ -279,7 +278,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "添加增员计划")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/addOrDeleteAttritionPlan")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/addOrDeleteAttritionPlan")
 	@ApiOperation(value = "添加增员计划", notes = "添加增员计划")
 	@RequestMapping(value = "/addOrDeleteAttritionPlan", method = RequestMethod.POST)
 	public Result<String> addOrDeleteAttritionPlan(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd){
@@ -289,7 +288,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "取消")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/deleteAttritionPlan")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/deleteAttritionPlan")
 	@ApiOperation(value = "取消", notes = "取消")
 	@RequestMapping(value = "/deleteAttritionPlan", method = RequestMethod.POST)
 	public Result<String> deleteAttritionPlan(@Validated @RequestBody IncreaseStaffPage increaseStaffPage){;
@@ -298,7 +297,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "修改项目基数")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/updateInsuredCardinalNumber")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/updateInsuredCardinalNumber")
 	@ApiOperation(value = "修改项目基数", notes = "修改项目基数")
 	@RequestMapping(value = "/updateInsuredCardinalNumber", method = RequestMethod.POST)
 	public Result<String> updateInsuredCardinalNumber(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
@@ -308,7 +307,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "参保明细页面")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquireInsuranceRecord")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquireInsuranceRecord")
 	@ApiOperation(value = "参保明细页面", notes = "参保明细页面")
 	@RequestMapping(value = "/paginationInquireInsuranceRecord", method = RequestMethod.POST)
 	public Result<PaginationData<List<InsuredDetaild>>> paginationInquireInsuranceRecord(@Validated @RequestBody InsuredDetaildPage insuredDetaildPage){
@@ -317,7 +316,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "参保明细附属页面")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/insuredDetailedSubsidiary")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/insuredDetailedSubsidiary")
 	@ApiOperation(value = "参保明细附属页面", notes = "参保明细附属页面")
 	@RequestMapping(value = "/insuredDetailedSubsidiary", method = RequestMethod.POST)
 	public Result<InsureManagement> insuredDetailedSubsidiary(@Validated @RequestBody InsuredDetaildPage insuredDetaildPage){
@@ -326,7 +325,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出参保明细")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/exportInsuranceRecord")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/exportInsuranceRecord")
 	@ApiOperation(value = "导出参保明细", notes = "导出参保明细")
 	@RequestMapping(value = "/exportInsuranceRecord", method = RequestMethod.GET)
 	public void exportInsuranceRecord(InsuredDetaildPage insuredDetaildPage, HttpServletResponse response){
@@ -342,7 +341,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	
 	
 	@ControllerLog(doAction = "停止参保")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/stopInsurance")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/stopInsurance")
 	@ApiOperation(value = "停止参保", notes = "停止参保")
 	@RequestMapping(value = "/stopInsurance", method = RequestMethod.POST)
 	public Result<String> stopInsurance(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd){
@@ -352,7 +351,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "自主参保方案页面")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquireInsurance")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/paginationInquireInsurance")
 	@ApiOperation(value = "自主参保方案页面", notes = "自主参保方案页面")
 	@RequestMapping(value = "/paginationInquireInsurance", method = RequestMethod.POST)
 	public Result<PaginationData<List<InsuredScheme>>> paginationInquireInsurance(@Validated @RequestBody InsuredSchemePage insuredSchemePage){
@@ -361,7 +360,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "修改参保方案")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/updateInsurancescheme")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/updateInsurancescheme")
 	@ApiOperation(value = "修改参保方案", notes = "修改参保方案")
 	@RequestMapping(value = "/updateInsurancescheme", method = RequestMethod.POST)
 	public Result<String> updateInsurancescheme(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
@@ -371,7 +370,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "参保方案页面明细")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/insuranceSchemeDetailed")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/insuranceSchemeDetailed")
 	@ApiOperation(value = "参保方案页面明细", notes = "参保方案页面明细")
 	@RequestMapping(value = "/insuranceSchemeDetailed", method = RequestMethod.POST)
 	public Result<InsuredScheme> insuranceSchemeDetailed(@Validated @RequestBody InsuredSchemePage insuredSchemePage){
@@ -381,7 +380,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "删除参保方案")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/deleteInsurancescheme")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/deleteInsurancescheme")
 	@ApiOperation(value = "删除参保方案", notes = "删除参保方案")
 	@RequestMapping(value = "/deleteInsurancescheme", method = RequestMethod.POST)
 	public Result<String> deleteInsurancescheme(@Validated @RequestBody InsuredSchemePage insuredSchemePage){
@@ -390,7 +389,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "添加参保方案")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/addInsurancescheme")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/addInsurancescheme")
 	@ApiOperation(value = "添加参保方案", notes = "添加参保方案")
 	@RequestMapping(value = "/addInsurancescheme", method = RequestMethod.POST)
 	public Result<String> addInsurancescheme(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
@@ -400,7 +399,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "参保概况")
-    //@RequiresPermissions("/hr/SalaryWelfareManagement/insuredOverview")
+    @RequiresPermissions("/hr/SalaryWelfareManagement/insuredOverview")
 	@ApiOperation(value = "参保概况", notes = "参保概况")
 	@RequestMapping(value = "/insuredOverview", method = RequestMethod.POST)
 	public Result<InsuredDetaild> insuredOverview(@Validated @RequestBody InsuredDetaildPage insuredDetaildPage){

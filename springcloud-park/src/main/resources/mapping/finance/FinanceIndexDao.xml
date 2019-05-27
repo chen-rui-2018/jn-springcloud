@@ -11,11 +11,13 @@
         tb_finance_expenses_month t
          where
         t.cost_happend_time between #{beginTime} and #{endTime}
+        AND t.record_status =1
         )/ (
         select
         SUM(t.budget_number)
         from
         tb_finance_total_budget t
+        where t.record_status =1
         ) * 100)) as "已支出/全年预算";
 
     </select>
@@ -130,12 +132,15 @@
         t.cost_after_type_name as "costftertypename",
         t.department_id  as "departmentid"
         FROM tb_finance_expenses_month t
-        where t.department_id = #{departmentId}  and t.cost_happend_time BETWEEN #{startTime} AND  #{endTime}
+        where t.department_id = #{departmentId}
+        AND t.record_status =1
+        and t.cost_happend_time BETWEEN #{startTime} AND  #{endTime}
         group by t.cost_after_type_id) t1
         inner  JOIN
         (select sum(t.budget_number) as "budgetnumber",
         department_id as "departmentid"
         from tb_finance_total_budget t
+        AND t.record_status =1
         group by t.department_id) t2
         ON t2.departmentid=t1.departmentid
     </select>

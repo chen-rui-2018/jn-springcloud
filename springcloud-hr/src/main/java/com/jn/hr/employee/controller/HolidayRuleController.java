@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class HolidayRuleController extends BaseController {
 
 
     @ControllerLog(doAction = "添加假期规则")
-    //@RequiresPermissions("/hr/holidayRule/addHolidayRule")
+    @RequiresPermissions("/hr/holidayRule/addHolidayRule")
     @ApiOperation(value = "添加假期规则", notes = "添加假期规则")
     @PostMapping(value = "/addHolidayRule")
     public Result addHolidayRule(@Validated @RequestBody HolidayRuleAdd holidayRuleAdd) {
@@ -62,7 +63,7 @@ public class HolidayRuleController extends BaseController {
         return new Result(ruleId);
     }
     @ControllerLog(doAction = "修改假期规则")
-    //@RequiresPermissions("/hr/holidayRule/updateHolidayRule")
+    @RequiresPermissions("/hr/holidayRule/updateHolidayRule")
     @ApiOperation(value = "修改假期规则", notes = "修改假期规则")
     @PostMapping(value = "/updateHolidayRule")
     public Result updateHolidayRule(@Validated @RequestBody HolidayRuleAdd holidayRuleAdd) {
@@ -74,7 +75,7 @@ public class HolidayRuleController extends BaseController {
 
 
     @ControllerLog(doAction = "查询假期规则列表")
-    //@RequiresPermissions("/hr/holidayRule/getHolidayRules")
+    @RequiresPermissions("/hr/holidayRule/getHolidayRules")
     @ApiOperation(value = "查询假期规则列表", notes = "查询假期规则列表")
     @PostMapping(value = "/getHolidayRules")
     public Result<List<HolidayRule>> getHolidayRules() {
@@ -84,7 +85,7 @@ public class HolidayRuleController extends BaseController {
 
 
     @ControllerLog(doAction = "删除假期规则")
-    //@RequiresPermissions("/hr/holidayRule/deleteHolidayRule")
+    @RequiresPermissions("/hr/holidayRule/deleteHolidayRule")
     @ApiOperation(value = "删除假期规则", notes = "删除假期规则")
     @GetMapping(value = "/deleteHolidayRule")
     public Result delete(@RequestParam("id") String departmentId) {
@@ -95,7 +96,7 @@ public class HolidayRuleController extends BaseController {
     }
 
     @ControllerLog(doAction = "假期审查列表")
-    //@RequiresPermissions("/hr/holidayRule/list")
+    @RequiresPermissions("/hr/holidayRule/list")
     @ApiOperation(value = "假期审查列表", notes = "假期审查列表")
     @PostMapping(value = "/list")
     public Result<PaginationData<List<EmployeeBasicInfo>>> list(@Validated @RequestBody EmployeeBasicInfoPage employeeBasicInfoPage) {
@@ -103,7 +104,7 @@ public class HolidayRuleController extends BaseController {
         return new Result(data);
     }
     @ControllerLog(doAction = "导出假期审查")
-    //@RequiresPermissions("/hr/holidayRule/exportEmployeHoliday")
+    @RequiresPermissions("/hr/holidayRule/exportEmployeHoliday")
     @ApiOperation(value = "导出假期审查", notes = "导出假期审查")
     @GetMapping(value = "/exportEmployeHoliday")
     public void exportEmployeHoliday(EmployeeBasicInfoPage employeeBasicInfoPage,
@@ -119,7 +120,7 @@ public class HolidayRuleController extends BaseController {
     }
 
     @ControllerLog(doAction = "假期查询")
-    //@RequiresPermissions("/hr/holidayRule/inquireVacationManage")
+    @RequiresPermissions("/hr/holidayRule/inquireVacationManage")
     @ApiOperation(value = "假期查询", notes = "假期查询")
     @PostMapping(value = "/inquireVacationManage")
     public Result<PaginationData<List<VacationManageVo>>> inquireVacationManage(@Validated @RequestBody VacationManagePage vacationManagePage) {
@@ -128,7 +129,7 @@ public class HolidayRuleController extends BaseController {
     }
     
     @ControllerLog(doAction = "假期修改")
-    //@RequiresPermissions("/hr/holidayRule/updateVacationManage")
+    @RequiresPermissions("/hr/holidayRule/updateVacationManage")
     @ApiOperation(value = "假期修改", notes = "假期修改")
     @PostMapping(value = "/updateVacationManage")
     public Result updateVacationManage(@Validated @RequestBody VacationManagePage vacationManagePage) {

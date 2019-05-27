@@ -185,30 +185,42 @@ export default {
           if (res.data.data.lastNumber.indexOf('+') !== -1) { // 参保人数
             this.imgs.insuredNumberUpPng = true
             this.imgs.insuredNumberDownPng = false
-          } else {
+          } else if (res.data.data.lastNumber.indexOf('-') !== -1) {
             this.imgs.insuredNumberUpPng = false
             this.imgs.insuredNumberDownPng = true
+          } else {
+            this.imgs.insuredNumberUpPng = false
+            this.imgs.insuredNumberDownPng = false
           }
           if (res.data.data.lastSocialSecurity.indexOf('+') !== -1) { // 社保费用
             this.imgs.socialSecurityUpPng = true
             this.imgs.socialSecurityDownPng = false
-          } else {
+          } else if (res.data.data.lastSocialSecurity.indexOf('-') !== -1) {
             this.imgs.socialSecurityUpPng = false
             this.imgs.socialSecurityDownPng = true
+          } else {
+            this.imgs.socialSecurityUpPng = false
+            this.imgs.socialSecurityDownPng = false
           }
           if (res.data.data.lastAccumulationFund.indexOf('+') !== -1) { // 公积金
             this.imgs.accumulationFundUpPng = true
             this.imgs.accumulationFundDownPng = false
-          } else {
+          } else if (res.data.data.lastAccumulationFund.indexOf('-') !== -1) {
             this.imgs.accumulationFundUpPng = false
             this.imgs.accumulationFundDownPng = true
+          } else {
+            this.imgs.accumulationFundUpPng = false
+            this.imgs.accumulationFundDownPng = false
           }
           if (res.data.data.lastTotalCost.indexOf('+') !== -1) { // 总费用
             this.imgs.totalCostUpPng = true
             this.imgs.totalCostDownPng = false
-          } else {
+          } else if (res.data.data.lastTotalCost.indexOf('-') !== -1) {
             this.imgs.totalCostUpPng = false
             this.imgs.totalCostDownPng = true
+          } else {
+            this.imgs.totalCostUpPng = false
+            this.imgs.totalCostDownPng = false
           }
         } else {
           this.$message.error(res.data.result)

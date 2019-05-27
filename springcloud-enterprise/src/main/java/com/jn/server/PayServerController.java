@@ -1,5 +1,6 @@
 package com.jn.server;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
@@ -15,6 +16,8 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +33,7 @@ import java.util.List;
  */
 @RestController
 public class PayServerController extends BaseController implements PayClient {
+    private static final Logger logger = LoggerFactory.getLogger(PayServerController.class);
 
     @Autowired
     private MyPayBillService myPayBillService;
@@ -91,6 +95,7 @@ public class PayServerController extends BaseController implements PayClient {
     @ControllerLog(doAction = "支付回调接口")
     @Override
     public Result payCallBack(@RequestBody PayOrderNotify callBackParam) {
+        logger.info("进入-支付回调接口，param:{}", JSONObject.toJSONString(callBackParam));
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         return new Result(myPayBillService.payCallBack(callBackParam,user));
     }

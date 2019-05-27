@@ -12,6 +12,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.github.binarywang.wxpay.util.SignUtils;
+import com.jn.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -258,7 +259,14 @@ public class PayChannel4WxController{
         String attach = null;
         String outTradeNo = payOrderId;
         String feeType = "CNY";
-        String spBillCreateIP = payOrder.getClientIp();
+        //终端IP
+        String spBillCreateIP ;
+        if(StringUtils.isBlank(payOrder.getClientIp())){
+            spBillCreateIP = XXPayUtil.getHostAddress();
+        }else{
+            spBillCreateIP = payOrder.getClientIp();
+        }
+
         String timeStart = null;
         //订单失效时间，格式为yyyyMMddHHmmss
         String timeExpire = createTimeExpire(payOrder.getDuration());

@@ -122,4 +122,16 @@ public interface MeterDao {
      */
     void saveGroupLogs(@Param("saveData") List<TbElectricEnergyGroupLog> saveData);
 
+    /**
+     * 保存账单明细
+     * @param saveData
+     */
+    void saveBillDetail(@Param("saveData") List<TbElectricEnergyBillDetail> saveData);
+
+    /**
+     * 保存表的每日业主关系
+     * @param saveData
+     */
+    void saveMeterLinkInDay(@Param("saveData") List<TbElectricMeterCompanyDay> saveData);
+
 }

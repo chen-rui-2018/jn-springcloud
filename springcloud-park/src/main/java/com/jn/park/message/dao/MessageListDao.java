@@ -1,6 +1,7 @@
 package com.jn.park.message.dao;
 
 import com.jn.park.message.model.*;
+import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,7 +13,10 @@ import java.util.List;
  */
 public interface MessageListDao {
 
-    List<MessageTowModel> getMessageOneTort(@Param("account") String account, @Param("messageOneTort") String messageOneTort);
+
+    List<MessageListModel> findAllList(@Param("messageOneSort") String messageOneSort,@Param("isRead") String isRead,@Param("account")  String account);
+
+    List<MessageTowListModel> getMessageOneTort(@Param("account") String account, @Param("messageOneTort") String messageOneTort);
 
 
     List<MessageListModel> findAllApp(@Param("messageOneSort") String messageOneSort,@Param("isRead") Integer isRead, @Param("account") String account);

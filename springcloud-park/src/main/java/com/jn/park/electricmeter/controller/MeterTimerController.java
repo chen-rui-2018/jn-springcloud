@@ -1,15 +1,12 @@
 package com.jn.park.electricmeter.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.Result;
 import com.jn.park.api.ElectricMeterClient;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
-import com.jn.park.electricmeter.service.MeterTimerService;
-import com.jn.park.message.model.AddMessageModel;
+import com.jn.park.electricmeter.service.MeterCalcCostService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
@@ -33,7 +30,7 @@ public class MeterTimerController extends BaseController implements ElectricMete
 
 
     @Autowired
-    private MeterTimerService meterTimerService;
+    private MeterCalcCostService meterTimerService;
 
     @ControllerLog(doAction = "电表数据定时采集接口")
     @Override
@@ -50,6 +47,11 @@ public class MeterTimerController extends BaseController implements ElectricMete
     @ControllerLog(doAction = "计算企业每日的电费")
     public void calcCostEverday(){
         meterTimerService.calcCostEverday();
+    }
+
+    @ControllerLog(doAction = "电表每日的业主")
+    public void setHostForMeter(){
+        meterService.setHostForMeter();
     }
 
 }

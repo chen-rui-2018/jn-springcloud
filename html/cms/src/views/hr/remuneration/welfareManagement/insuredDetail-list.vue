@@ -130,9 +130,11 @@ export default {
   },
   watch: {
     'listQuery.name': function() {
+      this.listQuery.page = 1
       this.reflushList()
     },
     'listQuery.departmentId': function() {
+      this.listQuery.page = 1
       this.reflushList()
     }
   },

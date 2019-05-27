@@ -7,11 +7,13 @@ public class TbManpowerAttendanceManagement implements Serializable {
 
     private String jobNumber;
 
+    private String userId;
+
+    private String departmentId;
+
     private String department;
 
     private String name;
-
-    private String userId;
 
     private Integer attendance;
 
@@ -37,7 +39,7 @@ public class TbManpowerAttendanceManagement implements Serializable {
 
     private Integer annualLeave;
 
-    private String attendanceDate;
+    private Integer attendanceDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -57,6 +59,22 @@ public class TbManpowerAttendanceManagement implements Serializable {
         this.jobNumber = jobNumber == null ? null : jobNumber.trim();
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId == null ? null : departmentId.trim();
+    }
+
     public String getDepartment() {
         return department;
     }
@@ -71,14 +89,6 @@ public class TbManpowerAttendanceManagement implements Serializable {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
     }
 
     public Integer getAttendance() {
@@ -177,12 +187,12 @@ public class TbManpowerAttendanceManagement implements Serializable {
         this.annualLeave = annualLeave;
     }
 
-    public String getAttendanceDate() {
+    public Integer getAttendanceDate() {
         return attendanceDate;
     }
 
-    public void setAttendanceDate(String attendanceDate) {
-        this.attendanceDate = attendanceDate == null ? null : attendanceDate.trim();
+    public void setAttendanceDate(Integer attendanceDate) {
+        this.attendanceDate = attendanceDate;
     }
 
     @Override
@@ -199,9 +209,10 @@ public class TbManpowerAttendanceManagement implements Serializable {
         TbManpowerAttendanceManagement other = (TbManpowerAttendanceManagement) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getJobNumber() == null ? other.getJobNumber() == null : this.getJobNumber().equals(other.getJobNumber()))
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
             && (this.getDepartment() == null ? other.getDepartment() == null : this.getDepartment().equals(other.getDepartment()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
             && (this.getAttendance() == null ? other.getAttendance() == null : this.getAttendance().equals(other.getAttendance()))
             && (this.getLate() == null ? other.getLate() == null : this.getLate().equals(other.getLate()))
             && (this.getLeaveEarly() == null ? other.getLeaveEarly() == null : this.getLeaveEarly().equals(other.getLeaveEarly()))
@@ -223,9 +234,10 @@ public class TbManpowerAttendanceManagement implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getJobNumber() == null) ? 0 : getJobNumber().hashCode());
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
         result = prime * result + ((getDepartment() == null) ? 0 : getDepartment().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
         result = prime * result + ((getAttendance() == null) ? 0 : getAttendance().hashCode());
         result = prime * result + ((getLate() == null) ? 0 : getLate().hashCode());
         result = prime * result + ((getLeaveEarly() == null) ? 0 : getLeaveEarly().hashCode());
@@ -250,9 +262,10 @@ public class TbManpowerAttendanceManagement implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", jobNumber=").append(jobNumber);
+        sb.append(", userId=").append(userId);
+        sb.append(", departmentId=").append(departmentId);
         sb.append(", department=").append(department);
         sb.append(", name=").append(name);
-        sb.append(", userId=").append(userId);
         sb.append(", attendance=").append(attendance);
         sb.append(", late=").append(late);
         sb.append(", leaveEarly=").append(leaveEarly);

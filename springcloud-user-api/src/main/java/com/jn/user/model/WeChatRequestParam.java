@@ -20,9 +20,8 @@ public class WeChatRequestParam implements Serializable {
     @Size(min=28,max=28,message = "请输入正确的28位openId")
     @NotNull(message = "openId不能为空")
     private String openId;
-    @ApiModelProperty(value = "unionId)",required = true)
-    @Size(min=29,max=29,message = "请输入正确的29位unionId")
-    @NotNull(message = "unionId不能为空")
+    @ApiModelProperty(value = "unionId)")
+    @Size(max=29,message = "unionId最大长度29位")
     private String unionId;
     @ApiModelProperty(value = "用户呢称)")
     private String nickName;

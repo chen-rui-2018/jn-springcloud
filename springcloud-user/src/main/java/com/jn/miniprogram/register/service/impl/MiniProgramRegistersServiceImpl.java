@@ -138,11 +138,14 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
             logger.warn("openId的长度不为28位");
             throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.OPEN_ID_FORMAT_ERROR);
         }
-        if(unionId.length()!=UNION_ID_LENGTH){
-            logger.warn("unionId的长度不为29位");
-            throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.UNION_ID_FORMAT_ERROR);
+        if(StringUtils.isNotBlank(unionId)){
+            if(unionId.length()!=UNION_ID_LENGTH){
+                logger.warn("unionId的长度不为29位");
+                throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.UNION_ID_FORMAT_ERROR);
+            }
         }
     }
+
 
     /**
      * openId在系统中的数据条数

@@ -9,14 +9,13 @@
         <img v-if="addForm.employeePortrait" :src="addForm.employeePortrait" class="avatar2">
       </div>
 
-
       <div class="head-right">
         <p v-if="!addForm.name">----</p>
-        <p v-else>{{addForm.name}}</p>
+        <p v-else>{{ addForm.name }}</p>
         <hr style="color:white;width:100%">
-        <p>部门：{{addForm.departmentName}}</p>
-        <p>入职日期：{{addForm.entryDate}}</p>
-        <p>司龄：{{companyYear}} 年</p>
+        <p>部门：{{ addForm.departmentName }}</p>
+        <p>入职日期：{{ addForm.entryDate }}</p>
+        <p>司龄：{{ companyYear }} 年</p>
       </div>
 
     </div>
@@ -28,23 +27,18 @@
         <div class="basic-info">
           <div>基础信息</div>
         </div>
-        <hr class="con-hr"/>
+        <hr class="con-hr">
 
         <el-row>
           <el-col :span="12">
             <el-form-item label="姓名：" prop="name">
-              <el-input v-model="addForm.name" style="width: 200px" placeholder="" clearable disabled></el-input>
+              <el-input v-model="addForm.name" style="width: 200px" placeholder="" clearable disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="部门：" prop="departmentId">
-              <el-select v-model="addForm.departmentId" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
-                <el-option label="请选择" value=""/>
-                <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName"
-                           :value="item.departmentId"/>
-              </el-select>
+              {{ addForm.departmentName }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -52,8 +46,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="职级：" prop="jobId">
-              <el-select v-model="addForm.jobId" placeholder="请选择" clearable style="width: 200px" class="filter-item"
-                         disabled>
+              <el-select
+                v-model="addForm.jobId"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option v-for="item in jobList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
@@ -61,12 +60,8 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="职务：" prop="postId">
-              <el-select v-model="addForm.postId" placeholder="请选择" clearable style="width: 200px" class="filter-item"
-                         disabled>
-                <el-option label="请选择" value=""/>
-                <el-option v-for="item in postList" :key="item.key" :label="item.lable" :value="item.key"/>
-              </el-select>
+            <el-form-item label="岗位：" prop="postId">
+              {{ addForm.postName }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -74,8 +69,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="证件类型：" prop="certificateId">
-              <el-select v-model="addForm.certificateId" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.certificateId"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option v-for="item in certificateList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
@@ -84,8 +84,12 @@
 
           <el-col :span="12">
             <el-form-item label="证件号：" prop="certificateNumber">
-              <el-input v-model="addForm.certificateNumber" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.certificateNumber"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -93,14 +97,19 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="工号：" prop="jobNumber">
-              <el-input v-model="addForm.jobNumber" disabled style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.jobNumber"
+                disabled
+                style="width: 200px"
+                placeholder=""
+                clearable
+              />
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="手机号码：" prop="phone">
-              <el-input v-model="addForm.phone" style="width: 200px" placeholder="" clearable disabled></el-input>
+              <el-input v-model="addForm.phone" style="width: 200px" placeholder="" clearable disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -108,8 +117,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="合同类型：" prop="contractId">
-              <el-select v-model="addForm.contractId" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.contractId"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option v-for="item in contractList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
@@ -118,8 +132,13 @@
 
           <el-col :span="12">
             <el-form-item label="员工类型：" prop="employeeType">
-              <el-select v-model="addForm.employeeType" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.employeeType"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option label="正式" value="1"/>
                 <el-option label="实习生" value="2"/>
@@ -133,18 +152,25 @@
             <el-form-item label="入职日期：" prop="entryDate">
               <el-date-picker
                 v-model="addForm.entryDate"
+                :picker-options="pickerOptions"
                 type="date"
                 placeholder="选择日期"
                 value-format="yyyy-MM-dd HH:mm:ss"
-                :picker-options="pickerOptions" style="width: 200px" clearable disabled>
-              </el-date-picker>
+                style="width: 200px"
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="性别：" prop="sex">
-              <el-select v-model="addForm.sex" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.sex"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option label="男" value="1"/>
                 <el-option label="女" value="2"/>
@@ -161,15 +187,21 @@
                 type="date"
                 placeholder="选择日期"
                 value-format="yyyy-MM-dd HH:mm:ss"
-                style="width: 200px" clearable disabled>
-              </el-date-picker>
+                style="width: 200px"
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="国籍：" prop="nationalityId">
-              <el-select v-model="addForm.nationalityId" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.nationalityId"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option v-for="item in nationalityList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
@@ -180,13 +212,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="工作地址：" prop="workAddress" disabled>
-              <el-input v-model="addForm.workAddress" style="width: 200px" placeholder="" clearable disabled></el-input>
+              <el-input v-model="addForm.workAddress" style="width: 200px" placeholder="" clearable disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="联系地址：" prop="contactAddress" disabled>
-              <el-input v-model="addForm.contactAddress" style="width: 200px" placeholder="" clearable disabled></el-input>
+              <el-input v-model="addForm.contactAddress" style="width: 200px" placeholder="" clearable disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -194,8 +226,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="员工状态：" prop="employStatus" disabled>
-              <el-select v-model="addForm.employStatus" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.employStatus"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option label="在职" value="1"/>
                 <el-option label="医疗期" value="2"/>
@@ -205,18 +242,16 @@
 
           <el-col :span="12">
             <el-form-item label="用户账号：" prop="userAccount">
-              <el-input v-model="addForm.userAccount" style="width: 200px" placeholder="请输入用户账号" clearable disabled></el-input>
+              <el-input v-model="addForm.userAccount" style="width: 200px" placeholder="请输入用户账号" clearable disabled/>
             </el-form-item>
           </el-col>
 
         </el-row>
 
-
         <div class="sub-basic-info">
-          <div class="line-green"></div>
+          <div class="line-green"/>
           <div style="float:left">合同信息</div>
         </div>
-
 
         <el-row>
           <el-col :span="12">
@@ -226,8 +261,9 @@
                 type="date"
                 placeholder="选择日期："
                 value-format="yyyy-MM-dd HH:mm:ss"
-                style="width: 200px" clearable disabled>
-              </el-date-picker>
+                style="width: 200px"
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
@@ -238,8 +274,9 @@
                 type="date"
                 placeholder="选择日期："
                 value-format="yyyy-MM-dd HH:mm:ss"
-                style="width: 200px" clearable disabled>
-              </el-date-picker>
+                style="width: 200px"
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -247,14 +284,18 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="工作邮箱：" prop="workMailbox">
-              <el-input v-model="addForm.workMailbox" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.workMailbox"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="工作电话：" prop="workPhone">
-              <el-input v-model="addForm.workPhone" style="width: 200px" placeholder="" clearable disabled></el-input>
+              <el-input v-model="addForm.workPhone" style="width: 200px" placeholder="" clearable disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -267,36 +308,44 @@
                 type="date"
                 placeholder="选择日期："
                 value-format="yyyy-MM-dd HH:mm:ss"
-                style="width: 200px" clearable disabled>
-              </el-date-picker>
+                style="width: 200px"
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="试用期：" prop="probationPeriod">
-              <el-input v-model="addForm.probationPeriod" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.probationPeriod"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
 
         <div class="sub-basic-info">
-          <div class="line-green"></div>
+          <div class="line-green"/>
           <div style="float:left">员工信息</div>
         </div>
-
 
         <el-row>
           <el-col :span="12">
             <el-form-item label="证件姓名：" prop="certificateName">
-              <el-input v-model="addForm.certificateName" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.certificateName"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="民族：" prop="nation">
-              <el-input v-model="addForm.nation" style="width: 200px" placeholder="" clearable disabled></el-input>
+              <el-input v-model="addForm.nation" style="width: 200px" placeholder="" clearable disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -304,8 +353,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="户口类型：" prop="registeredType">
-              <el-select v-model="addForm.registeredType" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.registeredType"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option label="城市" value="1"/>
                 <el-option label="农村" value="2"/>
@@ -315,8 +369,12 @@
 
           <el-col :span="12">
             <el-form-item label="户口所在地：" prop="registeredResidence">
-              <el-input v-model="addForm.registeredResidence" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.registeredResidence"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -324,15 +382,23 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="籍贯：" prop="nativePlace">
-              <el-input v-model="addForm.nativePlace" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.nativePlace"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="居住地址：" prop="residentialAddress">
-              <el-input v-model="addForm.residentialAddress" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.residentialAddress"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -340,8 +406,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="最高学历：" prop="highestAcademic">
-              <el-select v-model="addForm.highestAcademic" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.highestAcademic"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option v-for="item in academicList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
@@ -350,8 +421,13 @@
 
           <el-col :span="12">
             <el-form-item label="政治面貌：" prop="politicalOutlook">
-              <el-select v-model="addForm.politicalOutlook" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.politicalOutlook"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option label="党员" value="1"/>
                 <el-option label="团员" value="2"/>
@@ -364,8 +440,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="婚姻状态：" prop="maritalStatus">
-              <el-select v-model="addForm.maritalStatus" placeholder="请选择" clearable style="width: 200px"
-                         class="filter-item" disabled>
+              <el-select
+                v-model="addForm.maritalStatus"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option label="未婚" value="1"/>
                 <el-option label="已婚" value="2"/>
@@ -375,8 +456,12 @@
 
           <el-col :span="12">
             <el-form-item label="紧急联系人姓名：" prop="emergencyContactName">
-              <el-input v-model="addForm.emergencyContactName" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.emergencyContactName"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -384,14 +469,18 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="紧急联系人电话：" prop="emergencyContactPhone">
-              <el-input v-model="addForm.emergencyContactPhone" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.emergencyContactPhone"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="QQ：" prop="qq">
-              <el-input v-model="addForm.qq" style="width: 200px" placeholder="" clearable disabled></el-input>
+              <el-input v-model="addForm.qq" style="width: 200px" placeholder="" clearable disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -399,13 +488,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="微信：" prop="wechat">
-              <el-input v-model="addForm.wechat" style="width: 200px" placeholder="" clearable disabled></el-input>
+              <el-input v-model="addForm.wechat" style="width: 200px" placeholder="" clearable disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="个人邮箱：" prop="mailbox">
-              <el-input v-model="addForm.mailbox" style="width: 200px" placeholder="" clearable disabled></el-input>
+              <el-input v-model="addForm.mailbox" style="width: 200px" placeholder="" clearable disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -413,57 +502,73 @@
         <div class="basic-info">
           <div>教育经历</div>
         </div>
-        <hr class="con-hr"/>
+        <hr class="con-hr">
 
         <ul>
           <li v-for="(itemEducation,indexEducation) in addForm.educationExperienceList" :key="indexEducation">
             <div class="sub-basic-info">
-              <div class="delete-btn" v-if="indexEducation>0"></div>
-              <hr style="color:#DCDDDC"/>
-              <div class="line-green"></div>
+              <div v-if="indexEducation>0" class="delete-btn"/>
+              <hr style="color:#DCDDDC">
+              <div class="line-green"/>
               <div v-if="indexEducation==0" style="float:left">默认分组</div>
             </div>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="学校：" :prop="'educationExperienceList.' + indexEducation + '.school'"
+                <el-form-item
+                  :prop="'educationExperienceList.' + indexEducation + '.school'"
+                  label="学校："
                 >
-                  <el-input v-model="addForm.educationExperienceList[indexEducation].school" style="width: 200px"
-                            placeholder="" clearable disabled></el-input>
+                  <el-input
+                    v-model="addForm.educationExperienceList[indexEducation].school"
+                    style="width: 200px"
+                    placeholder=""
+                    clearable
+                    disabled/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
                 <el-form-item label="专业：" prop="major">
-                  <el-input v-model="addForm.educationExperienceList[indexEducation].major" style="width: 200px"
-                            placeholder="" clearable disabled></el-input>
+                  <el-input
+                    v-model="addForm.educationExperienceList[indexEducation].major"
+                    style="width: 200px"
+                    placeholder=""
+                    clearable
+                    disabled/>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="入校时间：" :prop="'educationExperienceList.' + indexEducation + '.admissionTime'"
+                <el-form-item
+                  :prop="'educationExperienceList.' + indexEducation + '.admissionTime'"
+                  label="入校时间："
                 >
                   <el-date-picker
                     v-model="addForm.educationExperienceList[indexEducation].admissionTime"
                     type="date"
                     placeholder="选择日期："
                     value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 200px" clearable disabled>
-                  </el-date-picker>
+                    style="width: 200px"
+                    clearable
+                    disabled/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
-                <el-form-item label="结业时间：" :prop="'educationExperienceList.' + indexEducation + '.completionTime'"
+                <el-form-item
+                  :prop="'educationExperienceList.' + indexEducation + '.completionTime'"
+                  label="结业时间："
                 >
                   <el-date-picker
                     v-model="addForm.educationExperienceList[indexEducation].completionTime"
                     type="date"
                     placeholder="选择日期："
                     value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 200px" clearable disabled>
-                  </el-date-picker>
+                    style="width: 200px"
+                    clearable
+                    disabled/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -471,9 +576,13 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="学历：" prop="educationCode">
-                  <el-select v-model="addForm.educationExperienceList[indexEducation].educationCode" placeholder="请选择"
-                             clearable style="width: 200px"
-                             class="filter-item" disabled>
+                  <el-select
+                    v-model="addForm.educationExperienceList[indexEducation].educationCode"
+                    placeholder="请选择"
+                    clearable
+                    style="width: 200px"
+                    class="filter-item"
+                    disabled>
                     <el-option label="请选择" value=""/>
                     <el-option v-for="item in academicList" :key="item.key" :label="item.lable" :value="item.key"/>
                   </el-select>
@@ -482,7 +591,7 @@
 
               <el-col :span="12">
                 <el-form-item label="是否取得学位：" prop="isAcademicDegree" disabled>
-                  <el-radio-group v-model="addForm.educationExperienceList[indexEducation].isAcademicDegree">
+                  <el-radio-group v-model="addForm.educationExperienceList[indexEducation].isAcademicDegree" disabled>
                     <el-radio :label="1">是</el-radio>
                     <el-radio :label="2">否</el-radio>
                   </el-radio-group>
@@ -493,84 +602,98 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="教育证书照1：" prop="certificateEducaUrlOne">
-                  <img v-if="addForm.educationExperienceList[indexEducation].certificateEducaUrlOne"
-                       :src="addForm.educationExperienceList[indexEducation].certificateEducaUrlOne" class="avatar">
+                  <img
+                    v-if="addForm.educationExperienceList[indexEducation].certificateEducaUrlOne"
+                    :src="addForm.educationExperienceList[indexEducation].certificateEducaUrlOne"
+                    class="avatar">
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
                 <el-form-item label="教育证书照2：" prop="certificateEducaUrlTwo">
-                  <img v-if="addForm.educationExperienceList[indexEducation].certificateEducaUrlTwo"
-                       :src="addForm.educationExperienceList[indexEducation].certificateEducaUrlTwo" class="avatar">
+                  <img
+                    v-if="addForm.educationExperienceList[indexEducation].certificateEducaUrlTwo"
+                    :src="addForm.educationExperienceList[indexEducation].certificateEducaUrlTwo"
+                    class="avatar">
                 </el-form-item>
               </el-col>
             </el-row>
           </li>
         </ul>
 
-        <div class="add-btn">
-          <i class="el-icon-plus" @click="addEducation()">添加教育经历</i>
-        </div>
-
-
         <div class="basic-info">
           <div>工作经历</div>
         </div>
-        <hr class="con-hr"/>
+        <hr class="con-hr">
 
         <ul>
           <li v-for="(workExperience,indexEducation) in addForm.workExperienceList" :key="indexEducation">
             <div class="sub-basic-info">
-              <div class="delete-btn" v-if="indexEducation>0">
-              </div>
-              <hr style="color:#DCDDDC"/>
-              <div class="line-green"></div>
+              <div v-if="indexEducation>0" class="delete-btn"/>
+              <hr style="color:#DCDDDC">
+              <div class="line-green"/>
               <div v-if="indexEducation==0" style="float:left">默认分组</div>
             </div>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="公司名称：" :prop="'workExperienceList.' + indexEducation + '.corporateName'"
+                <el-form-item
+                  :prop="'workExperienceList.' + indexEducation + '.corporateName'"
+                  label="公司名称："
                 >
-                  <el-input v-model="addForm.workExperienceList[indexEducation].corporateName"
-                            style="width: 200px"
-                            placeholder="" clearable disabled></el-input>
+                  <el-input
+                    v-model="addForm.workExperienceList[indexEducation].corporateName"
+                    style="width: 200px"
+                    placeholder=""
+                    clearable
+                    disabled/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
-                <el-form-item label="担任职位：" :prop="'workExperienceList.' + indexEducation + '.assumeOffice'"
+                <el-form-item
+                  :prop="'workExperienceList.' + indexEducation + '.assumeOffice'"
+                  label="担任职位："
                 >
-                  <el-input v-model="addForm.workExperienceList[indexEducation].assumeOffice"
-                            style="width: 200px"
-                            placeholder="" clearable disabled></el-input>
+                  <el-input
+                    v-model="addForm.workExperienceList[indexEducation].assumeOffice"
+                    style="width: 200px"
+                    placeholder=""
+                    clearable
+                    disabled/>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="入职日期：" :prop="'workExperienceList.' + indexEducation + '.entryDate'"
+                <el-form-item
+                  :prop="'workExperienceList.' + indexEducation + '.entryDate'"
+                  label="入职日期："
                 >
                   <el-date-picker
                     v-model="addForm.workExperienceList[indexEducation].entryDate"
                     type="date"
                     placeholder="选择日期："
                     value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 200px" clearable disabled>
-                  </el-date-picker>
+                    style="width: 200px"
+                    clearable
+                    disabled/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
-                <el-form-item label="离职日期：" :prop="'workExperienceList.' + indexEducation + '.leaveDate'"
+                <el-form-item
+                  :prop="'workExperienceList.' + indexEducation + '.leaveDate'"
+                  label="离职日期："
                 >
                   <el-date-picker
                     v-model="addForm.workExperienceList[indexEducation].leaveDate"
                     type="date"
                     placeholder="选择日期："
                     value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width: 200px" clearable disabled>
-                  </el-date-picker>
+                    style="width: 200px"
+                    clearable
+                    disabled/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -578,14 +701,19 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="职位描述：" prop="jobDescription">
-                  <el-input v-model="addForm.workExperienceList[indexEducation].jobDescription"
-                            style="width: 200px"
-                            placeholder="" clearable disabled></el-input>
+                  <el-input
+                    v-model="addForm.workExperienceList[indexEducation].jobDescription"
+                    style="width: 200px"
+                    placeholder=""
+                    clearable
+                    disabled/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
-                <el-form-item label="类型：" :prop="'workExperienceList.' + indexEducation + '.workType'"
+                <el-form-item
+                  :prop="'workExperienceList.' + indexEducation + '.workType'"
+                  label="类型："
                 >
                   <el-radio-group v-model="addForm.workExperienceList[indexEducation].workType" disabled>
                     <el-radio :label="1" disabled>社会实践</el-radio>
@@ -598,24 +726,31 @@
           </li>
         </ul>
 
-
         <div class="basic-info">
           <div>社保福利</div>
         </div>
-        <hr class="con-hr"/>
+        <hr class="con-hr">
 
         <el-row>
           <el-col :span="12">
             <el-form-item label="工资开户行：" prop="salaryBank">
-              <el-input v-model="addForm.socialSecurity.salaryBank" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.socialSecurity.salaryBank"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="工资卡号：" prop="salaryNumber">
-              <el-input v-model="addForm.socialSecurity.salaryNumber" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.socialSecurity.salaryNumber"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -623,15 +758,23 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="公积金账号：" prop="providentFundAccount">
-              <el-input v-model="addForm.socialSecurity.providentFundAccount" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.socialSecurity.providentFundAccount"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="公积金缴纳地：" prop="providentFundPayment">
-              <el-input v-model="addForm.socialSecurity.providentFundPayment" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.socialSecurity.providentFundPayment"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -639,40 +782,49 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="社保账号：" prop="socialSecurityAccount">
-              <el-input v-model="addForm.socialSecurity.socialSecurityAccount" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.socialSecurity.socialSecurityAccount"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="社保缴纳地：" prop="socialSecurityPayment">
-              <el-input v-model="addForm.socialSecurity.socialSecurityPayment" style="width: 200px" placeholder=""
-                        clearable disabled></el-input>
+              <el-input
+                v-model="addForm.socialSecurity.socialSecurityPayment"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
 
-
         <div class="basic-info">
           <div>荣誉墙</div>
         </div>
-        <hr class="con-hr"/>
+        <hr class="con-hr">
 
         <ul>
           <li v-for="(honorWall,indexEducation) in addForm.honorWallList" :key="indexEducation">
             <div class="sub-basic-info">
-              <div class="delete-btn" v-if="indexEducation>0">
-                <i class="el-icon-delete" @click="deleteHonorWall(indexEducation)"></i>
+              <div v-if="indexEducation>0" class="delete-btn">
+                <i class="el-icon-delete" @click="deleteHonorWall(indexEducation)"/>
               </div>
-              <hr style="color:#DCDDDC"/>
-              <div class="line-green"></div>
+              <hr style="color:#DCDDDC">
+              <div class="line-green"/>
               <div v-if="indexEducation==0" style="float:left">默认分组</div>
             </div>
             <el-row>
               <el-col :span="12">
                 <el-form-item label="图片：" prop="honoraryPictures">
-                  <img v-if="addForm.honorWallList[indexEducation].honoraryPictures"
-                       :src="addForm.honorWallList[indexEducation].honoraryPictures" class="avatar">
+                  <img
+                    v-if="addForm.honorWallList[indexEducation].honoraryPictures"
+                    :src="addForm.honorWallList[indexEducation].honoraryPictures"
+                    class="avatar">
                 </el-form-item>
               </el-col>
 
@@ -688,18 +840,21 @@
 
         </ul>
 
-
         <div class="sub-basic-info">
-          <div class="line-green"></div>
+          <div class="line-green"/>
           <div style="float:left">直属领导</div>
         </div>
-
 
         <el-row>
           <el-col :span="12">
             <el-form-item label="职级：" prop="directLeaderLevel">
-              <el-select v-model="addForm.directlyLeader.directLeaderLevel" placeholder="请选择" clearable
-                         style="width: 200px" class="filter-item" disabled>
+              <el-select
+                v-model="addForm.directlyLeader.directLeaderLevel"
+                placeholder="请选择"
+                clearable
+                style="width: 200px"
+                class="filter-item"
+                disabled>
                 <el-option label="请选择" value=""/>
                 <el-option v-for="item in jobList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
@@ -707,23 +862,21 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="职务：" prop="directLeadership">
-              <el-select v-model="addForm.directlyLeader.directLeadership" placeholder="请选择" clearable
-                         style="width: 200px" class="filter-item" disabled>
-                <el-option label="请选择" value=""/>
-                <el-option v-for="item in postList" :key="item.key" :label="item.lable" :value="item.key"/>
-              </el-select>
+            <el-form-item label="岗位：" prop="directLeadership">
+              {{ addForm.directlyLeader.directLeadershipName }}
             </el-form-item>
           </el-col>
         </el-row>
 
-
         <el-row>
           <el-col :span="12">
             <el-form-item label="姓名：" prop="directLeaderName">
-              <el-input v-model="addForm.directlyLeader.directLeaderName"
-                        style="width: 200px"
-                        placeholder="" clearable disabled></el-input>
+              <el-input
+                v-model="addForm.directlyLeader.directLeaderName"
+                style="width: 200px"
+                placeholder=""
+                clearable
+                disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -736,314 +889,292 @@
 
     </div>
 
-
   </div>
 
 </template>
 
 <script>
 
-  import {
-    getTreeList, getEmployeeBasicInfo
-  } from '@/api/hr/employeeBasicInfo'
-  import {
-    getCode
-  } from '@/api/hr/util'
-  import {getToken} from '@/utils/auth'
+import {
+  getEmployeeBasicInfo
+} from '@/api/hr/employeeBasicInfo'
+import {
+  getCode
+} from '@/api/hr/util'
 
-  export default {
-    data() {
-      return {
-        departmentList: [],
-        jobList: [],
-        postList: [],
-        certificateList: [],
-        contractList: [],
-        nationalityList: [],
-        academicList: [],
-        pickerOptions: {
-          shortcuts: [{
-            text: '今天',
-            onClick(picker) {
-              picker.$emit('pick', new Date());
-            }
-          }, {
-            text: '昨天',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit('pick', date);
-            }
-          }, {
-            text: '一周前',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', date);
-            }
-          }]
-        },
-        title: '员工花名册详情',
-        addForm: {
-          employStatus: '',
-          employeePortrait: '',
-          name: '',
-          departmentId: '',
-          departmentName: '',
-          jobId: '',
-          jobName: '',
-          postId: '',
-          postName: '',
-          certificateId: '',
-          certificateType: '',
-          certificateNumber: '',
-          jobNumber: '',
-          userAccount: '',
-          userId: '',
-          phone: '',
-          contractId: '',
-          contractName: '',
-          employeeType: '',
-          entryDate: '',
-          sex: '',
-          birthDate: '',
-          nationalityId: '',
-          nationalityName: '',
-          workAddress: '',
-          contactAddress: '',
-          startCurrent: '',
-          endCurrent: '',
-          workMailbox: '',
-          workPhone: '',
-          expirationDate: '',
-          probationPeriod: '',
-          certificateName: '',
-          nation: '',
-          registeredType: '',
-          registeredResidence: '',
-          nativePlace: '',
-          residentialAddress: '',
-          highestAcademic: '',
-          politicalOutlook: '',
-          maritalStatus: '',
-          emergencyContactName: '',
-          emergencyContactPhone: '',
-          qq: '',
-          wechat: '',
-          mailbox: '',
-          educationExperienceList: [{
-            school: '',
-            major: '',
-            admissionTime: '',
-            completionTime: '',
-            educationCode: '',
-            educationName: '',
-            isAcademicDegree: '',
-            certificateEducaUrlOne: '',
-            certificateEducaUrlTwo: '',
+export default {
+  data() {
+    return {
+      departmentList: [],
+      jobList: [],
+      postList: [],
+      certificateList: [],
+      contractList: [],
+      nationalityList: [],
+      academicList: [],
+      pickerOptions: {
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      title: '员工花名册详情',
+      addForm: {
+        employStatus: '',
+        employeePortrait: '',
+        name: '',
+        departmentId: '',
+        departmentName: '',
+        jobId: '',
+        jobName: '',
+        postId: '',
+        postName: '',
+        certificateId: '',
+        certificateType: '',
+        certificateNumber: '',
+        jobNumber: '',
+        userAccount: '',
+        userId: '',
+        phone: '',
+        contractId: '',
+        contractName: '',
+        employeeType: '',
+        entryDate: '',
+        sex: '',
+        birthDate: '',
+        nationalityId: '',
+        nationalityName: '',
+        workAddress: '',
+        contactAddress: '',
+        startCurrent: '',
+        endCurrent: '',
+        workMailbox: '',
+        workPhone: '',
+        expirationDate: '',
+        probationPeriod: '',
+        certificateName: '',
+        nation: '',
+        registeredType: '',
+        registeredResidence: '',
+        nativePlace: '',
+        residentialAddress: '',
+        highestAcademic: '',
+        politicalOutlook: '',
+        maritalStatus: '',
+        emergencyContactName: '',
+        emergencyContactPhone: '',
+        qq: '',
+        wechat: '',
+        mailbox: '',
+        educationExperienceList: [{
+          school: '',
+          major: '',
+          admissionTime: '',
+          completionTime: '',
+          educationCode: '',
+          educationName: '',
+          isAcademicDegree: '',
+          certificateEducaUrlOne: '',
+          certificateEducaUrlTwo: '',
+          jobNumber: ''
+        }],
+        workExperienceList: [
+          {
+            corporateName: '',
+            assumeOffice: '',
+            entryDate: '',
+            leaveDate: '',
+            jobDescription: '',
+            workType: '',
             jobNumber: ''
-          }],
-          workExperienceList: [
-            {
-              corporateName: '',
-              assumeOffice: '',
-              entryDate: '',
-              leaveDate: '',
-              jobDescription: '',
-              workType: '',
-              jobNumber: ''
-            }
-          ],
-          honorWallList: [
-            {
-              honoraryPictures: '',
-              honoraryFile: '',
-              jobNumber: ''
-            }
-          ],
-          directlyLeader: {
-            id: '',
-            jobNumber: '',
-            directLeaderLevel: '',
-            directLeaderLevelName: '',
-            directLeadership: '',
-            directLeadershipName: '',
-            directLeaderName: '',
-          },
-          socialSecurity: {
-            id: '',
-            jobNumber: '',
-            salaryBank: '',
-            salaryNumber: '',
-            providentFundAccount: '',
-            providentFundPayment: '',
-            socialSecurityAccount: '',
-            socialSecurityPayment: '',
           }
+        ],
+        honorWallList: [
+          {
+            honoraryPictures: '',
+            honoraryFile: '',
+            jobNumber: ''
+          }
+        ],
+        directlyLeader: {
+          id: '',
+          jobNumber: '',
+          directLeaderLevel: '',
+          directLeaderLevelName: '',
+          directLeadership: '',
+          directLeadershipName: '',
+          directLeaderName: ''
+        },
+        socialSecurity: {
+          id: '',
+          jobNumber: '',
+          salaryBank: '',
+          salaryNumber: '',
+          providentFundAccount: '',
+          providentFundPayment: '',
+          socialSecurityAccount: '',
+          socialSecurityPayment: ''
         }
       }
-    },
-    watch: {},
-    created() {
+    }
+  },
+  computed: {
+    companyYear() {
+      if (this.addForm.workExperienceList.length > 0) {
+        const startDateArr = this.addForm.workExperienceList.filter(item => {
+          return item.entryDate && item.leaveDate
+        }).map(item => item.entryDate)
+        const endDateArr = this.addForm.workExperienceList.filter(item => {
+          return item.entryDate && item.leaveDate
+        }).map(item => item.leaveDate)
+        startDateArr.sort((a, b) => {
+          return new Date(a).getTime() - new Date(b).getTime()
+        })
+        endDateArr.sort((a, b) => {
+          return new Date(a).getTime() - new Date(b).getTime()
+        })
+        const diff = new Date(endDateArr[endDateArr.length - 1]).getTime() - new Date(startDateArr[0]).getTime()
+        const diffYear = diff / 1000 / 86400 / 365
+        return diffYear < 0 ? 0 : parseInt(diffYear)
+      } else {
+        return 0
+      }
+    }
 
+  },
+  watch: {},
+  created() {
+
+  },
+  mounted() {
+    this.initJobList()
+    this.initCertificateList()
+    this.initContractList()
+    this.initNationalityList()
+    this.initAcademicList()
+    this.initDetail()
+  },
+  methods: {
+    cancel() {
+      this.$router.push('employeeBasicInfoList')
     },
-    computed: {
-      companyYear() {
-        if (this.addForm.workExperienceList.length > 0) {
-          const startDateArr = this.addForm.workExperienceList.filter(item => {
-            return item.entryDate && item.leaveDate
-          }).map(item => item.entryDate)
-          const endDateArr = this.addForm.workExperienceList.filter(item => {
-            return item.entryDate && item.leaveDate
-          }).map(item => item.leaveDate)
-          startDateArr.sort((a, b) => {
-            return new Date(a).getTime() - new Date(b).getTime();
-          })
-          endDateArr.sort((a, b) => {
-            return new Date(a).getTime() - new Date(b).getTime();
-          })
-          const diff = new Date(endDateArr[endDateArr.length - 1]).getTime() - new Date(startDateArr[0]).getTime()
-          const diffYear = diff / 1000 / 86400 / 365
-          return diffYear < 0 ? 0 : parseInt(diffYear)
+    initJobList() {
+      getCode({ 'groupCode': 'job', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
+        if (res.data.code === '0000') {
+          this.jobList = res.data.data
         } else {
-          return 0
+          this.$message.error(res.data.result)
         }
-      }
-
+      })
     },
-    methods: {
-      cancel() {
-        this.$router.push('employeeBasicInfoList')
-      },
-      initJobList() {
-        getCode({'groupCode': 'job', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr'}).then(res => {
+    initCertificateList() {
+      getCode({
+        'groupCode': 'certificate_type',
+        'parentGroupCode': 'employee',
+        'moduleCode': 'springcloud_hr'
+      }).then(res => {
+        if (res.data.code === '0000') {
+          this.certificateList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    },
+    initContractList() {
+      getCode({
+        'groupCode': 'contract',
+        'parentGroupCode': 'employee',
+        'moduleCode': 'springcloud_hr'
+      }).then(res => {
+        if (res.data.code === '0000') {
+          this.contractList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    },
+    initNationalityList() {
+      getCode({
+        'groupCode': 'nationality',
+        'parentGroupCode': 'employee',
+        'moduleCode': 'springcloud_hr'
+      }).then(res => {
+        if (res.data.code === '0000') {
+          this.nationalityList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    },
+    initAcademicList() {
+      getCode({
+        'groupCode': 'education',
+        'parentGroupCode': 'employee',
+        'moduleCode': 'springcloud_hr'
+      }).then(res => {
+        if (res.data.code === '0000') {
+          this.academicList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    },
+    initDetail() {
+      var query = this.$route.query
+      this.title = query.title
+      if (query.id) {
+        this.addForm.fileId = query.fileId
+        getEmployeeBasicInfo(query.id).then(res => {
           if (res.data.code === '0000') {
-            this.jobList = res.data.data
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      },
-      initPostList() {
-        getCode({'groupCode': 'post', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr'}).then(res => {
-          if (res.data.code === '0000') {
-            this.postList = res.data.data
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      },
-      initCertificateList() {
-        getCode({
-          'groupCode': 'certificate_type',
-          'parentGroupCode': 'employee',
-          'moduleCode': 'springcloud_hr'
-        }).then(res => {
-          if (res.data.code === '0000') {
-            this.certificateList = res.data.data
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      },
-      initContractList() {
-        getCode({
-          'groupCode': 'contract',
-          'parentGroupCode': 'employee',
-          'moduleCode': 'springcloud_hr'
-        }).then(res => {
-          if (res.data.code === '0000') {
-            this.contractList = res.data.data
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      },
-      initNationalityList() {
-        getCode({
-          'groupCode': 'nationality',
-          'parentGroupCode': 'employee',
-          'moduleCode': 'springcloud_hr'
-        }).then(res => {
-          if (res.data.code === '0000') {
-            this.nationalityList = res.data.data
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      },
-      initAcademicList() {
-        getCode({
-          'groupCode': 'education',
-          'parentGroupCode': 'employee',
-          'moduleCode': 'springcloud_hr'
-        }).then(res => {
-          if (res.data.code === '0000') {
-            this.academicList = res.data.data
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      },
-      initDepartMentList() {
-        getTreeList().then(res => {
-          if (res.data.code === '0000') {
-            this.departmentList = res.data.data
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      },
-      initDetail() {
-        var query = this.$route.query
-        this.title = query.title
-        if (query.id) {
-          this.addForm.fileId = query.fileId
-          getEmployeeBasicInfo(query.id).then(res => {
-            if (res.data.code === '0000') {
-              this.addForm = Object.assign({}, res.data.data)
-              if(!this.addForm.socialSecurity){
-                this.addForm.socialSecurity={
-                  id: '',
-                  jobNumber: '',
-                  salaryBank: '',
-                  salaryNumber: '',
-                  providentFundAccount: '',
-                  providentFundPayment: '',
-                  socialSecurityAccount: '',
-                  socialSecurityPayment: ''
-                }
+            this.addForm = Object.assign({}, res.data.data)
+            if (!this.addForm.socialSecurity) {
+              this.addForm.socialSecurity = {
+                id: '',
+                jobNumber: '',
+                salaryBank: '',
+                salaryNumber: '',
+                providentFundAccount: '',
+                providentFundPayment: '',
+                socialSecurityAccount: '',
+                socialSecurityPayment: ''
               }
-              if(!this.addForm.directlyLeader){
-                this.addForm.directlyLeader={
-                  id: '',
-                  jobNumber: '',
-                  directLeaderLevel: '',
-                  directLeaderLevelName: '',
-                  directLeadership: '',
-                  directLeadershipName: '',
-                  directLeaderName: ''
-                }
-              }
-
-            } else {
-              this.$message.error(res.data.result)
             }
-          })
-        }
+            if (!this.addForm.directlyLeader) {
+              this.addForm.directlyLeader = {
+                id: '',
+                jobNumber: '',
+                directLeaderLevel: '',
+                directLeaderLevelName: '',
+                directLeadership: '',
+                directLeadershipName: '',
+                directLeaderName: ''
+              }
+            }
+            this.addForm.employStatus = res.data.data.employStatus + ''
+          } else {
+            this.$message.error(res.data.result)
+          }
+        })
       }
-    },
-    mounted() {
-      this.initJobList()
-      this.initPostList()
-      this.initCertificateList()
-      this.initContractList()
-      this.initNationalityList()
-      this.initAcademicList()
-      this.initDepartMentList()
-      this.initDetail()
     }
   }
+}
 </script>
 
 <style lang="less">
@@ -1245,6 +1376,5 @@
   .file-download a:hover{
     color:red;
   }
-
 
 </style>

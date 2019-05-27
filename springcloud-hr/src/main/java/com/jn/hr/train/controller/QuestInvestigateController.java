@@ -21,6 +21,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,7 +48,7 @@ public class QuestInvestigateController extends BaseController {
 	private QuestInvestigateService investigateService;
 
 	@ControllerLog(doAction = "问卷调查-列表显示")
-	// @RequiresPermissions("/hr/train/listInvestigateQuest")
+	@RequiresPermissions("/hr/train/listInvestigateQuest")
 	@ApiOperation(value = "问卷项目信息列表", notes = "问卷调查功能")
 	@RequestMapping(value = "/listInvestigateQuest", method = RequestMethod.POST)
 	public Result<PaginationData<List<InvestigatesVo>>> listInvestigateQuest(
@@ -57,7 +58,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "项目详情")
-	// @RequiresPermissions("/hr/train/quest/selectInvestigateQuest")
+	@RequiresPermissions("/hr/train/quest/selectInvestigateQuest")
 	@ApiOperation(value = "项目详情", notes = "问卷调查-项目详情功能")
 	@RequestMapping(value = "/selectInvestigateQuest", method = RequestMethod.POST)
 	public Result<InvestigatesVo> selectInvestigateQuest(@Validated @RequestBody Investigate investigate) {
@@ -66,7 +67,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "新建项目及问题信息")
-	// @RequiresPermissions("/hr/train/quest/addInvestiageAndQuestionQuest")
+	@RequiresPermissions("/hr/train/quest/addInvestiageAndQuestionQuest")
 	@ApiOperation(value = "新建项目及问题信息", notes = "[问卷调查]新建项目及问题信息功能")
 	@RequestMapping(value = "/addInvestiageAndQuestionQuest", method = RequestMethod.POST)
 	public Result addInvestiageAndQuestionQuest(@Validated @RequestBody InvestigateAdd investigaAdd) {
@@ -125,7 +126,7 @@ public class QuestInvestigateController extends BaseController {
 	// }
 
 	@ControllerLog(doAction = "编辑项目详情")
-	// @RequiresPermissions("/hr/train/quest/updateInvestiageQuest")
+	@RequiresPermissions("/hr/train/quest/updateInvestiageQuest")
 	@ApiOperation(value = "编辑项目", notes = "[问卷调查]编辑项目功能")
 	@RequestMapping(value = "/updateInvestiageQuest", method = RequestMethod.POST)
 	public Result updateInvestiageQuest(@Validated @RequestBody Investigate investigaAdd) {
@@ -137,7 +138,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "编辑问卷项目题目-更新及修改")
-	// @RequiresPermissions("/hr/train/quest/updateQuestionQuest")
+	@RequiresPermissions("/hr/train/quest/updateQuestionQuest")
 	@ApiOperation(value = "编辑问卷项目题目-更新及修改", notes = "[问卷调查]编辑项目(编辑问卷问题)功能")
 	@RequestMapping(value = "/updateQuestionQuest", method = RequestMethod.POST)
 	public Result<String> updateQuestionQuest(@Validated @RequestBody InvestigateQuestion questionUpd) {
@@ -148,7 +149,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "编辑问卷项目题目-删除")
-	// @RequiresPermissions("/hr/train/quest/deleteQuestionQuest")
+	@RequiresPermissions("/hr/train/quest/deleteQuestionQuest")
 	@ApiOperation(value = "编辑问卷项目题目-删除", notes = "[问卷调查]编辑项目(编辑问卷问题)功能")
 	@RequestMapping(value = "/deleteQuestionQuest", method = RequestMethod.POST)
 	public Result deleteQuestionQuest(@Validated @RequestBody InvestigateQuestion questionUpd) {
@@ -159,7 +160,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "删除问卷")
-	// @RequiresPermissions("/hr/train/quest/daleteInvestigateQuest")
+	@RequiresPermissions("/hr/train/quest/daleteInvestigateQuest")
 	@ApiOperation(value = "删除问卷", notes = "删除问卷功能")
 	@RequestMapping(value = "/daleteInvestigateQuest", method = RequestMethod.POST)
 	public Result daleteInvestigateQuest(@Validated @RequestBody Investigate investigaDel) {
@@ -170,7 +171,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "结束问卷")
-	// @RequiresPermissions("/hr/train/quest/endInvestiageQuest")
+	@RequiresPermissions("/hr/train/quest/endInvestiageQuest")
 	@ApiOperation(value = "结束问卷", notes = "结束问卷功能")
 	@RequestMapping(value = "/endInvestiageQuest", method = RequestMethod.POST)
 	public Result endInvestiageQuest(@Validated @RequestBody Investigate investigaDel) {
@@ -181,7 +182,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "发放问卷")
-	// @RequiresPermissions("/hr/train/quest/sendInvestiageQuest")
+	@RequiresPermissions("/hr/train/quest/sendInvestiageQuest")
 	@ApiOperation(value = "发放问卷", notes = "发放问卷功能")
 	@RequestMapping(value = "/sendInvestiageQuest", method = RequestMethod.POST)
 	public Result sendInvestiageQuest(@Validated @RequestBody ResearchSetAdd researchSet) {
@@ -192,7 +193,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "问卷结果-汇总统计")
-	// @RequiresPermissions("/hr/train/quest/questionAnswerListQuest")
+	@RequiresPermissions("/hr/train/quest/questionAnswerListQuest")
 	@ApiOperation(value = "汇总统计", notes = "问卷结果功能")
 	@RequestMapping(value = "/questionAnswerListQuest", method = RequestMethod.POST)
 	public Result<List<AnswerVo>> questionAnswerListQuest(@Validated @RequestBody Investigate investigate) {
@@ -201,7 +202,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "问卷结果-单人统计-列表")
-	// @RequiresPermissions("/hr/train/quest/surveyResultListQuest")
+	@RequiresPermissions("/hr/train/quest/surveyResultListQuest")
 	@ApiOperation(value = "单人统计-列表", notes = "单人统计功能")
 	@RequestMapping(value = "/surveyResultListQuest", method = RequestMethod.POST)
 	public Result<PaginationData<List<SurveyResultVo>>> surveyResultListQuest(
@@ -211,7 +212,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "问卷结果-单人统计-详情页")
-	// @RequiresPermissions("/hr/train/quest/selectSurveyResultQuest")
+	@RequiresPermissions("/hr/train/quest/selectSurveyResultQuest")
 	@ApiOperation(value = "单人统计-详情页", notes = "查看页面功能")
 	@RequestMapping(value = "/selectSurveyResultQuest", method = RequestMethod.POST)
 	public Result<SurveyResultVo> selectSurveyResultQuest(@Validated @RequestBody SurveyResultPage surveyResult) {
@@ -220,7 +221,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "web端/app 问卷登陆页")
-	// @RequiresPermissions("/hr/train/quest/loginInvestiageQuest")
+	@RequiresPermissions("/hr/train/quest/loginInvestiageQuest")
 	@ApiOperation(value = "问卷登陆页", notes = "登陆问卷功能")
 	@RequestMapping(value = "/loginInvestiageQuest", method = RequestMethod.POST)
 	public Result<ResearchSet> loginInvestiageQuest(@Validated @RequestBody Investigate investigate) {
@@ -230,7 +231,7 @@ public class QuestInvestigateController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "web端/app 新增答题记录")
-	// @RequiresPermissions("/hr/train/quest/addAnswerInfoQuest")
+	@RequiresPermissions("/hr/train/quest/addAnswerInfoQuest")
 	@ApiOperation(value = "web端/app 新增答题记录", notes = "[问卷调查]web端-答题页面功能")
 	@RequestMapping(value = "/addAnswerInfoQuest", method = RequestMethod.POST)
 	public Result addAnswerInfoQuest(@Validated @RequestBody ResultAnswerAdd resultAnswerAdd) {

@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.jn.hr.exam.entity.TbManpowerExaminaBank;
-import com.jn.hr.exam.model.ExaminaManagement;
 import com.jn.hr.exam.model.Examinabank;
 import com.jn.hr.exam.model.ExaminabankAdd;
 import com.jn.hr.exam.model.ExaminabankPage;
@@ -38,4 +37,6 @@ public interface ExaminaBankMapper {
 	 * @return
 	 */
 	ExaminabankAdd selectBankByExaminaIdAndQuestionId(Examinabank examinabank);
+
+	List<Examinabank> selectBankByExaminaId(Examinabank examinabank);
 }

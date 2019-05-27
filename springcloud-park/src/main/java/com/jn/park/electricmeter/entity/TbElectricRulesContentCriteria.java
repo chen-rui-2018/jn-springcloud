@@ -245,73 +245,73 @@ public class TbElectricRulesContentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameIsNull() {
-            addCriterion("project_name is null");
+        public Criteria andRuleNameIsNull() {
+            addCriterion("rule_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameIsNotNull() {
-            addCriterion("project_name is not null");
+        public Criteria andRuleNameIsNotNull() {
+            addCriterion("rule_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameEqualTo(String value) {
-            addCriterion("project_name =", value, "projectName");
+        public Criteria andRuleNameEqualTo(String value) {
+            addCriterion("rule_name =", value, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameNotEqualTo(String value) {
-            addCriterion("project_name <>", value, "projectName");
+        public Criteria andRuleNameNotEqualTo(String value) {
+            addCriterion("rule_name <>", value, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameGreaterThan(String value) {
-            addCriterion("project_name >", value, "projectName");
+        public Criteria andRuleNameGreaterThan(String value) {
+            addCriterion("rule_name >", value, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameGreaterThanOrEqualTo(String value) {
-            addCriterion("project_name >=", value, "projectName");
+        public Criteria andRuleNameGreaterThanOrEqualTo(String value) {
+            addCriterion("rule_name >=", value, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameLessThan(String value) {
-            addCriterion("project_name <", value, "projectName");
+        public Criteria andRuleNameLessThan(String value) {
+            addCriterion("rule_name <", value, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameLessThanOrEqualTo(String value) {
-            addCriterion("project_name <=", value, "projectName");
+        public Criteria andRuleNameLessThanOrEqualTo(String value) {
+            addCriterion("rule_name <=", value, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameLike(String value) {
-            addCriterion("project_name like", value, "projectName");
+        public Criteria andRuleNameLike(String value) {
+            addCriterion("rule_name like", value, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameNotLike(String value) {
-            addCriterion("project_name not like", value, "projectName");
+        public Criteria andRuleNameNotLike(String value) {
+            addCriterion("rule_name not like", value, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameIn(List<String> values) {
-            addCriterion("project_name in", values, "projectName");
+        public Criteria andRuleNameIn(List<String> values) {
+            addCriterion("rule_name in", values, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameNotIn(List<String> values) {
-            addCriterion("project_name not in", values, "projectName");
+        public Criteria andRuleNameNotIn(List<String> values) {
+            addCriterion("rule_name not in", values, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameBetween(String value1, String value2) {
-            addCriterion("project_name between", value1, value2, "projectName");
+        public Criteria andRuleNameBetween(String value1, String value2) {
+            addCriterion("rule_name between", value1, value2, "ruleName");
             return (Criteria) this;
         }
 
-        public Criteria andProjectNameNotBetween(String value1, String value2) {
-            addCriterion("project_name not between", value1, value2, "projectName");
+        public Criteria andRuleNameNotBetween(String value1, String value2) {
+            addCriterion("rule_name not between", value1, value2, "ruleName");
             return (Criteria) this;
         }
 

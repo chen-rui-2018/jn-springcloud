@@ -25,13 +25,8 @@ import java.util.Date;
 public class PayCheckReminder implements Serializable {
     private static final long serialVersionUID = 6589486251046038120L;
 
-    @ApiModelProperty(value="缴费流水ID" ,example = "JF201905041212")
-    @NotBlank(message = "{paymentId :'缴费流水ID不能为空'}")
-    private String paymentId;
-
-    @ApiModelProperty(value="账单编号",example = "JF201905041234")
-    @NotBlank(message = "{billId :'账单编号不能为空'}")
-    private String billId;
+    @ApiModelProperty(value = "账单编号[数组]",required = true,example = "['2019050600025','2019050600026']")
+    private String[] billIds;
 
     @ApiModelProperty(value="企业名称",example = "某某科技集团")
     @NotBlank(message = "{enterpriseName:'企业名称不能为空'}")
@@ -55,20 +50,13 @@ public class PayCheckReminder implements Serializable {
         return serialVersionUID;
     }
 
-    public String getPaymentId() {
-        return paymentId;
+
+    public String[] getBillIds() {
+        return billIds;
     }
 
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public String getBillId() {
-        return billId;
-    }
-
-    public void setBillId(String billId) {
-        this.billId = billId;
+    public void setBillIds(String[] billIds) {
+        this.billIds = billIds;
     }
 
     public String getEnterpriseName() {

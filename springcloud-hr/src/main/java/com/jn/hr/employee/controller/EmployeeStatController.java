@@ -7,6 +7,7 @@ import com.jn.hr.employee.service.EmployeeStatService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,7 +80,7 @@ public class EmployeeStatController extends BaseController {
     }
 
     @ControllerLog(doAction = "部门人数统计排名")
-    //@RequiresPermissions("/hr/employeeStat/statByEmployeeDepartment")
+    @RequiresPermissions("/hr/employeeStat/statByEmployeeDepartment")
     @ApiOperation(value = "部门人数统计排名", notes = "部门人数统计排名")
     @GetMapping(value = "/statByEmployeeDepartment")
     public Result statByEmployeeDepartment(@RequestParam("departmentId") String departmentId) {

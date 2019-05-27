@@ -1265,6 +1265,10 @@
     <table tableName="tb_electric_warning_rules"></table>
     <table tableName="tb_electric_reading_source"></table>
     <table tableName="tb_electric_reading_fail_log"></table>
+    <table tableName="tb_electric_cost"></table>
+    <table tableName="tb_electric_error_log"></table>
+    <table tableName="tb_electric_energy_bill"></table>
+    <table tableName="tb_electric_energy_bill_detail"></table>
 
   </context>
   <!--物业维修-->

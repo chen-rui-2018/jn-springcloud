@@ -43,5 +43,28 @@
     FROM tb_person_care t1
     WHERE t1.care_account = #{account}
     AND t1.receive_type = '2'
+    AND t1.record_status = '1'
     </select>
+
+    <select id="findCareComment"  resultType="com.jn.park.gamtopic.model.CommentModel">
+        SELECT t1.careUser,t2.commentNumber FROM
+        (SELECT
+        IFNULL(COUNT(care_id),0)  as "careUser"
+        FROM tb_person_care t
+        WHERE t.record_status = 1
+        AND t.receive_type = 2
+        AND t.receive_account = #{id})t1
+        INNER JOIN
+        (SELECT
+        IFNULL(COUNT(id),0) as "commentNumber"
+        FROM
+        tb_comment t
+        WHERE t.record_status = 1
+        AND t.com_status = 1
+        AND t.com_type = 3
+        AND t.root_id=#{id}) t2
+
+
+    </select>
+
 </mapper>

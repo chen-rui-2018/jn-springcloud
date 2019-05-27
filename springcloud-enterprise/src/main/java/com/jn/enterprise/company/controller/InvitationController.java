@@ -38,8 +38,7 @@ public class InvitationController extends BaseController {
     @RequestMapping(value = "/getInviteStaffList",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/StaffController/getInviteStaffList")
     public Result<UserExtensionInfoVO> getInviteStaffList(@RequestParam String phone){
-        User user = checkUserValid();
-        return new Result(staffService.getInviteStaffList(phone, user.getAccount()));
+        return new Result(staffService.getInviteStaffList(phone));
     }
 
     @TxTransaction(isStart = true)

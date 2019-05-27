@@ -16,6 +16,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,7 +46,7 @@ public class TrainController extends BaseController {
 	private TrainService trainService;
 
 	@ControllerLog(doAction = "获取通知人员列表")
-	// @RequiresPermissions("/hr/train/list/selectUserList")
+	@RequiresPermissions("/hr/train/list/selectUserList")
 	@ApiOperation(value = "获取通知人员列表", notes = "[培训列表]获取通知人员列表功能")
 	@RequestMapping(value = "/selectUserList", method = RequestMethod.POST)
 	public Result<List<TrainDepartment>> selectUserList() {
@@ -54,7 +55,7 @@ public class TrainController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "分页查询培训列表")
-	// @RequiresPermissions("/hr/train/list/managementList")
+	@RequiresPermissions("/hr/train/list/managementList")
 	@ApiOperation(value = "分页查询培训列表", notes = "[培训列表]培训列表功能")
 	@RequestMapping(value = "/managementList", method = RequestMethod.POST)
 	public Result<PaginationData<List<Management>>> managementList(
@@ -64,7 +65,7 @@ public class TrainController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "分页查询培训记录")
-	// @RequiresPermissions("/hr/train/list/managemenRecordtList")
+	@RequiresPermissions("/hr/train/list/managemenRecordtList")
 	@ApiOperation(value = "分页查询培训记录", notes = "[培训列表]培训记录功能")
 	@RequestMapping(value = "/managemenRecordtList", method = RequestMethod.POST)
 	public Result<PaginationData<List<Management>>> managemenRecordtList(
@@ -74,7 +75,7 @@ public class TrainController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "导出培训记录")
-	// @RequiresPermissions("/hr/train/list/exportManagement")
+	@RequiresPermissions("/hr/train/list/exportManagement")
 	@ApiOperation(value = "导出培训记录", notes = "导出培训记录")
 	@RequestMapping(value = "/exportManagement", method = RequestMethod.GET)
 	public void exportManagement(ManagementPage managementPage, HttpServletResponse response) {
@@ -90,7 +91,7 @@ public class TrainController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "课程详情")
-	// @RequiresPermissions("/hr/train/list/selectManagement")
+	@RequiresPermissions("/hr/train/list/selectManagement")
 	@ApiOperation(value = "课程详情", notes = "[培训列表]课程详情功能")
 	@RequestMapping(value = "/selectManagement", method = RequestMethod.POST)
 	public Result<ManagementAdd> selectManagement(@Validated @RequestBody Management management) {
@@ -99,7 +100,7 @@ public class TrainController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "新建课程")
-	// @RequiresPermissions("/hr/train/list/addManagement")
+	@RequiresPermissions("/hr/train/list/addManagement")
 	@ApiOperation(value = "新建课程", notes = "[培训列表]制定课程功能")
 	@RequestMapping(value = "/addManagement", method = RequestMethod.POST)
 	public Result<String> addManagement(@Validated @RequestBody ManagementAdd managementAdd) {
@@ -114,7 +115,7 @@ public class TrainController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "修改课程")
-	// @RequiresPermissions("/hr/train/list/updateManagement")
+	@RequiresPermissions("/hr/train/list/updateManagement")
 	@ApiOperation(value = "修改课程", notes = "[培训列表]修改功能")
 	@RequestMapping(value = "/updateManagement", method = RequestMethod.POST)
 	public Result updateManagement(@Validated @RequestBody Management management) {
@@ -126,7 +127,7 @@ public class TrainController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "结束课程")
-	// @RequiresPermissions("/hr/train/list/deleteManagement")
+	@RequiresPermissions("/hr/train/list/deleteManagement")
 	@ApiOperation(value = "结束课程", notes = "[培训列表]删除功能")
 	@RequestMapping(value = "/deleteManagement", method = RequestMethod.POST)
 	public Result deleteManagement(@Validated @RequestBody Management management) {
@@ -137,7 +138,7 @@ public class TrainController extends BaseController {
 	}
 
 	@ControllerLog(doAction = "邮件发送培训通知")
-	// @RequiresPermissions("/hr/train/list/emailList")
+	@RequiresPermissions("/hr/train/list/emailList")
 	@ApiOperation(value = "邮件发送培训通知", notes = "发送通知功能")
 	@RequestMapping(value = "/emailList", method = RequestMethod.POST)
 	public Result emailList(@Validated @RequestBody Management management) {

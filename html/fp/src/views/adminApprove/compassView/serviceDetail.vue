@@ -16,8 +16,9 @@
       <!-- 大标题 -->
       <div class="right_headline">
         <p>{{seviceDetail.name}}
+          <span v-if="seviceDetail.contactQqGroup!=null&&seviceDetail.contactQqGroup!=''">q群咨询</span>
           <span @click="messageVisible = true">我要留言</span>
-          <span>在线咨询</span>
+          <span v-if="seviceDetail.isContactOnline==='1'">在线咨询</span>
         </p>
       </div>
       <!-- 我要留言弹窗 -->

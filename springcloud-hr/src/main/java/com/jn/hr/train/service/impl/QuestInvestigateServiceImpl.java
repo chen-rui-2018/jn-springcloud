@@ -293,9 +293,11 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 			BeanUtils.copyProperties(questionUpd, add);
 			// 拷贝选项列表
 			List<InvestigateTitleOption> titleOptionList = questionUpd.getTitleOptionList();
-			List<InvestigateTitleOptionAdd> titleOptionAddList = BeanCopyUtil.copyList(titleOptionList,
-					InvestigateTitleOptionAdd.class);
-			add.setTitleOptionList(titleOptionAddList);
+			if (null != titleOptionList && titleOptionList.size() > 0) {
+				List<InvestigateTitleOptionAdd> titleOptionAddList = BeanCopyUtil.copyList(titleOptionList,
+						InvestigateTitleOptionAdd.class);
+				add.setTitleOptionList(titleOptionAddList);
+			}
 			List<InvestigateQuestionAdd> questionList = new ArrayList<InvestigateQuestionAdd>();
 			questionList.add(add);
 			titleId = insertQuestion(questionList, projectId);
@@ -488,7 +490,7 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	}
 
 	/**
-	 * 结束问卷调查
+	 * 删除问卷调查
 	 * 
 	 * @param investigaDel
 	 *            问卷实体
@@ -496,7 +498,7 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	 *            当前登陆用户
 	 */
 	@Override
-	@ServiceLog(doAction = "结束问卷功能")
+	@ServiceLog(doAction = "删除问卷调查功能")
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteInvestiage(Investigate investigaDel, User user) {
 		String projectId = investigaDel.getProjectId();
@@ -628,7 +630,6 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "问卷页面展示功能")
-	@Transactional(rollbackFor = Exception.class)
 	public ResearchSet loginInvestiage(String projectId) {
 		ResearchSet researchSet = new ResearchSet();
 
@@ -656,7 +657,6 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "汇总统计功能")
-	@Transactional(rollbackFor = Exception.class)
 	public List<AnswerVo> questionAnswerList(String projectId) {
 		List<AnswerVo> answerVos = questAnswerList(projectId);
 		return answerVos;
@@ -718,13 +718,14 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 
 						}
 					}
-
-					for (InvestigateTitleOptionAdd tbTitleOption : questionAnswer.getTitleOptionList()) {
-						if (null != sizeMap.get(tbTitleOption.getOptionId())) {
-							tbTitleOption.setOptionPercent(
-									HrDataUtil.getPercentStr(sizeMap.get(tbTitleOption.getOptionId()), countSize)
-											+ "%");
-							tbTitleOption.setOptionCount(sizeMap.get(tbTitleOption.getOptionId()));
+					if (null != questionAnswer.getTitleOptionList() && questionAnswer.getTitleOptionList().size() > 0) {
+						for (InvestigateTitleOptionAdd tbTitleOption : questionAnswer.getTitleOptionList()) {
+							if (null != sizeMap.get(tbTitleOption.getOptionId())) {
+								tbTitleOption.setOptionPercent(
+										HrDataUtil.getPercentStr(sizeMap.get(tbTitleOption.getOptionId()), countSize)
+												+ "%");
+								tbTitleOption.setOptionCount(sizeMap.get(tbTitleOption.getOptionId()));
+							}
 						}
 					}
 				}
@@ -909,7 +910,7 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 		if (null == question) {
 			logger.warn("[问卷调查] 编辑问卷项目题目失败,编辑的问卷项目问题不存在,projectId:{},titleID:{}", questionUpd.getProjectId(),
 					questionUpd.getTitleId());
-			throw new JnSpringCloudException(TrainExceptionEnums.NOT_NULL_ERROR, "编辑问卷项目题目失败,编辑的问卷项目问题不存在");
+			throw new JnSpringCloudException(TrainExceptionEnums.NOT_NULL_ERROR, "编辑问卷题目失败,问卷题目不存在");
 		}
 		TbManpowerTrainQuestQuestionnaireQuese tbQuestion = new TbManpowerTrainQuestQuestionnaireQuese();
 		BeanUtils.copyProperties(questionUpd, tbQuestion);
@@ -924,37 +925,39 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	 */
 	private void updateOption(InvestigateQuestion questionUpd) {
 		List<InvestigateTitleOption> titleOptionList = questionUpd.getTitleOptionList();
-		for (InvestigateTitleOption titleOption : titleOptionList) {
-			if (StringUtils.isBlank(titleOption.getTitleId())) {
-				titleOption.setTitleId(questionUpd.getTitleId());
+		if (null != titleOptionList && titleOptionList.size() > 0) {
+			for (InvestigateTitleOption titleOption : titleOptionList) {
+				if (StringUtils.isBlank(titleOption.getTitleId())) {
+					titleOption.setTitleId(questionUpd.getTitleId());
+				}
+				if (StringUtils.isBlank(titleOption.getId())) {
+					TbManpowerTrainQuestTitleOption tbOption = new TbManpowerTrainQuestTitleOption();
+					BeanUtils.copyProperties(titleOption, tbOption);
+					if (StringUtils.isBlank(tbOption.getId())) {
+						tbOption.setId(UUID.randomUUID().toString());
+					}
+					if (!StringUtils.isBlank(tbOption.getOptionId())) {
+						tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
+					}
+					tbQuestTitleOptionMapper.insertSelective(tbOption);
+				} else {
+					TbManpowerTrainQuestTitleOption tbOption = new TbManpowerTrainQuestTitleOption();
+					BeanUtils.copyProperties(titleOption, tbOption);
+					if (!StringUtils.isBlank(tbOption.getOptionId())) {
+						tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
+					}
+					tbQuestTitleOptionMapper.updateByPrimaryKeySelective(tbOption);
+				}
 			}
-			if (StringUtils.isBlank(titleOption.getId())) {
-				TbManpowerTrainQuestTitleOption tbOption = new TbManpowerTrainQuestTitleOption();
-				BeanUtils.copyProperties(titleOption, tbOption);
-				if (StringUtils.isBlank(tbOption.getId())) {
-					tbOption.setId(UUID.randomUUID().toString());
-				}
-				if (!StringUtils.isBlank(tbOption.getOptionId())) {
-					tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
-				}
-				tbQuestTitleOptionMapper.insertSelective(tbOption);
-			} else {
-				TbManpowerTrainQuestTitleOption tbOption = new TbManpowerTrainQuestTitleOption();
-				BeanUtils.copyProperties(titleOption, tbOption);
-				if (!StringUtils.isBlank(tbOption.getOptionId())) {
-					tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
-				}
-				tbQuestTitleOptionMapper.updateByPrimaryKeySelective(tbOption);
-			}
-
 		}
+
 		List<InvestigateTitleOption> deltitleOptionList = questionUpd.getDeltitleOptionList();
 		if (null != deltitleOptionList && deltitleOptionList.size() > 0) {
 			for (InvestigateTitleOption deltitleOption : deltitleOptionList) {
 				if (StringUtils.isBlank(deltitleOption.getId())) {
 					logger.warn("[问卷调查] 删除问卷选项失败,删除时选项id不能为空,projectId:{},titleID:{}", questionUpd.getProjectId(),
 							questionUpd.getTitleId());
-					throw new JnSpringCloudException(TrainExceptionEnums.NOT_NULL_ERROR, "删除问卷选项失败,删除时选项id不能为空");
+					throw new JnSpringCloudException(TrainExceptionEnums.NOT_NULL_ERROR, "删除题目选项失败,删除时选项id不能为空");
 				}
 				tbQuestTitleOptionMapper.deleteByPrimaryKey(deltitleOption.getId());
 			}

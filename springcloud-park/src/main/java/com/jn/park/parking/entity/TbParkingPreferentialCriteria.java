@@ -245,6 +245,76 @@ public class TbParkingPreferentialCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPolicyUserTypeIsNull() {
+            addCriterion("policy_user_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeIsNotNull() {
+            addCriterion("policy_user_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeEqualTo(String value) {
+            addCriterion("policy_user_type =", value, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeNotEqualTo(String value) {
+            addCriterion("policy_user_type <>", value, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeGreaterThan(String value) {
+            addCriterion("policy_user_type >", value, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("policy_user_type >=", value, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeLessThan(String value) {
+            addCriterion("policy_user_type <", value, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeLessThanOrEqualTo(String value) {
+            addCriterion("policy_user_type <=", value, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeLike(String value) {
+            addCriterion("policy_user_type like", value, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeNotLike(String value) {
+            addCriterion("policy_user_type not like", value, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeIn(List<String> values) {
+            addCriterion("policy_user_type in", values, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeNotIn(List<String> values) {
+            addCriterion("policy_user_type not in", values, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeBetween(String value1, String value2) {
+            addCriterion("policy_user_type between", value1, value2, "policyUserType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyUserTypeNotBetween(String value1, String value2) {
+            addCriterion("policy_user_type not between", value1, value2, "policyUserType");
+            return (Criteria) this;
+        }
+
         public Criteria andPolicyCodeIsNull() {
             addCriterion("policy_code is null");
             return (Criteria) this;

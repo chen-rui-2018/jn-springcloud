@@ -139,7 +139,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      */
     @ServiceLog(doAction = "根据任务id获取问题详情")
     @Override
-    public Object customerQuesDetail(String account,String processInsId){
+    public CustomerServiceCenterDetailVo customerQuesDetail(String account,String processInsId){
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
         example.createCriteria().andProcessInsIdEqualTo(processInsId)
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
@@ -150,6 +150,10 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }
         CustomerServiceCenterDetailVo customerVo=new CustomerServiceCenterDetailVo();
         BeanUtils.copyProperties(clientServiceCenterList.get(0),customerVo);
+        customerVo.setCreatedTime(DateUtils.formatDate(clientServiceCenterList.get(0).getCreatedTime(),PATTERN));
+        if(clientServiceCenterList.get(0).getQuesUrl()!=null){
+            customerVo.setQuesUrl(Arrays.asList(clientServiceCenterList.get(0).getQuesUrl().split(";")));
+        }
         JSONObject opinions = IBPSUtils.opinions(account, processInsId, null);
         IBPSResult ibpsResult = new Gson().fromJson(opinions.toString(), IBPSResult.class);
         //请求响应码
@@ -170,19 +174,32 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      */
     @ServiceLog(doAction = "封装处理处理历史记录")
     private CustomerServiceCenterDetailVo getExecuteHistoryInfo(CustomerServiceCenterDetailVo customerVo,IBPSResult ibpsResult) {
+        //获取历史记录信息
         Object data = ibpsResult.getData();
         LinkedTreeMap dataMap=(LinkedTreeMap)data;
         List<LinkedTreeMap> dataResult = (List<LinkedTreeMap> )dataMap.get("dataResult");
         List<ExecuteHistoryResult> resultList=new ArrayList<>(16);
         for(LinkedTreeMap linkedTreeMap:dataResult){
             ObjectMapper objectMapper = new ObjectMapper();
+            //把json转为javaBean
             ExecuteHistoryResult executeHistoryResult = objectMapper.convertValue(linkedTreeMap, ExecuteHistoryResult.class);
             resultList.add(executeHistoryResult);
         }
+        //处理历史数据
         List<ExecuteHistoryShow> executeHistoryShowList=new ArrayList<>(16);
         for(ExecuteHistoryResult result:resultList){
             ExecuteHistoryShow historyShow=new ExecuteHistoryShow();
             BeanUtils.copyProperties(result, historyShow);
+            //ibps待处理状态“pending”
+            if(StringUtils.equals("pending",result.getStatus())){
+                List<LinkedTreeMap<String, String>> qualifiedExecutor = result.getQualifiedExecutor();
+                for(LinkedTreeMap<String, String> linkedTreeMap:qualifiedExecutor){
+                    if(linkedTreeMap.containsKey("executId")){
+                        historyShow.setAuditor(linkedTreeMap.get("executId"));
+                        break;
+                    }
+                }
+            }
             User user=new User();
             user.setId(historyShow.getAuditor().replace("user", ""));
             Result<User> userInfo = systemClient.getUser(user);
@@ -194,7 +211,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             if(StringUtils.equals(SEND_NODE, result.getTaskName())){
                 //设置发起节点信息
                 setSendPersonInfo(result.getStatus(), historyShow, userInfo.getData());
-                historyShow.setOptionDeptName(CUSTER_CENTER);
+                historyShow.setOptionDeptName("用户["+historyShow.getAuditorName()+"]");
             }else if(StringUtils.equals(CUSTER_CENTER, result.getTaskName())
                     || StringUtils.equals(EXECUTE_PERSON, result.getTaskName())){
                 //设置客户中心分发/处理节点信息
@@ -211,6 +228,18 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
                         if(StringUtils.equals(StringUtils.join(userIds,","), personInfo.getUserId())){
                             historyShow.setOptionDeptId(personInfo.getRoleId());
                             historyShow.setOptionDeptName(personInfo.getRoleName());
+                            break;
+                        }
+                    }
+                }else{
+                    List<LinkedTreeMap<String, String>> qualifiedExecutor = result.getQualifiedExecutor();
+                    //执行人类型为角色
+                    String type="role";
+                    for(LinkedTreeMap<String, String> map:qualifiedExecutor){
+                        if(StringUtils.equals(type,map.get("type"))){
+                            String roleId = map.get("executId").replace("user", "");
+                            historyShow.setOptionDeptId(roleId);
+                            historyShow.setOptionDeptName("客服中心");
                             break;
                         }
                     }
@@ -242,6 +271,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param historyShow       历史记录展示bean
      * @param status        操作状态
      */
+    @ServiceLog(doAction = "设置客户中心分发/处理节点信息")
     private List<String> setCustomerCenterInfo(List<LinkedTreeMap<String, String>> qualifiedExecutor , ExecuteHistoryShow historyShow,String status) {
         List<String>accountList=new ArrayList<>();
         List<String>userIdList=new ArrayList<>();
@@ -302,6 +332,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param historyShow  历史记录展示bean
      * @param user        用户信息
      */
+    @ServiceLog(doAction = "设置发起节点信息")
     private void setSendPersonInfo(String status, ExecuteHistoryShow historyShow, User user) {
         historyShow.setExecuteAccounts(user.getAccount());
         historyShow.setExecuteUserIds(user.getId());
@@ -377,7 +408,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param processInstanceId  流程实例id
      * @return
      */
-    private int updateProcessInstanceId(String loginAccount, String quesCode, String processInstanceId) {
+    @ServiceLog(doAction ="更新流程实例id")
+    @Override
+    public int updateProcessInstanceId(String loginAccount, String quesCode, String processInstanceId) {
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
         example.createCriteria().andQuesCodeEqualTo(quesCode).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         TbClientServiceCenter tbClientServiceCenter=new TbClientServiceCenter();
@@ -396,6 +429,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param loginAccount
      * @param quesCode      问题编码
      */
+    @ServiceLog(doAction ="设置在线客服ibps启动流工作流表单数据")
     private IBPSOnlineCustomerParam setIBPSOnlineCustomerParam(OnlineCustomerParam param, String loginAccount,String quesCode) {
         IBPSOnlineCustomerParam ibpsParam=new IBPSOnlineCustomerParam();
         BeanUtils.copyProperties(param, ibpsParam);
@@ -443,7 +477,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * 获取问题编码
      * @return
      */
-    private String getQuesCode() {
+    @ServiceLog(doAction ="获取问题编码")
+    @Override
+    public String getQuesCode() {
         return "QE-"+DateUtils.getDate("yyyyMMddHHmmss");
     }
 
@@ -452,9 +488,12 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      * @param loginAccount
      * @return
      */
+    @ServiceLog(doAction ="根据用户账号获取客服中心问题列表")
     private List<ConsultationCustomerListShow> getCustomerCenterList(String loginAccount) {
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
-        example.createCriteria().andCreatorAccountEqualTo(loginAccount)
+        //流程实例id为空或为null的不被查询
+        example.createCriteria().andCreatorAccountEqualTo(loginAccount).andProcessInsIdIsNotNull()
+                .andProcessInsIdNotEqualTo("")
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         example.setOrderByClause("created_time desc");
         List<TbClientServiceCenter> tbClientServiceCenterList = tbClientServiceCenterMapper.selectByExample(example);
@@ -465,6 +504,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             for(TbClientServiceCenter tbClientServiceCenter:tbClientServiceCenterList){
                 ConsultationCustomerListShow customerListShow=new ConsultationCustomerListShow();
                 BeanUtils.copyProperties(tbClientServiceCenter, customerListShow);
+                customerListShow.setCreatedTime(DateUtils.formatDate(tbClientServiceCenter.getCreatedTime(),PATTERN));
                 resultList.add(customerListShow);
             }
             return resultList;

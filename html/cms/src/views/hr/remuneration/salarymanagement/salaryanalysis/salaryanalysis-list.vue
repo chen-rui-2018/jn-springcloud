@@ -11,12 +11,12 @@
         <div style="height:66px; width: 210px;">
           <span style="height: 100%;width: 80px;display:inline-block; line-height: 15px;">
             <p style="color: #666666">计薪人数</p>
-            <p>{{salaryAnalysis.number}}人</p>
+            <p>{{ salaryAnalysis.number }}人</p>
           </span>
           <span style="width: 120px;float: right;line-height: 66px;display:inline-block;color: #666666">
-            环比{{salaryAnalysis.lastNumber}}人
-            <img src="@/assets/images/up.png" v-if="imgs.wageNumberUpPng" style="height: 20px;width: 10px;" alt="图片">
-            <img src="@/assets/images/down.png" v-if="imgs.wageNumberDownPng" style="height: 20px;width: 10px;" alt="图片">
+            环比{{ salaryAnalysis.lastNumber }}人
+            <img v-if="imgs.wageNumberUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
+            <img v-if="imgs.wageNumberDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
           </span>
         </div>
       </el-col>
@@ -24,12 +24,12 @@
         <div style="height:66px; width: 230px;">
           <span style="height: 100%;width: 100px;line-height: 15px;display:  inline-block;">
             <p style="color: #666666">应发工资总计</p>
-            <p>{{salaryAnalysis.deserveWage}}人</p>
+            <p>{{ salaryAnalysis.deserveWage }}元</p>
           </span>
           <span style="width: 120px;float: right;line-height: 66px;display:inline-block;color: #666666">
-            环比{{salaryAnalysis.lastDeserveWage}}
-            <img src="@/assets/images/up.png" v-if="imgs.deserveWageNumberUpPng" style="height: 20px;width: 10px;" alt="图片">
-            <img src="@/assets/images/down.png" v-if="imgs.deserveWageNumberDownPng" style="height: 20px;width: 10px;" alt="图片">
+            环比{{ salaryAnalysis.lastDeserveWage }}
+            <img v-if="imgs.deserveWageNumberUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
+            <img v-if="imgs.deserveWageNumberDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
           </span>
         </div>
       </el-col>
@@ -37,28 +37,28 @@
         <div style="height:66px; width: 250px;">
           <span style="height: 100%;width: 120px;line-height: 15px;display:  inline-block;">
             <p style="color: #666666">实际工资总计</p>
-            <p>{{salaryAnalysis.realWage}}人</p>
+            <p>{{ salaryAnalysis.realWage }}元</p>
           </span>
           <span style="width: 120px;float: right;line-height: 66px;display:inline-block;color: #666666">
-            环比{{salaryAnalysis.lastRealWage}}
-            <img src="@/assets/images/up.png" v-if="imgs.realWageNumberUpPng" style="height: 20px;width: 10px;" alt="图片">
-            <img src="@/assets/images/down.png" v-if="imgs.realWageNumberDownPng" style="height: 20px;width: 10px;" alt="图片">
+            环比{{ salaryAnalysis.lastRealWage }}
+            <img v-if="imgs.realWageNumberUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
+            <img v-if="imgs.realWageNumberDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
           </span>
         </div>
       </el-col>
-      <!--<el-col :span="6">
+      <el-col :span="6">
         <div style="height:66px; width: 250px;">
           <span style="height: 100%;line-height: 15px;width: 120px;display:  inline-block;">
             <p style="color: #666666">月度人力成本</p>
-            <p>33人</p>
+            <p>{{ salaryAnalysis.realWage }}元</p>
           </span>
           <span style="width: 120px;float: right;line-height: 66px;display:inline-block; color: #666666">
-            环比+9%
-            <img src="@/assets/images/up.png" v-if="imgs.monthlyLaborCostUpPng" style="height: 20px;width: 10px;" alt="图片">
-            <img src="@/assets/images/down.png" v-if="imgs.monthlyLaborCostDownPng" style="height: 20px;width: 10px;" alt="图片">
+            环比{{ salaryAnalysis.lastRealWage }}
+            <img v-if="imgs.realWageNumberUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
+            <img v-if="imgs.realWageNumberDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
           </span>
         </div>
-      </el-col>-->
+      </el-col>
     </el-row>
     <el-row :gutter="32" style="margin-top: 20px;">
       <el-col :xs="40" :sm="40" :lg="11">
@@ -82,110 +82,118 @@
 </template>
 
 <script>
-  import PieChart from './PieChart'
-  import BarChart from './BarChart'
-  import {
-    api
-  } from '@/api/hr/common'
+import PieChart from './PieChart'
+import BarChart from './BarChart'
+import {
+  api
+} from '@/api/hr/common'
 
-
-  export default {
-    name: 'EmployeeStat',
-    components: {
-      PieChart,
-      BarChart,
-    },
-    data() {
-      return {
-        salaryCompositionList: [],
-        laborCostsList: [],
-        percapitaWagePeopleList : {
-          percapitaWage:[],
-          peopleNo:[]
-        },
-        salaryAnalysis:{
-          number:0,
-          realWage:0,
-          deserveWage:0,
-          lastNumber:'0%',
-          lastDeserveWage:'0%',
-          lastRealWage:'0%'
-        },
-        imgs:{
-          wageNumberUpPng:true,
-          wageNumberDownPng:false,
-          deserveWageNumberUpPng:true,
-          deserveWageNumberDownPng:false,
-          realWageNumberUpPng:true,
-          realWageNumberDownPng:false,
-          monthlyLaborCostUpPng:true,
-          monthlyLaborCostDownPng:false
-        },
-        listQuery: {
-          accountEntryTime: ''
-        }
-      }
-    },
-    methods: {
-      handleFilter() {
-        this.initList()
+export default {
+  name: 'EmployeeStat',
+  components: {
+    PieChart,
+    BarChart
+  },
+  data() {
+    return {
+      salaryCompositionList: [],
+      laborCostsList: [],
+      percapitaWagePeopleList: {
+        percapitaWage: [],
+        peopleNo: []
       },
-      getCurrMonth(){
-        let currentDate = new Date()
-        let currentMonth = currentDate.getMonth()+1;//获得当前月份0-11
-        let currentYear = currentDate.getFullYear();//获得当前年份4位年
-        this.listQuery.accountEntryTime = currentYear+"-"+"0"+currentMonth
+      salaryAnalysis: {
+        number: 0,
+        realWage: 0,
+        deserveWage: 0,
+        lastNumber: '0%',
+        lastDeserveWage: '0%',
+        lastRealWage: '0%'
       },
-      initList() {
-        api('hr/SalaryWelfareManagement/salaryAnalysis', this.listQuery).then(res => {
-          if (res.data.code === '0000') {
-            this.salaryCompositionList = res.data.data.salaryComposition
-            this.laborCostsList = res.data.data.laborCosts
-            this.percapitaWagePeopleList.percapitaWage = res.data.data.perpleCapita
-            this.percapitaWagePeopleList.peopleNo = res.data.data.departmentNumber
-            this.salaryAnalysis.number=res.data.data.number
-            this.salaryAnalysis.realWage=res.data.data.realWage
-            this.salaryAnalysis.deserveWage=res.data.data.deserveWage
-            this.salaryAnalysis.lastNumber = res.data.data.lastNumber
-            if (res.data.data.lastNumber.indexOf("+") != -1) {
-              this.imgs.wageNumberUpPng=true
-              this.imgs.wageNumberDownPng=false
-            }else{
-              this.imgs.wageNumberUpPng=false
-              this.imgs.wageNumberDownPng=true
-            }
-            this.salaryAnalysis.lastDeserveWage = res.data.data.lastDeserveWage
-            if (res.data.data.lastDeserveWage.indexOf("+") != -1){
-              this.imgs.deserveWageNumberUpPng=true
-              this.imgs.deserveWageNumberDownPng=false
-            }else{
-              this.imgs.deserveWageNumberUpPng=false
-              this.imgs.deserveWageNumberDownPng=true
-            }
-            this.salaryAnalysis.lastRealWage = res.data.data.lastRealWage
-            if (res.data.data.lastRealWage.indexOf("+") != -1){
-              this.imgs.realWageNumberUpPng=true
-              this.imgs.realWageNumberDownPng=false
-            } else{
-              this.imgs.realWageNumberUpPng=false
-              this.imgs.realWageNumberDownPng=true
-            }
-          } else {
-            this.$message.error(res.data.result)
-          }
-        })
-      }
-    },
-    mounted() {
-      this.getCurrMonth()
-      this.initList()
-    },
-    watch: {
-      'listQuery.accountEntryTime': function() {
-        this.initList()
+      imgs: {
+        wageNumberUpPng: true,
+        wageNumberDownPng: false,
+        deserveWageNumberUpPng: true,
+        deserveWageNumberDownPng: false,
+        realWageNumberUpPng: true,
+        realWageNumberDownPng: false,
+        monthlyLaborCostUpPng: true,
+        monthlyLaborCostDownPng: false
+      },
+      listQuery: {
+        accountEntryTime: ''
       }
     }
+  },
+  watch: {
+    'listQuery.accountEntryTime': function() {
+      this.initList()
+    }
+  },
+  mounted() {
+    this.getCurrMonth()
+    this.initList()
+  },
+  methods: {
+    handleFilter() {
+      this.initList()
+    },
+    getCurrMonth() {
+      const currentDate = new Date()
+      const currentMonth = currentDate.getMonth() + 1// 获得当前月份0-11
+      const currentYear = currentDate.getFullYear()// 获得当前年份4位年
+      this.listQuery.accountEntryTime = currentYear + '-' + '0' + currentMonth
+    },
+    initList() {
+      api('hr/SalaryWelfareManagement/salaryAnalysis', this.listQuery).then(res => {
+        if (res.data.code === '0000') {
+          this.salaryCompositionList = res.data.data.salaryComposition
+          this.laborCostsList = res.data.data.laborCosts
+          this.percapitaWagePeopleList.percapitaWage = res.data.data.perpleCapita
+          this.percapitaWagePeopleList.peopleNo = res.data.data.departmentNumber
+          this.salaryAnalysis.number = res.data.data.number
+          this.salaryAnalysis.realWage = res.data.data.realWage
+          this.salaryAnalysis.deserveWage = res.data.data.deserveWage
+          this.salaryAnalysis.lastNumber = res.data.data.lastNumber
+          if (res.data.data.lastNumber.indexOf('+') !== -1) {
+            this.imgs.wageNumberUpPng = true
+            this.imgs.wageNumberDownPng = false
+          } else if (res.data.data.lastNumber.indexOf('-') !== -1) {
+            this.imgs.wageNumberUpPng = false
+            this.imgs.wageNumberDownPng = true
+          } else {
+            this.imgs.wageNumberUpPng = false
+            this.imgs.wageNumberDownPng = false
+          }
+          this.salaryAnalysis.lastDeserveWage = res.data.data.lastDeserveWage
+          if (res.data.data.lastDeserveWage.indexOf('+') !== -1) {
+            this.imgs.deserveWageNumberUpPng = true
+            this.imgs.deserveWageNumberDownPng = false
+          } else if (res.data.data.lastDeserveWage.indexOf('-') !== -1) {
+            this.imgs.deserveWageNumberUpPng = false
+            this.imgs.deserveWageNumberDownPng = true
+          } else {
+            this.imgs.deserveWageNumberUpPng = false
+            this.imgs.deserveWageNumberDownPng = false
+          }
+          this.salaryAnalysis.lastRealWage = res.data.data.lastRealWage
+          if (res.data.data.lastRealWage.indexOf('+') !== -1) {
+            this.imgs.realWageNumberUpPng = true
+            this.imgs.realWageNumberDownPng = false
+          } else if (res.data.data.lastRealWage.indexOf('-') !== -1) {
+            this.imgs.realWageNumberUpPng = false
+            this.imgs.realWageNumberDownPng = true
+          } else {
+            this.imgs.realWageNumberUpPng = false
+            this.imgs.realWageNumberDownPng = false
+          }
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    }
   }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

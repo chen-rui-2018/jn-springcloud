@@ -3,6 +3,7 @@ package com.jn.hr.attendance.model;
 import java.io.Serializable;
 
 import com.alibaba.excel.metadata.BaseRowModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -66,12 +67,15 @@ public class AttendanceManagementVo extends BaseRowModel implements Serializable
     private Integer annualLeave;
 	
 	@ApiModelProperty(value = "开始日期")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private String startTime;
 	
 	@ApiModelProperty(value = "结束日期")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private String endTime;
 	
 	@ApiModelProperty(value = "日期")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
 	private String absenceDate;
 	
 	@ApiModelProperty("签到时间")

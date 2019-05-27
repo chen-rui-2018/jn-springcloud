@@ -119,33 +119,69 @@ public class HrDataUtil {
 		return date;
 	}
 
-	// 获取上个月的时间
-	public static Map<String, String> getFirstdayLastdayMonth(Date date) {
+	public static Date formatConversionMinute(String dateStr) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date date = null;
+		try {
+			date = sdf.parse(dateStr);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return date;
+	}
+
+	/**
+	 * 获取某月的第一天和最后一天
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static Map<String, Date> getFirstdayLastdayMonth(String time) {
+		Date date = null;
+		try {
+			date = getDateMonth(time);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		// calendar.add(Calendar.MONTH, -1);
-		Date theDate = calendar.getTime();
+		Date firstDate = calendar.getTime();
 
-		// 上个月第一天
-		GregorianCalendar gcLast = (GregorianCalendar) Calendar.getInstance();
-		gcLast.setTime(theDate);
-		gcLast.set(Calendar.DAY_OF_MONTH, 1);
-		String day_first = df.format(gcLast.getTime());
-		StringBuffer str = new StringBuffer().append(day_first).append("000000");
-		day_first = str.toString();
-
-		calendar.add(Calendar.MONTH, -1);
+		calendar.add(Calendar.MONTH, 1);
 		calendar.set(Calendar.DATE, 1);
-		calendar.add(Calendar.DATE, 1);
-		String day_last = df.format(calendar.getTime());
-		StringBuffer endStr = new StringBuffer().append(day_last).append("235959");
-		day_last = endStr.toString();
+		calendar.add(Calendar.DATE, -1);
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		Date lastDate = calendar.getTime();
 
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("first", day_first);
-		map.put("last", day_last);
+		Map<String, Date> map = new HashMap<String, Date>();
+		map.put("first", firstDate);
+		map.put("last", lastDate);
 		return map;
+	}
+
+	/**
+	 * 获得两个Date类型日期之间的时间差(秒)
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return 两个Date类型日期之间的时间秒差
+	 */
+	public static long betweenDates(Date date1, Date date2) {
+		long v1 = date1.getTime();
+		long v2 = date2.getTime();
+
+		if (v1 > v2) {
+			return Math.abs(v1 - v2) / 1000;
+		} else {
+			return Math.abs(v2 - v1) / 1000;
+		}
 	}
 
 	// 获取上个月时间
@@ -168,6 +204,45 @@ public class HrDataUtil {
 		calendar.add(Calendar.DATE, 1);
 		// DateUtils.formatDate(calendar.getTime(),"yyyy-mm");
 		return calendar.getTime();
+	}
+
+	/**
+	 * 获得指定日期的前一天
+	 * 
+	 * @param specifiedDay
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getSpecifiedDayBefore(Date date) {
+		Calendar c = Calendar.getInstance();
+
+		c.setTime(date);
+		int day = c.get(Calendar.DATE);
+		c.set(Calendar.DATE, day - 1);
+
+		String dayBefore = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+		return dayBefore;
+	}
+
+	public static Date getBeforeDay(Date date) {
+		Calendar c = Calendar.getInstance();
+
+		c.setTime(date);
+		int day = c.get(Calendar.DATE);
+		c.set(Calendar.DATE, day - 1);
+
+		return c.getTime();
+	}
+
+	public static String getDayBefore(Date date) {
+		Calendar c = Calendar.getInstance();
+
+		c.setTime(date);
+		int day = c.get(Calendar.DATE);
+		c.set(Calendar.DATE, day - 1);
+
+		String dayBefore = new SimpleDateFormat("yyyy-MM").format(c.getTime());
+		return dayBefore;
 	}
 
 	/***
@@ -263,17 +338,19 @@ public class HrDataUtil {
 		} else {
 			// 多选题
 			if (answer.length() < standardAnswer.length()) {
-				// 判断answerArr中的字符是否全在standardAnswerArr中如果是就得一半分
-				char[] answerArr = answer.toCharArray();
-				// 标志，一旦有一个字符不在standardAnswerArr中 就变为 0,不得分
-				int flag = 1;
-				for (int i = 0; i < answerArr.length; i++) {
-					if (standardAnswer.indexOf(String.valueOf(answerArr[i])) == -1) {
-						flag = 0;
+				if (answer.length() > 0) {
+					// 判断answerArr中的字符是否全在standardAnswerArr中如果是就得一半分
+					char[] answerArr = answer.toCharArray();
+					// 标志，一旦有一个字符不在standardAnswerArr中 就变为 0,不得分
+					int flag = 1;
+					for (int i = 0; i < answerArr.length; i++) {
+						if (standardAnswer.indexOf(String.valueOf(answerArr[i])) == -1) {
+							flag = 0;
+						}
 					}
-				}
-				if (flag == 1) {
-					newScore = score / 2;
+					if (flag == 1) {
+						newScore = score / 2;
+					}
 				}
 			} else if (answer.length() == standardAnswer.length()) {
 				// 判断answerArr中的字符是否全在standardAnswerArr中 如果是就得全分

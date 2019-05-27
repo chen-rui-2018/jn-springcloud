@@ -10,8 +10,8 @@
                 <el-breadcrumb-item class="mainColor">报名情况</el-breadcrumb-item>
                 <el-breadcrumb-item class="mainColor">报名人资料</el-breadcrumb-item>
             </el-breadcrumb> -->
-            <span class="pointer" @click="$router.push({ path: '/serMatHp'})">首页/</span>
-            <span class="pointer" @click="$router.push({ path: '/actiTrain'})">活动培训/</span>
+            <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">首页/</span>
+            <span class="pointer" @click="$router.push({ path: '/actiCenter'})">活动中心/</span>
             <span class="pointer" @click="$router.push({ path: '/actiTrainDetail'})">活动详情/</span>
             <span class="mainColor">报名人资料</span>
         </div>

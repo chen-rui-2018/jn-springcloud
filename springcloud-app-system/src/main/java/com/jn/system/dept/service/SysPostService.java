@@ -2,7 +2,7 @@ package com.jn.system.dept.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.system.dept.entity.TbSysPost;
-import com.jn.system.dept.model.SysPost;
+import com.jn.system.model.SysPost;
 import com.jn.system.dept.model.SysPostPage;
 import com.jn.system.model.User;
 
@@ -22,7 +22,7 @@ public interface SysPostService {
      *
      * @return
      */
-    List<TbSysPost> findSysPostAll();
+    List<SysPost> findSysPostAll();
 
     /**
      * 添加岗位

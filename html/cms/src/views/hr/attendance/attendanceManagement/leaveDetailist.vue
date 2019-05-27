@@ -7,10 +7,16 @@
       <el-button class="filter-item right-btn" type="primary" @click="cancel">返回</el-button>
     </el-form>
 
-    <div class="cl"></div>
+    <div class="cl"/>
 
-    <el-table v-loading="listLoading" ref="multipleTable" :data="leaveDetailist" border fit highlight-current-row
-              style="width: 100%;height:100%;">
+    <el-table
+      v-loading="listLoading"
+      ref="multipleTable"
+      :data="leaveDetailist"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;height:100%;">
       <el-table-column type="index" width="60" label="序号" align="center"/>
       <el-table-column label="部门" align="center" prop="department"/>
       <el-table-column label="姓名" align="center" prop="name"/>
@@ -38,85 +44,84 @@
 
 <script>
 
-  import {
-    leaveDetailist,exportLeaveDetailist
-  } from '@/api/hr/attendance'
+import {
+  leaveDetailist, exportLeaveDetailist
+} from '@/api/hr/attendance'
 
-  export default {
-    data() {
-      return {
-        leaveDetailist: [],
-        listQuery: {
-          page: 1,
-          rows: 10,
-          jobNumber: '',
-          userId:'',
-          startTime:'',
-          endTime:'',
-          departmentId: '',
-          name: '',
-          department: ''
-        },
-        listLoading: false,
-        total: 0
-      }
+export default {
+  data() {
+    return {
+      leaveDetailist: [],
+      listQuery: {
+        page: 1,
+        rows: 10,
+        jobNumber: '',
+        userId: '',
+        startTime: '',
+        endTime: '',
+        departmentId: '',
+        name: '',
+        department: ''
+      },
+      listLoading: false,
+      total: 0
+    }
+  },
+  mounted() {
+    this.listQuery.jobNumber = this.$route.query.jobNumber
+    this.listQuery.userId = this.$route.query.userId
+    this.listQuery.startTime = this.$route.query.startTime
+    this.listQuery.endTime = this.$route.query.endTime
+    this.listQuery.departmentId = this.$route.query.departmentId
+    this.listQuery.department = this.$route.query.department
+    this.listQuery.name = this.$route.query.name
+    this.initList()
+  },
+  methods: {
+    cancel() {
+      this.$router.push({
+        name: 'attendanceList', query: {
+          jobNumber: this.listQuery.jobNumber, userId: this.listQuery.userId,
+          startTime: this.listQuery.startTime, endTime: this.listQuery.endTime,
+          departmentId: this.listQuery.departmentId,
+          department: this.listQuery.department,
+          name: this.listQuery.name
+        }
+      })
     },
-    methods: {
-      cancel() {
-        this.$router.push({
-          name: 'attendanceList', query: {
-            jobNumber: this.listQuery.jobNumber, userId: this.listQuery.userId,
-            startTime: this.listQuery.startTime, endTime: this.listQuery.endTime,
-            departmentId: this.listQuery.departmentId,
-            department: this.listQuery.department,
-            name: this.listQuery.name
-          }
-        })
-      },
-      exportExcel() {
-        exportLeaveDetailist(this.listQuery).then(res => {
-          console.log("导出。。。")
-          window.location.href = res.request.responseURL
-        })
-      },
-      initList() {
-        console.log('查询旷工明细。。。')
-        this.listLoading = true
-        leaveDetailist(this.listQuery).then(res => {
-          if (res.data.code === '0000') {
-            this.leaveDetailist = res.data.data
-            /*this.total = res.data.data.total
+    exportExcel() {
+      exportLeaveDetailist(this.listQuery).then(res => {
+        console.log('导出。。。')
+        window.location.href = res.request.responseURL
+      })
+    },
+    initList() {
+      console.log('查询旷工明细。。。')
+      this.listLoading = true
+      leaveDetailist(this.listQuery).then(res => {
+        if (res.data.code === '0000') {
+          this.leaveDetailist = res.data.data
+          /* this.total = res.data.data.total
             if (this.leaveDetailist.length === 0 && this.total > 0) {
               this.listQuery.page = 1
               this.initList()
             }*/
-          } else {
-            this.$message.error(res.data.result)
-          }
-          this.listLoading = false
-        })
-      },
-      handleSizeChange(val) {
-        this.listQuery.rows = val
-        this.initList()
-      },
-      handleCurrentChange(val) {
-        this.listQuery.page = val
-        this.initList()
-      }
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.listLoading = false
+      })
     },
-    mounted() {
-      this.listQuery.jobNumber = this.$route.query.jobNumber
-      this.listQuery.userId = this.$route.query.userId
-      this.listQuery.startTime = this.$route.query.startTime
-      this.listQuery.endTime = this.$route.query.endTime
-      this.listQuery.departmentId = this.$route.query.departmentId
-      this.listQuery.department = this.$route.query.department
-      this.listQuery.name = this.$route.query.name
+    handleSizeChange(val) {
+      this.listQuery.rows = val
       this.initList()
-
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val
+      this.initList()
     }
   }
+}
 </script>
 
 <style scoped>

@@ -8,6 +8,8 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.excel.ExcelUtil;
+import com.jn.hr.archives.model.TreeModel;
+import com.jn.hr.common.enums.HrConstants;
 import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.enums.HrStatusEnums;
 import com.jn.hr.common.service.CommonService;
@@ -22,7 +24,9 @@ import com.jn.hr.employee.model.*;
 import com.jn.hr.employee.service.EmployeeBasicInfoService;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDictKeyValue;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,9 +90,9 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
     @ServiceLog(doAction = "添加员工花名册")
     @Transactional(rollbackFor = Exception.class)
     public void addEmployeeBasicInfo(EmployeeBasicInfoAdd employeeBasicInfoAdd, User user) {
-        if(!checkDepartment(employeeBasicInfoAdd.getDepartmentId())){
+       /* if(!checkDepartment(employeeBasicInfoAdd.getDepartmentId())){
             throw new JnSpringCloudException(EmployeeExceptionEnums.EmployeeDEPARTMENT_NOT_EXISTS);
-        }
+        }*/
         //用户接口
         User  adduser=new User();
         adduser.setAccount(employeeBasicInfoAdd.getUserAccount());
@@ -182,9 +186,9 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             logger.warn("[员工花名册管理] 修改员工花名册失败,修改信息不存在,id:{}", employeeBasicInfoAdd.getId());
             throw new JnSpringCloudException(HrExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
-        if(!checkDepartment(employeeBasicInfoAdd.getDepartmentId())){
+        /*if(!checkDepartment(employeeBasicInfoAdd.getDepartmentId())){
             throw new JnSpringCloudException(EmployeeExceptionEnums.EmployeeDEPARTMENT_NOT_EXISTS);
-        }
+        }*/
 
         //用户接口
         if(StringUtils.isEmpty(tbFile.getUserId())){
@@ -882,6 +886,13 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
                 database.setIsAcademicDegree(Byte.parseByte("2"));
             }
         }
+        if(!StringUtils.isBlank(database.getEducationName())){
+            database.setEducationCode(commonService.queryDictValueByLable("employee","education",
+                    database.getEducationName()));
+            if(StringUtils.isBlank(database.getEducationCode())){
+                return "学历错误";
+            }
+        }
 
         //查询工号是否存在
         TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo=new TbManpowerEmployeeBasicInfo();
@@ -981,5 +992,6 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         record.setModifiedTime(new Date());
         tbManpowerEmployeeBasicInfoMapper.updateByPrimaryKeySelective(record);
     }
+
 
 }

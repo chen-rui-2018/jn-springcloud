@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.jn.hr.attendance.model.AttendanceManagementAdd;
 import com.jn.hr.attendance.service.AttendanceTaskService;
 import com.jn.hr.attendance.service.impl.AttendanceTaskServiceImpl;
 

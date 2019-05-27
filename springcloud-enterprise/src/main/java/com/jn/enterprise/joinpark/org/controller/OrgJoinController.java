@@ -3,6 +3,7 @@ package com.jn.enterprise.joinpark.org.controller;
 import com.jn.common.model.Result;
 import com.jn.enterprise.joinpark.org.service.OrgJoinService;
 import com.jn.enterprise.servicemarket.org.model.OrgDetailParameter;
+import com.jn.enterprise.servicemarket.org.model.OrgDetailUpdateParameter;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -43,6 +44,5 @@ public class OrgJoinController {
         logger.info("保存/修改机构认证信息成功，响应条数{}",i);
         return new Result(i);
     }
-
 
 }

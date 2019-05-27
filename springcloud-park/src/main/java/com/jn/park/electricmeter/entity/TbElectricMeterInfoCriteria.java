@@ -1,6 +1,5 @@
 package com.jn.park.electricmeter.entity;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -906,52 +905,52 @@ public class TbElectricMeterInfoCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdEqualTo(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdEqualTo(Long value) {
             addCriterion("is_high_energy_threshold =", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdNotEqualTo(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdNotEqualTo(Long value) {
             addCriterion("is_high_energy_threshold <>", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdGreaterThan(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdGreaterThan(Long value) {
             addCriterion("is_high_energy_threshold >", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdGreaterThanOrEqualTo(Long value) {
             addCriterion("is_high_energy_threshold >=", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdLessThan(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdLessThan(Long value) {
             addCriterion("is_high_energy_threshold <", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andIsHighEnergyThresholdLessThanOrEqualTo(Long value) {
             addCriterion("is_high_energy_threshold <=", value, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdIn(List<BigDecimal> values) {
+        public Criteria andIsHighEnergyThresholdIn(List<Long> values) {
             addCriterion("is_high_energy_threshold in", values, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdNotIn(List<BigDecimal> values) {
+        public Criteria andIsHighEnergyThresholdNotIn(List<Long> values) {
             addCriterion("is_high_energy_threshold not in", values, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andIsHighEnergyThresholdBetween(Long value1, Long value2) {
             addCriterion("is_high_energy_threshold between", value1, value2, "isHighEnergyThreshold");
             return (Criteria) this;
         }
 
-        public Criteria andIsHighEnergyThresholdNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andIsHighEnergyThresholdNotBetween(Long value1, Long value2) {
             addCriterion("is_high_energy_threshold not between", value1, value2, "isHighEnergyThreshold");
             return (Criteria) this;
         }
@@ -1433,6 +1432,206 @@ public class TbElectricMeterInfoCriteria {
 
         public Criteria andBuildingIdNotBetween(String value1, String value2) {
             addCriterion("building_id not between", value1, value2, "buildingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameIsNull() {
+            addCriterion("company_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameIsNotNull() {
+            addCriterion("company_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameEqualTo(String value) {
+            addCriterion("company_name =", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameNotEqualTo(String value) {
+            addCriterion("company_name <>", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameGreaterThan(String value) {
+            addCriterion("company_name >", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameGreaterThanOrEqualTo(String value) {
+            addCriterion("company_name >=", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameLessThan(String value) {
+            addCriterion("company_name <", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameLessThanOrEqualTo(String value) {
+            addCriterion("company_name <=", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameLike(String value) {
+            addCriterion("company_name like", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameNotLike(String value) {
+            addCriterion("company_name not like", value, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameIn(List<String> values) {
+            addCriterion("company_name in", values, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameNotIn(List<String> values) {
+            addCriterion("company_name not in", values, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameBetween(String value1, String value2) {
+            addCriterion("company_name between", value1, value2, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNameNotBetween(String value1, String value2) {
+            addCriterion("company_name not between", value1, value2, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdIsNull() {
+            addCriterion("is_low_energy_threshold is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdIsNotNull() {
+            addCriterion("is_low_energy_threshold is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdEqualTo(Long value) {
+            addCriterion("is_low_energy_threshold =", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdNotEqualTo(Long value) {
+            addCriterion("is_low_energy_threshold <>", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdGreaterThan(Long value) {
+            addCriterion("is_low_energy_threshold >", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdGreaterThanOrEqualTo(Long value) {
+            addCriterion("is_low_energy_threshold >=", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdLessThan(Long value) {
+            addCriterion("is_low_energy_threshold <", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdLessThanOrEqualTo(Long value) {
+            addCriterion("is_low_energy_threshold <=", value, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdIn(List<Long> values) {
+            addCriterion("is_low_energy_threshold in", values, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdNotIn(List<Long> values) {
+            addCriterion("is_low_energy_threshold not in", values, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdBetween(Long value1, Long value2) {
+            addCriterion("is_low_energy_threshold between", value1, value2, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLowEnergyThresholdNotBetween(Long value1, Long value2) {
+            addCriterion("is_low_energy_threshold not between", value1, value2, "isLowEnergyThreshold");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIsNull() {
+            addCriterion("phone is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIsNotNull() {
+            addCriterion("phone is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneEqualTo(String value) {
+            addCriterion("phone =", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotEqualTo(String value) {
+            addCriterion("phone <>", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneGreaterThan(String value) {
+            addCriterion("phone >", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneGreaterThanOrEqualTo(String value) {
+            addCriterion("phone >=", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLessThan(String value) {
+            addCriterion("phone <", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLessThanOrEqualTo(String value) {
+            addCriterion("phone <=", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLike(String value) {
+            addCriterion("phone like", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotLike(String value) {
+            addCriterion("phone not like", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIn(List<String> values) {
+            addCriterion("phone in", values, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotIn(List<String> values) {
+            addCriterion("phone not in", values, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneBetween(String value1, String value2) {
+            addCriterion("phone between", value1, value2, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotBetween(String value1, String value2) {
+            addCriterion("phone not between", value1, value2, "phone");
             return (Criteria) this;
         }
     }

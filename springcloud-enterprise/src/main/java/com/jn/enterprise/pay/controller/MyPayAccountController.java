@@ -6,11 +6,10 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.pay.service.MyPayAccountService;
 import com.jn.enterprise.pay.service.MyPayBillService;
-import com.jn.pay.model.*;
+import com.jn.pay.model.PayAccountBookParam;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayAccountBookMoneyRecordVo;
 import com.jn.pay.vo.PayAccountBookRecordVo;
-import com.jn.pay.vo.PayRecordVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
@@ -25,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -98,19 +96,5 @@ public class MyPayAccountController extends BaseController {
         Result<String> data = myPayAccountService.getFeeAdvanceAgreement(sysDictInvoke,user);
         return new Result(data);
     }
-
-    @ControllerLog(doAction = "我的账本-预缴充值")
-    @ApiOperation(value = "我的账本-预缴充值",notes = "我的账本-预缴充值")
-    @RequestMapping(value = "/insertPrepaidRecharge",method = RequestMethod.POST)
-    @RequiresPermissions("/payment/payAccount/insertPrepaidRecharge")
-    public  Result<PayOrderRsp> insertPrepaidRecharge(@RequestBody @Validated PayPrepaidRechargeParam payPrepaidRechargeParam){
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(payPrepaidRechargeParam.getRechargeAmount(),"充值金额不能为空");
-        Assert.notNull(payPrepaidRechargeParam.getAcBookId(),"账本编号不能为空");
-        Assert.notNull(payPrepaidRechargeParam.getChannelId(),"支付渠道ID不能为空");
-        return myPayBillService.insertPrepaidRecharge(payPrepaidRechargeParam,user);
-    }
-
 
 }

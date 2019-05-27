@@ -149,6 +149,15 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
                     businessPromotionListParam.getRows() == 0 ? 15 : businessPromotionListParam.getRows(), true);
         }
         List<BusinessPromotionListShow> resultList = businessPromotionMapper.getBusinessPromotionList(businessPromotionListParam,creator);
+        for(BusinessPromotionListShow pShow:resultList){
+            //设置宣传摘要
+            String replaceDetails=pShow.getPropagandaDetails().replaceAll("</?[^>]+>","");
+            if(StringUtils.isNotBlank(replaceDetails)){
+                String propagandaSummaries=replaceDetails.substring(0,replaceDetails.length()>100?100:replaceDetails.length()-1);
+                propagandaSummaries=replaceDetails.length()>100?propagandaSummaries+"......":propagandaSummaries;
+                pShow.setPropagandaSummaries(propagandaSummaries);
+            }
+        }
         return  new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
     }
 
@@ -179,6 +188,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @ServiceLog(doAction = "企业宣传详情")
     @Override
     public BusinessPromotionDetailsShow getBusinessPromotionDetails(String propagandaId) {
+        businessPromotionMapper.addClickNumById(propagandaId);
         return businessPromotionMapper.getBusinessPromotionDetails(propagandaId);
     }
 

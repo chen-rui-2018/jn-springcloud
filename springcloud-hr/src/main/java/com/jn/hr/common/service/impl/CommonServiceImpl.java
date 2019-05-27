@@ -139,28 +139,16 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public String queryDictValueByLable(String parentGroupCode, String groupCode, String lable) {
-        String value="";
+    public List<SysDictKeyValue> queryDictList(String parentGroupCode, String groupCode) {
         SysDictInvoke sysDictInvoke=new SysDictInvoke();
         sysDictInvoke.setGroupCode(groupCode);
         sysDictInvoke.setModuleCode("springcloud_hr");
         sysDictInvoke.setParentGroupCode(parentGroupCode);
         Result result=systemClient.getDict(sysDictInvoke);
-        boolean flag=false;
-        if(result!=null && "0000".equals(result.getCode()) && result.getData()!=null){
-            List<SysDictKeyValue> certificateTypeList= (List<SysDictKeyValue>) result.getData();
-            if(!CollectionUtils.isEmpty(certificateTypeList)){
-                for (SysDictKeyValue dictKeyValue : certificateTypeList) {
-                    if(lable.equals(dictKeyValue.getLable())){
-                        value=dictKeyValue.getKey();
-                        flag=true;
-                        break;
-                    }
-                }
-            }
-        }else{
+        if(result==null || !"0000".equals(result.getCode()) || result.getData()!=null){
             throw new JnSpringCloudException(EmployeeExceptionEnums.QUERYDICT_ERROR);
         }
-        return value;
+        List<SysDictKeyValue> resultList= (List<SysDictKeyValue>) result.getData();
+        return resultList;
     }
 }

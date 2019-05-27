@@ -227,7 +227,6 @@ export default {
         if (res.data.code === '0000') {
           this.timeSetList = res.data.data
           this.timeSetList.forEach(item => {
-            debugger
             Object.assign(item, { disabled: true })
             const hasVal = this.shiftList.find(itemShift => {
               return itemShift.optionId === item.shift

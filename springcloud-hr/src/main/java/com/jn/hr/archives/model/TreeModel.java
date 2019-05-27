@@ -19,6 +19,10 @@ public class TreeModel {
     private String parentId;
     @ApiModelProperty(value = "层级")
     private String level;
+    @ApiModelProperty(value = "标识1部门,2员工")
+    private boolean flag;
+    @ApiModelProperty(value = "value")
+    private String value;
     private List<TreeModel> children;
 
     public String getId() {
@@ -59,5 +63,21 @@ public class TreeModel {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }

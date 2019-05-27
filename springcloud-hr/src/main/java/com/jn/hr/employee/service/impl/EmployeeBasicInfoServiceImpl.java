@@ -13,10 +13,7 @@ import com.jn.hr.common.enums.HrConstants;
 import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.enums.HrStatusEnums;
 import com.jn.hr.common.service.CommonService;
-import com.jn.hr.common.util.BeanCopyUtil;
-import com.jn.hr.common.util.CodeAndMsgUtil;
-import com.jn.hr.common.util.HrDataUtil;
-import com.jn.hr.common.util.ValidateUtil;
+import com.jn.hr.common.util.*;
 import com.jn.hr.employee.dao.*;
 import com.jn.hr.employee.entity.*;
 import com.jn.hr.employee.enums.*;
@@ -25,6 +22,7 @@ import com.jn.hr.employee.service.EmployeeBasicInfoService;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysDictInvoke;
+import com.jn.system.model.SysPost;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysDictKeyValue;
 import org.apache.commons.collections.CollectionUtils;
@@ -434,10 +432,35 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         int i=0;
         StringBuffer sb=new StringBuffer();
         List<TbManpowerEmployeeBasicInfo> batchResult=new ArrayList<TbManpowerEmployeeBasicInfo>();
+
+
+        Result deptResult= systemClient.selectDeptByParentId("",true);
+        if(deptResult==null || !"0000".equals(deptResult.getCode()) || deptResult.getData()==null){
+            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+        }
+        Map<String,String>  departMap= DepartMentUtil.convertDepartList((List<HashMap<String, Object>>)deptResult.getData());
+        Result<List<SysPost>> postResult=systemClient.getPostAll();
+        if(postResult==null || !"0000".equals(postResult.getCode()) || CollectionUtils.isEmpty(postResult.getData())){
+            throw new JnSpringCloudException(HrExceptionEnums.POST_QUERY_ERRPR);
+        }
+        List<SysPost>  postList=postResult.getData();
+        List<SysDictKeyValue>  certificateTypeList= commonService.queryDictList
+                ("employee","certificate_type");
+        List<SysDictKeyValue>  educationList= commonService.queryDictList
+                ("employee","education");
+        List<SysDictKeyValue>  jobList= commonService.queryDictList
+                ("employee","job");
+        List<SysDictKeyValue>  contractList= commonService.queryDictList
+                ("employee","contract");
+        List<SysDictKeyValue>  nationalityList= commonService.queryDictList
+                ("nationality","contract");
+
+
         for(Object result:resultList){
             i++;
             EmployeeBasicInfo database= (EmployeeBasicInfo) result;
-            String str=checkImportValue(database);
+            String str=checkImportValue(database,departMap,postList,certificateTypeList,educationList,
+                    jobList,contractList,nationalityList);
             if(!StringUtils.isBlank(str)){
                 sb.append("第"+i+"行:"+str+";");
                 continue;
@@ -513,10 +536,20 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         int i=0;
         StringBuffer sb=new StringBuffer();
         List<TbManpowerDirectlyLeader> batchResult=new ArrayList<TbManpowerDirectlyLeader>();
+
+
+        Result<List<SysPost>> postResult=systemClient.getPostAll();
+        if(postResult==null || !"0000".equals(postResult.getCode()) || CollectionUtils.isEmpty(postResult.getData())){
+            throw new JnSpringCloudException(HrExceptionEnums.POST_QUERY_ERRPR);
+        }
+        List<SysPost>  postList=postResult.getData();
+        List<SysDictKeyValue>  jobList= commonService.queryDictList
+                ("employee","job");
+
         for(Object result:resultList){
             i++;
             DirectlyLeader database= (DirectlyLeader) result;
-            String str=checkImportDirectlyLeader(database);
+            String str=checkImportDirectlyLeader(database,postList,jobList);
             if(!StringUtils.isBlank(str)){
                 sb.append("第"+i+"行:"+str+";");
                 continue;
@@ -599,10 +632,14 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         int i=0;
         StringBuffer sb=new StringBuffer();
         List<TbManpowerEducationExperience> batchResult=new ArrayList<TbManpowerEducationExperience>();
+
+        List<SysDictKeyValue>  educationList= commonService.queryDictList
+                ("employee","education");
+
         for(Object result:resultList){
             i++;
             EducationExperience database= (EducationExperience) result;
-            String str=checkImportEducation(database);
+            String str=checkImportEducation(database,educationList);
             if(!StringUtils.isBlank(str)){
                 sb.append("第"+i+"行:"+str+";");
                 continue;
@@ -668,7 +705,10 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         }
     }
 
-    private String checkImportValue(EmployeeBasicInfo database){
+    private String checkImportValue(EmployeeBasicInfo database,Map<String,String> departMap,List<SysPost> postList,
+                                    List<SysDictKeyValue> certificateTypeList,List<SysDictKeyValue> educationList,
+                                    List<SysDictKeyValue> jobList,List<SysDictKeyValue> contractList,
+                                    List<SysDictKeyValue> nationalityList){
         if(StringUtils.isBlank(database.getName())){
             return "姓名不能为空";
         }
@@ -699,29 +739,25 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         if(StringUtils.isBlank(database.getDepartmentName())){
             return "部门名称不能为空";
         }
-        TbManpowerDepartmentCriteria example=new TbManpowerDepartmentCriteria();
-        TbManpowerDepartmentCriteria.Criteria criteria=example.createCriteria();
-        criteria.andDepartmentNameEqualTo(database.getDepartmentName());
-        List<TbManpowerDepartment> departments=tbManpowerDepartmentMapper.selectByExample(example);
-        if(CollectionUtils.isEmpty(departments)){
+
+        database.setDepartmentId(departMap.get(database.getDepartmentName()));
+        if(StringUtils.isEmpty(database.getDepartmentId())){
             return "部门名称错误";
         }
-        database.setDepartmentId(departments.get(0).getDepartmentId());
+
 
         if(StringUtils.isBlank(database.getJobName())){
-            return "职位名称不能为空";
+            return "职级名称不能为空";
         }
-        database.setJobId(commonService.queryDictValueByLable("employee","job",
-                database.getJobName()));
+        database.setJobId(SysDictKeyValueUtil.getKeyByLabel(jobList,database.getJobName()));
         if(StringUtils.isBlank(database.getJobId())){
-            return "职位名称错误";
+            return "职级名称错误";
         }
 
         if(StringUtils.isBlank(database.getCertificateType())){
             return "证件类型不能为空";
         }
-        database.setCertificateId(commonService.queryDictValueByLable("employee","certificate_type"
-                ,database.getCertificateType()));
+        database.setCertificateId(SysDictKeyValueUtil.getKeyByLabel(certificateTypeList,database.getCertificateType()));
         if(StringUtils.isBlank(database.getCertificateId())){
             return "证件类型错误";
         }
@@ -731,19 +767,18 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         }
 
         if(StringUtils.isBlank(database.getPostName())){
-            return "职务名称不能为空";
+            return "岗位名称不能为空";
         }
-        database.setPostId(commonService.queryDictValueByLable("employee","post"
-                ,database.getPostName()));
+        database.setJobId(SysDictKeyValueUtil.getPostIdByName(postList,database.getPostName()));
         if(StringUtils.isBlank(database.getPostId())){
-            return "职务名称错误";
+            return "岗位名称错误";
         }
+
 
         if(StringUtils.isBlank(database.getContractName())){
             return "合同类型名称不能为空";
         }
-        database.setContractId(commonService.queryDictValueByLable("employee","contract"
-                ,database.getContractName()));
+        database.setContractId(SysDictKeyValueUtil.getKeyByLabel(contractList,database.getContractName()));
         if(StringUtils.isBlank(database.getContractId())){
             return "合同类型名称错误";
         }
@@ -772,8 +807,7 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         if(StringUtils.isBlank(database.getNationalityName())){
             return "国籍名称不能为空";
         }
-        database.setNationalityId(commonService.queryDictValueByLable("employee","nationality"
-                ,database.getNationalityName()));
+        database.setNationalityId(SysDictKeyValueUtil.getKeyByLabel(nationalityList,database.getNationalityName()));
 
         if(StringUtils.isBlank(database.getNationalityId())){
             return "国籍名称错误";
@@ -817,7 +851,7 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         return "";
     }
 
-    private String checkImportDirectlyLeader(DirectlyLeader database) {
+    private String checkImportDirectlyLeader(DirectlyLeader database,List<SysPost> postList,List<SysDictKeyValue> jobList) {
         if(StringUtils.isBlank(database.getJobNumber())){
             return "工号不能为空";
         }
@@ -839,23 +873,22 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         }
 
         if(!StringUtils.isBlank(database.getDirectLeaderLevelName())){
-            database.setDirectLeaderLevel(commonService.queryDictValueByLable("employee","post",
-                    database.getDirectLeaderLevelName()));
+            database.setDirectLeaderLevel(SysDictKeyValueUtil.getKeyByLabel(jobList,database.getDirectLeaderLevelName()));
             if(StringUtils.isBlank(database.getDirectLeaderLevel())){
                 return "直属领导职级错误";
             }
         }
+
         if(!StringUtils.isBlank(database.getDirectLeadershipName())){
-            database.setDirectLeadership(commonService.queryDictValueByLable("employee","job"
-                    ,database.getDirectLeadershipName()));
+            database.setDirectLeadership(SysDictKeyValueUtil.getPostIdByName(postList,database.getDirectLeadershipName()));
             if(StringUtils.isBlank(database.getDirectLeadership())){
-                return "直属领导职务错误";
+                return "直属领导岗位错误";
             }
         }
         return "";
     }
 
-    private String checkImportEducation(EducationExperience database) {
+    private String checkImportEducation(EducationExperience database,List<SysDictKeyValue> educationList) {
         if(StringUtils.isBlank(database.getJobNumber())){
             return "工号不能为空";
         }
@@ -887,8 +920,7 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             }
         }
         if(!StringUtils.isBlank(database.getEducationName())){
-            database.setEducationCode(commonService.queryDictValueByLable("employee","education",
-                    database.getEducationName()));
+            database.setEducationCode(SysDictKeyValueUtil.getKeyByLabel(educationList,database.getEducationName()));
             if(StringUtils.isBlank(database.getEducationCode())){
                 return "学历错误";
             }
@@ -902,8 +934,8 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             return "工号不存在";
         }
         //查询直属领导表判断是否存在
-        List<EducationExperience> educationList=educationExperienceMapper.selectByJobNumber(database.getJobNumber());
-        if(!CollectionUtils.isEmpty(educationList)){
+        List<EducationExperience> educationExpList=educationExperienceMapper.selectByJobNumber(database.getJobNumber());
+        if(!CollectionUtils.isEmpty(educationExpList)){
             return "教育经历表已经存在当前工号的记录";
         }
         return "";
@@ -993,5 +1025,78 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         tbManpowerEmployeeBasicInfoMapper.updateByPrimaryKeySelective(record);
     }
 
+    @Override
+    public List<TreeModel> selectDepartEmployee() {
+        Result result= systemClient.selectDeptByParentId("",true);
+        if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+        }
+        List<TreeModel> rootList=new ArrayList<TreeModel>();
+        List<HashMap<String,Object>> list= (List<HashMap<String, Object>>) result.getData();
 
+        for (HashMap<String, Object> stringObjectHashMap : list) {
+            TreeModel treeModel = getTreeModel(stringObjectHashMap);
+            rootList.add(treeModel);
+        }
+
+        return rootList;
+    }
+
+    private void setTreeChildren(TreeModel rootModel,List<HashMap<String,Object>> children){
+        if(children==null || children.size()==0){
+            return;
+        }
+        List<TreeModel> childList=null;
+        if(rootModel.getChildren()==null){
+            childList=new ArrayList<TreeModel>();
+        }else{
+            childList=rootModel.getChildren();
+        }
+
+        for (HashMap<String, Object> childMap : children) {
+            TreeModel treeModel = getTreeModel(childMap);
+            childList.add(treeModel);
+        }
+        rootModel.setChildren(childList);
+    }
+
+    private void setTreeEmployeeChildren(TreeModel rootModel,List<TbManpowerEmployeeBasicInfo> children){
+        if(children==null || children.size()==0){
+            return;
+        }
+        List<TreeModel> childList=null;
+        if(rootModel.getChildren()==null){
+            childList=new ArrayList<TreeModel>();
+        }else{
+            childList=rootModel.getChildren();
+        }
+
+        for (TbManpowerEmployeeBasicInfo child : children) {
+            TreeModel treeModel = new TreeModel();
+            treeModel.setFlag(false);//表示员工
+            treeModel.setId(child.getId());
+            treeModel.setValue(child.getId());
+            treeModel.setLabel(child.getName());
+            childList.add(treeModel);
+        }
+        rootModel.setChildren(childList);
+    }
+
+    private TreeModel getTreeModel(HashMap<String, Object> childMap) {
+        TreeModel treeModel = new TreeModel();
+        treeModel.setFlag(true);//表示部门
+        treeModel.setId((String) childMap.get("id"));
+        treeModel.setValue((String) childMap.get("value"));
+        treeModel.setLabel((String) childMap.get("departmentName"));
+        List<TbManpowerEmployeeBasicInfo> employees=employeeBasicInfoMapper.selectByDepartment(treeModel.getId());
+        if(!CollectionUtils.isEmpty(employees)){
+            setTreeEmployeeChildren(treeModel,employees);
+        }
+        if (childMap.get("children") != null) {
+            List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
+            setTreeChildren(treeModel, childrenSub);
+
+        }
+        return treeModel;
+    }
 }

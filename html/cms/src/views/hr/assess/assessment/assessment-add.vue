@@ -6,11 +6,11 @@
       </el-form-item>
       <el-form-item label="考核开始时间" prop="assessmentTime">
         <el-col :span="11" style="width:auto;">
-          <el-date-picker v-model="assessment.assessmentStartTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始日期" style="width: 100%;" @change="getStarttime" />
+          <el-date-picker v-model="assessment.assessmentStartTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始日期" style="width: 210px;" @change="getStarttime" />
         </el-col>
         <el-col :span="2" class="line" align="center">至</el-col>
         <el-col :span="11" style="width:auto;">
-          <el-date-picker v-model="assessment.assessmentEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" style="width: 100%;" @change="getEndtime" />
+          <el-date-picker v-model="assessment.assessmentEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" style="width: 210px;" @change="getEndtime" />
         </el-col>
       </el-form-item>
       <el-form-item label="考核模板" prop="templateId" class="inline">
@@ -19,13 +19,24 @@
         </el-select>
       </el-form-item>
       <el-form-item label="考核对象" prop="assessmentObject" class="inline">
-        <el-input v-model="assessmentObjectData" type="textarea" style="width: 500px;" readonly="readonly"/>
-        <el-button type="text" @click="openAssessmentObjPage">选择</el-button>
+        <!--最后子节点支持多选  only-last="true" -->
+        <el-cascader-multi ref="assessmentObjectRef" v-model="checkList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 620px" @change="assessmentObjectSel"/>
+        <!--<el-input v-model="assessmentObjectData" type="textarea" style="width: 500px;" readonly="readonly"/>
+        <el-button type="text" @click="openAssessmentObjPage">选择</el-button>-->
       </el-form-item>
       <el-form-item label="考核人" prop="assessmentPeople" class="inline">
+        <el-cascader
+          :options="deptEmployeeList"
+          v-model="assessmentPeopleArr"
+          change-on-select
+          placeholder="请选择"
+          clearable
+          @change="assessmentPeopleSel"
+        />
+        <!--<el-cascader-multi v-model="checkList" :data="deptEmployeeList" style="width: 620px" @change="assessmentPeopleSel"/>-->
         <!--<el-input v-model="assessment.assessmentPeople" style="width: 205px;"/>-->
-        <el-input v-model="assessmentPeopleData" type="textarea" style="width: 500px;" readonly="readonly"/>
-        <el-button type="text" @click="openAssessmentPeoplePage">选择</el-button>
+        <!--<el-input v-model="assessmentPeopleData" type="textarea" style="width: 500px;" readonly="readonly"/>
+        <el-button type="text" @click="openAssessmentPeoplePage">选择</el-button>-->
       </el-form-item>
       <el-form-item>
         <el-button :disabled="isDisabled" type="primary" @click="submitForm()">发送</el-button>
@@ -34,7 +45,7 @@
     </el-form>
     <!--获取考核对象/考核人树形信息模板-->
     <!--<template v-if="assessmentObjPageVisible">-->
-    <el-dialog :title="titleMap[dialogStatus]" :visible.sync="assessmentObjPageVisible" style="width: 950px;" >
+    <!--<el-dialog :title="titleMap[dialogStatus]" :visible.sync="assessmentObjPageVisible" style="width: 950px;" >
       <div style="width: 100%;height: 320px;overflow: auto">
         <el-input
           v-model="filterText"
@@ -49,7 +60,7 @@
         <el-button type="primary" @click="getKeys(dialogStatus)">确定</el-button>
         <el-button @click="closeDialog" >取消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
     <!-- </template>-->
   </div>
 </template>
@@ -63,9 +74,13 @@ export default {
   components: { UE },
   data() {
     return {
+      // 新部门员工树
+      deptEmployeeList: [],
+      checkList: [],
+      // 新部门员工树 end
       defaultMsg: '',
       filterText: '',
-      rootData: [],
+      // rootData: [],
       assessmentObjectData: '',
       assessmentPeopleData: '',
       config: {
@@ -107,6 +122,7 @@ export default {
         moduleCode: 'springcloud-hr',
         parentGroupCode: 'assess'
       },
+      assessmentPeopleArr: [],
       rules: {
         assessmentName: [{ required: true, message: '请输考核名称', trigger: 'blur' }],
         templateId: [{ required: true, message: '请选择考核模板', trigger: 'change' }],
@@ -123,17 +139,86 @@ export default {
   },
   created() {
     this.getTemplates()
-    this.getDepartmentTree()
+    this.getDeptEmployeeList()
   },
   methods: {
-    getDepartmentTree() {
-      api('hr/AssessmentManagement/ObtainDepartmentTree', {}).then(res => {
-        if (res.data.code === '0000') {
-          this.rootData = res.data.data
-        } else {
-          this.$message.error(res.data.result)
+    assessmentObjectSel() {
+      const selectedNodes = this.$refs['assessmentObjectRef'].selectedNodes
+      this.assessment.assessmentObject = ''
+      for (let i = 0; i < selectedNodes.length; i++) {
+        if (!selectedNodes.flag) {
+          this.assessment.assessmentObject = this.assessment.assessmentObject + selectedNodes[i].value + ','
         }
-      })
+      }
+      if (this.assessment.assessmentObject.length > 0) {
+        this.assessment.assessmentObject = this.assessment.assessmentObject.substring(0, this.assessment.assessmentObject.length - 1)
+      }
+    },
+    assessmentPeopleSel(val) {
+      this.assessment.assessmentPeople = this.assessmentPeopleArr[this.assessmentPeopleArr.length - 1]
+    },
+    getDeptEmployeeList() {
+      this.deptEmployeeList = [
+        {
+          value: 'dept1',
+          label: '部门1',
+          flag: true,
+          children: [{
+            value: 'dept2',
+            label: '研发',
+            flag: true,
+            children: [{
+              flag: false,
+              value: 'NJ000001',
+              label: '张三'
+            }, {
+              flag: false,
+              value: 'NJ000007',
+              label: '李四'
+            }, {
+              flag: false,
+              value: 'NJ000006',
+              label: '赵六'
+            }]
+          }, {
+            value: 'daohang',
+            label: '导航',
+            flag: true,
+            children: [{
+              flag: false,
+              value: 'cexiangdaohang',
+              label: '侧向导航'
+            }, {
+              flag: false,
+              value: 'dingbudaohang',
+              label: '顶部导航'
+            }]
+          }]
+        }, {
+          value: 'ziyuan',
+          label: '资源',
+          flag: true,
+          children: [{
+            flag: true,
+            value: 'axure',
+            label: 'Axure Components'
+          }, {
+            flag: true,
+            value: 'sketch',
+            label: 'Sketch Templates'
+          }, {
+            flag: true,
+            value: 'jiaohu',
+            label: '组件交互文档'
+          }]
+        }]
+      // api('hr/AssessmentManagement/ObtainDepartmentTree', {}).then(res => {
+      //   if (res.data.code === '0000') {
+      //     this.rootData = res.data.data
+      //   } else {
+      //     this.$message.error(res.data.result)
+      //   }
+      // })
     },
     templateIdSel(val) {
       this.assessment.templateId = val

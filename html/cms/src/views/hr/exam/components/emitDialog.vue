@@ -86,7 +86,7 @@ export default {
           window.setTimeout(function() {
             _this.vueQrEmintDom = document.getElementById('vueQrEmint').innerHTML // 创建一个隐藏元素
             _this.formData.emailContent = '你好！<br/>邀请你参加"在职测试"考试，您可以点击下面的考试链接或者扫描二维码直接参加考试<br/>点击链接参加考试：<a href="' + returnData.examinaUrl + '" style="color:purple;cursor:pointer;">' + returnData.examinaUrl + '</a><br/>或者扫描二维码参加考试：<br/><br/>' + _this.vueQrEmintDom
-          }, 300)
+          }, 100)
         } else {
           this.$message.error(res.data.result)
         }

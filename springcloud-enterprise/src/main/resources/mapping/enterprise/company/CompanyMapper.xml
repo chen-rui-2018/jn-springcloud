@@ -80,7 +80,32 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(induType)">
         AND t.indu_type = #{induType,jdbcType=VARCHAR}
         </if>
-        ORDER BY ${orderByClause}
+        ORDER BY ${orderByClause} desc
 
     </select>
+    <select id="getCompanyDetails" resultType = "com.jn.enterprise.company.model.CompanyInfoShow">
+      select
+          t1.id as "companyId"
+          ,t1.com_name as "comName"
+          ,t1.avatar as "avatar"
+          ,t1.com_web as "comWeb"
+          ,t1.affiliated_park as "affiliatedId"
+          ,t1.affiliated_name as "affiliatedName"
+          ,t1.com_server as "comServer"
+          ,t1.com_demand as "comDemand"
+          ,t1.founding_time as "foundingTime"
+          ,t1.com_type as "comType"
+          ,t1.com_address as "comAddress"
+          ,t1.browse_number as "browseNumber"
+          ,t1.browse_number as "browseNumber"
+          ,t1.com_synopsis as  "comSynopsis"
+          ,t1.addr_park "addrPark"
+          ,t1.com_tele "conTele"
+          ,t1.owner_law "ownerLaw"
+          ,t1.owner_phone "ownerPhone"
+          ,t1.products "products"
+        from tb_service_company t1
+         where t1.id=#{companyId};
+    </select>
+
 </mapper>

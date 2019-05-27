@@ -11,6 +11,8 @@ import com.jn.common.model.Result;
 import com.jn.hr.model.AttendanceManageApiVo;
 import com.jn.hr.model.AttendanceManagement;
 import com.jn.hr.model.AttendanceManagementApiVo;
+import com.jn.hr.model.AttendanceOverTime;
+import com.jn.hr.model.AttendanceOverTimeApiVo;
 import com.jn.hr.model.VacationManagement;
 
 /**
@@ -39,5 +41,5 @@ public interface HrClient {
     public  Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@RequestBody  AttendanceManagement attendanceManagement);
 	
 	@RequestMapping(value={"/api/hr/selectByUserIdAndTime"}, method={RequestMethod.POST})
-	public Result<AttendanceManagementApiVo> selectByUserIdAndTime(@RequestBody  AttendanceManagement attendanceManagement);
+	public Result<AttendanceOverTimeApiVo> selectByUserIdAndTime(@RequestBody  AttendanceOverTime attendanceOverTime);
 }

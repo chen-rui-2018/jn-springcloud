@@ -3,7 +3,7 @@ package com.jn.hr.attendance.enums;
 import com.jn.common.api.CodeAndMsg;
 
 public enum AttendanceManageTypeEnums implements CodeAndMsg{
-
+    NORMAL("0","正常"),
 	COME_LATE("1","迟到"),
 	LEAVE_EARLY("2","早退"),
 	MISS_CARD("3","缺卡"),

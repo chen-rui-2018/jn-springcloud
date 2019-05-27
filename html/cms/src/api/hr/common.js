@@ -132,3 +132,11 @@ export function getNextMonth(date) {
   return t2
 }
 
+export function systemApi(url, query) {
+  return request({
+    url: 'springcloud-app-system/' + url,
+    method: 'post',
+    data: query
+  })
+}
+

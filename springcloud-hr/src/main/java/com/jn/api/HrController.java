@@ -19,13 +19,15 @@ import com.jn.hr.attendance.service.AttendanceManagementService;
 import com.jn.hr.model.AttendanceManageApiVo;
 import com.jn.hr.model.AttendanceManagement;
 import com.jn.hr.model.AttendanceManagementApiVo;
+import com.jn.hr.model.AttendanceOverTime;
+import com.jn.hr.model.AttendanceOverTimeApiVo;
 import com.jn.hr.model.VacationManagement;
 import com.jn.system.log.annotation.ControllerLog;
 
 import io.swagger.annotations.ApiOperation;
-//@Api(tags = "考核管理")
+
+
 @RestController
-//@RequestMapping("/api/hr")
 public class HrController implements HrClient{
 	
 	private static final Logger logger = LoggerFactory.getLogger(HrController.class);
@@ -82,11 +84,11 @@ public class HrController implements HrClient{
 	    @RequiresPermissions("/hr/AttendanceManagement/selectByUserIdAndTime")
 		@ApiOperation(value = "考勤接口", notes = "考勤接口")
 	    @RequestMapping(value = "/selectByUserIdAndTime", method = RequestMethod.POST)
-		public Result<AttendanceManagementApiVo> selectByUserIdAndTime(@Validated @RequestBody  AttendanceManagement attendanceManagement){
-	    	Assert.notNull(attendanceManagement.getUserId(),"签到人不能为空");
-	    	Assert.notNull(attendanceManagement.getType(),"签到类型不能为空");
-	    	Assert.notNull(attendanceManagement.getAttendanceDate(),"签到时间不能为空");
-	    	AttendanceManagementApiVo attendanceManage= attendanceManagementService.selectByUserIdAndTime(attendanceManagement);
-			return new Result(attendanceManage);
+		public Result<AttendanceOverTimeApiVo> selectByUserIdAndTime(@Validated @RequestBody  AttendanceOverTime attendanceOverTime){
+	    	Assert.notNull(attendanceOverTime.getUserId(),"签到人不能为空");
+	    	Assert.notNull(attendanceOverTime.getType(),"签到类型不能为空");
+	    	Assert.notNull(attendanceOverTime.getAttendanceDate(),"签到时间不能为空");
+	    	AttendanceOverTimeApiVo attendanceOverTimeApi= attendanceManagementService.selectByUserIdAndTime(attendanceOverTime);
+			return new Result(attendanceOverTimeApi);
 		}
 }

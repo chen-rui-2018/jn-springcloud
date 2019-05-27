@@ -206,9 +206,11 @@ public class ExaminaServiceImpl implements ExaminaService {
 	 * @return
 	 */
 	private String getQuestType(String questType) {
-		String questTypeStr = ExaminaStatusEnmus.TYPE_ONE.getMessage();
+		String questTypeStr = "";
 		if (!StringUtils.isBlank(questType)) {
-			if (questType.equals(ExaminaStatusEnmus.TYPE_TWO.getCode())) {
+			if (questType.equals(ExaminaStatusEnmus.TYPE_ONE.getCode())) {
+				questTypeStr = ExaminaStatusEnmus.TYPE_ONE.getMessage();
+			} else if (questType.equals(ExaminaStatusEnmus.TYPE_TWO.getCode())) {
 				questTypeStr = ExaminaStatusEnmus.TYPE_TWO.getMessage();
 			} else if (questType.equals(ExaminaStatusEnmus.TYPE_THREE.getCode())) {
 				questTypeStr = ExaminaStatusEnmus.TYPE_THREE.getMessage();

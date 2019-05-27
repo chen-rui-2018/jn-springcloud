@@ -29,7 +29,7 @@
             and employee_type=#{employeeType}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and department_id=#{departmentId}
+            and department_id  like concat('%',#{departmentId},'%')
         </if>
         ORDER BY created_time DESC
     </select>

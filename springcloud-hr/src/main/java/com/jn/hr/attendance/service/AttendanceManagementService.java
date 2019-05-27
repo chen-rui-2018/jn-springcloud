@@ -3,7 +3,6 @@ package com.jn.hr.attendance.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jn.common.model.PaginationData;
@@ -16,6 +15,8 @@ import com.jn.hr.attendance.model.AttendanceTimeSetVo;
 import com.jn.hr.model.AttendanceManageApiVo;
 import com.jn.hr.model.AttendanceManagement;
 import com.jn.hr.model.AttendanceManagementApiVo;
+import com.jn.hr.model.AttendanceOverTime;
+import com.jn.hr.model.AttendanceOverTimeApiVo;
 import com.jn.hr.model.VacationManagement;
 import com.jn.system.model.User;
 
@@ -68,6 +69,6 @@ public interface AttendanceManagementService {
 	public String insertByLeaveVacationmanage(VacationManagement vacationManage);
 	
 	//考勤接口
-	public AttendanceManagementApiVo selectByUserIdAndTime(AttendanceManagement attendanceManagement);
+	public AttendanceOverTimeApiVo selectByUserIdAndTime(AttendanceOverTime attendanceOverTime);
 	
 }

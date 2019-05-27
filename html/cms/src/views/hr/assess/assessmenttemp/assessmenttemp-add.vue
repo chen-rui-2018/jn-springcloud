@@ -38,7 +38,17 @@
           </el-table-column>
           <el-table-column label="牵头考核部门">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.leadAssessmentDepartment"/>
+              <!--<el-input v-model="scope.row.leadAssessmentDepartment"/>-->
+              <!-- <el-form-item v-if="Visible" label="部门">-->
+              <el-cascader
+                :options="departmentList"
+                v-model="scope.row.leadAssessmentDepartmentS"
+                change-on-select
+                placeholder="请选择"
+                clearable
+                @change="handleChangeDepartment"
+              />
+              <!--</el-form-item>-->
             </template>
           </el-table-column>
           <el-table-column label="得分">
@@ -69,11 +79,13 @@
 </template>
 <script>
 import {
-  api
+  api, systemApi
 } from '@/api/hr/common'
 export default {
   data() {
     return {
+      departmentListLoading: false,
+      departmentList: [],
       tableData: [{
         rowNum: 0,
         templateName: '',
@@ -81,6 +93,7 @@ export default {
         serialNumber: '',
         score: '',
         scoreRubric: '',
+        leadAssessmentDepartmentS: [],
         leadAssessmentDepartment: '',
         assessmentScore: '',
         assessmentTarget: '',
@@ -94,7 +107,29 @@ export default {
       rowIndex: 1
     }
   },
+  mounted() {
+    this.getAllDepartment()
+  },
   methods: {
+    // 获取所有部门列表
+    getAllDepartment() {
+      this.departmentListLoading = true
+      systemApi('system/sysDepartment/findDepartmentAllByLevel').then(res => {
+        if (res.data.code === '0000') {
+          this.departmentList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
+      })
+    },
+
+    // 选择部门（新增用户对话框）
+    handleChangeDepartment(value) {
+      debugger
+      // // 提交的时候拿到的部门id等于提取出来的最后一个id
+      // this.temp.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
+    },
     // 获取表格选中时的数据
     selectRow(val) {
       this.selectlistRow = val
@@ -136,6 +171,7 @@ export default {
       this.$refs.tableData.clearSelection()
     },
     submitForm() {
+      debugger
       this.isDisabled = true
       if (this.templateName === '') {
         this.$message.error('请填写模板名称')
@@ -171,7 +207,7 @@ export default {
           msg = msg + '评分细则、'
           flag = false
         }
-        if (val.leadAssessmentDepartment == null || val.leadAssessmentDepartment === '') {
+        if (val.leadAssessmentDepartmentS == null || val.leadAssessmentDepartmentS === '') {
           msg = msg + '牵头考核部门、'
           flag = false
         }
@@ -187,7 +223,10 @@ export default {
       for (let i = 0; i < this.selectlistRow.length; i++) {
         const val = this.selectlistRow[i]
         // val.templateName=this.templateName
+        // 取最后一个部门ID
+        val.leadAssessmentDepartment = this.selectlistRow[i].leadAssessmentDepartmentS[ this.selectlistRow[i].leadAssessmentDepartmentS.length - 1]
         delete val.rowNum
+        delete val.leadAssessmentDepartmentS
         this.commitRows.push(val)
       }
       const rows = { templateName: this.templateName, recordList: this.commitRows }
@@ -218,7 +257,7 @@ export default {
         'serialNumber': row.serialNumber,
         'score': row.score,
         'scoreRubric': row.scoreRubric,
-        'leadAssessmentDepartment': row.leadAssessmentDepartment,
+        'leadAssessmentDepartment': row.leadAssessmentDepartmentS[row.leadAssessmentDepartmentS.length - 1],
         'assessmentScore': row.assessmentScore,
         'assessmentTarget': row.assessmentTarget,
         'causeDeduction': row.causeDeduction

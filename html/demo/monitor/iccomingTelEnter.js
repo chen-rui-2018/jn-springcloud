@@ -1,11 +1,68 @@
-﻿var curl="http://localhost/springcloud-park/";
+﻿//服务请求url
+var service_url="http://112.94.22.222:8000/springcloud-park/";
+//var service_url="http://localhost/springcloud-park/";
+//获取token的Url
+var token_Url="http://112.94.22.222:8000/springcloud-app-system";
+//客服连接服务器ip
+var serviceIp="112.94.22.222";
+//客服连接服务器端口号
+var servicePort="13000";
+
+
 var toolbar = new ghToolbar( "mySoftphone" );
 //获取token
-var token=sessionStorage.token;
+var token="";
 $(function () {
+	//获取token
+	token=getCookie('Admin-Token');
+	if(token==undefined || token==''){
+		getServiceToken();
+		token=getCookie('Admin-Token');
+	}
+	//设置服务器连接ip和端口号
+	$("#serverIp").val(serviceIp);
+	$("#serverPort").val(servicePort);
 	//获取服务模块信息
 	getServiceModule();
 });
+
+function getCookie(cookieName) {
+    var strCookie = document.cookie;
+    var arrCookie = strCookie.split("; ");
+    for(var i = 0; i < arrCookie.length; i++){
+        var arr = arrCookie[i].split("=");
+        if(cookieName == arr[0]){
+            return arr[1];
+        }
+    }
+    return "";
+}
+
+function getServiceToken(){
+	$.ajax({
+		url: token_Url+'/authLogin',
+		type: 'POST',
+		async: false,
+		data: {
+		},
+		dataType: 'json',
+		beforeSend: function(xhr) {
+		},
+		success: function(data, textStatus, jqXHR) {
+			// console.log('================>authLogin请求返回data：' + data)
+			if (data.code === '0000') {
+				if (data.data !== null) {
+					console.log('================>authLogin请求返回：' + data.data)
+					document.cookie ="Admin-Token="+data.data+"; path=/";
+				}
+			}
+		},
+		error: function(xhr, textStatus) {
+		},
+		complete: function() {
+		}
+	})
+}
 
 
 
@@ -13,7 +70,7 @@ $(function () {
 function getServiceModule(){
 	$.ajax({
 		type: 'get',
-		url: curl + '/guest/customer/customerCalledInfoEnterController/serviceModules',
+		url: service_url + '/customer/customerCalledInfoEnterController/serviceModules',
 		dataType: "json",
 		data: {},
 		headers: {
@@ -38,8 +95,8 @@ function getServiceModule(){
 
 //连接ACD服务器
 function connectACD(){
-	var ip = document.getElementById("serverip").value;
-	var port = document.getElementById("serverport").value;
+	var ip = document.getElementById("serverIp").value;
+	var port = document.getElementById("serverPort").value;
 	var r = toolbar.ConnectToACD( ip, port );
 	addLog( "调用ConnectToACD方法, 返回值=" + r );
 }
@@ -406,13 +463,13 @@ toolbar.OnTelephoneRing(function( szCaller, szCallid ) {
 function getCallerOwen(obj){
 	$.ajax({
 		type: 'get',
-		url: curl + '/guest/customer/customerCalledInfoEnterController/getPhoneCalledOwen',
+		url: service_url + '/customer/customerCalledInfoEnterController/getPhoneCalledOwen',
 		dataType: "json",
 		data: {
-			phone: obj,
+			phone: obj
 		},
 		headers: {
-			"X-Authorization-access_token":token
+			"token":token
 		},
 		success: function (data) {
 			if(data!=null && data.data!=null && data.code=='0000'){
@@ -428,13 +485,13 @@ function getUserIno(obj){
 	$("#userData").html("");
 	$.ajax({
 		type: 'get',
-		url: curl + '/guest/customer/customerCalledInfoEnterController/getUserInfo',
+		url: service_url + '/customer/customerCalledInfoEnterController/getUserInfo',
 		dataType: "json",
 		data: {
-			phone: obj,
+			phone: obj
 		},
 		headers: {
-			"X-Authorization-access_token":token
+			"token":token
 		},
 		success: function (data) {
 			var table=""
@@ -456,13 +513,13 @@ function getUserIno(obj){
 function getCalledHistory(obj){
 	$.ajax({
 		type: 'get',
-		url: curl + '/guest/customer/customerCalledInfoEnterController/getCalledHistory',
+		url: service_url + '/customer/customerCalledInfoEnterController/getCalledHistory',
 		dataType: "json",
 		data: {
-			phone: obj,
+			phone: obj
 		},
 		headers: {
-			"X-Authorization-access_token":token
+			"token":token
 		},
 		success: function (data) {
 			var table=""
@@ -496,13 +553,13 @@ function getHistoryDetails(obj){
 	$("#detailLoad").show();
 	$.ajax({
 		type: 'get',
-		url: curl + '/guest/customer/customerCalledInfoEnterController/customerQuesDetail',
+		url: service_url + '/customer/customerCalledInfoEnterController/customerQuesDetail',
 		dataType: "json",
 		data: {
-			processInsId: processInsId,
+			processInsId: processInsId
 		},
 		headers: {
-			"X-Authorization-access_token":token
+			"token":token
 		},
 		success: function (data) {
 			$("#detailLoad").hide();
@@ -684,7 +741,8 @@ function submit(){
 		 "quesDetails":quesDetails,
 		 "clientType":clientType,
 		 "custName":custName,
-		 "contactWay":contactWay
+		 "contactWay":contactWay,
+		 "shiroSessionId":token
 	 }
 	//显示加载中...
 	$("#submitDesc").show();
@@ -693,12 +751,12 @@ function submit(){
 	//提交数据
 	$.ajax({
 		type: 'post',
-		url: curl + '/guest/customer/customerCalledInfoEnterController/saveCalledInfo',
+		url: service_url + '/customer/customerCalledInfoEnterController/saveCalledInfo',
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
 		data: JSON.stringify(json),
 		headers: {
-			"X-Authorization-access_token":token
+			"token":token
 		},
 		success: function (data) {
 			$("#submitDesc").hide();

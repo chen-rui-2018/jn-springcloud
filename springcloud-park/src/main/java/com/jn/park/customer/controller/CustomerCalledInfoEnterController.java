@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Api(tags = "客服中心--园区客服中心")
 @RestController
-@RequestMapping("/guest/customer/customerCalledInfoEnterController")
+@RequestMapping("/customer/customerCalledInfoEnterController")
 public class CustomerCalledInfoEnterController extends BaseController {
     /**
      * 日志组件

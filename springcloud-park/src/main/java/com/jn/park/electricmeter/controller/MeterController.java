@@ -83,7 +83,7 @@ public class MeterController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "计价规则id",type = "String" ,example = "1",required = true)
     })
-    public Result deletePriceRule(@RequestBody MeterInfoModel model){
+    public Result deletePriceRule(@RequestBody MeterIdParam model){
         Result result = new Result();
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Integer data = meterRulesService.deletePriceRule(user,model.getId());
@@ -180,17 +180,6 @@ public class MeterController extends BaseController {
         return meterCalcCostService.setUrgeCall(user,model.getId());
     }
 
-    @ControllerLog(doAction = "支付成功后的回调接口")
-    @ApiOperation(value = "支付成功后的回调接口",notes = "支付成功后的回调接口", httpMethod = "POST")
-    @PostMapping(value = "/updateBillInfo")
-    @RequiresPermissions("/meter/updateBillInfo")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id" ,value = "账单id",type = "String" ,example = "1",required = true)
-    })
-    public Result updateBillInfo(String id){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        return meterCalcCostService.updateBillInfo(user,id);
-    }
 
     @ControllerLog(doAction = "手动调用定时计价接口，进行指定企业的电费和电量计算")
     @ApiOperation(value = "手动调用定时计价接口，进行指定企业的电费和电量计算",notes = "手动调用定时计价接口，进行指定企业的电费和电量计算", httpMethod = "POST")
@@ -237,4 +226,5 @@ public class MeterController extends BaseController {
         return meterService.updateMeterInfo( user,model);
     }
 
+    
 }

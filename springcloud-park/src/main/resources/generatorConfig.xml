@@ -1269,6 +1269,7 @@
     <table tableName="tb_electric_error_log"></table>
     <table tableName="tb_electric_energy_bill"></table>
     <table tableName="tb_electric_energy_bill_detail"></table>
+    <table tableName="tb_electric_meter_switch_log"></table>
 
   </context>
   <!--物业维修-->

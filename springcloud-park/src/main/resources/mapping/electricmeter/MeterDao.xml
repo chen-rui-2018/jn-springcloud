@@ -321,6 +321,25 @@
         </if>
     </select>
 
+    <insert id="saveMeterLinkInDay" parameterType="java.util.List">
+        insert into tb_electric_meter_company_day
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricMeterCompanyDayMapper.Base_Column_List"/>)
+        <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
+            select
+            #{ item.id,jdbcType=VARCHAR},
+            #{ item.meterCode,jdbcType=VARCHAR},
+            #{ item.meterName,jdbcType=VARCHAR},
+            #{ item.companyId,jdbcType=VARCHAR},
+            #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.creatorAccount,jdbcType=VARCHAR},
+            #{ item.createdTime,jdbcType=TIMESTAMP},
+            #{ item.modifierAccount,jdbcType=VARCHAR},
+            #{ item.modifiedTime,jdbcType=TIMESTAMP},
+            #{ item.day,jdbcType=DATE}
+            from  dual
+        </foreach>
+    </insert>
+
     <select id="getRuleIdByCompanyId"  parameterType="java.lang.String" resultType="java.lang.String">
         select
         rule_id
@@ -350,15 +369,15 @@
         tb_electric_reading
         where
         record_status =1
-        <if test="dealData !=null">
+        <if test="dealDate !=null">
             and deal_date=#{dealDate}
-            and meterCode=#{meterCode}
+            and meter_code=#{meterCode}
         </if>
-        <if test="dealData ==null">
+        <if test="dealDate ==null">
             and deal_date=date_sub(curdate(),interval 1 day)
-            and meterCode=#{meterCode}
+            and meter_code=#{meterCode}
         </if>
-        order by hour asc
+        order by deal_hour asc
     </select>
 
     <!--保存计价规则和企业之间的关系-->
@@ -405,4 +424,76 @@
         </foreach>
     </insert>
 
+    <insert id="saveWarningRecord" parameterType="java.util.List">
+        insert into Tb_Electric_Warning_Record
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricWarningRecordMapper.Base_Column_List"/>)
+        <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
+            select
+            #{ item.id,jdbcType=VARCHAR}, #{ item.ruleId,jdbcType=VARCHAR}, #{ item.companyId,jdbcType=VARCHAR},
+            #{ item.warningName,jdbcType=VARCHAR}, #{ item.thresholds,jdbcType=DECIMAL}, #{ item.warningContent,jdbcType=VARCHAR},
+            #{ item.recordStatus,jdbcType=TINYINT}, #{ item.creatorAccount,jdbcType=VARCHAR}, #{ item.createdTime,jdbcType=TIMESTAMP},
+            #{ item.modifierAccount,jdbcType=VARCHAR}, #{ item.modifiedTime,jdbcType=TIMESTAMP}, #{ item.companyName,jdbcType=VARCHAR}
+            from  dual
+        </foreach>
+    </insert>
+
+    <!--停电的企业-->
+    <select id="stopElectric" resultType="com.jn.park.electricmeter.model.SwitchModel">
+        select
+        id as id
+        , turn_name as turnName
+        , thresholds as thresholds
+        , turn_content as turnContent
+        , company_id as companyId
+        , company_name as companyName
+        , balance as balance
+        from tb_electric_turn_rules t ,
+        tb_electric_cost p
+        where p.balance &lt; t.thresholds
+        and p.record_status =1
+        and t.record_status=1
+    </select>
+
+    <!--有电的企业-->
+    <select id="getElectric" resultType="com.jn.park.electricmeter.model.SwitchModel">
+        select
+        id as id
+        , turn_name as turnName
+        , thresholds as thresholds
+        , turn_content as turnContent
+        , company_id as companyId
+        , company_name as companyName
+        , balance as balance
+        from tb_electric_turn_rules t ,
+        tb_electric_cost p
+        where p.balance &gt;= t.thresholds
+        and p.record_status =1
+        and t.record_status=1
+    </select>
+
+
+    <!--获取企业当前的电表，进行停电或开启操作-->
+    <select id="getHostsMeter" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        meter_code as meterCode
+        from
+        tb_electric_meter_info
+        where record_status=1
+        and company_id=#{companyId}
+        group by meterCode
+    </select>
+
+    <!--保存电表转换的日志-->
+    <insert id="saveMeterSwitchLog" parameterType="java.util.List">
+        insert into tb_electric_energy_bill_detail
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricMeterSwitchLogMapper.Base_Column_List"/>)
+        <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
+            select
+            #{ item.id,jdbcType=VARCHAR}, #{ item.meterCode,jdbcType=VARCHAR}, #{ item.turnId,jdbcType=VARCHAR},
+            #{ item.turnName,jdbcType=VARCHAR}, #{ item.companyId,jdbcType=VARCHAR}, #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.creatorAccount,jdbcType=VARCHAR}, #{ item.createdTime,jdbcType=TIMESTAMP}, #{ item.modifierAccount,jdbcType=VARCHAR},
+            #{ item.modifiedTime,jdbcType=TIMESTAMP}, #{ item.switchStatus,jdbcType=TINYINT}, #{ item.companyName,jdbcType=VARCHAR}
+            from  dual
+        </foreach>
+    </insert>
 </mapper>

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.electricmeter.dao.TbElectricMeterSwitchLogMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.electricmeter.entity.TbElectricMeterSwitchLog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="meter_code" jdbcType="VARCHAR" property="meterCode" />
+    <result column="turn_id" jdbcType="VARCHAR" property="turnId" />
+    <result column="turn_name" jdbcType="VARCHAR" property="turnName" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="switch_status" jdbcType="TINYINT" property="switchStatus" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, meter_code, turn_id, turn_name, company_id, record_status, creator_account, created_time, 
+    modifier_account, modified_time, switch_status, company_name
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterSwitchLogCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_electric_meter_switch_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_electric_meter_switch_log
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_electric_meter_switch_log
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterSwitchLogCriteria">
+    delete from tb_electric_meter_switch_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterSwitchLog">
+    insert into tb_electric_meter_switch_log (id, meter_code, turn_id, 
+      turn_name, company_id, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, switch_status, company_name
+      )
+    values (#{id,jdbcType=VARCHAR}, #{meterCode,jdbcType=VARCHAR}, #{turnId,jdbcType=VARCHAR}, 
+      #{turnName,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{switchStatus,jdbcType=TINYINT}, #{companyName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterSwitchLog">
+    insert into tb_electric_meter_switch_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="meterCode != null">
+        meter_code,
+      </if>
+      <if test="turnId != null">
+        turn_id,
+      </if>
+      <if test="turnName != null">
+        turn_name,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="switchStatus != null">
+        switch_status,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        #{meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="turnId != null">
+        #{turnId,jdbcType=VARCHAR},
+      </if>
+      <if test="turnName != null">
+        #{turnName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="switchStatus != null">
+        #{switchStatus,jdbcType=TINYINT},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterSwitchLogCriteria" resultType="java.lang.Long">
+    select count(*) from tb_electric_meter_switch_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_electric_meter_switch_log
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meterCode != null">
+        meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.turnId != null">
+        turn_id = #{record.turnId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.turnName != null">
+        turn_name = #{record.turnName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.switchStatus != null">
+        switch_status = #{record.switchStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_electric_meter_switch_log
+    set id = #{record.id,jdbcType=VARCHAR},
+      meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      turn_id = #{record.turnId,jdbcType=VARCHAR},
+      turn_name = #{record.turnName,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      switch_status = #{record.switchStatus,jdbcType=TINYINT},
+      company_name = #{record.companyName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterSwitchLog">
+    update tb_electric_meter_switch_log
+    <set>
+      <if test="meterCode != null">
+        meter_code = #{meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="turnId != null">
+        turn_id = #{turnId,jdbcType=VARCHAR},
+      </if>
+      <if test="turnName != null">
+        turn_name = #{turnName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="switchStatus != null">
+        switch_status = #{switchStatus,jdbcType=TINYINT},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterSwitchLog">
+    update tb_electric_meter_switch_log
+    set meter_code = #{meterCode,jdbcType=VARCHAR},
+      turn_id = #{turnId,jdbcType=VARCHAR},
+      turn_name = #{turnName,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      switch_status = #{switchStatus,jdbcType=TINYINT},
+      company_name = #{companyName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

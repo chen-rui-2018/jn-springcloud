@@ -1,6 +1,7 @@
 package com.jn.enterprise.workflow.task.dao;
 
 import com.jn.enterprise.workflow.task.model.TaskPage;
+import com.jn.enterprise.workflow.task.model.TaskStatistics;
 import com.jn.enterprise.workflow.task.model.TaskType;
 import com.jn.enterprise.workflow.task.vo.TaskTypeVo;
 import com.jn.enterprise.workflow.task.vo.TaskVo;
@@ -36,5 +37,12 @@ public interface TaskMapper {
      * @return
      */
     List<TaskVo> selectTaskListByCondition(TaskPage taskPage);
+
+    /**
+     * 时效性待办事项预警数据统计
+     * @param taskStatistics
+     * @return
+     */
+    String getWorkflowTaskStatistics(TaskStatistics taskStatistics);
 
 }

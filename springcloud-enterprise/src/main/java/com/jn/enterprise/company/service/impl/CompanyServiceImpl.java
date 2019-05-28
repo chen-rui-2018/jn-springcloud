@@ -26,9 +26,11 @@ import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.model.IBPSFile;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
@@ -47,6 +49,7 @@ import com.jn.park.care.model.ServiceEnterpriseCompany;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -278,6 +281,15 @@ public class CompanyServiceImpl implements CompanyService {
         companyUpdateParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         companyUpdateParam.setCreatorAccount(account);
         companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
+
+        // 处理图片
+        companyUpdateParam.setAvatar(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getAvatar()));
+        companyUpdateParam.setBusinessLicense(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getBusinessLicense()));
+        List<String> picList = Arrays.asList(companyUpdateParam.getPropagandaPicture().split(","));
+        String ibpsUrl = IBPSFileUtils.uploadFiles(account, picList);
+        if (StringUtils.isNotBlank(ibpsUrl)) {
+            companyUpdateParam.setPropagandaPicture(ibpsUrl);
+        }
 
         String bpmnDefId = ibpsDefIdConfig.getUpdateCompanyInfo();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, companyUpdateParam);

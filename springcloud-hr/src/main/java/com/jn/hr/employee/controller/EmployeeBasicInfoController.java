@@ -211,7 +211,7 @@ public class EmployeeBasicInfoController extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "查询部门员工树")
-    //@RequiresPermissions("/hr/employeeBasicInfo/selectDepartEmployee")
+    @RequiresPermissions("/hr/employeeBasicInfo/selectDepartEmployee")
     @ApiOperation(value = "查询部门员工树", notes = "查询部门员工树")
     @GetMapping(value = "/selectDepartEmployee")
     public Result selectDepartEmployee() {

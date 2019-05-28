@@ -48,10 +48,9 @@ import org.springframework.stereotype.Service;
 import com.jn.park.care.model.ServiceEnterpriseCompany;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 企业信息Service
@@ -308,6 +307,11 @@ public class CompanyServiceImpl implements CompanyService {
         CompanyDetailsVo vo = new CompanyDetailsVo();
         //获取企业基本信息 基本信息+ 基本资料+ 法人信息+ 产品
         CompanyInfoShow show  = companyMapper.getCompanyDetails(companyId);
+
+        if(show==null){
+            logger.info("企业信息不存在!");
+            return vo;
+        }
         //获取 评论数  和 关注数信息
         List<ServiceEnterpriseCompany> getCompanyNewList= new ArrayList<>();
         ServiceEnterpriseCompany serviceEnterpriseCompany = new ServiceEnterpriseCompany();
@@ -342,6 +346,19 @@ public class CompanyServiceImpl implements CompanyService {
             }
             show.setPersonAvatar(avatarList);
         }
+        //获取地址中的城市信息
+        if(StringUtils.isNotBlank(show.getComAddress())){
+            List<Map<String,String>> list = addressResolution(show.getComAddress());
+            if(!list.isEmpty()){
+              String province =   list.get(0).get("province");
+              String cityKey = "市";
+             if(cityKey.equals(province.substring(province.length()-1))){
+                 show.setCity(province);
+             }else {
+                 show.setCity(list.get(0).get("city"));
+             }
+            }
+        }
         vo.setCompanyInfoShow(show);
         return vo;
     }
@@ -356,6 +373,28 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Result<Boolean> saveComment(CommentAddParam commentAddParam){
         return commentClient.commentActivity(commentAddParam);
+    }
+    public static List<Map<String,String>> addressResolution(String address){
+        String regex="(?<province>[^省]+自治区|.*?省|.*?行政区|.*?市)(?<city>[^市]+自治州|.*?地区|.*?行政单位|.+盟|市辖区|.*?市|.*?县)(?<county>[^县]+县|.+区|.+市|.+旗|.+海域|.+岛)?(?<town>[^区]+区|.+镇)?(?<village>.*)";
+        Matcher m= Pattern.compile(regex).matcher(address);
+        String province=null,city=null,county=null,town=null,village=null;
+        List<Map<String,String>> table=new ArrayList<Map<String,String>>();
+        Map<String,String> row=null;
+        while(m.find()){
+            row=new LinkedHashMap<String,String>();
+            province=m.group("province");
+            row.put("province", province==null?"":province.trim());
+            city=m.group("city");
+            row.put("city", city==null?"":city.trim());
+            county=m.group("county");
+            row.put("county", county==null?"":county.trim());
+            town=m.group("town");
+            row.put("town", town==null?"":town.trim());
+            village=m.group("village");
+            row.put("village", village==null?"":village.trim());
+            table.add(row);
+        }
+        return table;
     }
 
     @ServiceLog(doAction = "修改企业信用分")

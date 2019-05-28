@@ -649,6 +649,62 @@ export default new Router({
           name: 'policyCenter'
         },
         {
+          path: '/parkProfile',
+          component: resolve => require(['@/views/parkProfile/index'], resolve),
+          meta: {
+            title: '园区概况'
+          },
+          name: 'parkProfile'
+        },
+        {
+          path: '/investmentPolicy',
+          component: resolve => require(['@/views/investmentPolicy/index'], resolve),
+          meta: {
+            title: '招商政策'
+          },
+          name: 'investmentPolicy'
+        },
+        {
+          path: '/investmentPolicyDetail',
+          component: resolve => require(['@/views/investmentPolicy/investmentPolicyDetail'], resolve),
+          meta: {
+            title: '招商政策详情'
+          },
+          name: 'investmentPolicyDetail'
+        },
+        {
+          path: '/investmentDynamic',
+          component: resolve => require(['@/views/investmentDynamic/index'], resolve),
+          meta: {
+            title: '招商动态'
+          },
+          name: 'investmentDynamic'
+        },
+        {
+          path: '/investmentDynamicDetail',
+          component: resolve => require(['@/views/investmentDynamic/investmentDynamicDetail'], resolve),
+          meta: {
+            title: '招商动态详情'
+          },
+          name: 'investmentDynamicDetail'
+        },
+        {
+          path: '/investmentInfo',
+          component: resolve => require(['@/views/investmentInfo/index'], resolve),
+          meta: {
+            title: '招商信息'
+          },
+          name: 'investmentInfo'
+        },
+        {
+          path: '/investmentInfoDetail',
+          component: resolve => require(['@/views/investmentInfo/investmentInfoDetail'], resolve),
+          meta: {
+            title: '招商信息详情'
+          },
+          name: 'investmentInfoDetail'
+        },
+        {
           path: '/graphicPolicy',
           component: resolve => require(['@/views/policyCenter/graphicPolicy'], resolve),
           meta: {

@@ -265,15 +265,18 @@ public class CompanyServiceImpl implements CompanyService {
         companyUpdateParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         companyUpdateParam.setCreatorAccount(account);
         companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
+        companyUpdateParam.setComProperty(StringUtils.join(companyUpdateParam.getComPropertyList(), ","));
+        companyUpdateParam.setComPropertyList(null);
 
         // 处理图片
         companyUpdateParam.setAvatar(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getAvatar()));
         companyUpdateParam.setBusinessLicense(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getBusinessLicense()));
-        List<String> picList = Arrays.asList(companyUpdateParam.getPropagandaPicture().split(","));
+        List<String> picList = Arrays.asList(companyUpdateParam.getPropagandaPictureList());
         String ibpsUrl = IBPSFileUtils.uploadFiles(account, picList);
         if (StringUtils.isNotBlank(ibpsUrl)) {
             companyUpdateParam.setPropagandaPicture(ibpsUrl);
         }
+        companyUpdateParam.setPropagandaPictureList(null);
 
         String bpmnDefId = ibpsDefIdConfig.getUpdateCompanyInfo();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, companyUpdateParam);

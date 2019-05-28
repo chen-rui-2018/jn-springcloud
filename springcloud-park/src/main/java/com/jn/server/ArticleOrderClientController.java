@@ -59,6 +59,7 @@ public class ArticleOrderClientController implements ArticleOrderClient {
      * @return
      */
     @Override
+    @ControllerLog(doAction = "创建订单")
     public Result<PayOrderRsp> createArticlePay(@RequestBody CreatePayReqModel createPayReqModel) {
         return assetArticleLeaseOrdersService.createArticlePay(createPayReqModel.getOrderId(),createPayReqModel.getChannelId(),createPayReqModel.getPaySum(),createPayReqModel.getUserAccount());
     }

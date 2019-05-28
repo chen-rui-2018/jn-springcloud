@@ -18,6 +18,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -40,6 +41,7 @@ public class MeterController extends BaseController {
     private MeterRulesService meterRulesService;
     @Autowired
     private MeterCalcCostService meterCalcCostService;
+
 
     private static Logger logger = LoggerFactory.getLogger(MeterTimerController.class);
 
@@ -121,8 +123,6 @@ public class MeterController extends BaseController {
         result.setData(data);
         return result;
     }
-
-
 
 
     @ControllerLog(doAction = "企业计价规则维护-企业更新计价规则")
@@ -226,5 +226,36 @@ public class MeterController extends BaseController {
         return meterService.updateMeterInfo( user,model);
     }
 
-    
+    //能耗统计
+    @ControllerLog(doAction = "分组统计图表")
+    @ApiOperation(value = "分组统计图表",notes = "分组统计图表", httpMethod = "GET")
+    @GetMapping(value = "/groupChart")
+    @RequiresPermissions("/meter/groupChart")
+    public Result groupChart(){
+        return meterService.groupChart();
+    }
+
+    @ControllerLog(doAction = "分类统计图表")
+    @ApiOperation(value = "分类统计图表",notes = "分类统计图表", httpMethod = "GET")
+    @GetMapping(value = "/categaryChart")
+    @RequiresPermissions("/meter/categaryChart")
+    public Result categaryChart(){
+        return meterService.categaryChart();
+    }
+
+    @ControllerLog(doAction = "趋势明细图表")
+    @ApiOperation(value = "趋势明细图表",notes = "趋势明细图表", httpMethod = "POST")
+    @PostMapping(value = "/trendChartDetail")
+    @RequiresPermissions("/meter/trendChartDetail")
+    public Result trendChartDetail(@RequestBody @Validated TrendChartParam param){
+        return meterService.trendChartDetail(param);
+    }
+
+    @ControllerLog(doAction = "趋势图表")
+    @ApiOperation(value = "趋势图表",notes = "趋势图表", httpMethod = "POST")
+    @PostMapping(value = "/trendChart")
+    @RequiresPermissions("/meter/trendChart")
+    public Result trendChart(@RequestBody @Validated TrendChartParam param){
+        return meterService.trendChart(param);
+    }
 }

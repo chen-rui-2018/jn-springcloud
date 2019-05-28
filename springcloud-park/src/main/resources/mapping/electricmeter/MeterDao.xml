@@ -496,4 +496,120 @@
             from  dual
         </foreach>
     </insert>
+
+    <!--每日耗电趋势图-->
+    <select id="trendChart" parameterType="com.jn.park.electricmeter.model.TrendChartParam" resultType="com.jn.park.electricmeter.model.TrendChartStatisticsModel">
+        select t.deal_date_value  as dealDateVale,
+        sum(t.b_value) as allEnergy
+        from vw_electric_sum   t
+        inner join tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        where t.type = '日'
+        <!--采集时间-->
+        <if test="dealDateStart == null">
+            and t.deal_date_value &gt;= CURDATE()
+        </if>
+        <if test="dealDateStart != null">
+            and t.deal_date_value &gt;= #{dealDateStart,jdbcType=DATE}
+        </if>
+
+        <if test="dealDateEnd == null">
+            and t.deal_date_value &lt;= CURDATE()
+        </if>
+        <if test="dealDateEnd != null">
+            and t.deal_date_value &lt;= #{dealDateEnd,jdbcType=DATE}
+        </if>
+
+        <if test="type !=null">
+            and t2.type = #{type,jdbcType=TINYINT}
+        </if>
+
+        <if test="meterName !=null">
+            and t2.meter_name=#{meterName}
+        </if>
+        <if test="position !=null ">
+            and t2.position = #{position}
+        </if>
+        group by t.deal_date_value
+        order by t.deal_date_value
+    </select>
+
+    <!--每日耗电趋势图(下面明细)-->
+    <select id="trendChartDetail" parameterType="com.jn.park.electricmeter.model.TrendChartParam" resultType="com.jn.park.electricmeter.model.TrendChartDetailStatisticsModel">
+
+        select t2.type  as type ,
+        t2.position as position,
+        t2.company_name as companyName,
+        t2.meter_name as meterName,
+        '001X' as flag,
+        sum(t.b_value) as allEnergy,
+        case when round((sum(t.b_value) - sum(t.s_value)) /sum(t.s_value) * 100,2) &gt; t2.is_high_energy_threshold then  '高能耗'
+        when round((sum(t.b_value) - sum(t.s_value)) /sum(t.s_value) * 100,2)  &lt; t2.is_low_energy_threshold then  '低能耗'
+        else '正常' end  threshold
+        from vw_electric_sum t
+        inner join tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        where t.type = '日'
+        <if test="dealDateStart == null">
+            and t.deal_date_value &gt;= CURDATE()
+        </if>
+        <if test="dealDateStart != null">
+            and t.deal_date_value &gt;= #{dealDateStart,jdbcType=DATE}
+        </if>
+
+        <if test="dealDateEnd == null">
+            and t.deal_date_value &lt;= CURDATE()
+        </if>
+        <if test="dealDateEnd != null">
+            and t.deal_date_value &lt;= #{dealDateEnd,jdbcType=DATE}
+        </if>
+        <if test="type !=null">
+            and t2.type = #{type,jdbcType=TINYINT}
+        </if>
+
+        <if test="meterName !=null">
+            and t2.meter_name=#{meterName}
+        </if>
+        <if test="position !=null ">
+            and t2.position = #{position}
+        </if>
+        group by t.deal_date_value, t.meter_code
+        order by  t2.position
+
+    </select>
+    <!--分组能耗统计-->
+    <select id="groupChart" resultType="com.jn.park.electricmeter.model.GroupChartStatisticsModel">
+        select position as position ,
+        sum(br_reading_end) as brReadingEnd,
+        sum(is_high) as isHigh
+        from (
+        select
+        t2.position,
+        t.meter_code,
+        sum(t.b_value) br_reading_end ,
+        case when round((sum(t.b_value) - sum(t.s_value)) /sum(t.s_value) * 100,2) &gt; t2.is_high_energy_threshold then 1 else 0 end is_high
+        from vw_electric_sum t
+        LEFT join tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        where  t.type = '日'
+        and t.deal_date_value &gt;= DATE(CURDATE())
+        group by t2.position,t.meter_code ) t
+        group by position
+    </select>
+
+    <!--当日分类设备能耗趋势-->
+    <select id="categaryChart"  resultType="com.jn.park.electricmeter.model.GategaryEnergyStatisticsModel">
+        select t.deal_date_value as dealDateValue ,
+        t2.type as type,
+        sum(t.b_value) as bValue
+        from vw_electric_sum   t
+        LEFT join tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        where
+        t.deal_date_value >= date_sub(date_sub(date_format(now(), '%y-%m-%d'),interval extract(day from now()) - 1 day),interval 0 month)
+        and t.type = '日'
+        group by t.deal_date_value,t2.type
+        order by t.deal_date_value,t2.type
+    </select>
+
 </mapper>

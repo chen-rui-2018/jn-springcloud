@@ -132,7 +132,7 @@
                       group by meter_code, deal_date) t5
             on t.meter_code = t5.meter_code
            and t.deal_date = t5.deal_date
-         where t.deal_date >  CURDATE()
+         where t.deal_date >=  CURDATE()
          group by t.meter_code, t.deal_date
 
     </insert>
@@ -599,17 +599,26 @@
 
     <!--当日分类设备能耗趋势-->
     <select id="categaryChart"  resultType="com.jn.park.electricmeter.model.GategaryEnergyStatisticsModel">
-        select t.deal_date_value as dealDateValue ,
-        t2.type as type,
-        sum(t.b_value) as bValue
-        from vw_electric_sum   t
-        LEFT join tb_electric_meter_info t2
+
+        select t.val  as dealDateValue,
+        t.electric_type as type,
+        ifnull(sum(t2.degree_diff),0)  as bValue
+        from tb_electric_date t
+        left join
+        ( select deal_date,t2.type,t.deal_hour,sum(t.degree_diff) degree_diff  from
+        tb_electric_reading t
+        inner join tb_electric_meter_info t2
         on t.meter_code = t2.meter_code
-        where
-        t.deal_date_value >= date_sub(date_sub(date_format(now(), '%y-%m-%d'),interval extract(day from now()) - 1 day),interval 0 month)
-        and t.type = '日'
-        group by t.deal_date_value,t2.type
-        order by t.deal_date_value,t2.type
+        where t.deal_date &gt;= DATE(CURDATE())
+        group by deal_date,t.deal_hour ) t2
+        on t.date = t2.deal_date
+        and t.val = t2.deal_hour
+        and t.electric_type = t2.type
+        where t.date &gt;= DATE(CURDATE())   # 开始时间  默认本月月初
+        and t.date &lt; DATE(CURDATE()+1)
+        and t.type = '时'
+        group by t.val,t.electric_type
+        order by t.val+0,t.electric_type +0
     </select>
 
 </mapper>

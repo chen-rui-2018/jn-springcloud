@@ -397,7 +397,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         priceruleCompanyMapper.updateByExampleSelective(record, priceruleCompanyCriteria);
 
         if (records == null || records.size() == 0) {
-            //todo 抛出更新失败的异常
+            throw new JnSpringCloudException(MeterExceptionEnums.PRICE_RULE_ISNOT_EXIST);
         }
         //保存数据
         saveCompanyPriceRule(user, ruleId, companyId);

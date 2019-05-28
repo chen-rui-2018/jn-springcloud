@@ -301,6 +301,10 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
                     String str = DateUtils.formatDate(new Date(), "yyyyMMdd");
                     String fileName = split[0] + str + RandomStringUtils.randomNumeric(4) + "." + split[1];
                     Result<String> result = uploadClient.uploadFile(file, true,fileGroup);
+                    if(!"0000".equals(result.getCode())){
+                        logger.error("档案附件上传失败,code={},message={}",result.getCode(),result.getResult());
+                        throw new JnSpringCloudException(HrExceptionEnums.UPLOAD_FILE_ERRPR);
+                    }
                     fileAttachment.setFileId(fileId);
                     fileAttachment.setCreateTime(new Date());
                     fileAttachment.setFileName(split[0]);

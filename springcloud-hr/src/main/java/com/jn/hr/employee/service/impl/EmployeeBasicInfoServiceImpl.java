@@ -1080,6 +1080,8 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             treeModel.setLabel(child.getName());
             treeModel.setLevel("");
             treeModel.setParentId("");
+            treeModel.setJobNumber(child.getJobNumber());
+            treeModel.setMailbox(child.getMailbox());
             treeModel.setChildren(new ArrayList<TreeModel>());
             childList.add(treeModel);
         }
@@ -1094,6 +1096,9 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         treeModel.setLabel((String) childMap.get("departmentName"));
         treeModel.setLevel((String) childMap.get("level"));
         treeModel.setParentId((String) childMap.get("parentId"));
+        treeModel.setJobNumber("");
+        treeModel.setMailbox("");
+
         List<TbManpowerEmployeeBasicInfo> employees=employeeBasicInfoMapper.selectByDepartment(treeModel.getId());
         if(!CollectionUtils.isEmpty(employees)){
             setTreeEmployeeChildren(treeModel,employees);

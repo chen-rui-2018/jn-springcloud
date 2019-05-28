@@ -2,7 +2,7 @@
   <div class="invest-give">
     <el-card>
       <!-- 标题 -->
-      <el-tabs v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="tabsCLick">
         <el-tab-pane label="编辑调研" name="first"/>
         <el-tab-pane label="发放调研" name="second"/>
         <el-tab-pane label="调研结果" name="third"/>
@@ -196,8 +196,8 @@ export default {
       activeName: 'second',
       // 二维码
       appSrc:
-        'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
-        this.$route.query.id,
+          'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
+          this.$route.query.id,
       // 提交数据
       formData: {
         effectiveTimeEnd: '',
@@ -216,8 +216,8 @@ export default {
         researchProject: this.$route.query.researchProject,
         surveyDimensional: 'static/QrCode/qr.jpg',
         surveyUrl:
-          'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
-          this.$route.query.id
+            'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
+            this.$route.query.id
       }
     }
   },
@@ -243,6 +243,17 @@ export default {
           this.$message.error(res.data.result)
         }
       })
+    },
+    tabsCLick(item) {
+      if (this.activeName === 'first') {
+        this.$router.push({ path: 'invest-edit', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'second') {
+        this.$router.push({ path: 'invest-give', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'third') {
+        this.$router.push({ path: 'invest-result', query: { id: this.$route.query.id }})
+      }
     },
     // 下载图片
     downloadImg() {
@@ -295,52 +306,52 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.mode {
-  padding: 10px 10px;
-  .modeTit {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 26px;
-    span {
-      display: inline-block;
-      width: 68px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-    .line {
-      display: inline-block;
+  .mode {
+    padding: 10px 10px;
+    .modeTit {
+      display: flex;
+      align-items: center;
       width: 100%;
-      height: 2px;
-      background-color: #f5f5f5;
-    }
-  }
-  .modeCon {
-    padding: 20px;
-    font-size: 14px;
-    .item {
-      margin-bottom: 36px;
-      .item-l {
+      height: 26px;
+      span {
+        display: inline-block;
+        width: 68px;
         font-size: 14px;
+        font-weight: bold;
       }
-      .maImg {
-        width: 126px;
-        height: 126px;
-        border: 1px solid #ccc;
-        img {
-          width: 100%;
-          height: 100%;
+      .line {
+        display: inline-block;
+        width: 100%;
+        height: 2px;
+        background-color: #f5f5f5;
+      }
+    }
+    .modeCon {
+      padding: 20px;
+      font-size: 14px;
+      .item {
+        margin-bottom: 36px;
+        .item-l {
+          font-size: 14px;
         }
-      }
-      .maCon {
-        p:first-child {
-          margin-top: 0;
+        .maImg {
+          width: 126px;
+          height: 126px;
+          border: 1px solid #ccc;
+          img {
+            width: 100%;
+            height: 100%;
+          }
         }
-      }
-      .maLink {
-        margin-top: 16px;
+        .maCon {
+          p:first-child {
+            margin-top: 0;
+          }
+        }
+        .maLink {
+          margin-top: 16px;
+        }
       }
     }
   }
-}
 </style>

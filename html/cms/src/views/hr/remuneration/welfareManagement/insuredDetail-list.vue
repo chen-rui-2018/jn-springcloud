@@ -89,7 +89,7 @@
 </template>
 <script>
 import {
-  api, exportExcel, getPreMonth, getNextMonth, apiGet, systemApi
+  api, exportExcel, getPreMonth, getNextMonth, systemApi
 } from '@/api/hr/common'
 
 import UE from '@/components/ue.vue'
@@ -140,7 +140,7 @@ export default {
   },
   mounted() {
     this.initList()
-    this.getDepartmentList()
+    this.getAllDepartment()
   },
   methods: {
     // 选择部门（新增用户对话框）
@@ -162,15 +162,6 @@ export default {
     reflushList() {
       this.getInsuredDetaildList(this.queryMonth)
       this.getDetailSub(this.queryMonth, this.listQuery.departmentId)
-    },
-    getDepartmentList() {
-      apiGet('hr/employeeDepartment/getEmployeeDepartments').then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
     },
     getInsuredMonthNextMonth() {
       const curMonth = this.queryMonth

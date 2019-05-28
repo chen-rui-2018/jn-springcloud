@@ -20,7 +20,7 @@
     <result column="funeral_leave" jdbcType="INTEGER" property="funeralLeave" />
     <result column="maternity_leave" jdbcType="INTEGER" property="maternityLeave" />
     <result column="annual_leave" jdbcType="INTEGER" property="annualLeave" />
-    <result column="attendance_date" jdbcType="INTEGER" property="attendanceDate" />
+    <result column="attendance_date" jdbcType="VARCHAR" property="attendanceDate" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -129,7 +129,7 @@
       #{startMissCard,jdbcType=INTEGER}, #{endMissCard,jdbcType=INTEGER}, #{absenteeism,jdbcType=INTEGER}, 
       #{compassionateLeave,jdbcType=INTEGER}, #{sickLeave,jdbcType=INTEGER}, #{marriageHoliday,jdbcType=INTEGER}, 
       #{funeralLeave,jdbcType=INTEGER}, #{maternityLeave,jdbcType=INTEGER}, #{annualLeave,jdbcType=INTEGER}, 
-      #{attendanceDate,jdbcType=INTEGER})
+      #{attendanceDate,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.hr.attendance.entity.TbManpowerAttendanceManagement">
     insert into tb_manpower_attendance_management
@@ -248,7 +248,7 @@
         #{annualLeave,jdbcType=INTEGER},
       </if>
       <if test="attendanceDate != null">
-        #{attendanceDate,jdbcType=INTEGER},
+        #{attendanceDate,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -316,7 +316,7 @@
         annual_leave = #{record.annualLeave,jdbcType=INTEGER},
       </if>
       <if test="record.attendanceDate != null">
-        attendance_date = #{record.attendanceDate,jdbcType=INTEGER},
+        attendance_date = #{record.attendanceDate,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -343,7 +343,7 @@
       funeral_leave = #{record.funeralLeave,jdbcType=INTEGER},
       maternity_leave = #{record.maternityLeave,jdbcType=INTEGER},
       annual_leave = #{record.annualLeave,jdbcType=INTEGER},
-      attendance_date = #{record.attendanceDate,jdbcType=INTEGER}
+      attendance_date = #{record.attendanceDate,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -403,7 +403,7 @@
         annual_leave = #{annualLeave,jdbcType=INTEGER},
       </if>
       <if test="attendanceDate != null">
-        attendance_date = #{attendanceDate,jdbcType=INTEGER},
+        attendance_date = #{attendanceDate,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -427,7 +427,7 @@
       funeral_leave = #{funeralLeave,jdbcType=INTEGER},
       maternity_leave = #{maternityLeave,jdbcType=INTEGER},
       annual_leave = #{annualLeave,jdbcType=INTEGER},
-      attendance_date = #{attendanceDate,jdbcType=INTEGER}
+      attendance_date = #{attendanceDate,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

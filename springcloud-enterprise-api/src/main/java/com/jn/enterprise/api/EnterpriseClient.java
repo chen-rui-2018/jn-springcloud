@@ -22,20 +22,20 @@ public interface EnterpriseClient {
     /**
      * 创建任务
      */
-    @RequestMapping(value = "/task/createTask", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/task/createTask", method = RequestMethod.GET)
     void createTask();
 
     /**
      * 更新任务状态
      */
-    @RequestMapping(value = "/task/updateTask", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/task/updateTask", method = RequestMethod.GET)
     void updateTask();
 
 
     /**
      * 任务预警
      */
-    @RequestMapping(value = "/task/taskWarning", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/task/taskWarning", method = RequestMethod.GET)
     void taskWarning();
 
 }

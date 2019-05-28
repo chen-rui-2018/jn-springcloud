@@ -58,8 +58,7 @@ public class PayServerController extends BaseController implements PayClient {
         Assert.notNull(payCheckReminderParam.getBillId(),"账单ID或编号不能为空");
         Assert.notNull(payCheckReminderParam.getReminderNumber(),"催缴次数不能为空");
         Assert.notNull(payCheckReminderParam.getModifiedReminderTime(),"最新催缴时间不能为空");
-        myPayBillService.updateBillNumber(payCheckReminderParam);
-        return new Result();
+        return new Result(myPayBillService.updateBillNumber(payCheckReminderParam));
     }
 
     @ControllerLog(doAction = "我的账单-核查提醒录入")
@@ -67,8 +66,7 @@ public class PayServerController extends BaseController implements PayClient {
     public Result billCheckReminder(@RequestBody PayCheckReminder payCheckReminder) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        myPayBillService.billCheckReminder(payCheckReminder,user);
-        return new Result();
+        return new Result( myPayBillService.billCheckReminder(payCheckReminder,user));
     }
 
     @ControllerLog(doAction = "我的账单-创建账单")

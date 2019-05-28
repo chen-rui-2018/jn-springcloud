@@ -26,7 +26,7 @@
          ifnull((select tg.identity from tb_gam_topic tg where creator_account = #{account} limit 1),0) as "identity",
          (select count(1) from tb_person_care tp1 where tp1.care_account = t1.care_account) as "careNum", <!--关注数-->
          (select count(1) from tb_person_care tp2 where tp2.receive_account = t1.care_account) as "fansNum", <!--粉丝数-->
-         (select count(1) from tb_park_like tl where tl.like_parent_id in (
+         (select count(tp3.like_parent_id) from tb_park_like tp3 where tp3.record_status = 1 and tp3.like_status = 1 and  tp3.like_parent_id in (
              select tt.topic_id from tb_gam_topic tt where tt.creator_account =t1.care_account
                   )) as "likedNum" <!--获赞数-->
         <if test="currentAccount != null and currentAccount != '' ">

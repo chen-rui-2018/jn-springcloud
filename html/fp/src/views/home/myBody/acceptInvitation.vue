@@ -778,7 +778,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  path: "/servicemarket/product/userCenter"
+                  path: "/home"
                 });
                 this.disabled = false;
               } else {
@@ -795,7 +795,7 @@ export default {
       });
     },
     toCounselorManagement() {
-      this.$router.push({ path: "/servicemarket/product/userCenter" });
+      this.$router.push({ path: "/home" });
     }
     // toEditAdvisers() {
     //   this.$router.push({ name: "editAdvisers" });

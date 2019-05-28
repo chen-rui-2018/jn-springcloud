@@ -37,4 +37,15 @@ public class ElectricMeterController {
     public void setRulesInDayForCompany(){
         electricMeterClient.setRulesInDayForCompany();
     }
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void setWarning(){
+        electricMeterClient.setWarning();
+    }
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void setSwitchMeterTimer(){
+        electricMeterClient.setSwitchMeterTimer();
+    }
+
 }

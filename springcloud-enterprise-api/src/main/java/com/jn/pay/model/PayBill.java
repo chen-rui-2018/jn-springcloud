@@ -53,7 +53,7 @@ public class PayBill extends Page implements Serializable {
     @ApiModelProperty(value="支付平台类型（1：线上或2：线下）")
     private String paymentType;
 
-    @ApiModelProperty(value="账本类型ID")
+    @ApiModelProperty(value="账本类型【1：电费，2：物业费，3：维修费，4：房租费，5：物品租赁费，6：停车费，7：车位费，8：水费，9：宣传费，10：体检费】")
     private String acBookType;
 
     @ApiModelProperty(value="统一下单号")

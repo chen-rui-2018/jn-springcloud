@@ -1414,5 +1414,8 @@ export default {
   .file-download a:hover{
     color:red;
   }
+  .addForm{
+    height:100%;
+  }
 
 </style>

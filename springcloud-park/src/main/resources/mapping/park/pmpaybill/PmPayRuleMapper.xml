@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.pmpaybill.dao.PmPayRuleMapper">
+
+    <select id="getPmRuleByCompanyId" resultType="com.jn.park.pmpaybill.entity.TbPmPayRule"
+            parameterType="java.lang.String">
+        SELECT
+            t.id,
+            t.`name`,
+            t.calc_mode as calcMode,
+            t.share_percentage as sharePercentage,
+            t.`status`,
+            t.remark,
+            t.price,
+            t.pay_type as payType
+        FROM
+            tb_pm_pay_rule t,
+            tb_pm_pay_rule_object tt
+        WHERE
+            t.id = tt.rule_id
+        AND t.pay_type = '3'
+        AND t.`status` = '1'
+        AND tt.object_id = #{companyId,jdbcType=VARCHAR}
+    </select>
+</mapper>

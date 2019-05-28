@@ -175,7 +175,7 @@ export default {
       this.$router.push({ name: "staffManagement" });
     },
     toUserCenter() {
-      this.$router.push({ path: "/servicemarket/product/userCenter" });
+      this.$router.push({ path: "/home" });
     },
     toEditBusiness() {
       this.$router.push({ name: "editBusiness" });

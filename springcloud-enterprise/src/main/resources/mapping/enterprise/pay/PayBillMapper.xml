@@ -36,56 +36,7 @@
             <result column="cost_value" jdbcType="VARCHAR" property="costValue"/>
         </collection>
     </resultMap>
-   <!-- <select id="getBillQueryList" parameterType="com.jn.enterprise.pay.model.PayBill" resultMap="BaseResultMap">
-    select
-	d.bill_id as billId,
-	d.ac_book_id as acBookId,
-	d.bill_name as billName,
-	d.bill_source as billSource,
-	d.bill_expense as billExpense,
-	d.reminder_number as reminderNumber,
-	d.obj_type as objType,
-	d.obj_name as objName,
-	d.payment_state as paymentState,
-	d.payment_type as paymentType,
-	d.ac_book_type as ac_bookType,
-	d.created_time as createdTime,
-	d.creator_account as creatorAccount,
-	d.modified_time as modifiedTime,
-	d.modifier_account as modifierAccount,
-	d.late_payment as latePayment,
-	d.payment_affirm as paymentAffirm,
-	d.affirm_part as affirmPart,
-	d.affirm_time as affirmTime,
-	d.record_status as recordStatus,
-	g.deduction_id as deductionId,
-	g.money as money,
-	g.remark as remark,
-	g.payment_method as paymentMethod,
-	g.payment_action as paymentAction,
-	g.nature_code as natureCode,
-	b.details_id as detailsId,
-	b.cost_name as costName,
-	b.cost_value as costValue
-from
 
-(
-		(
-			tb_pay_bill d
-			left join tb_pay_account_book_money_record g on (
-				(
-					g.bill_id = d.bill_id
-				)
-			)
-		)
-		left join tb_pay_bill_details b on (
-			(
-				b.bill_id = d.bill_id
-			)
-		)
-	)
-
-  </select>-->
   <select id="getBillQueryList" parameterType="com.jn.pay.model.PayBillParams" resultType="com.jn.pay.vo.PayBillVo">
     SELECT
 	id_ AS billId,
@@ -114,10 +65,26 @@ from
     END paymentState,
      payment_type AS paymentType,
      CASE ac_book_type
-    WHEN '1' THEN
-        '电费'
-    WHEN '2' THEN
-        '物业费'
+      WHEN '1' THEN
+      '电费'
+      WHEN '2' THEN
+      '物业费'
+      WHEN '3' THEN
+      '维修费'
+      WHEN '4' THEN
+      '房租费'
+      WHEN '5' THEN
+      '物品租赁费'
+      WHEN '6' THEN
+      '停车费'
+      WHEN '7' THEN
+      '车位费'
+      WHEN '8' THEN
+      '水费'
+      WHEN '9' THEN
+      '宣传费'
+      WHEN '10' THEN
+      '体检费'
     ELSE
         '其他'
     END acBookType,
@@ -211,6 +178,22 @@ and obj_id = #{payBill.objId,jdbcType=VARCHAR}
         '电费'
         WHEN '2' THEN
         '物业费'
+        WHEN '3' THEN
+        '维修费'
+        WHEN '4' THEN
+        '房租费'
+        WHEN '5' THEN
+        '物品租赁费'
+        WHEN '6' THEN
+        '停车费'
+        WHEN '7' THEN
+        '车位费'
+        WHEN '8' THEN
+        '水费'
+        WHEN '9' THEN
+        '宣传费'
+        WHEN '10' THEN
+        '体检费'
         ELSE
         '其他'
         END acBookType,

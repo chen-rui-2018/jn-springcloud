@@ -1,13 +1,16 @@
 package com.jn.park.electricmeter.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.Result;
 import com.jn.park.api.ElectricMeterClient;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
+import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +30,8 @@ public class MeterTimerController extends BaseController implements ElectricMete
     @Autowired
     private MeterRulesService meterRulesService;
     private static Logger logger = LoggerFactory.getLogger(MeterTimerController.class);
-
+    @Autowired
+    private MeterCalcCostService meterCalcCostService;
 
     @Autowired
     private MeterCalcCostService meterTimerService;
@@ -52,6 +56,22 @@ public class MeterTimerController extends BaseController implements ElectricMete
     @ControllerLog(doAction = "电表每日的业主")
     public void setHostForMeter(){
         meterService.setHostForMeter();
+    }
+
+    @ControllerLog(doAction = "企业电费的回掉接口")
+    @Override
+    public Result updateBillInfo(@RequestBody  PayCallBackNotify payCallBackNotify) {
+        return meterCalcCostService.updateBillInfo(payCallBackNotify);
+    }
+
+    @ControllerLog(doAction = "企业电费余额不足告警定时任务")
+    public void setWarning(){
+        meterRulesService.warningBalanceShortTimer();
+    }
+
+    @ControllerLog(doAction = "电表的启动和关闭定时器接口")
+    public void setSwitchMeterTimer(){
+        meterRulesService.setSwitchMeterTimer();
     }
 
 }

@@ -3,7 +3,7 @@ package com.jn.oa.attendance.enmus;
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * TODO:未添加类描述
+ * 经纬度枚举
  *
  * @author： yuanyy
  * @date： Created on 2019/5/27 19:04

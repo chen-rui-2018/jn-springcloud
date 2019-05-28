@@ -351,8 +351,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private String getDictValue(SysDictInvoke sysDictInvoke){
         Result<String> data=systemClient.selectDictValueByCondition(sysDictInvoke);
-        if(data==null||data.getData()==null||GlobalConstants.SUCCESS_CODE.equals(data.getCode())){
-            logger.warn("[考勤管理] 根据数据字典查询考勤定位经纬度失败失败！,参数：{}",JSONObject.toJSONString(sysDictInvoke));
+        if(data==null||data.getData()==null||!GlobalConstants.SUCCESS_CODE.equals(data.getCode())){
+            logger.warn("[考勤管理] 根据数据字典查询考勤定位经纬度失败失败！,参数：{}，返回值：{}",JSONObject.toJSONString(sysDictInvoke),JSONObject.toJSONString(data));
             throw  new JnSpringCloudException(AttendanceExceptionEnums.ATTENDANCE_LOCATION_DIST_ERROR);
         }
         return data.getData();

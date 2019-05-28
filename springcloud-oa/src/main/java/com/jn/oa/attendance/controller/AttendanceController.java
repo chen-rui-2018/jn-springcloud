@@ -112,9 +112,9 @@ public class AttendanceController extends BaseController {
     @ApiOperation(value = "根据部门id查询部门考勤打卡数据",notes = "根据部门id查询部门考勤打卡数据")
     @PostMapping(value = "/selectAttendanceManagementByDepartmentId")
     @RequiresPermissions("/oa/attendance/selectAttendanceManagementByDepartmentId")
-    public  Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@RequestBody @Validated  AttendanceManagement attendanceManagement) {
+    public  Result<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(@RequestBody @Validated  AttendanceManagement attendanceManagement) {
         Assert.notNull(attendanceManagement.getDepartmentId(), "部门ID不能为空");
-        Result<List<AttendanceManageApiVo>> data = attendanceService.selectAttendanceManagementByDepartmentId(attendanceManagement);
+        Result<AttendanceManageApiVo>data = attendanceService.selectAttendanceManagementByDepartmentId(attendanceManagement);
         return data;
     }
 

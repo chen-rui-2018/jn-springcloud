@@ -19,9 +19,11 @@ export default {
         findActivityRegistration:"springcloud-park/guest/activity/findActivityRegistration",//用户中心-已报名活动列表
         basic:"springcloud-park/guest/portal/park/basic",//获取园区概况
         getBusinessAdDynamic:"springcloud-park/guest/portal/businessAd/getBusinessAdDynamic",//获取招商动态信息
+        getBusinessAdDynamicInfo:"springcloud-park/guest/portal/businessAd/getBusinessAdDynamicInfo",//获取招商动态信息详情
         getBusinessAdPolicy:"springcloud-park/guest/portal/businessAd/getBusinessAdPolicy",//招商政策
+        getBusinessAdPolicyInfo:"springcloud-park/guest/portal/businessAd/getBusinessAdPolicyInfo",//获取招商政策信息详情
+        getBusinessAdContentInfo:"springcloud-park/guest/portal/businessAd/getBusinessAdContentInfo",//获取招商信息详情
         parkList:"springcloud-park/guest/portal/park/list",//一区多园
-
 
 
         getUserCode:"springcloud-user/guest/userJoin/getUserCode",//获取短信验证码[当前用户]

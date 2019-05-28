@@ -158,11 +158,7 @@ export default {
       // this.deptEmployeeList = JSON.parse(data)
       apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
-<<<<<<< HEAD
-          this.deptEmployeeList = res.data.data
-=======
           this.deptEmployeeList = JSON.parse(res.data.data)
->>>>>>> develop
         } else {
           this.$message.error(res.data.result)
         }

@@ -94,10 +94,7 @@ public class CompanyController extends BaseController {
     @RequestMapping(value = "/getCommentInfo",method = RequestMethod.GET)
     public Result<PaginationData<List<Comment>>>  getCommentInfo(ActivityPagingParam activityPagingParam){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null){
-            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
-        }
-        activityPagingParam.setAccount(user.getAccount());
+        activityPagingParam.setAccount(user==null?"":user.getAccount());
         return companyService.getCommentInfo(activityPagingParam);
     }
 

@@ -6,6 +6,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.BusinessPromotionExceptionEnum;
 import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
+import com.jn.park.api.ElectricMeterClient;
+import com.jn.park.property.model.PayCallBackNotify;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
@@ -38,6 +41,9 @@ public class BusinessPromotionServiceImplTest {
 
     @Autowired
     private BusinessPromotionService businessPromotionService;
+
+    @Autowired
+    private ElectricMeterClient electricMeterClient;
 
 
     /**
@@ -329,6 +335,15 @@ public class BusinessPromotionServiceImplTest {
         String bill = businessPromotionService.createBill(orderNum, loginAccount);
         logger.info("------账单号：{}-----",bill);
         assertThat(bill, anything());
+    }
+
+    @Test
+    @Rollback(false)
+    public void updateBillInfo() {
+        PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
+        payCallBackNotify.setBillId("a797270a6bf54ced81b2e5ea19902d86");
+        payCallBackNotify.setPaymentState("1");
+        electricMeterClient.updateBillInfo(payCallBackNotify);
     }
 
     /**

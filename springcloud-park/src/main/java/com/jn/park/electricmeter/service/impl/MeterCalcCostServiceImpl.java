@@ -15,8 +15,11 @@ import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
 import com.jn.park.electricmeter.exception.ErrorLogException;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
+import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.pay.api.PayClient;
+import com.jn.pay.model.PayBill;
 import com.jn.pay.model.PayBillDetails;
+import com.jn.pay.model.PayBillParams;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -31,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -145,8 +149,9 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 PayBillDetails billDetails=null;
                 int sort=0;
                 for(TbElectricMeterDayLog  meterDayLog : meterDayLogs ){
-                    allPrice.add(meterDayLog.getPrice());
-                    allDegree.add(meterDayLog.getDegree());
+                    billDetails = new PayBillDetails();
+                    allPrice = allPrice.add(meterDayLog.getPrice());
+                    allDegree = allDegree.add(meterDayLog.getDegree());
                     String name = "[电表编号]:"+meterDayLog.getMeterId();
                     billDetails.setCostName(name);
                     billDetails.setCostValue(meterDayLog.getPrice().toString());
@@ -158,7 +163,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 //计价规则那边是角，此处要除10，才得出元
                 String ten ="10";
                 BigDecimal tenDivisor = new BigDecimal(ten);
-                allPrice.divide(tenDivisor,2, RoundingMode.HALF_UP);
+                allPrice = allPrice.divide(tenDivisor,2, RoundingMode.HALF_UP);
                 boolean success = createBill(allPrice,companyId,companyName,account,  payBillDetails);
                 if(! success){
                     String msg =account+",创建账单失败,"+"null,"+companyId+","+ DateUtils.formatDate(dealDate,"yyyy-MM-dd")+","+companyName;
@@ -214,7 +219,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     public void calcCostEverday() {
         logger.info("开始计算所有企业每日的电费");
         logger.info("所有电表的业主查询处");
-        List<String> hosters  =meterDao.getMeterHost("", null);
+        List<String> hosters  =meterDao.getMeterHost(null, null);
         if(hosters ==null || hosters.size()==0){
             logger.info("电表不存在一个业主");
             return;
@@ -282,6 +287,9 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     private boolean createBill(BigDecimal allPrice,String companyId,String companyName,String account, List<PayBillDetails> payBillDetails){
         boolean success = true;
         logger.info("开始调用接口创建账单");
+
+        Result<ServiceCompany> ressult =  companyClient.getCompanyDetailByAccountOrCompanyId(companyId);
+        companyId = ressult.getData().getComAdmin();
         PayBillCreateParamVo payBillCreateParamVo = new PayBillCreateParamVo();
         payBillCreateParamVo.setBillId(UUID.randomUUID().toString().replaceAll("-",""));
         //账单名称
@@ -330,6 +338,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         bill.setPayStatus(new Byte(MeterConstants.NOT_PAY));
         bill.setRecordStatus(new Byte(MeterConstants.VALID));
         bill.setCallTimes(0);
+        bill.setId(UUID.randomUUID().toString().replaceAll("-",""));
         energyBillMapper.insertSelective(bill);
         //保存明细
         List<TbElectricEnergyBillDetail> saveDetails = new ArrayList<>();
@@ -340,6 +349,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 saveDetail = new TbElectricEnergyBillDetail();
                 BeanUtils.copyProperties(detail,saveDetail);
                 saveDetail.setBillId(payBill.getBillId());
+                saveDetail.setId(UUID.randomUUID().toString().replaceAll("-",""));
                 saveDetail.setCreatedTime(new Date());
                 saveDetail.setCreatorAccount(payBill.getCreatorAccount());
                 saveDetail.setRecordStatus(new Byte(MeterConstants.VALID));
@@ -374,7 +384,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 if(Integer.parseInt(reading.getDealHour().toString())==rules.getStart()){
                     startDegree = reading.getReadingEnd();
                 }
-                if(Integer.parseInt(reading.getDealHour().toString())==rules.getEnd()){
+                if(Integer.parseInt(reading.getDealHour().toString())==(rules.getEnd()-1)){
                     endDegree = reading.getReadingEnd();
                 }
             }
@@ -397,8 +407,8 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             groupLog.setId(UUID.randomUUID().toString().replaceAll("-",""));
             groupLog.setRecordStatus(new Byte(MeterConstants.VALID));
             groupLogs.add(groupLog);
-            allPrice.add(cost);
-            allDegree.add(result);
+            allPrice= allPrice.add(cost);
+            allDegree =allDegree.add(result);
         }
 
         //保存这块电表一天的用电量和钱
@@ -413,7 +423,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         meterDayLog.setId(UUID.randomUUID().toString().replaceAll("-",""));
         meterDayLog.setRecordStatus(new Byte(MeterConstants.VALID));
         meterDayLog.setRuleName(ruleName);
-        meterDayLog.setId(ruleId);
+        meterDayLog.setRuleId(ruleId);
         meterDayLog.setCreatorAccount(account);
         meterDayLogMapper.insertSelective(meterDayLog);
         //返回这块电表的钱，和用电量
@@ -429,7 +439,14 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.add(Calendar.DATE, -1);
-        Date lastDay = c.getTime();
+        Date lastDay=null;
+        try{
+            lastDay =DateUtils.parseDate(DateUtils.formatDate( c.getTime(),"yyyy-MM-dd"),"yyyy-MM-dd");
+        }catch (ParseException e){
+            logger.info("日期转换错误");
+            throw new JnSpringCloudException(MeterExceptionEnums.DAY_FORMATE_WRONG);
+        }
+
         return lastDay;
     }
 
@@ -442,16 +459,26 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
 
     @Override
     @ServiceLog(doAction = "缴费成功后进行数据的更新")
-    public Result updateBillInfo(User user,String id){
-        TbElectricEnergyBill bill = new TbElectricEnergyBill();
-        bill.setPayStatus(new Byte(MeterConstants.PAYED));
-        bill.setPayTime(new Date());
-        bill.setPaier(user.getAccount());
-        bill.setModifiedTime(new Date());
-        bill.setModifierAccount(user.getAccount());
-        TbElectricEnergyBillCriteria billCriteria = new TbElectricEnergyBillCriteria();
-        billCriteria.or().andIdEqualTo(id).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
-        energyBillMapper.updateByExampleSelective(bill,billCriteria);
+    public Result updateBillInfo(PayCallBackNotify payCallBackNotify){
+
+        String billId=payCallBackNotify.getBillId();
+        PayBillParams payBillParams=new PayBillParams();
+        payBillParams.setBillId(billId);
+        PayBill PayBillDetails= payClient.getBillBasicInfo(billId);
+        PayBill payBill =payClient.getBillBasicInfo(billId);
+        //支付成功
+        if(payBill.getPaymentState().equals("1")){
+            TbElectricEnergyBill bill = new TbElectricEnergyBill();
+            bill.setPayStatus(new Byte(MeterConstants.PAYED));
+            bill.setPayTime(new Date());
+            //bill.setPaier(user.getAccount());
+            bill.setModifiedTime(new Date());
+            //bill.setModifierAccount(user.getAccount());
+            TbElectricEnergyBillCriteria billCriteria = new TbElectricEnergyBillCriteria();
+            billCriteria.or().andIdEqualTo(billId).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            energyBillMapper.updateByExampleSelective(bill,billCriteria);
+        }
+
         return new Result<>();
     }
 

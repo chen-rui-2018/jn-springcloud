@@ -70,7 +70,7 @@ public class MeterConstants {
     /**
      * 电表调用方法
      */
-    public final static String METHOD_ID="/meter/updateBill";
+    public final static String METHOD_ID="/api/meter/updateBillInfo";
 
     /**
      * 电表账本标识
@@ -79,5 +79,15 @@ public class MeterConstants {
     /**
      * 电表账本标识
      */
-    public final static String NOT_PAY="1";
+    public final static String NOT_PAY="2";
+
+    /**
+     * 有电的状态
+     */
+    public final static String SWITCH_GET_ELEC="5";
+
+    /**
+     * 没电的状态
+     */
+    public final static String SWITCH_NOT_ELEC="4";
 }

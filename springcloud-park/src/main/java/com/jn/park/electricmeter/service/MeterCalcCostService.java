@@ -3,6 +3,7 @@ package com.jn.park.electricmeter.service;
 import com.jn.common.model.Result;
 import com.jn.park.electricmeter.entity.TbElectricErrorLog;
 import com.jn.park.electricmeter.exception.ErrorLogException;
+import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.system.model.User;
 
 import java.util.Date;
@@ -41,5 +42,5 @@ public interface MeterCalcCostService {
      * 缴费成功后的回调接口
      * @return
      */
-    Result updateBillInfo(User user,String id);
+    Result updateBillInfo(PayCallBackNotify payCallBackNotify);
 }

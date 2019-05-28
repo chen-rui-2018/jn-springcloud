@@ -379,7 +379,7 @@ export default {
           this.$message.error('请先选择基本信息里的业务领域在发送申请');
           return
       }
-      this.$router.push({ path: "/servicemarket/product/userCenter" });
+      this.$router.push({ path: "/home" });
     },
     // 新增项目经验
     addProjectExperienceList(projectExperienceListForm) {

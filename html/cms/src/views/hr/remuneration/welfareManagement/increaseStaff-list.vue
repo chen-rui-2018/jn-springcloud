@@ -129,7 +129,7 @@
 </template>
 <script>
 import {
-  api
+  api, apiGet
 } from '@/api/hr/common'
 
 import UE from '@/components/ue.vue'
@@ -219,7 +219,7 @@ export default {
       console.log(this.increaseStaffAddFromData.jobNumber)
     },
     getDeptEmployeeList() {
-      api('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
+      apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
           this.deptEmployeeList = res.data.data
         } else {

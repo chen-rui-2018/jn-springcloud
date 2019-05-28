@@ -211,7 +211,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             if(StringUtils.equals(SEND_NODE, result.getTaskName())){
                 //设置发起节点信息
                 setSendPersonInfo(result.getStatus(), historyShow, userInfo.getData());
-                historyShow.setOptionDeptName("用户["+historyShow.getAuditorName()+"]");
+                historyShow.setOptionDeptName(historyShow.getAuditorName());
             }else if(StringUtils.equals(CUSTER_CENTER, result.getTaskName())
                     || StringUtils.equals(EXECUTE_PERSON, result.getTaskName())){
                 //设置客户中心分发/处理节点信息

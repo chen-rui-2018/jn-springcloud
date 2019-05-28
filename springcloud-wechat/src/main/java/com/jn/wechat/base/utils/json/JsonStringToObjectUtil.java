@@ -3,6 +3,8 @@ package com.jn.wechat.base.utils.json;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.common.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * json字符串转换成对象
@@ -14,6 +16,8 @@ import com.jn.common.util.StringUtils;
  */
 public class JsonStringToObjectUtil {
 
+    private static Logger logger = LoggerFactory.getLogger(JsonStringToObjectUtil.class);
+
     private  static ObjectMapper objectMapper = new ObjectMapper();
 
     public static <T>T jsonToObject(String src, TypeReference<T> typeReference){
@@ -23,7 +27,7 @@ public class JsonStringToObjectUtil {
         try {
             return (T)(typeReference.getType().equals(String.class) ? src : objectMapper.readValue(src, typeReference));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("json字符串转换成对象失败.",e);
             return null;
         }
     }

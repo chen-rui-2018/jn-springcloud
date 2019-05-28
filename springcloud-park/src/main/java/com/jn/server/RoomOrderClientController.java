@@ -39,6 +39,7 @@ public class RoomOrderClientController implements RoomOrderClient {
     }
 
     @Override
+    @ControllerLog(doAction = "创建订单")
     public Result<PayOrderRsp> createPay(@RequestBody CreatePayReqModel createPayReqModel) {
         return roomInformationService.createPayOrder(createPayReqModel.getOrderId(),createPayReqModel.getChannelId(),createPayReqModel.getPaySum(),createPayReqModel.getUserAccount());
     }

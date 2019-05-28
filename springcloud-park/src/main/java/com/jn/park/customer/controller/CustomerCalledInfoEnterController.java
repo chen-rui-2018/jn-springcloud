@@ -88,7 +88,7 @@ public class CustomerCalledInfoEnterController extends BaseController {
     @RequestMapping(value = "/getPhoneCalledOwen",method = RequestMethod.GET)
     public Result<String> getPhoneCalledOwen(@ApiParam(name="phone",value = "来电用户电话",required = true,example = "18088888888")
                                                                                        @RequestParam(value = "phone") String phone) {
-        return new Result<String>(manageService.getPhoneCalledOwen(phone));
+        return new Result<>(manageService.getPhoneCalledOwen(phone));
     }
 
 

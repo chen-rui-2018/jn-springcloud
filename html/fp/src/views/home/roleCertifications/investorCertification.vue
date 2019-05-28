@@ -374,7 +374,7 @@ export default {
                   type: "success"
                 });
            this.$router.push({
-        path: "/servicemarket/product/userCenter"
+        path: "/home"
       });
                 this.disabled = false;
               } else {

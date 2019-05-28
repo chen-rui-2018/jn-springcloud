@@ -1,21 +1,25 @@
-package com.jn.user.model;
+package com.jn.miniprogram.base.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
- * @Author: yangph
- * @Date: 2019/3/13 19:17
- * @Version v1.0
- * @modified By:
+ * 微信用户信息绑定并返回token的入参
+ *
+ * @Author： cm
+ * @Date： Created on 2019/5/25 17:39
+ * @Version： v1.0
+ * @Modified By:
  */
-@ApiModel(value = "RegisterInfoParam", description = "小程序注册绑定入参")
-public class RegisterInfoParam implements Serializable {
+@ApiModel(value = "WxMiniRegisterUserGetTokenParam",description = "绑定微信用户并获取Token参数")
+public class WxMiniRegisterUserGetTokenParam implements Serializable {
+
+    private static final long serialVersionUID = -6552120814413831548L;
+
     @ApiModelProperty(value = "手机号)",required = true)
     @NotNull(message = "手机号不能为空")
     @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
@@ -24,12 +28,11 @@ public class RegisterInfoParam implements Serializable {
     @ApiModelProperty(value = "验证码)",required = true)
     @NotNull(message = "验证码不能为空")
     @Pattern(regexp = "^([0-9]{6})$",
-            message = "{code:'验证码只能是6位的数字'}")
+            message = "{phoneCode:'验证码只能是6位的数字'}")
+    private String phoneCode;
+    @ApiModelProperty(value = "小程序登陆凭证code",required = true)
+    @NotNull(message = "小程序登陆凭证code不能为空")
     private String code;
-    @ApiModelProperty(value = "openId)",required = true)
-    @NotNull(message = "openId不能为空")
-    @Size(min=28,max=28,message = "请输入正确的28位openId")
-    private String openId;
 
     public String getPhone() {
         return phone;
@@ -47,20 +50,11 @@ public class RegisterInfoParam implements Serializable {
         this.code = code;
     }
 
-    public String getOpenId() {
-        return openId;
+    public String getPhoneCode() {
+        return phoneCode;
     }
 
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
-
-    @Override
-    public String toString() {
-        return "RegisterInfoParam{" +
-                "phone='" + phone + '\'' +
-                ", code='" + code + '\'' +
-                ", openId='" + openId + '\'' +
-                '}';
+    public void setPhoneCode(String phoneCode) {
+        this.phoneCode = phoneCode;
     }
 }

@@ -2,18 +2,13 @@ package com.jn.enterprise.pay.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.pay.model.PayAccountBookMoneyRecord;
-import com.jn.pay.model.PayAccountBookParam;
-import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayAccountBookMoneyRecordVo;
 import com.jn.pay.vo.PayAccountBookRecordVo;
-import com.jn.pay.vo.PayRecordVo;
 import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
-import org.apache.shiro.SecurityUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
@@ -53,4 +48,11 @@ public interface MyPayAccountService {
      * @return
      */
     Result<String> getFeeAdvanceAgreement(SysDictInvoke sysDictInvoke, User user);
+
+    /**
+     * 我的账户-通过企业ID和账本类型查询账号余额
+     * @param payAccountBookMoney
+     * @return
+     */
+    PayAccountBook queryPayAccountBookMoney(PayAccountBookMoney payAccountBookMoney);
 }

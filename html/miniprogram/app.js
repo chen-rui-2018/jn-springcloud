@@ -133,7 +133,7 @@ App({
   globalData: {
     hasLogin: false,
     openid: null,
-    urlPath: 'http://sw8cyn.natappfree.cc/springcloud-wechat-miniprogram/',
+    urlPath: 'https://njbxq.mynatapp.cc/springcloud-wechat-miniprogram/',
     wxHttp,
     baseUrl,
     ...util

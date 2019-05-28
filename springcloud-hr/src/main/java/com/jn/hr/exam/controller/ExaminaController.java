@@ -94,12 +94,12 @@ public class ExaminaController extends BaseController {
 	@RequiresPermissions("/hr/exam/updateExaminabank")
 	@ApiOperation(value = "修改题目及答案", notes = "[试题库]修改题目及答案功能")
 	@RequestMapping(value = "/updateExaminabank", method = RequestMethod.POST)
-	public Result updateExaminabank(@Validated @RequestBody Examinabank examinabank) {
+	public Result<ExaminabankAdd> updateExaminabank(@Validated @RequestBody Examinabank examinabank) {
 		// 获取当前用户信息
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		// 编辑调研项目
-		examinaService.updateExaminabank(examinabank, user);
-		return new Result();
+		ExaminabankAdd data = examinaService.updateExaminabank(examinabank, user);
+		return new Result(data);
 	}
 
 	@ControllerLog(doAction = "删除试题")

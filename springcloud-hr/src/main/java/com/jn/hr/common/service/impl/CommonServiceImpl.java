@@ -145,7 +145,8 @@ public class CommonServiceImpl implements CommonService {
         sysDictInvoke.setModuleCode("springcloud_hr");
         sysDictInvoke.setParentGroupCode(parentGroupCode);
         Result result=systemClient.getDict(sysDictInvoke);
-        if(result==null || !"0000".equals(result.getCode()) || result.getData()!=null){
+        if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+            logger.error("查询字典表出错或数据不存在,GroupCode={},ModuleCode=springcloud_hr,ParentGroupCode={}",groupCode,parentGroupCode);
             throw new JnSpringCloudException(EmployeeExceptionEnums.QUERYDICT_ERROR);
         }
         List<SysDictKeyValue> resultList= (List<SysDictKeyValue>) result.getData();

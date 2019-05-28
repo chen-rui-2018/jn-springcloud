@@ -961,7 +961,7 @@ import {
   addEmployeeBasicInfo, updateEmployeeBasicInfo, getEmployeeBasicInfo
 } from '@/api/hr/employeeBasicInfo'
 import {
-  getCode, isvalidName, isvalidMobile, isvalidPhone, isvalidZjhm, setChild, findNodeById, findP
+  getCode, isvalidName, isvalidMobile, isvalidPhone, setChild, findNodeById, findP
 } from '@/api/hr/util'
 import { getToken } from '@/utils/auth'
 
@@ -976,18 +976,10 @@ export default {
     }
     const reg = /^\w{5,18}$/i
     const checkZjhm = (rule, value, callback) => {
-      if (this.addForm.certificateName === '身份证') {
-        if (!isvalidZjhm(value)) {
-          callback(new Error('请输入正确的证件号码'))
-        } else {
-          callback()
-        }
+      if (!reg.test(value)) {
+        callback(new Error('请输入正确的证件号码'))
       } else {
-        if (!reg.test(value)) {
-          callback(new Error('请输入正确的证件号码'))
-        } else {
-          callback()
-        }
+        callback()
       }
     }
     const validMobile = (rule, value, callback) => {
@@ -1783,10 +1775,6 @@ export default {
   .form-content {
     background-color: white;
     border-radius: 10px;
-    position: absolute;
-    top: 280px;
-    left: 36px;
-    right: 36px;
     .con-hr {
       color: #e4e4e4;
       margin-left: 20px;

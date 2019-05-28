@@ -20,7 +20,7 @@ public class PayBillParams extends Page implements Serializable {
     @ApiModelProperty(value="账单编号",example = "201905090000003")
     private String billId;
 
-    @ApiModelProperty(value="账单类型【1：电费，2：物业费】",example = "1")
+    @ApiModelProperty(value="账单类型【1：电费，2：物业费，3：维修费，4：房租费，5：物品租赁费，6：停车费，7：车位费，8：水费，9：宣传费，10：体检费】",example = "1")
     private String acBookType;
 
     @ApiModelProperty(value="支付状态（如 1:已支付、2:待支付）")

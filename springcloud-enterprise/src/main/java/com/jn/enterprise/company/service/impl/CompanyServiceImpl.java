@@ -179,8 +179,7 @@ public class CompanyServiceImpl implements CompanyService {
             String[] comProperty = tbServiceCompany.getComProperty().split(",");
 
             company.setComPropertys(comProperty);
-            for (TbServicePrefer prefer: tbServicePrefers
-            ) {
+            for (TbServicePrefer prefer: tbServicePrefers) {
                 // 行业领域
                 if(StringUtils.equals(prefer.getId(),tbServiceCompany.getInduType())){
                     company.setInduTypeName(prefer.getPreValue());
@@ -221,21 +220,7 @@ public class CompanyServiceImpl implements CompanyService {
             company.setComPropertyNames(comPropertys.toArray(new String[comPropertys.size()]));
         }
 
-        TbServiceCompanyProImgCriteria imgCriteria = new TbServiceCompanyProImgCriteria();
-        imgCriteria.createCriteria().andComIdEqualTo(tbServiceCompany.getId());
-        List<TbServiceCompanyProImg> tbServiceCompanyProImgs = tbServiceCompanyProImgMapper.selectByExample(imgCriteria);
-        List<CompanyProImg> imgs = new ArrayList<>(16);
-        for (TbServiceCompanyProImg img:tbServiceCompanyProImgs
-             ) {
-            CompanyProImg proImg = new CompanyProImg();
-            BeanUtils.copyProperties(img,proImg);
-            imgs.add(proImg);
-        }
-        company.setProImgs(imgs);
-
         //TODO 企业员工
-
-
         return company;
     }
 

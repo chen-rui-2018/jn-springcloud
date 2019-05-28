@@ -13,7 +13,7 @@ public class WarnStatisticsVO implements Serializable {
 
     private String warnType;
 
-    private String warnNum;
+    private Integer warnNum;
 
     public String getWarnType() {
         return warnType;
@@ -21,6 +21,14 @@ public class WarnStatisticsVO implements Serializable {
 
     public void setWarnType(String warnType) {
         this.warnType = warnType;
+    }
+
+    public Integer getWarnNum() {
+        return warnNum;
+    }
+
+    public void setWarnNum(Integer warnNum) {
+        this.warnNum = warnNum;
     }
 
     @Override

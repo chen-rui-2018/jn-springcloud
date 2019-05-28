@@ -172,11 +172,13 @@ export default {
         series: [{
           name: '人均工资',
           data: this.values,
-          type: 'bar'
+          type: 'bar'/*,
+          barWidth: 50*/
         }, {
           name: '计薪人数',
           data: this.peopleNo,
-          type: 'line'
+          type: 'line'/*,
+          barWidth: 50*/
         }]
       })
     }

@@ -127,6 +127,7 @@ export default {
   },
   watch: {
     'listQuery.accountEntryTime': function() {
+      this.listQuery.page = 1
       this.initList()
     }
   },

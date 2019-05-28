@@ -9,10 +9,7 @@ import com.jn.enterprise.workflow.task.model.CommonTaskPage;
 import com.jn.enterprise.workflow.task.model.TaskPage;
 import com.jn.enterprise.workflow.task.model.TaskType;
 import com.jn.enterprise.workflow.task.service.TaskService;
-import com.jn.enterprise.workflow.task.vo.CommonTaskListVO;
-import com.jn.enterprise.workflow.task.vo.CommonTaskVO;
-import com.jn.enterprise.workflow.task.vo.TaskTypeVo;
-import com.jn.enterprise.workflow.task.vo.TaskVo;
+import com.jn.enterprise.workflow.task.vo.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -43,8 +40,17 @@ public class TaskController extends BaseController {
     @Autowired
     private TaskService taskService;
 
-    @ControllerLog(doAction = "根据用户查询事项任务列表")
-    @ApiOperation(value = "根据用户查询事项任务列表", notes = "根据事项状态查询待办事项、已办事项，1：待办，2：已办")
+    @ControllerLog(doAction = "时效性待办事项预警统计")
+    @ApiOperation(value = "时效性待办事项预警统计", notes = "时效性待办事项预警数据统计")
+    @PostMapping(value = "/getWorkflowTaskStatistics")
+    @RequiresPermissions("/enterprise/workflow/task/getWorkflowTaskStatistics")
+    public Result<TaskStatisticsVO> getWorkflowTaskStatistics() {
+        User user = checkUserValid();
+        return new Result(taskService.getWorkflowTaskStatistics(user.getId()));
+    }
+
+    @ControllerLog(doAction = "查询时效性事项任务列表")
+    @ApiOperation(value = "查询时效性事项任务列表", notes = "根据事项状态查询待办事项、已办事项，1：待办，2：已办")
     @PostMapping(value = "/searchWorkflowTaskListByUser")
     @RequiresPermissions("/enterprise/workflow/task/searchWorkflowTaskListByUser")
     public Result<List<TaskTypeVo> > searchWorkflowTaskListByUser(@Validated @RequestBody TaskType taskType) {
@@ -54,8 +60,8 @@ public class TaskController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "分页查询事项任务列表")
-    @ApiOperation(value = "分页查询事项任务列表", notes = "根据用户与事项分类分页查询事项任务列表")
+    @ControllerLog(doAction = "分页查询时效性事项任务列表")
+    @ApiOperation(value = "分页查询时效性事项任务列表", notes = "根据用户与事项分类分页查询事项任务列表")
     @PostMapping(value = "/searchWorkflowTaskListByPage")
     @RequiresPermissions("/enterprise/workflow/task/searchWorkflowTaskListByPage")
     public Result<List<TaskVo>> searchWorkflowTaskListByPage(@Validated @RequestBody TaskPage taskPage) {
@@ -68,7 +74,7 @@ public class TaskController extends BaseController {
     @ControllerLog(doAction = "查询常规待办事项")
     @ApiOperation(value = "查询常规待办事项",notes = "查询常规待办事项列表")
     @PostMapping(value = "/searchCommonWorkflowTaskList")
-    //@RequiresPermissions("/enterprise/workflow/task/searchCommonWorkflowTaskList")
+    @RequiresPermissions("/enterprise/workflow/task/searchCommonWorkflowTaskList")
     public Result<List<CommonTaskListVO>> searchCommonWorkflowTaskList() {
         User user = checkUserValid();
         return new Result(taskService.searchCommonWorkflowTaskList(user.getAccount()));
@@ -77,7 +83,7 @@ public class TaskController extends BaseController {
     @ControllerLog(doAction = "分页查询常规具体待办事项")
     @ApiOperation(value = "分页查询常规具体待办事项",notes = "分页查询常规具体待办事项列表")
     @PostMapping(value = "/searchCommonWorkflowTaskListByTaskId")
-    //@RequiresPermissions("/enterprise/workflow/task/searchCommonWorkflowTaskListByTaskId")
+    @RequiresPermissions("/enterprise/workflow/task/searchCommonWorkflowTaskListByTaskId")
     public Result<List<CommonTaskVO>> searchCommonWorkflowTaskListByTaskId(@Validated CommonTaskPage commonTaskPage) {
         User user = checkUserValid();
         commonTaskPage.setAccount(user.getAccount());

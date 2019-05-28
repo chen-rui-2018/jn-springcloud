@@ -8,6 +8,12 @@ export function api(url, query) {
     data: query
   })
 }
+export function apiGet(url) {
+  return request({
+    url: baseurl + url,
+    method: 'get'
+  })
+}
 export function paramApi(url, query, parameter) {
   const param = new URLSearchParams()
   param.append(parameter, query)
@@ -80,6 +86,15 @@ export function selectUserList(query) {
   return request({
     url: 'hr/train/list/selectUserList',
     method: 'post',
+    data: query
+  })
+}
+
+// 获取通知人员列表
+export function selectDepartEmployee(query) {
+  return request({
+    url: 'hr/employeeBasicInfo/selectDepartEmployee',
+    method: 'get',
     data: query
   })
 }

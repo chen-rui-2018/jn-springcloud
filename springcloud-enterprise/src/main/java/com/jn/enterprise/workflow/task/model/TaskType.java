@@ -31,6 +31,17 @@ public class TaskType implements Serializable {
     @ApiModelProperty(value = "用户id'", hidden = true)
     private String userId;
 
+    @ApiModelProperty(value = "报警时间（单位：小时）", hidden = true)
+    private Integer warnHour;
+
+    public Integer getWarnHour() {
+        return warnHour;
+    }
+
+    public void setWarnHour(Integer warnHour) {
+        this.warnHour = warnHour;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -61,5 +72,16 @@ public class TaskType implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskType{" +
+                "status='" + status + '\'' +
+                ", type='" + type + '\'' +
+                ", rowCount=" + rowCount +
+                ", userId='" + userId + '\'' +
+                ", warnHour='" + warnHour + '\'' +
+                '}';
     }
 }

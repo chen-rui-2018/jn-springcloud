@@ -32,7 +32,7 @@ public class PayCallBackParam implements Serializable {
     @NotBlank(message = "渠道ID不能为空！")
     private String channelId;
 
-    @ApiModelProperty(value = "支付金额",required = true,example = "5cd80d8624f14737abcc7eda4c0675b8")
+    @ApiModelProperty(value = "支付金额",required = true,example = "200")
     @NotBlank(message = "支付金额不能为空！")
     private Long amount;
 

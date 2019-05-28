@@ -253,7 +253,7 @@ export default {
                    data:{account :this.userAccount},
         callback: function(res) {
           console.log(res);
-          if (res.code == "0000") {
+          if (res.data) {
             _this.orgName = res.data.orgDetailVo.orgName
             _this.orgCode = res.data.orgDetailVo.orgCode
             _this.orgRegisterTime = res.data.orgDetailVo.orgRegisterTime
@@ -297,7 +297,7 @@ export default {
         this.$router.push({ name: "counselorManagement" });
     },
     toUserCenter(){
-        this.$router.push({ name: "userCenter" });
+        this.$router.push({ path: "/home" });
     },
     toBasicInformation(){
         this.$router.push({ path: "/roleCertifications/basicInformation" });

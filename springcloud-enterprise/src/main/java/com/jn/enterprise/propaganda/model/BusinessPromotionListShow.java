@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "BusinessPromotionListShow", description = "企业宣传查询列表出参")
 public class BusinessPromotionListShow implements Serializable {
-    @ApiModelProperty(value = "订单号(已付款的宣传才有订单号)")
+    @ApiModelProperty(value = "账单号(调用创建账单接口后生成)")
     private String orderNum;
     @ApiModelProperty(value = "宣传类型")
     private String propagandaType;

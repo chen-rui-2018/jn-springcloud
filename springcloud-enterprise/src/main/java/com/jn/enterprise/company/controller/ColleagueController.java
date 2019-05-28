@@ -53,8 +53,6 @@ public class ColleagueController extends BaseController {
         User user = checkUserValid();
         StaffListParam staffListParam = new StaffListParam();
         BeanUtils.copyProperties(colleagueListParam, staffListParam);
-        // 查询通过审核的员工
-        staffListParam.setStatus(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode());
         return new Result(staffService.getColleagueList(staffListParam, user.getAccount()));
     }
 

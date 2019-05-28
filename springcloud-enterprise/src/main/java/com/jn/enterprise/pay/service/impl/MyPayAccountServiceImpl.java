@@ -1,13 +1,19 @@
 package com.jn.enterprise.pay.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.enterprise.pay.dao.PayAccountAndAccountBookDao;
-import com.jn.enterprise.pay.dao.TbPayAccountBookMoneyRecordMapper;
-import com.jn.enterprise.pay.dao.TbPayAccountBookTypeMapper;
+import com.jn.common.util.StringUtils;
+import com.jn.company.model.ServiceCompany;
+import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.pay.dao.*;
 import com.jn.enterprise.pay.entity.*;
+import com.jn.enterprise.pay.enums.PaymentBillEnum;
+import com.jn.enterprise.pay.enums.PaymentBillExceptionEnum;
 import com.jn.enterprise.pay.service.MyPayAccountService;
+import com.jn.pay.model.PayAccountBook;
+import com.jn.pay.model.PayAccountBookMoney;
 import com.jn.pay.model.PayAccountBookMoneyRecordParam;
 import com.jn.pay.model.PayAccountBookParam;
 import com.jn.pay.vo.*;
@@ -21,7 +27,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +51,14 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
     @Autowired
     private TbPayAccountBookTypeMapper tbPayAccountBookTypeMapper;
 
+    @Autowired
+    private TbPayAccountMapper tbPayAccountMapper;
+
+    @Autowired
+    private TbPayAccountBookMapper tbPayAccountBookMapper;
+
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private SystemClient systemClient;
@@ -107,5 +120,46 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
             Result<String> data= systemClient.selectDictValueByCondition(sysDictInvoke);
             logger.info("【获取费用预缴协议】 字典ID:{},字典值:{}}", sysDictInvoke.getKey(),data);
             return data;
+    }
+
+    @Override
+    @ServiceLog(doAction = "我的账户-通过企业ID和账本类型查询账号余额")
+    public PayAccountBook queryPayAccountBookMoney(PayAccountBookMoney payAccountBookMoney) {
+        logger.info("【我的账户-通过企业ID和账本类型查询账号余额】 入參:{}}", payAccountBookMoney);
+        List<TbPayAccountBook> tbPayAccountBook = null;
+        List<TbPayAccount> tbPayAccount = null;
+        TbPayAccountBookCriteria criteria = new TbPayAccountBookCriteria();
+        TbPayAccountCriteria accountCriteria = new TbPayAccountCriteria();
+        PayAccountBook payAccountBook = new PayAccountBook();
+        if (payAccountBookMoney.getObjType().equals(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode())) {
+            /**如果是企业则去查询企业信息再通过查询的企业的管理员账户去查询账户表*/
+            logger.info("如果是企业则去查询企业信息再通过查询的企业的管理员账户去查询账户表,objId={}",payAccountBookMoney.getObjId());
+            ServiceCompany serviceCompany = companyService.getCompanyDetailByAccountOrId(payAccountBookMoney.getObjId());
+            if (serviceCompany == null || StringUtils.isBlank(serviceCompany.getComAdmin())) {
+                /**查询企业信息异常*/
+                throw new JnSpringCloudException(PaymentBillExceptionEnum.QUERY_ENTERPRISE_INFO_ERROR);
+            }
+            /**通过企业管理员获取账户ID*/
+            accountCriteria.createCriteria().andUserIdEqualTo(serviceCompany.getComAdmin()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+            tbPayAccount = tbPayAccountMapper.selectByExample(accountCriteria);
+        } else if (payAccountBookMoney.getObjType().equals(PaymentBillEnum.BILL_OBJ_TYPE_IS_INDIVIDUAL.getCode())) {
+            /**如果是个人则用个人对象名称去查询账户表*/
+            accountCriteria.createCriteria().andUserIdEqualTo(payAccountBookMoney.getObjId()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+            tbPayAccount = tbPayAccountMapper.selectByExample(accountCriteria);
+        }
+        if (tbPayAccount.size() > Integer.parseInt(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode()) || tbPayAccount.size() == Integer.parseInt(PaymentBillEnum.BILL_STATE_DELETE.getCode())) {
+            /**查询账户信息异常*/
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_ACCOUNT_IS_NOT_EXIT);
+        }
+        /**通过账户表的账户ID查询账本信息*/
+        logger.info("通过账户表的账户ID查询账本信息,账户ID={}",tbPayAccount.get(0).getAccountId());
+        criteria.createCriteria().andAccountIdEqualTo(tbPayAccount.get(0).getAccountId()).andAcBookTypeEqualTo(payAccountBookMoney.getAcBookType()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        tbPayAccountBook = tbPayAccountBookMapper.selectByExample(criteria);
+        if (tbPayAccountBook.size() > Integer.parseInt(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode()) || tbPayAccountBook.size() == Integer.parseInt(PaymentBillEnum.BILL_STATE_DELETE.getCode())) {
+            /**查询账本信息异常*/
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_BOOK_IS_NOT_EXIT);
+        }
+        BeanUtils.copyProperties(tbPayAccountBook.get(0),payAccountBook);
+        return payAccountBook;
     }
 }

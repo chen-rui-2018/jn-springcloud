@@ -44,4 +44,10 @@ public interface PayAccountClient {
      */
     @RequestMapping(value = "/api/payment/payAccount/createOrderAndPay", method = RequestMethod.POST)
     Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel);
+
+
+    @ApiOperation(value = "我的账户-通过企业ID和账本类型查询账号余额",notes = "我的账户-通过企业ID和账本类型查询账号余额")
+    @RequestMapping(value = "/api/payment/payAccount/queryPayAccountBookMoney",method = RequestMethod.POST)
+    Result<PayAccountBook> queryPayAccountBookMoney(@RequestBody @Validated PayAccountBookMoney payAccountBookMoney);
+
 }

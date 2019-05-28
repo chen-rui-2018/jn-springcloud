@@ -6,6 +6,7 @@ import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
+import com.jn.company.model.CreditUpdateParam;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
@@ -83,4 +84,12 @@ public interface CompanyService {
      * @return
      */
     CompanyDetailsVo  getCompanyDetails(String companyId,String account);
+
+    /**
+     * 修改企业信用分
+     * @param creditUpdateParam
+     * @return
+     */
+    Result<Boolean> updateCreditPoints(CreditUpdateParam creditUpdateParam);
+
 }

@@ -424,6 +424,8 @@ function getCallerOwen(obj){
 
 //根据手机号获取来电用户信息
 function getUserIno(obj){
+	//清空数据
+	$("#userData").html("");
 	$.ajax({
 		type: 'get',
 		url: curl + '/guest/customer/customerCalledInfoEnterController/getUserInfo',
@@ -435,18 +437,17 @@ function getUserIno(obj){
 			"X-Authorization-access_token":token
 		},
 		success: function (data) {
-			var table="<table border='1'>";
-			table=table+"<tr><td style='width:80px'>行号</td><td style='width:80px'>性别</td>" +
-				"<td style='width: 120px'>用户账号</td><td style='width: 80px'>邮箱</td><td style='width: 100px'>手机号</td></tr>";
+			var table=""
 			if(data==undefined ||data==null ||data.data==null){
-				table=table+"<tr><td colspan='5' style='text-align: center'>当前来电非系统用户，暂无用户信息</td></tr>";
+				table=table+"<tr><td colspan='6'>暂无数据</td></tr>";
 			}else if(data.code='0000'){
+				$("#noUserData").hide();
+				$("#haveUserData").show();
 				var user=data.data;
-				table=table+"<tr><td style='width:80px'>1</td><td style='width:80px'>"+user.sex+"</td>" +
-					"<td style='width: 120px'>"+user.account+"</td><td style='width: 80px'>"+user.email+"</td><td style='width: 100px'>"+user.phone+"</td></tr>";
+				table=table+"<tr><td>1</td><td>"+user.name+"</td><td>"+user.sex+"</td>" +
+					"<td>"+user.account+"</td><td>"+user.email+"</td>" +"<td>"+user.phone+"</td></tr>";
 			}
-			table=table+"</table>";
-			$("#userInfo").html(table);
+			$("#userData").html(table);
 		}
 	});
 }
@@ -464,12 +465,9 @@ function getCalledHistory(obj){
 			"X-Authorization-access_token":token
 		},
 		success: function (data) {
-			var table="<table>";
-			table=table+"<tr><td style='width:200px'>问题编号</td><td style='width:100px'>业务模块</td>" +
-				"<td style='width: 100px'>处理状态</td><td style='width: 250px'>问题标题</td>" +
-				"<td style='width: 160px'>时间</td><td style='width: 100px'>详情</td></tr>";
+			var table=""
 			if(data==undefined ||data==null ||data.data==null ||data.data.rows.length==0){
-				table=table+"<tr><td colspan='6' style='text-align: center'>当前来电用户暂无历史信息</td></tr>";
+				table=talbe+"<tr><td colspan='6'>暂无数据</td></tr>";
 			}else if(data.code='0000'){
 				var customerList=data.data.rows;
 				$("#historyNum").html(customerList.length);
@@ -480,13 +478,12 @@ function getCalledHistory(obj){
 					else if(info.status=='1'){showStatus="处理中"}
 					else if(info.status=='2'){showStatus="已处理"}
 					else if(info.status=='3'){showStatus="无法处理"}
-					table=table+"<tr><td style='width:200px'>"+info.quesCode+"</td><td style='width:100px'>"+info.serviceModuleName+"</td>" +
-						"<td style='width: 100px'>"+showStatus+"</td><td style='width: 250px'>"+info.quesTitle+"</td>" +
-						"<td style='width: 160px'>"+info.createdTime+"</td>" +
-						"<td style='width: 100px'><a href='javascript:void(0);' onclick='getHistoryDetails(this)' value='"+info.processInsId+"'>详情></a></td></tr>";
+					table=table+"<tr><td>"+info.quesCode+"</td><td >"+info.serviceModuleName+"</td>" +
+						"<td>"+showStatus+"</td><td>"+info.quesTitle+"</td>" +
+						"<td>"+info.createdTime+"</td>" +
+						"<td><a href='javascript:void(0)' class='btn mini' onclick='getHistoryDetails(this)' value='"+info.processInsId+"'>详情</a></td></tr>";
 				}
 			}
-			table=table+"</table>";
 			$("#history").html(table);
 		}
 	});
@@ -509,6 +506,8 @@ function getHistoryDetails(obj){
 		},
 		success: function (data) {
 			$("#detailLoad").hide();
+			//详情描述图片隐藏
+			$("#quesUrlShow").hide();
 			if(data!=undefined && data!=null && data.data!=null && data.code=='0000'){
 				$(".quesLayer").show();
 				$(".quesBox").show();
@@ -526,58 +525,56 @@ function getHistoryDetails(obj){
 				var executeHistoryShowList=detailInfo.executeHistoryShowList;
 
 				//给弹出框控件赋值
-				$("#quesTitleShow").val(quesTitle);
+				$("#quesTitleShow").html(quesTitle);
 				if(status=='0'){$("#status").html("待处理")}
 				else if(status=='1'){$("#status").html("处理中")}
 				else if(status=='2'){$("#status").html("已处理")}
 				else if(status=='3'){$("#status").html("无法处理")}
-				$("#quesDetailsShow").val(quesDetails);
+				$("#quesDetailsShow").html(quesDetails);
 				if(quesUrl!=null && quesUrl.length>0){
 					for(var i=0;i<quesUrl.length;i++){
 						if(quesUrl[i]==''){
 							continue;
 						}else{
 							if(i==0){
-								$(".quesUrlShow").show();
-								$(".quesUrlShow").attr("src",quesUrl[i]);
+								$("#quesUrlShow").show();
+								$("#quesUrlShow").attr("src",quesUrl[i]);
 							}else{
-								$(".quesUrlShow").after("<img style='width: 80px;height:60px;padding-left: 5px' class='quesUrlShowAdd' src='"+quesUrl[i]+"'/>");
+								$("#quesUrlShow").after("<img class='img quesUrlShowAdd' src='"+quesUrl[i]+"'/>");
 							}
 						}
 					}
 				}
-				$("#custNameShow").val(custName);
-				$("#contactWayShow").val(contactWay);
-				$("#serviceModuleName").val(serviceModuleName);
-				$("#createdTime").val(createdTime);
+				$("#custNameShow").html(custName);
+				$("#contactWayShow").html(contactWay);
+				$("#serviceModuleName").html(serviceModuleName);
+				$("#createdTime").html(createdTime);
 
 				//问题处理记录
 				if(executeHistoryShowList!=null && executeHistoryShowList.length>0){
-					var table="<table>";
+					var html="<div class='process-title'>问题处理记录</div>";
 					for(var i=0;i<executeHistoryShowList.length;i++){
-						var histoyShow=executeHistoryShowList[i];
-						table=table+"<tr><td>"+histoyShow.optionDeptName+"&nbsp;&nbsp;&nbsp;</td>" +
-							"<td>"+histoyShow.opinion+"("+histoyShow.statusName+")</td></tr>";
-						if(histoyShow.executePictureUrl!=null && histoyShow.executePictureUrl.length>0 ){
-							for(var j=0;j<histoyShow.executePictureUrl.length;j++){
+						var historyShow=executeHistoryShowList[i];
+						html=html+"<div class='item'>"
+							+"<div class='tle'>"+historyShow.optionDeptName+"</div>"
+							+"<div class='info'Style='padding-left: 10px'>"+historyShow.opinion+"("+historyShow.statusName+")</div>";
+						if(historyShow.executePictureUrl!=null && historyShow.executePictureUrl.length>0 ){
+							for(var j=0;j<historyShow.executePictureUrl.length;j++){
 								if(j==0){
-									table=table+"<tr><td></td>><td rowspan='3'><img class='executeShow' style='width: 80px;height:60px;padding-left: 5px' src='"+histoyShow.executePictureUrl[j]+"'/>";
+									html=html+"<div class='img-box'>";
+									html=html+"<img src='"+historyShow.executePictureUrl[j]+"' id='pictureUrl' class='executeShow' alt='' style='padding-left: 10px'>";
 								}else{
-									table=table+"<img class='executeShow' style='width: 80px;height:60px;padding-left: 5px' src='"+histoyShow.executePictureUrl[j]+"'/>";
+									$("#pictureUrl").after("<img src='"+historyShow.executePictureUrl[j]+"' id='pictureUrl"+j+"' class='executeShow' alt='' style='padding-left: 5px'>");
 								}
-							}
-							table=table+"</td></tr>";
-						}
-						if(i!=executeHistoryShowList.length-1){
-							table=table+"<tr><td >|</td></tr>";
-							table=table+"<tr><td >|</td></tr>";
-							table=table+"<tr><td >|</td></tr>";
-						}
-					}
-					table=table+"</table>"
-					$("#historyDetails").html(table);
-				}
 
+							}
+							html=html+"</div>";
+						}
+						html=html+"</div>";
+
+					}
+					$("#historyDetails").html(html);
+				}
 			}else{
 				alert("网络异常，请稍后重试");
 			}
@@ -594,13 +591,14 @@ function closeQuesBox(){
 	$("#quesTitleShow").val("");
 	$("#status").html("")
 	$("#quesDetailsShow").val("");
-	$(".quesUrlShow").attr("src","");
+	$("#quesUrlShow").attr("src","");
 	$("#custNameShow").val("");
 	$("#contactWayShow").val("");
 	$("#serviceModuleName").val("");
 	$("#createdTime").val("");
 	$("#historyDetails").html("");
 	//隐藏问题图片
+	$("#pictureUrl").hide();
 	$(".quesUrlShow").hide();
 	$(".quesUrlShowAdd").remove();
 	//隐藏弹出框
@@ -626,27 +624,20 @@ function okSubmit(){
 		return false;
 	}
 	//清空来电信息
-	$("#currentCallShow").val("");
-	$("#calledNumberShow").val("");
-	$("#callerOwenShow").val("");
-	$("#phoneShow").val("");
+	$("#currentCallShow").html("");
+	$("#calledNumberShow").html("");
+	$("#callerOwenShow").html("");
+	$("#phoneShow").html("");
 	//给来电信息赋值
-	$("#currentCallShow").val($("#currentCall").val());
-	$("#calledNumberShow").val($("#calledNumber").val());
-	$("#callerOwenShow").val($("#callerOwen").val());
-	$("#phoneShow").val($("#currentCall").val());
+	$("#currentCallShow").html($("#currentCall").val());
+	$("#calledNumberShow").html($("#calledNumber").val());
+	$("#callerOwenShow").html($("#callerOwen").val());
+	$("#phoneShow").html($("#currentCall").val());
+	//展示历史记录
+	$("#history").show();
 	//关闭弹窗
 	$(".popBox").hide();
 	$(".popLayer").hide();
-	//来电信息显示
-	$("#calledInfo").show();
-	//历史信息显示
-	$("#historyDesc").show();
-	$("#history").show();
-	//来电录入显示
-	$("#calledEnter").show();
-	//提交按钮显示
-	$("#submitButton").show();
 }
 
 //提交数据

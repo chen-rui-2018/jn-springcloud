@@ -46,12 +46,12 @@ public class LeaveController extends BaseController {
     @ApiOperation(value = "请假记录扣除小时", notes = "请假结束后，扣除请假记录小时")
     @PostMapping(value = "/insertLeave")
     @RequiresPermissions("/oa/leave/insertLeave")
-    public Result<AttendanceResultVo> insertLeave(@Validated @RequestBody VacationManagement leave) {
+    public Result<String> insertLeave(@Validated @RequestBody VacationManagement leave) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         leave.setUserId(user.getId());
-        Result data =leaveService.insertByLeave(leave);
-        return new Result(data);
+        Result<String> data =leaveService.insertByLeave(leave);
+        return data;
     }
 
 

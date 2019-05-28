@@ -244,6 +244,146 @@ public class TbManpowerAttendanceManagementCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andUserIdIsNull() {
+            addCriterion("user_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdIsNotNull() {
+            addCriterion("user_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdEqualTo(String value) {
+            addCriterion("user_id =", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotEqualTo(String value) {
+            addCriterion("user_id <>", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdGreaterThan(String value) {
+            addCriterion("user_id >", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("user_id >=", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdLessThan(String value) {
+            addCriterion("user_id <", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdLessThanOrEqualTo(String value) {
+            addCriterion("user_id <=", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdLike(String value) {
+            addCriterion("user_id like", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotLike(String value) {
+            addCriterion("user_id not like", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdIn(List<String> values) {
+            addCriterion("user_id in", values, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotIn(List<String> values) {
+            addCriterion("user_id not in", values, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdBetween(String value1, String value2) {
+            addCriterion("user_id between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotBetween(String value1, String value2) {
+            addCriterion("user_id not between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdIsNull() {
+            addCriterion("department_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdIsNotNull() {
+            addCriterion("department_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdEqualTo(String value) {
+            addCriterion("department_id =", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdNotEqualTo(String value) {
+            addCriterion("department_id <>", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdGreaterThan(String value) {
+            addCriterion("department_id >", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdGreaterThanOrEqualTo(String value) {
+            addCriterion("department_id >=", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdLessThan(String value) {
+            addCriterion("department_id <", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdLessThanOrEqualTo(String value) {
+            addCriterion("department_id <=", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdLike(String value) {
+            addCriterion("department_id like", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdNotLike(String value) {
+            addCriterion("department_id not like", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdIn(List<String> values) {
+            addCriterion("department_id in", values, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdNotIn(List<String> values) {
+            addCriterion("department_id not in", values, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdBetween(String value1, String value2) {
+            addCriterion("department_id between", value1, value2, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdNotBetween(String value1, String value2) {
+            addCriterion("department_id not between", value1, value2, "departmentId");
+            return (Criteria) this;
+        }
+
         public Criteria andDepartmentIsNull() {
             addCriterion("department is null");
             return (Criteria) this;
@@ -381,76 +521,6 @@ public class TbManpowerAttendanceManagementCriteria {
 
         public Criteria andNameNotBetween(String value1, String value2) {
             addCriterion("name not between", value1, value2, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdIsNull() {
-            addCriterion("user_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdIsNotNull() {
-            addCriterion("user_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdEqualTo(String value) {
-            addCriterion("user_id =", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotEqualTo(String value) {
-            addCriterion("user_id <>", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdGreaterThan(String value) {
-            addCriterion("user_id >", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdGreaterThanOrEqualTo(String value) {
-            addCriterion("user_id >=", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdLessThan(String value) {
-            addCriterion("user_id <", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdLessThanOrEqualTo(String value) {
-            addCriterion("user_id <=", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdLike(String value) {
-            addCriterion("user_id like", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotLike(String value) {
-            addCriterion("user_id not like", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdIn(List<String> values) {
-            addCriterion("user_id in", values, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotIn(List<String> values) {
-            addCriterion("user_id not in", values, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdBetween(String value1, String value2) {
-            addCriterion("user_id between", value1, value2, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotBetween(String value1, String value2) {
-            addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
 
@@ -1184,62 +1254,52 @@ public class TbManpowerAttendanceManagementCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateEqualTo(String value) {
+        public Criteria andAttendanceDateEqualTo(Integer value) {
             addCriterion("attendance_date =", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateNotEqualTo(String value) {
+        public Criteria andAttendanceDateNotEqualTo(Integer value) {
             addCriterion("attendance_date <>", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateGreaterThan(String value) {
+        public Criteria andAttendanceDateGreaterThan(Integer value) {
             addCriterion("attendance_date >", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateGreaterThanOrEqualTo(String value) {
+        public Criteria andAttendanceDateGreaterThanOrEqualTo(Integer value) {
             addCriterion("attendance_date >=", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateLessThan(String value) {
+        public Criteria andAttendanceDateLessThan(Integer value) {
             addCriterion("attendance_date <", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateLessThanOrEqualTo(String value) {
+        public Criteria andAttendanceDateLessThanOrEqualTo(Integer value) {
             addCriterion("attendance_date <=", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateLike(String value) {
-            addCriterion("attendance_date like", value, "attendanceDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttendanceDateNotLike(String value) {
-            addCriterion("attendance_date not like", value, "attendanceDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttendanceDateIn(List<String> values) {
+        public Criteria andAttendanceDateIn(List<Integer> values) {
             addCriterion("attendance_date in", values, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateNotIn(List<String> values) {
+        public Criteria andAttendanceDateNotIn(List<Integer> values) {
             addCriterion("attendance_date not in", values, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateBetween(String value1, String value2) {
+        public Criteria andAttendanceDateBetween(Integer value1, Integer value2) {
             addCriterion("attendance_date between", value1, value2, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateNotBetween(String value1, String value2) {
+        public Criteria andAttendanceDateNotBetween(Integer value1, Integer value2) {
             addCriterion("attendance_date not between", value1, value2, "attendanceDate");
             return (Criteria) this;
         }

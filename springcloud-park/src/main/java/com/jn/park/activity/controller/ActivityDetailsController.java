@@ -58,16 +58,16 @@ public class ActivityDetailsController extends BaseController {
     @ApiOperation(value = "获取评论信息")
     @RequestMapping(value = "/guest/getCommentInfo",method = RequestMethod.POST)
     public Result<PaginationData<List<Comment>>> getCommentInfo(@RequestBody ActivityPagingParam activityPagingParam){
+        logger.info("进入获取评论信息API,入参：{}",activityPagingParam.toString());
         //获取当前登录用户
         User loginUser=(User) SecurityUtils.getSubject().getPrincipal();
+        String account="";
         if(loginUser==null || loginUser.getAccount()==null){
-            Result result=new Result();
-            result.setResult(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
-            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
-            logger.warn("获取评论信息接口获取当前登录用户失败");
-            return result;
+            //ignore
+        }else{
+            account= loginUser.getAccount();
         }
-        PaginationData<List<Comment>> commentInfo = activityDetailsService.getCommentInfo(activityPagingParam,loginUser.getAccount(),Boolean.TRUE);
+        PaginationData<List<Comment>> commentInfo = activityDetailsService.getCommentInfo(activityPagingParam,account,true);
         return new Result<>(commentInfo);
     }
 }

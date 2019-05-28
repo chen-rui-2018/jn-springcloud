@@ -585,7 +585,7 @@ export default {
       })
     },
     partDeepClone(source, arr) {
-      // 因为formData.tabs存在循环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性
+      // 因为formData.tabs存在循getNode环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性
       if (!source && typeof source !== 'object') {
         throw new Error('error arguments', 'shallowClone')
       }
@@ -607,7 +607,6 @@ export default {
           this.loading = true
           this.submitting = true
           // 保存的时候再预览一遍, 获取选中指标树的填报格式
-
           this.previewForm()
             .then(() => {
               const formData = this.partDeepClone(this.formData, ['tabs', 'filllInFormDeadline', 'taskCreateTime'])

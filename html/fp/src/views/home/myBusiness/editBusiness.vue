@@ -103,10 +103,10 @@
           <el-form-item label="所属园区:" prop="affiliatedPark">
             <el-select v-model="businessForm.affiliatedPark" placeholder="请选择所属园区">
               <el-option
-                v-for="item in comSourceOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in parkList"
+                :key="item.id"
+                :label="item.parkName"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -143,7 +143,7 @@
         >-->
         <el-form-item label="企业LOGO:" class="br enterprise_bottom" prop="avatar">
           <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+              :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers"
               :show-file-list="false"
             :on-success="handleAvatarSuccess"
@@ -155,7 +155,7 @@
         </el-form-item>
         <el-form-item label="三证一体或营业执照:" class="br" prop="businessLicense">
           <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+             :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers"
             :show-file-list="false"
             :on-success="handleBusinessLicenseSuccess"
@@ -165,9 +165,9 @@
             <i v-else class="el-icon-plus "></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="企业宣传图片:" class="br" prop="imgParams">
+        <el-form-item label="企业宣传图片:" class="br">
           <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+            :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers"
             :on-exceed=" handleExceed"
             :limit="5"
@@ -196,7 +196,7 @@
   show-word-limit></el-input>
         </el-form-item>
       </el-form>
-      <div class="business_footer">
+      <div class="bus_footer">
         <span @click="submit">保存修改</span>
         <span>取消</span>
       </div>
@@ -208,6 +208,8 @@
 export default {
   data() {
     return {
+      baseUrl:this.api.host,
+      parkList:[],
       fileList: [],
       showImg: false,
       headers: {
@@ -322,9 +324,9 @@ export default {
         businessLicense: [
           { required: true, message: "请选择营业执照", trigger: "blur" }
         ],
-        imgParams: [
-          { required: true, message: "请选择宣传图片", trigger: "change" }
-        ],
+        // imgParams: [
+        //   { required: true, message: "请选择宣传图片", trigger: "change" }
+        // ],
         comDetails: [
           { required: true, message: "请输入公司简介", trigger: "blur" }
         ],
@@ -338,6 +340,7 @@ export default {
     this.selectIndustryList();
     this.getComPropertyOptions();
     this.init();
+    this.getParkList()
   },
   methods: {
     submit() {
@@ -367,6 +370,20 @@ export default {
         }
       })
     },
+     //所属园区
+    getParkList() {
+      let _this = this;
+      this.api.get({
+        url: "getParkList",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+           _this.parkList=res.data
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });},
     init() {
       let _this = this;
       _this.api.get({
@@ -644,7 +661,7 @@ export default {
       }
     }
   }
-  .business_footer {
+  .bus_footer {
     margin: 0 auto;
     margin-top: 58px;
     // border-radius: 4px;

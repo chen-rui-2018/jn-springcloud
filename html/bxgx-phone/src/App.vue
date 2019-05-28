@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     init () {
+      // sessionStorage.token = this.$route.query.token
       this.api.post({
         url: 'loginURL',
         data: {

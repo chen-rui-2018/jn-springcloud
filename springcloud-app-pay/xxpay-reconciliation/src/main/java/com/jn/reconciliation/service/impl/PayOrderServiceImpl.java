@@ -33,8 +33,8 @@ public class PayOrderServiceImpl implements PayOrderService {
     @Override
     public List<PayOrder> getPaySuccessOrderByDate(String date, String channelName) {
         Map<String,Object> param = new HashMap<>();
-        param.put("date","date");
-        param.put("channelName","channelName");
+        param.put("date",date);
+        param.put("channelName",channelName);
         return payOrderMapper.getPaySuccessOrderByDate(param);
     }
 
@@ -46,8 +46,8 @@ public class PayOrderServiceImpl implements PayOrderService {
     @Override
     public List<PayOrder> getAllPayOrderByDate(String date, String channelName) {
         Map<String,Object> param = new HashMap<>();
-        param.put("date","date");
-        param.put("channelName","channelName");
+        param.put("date",date);
+        param.put("channelName",channelName);
         return payOrderMapper.getAllPayOrderByDate(param);
     }
 }

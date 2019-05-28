@@ -452,9 +452,9 @@
                   this.$set(item, 'list',rows)
                 })
             })
-        //     this.$nextTick(() => {
-        //       this.loadingParkList = true
-        //     })
+            this.$nextTick(() => {
+              this.loadingParkList = true
+            })
           })
         Promise.all([
           this.getBanner(),

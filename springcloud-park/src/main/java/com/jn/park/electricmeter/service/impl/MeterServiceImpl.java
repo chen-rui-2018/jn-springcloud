@@ -463,8 +463,7 @@ public class MeterServiceImpl implements MeterService {
         TbElectricMeterInfo meterInfos = meterInfoMapper.selectByPrimaryKey(id);
         //作废电表信息和企业的每日关系
         if(meterInfos ==null){
-            //throw new
-            //todo 电表不存在
+            throw new JnSpringCloudException(MeterExceptionEnums.METER_INFO_NOT_FOUND);
         }
         deleteEveryDayLinks(meterInfos);
         return new Result();
@@ -479,7 +478,8 @@ public class MeterServiceImpl implements MeterService {
         try{
             date =DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd"),"yyyy-MM-dd");
         }catch(ParseException e){
-            logger.info("");
+            logger.info("获取当前日期时转换失败");
+            throw new JnSpringCloudException(MeterExceptionEnums.DAY_FORMATE_WRONG);
         }
         return date;
     }

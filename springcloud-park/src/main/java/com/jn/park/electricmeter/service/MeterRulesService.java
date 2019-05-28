@@ -67,6 +67,13 @@ public interface MeterRulesService {
      */
     Result SwitchMeter(String meterCode,String status);
 
+
+    /**
+     * 拉闸/回复接口
+     * @return
+     */
+    void setSwitchMeterTimer();
+
     /**
      * 余额不足告警
      * @param companyId
@@ -82,4 +89,9 @@ public interface MeterRulesService {
      */
     Integer deleteLinks(User user,String id);
 
+    /**
+     * 企业定时;余额不足告警
+     * @return
+     */
+    void warningBalanceShortTimer();
 }

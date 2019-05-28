@@ -1,6 +1,7 @@
 package com.jn.park.electricmeter.dao;
 
 import com.jn.park.electricmeter.entity.*;
+import com.jn.park.electricmeter.model.SwitchModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -109,11 +110,11 @@ public interface MeterDao {
 
     /**
      * 获取企业的电表用电量
-     * @param companyId
+     * @param meterCode
      * @param dealDate
      * @return
      */
-    List<TbElectricReading> getDegreeByMeterCode(@Param("companyId") String companyId,@Param("dealDate") Date dealDate);
+    List<TbElectricReading> getDegreeByMeterCode(@Param("meterCode") String meterCode,@Param("dealDate") Date dealDate);
 
     /**
      * 获取一块电表当天按计价规则分组的费用
@@ -133,5 +134,28 @@ public interface MeterDao {
      * @param saveData
      */
     void saveMeterLinkInDay(@Param("saveData") List<TbElectricMeterCompanyDay> saveData);
+
+    /**
+     * 停电的企业
+     */
+    List<SwitchModel> stopElectric();
+
+    /**
+     * 有电的企业
+     */
+    List<SwitchModel> getElectric();
+
+    /**
+     * 查询所有企业的电表
+     * @param companyId
+     * @return
+     */
+    List<String> getHostsMeter(@Param("companyId") String companyId);
+
+    /**
+     * 保存电表转换的日志
+     * @param saveData
+     */
+    void saveMeterSwitchLog(@Param("saveData") List<TbElectricMeterSwitchLog> saveData);
 
 }

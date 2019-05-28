@@ -17,6 +17,7 @@ import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.model.CompanyInfoShow;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
+import com.jn.company.model.CreditUpdateParam;
 import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
@@ -44,6 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jn.park.care.model.ServiceEnterpriseCompany;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -344,6 +346,22 @@ public class CompanyServiceImpl implements CompanyService {
         return commentClient.commentActivity(commentAddParam);
     }
 
+    @ServiceLog(doAction = "修改企业信用分")
+    @Override
+    public Result<Boolean> updateCreditPoints(CreditUpdateParam creditUpdateParam){
 
+        TbServiceCompany tbServiceCompany = tbServiceCompanyMapper.selectByPrimaryKey(creditUpdateParam.getComId());
+        if(null == tbServiceCompany){
+            throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
+        }
+        tbServiceCompany.setCreditPoints(tbServiceCompany.getCreditPoints()==null?
+                (new BigDecimal("100").subtract(new BigDecimal(creditUpdateParam.getPintNum()))):(tbServiceCompany.getCreditPoints().subtract(new BigDecimal(creditUpdateParam.getPintNum()))));
+        tbServiceCompany.setCreditUpdateTime(new Date());
+
+        int i = tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
+        logger.info("修改企业信用分逻辑执行完毕，响应条数：{} ",i);
+        return new Result<>(i==1?true:false);
+
+    }
 
 }

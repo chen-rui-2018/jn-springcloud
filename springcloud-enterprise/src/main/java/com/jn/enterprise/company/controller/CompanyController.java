@@ -8,6 +8,7 @@ import com.jn.company.enums.CompanyExceptionEnum;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.company.model.ServiceEnterpriseParam;
+import com.jn.company.model.CreditUpdateParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.park.activity.model.ActivityPagingParam;

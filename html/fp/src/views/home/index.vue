@@ -115,7 +115,7 @@
         <el-form-item prop="orgId" label="服务机构" :rules="[
       { required: true, message: '请输入你要申请入驻的机构', trigger: 'change' },
     ]">
-          <el-select v-model="organizationForm.orgId" filterable placeholder="请输入你要申请入驻的机构" clearable>
+          <el-select v-model="organizationForm.orgId" filterable placeholder="请输入你要申请入驻的机构" clearable @change="getBusinessArea">
             <el-option v-for="item in orgArr" :key="item.orgId" :label="item.orgName" :value="item.orgId">
             </el-option>
 
@@ -139,6 +139,7 @@ export default {
   //  components: { SidebarItem },
   data() {
     return {
+      businessArea:'',
       menuItems:[],
       isMobile: isMobile(),
       orgArr: [],
@@ -215,6 +216,14 @@ export default {
     } catch (e) {}
   },
   methods: {
+    getBusinessArea(value){
+        this.orgArr.forEach(v=>{
+          if(value===v.orgId){
+         this.businessArea=v.businessArea
+          }
+        }
+        )
+    },
     // 前往填写页面
     toAdvisoryInformation() {
       this.$refs["organizationForm"].validate(valid => {
@@ -223,7 +232,8 @@ export default {
           this.$router.push({
             name: "advisoryInformation",
             query: {
-              orgId: this.organizationForm.orgId
+              orgId: this.organizationForm.orgId,
+              businessArea:this.businessArea
             }
           });
         } else {

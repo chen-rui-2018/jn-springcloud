@@ -1,5 +1,6 @@
 package com.jn.park.electricmeter.model;
 
+import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,8 +13,8 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "TrendChartParam",description = "趋势图入参实体")
-public class TrendChartParam implements Serializable {
+@ApiModel(value = "TrendChartPageParam",description = "趋势图入参实体带有分页功能")
+public class TrendChartPageParam extends Page implements Serializable {
     @ApiModelProperty(value = "日期" ,example = "2018-9-10")
     private Date dealDate;
     @ApiModelProperty(value = "设备类型")
@@ -22,7 +23,6 @@ public class TrendChartParam implements Serializable {
     private String meterName;
     @ApiModelProperty(value = "楼宇位置")
     private String position;
-
 
     public Date getDealDate() {
         return dealDate;

@@ -32,6 +32,9 @@ public class IBPSDefIdConfig implements Serializable {
     // 上架/编辑科技金融产品流程ID
     private String technologyProduct;
 
+    // 升级企业流程ID
+    private String upgradeCompany;
+
     public String getTechnologyProduct() {
         return technologyProduct;
     }
@@ -62,5 +65,13 @@ public class IBPSDefIdConfig implements Serializable {
 
     public void setProduct(String product) {
         this.product = product;
+    }
+
+    public String getUpgradeCompany() {
+        return upgradeCompany;
+    }
+
+    public void setUpgradeCompany(String upgradeCompany) {
+        this.upgradeCompany = upgradeCompany;
     }
 }

@@ -169,7 +169,7 @@ export default new Router({
             },
             {
               path: '/enterpriseOrder',
-              component: resolve => require(['@/views/messageCenter/enterpriseOrder'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '企业订单'
               },
@@ -177,7 +177,7 @@ export default new Router({
             },
             {
               path: '/informationDynamics',
-              component: resolve => require(['@/views/messageCenter/informationDynamics'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '信息发布动态'
               },
@@ -185,7 +185,7 @@ export default new Router({
             },
             {
               path: '/paymentReminder',
-              component: resolve => require(['@/views/messageCenter/paymentReminder'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '缴费提醒'
               },
@@ -193,7 +193,7 @@ export default new Router({
             },
             {
               path: '/guestbook',
-              component: resolve => require(['@/views/messageCenter/guestbook'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '访客留言'
               },
@@ -201,7 +201,7 @@ export default new Router({
             },
             {
               path: '/dataReminder',
-              component: resolve => require(['@/views/messageCenter/dataReminder'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '数据上报提醒'
               },

@@ -44,8 +44,8 @@ export default {
       this.api.get({
         url: "getParkDetails",
         data: {
-          id: "570329542049136640"
-          // id: this.$route.query.id
+          // id: "570329542049136640"
+          id: this.$route.query.id
         },
         callback: function(res) {
           if (res.code == "0000") {

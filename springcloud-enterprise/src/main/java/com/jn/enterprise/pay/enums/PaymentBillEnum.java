@@ -69,4 +69,13 @@ public enum PaymentBillEnum implements CodeAndMsg {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public static PaymentBillEnum getByValue(String value){
+        for(PaymentBillEnum transactType : values()){
+            if (transactType.getCode().equals(value)) {
+                return transactType;
+            }
+        }
+        return null;
+    }
 }

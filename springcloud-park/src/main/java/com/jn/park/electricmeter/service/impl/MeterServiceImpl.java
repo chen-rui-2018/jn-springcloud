@@ -1,6 +1,9 @@
 package com.jn.park.electricmeter.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
@@ -592,10 +595,12 @@ public class MeterServiceImpl implements MeterService {
     }
 
     @Override
-    public Result trendChartDetail(TrendChartParam param) {
+    public Result<PaginationData<List<TrendChartDetailStatisticsModel>>> trendChartDetail(TrendChartPageParam param) {
         Result result = new Result();
+        Page<Object> objects = PageHelper.startPage(param.getPage(), param.getRows() == 0 ? 15 : param.getRows());
         List<TrendChartDetailStatisticsModel> list = meterDao.trendChartDetail(param);
-        result.setData(list);
+        PaginationData<List<TrendChartDetailStatisticsModel>> data = new PaginationData(list, objects.getTotal());
+        result.setData(data);
         return result;
     }
 

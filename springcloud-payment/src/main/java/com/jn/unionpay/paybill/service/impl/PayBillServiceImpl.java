@@ -12,6 +12,7 @@ import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
 import com.jn.park.api.ParkingClient;
 import com.jn.pay.api.PayOrderClient;
+import com.jn.pay.api.PropagandaClient;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.CreateOrderAndPayReqModel;
 import com.jn.pay.model.PayOrderNotify;
@@ -78,6 +79,8 @@ public class PayBillServiceImpl implements PayBillService {
     private ParkingClient parkingClient;
     @Autowired
     private SystemClient systemClient;
+    @Autowired
+    private PropagandaClient propagandaClient;
 
     private final static String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -333,7 +336,7 @@ public class PayBillServiceImpl implements PayBillService {
         paymentOrder.setIntegralAmount((StringUtils.equals(USE_POINT,NOT_USER_POINT)&&pointDeductionVO.getDeductionTotalAmount()!=null)?pointDeductionVO.getDeductionTotalAmount():0);
         paymentOrder.setRecordStatus(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         logger.info("统一支付接口，发起支付下单开始。");
-        Map<String, Object> map = createPayOrder(createOrderAndPayReqModel.getChannelId(), paymentOrder);
+        Map<String, Object> map = createPayOrder(createOrderAndPayReqModel.getChannelId(),createOrderAndPayReqModel.getExtra(), paymentOrder);
         Result payOrder = (Result<PayOrderRsp>)map.get("result");
         boolean verifyFlag = XXPayUtil.verifyPaySign(BeanToMap.toMap(payOrder.getData()), MchIdEnum.MCH_BASE.getRspKey());
         if(!verifyFlag) {
@@ -382,7 +385,7 @@ public class PayBillServiceImpl implements PayBillService {
      * @param paymentOrder
      * @return
      */
-    public Map<String,Object> createPayOrder(String channelId,TbPaymentOrder paymentOrder){
+    public Map<String,Object> createPayOrder(String channelId,String extra,TbPaymentOrder paymentOrder){
         Map<String,Object> map = new HashMap<>(16);
         PayOrderReq payOrderReq = new PayOrderReq();
         payOrderReq.setMchId(MchIdEnum.MCH_BASE.getCode());
@@ -395,6 +398,7 @@ public class PayBillServiceImpl implements PayBillService {
         payOrderReq.setServiceUrl(PayBillEnum.PAYMENT_ORDER_PAYMENT_URL_NAME.getCode());
         payOrderReq.setSubject(paymentOrder.getOrderName());
         payOrderReq.setBody(paymentOrder.getOrderName());
+        payOrderReq.setExtra(extra);
         payOrderReq.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrderReq),MchIdEnum.MCH_BASE.getReqKey()));
         Result<PayOrderRsp> payOrder = payOrderClient.createPayOrder(payOrderReq);
         map.put("result",payOrder);
@@ -468,8 +472,11 @@ public class PayBillServiceImpl implements PayBillService {
             paymentBillCallBack.setBillType(billType);
             BeanUtils.copyProperties(payOrderNotify,paymentBillCallBack);
             Result result = parkingClient.parkingPayCallBack(paymentBillCallBack);
-            logger.info("处理统一停车业务成功。响应结果：{}",result.getCode());
+            logger.info("处理统一停车业务支付回调成功。响应结果：{}",result.getCode());
             return (Boolean) result.getData();
+        }else if(StringUtils.equals(billType,PayTypeEnum.PAYMENT_ORDER_TYPE_AD_FREE.getCode())){
+            Result<Integer> integerResult = propagandaClient.updatePayStatus(bill.getBillId());
+            logger.info("处理宣传费业务支付回调成功。响应结果：{}",integerResult==null?"":integerResult.getData());
         }
         return true;
     }

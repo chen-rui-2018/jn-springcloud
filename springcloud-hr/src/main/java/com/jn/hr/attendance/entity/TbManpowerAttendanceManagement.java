@@ -39,7 +39,7 @@ public class TbManpowerAttendanceManagement implements Serializable {
 
     private Integer annualLeave;
 
-    private Integer attendanceDate;
+    private String attendanceDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -187,12 +187,12 @@ public class TbManpowerAttendanceManagement implements Serializable {
         this.annualLeave = annualLeave;
     }
 
-    public Integer getAttendanceDate() {
+    public String getAttendanceDate() {
         return attendanceDate;
     }
 
-    public void setAttendanceDate(Integer attendanceDate) {
-        this.attendanceDate = attendanceDate;
+    public void setAttendanceDate(String attendanceDate) {
+        this.attendanceDate = attendanceDate == null ? null : attendanceDate.trim();
     }
 
     @Override

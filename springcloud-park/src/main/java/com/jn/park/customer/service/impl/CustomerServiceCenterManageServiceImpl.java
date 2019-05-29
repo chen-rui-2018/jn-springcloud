@@ -171,6 +171,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             for(TbClientServiceCenter serviceCenter:serviceCenterList){
                 ConsultationCustomerListShow customerListShow=new ConsultationCustomerListShow();
                 BeanUtils.copyProperties(serviceCenter, customerListShow);
+                customerListShow.setCreatedTime(DateUtils.formatDate(serviceCenter.getCreatedTime(), PATTERN));
                 for(Map<String,String> map:procInsIdAndTaskIdList){
                    if(map.containsKey(customerListShow.getProcessInsId())){
                        customerListShow.setTaskId(map.get(customerListShow.getProcessInsId()));

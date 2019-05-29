@@ -117,17 +117,23 @@
             this.formatColumn(tab)
             // 把otherColumns的对象根据指标id挂载到树形指标上面
             this.formatTreeOtherColumnData(tab)
-            this.sortTree(tab.targetList)
+            this.sortTree(tab.targetList, 'orderNumber')
           }
         })
       },
-      sortTree(tree) {
-        tree.sort((a, b) => {
-          if (a.children && a.children.length > 0) {
-            this.sortTree(a.children)
+      sortTree(tree, key) {
+        for (let i = 0, length = tree.length; i < length; i++) {
+          for (let j = i + 1; j < length; j++) {
+            if (tree[i][key] > tree[j][key]) {
+              const temp = tree[j]
+              tree[j] = tree[i]
+              tree[i] = temp
+            }
           }
-          return a.orderNumber - b.orderNumber
-        })
+          if (tree[i].children && tree[i].children.length > 0) {
+            this.sortTree(tree[i].children, key)
+          }
+        }
       },
       formatInputFormatModel(tab) {
         // 填报格式合并到树指标

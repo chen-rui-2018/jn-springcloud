@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.pmpaybill.dao.PmPayBillMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO `tb_pm_pay_bill` (
+            `id`,
+            `company_id`,
+            `company_name`,
+            `company_address`,
+            `building_id`,
+            `building_name`,
+            `deal_date`,
+            `bill_amount`,
+            `free_amount`,
+            `total_amount`,
+            `last_pay_time`,
+            `pay_status`,
+            `is_expire`,
+            `generate_satus`,
+            `derate_state`
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+                #{item.id,jdbcType=VARCHAR},
+                #{item.companyId,jdbcType=VARCHAR},
+                #{item.companyName,jdbcType=VARCHAR},
+                #{item.companyAddress,jdbcType=VARCHAR},
+                #{item.buildingId,jdbcType=VARCHAR},
+                #{item.buildingName,jdbcType=VARCHAR},
+                #{item.dealDate,jdbcType=VARCHAR},
+                #{item.billAmount,jdbcType=DECIMAL},
+                #{item.freeAmount,jdbcType=DECIMAL},
+                #{item.totalAmount,jdbcType=DECIMAL},
+                #{item.lastPayTime,jdbcType=TIMESTAMP},
+                #{item.payStatus,jdbcType=TINYINT},
+                #{item.isExpire,jdbcType=TINYINT},
+                #{item.generateSatus,jdbcType=TINYINT},
+                #{item.derateState,jdbcType=TINYINT}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

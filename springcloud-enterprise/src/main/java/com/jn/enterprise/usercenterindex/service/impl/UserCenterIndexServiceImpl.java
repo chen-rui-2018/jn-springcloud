@@ -113,7 +113,11 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         String s1=userCenterIndexDao.findAdviserInvitation("1",affiliateCode);
 
         String str="已收到"+s+"条顾问邀请的回馈,"+s1+"条仍未审批。";
+
         if(StringUtils.isBlank(s) && StringUtils.isBlank(s1)){
+            str="";
+        }
+        if(("0").equals(s) && ("0").equals(s1)){
             str="";
         }
 
@@ -156,6 +160,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
             if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(Long.toString(s1))){
                 str="";
             }
+            if(("0").equals(Long.toString(s)) && ("0").equals(Long.toString(s1))){
+                str="";
+            }
         }
         //如果企业编码不为空则查询提交的需求
         if(StringUtils.isNotBlank(companyCode)){
@@ -169,6 +176,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
             long s1=requireOtherList1.getTotal();
             str="已提交"+s+"条服务需求,"+s1+"条仍在处理中";
             if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(Long.toString(s1))){
+                str="";
+            }
+            if(("0").equals(Long.toString(s)) && ("0").equals(Long.toString(s1))){
                 str="";
             }
         }
@@ -232,6 +242,11 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(Long.toString(s1))){
             str="";
         }
+
+        if(("0").equals(Long.toString(s)) && ("0").equals(Long.toString(s1))){
+            str="";
+        }
+
         return str;
     }
 
@@ -265,6 +280,11 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(String.valueOf(j))){
             str="";
         }
+
+        if(("0").equals(Long.toString(s)) && ("0").equals(Long.toString(j))){
+            str="";
+        }
+
         return str;
     }
 

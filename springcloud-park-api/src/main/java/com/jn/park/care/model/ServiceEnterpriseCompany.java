@@ -66,7 +66,7 @@ public class ServiceEnterpriseCompany implements Serializable {
     @ApiModelProperty(value = "主要原材料")
     private String material;
 
-    @ApiModelProperty(value = "企业性质（多个,分隔）")
+    @ApiModelProperty(value = "企业性质")
     private String comProperty;
 
     @ApiModelProperty(value = "注册资本（万元）")
@@ -75,7 +75,7 @@ public class ServiceEnterpriseCompany implements Serializable {
     @ApiModelProperty(value = "增资情况")
     private String addCapital;
 
-    @ApiModelProperty(value = "企业规模（万元）")
+    @ApiModelProperty(value = "企业规模")
     private String comScale;
 
     @ApiModelProperty(value = "成立时间（注册时间）")

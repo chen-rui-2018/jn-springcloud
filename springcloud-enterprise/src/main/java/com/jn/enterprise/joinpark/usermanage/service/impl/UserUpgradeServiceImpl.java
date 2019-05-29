@@ -6,7 +6,6 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.common.config.IBPSDefIdConfig;
-import com.jn.enterprise.company.dao.ServiceCompanyProImgMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
 import com.jn.enterprise.company.entity.TbServiceCompany;
@@ -41,7 +40,7 @@ import java.util.*;
  * @author： jiangyl
  * @date： Created on 2019/3/5 11:56
  * @version： v1.0
- * @modified By:
+ * @modified By:huxw
  */
 @Service
 public class UserUpgradeServiceImpl implements UserUpgradeService {
@@ -54,8 +53,6 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
     private TbServiceCompanyStaffMapper tbServiceCompanyStaffMapper;
     @Autowired
     private UserExtensionClient userExtensionClient;
-    @Autowired
-    private ServiceCompanyProImgMapper serviceCompanyProImgMapper;
     @Autowired
     private IBPSDefIdConfig ibpsDefIdConfig;
 
@@ -102,8 +99,6 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         companyCheckParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         companyCheckParam.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
         companyCheckParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getCode());
-        companyCheckParam.setComProperty(StringUtils.join(companyCheckParam.getComPropertyList(),","));
-        companyCheckParam.setComPropertyList(null);
 
         // 处理图片格式
         companyCheckParam.setBusinessLicense(IBPSFileUtils.uploadFile2Json(account, companyCheckParam.getBusinessLicense()));

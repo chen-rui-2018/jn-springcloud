@@ -14,10 +14,8 @@ import java.util.Date;
  */
 @ApiModel(value = "TrendChartParam",description = "趋势图入参实体")
 public class TrendChartParam implements Serializable {
-    @ApiModelProperty(value = "开始日期" ,example = "2018-9-10")
-    private Date dealDateStart;
-    @ApiModelProperty(value = "结束日期",example = "2018-9-10")
-    private Date dealDateEnd;
+    @ApiModelProperty(value = "日期" ,example = "2018-9-10")
+    private Date dealDate;
     @ApiModelProperty(value = "设备类型")
     private Byte type;
     @ApiModelProperty(value = "电表需求")
@@ -25,20 +23,13 @@ public class TrendChartParam implements Serializable {
     @ApiModelProperty(value = "楼宇位置")
     private String position;
 
-    public Date getDealDateStart() {
-        return dealDateStart;
+
+    public Date getDealDate() {
+        return dealDate;
     }
 
-    public void setDealDateStart(Date dealDateStart) {
-        this.dealDateStart = dealDateStart;
-    }
-
-    public Date getDealDateEnd() {
-        return dealDateEnd;
-    }
-
-    public void setDealDateEnd(Date dealDateEnd) {
-        this.dealDateEnd = dealDateEnd;
+    public void setDealDate(Date dealDate) {
+        this.dealDate = dealDate;
     }
 
     public Byte getType() {

@@ -28,7 +28,7 @@
             <i class="iconfont icon-rightarrow pointer" v-show="showBtn"></i>
           </div>
         </div>
-       <div class="quickEnter">
+        <div class="quickEnter">
           <ul>
             <li @click="$router.push({path:'/talentsService'})">
               <span>人才申报</span>
@@ -368,102 +368,13 @@
               <button class="btn2" :class="{'btActive':flag44=='2'}" @click="flag44 = '2'">金融机构</button>
             </div>
             <div class="tecnInfo clearfix">
-              <!--  <div class="info1 clearfix">
-                        <div class="lef1 fl clearfix">
-                            <div class="imgItem fl"><img src="@/../static/img/largeImg.png" alt=""></div>
-                            <div class="itemInfo fr">
-                                <span class="color1">郭龙华/总经理</span>
-                                <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                <p class="color3">合伙人</p>
-                            </div>
-                        </div>
-                        <ul class="lef2 fr clearfix">
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/largeImg.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/图层 46.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/49.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/图层 44.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="info1 clearfix">
-                        <div class="lef1 fl clearfix">
-                            <div class="imgItem fl"><img src="@/../static/img/51.png" alt=""></div>
-                            <div class="itemInfo fr">
-                                <span class="color1">郭龙华/总经理</span>
-                                <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                <p class="color3">合伙人</p>
-                            </div>
-                        </div>
-                        <ul class="lef2 fr clearfix">
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/图层 47.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/图层 46.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/49.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix lastLi">
-                                <div class="liImg">
-                                    <img src="@/../static/img/xiao.png" alt="">
-                                </div>
-                                <div class="liBtn">
-                                    MORE
-                                    <img src="@/../static/img/xiala1.png" alt="">
-                                </div>
-                            </li>
-                        </ul>
-                    </div> -->
               <div id="conselor_info" v-if="flag44 == '0'">
                 <ul>
                   <li class="conselor_left">
                     <div v-for="(item,index) in investorInfoList" :key="index" v-if="index<2">
                       <a href="javascript:;">
                         <div class="info_img">
-                          <div  @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})"><img :src="item.avatar" alt=""></div>
+                          <div @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})"><img :src="item.avatar" alt=""></div>
                         </div>
                         <div class="info_all">
                           <div class="info_name">
@@ -567,7 +478,7 @@
                       </div>
                     </div>
                     <div class="orgBtn fr mainColor">
-                      <a href="">在线联系</a>
+                      <a href="javascript:;" @click="onlineContact">在线联系</a>
                     </div>
                   </li>
                 </ul>
@@ -590,7 +501,7 @@
                 <button class="btn1 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
                 <button class="btn2 pointer" :class="{'btnActive':!flag55}" @click="flag55=false">服务</button>
               </div>
-              <div class="chage fr color3 pointer"  @click="hanlepage">
+              <div class="chage fr color3 pointer" @click="hanlepage">
                 <img src="@/../static/img/huanyipi.png" alt=""> 换一批
               </div>
             </div>
@@ -609,7 +520,7 @@
                   <p>发布时间: {{i.createdTime}}</p>
                 </div>
                 <div class="con3 fr">
-                  <button class="btn1">在线联系</button>
+                  <button class="btn1 pointer" @click="onlineContact">在线联系</button>
                   <button class="btn2 pointer" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">了解详情</button>
                 </div>
                 <!-- 详情弹框 -->
@@ -658,14 +569,123 @@
       </div>
 
     </div>
+    <!-- 金融提需求弹框 -->
+    <template v-if="financialProVisible">
+      <el-dialog :visible.sync="financialProVisible" width="600px">
+        <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
+          <el-form-item label="融资金额(万元):" prop="financingAmount">
+            <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
+          </el-form-item>
+          <el-form-item label="融资期限(月):" prop="financingPeriod">
+            <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
+              <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="资金需求日期:" prop="expectedDate">
+            <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
+          </el-form-item>
+          <el-form-item label="资金需求说明:" prop="fundsReqDesc">
+            <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+          </el-form-item>
+        </el-form>
+        <div class="demandLine"></div>
+        <div class="demandDia1" @click="demandDia()">提交需求</div>
+      </el-dialog>
+    </template>
+    <!-- 服务产品提需求弹框 -->
+    <template v-if="serverProVisible">
+      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh">
+        <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+          <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+            <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+          </el-form-item>
+        </el-form>
+        <div class="demandLine"></div>
+        <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+        <div class="demandDia" @click="demandDia1()">提交需求</div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
 import swiper from "swiper";
-import bus from '@/util/bus'
+import bus from "@/util/bus";
 export default {
   data() {
     return {
+      serverProVisible: false,
+      serverProform: {
+        requireDetail: "",
+        productId: "",
+        productName: ""
+      },
+      financialProVisible: false,
+      financialProform: {
+        financingAmount: "",
+        financingPeriod: "",
+        financingPeriodMax: "",
+        financingPeriodMin: "",
+        expectedDate: "",
+        fundsReqDesc: "",
+        productId: "",
+        productName: ""
+      },
+      options: [
+        {
+          value: 0,
+          label: "3个月及以下"
+        },
+        {
+          value: 1,
+          label: "6个月及以下"
+        },
+        {
+          value: 2,
+          label: "12个月及以下"
+        },
+        {
+          value: 3,
+          label: "36个月及以下"
+        },
+        {
+          value: 4,
+          label: "36个月以上"
+        }
+      ],
+      arr: [
+        {
+          loanTermMax: 3,
+          loanTermMin: ""
+        },
+        {
+          loanTermMax: 6,
+          loanTermMin: ""
+        },
+        {
+          loanTermMax: 12,
+          loanTermMin: ""
+        },
+        {
+          loanTermMax: 36,
+          loanTermMin: ""
+        },
+        {
+          loanTermMax: "",
+          loanTermMin: 36
+        }
+      ],
+      rules: {
+        financingAmount: [
+          { required: true, message: "请输入融资金额", trigger: "blur" }
+        ],
+        financingPeriod: [
+          { required: true, message: "请选择融资期限", trigger: "change" }
+        ],
+        expectedDate: [
+          { required: true, message: "请输入需求日期", trigger: "blur" }
+        ]
+      },
       detailFlag: "",
       flag55: true,
       flag44: "0",
@@ -704,10 +724,12 @@ export default {
       finaOrgLost: [],
       page7: 1,
       rows7: 3,
+      total7: 0,
       humanResourcesList: [],
       bannerList: [],
       page8: 1,
       rows8: 3,
+      total8: 0,
       serverProList: [],
       humanDetail: {}
     };
@@ -726,21 +748,101 @@ export default {
     this.getProList(); //服务产品列表
     this.getFinaOrg(); //金融机构
     this.getFinaPro(); //金融产品
-    Promise.all([this.getBanner(), this.getPolicyCenterList()]).then(() => {
+    Promise.all([this.getBanner()]).then(() => {
       this.init();
     });
-    
   },
-  created(){
-    let _this = this
-      bus.$on('closeKnow',msg => {
-          _this.detailFlag = '';
-      })
+  created() {
+    let _this = this;
+    bus.$on("closeKnow", msg => {
+      _this.detailFlag = "";
+    });
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    //在线联系
+    onlineContact(){
+     if(!sessionStorage.userInfo){
+        this.$message.error('请先登录');
+        return
+      }
+      this.$router.push({path:'chat'})
+    },
+    //金融产品提需求
+    raiseDemand(i) {
+      if(!sessionStorage.userInfo){
+        this.$message.error('请先登录');
+        return
+      }
+      this.financialProVisible = true;
+      this.financialProform.expectedDate = "";
+      this.financialProform.financingAmount = "";
+      this.financialProform.financingPeriodMax = "";
+      this.financialProform.financingPeriodMin = "";
+      this.financialProform.financingPeriod = "";
+      this.financialProform.fundsReqDesc = "";
+      this.financialProform.productId = i.productId;
+      this.financialProform.productName = i.productName;
+    },
+    //用户提交需求
+    demandDia() {
+      let _this = this;
+      let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
+      let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
+      this.api.post({
+        url: "userDemandTechnology",
+        data: {
+          expectedDate: _this.financialProform.expectedDate,
+          financingAmount: _this.financialProform.financingAmount,
+          financingPeriodMax: max,
+          financingPeriodMin: min,
+          productId: _this.financialProform.productId,
+          productName: _this.financialProform.productName,
+          fundsReqDesc: _this.financialProform.fundsReqDesc
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.$message.success("提交需求成功");
+            _this.financialProVisible = false;
+          } else {
+            _this.$message.error(res.result);
+            _this.financialProVisible = false;
+          }
+        }
+      });
+    },
+    //服务产品提需求
+    demandRaise(i) { 
+      if(!sessionStorage.userInfo){
+        this.$message.error('请先登录');
+        return
+      }
+      this.serverProVisible = true;
+      this.serverProform.requireDetail = "";
+      this.serverProform.productId = i.productId;
+      this.serverProform.productName = i.productName;
+    },
+    demandDia1() {
+      let _this = this;
+      this.api.post({
+        url: "userDemand",
+        data: {
+          productId: _this.serverProform.productId,
+          productName: _this.serverProform.productName,
+          requireDetail: _this.serverProform.requireDetail
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.$message.success("提交需求成功");
+            _this.serverProVisible = false;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
     handleProDel(productId, signoryId) {
       this.$router.push({
         path: "serverProDetail",
@@ -749,13 +851,22 @@ export default {
     },
     //招聘与服务切换翻页
     hanlepage() {
-      debugger
-      if(this.flag55==true){
-         this.page7++;
-         this.getRecruitList()
-      } else{
-         this.page8++;
-         this.getProList()
+      if (this.flag55 == true) {
+        if (this.page7 >= Math.ceil(this.total7 / this.rows7)) {
+          this.$message.error("没有更多数据了");
+          return;
+        } else {
+          this.page7++;
+          this.getRecruitList();
+        }
+      } else {
+        if (this.page8 >= Math.ceil(this.total8 / this.rows8)) {
+          this.$message.error("没有更多数据了");
+          return;
+        } else {
+          this.page8++;
+          this.getProList();
+        }
       }
     },
     formatArr(arr, n) {
@@ -780,7 +891,13 @@ export default {
       }
     },
     getElementLeft(element) {
+      if(!element){
+        return 0
+      }
       var top = element.offsetTop;
+      if(!element.offsetParent){
+        return top
+      }
       var curEle = element.offsetParent;
 
       while (curEle !== null) {
@@ -837,10 +954,10 @@ export default {
         loop: true, // 循环模式选项
         noSwiping: true,
         on: {
-          click: (e) => {
-            // let url = e.target.dataset.jumpurl; 
+          click: e => {
+            // let url = e.target.dataset.jumpurl;
             // this.bannerJump(url);
-            console.log(e)
+            console.log(e);
           }
         },
         observer: true,
@@ -918,7 +1035,7 @@ export default {
           if (res.code === "0000") {
             this.policyCenterList = this.formatArr(res.data.rows, 4);
             this.total2 = res.data.total;
-            let _this=this
+            let _this = this;
             setTimeout(() => {
               _this.init();
             }, 0);
@@ -1081,6 +1198,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.humanResourcesList = res.data.rows;
+            _this.total7 = res.data.total;
           } else {
             _this.$message.error(res.result);
           }
@@ -1103,7 +1221,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverProList = res.data.rows;
-            // _this.total = res.data.total;
+            _this.total8 = res.data.total;
           } else {
             _this.$message.error(res.result);
           }
@@ -1743,11 +1861,11 @@ export default {
           right: 38px;
           top: 66px;
           text-align: left;
-          .detail{
-            margin-bottom:10px;
-            color:#333;
+          .detail {
+            margin-bottom: 10px;
+            color: #333;
           }
-          p{
+          p {
             font-size: 13px;
           }
           .el-card__body {
@@ -1873,7 +1991,7 @@ export default {
             width: 27%;
             img {
               width: 75px;
-              height:75px;
+              height: 75px;
               border-radius: 50%;
               display: block;
               margin: 6px auto;
@@ -1898,6 +2016,49 @@ export default {
         box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.1);
       }
     }
+  }
+  .demandDia1 {
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+  }
+  .demandLine {
+    height: 1px;
+    width: 600px;
+    position: relative;
+    left: -20px;
+    background: #eee;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  .demandTextArea {
+    .el-textarea__inner {
+      background: #fff;
+    }
+  }
+  .serverTip {
+    display: inline-block;
+    font-size: 12px;
+  }
+  .demandDia {
+    display: inline-block;
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+    margin-left: 20px;
+    font-size: 12px;
   }
 }
 </style>

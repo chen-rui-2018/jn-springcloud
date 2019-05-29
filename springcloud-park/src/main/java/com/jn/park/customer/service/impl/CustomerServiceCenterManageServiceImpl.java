@@ -518,7 +518,12 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             }
         }
         //创建人
-        ibpsParam.setCreatorAccount(param.getContactWay());
+        if(StringUtils.isNotBlank(param.getCalledPhone())){
+
+            ibpsParam.setCreatorAccount(param.getCalledPhone());
+        }else{
+            ibpsParam.setCreatorAccount(param.getContactWay());
+        }
         //创建时间
         ibpsParam.setCreatedTime(DateUtils.getDate(PATTERN));
         //处理状态(0：待处理  1:处理中 2：已处理)

@@ -49,8 +49,8 @@ public class CompanyUpdateParam implements Serializable {
     private String ownerPhone;
 
     @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[多个用,分隔][传机构字典接口入参preType=3返回的ID]",required = true,notes = "传机构字典接口入参preType=3返回的ID",example = "[\"joint_enterprise\"]")
-    private String[] comPropertyList;
+    @ApiModelProperty(value = "企业性质[传机构字典接口入参preType=3返回的ID]",required = true,notes = "传机构字典接口入参preType=3返回的ID",example = "joint_enterprise")
+    private String comProperty;
 
     @NotNull(message = "注册资金不能为空")
     @Pattern(regexp = "^\\d+.?\\d*$", message = "注册资金校验失败")
@@ -138,9 +138,6 @@ public class CompanyUpdateParam implements Serializable {
     @ApiModelProperty(value = "公司宣传图片", hidden = true)
     private String propagandaPicture;
 
-    @ApiModelProperty(value = "企业性质", hidden = true)
-    private String comProperty;
-
     @NotNull(message = "验证码不能为空")
     @Pattern(regexp = "^\\d{6}$", message = "验证码校验错误，请输入6位数字的验证码")
     @ApiModelProperty(value = "验证码",required = true,example = "123456")
@@ -210,12 +207,12 @@ public class CompanyUpdateParam implements Serializable {
         this.ownerPhone = ownerPhone;
     }
 
-    public String[] getComPropertyList() {
-        return comPropertyList;
+    public String getComProperty() {
+        return comProperty;
     }
 
-    public void setComPropertyList(String[] comPropertyList) {
-        this.comPropertyList = comPropertyList;
+    public void setComProperty(String comProperty) {
+        this.comProperty = comProperty;
     }
 
     public String getRegCapital() {
@@ -402,14 +399,6 @@ public class CompanyUpdateParam implements Serializable {
         this.propagandaPicture = propagandaPicture;
     }
 
-    public String getComProperty() {
-        return comProperty;
-    }
-
-    public void setComProperty(String comProperty) {
-        this.comProperty = comProperty;
-    }
-
     public String getCheckCode() {
         return checkCode;
     }
@@ -429,7 +418,7 @@ public class CompanyUpdateParam implements Serializable {
                 ", unifyCode='" + unifyCode + '\'' +
                 ", ownerLaw='" + ownerLaw + '\'' +
                 ", ownerPhone='" + ownerPhone + '\'' +
-                ", comPropertyList=" + Arrays.toString(comPropertyList) +
+                ", comProperty='" + comProperty + '\'' +
                 ", regCapital='" + regCapital + '\'' +
                 ", comScale='" + comScale + '\'' +
                 ", foundingTime='" + foundingTime + '\'' +
@@ -453,7 +442,6 @@ public class CompanyUpdateParam implements Serializable {
                 ", createdTime='" + createdTime + '\'' +
                 ", recordStatus='" + recordStatus + '\'' +
                 ", propagandaPicture='" + propagandaPicture + '\'' +
-                ", comProperty='" + comProperty + '\'' +
                 ", checkCode='" + checkCode + '\'' +
                 '}';
     }

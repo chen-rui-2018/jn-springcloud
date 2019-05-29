@@ -26,7 +26,7 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "企业简称", required = true, example = "白下")
     private String comNameShort;
     @NotNull(message = "企业领域不能为空")
-    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=0返回的ID]", required = true, notes = "传机构字典接口入参preType=1返回的ID", example = "general_service")
+    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=1返回的ID]", required = true, notes = "传机构字典接口入参preType=1返回的ID", example = "cloud_computing")
     private String induType;
     @NotNull(message = "企业法人不能为空")
     @ApiModelProperty(value = "企业法人", required = true, example = "李薇薇")
@@ -62,8 +62,8 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "统一社会信用代码", required = true, example = "1000")
     private String unifyCode;
     @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[传机构字典接口入参preType=3返回的ID]", required = true,notes = "传机构字典接口入参preType=3返回的ID", example = "[\"joint_enterprise\"]")
-    private String[] comPropertyList;
+    @ApiModelProperty(value = "企业性质[传机构字典接口入参preType=3返回的ID]", required = true,notes = "传机构字典接口入参preType=3返回的ID", example = "joint_enterprise")
+    private String comProperty;
     @NotNull(message = "企业来源不能为空")
     @Pattern(regexp = "^[12]$", message = "企业来源校验错误")
     @ApiModelProperty(value = "企业来源 [1人才企业2招商企业]",notes = "1人才企业2招商企业", required = true, example = "1")
@@ -87,8 +87,6 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "所属园区[园区ID]", example = "846841")
     private String affiliatedPark;
 
-    @ApiModelProperty(value = "企业性质", hidden = true)
-    private String comProperty;
     @ApiModelProperty(value = "企业管理员", hidden = true)
     private String comAdmin;
     @ApiModelProperty(value = "是否删除", hidden = true)
@@ -212,12 +210,12 @@ public class CompanyCheckParam implements Serializable {
         this.unifyCode = unifyCode;
     }
 
-    public String[] getComPropertyList() {
-        return comPropertyList;
+    public String getComProperty() {
+        return comProperty;
     }
 
-    public void setComPropertyList(String[] comPropertyList) {
-        this.comPropertyList = comPropertyList;
+    public void setComProperty(String comProperty) {
+        this.comProperty = comProperty;
     }
 
     public String getComSource() {
@@ -284,14 +282,6 @@ public class CompanyCheckParam implements Serializable {
         this.affiliatedPark = affiliatedPark;
     }
 
-    public String getComProperty() {
-        return comProperty;
-    }
-
-    public void setComProperty(String comProperty) {
-        this.comProperty = comProperty;
-    }
-
     public String getComAdmin() {
         return comAdmin;
     }
@@ -349,7 +339,7 @@ public class CompanyCheckParam implements Serializable {
                 ", regCapital='" + regCapital + '\'' +
                 ", comScale='" + comScale + '\'' +
                 ", unifyCode='" + unifyCode + '\'' +
-                ", comPropertyList=" + Arrays.toString(comPropertyList) +
+                ", comProperty='" + comProperty + '\'' +
                 ", comSource='" + comSource + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", businessLicense='" + businessLicense + '\'' +
@@ -358,7 +348,6 @@ public class CompanyCheckParam implements Serializable {
                 ", comServer='" + comServer + '\'' +
                 ", comDemand='" + comDemand + '\'' +
                 ", affiliatedPark='" + affiliatedPark + '\'' +
-                ", comProperty='" + comProperty + '\'' +
                 ", comAdmin='" + comAdmin + '\'' +
                 ", recordStatus='" + recordStatus + '\'' +
                 ", checkStatus='" + checkStatus + '\'' +

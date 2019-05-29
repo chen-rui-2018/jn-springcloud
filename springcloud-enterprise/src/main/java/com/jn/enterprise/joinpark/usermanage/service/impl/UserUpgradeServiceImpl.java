@@ -102,8 +102,6 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         companyCheckParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         companyCheckParam.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
         companyCheckParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getCode());
-        companyCheckParam.setComProperty(StringUtils.join(companyCheckParam.getComPropertyList(),","));
-        companyCheckParam.setComPropertyList(null);
 
         // 处理图片格式
         companyCheckParam.setBusinessLicense(IBPSFileUtils.uploadFile2Json(account, companyCheckParam.getBusinessLicense()));

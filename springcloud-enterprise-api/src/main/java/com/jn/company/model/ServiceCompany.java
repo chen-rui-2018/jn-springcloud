@@ -49,12 +49,10 @@ public class ServiceCompany implements Serializable {
     private String products;
     @ApiModelProperty(value = "主要原材料")
     private String material;
-    @ApiModelProperty(value = "企业性质ID 多个,分隔")
+    @ApiModelProperty(value = "企业性质ID")
     private String comProperty;
-    @ApiModelProperty(value = "企业性质ID[数组]")
-    private String[] comPropertys;
     @ApiModelProperty(value = "企业性质名称[数组]")
-    private String[] comPropertyNames;
+    private String comPropertyName;
     @ApiModelProperty(value = "注册资本 万元")
     private Long regCapital;
     @ApiModelProperty(value = "增资情况")
@@ -276,6 +274,14 @@ public class ServiceCompany implements Serializable {
         this.comProperty = comProperty;
     }
 
+    public String getComPropertyName() {
+        return comPropertyName;
+    }
+
+    public void setComPropertyName(String comPropertyName) {
+        this.comPropertyName = comPropertyName;
+    }
+
     public Long getRegCapital() {
         return regCapital;
     }
@@ -322,6 +328,14 @@ public class ServiceCompany implements Serializable {
 
     public void setInduType(String induType) {
         this.induType = induType;
+    }
+
+    public String getInduTypeName() {
+        return induTypeName;
+    }
+
+    public void setInduTypeName(String induTypeName) {
+        this.induTypeName = induTypeName;
     }
 
     public String getInduCode() {
@@ -596,30 +610,6 @@ public class ServiceCompany implements Serializable {
         this.propagandaPicture = propagandaPicture;
     }
 
-    public String[] getComPropertys() {
-        return comPropertys;
-    }
-
-    public void setComPropertys(String[] comPropertys) {
-        this.comPropertys = comPropertys;
-    }
-
-    public String[] getComPropertyNames() {
-        return comPropertyNames;
-    }
-
-    public void setComPropertyNames(String[] comPropertyNames) {
-        this.comPropertyNames = comPropertyNames;
-    }
-
-    public String getInduTypeName() {
-        return induTypeName;
-    }
-
-    public void setInduTypeName(String induTypeName) {
-        this.induTypeName = induTypeName;
-    }
-
     public CareUserDetails getCareUserDetails() {
         return careUserDetails;
     }
@@ -648,8 +638,7 @@ public class ServiceCompany implements Serializable {
                 ", products='" + products + '\'' +
                 ", material='" + material + '\'' +
                 ", comProperty='" + comProperty + '\'' +
-                ", comPropertys=" + Arrays.toString(comPropertys) +
-                ", comPropertyNames=" + Arrays.toString(comPropertyNames) +
+                ", comPropertyName='" + comPropertyName + '\'' +
                 ", regCapital=" + regCapital +
                 ", addCapital='" + addCapital + '\'' +
                 ", comScale=" + comScale +
@@ -690,7 +679,7 @@ public class ServiceCompany implements Serializable {
                 ", modifierAccount='" + modifierAccount + '\'' +
                 ", createdTime='" + createdTime + '\'' +
                 ", modifiedTime='" + modifiedTime + '\'' +
-                ", propagandaPicture=" + propagandaPicture +
+                ", propagandaPicture=" + Arrays.toString(propagandaPicture) +
                 ", careUserDetails=" + careUserDetails +
                 '}';
     }

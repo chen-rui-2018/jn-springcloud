@@ -17,7 +17,7 @@ import com.jn.park.electricmeter.dao.TbElectricReadingFailLogMapper;
 import com.jn.park.electricmeter.entity.*;
 import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
-import com.jn.park.electricmeter.model.MeterInfoModel;
+import com.jn.park.electricmeter.model.*;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.enums.NoticeExceptionEnum;
 import com.jn.park.notice.service.impl.NoticeManageServiceImpl;
@@ -571,5 +571,39 @@ public class MeterServiceImpl implements MeterService {
                 meterDao.saveMeterLinkInDay(companyDays);
             }
         }
+    }
+
+    //能耗统计
+
+    @Override
+    public Result groupChart() {
+        Result result = new Result();
+        List<GroupChartStatisticsModel> list = meterDao.groupChart();
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+    public Result categaryChart() {
+        Result result = new Result();
+        List<GategaryEnergyStatisticsModel> list = meterDao.categaryChart();
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+    public Result trendChartDetail(TrendChartParam param) {
+        Result result = new Result();
+        List<TrendChartDetailStatisticsModel> list = meterDao.trendChartDetail(param);
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+    public Result trendChart(TrendChartParam param) {
+        Result result = new Result();
+        List<TrendChartStatisticsModel> list = meterDao.trendChart(param);
+        result.setData(list);
+        return result;
     }
 }

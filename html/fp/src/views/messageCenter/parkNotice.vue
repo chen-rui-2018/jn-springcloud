@@ -28,16 +28,16 @@ export default {
   data() {
     return {
       messageList: [],
-      messageOneTort: 0,
+      messageOneTort: 1,
       messageTowTort: 1
     };
   },
   created() {
-    // this.getName();
+    this.getName();
   },
   mounted() {
-    this.getMessageOneTort();
-    this.getMessageList();
+    // this.getMessageOneTort();
+    // this.getMessageList();
   },
   methods: {
     //判断跳转过来的路径
@@ -62,11 +62,16 @@ export default {
         this.messageOneTort = 1;
         this.getMessageOneTort();
         this.getMessageList();
-      } else{
-        // this.messageTowTort = 1;
-        // this.messageOneTort = 0;
-        // this.getMessageOneTort();
-        // this.getMessageList();
+      } else if(this.$route.name == "guestbook") {
+        this.messageTowTort = 5;
+        this.messageOneTort = 1;
+        this.getMessageOneTort();
+        this.getMessageList();
+      } else if(this.$route.name == "dataReminder"){
+        this.messageTowTort = 6;
+        this.messageOneTort = 1;
+        this.getMessageOneTort();
+        this.getMessageList();
       }
     },
     //获取消息列表
@@ -102,6 +107,11 @@ export default {
           }
         }
       });
+    }
+  },
+  watch:{
+    $route(){
+      this.getName();
     }
   }
 };

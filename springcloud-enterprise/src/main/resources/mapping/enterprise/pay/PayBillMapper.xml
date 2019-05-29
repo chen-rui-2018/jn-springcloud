@@ -173,6 +173,7 @@ and obj_id = #{payBill.objId,jdbcType=VARCHAR}
         ELSE
         '支付异常'
         END paymentState,
+        ac_book_type AS payType,
         CASE ac_book_type
         WHEN 'ELECTRIC' THEN
         '电费'

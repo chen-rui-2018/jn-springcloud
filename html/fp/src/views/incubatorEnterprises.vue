@@ -53,7 +53,7 @@
                             <h4>申请入驻</h4>
                             <p>电话：{{i.phone}}</p>
                         </div>
-                        <div class="footLi pointer">申请入驻</div>
+                        <a class="footLi pointer" href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp?response_type=code&redirect_uri=http%3A%2F%2F112.94.22.222%3A2384%2Fibps%2Fplatform%2Fconsole%2Fmain.htm&client_id=test">申请入驻</a>
                     </li>
                 </ul>
             </div>
@@ -213,12 +213,13 @@ export default {
       line-height: 20px;
     }
     .footLi {
+      display: block;
       height: 36px;
       line-height: 36px;
       font-size: 13px;
       color: #fff;
       text-align: center;
-      background: url("../../static/img/tuceng5.png") 100% 100% / 100% 100%
+      background: url("../../static/img/linerBg.png") 100% 100% / 100% 100%
         no-repeat;
     }
   }

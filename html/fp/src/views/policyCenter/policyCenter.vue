@@ -57,6 +57,7 @@
         <span class="mainColor">政策中心</span>
       </div>
       <div class="serverOrgNav w mainBorder" v-if="tableType=='allPolicy'">
+        <div class="policynav">
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">政策级别：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto;">
@@ -111,6 +112,7 @@
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
             <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
           </div>
+        </div>
         </div>
       </div>
       <div class="policyTab  w">
@@ -632,11 +634,12 @@ export default {
       }
     }
     .serverOrgNav {
-      padding: 0 20px;
       font-size: 13px;
       margin-bottom: 20px;
       text-align: center;
-
+     .policynav{
+       padding:0 20px;
+     }
       .nav1 {
         padding: 15px 0;
         border-bottom: 1px solid #eee;

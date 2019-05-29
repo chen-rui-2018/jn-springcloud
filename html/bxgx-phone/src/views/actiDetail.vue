@@ -81,15 +81,15 @@ export default {
       h: 0,
       m: 0,
       s: 0,
-      CountDown: ''
+      CountDown: '',
+      activityId: ''
     }
   },
   created () {
     this.actiDel()
+    this.activityId = this.getUrlParms('activityId')
   },
-  mounted () {
-
-  },
+  mounted () {},
   destroyed () {
     clearInterval(this._interval)
   },
@@ -99,8 +99,8 @@ export default {
       this.api.post({
         url: 'getActivityDetails',
         data: {
-          // activityId: _this.$route.query.id
-          activityId: 'f5c95f9adf714aedab3739cbc9297178'
+          activityId: _this.activityId
+          // activityId: 'f5c95f9adf714aedab3739cbc9297178'
         },
         dataFlag: true,
         callback: function (res) {
@@ -184,6 +184,16 @@ export default {
         this.s = 0
         return true
       }
+    },
+    // 获取地址栏参数，name:参数名称
+    getUrlParms (name) {
+      debugger
+      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+      var r = window.location.search.substr(1).match(reg)
+      if (r != null) {
+        return unescape(r[2])
+      }
+      return null
     }
   }
 }

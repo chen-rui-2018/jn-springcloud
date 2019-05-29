@@ -13,7 +13,8 @@
         <el-aside style="width: 200px;margin-right: 20px;" v-if="$store.state.hiddenNav">
           <div class="userImg">
             <div class="imgItem">
-              <img src="@/../static/img/larImg.png" alt="">
+              <img v-if="!avartImg" src="@/../static/img/larImg.png" alt="">
+              <img v-else :src="avartImg" alt="">
             </div>
             <!-- <p>{{account}}</p> -->
           </div>
@@ -59,11 +60,20 @@
 <script>
 export default {
   name: "MessageCenter",
+  data() {
+    return {
+      avartImg:'',
+    }
+  },
   computed:{
     key(){
       return this.$route.path + Date.now();
     }
-  }
+  },
+  mounted() {
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+    this.avartImg=userInfo.avatar
+  },
 }
 </script>
 

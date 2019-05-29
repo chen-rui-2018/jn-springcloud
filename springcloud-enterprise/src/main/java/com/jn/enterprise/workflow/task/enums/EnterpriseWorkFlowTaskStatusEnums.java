@@ -11,8 +11,12 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum EnterpriseWorkFlowTaskStatusEnums implements CodeAndMsg {
     TASK_TO_DO("1", "待办事项"),
-    TASK_COMPLETED("2", "已办事项");
+    TASK_COMPLETED("2", "已办事项"),
 
+    TASK_WARNING("WARNING", "报警事项"),
+    TASK_EARLY_WARNING("EARLY_WARNING", "预警事项"),
+    TASK_NORMAL("NORMAL", "普通事项"),
+    ;
     private String code;
 
     private String message;

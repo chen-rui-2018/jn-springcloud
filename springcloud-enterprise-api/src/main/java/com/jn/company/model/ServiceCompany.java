@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -135,7 +136,7 @@ public class ServiceCompany implements Serializable {
     @ApiModelProperty(value = "修改时间")
     private String modifiedTime;
     @ApiModelProperty(value = "企业宣传图片")
-    private List<CompanyProImg> proImgs;
+    private String[] propagandaPicture;
     @ApiModelProperty(value = "关注用户数及当前用户关注状态")
     private CareUserDetails careUserDetails;
 
@@ -587,12 +588,12 @@ public class ServiceCompany implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public List<CompanyProImg> getProImgs() {
-        return proImgs;
+    public String[] getPropagandaPicture() {
+        return propagandaPicture;
     }
 
-    public void setProImgs(List<CompanyProImg> proImgs) {
-        this.proImgs = proImgs;
+    public void setPropagandaPicture(String[] propagandaPicture) {
+        this.propagandaPicture = propagandaPicture;
     }
 
     public String[] getComPropertys() {
@@ -625,5 +626,72 @@ public class ServiceCompany implements Serializable {
 
     public void setCareUserDetails(CareUserDetails careUserDetails) {
         this.careUserDetails = careUserDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceCompany{" +
+                "id='" + id + '\'' +
+                ", comName='" + comName + '\'' +
+                ", comNameShort='" + comNameShort + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", comAdmin='" + comAdmin + '\'' +
+                ", unifyCode='" + unifyCode + '\'' +
+                ", owners='" + owners + '\'' +
+                ", ownerLaw='" + ownerLaw + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", ownerPhone='" + ownerPhone + '\'' +
+                ", ownerWechat='" + ownerWechat + '\'' +
+                ", ownerQq='" + ownerQq + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", bankAccount='" + bankAccount + '\'' +
+                ", products='" + products + '\'' +
+                ", material='" + material + '\'' +
+                ", comProperty='" + comProperty + '\'' +
+                ", comPropertys=" + Arrays.toString(comPropertys) +
+                ", comPropertyNames=" + Arrays.toString(comPropertyNames) +
+                ", regCapital=" + regCapital +
+                ", addCapital='" + addCapital + '\'' +
+                ", comScale=" + comScale +
+                ", foundingTime='" + foundingTime + '\'' +
+                ", runTime='" + runTime + '\'' +
+                ", induType='" + induType + '\'' +
+                ", induTypeName='" + induTypeName + '\'' +
+                ", induCode='" + induCode + '\'' +
+                ", businessLicense='" + businessLicense + '\'' +
+                ", licStarttime='" + licStarttime + '\'' +
+                ", licEndtime='" + licEndtime + '\'' +
+                ", registerType='" + registerType + '\'' +
+                ", orgCode='" + orgCode + '\'' +
+                ", mainProducts='" + mainProducts + '\'' +
+                ", businessScope='" + businessScope + '\'' +
+                ", contact='" + contact + '\'' +
+                ", conPhone='" + conPhone + '\'' +
+                ", conWechat='" + conWechat + '\'' +
+                ", conQq='" + conQq + '\'' +
+                ", conAddress='" + conAddress + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", comAddress='" + comAddress + '\'' +
+                ", comTele='" + comTele + '\'' +
+                ", comWeb='" + comWeb + '\'' +
+                ", comServer='" + comServer + '\'' +
+                ", comDemand='" + comDemand + '\'' +
+                ", addrPark='" + addrPark + '\'' +
+                ", comSynopsis='" + comSynopsis + '\'' +
+                ", parkBuildId='" + parkBuildId + '\'' +
+                ", parkBuildName='" + parkBuildName + '\'' +
+                ", creditPoints=" + creditPoints +
+                ", comType='" + comType + '\'' +
+                ", isJoinActivity='" + isJoinActivity + '\'' +
+                ", checkStatus='" + checkStatus + '\'' +
+                ", checkTime='" + checkTime + '\'' +
+                ", comSource='" + comSource + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", propagandaPicture=" + propagandaPicture +
+                ", careUserDetails=" + careUserDetails +
+                '}';
     }
 }

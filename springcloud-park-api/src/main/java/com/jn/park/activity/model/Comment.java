@@ -43,7 +43,7 @@ public class Comment extends Page implements Serializable {
     private List<Comment> childList;
     @ApiModelProperty(value = "当前评论的子节点个数")
     private int childNum;
-    @ApiModelProperty(value = "当前用户是否已点赞('true':已点赞  'false':未点赞)")
+    @ApiModelProperty(value = "当前用户是否已点赞('true':已点赞  'false':未点赞),若用户未登录，当前字段为空")
     private String isCommentLike;
 
     private static final long serialVersionUID = 1L;

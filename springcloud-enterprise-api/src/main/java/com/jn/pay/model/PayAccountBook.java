@@ -30,7 +30,7 @@ public class PayAccountBook implements Serializable {
     @ApiModelProperty(value="账本名称")
     private String acBookName;
 
-    @ApiModelProperty(value="账本类型ID（如电费，房租）")
+    @ApiModelProperty(value="账本类型【1：电费，2：物业费，3：维修费，4：房租费，5：物品租赁费，6：停车费，7：车位费，8：水费，9：宣传费，10：体检费】")
     private String acBookType;
 
     @ApiModelProperty(value="余额")

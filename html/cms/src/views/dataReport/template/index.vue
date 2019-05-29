@@ -369,7 +369,7 @@ export default {
       dialogVisible: false,
       templateTree: [],
       modelFormTargetOptions: [], // 填报对象列表选项
-      filllInFormDeadlineMonth: '', // 选择当月或下月
+      filllInFormDeadlineMonth: '当月', // 选择当月或下月
       originTab: { // tab表初始化数据
         tabName: '', // tab名称 表名
         tabClumnType: '', // 表填报列类型（0：累计值；1：本期值）
@@ -404,7 +404,7 @@ export default {
         departmentName: '', // 填报对象，类型是园区时候
         groupId: '', // 填报对象，类型是园区企业时候
         modelFormTargetId: '', // 填报对象 填报群组(企业群组)/园区填报部门
-        modelCycle: '', // 填报周期（1：年，0：月）
+        modelCycle: 0, // 填报周期（1：年，0：月）
         taskCreateTime: '', // 年报表：任务生成日期（YYYYMMDD）月报表：是一个01-31之间的数字
         filllInFormDeadline: '', // 年报表：截止日期（YYYYMMDD）月报表：当月/下月+01-31之间的数字
         warningBeforeDays: '', // 提前预警天数
@@ -538,7 +538,7 @@ export default {
       // 获取树形指标
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/target/getTargetTree`).then(data => {
         const treeList = data.data
-        this.sortTree(treeList)
+        this.sortTree(treeList, 'orderNumber')
         this.originTab.treeData = treeList
       })
       // 获取预警人
@@ -546,13 +546,19 @@ export default {
         this.warnerOptions = data.data.map(item => ({ id: item.id, label: item.creatorAccount }))
       })
     },
-    sortTree(tree) {
-      tree.sort((a, b) => {
-        if (a.children && a.children.length > 0) {
-          this.sortTree(a.children)
+    sortTree(tree, key) {
+      for (let i = 0, length = tree.length; i < length; i++) {
+        for (let j = i + 1; j < length; j++) {
+          if (tree[i][key] > tree[j][key]) {
+            const temp = tree[j]
+            tree[j] = tree[i]
+            tree[i] = temp
+          }
         }
-        return a.orderNumber - b.orderNumber
-      })
+        if (tree[i].children && tree[i].children.length > 0) {
+          this.sortTree(tree[i].children, key)
+        }
+      }
     },
     getModelTree() {
       // 获取树形模板
@@ -585,7 +591,7 @@ export default {
       })
     },
     partDeepClone(source, arr) {
-      // 因为formData.tabs存在循环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性
+      // 因为formData.tabs存在循getNode环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性
       if (!source && typeof source !== 'object') {
         throw new Error('error arguments', 'shallowClone')
       }
@@ -607,7 +613,6 @@ export default {
           this.loading = true
           this.submitting = true
           // 保存的时候再预览一遍, 获取选中指标树的填报格式
-
           this.previewForm()
             .then(() => {
               const formData = this.partDeepClone(this.formData, ['tabs', 'filllInFormDeadline', 'taskCreateTime'])
@@ -870,7 +875,6 @@ export default {
       // 切换年月填报周期时，把上次输入的值清空
       this.formData.taskCreateTime = ''
       this.formData.filllInFormDeadline = ''
-      this.filllInFormDeadlineMonth = ''
     },
     addTargetFormData(index, form) {
       if (form.tabCreateType === '1') {
@@ -1036,6 +1040,9 @@ export default {
                 formModels.sort((a, b) => {
                   return a['rowNum'] - b['rowNum']
                 })
+                arr.sort((a, b) => {
+                  return a.data.orderNumber - b.data.orderNumber
+                })
                 this.treeMerge(formModels, arr)
                 // 一维的结构指标转成树结构
                 const list = []
@@ -1052,7 +1059,7 @@ export default {
                   }
                 }
                 // 勾选的树结构指标挂载到tree-table
-                this.sortTree(list)
+                this.sortTree(list, 'orderNumber')
                 this.$nextTick(() => {
                   this.$set(tab, 'treeTableData', list)
                 })

@@ -18,7 +18,9 @@
         </checker>
       </div>
       <group>
-        <selector title="项目分类" :options="workNameList" placeholder="请选择项目名称" v-model="listQuery.itemId" @on-change="init()"></selector>
+        <selector title="项目分类" :options="workNameList" placeholder="请选择项目名称" v-model="listQuery.itemId" @on-change="workChange"></selector>
+        <div class="clearValue" @click="clearValue" v-show="listQuery.itemId"><icon type="clear"  ></icon></div>
+
       </group>
       <div class="search">
         <input type="text" v-model="listQuery.workPlanName" :class="isActive==0?'input-fcous':''" @focus="setBorder"
@@ -141,6 +143,13 @@ export default {
     this.getItemAll()
   },
   methods: {
+    workChange () {
+      // this.workNameList.unshift({key: '1', value: ''})
+      this.init()
+    },
+    clearValue () {
+      this.listQuery.itemId = ''
+    },
     toWorkPlanDetails (item) {
       this.$router.push({path: 'workPlanDetails', query: {id: item.id}})
     },
@@ -157,17 +166,6 @@ export default {
     completeWork (item) {
       this.$router.push({path: 'editWorkStatus', query: {id: item.id, title: '完成'}})
     },
-    // onShow () {
-    //   console.log('on show')
-    //   this.$vux.toast.text('hello', 'top')
-    // },
-    // onHide () {
-    //   console.log('on hide')
-    // },
-    // handleOperation () {
-    //   alert('123')
-    //   this.operation = true
-    // },
     handleQueryCondition () {
       // this.$vux.toast.text('hello', 'top')
       this.queryCondition = !this.queryCondition
@@ -225,7 +223,6 @@ export default {
         data: this.listQuery,
         callback: res => {
           if (res.code === '0000') {
-            console.log(res)
             this.workList = res.data.rows
             this.total = res.data.total
             this.onFetching = false
@@ -251,6 +248,16 @@ export default {
   font-size: 32px;
   .pd {
     padding: 20px 0px;
+  }
+  .clearValue{
+        position: absolute;
+    top: 13px;
+    text-align: center;
+    right: 50px;
+    z-index: 100;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
   }
   .workPlan-header {
     display: flex;

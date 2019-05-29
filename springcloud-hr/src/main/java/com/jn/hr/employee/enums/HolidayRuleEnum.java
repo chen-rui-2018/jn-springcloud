@@ -7,7 +7,7 @@ package com.jn.hr.employee.enums;
 public enum HolidayRuleEnum {
     ANNUAL_LEAVE("1", "年假","40"),
     COMPENSATED_LEAVE("2", "补休","0"),
-    CASUAL_LEAVE("3", "事假","192"),
+    CASUAL_LEAVE("3", "事假","0"),
     SICK_LEAVE("4", "病假","96"),
     MARRIAGE_LEAVE("5", "婚假","0"),
     MATERNITY_LEAVE("6", "产假","0"),

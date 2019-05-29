@@ -1,0 +1,11 @@
+.sub-button {
+  width: 90%;
+  height: 82rpx;
+  display: inline-block;
+  line-height: 82rpx;
+  color: #07AB50;
+  border-radius: 42rpx;
+  background:rgba(236,252,242,1);
+  border:1px solid #57BD99;
+  font-size: 30rpx;
+}

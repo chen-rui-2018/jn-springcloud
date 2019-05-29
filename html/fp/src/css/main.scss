@@ -123,7 +123,7 @@ img {
 }
 
 /* 活动中心开始 */
-.actiCenter {
+.actiCenter,.actiTrain {
   .actiContent {
     width: 1190px;
     margin: 0 auto;
@@ -533,7 +533,7 @@ img {
 .quickSearch,
 .aboutUs,
 .finaInstitution,
-.finaPro {
+.finaPro,.companyProfile {
 
   // .el-rate__icon.el-icon-star-on{
   //   color:#00a041 !important;
@@ -1813,7 +1813,7 @@ img {
           color: #fff;
           text-align: center;
           line-height: 40px;
-          background: url("../../static/img/椭圆2.png") 100% 100% / 100% 100% no-repeat;
+          background: url("../../static/img/tuoyuan2.png") 100% 100% / 100% 100% no-repeat;
           margin-right: 20px;
           z-index: 2;
           border: none;

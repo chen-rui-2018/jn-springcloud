@@ -114,7 +114,7 @@ public class PayOrderReq implements Serializable  {
 
     /**
      * 特定渠道发起时额外参数
-     *    当请求参数channelId = WX_JSAPI （微信公众号支付）时，openId参数必填，对应用户所在微信公众号的openId。
+     *    当请求参数channelId = WX_JSAPI 或者 WX_PROGRAM（微信公众号 和小程序支付 ）时，openId(用户标识)参数必填。
      * 如：{"openId":"o2RvowBf7sOVJf8kJksUEMceaDqo"}
      *
      *    当请求参数channelId = WX_NATIVE （微信原生扫码支付）时，productId参数必填，对应业务系统定义的商品ID。

@@ -20,6 +20,7 @@ import com.jn.enterprise.company.model.*;
 import com.jn.enterprise.company.service.RecruitService;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.api.CareClient;
 import com.jn.park.care.model.CareParam;
@@ -156,6 +157,13 @@ public class RecruitServiceImpl implements RecruitService {
 
         Page<Object> objects = PageHelper.startPage(recruitParam.getPage(), recruitParam.getRows() == 0 ? 15 : recruitParam.getRows());
         List<RecruitVO> recruitList = serviceRecruitMapper.getRecruitList(rp);
+
+        // 处理企业logo图片格式
+        for (RecruitVO recruit : recruitList) {
+            if (StringUtils.isNotBlank(recruit.getComAvatar())) {
+                recruit.setComAvatar(IBPSFileUtils.getFilePath(recruit.getComAvatar()));
+            }
+        }
 
         // 如果已登录，查询关注列表
         if (StringUtils.isNotBlank(recruitParam.getAccount())) {

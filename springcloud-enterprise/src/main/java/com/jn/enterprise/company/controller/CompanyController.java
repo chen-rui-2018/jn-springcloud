@@ -8,7 +8,9 @@ import com.jn.company.enums.CompanyExceptionEnum;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.company.model.ServiceEnterpriseParam;
+import com.jn.company.model.CreditUpdateParam;
 import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
 import com.jn.park.activity.model.CommentAddParam;
@@ -51,6 +53,15 @@ public class CompanyController extends BaseController {
     public Result<PaginationData<List<ServiceEnterpriseCompany>>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam){
         return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam));
     }
+    @ControllerLog(doAction = "查询企业详情-新版")
+    @ApiOperation(value = "查询企业详情-新版")
+    @RequestMapping(value = "/getCompanyDetails",method = RequestMethod.GET)
+    public Result<CompanyDetailsVo> getCompanyDetails(@ApiParam(name = "companyId", value = "企业id", required = true) @RequestParam(value = "companyId") String companyId){
+        User user =(User) SecurityUtils.getSubject().getPrincipal();
+
+        return new Result<>(companyService.getCompanyDetails(companyId,user==null?"":user.getAccount()));
+
+    }
 
     @ControllerLog(doAction = "根据用户账号/企业ID查询企业信息（用户为企业管理员）")
     @ApiOperation(value = "根据用户账号/企业ID查询企业信息",notes = "用户为企业管理员")
@@ -83,10 +94,7 @@ public class CompanyController extends BaseController {
     @RequestMapping(value = "/getCommentInfo",method = RequestMethod.GET)
     public Result<PaginationData<List<Comment>>>  getCommentInfo(ActivityPagingParam activityPagingParam){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null){
-            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
-        }
-        activityPagingParam.setAccount(user.getAccount());
+        activityPagingParam.setAccount(user==null?"":user.getAccount());
         return companyService.getCommentInfo(activityPagingParam);
     }
 

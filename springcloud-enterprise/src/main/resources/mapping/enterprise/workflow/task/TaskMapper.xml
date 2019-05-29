@@ -45,7 +45,7 @@
        left join
        (
        select type , count(*) as warn_num  from tb_workflow_task
-          where round(( UNIX_TIMESTAMP( end_time ) - UNIX_TIMESTAMP( NOW( ) )  ) / 3600) &lt; 24
+          where round(( UNIX_TIMESTAMP( end_time ) - UNIX_TIMESTAMP( NOW( ) )  ) / 3600) &lt; #{warnHour,jdbcType=INTEGER}
           and record_status =1
        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
            AND STATUS = #{status,jdbcType=VARCHAR}
@@ -79,6 +79,36 @@
                 LIMIT 0,#{rowCount,jdbcType=INTEGER}
         </if>
 
+    </select>
+
+    <!-- 时效性待办事项预警数据统计 -->
+    <select id="getWorkflowTaskStatistics" resultType="java.lang.String">
+        SELECT GROUP_CONCAT(x.warnNum separator ';') FROM (
+            SELECT
+                b.warnType AS "warnType",
+                COUNT(b.id) AS "warnNum"
+            FROM (
+                SELECT
+                    h.id,
+                    CASE
+                        <![CDATA[
+                        WHEN h.warnTime <= #{warnHour} THEN "2"
+                        WHEN #{warnHour} < h.warnTime AND h.warnTime <= #{earlyWarnHour} THEN "1"
+                        ]]>
+                    ELSE "0" END AS "warnType"
+                FROM (
+                    SELECT
+                    a.id,
+                    ROUND((UNIX_TIMESTAMP(a.end_time) - UNIX_TIMESTAMP(NOW())) / 3600,2) AS "warnTime"
+                    FROM tb_workflow_task a
+                    WHERE a.status = 1
+                    AND a.record_status = 1
+                    AND a.user_id = #{userId}
+                ) h
+            ) b
+            GROUP BY b.warnType
+            ORDER BY b.warnType DESC
+        ) x
     </select>
 
 

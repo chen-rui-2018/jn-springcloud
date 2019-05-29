@@ -15,14 +15,22 @@ import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
 import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
+import com.jn.enterprise.company.model.CompanyInfoShow;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
+import com.jn.company.model.CreditUpdateParam;
+import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.vo.ColleagueListVO;
+import com.jn.enterprise.company.vo.CompanyDetailsVo;
+import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.model.IBPSFile;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
@@ -39,9 +47,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jn.park.care.model.ServiceEnterpriseCompany;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 企业信息Service
@@ -87,15 +96,13 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @ServiceLog(doAction = "查询企业列表New")
     public PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam sepParam) {
-        if(StringUtils.isBlank(sepParam.getOrderByClause())){
+        /*if(StringUtils.isBlank(sepParam.getOrderByClause())){
             sepParam.setOrderByClause("browse_number DESC");
-        }
+        }*/
         Page<Object> objects = PageHelper.startPage(sepParam.getPage(), sepParam.getRows() == 0 ? 15 : sepParam.getRows());
         List<ServiceEnterpriseCompany> getCompanyNewList=companyMapper.getCompanyNewList(sepParam);
         //调用park,处理后再返回 getCompanyNewList
         Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(getCompanyNewList);
-
-
         PaginationData<List<ServiceEnterpriseCompany>> data = new PaginationData(companyNewList, objects.getTotal());
         return data;
     }
@@ -274,6 +281,15 @@ public class CompanyServiceImpl implements CompanyService {
         companyUpdateParam.setCreatorAccount(account);
         companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
 
+        // 处理图片
+        companyUpdateParam.setAvatar(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getAvatar()));
+        companyUpdateParam.setBusinessLicense(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getBusinessLicense()));
+        List<String> picList = Arrays.asList(companyUpdateParam.getPropagandaPicture().split(","));
+        String ibpsUrl = IBPSFileUtils.uploadFiles(account, picList);
+        if (StringUtils.isNotBlank(ibpsUrl)) {
+            companyUpdateParam.setPropagandaPicture(ibpsUrl);
+        }
+
         String bpmnDefId = ibpsDefIdConfig.getUpdateCompanyInfo();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, companyUpdateParam);
 
@@ -285,7 +301,67 @@ public class CompanyServiceImpl implements CompanyService {
         logger.info("[编辑企业信息] " + ibpsResult.getMessage());
         return 1;
     }
+    @ServiceLog(doAction = "获取企业详情")
+    @Override
+    public CompanyDetailsVo getCompanyDetails(String companyId,String account) {
+        CompanyDetailsVo vo = new CompanyDetailsVo();
+        //获取企业基本信息 基本信息+ 基本资料+ 法人信息+ 产品
+        CompanyInfoShow show  = companyMapper.getCompanyDetails(companyId);
 
+        if(show==null){
+            logger.info("企业信息不存在!");
+            return vo;
+        }
+        //获取 评论数  和 关注数信息
+        List<ServiceEnterpriseCompany> getCompanyNewList= new ArrayList<>();
+        ServiceEnterpriseCompany serviceEnterpriseCompany = new ServiceEnterpriseCompany();
+        serviceEnterpriseCompany.setId(companyId);
+        getCompanyNewList.add(serviceEnterpriseCompany);
+        Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(getCompanyNewList);
+        if(!companyNewList.getData().isEmpty()){
+            serviceEnterpriseCompany = companyNewList.getData().get(0);
+            if(serviceEnterpriseCompany != null){
+                show.setCareNumber(serviceEnterpriseCompany.getCareUser());
+                show.setCommentNumber(serviceEnterpriseCompany.getCommentNumber());
+            }
+        }
+        //获取评论信息
+        ActivityPagingParam activityPagingParam = new ActivityPagingParam();
+        activityPagingParam.setActivityId(companyId);
+        Result<PaginationData<List<Comment>>> commentRedsult = getCommentInfo(activityPagingParam);
+        if(commentRedsult.getData() != null){
+            vo.setComments(commentRedsult.getData().getRows());
+        }
+        //获取企业员工人数及头像列表信息
+        StaffListParam param = new StaffListParam();
+        param.setComId(companyId);
+        param.setNeedPage("0");
+        ColleagueListVO colleagueListVO =  staffService.getColleagueList(param,account);
+        if(colleagueListVO.getData()!=null){
+            List<String> avatarList = new ArrayList<>();
+            show.setComPerSonNumber(Long.toString(colleagueListVO.getData().getTotal()));
+            List<StaffListVO> staffListVOS = colleagueListVO.getData().getRows();
+            for(StaffListVO staffListVO: staffListVOS){
+                avatarList.add(staffListVO.getAvatar());
+            }
+            show.setPersonAvatar(avatarList);
+        }
+        //获取地址中的城市信息
+        if(StringUtils.isNotBlank(show.getComAddress())){
+            List<Map<String,String>> list = addressResolution(show.getComAddress());
+            if(!list.isEmpty()){
+              String province =   list.get(0).get("province");
+              String cityKey = "市";
+             if(cityKey.equals(province.substring(province.length()-1))){
+                 show.setCity(province);
+             }else {
+                 show.setCity(list.get(0).get("city"));
+             }
+            }
+        }
+        vo.setCompanyInfoShow(show);
+        return vo;
+    }
 
     @ServiceLog(doAction = "获取评论信息")
     @Override
@@ -297,6 +373,46 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Result<Boolean> saveComment(CommentAddParam commentAddParam){
         return commentClient.commentActivity(commentAddParam);
+    }
+    public static List<Map<String,String>> addressResolution(String address){
+        String regex="(?<province>[^省]+自治区|.*?省|.*?行政区|.*?市)(?<city>[^市]+自治州|.*?地区|.*?行政单位|.+盟|市辖区|.*?市|.*?县)(?<county>[^县]+县|.+区|.+市|.+旗|.+海域|.+岛)?(?<town>[^区]+区|.+镇)?(?<village>.*)";
+        Matcher m= Pattern.compile(regex).matcher(address);
+        String province=null,city=null,county=null,town=null,village=null;
+        List<Map<String,String>> table=new ArrayList<Map<String,String>>();
+        Map<String,String> row=null;
+        while(m.find()){
+            row=new LinkedHashMap<String,String>();
+            province=m.group("province");
+            row.put("province", province==null?"":province.trim());
+            city=m.group("city");
+            row.put("city", city==null?"":city.trim());
+            county=m.group("county");
+            row.put("county", county==null?"":county.trim());
+            town=m.group("town");
+            row.put("town", town==null?"":town.trim());
+            village=m.group("village");
+            row.put("village", village==null?"":village.trim());
+            table.add(row);
+        }
+        return table;
+    }
+
+    @ServiceLog(doAction = "修改企业信用分")
+    @Override
+    public Result<Boolean> updateCreditPoints(CreditUpdateParam creditUpdateParam){
+
+        TbServiceCompany tbServiceCompany = tbServiceCompanyMapper.selectByPrimaryKey(creditUpdateParam.getComId());
+        if(null == tbServiceCompany){
+            throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
+        }
+        tbServiceCompany.setCreditPoints(tbServiceCompany.getCreditPoints()==null?
+                (new BigDecimal("100").subtract(new BigDecimal(creditUpdateParam.getPintNum()))):(tbServiceCompany.getCreditPoints().subtract(new BigDecimal(creditUpdateParam.getPintNum()))));
+        tbServiceCompany.setCreditUpdateTime(new Date());
+
+        int i = tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
+        logger.info("修改企业信用分逻辑执行完毕，响应条数：{} ",i);
+        return new Result<>(i==1?true:false);
+
     }
 
 }

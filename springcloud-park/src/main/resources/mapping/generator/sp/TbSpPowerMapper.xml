@@ -8,7 +8,6 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="depart_id" jdbcType="VARCHAR" property="departId" />
     <result column="depart_name" jdbcType="VARCHAR" property="departName" />
-    <result column="setting_basis" jdbcType="VARCHAR" property="settingBasis" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="level" jdbcType="VARCHAR" property="level" />
@@ -25,6 +24,9 @@
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.sp.entity.TbSpPower">
+    <result column="setting_basis" jdbcType="LONGVARCHAR" property="settingBasis" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -85,10 +87,29 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, parent_id, parent_name, name, depart_id, depart_name, setting_basis, type, code, 
-    level, come_from, is_area, is_ningzhengfa, is_qinzhengfa, is_qubianban, notes, index_order, 
-    hot_order, record_status, creator_account, created_time, modifier_account, modified_time
+    id, parent_id, parent_name, name, depart_id, depart_name, type, code, level, come_from, 
+    is_area, is_ningzhengfa, is_qinzhengfa, is_qubianban, notes, index_order, hot_order, 
+    record_status, creator_account, created_time, modifier_account, modified_time
   </sql>
+  <sql id="Blob_Column_List">
+    setting_basis
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.park.sp.entity.TbSpPowerCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_sp_power
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.jn.park.sp.entity.TbSpPowerCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -103,9 +124,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from tb_sp_power
     where id = #{id,jdbcType=VARCHAR}
   </select>
@@ -122,20 +145,20 @@
   <insert id="insert" parameterType="com.jn.park.sp.entity.TbSpPower">
     insert into tb_sp_power (id, parent_id, parent_name, 
       name, depart_id, depart_name, 
-      setting_basis, type, code, 
-      level, come_from, is_area, 
-      is_ningzhengfa, is_qinzhengfa, is_qubianban, 
-      notes, index_order, hot_order, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
+      type, code, level, 
+      come_from, is_area, is_ningzhengfa, 
+      is_qinzhengfa, is_qubianban, notes, 
+      index_order, hot_order, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, setting_basis)
     values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{parentName,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{departId,jdbcType=VARCHAR}, #{departName,jdbcType=VARCHAR}, 
-      #{settingBasis,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{level,jdbcType=VARCHAR}, #{comeFrom,jdbcType=VARCHAR}, #{isArea,jdbcType=INTEGER}, 
-      #{isNingzhengfa,jdbcType=INTEGER}, #{isQinzhengfa,jdbcType=INTEGER}, #{isQubianban,jdbcType=INTEGER}, 
-      #{notes,jdbcType=VARCHAR}, #{indexOrder,jdbcType=INTEGER}, #{hotOrder,jdbcType=INTEGER}, 
-      #{recordStatus,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{type,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, 
+      #{comeFrom,jdbcType=VARCHAR}, #{isArea,jdbcType=INTEGER}, #{isNingzhengfa,jdbcType=INTEGER}, 
+      #{isQinzhengfa,jdbcType=INTEGER}, #{isQubianban,jdbcType=INTEGER}, #{notes,jdbcType=VARCHAR}, 
+      #{indexOrder,jdbcType=INTEGER}, #{hotOrder,jdbcType=INTEGER}, #{recordStatus,jdbcType=INTEGER}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{settingBasis,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.sp.entity.TbSpPower">
     insert into tb_sp_power
@@ -157,9 +180,6 @@
       </if>
       <if test="departName != null">
         depart_name,
-      </if>
-      <if test="settingBasis != null">
-        setting_basis,
       </if>
       <if test="type != null">
         type,
@@ -209,6 +229,9 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="settingBasis != null">
+        setting_basis,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -228,9 +251,6 @@
       </if>
       <if test="departName != null">
         #{departName,jdbcType=VARCHAR},
-      </if>
-      <if test="settingBasis != null">
-        #{settingBasis,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         #{type,jdbcType=VARCHAR},
@@ -280,6 +300,9 @@
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="settingBasis != null">
+        #{settingBasis,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.sp.entity.TbSpPowerCriteria" resultType="java.lang.Long">
@@ -308,9 +331,6 @@
       </if>
       <if test="record.departName != null">
         depart_name = #{record.departName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.settingBasis != null">
-        setting_basis = #{record.settingBasis,jdbcType=VARCHAR},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=VARCHAR},
@@ -360,7 +380,39 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.settingBasis != null">
+        setting_basis = #{record.settingBasis,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_sp_power
+    set id = #{record.id,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=VARCHAR},
+      parent_name = #{record.parentName,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      depart_id = #{record.departId,jdbcType=VARCHAR},
+      depart_name = #{record.departName,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
+      level = #{record.level,jdbcType=VARCHAR},
+      come_from = #{record.comeFrom,jdbcType=VARCHAR},
+      is_area = #{record.isArea,jdbcType=INTEGER},
+      is_ningzhengfa = #{record.isNingzhengfa,jdbcType=INTEGER},
+      is_qinzhengfa = #{record.isQinzhengfa,jdbcType=INTEGER},
+      is_qubianban = #{record.isQubianban,jdbcType=INTEGER},
+      notes = #{record.notes,jdbcType=VARCHAR},
+      index_order = #{record.indexOrder,jdbcType=INTEGER},
+      hot_order = #{record.hotOrder,jdbcType=INTEGER},
+      record_status = #{record.recordStatus,jdbcType=INTEGER},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      setting_basis = #{record.settingBasis,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -373,7 +425,6 @@
       name = #{record.name,jdbcType=VARCHAR},
       depart_id = #{record.departId,jdbcType=VARCHAR},
       depart_name = #{record.departName,jdbcType=VARCHAR},
-      setting_basis = #{record.settingBasis,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=VARCHAR},
       code = #{record.code,jdbcType=VARCHAR},
       level = #{record.level,jdbcType=VARCHAR},
@@ -411,9 +462,6 @@
       </if>
       <if test="departName != null">
         depart_name = #{departName,jdbcType=VARCHAR},
-      </if>
-      <if test="settingBasis != null">
-        setting_basis = #{settingBasis,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=VARCHAR},
@@ -463,7 +511,36 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="settingBasis != null">
+        setting_basis = #{settingBasis,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.park.sp.entity.TbSpPower">
+    update tb_sp_power
+    set parent_id = #{parentId,jdbcType=VARCHAR},
+      parent_name = #{parentName,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      depart_id = #{departId,jdbcType=VARCHAR},
+      depart_name = #{departName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR},
+      come_from = #{comeFrom,jdbcType=VARCHAR},
+      is_area = #{isArea,jdbcType=INTEGER},
+      is_ningzhengfa = #{isNingzhengfa,jdbcType=INTEGER},
+      is_qinzhengfa = #{isQinzhengfa,jdbcType=INTEGER},
+      is_qubianban = #{isQubianban,jdbcType=INTEGER},
+      notes = #{notes,jdbcType=VARCHAR},
+      index_order = #{indexOrder,jdbcType=INTEGER},
+      hot_order = #{hotOrder,jdbcType=INTEGER},
+      record_status = #{recordStatus,jdbcType=INTEGER},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      setting_basis = #{settingBasis,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.sp.entity.TbSpPower">
@@ -473,7 +550,6 @@
       name = #{name,jdbcType=VARCHAR},
       depart_id = #{departId,jdbcType=VARCHAR},
       depart_name = #{departName,jdbcType=VARCHAR},
-      setting_basis = #{settingBasis,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       level = #{level,jdbcType=VARCHAR},

@@ -37,10 +37,11 @@
     <!--添加增减员计划对话框-->
     <template v-if="increaseStaffAddFormVisible">
       <el-dialog :visible.sync="increaseStaffAddFormVisible" title="增减员计划" width="750px">
-        <el-form ref="increaseStaffAddForm" :model="increaseStaffAddFromData" label-width="150px">
-          <el-form-item label="姓名" prop="name" class="inline">
-            <el-input v-model="increaseStaffAddFromData.name" type="textarea" style="width: 350px;" readonly="readonly"/>
-            <el-button type="text" @click="openStaffNamePage">选择</el-button>
+        <el-form ref="increaseStaffAddForm" :rules="increaseStaffAddFormRules" :model="increaseStaffAddFromData" label-width="150px">
+          <el-form-item label="姓名" prop="jobNumber" class="inline">
+            <el-cascader-multi ref="assessmentObjectRef" v-model="increaseStaffAddFromData.jobNumberList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+            <!--<el-input v-model="increaseStaffAddFromData.name" type="textarea" style="width: 350px;" readonly="readonly"/>
+            <el-button type="text" @click="openStaffNamePage">选择</el-button>-->
           </el-form-item>
           <el-form-item label="参保月份" prop="insuredMonth" class="inline">
             <el-date-picker v-model="increaseStaffAddFromData.insuredMonth" value-format="yyyy-MM" type="month" placeholder="选择参保月份" style="width: 200px;"/>
@@ -52,13 +53,13 @@
           </el-form-item>
           <el-form-item label="社保基数" prop="socialInsuranceBase" class="inline">
             <el-input v-model="socialInsuranceBaseData" type="textarea" style="width: 350px;" readonly="readonly"/>
-            <el-button type="text" @click="socialInsuranceBaseFormPage">编辑各项目基数</el-button>
+            <el-button v-if="socialInsuranceBaseData !== ''" type="text" @click="socialInsuranceBaseFormPage">编辑各项目基数</el-button>
           </el-form-item>
           <el-form-item label="公积金基数" prop="reserveBase" class="inline">
             <!--<el-input type="text" style="width: 200px;"  v-model="increaseStaffAddFromData.increaseStaffAddFromReserveBase"/>
             <p style="height: 12px;margin-top: 0px;color:dodgerblue">基数范围[0-99999]</p>-->
             <el-input v-model="increaseStaffAddFromReserveBaseData" type="textarea" style="width: 350px;" readonly="readonly"/>
-            <el-button type="text" @click="accumulationFundPageVisible">编辑各项目基数</el-button>
+            <el-button v-if="increaseStaffAddFromReserveBaseData !== ''" type="text" @click="accumulationFundPageVisible">编辑各项目基数</el-button>
           </el-form-item>
           <el-form-item>
             <el-button :disabled="saveIncreaseStaffDisable" type="primary" @click="saveIncreaseStaff()">确定</el-button>
@@ -128,7 +129,7 @@
 </template>
 <script>
 import {
-  api
+  api, apiGet
 } from '@/api/hr/common'
 
 import UE from '@/components/ue.vue'
@@ -136,6 +137,15 @@ export default {
   components: { UE },
   data() {
     return {
+      increaseStaffAddFormRules: {
+        jobNumber: [{ required: true, message: '请选择增员名称', trigger: 'change' }],
+        insuredMonth: [{ required: true, message: '请选择参保月份', trigger: 'change' }],
+        insuredProgrammeId: [{ required: true, message: '请选择参保方案', trigger: 'change' }]
+      },
+      // 新部门员工树
+      deptEmployeeList: [],
+      checkList: [],
+      // 新部门员工树 end
       socialInsuranceBaseData: '',
       increaseStaffAddFromReserveBaseData: '',
       config: {
@@ -166,9 +176,9 @@ export default {
         insuredMonth: '',
         jobNumber: '',
         name: '',
+        jobNumberList: [],
         insuredProgrammeId: '',
-        insuredProgrammeName: '',
-        increaseStaffAddFromReserveBase: ''
+        insuredProgrammeName: ''
       },
       increaseStaffAddFormVisible: false,
       increaseStaffList: [],
@@ -192,8 +202,31 @@ export default {
   },
   mounted() {
     this.initList()
+    this.getDeptEmployeeList()
   },
   methods: {
+    nameSel() {
+      const selectedNodes = this.$refs['assessmentObjectRef'].selectedNodes
+      this.increaseStaffAddFromData.jobNumber = ''
+      for (let i = 0; i < selectedNodes.length; i++) {
+        if (!selectedNodes.flag) {
+          this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber + selectedNodes[i].jobNumber + ','
+        }
+      }
+      if (this.increaseStaffAddFromData.jobNumber.length > 0) {
+        this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber.substring(0, this.increaseStaffAddFromData.jobNumber.length - 1)
+      }
+      console.log(this.increaseStaffAddFromData.jobNumber)
+    },
+    getDeptEmployeeList() {
+      apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
+        if (res.data.code === '0000') {
+          this.deptEmployeeList = JSON.parse(res.data.data)
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    },
     cancelIncreaseStaffAddFormVisible() {
       this.increaseStaffAddFormVisible = false
     },
@@ -255,6 +288,8 @@ export default {
       let index = 1
       this.socialInsuranceBaseData = ''
       this.increaseStaffAddFromReserveBaseData = ''
+      this.socialInsuranceBasePageInit = []
+      this.reserveBasePageInit = []
       insuredSchemeDetailedList.forEach(e => {
         if (e.projectType === 1) {
           this.socialInsuranceBasePageInit.push({
@@ -371,22 +406,42 @@ export default {
     },
     saveIncreaseStaff() { // 保存增员计划
       this.saveIncreaseStaffDisable = true
+      // if (this.increaseStaffAddFromData.jobNumber === '') {
+      //   alert('增员员工姓名必填')
+      //   this.saveIncreaseStaffDisable = false
+      //   return
+      // }
       const param = {
         insuredMonth: this.increaseStaffAddFromData.insuredMonth,
         insuredProgrammeId: this.increaseStaffAddFromData.insuredProgrammeId,
         jobNumber: this.increaseStaffAddFromData.jobNumber
       }
-      api('hr/SalaryWelfareManagement/addOrDeleteAttritionPlan', param).then(res => {
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '添加增员计划成功',
-            type: 'success'
+      this.$refs['increaseStaffAddForm'].validate(valid => {
+        if (valid) {
+          api('hr/SalaryWelfareManagement/addOrDeleteAttritionPlan', param).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '添加增员计划成功',
+                type: 'success'
+              })
+              this.increaseStaffAddFormVisible = false
+              this.saveIncreaseStaffDisable = false
+              this.increaseStaffAddFromData.jobNumber = ''
+              this.checkList = []
+              this.increaseStaffAddFromData = {
+                insuredMonth: '',
+                jobNumber: '',
+                name: '',
+                insuredProgrammeId: '',
+                insuredProgrammeName: ''
+              }
+              this.initList()
+            } else {
+              this.$message.error('添加增员计划失败')
+              this.saveIncreaseStaffDisable = false
+            }
           })
-          this.increaseStaffAddFormVisible = false
-          this.saveIncreaseStaffDisable = false
-          this.initList()
         } else {
-          this.$message.error('添加增员计划失败')
           this.saveIncreaseStaffDisable = false
         }
       })

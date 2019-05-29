@@ -190,12 +190,6 @@ public class PayOrder implements Serializable {
      * */
     private String backType;
 
-    /**
-     * 缴费类型
-     * （详情请查看 MchPayTypeEnum 枚举类）
-    * */
-    private String payType;
-
 
     /**
      * 回调springCloud服务名称ID
@@ -223,6 +217,21 @@ public class PayOrder implements Serializable {
      * 注意： 最大时长为120分钟,为空则默认为120分钟
     * */
     private Integer duration;
+
+    /**
+     * 商户支付费率(单位: 百分比)
+     * */
+    private Double payRate;
+
+    /**
+     * 支付手续费(平台成本),单位分
+     * */
+    private Long platCost;
+
+    /**
+     * 实际收入金额，单位分
+     * */
+    private Long realIncomeAmount;
 
     private static final long serialVersionUID = 1L;
 
@@ -442,14 +451,6 @@ public class PayOrder implements Serializable {
         this.sign = sign;
     }
 
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
-
     public String getServiceId() {
         return serviceId;
     }
@@ -482,6 +483,30 @@ public class PayOrder implements Serializable {
         this.duration = duration;
     }
 
+    public Double getPayRate() {
+        return payRate;
+    }
+
+    public void setPayRate(Double payRate) {
+        this.payRate = payRate;
+    }
+
+    public Long getPlatCost() {
+        return platCost;
+    }
+
+    public void setPlatCost(Long platCost) {
+        this.platCost = platCost;
+    }
+
+    public Long getRealIncomeAmount() {
+        return realIncomeAmount;
+    }
+
+    public void setRealIncomeAmount(Long realIncomeAmount) {
+        this.realIncomeAmount = realIncomeAmount;
+    }
+
     @Override
     public String toString() {
         return "PayOrder{" +
@@ -512,11 +537,13 @@ public class PayOrder implements Serializable {
                 ", updateTime=" + updateTime +
                 ", sign='" + sign + '\'' +
                 ", backType='" + backType + '\'' +
-                ", payType='" + payType + '\'' +
                 ", serviceId='" + serviceId + '\'' +
                 ", serviceUrl='" + serviceUrl + '\'' +
                 ", aliPayReturnUrl='" + aliPayReturnUrl + '\'' +
                 ", duration=" + duration +
+                ", payRate=" + payRate +
+                ", platCost=" + platCost +
+                ", realIncomeAmount=" + realIncomeAmount +
                 '}';
     }
 }

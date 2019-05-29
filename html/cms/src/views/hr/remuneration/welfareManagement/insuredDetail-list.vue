@@ -10,20 +10,28 @@
         <el-input v-model="listQuery.name" maxlength="20" placeholder="" class="filter-item" clearable @keyup.enter.native="handleFilter" />
       </el-form-item>
       <el-form-item label="部门:" style="margin:0px 30px;">
-        <el-select v-model="listQuery.departmentId" placeholder="请选择部门" filterable>
+        <el-cascader
+          :options="departmentList"
+          v-model="departmentIdS"
+          change-on-select
+          placeholder="请选择"
+          clearable
+          @change="handleChangeDepartment"
+        />
+        <!--<el-select v-model="listQuery.departmentId" placeholder="请选择部门" filterable>
           <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName" :value="item.departmentId" />
-        </el-select>
+        </el-select>-->
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
     </el-form>
 
     <div style="height:92px; width: 99.8%; border: 1px solid #b3d4fc">
-      <span style="width: 7%;float: left;line-height: 92px;display:inline-block;text-align: center;font-size: 13px;font-weight: bold;color: blue">
+      <span style="width: 9%;float: left;line-height: 92px;display:inline-block;text-align: center;font-size: 13px;font-weight: bold;color: blue">
         <img src="@/assets/images/left.png" style="height: 20px;width: 20px;" alt="图片" @click="getInsuredMonthPreMonth">
         {{ queryMonth }}
         <img src="@/assets/images/right.png" style="height: 20px;width: 20px;" alt="图片" @click="getInsuredMonthNextMonth">
       </span>
-      <span style="height: 100%;width: 93%; display:inline-block; line-height: 15px;">
+      <span style="height: 100%;width: 91%; display:inline-block; line-height: 15px;">
         <el-table :data="insuredSummary" border fit highlight-current-row style="width: 100%;height:100%;">
           <el-table-column :show-overflow-tooltip="true" label="参保人数" align="center" prop="insuredNumber" />
           <el-table-column :show-overflow-tooltip="true" label="本月新增" align="center" prop="increaseInsuranceNumber"/>
@@ -81,7 +89,7 @@
 </template>
 <script>
 import {
-  api, exportExcel, getPreMonth, getNextMonth, apiGet
+  api, exportExcel, getPreMonth, getNextMonth, systemApi
 } from '@/api/hr/common'
 
 import UE from '@/components/ue.vue'
@@ -96,6 +104,8 @@ export default {
       insuredDetaildList: [],
       insuredSummary: [],
       departmentList: [],
+      departmentIdS: [],
+      departmentListLoading: false,
       stopInsuranceFormVisible: false,
       stopInsuranceFormData: {
         insuredMonth: '',
@@ -120,29 +130,38 @@ export default {
   },
   watch: {
     'listQuery.name': function() {
+      this.listQuery.page = 1
       this.reflushList()
     },
     'listQuery.departmentId': function() {
+      this.listQuery.page = 1
       this.reflushList()
     }
   },
   mounted() {
     this.initList()
-    this.getDepartmentList()
+    this.getAllDepartment()
   },
   methods: {
-    reflushList() {
-      this.getInsuredDetaildList(this.queryMonth)
-      this.getDetailSub(this.queryMonth, this.listQuery.departmentId)
+    // 选择部门（新增用户对话框）
+    handleChangeDepartment(value) {
+      this.listQuery.departmentId = this.departmentIdS[this.departmentIdS.length - 1]
     },
-    getDepartmentList() {
-      apiGet('hr/employeeDepartment/getEmployeeDepartments').then(res => {
+    // 获取所有部门列表
+    getAllDepartment() {
+      this.departmentListLoading = true
+      systemApi('system/sysDepartment/findDepartmentAllByLevel').then(res => {
         if (res.data.code === '0000') {
           this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
+        this.departmentListLoading = false
       })
+    },
+    reflushList() {
+      this.getInsuredDetaildList(this.queryMonth)
+      this.getDetailSub(this.queryMonth, this.listQuery.departmentId)
     },
     getInsuredMonthNextMonth() {
       const curMonth = this.queryMonth

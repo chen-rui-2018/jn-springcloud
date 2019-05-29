@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "nav-bar": "./../../templates/header/header",
+    "cell": "./../../templates/cell/cell",
+    "sub-button": "./../../templates/sub-button/sub-button"
+  }
+}

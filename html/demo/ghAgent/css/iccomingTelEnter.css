@@ -1,0 +1,259 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 12px;
+}
+ul{
+    list-style: none;
+}
+.page-box{
+    padding: 10px;
+}
+.top-bar{
+    border: 1px solid #ddd;
+    border-radius: 10px 10px 0 0;
+}
+.info-box, .form-box{
+    border: 1px solid #ddd;
+}
+.text-center{
+    text-align: center;
+}
+.input,select{
+    height: 30px;
+    line-height: 1.3;
+    line-height: 30px\9;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fff;
+    border-radius: 2px;
+    border-color: #e6e6e6;
+    padding:  0 10px;
+    width: 160px;
+}
+textarea{
+    line-height: 30px;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fff;
+    border-radius: 2px;
+    border-color: #e6e6e6;
+    padding:  0 10px;
+    width: 160px;
+}
+.input.wd-12{
+    width: 120px;
+}
+.btn{
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 18px;
+    background-color: #009688;
+    color: #fff;
+    white-space: nowrap;
+    text-align: center;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.btn.mini{
+    height: 20px;
+    line-height: 20px;
+}
+.btn.info{
+    background-color: #1E9FFF;
+}
+.btn:hover{
+    opacity: 0.8;
+}
+.input:focus,textarea:focus{
+    box-shadow: 0px 0px 5px #1E9FFF;
+}
+.top-bar{
+    list-style: none;
+    overflow: hidden;
+}
+.input,.btn, textarea, select{
+    outline: 0;
+    -webkit-appearance: none;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    box-sizing: border-box;
+}
+.top-bar li{
+    float: left;
+    margin-left: 20px;
+    line-height: 40px;
+}
+
+.calledInfo{
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-bottom: 1px solid #ddd;
+}
+.calledInfo li{
+    line-height: 35px;
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+
+.info-box{
+    padding: 20px;
+}
+.his-content .his-tip{
+    padding: 4px 10px;
+    color: #fff;
+    background: #FF6632;
+    display: inline-block;
+}
+.table{
+    width: 100%;
+    border: 1px solid #ddd;
+    line-height: 30px;
+}
+.table tr td{
+    text-align: center;
+    border-top: 1px solid #ddd;
+}
+.form-box{
+    overflow: hidden;
+    margin-top: 10px;
+    padding-top: 20px;
+}
+.form-box ul{
+    width: 800px;
+    margin: 0 auto;
+}
+.form-box li{
+    margin-bottom: 20px;
+    width: 50%;
+    float: left;
+    padding: 0 20px;
+}
+.form-box li.wd{
+    width: 100%;
+}
+.form-box li label{
+    width: 60px;
+    display: inline-block;
+    vertical-align: top;
+    line-height: 27px;
+    position: relative;
+}
+.form-box li label.must-input:before{
+    content: "*";
+    color: red;
+    position: absolute;
+    left: -7px;
+    top: -3px;
+}
+.form-box li input, .form-box li select, .form-box li textarea{
+    width: calc(100% - 65px);
+}
+.form-box li > span{
+    display: inline-block;
+    vertical-align: top;
+    line-height: 27px;
+}
+.state{
+    margin-left: 20px;
+    color: #3c8b3c;
+}
+.form-box li .describe{
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: calc(100% - 65px);
+    display: inline-block;
+    color: #999;
+}
+.form-box li .describe span{
+    display: block;
+}
+.form-box li .describe .img{
+    height: 60px;
+    width: 60px;
+    border: 1px solid #f4f4f4;
+    border-radius: 6px;
+    margin-top: 6px;
+}
+.quesLayer .content .form-box{
+    margin-top: 0;
+    padding: 10px 0;
+}
+.quesLayer .content .form-box li{
+    margin-bottom: 5px;
+}
+.process-box{
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    position: relative;
+    margin-top: 20px;
+}
+.process-box .item{
+    margin-bottom: 40px;
+    position: relative;
+    padding-left: 90px;
+}
+.process-box .item:last-child{
+    margin-bottom: 0;
+}
+.process-box .tle{
+    padding: 1px 6px;
+    background: #BDBDBD;
+    display: inline-block;
+    border-radius: 8px;
+    color: #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.process-box .item:last-child .tle{
+    background: #3c8b3c;
+}
+.process-box .item .info{
+    color: #999;
+}
+.process-box .item:before{
+    content: "";
+    position: absolute;
+    left: 30px;
+    top: 0;
+    bottom: -40px;
+    width: 1px;
+    border-left: 1px dashed #bbb;
+}
+.process-box .item:last-child:before{
+    display: none;
+}
+.process-box .img-box{
+    margin-top: 6px;
+}
+.process-box .img-box img{
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+}
+.process-box .process-title{
+    padding: 3px 10px;
+    position: absolute;
+    width: 110px;
+    text-align: center;
+    top: -10px;
+    left: 50%;
+    margin-left: -55px;
+    border-radius: 15px;
+    color: #fff;
+    background: #3299FF;
+}
+.popLayer .form-box li label{
+    width: 80px;
+}
+.popLayer .form-box li input{
+    width: calc(100% - 85px);
+}

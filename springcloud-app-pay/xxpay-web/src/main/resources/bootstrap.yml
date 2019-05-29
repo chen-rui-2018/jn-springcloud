@@ -18,3 +18,10 @@ spring:
         serviceId: springcloud-app-config
       label: master
       profile: master
+  sleuth:
+    sampler:
+      percentage: 1.0
+
+management:
+  security:
+    enabled: false

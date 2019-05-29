@@ -21,8 +21,11 @@ import com.jn.hr.employee.dao.EmployeeFileClassMapper;
 import com.jn.hr.employee.dao.EmployeeFileMapper;
 import com.jn.hr.employee.dao.FileAttachmentMapper;
 import com.jn.hr.employee.enums.EmployeeExceptionEnums;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDictKeyValue;
 import com.jn.upload.api.UploadClient;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
@@ -68,6 +71,10 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
     @Value("${spring.application.name}")
     private String applicationName;
     public static final String prefix="NJ";
+
+    @Autowired
+    private SystemClient systemClient;
+
     @Override
     @ServiceLog(doAction = "添加员工档案")
     @Transactional(rollbackFor = Exception.class)
@@ -264,6 +271,22 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
     @Override
     @ServiceLog(doAction = "员工档案附件批量上传")
     public List<FileAttachment> uploadAttachment(List<MultipartFile> files,String fileId,User user) {
+        SysDictInvoke sysDictInvoke=new SysDictInvoke();
+        sysDictInvoke.setGroupCode("hr_file_group");
+        sysDictInvoke.setModuleCode("springcloud_hr");
+        sysDictInvoke.setParentGroupCode("springcloud_hr");
+        sysDictInvoke.setKey("hr_file_group_id");
+        Result dictResult=systemClient.getDict(sysDictInvoke);
+        String fileGroup="";
+        if(dictResult!=null && "0000".equals(dictResult.getCode()) && dictResult.getData()!=null) {
+            List<SysDictKeyValue> certificateTypeList = (List<SysDictKeyValue>) dictResult.getData();
+            if(!CollectionUtils.isEmpty(certificateTypeList)){
+                fileGroup=certificateTypeList.get(0).getLable();
+            }
+        }else{
+            logger.error("上传文件，查询文件组失败");
+            throw new JnSpringCloudException(EmployeeExceptionEnums.QUERYDICT_ERROR);
+        }
         List<FileAttachment> fileAttachmentList=new ArrayList<FileAttachment>();
         for (MultipartFile file : files) {
             if (file.isEmpty()) {
@@ -277,7 +300,11 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
                     String[] split = title.split("\\.");
                     String str = DateUtils.formatDate(new Date(), "yyyyMMdd");
                     String fileName = split[0] + str + RandomStringUtils.randomNumeric(4) + "." + split[1];
-                    Result<String> result = uploadClient.uploadFile(file, false,"hr");
+                    Result<String> result = uploadClient.uploadFile(file, true,fileGroup);
+                    if(!"0000".equals(result.getCode())){
+                        logger.error("档案附件上传失败,code={},message={}",result.getCode(),result.getResult());
+                        throw new JnSpringCloudException(HrExceptionEnums.UPLOAD_FILE_ERRPR);
+                    }
                     fileAttachment.setFileId(fileId);
                     fileAttachment.setCreateTime(new Date());
                     fileAttachment.setFileName(split[0]);

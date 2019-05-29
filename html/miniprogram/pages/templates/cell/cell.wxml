@@ -1,0 +1,10 @@
+<view class="common-cell">
+    <view class="common-cell-l">
+      <slot name="left"/>
+        <text class="common-cell-content">{{ content }}</text>
+    </view>
+    <view class="common-cell-r">
+        <text wx:if="tips" class="common-cell-tips">{{ tips }}</text>
+        <slot name="right"/>
+    </view>
+</view>

@@ -20,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +75,8 @@ public class MaintainManageServiceImpl implements MaintainManageService {
                 //创建维保记录model
                 AssetMaintainRecordModel assetMaintainRecordModel = new AssetMaintainRecordModel();
                 BeanUtils.copyProperties(tbAssetMaintainRecord,assetMaintainRecordModel);
+                java.sql.Date maintenanceTime = new java.sql.Date(tbAssetMaintainRecord.getMaintenanceTime().getTime());
+                assetMaintainRecordModel.setMaintenanceTime(maintenanceTime);
                 assetMaintainRecordModelList.add(assetMaintainRecordModel);
             }
             //维保记录集合

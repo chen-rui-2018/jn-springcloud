@@ -43,7 +43,7 @@
                 <el-menu-item index="/dataReminder">数据上报提醒</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-menu-item :index="'/messageCenter/chat?fromUser=' + fromUser">
+            <el-menu-item index="/messageCenter/chat">
               <span slot="title">社区交流</span>
             </el-menu-item>
           </el-menu>
@@ -59,19 +59,10 @@
 <script>
 export default {
   name: "MessageCenter",
-  data() {
-    return {
-      fromUser: ''
-    }
-  },
   computed:{
     key(){
       return this.$route.path + Date.now();
     }
-  },
-  mounted() {
-    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-    this.fromUser = userInfo.account
   }
 }
 </script>
@@ -146,6 +137,8 @@ $bg-gray: #f3f3f3;
         color: $--color-primary;
         border-left: 2px solid $--color-primary;
       }
+      padding:0;
+      padding-left:20px !important;
     }
   }
   .userImg {

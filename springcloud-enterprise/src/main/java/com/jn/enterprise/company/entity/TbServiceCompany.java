@@ -101,6 +101,8 @@ public class TbServiceCompany implements Serializable {
 
     private BigDecimal creditPoints;
 
+    private Date creditUpdateTime;
+
     private String comType;
 
     private String isJoinActivity;
@@ -112,6 +114,10 @@ public class TbServiceCompany implements Serializable {
     private String comSource;
 
     private String affiliatedPark;
+
+    private String affiliatedName;
+
+    private String browseNumber;
 
     private String creatorAccount;
 
@@ -509,6 +515,14 @@ public class TbServiceCompany implements Serializable {
         this.creditPoints = creditPoints;
     }
 
+    public Date getCreditUpdateTime() {
+        return creditUpdateTime;
+    }
+
+    public void setCreditUpdateTime(Date creditUpdateTime) {
+        this.creditUpdateTime = creditUpdateTime;
+    }
+
     public String getComType() {
         return comType;
     }
@@ -555,6 +569,22 @@ public class TbServiceCompany implements Serializable {
 
     public void setAffiliatedPark(String affiliatedPark) {
         this.affiliatedPark = affiliatedPark == null ? null : affiliatedPark.trim();
+    }
+
+    public String getAffiliatedName() {
+        return affiliatedName;
+    }
+
+    public void setAffiliatedName(String affiliatedName) {
+        this.affiliatedName = affiliatedName == null ? null : affiliatedName.trim();
+    }
+
+    public String getBrowseNumber() {
+        return browseNumber;
+    }
+
+    public void setBrowseNumber(String browseNumber) {
+        this.browseNumber = browseNumber == null ? null : browseNumber.trim();
     }
 
     public String getCreatorAccount() {
@@ -657,12 +687,15 @@ public class TbServiceCompany implements Serializable {
             && (this.getParkBuildId() == null ? other.getParkBuildId() == null : this.getParkBuildId().equals(other.getParkBuildId()))
             && (this.getParkBuildName() == null ? other.getParkBuildName() == null : this.getParkBuildName().equals(other.getParkBuildName()))
             && (this.getCreditPoints() == null ? other.getCreditPoints() == null : this.getCreditPoints().equals(other.getCreditPoints()))
+            && (this.getCreditUpdateTime() == null ? other.getCreditUpdateTime() == null : this.getCreditUpdateTime().equals(other.getCreditUpdateTime()))
             && (this.getComType() == null ? other.getComType() == null : this.getComType().equals(other.getComType()))
             && (this.getIsJoinActivity() == null ? other.getIsJoinActivity() == null : this.getIsJoinActivity().equals(other.getIsJoinActivity()))
             && (this.getCheckStatus() == null ? other.getCheckStatus() == null : this.getCheckStatus().equals(other.getCheckStatus()))
             && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
             && (this.getComSource() == null ? other.getComSource() == null : this.getComSource().equals(other.getComSource()))
             && (this.getAffiliatedPark() == null ? other.getAffiliatedPark() == null : this.getAffiliatedPark().equals(other.getAffiliatedPark()))
+            && (this.getAffiliatedName() == null ? other.getAffiliatedName() == null : this.getAffiliatedName().equals(other.getAffiliatedName()))
+            && (this.getBrowseNumber() == null ? other.getBrowseNumber() == null : this.getBrowseNumber().equals(other.getBrowseNumber()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -722,12 +755,15 @@ public class TbServiceCompany implements Serializable {
         result = prime * result + ((getParkBuildId() == null) ? 0 : getParkBuildId().hashCode());
         result = prime * result + ((getParkBuildName() == null) ? 0 : getParkBuildName().hashCode());
         result = prime * result + ((getCreditPoints() == null) ? 0 : getCreditPoints().hashCode());
+        result = prime * result + ((getCreditUpdateTime() == null) ? 0 : getCreditUpdateTime().hashCode());
         result = prime * result + ((getComType() == null) ? 0 : getComType().hashCode());
         result = prime * result + ((getIsJoinActivity() == null) ? 0 : getIsJoinActivity().hashCode());
         result = prime * result + ((getCheckStatus() == null) ? 0 : getCheckStatus().hashCode());
         result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
         result = prime * result + ((getComSource() == null) ? 0 : getComSource().hashCode());
         result = prime * result + ((getAffiliatedPark() == null) ? 0 : getAffiliatedPark().hashCode());
+        result = prime * result + ((getAffiliatedName() == null) ? 0 : getAffiliatedName().hashCode());
+        result = prime * result + ((getBrowseNumber() == null) ? 0 : getBrowseNumber().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -790,12 +826,15 @@ public class TbServiceCompany implements Serializable {
         sb.append(", parkBuildId=").append(parkBuildId);
         sb.append(", parkBuildName=").append(parkBuildName);
         sb.append(", creditPoints=").append(creditPoints);
+        sb.append(", creditUpdateTime=").append(creditUpdateTime);
         sb.append(", comType=").append(comType);
         sb.append(", isJoinActivity=").append(isJoinActivity);
         sb.append(", checkStatus=").append(checkStatus);
         sb.append(", checkTime=").append(checkTime);
         sb.append(", comSource=").append(comSource);
         sb.append(", affiliatedPark=").append(affiliatedPark);
+        sb.append(", affiliatedName=").append(affiliatedName);
+        sb.append(", browseNumber=").append(browseNumber);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", createdTime=").append(createdTime);

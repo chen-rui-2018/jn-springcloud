@@ -61,8 +61,8 @@ export default {
       disableInput: true,
       holidayRuleModel: {
         reachedYear: 0,
-        notFullYear: 999,
-        annualLeave: 0,
+        notFullYear: undefined,
+        annualLeave: undefined,
         ruleId: '',
         disabled: false
       },

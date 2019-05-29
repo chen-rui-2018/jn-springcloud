@@ -102,34 +102,34 @@ img {
 }
 
 /* 活动中心开始 */
-.actiCenter .actiContent {
+.actiCenter .actiContent, .actiTrain .actiContent {
   width: 1190px;
   margin: 0 auto;
 }
 
-.actiCenter .actiContent .actiNav {
+.actiCenter .actiContent .actiNav, .actiTrain .actiContent .actiNav {
   margin: 20px 0;
   font-size: 13px;
 }
 
-.actiCenter .actiContent .actiNav a:last-child {
+.actiCenter .actiContent .actiNav a:last-child, .actiTrain .actiContent .actiNav a:last-child {
   color: #00a041;
   font-weight: bold;
 }
 
-.actiCenter .actiContent .actiFilter {
+.actiCenter .actiContent .actiFilter, .actiTrain .actiContent .actiFilter {
   height: 75px;
   line-height: 75px;
   padding: 0 20px;
   border: 1px solid #eee;
 }
 
-.actiCenter .actiContent .actiFilter .timeFilter {
+.actiCenter .actiContent .actiFilter .timeFilter, .actiTrain .actiContent .actiFilter .timeFilter {
   float: left;
   color: #797979;
 }
 
-.actiCenter .actiContent .actiFilter .timeFilter > span {
+.actiCenter .actiContent .actiFilter .timeFilter > span, .actiTrain .actiContent .actiFilter .timeFilter > span {
   cursor: pointer;
   display: inline-block;
   width: 100px;
@@ -140,57 +140,57 @@ img {
   border-radius: 16px;
 }
 
-.actiCenter .actiContent .actiFilter .timeFilter > span.active0 {
+.actiCenter .actiContent .actiFilter .timeFilter > span.active0, .actiTrain .actiContent .actiFilter .timeFilter > span.active0 {
   color: #fff;
   background: -webkit-gradient(linear, left top, right bottom, from(#35bf6d), to(#00a041));
   background: linear-gradient(to bottom right, #35bf6d, #00a041);
 }
 
-.actiCenter .actiContent .actiFilter .timeOrder {
+.actiCenter .actiContent .actiFilter .timeOrder, .actiTrain .actiContent .actiFilter .timeOrder {
   float: right;
   color: #919191;
 }
 
-.actiCenter .actiContent .actiFilter .timeOrder > ul {
+.actiCenter .actiContent .actiFilter .timeOrder > ul, .actiTrain .actiContent .actiFilter .timeOrder > ul {
   overflow: hidden;
 }
 
-.actiCenter .actiContent .actiFilter .timeOrder > ul li {
+.actiCenter .actiContent .actiFilter .timeOrder > ul li, .actiTrain .actiContent .actiFilter .timeOrder > ul li {
   display: inline-block;
   margin-left: 20px;
   cursor: pointer;
 }
 
-.actiCenter .actiContent .actiFilter .timeOrder > ul li .iconfont {
+.actiCenter .actiContent .actiFilter .timeOrder > ul li .iconfont, .actiTrain .actiContent .actiFilter .timeOrder > ul li .iconfont {
   font-size: 18px;
 }
 
-.actiCenter .actiContent .actiFilter .timeOrder > ul li .icon-menu1:hover {
+.actiCenter .actiContent .actiFilter .timeOrder > ul li .icon-menu1:hover, .actiTrain .actiContent .actiFilter .timeOrder > ul li .icon-menu1:hover {
   cursor: pointer;
 }
 
-.actiCenter .actiContent .actiFilter .timeOrder > ul li .icon-menu {
+.actiCenter .actiContent .actiFilter .timeOrder > ul li .icon-menu, .actiTrain .actiContent .actiFilter .timeOrder > ul li .icon-menu {
   cursor: pointer;
   margin-left: 10px;
 }
 
-.actiCenter .actiContent .actiFilter .timeOrder > ul li.active0 {
+.actiCenter .actiContent .actiFilter .timeOrder > ul li.active0, .actiTrain .actiContent .actiFilter .timeOrder > ul li.active0 {
   background-image: -webkit-linear-gradient(to bottom right, #35bf6d, #00a041);
   -webkit-text-fill-color: #00a041;
   -webkit-background-clip: text;
 }
 
-.actiCenter .actiContent .actiFilter .timeOrder > ul .showListLi > i.active0 {
+.actiCenter .actiContent .actiFilter .timeOrder > ul .showListLi > i.active0, .actiTrain .actiContent .actiFilter .timeOrder > ul .showListLi > i.active0 {
   color: #00a041;
 }
 
-.actiCenter .actiContent .allActi {
+.actiCenter .actiContent .allActi, .actiTrain .actiContent .allActi {
   padding-top: 20px;
   border-bottom: 1px solid #eee;
   line-height: 37px;
 }
 
-.actiCenter .actiContent .allActi .actiFilterUl > li {
+.actiCenter .actiContent .allActi .actiFilterUl > li, .actiTrain .actiContent .allActi .actiFilterUl > li {
   float: left;
   padding-bottom: 10px;
   margin-right: 20px;
@@ -198,16 +198,16 @@ img {
   color: #333;
 }
 
-.actiCenter .actiContent .allActi .actiFilterUl > li.active0 {
+.actiCenter .actiContent .allActi .actiFilterUl > li.active0, .actiTrain .actiContent .allActi .actiFilterUl > li.active0 {
   border-bottom: 2px solid #00a041;
   color: #00a041;
 }
 
-.actiCenter .actiContent .allActi .actiFilterUl .bottomLi {
+.actiCenter .actiContent .allActi .actiFilterUl .bottomLi, .actiTrain .actiContent .allActi .actiFilterUl .bottomLi {
   margin-right: 0;
 }
 
-.actiCenter .actiContent .allActi .actiFilterUl .box-card {
+.actiCenter .actiContent .allActi .actiFilterUl .box-card, .actiTrain .actiContent .allActi .actiFilterUl .box-card {
   position: absolute;
   left: 8px;
   top: 23px;
@@ -216,19 +216,19 @@ img {
   z-index: 4;
 }
 
-.actiCenter .actiContent .allActi .actiFilterUl .el-card__body {
+.actiCenter .actiContent .allActi .actiFilterUl .el-card__body, .actiTrain .actiContent .allActi .actiFilterUl .el-card__body {
   padding: 0;
   width: 100%;
   height: 100%;
 }
 
-.actiCenter .actiContent .allActi .actiFilterUl .listUl {
+.actiCenter .actiContent .allActi .actiFilterUl .listUl, .actiTrain .actiContent .allActi .actiFilterUl .listUl {
   width: 100%;
   height: 100%;
   padding: 0 20px;
 }
 
-.actiCenter .actiContent .allActi .actiFilterUl .listUl > li {
+.actiCenter .actiContent .allActi .actiFilterUl .listUl > li, .actiTrain .actiContent .allActi .actiFilterUl .listUl > li {
   padding: 5px 0;
   float: left;
   width: 170px;
@@ -236,11 +236,11 @@ img {
   color: #000;
 }
 
-.actiCenter .actiContent .allActi .actiFilterUl .listUl > li.active {
+.actiCenter .actiContent .allActi .actiFilterUl .listUl > li.active, .actiTrain .actiContent .allActi .actiFilterUl .listUl > li.active {
   color: #00a041;
 }
 
-.actiCenter .actiContent .allActi .actiSearch {
+.actiCenter .actiContent .allActi .actiSearch, .actiTrain .actiContent .allActi .actiSearch {
   width: 200px;
   height: 35px;
   line-height: 35px;
@@ -250,7 +250,7 @@ img {
   border-radius: 5px;
 }
 
-.actiCenter .actiContent .allActi .actiSearch > input {
+.actiCenter .actiContent .allActi .actiSearch > input, .actiTrain .actiContent .allActi .actiSearch > input {
   border: 0;
   height: 100%;
   width: 80%;
@@ -259,7 +259,10 @@ img {
 .actiCenter .actiContent .allActi .actiSearch input,
 .actiCenter .actiContent .allActi .actiSearch textarea,
 .actiCenter .actiContent .allActi .actiSearch select,
-.actiCenter .actiContent .allActi .actiSearch button {
+.actiCenter .actiContent .allActi .actiSearch button, .actiTrain .actiContent .allActi .actiSearch input,
+.actiTrain .actiContent .allActi .actiSearch textarea,
+.actiTrain .actiContent .allActi .actiSearch select,
+.actiTrain .actiContent .allActi .actiSearch button {
   text-rendering: auto;
   color: #333;
   letter-spacing: normal;
@@ -273,7 +276,7 @@ img {
   font: 400 16px Arial;
 }
 
-.actiCenter .actiContent .allActi .actiSearch > .icon-sousuo {
+.actiCenter .actiContent .allActi .actiSearch > .icon-sousuo, .actiTrain .actiContent .allActi .actiSearch > .icon-sousuo {
   position: relative;
   top: -36px;
   right: -120px;
@@ -286,12 +289,12 @@ img {
   border-left: 1px solid #eee;
 }
 
-.actiCenter .actiContent .actiTab {
+.actiCenter .actiContent .actiTab, .actiTrain .actiContent .actiTab {
   margin-top: 20px;
   margin-bottom: 30px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li {
+.actiCenter .actiContent .actiTab .allActiUl > li, .actiTrain .actiContent .actiTab .allActiUl > li {
   float: left;
   width: 280px;
   height: 345px;
@@ -300,34 +303,34 @@ img {
   margin-bottom: 30px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .postImgItem {
+.actiCenter .actiContent .actiTab .allActiUl > li .postImgItem, .actiTrain .actiContent .actiTab .allActiUl > li .postImgItem {
   display: inline-block;
   width: 100%;
   height: 192px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .postImgItem .postImg {
+.actiCenter .actiContent .actiTab .allActiUl > li .postImgItem .postImg, .actiTrain .actiContent .actiTab .allActiUl > li .postImgItem .postImg {
   height: 100%;
   width: 100%;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum, .actiTrain .actiContent .actiTab .allActiUl > li .actiNum {
   padding: 10px;
   border-top: 1px solid #eee;
   color: #999;
   font-size: 12px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum .avatar {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum .avatar, .actiTrain .actiContent .actiTab .allActiUl > li .actiNum .avatar {
   float: left;
   padding-left: 10px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum .avatar > ul {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum .avatar > ul, .actiTrain .actiContent .actiTab .allActiUl > li .actiNum .avatar > ul {
   display: inline-block;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum .avatar > ul li {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum .avatar > ul li, .actiTrain .actiContent .actiTab .allActiUl > li .actiNum .avatar > ul li {
   float: left;
   width: 18px;
   height: 18px;
@@ -336,96 +339,96 @@ img {
   margin-left: -10px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum .avatar > ul li img {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum .avatar > ul li img, .actiTrain .actiContent .actiTab .allActiUl > li .actiNum .avatar > ul li img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > i {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > i, .actiTrain .actiContent .actiTab .allActiUl > li .actiNum > i {
   margin-left: 10px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span, .actiTrain .actiContent .actiTab .allActiUl > li .actiNum > span {
   float: right;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span .icon-xihuan {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span .icon-xihuan, .actiTrain .actiContent .actiTab .allActiUl > li .actiNum > span .icon-xihuan {
   margin-right: 5px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo, .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo {
   padding: 10px;
   color: #999;
   font-size: 13px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo > .actiNameItem {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo > .actiNameItem, .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer, .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer {
   text-indent: -10px;
   margin: 10px 0 5px 18px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl li:nth-child(4n) {
+.actiCenter .actiContent .actiTab .allActiUl li:nth-child(4n), .actiTrain .actiContent .actiTab .allActiUl li:nth-child(4n) {
   margin-right: 0;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl {
+.actiCenter .actiContent .actiTab .verticalUl, .actiTrain .actiContent .actiTab .verticalUl {
   margin-bottom: 50px;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li {
+.actiCenter .actiContent .actiTab .verticalUl > li, .actiTrain .actiContent .actiTab .verticalUl > li {
   padding: 20px 0;
   border-bottom: 1px solid #ccc;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalLeft {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalLeft, .actiTrain .actiContent .actiTab .verticalUl > li .verticalLeft {
   margin-right: 30px;
   width: 304px;
   height: 185px;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalLeft > img {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalLeft > img, .actiTrain .actiContent .actiTab .verticalUl > li .verticalLeft > img {
   width: 100%;
   height: 100%;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .verticalTit {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .verticalTit, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .verticalTit {
   color: #333;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle > p > span {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle > p > span, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle > p > span {
   color: #999;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan {
   margin: 15px 0;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .location {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .location, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .location {
   margin: 18px 0;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum > i {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum > i, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum > i {
   color: #999;
   margin-left: 10px;
   font-size: 12px;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar {
   float: left;
   padding-left: 10px;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul {
   display: inline-block;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul li {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul li, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul li {
   float: left;
   width: 22px;
   height: 22px;
@@ -434,21 +437,21 @@ img {
   margin-left: -10px;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul li img {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul li img, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul li img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum > .btn {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum > .btn, .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum > .btn {
   float: right;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li .verticalRight {
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalRight, .actiTrain .actiContent .actiTab .verticalUl > li .verticalRight {
   margin-top: 145px;
 }
 
-.actiCenter .actiContent .actiTab .verticalUl > li:first-child {
+.actiCenter .actiContent .actiTab .verticalUl > li:first-child, .actiTrain .actiContent .actiTab .verticalUl > li:first-child {
   padding-top: 0;
 }
 
@@ -491,7 +494,7 @@ img {
 .quickSearch .serverOrgMenu,
 .aboutUs .serverOrgMenu,
 .finaInstitution .serverOrgMenu,
-.finaPro .serverOrgMenu {
+.finaPro .serverOrgMenu, .companyProfile .serverOrgMenu {
   padding: 20px 0;
   font-size: 13px;
   font-weight: bold;
@@ -503,7 +506,7 @@ img {
 .quickSearch .serverOrgMenu .agent,
 .aboutUs .serverOrgMenu .agent,
 .finaInstitution .serverOrgMenu .agent,
-.finaPro .serverOrgMenu .agent {
+.finaPro .serverOrgMenu .agent, .companyProfile .serverOrgMenu .agent {
   font-weight: bold;
 }
 
@@ -513,7 +516,7 @@ img {
 .quickSearch .serverOrgNav,
 .aboutUs .serverOrgNav,
 .finaInstitution .serverOrgNav,
-.finaPro .serverOrgNav {
+.finaPro .serverOrgNav, .companyProfile .serverOrgNav {
   padding: 0 20px;
   font-size: 13px;
   margin-bottom: 20px;
@@ -526,7 +529,7 @@ img {
 .quickSearch .serverOrgNav .nav1,
 .aboutUs .serverOrgNav .nav1,
 .finaInstitution .serverOrgNav .nav1,
-.finaPro .serverOrgNav .nav1 {
+.finaPro .serverOrgNav .nav1, .companyProfile .serverOrgNav .nav1 {
   padding: 15px 0;
   border-bottom: 1px solid #eee;
   color: #666;
@@ -538,7 +541,7 @@ img {
 .quickSearch .serverOrgNav .nav1 > img,
 .aboutUs .serverOrgNav .nav1 > img,
 .finaInstitution .serverOrgNav .nav1 > img,
-.finaPro .serverOrgNav .nav1 > img {
+.finaPro .serverOrgNav .nav1 > img, .companyProfile .serverOrgNav .nav1 > img {
   width: 12px;
   height: 15px;
   vertical-align: top;
@@ -550,7 +553,7 @@ img {
 .quickSearch .serverOrgNav .nav1 .nav1Tit,
 .aboutUs .serverOrgNav .nav1 .nav1Tit,
 .finaInstitution .serverOrgNav .nav1 .nav1Tit,
-.finaPro .serverOrgNav .nav1 .nav1Tit {
+.finaPro .serverOrgNav .nav1 .nav1Tit, .companyProfile .serverOrgNav .nav1 .nav1Tit {
   margin-top: 5px;
 }
 
@@ -560,7 +563,7 @@ img {
 .quickSearch .serverOrgNav .nav1 .nav1Ul,
 .aboutUs .serverOrgNav .nav1 .nav1Ul,
 .finaInstitution .serverOrgNav .nav1 .nav1Ul,
-.finaPro .serverOrgNav .nav1 .nav1Ul {
+.finaPro .serverOrgNav .nav1 .nav1Ul, .companyProfile .serverOrgNav .nav1 .nav1Ul {
   width: 860px;
   overflow: hidden;
   height: 27px;
@@ -572,7 +575,7 @@ img {
 .quickSearch .serverOrgNav .nav1 .nav1Ul > li,
 .aboutUs .serverOrgNav .nav1 .nav1Ul > li,
 .finaInstitution .serverOrgNav .nav1 .nav1Ul > li,
-.finaPro .serverOrgNav .nav1 .nav1Ul > li {
+.finaPro .serverOrgNav .nav1 .nav1Ul > li, .companyProfile .serverOrgNav .nav1 .nav1Ul > li {
   float: left;
   margin-left: 20px;
   padding: 5px 10px;
@@ -586,7 +589,7 @@ img {
 .quickSearch .serverOrgNav .nav1 .nav1Ul > li.active1,
 .aboutUs .serverOrgNav .nav1 .nav1Ul > li.active1,
 .finaInstitution .serverOrgNav .nav1 .nav1Ul > li.active1,
-.finaPro .serverOrgNav .nav1 .nav1Ul > li.active1 {
+.finaPro .serverOrgNav .nav1 .nav1Ul > li.active1, .companyProfile .serverOrgNav .nav1 .nav1Ul > li.active1 {
   background: #009f42;
   border-radius: 4px;
   color: #fff;
@@ -598,7 +601,7 @@ img {
 .quickSearch .serverOrgNav .nav1 .nav1Ul.sh,
 .aboutUs .serverOrgNav .nav1 .nav1Ul.sh,
 .finaInstitution .serverOrgNav .nav1 .nav1Ul.sh,
-.finaPro .serverOrgNav .nav1 .nav1Ul.sh {
+.finaPro .serverOrgNav .nav1 .nav1Ul.sh, .companyProfile .serverOrgNav .nav1 .nav1Ul.sh {
   overflow: visible;
   height: auto;
 }
@@ -616,7 +619,8 @@ img {
 .finaInstitution .serverOrgNav .nav1 .el-icon-arrow-down,
 .finaInstitution .serverOrgNav .nav1 .el-icon-arrow-up,
 .finaPro .serverOrgNav .nav1 .el-icon-arrow-down,
-.finaPro .serverOrgNav .nav1 .el-icon-arrow-up {
+.finaPro .serverOrgNav .nav1 .el-icon-arrow-up, .companyProfile .serverOrgNav .nav1 .el-icon-arrow-down,
+.companyProfile .serverOrgNav .nav1 .el-icon-arrow-up {
   font-size: 18px;
   color: #999;
 }
@@ -627,7 +631,7 @@ img {
 .quickSearch .serverOrgNav #nav1,
 .aboutUs .serverOrgNav #nav1,
 .finaInstitution .serverOrgNav #nav1,
-.finaPro .serverOrgNav #nav1 {
+.finaPro .serverOrgNav #nav1, .companyProfile .serverOrgNav #nav1 {
   border: none;
 }
 
@@ -637,7 +641,7 @@ img {
 .quickSearch .serverOrgNav .nav2,
 .aboutUs .serverOrgNav .nav2,
 .finaInstitution .serverOrgNav .nav2,
-.finaPro .serverOrgNav .nav2 {
+.finaPro .serverOrgNav .nav2, .companyProfile .serverOrgNav .nav2 {
   border-bottom: none;
 }
 
@@ -647,7 +651,7 @@ img {
 .quickSearch .serverOrgFilter,
 .aboutUs .serverOrgFilter,
 .finaInstitution .serverOrgFilter,
-.finaPro .serverOrgFilter {
+.finaPro .serverOrgFilter, .companyProfile .serverOrgFilter {
   padding: 10px;
   font-size: 13px;
 }
@@ -658,7 +662,7 @@ img {
 .quickSearch .serverOrgFilter .filLeft,
 .aboutUs .serverOrgFilter .filLeft,
 .finaInstitution .serverOrgFilter .filLeft,
-.finaPro .serverOrgFilter .filLeft {
+.finaPro .serverOrgFilter .filLeft, .companyProfile .serverOrgFilter .filLeft {
   margin-top: 10px;
   color: #797979;
 }
@@ -669,7 +673,7 @@ img {
 .quickSearch .serverOrgFilter .filLeft > span,
 .aboutUs .serverOrgFilter .filLeft > span,
 .finaInstitution .serverOrgFilter .filLeft > span,
-.finaPro .serverOrgFilter .filLeft > span {
+.finaPro .serverOrgFilter .filLeft > span, .companyProfile .serverOrgFilter .filLeft > span {
   margin-right: 20px;
   cursor: pointer;
   color: #999;
@@ -681,7 +685,7 @@ img {
 .quickSearch .serverOrgFilter .filLeft > span.active2,
 .aboutUs .serverOrgFilter .filLeft > span.active2,
 .finaInstitution .serverOrgFilter .filLeft > span.active2,
-.finaPro .serverOrgFilter .filLeft > span.active2 {
+.finaPro .serverOrgFilter .filLeft > span.active2, .companyProfile .serverOrgFilter .filLeft > span.active2 {
   color: #00a041;
 }
 
@@ -691,7 +695,7 @@ img {
 .quickSearch .serverOrgFilter .filRight,
 .aboutUs .serverOrgFilter .filRight,
 .finaInstitution .serverOrgFilter .filRight,
-.finaPro .serverOrgFilter .filRight {
+.finaPro .serverOrgFilter .filRight, .companyProfile .serverOrgFilter .filRight {
   width: 200px;
   height: 35px;
   line-height: 35px;
@@ -707,7 +711,7 @@ img {
 .quickSearch .serverOrgFilter .filRight > input,
 .aboutUs .serverOrgFilter .filRight > input,
 .finaInstitution .serverOrgFilter .filRight > input,
-.finaPro .serverOrgFilter .filRight > input {
+.finaPro .serverOrgFilter .filRight > input, .companyProfile .serverOrgFilter .filRight > input {
   border: 0;
   height: 100%;
   width: 80%;
@@ -740,7 +744,10 @@ img {
 .finaPro .serverOrgFilter .filRight input,
 .finaPro .serverOrgFilter .filRight textarea,
 .finaPro .serverOrgFilter .filRight select,
-.finaPro .serverOrgFilter .filRight button {
+.finaPro .serverOrgFilter .filRight button, .companyProfile .serverOrgFilter .filRight input,
+.companyProfile .serverOrgFilter .filRight textarea,
+.companyProfile .serverOrgFilter .filRight select,
+.companyProfile .serverOrgFilter .filRight button {
   text-rendering: auto;
   color: #333;
   letter-spacing: normal;
@@ -760,7 +767,7 @@ img {
 .quickSearch .serverOrgFilter .filRight > .icon-sousuo,
 .aboutUs .serverOrgFilter .filRight > .icon-sousuo,
 .finaInstitution .serverOrgFilter .filRight > .icon-sousuo,
-.finaPro .serverOrgFilter .filRight > .icon-sousuo {
+.finaPro .serverOrgFilter .filRight > .icon-sousuo, .companyProfile .serverOrgFilter .filRight > .icon-sousuo {
   position: relative;
   top: -36px;
   right: -120px;
@@ -779,7 +786,7 @@ img {
 .quickSearch .serverOrgContent,
 .aboutUs .serverOrgContent,
 .finaInstitution .serverOrgContent,
-.finaPro .serverOrgContent {
+.finaPro .serverOrgContent, .companyProfile .serverOrgContent {
   margin-top: 20px;
   margin-bottom: 70px;
 }
@@ -790,7 +797,7 @@ img {
 .quickSearch .serverOrgContent > ul > li,
 .aboutUs .serverOrgContent > ul > li,
 .finaInstitution .serverOrgContent > ul > li,
-.finaPro .serverOrgContent > ul > li {
+.finaPro .serverOrgContent > ul > li, .companyProfile .serverOrgContent > ul > li {
   padding: 20px 0;
   border-bottom: 1px solid #eee;
 }
@@ -801,7 +808,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgImg,
 .aboutUs .serverOrgContent > ul > li .orgImg,
 .finaInstitution .serverOrgContent > ul > li .orgImg,
-.finaPro .serverOrgContent > ul > li .orgImg {
+.finaPro .serverOrgContent > ul > li .orgImg, .companyProfile .serverOrgContent > ul > li .orgImg {
   width: 200px;
   height: 130px;
 }
@@ -812,7 +819,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgImg > img,
 .aboutUs .serverOrgContent > ul > li .orgImg > img,
 .finaInstitution .serverOrgContent > ul > li .orgImg > img,
-.finaPro .serverOrgContent > ul > li .orgImg > img {
+.finaPro .serverOrgContent > ul > li .orgImg > img, .companyProfile .serverOrgContent > ul > li .orgImg > img {
   width: 100%;
   height: 100%;
 }
@@ -823,7 +830,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgCon,
 .aboutUs .serverOrgContent > ul > li .orgCon,
 .finaInstitution .serverOrgContent > ul > li .orgCon,
-.finaPro .serverOrgContent > ul > li .orgCon {
+.finaPro .serverOrgContent > ul > li .orgCon, .companyProfile .serverOrgContent > ul > li .orgCon {
   margin-left: 20px;
 }
 
@@ -833,7 +840,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgCon .conTil,
 .aboutUs .serverOrgContent > ul > li .orgCon .conTil,
 .finaInstitution .serverOrgContent > ul > li .orgCon .conTil,
-.finaPro .serverOrgContent > ul > li .orgCon .conTil {
+.finaPro .serverOrgContent > ul > li .orgCon .conTil, .companyProfile .serverOrgContent > ul > li .orgCon .conTil {
   font-size: 15px;
   color: #222;
   font-weight: bold;
@@ -846,7 +853,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgCon .conContent,
 .aboutUs .serverOrgContent > ul > li .orgCon .conContent,
 .finaInstitution .serverOrgContent > ul > li .orgCon .conContent,
-.finaPro .serverOrgContent > ul > li .orgCon .conContent {
+.finaPro .serverOrgContent > ul > li .orgCon .conContent, .companyProfile .serverOrgContent > ul > li .orgCon .conContent {
   font-size: 12px;
 }
 
@@ -856,7 +863,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgCon .conContent .left1,
 .aboutUs .serverOrgContent > ul > li .orgCon .conContent .left1,
 .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .left1,
-.finaPro .serverOrgContent > ul > li .orgCon .conContent .left1 {
+.finaPro .serverOrgContent > ul > li .orgCon .conContent .left1, .companyProfile .serverOrgContent > ul > li .orgCon .conContent .left1 {
   width: 300px;
 }
 
@@ -866,7 +873,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgCon .conContent .left1 > p,
 .aboutUs .serverOrgContent > ul > li .orgCon .conContent .left1 > p,
 .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .left1 > p,
-.finaPro .serverOrgContent > ul > li .orgCon .conContent .left1 > p {
+.finaPro .serverOrgContent > ul > li .orgCon .conContent .left1 > p, .companyProfile .serverOrgContent > ul > li .orgCon .conContent .left1 > p {
   margin-bottom: 5px;
 }
 
@@ -876,7 +883,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .aboutUs .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
-.finaPro .serverOrgContent > ul > li .orgCon .conContent .right1 > p {
+.finaPro .serverOrgContent > ul > li .orgCon .conContent .right1 > p, .companyProfile .serverOrgContent > ul > li .orgCon .conContent .right1 > p {
   margin-bottom: 5px;
 }
 
@@ -886,7 +893,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate,
 .aboutUs .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate,
 .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate,
-.finaPro .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate {
+.finaPro .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate, .companyProfile .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate {
   display: inline-block;
 }
 
@@ -896,7 +903,7 @@ img {
 .quickSearch .serverOrgContent > ul > li .orgBtn,
 .aboutUs .serverOrgContent > ul > li .orgBtn,
 .finaInstitution .serverOrgContent > ul > li .orgBtn,
-.finaPro .serverOrgContent > ul > li .orgBtn {
+.finaPro .serverOrgContent > ul > li .orgBtn, .companyProfile .serverOrgContent > ul > li .orgBtn {
   font-size: 13px;
   background: #ecfcf2;
   padding: 6px 20px;
@@ -912,7 +919,7 @@ img {
 .quickSearch .serverOrgContent > ul > li:first-child,
 .aboutUs .serverOrgContent > ul > li:first-child,
 .finaInstitution .serverOrgContent > ul > li:first-child,
-.finaPro .serverOrgContent > ul > li:first-child {
+.finaPro .serverOrgContent > ul > li:first-child, .companyProfile .serverOrgContent > ul > li:first-child {
   padding-top: 10px;
 }
 
@@ -922,7 +929,7 @@ img {
 .quickSearch .pagination-container,
 .aboutUs .pagination-container,
 .finaInstitution .pagination-container,
-.finaPro .pagination-container {
+.finaPro .pagination-container, .companyProfile .pagination-container {
   margin-bottom: 50px;
 }
 
@@ -2892,7 +2899,7 @@ img {
   color: #fff;
   text-align: center;
   line-height: 40px;
-  background: url("../../static/img/椭圆2.png") 100% 100%/100% 100% no-repeat;
+  background: url("../../static/img/tuoyuan2.png") 100% 100%/100% 100% no-repeat;
   margin-right: 20px;
   z-index: 2;
   border: none;

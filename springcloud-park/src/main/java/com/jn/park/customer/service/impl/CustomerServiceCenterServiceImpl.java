@@ -150,6 +150,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }
         CustomerServiceCenterDetailVo customerVo=new CustomerServiceCenterDetailVo();
         BeanUtils.copyProperties(clientServiceCenterList.get(0),customerVo);
+        customerVo.setCreatedTime(DateUtils.formatDate(clientServiceCenterList.get(0).getCreatedTime(),PATTERN));
         if(clientServiceCenterList.get(0).getQuesUrl()!=null){
             customerVo.setQuesUrl(Arrays.asList(clientServiceCenterList.get(0).getQuesUrl().split(";")));
         }
@@ -173,15 +174,18 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      */
     @ServiceLog(doAction = "封装处理处理历史记录")
     private CustomerServiceCenterDetailVo getExecuteHistoryInfo(CustomerServiceCenterDetailVo customerVo,IBPSResult ibpsResult) {
+        //获取历史记录信息
         Object data = ibpsResult.getData();
         LinkedTreeMap dataMap=(LinkedTreeMap)data;
         List<LinkedTreeMap> dataResult = (List<LinkedTreeMap> )dataMap.get("dataResult");
         List<ExecuteHistoryResult> resultList=new ArrayList<>(16);
         for(LinkedTreeMap linkedTreeMap:dataResult){
             ObjectMapper objectMapper = new ObjectMapper();
+            //把json转为javaBean
             ExecuteHistoryResult executeHistoryResult = objectMapper.convertValue(linkedTreeMap, ExecuteHistoryResult.class);
             resultList.add(executeHistoryResult);
         }
+        //处理历史数据
         List<ExecuteHistoryShow> executeHistoryShowList=new ArrayList<>(16);
         for(ExecuteHistoryResult result:resultList){
             ExecuteHistoryShow historyShow=new ExecuteHistoryShow();
@@ -207,7 +211,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             if(StringUtils.equals(SEND_NODE, result.getTaskName())){
                 //设置发起节点信息
                 setSendPersonInfo(result.getStatus(), historyShow, userInfo.getData());
-                historyShow.setOptionDeptName(CUSTER_CENTER);
+                historyShow.setOptionDeptName(historyShow.getAuditorName());
             }else if(StringUtils.equals(CUSTER_CENTER, result.getTaskName())
                     || StringUtils.equals(EXECUTE_PERSON, result.getTaskName())){
                 //设置客户中心分发/处理节点信息
@@ -224,6 +228,18 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
                         if(StringUtils.equals(StringUtils.join(userIds,","), personInfo.getUserId())){
                             historyShow.setOptionDeptId(personInfo.getRoleId());
                             historyShow.setOptionDeptName(personInfo.getRoleName());
+                            break;
+                        }
+                    }
+                }else{
+                    List<LinkedTreeMap<String, String>> qualifiedExecutor = result.getQualifiedExecutor();
+                    //执行人类型为角色
+                    String type="role";
+                    for(LinkedTreeMap<String, String> map:qualifiedExecutor){
+                        if(StringUtils.equals(type,map.get("type"))){
+                            String roleId = map.get("executId").replace("user", "");
+                            historyShow.setOptionDeptId(roleId);
+                            historyShow.setOptionDeptName("客服中心");
                             break;
                         }
                     }
@@ -475,7 +491,9 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     @ServiceLog(doAction ="根据用户账号获取客服中心问题列表")
     private List<ConsultationCustomerListShow> getCustomerCenterList(String loginAccount) {
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
+        //流程实例id为空或为null的不被查询
         example.createCriteria().andCreatorAccountEqualTo(loginAccount).andProcessInsIdIsNotNull()
+                .andProcessInsIdNotEqualTo("")
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         example.setOrderByClause("created_time desc");
         List<TbClientServiceCenter> tbClientServiceCenterList = tbClientServiceCenterMapper.selectByExample(example);

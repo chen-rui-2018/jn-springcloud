@@ -22,7 +22,14 @@ public enum MeterExceptionEnums implements CodeAndMsg {
     DAY_FORMATE_WRONG("4010210","日期转换错误"),
     COMPANY_NO_CONTACT_TEL("4010211","企业没有维护联系人电话"),
     COMPANY_NOT_FOUND("4010212","未找到当前企业"),
-    CANT_GET_TWO_RULE("4010213","不能重复设置计价规则")
+    CANT_GET_TWO_RULE("4010213","不能重复设置计价规则"),
+    CANT_REPEAT_DEAL("4010214","当日的企业计价已经正确处理了，不允许重复处理"),
+    COMPANY_NO_METER("4010215","指定的企业在指定的日期上没有关联电表"),
+    METER_NO_CODE("4010216","电表的code不能为空"),
+    METER_INFO_EXIST("4010217","电表信息已经存在"),
+    LINK_ID_ERROR("4010218","关系不存在"),
+    METER_INFO_NOT_FOUND("4010219","电表信息不存在"),
+    COMPANY_BALANCE_NOT_FOUND("4010220","企业余额获取失败")
             ;
 
 

@@ -74,6 +74,78 @@ export default new Router({
           name: 'enterpriseservice'
         },
         {
+          path: '/compassView',
+          component: resolve => require(['@/views/adminApprove/compassView/compassView'], resolve),
+          meta: {
+            title: '政策指引'
+          },
+          name: 'compassView'
+        },
+        {
+          path: '/rightDetail',
+          component: resolve => require(['@/views/adminApprove/compassView/rightDetail'], resolve),
+          meta: {
+            title: '权利详情'
+          },
+          name: 'rightDetail'
+        },
+        {
+          path: '/serviceDetail',
+          component: resolve => require(['@/views/adminApprove/compassView/serviceDetail'], resolve),
+          meta: {
+            title: '服务详情'
+          },
+          name: 'serviceDetail'
+        },
+        {
+          path: '/declarationCenter',
+          component: resolve => require(['@/views/declarationCenter/declarationCenter'], resolve),
+          meta: {
+            title: '申报中心'
+          },
+          name: 'declarationCenter'
+        },
+        {
+          path: '/declarationNoticeDetail',
+          component: resolve => require(['@/views/declarationCenter/declarationNoticeDetail'], resolve),
+          meta: {
+            title: '申报公告详情'
+          },
+          name: 'declarationNoticeDetail'
+        },
+        {
+          path: '/declarationPlatform',
+          component: resolve => require(['@/views/declarationCenter/declarationPlatform'], resolve),
+          meta: {
+            title: '申报平台'
+          },
+          name: 'declarationPlatform'
+        },
+        {
+          path: '/talentsService',
+          component: resolve => require(['@/views/talentsService/talentsService'], resolve),
+          meta: {
+            title: '人才服务首页'
+          },
+          name: 'talentsService'
+        },
+        {
+          path: '/talentPlatform',
+          component: resolve => require(['@/views/talentsService/talentPlatform'], resolve),
+          meta: {
+            title: '人才服务申报平台'
+          },
+          name: 'talentPlatform'
+        },
+        {
+          path: '/talentsServiceDetail',
+          component: resolve => require(['@/views/talentsService/talentsServiceDetail'], resolve),
+          meta: {
+            title: '人才服务详情'
+          },
+          name: 'talentsServiceDetail'
+        },
+        {
           path: 'messageCenter',
           component: resolve => require(['@/views/messageCenter/index'], resolve),
           meta: {
@@ -244,7 +316,7 @@ export default new Router({
               component: resolve => require(['@/views/home/productService/myApply'], resolve)
             },
             {
-              path: 'home/myBusiness/index',
+              path: '/myBusiness/index',
               name: 'business',
               meta: {
                 title: '我的企业'
@@ -306,6 +378,18 @@ export default new Router({
                 title: '邀请员工'
               },
               component: resolve => require(['@/views/home/myBusiness/InviteEmployees'], resolve)
+            },
+            {
+              path: '/roleCertifications/advisoryInformation',
+              name: 'advisoryInformation',
+              meta: {title: '填写顾问资料'},
+              component: resolve => require(['@/views/home/roleCertifications/advisoryInformation'], resolve)
+            },
+            {
+              path: '/roleCertifications/basicInformation',
+              name: 'basicInformation',
+              meta: {title: '服务机构认证'},
+              component: resolve => require(['@/views/home/roleCertifications/basicInformation'], resolve)
             },
             {
               path: '/myBusiness/enterprisePropaganda',
@@ -565,6 +649,62 @@ export default new Router({
           name: 'policyCenter'
         },
         {
+          path: '/parkProfile',
+          component: resolve => require(['@/views/parkProfile/index'], resolve),
+          meta: {
+            title: '园区概况'
+          },
+          name: 'parkProfile'
+        },
+        {
+          path: '/investmentPolicy',
+          component: resolve => require(['@/views/investmentPolicy/index'], resolve),
+          meta: {
+            title: '招商政策'
+          },
+          name: 'investmentPolicy'
+        },
+        {
+          path: '/investmentPolicyDetail',
+          component: resolve => require(['@/views/investmentPolicy/investmentPolicyDetail'], resolve),
+          meta: {
+            title: '招商政策详情'
+          },
+          name: 'investmentPolicyDetail'
+        },
+        {
+          path: '/investmentDynamic',
+          component: resolve => require(['@/views/investmentDynamic/index'], resolve),
+          meta: {
+            title: '招商动态'
+          },
+          name: 'investmentDynamic'
+        },
+        {
+          path: '/investmentDynamicDetail',
+          component: resolve => require(['@/views/investmentDynamic/investmentDynamicDetail'], resolve),
+          meta: {
+            title: '招商动态详情'
+          },
+          name: 'investmentDynamicDetail'
+        },
+        {
+          path: '/investmentInfo',
+          component: resolve => require(['@/views/investmentInfo/index'], resolve),
+          meta: {
+            title: '招商信息'
+          },
+          name: 'investmentInfo'
+        },
+        {
+          path: '/investmentInfoDetail',
+          component: resolve => require(['@/views/investmentInfo/investmentInfoDetail'], resolve),
+          meta: {
+            title: '招商信息详情'
+          },
+          name: 'investmentInfoDetail'
+        },
+        {
           path: '/graphicPolicy',
           component: resolve => require(['@/views/policyCenter/graphicPolicy'], resolve),
           meta: {
@@ -643,6 +783,22 @@ export default new Router({
             title: '企业资讯详情'
           },
           name: 'enterpriseInfoDetails'
+        },
+        {
+          path: '/companyProfile',
+          component: resolve => require(['@/views/companyProfile'], resolve),
+          meta: {
+            title: '企业简介'
+          },
+          name: 'companyProfile'
+        },
+        {
+          path: '/profileDetails',
+          component: resolve => require(['@/views/companyProfile/profileDetails'], resolve),
+          meta: {
+            title: '企业简介详情'
+          },
+          name: 'profileDetails'
         },
       ]
     },
@@ -756,7 +912,7 @@ export default new Router({
     //   meta: {title: '服务超市首页'},
     //   name:'serviceMarketPage'
     // },
-    {
+    /* {
       path: '/compassView',
       component: resolve => require(['@/views/adminApprove/compassView/compassView'], resolve),
       meta: {
@@ -803,7 +959,7 @@ export default new Router({
         title: '申报平台'
       },
       name: 'declarationPlatform'
-    },
+    }, */
     {
 
       path: '/tfindex',
@@ -820,18 +976,6 @@ export default new Router({
         title: '投资人'
       },
       name: 'investor'
-    },
-    {
-      path: '/roleCertifications/advisoryInformation',
-      name: 'advisoryInformation',
-      meta: {title: '填写顾问资料'},
-      component: resolve => require(['@/views/home/roleCertifications/advisoryInformation'], resolve)
-    },
-    {
-      path: '/roleCertifications/basicInformation',
-      name: 'basicInformation',
-      meta: {title: '服务机构认证'},
-      component: resolve => require(['@/views/home/roleCertifications/basicInformation'], resolve)
     },
     {
       path: '/investorDetail',
@@ -857,43 +1001,30 @@ export default new Router({
       },
       name: 'finaInsDetail'
     },
-    {
-      path: '/talentsService',
-      component: resolve => require(['@/views/talentsService/talentsService'], resolve),
-      meta: {
-        title: '人才服务首页'
-      },
-      name: 'talentsService'
-    },
-    {
-      path: '/talentPlatform',
-      component: resolve => require(['@/views/talentsService/talentPlatform'], resolve),
-      meta: {
-        title: '人才服务申报平台'
-      },
-      name: 'talentPlatform'
-    },
-    /*  {
-/*     {
-      path: '/familiarProblem',
-      component: resolve => require(['@/views/talentsService/familiarProblem'],resolve),
-      meta: {title: '常见问题列表'},
-      name:'familiarProblem'
-    }, */
-    /*   {
-        path: '/familiarProblemDetail',
-        component: resolve => require(['@/views/talentsService/familiarProblemDetail'],resolve),
-        meta: {title: '常见问题详情'},
-        name:'familiarProblemDetail'
-      }, */
-    {
-      path: '/talentsServiceDetail',
-      component: resolve => require(['@/views/talentsService/talentsServiceDetail'], resolve),
-      meta: {
-        title: '人才服务详情'
-      },
-      name: 'talentsServiceDetail'
-    },
+    // {
+    //   path: '/talentsService',
+    //   component: resolve => require(['@/views/talentsService/talentsService'], resolve),
+    //   meta: {
+    //     title: '人才服务首页'
+    //   },
+    //   name: 'talentsService'
+    // },
+    // {
+    //   path: '/talentPlatform',
+    //   component: resolve => require(['@/views/talentsService/talentPlatform'], resolve),
+    //   meta: {
+    //     title: '人才服务申报平台'
+    //   },
+    //   name: 'talentPlatform'
+    // },
+    // {
+    //   path: '/talentsServiceDetail',
+    //   component: resolve => require(['@/views/talentsService/talentsServiceDetail'], resolve),
+    //   meta: {
+    //     title: '人才服务详情'
+    //   },
+    //   name: 'talentsServiceDetail'
+    // },
     {
       path: '/finaPro',
       component: resolve => require(['@/views/technologyFinance/finaPro'], resolve),

@@ -139,7 +139,7 @@
 
         <el-form-item label="附件:" prop="personalProfile" class="inline border-bottom">
           <label slot="label">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件:</label>
-          <el-upload class="avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+          <el-upload class="avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
             <img v-if="certificateForm.certificatePhoto" :src="certificateForm.certificatePhoto">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -233,7 +233,7 @@
 
     </div>
     <el-dialog :visible.sync="dialogVisible" width="50%">
-      <img :src="certificatePhoto" alt="图片" style="width:100%">
+      <img :src="certificatePhoto" alt="图片" style="width:100%;height:200px;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -245,6 +245,7 @@
 export default {
   data() {
     return {
+      baseUrl:this.api.host,
       showBtn: true,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -727,16 +728,18 @@ export default {
     },
     init() {
       let _this = this;
+      console.log( this.$route.query)
       this.basicForm.orgId = this.$route.query.orgId;
       this.title = this.$route.query.title;
       // this.basicForm.advisorAccount = sessionStorage.getItem("account");
       // this.certificateForm.advisorAccount = sessionStorage.getItem("account");
       console.log(this.basicForm.advisorAccount);
       _this.api.get({
-        url: "advisorDetails",
-        data: { advisorAccount: this.basicForm.advisorAccount },
+        url: "getOrgInfoForManage",
+        data: { orgId : this.$route.query.orgId },
         callback: function(res) {
           if (res.code == "0000") {
+            console.log(res)
             _this.basicForm.personalProfile =
               res.data.advisorServiceInfo.personalProfile;
             _this.basicForm.graduatedSchool =
@@ -775,7 +778,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  path: "/servicemarket/product/userCenter"
+                  path: "/home"
                 });
                 this.disabled = false;
               } else {
@@ -792,7 +795,7 @@ export default {
       });
     },
     toCounselorManagement() {
-      this.$router.push({ path: "/servicemarket/product/userCenter" });
+      this.$router.push({ path: "/home" });
     }
     // toEditAdvisers() {
     //   this.$router.push({ name: "editAdvisers" });

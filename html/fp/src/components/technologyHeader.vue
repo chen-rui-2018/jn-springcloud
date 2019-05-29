@@ -25,7 +25,7 @@
               <!-- <li :class="{'active':$route.path==i.path}" v-for="(i,k) in liArr" :key="k" @click="$router.push({path:i.path})">{{i.name}}</li> -->
               <li :class="{'activeB':$route.path=='/tfindex'}" @click="$router.push({path:'/tfindex'})">首页</li>
               <li :class="{'activeB':$route.path=='/investor'||$route.path=='/investorDetail'}" @click="$router.push({path:'/investor'})">投资人</li>
-              <li :class="{'activeB':$route.path=='/finaPro'||$route.path=='/finaProDetail'}" @click="$router.push({path:'/finaPro'})">金融产品</li>
+              <li :class="{'activeB':$route.path=='/finaPro'||$route.path=='/finaProDetail'}" @click="$router.push-({path:'/finaPro'})">金融产品</li>
               <li :class="{'activeB':$route.path=='/finaInstitution'||$route.path=='/finaInsDetail'}" @click="$router.push({path:'/finaInstitution'})">金融机构</li>
             </ul>
           </div>
@@ -34,7 +34,7 @@
     </div>
     <div class="search_box" id="search_box" @mouseleave="show4=!show4">
       <el-collapse-transition>
-        <div v-show="show4">
+        <div v-show="show4" style="width:100%">
           <div class="transition-box">
             <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
               <el-button slot="append" icon="el-icon-search">搜索 </el-button>
@@ -75,54 +75,104 @@ export default {
   z-index: 9;
   width: 100%;
   position: fixed;
+  // .search_box {
+  //   background: #fff;
+  //   box-shadow: 0 10px 10px -10px #ccc;
+  //   .el-input-group {
+  //     border-radius: 28px;
+  //     width: 42%;
+  //     margin: 43px 0;
+  //     position: relative;
+  //     transform: translateX(-50%);
+  //     left: 50%;
+  //     .el-input {
+  //       width: 94px;
+  //     }
+  //     .el-input__inner:focus {
+  //       border-color: #00a041;
+  //     }
+  //     .el-input-group__append,
+  //     .el-input-group__prepend {
+  //       border-radius: 28px;
+  //     }
+  //     .el-input-group__append {
+  //       /* border-top-left-radius: 0;
+  //       border-bottom-left-radius: 0; */
+  //       background: #00a041;
+  //       color: #fff;
+  //       right: 58px;
+  //       .el-button {
+  //         margin: -10px -10px;
+  //       }
+  //     }
+  //     .el-input-group__prepend {
+  //       border-top-right-radius: 0;
+  //       border-bottom-right-radius: 0;
+  //       background-color: #fff;
+  //       padding: 0px 17px 0 9px;
+  //       input {
+  //         color: #666666;
+  //         text-align: right;
+  //       }
+  //     }
+  //   }
+  //   .input-with-select .el-input__inner {
+  //     border-top-left-radius: 19px;
+  //     border-bottom-left-radius: 19px;
+  //     border: 1px solid #00a041;
+  //   }
+  // }
   .search_box {
-    // background: rgba(0, 0, 0, 0.3);
-    background: #fff;
-    box-shadow: 0 10px 10px -10px #ccc;
-    .el-input-group {
-      border-radius: 28px;
-      width: 42%;
-      margin: 43px 0;
-      position: relative;
-      transform: translateX(-50%);
-      left: 50%;
-      .el-input {
-        width: 94px;
-      }
-      .el-input__inner:focus {
-        border-color: #00a041;
-      }
-      .el-input-group__append,
-      .el-input-group__prepend {
-        border-radius: 28px;
-      }
-      .el-input-group__append {
-        /* border-top-left-radius: 0;
-        border-bottom-left-radius: 0; */
-        background: #00a041;
-        color: #fff;
-        right: 58px;
-        .el-button {
-          margin: -10px -10px;
+        // background: rgba(0, 0, 0, 0.3);
+        background: #fff;
+      box-shadow: 0 10px 10px -10px #ccc;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        width:100%;
+        .el-input-group {
+          // position: relative;
+          // left: 50%;
+          // transform: translateX(-50%);
+          border-radius: 28px;
+          overflow: hidden;
+          width: 50%;
+          margin: 43px 0;
+          .el-input {
+            // width: 94px;
+          }
+          .el-input__inner:focus {
+            border-color: #00a041;
+          }
+          .el-input-group__append,
+          .el-input-group__prepend {
+            border-radius: 28px;
+          }
+          .el-input-group__append {
+            background: #00a041;
+            color: #fff;
+            right: 58px;
+            .el-button {
+              margin: -10px -10px;
+            }
+          }
+          .el-input-group__prepend {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            background-color: #fff;
+            padding: 0px 17px 0 9px;
+            input {
+              color: #666666;
+              text-align: right;
+            }
+          }
+        }
+        .input-with-select .el-input__inner {
+          border-top-left-radius: 19px;
+          border-bottom-left-radius: 19px;
+          border: 1px solid #00a041;
         }
       }
-      .el-input-group__prepend {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        background-color: #fff;
-        padding: 0px 17px 0 9px;
-        input {
-          color: #666666;
-          text-align: right;
-        }
-      }
-    }
-    .input-with-select .el-input__inner {
-      border-top-left-radius: 19px;
-      border-bottom-left-radius: 19px;
-      border: 1px solid #00a041;
-    }
-  }
   .el-card__body {
     padding: 0;
   }

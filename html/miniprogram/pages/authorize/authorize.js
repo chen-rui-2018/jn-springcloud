@@ -33,9 +33,11 @@ Page({
       app.globalData.userInfo = e.detail.userInfo
       console.log(e.detail.userInfo)
       // 插入登录的用户的相关信息到数据库
+
       wx.request({
-        url: app.globalData.urlPath + 'guest/mini/user/login',
+        url: app.globalData.urlPath + 'guest/mini/user/checkCodeAndGetToken',
         data: {
+          code: '0216Jz8S1HvIz41bTA6S1cMF8S16Jz86',
           openid: app.globalData.openid,
           nickName: e.detail.userInfo.nickName,
           avatarUrl: e.detail.userInfo.avatarUrl,

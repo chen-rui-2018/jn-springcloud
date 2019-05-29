@@ -129,7 +129,7 @@ public class CompanyCheckParam implements Serializable {
     private String parkBuildName;
     @ApiModelProperty(value = "信用积分",example = "0.00")
     private BigDecimal creditPoints;
-    @ApiModelProperty(value = "企业类型[传机构字典接口入参preType=1返回的ID]",notes = "传机构字典接口入参preType=0返回的ID",example = "ogistics")
+    @ApiModelProperty(value = "企业类型[传机构字典接口入参preType=3返回的ID]",notes = "传机构字典接口入参preType=3返回的ID",example = "ogistics")
     private String comType;
     @ApiModelProperty(value = "是否参加园区获取【0否1是】",example = "0")
     private String isJoinActivity;

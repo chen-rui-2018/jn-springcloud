@@ -24,23 +24,20 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="应聘部门：">
-              <el-select v-model="addForm.departmentId" disabled placeholder="请选择" clearable style="width: 200px" class="filter-item">
-                <el-option label="请选择" value=""/>
-                <el-option
-                  v-for="item in departmentList"
-                  :key="item.departmentId"
-                  :label="item.departmentName"
-                  :value="item.departmentId"/>
-              </el-select>
+              <el-cascader
+                ref="departRef"
+                :options="departmentList"
+                v-model="currentDepartmentIds"
+                change-on-select
+                placeholder="请选择"
+                disabled
+              />
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="应聘职位：">
-              <el-select v-model="addForm.jobId" disabled placeholder="请选择" clearable style="width: 200px" class="filter-item">
-                <el-option label="请选择" value=""/>
-                <el-option v-for="item in jobList" :key="item.key" :label="item.lable" :value="item.key"/>
-              </el-select>
+              {{ addForm.jobName }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -169,12 +166,21 @@ import {
   getResumeDatabaseById
 } from '@/api/hr/resumeDatabase'
 import {
-  getDepartMents, getCode
+  getCode, setChild, findNodeById, findP
 } from '@/api/hr/util'
+
+import {
+  api
+} from '@/api/axios'
 
 export default {
   data() {
     return {
+      nodes: [],
+      pNodes: [],
+      currentDepartmentIds: [],
+      departmentOptions: [],
+      departmentListLoading: false,
       departmentList: [],
       jobList: [],
       educationList: [],
@@ -220,6 +226,7 @@ export default {
         getResumeDatabaseById(id).then(res => {
           if (res.data.code === '0000') {
             this.addForm = res.data.data
+            this.getAllDepartment()
           } else {
             this.$message.error(res.data.result)
           }
@@ -240,20 +247,6 @@ export default {
       this.$router.push('resumeDatabaseList')
     },
     initSelect() {
-      getDepartMents().then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-      getCode({ 'groupCode': 'job', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
-        if (res.data.code === '0000') {
-          this.jobList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
       getCode({ 'groupCode': 'education', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
         if (res.data.code === '0000') {
           this.educationList = res.data.data
@@ -271,6 +264,27 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
+      })
+    },
+    getAllDepartment() {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.departmentList = res.data.data
+          setChild(this.nodes, this.departmentList)
+          const currNode = findNodeById(this.nodes, this.addForm.departmentId)
+          this.pNodes.push(currNode)
+          findP(this.nodes, currNode, this.pNodes)
+          this.pNodes.reverse()
+          const arr = []
+          this.pNodes.forEach(item => {
+            arr.push(item.id)
+          })
+          this.currentDepartmentIds = arr
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
       })
     }
 

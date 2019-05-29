@@ -61,7 +61,7 @@ public class PayController {
             case ROOM_LEASE://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-park","/api/order/createPay",JSONObject.toJSONString(createPayReqModel));
             case GOODS_LEASE://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-park","/api/order/createArticlePay",JSONObject.toJSONString(createPayReqModel));
             case TEMPORARY_PARKING://
                 return NOT_SUPPORT_RESULT;
             case PARKING_LEASE://
@@ -105,7 +105,7 @@ public class PayController {
             case WATER://
                 return NOT_SUPPORT_RESULT;
             case PROMOTION://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
             case HEALTH://
                 return NOT_SUPPORT_RESULT;
             case ELECTRIC_RECHARGE:

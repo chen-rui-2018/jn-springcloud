@@ -155,7 +155,7 @@
               placeholder="请输入上家公司证明人"
               clearable/>
           </el-form-item>
-          <el-form-item label="核查人:" prop="inspectors">
+          <!-- <el-form-item label="核查人:" prop="inspectors">
             <el-input v-model.trim="bgForm.inspectors" :rows="2" type="textarea" maxlength="200" clearable/>
           </el-form-item>
           <el-form-item label="核查人联系电话:" prop="inspectorsPhone">
@@ -167,7 +167,7 @@
               style="width: 200px"
               placeholder="请输入核查人联系电话"
               clearable/>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
         <div slot="footer" class="dialog-footer" align="center">
           <el-button :disabled="isDisabled" type="primary" @click="completeBackground">保存</el-button>
@@ -213,6 +213,7 @@ export default {
         callback()
       }
     }
+    // eslint-disable-next-line no-unused-vars
     var validPhone = (rule, value, callback) => {
       if (!value) {
         callback(new Error('请输入联系电话'))
@@ -238,12 +239,12 @@ export default {
           trigger: 'blur'
         }],
         companyCertifier: [{ required: true, message: '请输入上家公司证明人', trigger: 'blur' },
-          { validator: checkName, trigger: 'blur' }],
-        inspectors: [{ required: true, message: '请输入核查人', trigger: 'blur' }, { validator: checkName, trigger: 'blur' }],
-        inspectorsPhone: [{ required: true, message: '请输入核查人联系电话', trigger: 'blur' }, {
-          validator: validPhone,
-          trigger: 'blur'
-        }]
+          { validator: checkName, trigger: 'blur' }]
+        // inspectors: [{ required: true, message: '请输入核查人', trigger: 'blur' }, { validator: checkName, trigger: 'blur' }],
+        // inspectorsPhone: [{ required: true, message: '请输入核查人联系电话', trigger: 'blur' }, {
+        //   validator: validPhone,
+        //   trigger: 'blur'
+        // }]
       },
       bgFormVisible: false,
       educationList: [],

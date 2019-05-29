@@ -1,6 +1,7 @@
 package com.jn.park.electricmeter.dao;
 
 import com.jn.park.electricmeter.entity.*;
+import com.jn.park.electricmeter.model.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -82,4 +83,107 @@ public interface MeterDao {
      * saveWarningRecord
      */
     void saveWarningRecord(@Param("saveData") List<TbElectricWarningRecord> saveData);
+
+    /**
+     * 获取电表的业主集合
+     * @param companyId
+     * @param day
+     * @return
+     */
+    List<String> getMeterHost(@Param("companyId") String companyId,@Param("day") Date day);
+
+    /**
+     * 获取企业的所有电表
+     * @param companyId
+     * @param day
+     * @return
+     */
+    List<String> getElectricMeterByCompanyId(@Param("companyId") String companyId,@Param("day") Date day);
+
+    /**
+     * 获取企业的计价规则
+     * @param companyId
+     * @param day
+     * @return
+     */
+    List<String> getRuleIdByCompanyId(@Param("companyId") String companyId,@Param("day") Date day);
+
+    /**
+     * 获取企业的电表用电量
+     * @param meterCode
+     * @param dealDate
+     * @return
+     */
+    List<TbElectricReading> getDegreeByMeterCode(@Param("meterCode") String meterCode,@Param("dealDate") Date dealDate);
+
+    /**
+     * 获取一块电表当天按计价规则分组的费用
+     * @param saveData
+     * @return
+     */
+    void saveGroupLogs(@Param("saveData") List<TbElectricEnergyGroupLog> saveData);
+
+    /**
+     * 保存账单明细
+     * @param saveData
+     */
+    void saveBillDetail(@Param("saveData") List<TbElectricEnergyBillDetail> saveData);
+
+    /**
+     * 保存表的每日业主关系
+     * @param saveData
+     */
+    void saveMeterLinkInDay(@Param("saveData") List<TbElectricMeterCompanyDay> saveData);
+
+    /**
+     * 停电的企业
+     */
+    List<SwitchModel> stopElectric();
+
+    /**
+     * 有电的企业
+     */
+    List<SwitchModel> getElectric();
+
+    /**
+     * 查询所有企业的电表
+     * @param companyId
+     * @return
+     */
+    List<String> getHostsMeter(@Param("companyId") String companyId);
+
+    /**
+     * 保存电表转换的日志
+     * @param saveData
+     */
+    void saveMeterSwitchLog(@Param("saveData") List<TbElectricMeterSwitchLog> saveData);
+
+    //能耗统计
+    /**
+     * 分组统计
+     * @return
+     */
+    List<GroupChartStatisticsModel> groupChart();
+
+    /**
+     * 分类统计
+     * @return
+     */
+    List<GategaryEnergyStatisticsModel> categaryChart() ;
+
+    /**
+     * 趋势明细图
+     * @param param
+     * @return
+     */
+    List<TrendChartDetailStatisticsModel> trendChartDetail(TrendChartParam param) ;
+
+    /**
+     * 趋势图
+     * @param param
+     * @return
+     */
+    List<TrendChartStatisticsModel> trendChart(TrendChartParam param);
+
+
 }

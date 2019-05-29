@@ -1,12 +1,18 @@
 package com.jn.hr.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class AttendanceManagementApiVo {
+public class AttendanceManagementApiVo implements Serializable{
 
-	@ApiModelProperty(value = "考勤状态")
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5402096435312473535L;
+
+	@ApiModelProperty(value = "考勤状态（1：迟到， 2：早退， 3：缺卡，4：加班，5：旷工，6：请假）")
 	private String attendanceType;
 	
 	@ApiModelProperty(value = "次数")
@@ -18,11 +24,28 @@ public class AttendanceManagementApiVo {
 	@ApiModelProperty(value = "部门")
     private String department;
 	
-	@ApiModelProperty(value = "用户id")
-	private String userId;
+	@ApiModelProperty(value = "姓名")
+	private String name;
 	
 	@ApiModelProperty(value = "状态时间明细")
 	private List<AttendanceKeyValue> statusDetailedList;
+
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getAttendanceType() {
 		return attendanceType;
@@ -46,22 +69,6 @@ public class AttendanceManagementApiVo {
 
 	public void setTotalTime(String totalTime) {
 		this.totalTime = totalTime;
-	}
-
-	public String getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(String department) {
-		this.department = department;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 
 	public List<AttendanceKeyValue> getStatusDetailedList() {

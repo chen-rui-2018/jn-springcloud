@@ -14,6 +14,7 @@ import com.jn.enterprise.company.entity.TbServiceCompanyStaff;
 import com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
+import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.*;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
@@ -297,6 +298,13 @@ public class StaffServiceImpl implements StaffService {
             throw new JnSpringCloudException(CompanyExceptionEnum.USER_IS_COMPANY_EXIST);
         }
 
+        // 删除所有拒绝或未审批的数据
+//        TbServiceCompanyStaffCriteria deleteCriteria = new TbServiceCompanyStaffCriteria();
+//        deleteCriteria.createCriteria().andAccountEqualTo(inviteAccount);
+//        TbServiceCompanyStaff deleteStaff = new TbServiceCompanyStaff();
+//        deleteStaff.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+//        tbServiceCompanyStaffMapper.updateByExampleSelective(deleteStaff, deleteCriteria);
+
         // 封装数据
         TbServiceCompanyStaff staff = new TbServiceCompanyStaff();
         staff.setComId(company.getId());
@@ -319,7 +327,7 @@ public class StaffServiceImpl implements StaffService {
             addMessageModel.setMessageRecipien(inviteAccount);
             addMessageModel.setMessageOneSort(1);
             addMessageModel.setMessageTowSort(8);
-            addMessageModel.setMessageConnect("comId=" + company.getId() + "&comName=" + company.getComName());
+            addMessageModel.setMessageConnect("{\"comId\":\"" + company.getId() + "\",\"comName\":\"" + company.getComName() + "\"}");
             addMessageModel.setMessageConnectName("企业邀请");
             addMessageModel.setMessageTitle("企业邀请待处理通知");
             addMessageModel.setMessageContent(company.getComName());
@@ -539,7 +547,8 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "企业同事-设为/取消联系人")
     public Integer setOrCancelContact(String account, String curAccount, boolean isSet) {
         // 判断是否为企业管理员
-        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
+//        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
+        String comId = checkCompanyUser(curAccount).getCompanyCode();
         // 判断联系人账号有效性
         checkCompanyAndStaff(account, comId);
 
@@ -721,5 +730,22 @@ public class StaffServiceImpl implements StaffService {
             }
         }
         return staff;
+    }
+
+    /**
+     * 判断账号是否企业账号
+     * @param account
+     * @return
+     */
+    public UserExtensionInfo checkCompanyUser (String account) {
+        Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(account);
+        if (result == null || result.getData() == null) {
+            throw new JnSpringCloudException(CompanyExceptionEnum.GET_USER_EXTENSION_INFO_ERROR);
+        }
+        UserExtensionInfo userExtensionInfo = result.getData();
+        if (StringUtils.isBlank(userExtensionInfo.getCompanyCode()) || StringUtils.isBlank(userExtensionInfo.getCompanyName())) {
+            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_USER_NOT_COMPANY_USER);
+        }
+        return userExtensionInfo;
     }
 }

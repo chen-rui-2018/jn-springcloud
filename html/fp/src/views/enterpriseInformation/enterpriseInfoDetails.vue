@@ -10,14 +10,14 @@
         <div class="delinfo">
             <el-card style="overflow:visible">
                 <div class="infotop pr">
-                    <img class="infoImg" :src="getDetails.mainPicture" alt="">
+                    <img class="infoImg" :src="getDetails.posterUrl" alt="">
                     <div class="infotitle">
                         <div class="tit color4">
-                            龙虎网“黑科技”亮相融交南京市第六届金梧桐奖颁奖 典礼
+                            {{getDetails.propagandaTitle}}
                         </div>
                         <div class="infoTime">
                             <span>
-                                <i class="el-icon-time"></i>21342243</span>
+                                <i class="el-icon-time"></i>{{getDetails.effectiveDate}}</span>
                             <span class="mainColor infoNum">
                                 <i class="el-icon-view"></i>21342243</span>
                         </div>
@@ -36,7 +36,7 @@
             <div class="delTil">详情</div>
             <el-card>
                 <div class="delContent">
-                    <p v-html="getDetails.parkIntroduce"></p>
+                    <p>{{getDetails.propagandaDetails}}</p>
                 </div>
             </el-card>
         </div>
@@ -47,10 +47,10 @@
                     <li class="clearfix moreLi">
                         <div class="fl">
                             <i></i>
-                            <span class="color1" style="text-align:left">{{i.propagandaTitle}}</span>
+                            <span class="color1" style="text-align:left">111</span>
                             <p>
                                 <img src="@/../static/img/图层 4.png" alt="">
-                                <span>{{i.createdTime}}</span>
+                                <span>www</span>
                             </p>
                         </div>
                         <p class="fr mainColor pointer">MORE</p>
@@ -69,19 +69,18 @@ export default {
   },
   created() {},
   mounted() {
-    this.getParkDetails();
+    this.getBusinessPromotionDetails();
   },
   methods: {
-    getParkDetails() {
+    getBusinessPromotionDetails() {
       let _this = this;
       this.api.get({
-        url: "getParkDetails",
+        url: "getPromotionDetails",
         data: {
-          id: "570295002484178944"
+          propagandaId : _this.$route.query.propagandaId
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.getDetails = res.data;
           } else {
             _this.$message.error(res.result);

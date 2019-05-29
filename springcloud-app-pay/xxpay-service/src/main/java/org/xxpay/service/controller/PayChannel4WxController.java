@@ -12,6 +12,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.github.binarywang.wxpay.util.SignUtils;
+import com.jn.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -76,9 +77,14 @@ public class PayChannel4WxController{
             String channelId = payOrder.getChannelId();
             MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
             String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-            if("".equals(resKey)) return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+            if("".equals(resKey)) {
+                return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+            }
+            //获取支付渠道信息
             PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
+            //获取微信支付配置
             WxPayConfig wxPayConfig = WxPayUtil.getWxPayConfig(payChannel.getParam(), tradeType, wxPayProperties.getCertRootPath(), wxPayProperties.getNotifyUrl());
+            //封装参数并且请求微信支付
             WxPayService wxPayService = new WxPayServiceImpl();
             wxPayService.setConfig(wxPayConfig);
             WxPayUnifiedOrderRequest wxPayUnifiedOrderRequest = buildUnifiedOrderRequest(payOrder, wxPayConfig);
@@ -258,19 +264,32 @@ public class PayChannel4WxController{
         String attach = null;
         String outTradeNo = payOrderId;
         String feeType = "CNY";
-        String spBillCreateIP = payOrder.getClientIp();
+        //终端IP
+        String spBillCreateIP ;
+        if(StringUtils.isBlank(payOrder.getClientIp())){
+            spBillCreateIP = XXPayUtil.getHostAddress();
+        }else{
+            spBillCreateIP = payOrder.getClientIp();
+        }
+
         String timeStart = null;
         //订单失效时间，格式为yyyyMMddHHmmss
         String timeExpire = createTimeExpire(payOrder.getDuration());
         String goodsTag = null;
         String notifyUrl = wxPayConfig.getNotifyUrl();
         String productId = null;
-        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_NATIVE)) productId = JSON.parseObject(payOrder.getExtra()).getString("productId");
+        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_NATIVE)) {
+            productId = JSON.parseObject(payOrder.getExtra()).getString("productId");
+        }
         String limitPay = null;
         String openId = null;
-        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_JSPAI)) openId = JSON.parseObject(payOrder.getExtra()).getString("openId");
+        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_JSPAI) ) {
+            openId = JSON.parseObject(payOrder.getExtra()).getString("openId");
+        }
         String sceneInfo = null;
-        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_MWEB)) sceneInfo = JSON.parseObject(payOrder.getExtra()).getString("sceneInfo");
+        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_MWEB)) {
+            sceneInfo = JSON.parseObject(payOrder.getExtra()).getString("sceneInfo");
+        }
         // 微信统一下单请求对象
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setDeviceInfo(deviceInfo);

@@ -1,6 +1,7 @@
 package com.jn.hr.employee.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.hr.archives.model.TreeModel;
 import com.jn.hr.employee.model.EmployeeBasicInfo;
 import com.jn.hr.employee.model.EmployeeBasicInfoAdd;
 import com.jn.hr.employee.model.EmployeeBasicInfoPage;
@@ -8,6 +9,7 @@ import com.jn.system.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dt
@@ -39,9 +41,12 @@ public interface EmployeeBasicInfoService {
 
     //导入社保福利
     public String importSocialSecurity(MultipartFile file, User user);
-
-
-
-
     void updateEmployStatus(String id, String employStatus, User user);
+    //查询部门员工树
+    public List<TreeModel> selectDepartEmployee();
+
+
+
+
+
 }

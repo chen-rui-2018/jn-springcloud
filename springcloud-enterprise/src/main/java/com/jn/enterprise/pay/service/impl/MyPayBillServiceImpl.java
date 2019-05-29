@@ -1,6 +1,7 @@
 package com.jn.enterprise.pay.service.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -227,15 +228,16 @@ public class MyPayBillServiceImpl implements MyPayBillService {
 
 
     @Override
-    public void updateBillNumber(PayCheckReminderParam payCheckReminderParam) {
+    public Result updateBillNumber(PayCheckReminderParam payCheckReminderParam) {
         TbPayBill bill = new TbPayBill();
         BeanUtils.copyProperties(payCheckReminderParam, bill);
         tbPayBillMapper.updateByPrimaryKeySelective(bill);
+        return new Result("账单催缴次数更新成功");
     }
 
     @ServiceLog(doAction = "我的账单-我的账单-核查提醒录入")
     @Override
-    public void billCheckReminder(PayCheckReminder payCheckReminder, User user) {
+    public Result billCheckReminder(PayCheckReminder payCheckReminder, User user) {
         TbPayBillCriteria billCriteria = new TbPayBillCriteria();
         List<String> strings = Arrays.asList(payCheckReminder.getBillIds());
         billCriteria.createCriteria().andBillIdIn(strings).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
@@ -281,6 +283,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             tbPayCheckReminderMapper.insertSelective(checkReminder);
         }
         logger.info("执行核对提醒插入信息操作结束");
+        return new Result("核对提醒录入成功！");
     }
 
     @ServiceLog(doAction = "我的账单-创建账单")
@@ -291,6 +294,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         logger.info("我的账单-创建账单,参数：payBillCreateParamVo={},user={}", JsonUtil.object2Json(payBillCreateParamVo),JsonUtil.object2Json(user));
         List<TbPayAccountBook> tbPayAccountBook = null;
         List<TbPayAccount> tbPayAccount = null;
+        Result<Boolean> result = null;
         TbPayAccountBookCriteria billCriteria = new TbPayAccountBookCriteria();
         TbPayAccountCriteria accountCriteria = new TbPayAccountCriteria();
         if (payBillCreateParamVo.getObjType().equals(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode())) {
@@ -393,27 +397,26 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     logger.info("执行统一缴费更新账单状态操作,入參【{}】", tbs.toString());
                     tbPayBillMapper.updateByPrimaryKeySelective(tbs);
                     logger.info("结束执行统一缴费更新账单状态操作");
+                    /**回调通知各业务测账单状态*/
+                    PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
+                    payCallBackNotify.setBillId(tbs.getBillId());
+                    payCallBackNotify.setPaymentState(tbs.getPaymentState());
+                    Delay delay = new Delay();
+                    delay.setServiceId(tbs.getCallbackId());
+                    delay.setServiceUrl(tbs.getCallbackUrl());
+                    delay.setTtl("30");
+                    delay.setDataString(JSONObject.toJSONString(payCallBackNotify));
+                    logger.info("接收到延迟消息内容：【{}】", JSONObject.toJSONString(payCallBackNotify));
+                    logger.info("开始回调");
+                    result = delaySendMessageClient.delaySend(delay);
+                    logger.info("结束回调,返回结果，【{}】", result.toString());
                 }
             } catch (Exception e) {
                 throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_DEDUCTION_FEE_ERROR);
             }
         }
-        /**回调通知各业务测账单状态*/
-        PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
-        payCallBackNotify.setBillId(tbs.getBillId());
-        payCallBackNotify.setPaymentState(tbs.getPaymentState());
-        Delay delay = new Delay();
-        delay.setServiceId(tbs.getCallbackId());
-        delay.setServiceUrl(tbs.getCallbackUrl());
-        delay.setTtl("30");
-        delay.setDataString(payCallBackNotify.toString());
-        logger.info("接收到延迟消息内容：【{}】", delay.toString());
-        logger.info("开始回调");
-        Result<Boolean> result = delaySendMessageClient.delaySend(delay);
-        logger.info("结束回调,返回结果，【{}】", result.toString());
-        return result;
-
         /**TODO 是否需要推送自动扣费的消息给企业或个人*/
+        return result;
     }
 
     @ServiceLog(doAction = "我的账单-统一缴费发起支付")
@@ -457,8 +460,13 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             }
             sb.append(bill.getBillId());
         }
-        //todo 中原，校验下支付金额
-
+        /**开始校验金额，比较金额大小即左边比右边数大，返回1，相等返回0，比右边小返回-1*/
+        logger.info("统一支付校验输入金额和账单金额开始，输入金额【{}】，账单金额【{}】",createOrderAndPayReqModel.getPaySum(),totalAmount);
+        int i = createOrderAndPayReqModel.getPaySum().compareTo(totalAmount);
+        logger.info("统一支付校验输入金额和账单金额,比较金额大小结果,相等返回0：【{}】", i);
+        if(i != 0){
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.COMMIT_AMOUNT_NOT_EQUAL_BILL_AMOUNT);
+        }
         Result<PayOrderRsp> result;
 
             /**调用支付接口发起支付*/
@@ -474,7 +482,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             payOrderReq.setBody("统一缴费账单");
             payOrderReq.setServiceId(ENT_CLIENT);
             payOrderReq.setServiceUrl(ENT_CLIENT_CALLBOCK_SERVICE);
-            //签名
+           /** 签名*/
             String sign = PayDigestUtil.getSign(BeanToMap.toMap(payOrderReq), MchIdEnum.MCH_BASE.getReqKey());
             payOrderReq.setSign(sign);
             logger.info("调用 统一支付下单接口,请求参数{}", payOrderReq);
@@ -485,7 +493,6 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 return result;
             }
             /*******验证响应签名 ********/
-            //验证响应签名
             boolean verifyFlag = XXPayUtil.verifyPaySign(BeanToMap.toMap(result.getData()), MchIdEnum.MCH_BASE.getRspKey());
             if (!verifyFlag) {
                 logger.info(" 支付验证响应签名失败  fail ！verifyFlag={}", verifyFlag);
@@ -529,10 +536,10 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             /**判断回调参数商户订单号是否为空*/
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_CALLBACK_ID_IS_NULL);
         }
-        //查询支付订单的支付状态
+        /**查询支付订单的支付状态*/
         PayOrderQueryReq req = new PayOrderQueryReq();
         req.setPayOrderId(callBackParam.getPayOrderId());
-        //签名
+        /**签名*/
         String sign = PayDigestUtil.getSign(BeanToMap.toMap(req), MchIdEnum.MCH_BASE.getReqKey());
         req.setSign(sign);
         logger.info("调用支付查询接口，请求参数:{}", req);
@@ -573,7 +580,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     delay.setServiceId(tbPayBills.get(i).getCallbackId());
                     delay.setServiceUrl(tbPayBills.get(i).getCallbackUrl());
                     delay.setTtl("30");
-                    delay.setDataString(payCallBackNotify.toString());
+                    delay.setDataString(JSONObject.toJSONString(payCallBackNotify));
                     logger.info("接收到延迟消息内容：【{}】", delay.toString());
                     logger.info("开始回调");
                     Result<Boolean> result2 = delaySendMessageClient.delaySend(delay);
@@ -625,7 +632,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             payOrderReq.setBody("预缴充值");
             payOrderReq.setServiceId(ENT_CLIENT);
             payOrderReq.setServiceUrl(ENT_CLIENT_CALLBOCK_FEE_SERVICE);
-            //签名
+            /**签名*/
             String sign = PayDigestUtil.getSign(BeanToMap.toMap(payOrderReq), MchIdEnum.MCH_BASE.getReqKey());
             payOrderReq.setSign(sign);
             logger.info("调用 统一支付下单接口,请求参数{}", payOrderReq);
@@ -636,7 +643,6 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 return result;
             }
             /*******验证响应签名 ********/
-            //验证响应签名
             boolean verifyFlag = XXPayUtil.verifyPaySign(BeanToMap.toMap(result.getData()), MchIdEnum.MCH_BASE.getRspKey());
             if (!verifyFlag) {
                 logger.info(" 支付验证响应签名失败  fail ！verifyFlag={}", verifyFlag);
@@ -705,6 +711,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 /**补充账本金额*/
                 TbPayBill tbPayBill = new TbPayBill();
                 tbPayBill.setBillExpense(new BigDecimal(MoneyUtils.changeF2Y(callBackParam.getAmount())));
+                tbPayBill.setAcBookId(tbPayAccountBook.getAcBookId());
                 addAccountBookMoneyAndRecord(tbPayBill, tbPayAccountBook, callBackParam, user);
                 logger.info("调用统一支付下单接口回调，更新账单状态到账单中间表操作开始");
                 tbPayBillMiddles.get(0).setStatus(callBackParam.getStatus().toString());

@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Api(tags = "客服中心--园区客服中心")
 @RestController
-@RequestMapping("/guest/customer/customerCalledInfoEnterController")
+@RequestMapping("/customer/customerCalledInfoEnterController")
 public class CustomerCalledInfoEnterController extends BaseController {
     /**
      * 日志组件
@@ -88,7 +88,7 @@ public class CustomerCalledInfoEnterController extends BaseController {
     @RequestMapping(value = "/getPhoneCalledOwen",method = RequestMethod.GET)
     public Result<String> getPhoneCalledOwen(@ApiParam(name="phone",value = "来电用户电话",required = true,example = "18088888888")
                                                                                        @RequestParam(value = "phone") String phone) {
-        return new Result<String>(manageService.getPhoneCalledOwen(phone));
+        return new Result<>(manageService.getPhoneCalledOwen(phone));
     }
 
 
@@ -100,7 +100,7 @@ public class CustomerCalledInfoEnterController extends BaseController {
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
-            logger.warn("用户问题详情获取当前登录用户信息失败");
+            logger.warn("来电录入用户问题详情获取当前登录用户信息失败");
             return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         return new Result<>(customerServiceCenterService.customerQuesDetail(user.getAccount(), processInsId));

@@ -48,6 +48,8 @@ public class CreatePayReqBaseModel implements Serializable {
     @ApiModelProperty(value = "用户IP地址",hidden = true)
     private String userIp;
 
+    @ApiModelProperty(value = "特定渠道发起时额外参数：当请求参数channelId = WX_JSAPI 或者 WX_PROGRAM（微信公众号 和小程序支付 ）时，openId(用户标识)参数必填  如：{\"openId\":\"o2RvowBf7sOVJf8kJksUEMceaDqo\"}")
+    private String extra;
 
 
     public String getChannelId() {
@@ -90,14 +92,23 @@ public class CreatePayReqBaseModel implements Serializable {
         this.userIp = userIp;
     }
 
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
+    }
+
     @Override
     public String toString() {
         return "CreatePayReqBaseModel{" +
                 "channelId='" + channelId + '\'' +
                 ", paySum=" + paySum +
-                ", payType='" + payType + '\'' +
+                ", payType=" + payType +
                 ", userAccount='" + userAccount + '\'' +
                 ", userIp='" + userIp + '\'' +
+                ", extra='" + extra + '\'' +
                 '}';
     }
 }

@@ -14,6 +14,7 @@ import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.model.IBPSCompleteParam;
 import com.jn.enterprise.model.IBPSMyTasksParam;
+import com.jn.enterprise.model.MyTasksResult;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.customer.dao.TbClientExecuteImgMapper;
 import com.jn.park.customer.dao.TbClientServiceCenterMapper;
@@ -21,7 +22,7 @@ import com.jn.park.customer.entity.TbClientExecuteImg;
 import com.jn.park.customer.entity.TbClientServiceCenter;
 import com.jn.park.customer.entity.TbClientServiceCenterCriteria;
 import com.jn.park.customer.enums.IBPSExecuteTypeEnum;
-import com.jn.park.customer.enums.IBPSMyTaskParamEnum;
+import com.jn.enterprise.enums.IBPSMyTaskParamEnum;
 import com.jn.park.customer.enums.IBPSOptionsStatusEnum;
 import com.jn.park.customer.model.*;
 import com.jn.park.customer.service.CustomerServiceCenterManageService;
@@ -170,6 +171,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             for(TbClientServiceCenter serviceCenter:serviceCenterList){
                 ConsultationCustomerListShow customerListShow=new ConsultationCustomerListShow();
                 BeanUtils.copyProperties(serviceCenter, customerListShow);
+                customerListShow.setCreatedTime(DateUtils.formatDate(serviceCenter.getCreatedTime(), PATTERN));
                 for(Map<String,String> map:procInsIdAndTaskIdList){
                    if(map.containsKey(customerListShow.getProcessInsId())){
                        customerListShow.setTaskId(map.get(customerListShow.getProcessInsId()));

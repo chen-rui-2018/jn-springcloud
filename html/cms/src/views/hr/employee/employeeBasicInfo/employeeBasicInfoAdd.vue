@@ -41,26 +41,21 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="姓名：" prop="name">
-              <el-input v-model="addForm.name" style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.name" style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="部门：" prop="departmentId">
-              <el-select
-                v-model="addForm.departmentId"
+              <el-cascader
+                ref="departRef"
+                :options="departmentList"
+                v-model="currentDepartmentIds"
+                change-on-select
                 placeholder="请选择"
                 clearable
-                style="width: 200px"
-                class="filter-item"
-                @change="setDepartmentInfo">
-                <el-option label="请选择" value=""/>
-                <el-option
-                  v-for="item in departmentList"
-                  :key="item.departmentId"
-                  :label="item.departmentName"
-                  :value="item.departmentId"/>
-              </el-select>
+                @change="handleChangeDepartment"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -76,10 +71,10 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="职务：" prop="postId">
+            <el-form-item label="岗位：" prop="postId">
               <el-select v-model="addForm.postId" placeholder="请选择" clearable style="width: 200px" class="filter-item">
                 <el-option label="请选择" value=""/>
-                <el-option v-for="item in postList" :key="item.key" :label="item.lable" :value="item.key"/>
+                <el-option v-for="item in postList" :key="item.id" :label="item.postName" :value="item.id"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -103,7 +98,7 @@
           <el-col :span="12">
             <el-form-item label="证件号：" prop="certificateNumber">
               <el-input
-                v-model="addForm.certificateNumber"
+                v-model.trim="addForm.certificateNumber"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -115,7 +110,7 @@
           <el-col :span="12">
             <el-form-item label="工号：" prop="jobNumber">
               <el-input
-                v-model="addForm.jobNumber"
+                v-model.trim="addForm.jobNumber"
                 disabled
                 style="width: 200px"
                 placeholder=""
@@ -125,7 +120,7 @@
 
           <el-col :span="12">
             <el-form-item label="手机号码：" prop="phone">
-              <el-input v-model="addForm.phone" style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.phone" style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -222,13 +217,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="工作地址：" prop="workAddress">
-              <el-input v-model="addForm.workAddress" style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.workAddress" style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="联系地址：" prop="contactAddress">
-              <el-input v-model="addForm.contactAddress" style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.contactAddress" style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -252,7 +247,7 @@
           <el-col :span="12">
             <el-form-item label="用户账号：" prop="userAccount">
               <el-input
-                v-model="addForm.userAccount"
+                v-model.trim="addForm.userAccount"
                 :disabled="addForm.userId!=''"
                 style="width: 200px"
                 placeholder="请输入用户账号"
@@ -297,7 +292,7 @@
           <el-col :span="12">
             <el-form-item label="工作邮箱：" prop="workMailbox">
               <el-input
-                v-model="addForm.workMailbox"
+                v-model.trim="addForm.workMailbox"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -306,7 +301,7 @@
 
           <el-col :span="12">
             <el-form-item label="工作电话：" prop="workPhone">
-              <el-input v-model="addForm.workPhone" style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.workPhone" style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -327,7 +322,7 @@
           <el-col :span="12">
             <el-form-item label="试用期：" prop="probationPeriod">
               <el-input
-                v-model="addForm.probationPeriod"
+                v-model.trim="addForm.probationPeriod"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -344,7 +339,7 @@
           <el-col :span="12">
             <el-form-item label="证件姓名：" prop="certificateName">
               <el-input
-                v-model="addForm.certificateName"
+                v-model.trim="addForm.certificateName"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -353,7 +348,7 @@
 
           <el-col :span="12">
             <el-form-item label="民族：" prop="nation">
-              <el-input v-model="addForm.nation" style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.nation" style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -377,7 +372,7 @@
           <el-col :span="12">
             <el-form-item label="户口所在地：" prop="registeredResidence">
               <el-input
-                v-model="addForm.registeredResidence"
+                v-model.trim="addForm.registeredResidence"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -389,7 +384,7 @@
           <el-col :span="12">
             <el-form-item label="籍贯：" prop="nativePlace">
               <el-input
-                v-model="addForm.nativePlace"
+                v-model.trim="addForm.nativePlace"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -399,7 +394,7 @@
           <el-col :span="12">
             <el-form-item label="居住地址：" prop="residentialAddress">
               <el-input
-                v-model="addForm.residentialAddress"
+                v-model.trim="addForm.residentialAddress"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -458,7 +453,7 @@
           <el-col :span="12">
             <el-form-item label="紧急联系人姓名：" prop="emergencyContactName">
               <el-input
-                v-model="addForm.emergencyContactName"
+                v-model.trim="addForm.emergencyContactName"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -470,7 +465,7 @@
           <el-col :span="12">
             <el-form-item label="紧急联系人电话：" prop="emergencyContactPhone">
               <el-input
-                v-model="addForm.emergencyContactPhone"
+                v-model.trim="addForm.emergencyContactPhone"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -479,7 +474,7 @@
 
           <el-col :span="12">
             <el-form-item label="QQ：" prop="qq">
-              <el-input v-model="addForm.qq" style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.qq" style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -487,13 +482,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="微信：" prop="wechat">
-              <el-input v-model="addForm.wechat" style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.wechat" style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="个人邮箱：" prop="mailbox">
-              <el-input v-model="addForm.mailbox" style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.mailbox" style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -520,7 +515,7 @@
                   :rules="{required: true, message: '请输入学校', trigger: 'blur'}"
                   label="学校：">
                   <el-input
-                    v-model="addForm.educationExperienceList[indexEducation].school"
+                    v-model.trim="addForm.educationExperienceList[indexEducation].school"
                     style="width: 200px"
                     placeholder=""
                     clearable/>
@@ -530,7 +525,7 @@
               <el-col :span="12">
                 <el-form-item label="专业：" prop="major">
                   <el-input
-                    v-model="addForm.educationExperienceList[indexEducation].major"
+                    v-model.trim="addForm.educationExperienceList[indexEducation].major"
                     style="width: 200px"
                     placeholder=""
                     clearable/>
@@ -672,7 +667,7 @@
                   :rules="{required: true, message: '请输入公司名称', trigger: 'blur'}"
                   label="公司名称：">
                   <el-input
-                    v-model="addForm.workExperienceList[indexEducation].corporateName"
+                    v-model.trim="addForm.workExperienceList[indexEducation].corporateName"
                     style="width: 200px"
                     placeholder=""
                     clearable/>
@@ -685,7 +680,7 @@
                   :rules="{required: true, message: '请输入担任职位', trigger: 'blur'}"
                   label="担任职位：">
                   <el-input
-                    v-model="addForm.workExperienceList[indexEducation].assumeOffice"
+                    v-model.trim="addForm.workExperienceList[indexEducation].assumeOffice"
                     style="width: 200px"
                     placeholder=""
                     clearable/>
@@ -729,7 +724,7 @@
               <el-col :span="12">
                 <el-form-item label="职位描述：" prop="jobDescription">
                   <el-input
-                    v-model="addForm.workExperienceList[indexEducation].jobDescription"
+                    v-model.trim="addForm.workExperienceList[indexEducation].jobDescription"
                     style="width: 200px"
                     placeholder=""
                     clearable/>
@@ -765,7 +760,7 @@
           <el-col :span="12">
             <el-form-item label="工资开户行：" prop="salaryBank">
               <el-input
-                v-model="addForm.socialSecurity.salaryBank"
+                v-model.trim="addForm.socialSecurity.salaryBank"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -775,7 +770,7 @@
           <el-col :span="12">
             <el-form-item label="工资卡号：" prop="salaryNumber">
               <el-input
-                v-model="addForm.socialSecurity.salaryNumber"
+                v-model.trim="addForm.socialSecurity.salaryNumber"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -787,7 +782,7 @@
           <el-col :span="12">
             <el-form-item label="公积金账号：" prop="providentFundAccount">
               <el-input
-                v-model="addForm.socialSecurity.providentFundAccount"
+                v-model.trim="addForm.socialSecurity.providentFundAccount"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -797,7 +792,7 @@
           <el-col :span="12">
             <el-form-item label="公积金缴纳地：" prop="providentFundPayment">
               <el-input
-                v-model="addForm.socialSecurity.providentFundPayment"
+                v-model.trim="addForm.socialSecurity.providentFundPayment"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -809,7 +804,7 @@
           <el-col :span="12">
             <el-form-item label="社保账号：" prop="socialSecurityAccount">
               <el-input
-                v-model="addForm.socialSecurity.socialSecurityAccount"
+                v-model.trim="addForm.socialSecurity.socialSecurityAccount"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -819,7 +814,7 @@
           <el-col :span="12">
             <el-form-item label="社保缴纳地：" prop="socialSecurityPayment">
               <el-input
-                v-model="addForm.socialSecurity.socialSecurityPayment"
+                v-model.trim="addForm.socialSecurity.socialSecurityPayment"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -909,13 +904,13 @@
                 style="width: 200px"
                 class="filter-item">
                 <el-option label="请选择" value=""/>
-                <el-option v-for="item in postList" :key="item.key" :label="item.lable" :value="item.key"/>
+                <el-option v-for="item in jobList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="职务：" prop="directLeadership">
+            <el-form-item label="岗位：" prop="directLeadership">
               <el-select
                 v-model="addForm.directlyLeader.directLeadership"
                 placeholder="请选择"
@@ -923,7 +918,7 @@
                 style="width: 200px"
                 class="filter-item">
                 <el-option label="请选择" value=""/>
-                <el-option v-for="item in jobList" :key="item.key" :label="item.lable" :value="item.key"/>
+                <el-option v-for="item in postList" :key="item.id" :label="item.postName" :value="item.id"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -933,7 +928,7 @@
           <el-col :span="12">
             <el-form-item label="姓名：" prop="directLeaderName">
               <el-input
-                v-model="addForm.directlyLeader.directLeaderName"
+                v-model.trim="addForm.directlyLeader.directLeaderName"
                 style="width: 200px"
                 placeholder=""
                 clearable/>
@@ -959,10 +954,14 @@
 import store from '@/store'
 
 import {
-  getTreeList, addEmployeeBasicInfo, updateEmployeeBasicInfo, getEmployeeBasicInfo
+  api
+} from '@/api/axios'
+
+import {
+  addEmployeeBasicInfo, updateEmployeeBasicInfo, getEmployeeBasicInfo
 } from '@/api/hr/employeeBasicInfo'
 import {
-  getCode, isvalidName, isvalidMobile, isvalidPhone, isvalidZjhm
+  getCode, isvalidName, isvalidMobile, isvalidPhone, setChild, findNodeById, findP
 } from '@/api/hr/util'
 import { getToken } from '@/utils/auth'
 
@@ -975,14 +974,15 @@ export default {
         callback()
       }
     }
-    var checkZjhm = (rule, value, callback) => {
-      if (!isvalidZjhm(value)) {
+    const reg = /^\w{5,18}$/i
+    const checkZjhm = (rule, value, callback) => {
+      if (!reg.test(value)) {
         callback(new Error('请输入正确的证件号码'))
       } else {
         callback()
       }
     }
-    var validMobile = (rule, value, callback) => {
+    const validMobile = (rule, value, callback) => {
       if (!value) {
         callback(new Error('请输入手机号码'))
       } else if (!isvalidMobile(value)) {
@@ -991,7 +991,7 @@ export default {
         callback()
       }
     }
-    var validPhone = (rule, value, callback) => {
+    const validPhone = (rule, value, callback) => {
       if (value && !isvalidPhone(value) && !isvalidMobile(value)) {
         callback(new Error('请输入正确的联系电话'))
       } else {
@@ -999,7 +999,7 @@ export default {
       }
     }
     const chatReg = /^[a-zA-Z\d_]{5,}$/
-    var validWechat = (rule, value, callback) => {
+    const validWechat = (rule, value, callback) => {
       if (value && value !== '' && !chatReg.test(value)) {
         callback(new Error('请输入正确的微信号'))
       } else {
@@ -1024,6 +1024,11 @@ export default {
       }*/
 
     return {
+      nodes: [],
+      pNodes: [],
+      currentDepartmentIds: [],
+      departmentOptions: [],
+      departmentListLoading: false,
       importHeaders: {
         enctype: 'multipart/form-data',
         token: getToken()
@@ -1064,7 +1069,7 @@ export default {
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }, { validator: checkName, trigger: 'blur' }],
         departmentId: [{ required: true, message: '请选择部门', trigger: 'change' }],
         jobId: [{ required: true, message: '请选择职级', trigger: 'change' }],
-        postId: [{ required: true, message: '请选择职务', trigger: 'change' }],
+        postId: [{ required: true, message: '请选择岗位', trigger: 'change' }],
         certificateId: [{ required: true, message: '请选择证件类型', trigger: 'change' }],
         certificateNumber: [{ required: true, message: '请输入证件号码', trigger: 'blur' }, {
           validator: checkZjhm,
@@ -1234,10 +1239,26 @@ export default {
     this.initContractList()
     this.initNationalityList()
     this.initAcademicList()
-    this.initDepartMentList()
+    this.getAllDepartment()
     this.initDetail()
   },
   methods: {
+    getAllDepartment() {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.departmentList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
+      })
+    },
+    handleChangeDepartment(value) {
+      this.addForm.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
+      const arr = this.$refs['departRef'].currentLabels
+      this.addForm.departmentName = arr[arr.length - 1]
+    },
     setDepartmentInfo() {
       const depart = this.departmentList.find(item => item.departmentId === this.addForm.departmentId)
       if (depart) {
@@ -1408,19 +1429,14 @@ export default {
       this.$router.push('employeeBasicInfoList')
     },
     initSelectName() {
-      const depart = this.departmentList.find(item => item.departmentId === this.addForm.departmentId)
-      if (depart) {
-        this.addForm.departmentName = depart['departmentName']
-      }
-
       const job = this.jobList.find(item => item.key === this.addForm.jobId)
       if (job) {
         this.addForm.jobName = job['lable']
       }
 
-      const post = this.postList.find(item => item.key === this.addForm.postId)
+      const post = this.postList.find(item => item.id === this.addForm.postId)
       if (post) {
-        this.addForm.postName = post['lable']
+        this.addForm.postName = post['postName']
       }
 
       const certificate = this.certificateList.find(item => item.key === this.addForm.certificateId)
@@ -1438,14 +1454,14 @@ export default {
         this.addForm.nationalityName = nationality['lable']
       }
 
-      const leaderjob = this.postList.find(item => item.key === this.addForm.directlyLeader.directLeaderLevel)
+      const leaderjob = this.jobList.find(item => item.key === this.addForm.directlyLeader.directLeaderLevel)
       if (leaderjob) {
         this.addForm.directlyLeader.directLeaderLevelName = leaderjob['lable']
       }
 
-      const leaderpost = this.jobList.find(item => item.key === this.addForm.directlyLeader.directLeadership)
+      const leaderpost = this.postList.find(item => item.id === this.addForm.directlyLeader.directLeadership)
       if (leaderpost) {
-        this.addForm.directlyLeader.directLeadershipName = leaderpost['lable']
+        this.addForm.directlyLeader.directLeadershipName = leaderpost['postName']
       }
     },
     submitForm() {
@@ -1515,8 +1531,9 @@ export default {
       })
     },
     initPostList() {
-      getCode({ 'groupCode': 'post', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysPost/findSysPostAll`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          console.log(res.data.data)
           this.postList = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -1570,15 +1587,6 @@ export default {
       }).then(res => {
         if (res.data.code === '0000') {
           this.academicList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-    },
-    initDepartMentList() {
-      getTreeList().then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
@@ -1658,6 +1666,17 @@ export default {
               }
             }
             this.addForm.employStatus = res.data.data.employStatus + ''
+
+            setChild(this.nodes, this.departmentList)
+            const currNode = findNodeById(this.nodes, this.addForm.departmentId)
+            this.pNodes.push(currNode)
+            findP(this.nodes, currNode, this.pNodes)
+            this.pNodes.reverse()
+            const arr = []
+            this.pNodes.forEach(item => {
+              arr.push(item.id)
+            })
+            this.currentDepartmentIds = arr
           } else {
             this.$message.error(res.data.result)
           }
@@ -1756,10 +1775,6 @@ export default {
   .form-content {
     background-color: white;
     border-radius: 10px;
-    position: absolute;
-    top: 280px;
-    left: 36px;
-    right: 36px;
     .con-hr {
       color: #e4e4e4;
       margin-left: 20px;

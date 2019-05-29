@@ -339,6 +339,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     private void saveBill(PayBillCreateParamVo payBill){
         TbElectricEnergyBill bill = new TbElectricEnergyBill();
         BeanUtils.copyProperties(payBill,bill);
+        bill.setAcBookType(payBill.getAcBookType());
         bill.setPayStatus(new Byte(MeterConstants.NOT_PAY));
         bill.setRecordStatus(new Byte(MeterConstants.VALID));
         bill.setCallTimes(0);

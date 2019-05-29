@@ -18,7 +18,6 @@ import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.model.*;
 import com.jn.pay.vo.*;
 import com.jn.enterprise.pd.declaration.enums.PdStatusEnums;
-import com.jn.pay.enums.ChannelIdEnum;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
@@ -40,6 +39,8 @@ import org.xxpay.common.util.XXPayUtil;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static com.jn.enterprise.pay.enums.PaymentBillEnum.BILL_AC_BOOK_TYPE_1;
 
 /**
  * 我的账单(业务实现层)
@@ -195,9 +196,44 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     public PaginationData<List<PayBillDetailsVo>> getBillInfo(String billId) {
         PayBillDetailsVo payBillDetailsVo = new PayBillDetailsVo();
         List<PayBillDetails> list = new ArrayList<>();
-        PayBill payBill = new PayBill();
+        PayBillParamVo payBill = new PayBillParamVo();
         TbPayBill tbPayBill = tbPayBillMapper.selectByPrimaryKey(billId);
         BeanUtils.copyProperties(tbPayBill, payBill);
+        payBill.setPayType(tbPayBill.getAcBookType());
+        switch (PaymentBillEnum.getByValue(tbPayBill.getAcBookType())){
+            case BILL_AC_BOOK_TYPE_1:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage());
+                break;
+            case BILL_AC_BOOK_TYPE_2:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_2.getMessage());
+                break;
+            case BILL_AC_BOOK_TYPE_3:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_3.getMessage());
+                break;
+            case BILL_AC_BOOK_TYPE_4:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_4.getMessage());
+                break;
+            case BILL_AC_BOOK_TYPE_5:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_5.getMessage());
+                break;
+            case BILL_AC_BOOK_TYPE_6:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_6.getMessage());
+                break;
+            case BILL_AC_BOOK_TYPE_7:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_7.getMessage());
+                break;
+            case BILL_AC_BOOK_TYPE_8:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_8.getMessage());
+                break;
+            case BILL_AC_BOOK_TYPE_9:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_9.getMessage());
+                break;
+            case BILL_AC_BOOK_TYPE_10:
+                payBill.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getMessage());
+                break;
+            default:
+                break;
+        }
         TbPayBillDetailsCriteria tbPayBillDetailsCriteria = new TbPayBillDetailsCriteria();
         tbPayBillDetailsCriteria.setOrderByClause("sort asc");
         TbPayBillDetailsCriteria.Criteria criteria = tbPayBillDetailsCriteria.createCriteria();
@@ -361,7 +397,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
         }
         /**判断是否是电费账单，如果是电费账单，则直接扣除费用*/
-        if (tbs.getAcBookType().equals(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode())) {
+        if (tbs.getAcBookType().equals(BILL_AC_BOOK_TYPE_1.getCode())) {
             /**比较金额大小即左边比右边数大，返回1，相等返回0，比右边小返回-1*/
             int i = tbPayAccountBook.get(0).getBalance().compareTo(tbs.getBillExpense());
             logger.info("比较金额大小结果：{}", i);
@@ -382,7 +418,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     tpbmr.setRemark(tbs.getBillSource());
                     tpbmr.setPaymentMethod(PaymentBillMethodEnum.BILL_STATE_QIAN_BAO.getMessage());
                     tpbmr.setPaymentAction(PaymentBillActionEnum.BILL_STATE_AUYTO.getCode());
-                    tpbmr.setNatureCode(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode());
+                    tpbmr.setNatureCode(BILL_AC_BOOK_TYPE_1.getCode());
                     tpbmr.setMoney(tbs.getBillExpense());
                     tpbmr.setBalance(totalAmount);
                     tpbmr.setCreatorAccount(user.getAccount());

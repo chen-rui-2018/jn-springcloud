@@ -229,7 +229,7 @@ export default {
           this.timeSetList.forEach(item => {
             Object.assign(item, { disabled: true })
             const hasVal = this.shiftList.find(itemShift => {
-              return itemShift.optionId === item.shift
+              return itemShift.optionId + '' === item.shift
             })
             if (!hasVal) {
               this.shiftList.push({

@@ -28,11 +28,15 @@ public class CalledInfoParam implements Serializable {
     private String clientType;
     @ApiModelProperty(value = "客户姓名",required = true,example = "张三")
     private String custName;
-    @ApiModelProperty(value = "联系方式（手机号码/邮箱）",required = true,example = "18088888888")
+    @ApiModelProperty(value = "联系方式（手机号码/邮箱/座机号）",required = true,example = "18088888888")
     @Pattern(regexp = "([\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?) " +
-            "|(^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$)",
+            "|(^(((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8})$)"+"|(^0\\d{2,3}-[1-9]\\d{6,7}$)",
             message = "{'联系方式格式出错，只能是手机号，邮箱，座机号'}")
     private String contactWay;
+    @ApiModelProperty(value = "当前来电号码（客服来电录入使用,其他情况忽略）",example = "18088888888")
+    @Pattern(regexp = "|(^(((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8})$)"+"|(^0\\d{2,3}-[1-9]\\d{6,7}$)",
+            message = "{'当前来电号码格式不正确的，只能是手机号，座机号'}")
+    private String calledPhone;
 
     public String getQuesTitle() {
         return quesTitle;
@@ -80,5 +84,26 @@ public class CalledInfoParam implements Serializable {
 
     public void setContactWay(String contactWay) {
         this.contactWay = contactWay;
+    }
+
+    public String getCalledPhone() {
+        return calledPhone;
+    }
+
+    public void setCalledPhone(String calledPhone) {
+        this.calledPhone = calledPhone;
+    }
+
+    @Override
+    public String toString() {
+        return "CalledInfoParam{" +
+                "quesTitle='" + quesTitle + '\'' +
+                ", quesDetails='" + quesDetails + '\'' +
+                ", serviceModule='" + serviceModule + '\'' +
+                ", clientType='" + clientType + '\'' +
+                ", custName='" + custName + '\'' +
+                ", contactWay='" + contactWay + '\'' +
+                ", calledPhone='" + calledPhone + '\'' +
+                '}';
     }
 }

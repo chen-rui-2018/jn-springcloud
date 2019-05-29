@@ -23,4 +23,11 @@ public interface MiniProgramRegistersService {
      * @return
      */
     String registerAndBinding(RegisterInfoParam registerInfoParam);
+
+    /**
+     * 根据账号获取openId
+     * @param account
+     * @return
+     */
+    String getOpenIdByAccount(String account);
 }

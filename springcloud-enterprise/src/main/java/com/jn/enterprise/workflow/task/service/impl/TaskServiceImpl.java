@@ -24,10 +24,7 @@ import com.jn.enterprise.workflow.task.model.TaskPage;
 import com.jn.enterprise.workflow.task.model.TaskStatistics;
 import com.jn.enterprise.workflow.task.model.TaskType;
 import com.jn.enterprise.workflow.task.service.TaskService;
-import com.jn.enterprise.workflow.task.vo.CommonTaskListVO;
-import com.jn.enterprise.workflow.task.vo.CommonTaskVO;
-import com.jn.enterprise.workflow.task.vo.TaskStatisticsVO;
-import com.jn.enterprise.workflow.task.vo.TaskTypeVo;
+import com.jn.enterprise.workflow.task.vo.*;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.task.model.WorkflowTaskAdd;
@@ -67,21 +64,25 @@ public class TaskServiceImpl implements TaskService {
     @ServiceLog(doAction = "时效性待办事项预警数据统计")
     public TaskStatisticsVO getWorkflowTaskStatistics(String userId) {
         TaskStatisticsVO taskStatisticsVO = new TaskStatisticsVO();
+
         TaskStatistics taskStatistics = new TaskStatistics();
         taskStatistics.setUserId(userId);
         taskStatistics.setWarnHour(taskStatisticsConfig.getWarn());
         taskStatistics.setEarlyWarnHour(taskStatisticsConfig.getEarlyWarn());
-        String taskStr = taskMapper.getWorkflowTaskStatistics(taskStatistics);
 
-        // 返回数据以‘;’拼接（顺序：报警，预警，普通）
-        String[] taskArr = taskStr.split(";");
-        Integer warnNum = Integer.parseInt(taskArr[0]);
-        Integer earlyWarnNum = Integer.parseInt(taskArr[1]);
-        Integer normalNum = Integer.parseInt(taskArr[2]);
-        taskStatisticsVO.setWarnNum(warnNum);
-        taskStatisticsVO.setEarlyWarnNum(earlyWarnNum);
-        taskStatisticsVO.setNormalNum(normalNum);
-        taskStatisticsVO.setTotalNum(warnNum + earlyWarnNum + normalNum);
+        List<WarnStatisticsVO> workflowTaskList = taskMapper.getWorkflowTaskStatistics(taskStatistics);
+        if (workflowTaskList != null && !workflowTaskList.isEmpty()) {
+            for (WarnStatisticsVO statisticsVO : workflowTaskList) {
+                if (statisticsVO.getWarnType().equals(EnterpriseWorkFlowTaskStatusEnums.TASK_WARNING.getCode())) {
+                    taskStatisticsVO.setWarnNum(statisticsVO.getWarnNum());
+                } else if (statisticsVO.getWarnType().equals(EnterpriseWorkFlowTaskStatusEnums.TASK_EARLY_WARNING.getCode())) {
+                    taskStatisticsVO.setEarlyWarnNum(statisticsVO.getWarnNum());
+                } else {
+                    taskStatisticsVO.setNormalNum(statisticsVO.getWarnNum());
+                }
+            }
+        }
+        taskStatisticsVO.setTotalNum(taskStatisticsVO.getWarnNum() + taskStatisticsVO.getEarlyWarnNum() + taskStatisticsVO.getNormalNum());
         return taskStatisticsVO;
     }
 

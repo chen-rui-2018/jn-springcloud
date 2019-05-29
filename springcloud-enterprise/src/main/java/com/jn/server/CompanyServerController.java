@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.company.api.CompanyClient;
+import com.jn.company.model.CreditUpdateParam;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.enterprise.company.service.CompanyService;
@@ -40,6 +41,13 @@ public class CompanyServerController extends BaseController implements CompanyCl
     @Override
     public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(@RequestBody String accountOrCompanyId){
         return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId));
+    }
+
+
+    @ControllerLog(doAction = "修改企业信用分")
+    @Override
+    public Result<Boolean> updateCreditPoints(@RequestBody CreditUpdateParam creditUpdateParam){
+        return companyService.updateCreditPoints(creditUpdateParam);
     }
 
 }

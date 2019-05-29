@@ -105,7 +105,7 @@ public class PayController {
             case WATER://
                 return NOT_SUPPORT_RESULT;
             case PROMOTION://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
             case HEALTH://
                 return NOT_SUPPORT_RESULT;
             case ELECTRIC_RECHARGE:

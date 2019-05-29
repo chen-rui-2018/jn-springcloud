@@ -132,7 +132,7 @@
                       group by meter_code, deal_date) t5
             on t.meter_code = t5.meter_code
            and t.deal_date = t5.deal_date
-         where t.deal_date >  CURDATE()
+         where t.deal_date >=  CURDATE()
          group by t.meter_code, t.deal_date
 
     </insert>
@@ -321,6 +321,25 @@
         </if>
     </select>
 
+    <insert id="saveMeterLinkInDay" parameterType="java.util.List">
+        insert into tb_electric_meter_company_day
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricMeterCompanyDayMapper.Base_Column_List"/>)
+        <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
+            select
+            #{ item.id,jdbcType=VARCHAR},
+            #{ item.meterCode,jdbcType=VARCHAR},
+            #{ item.meterName,jdbcType=VARCHAR},
+            #{ item.companyId,jdbcType=VARCHAR},
+            #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.creatorAccount,jdbcType=VARCHAR},
+            #{ item.createdTime,jdbcType=TIMESTAMP},
+            #{ item.modifierAccount,jdbcType=VARCHAR},
+            #{ item.modifiedTime,jdbcType=TIMESTAMP},
+            #{ item.day,jdbcType=DATE}
+            from  dual
+        </foreach>
+    </insert>
+
     <select id="getRuleIdByCompanyId"  parameterType="java.lang.String" resultType="java.lang.String">
         select
         rule_id
@@ -350,15 +369,15 @@
         tb_electric_reading
         where
         record_status =1
-        <if test="dealData !=null">
+        <if test="dealDate !=null">
             and deal_date=#{dealDate}
-            and meterCode=#{meterCode}
+            and meter_code=#{meterCode}
         </if>
-        <if test="dealData ==null">
+        <if test="dealDate ==null">
             and deal_date=date_sub(curdate(),interval 1 day)
-            and meterCode=#{meterCode}
+            and meter_code=#{meterCode}
         </if>
-        order by hour asc
+        order by deal_hour asc
     </select>
 
     <!--保存计价规则和企业之间的关系-->
@@ -404,5 +423,212 @@
             from  dual
         </foreach>
     </insert>
+
+    <insert id="saveWarningRecord" parameterType="java.util.List">
+        insert into Tb_Electric_Warning_Record
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricWarningRecordMapper.Base_Column_List"/>)
+        <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
+            select
+            #{ item.id,jdbcType=VARCHAR}, #{ item.ruleId,jdbcType=VARCHAR}, #{ item.companyId,jdbcType=VARCHAR},
+            #{ item.warningName,jdbcType=VARCHAR}, #{ item.thresholds,jdbcType=DECIMAL}, #{ item.warningContent,jdbcType=VARCHAR},
+            #{ item.recordStatus,jdbcType=TINYINT}, #{ item.creatorAccount,jdbcType=VARCHAR}, #{ item.createdTime,jdbcType=TIMESTAMP},
+            #{ item.modifierAccount,jdbcType=VARCHAR}, #{ item.modifiedTime,jdbcType=TIMESTAMP}, #{ item.companyName,jdbcType=VARCHAR}
+            from  dual
+        </foreach>
+    </insert>
+
+    <!--停电的企业-->
+    <select id="stopElectric" resultType="com.jn.park.electricmeter.model.SwitchModel">
+        select
+        id as id
+        , turn_name as turnName
+        , thresholds as thresholds
+        , turn_content as turnContent
+        , company_id as companyId
+        , company_name as companyName
+        , balance as balance
+        from tb_electric_turn_rules t ,
+        tb_electric_cost p
+        where p.balance &lt; t.thresholds
+        and p.record_status =1
+        and t.record_status=1
+    </select>
+
+    <!--有电的企业-->
+    <select id="getElectric" resultType="com.jn.park.electricmeter.model.SwitchModel">
+        select
+        id as id
+        , turn_name as turnName
+        , thresholds as thresholds
+        , turn_content as turnContent
+        , company_id as companyId
+        , company_name as companyName
+        , balance as balance
+        from tb_electric_turn_rules t ,
+        tb_electric_cost p
+        where p.balance &gt;= t.thresholds
+        and p.record_status =1
+        and t.record_status=1
+    </select>
+
+
+    <!--获取企业当前的电表，进行停电或开启操作-->
+    <select id="getHostsMeter" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        meter_code as meterCode
+        from
+        tb_electric_meter_info
+        where record_status=1
+        and company_id=#{companyId}
+        group by meterCode
+    </select>
+
+    <!--保存电表转换的日志-->
+    <insert id="saveMeterSwitchLog" parameterType="java.util.List">
+        insert into tb_electric_energy_bill_detail
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricMeterSwitchLogMapper.Base_Column_List"/>)
+        <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
+            select
+            #{ item.id,jdbcType=VARCHAR}, #{ item.meterCode,jdbcType=VARCHAR}, #{ item.turnId,jdbcType=VARCHAR},
+            #{ item.turnName,jdbcType=VARCHAR}, #{ item.companyId,jdbcType=VARCHAR}, #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.creatorAccount,jdbcType=VARCHAR}, #{ item.createdTime,jdbcType=TIMESTAMP}, #{ item.modifierAccount,jdbcType=VARCHAR},
+            #{ item.modifiedTime,jdbcType=TIMESTAMP}, #{ item.switchStatus,jdbcType=TINYINT}, #{ item.companyName,jdbcType=VARCHAR}
+            from  dual
+        </foreach>
+    </insert>
+
+    <!--每日耗电趋势图-->
+    <select id="trendChart" parameterType="com.jn.park.electricmeter.model.TrendChartParam" resultType="com.jn.park.electricmeter.model.TrendChartStatisticsModel">
+        select t.val as dealDateValue,
+        ifnull(sum(t2.degree_diff),0) as allEnergy
+        from tb_electric_date t
+        left join
+        ( select deal_date,t.deal_hour,sum(t.degree_diff) degree_diff  from
+        tb_electric_reading t
+        inner join tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        where
+        1=1
+        <if test="dealDate == null">
+            and t.deal_date = DATE(CURDATE())
+        </if>
+        <if test="dealDate != null">
+            and t.deal_date = #{dealDate,jdbcType=DATE}
+        </if>
+
+        <if test="type !=null">
+            and t2.type = #{type,jdbcType=TINYINT}
+        </if>
+
+        <if test="meterName !=null">
+            and t2.meter_name=#{meterName}
+        </if>
+        <if test="position !=null ">
+            and t2.position = #{position}
+        </if>
+        group by deal_date,t.deal_hour ) t2
+        on t.date = t2.deal_date
+        and t.val = t2.deal_hour
+        where
+        t.type = '时'
+
+        <if test="dealDate == null">
+            and t.date = DATE(CURDATE())
+        </if>
+        <if test="dealDate != null">
+            and t.date =#{dealDate,jdbcType=DATE}
+        </if>
+        group by t.val
+        order by t.val+0
+
+
+    </select>
+
+    <!--每日耗电趋势图(下面明细)-->
+    <select id="trendChartDetail" parameterType="com.jn.park.electricmeter.model.TrendChartPageParam" resultType="com.jn.park.electricmeter.model.TrendChartDetailStatisticsModel">
+
+        select
+        case when t2.type = 0 then '企业用电'
+        when t2.type = 1 then '公共照明'
+        when t2.type = 2 then '空调用电'
+        when t2.type = 3 then '楼层用电'
+        else '其他类型'
+        end as type ,
+        t2.position as position,
+        t2.company_name as companyName,
+        t2.meter_name as meterName,
+        '001X' as flag,
+        sum(t.b_value) as allEnergy,
+        case when round((sum(t.b_value) - sum(t.s_value)) /sum(t.s_value) * 100,2) &gt; t2.is_high_energy_threshold then  '高能耗'
+        when round((sum(t.b_value) - sum(t.s_value)) /sum(t.s_value) * 100,2)  &lt; t2.is_low_energy_threshold then  '低能耗'
+        else '正常' end  threshold
+        from vw_electric_sum t
+        inner join tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        where t.type = '日'
+        <if test="dealDate == null">
+            and t.deal_date_value = CURDATE()
+        </if>
+        <if test="dealDate != null">
+            and t.deal_date_value = #{dealDate,jdbcType=DATE}
+        </if>
+
+        <if test="type !=null">
+            and t2.type = #{type,jdbcType=TINYINT}
+        </if>
+
+        <if test="meterName !=null">
+            and t2.meter_name=#{meterName}
+        </if>
+        <if test="position !=null ">
+            and t2.position = #{position}
+        </if>
+        group by t.deal_date_value, t.meter_code
+        order by  t2.position
+
+    </select>
+    <!--分组能耗统计-->
+    <select id="groupChart" resultType="com.jn.park.electricmeter.model.GroupChartStatisticsModel">
+        select position as position ,
+        sum(br_reading_end) as brReadingEnd,
+        sum(is_high) as isHigh
+        from (
+        select
+        t2.position,
+        t.meter_code,
+        sum(t.b_value) br_reading_end ,
+        case when round((sum(t.b_value) - sum(t.s_value)) /sum(t.s_value) * 100,2) &gt; t2.is_high_energy_threshold then 1 else 0 end is_high
+        from vw_electric_sum t
+        LEFT join tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        where  t.type = '日'
+        and t.deal_date_value &gt;= DATE(CURDATE())
+        group by t2.position,t.meter_code ) t
+        group by position
+    </select>
+
+    <!--当日分类设备能耗趋势-->
+    <select id="categaryChart"  resultType="com.jn.park.electricmeter.model.GategaryEnergyStatisticsModel">
+
+        select t.val  as dealDateValue,
+        t.electric_type as type,
+        ifnull(sum(t2.degree_diff),0)  as bValue
+        from tb_electric_date t
+        left join
+        ( select deal_date,t2.type,t.deal_hour,sum(t.degree_diff) degree_diff  from
+        tb_electric_reading t
+        inner join tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        where t.deal_date &gt;= DATE(CURDATE())
+        group by deal_date,t.deal_hour ) t2
+        on t.date = t2.deal_date
+        and t.val = t2.deal_hour
+        and t.electric_type = t2.type
+        where t.date &gt;= DATE(CURDATE())   # 开始时间  默认本月月初
+        and t.date &lt; DATE(CURDATE()+1)
+        and t.type = '时'
+        group by t.val,t.electric_type
+        order by t.val+0,t.electric_type +0
+    </select>
 
 </mapper>

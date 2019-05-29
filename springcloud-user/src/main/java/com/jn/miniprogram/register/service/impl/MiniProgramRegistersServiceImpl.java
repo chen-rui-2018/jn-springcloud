@@ -206,4 +206,23 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
         logger.info("注册并绑定Api绑定成功，数据响应条数：{}",resNum);
         return registerInfoParam.getPhone();
     }
+
+    /**
+     * 根据账号获取openId
+     * @param account
+     * @return
+     */
+    @ServiceLog(doAction = "根据账号获取openId")
+    @Override
+    public String getOpenIdByAccount(String account) {
+        TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
+        example.createCriteria().andPhoneEqualTo(account)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbWechatUserInfo> userInfoList = tbWechatUserInfoMapper.selectByExample(example);
+        if(userInfoList.isEmpty()|| StringUtils.isBlank(userInfoList.get(0).getOpenId())){
+            return "";
+        }else{
+            return userInfoList.get(0).getOpenId();
+        }
+    }
 }

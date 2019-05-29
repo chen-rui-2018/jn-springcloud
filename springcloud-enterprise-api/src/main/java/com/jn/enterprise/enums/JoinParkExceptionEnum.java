@@ -14,6 +14,7 @@ public enum JoinParkExceptionEnum implements CodeAndMsg {
     FOUND_TIME_IS_ERROR("3020511","公司注册时间格式错误[yyyy-MM-dd]"),
     RUN_TIME_IS_ERROR("3020511","公司落地时间格式错误[yyyy-MM-dd]"),
     USER_IS_COMPANY_EXIST("3020511","您已是员工账号，不能再次申请"),
+    UPGRADE_SUBMIT_IBPS_ERROR("3020512","升级企业提交审核出错，请检查提交数据"),
     ;
 
     /**

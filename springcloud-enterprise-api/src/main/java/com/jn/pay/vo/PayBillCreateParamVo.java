@@ -43,7 +43,7 @@ public class PayBillCreateParamVo implements Serializable {
     @ApiModelProperty(value="对象名称（传企业名称或用户名称）",example = "XXX科技企业")
     private String objName;
 
-    @ApiModelProperty(value="账本类型ID【1：电费，2：物业费】",example = "1")
+    @ApiModelProperty(value="账本类型ID【ELECTRIC:电费，PROPERTY:物业费，REPAIR:维修费，ROOM_LEASE:房租费，GOODS_LEASE:物品租赁费，TEMPORARY_PARKING:停车费，PARKING_LEASE:车位费，WATER:水费，PROMOTION:宣传费，HEALTH:体检费】",example = "ELECTRIC")
     private String acBookType;
 
     @ApiModelProperty(value="回调ID",example = "springcloud-app-system")

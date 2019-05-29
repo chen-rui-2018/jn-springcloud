@@ -211,7 +211,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             if(StringUtils.equals(SEND_NODE, result.getTaskName())){
                 //设置发起节点信息
                 setSendPersonInfo(result.getStatus(), historyShow, userInfo.getData());
-                historyShow.setOptionDeptName("用户["+historyShow.getAuditorName()+"]");
+                historyShow.setOptionDeptName(historyShow.getAuditorName());
             }else if(StringUtils.equals(CUSTER_CENTER, result.getTaskName())
                     || StringUtils.equals(EXECUTE_PERSON, result.getTaskName())){
                 //设置客户中心分发/处理节点信息
@@ -225,10 +225,20 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
                         throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
                     }
                     for(TbClientRolePersonInfo personInfo:rolePersonInfoList){
-                        if(StringUtils.equals(StringUtils.join(userIds,","), personInfo.getUserId())){
-                            historyShow.setOptionDeptId(personInfo.getRoleId());
-                            historyShow.setOptionDeptName(personInfo.getRoleName());
-                            break;
+                        if(StringUtils.equals(CUSTER_CENTER, result.getTaskName())){
+                            historyShow.setOptionDeptName(CUSTER_CENTER);
+                        }else if(StringUtils.equals(EXECUTE_PERSON, result.getTaskName())){
+                            //把数值转换为字符串，以逗号分隔
+                            String joinUserId = StringUtils.join(userIds, ",");
+                            String[] reverseUserIds = ArraysReverse(userIds.toArray(new String[userIds.size()]));
+                            //反转userId
+                            String revUserId = StringUtils.join(reverseUserIds,",");
+                            if(StringUtils.equals(joinUserId, personInfo.getUserId())
+                                    || StringUtils.equals(revUserId, personInfo.getUserId())){
+                                historyShow.setOptionDeptId(personInfo.getRoleId());
+                                historyShow.setOptionDeptName(personInfo.getRoleName());
+                                break;
+                            }
                         }
                     }
                 }else{
@@ -263,6 +273,22 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }
         customerVo.setExecuteHistoryShowList(executeHistoryShowList);
         return customerVo;
+    }
+
+    /**
+     * 反转数组元素
+     * @param resource 初始数组
+     * @return
+     */
+    @ServiceLog(doAction = "反转数组元素")
+    private String[] ArraysReverse(String [] resource){
+        String[] target = new String[resource.length];
+        int n = resource.length - 1;
+        for (int i = 0; i < resource.length; i++) {
+            target[n] = resource[i];
+            n--;
+        }
+        return target;
     }
 
     /**

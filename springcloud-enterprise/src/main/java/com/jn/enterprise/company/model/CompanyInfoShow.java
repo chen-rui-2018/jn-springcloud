@@ -43,6 +43,8 @@ public class CompanyInfoShow  implements Serializable {
 
     @ApiModelProperty(value = "企业类型Id")
     private String comType;
+    @ApiModelProperty(value = "企业类型名称")
+    private String comTypeName;
 
     @ApiModelProperty(value = "企业人数")
     private String comPerSonNumber;
@@ -51,6 +53,8 @@ public class CompanyInfoShow  implements Serializable {
 
     @ApiModelProperty(value = "注册地址")
     private String comAddress;
+    @ApiModelProperty(value = "城市")
+    private String city;
 
     @ApiModelProperty(value = "浏览数")
     private String browseNumber;
@@ -74,6 +78,34 @@ public class CompanyInfoShow  implements Serializable {
     private String ownerPhone;
     @ApiModelProperty(value = "企业产品")
     private String  products;
+    @ApiModelProperty(value = "信用积分")
+    private String creditPoints;
+    @ApiModelProperty(value = "信用积分更新时间")
+    private String creditUpdateTime;
+
+    public String getComTypeName() {
+        return comTypeName;
+    }
+
+    public void setComTypeName(String comTypeName) {
+        this.comTypeName = comTypeName;
+    }
+
+    public String getCreditPoints() {
+        return creditPoints;
+    }
+
+    public void setCreditPoints(String creditPoints) {
+        this.creditPoints = creditPoints;
+    }
+
+    public String getCreditUpdateTime() {
+        return creditUpdateTime;
+    }
+
+    public void setCreditUpdateTime(String creditUpdateTime) {
+        this.creditUpdateTime = creditUpdateTime;
+    }
 
     public List<String> getPersonAvatar() {
         return personAvatar;
@@ -249,5 +281,13 @@ public class CompanyInfoShow  implements Serializable {
 
     public void setCareNumber(String careNumber) {
         this.careNumber = careNumber;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

@@ -447,7 +447,7 @@ toolbar.OnAgentLogout(function( bResult, iReason ) {
 		$("#optionNGDesc").html("......请登录.....");
 	}else{
 		$("#optionNGDesc").show();
-		$("#optionNGDesc").html("登出失败");
+		$("#optionNGDesc").html("网络异常，登出失败");
 		$("#optionOKDesc").html("");
 		setTimeout(function(){document.getElementById("optionNGDesc").style.display="none";},1000);
 	}
@@ -798,21 +798,7 @@ function submit(){
 			$("#buttons").removeAttr("disabled");
 			if(data!=undefined &&data!=null && data.data!=null
 				&& data.code=='0000'){
-				//清空来电录入信息
-				$("#quesTitle").val("");
-				$("#serviceModule").val("");
-				$("#quesDetails").val("");
-				$("#clientType").val("");
-				$("#custName").val("");
-				$("#contactWay").val("");
-
-				//清空来电信息
-				$("#currentCallShow").val("");
-				$("#calledNumberShow").val("");
-				$("#callerOwenShow").val("");
-				$("#phoneShow").val("");
-				//历史记录 0条
-				$("#historyNum").html(0);
+				clearCustomerInfo();
 				alert("提交成功");
 			}else{
 				alert(data.result);
@@ -824,6 +810,27 @@ function submit(){
 			alert("网络异常，请稍后重试");
 		}
 	});
+}
+//清楚用户信息
+function clearCustomerInfo(){
+	//清空来电录入信息
+	$("#quesTitle").val("");
+	$("#serviceModule").val("");
+	$("#quesDetails").val("");
+	$("#clientType").val("");
+	$("#custName").val("");
+	$("#contactWay").val("");
+
+	//清空来电信息
+	$("#currentCallShow").html("");
+	$("#calledNumberShow").html("");
+	$("#callerOwenShow").html("");
+	$("#phoneShow").html("");
+	//历史记录 0条
+	$("#historyNum").html(0);
+	//清空历史记录
+	$("#history").html("");
+	$("#history").hide("");
 }
 
 toolbar.OnAnswerConnected(function() {

@@ -210,8 +210,8 @@
                   >
                     <el-checkbox-group v-model="form.tabClumnTargetShow">
                       <el-checkbox label="0">上月填报值</el-checkbox>
-                      <el-checkbox v-if="formData.modelType === '1'" label="1">上年同期值</el-checkbox>
-                      <el-checkbox v-if="formData.modelType === '1'" label="2">上月上年同期值</el-checkbox>
+                      <el-checkbox label="1">上年同期值</el-checkbox>
+                      <el-checkbox label="2">上月上年同期值</el-checkbox>
                       <el-checkbox label="3">增幅</el-checkbox>
                     </el-checkbox-group>
                   </el-form-item>

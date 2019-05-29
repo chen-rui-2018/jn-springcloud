@@ -24,7 +24,7 @@ public class TbServiceCompanyModify implements Serializable {
 
     private Long regCapital;
 
-    private Long comScale;
+    private String comScale;
 
     private Date foundingTime;
 
@@ -150,11 +150,11 @@ public class TbServiceCompanyModify implements Serializable {
         this.regCapital = regCapital;
     }
 
-    public Long getComScale() {
+    public String getComScale() {
         return comScale;
     }
 
-    public void setComScale(Long comScale) {
+    public void setComScale(String comScale) {
         this.comScale = comScale;
     }
 

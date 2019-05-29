@@ -1306,52 +1306,52 @@ public class TbServiceCompanyCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalEqualTo(Long value) {
+        public Criteria andRegCapitalEqualTo(BigDecimal value) {
             addCriterion("reg_capital =", value, "regCapital");
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalNotEqualTo(Long value) {
+        public Criteria andRegCapitalNotEqualTo(BigDecimal value) {
             addCriterion("reg_capital <>", value, "regCapital");
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalGreaterThan(Long value) {
+        public Criteria andRegCapitalGreaterThan(BigDecimal value) {
             addCriterion("reg_capital >", value, "regCapital");
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalGreaterThanOrEqualTo(Long value) {
+        public Criteria andRegCapitalGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("reg_capital >=", value, "regCapital");
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalLessThan(Long value) {
+        public Criteria andRegCapitalLessThan(BigDecimal value) {
             addCriterion("reg_capital <", value, "regCapital");
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalLessThanOrEqualTo(Long value) {
+        public Criteria andRegCapitalLessThanOrEqualTo(BigDecimal value) {
             addCriterion("reg_capital <=", value, "regCapital");
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalIn(List<Long> values) {
+        public Criteria andRegCapitalIn(List<BigDecimal> values) {
             addCriterion("reg_capital in", values, "regCapital");
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalNotIn(List<Long> values) {
+        public Criteria andRegCapitalNotIn(List<BigDecimal> values) {
             addCriterion("reg_capital not in", values, "regCapital");
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalBetween(Long value1, Long value2) {
+        public Criteria andRegCapitalBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("reg_capital between", value1, value2, "regCapital");
             return (Criteria) this;
         }
 
-        public Criteria andRegCapitalNotBetween(Long value1, Long value2) {
+        public Criteria andRegCapitalNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("reg_capital not between", value1, value2, "regCapital");
             return (Criteria) this;
         }
@@ -1436,52 +1436,62 @@ public class TbServiceCompanyCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andComScaleEqualTo(Long value) {
+        public Criteria andComScaleEqualTo(String value) {
             addCriterion("com_scale =", value, "comScale");
             return (Criteria) this;
         }
 
-        public Criteria andComScaleNotEqualTo(Long value) {
+        public Criteria andComScaleNotEqualTo(String value) {
             addCriterion("com_scale <>", value, "comScale");
             return (Criteria) this;
         }
 
-        public Criteria andComScaleGreaterThan(Long value) {
+        public Criteria andComScaleGreaterThan(String value) {
             addCriterion("com_scale >", value, "comScale");
             return (Criteria) this;
         }
 
-        public Criteria andComScaleGreaterThanOrEqualTo(Long value) {
+        public Criteria andComScaleGreaterThanOrEqualTo(String value) {
             addCriterion("com_scale >=", value, "comScale");
             return (Criteria) this;
         }
 
-        public Criteria andComScaleLessThan(Long value) {
+        public Criteria andComScaleLessThan(String value) {
             addCriterion("com_scale <", value, "comScale");
             return (Criteria) this;
         }
 
-        public Criteria andComScaleLessThanOrEqualTo(Long value) {
+        public Criteria andComScaleLessThanOrEqualTo(String value) {
             addCriterion("com_scale <=", value, "comScale");
             return (Criteria) this;
         }
 
-        public Criteria andComScaleIn(List<Long> values) {
+        public Criteria andComScaleLike(String value) {
+            addCriterion("com_scale like", value, "comScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andComScaleNotLike(String value) {
+            addCriterion("com_scale not like", value, "comScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andComScaleIn(List<String> values) {
             addCriterion("com_scale in", values, "comScale");
             return (Criteria) this;
         }
 
-        public Criteria andComScaleNotIn(List<Long> values) {
+        public Criteria andComScaleNotIn(List<String> values) {
             addCriterion("com_scale not in", values, "comScale");
             return (Criteria) this;
         }
 
-        public Criteria andComScaleBetween(Long value1, Long value2) {
+        public Criteria andComScaleBetween(String value1, String value2) {
             addCriterion("com_scale between", value1, value2, "comScale");
             return (Criteria) this;
         }
 
-        public Criteria andComScaleNotBetween(Long value1, Long value2) {
+        public Criteria andComScaleNotBetween(String value1, String value2) {
             addCriterion("com_scale not between", value1, value2, "comScale");
             return (Criteria) this;
         }

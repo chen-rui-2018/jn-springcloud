@@ -33,7 +33,7 @@ public class CompanyUpdateParam implements Serializable {
     private String comNameShort;
 
     @NotNull(message = "企业logo不能为空")
-    @ApiModelProperty(value = "企业logo",required = true,example = "http://xxxxx.jpg")
+    @ApiModelProperty(value = "企业logo", required = true, example = "http://xxxxx.jpg")
     private String avatar;
 
     @NotNull(message = "统一社会信用代码不能为空")
@@ -58,8 +58,7 @@ public class CompanyUpdateParam implements Serializable {
     private String regCapital;
 
     @NotNull(message = "企业规模不能为空")
-    @Pattern(regexp = "^\\d+.?\\d*$", message = "企业规模校验失败")
-    @ApiModelProperty(value = "企业规模（万元）", required = true)
+    @ApiModelProperty(value = "企业规模", required = true, example = "100-200人")
     private String comScale;
 
     @NotNull(message = "注册时间不能为空")
@@ -73,14 +72,14 @@ public class CompanyUpdateParam implements Serializable {
     private String runTime;
 
     @NotNull(message = "企业领域不能为空")
-    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=1返回的ID]", required = true,notes = "传机构字典接口入参preType=1返回的ID",example = "general_service")
+    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=1返回的ID]", required = true,notes = "传机构字典接口入参preType=1返回的ID",example = "cloud_computing")
     private String induType;
 
     @ApiModelProperty(value = "行业代码")
     private String induCode;
 
     @NotNull(message = "三证一体或营业执照照片不能为空")
-    @ApiModelProperty(value = "三证一体或营业执照照片", required = true)
+    @ApiModelProperty(value = "三证一体或营业执照照片", required = true, example = "http://xxxxx.jpg")
     private String businessLicense;
 
     @NotNull(message = "公司宣传图片不能为空")

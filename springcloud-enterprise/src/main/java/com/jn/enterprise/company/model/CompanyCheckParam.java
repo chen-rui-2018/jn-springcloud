@@ -55,8 +55,7 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "注册资金（万元）", required = true, example = "500")
     private String regCapital;
     @NotNull(message = "企业规模不能为空")
-    @Pattern(regexp = "^\\d+.?\\d*$", message = "企业规模校验失败")
-    @ApiModelProperty(value = "企业规模（万元）", required = true, example = "500")
+    @ApiModelProperty(value = "企业规模", required = true, example = "100-200人")
     private String comScale;
     @NotNull(message = "统一社会信用代码不能为空")
     @ApiModelProperty(value = "统一社会信用代码", required = true, example = "1000")

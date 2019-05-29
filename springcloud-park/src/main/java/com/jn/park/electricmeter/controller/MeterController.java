@@ -247,7 +247,7 @@ public class MeterController extends BaseController {
     @ApiOperation(value = "趋势明细图表",notes = "趋势明细图表", httpMethod = "POST")
     @PostMapping(value = "/trendChartDetail")
     @RequiresPermissions("/meter/trendChartDetail")
-    public Result trendChartDetail(@RequestBody @Validated TrendChartParam param){
+    public Result trendChartDetail(@RequestBody @Validated TrendChartPageParam param){
         return meterService.trendChartDetail(param);
     }
 

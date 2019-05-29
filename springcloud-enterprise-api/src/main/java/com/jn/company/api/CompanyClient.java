@@ -2,6 +2,7 @@ package com.jn.company.api;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.company.model.CreditUpdateParam;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -38,5 +39,15 @@ public interface CompanyClient {
      */
     @RequestMapping(value = "/api/company/getCompanyDetailByAccountOrCompanyId", method = RequestMethod.POST)
     Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(@RequestBody String accountOrCompanyId);
+
+    /**
+     * 修改企业信用分
+     * @param creditUpdateParam
+     * @return
+     */
+    @RequestMapping(value = "/api/company/updateCreditPoints", method = RequestMethod.POST)
+    Result<Boolean> updateCreditPoints(@RequestBody CreditUpdateParam creditUpdateParam);
+
+
 
 }

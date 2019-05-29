@@ -72,7 +72,7 @@
         </div> -->
 
       </el-form>
-      <div style="padding:10px 0px;">企业已发布企业简介，查看详情点击<router-link class="mainColor" :to="{path: '', query: { } }">企业简介</router-link>
+      <div style="padding:10px 0px;">企业已发布企业简介，查看详情点击<router-link class="mainColor" :to="{path: '/profileDetails', query: {id:supplementForm.comId } }">企业简介</router-link>
       </div>
       <el-form class="enterprise_bottom" label-position="right" label-width="142px">
         <el-form-item label="企业LOGO:">

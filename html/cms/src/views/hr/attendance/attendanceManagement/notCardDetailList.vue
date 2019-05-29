@@ -21,7 +21,7 @@
       <el-table-column label="部门" align="center" prop="department"/>
       <el-table-column label="姓名" align="center" prop="name"/>
       <el-table-column label="日期" align="center" prop="absenceDate"/>
-      <el-table-column label="状态" align="center" prop="absenceDate"/>
+      <el-table-column label="状态" align="center" prop="workStatus"/>
     </el-table>
 
     <!--<el-pagination

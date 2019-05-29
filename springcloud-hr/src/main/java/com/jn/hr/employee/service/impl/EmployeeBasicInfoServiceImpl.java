@@ -453,7 +453,7 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         List<SysDictKeyValue>  contractList= commonService.queryDictList
                 ("employee","contract");
         List<SysDictKeyValue>  nationalityList= commonService.queryDictList
-                ("nationality","contract");
+                ("employee","nationality");
 
 
         for(Object result:resultList){
@@ -540,6 +540,7 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
 
         Result<List<SysPost>> postResult=systemClient.getPostAll();
         if(postResult==null || !"0000".equals(postResult.getCode()) || CollectionUtils.isEmpty(postResult.getData())){
+            logger.error("导入直属领导，查询岗位出错");
             throw new JnSpringCloudException(HrExceptionEnums.POST_QUERY_ERRPR);
         }
         List<SysPost>  postList=postResult.getData();
@@ -769,7 +770,7 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         if(StringUtils.isBlank(database.getPostName())){
             return "岗位名称不能为空";
         }
-        database.setJobId(SysDictKeyValueUtil.getPostIdByName(postList,database.getPostName()));
+        database.setPostId(SysDictKeyValueUtil.getPostIdByName(postList,database.getPostName()));
         if(StringUtils.isBlank(database.getPostId())){
             return "岗位名称错误";
         }
@@ -1077,6 +1078,11 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             treeModel.setId(child.getId());
             treeModel.setValue(child.getId());
             treeModel.setLabel(child.getName());
+            treeModel.setLevel("");
+            treeModel.setParentId("");
+            treeModel.setJobNumber(child.getJobNumber());
+            treeModel.setMailbox(child.getMailbox());
+            treeModel.setChildren(new ArrayList<TreeModel>());
             childList.add(treeModel);
         }
         rootModel.setChildren(childList);
@@ -1088,6 +1094,11 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         treeModel.setId((String) childMap.get("id"));
         treeModel.setValue((String) childMap.get("value"));
         treeModel.setLabel((String) childMap.get("departmentName"));
+        treeModel.setLevel((String) childMap.get("level"));
+        treeModel.setParentId((String) childMap.get("parentId"));
+        treeModel.setJobNumber("");
+        treeModel.setMailbox("");
+
         List<TbManpowerEmployeeBasicInfo> employees=employeeBasicInfoMapper.selectByDepartment(treeModel.getId());
         if(!CollectionUtils.isEmpty(employees)){
             setTreeEmployeeChildren(treeModel,employees);
@@ -1096,6 +1107,9 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
             setTreeChildren(treeModel, childrenSub);
 
+        }
+        if(treeModel.getChildren()==null){
+            treeModel.setChildren(new ArrayList<TreeModel>());
         }
         return treeModel;
     }

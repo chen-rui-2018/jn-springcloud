@@ -62,7 +62,7 @@
       <el-button type="primary" icon="el-icon-plus" round> <a :href="ibpsUrl+'560991999331663872.htm'">新增项目</a> </el-button>
       <el-button type="primary" round class="el-radio-group"> <a href="javascript:;">返回</a> </el-button>
       <el-input v-model="listQuery.projectName" placeholder="请输入项目名称" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search" @change="handleFilter" />
+        <el-button slot="append" icon="el-icon-search" @click="handleFilter" />
       </el-input>
     </div>
     <el-row :gutter="25">

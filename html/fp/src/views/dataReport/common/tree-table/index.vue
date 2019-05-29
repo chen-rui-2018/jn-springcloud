@@ -33,11 +33,11 @@
             <span v-if="iconShow(index,scope.row)" class="tree-ctrl" @click="toggleExpanded(scope.$index)">
               <i v-if="!scope.row._expanded" class="el-icon-caret-right"/>
               <i v-else class="el-icon-caret-bottom"/>
-              <svg v-if="!isMobile" class="icon svg-icon" aria-hidden="true">
+              <svg class="icon svg-icon" aria-hidden="true">
                  <use xlink:href="#icon-folder"></use>
               </svg>
             </span>
-            <span v-else-if="index === 0 && !isMobile">
+            <span v-else-if="index === 0">
               <i class="icon iconfont icon-document folder-yellow"></i>
             </span>
           </div>

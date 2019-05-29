@@ -49,18 +49,20 @@
         </div>
       </div>
       <div class="popularActi w" ref="popularActi" data-class="bottom" style="padding-bottom: 20px;">
-        <div ref="acti11" data-class="bottom">
-          <div class="tit color2">园区概况</div>
-          <div class="eng mainColor">PARK PROFILE</div>
-          <div class="line"></div>
-        </div>
+        <router-link to="/parkProfile">
+          <div ref="acti11" data-class="bottom">
+            <div class="tit color2">园区概况</div>
+            <div class="eng mainColor">PARK PROFILE</div>
+            <div class="line"></div>
+          </div>
+        </router-link>
       </div>
-      <div class="flex-center">
+      <div class="flex-center op-0" ref="arrowDown" data-class="bottom">
         <arrow-down line></arrow-down>
       </div>
       <div class="park-info op-0" ref="park-info" data-class="bottom1">
         <div class="park-poster">
-          <img src="@/../static/img/banner11.png" alt="">
+          <img src="@/../static/img/investment-profile.png" alt="">
         </div>
         <div class="park-desc">
           <span v-if="!showMore">{{ parkDesc | formatParkDesc}}</span>
@@ -83,7 +85,7 @@
           </div>
         </div>
         <div class="film-show">
-          <video src="" width="100%" poster="@/../static/img/banner11.png"></video>
+          <video src="" width="100%" poster="@/../static/img/investment-film.png"></video>
 <!--          <img src="@/../static/img/banner11.png" alt="">-->
           <div class="film-play"></div>
           <div class="green-frame"></div>
@@ -91,22 +93,29 @@
       </div>
 
       <div class="policyCenter pd-b-n w" ref="policyCenter" data-class="bottom1">
-        <div ref="poCenter1" data-class="bottom">
-          <div class="tit color2 pr">招商政策</div>
-          <div class="eng mainColor">INVESTMENT POLICY</div>
-          <div class="line"></div>
-        </div>
+        <router-link to="/investmentPolicy">
+          <div ref="poCenter1" data-class="bottom">
+            <div class="tit color2 pr">招商政策</div>
+            <div class="eng mainColor">INVESTMENT POLICY</div>
+            <div class="line"></div>
+          </div>
+        </router-link>
         <div class="paging w pr" ref="poCenter2" data-class="bottom">
           <div class="swiper-container">
             <div class="swiper-wrapper">
               <div
                 v-for="(list, listIndex) in businessAdPolicy"
+                :key="listIndex"
                 class="swiper-slide"
               >
                 <ul class="page1 clearfix" data-class="bottom">
                   <li
                     v-for="(item, index) in list"
-                    data-class="left">
+                    :key="index"
+                    class="pointer"
+                    data-class="left"
+                    @click="$router.push({path:'/investmentPolicyDetail',query:{ id: item.id }})"
+                  >
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{ item.title }}</div>
@@ -130,16 +139,19 @@
           </div>
         </div>
         <div class="districtGardens w" ref="districtGardens" data-class="bottom1">
-          <div ref="disGardens" data-class="bottom">
-            <div class="tit color2">招商动态</div>
-            <div class="eng mainColor">MERCHANTS DYNAMIC</div>
-            <div class="line"></div>
-          </div>
+          <router-link to="/investmentDynamic">
+            <div ref="disGardens" data-class="bottom">
+              <div class="tit color2">招商动态</div>
+              <div class="eng mainColor">MERCHANTS DYNAMIC</div>
+              <div class="line"></div>
+            </div>
+          </router-link>
           <div class="more-garden">
             <div
               v-for="(item, index) in businessAdDynamic"
               :key="index"
               class="more-garden-card"
+              @click="$router.push({ path:'/investmentDynamicDetail',query:{ id: item.id } })"
             >
               <div class="more-garden-card-cell">
                 <img class="more-garden-img" :src="item.adCover" alt=""/>
@@ -169,35 +181,45 @@
             class="multi-park">
             <div class="multi-park-title">
               <div class="fw-title">{{ row.parkName }}</div>
-              <div class="gray-tips">查看更多</div>
+              <router-link :to="'/investmentInfo?parkId=' + row.id" class="gray-tips">查看更多</router-link>
             </div>
             <div class="multi-park-content">
               <div
                 v-for="(item, index) in row.list"
                 :key="index"
                 :class="{small: index !== 0}"
-                class="multi-park-card">
+                class="multi-park-card"
+              >
                 <div class="multi-park-card-cell">
-                  <img :src="item.adCover"  alt="">
-                  <div v-if="index !== 0" class="multi-park-desc">
-                    <div class="fw-title">{{ item.title }}</div>
-                    <div class="gray-tips">{{ item.subTitle }}</div>
-                    <div class="tag-list">
-                      <div class="tag-btn">
-                        <el-tag
-                          v-for="(tag, tagIndex) in item.adFlag.split(',')"
-                          v-if="tagIndex < 2"
-                          :key="tagIndex"
-                          class="tag-text"
-                          type="success"
-                          size="mini"
-                          color="#ECFCF2"
-                        >{{ tag }}</el-tag>
-                        <div v-if="item.adFlag.split(',').length >= 2">...</div>
+                  <router-link
+                    v-if="index === 0"
+                    :to="'/parkDetails?id=' + row.id">
+                    <img :src="item.adCover"  alt=""/>
+                  </router-link>
+                  <img v-else :src="item.adCover"  alt=""/>
+                  <router-link
+                    v-if="index !== 0"
+                    :to="'/investmentInfoDetail?id=' + item.id">
+                    <div class="multi-park-desc">
+                      <div class="fw-title">{{ item.title }}</div>
+                      <div class="gray-tips">{{ item.subTitle }}</div>
+                      <div class="tag-list">
+                        <div class="tag-btn">
+                          <el-tag
+                            v-for="(tag, tagIndex) in item.adFlag.split(',')"
+                            v-if="tagIndex < 2"
+                            :key="tagIndex"
+                            class="tag-text"
+                            type="success"
+                            size="mini"
+                            color="#ECFCF2"
+                          >{{ tag }}</el-tag>
+                          <div v-if="item.adFlag.split(',').length >= 2">...</div>
+                        </div>
+                        <div class="method-btn">立即考察</div>
                       </div>
-                      <div class="method-btn">立即考察</div>
                     </div>
-                  </div>
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -423,13 +445,13 @@
             this.parkList.forEach((item, index) => {
               this.getPartDetail(item.id)
                 .then((data) => {
-                  data.rows.unshift({
+                  const rows = data.rows
+                 rows.unshift({
                     adCover: item.mainPicture
                   })
-                  this.$set(item, 'list', data.rows)
+                  this.$set(item, 'list',rows)
                 })
             })
-            console.dir(this.parkList)
             this.$nextTick(() => {
               this.loadingParkList = true
             })
@@ -535,7 +557,7 @@
         }
         .film-desc-content {
           margin-top: 20px;
-          line-height: 18px;
+          line-height: 26px;
         }
         .square-angle-bg {
           @include flex($h: flex-end);
@@ -561,7 +583,7 @@
         position: relative;
         .green-frame {
           width: 368px;
-          height: 286px;
+          height: 354px;
           position: absolute;
           left: -34px;
           top: 50%;
@@ -580,7 +602,8 @@
           height: $size;
           position: absolute;
           left: 112px;
-          top: 137px;
+          top: 50%;
+          transform: translateY(-50%);
           @include image('~@/../static/img/film-play.png');
           transition: .3s;
           cursor: pointer;
@@ -681,6 +704,7 @@
             width: 100%;
             margin-top: -1px;
             display: block;
+            height: 285px;
           }
           .multi-park-desc {
             .fw-title {

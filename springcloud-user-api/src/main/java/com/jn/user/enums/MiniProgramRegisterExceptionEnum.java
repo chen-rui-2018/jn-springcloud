@@ -17,8 +17,8 @@ public enum MiniProgramRegisterExceptionEnum implements CodeAndMsg {
     USER_PHONE_IS_NOT_EXIST("3020514","用户手机号不存在"),
     WE_CHAT_OPENID_NOT_NULL("3020515","微信用户OpenId不能为空"),
     CODE_IS_ERROR("3020516","短信验证码错误或验证码已失效"),
-    OPEN_ID_FORMAT_ERROR("3020517","openId格式不正确"),
-    UNION_ID_FORMAT_ERROR("3020518","unionId格式不正确"),
+    OPEN_ID_FORMAT_ERROR("3020517","openId格式不正确,openId长度为28位"),
+    UNION_ID_FORMAT_ERROR("3020518","unionId格式不正确,unionId长度为29位"),
     ;
     private String code;
     private String message;

@@ -6,7 +6,7 @@
     <div class="ordinary_content">
        <el-form label-width="120px" class="postJobInfo">
   <el-form-item label="注册手机/邮箱:" prop="post" class="staffAccount">
-    <el-input placeholder="请输入手机号或姓名" v-model="searchFiled" clearable>
+    <el-input placeholder="请输入手机号或账号、邮箱" v-model="searchFiled" clearable>
           <el-button slot="append" icon="el-icon-search" @click="getStaffInfo"></el-button>
         </el-input>
   </el-form-item>
@@ -58,9 +58,8 @@ export default {
       getStaffInfo(){
         this.api.get({
      url:'getInviteStaffList',
-     data:{searchFiled :this.searchFiled },
+     data:{phone :this.searchFiled },
      callback:(res=>{
-         console.log(res)
          this.nickName=res.data.rows[0].nickName
          this.name=res.data.rows[0].name
          this.sex=res.data.rows[0].sex
@@ -81,7 +80,7 @@ export default {
        }
       this.api.post({
      url:'inviteStaff',
-     data:{accounts:this.searchFiled},
+     data:{inviteAccount:this.searchFiled},
      dataFlag:true,
      callback:(res=>{
          console.log(res)

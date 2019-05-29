@@ -144,6 +144,9 @@ public class ExaminaServiceImpl implements ExaminaService {
 			Byte recordStatus = Byte.parseByte(HrStatusEnums.EFFECTIVE.getCode());// 正常调研1
 			tbBank.setRecordStatus(recordStatus);
 		}
+		if (!StringUtils.isBlank(tbBank.getStandardAnswer())) {
+			tbBank.setStandardAnswer(null);
+		}
 		String userAccount = user.getAccount();
 		tbBank.setCreatorAccount(userAccount);
 		tbBank.setCreatedTime(new Date());
@@ -279,7 +282,8 @@ public class ExaminaServiceImpl implements ExaminaService {
 	@Override
 	@ServiceLog(doAction = "修改试题功能")
 	@Transactional(rollbackFor = Exception.class)
-	public void updateExaminabank(Examinabank examinabank, User user) {
+	public ExaminabankAdd updateExaminabank(Examinabank examinabank, User user) {
+		ExaminabankAdd examinabankAdd = new ExaminabankAdd();
 		String testQuestionId = examinabank.getTestQuestionId();
 
 		// 编辑题目信息
@@ -293,7 +297,9 @@ public class ExaminaServiceImpl implements ExaminaService {
 			tbBank.setStandardAnswer(null);
 		}
 		tbManpowerExaminaBankMapper.updateByPrimaryKeySelective(tbBank);
-
+		BeanUtils.copyProperties(tbBank, examinabankAdd);
+		// 返回题目类型
+		examinabankAdd.setTestQuestionTypeStr(getQuestType(examinabankAdd.getTestQuestionType()));
 		// 编辑题目选项
 		// 新增/编辑选项
 		List<ExaminaOption> optionList = examinabank.getOptionList();
@@ -332,7 +338,25 @@ public class ExaminaServiceImpl implements ExaminaService {
 		BeanUtils.copyProperties(examinabank, tbQuestionAnswer);
 		tbQuestionAnswer.setId(answerId);
 		tbManpowerExaminaQuestionAnswerMapper.updateByPrimaryKeySelective(tbQuestionAnswer);
+
+		if (!StringUtils.isBlank(tbQuestionAnswer.getId())) {
+			examinabankAdd.setAnswerId(tbQuestionAnswer.getId());
+		}
+		if (!StringUtils.isBlank(tbQuestionAnswer.getAnswerNumber())) {
+			if (tbQuestionAnswer.getAnswerNumber().equals("N")) {
+				tbQuestionAnswer.setAnswerNumber("×");
+			} else if (tbQuestionAnswer.getAnswerNumber().equals("Y")) {
+				tbQuestionAnswer.setAnswerNumber("√");
+			}
+			examinabankAdd.setAnswerNumber(tbQuestionAnswer.getAnswerNumber());
+			examinabankAdd.setStandardAnswer(examinabankAdd.getAnswerNumber());
+		}
+		if (!StringUtils.isBlank(tbQuestionAnswer.getAnswerHtml())) {
+			examinabankAdd.setAnswerHtml(tbQuestionAnswer.getAnswerHtml());
+			examinabankAdd.setStandardAnswer(examinabankAdd.getAnswerHtml());
+		}
 		logger.info("编辑题目信息成功,testQuestionId:{}", examinabank.getTestQuestionId());
+		return examinabankAdd;
 	}
 
 	/**
@@ -953,7 +977,7 @@ public class ExaminaServiceImpl implements ExaminaService {
 							achievementStr = (float) achievementInt;
 							achievement += achievementStr;
 						} else {
-							answerType = ExaminaStatusEnmus.TYPE_TRUE.getCode();
+							answerType = ExaminaStatusEnmus.TYPE_FALSE.getCode();
 						}
 
 						TbManpowerExaminaAnswerCard tbManpowerExaminaAnswerCard = new TbManpowerExaminaAnswerCard();

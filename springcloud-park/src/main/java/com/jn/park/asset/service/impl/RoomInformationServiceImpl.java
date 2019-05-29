@@ -114,8 +114,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
         TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(roomId);
         //通过用户account查询企业
-        //Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
-        //ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
+        Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
+        ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
 
         //计算结束时间
         Calendar cal = Calendar.getInstance();
@@ -178,8 +178,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         orders.setIsRelet(Byte.parseByte(RoomReletStatusEnums.NO.getCode()));
         //有效
         orders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
-        //orders.setEnterpriseId(data.getId());
-        //orders.setLeaseEnterprise(data.getComName());
+        orders.setEnterpriseId(data.getId());
+        orders.setLeaseEnterprise(data.getComName());
         orders.setLeaseStartTime(leaseStartTime);
         orders.setLeaseEndTime(leaseEndTime);
         orders.setContactName(contactName);
@@ -244,7 +244,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(account);
         ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
         if (null == data){
-            //throw new JnSpringCloudException(new Result("4020502","当前用户不属于企业用户"));
+            throw new JnSpringCloudException(new Result("4020502","当前用户不属于企业用户"));
         }
     }
 
@@ -291,26 +291,26 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         return null;
     }
 
+     @Override
      @ServiceLog(doAction = "创建支付订单")
     public Result<PayOrderRsp> createPayOrder(String orderId, String channelId , BigDecimal paySum, String userAccount){
         logger.info("创建支付订单,orderId={}",orderId);
         TbRoomOrders tbRoomOrders=tbRoomOrdersMapper.selectByPrimaryKey(orderId);
-
+         if(null==tbRoomOrders){
+             logger.info("订单不存在,orderId={}",orderId);
+             return new Result("-1","订单不存在");
+         }
          BigDecimal ordersPaySum = tbRoomOrders.getPaySum();
-         if (!StringUtils.equals(String.valueOf(ordersPaySum),String.valueOf(paySum))){
+         int count = paySum.compareTo(ordersPaySum);
+         if (!StringUtils.equals(String.valueOf(count),String.valueOf(0))){
             logger.info("支付金额与订单支付金额不一致,无法支付,传入金额:paySum={},订单金额:orderPaySum={}",paySum,ordersPaySum);
             return new Result("-1","支付金额不一致,支付失败");
-        }
-
-        if(null==tbRoomOrders){
-            logger.info("订单不存在,orderId={}",orderId);
-            return new Result("-1","订单不存在");
         }
         if(!StringUtils.equals(tbRoomOrders.getCreatorAccount(),userAccount)){
             logger.info("非本人的订单，无法支付,orderId={}",orderId);
             return new Result("-1","非本人的订单，无法支付");
         }
-        if(tbRoomOrders.getPayState().equals(2)){
+        if(StringUtils.equals(tbRoomOrders.getPayState().toString(),PayStatusEnums.PAYMENT.getCode())){
             logger.info("订单已支付，无需重复支付,orderId={}",orderId);
             return new Result("-1","订单已支付，无需重复支付");
         }

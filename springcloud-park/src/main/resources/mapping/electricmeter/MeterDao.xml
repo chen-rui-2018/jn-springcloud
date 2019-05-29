@@ -510,7 +510,7 @@
         where
         1=1
         <if test="dealDate == null">
-            and t.deal_date = DATE(CURDATE()
+            and t.deal_date = DATE(CURDATE())
         </if>
         <if test="dealDate != null">
             and t.deal_date = #{dealDate,jdbcType=DATE}
@@ -526,9 +526,6 @@
         <if test="position !=null ">
             and t2.position = #{position}
         </if>
-
-
-        )
         group by deal_date,t.deal_hour ) t2
         on t.date = t2.deal_date
         and t.val = t2.deal_hour

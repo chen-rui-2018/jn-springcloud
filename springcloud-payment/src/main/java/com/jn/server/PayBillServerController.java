@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.pay.model.CreateOrderAndPayReqModel;
+import com.jn.pay.model.CreatePayReqModel;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.api.PayBillClient;
@@ -116,8 +117,8 @@ public class PayBillServerController extends BaseController implements PayBillCl
 
     @ControllerLog(doAction = "统一缴费-->发起支付")
     @Override
-    @RequestMapping(value = "/createOrderAndPay")
-    public Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel) {
-        return new Result(payBillService.createPayOrder(createOrderAndPayReqModel));
+    @RequestMapping(value = "/createPayOrder")
+    public Result<PayOrderRsp> createPayOrder(@RequestBody CreatePayReqModel createPayReqModel) {
+        return payBillService.createPayOrder(createPayReqModel);
     }
 }

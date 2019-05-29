@@ -34,14 +34,15 @@
                 <div class="agent1 clearfix">
                     <div class="agentTil fl color1">{{companyDetail.comName}}</div>
                     <div class="orgBtn fr mainColor">
-                        <span class="span1">在线联系</span>
-                        <span class="span1">热招职位</span>
-                        <span class="span1">+关注</span>
+                        <span class="span1 span2" @click="onlineContact">在线联系</span>
+                        <span class="span1" @click="$router.push({path:'/recruitmentList',query:{comId:companyDetail.id}})">热招职位</span>
+                        <span class="span1 span3">+关注</span>
                     </div>
                 </div>
-                <div class="agent2 clearfix color2">
+                <div class="agent2 clearfix color2 pr">
                     <div class="agentImg fl">
-                        <img src="@/../static/img/ins1.png" alt="">
+                        <img :src="companyDetail.avatar" alt="">
+                        <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                     </div>
                     <div class="agent2Info fl color2">
                         <p>官网地址：
@@ -50,9 +51,9 @@
                         <p>所属园区：{{companyDetail.parkBuildName}}</p>
                         <p>我的服务：{{companyDetail.comServer}}</p>
                         <p>我的需求：{{companyDetail.comDemand}}</p>
-                        <p>
+                        <p class="comInfo">
                             <span class="mainColor">民营</span>| 50-100人 | 2017年01月成立 | 南京市</p>
-                        <p class="lastP color3">
+                        <p class="lastP color3 fr">
                             <span>关注数：</span>
                             <span>浏览：</span>
                             <span>合作留言：</span>
@@ -76,14 +77,14 @@
                         <el-tab-pane label="公司概况" name="baseInfo">
                             <div class="basicInfo" v-if="zankaiFlag">
                                 <p>公司简介</p>
-                                <p>奇虎360科技有限公司，是中国领先的互联网和手机安全产品及服务供应商。据第三方统计，按照用户数量计算，360是中国领先的互联网安全公司，用户6亿， 市场渗透率96.6%；中国领先的移动互联网安全公司，用户数近8亿，市场渗透率近70%；中国领先的浏览器公司之一，活跃用户达到4亿，渗透率超过70%。 360致力于通过提供高品质的免费安全服务，为中国互联网用户解决上网时遇到的各种安全问题。面对互联网时代木马、病毒、流氓软件。
+                                <p class="short">{{companyDetail.comNameShort}}
                                 </p>
-                                <p>工作地址：南京市鼓楼区中山路75号</p>
-                                <p>企业网址：
-                                    <span class="mainColor"></span>
+                                <p class="p1">工作地址：{{companyDetail.addrPark}}</p>
+                                <p class="p1">企业网址：
+                                    <span class="mainColor">{{companyDetail.comWeb}}</span>
                                 </p>
-                                <p>联系电话：
-                                    <span class="mainColor"></span>
+                                <p class="p1">联系电话：
+                                    <span class="mainColor">{{companyDetail.conPhone}}</span>
                                 </p>
                             </div>
                         </el-tab-pane>
@@ -93,14 +94,14 @@
                                     <tr>
                                         <td class="table-orgspace-title">姓名:</td>
                                         <td class="table-orgspace-detail" width="300px" colspan="2">
-                                            <div>搜索时</div>
+                                            <div>{{companyDetail.ownerLaw}}</div>
                                         </td>
-                                        <td class="table-orgspace-title">从业年限：</td>
+                                        <td class="table-orgspace-title">联系电话：</td>
                                         <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
-                                            <div>333</div>
+                                            <div>{{companyDetail.ownerPhone}}</div>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td class="table-orgspace-title">毕业学校：</td>
                                         <td class="table-orgspace-detail" width="300px" colspan="2">
                                             <div>冻结</div>
@@ -117,7 +118,7 @@
                                         <td class="table-orgspace-detail" colspan="4">
                                             <div class="table-orgspace-col">说的对吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼</div>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </table>
                             </div>
                         </el-tab-pane>
@@ -125,14 +126,14 @@
                             <div class="honor clearfix" v-if="zankaiFlag">
                                 <ul class="clearfix">
                                     <li class="">
+                                        <span class="contact-detail-img mr5"></span>{{companyDetail.mainProducts}}
+                                    </li>
+                                    <!-- <li class="">
                                         <span class="contact-detail-img mr5"></span>联系人信息
                                     </li>
                                     <li class="">
                                         <span class="contact-detail-img mr5"></span>联系人信息
-                                    </li>
-                                    <li class="">
-                                        <span class="contact-detail-img mr5"></span>联系人信息
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </div>
                         </el-tab-pane>
@@ -218,9 +219,17 @@ export default {
   created() {
     this.swiperinit();
     this.getCompanyDetail();
-    // this.getComCommentInfo()
+    this.getComCommentInfo()
   },
   methods: {
+      //在线联系
+    onlineContact(){
+     if(!sessionStorage.userInfo){
+        this.$message.error('请先登录');
+        return
+      }
+      this.$router.push({path:'chat'})
+    },
     swiperinit() {
       // if (this.policyCenterList.length <= 1 ) {
       //   return
@@ -274,9 +283,9 @@ export default {
     getCompanyDetail() {
       let _this = this;
       this.api.get({
-        url: "getCompanyDetail",
+        url: "getCompanyDetails",
         data: {
-          accountOrCompanyId: this.$route.query.id
+          companyId: this.$route.query.id
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -370,11 +379,24 @@ export default {
         .span1 {
           display: inline-block;
           font-size: 13px;
+          width: 52px;
           background: #ecfcf2;
           padding: 6px 20px;
           border: 1px solid #00a041;
           border-radius: 4px;
           cursor: pointer;
+          margin-left:20px;
+          text-align: center;
+        }
+        .span2{
+          color:#55A6FF;
+          border:1px solid #55A6FF;
+          background:rgba(228,240,255,1);
+        }
+        .span3{
+          color:#FFBD5C;
+          border:1px solid #FFBD5C;
+          background:rgba(254,245,229,1);
         }
       }
     }
@@ -399,10 +421,14 @@ export default {
         > p {
           margin-bottom: 7px;
         }
-
+        .comInfo{
+          margin-bottom:0;
+          margin-top:15px;
+        }
         .lastP {
           position: absolute;
-          margin-left: 630px;
+          bottom: -14px;
+          right: 0;
 
           > span {
             margin-right: 20px;
@@ -678,6 +704,12 @@ export default {
         }
       }
     }
+  }
+  .short{
+    margin:20px 0;
+  }
+  .p1{
+    margin-bottom:10px;
   }
 }
 </style>

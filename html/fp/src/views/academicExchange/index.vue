@@ -180,6 +180,7 @@ export default {
   .incubatorNav {
     padding: 15px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .serverOrgNav {
     padding: 0 20px;

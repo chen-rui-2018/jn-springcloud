@@ -92,7 +92,7 @@
       <el-form-item>
         <el-button v-if="activityForm.actiStatus==='1'" type="primary" @click="saveDrafts">保存草稿</el-button>
         <el-button v-if="activityForm.actiStatus==='1'" type="primary" @click="release">发布</el-button>
-        <el-button type="primary" @click="goBack">返回</el-button>
+        <el-button type="primary" @click="$router.push({path:'activityManagement'})">返回</el-button>
       </el-form-item>
     </el-form>
     <!-- 新增海报弹出框 -->

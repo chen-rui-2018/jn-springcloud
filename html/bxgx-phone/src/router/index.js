@@ -125,6 +125,30 @@ export default new Router({
       name: 'attendanceDetails',
       component: () => import('@/views/attendanceManagement/attendanceDetails'),
       meta: {title: '考勤明细'}
+    },
+    {
+      path: '/parkDetais',
+      name: 'parkDetais',
+      component: () => import('@/views/parkDetais'),
+      meta: {title: '公告详情'}
+    },
+    {
+      path: '/moreActi',
+      name: 'moreActi',
+      component: () => import('@/views/moreActi'),
+      meta: {title: '更多活动'}
+    },
+    {
+      path: '/policyGuide',
+      name: 'policyGuide',
+      component: () => import('@/views/policyGuide'),
+      meta: {title: '政策指南'}
+    },
+    {
+      path: '/policyDetails',
+      name: 'policyDetails',
+      component: () => import('@/views/policyDetails'),
+      meta: {title: '政策详情'}
     }
   ]
 })

@@ -83,7 +83,10 @@
                 <el-col :span="6" class="tr">截止上报时间为</el-col>
                 <el-col :span="6">
                   <el-form-item prop="filllInFormDeadlineMonth" style="margin-bottom: 0;">
-                    <el-select v-model="filllInFormDeadlineMonth" placeholder="请选择" style="width: 100%; min-width: 80px;">
+                    <el-select
+                      v-model="filllInFormDeadlineMonth"
+                      placeholder="请选择"
+                      style="width: 100%; min-width: 80px;">
                       <el-option label="当月" value="当月"/>
                       <el-option label="下月" value="下月"/>
                     </el-select>
@@ -131,12 +134,12 @@
         </target-row>
         <target-row class="target-row" title="提前多久预警">
           <el-form-item :style="{margin: 0}" prop="warningBeforeDays">
-            <el-input-number v-model="formData.warningBeforeDays" :min="1" placeholder="请输入天数" style="width: 200px" />
+            <el-input-number v-model="formData.warningBeforeDays" :min="1" placeholder="请输入天数" style="width: 200px"/>
           </el-form-item>
         </target-row>
         <target-row class="target-row" title="预警方式">
           <el-form-item :style="{margin: 0}" prop="warningBy">
-            <el-checkbox-group v-model="formData.warningBy" >
+            <el-checkbox-group v-model="formData.warningBy">
               <el-checkbox label="0">短信</el-checkbox>
               <el-checkbox label="1">邮件</el-checkbox>
               <el-checkbox label="2">app</el-checkbox>
@@ -162,13 +165,14 @@
                   :rules="{ required: true, message: '请填写表名', trigger: 'change' }">
                   <el-radio-group v-model="form.tabCreateType" @change="(value) => { targetTypeChange(value, index) }">
                     <el-radio label="0">普通模板</el-radio>
-                    <el-radio :disabled="formData.modelType !== '1' || formData.tabs.length > 1" label="1">科技园模板</el-radio>
+                    <el-radio :disabled="formData.modelType !== '1' || formData.tabs.length > 1" label="1">科技园模板
+                    </el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
               <el-col :span="6" style="text-align: right;">
-                <i class="el-icon-circle-plus green" @click="addTargetFormData(index, form)" />
-                <i class="el-icon-circle-close red" @click="deleteTargetFormData(index)" />
+                <i class="el-icon-circle-plus green" @click="addTargetFormData(index, form)"/>
+                <i class="el-icon-circle-close red" @click="deleteTargetFormData(index)"/>
               </el-col>
             </el-row>
             <target-frame>
@@ -185,7 +189,8 @@
                   check-on-click-node
                   @check="(a, b, c) => setBroNode(index, a, b, c)"
                 />
-                <el-button class="add-more-target" icon="el-icon-plus" type="primary" @click="toTargetPage">去新增更多指标</el-button>
+                <el-button class="add-more-target" icon="el-icon-plus" type="primary" @click="toTargetPage">去新增更多指标
+                </el-button>
               </div>
               <div slot="right">
                 <target-row v-if="form.tabCreateType !== '1'" class="target-row" title="填报数据列">
@@ -226,7 +231,9 @@
               </div>
             </target-frame>
           </div>
-          <div class="preview-form"><el-button type="primary" @click="previewForm">预览</el-button></div>
+          <div class="preview-form">
+            <el-button type="primary" @click="previewForm">预览</el-button>
+          </div>
           <el-tabs v-loading="previewing" v-if="!previewing" type="border-card">
             <el-tab-pane v-for="(tab, formIndex) in formData.tabs" :key="formIndex" :label="tab.tabName">
               <tree-table v-if="tab.treeTableData" :data="tab.treeTableData" :columns="tab.columns" border expand-all/>
@@ -329,6 +336,7 @@ import targetFrame from '../common/target-frame'
 import targetForm from '../common/target-form'
 import treeTable from '../common/tree-table/index'
 import { deepClone } from '../../../utils'
+
 export default {
   name: 'TargetManagement',
   components: {
@@ -775,7 +783,7 @@ export default {
                 })
               })
 
-            // 返回的字符串放回多选v-model数组 预警方式
+              // 返回的字符串放回多选v-model数组 预警方式
             formData.warningBy = formData.warningBy.length > 0 ? formData.warningBy.split(',') : []
             if (formData.modelCycle === 0) {
               // 如果填报周期是月
@@ -1028,36 +1036,22 @@ export default {
               width: 600
             }], tabClumnTargetShowList)
 
-            // 选中的一维指标获取node节点
-            const arr = nodeList.map(item => this.$refs.targetTree[tabIndex].getNode(item.id))
-
             // 把渲染表单规则挂载到已经勾选的各个结构指标
             const targetIdList = nodeList.map(list => list.id)
             this.getInputFormat(targetIdList)
               .then(data => {
+                // "66383ef743624c69b8f8f9e44b980119"
                 tab.inputList = deepClone(data.data)
                 const formModels = tab.inputList
                 formModels.sort((a, b) => {
                   return a['rowNum'] - b['rowNum']
                 })
-                arr.sort((a, b) => {
-                  return a.data.orderNumber - b.data.orderNumber
+                nodeList.sort((a, b) => {
+                  return a.orderNumber - b.orderNumber
                 })
-                this.treeMerge(formModels, arr)
+                this.treeMerge(formModels, nodeList)
                 // 一维的结构指标转成树结构
-                const list = []
-                for (const node of arr) {
-                  if (node.level === 1) {
-                    const obj = {
-                      ...node.data,
-                      nodeId: node.id,
-                      pid: node.parent.id,
-                      children: []
-                    }
-                    obj.children = this.treeFormat(arr, obj)
-                    list.push(obj)
-                  }
-                }
+                const list = this.toTree(nodeList)
                 // 勾选的树结构指标挂载到tree-table
                 this.sortTree(list, 'orderNumber')
                 this.$nextTick(() => {
@@ -1075,28 +1069,16 @@ export default {
         })
       })
     },
-    treeFormat(arr, node) {
-      // 把一维树指标节点转回树结构的函数
-      const children = []
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].parent.id === node.nodeId) {
-          const obj = {
-            ...arr[i].data,
-            nodeId: arr[i].id,
-            parent: {
-              id: arr[i].parent.id
-            },
-            children: []
-          }
-          arr.splice(i, 1)
-          i--
-          if (arr.length > 0) {
-            obj.children = this.treeFormat(arr, obj)
-          }
-          children.push(obj)
-        }
-      }
-      return children
+    toTree(arr) {
+      const ids = arr.map(a => a.id)
+      const arrNotParent = arr.filter(({ pid }) => pid && !ids.includes(pid))
+      const _ = (arr, pID) =>
+        arr.filter(({ pid }) => pid === pID)
+          .map(a => ({
+            ...a,
+            children: _(arr.filter(({ pid }) => pid !== pID), a.id)
+          }))
+      return _(arr).concat(arrNotParent)
     },
     getInputFormat(list) {
       // 根据选中的指标，获取它们对应的填报格式
@@ -1114,25 +1096,25 @@ export default {
     treeMerge(formModels, tree) {
       // 递归选中的指标树节点和获取到的填报格式数组比对，寻找对应的填报格式，并挂载到指标节点中
       for (const target of tree) {
-        if (!target.data.hasOwnProperty('inputFormatModel')) {
-          this.$set(target.data, 'inputFormatModel', [[]])
+        if (!target.hasOwnProperty('inputFormatModel')) {
+          this.$set(target, 'inputFormatModel', [[]])
         } else {
-          target.data.inputFormatModel = [[]]
+          target.inputFormatModel = [[]]
         }
         for (const item of formModels) {
-          if (target.data.id === item.targetId) {
+          if (target.id === item.targetId) {
             if (item.formType === '2') {
               item.value = null
             } else if (item.formType === '4') {
               item.value = []
             }
-            target.data.inputFormatModel[0].push(item)
+            target.inputFormatModel[0].push(item)
           }
         }
       }
     },
     uploadDone(res, file, fileList, name) {
-      this[name ] = res.data
+      this[name] = res.data
     },
     beforeUpload(file, isRequireFileType) {
       // 判断上传文件类型
@@ -1181,6 +1163,7 @@ export default {
 
 <style lang="scss" scoped>
   @import "~@/styles/r-common";
+
   .target-management {
     min-width: 1100px;
     $gray: #ebebeb;
@@ -1188,84 +1171,106 @@ export default {
     @include flex($v: flex-start);
     background-color: #fff;
     border: 1px solid $gray;
+
     .target-management-l {
       width: 200px;
+
       .tree-filter-bg {
         padding: 4px;
       }
+
       .filter-tree {
         min-height: 100%;
       }
+
       min-height: 100%;
       padding: 15px;
     }
+
     .target-management-r {
       min-height: 100%;
       width: calc(100% - 200px);
       padding: 15px;
       border-left: 1px solid $gray;
+
       .chart-list {
         margin: 20px auto;
       }
+
       .target-row {
         margin: 5px auto;
       }
     }
+
     .submit-row {
       margin: 20px auto;
       text-align: center;
     }
+
     .target-data-l {
       min-height: 100%;
       display: flex;
       flex-direction: column;
       overflow: auto;
+
       .filter-tree {
         min-height: calc(100%);
       }
+
       .add-more-target {
         margin-top: 20px;
       }
     }
+
     .preview-form {
       margin: 20px auto;
       text-align: center;
     }
+
     $gray: #ebebeb;
+
     .target-form-header {
       padding: 10px;
       background-color: $gray;
       @include flex($h: space-between);
     }
+
     .target-form-title {
       text-align: center;
       background-color: $gray;
       padding: 10px;
     }
+
     .target-form-body {
       padding: 10px;
       border: 1px solid $gray;
+
       .target-tags {
         margin: 10px;
       }
     }
+
     .green {
       color: limegreen;
       font-size: 18px;
-      margin:0 10px;
+      margin: 0 10px;
     }
+
     .red {
       color: orangered;
       font-size: 18px;
     }
+
     .green,
     .red {
       cursor: pointer;
       transition: .2s;
+
       &:hover {
         opacity: .8;
       }
     }
+
     .menu {
       position: fixed;
       z-index: 1;
@@ -1277,6 +1282,7 @@ export default {
       -webkit-box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, 0.1);
       box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, 0.1);
     }
+
     .menu__item {
       width: 90px;
       height: 32px;
@@ -1285,6 +1291,7 @@ export default {
       display: block;
       color: #1a1a1a;
       cursor: pointer;
+
       &:hover {
         background-color: #409EFF;
         color: white;
@@ -1298,6 +1305,7 @@ export default {
       height: auto;
       padding: 2px;
     }
+
     .el-tree-node {
       white-space: normal;
     }

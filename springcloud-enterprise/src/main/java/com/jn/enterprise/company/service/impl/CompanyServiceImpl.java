@@ -383,6 +383,19 @@ public class CompanyServiceImpl implements CompanyService {
              }
             }
         }
+        // 设置当前用户是否关注此企业, 0 否 1 是
+        if(StringUtils.isNotBlank(account)) {
+           CareParam careParam = new CareParam();
+           careParam.setCurrentAccount(account);
+           Result<List<String>>  result =  careClient.findCareCompanyList(careParam);
+           show.setIsCare("0");
+           List<String> list = result.getData();
+           for(String id : list){
+               if(id.equals(companyId)){
+                   show.setIsCare("1");
+               }
+           }
+        }
         vo.setCompanyInfoShow(show);
         return vo;
     }

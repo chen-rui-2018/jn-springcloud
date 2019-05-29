@@ -48,6 +48,8 @@ public class CompanyInfoShow  implements Serializable {
 
     @ApiModelProperty(value = "企业人数")
     private String comPerSonNumber;
+    @ApiModelProperty(value = "企业规模")
+    private String comScale;
     @ApiModelProperty(value = "企业员工头像列表")
     private List<String> personAvatar;
 
@@ -62,8 +64,10 @@ public class CompanyInfoShow  implements Serializable {
     @ApiModelProperty(value = "评论数")
     private String commentNumber;
 
-    @ApiModelProperty(value = "关注用户数")
+    @ApiModelProperty(value = "关注企业的用户数")
     private String careNumber;
+    @ApiModelProperty(value = "是否关注 0 否 1 是")
+    private String isCare;
 
     @ApiModelProperty(value = "公司简介")
     private String comSynopsis;
@@ -82,6 +86,22 @@ public class CompanyInfoShow  implements Serializable {
     private String creditPoints;
     @ApiModelProperty(value = "信用积分更新时间")
     private String creditUpdateTime;
+
+    public String getIsCare() {
+        return isCare;
+    }
+
+    public void setIsCare(String isCare) {
+        this.isCare = isCare;
+    }
+
+    public String getComScale() {
+        return comScale;
+    }
+
+    public void setComScale(String comScale) {
+        this.comScale = comScale;
+    }
 
     public String getComTypeName() {
         return comTypeName;

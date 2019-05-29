@@ -15,6 +15,17 @@
             <if test="bpp.approvalStatus!=null and bpp.approvalStatus!=''">
                 ,#{bpp.approvalStatus} as "approvalStatus"
             </if>
+            <if test="bpp.approvalStatus==null or bpp.approvalStatus==''">
+            ,case when sp.approval_status=0 and sp.is_pay=0 and sp.status=0 then "0"
+            when sp.approval_status=1 and sp.is_pay=0 and sp.status=0 then "1"
+            when sp.approval_status=3 then "3"
+            when sp.approval_status=2 and sp.is_pay=0 and sp.status=0 then "4"
+            when sp.approval_status=2 and sp.is_pay=1 and sp.status=0 then "5"
+            when sp.approval_status=2 and sp.is_pay=1 and sp.status=1 then "6"
+            when sp.approval_status=2 then "2"
+            when sp.record_status=0 then "7"
+            end  as "approvalStatus"
+            </if>
           ,sp.propaganda_area as "propagandaArea"
           ,sp.poster_url as "posterUrl"
           ,sp.propaganda_fee as "propagandaFee"

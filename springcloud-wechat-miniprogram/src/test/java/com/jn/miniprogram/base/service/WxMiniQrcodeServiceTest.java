@@ -19,7 +19,7 @@ public class WxMiniQrcodeServiceTest {
     @Test
     @Ignore
     public void createWxaCode() {
-        String url = wxMiniQrcodeService.createWxaCode("https://njbxq.mynatapp.cc/springcloud-wechat-miniprogram/guest/mini/user/login");
+        String url = wxMiniQrcodeService.createWxaCodeUnlimit("111","https://www.baidu.com");
         Assert.assertThat(url, CoreMatchers.anything());
     }
 

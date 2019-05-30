@@ -343,7 +343,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         bill.setPayStatus(new Byte(MeterConstants.NOT_PAY));
         bill.setRecordStatus(new Byte(MeterConstants.VALID));
         bill.setCallTimes(0);
-        bill.setId(UUID.randomUUID().toString().replaceAll("-",""));
+        bill.setId(payBill.getBillId());
         energyBillMapper.insertSelective(bill);
         //保存明细
         List<TbElectricEnergyBillDetail> saveDetails = new ArrayList<>();

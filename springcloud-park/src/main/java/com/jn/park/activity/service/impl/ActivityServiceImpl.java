@@ -6,6 +6,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.activity.dao.ActivityDetailsMapper;
@@ -19,7 +20,9 @@ import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.model.*;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityEnum;
+import com.jn.park.api.MessageClient;
 import com.jn.park.enums.ActivityExceptionEnum;
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
@@ -56,6 +59,8 @@ public class ActivityServiceImpl implements ActivityService {
     private DelaySendMessageClient delaySendMessageClient;
     @Autowired
     private ActivityApplyService activityApplyService;
+    @Autowired
+    private MessageClient messageClient;
 
     /**
      * 活动可报名
@@ -501,7 +506,17 @@ public class ActivityServiceImpl implements ActivityService {
         }
         String actiStartTime = DateUtils.formatDate(activity.getActiStartTime(), "yyyy-MM-dd HH:mm:ss");
         if (StringUtils.isEmpty(activityTime) || StringUtils.equals(actiStartTime, activityTime)) {
-            //TODO jiangyl 调用消息发送接口
+            AddMessageModel addMessageModel = new AddMessageModel();
+            addMessageModel.setMessageTitle("园区活动提醒");
+            addMessageModel.setMessageConnect(activity.getActiName()+"将于"+actiStartTime+"开始，请准时参加");
+            addMessageModel.setMessageSender("admin");
+            addMessageModel.setMessageOneSort(0);
+            addMessageModel.setMessageOneSortName("个人动态");
+            addMessageModel.setMessageTowSort(2);
+            addMessageModel.setMessageTowSortName("园区活动");
+            addMessageModel.setCreatorAccount("admin");
+            Result<String> stringResult = messageClient.addMessage(addMessageModel);
+            logger.info("活动提醒：调用消息发送接口,接口返回状态：{}",stringResult.getCode());
             return 1;
         }
         return 0;

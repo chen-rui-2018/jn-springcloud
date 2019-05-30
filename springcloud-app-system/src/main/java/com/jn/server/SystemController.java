@@ -262,6 +262,13 @@ public class SystemController extends BaseController implements SystemClient {
     }
 
     @Override
+    @ControllerLog(doAction = "校验用户账号是否存在")
+    public Result<String> checkUserAccount(@RequestParam("account") String account) {
+        String result = sysUserService.checkUserName(account);
+        return new Result<>(result);
+    }
+
+    @Override
     @ControllerLog(doAction = "更新用户")
     public Result updateSysUser(@Validated @RequestBody User user) {
         if (StringUtils.isNotBlank(user.getAccount())) {

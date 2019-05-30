@@ -99,11 +99,6 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         spPowerBusiDetailVo.setTime(format);
 
         spPowerBusiDetailVo.setFlowPic(spPowerBusiDetailVo.getFlowPic().replace("/ibps/components/upload/ueditor/preview.htm",ibpsUrl+"/ibps/components/upload/ueditor/preview.htm"));
-        //替换标签,只要纯文本
-        String dealConditions = spPowerBusiDetailVo.getDealConditions();
-        dealConditions = dealConditions.replace("<p><span style=\"color: rgb(50, 50, 50); font-family: &quot;Microsoft Yahei&quot;; font-size: 15px; background-color: rgb(255, 255, 255);\">","");
-        dealConditions = dealConditions.replace("</span></p>","");
-        spPowerBusiDetailVo.setDealConditions(dealConditions);
         //通过业务id查询业务对象的办理材料集合
         TbSpPowerBusiMaterialsCriteria tbSpPowerBusiMaterialsCriteria = new TbSpPowerBusiMaterialsCriteria();
         TbSpPowerBusiMaterialsCriteria.Criteria criteria = tbSpPowerBusiMaterialsCriteria.createCriteria();

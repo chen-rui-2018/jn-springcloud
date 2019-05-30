@@ -174,8 +174,9 @@
         </div>
       </div>
       <el-row type="flex" justify="center">
-        <el-col :span="1">
+        <el-col :span="8">
           <el-button type="primary" @click="save">保存</el-button>
+          <el-button type="primary" @click="goBack($route)">返回</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -287,6 +288,23 @@ export default {
           this.$message.error(res.data.result)
         }
       })
+    },
+    // 返回
+    goBack(view) {
+      this.$store.dispatch('delView', view).then(({ visitedViews }) => {
+        if (this.isActive(view)) {
+          const latestView = visitedViews.slice(-1)[0]
+          if (latestView) {
+            this.$router.push('question-invest')
+          } else {
+            // this.$router.push('/')
+            this.$router.push('question-invest')
+          }
+        }
+      })
+    },
+    isActive(route) {
+      return route.path === this.$route.path
     }
   }
 }

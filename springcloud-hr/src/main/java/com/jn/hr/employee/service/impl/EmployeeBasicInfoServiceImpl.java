@@ -481,7 +481,19 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         List<SysDictKeyValue> nationalityList = commonService.queryDictList
                 ("employee", "nationality");
 
+        Set<String> phoneSet=new HashSet<String>();
+        Set<String> mailboxSet=new HashSet<String>();
+        Set<String> certificateNumberSet=new HashSet<String>();
 
+        Map<String,EmployeeBasicInfo> phoneMap=new HashMap<String,EmployeeBasicInfo>();
+        Map<String,EmployeeBasicInfo> mailboxMap=new HashMap<String,EmployeeBasicInfo>();
+        Map<String,EmployeeBasicInfo> certificateNumberMap=new HashMap<String,EmployeeBasicInfo>();
+        List<EmployeeBasicInfo> infoList = employeeBasicInfoMapper.list(new EmployeeBasicInfoPage());
+        infoList.forEach(e->{
+            phoneMap.put(e.getPhone(),e);
+            mailboxMap.put(e.getMailbox(),e);
+            certificateNumberMap.put(e.getCertificateNumber(),e);
+        });
         for (Object result : resultList) {
             i++;
             EmployeeBasicInfo database = (EmployeeBasicInfo) result;
@@ -491,6 +503,37 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
                 sb.append("第" + i + "行:" + str + ";");
                 continue;
             }
+
+            if(phoneSet.contains(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(phoneMap.containsKey(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在员工花名册中已经存在记录;");
+                continue;
+            }
+            phoneSet.add(database.getPhone());
+
+            if(mailboxSet.contains(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在当前EXCEL中重复;");
+                continue;
+            }
+            if(mailboxMap.containsKey(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在员工花名册中已经存在记录;");
+                continue;
+            }
+
+            mailboxSet.add(database.getMailbox());
+            if(certificateNumberSet.contains(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(certificateNumberMap.containsKey(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在员工花名册中已经存在记录;");
+                continue;
+            }
+            certificateNumberSet.add(database.getCertificateNumber());
+
             TbManpowerEmployeeBasicInfo tbFile = new TbManpowerEmployeeBasicInfo();
             BeanUtils.copyProperties(database, tbFile);
             tbFile.setId(UUID.randomUUID().toString());

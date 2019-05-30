@@ -258,4 +258,12 @@ public class MeterController extends BaseController {
     public Result trendChart(@RequestBody @Validated TrendChartParam param){
         return meterService.trendChart(param);
     }
+
+    @ControllerLog(doAction = "手动调用电表定时计价无参数")
+    @ApiOperation(value = "手动调用电表定时计价无参数",notes = "手动调用电表定时计价无参数", httpMethod = "GET")
+    @GetMapping(value = "/calcCostEverday")
+    @RequiresPermissions("/meter/calcCostEverday")
+    public void calcCostEverday(){
+        meterCalcCostService.calcCostEverday();
+    }
 }

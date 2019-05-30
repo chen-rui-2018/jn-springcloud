@@ -106,9 +106,6 @@ export default {
     if (!this.listQuery.endDate || this.listQuery.endDate === '') {
       this.listQuery.endDate = moment().add(1, 'months').startOf('month').format('YYYYMM')
     }
-
-    this.initList()
-
     this.initList()
   },
   methods: {

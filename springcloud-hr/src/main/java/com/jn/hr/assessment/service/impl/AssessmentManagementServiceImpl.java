@@ -362,6 +362,12 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 	@Transactional(rollbackFor = Exception.class)
 	public String addAssessmentTemplate(AssessmentTemplatePage assessmentTemplatePage) {
 		// TODO Auto-generated method stub
+		AssessmentTemplateVo assessmentTemplateVo = assessmentTemplateMapper.selectByTemplateName(assessmentTemplatePage);
+		if(assessmentTemplateVo != null){
+			logger.info("[考核模板]考勤名称已存在");
+			throw new JnSpringCloudException(AssessmentManageExceptionEnums.ASSESSMENT_TEMPLATE_EXIST);
+		}
+		
 		TbManpowerAssessmentTemplate tbManpowerAssessmentTemplate = new TbManpowerAssessmentTemplate();
 		tbManpowerAssessmentTemplate.setTemplateId(UUID.randomUUID().toString());
 		tbManpowerAssessmentTemplate.setTemplateName(assessmentTemplatePage.getTemplateName());

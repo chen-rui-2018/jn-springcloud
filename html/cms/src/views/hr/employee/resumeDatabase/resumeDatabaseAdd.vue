@@ -1,7 +1,7 @@
 <template>
   <div class="addForm">
     <el-card>
-      <el-form ref="addForm" :model="addForm" :rules="rules" label-width="120px">
+      <el-form ref="addForm" :model="addForm" :rules="rules" label-width="120px" validate-on-rule-change>
         <el-row>
           <el-col :span="12">
             <el-form-item label="姓名：" prop="name">
@@ -89,7 +89,8 @@
                 placeholder="请选择"
                 clearable
                 style="width: 200px"
-                class="filter-item">
+                class="filter-item"
+                @change="setCertificateType">
                 <el-option label="请选择" value=""/>
                 <el-option v-for="item in certificateList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
@@ -145,7 +146,7 @@ import {
   addResumeDatabase, updateResumeDatabase, getResumeDatabaseById
 } from '@/api/hr/resumeDatabase'
 import {
-  getCode, isvalidName, isvalidMobile, uploadUrl, setChild, findNodeById, findP
+  getCode, isvalidName, isvalidMobile, uploadUrl, setChild, findNodeById, findP, isvalidZjhm, getApi
 } from '@/api/hr/util'
 
 import {
@@ -170,12 +171,52 @@ export default {
         callback()
       }
     }
-    const reg = /^\w{5,18}$/i
-    const checkZjhm = (rule, value, callback) => {
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的证件号码'))
+    var checkPhoneExist = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入号码'))
       } else {
-        callback()
+        getApi('hr/resumeData/checkPhoneExist', { phone: value, id: this.addForm.id }).then(res => {
+          if (res.data && res.data.code === '0000' && !res.data.data) {
+            callback(new Error('号码在简历库中已经存在'))
+          } else {
+            callback()
+          }
+        }).catch(error => {
+          console.log(error)
+          callback(new Error('校验号码是否存在简历库失败'))
+        })
+      }
+    }
+    var checkMailboxExist = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入邮箱'))
+      } else {
+        getApi('hr/resumeData/checkMailboxExist', { mailbox: value, id: this.addForm.id }).then(res => {
+          if (res.data && res.data.code === '0000' && !res.data.data) {
+            callback(new Error('邮箱在简历库中已经存在'))
+          } else {
+            callback()
+          }
+        }).catch(error => {
+          console.log(error)
+          callback(new Error('校验邮箱是否存在简历库失败'))
+        })
+      }
+    }
+    var checkCertificateNumberExist = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入证件号码'))
+      } else {
+        getApi('hr/resumeData/checkCertificateNumberExist', { certificateNumber: value, id: this.addForm.id }).then(res => {
+          if (res.data && res.data.code === '0000' && !res.data.data) {
+            callback(new Error('证件号码在简历库中已经存在'))
+          } else {
+            callback()
+          }
+        }).catch(error => {
+          console.log(error)
+          callback(new Error('校验证件号码是否存在简历库失败'))
+        })
       }
     }
 
@@ -204,8 +245,10 @@ export default {
         departmentId: [{ required: true, message: '请选择应聘部门', trigger: 'change' }],
         jobId: [{ required: true, message: '请选择应聘职位', trigger: 'change' }],
         mailbox: [{ required: true, message: '请输入个人邮箱', trigger: 'blur' },
-          { type: 'email', message: '请正确输入个人邮箱', trigger: 'blur' }],
-        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: validMobile, trigger: 'blur' }],
+          { type: 'email', message: '请正确输入个人邮箱', trigger: 'blur' },
+          { validator: checkMailboxExist, trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: validMobile, trigger: 'blur' },
+          { validator: checkPhoneExist, trigger: 'blur' }],
         educationId: [{ required: true, message: '请选择学历', trigger: 'change' }],
         graduaAcademy: [{ required: true, message: '请输入毕业院校', trigger: 'blur' }, {
           validator: checkName,
@@ -213,9 +256,10 @@ export default {
         }],
         certificateId: [{ required: true, message: '请选择证件类型', trigger: 'change' }],
         certificateNumber: [{ required: true, message: '请选择证件号', trigger: 'blur' }, {
-          validator: checkZjhm,
+          validator: this.checkZjhm,
           trigger: 'blur'
-        }]
+        },
+        { validator: checkCertificateNumberExist, trigger: 'blur' }]
       },
       addForm: {
         name: '',
@@ -235,7 +279,16 @@ export default {
         resumeInfo: '',
         id: ''
 
-      }
+      },
+      checkZjhm: undefined
+    }
+  },
+  watch: {
+    'addForm.certificateType': {
+      handler(newValue, oldValue) {
+        this.initCheckZjhm()
+      },
+      deep: true
     }
   },
   created() {
@@ -243,6 +296,37 @@ export default {
     this.initList()
   },
   methods: {
+    setCertificateType() {
+      const certificate = this.certificateList.find(item => item.key === this.addForm.certificateId)
+      if (certificate) {
+        this.addForm.certificateType = certificate['lable']
+      }
+    },
+    initCheckZjhm() {
+      debugger
+      const reg = /^\w{5,18}$/i
+      if (this.addForm.certificateType === '身份证') {
+        this.checkZjhm = (rule, value, callback) => {
+          if (!isvalidZjhm(value)) {
+            callback(new Error('请输入正确的证件号码'))
+          } else {
+            callback()
+          }
+        }
+      } else {
+        this.checkZjhm = (rule, value, callback) => {
+          if (!reg.test(value)) {
+            callback(new Error('请输入正确的证件号码'))
+          } else {
+            callback()
+          }
+        }
+      }
+      this.rules.certificateNumber.splice(1, 1, {
+        validator: this.checkZjhm,
+        trigger: 'blur'
+      })
+    },
     handlePreview(file) {
       const link = document.createElement('a')
       link.setAttribute('href', file.url)
@@ -403,6 +487,8 @@ export default {
               this.$set(obj, 'url', this.addForm.resumeInfo)
               this.fileList.push(obj)
             }
+
+            this.initCheckZjhm()
           } else {
             this.$message.error(res.data.result)
           }

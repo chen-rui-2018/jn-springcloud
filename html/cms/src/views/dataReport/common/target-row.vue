@@ -33,11 +33,12 @@ export default {
       width: 160px;
       padding: 10px;
       @include flex-center;
+      flex: none;
       border-right: $gray;
       color: #A8A8A8;
     }
     .row-r {
-      width: calc(100% - 160px);
+      width: 100%;
       padding: 20px;
       font-size: 14px;
       background-color: #fff;

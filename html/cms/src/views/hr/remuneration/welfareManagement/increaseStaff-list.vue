@@ -95,7 +95,8 @@
             <el-input v-model="socialInsuranceBaseFormData.schemeName" type="text" style="width: 200px;"/>
           </el-form-item>
           <el-form-item v-for="(domain) in socialInsuranceBasePageInit" :prop="domain.prop" :label="domain.label" :key="domain.key">
-            <el-input v-model="domain.value" type="text" style="width: 200px;"/>
+            <!--<el-input v-model="domain.value" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" style="width: 200px;"/>-->
+            <el-input-number v-model="domain.value" :min="1" :max="99999" style="width: 200px"/>
             <p style="height: 12px;margin-top: 0px;color:dodgerblue">基数范围[0-99999]</p>
           </el-form-item>
           <el-form-item>
@@ -111,10 +112,11 @@
       <el-dialog :visible.sync="accumulationFundPageVisibleVisible" title="各项目基数" width="650px">
         <el-form ref="socialInsuranceBaseForm" :model="accumulationFundPageVisibleVisibleData" class="auto_form">
           <el-form-item label="参保方案" prop="insuredProgrammeId" class="inline">
-            <el-input v-model="socialInsuranceBaseFormData.schemeName" type="text" style="width: 200px;"/>
+            <el-input v-model="socialInsuranceBaseFormData.schemeName" type="number" style="width: 200px;"/>
           </el-form-item>
           <el-form-item v-for="(domain) in reserveBasePageInit" :prop="domain.prop" :label="domain.label" :key="domain.key">
-            <el-input v-model="domain.value" type="text" style="width: 200px;"/>
+            <!--<el-input v-model="domain.value" type="text" style="width: 200px;"/>-->
+            <el-input-number v-model="domain.value" :min="1" :max="99999" style="width: 200px"/>
             <p style="height: 12px;margin-top: 0px;color:dodgerblue">基数范围[0-99999]</p>
           </el-form-item>
           <el-form-item>
@@ -209,14 +211,13 @@ export default {
       const selectedNodes = this.$refs['assessmentObjectRef'].selectedNodes
       this.increaseStaffAddFromData.jobNumber = ''
       for (let i = 0; i < selectedNodes.length; i++) {
-        if (!selectedNodes.flag) {
+        if (!selectedNodes[i].flag) {
           this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber + selectedNodes[i].jobNumber + ','
         }
       }
       if (this.increaseStaffAddFromData.jobNumber.length > 0) {
         this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber.substring(0, this.increaseStaffAddFromData.jobNumber.length - 1)
       }
-      console.log(this.increaseStaffAddFromData.jobNumber)
     },
     getDeptEmployeeList() {
       apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
@@ -377,9 +378,10 @@ export default {
       })
         .then(() => {
           api('hr/SalaryWelfareManagement/deleteAttritionPlan', row).then(res => {
+            debugger
             if (res.data.code === '0000') {
               this.$message({
-                message: '删除成功',
+                message: res.data.data,
                 type: 'success'
               })
               if (this.total % this.listQuery.rows === 1) {
@@ -387,7 +389,7 @@ export default {
               }
               this.initList()
             } else {
-              this.$message.error(res.data.result)
+              this.$message.error(res.data.data)
             }
           })
         })
@@ -406,11 +408,6 @@ export default {
     },
     saveIncreaseStaff() { // 保存增员计划
       this.saveIncreaseStaffDisable = true
-      // if (this.increaseStaffAddFromData.jobNumber === '') {
-      //   alert('增员员工姓名必填')
-      //   this.saveIncreaseStaffDisable = false
-      //   return
-      // }
       const param = {
         insuredMonth: this.increaseStaffAddFromData.insuredMonth,
         insuredProgrammeId: this.increaseStaffAddFromData.insuredProgrammeId,
@@ -435,6 +432,8 @@ export default {
                 insuredProgrammeId: '',
                 insuredProgrammeName: ''
               }
+              this.socialInsuranceBasePageInit = []
+              this.reserveBasePageInit = []
               this.initList()
             } else {
               this.$message.error('添加增员计划失败')

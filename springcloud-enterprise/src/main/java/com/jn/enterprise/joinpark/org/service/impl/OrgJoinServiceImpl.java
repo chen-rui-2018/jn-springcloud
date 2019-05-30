@@ -59,6 +59,7 @@ public class OrgJoinServiceImpl implements OrgJoinService {
         orgContactData.setOrgId(orgId);
         int i3 = orgService.saveOrUpdateOrgContactData(orgContactData, account);
         logger.info("保存服务机构联系信息，响应条数{}",i3);
+
         return 1;
     }
 

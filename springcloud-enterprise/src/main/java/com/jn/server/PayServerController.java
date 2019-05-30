@@ -87,7 +87,7 @@ public class PayServerController extends BaseController implements PayClient {
     @Override
     public Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result(myPayBillService.startPayment(createOrderAndPayReqModel,user));
+        return myPayBillService.startPayment(createOrderAndPayReqModel,user);
     }
 
     @ControllerLog(doAction = "支付回调接口")

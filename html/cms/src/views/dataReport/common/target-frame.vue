@@ -31,9 +31,8 @@ export default {}
     }
     .target-frame-r {
       min-height: 100%;
-      width: 100%;
+      width: calc(100% - 200px);
       padding: 15px;
-      flex: 1;
       border-left: 1px solid $gray;
       .target-row {
         margin: 5px auto;

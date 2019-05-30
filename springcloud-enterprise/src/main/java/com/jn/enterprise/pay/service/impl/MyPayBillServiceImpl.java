@@ -325,9 +325,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @ServiceLog(doAction = "我的账单-创建账单")
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result billCreate(PayBillCreateParamVo payBillCreateParamVo, User user) {
+    public Result billCreate(PayBillCreateParamVo payBillCreateParamVo) {
         /**根据用户账号/企业ID查询企业信息（用户为企业管理员） */
-        logger.info("我的账单-创建账单,参数：payBillCreateParamVo={},user={}", JsonUtil.object2Json(payBillCreateParamVo),JsonUtil.object2Json(user));
+        logger.info("我的账单-创建账单,参数：payBillCreateParamVo={},user={}", JsonUtil.object2Json(payBillCreateParamVo));
         List<TbPayAccountBook> tbPayAccountBook = null;
         List<TbPayAccount> tbPayAccount = null;
         Result<Boolean> result = new Result<>();
@@ -421,11 +421,15 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     tpbmr.setNatureCode(BILL_AC_BOOK_TYPE_1.getCode());
                     tpbmr.setMoney(tbs.getBillExpense());
                     tpbmr.setBalance(totalAmount);
-                    if (StringUtils.isBlank(user.getAccount())) {
-                        tpbmr.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
-                    } else {
+<<<<<<< Updated upstream
+                    if(user != null){
                         tpbmr.setCreatorAccount(user.getAccount());
+                    }else {
+                        tpbmr.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
                     }
+=======
+                    tpbmr.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
+>>>>>>> Stashed changes
                     tpbmr.setCreatedTime(new Date());
                     tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
                     logger.info("统一缴费插入流水记录入參【{}】", tpbmr.toString());

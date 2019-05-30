@@ -73,7 +73,7 @@ public interface MyPayBillService {
      * @param payBillCreateParamVo,user
      * @return
      */
-    Result billCreate(PayBillCreateParamVo payBillCreateParamVo, User user);
+    Result billCreate(PayBillCreateParamVo payBillCreateParamVo);
 
     /**
      * 缴费单支付发起

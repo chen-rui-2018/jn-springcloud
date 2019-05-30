@@ -87,7 +87,7 @@ export default {
             _this.$message.error(res.result);
           }
         }
-      });
+      })
     }
   }
 };

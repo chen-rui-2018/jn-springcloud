@@ -1,6 +1,11 @@
 {
   "usingComponents": {
-    "nav-bar": "./../../templates/header/header",
     "card-list": "./../../templates/card-list/card-list"
-  }
+  },
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "设备列表",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": true
 }

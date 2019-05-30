@@ -421,10 +421,10 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     tpbmr.setNatureCode(BILL_AC_BOOK_TYPE_1.getCode());
                     tpbmr.setMoney(tbs.getBillExpense());
                     tpbmr.setBalance(totalAmount);
-                    if (StringUtils.isBlank(user.getAccount())) {
-                        tpbmr.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
-                    } else {
+                    if(user != null){
                         tpbmr.setCreatorAccount(user.getAccount());
+                    }else {
+                        tpbmr.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
                     }
                     tpbmr.setCreatedTime(new Date());
                     tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());

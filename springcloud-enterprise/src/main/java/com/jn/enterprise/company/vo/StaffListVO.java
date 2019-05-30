@@ -38,12 +38,22 @@ public class StaffListVO implements Serializable {
     private String roleName;
     @ApiModelProperty(value = "头像")
     private String avatar;
+    @ApiModelProperty(value = "加入方式（0升级员工 1企业邀请）")
+    private String joinPattern;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "生日")
     private Date birthday;
     @ApiModelProperty(value = "入驻日期")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date checkTime;
+
+    public String getJoinPattern() {
+        return joinPattern;
+    }
+
+    public void setJoinPattern(String joinPattern) {
+        this.joinPattern = joinPattern;
+    }
 
     public String getAvatar() {
         return avatar;
@@ -154,6 +164,7 @@ public class StaffListVO implements Serializable {
                 ", sex='" + sex + '\'' +
                 ", roleName='" + roleName + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", joinPattern='" + joinPattern + '\'' +
                 ", birthday=" + birthday +
                 ", checkTime=" + checkTime +
                 '}';

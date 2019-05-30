@@ -80,6 +80,8 @@ public class RecruitServiceImpl implements RecruitService {
                 recruitDetails.setCareStatus("1");
             }
         }
+        // 处理图片格式
+        recruitDetails.setComAvatar(IBPSFileUtils.getFilePath(recruitDetails.getComAvatar()));
         return recruitDetails;
     }
 

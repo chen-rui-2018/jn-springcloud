@@ -51,14 +51,14 @@ public class ServiceCompany implements Serializable {
     private String products;
     @ApiModelProperty(value = "主要原材料")
     private String material;
-    @ApiModelProperty(value = "企业性质（多个")
+    @ApiModelProperty(value = "企业性质")
     private String comProperty;
     @ApiModelProperty(value = "注册资本（万元）")
     private Long regCapital;
     @ApiModelProperty(value = "增资情况")
     private String addCapital;
-    @ApiModelProperty(value = "企业规模（万元）")
-    private Long comScale;
+    @ApiModelProperty(value = "企业规模")
+    private String comScale;
     @ApiModelProperty(value = "成立时间（注册时间）")
     private Date foundingTime;
     @ApiModelProperty(value = "落地时间（实际运营时间）")
@@ -325,11 +325,11 @@ public class ServiceCompany implements Serializable {
         this.addCapital = addCapital == null ? null : addCapital.trim();
     }
 
-    public Long getComScale() {
+    public String getComScale() {
         return comScale;
     }
 
-    public void setComScale(Long comScale) {
+    public void setComScale(String comScale) {
         this.comScale = comScale;
     }
 

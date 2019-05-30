@@ -35,5 +35,5 @@ public interface StaffMapper {
      * @param account
      * @return
      */
-    List<StaffAuditVO> getAuditStatus(@Param("account") String account);
+    StaffAuditVO getAuditStatus(@Param("account") String account);
 }

@@ -32,27 +32,27 @@
             </el-table-column>
             <el-table-column label="默认基数">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.defaultCardinalNumber" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.defaultCardinalNumber" :min="0" :max="99999"/>
               </template>
             </el-table-column>
             <el-table-column label="可选基数范围起">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.optionalBaseStart" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.optionalBaseStart" :min="0" :max="99999" @blur="checkOptionalBaseValid(scope.row)"/>
               </template>
             </el-table-column>
             <el-table-column label="可选基数范围止">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.optionalBaseEnd" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.optionalBaseEnd" :min="1" :max="99999" @blur="checkOptionalBaseValid(scope.row)"/>
               </template>
             </el-table-column>
             <el-table-column label="公司缴纳比例">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.corporateContributionRatio" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.corporateContributionRatio" :min="0" :max="99"/>
               </template>
             </el-table-column>
             <el-table-column label="个人缴纳比例">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.individualContributionRatio" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.individualContributionRatio" :min="0" :max="99"/>
               </template>
             </el-table-column>
             <el-table-column label="公司金额">
@@ -94,27 +94,27 @@
             </el-table-column>
             <el-table-column label="默认基数">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.defaultCardinalNumber" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.defaultCardinalNumber" :min="0" :max="99999"/>
               </template>
             </el-table-column>
             <el-table-column label="可选基数范围起">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.optionalBaseStart" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.optionalBaseStart" :min="0" :max="99999" @blur="checkOptionalBaseValid(scope.row)"/>
               </template>
             </el-table-column>
             <el-table-column label="可选基数范围止">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.optionalBaseEnd" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.optionalBaseEnd" :min="1" :max="99999" @blur="checkOptionalBaseValid(scope.row)"/>
               </template>
             </el-table-column>
             <el-table-column label="公司缴纳比例">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.corporateContributionRatio" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.corporateContributionRatio" :min="0" :max="99"/>
               </template>
             </el-table-column>
             <el-table-column label="个人缴纳比例">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.individualContributionRatio" :disabled="accumulationFundDisabled" :max="99999999999" :min="0" type="number" oninput = "value=value.replace(/[^\d]/g,'')"/>
+                <el-input-number v-model="scope.row.individualContributionRatio" :min="0" :max="99"/>
               </template>
             </el-table-column>
             <el-table-column label="公司金额" style="background: #666666">
@@ -189,12 +189,13 @@
 </template>
 <script>
 import {
-  api, getJson
+  api, getJson, accDiv, accMul
 } from '@/api/hr/common'
 
 export default {
   data() {
     return {
+      isOptionalBaseValid: true,
       accumulationFundDisabled: false,
       checked: false,
       insuranceCityKeyArr: {
@@ -230,39 +231,41 @@ export default {
       socialSecurityRowIndex: 6,
       selectlistRow: [],
       commitRows: {},
-      rowIndex: 2,
-      rules: {
-        assessmentName: [{ required: true, message: '请输考核名称', trigger: 'blur' }],
-        templateId: [{ required: true, message: '请选择考核模板', trigger: 'change' }],
-        // assessmentTime: [{ required: true, message: '请选择考核时间', trigger: 'change' }],
-        assessmentObject: [{ required: true, message: '请选择考核对象', trigger: 'change' }],
-        assessmentPeople: [{ required: true, message: '请选择考核人', trigger: 'change' }]
-      }
+      rowIndex: 2
     }
   },
   computed: {
     getProvidentFundCompanyAmount(row) {
       return function(row) {
-        return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
-          (row.corporateContributionRatio == null || row.corporateContributionRatio === '') ? 0 : row.corporateContributionRatio) / 100
+        // return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
+        //   (row.corporateContributionRatio == null || row.corporateContributionRatio === '') ? 0 : row.corporateContributionRatio) / 100
+        const number = accMul((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber, (row.corporateContributionRatio == null || row.corporateContributionRatio === '') ? 0 : row.corporateContributionRatio)
+        return accDiv(number, 100)
       }
     },
     getProvidentFundPersonalAmount(row) {
       return function(row) {
-        return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
-          (row.individualContributionRatio == null || row.individualContributionRatio === '') ? 0 : row.individualContributionRatio) / 100
+        // return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
+        //   (row.individualContributionRatio == null || row.individualContributionRatio === '') ? 0 : row.individualContributionRatio) / 100
+        const number = accMul((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber, (row.individualContributionRatio == null || row.individualContributionRatio === '') ? 0 : row.individualContributionRatio)
+        return accDiv(number, 100)
       }
     },
     getSocialSecurityCompanyAmount(row) {
       return function(row) {
-        return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
-          (row.corporateContributionRatio == null || row.corporateContributionRatio === '') ? 0 : row.corporateContributionRatio) / 100
+        // return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
+        //   (row.corporateContributionRatio == null || row.corporateContributionRatio === '') ? 0 : row.corporateContributionRatio) / 100
+        const number = accMul((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber, (row.corporateContributionRatio == null || row.corporateContributionRatio === '') ? 0 : row.corporateContributionRatio)
+        return accDiv(number, 100)
       }
     },
     getSocialSecurityPersonalAmount(row) {
       return function(row) {
-        return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
-          (row.individualContributionRatio == null || row.individualContributionRatio === '') ? 0 : row.individualContributionRatio) / 100
+        // return parseFloat((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber) * parseFloat(
+        //   (row.individualContributionRatio == null || row.individualContributionRatio === '') ? 0 : row.individualContributionRatio) / 100
+
+        const number = accMul((row.defaultCardinalNumber == null || row.defaultCardinalNumber === '') ? 0 : row.defaultCardinalNumber, (row.individualContributionRatio == null || row.individualContributionRatio === '') ? 0 : row.individualContributionRatio)
+        return accDiv(number, 100)
       }
     },
     companyAccumulationFundCom: function() { // 公司公积金总计
@@ -270,8 +273,9 @@ export default {
       if (this.accumulationFundDisabled === false) {
         if (this.addInsuranceData.tableData.length > 0) {
           this.addInsuranceData.tableData.forEach((v, i) => {
-            companyAccumulationFund = companyAccumulationFund + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
-              (v.corporateContributionRatio == null || v.corporateContributionRatio === '') ? 0 : v.corporateContributionRatio) / 100
+            // companyAccumulationFund = companyAccumulationFund + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
+            //   (v.corporateContributionRatio == null || v.corporateContributionRatio === '') ? 0 : v.corporateContributionRatio) / 100
+            companyAccumulationFund = companyAccumulationFund + accDiv(accMul((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber, (v.corporateContributionRatio == null || v.corporateContributionRatio === '') ? 0 : v.corporateContributionRatio), 100)
           })
         }
       }
@@ -282,8 +286,9 @@ export default {
       if (this.accumulationFundDisabled === false) {
         if (this.addInsuranceData.tableData.length > 0) {
           this.addInsuranceData.tableData.forEach((v, i) => {
-            personalAccumulationFund = personalAccumulationFund + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
-              (v.individualContributionRatio == null || v.individualContributionRatio === '') ? 0 : v.individualContributionRatio) / 100
+            // personalAccumulationFund = personalAccumulationFund + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
+            //   (v.individualContributionRatio == null || v.individualContributionRatio === '') ? 0 : v.individualContributionRatio) / 100
+            personalAccumulationFund = personalAccumulationFund + accDiv(accMul((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber, (v.individualContributionRatio == null || v.individualContributionRatio === '') ? 0 : v.individualContributionRatio), 100)
           })
         }
       }
@@ -293,8 +298,9 @@ export default {
       let companySocialSecurity = 0
       if (this.addInsuranceData.socialSecurityTableData.length > 0) {
         this.addInsuranceData.socialSecurityTableData.forEach((v, i) => {
-          companySocialSecurity = companySocialSecurity + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
-            (v.corporateContributionRatio == null || v.corporateContributionRatio === '') ? 0 : v.corporateContributionRatio) / 100
+          // companySocialSecurity = companySocialSecurity + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
+          //   (v.corporateContributionRatio == null || v.corporateContributionRatio === '') ? 0 : v.corporateContributionRatio) / 100
+          companySocialSecurity = companySocialSecurity + accDiv(accMul((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber, (v.corporateContributionRatio == null || v.corporateContributionRatio === '') ? 0 : v.corporateContributionRatio), 100)
         })
       }
       return companySocialSecurity
@@ -303,8 +309,9 @@ export default {
       let personalSocialSecurity = 0
       if (this.addInsuranceData.socialSecurityTableData.length > 0) {
         this.addInsuranceData.socialSecurityTableData.forEach((v, i) => {
-          personalSocialSecurity = personalSocialSecurity + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
-            (v.individualContributionRatio == null || v.individualContributionRatio === '') ? 0 : v.individualContributionRatio) / 100
+          // personalSocialSecurity = personalSocialSecurity + parseFloat((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber) * parseFloat(
+          //   (v.individualContributionRatio == null || v.individualContributionRatio === '') ? 0 : v.individualContributionRatio) / 100
+          personalSocialSecurity = personalSocialSecurity + accDiv(accMul((v.defaultCardinalNumber == null || v.defaultCardinalNumber === '') ? 0 : v.defaultCardinalNumber, (v.individualContributionRatio == null || v.individualContributionRatio === '') ? 0 : v.individualContributionRatio), 100)
         })
       }
       return personalSocialSecurity
@@ -318,6 +325,14 @@ export default {
     this.initList()
   },
   methods: {
+    checkOptionalBaseValid(row) {
+      if (row.optionalBaseStart > row.optionalBaseEnd) {
+        alert('可选基数范围开始值应小于可选基数范围结束值')
+        this.isOptionalBaseValid = false
+      } else {
+        this.isOptionalBaseValid = true
+      }
+    },
     initAddData() {
       this.addInsuranceData.tableData = [{
         rowNum: 0,
@@ -610,6 +625,11 @@ export default {
     updateData() { // 修改保存
       this.isDisabled = true
       let flag = true
+      if (!this.isOptionalBaseValid) {
+        alert('可选基数范围开始值不能小于可选基数范围结束值')
+        this.isDisabled = false
+        return false
+      }
       if (this.addInsuranceData.insuredCityId === '' || this.addInsuranceData.insuredCityId.trim() === '/') {
         this.$message.error('请填写要参保的城市')
         flag = false
@@ -689,6 +709,11 @@ export default {
     submitForm() {
       let flag = true
       this.isDisabled = true
+      if (!this.isOptionalBaseValid) {
+        alert('可选基数范围开始值不能小于可选基数范围结束值')
+        this.isDisabled = false
+        return false
+      }
       if (this.addInsuranceData.insuredCityId === '' || this.addInsuranceData.insuredCityId === '/') {
         this.$message.error('请填写要参保的城市')
         flag = false

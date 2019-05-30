@@ -60,7 +60,7 @@ public class MeterConstants {
     /**
      * 电表账本标识
      */
-    public final static String ELEC_BOOK="1";
+    public final static String ELEC_BOOK="ELECTRIC";
 
     /**
      * 电表调用标识

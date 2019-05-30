@@ -105,7 +105,8 @@ export default {
           if (latestView) {
             this.$router.push('investigation/invest-analysis')
           } else {
-            this.$router.push('/')
+            // this.$router.push('/')
+            this.$router.push('investigation/invest-analysis')
           }
         }
       })

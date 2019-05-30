@@ -110,6 +110,7 @@ public class ParkServiceImpl implements ParkService {
         ParkGeneral parkGeneral = new ParkGeneral();
         for (TbPark general:list) {
             parkGeneral.setParkIntroduce(general.getParkIntroduce());
+            parkGeneral.setMainPicture(general.getMainPicture());
         }
         return parkGeneral;
     }

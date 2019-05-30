@@ -2,6 +2,7 @@ package com.jn.hr.attendance.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.jn.common.model.Page;
 
@@ -147,6 +148,9 @@ public class AttendanceSchedulPage extends Page implements Serializable{
 	
 	@ApiModelProperty(value = "结束日期")
 	private String endDate;
+
+	@ApiModelProperty(value = "部门IDs")
+	private List<String> departmentIds;
 
 	public String getStartDate() {
 		return startDate;
@@ -498,5 +502,13 @@ public class AttendanceSchedulPage extends Page implements Serializable{
 
 	public void setModifiedTime(Date modifiedTime) {
 		this.modifiedTime = modifiedTime;
+	}
+
+	public List<String> getDepartmentIds() {
+		return departmentIds;
+	}
+
+	public void setDepartmentIds(List<String> departmentIds) {
+		this.departmentIds = departmentIds;
 	}
 }

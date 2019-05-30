@@ -63,7 +63,7 @@ public class WxMiniServiceImpl implements WxMiniService {
         try {
             accessToken = JacksonJsonTransformUtil.jsonToObject(responseString, new TypeReference<AccessToken>(){});
         } catch (IOException e) {
-            throw new JnSpringCloudException(WxExceptionEnums.JSON_PROCESS_FAL);
+            throw new JnSpringCloudException(WxExceptionEnums.JSON_PROCESS_FAIL);
         }
         if(null != accessToken && StringUtils.isNotBlank(accessToken.getAccess_token())) {
             accessTokenString = accessToken.getAccess_token();

@@ -1,5 +1,7 @@
 package com.jn.miniprogram.base.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +12,7 @@ import java.io.Serializable;
  * @Version： v1.0
  * @Modified By:
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WxMiniJscode2SessionResult implements Serializable {
 
     private static final long serialVersionUID = -7526930796162186438L;

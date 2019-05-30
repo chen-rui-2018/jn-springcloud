@@ -30,8 +30,8 @@
       </el-tab-pane>
     </el-tabs>
     <div class="btn-row">
-      <el-button size="small" type="primary" :disabled="submitting || formData.taskInfo && formData.taskInfo.status === 0 || (formData.modelType === 1 && !formData.departmentId) || (formData.modelType !== 0)" @click="submitForDraft">保存为草稿</el-button>
-      <el-button size="small" type="primary" :disabled="submitting || formData.taskInfo && formData.taskInfo.status === 0 || (formData.modelType === 1 && !formData.departmentId) || (formData.modelType !== 0)" @click="submitForDone">提交</el-button>
+      <el-button size="small" type="primary" :disabled="canFill" @click="submitForDraft">保存为草稿</el-button>
+      <el-button size="small" type="primary" :disabled="canFill" @click="submitForDone">提交</el-button>
       <el-button size="small" type="primary" v-if="formData.otherData">
         <a :href="formData.otherData" download="" target="_blank">点击下载附件</a>
       </el-button>
@@ -52,6 +52,22 @@
     },
     mounted() {
       this.init()
+    },
+    computed: {
+      canFill() {
+        if (this.submitting) {
+          console.dir(1)
+          return true
+        }
+        if (this.formData.taskInfo && this.formData.taskInfo.status === 0) {
+          console.dir(2)
+          return true
+        }
+        if (this.formData.modelType === 1 && !this.formData.departmentId) {
+          console.dir(3)
+          return true
+        }
+      }
     },
     data() {
       return {
@@ -379,7 +395,6 @@
                 confirmButtonText: '确定',
                 type: 'warning'
               }).then(res => {
-                console.dir(res)
               }).catch(err => {
                 console.dir(err)
               })

@@ -114,8 +114,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
         TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(roomId);
         //通过用户account查询企业
-        //Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
-        //ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
+        Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
+        ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
 
         //计算结束时间
         Calendar cal = Calendar.getInstance();
@@ -178,8 +178,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         orders.setIsRelet(Byte.parseByte(RoomReletStatusEnums.NO.getCode()));
         //有效
         orders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
-        //orders.setEnterpriseId(data.getId());
-        //orders.setLeaseEnterprise(data.getComName());
+        orders.setEnterpriseId(data.getId());
+        orders.setLeaseEnterprise(data.getComName());
         orders.setLeaseStartTime(leaseStartTime);
         orders.setLeaseEndTime(leaseEndTime);
         orders.setContactName(contactName);
@@ -244,7 +244,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(account);
         ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
         if (null == data){
-            //throw new JnSpringCloudException(new Result("4020502","当前用户不属于企业用户"));
+            throw new JnSpringCloudException(new Result("4020502","当前用户不属于企业用户"));
         }
     }
 

@@ -1,6 +1,9 @@
 package com.jn.park.electricmeter.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
@@ -17,7 +20,7 @@ import com.jn.park.electricmeter.dao.TbElectricReadingFailLogMapper;
 import com.jn.park.electricmeter.entity.*;
 import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
-import com.jn.park.electricmeter.model.MeterInfoModel;
+import com.jn.park.electricmeter.model.*;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.enums.NoticeExceptionEnum;
 import com.jn.park.notice.service.impl.NoticeManageServiceImpl;
@@ -571,5 +574,41 @@ public class MeterServiceImpl implements MeterService {
                 meterDao.saveMeterLinkInDay(companyDays);
             }
         }
+    }
+
+    //能耗统计
+
+    @Override
+    public Result groupChart() {
+        Result result = new Result();
+        List<GroupChartStatisticsModel> list = meterDao.groupChart();
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+    public Result categaryChart() {
+        Result result = new Result();
+        List<GategaryEnergyStatisticsModel> list = meterDao.categaryChart();
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+    public Result<PaginationData<List<TrendChartDetailStatisticsModel>>> trendChartDetail(TrendChartPageParam param) {
+        Result result = new Result();
+        Page<Object> objects = PageHelper.startPage(param.getPage(), param.getRows() == 0 ? 15 : param.getRows());
+        List<TrendChartDetailStatisticsModel> list = meterDao.trendChartDetail(param);
+        PaginationData<List<TrendChartDetailStatisticsModel>> data = new PaginationData(list, objects.getTotal());
+        result.setData(data);
+        return result;
+    }
+
+    @Override
+    public Result trendChart(TrendChartParam param) {
+        Result result = new Result();
+        List<TrendChartStatisticsModel> list = meterDao.trendChart(param);
+        result.setData(list);
+        return result;
     }
 }

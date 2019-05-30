@@ -2,7 +2,7 @@
   <div class="enterpriseInformation w">
     <div class="actiContent">
       <div class="actiNav">
-        <span>首页/</span>
+        <span class="pointer" @click="$router.push({path:'/'})">首页/</span>
         <span class="mainColor">企业资讯</span>
       </div>
       <div class="changeIcon clearfix">
@@ -27,11 +27,11 @@
             </div>
             <div class="actiNum clearfix">
               <div class="avatar">
-                <img src="@/../static/img/图层 9.png" alt="">
+                <!-- <img src="@/../static/img/图层 9.png" alt=""> -->
                 <i class="avaTime">{{item.createdTime}}</i>
               </div>
               <span class="mainColor">
-                <i class="el-icon-view"></i>&nbsp;</span>
+                <i class="el-icon-view"></i>&nbsp;{{item.viewCount}}</span>
             </div>
           </li>
         </ul>
@@ -50,7 +50,7 @@
               </p>
               <div class="actiNum clearfix">
                 <div class="avatar">
-                  <img src="@/../static/img/图层 9.png" alt="">
+                  <!-- <img src="@/../static/img/图层 9.png" alt=""> -->
                   <span>{{item.createdTime}}</span>
                 </div>
                 <!-- <i>{{item.applyNum}}/{{item.actiNumber}}</i> -->
@@ -118,7 +118,7 @@ export default {
         query: { propagandaId: id }
       });
     },
-    //(门户各首页企业宣传列表查询)  缺阅读量跟图标
+    //(门户各首页企业宣传列表查询)  缺阅读量跟 图标去掉
     getBusinessPromotionList() {
       let _this = this;
       this.api.get({
@@ -151,6 +151,7 @@ export default {
   .actiNav {
     margin: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .changeIcon {
     padding-bottom: 20px;
@@ -193,7 +194,7 @@ export default {
 
           .avatar {
             float: left;
-            padding-left: 10px;
+            // padding-left: 10px;
             > img {
               width: 77px;
               height: 21px;

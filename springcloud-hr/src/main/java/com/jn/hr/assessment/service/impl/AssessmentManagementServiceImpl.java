@@ -2,6 +2,7 @@ package com.jn.hr.assessment.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.hr.assessment.dao.AssessManageMapper;
 import com.jn.hr.assessment.dao.AssessmentInfoFillMapper;
 import com.jn.hr.assessment.dao.AssessmentSubsidiaryMapper;
@@ -42,13 +44,16 @@ import com.jn.hr.assessment.model.AssessmentTemplateVo;
 import com.jn.hr.assessment.model.DepartmentTree;
 import com.jn.hr.assessment.service.AssessmentManagementService;
 import com.jn.hr.attendance.enums.AttendanceManageStatusEnums;
+import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.enums.HrStatusEnums;
+import com.jn.hr.common.util.DepartMentUtil;
 import com.jn.hr.employee.dao.EmployeeBasicInfoMapper;
 import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
 import com.jn.hr.employee.entity.TbManpowerDepartment;
 import com.jn.hr.employee.entity.TbManpowerDepartmentCriteria;
 import com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo;
 import com.jn.hr.employee.model.EmployeeBasicInfoPage;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 
@@ -56,6 +61,8 @@ import com.jn.system.model.User;
 public class AssessmentManagementServiceImpl implements AssessmentManagementService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AssessmentManagementServiceImpl.class);
+	@Autowired
+	SystemClient systemClient;
 	@Autowired
 	AssessManageMapper assessManageMapper;
 	@Autowired
@@ -420,6 +427,14 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 		assessmentTemplateVo.setTemplateId(tbManpowerAssessmentTemplate.getTemplateId());
 		assessmentTemplateVo.setTemplateName(tbManpowerAssessmentTemplate.getTemplateName());
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentTemplateDetailMapper.selectByTemplateId(assessmentTemplatePage.getTemplateId());
+		for(AssessmentTemplateDetailVo detail : templateDetailList){
+			Result result = systemClient.selectDeptByParentId(detail.getLeadAssessmentDepartment(), false);
+			if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+	            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+	        }
+	        Map<String,String>  departMap= (HashMap<String, String>)result.getData();
+			detail.setLeadAssessmentDepartment(departMap.get("departmentName"));
+		}
 		assessmentTemplateVo.setRecordList(templateDetailList);
 		return assessmentTemplateVo;
 	}

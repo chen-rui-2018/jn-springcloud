@@ -56,7 +56,7 @@ public class ParkingTemporaryController extends BaseController {
     }
 
     @ControllerLog(doAction = " 临停缴费账单创建")
-    @ApiOperation(value = "临停缴费账单创建", notes = "前台用户点击‘缴费离场’，调用该接口返回账单ID，携带账单号调用统一缴费服务‘/pay/createOrderAndPay创建订单并发起支付’发起支付[billId即发起支付的goodsIdArr]")
+    @ApiOperation(value = "临停缴费账单创建", notes = "前台用户点击‘缴费离场’，调用该接口返回账单ID，携带账单号调用统一缴费服务‘/pay/createPay发起支付’发起支付[billId即发起支付的goodsIdArr]")
     @RequestMapping(value = "/createCarParkingBill",method = RequestMethod.POST)
     public Result<ParkingCarPayVo> createCarParkingBill(String parkingId){
         return new Result<>(parkingTemporaryService.createCarParkingBill(parkingId));

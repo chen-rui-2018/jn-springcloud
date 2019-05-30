@@ -1302,10 +1302,6 @@ export default {
   .form-content {
     background-color: white;
     border-radius: 10px;
-    position: absolute;
-    top: 280px;
-    left: 36px;
-    right: 36px;
     .con-hr {
       color: #e4e4e4;
       margin-left: 20px;

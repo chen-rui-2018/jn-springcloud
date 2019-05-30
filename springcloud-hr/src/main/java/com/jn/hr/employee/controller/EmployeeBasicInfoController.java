@@ -1,6 +1,7 @@
 package com.jn.hr.employee.controller;
 
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.fastjson.JSON;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -216,7 +217,10 @@ public class EmployeeBasicInfoController extends BaseController {
     @GetMapping(value = "/selectDepartEmployee")
     public Result selectDepartEmployee() {
         List<TreeModel> teeList=employeeBasicInfoService.selectDepartEmployee();
-        return new Result(teeList);
+        String str= JSON.toJSONString(teeList);
+        str=str.replaceAll(",\"children\":\\[]","");
+        str=str.replaceAll("\"children\":\\[],","");
+        return new Result(str);
     }
 
 }

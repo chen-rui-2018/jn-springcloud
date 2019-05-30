@@ -1,7 +1,7 @@
 <template>
   <div class="inviteProduct">
     <div class="ordinary_title">
-      <div>邀请员工</div>
+      <div class="font16">邀请员工</div>
     </div>
     <div class="ordinary_content">
        <el-form label-width="120px" class="postJobInfo">
@@ -130,7 +130,6 @@ export default {
       background-color: #fff;
 
       padding:24px 28px;
-      font-size: 13px;
       border-radius: 5px;
     }
     .ordinary_content{

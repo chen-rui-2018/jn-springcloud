@@ -143,24 +143,24 @@ export default {
       this.api.get({
         url: 'findProductDetails',
         data: {
-          productId: '00d80a4886584cb28157e8f00aa8c030'
+          // productId: '00d80a4886584cb28157e8f00aa8c030'
+          productId: '19d19552832f47198b193d1913275866'
         },
         callback: function (res) {
           if (res.code === '0000') {
             _this.proDelInfo = res.data.info
-          } else {
-            _this.$message.error(res.result)
           }
         }
       })
     },
+    // 同类产品
     sameTypeProductList () {
-      // 同类产品
       let _this = this
       this.api.get({
         url: 'sameTypeProductList',
         data: {
-          signoryId: 'jrywdljz012345689999999999999999',
+          // signoryId: 'jrywdljz012345689999999999999999',
+          signoryId: 'iegal_server',
           page: _this.page,
           rows: _this.row
         },
@@ -168,8 +168,6 @@ export default {
           if (res.code === '0000') {
             _this.sameTypeProList = res.data.rows
             _this.total = res.data.total
-          } else {
-            _this.$message.error(res.result)
           }
         }
       })
@@ -183,7 +181,7 @@ export default {
             this.api.get({
               url: 'sameTypeProductList',
               data: {
-                signoryId: 'jrywdljz012345689999999999999999',
+                signoryId: 'iegal_server',
                 page: this.page,
                 rows: this.row
               },
@@ -381,10 +379,10 @@ export default {
         flex: 1;
         padding: 42px 0 42px 35px;
         img {
-          // width: 198px;
-          // height: 198px;
-          width: 100%;
-          height: 100%;
+          width: 198px;
+          height: 198px;
+          // width: 100%;
+          // height: 100%;
           border-radius: 20px;
         }
       }

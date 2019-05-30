@@ -245,6 +245,7 @@ public class DataModelServiceImpl implements DataModelService {
                 treeData = new TreeData();
                 treeData.setId(tbDataReportingModel.getModelId());
                 treeData.setText(tbDataReportingModel.getModelName());
+                treeData.setOrderNumber(tbDataReportingModel.getOrderNumber());
                 treeDataList.add(treeData);
             }
         }

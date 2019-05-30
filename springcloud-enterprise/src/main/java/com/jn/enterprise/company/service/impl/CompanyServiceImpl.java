@@ -12,12 +12,12 @@ import com.jn.company.model.*;
 import com.jn.enterprise.common.config.IBPSDefIdConfig;
 import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
-import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
-import com.jn.enterprise.company.entity.*;
+import com.jn.enterprise.company.entity.TbServiceCompany;
+import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
+import com.jn.enterprise.company.entity.TbServiceCompanyModify;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.model.CompanyInfoShow;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
-import com.jn.company.model.CreditUpdateParam;
 import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
@@ -26,7 +26,6 @@ import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
-import com.jn.enterprise.model.IBPSFile;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
@@ -38,6 +37,7 @@ import com.jn.park.activity.model.CommentAddParam;
 import com.jn.park.api.CareClient;
 import com.jn.park.api.CommentClient;
 import com.jn.park.care.model.CareParam;
+import com.jn.park.care.model.ServiceEnterpriseCompany;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import org.slf4j.Logger;
@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.jn.park.care.model.ServiceEnterpriseCompany;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -68,11 +67,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private TbServicePreferMapper tbServicePreferMapper;
     @Autowired
-    private TbServiceCompanyProImgMapper tbServiceCompanyProImgMapper;
-
-    @Autowired
     private CompanyMapper companyMapper;
-
     @Autowired
     private UserExtensionClient userExtensionClient;
     @Autowired
@@ -84,14 +79,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private IBPSDefIdConfig ibpsDefIdConfig;
 
-    /**
-     * 数据状态 1有效
-     */
-    private final static String RECORD_STATUS_VALID = "1";
-
     private static final String PATTERN="yyyy-MM-dd";
     private static final String PATTERN_DETAIL="yyyy-MM-dd HH:mm:ss";
-
 
     @Override
     @ServiceLog(doAction = "查询企业列表New")
@@ -101,8 +90,22 @@ public class CompanyServiceImpl implements CompanyService {
         }*/
         Page<Object> objects = PageHelper.startPage(sepParam.getPage(), sepParam.getRows() == 0 ? 15 : sepParam.getRows());
         List<ServiceEnterpriseCompany> getCompanyNewList=companyMapper.getCompanyNewList(sepParam);
+        List<ServiceEnterpriseCompany> newCompanyNewList = new ArrayList<>();
+
+        // 处理图片格式
+        for (ServiceEnterpriseCompany serviceEnterpriseCompany : getCompanyNewList) {
+            List<String> filePathList = IBPSFileUtils.getFilePath2List(serviceEnterpriseCompany.getProImgs());
+            if (filePathList != null && !filePathList.isEmpty()) {
+                String[] strings = new String[filePathList.size()];
+                serviceEnterpriseCompany.setPropagandaPicture(filePathList.toArray(strings));
+            }
+            serviceEnterpriseCompany.setAvatar(IBPSFileUtils.getFilePath(serviceEnterpriseCompany.getAvatar()));
+            serviceEnterpriseCompany.setBusinessLicense(IBPSFileUtils.getFilePath(serviceEnterpriseCompany.getBusinessLicense()));
+            newCompanyNewList.add(serviceEnterpriseCompany);
+        }
+
         //调用park,处理后再返回 getCompanyNewList
-        Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(getCompanyNewList);
+        Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(newCompanyNewList);
         PaginationData<List<ServiceEnterpriseCompany>> data = new PaginationData(companyNewList, objects.getTotal());
         return data;
     }
@@ -145,6 +148,16 @@ public class CompanyServiceImpl implements CompanyService {
         for (TbServiceCompany t:tbServiceCompanies) {
             ServiceCompany company = new ServiceCompany();
             BeanUtils.copyProperties(t,company);
+
+            // 处理图片格式
+            List<String> filePathList = IBPSFileUtils.getFilePath2List(t.getPropagandaPicture());
+            if (filePathList != null && !filePathList.isEmpty()) {
+                String[] strings = new String[filePathList.size()];
+                company.setPropagandaPicture(filePathList.toArray(strings));
+            }
+            company.setBusinessLicense(IBPSFileUtils.getFilePath(t.getBusinessLicense()));
+            company.setAvatar(IBPSFileUtils.getFilePath(t.getAvatar()));
+
             companies.add(company);
         }
         PaginationData<List<ServiceCompany>> data = new PaginationData(companies, objects.getTotal());
@@ -171,30 +184,31 @@ public class CompanyServiceImpl implements CompanyService {
         ServiceCompany company = new ServiceCompany();
         BeanUtils.copyProperties(tbServiceCompany, company);
 
+        // 处理图片格式
+        company.setAvatar(IBPSFileUtils.getFilePath(tbServiceCompany.getAvatar()));
+        company.setBusinessLicense(IBPSFileUtils.getFilePath(tbServiceCompany.getBusinessLicense()));
+        List<String> filePathList = IBPSFileUtils.getFilePath2List(tbServiceCompany.getPropagandaPicture());
+        if (filePathList != null && !filePathList.isEmpty()) {
+            String[] strings = new String[filePathList.size()];
+            company.setPropagandaPicture(filePathList.toArray(strings));
+        }
+
         //查询企业字段数据
         TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
         List<String> comPropertys = new ArrayList<>(16);
         List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
         if(StringUtils.isNotEmpty(tbServiceCompany.getComProperty())){
-            String[] comProperty = tbServiceCompany.getComProperty().split(",");
-
-            company.setComPropertys(comProperty);
-            for (TbServicePrefer prefer: tbServicePrefers
-            ) {
+            for (TbServicePrefer prefer: tbServicePrefers) {
                 // 行业领域
                 if(StringUtils.equals(prefer.getId(),tbServiceCompany.getInduType())){
                     company.setInduTypeName(prefer.getPreValue());
                 }
                 // 企业性质
-                for (String s: comProperty
-                ) {
-                    if(StringUtils.equals(s,prefer.getId())){
-                        comPropertys.add(prefer.getPreValue());
-                    }
+                if(StringUtils.equals(tbServiceCompany.getComProperty(), prefer.getId())){
+                    comPropertys.add(prefer.getPreValue());
                 }
             }
         }
-
 
         if(null != tbServiceCompany.getFoundingTime()){
             company.setFoundingTime(DateUtils.formatDate(tbServiceCompany.getFoundingTime(),PATTERN));
@@ -217,25 +231,8 @@ public class CompanyServiceImpl implements CompanyService {
         if(null != tbServiceCompany.getModifiedTime()){
             company.setModifiedTime(DateUtils.formatDate(tbServiceCompany.getModifiedTime(),PATTERN_DETAIL));
         }
-        if(null != comPropertys && comPropertys.size()>0){
-            company.setComPropertyNames(comPropertys.toArray(new String[comPropertys.size()]));
-        }
-
-        TbServiceCompanyProImgCriteria imgCriteria = new TbServiceCompanyProImgCriteria();
-        imgCriteria.createCriteria().andComIdEqualTo(tbServiceCompany.getId());
-        List<TbServiceCompanyProImg> tbServiceCompanyProImgs = tbServiceCompanyProImgMapper.selectByExample(imgCriteria);
-        List<CompanyProImg> imgs = new ArrayList<>(16);
-        for (TbServiceCompanyProImg img:tbServiceCompanyProImgs
-             ) {
-            CompanyProImg proImg = new CompanyProImg();
-            BeanUtils.copyProperties(img,proImg);
-            imgs.add(proImg);
-        }
-        company.setProImgs(imgs);
 
         //TODO 企业员工
-
-
         return company;
     }
 
@@ -284,11 +281,12 @@ public class CompanyServiceImpl implements CompanyService {
         // 处理图片
         companyUpdateParam.setAvatar(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getAvatar()));
         companyUpdateParam.setBusinessLicense(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getBusinessLicense()));
-        List<String> picList = Arrays.asList(companyUpdateParam.getPropagandaPicture().split(","));
+        List<String> picList = Arrays.asList(companyUpdateParam.getPropagandaPictureList());
         String ibpsUrl = IBPSFileUtils.uploadFiles(account, picList);
         if (StringUtils.isNotBlank(ibpsUrl)) {
             companyUpdateParam.setPropagandaPicture(ibpsUrl);
         }
+        companyUpdateParam.setPropagandaPictureList(null);
 
         String bpmnDefId = ibpsDefIdConfig.getUpdateCompanyInfo();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, companyUpdateParam);
@@ -312,6 +310,9 @@ public class CompanyServiceImpl implements CompanyService {
             logger.info("企业信息不存在!");
             return vo;
         }
+        // 处理图片格式
+        show.setAvatar(IBPSFileUtils.getFilePath(show.getAvatar()));
+
         //获取 评论数  和 关注数信息
         List<ServiceEnterpriseCompany> getCompanyNewList= new ArrayList<>();
         ServiceEnterpriseCompany serviceEnterpriseCompany = new ServiceEnterpriseCompany();
@@ -358,6 +359,19 @@ public class CompanyServiceImpl implements CompanyService {
                  show.setCity(list.get(0).get("city"));
              }
             }
+        }
+        // 设置当前用户是否关注此企业, 0 否 1 是
+        if(StringUtils.isNotBlank(account)) {
+           CareParam careParam = new CareParam();
+           careParam.setCurrentAccount(account);
+           Result<List<String>>  result =  careClient.findCareCompanyList(careParam);
+           show.setIsCare("0");
+           List<String> list = result.getData();
+           for(String id : list){
+               if(id.equals(companyId)){
+                   show.setIsCare("1");
+               }
+           }
         }
         vo.setCompanyInfoShow(show);
         return vo;

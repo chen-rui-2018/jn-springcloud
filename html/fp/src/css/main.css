@@ -3491,6 +3491,7 @@ img {
   font-size: 16px;
   font-weight: 500;
   margin-top: 10px;
+  text-align: left;
 }
 
 .portalIndex .enterpriseinfo .enterPriseCon .con1 .conInfo,
@@ -3617,6 +3618,11 @@ img {
   margin-top: 5px;
 }
 
+.portalIndex .enterpriseinfo .enterPriseCon .con2 .conT2 > .contop1 .sp1,
+.enterpriseservice .enterpriseinfo .enterPriseCon .con2 .conT2 > .contop1 .sp1 {
+  margin-left: 10px;
+}
+
 .portalIndex .enterpriseinfo .enterPriseCon .con2 .conT2 > .contop2,
 .enterpriseservice .enterpriseinfo .enterPriseCon .con2 .conT2 > .contop2 {
   margin-top: 20px;
@@ -3662,6 +3668,7 @@ img {
       -ms-flex: 23%;
           flex: 23%;
   margin-bottom: 40px;
+  opacity: 0;
 }
 
 .portalIndex .enterprisesPark .enterPark > ul li p,

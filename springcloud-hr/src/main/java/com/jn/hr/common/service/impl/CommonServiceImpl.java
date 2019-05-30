@@ -90,7 +90,11 @@ public class CommonServiceImpl implements CommonService {
                     String str = DateUtils.formatDate(new Date(), "yyyyMMdd");
                     String fileName = split[0] + str + RandomStringUtils.randomNumeric(4) + "." + split[1];
 
-                    Result<String> result = uploadClient.uploadFile(file, true,fileGroup);
+                    Result<String> result = uploadClient.uploadFile(file, false,fileGroup);
+                    if(!"0000".equals(result.getCode())){
+                        logger.error("附件上传失败,code={},message={}",result.getCode(),result.getResult());
+                        throw new JnSpringCloudException(HrExceptionEnums.UPLOAD_FILE_ERRPR);
+                    }
                     map.put("title", fileName);
                     map.put("url", result.getData());
                     list.add(map);

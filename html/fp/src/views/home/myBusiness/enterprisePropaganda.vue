@@ -1,7 +1,7 @@
 <template>
   <div class="enterpriseProduct">
     <div class="ordinary_title">
-      <div>企业宣传</div>
+      <div class="font16">企业宣传</div>
       <div @click="toPublishingPropaganda">发布宣传</div>
     </div>
     <div class="ordinary_main">
@@ -210,7 +210,7 @@ cursor: pointer;
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
       div:nth-child(2){
         width:88px;

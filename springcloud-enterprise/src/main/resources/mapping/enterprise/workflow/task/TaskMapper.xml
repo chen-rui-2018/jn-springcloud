@@ -82,33 +82,31 @@
     </select>
 
     <!-- 时效性待办事项预警数据统计 -->
-    <select id="getWorkflowTaskStatistics" resultType="java.lang.String">
-        SELECT GROUP_CONCAT(x.warnNum separator ';') FROM (
+    <select id="getWorkflowTaskStatistics" resultType="com.jn.enterprise.workflow.task.vo.WarnStatisticsVO">
+        SELECT
+            b.warnType AS "warnType",
+            COUNT(b.id) AS "warnNum"
+        FROM (
             SELECT
-                b.warnType AS "warnType",
-                COUNT(b.id) AS "warnNum"
+                h.id,
+                CASE
+                    <![CDATA[
+                    WHEN h.warnTime <= #{warnHour} THEN "WARNING"
+                    WHEN #{warnHour} < h.warnTime AND h.warnTime <= #{earlyWarnHour} THEN "EARLY_WARNING"
+                    ]]>
+                ELSE "NORMAL" END AS "warnType"
             FROM (
                 SELECT
-                    h.id,
-                    CASE
-                        <![CDATA[
-                        WHEN h.warnTime <= #{warnHour} THEN "2"
-                        WHEN #{warnHour} < h.warnTime AND h.warnTime <= #{earlyWarnHour} THEN "1"
-                        ]]>
-                    ELSE "0" END AS "warnType"
-                FROM (
-                    SELECT
-                    a.id,
-                    ROUND((UNIX_TIMESTAMP(a.end_time) - UNIX_TIMESTAMP(NOW())) / 3600,2) AS "warnTime"
-                    FROM tb_workflow_task a
-                    WHERE a.status = 1
-                    AND a.record_status = 1
-                    AND a.user_id = #{userId}
-                ) h
-            ) b
-            GROUP BY b.warnType
-            ORDER BY b.warnType DESC
-        ) x
+                a.id,
+                ROUND((UNIX_TIMESTAMP(a.end_time) - UNIX_TIMESTAMP(NOW())) / 3600,2) AS "warnTime"
+                FROM tb_workflow_task a
+                WHERE a.status = 1
+                AND a.record_status = 1
+                AND a.user_id = #{userId}
+            ) h
+        ) b
+        GROUP BY b.warnType
+        ORDER BY b.warnType DESC
     </select>
 
 

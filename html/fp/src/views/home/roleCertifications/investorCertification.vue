@@ -1,6 +1,6 @@
 <template>
   <div class="investorCertification">
-    <div class="investorCertification-header">
+    <div class="investorCertification-header font16">
       <div>投资人认证</div>
     </div>
     <el-main style="padding:0 25px;text-align:left;background:#fff;">
@@ -728,7 +728,7 @@ export default {
     background-color: #fff;
     padding: 17px;
     margin-bottom: 14px;
-    font-size: 13px;
+    // font-size: 13px;
     border-radius: 5px;
   }
   .el-table__header {

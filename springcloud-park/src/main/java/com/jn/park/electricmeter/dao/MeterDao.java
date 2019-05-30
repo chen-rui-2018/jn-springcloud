@@ -1,7 +1,7 @@
 package com.jn.park.electricmeter.dao;
 
 import com.jn.park.electricmeter.entity.*;
-import com.jn.park.electricmeter.model.SwitchModel;
+import com.jn.park.electricmeter.model.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -157,5 +157,33 @@ public interface MeterDao {
      * @param saveData
      */
     void saveMeterSwitchLog(@Param("saveData") List<TbElectricMeterSwitchLog> saveData);
+
+    //能耗统计
+    /**
+     * 分组统计
+     * @return
+     */
+    List<GroupChartStatisticsModel> groupChart();
+
+    /**
+     * 分类统计
+     * @return
+     */
+    List<GategaryEnergyStatisticsModel> categaryChart() ;
+
+    /**
+     * 趋势明细图
+     * @param param
+     * @return
+     */
+    List<TrendChartDetailStatisticsModel> trendChartDetail(TrendChartPageParam param) ;
+
+    /**
+     * 趋势图
+     * @param param
+     * @return
+     */
+    List<TrendChartStatisticsModel> trendChart(TrendChartParam param);
+
 
 }

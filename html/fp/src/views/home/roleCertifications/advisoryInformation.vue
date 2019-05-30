@@ -1,6 +1,6 @@
 <template>
   <div class="advisoryInformation">
-    <div class="advisory_title">
+    <div class="advisory_title font16">
       <div>顾问资料填写</div>
     </div>
 
@@ -875,7 +875,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 17px;
-    font-size: 13px;
+    // font-size: 13px;
     border-radius: 5px;
     div:nth-child(2) {
       width: 88px;

@@ -78,9 +78,6 @@ ul{
 .demo> a:hover{
   color:#fff !important;
 }
-.el-pagination{
-  margin-top:15px;
-}
  .el-dialog__footer{
     text-align: center;
   }

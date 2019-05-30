@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -17,19 +18,20 @@ public class ServiceEnterpriseParam extends Page implements Serializable {
 
     private static final long serialVersionUID = 5085520769089005087L;
 
-    @ApiModelProperty(value = "企业名称[模糊搜索]",example = "南京")
+    @ApiModelProperty(value = "企业名称[模糊搜索]", example = "南京")
     private String comName;
 
-    @ApiModelProperty(value = "企业来源[1人才企业2招商企业]]",example = "1")
+    @Pattern(regexp = "^[12]$", message = "企业来源校验错误")
+    @ApiModelProperty(value = "企业来源[1人才企业2招商企业]]", example = "1")
     private String comSource;
 
-    @ApiModelProperty(value = "所属园区(传园区的id)",example = "0001")
+    @ApiModelProperty(value = "所属园区(传园区的id)", example = "0001")
     private String affiliatedPark;
 
-    @ApiModelProperty(value = "产业领域",example = "shengwuyiyao")
+    @ApiModelProperty(value = "产业领域", example = "cloud_computing")
     private String induType;
 
-    @ApiModelProperty(value = "排序字段",example = " ")
+    @ApiModelProperty(value = "排序字段")
     private String orderByClause;
 
     public static long getSerialVersionUID() {

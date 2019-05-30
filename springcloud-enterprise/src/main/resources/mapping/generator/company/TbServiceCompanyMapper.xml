@@ -21,7 +21,7 @@
     <result column="com_property" jdbcType="VARCHAR" property="comProperty" />
     <result column="reg_capital" jdbcType="DECIMAL" property="regCapital" />
     <result column="add_capital" jdbcType="VARCHAR" property="addCapital" />
-    <result column="com_scale" jdbcType="DECIMAL" property="comScale" />
+    <result column="com_scale" jdbcType="VARCHAR" property="comScale" />
     <result column="founding_time" jdbcType="TIMESTAMP" property="foundingTime" />
     <result column="run_time" jdbcType="TIMESTAMP" property="runTime" />
     <result column="indu_type" jdbcType="VARCHAR" property="induType" />
@@ -193,7 +193,7 @@
       #{ownerPhone,jdbcType=VARCHAR}, #{ownerWechat,jdbcType=VARCHAR}, #{ownerQq,jdbcType=VARCHAR}, 
       #{bankName,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, #{products,jdbcType=VARCHAR}, 
       #{material,jdbcType=VARCHAR}, #{comProperty,jdbcType=VARCHAR}, #{regCapital,jdbcType=DECIMAL}, 
-      #{addCapital,jdbcType=VARCHAR}, #{comScale,jdbcType=DECIMAL}, #{foundingTime,jdbcType=TIMESTAMP}, 
+      #{addCapital,jdbcType=VARCHAR}, #{comScale,jdbcType=VARCHAR}, #{foundingTime,jdbcType=TIMESTAMP}, 
       #{runTime,jdbcType=TIMESTAMP}, #{induType,jdbcType=VARCHAR}, #{induCode,jdbcType=VARCHAR}, 
       #{businessLicense,jdbcType=VARCHAR}, #{propagandaPicture,jdbcType=VARCHAR}, #{licStarttime,jdbcType=TIMESTAMP}, 
       #{licEndtime,jdbcType=TIMESTAMP}, #{registerType,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, 
@@ -458,7 +458,7 @@
         #{addCapital,jdbcType=VARCHAR},
       </if>
       <if test="comScale != null">
-        #{comScale,jdbcType=DECIMAL},
+        #{comScale,jdbcType=VARCHAR},
       </if>
       <if test="foundingTime != null">
         #{foundingTime,jdbcType=TIMESTAMP},
@@ -655,7 +655,7 @@
         add_capital = #{record.addCapital,jdbcType=VARCHAR},
       </if>
       <if test="record.comScale != null">
-        com_scale = #{record.comScale,jdbcType=DECIMAL},
+        com_scale = #{record.comScale,jdbcType=VARCHAR},
       </if>
       <if test="record.foundingTime != null">
         founding_time = #{record.foundingTime,jdbcType=TIMESTAMP},
@@ -809,7 +809,7 @@
       com_property = #{record.comProperty,jdbcType=VARCHAR},
       reg_capital = #{record.regCapital,jdbcType=DECIMAL},
       add_capital = #{record.addCapital,jdbcType=VARCHAR},
-      com_scale = #{record.comScale,jdbcType=DECIMAL},
+      com_scale = #{record.comScale,jdbcType=VARCHAR},
       founding_time = #{record.foundingTime,jdbcType=TIMESTAMP},
       run_time = #{record.runTime,jdbcType=TIMESTAMP},
       indu_type = #{record.induType,jdbcType=VARCHAR},
@@ -914,7 +914,7 @@
         add_capital = #{addCapital,jdbcType=VARCHAR},
       </if>
       <if test="comScale != null">
-        com_scale = #{comScale,jdbcType=DECIMAL},
+        com_scale = #{comScale,jdbcType=VARCHAR},
       </if>
       <if test="foundingTime != null">
         founding_time = #{foundingTime,jdbcType=TIMESTAMP},
@@ -1065,7 +1065,7 @@
       com_property = #{comProperty,jdbcType=VARCHAR},
       reg_capital = #{regCapital,jdbcType=DECIMAL},
       add_capital = #{addCapital,jdbcType=VARCHAR},
-      com_scale = #{comScale,jdbcType=DECIMAL},
+      com_scale = #{comScale,jdbcType=VARCHAR},
       founding_time = #{foundingTime,jdbcType=TIMESTAMP},
       run_time = #{runTime,jdbcType=TIMESTAMP},
       indu_type = #{induType,jdbcType=VARCHAR},

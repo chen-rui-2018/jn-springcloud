@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,14 +44,14 @@ public class CompanyController extends BaseController {
     @ControllerLog(doAction = "查询企业列表")
     @ApiOperation(value = "查询企业列表")
     @RequestMapping(value = "/getCompanyList",method = RequestMethod.GET)
-    public Result<PaginationData<List<ServiceCompany>>> getCompanyList(ServiceCompanyParam serviceCompanyParam){
+    public Result<PaginationData<List<ServiceCompany>>> getCompanyList(@Validated ServiceCompanyParam serviceCompanyParam){
         return new Result<>(companyService.getCompanyList(serviceCompanyParam));
     }
 
     @ControllerLog(doAction = "查询企业列表-新版")
     @ApiOperation(value = "查询企业列表-新版")
     @RequestMapping(value = "/getCompanyNewList",method = RequestMethod.GET)
-    public Result<PaginationData<List<ServiceEnterpriseCompany>>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam){
+    public Result<PaginationData<List<ServiceEnterpriseCompany>>> getCompanyNewList(@Validated ServiceEnterpriseParam serviceEnterpriseParam){
         return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam));
     }
     @ControllerLog(doAction = "查询企业详情-新版")
@@ -92,7 +93,7 @@ public class CompanyController extends BaseController {
     @ControllerLog(doAction = "获取评论/留言信息")
     @ApiOperation(value = "获取评论/留言信息")
     @RequestMapping(value = "/getCommentInfo",method = RequestMethod.GET)
-    public Result<PaginationData<List<Comment>>>  getCommentInfo(ActivityPagingParam activityPagingParam){
+    public Result<PaginationData<List<Comment>>>  getCommentInfo(@Validated ActivityPagingParam activityPagingParam){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         activityPagingParam.setAccount(user==null?"":user.getAccount());
         return companyService.getCommentInfo(activityPagingParam);
@@ -101,7 +102,7 @@ public class CompanyController extends BaseController {
     @ControllerLog(doAction = "留言/留言回复")
     @ApiOperation(value = "留言/留言回复")
     @RequestMapping(value = "/commentActivity",method = RequestMethod.POST)
-    public Result<Boolean> commentActivity(@RequestBody CommentAddParam commentAddParam){
+    public Result<Boolean> commentActivity(@Validated @RequestBody CommentAddParam commentAddParam){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
             throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);

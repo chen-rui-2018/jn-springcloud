@@ -39,12 +39,12 @@
       <div class="allActi clearfix">
         <ul class="actiFilterUl fl clearfix">
           <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
-          <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeName}" @click="handleFil(v.typeName)">{{v.typeName}}</li>
+          <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeId}" @click="handleFil(v.typeId)">{{v.typeName}}</li>
           <li v-if="this.actiTypeList.length>4" class="bottomLi pr">
             <i class="iconfont icon-bottom" @click.stop="handleTypeList"></i>
             <el-card class="box-card" v-if="showList" style="overflow:auto">
               <ul class="listUl clearfix">
-                <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeName}" @click.stop="handleFil(i.typeName)">
+                <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeId}" @click.stop="handleFil(i.typeId)">
                   <i class="iconfont icon-yuandian"></i>{{i.typeName}}</li>
               </ul>
             </el-card>
@@ -154,7 +154,8 @@ export default {
       timeIndexFlag: "",
       startTime: "",
       endTime: "",
-      showList: false
+      showList: false,
+      typeId:''
     };
   },
   mounted() {
@@ -188,7 +189,7 @@ export default {
     },
     handleFil(v) {
       //筛选
-      this.keyWord = v;
+      this.typeId = v;
       this.actiFilflag = v;
       this.initList();
     },
@@ -255,7 +256,7 @@ export default {
           page: this.page,
           rows: this.row,
           startTime: this.startTime,
-          typeId: ""
+          typeId: this.typeId
         },
         dataFlag: false,
         callback: function(res) {

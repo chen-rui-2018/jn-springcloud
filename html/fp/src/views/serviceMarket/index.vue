@@ -21,7 +21,7 @@
                     <li @click='$router.push({path:"/actiTrain"})'>活动培训</li>
                     <li @click='$router.push({path:"/aboutUs"})'>关于我们</li>
                 </div>
-                <div class="headerRight">
+                <div class="headerRight pr">
                   <div class="search" >
                     <i class="el-icon-search" style="font-size:20px" @click="show3=true"></i>
                   </div>

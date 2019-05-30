@@ -10,9 +10,9 @@
             <i class="el-icon-search"></i>
           </div>
           <div class="headerRight fr">
-            <div class="search">
+            <!-- <div class="search">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
+            </div> -->
             <!-- <div class="navlogin" v-if="this.$route.name!=='actiManagent'">
               <a @click="$router.push({path:'/login'})">登录</a>
               <span class="line">|</span>

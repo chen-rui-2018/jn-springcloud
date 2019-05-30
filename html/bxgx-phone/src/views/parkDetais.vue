@@ -23,8 +23,8 @@ export default {
       this.api.get({
         url: 'findNoticeDetails',
         data: {
-          noticeId: '536d4e9c22a1465dbb1f1644f793e900'
-          //   noticeId: this.$route.query.noticeId
+          // noticeId: '536d4e9c22a1465dbb1f1644f793e900'
+          noticeId: this.$route.query.noticeId
         },
         callback: res => {
           if (res.code === '0000') {

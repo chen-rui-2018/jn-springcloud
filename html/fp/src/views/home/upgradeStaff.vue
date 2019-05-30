@@ -55,7 +55,6 @@ export default {
       loading: false,
       sendAuthCode: true,
       auth_time: 0,
-      checkCode: "",
       comId: "",
       comName: "",
       companyList: "",
@@ -72,7 +71,8 @@ export default {
         phone: "",
         date1: "",
         realname: "",
-        joinCom: ""
+        joinCom: "",
+        checkCode: "",
       },
       rules: {
         name: [{ required: true, message: "请输入名号", trigger: "blur" }],
@@ -132,18 +132,12 @@ export default {
             },
             callback: function(res) {
               if (res.code == "0000") {
-                _this.$message.success("申请成功");
-                (_this.ruleForm.name = ""),
-                  (_this.ruleForm.phone = ""),
-                  (_this.ruleForm.date1 = ""),
-                  (_this.ruleForm.realname = ""),
-                  (_this.ruleForm.joinCom = ""),
-                  console.log(res);
+                _this.$message.success(res.result);
+                 _this.$refs['ruleForm'].resetFields();
               }
             }
           });
         } else {
-          console.log("error submit!!");
           this.$message.error(res.result);
           return false;
         }
@@ -159,9 +153,9 @@ export default {
       let _this = this;
       this.api.get({
         // url: `springcloud-user/guest/userJoin/getCode?phone=${_this.phone}`,
-        url: "getCode",
+        url: "getUserCode",
         data: {
-          phone: _this.ruleForm.phone
+          // phone: _this.ruleForm.phone
         },
         callback: function(res) {
           if (res.code == "0000") {

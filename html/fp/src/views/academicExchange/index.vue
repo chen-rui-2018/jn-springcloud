@@ -37,6 +37,7 @@
                 <div id="nav1" class="nav1 clearfix">
                     <div class="nav1Tit fl">所有类别：</div>
                     <ul class="nav1Ul fl clearfix">
+                        <li class="wid1" :class="{'active1':flag1==''}" @click="handleFilter('')">全部</li>
                         <li class="wid1" :class="{'active1':flag1=='science'}" @click="handleFilter('science')">学术</li>
                         <li class="wid1" :class="{'active1':flag1=='technology'}" @click="handleFilter('technology')">科技</li>
                     </ul>
@@ -64,7 +65,7 @@
                                 <p class="p2">
                                     成果类型：<span v-if="i.type=='technology'">科技</span><span v-if="i.type=='science'">学术</span>
                                 </p>
-                                <p class="color22">{{i.details}}</p>
+                                <p class="color22" v-html="i.details"></p>
                                 <!-- <div class="firInfo">{{i.briefContent}}</div> -->
                             </div>
                             <div class="fir2 fr mainColor"  @click="$router.push({path:'/technologyDetails',query:{achievementId:i.id}})">详情</div>

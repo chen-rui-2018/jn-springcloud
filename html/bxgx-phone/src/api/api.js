@@ -20,6 +20,7 @@ export default {
     sameTypeProductList: 'springcloud-enterprise/guest/servicemarket/product/web/sameTypeProductList', // 同类型产品
     activityLike: 'springcloud-park/activity/activityLike/activityLike', // 活动点赞
     CancelLike: 'springcloud-park/activity/activityLike/cancelLike', // 取消点赞
+    quickApply: 'springcloud-park/activity/activityApply/quickApply', // 快速报名
 
     trafficVolume: 'springcloud-enterprise/guest/pd/declarationNotice/trafficVolume', // 申报中心访问量
     onlineBooking: 'springcloud-enterprise/pd/online/onlineBooking', // 申报中心预约申报

@@ -154,6 +154,7 @@ export default {
         }
         .el-input{
           width: 25%;
+          font-size: 12px;
         }
         .el-select>.el-input{
           width:100%;

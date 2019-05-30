@@ -15,8 +15,8 @@
         <el-container>
           <!-- 侧边栏 -->
           <div class="slider" v-if="$store.state.hiddenNav">
-            <el-aside width="135px">
-              <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" @open="handleOpen"
+            <el-aside width="150px">
+              <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
                 <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" />
                 <!-- <el-menu-item index="/home">
@@ -318,6 +318,9 @@ export default {
 };
 </script>
 <style lang="scss">
+ .el-main {
+            padding: 0 20px;
+          }
   .header.user-center {
     background-color: #fff;
     .router-link {
@@ -520,7 +523,7 @@ export default {
 
         .el-menu-item.is-active {
           color: #00a042;
-          background-color: #fff;
+          background-color: #f7f7f7;
           border-left: 2px solid #00a042;
           &:hover {
             color: #fff;
@@ -543,8 +546,15 @@ export default {
           min-width: 0;
         }
         .el-submenu.is-active .el-submenu__title {
-          // border-left: 2px solid #00a042;
           border-left: 2px solid #00a042;
+        }
+         .el-menu-item {
+            // background-color: #f7f7f7;
+            margin: 0;
+          }
+        .el-menu-item:hover {
+          color: #fff;
+          background-color: #00a042;
         }
         .el-menu-item-group {
           background-color: #f7f7f7;
@@ -564,8 +574,12 @@ export default {
         .el-menu-item:hover {
           color: #fff;
           background-color: #00a042;
+
+          .el-main.isMobile{
+            padding: 0;
+          }
+
         }
-      }
       }
 
     .isMobile {
@@ -578,7 +592,8 @@ export default {
     flex: 1;
     width: 100%;
   }
-}
+    }
+  }
 }
 
 </style>

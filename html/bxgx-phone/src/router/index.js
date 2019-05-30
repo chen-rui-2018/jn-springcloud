@@ -25,6 +25,12 @@ export default new Router({
       component: () => import('@/views/administrative/powerDetail')
     },
     {
+      path: '/guest/portal/sp/power/text',
+      name: 'text',
+      meta: {title: '实施依据详情'},
+      component: () => import('@/views/administrative/text')
+    },
+    {
       path: '/guest/portal/sp/power/serviceDetail',
       name: 'serviceDetail',
       meta: {title: '服务详情'},

@@ -1,5 +1,5 @@
 <!--pages/meeting/meetingPerson/meetingPerson.wxml-->
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <view class="meetingAttendance">
   <view class="meeting_cont">
     <view>会议名称：{{meetingApplyDetail.title}}</view>

@@ -147,7 +147,8 @@
 .person_num{
   padding-left: 10rpx;
 }
-.num_right .icon-likefill{
-  padding-right: 12rpx;
-  color:#0bac4d;
+.num_right image{
+  width: 28rpx;
+  height: 23rpx;
+  margin-right: 12rpx;
 }

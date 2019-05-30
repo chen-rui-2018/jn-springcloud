@@ -45,3 +45,34 @@ map,.mapBox{
   width: 750rpx;
   height: 300rpx;
 }
+.cu-list.menu>.cu-item .content{
+  font-size: 26rpx;
+}
+.cu-list.menu>.cu-item .content>image {
+  margin-right:15rpx;
+
+}
+.cu-list.menu>.cu-item .content>image {
+  width:65rpx;
+  height:65rpx;
+}
+.content{
+  display: flex;
+  align-items: center;
+}
+.loginOut{
+  margin-top: 80rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  color:#9A9A9A;
+  text-align: center;
+  background-color: #fff;
+  font-size: 26rpx;
+}
+.text-xl{
+  margin-top: 20rpx;
+  font-weight: 600;
+}
+.cu-list.menu>.cu-item{
+  min-height:80rpx;
+}

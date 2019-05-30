@@ -1,4 +1,4 @@
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <view class="orgDepartment" >
   <!-- 多选 -->
   <view class="select_box" >

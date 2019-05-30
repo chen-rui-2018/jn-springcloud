@@ -1,5 +1,5 @@
 <!--pages/meeting/meetingPerson/meetingPerson.wxml-->
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <view class="meetingPerson" hover-class="none" hover-stop-propagation="false">
   <!-- 搜索框 -->
   <view class="search" hover-class="none" hover-stop-propagation="false">

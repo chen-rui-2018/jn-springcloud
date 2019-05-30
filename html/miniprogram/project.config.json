@@ -37,12 +37,26 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 2,
 			"list": [
 				{
 					"id": 0,
-					"name": "停车缴费",
-					"pathName": "pages/index/parkPay/parkPay",
+					"name": "我的爱车",
+					"pathName": "pages/home/maCar/maCar",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "缴费",
+					"pathName": "pages/home/payRecord/payRecord",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "编辑车",
+					"pathName": "pages/home/aboutUs/aboutUs",
 					"query": "",
 					"scene": null
 				}

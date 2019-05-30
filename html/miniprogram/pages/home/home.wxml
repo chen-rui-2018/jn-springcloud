@@ -1,71 +1,36 @@
 <view class='UCenter-bg'>
-  <!-- <image src='/images/logo.png' class='png' mode='widthFix'></image> -->
   <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"></image>
   <view class='text-xl'>{{ userInfo.nickName }}
-    <!-- <text class='text-df'>{{ userInfo.nickName }}</text> -->
   </view>
   <view class='margin-top-sm'>
-    <!-- <text>By:文晓港</text> -->
   </view>
-  <image src='/images/wave.gif' mode='scaleToFill' class='gif-wave'></image>
 </view>
-<view class='padding flex text-center text-grey bg-white shadow-warp'>
-  南京白下高新园区
-  <!--
-  <view class='flex flex-sub flex-direction solid-right'>
-    <view class="text-xxl text-orange">{{visitTotal}}</view>
-    <view class="margin-top-sm">
-      <text class='icon-attentionfill'></text> View</view>
-  </view>
-  <view class='flex flex-sub flex-direction solid-right'>
-    <view class="text-xxl text-blue">{{starCount}}</view>
-    <view class="margin-top-sm">
-      <text class='icon-favorfill'></text> Star</view>
-  </view>
-  <view class='flex flex-sub flex-direction'>
-    <view class="text-xxl text-green">{{forksCount}}</view>
-    <view class="margin-top-sm">
-      <text class='icon-fork'></text> Fork</view>
-  </view>
-  -->
-</view>
-<view class="cu-list menu margin-top-xl margin-bottom-xl shadow-lg">
+<view class="cu-list menu  shadow-lg">
   <view class="cu-item arrow">
-    <navigator class='content' url='../log/log' hover-class='none'>
-      <text class='icon-formfill text-green'></text>
-      <text class='text-grey'>我的爱车</text>
-    </navigator>
-  </view>
-  <view class="cu-item arrow">
-    <view class='content' bindtap="showQrcode">
-      <text class='icon-appreciatefill text-red'></text>
-      <text class='text-grey'>我的报修</text>
-    </view>
-  </view>
-  <view class="cu-item arrow">
-    <button class='cu-btn content' open-type='feedback'>
-      <text class='icon-writefill text-cyan'></text>
-      <text class='text-grey'>我的活动</text>
-    </button>
-  </view>
-  <view class="cu-item arrow">
-    <navigator class='content' url='../test/list' hover-class='none'>
-      <text class='icon-creativefill text-orange'></text>
+    <navigator class='content' url='./payRecord/payRecord' hover-class='none'>
+      <image class="" src="./../../images/1@2x.png"> </image>
       <text class='text-grey'>缴费记录</text>
     </navigator>
   </view>
-  <view class="cu-item arrow">
+  <!-- <view class="cu-item arrow">
     <button class='cu-btn content' open-type='feedback'>
-      <text class='icon-writefill text-cyan'></text>
-      <text class='text-grey'>修改密码</text>
+      <image class="" src="./../../images/tijian@2x.png"> </image>
+      <text class='text-grey'>我的活动</text>
     </button>
-  </view>
+  </view> -->
   <view class="cu-item arrow">
-    <navigator class='content' url='../test/list' hover-class='none'>
-      <text class='icon-creativefill text-orange'></text>
-      <text class='text-grey'>关于我们</text>
+    <navigator class='content' url='./maCar/maCar' hover-class='none'>
+      <image class="" src="./../../images/my_car.png"></image>
+      <text class='text-grey'>我的爱车</text>
     </navigator>
   </view>
+  <view class="cu-item arrow" bindtap="goabout">
+    <!-- <navigator class='content' url='./aboutUs/aboutUs' hover-class='none'> -->
+    <view class="content">
+      <image class="" src="./../../images/tingche-@2x.png"> </image>      
+      <text class='text-grey'>关于我们</text>
+    </view>
+    <!-- </navigator> -->
+  </view>
 </view>
-
 <view class='cu-tabbar-height'></view>

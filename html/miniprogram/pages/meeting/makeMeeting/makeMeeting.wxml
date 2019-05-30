@@ -1,5 +1,5 @@
 <!--pages/meeting/makeMeeting/makeMeeting.wxml-->
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <view class="roomForm" >
   <form bindsubmit="formSubmit" bindreset="formReset" class="form">
     <view class="section" bindtap="goTitle">

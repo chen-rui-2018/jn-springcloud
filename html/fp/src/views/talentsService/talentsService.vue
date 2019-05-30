@@ -102,6 +102,18 @@
           :total="total">
         </el-pagination>
       </div>
+      <!-- 弹窗 -->
+      <el-dialog
+        title="提示"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        center>
+        <span>亲，您需要登录后才能访问以下界面哦！</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="centerDialogVisible = false">留在当前页面</el-button>
+          <el-button type="primary" @click="goLogin">去登陆</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -116,7 +128,8 @@ export default {
         sortType:'1',//排序
         page:1,
         rows:5,
-        perennialList:[]
+        perennialList:[],
+        centerDialogVisible:false
       }
     },
     filters: {
@@ -154,6 +167,9 @@ export default {
       this.getperennialList()//常年申报
     },
     methods: {
+      goLogin(){
+        this.$router.push({path:"/login"})
+      },
       //区类型获取
       getdeclarationcentertype(){
         let _this = this;
@@ -230,7 +246,11 @@ export default {
       },
       //跳转页面
       gotalentplatform(){
-        this.$router.push({name:'talentPlatform'})
+        if(sessionStorage.token){
+          this.$router.push({name:'talentPlatform'})
+        }else{
+          this.centerDialogVisible=true
+        }
       },
       //跳转页面
       gotalentdetail(id){

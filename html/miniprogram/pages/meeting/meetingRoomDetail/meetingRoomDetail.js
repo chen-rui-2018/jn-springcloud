@@ -1,5 +1,4 @@
-
-import {CreateHeader} from "./../../../utils/require"
+import request from "./../../../utils/http"
 const date = new Date()
 Page({
   data: {
@@ -26,57 +25,69 @@ Page({
    },
   onReady: function () { },
   onShow: function () {
-    CreateHeader()
-    .then(header=>{
-      this.data.token=header.token
-      this.getRoomDetail()
-      this.getMeetingList()
-    })
+    this.getRoomDetail()
+    this.getMeetingList()
    },
   onUnload: function () { },
   onPullDownRefresh: function () { },
   onReachBottom: function () { },
    // 会议室详情
   getRoomDetail(){
-    wx.request({
-      url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeetingRoom/selectById?id='+this.data.sendData.meetingRoomId,
-      data:{} ,
-      header: {'content-type':'application/json','token':this.data.token},
+    // wx.request({
+    //   url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeetingRoom/selectById?id='+this.data.sendData.meetingRoomId,
+    //   data:{} ,
+    //   header: {'content-type':'application/json','token':this.data.token},
+    //   method: 'POST',
+    //   dataType: 'json',
+    //   success: (res)=>{
+    //     // console.log(res)
+    //     if(res.data.code==='0000'){
+    //       this.setData({
+    //         meetingDetail:res.data.data,
+    //       })
+    //     }
+    //   },
+    //   fail: ()=>{},
+    //   complete: ()=>{}
+    // });
+    request.send({
+      url: '/springcloud-oa/oa/oaMeetingRoom/selectById?id='+this.data.sendData.meetingRoomId,
+      data: {},
       method: 'POST',
-      dataType: 'json',
-      success: (res)=>{
-        // console.log(res)
-        if(res.data.code==='0000'){
-          this.setData({
-            meetingDetail:res.data.data,
-          })
-        }
-      },
-      fail: ()=>{},
-      complete: ()=>{}
-    });
+    }).then(res=>{
+      if(res.data.code==='0000'){
+        this.setData({
+          meetingDetail:res.data.data,
+        })
+      }
+    })
   },
   getMeetingList(){
-    wx.request({
-      url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeetingRoom/orderList',
-      data:this.data.sendData ,
-      header: {'content-type':'application/json','token':this.data.token},
+    // wx.request({
+    //   url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeetingRoom/orderList',
+    //   data:this.data.sendData ,
+    //   header: {'content-type':'application/json','token':this.data.token},
+    //   method: 'POST',
+    //   dataType: 'json',
+    //   success: (res)=>{
+    //     if(res.data.code==='0000'){
+    //       this.setData({
+    //         meetingList:res.data.data.rows[0].meetingList,
+    //       })
+    //     }
+    //   },
+    //   fail: ()=>{},
+    //   complete: ()=>{}
+    // });
+    request.send({
+      url: '/springcloud-oa/oa/oaMeetingRoom/orderList',
+      data: this.data.sendData,
       method: 'POST',
-      dataType: 'json',
-      success: (res)=>{
-        if(res.data.code==='0000'){
-          this.setData({
-            meetingList:res.data.data.rows[0].meetingList,
-          })
-          res.data.data.rows[0].meetingList.forEach(ele => {
-            /* ele.starTime=ele.starTime.split('8') */
-            // console.log(ele.starTime)
-          });
-        }
-      },
-      fail: ()=>{},
-      complete: ()=>{}
-    });
+    }).then(res=>{
+      this.setData({
+        meetingList:res.data.data.rows[0].meetingList,
+      })
+    })
   },
   goAttendence(e){
     wx.navigateTo({

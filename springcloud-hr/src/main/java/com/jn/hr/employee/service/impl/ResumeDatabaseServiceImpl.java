@@ -11,16 +11,14 @@ import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.enums.HrStatusEnums;
 import com.jn.hr.common.service.CommonService;
 import com.jn.hr.common.util.DepartMentUtil;
+import com.jn.hr.common.util.IDCardUtil;
 import com.jn.hr.common.util.SysDictKeyValueUtil;
 import com.jn.hr.common.util.ValidateUtil;
 import com.jn.hr.employee.dao.ResumeDatabaseMapper;
 import com.jn.hr.employee.dao.TbManpowerBackgroundInvestMapper;
 import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
 import com.jn.hr.employee.dao.TbManpowerResumeDatabaseMapper;
-import com.jn.hr.employee.entity.TbManpowerBackgroundInvest;
-import com.jn.hr.employee.entity.TbManpowerDepartment;
-import com.jn.hr.employee.entity.TbManpowerDepartmentCriteria;
-import com.jn.hr.employee.entity.TbManpowerResumeDatabase;
+import com.jn.hr.employee.entity.*;
 import com.jn.hr.employee.enums.ApplicationResultEnum;
 import com.jn.hr.employee.enums.BackgroundInvestEnum;
 import com.jn.hr.employee.enums.EmployeeExceptionEnums;
@@ -316,6 +314,17 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
         if(StringUtils.isBlank(database.getCertificateNumber())){
             return "证件号不能为空";
         }
+
+        if("身份证".equals(database.getCertificateType())){
+            if(!IDCardUtil.validateIdCard(database.getCertificateNumber())){
+                return "证件号码错误";
+            }
+        }else{
+            if(!ValidateUtil.validCommonZjhm(database.getCertificateNumber())){
+                return "证件号码错误";
+            }
+        }
+
         if(StringUtils.isBlank(database.getEducationName())){
             return "学历名称不能为空";
         }
@@ -354,6 +363,24 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
             return "部门名称错误";
         }
         return "";
+    }
+
+    @Override
+    public boolean checkPhoneExist(String phone,String id) {
+        ResumeDatabase info=resumeDatabaseMapper.selectByPhone(phone,id);
+        return info==null ? true:false;
+    }
+
+    @Override
+    public boolean checkMailboxExist(String mailBox,String id) {
+        ResumeDatabase info=resumeDatabaseMapper.selectByMailbox(mailBox,id);
+        return info==null ? true:false;
+    }
+
+    @Override
+    public boolean checkCertificateNumberExist(String certificateNumber,String id) {
+        ResumeDatabase info=resumeDatabaseMapper.selectByCertificateNumber(certificateNumber,id);
+        return info==null ? true:false;
     }
 
 }

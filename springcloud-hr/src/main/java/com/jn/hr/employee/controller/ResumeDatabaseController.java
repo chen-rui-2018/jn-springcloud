@@ -179,4 +179,33 @@ public class ResumeDatabaseController extends BaseController {
         }
     }
 
+    @ControllerLog(doAction = "校验简历号码是否存在")
+    @RequiresPermissions("/hr/resumeData/checkPhoneExist")
+    @ApiOperation(value = "校验员工号码是否存在", notes = "校验简历号码是否存在")
+    @GetMapping(value = "/checkPhoneExist")
+    public Result checkPhoneExist(@RequestParam("phone") String phone,@RequestParam(value="id",required = false) String id){
+        Assert.notNull(phone,"号码不能为空");
+        boolean flag= resumeDatabaseService.checkPhoneExist(phone,id);
+        return new Result(flag);
+    }
+    @ControllerLog(doAction = "校验简历邮箱是否存在")
+    @RequiresPermissions("/hr/resumeData/checkMailboxExist")
+    @ApiOperation(value = "校验简历邮箱是否存在", notes = "校验简历邮箱是否存在")
+    @GetMapping(value = "/checkMailboxExist")
+    public Result checkMailboxExist(@RequestParam("mailbox") String mailbox,@RequestParam(value="id",required = false) String id){
+        Assert.notNull(mailbox,"邮箱不能为空");
+        boolean flag= resumeDatabaseService.checkMailboxExist(mailbox,id);
+        return new Result(flag);
+    }
+    @ControllerLog(doAction = "校验简历证件号码是否存在")
+    @RequiresPermissions("/hr/resumeData/checkCertificateNumberExist")
+    @ApiOperation(value = "校验简历证件号码是否存在", notes = "校验简历证件号码是否存在")
+    @GetMapping(value = "/checkCertificateNumberExist")
+    public Result checkCertificateNumberExist(@RequestParam("certificateNumber") String certificateNumber,
+                                              @RequestParam(value="id",required = false) String id){
+        Assert.notNull(certificateNumber,"证件号码不能为空");
+        boolean flag= resumeDatabaseService.checkCertificateNumberExist(certificateNumber,id);
+        return new Result(flag);
+    }
+
 }

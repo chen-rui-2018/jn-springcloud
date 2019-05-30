@@ -63,7 +63,7 @@
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
             and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
     </if>
-    group by department
+    group by department desc
   </select>
   
   <select id="selectByPeople" parameterType="map" resultType="com.jn.hr.increase.model.SalaryKeyValue">
@@ -72,7 +72,7 @@
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
             and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
     </if>
-    group by department
+    group by department desc
   </select>
   
   <select id="selectByDepartmentCost" parameterType="map" resultType="com.jn.hr.increase.model.SalaryKeyValue">
@@ -81,7 +81,7 @@
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
             and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
     </if>
-    group by department
+    group by department desc
   </select>
   
   <select id="selectByDepartment" parameterType="com.jn.hr.increase.model.SalaryPayrollPage" resultType="map">

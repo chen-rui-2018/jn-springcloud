@@ -623,16 +623,43 @@ export default {
           // 保存的时候再预览一遍, 获取选中指标树的填报格式
           this.previewForm()
             .then(() => {
-              const formData = this.partDeepClone(this.formData, ['tabs', 'filllInFormDeadline', 'taskCreateTime'])
-              // 先克隆提交表单对象
-              formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['treeData', 'treeTableData', 'columns']))
-              // 再处理提交格式
+              let cache = []
+              let formData = JSON.stringify(this.formData, function(key, value) {
+                if (typeof value === 'object' && value !== null) {
+                  if (cache.indexOf(value) !== -1) {
+                    // Duplicate reference found
+                    try {
+                      // If this value does not reference a parent it can be deduped
+                      return JSON.parse(JSON.stringify(value))
+                    } catch (error) {
+                      // discard key if value cannot be deduped
+                      return
+                    }
+                  }
+                  // Store value in our collection
+                  cache.push(value)
+                }
+                return value
+              })
+              // Enable garbage collection
+              cache = null
+              formData = JSON.parse(formData)
+
               formData.tabs.forEach((item, index) => {
+                delete item.treeData
+                delete item.treeTableData
+                delete item.columns
                 // tab增加排序
                 item.orderNumber = index.toString()
                 // 多选值转字符串 1.表类型（0：上月填报值；1：上年同期值；2：上月上年同期值；3增幅)
                 item.tabClumnTargetShow = item.tabClumnTargetShow.join(',')
+                for (const list of item.inputList) {
+                  if (list.formType === '4') {
+                    list.value = ''
+                  }
+                }
               })
+
               if (formData.modelCycle === 0) {
                 // 如果填报周期是月
                 const filllInFormDeadline = this.formData.filllInFormDeadline < 10 ? '0' + this.formData.filllInFormDeadline : this.formData.filllInFormDeadline
@@ -653,7 +680,6 @@ export default {
               // console.dir(formData)
               // return
               formData.tabs.forEach((item, index) => {
-                console.dir(item.inputList)
                 for (const list of item.inputList) {
                   if (list.formType === '4') {
                     list.value = ''
@@ -967,106 +993,113 @@ export default {
         // 预览处理中的状态
         this.previewing = true
         // 循环表格生成预览数据
+        const promiseList = []
         this.formData.tabs.map((tab, tabIndex) => {
-          // 预览时清空一下表头和表格树数据
-          tab.columns = []
-          tab.treeTableData = []
+          const p = new Promise((listResolve, listReject) => {
+            // 预览时清空一下表头和表格树数据
+            tab.columns = []
+            tab.treeTableData = []
 
-          // 获取选中的指标树，包括半选节点
-          const nodeList = this.$refs.targetTree[tabIndex].getCheckedNodes(false, true)
-          if (nodeList.length === 0) {
-            reject(`请选择第${tabIndex + 1}个表格的指标，指标至少要选择一个！`)
-          }
-
-          // 判断是普通模板或科技园模板，生成对应的报表
-          const isCommonType = tab.tabCreateType === '0'
-          if (isCommonType) {
-            // 普通模板时
-            // 填报数据列 表填报列类型（0：累计值；1：本期值）
-            if (tab.tabClumnType === '') {
-              this.$message.warning('请完善填报数据列！')
-              return
-            }
-            if (tab.tabCreateType === '') {
-              this.$message.warning('请填写模板生成方式！')
-              return
+            // 获取选中的指标树，包括半选节点
+            const nodeList = this.$refs.targetTree[tabIndex].getCheckedNodes(false, true)
+            if (nodeList.length === 0) {
+              reject(`请选择第${tabIndex + 1}个表格的指标，指标至少要选择一个！`)
             }
 
-            // 整合表头
-            const date = new Date()
-            const year = date.getFullYear()
-            const month = date.getMonth() + 1
-            const tabClumnTypeOption = {
-              0: `${year}年1-${month}月`,
-              1: `${year}年${month}月`
-            }
-
-            // 模拟的数据
-            const tabClumnTargetShow = tab.tabClumnTargetShow
-            const tabClumnType = tab.tabClumnType // 填报数据列
-            const tabClumnTargetShowOption = {
-              0: {
-                text: `${year}年${month - 1}月`,
-                value: 'lastMonth'
-              },
-              1: {
-                text: tabClumnType === '0' ? `${year - 1}年1-${month}月` : `${year - 1}年${month}月`,
-                value: 'lastYear'
-              },
-              2: {
-                text: `${year - 1}年${month - 1}月`,
-                value: 'lastYearMonth'
-              },
-              3: {
-                text: '增幅%',
-                value: 'increase'
+            // 判断是普通模板或科技园模板，生成对应的报表
+            const isCommonType = tab.tabCreateType === '0'
+            if (isCommonType) {
+              // 普通模板时
+              // 填报数据列 表填报列类型（0：累计值；1：本期值）
+              if (tab.tabClumnType === '') {
+                this.$message.warning('请完善填报数据列！')
+                return
               }
-            }
-            const tabClumnTargetShowList = []
-            tabClumnTargetShow && tabClumnTargetShow.sort((a, b) => {
-              return Number(a) - Number(b)
-            })
-            for (const item of tabClumnTargetShow) {
-              tabClumnTargetShowList.push(tabClumnTargetShowOption[item])
-            }
-            // 表头
-            tab.columns = this.columns.concat([{
-              text: tabClumnTypeOption[tabClumnType],
-              value: 'inputFormatModel',
-              width: 600
-            }], tabClumnTargetShowList)
+              if (tab.tabCreateType === '') {
+                this.$message.warning('请填写模板生成方式！')
+                return
+              }
 
-            // 把渲染表单规则挂载到已经勾选的各个结构指标
-            const targetIdList = nodeList.map(list => list.id)
-            this.getInputFormat(targetIdList)
-              .then(data => {
-                // "66383ef743624c69b8f8f9e44b980119"
-                tab.inputList = deepClone(data.data)
-                const formModels = tab.inputList
-                formModels.sort((a, b) => {
-                  return a['rowNum'] - b['rowNum']
-                })
-                nodeList.sort((a, b) => {
-                  return a.orderNumber - b.orderNumber
-                })
-                this.treeMerge(formModels, nodeList)
-                // 一维的结构指标转成树结构
-                const list = this.toTree(nodeList)
-                // 勾选的树结构指标挂载到tree-table
-                this.sortTree(list, 'orderNumber')
-                this.$nextTick(() => {
-                  this.$set(tab, 'treeTableData', list)
-                })
+              // 整合表头
+              const date = new Date()
+              const year = date.getFullYear()
+              const month = date.getMonth() + 1
+              const tabClumnTypeOption = {
+                0: `${year}年1-${month}月`,
+                1: `${year}年${month}月`
+              }
+
+              // 模拟的数据
+              const tabClumnTargetShow = tab.tabClumnTargetShow
+              const tabClumnType = tab.tabClumnType // 填报数据列
+              const tabClumnTargetShowOption = {
+                0: {
+                  text: `${year}年${month - 1}月`,
+                  value: 'lastMonth'
+                },
+                1: {
+                  text: tabClumnType === '0' ? `${year - 1}年1-${month}月` : `${year - 1}年${month}月`,
+                  value: 'lastYear'
+                },
+                2: {
+                  text: `${year - 1}年${month - 1}月`,
+                  value: 'lastYearMonth'
+                },
+                3: {
+                  text: '增幅%',
+                  value: 'increase'
+                }
+              }
+              const tabClumnTargetShowList = []
+              tabClumnTargetShow && tabClumnTargetShow.sort((a, b) => {
+                return Number(a) - Number(b)
               })
-          } else {
-            //  科技园模板表头
-            tab.columns = nodeList.map(node => ({ text: node.text, value: node.text }))
-          }
+              for (const item of tabClumnTargetShow) {
+                tabClumnTargetShowList.push(tabClumnTargetShowOption[item])
+              }
+              // 表头
+              tab.columns = this.columns.concat([{
+                text: tabClumnTypeOption[tabClumnType],
+                value: 'inputFormatModel',
+                width: 600
+              }], tabClumnTargetShowList)
+
+              // 把渲染表单规则挂载到已经勾选的各个结构指标
+              const targetIdList = nodeList.map(list => list.id)
+              this.getInputFormat(targetIdList)
+                .then(data => {
+                  // "66383ef743624c69b8f8f9e44b980119"
+                  tab.inputList = deepClone(data.data)
+                  const formModels = tab.inputList
+                  formModels.sort((a, b) => {
+                    return a['rowNum'] - b['rowNum']
+                  })
+                  nodeList.sort((a, b) => {
+                    return a.orderNumber - b.orderNumber
+                  })
+                  this.treeMerge(formModels, nodeList)
+                  // 一维的结构指标转成树结构
+                  const list = this.toTree(nodeList)
+
+                  // 勾选的树结构指标挂载到tree-table
+                  this.sortTree(list, 'orderNumber')
+                  this.$nextTick(() => {
+                    this.$set(tab, 'treeTableData', list)
+                    listResolve()
+                  })
+                })
+            } else {
+              //  科技园模板表头
+              tab.columns = nodeList.map(node => ({ text: node.text, value: node.text }))
+            }
+          })
+          promiseList.push(p)
         })
-        this.$nextTick(() => {
-          this.previewing = false
-          resolve()
-        })
+        Promise.all(promiseList)
+          .then(() => {
+            this.previewing = false
+            resolve()
+          })
       })
     },
     toTree(arr) {
@@ -1174,7 +1207,6 @@ export default {
 
     .target-management-l {
       width: 200px;
-
       .tree-filter-bg {
         padding: 4px;
       }

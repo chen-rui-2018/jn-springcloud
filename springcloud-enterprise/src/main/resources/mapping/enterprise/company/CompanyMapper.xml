@@ -146,6 +146,7 @@
           ,t1.owner_phone as "ownerPhone"
           ,t1.products as "products"
           ,t1.credit_points as "creditPoints"
+          ,t1.com_scale as "comScale"
           ,date_format(t1.credit_update_time,"%Y-%m=%d %H:%i:%s") as "creditUpdateTime"
         from tb_service_company t1 left join tb_service_prefer t2 on t1.com_type = t2.id
          where t1.id=#{companyId};

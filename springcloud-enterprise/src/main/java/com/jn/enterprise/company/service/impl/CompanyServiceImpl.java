@@ -12,7 +12,6 @@ import com.jn.company.model.*;
 import com.jn.enterprise.common.config.IBPSDefIdConfig;
 import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
-import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
 import com.jn.enterprise.company.entity.TbServiceCompany;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
 import com.jn.enterprise.company.entity.TbServiceCompanyModify;
@@ -68,11 +67,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private TbServicePreferMapper tbServicePreferMapper;
     @Autowired
-    private TbServiceCompanyProImgMapper tbServiceCompanyProImgMapper;
-
-    @Autowired
     private CompanyMapper companyMapper;
-
     @Autowired
     private UserExtensionClient userExtensionClient;
     @Autowired
@@ -84,14 +79,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private IBPSDefIdConfig ibpsDefIdConfig;
 
-    /**
-     * 数据状态 1有效
-     */
-    private final static String RECORD_STATUS_VALID = "1";
-
     private static final String PATTERN="yyyy-MM-dd";
     private static final String PATTERN_DETAIL="yyyy-MM-dd HH:mm:ss";
-
 
     @Override
     @ServiceLog(doAction = "查询企业列表New")
@@ -209,24 +198,17 @@ public class CompanyServiceImpl implements CompanyService {
         List<String> comPropertys = new ArrayList<>(16);
         List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
         if(StringUtils.isNotEmpty(tbServiceCompany.getComProperty())){
-            String[] comProperty = tbServiceCompany.getComProperty().split(",");
-
-            company.setComPropertys(comProperty);
             for (TbServicePrefer prefer: tbServicePrefers) {
                 // 行业领域
                 if(StringUtils.equals(prefer.getId(),tbServiceCompany.getInduType())){
                     company.setInduTypeName(prefer.getPreValue());
                 }
                 // 企业性质
-                for (String s: comProperty
-                ) {
-                    if(StringUtils.equals(s,prefer.getId())){
-                        comPropertys.add(prefer.getPreValue());
-                    }
+                if(StringUtils.equals(tbServiceCompany.getComProperty(), prefer.getId())){
+                    comPropertys.add(prefer.getPreValue());
                 }
             }
         }
-
 
         if(null != tbServiceCompany.getFoundingTime()){
             company.setFoundingTime(DateUtils.formatDate(tbServiceCompany.getFoundingTime(),PATTERN));
@@ -248,9 +230,6 @@ public class CompanyServiceImpl implements CompanyService {
         }
         if(null != tbServiceCompany.getModifiedTime()){
             company.setModifiedTime(DateUtils.formatDate(tbServiceCompany.getModifiedTime(),PATTERN_DETAIL));
-        }
-        if(null != comPropertys && comPropertys.size()>0){
-            company.setComPropertyNames(comPropertys.toArray(new String[comPropertys.size()]));
         }
 
         //TODO 企业员工
@@ -298,8 +277,6 @@ public class CompanyServiceImpl implements CompanyService {
         companyUpdateParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         companyUpdateParam.setCreatorAccount(account);
         companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
-        companyUpdateParam.setComProperty(StringUtils.join(companyUpdateParam.getComPropertyList(), ","));
-        companyUpdateParam.setComPropertyList(null);
 
         // 处理图片
         companyUpdateParam.setAvatar(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getAvatar()));
@@ -382,6 +359,19 @@ public class CompanyServiceImpl implements CompanyService {
                  show.setCity(list.get(0).get("city"));
              }
             }
+        }
+        // 设置当前用户是否关注此企业, 0 否 1 是
+        if(StringUtils.isNotBlank(account)) {
+           CareParam careParam = new CareParam();
+           careParam.setCurrentAccount(account);
+           Result<List<String>>  result =  careClient.findCareCompanyList(careParam);
+           show.setIsCare("0");
+           List<String> list = result.getData();
+           for(String id : list){
+               if(id.equals(companyId)){
+                   show.setIsCare("1");
+               }
+           }
         }
         vo.setCompanyInfoShow(show);
         return vo;

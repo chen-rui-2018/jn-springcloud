@@ -16,7 +16,7 @@
           <!-- 侧边栏 -->
           <div class="slider" v-if="$store.state.hiddenNav">
             <el-aside width="135px">
-              <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
+              <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
                 <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" />
                 <!-- <el-menu-item index="/home">
@@ -110,7 +110,7 @@
       </div>
     </div>
     <!-- 选择机构对话框 -->
-    <el-dialog title="申请顾问" :visible.sync="centerDialogVisible" width="30%" center>
+    <!-- <el-dialog title="申请顾问" :visible.sync="centerDialogVisible" width="30%" center>
       <el-form :model="organizationForm" ref="organizationForm" label-width="80px" class="demo-dynamic">
         <el-form-item prop="orgId" label="服务机构" :rules="[
       { required: true, message: '请输入你要申请入驻的机构', trigger: 'change' },
@@ -125,7 +125,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button class="btn" type="primary" @click="toAdvisoryInformation">前往填写资料</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -172,14 +172,14 @@ export default {
       }
     }
   },
-  watch: {
-    centerDialogVisible(val) {
-      !val &&
-        setTimeout(() => {
-          this.$refs["organizationForm"].resetFields();
-        }, 0);
-    }
-  },
+  // watch: {
+  //   centerDialogVisible(val) {
+  //     !val &&
+  //       setTimeout(() => {
+  //         this.$refs["organizationForm"].resetFields();
+  //       }, 0);
+  //   }
+  // },
   created() {
     bus.$on("getUserinfoF", res => {
       this.getUserExtension();
@@ -308,7 +308,11 @@ export default {
       console.log(key, keyPath);
     },
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      console.log(keyPath);
+      if(keyPath=='/roleCertifications/advisoryInformation'){
+        console.log(123)
+        this.checkOrganization()
+      }
     }
   }
 };

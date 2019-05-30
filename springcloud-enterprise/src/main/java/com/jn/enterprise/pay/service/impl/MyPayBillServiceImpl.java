@@ -330,7 +330,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         logger.info("我的账单-创建账单,参数：payBillCreateParamVo={},user={}", JsonUtil.object2Json(payBillCreateParamVo),JsonUtil.object2Json(user));
         List<TbPayAccountBook> tbPayAccountBook = null;
         List<TbPayAccount> tbPayAccount = null;
-        Result<Boolean> result = null;
+        Result<Boolean> result = new Result<>();
         TbPayAccountBookCriteria billCriteria = new TbPayAccountBookCriteria();
         TbPayAccountCriteria accountCriteria = new TbPayAccountCriteria();
         if (payBillCreateParamVo.getObjType().equals(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode())) {

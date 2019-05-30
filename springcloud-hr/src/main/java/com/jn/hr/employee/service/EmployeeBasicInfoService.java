@@ -45,6 +45,10 @@ public interface EmployeeBasicInfoService {
     //查询部门员工树
     public List<TreeModel> selectDepartEmployee();
 
+    public boolean checkPhoneExist(String phone,String id);
+    public boolean checkMailboxExist(String mailBox,String id);
+    public boolean checkCertificateNumberExist(String certificateNumber,String id);
+
 
 
 

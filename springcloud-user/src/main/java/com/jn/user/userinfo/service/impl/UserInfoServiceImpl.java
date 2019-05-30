@@ -249,6 +249,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         tbUserPerson.setAffiliateCode(userAffiliateInfo.getAffiliateCode());
         tbUserPerson.setAffiliateName(userAffiliateInfo.getAffiliateName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+
+        // 更新redis缓存
+        if (userAffiliateInfo.getAccountList() != null && !userAffiliateInfo.getAccountList().isEmpty()) {
+            for (String account : userAffiliateInfo.getAccountList()) {
+                updateRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }
@@ -267,6 +275,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         tbUserPerson.setCompanyCode(userCompanyInfo.getCompanyCode());
         tbUserPerson.setCompanyName(userCompanyInfo.getCompanyName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+
+        // 更新redis缓存
+        if (userCompanyInfo.getAccountList() != null && !userCompanyInfo.getAccountList().isEmpty()) {
+            for (String account : userCompanyInfo.getAccountList()) {
+                updateRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }

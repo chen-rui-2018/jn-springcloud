@@ -173,7 +173,8 @@ export default {
           if (latestView) {
             this.$router.push('train-list')
           } else {
-            this.$router.push('/')
+            // this.$router.push('/')
+            this.$router.push('train-list')
           }
         }
       })

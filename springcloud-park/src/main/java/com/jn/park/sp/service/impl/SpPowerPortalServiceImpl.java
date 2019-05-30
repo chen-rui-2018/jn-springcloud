@@ -99,11 +99,6 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         spPowerBusiDetailVo.setTime(format);
 
         spPowerBusiDetailVo.setFlowPic(spPowerBusiDetailVo.getFlowPic().replace("/ibps/components/upload/ueditor/preview.htm",ibpsUrl+"/ibps/components/upload/ueditor/preview.htm"));
-        //替换标签,只要纯文本
-        String dealConditions = spPowerBusiDetailVo.getDealConditions();
-        dealConditions = dealConditions.replace("<p><span style=\"color: rgb(50, 50, 50); font-family: &quot;Microsoft Yahei&quot;; font-size: 15px; background-color: rgb(255, 255, 255);\">","");
-        dealConditions = dealConditions.replace("</span></p>","");
-        spPowerBusiDetailVo.setDealConditions(dealConditions);
         //通过业务id查询业务对象的办理材料集合
         TbSpPowerBusiMaterialsCriteria tbSpPowerBusiMaterialsCriteria = new TbSpPowerBusiMaterialsCriteria();
         TbSpPowerBusiMaterialsCriteria.Criteria criteria = tbSpPowerBusiMaterialsCriteria.createCriteria();
@@ -119,15 +114,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
                 SpPowerBusiMaterialsModel spPowerBusiMaterialsModel = new SpPowerBusiMaterialsModel();
                 BeanUtils.copyProperties(tbSpPowerBusiMaterial,spPowerBusiMaterialsModel);
                 String sample = spPowerBusiMaterialsModel.getSample();
-                //拼接附件下载链接
-                Object parse = JSONValue.parse(sample);
-                JSONArray array=(JSONArray)parse;
-                JSONObject obj2=(JSONObject)array.get(0);
-                String spring =(String) obj2.get("id");
-                String fileName =  (String)obj2.get("fileName");
-                String sid = "/components/upload/preview.htm?downloadId=" + spring;
-                spPowerBusiMaterialsModel.setSampleName(fileName);
-                spPowerBusiMaterialsModel.setSample(sid);
+                if(StringUtils.isNotEmpty(sample)){
+                    //附件下载链接
+                    Object parse = JSONValue.parse(sample);
+                    JSONArray array=(JSONArray)parse;
+                    JSONObject obj2=(JSONObject)array.get(0);
+                    String filePath =(String) obj2.get("filePath");
+                    String fileName =  (String)obj2.get("fileName");
+                    spPowerBusiMaterialsModel.setSampleName(fileName);
+                    spPowerBusiMaterialsModel.setSample(filePath);
+                }
                 spPowerBusiMaterialsModelList.add(spPowerBusiMaterialsModel);
             }
             spPowerBusiDetailVo.setMaterialsModelList(spPowerBusiMaterialsModelList);

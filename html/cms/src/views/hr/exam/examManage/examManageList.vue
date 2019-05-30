@@ -2,13 +2,13 @@
 <template>
   <div class="examManagelist">
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">处理中心</el-menu-item>
+      <el-menu-item index="1" style="color:'red'"> <i class="el-icon-s-management"/>考试管理</el-menu-item>
       <el-button class="addexamBtn" type="primary" size="small" icon="el-icon-plus" @click="addExam">创建考试</el-button>
     </el-menu>
     <!---->
 
     <div class="header-tabs">
-      <el-tabs v-model="initFrom.status" type="border-card" @tab-click="handleClick">
+      <el-tabs ref="elTabs" v-model="initFrom.status" :lazy="true" type="border-card" @tab-click="handleClick">
 
         <el-tab-pane name="1">
           <span slot="label">进行中({{ dataStatusNum.underWayStatusCount }})</span>
@@ -35,7 +35,7 @@
             <img src="../../../../assets/images/testErweima.png" width="150" height="150" > -->
             <div class="examlistleft">
               <h6>{{ item.examinaName }}</h6>
-              <p><span>参加方式:免登陆考试</span></p>
+              <p><span>参加方式:登录后参考</span></p>
               <p>
                 <span>考试总分:{{ item.totalScore }}分</span>
                 <span>及格分数:{{ item.passScore }}分</span>
@@ -170,7 +170,12 @@ export default {
             this.dataList = res.data.data.rows
           }
           if (res.data.data.rows.length > 0) {
-            this.dataStatusNum = res.data.data.rows[0]
+            // this.$set(this.dataStatusNum, { ...res.data.data.rows[0] })
+            this.dataStatusNum = { ...res.data.data.rows[0] }
+            const childrenRefs = this.$refs.elTabs.$children
+            this.$nextTick(() => {
+              childrenRefs.forEach(child => child.$forceUpdate())
+            })
           }
         } else {
           this.examboxLoading = false
@@ -343,6 +348,7 @@ export default {
 				}
 			}
 			.examListrightbottom {
+        cursor:pointer;
 				text-align: right;
 				margin-top: 60px;
 				span {

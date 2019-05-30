@@ -537,6 +537,11 @@ export default {
     initList() {
       console.log('排班明细查询')
       this.listLoading = true
+
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
+
       scheduDetailist(this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.scheduDetailist = res.data.data.rows
@@ -559,6 +564,9 @@ export default {
       this.initList()
     },
     exportExcel() {
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
       exportScheduDetailist(this.listQuery).then(res => {
         console.log('导出。。。')
         window.location.href = res.request.responseURL

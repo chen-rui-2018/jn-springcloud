@@ -35,4 +35,8 @@ public interface ResumeDatabaseService {
     public void finishBackgroundInvest(BackgroundInvestAdd backgroundInvestAdd,User user);
     //导入excel
     public String importResumeDatabase(MultipartFile file,User user);
+
+    public boolean checkPhoneExist(String phone,String id);
+    public boolean checkMailboxExist(String mailBox,String id);
+    public boolean checkCertificateNumberExist(String certificateNumber,String id);
 }

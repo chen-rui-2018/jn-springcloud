@@ -195,7 +195,6 @@ public class CompanyServiceImpl implements CompanyService {
 
         //查询企业字段数据
         TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
-        List<String> comPropertys = new ArrayList<>(16);
         List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
         if(StringUtils.isNotEmpty(tbServiceCompany.getComProperty())){
             for (TbServicePrefer prefer: tbServicePrefers) {
@@ -205,7 +204,7 @@ public class CompanyServiceImpl implements CompanyService {
                 }
                 // 企业性质
                 if(StringUtils.equals(tbServiceCompany.getComProperty(), prefer.getId())){
-                    comPropertys.add(prefer.getPreValue());
+                    company.setComPropertyName(prefer.getPreValue());
                 }
             }
         }
@@ -232,7 +231,7 @@ public class CompanyServiceImpl implements CompanyService {
             company.setModifiedTime(DateUtils.formatDate(tbServiceCompany.getModifiedTime(),PATTERN_DETAIL));
         }
 
-        //TODO 企业员工
+
         return company;
     }
 

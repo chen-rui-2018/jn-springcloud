@@ -89,8 +89,8 @@ public class StaffServiceImpl implements StaffService {
     @Override
     @ServiceLog(doAction = "查询员工列表")
     public PaginationData getStaffList(StaffListParam staffListParam, String curAccount) {
-        // 判断当前角色为企业管理员
-        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
+        UserExtensionInfo userExtensionInfo = getUserExtensionByAccount(curAccount);
+        String comId = userExtensionInfo.getCompanyCode();
 
         // 分页相关
         com.github.pagehelper.Page<Object> objects = null;
@@ -265,8 +265,10 @@ public class StaffServiceImpl implements StaffService {
         if (StringUtils.isBlank(inviteAccount)) {
             throw new JnSpringCloudException(CompanyExceptionEnum.PARAM_IS_NULL);
         }
-        // 判断当前用户为企业管理员
-        ServiceCompany company = checkAccountIsCompanyAdmin(curAccount);
+
+        // 获取用户扩展信息-企业信息
+        UserExtensionInfo userExtensionInfo = checkCompanyUser(curAccount);
+        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(userExtensionInfo.getCompanyCode());
 
         // 判断邀请账号不是企业管理员
         List<String> accountList = new ArrayList<>();
@@ -310,6 +312,7 @@ public class StaffServiceImpl implements StaffService {
         staff.setComId(company.getId());
         staff.setComName(company.getComName());
         staff.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_SEND.getCode());
+        staff.setJoinPattern(CompanyDataEnum.COMPANY_STAFF_JOIN_PATTERN_INVITE.getCode());
         staff.setInviterAccount(curAccount);
         staff.setInviteTime(new Date());
         staff.setCreatedTime(new Date());
@@ -325,8 +328,10 @@ public class StaffServiceImpl implements StaffService {
             addMessageModel.setCreatorAccount(curAccount);
             addMessageModel.setMessageSender(curAccount);
             addMessageModel.setMessageRecipien(inviteAccount);
-            addMessageModel.setMessageOneSort(1);
+            addMessageModel.setMessageOneSort(0);
+            addMessageModel.setMessageOneSortName("个人动态");
             addMessageModel.setMessageTowSort(8);
+            addMessageModel.setMessageTowSortName("企业邀请");
             addMessageModel.setMessageConnect("{\"comId\":\"" + company.getId() + "\",\"comName\":\"" + company.getComName() + "\"}");
             addMessageModel.setMessageConnectName("企业邀请");
             addMessageModel.setMessageTitle("企业邀请待处理通知");
@@ -347,8 +352,9 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "审核员工申请")
     @Transactional(rollbackFor = Exception.class)
     public Integer reviewStaff(ReviewStaffParam reviewStaffParam, String curAccount) {
-        // 判断当前角色为企业管理员
-        ServiceCompany company = checkAccountIsCompanyAdmin(curAccount);
+        // 获取用户扩展信息-企业信息
+        UserExtensionInfo userExtensionInfo = checkCompanyUser(curAccount);
+        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(userExtensionInfo.getCompanyCode());
 
         // 核实员工身份
         TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
@@ -475,7 +481,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     @ServiceLog(doAction = "获取待审核列表")
-    public List<StaffAuditVO> getAuditStatus(String curAccount) {
+    public StaffAuditVO getAuditStatus(String curAccount) {
         return staffMapper.getAuditStatus(curAccount);
     }
 
@@ -488,6 +494,7 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "企业成员-批量删除成员")
     @Transactional(rollbackFor = Exception.class)
     public Integer delMoreStaffs(String[] accountList, String curAccount) {
+        // 只有企业管理员能删除
         String comId = checkAccountIsCompanyAdmin(curAccount).getId();
         if (accountList.length == 0) {
             throw new JnSpringCloudException(CompanyExceptionEnum.ACCOUNT_LIST_IS_NULL);
@@ -547,8 +554,7 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "企业同事-设为/取消联系人")
     public Integer setOrCancelContact(String account, String curAccount, boolean isSet) {
         // 判断是否为企业管理员
-//        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
-        String comId = checkCompanyUser(curAccount).getCompanyCode();
+        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
         // 判断联系人账号有效性
         checkCompanyAndStaff(account, comId);
 

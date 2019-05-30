@@ -15,18 +15,16 @@ import com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.Company;
-import com.jn.enterprise.company.model.CompanyCheckCallBackParam;
 import com.jn.enterprise.company.model.CompanyCheckParam;
+import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
-import com.jn.enterprise.joinpark.usermanage.model.StaffCheckCallBackParam;
 import com.jn.enterprise.joinpark.usermanage.model.StaffCheckParam;
 import com.jn.enterprise.joinpark.usermanage.service.UserUpgradeService;
 import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
-import com.jn.user.model.UserCompanyInfo;
 import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +32,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author： jiangyl
@@ -54,27 +55,18 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
     @Autowired
     private UserExtensionClient userExtensionClient;
     @Autowired
+    private CompanyService companyService;
+    @Autowired
     private IBPSDefIdConfig ibpsDefIdConfig;
 
     /**
-     * 数据状态 1:有效
+     * 企业审批状态 0:审核中 -1:无效
      */
-    private final static String RECORD_STATUS_VALID = "1";
-    /**
-     * 机构状态 0:审核中 -1:无效
-     */
-    private final static String COMPANY_APPLY_IS_NOT_VALID = "-1";
     private final static String COMPANY_APPLY_IS_CHECKING = "0";
 
     @Override
     @ServiceLog(doAction = "升级企业")
     public int changeToCompany(CompanyCheckParam companyCheckParam, String phone, String account) {
-        UserExtensionInfo userExtensionInfo = getUserExtensionByAccount(account);
-        if (StringUtils.isNotBlank(userExtensionInfo.getCompanyCode())) {
-            logger.warn("[升级企业] 用户已是企业员工或企业管理员，account：{}", account);
-            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_IS_COMPANY_EXIST);
-        }
-
         //从redis中取出短信验证码
         Result sendCodeByPhone = userExtensionClient.getSendCodeByPhone(phone);
         String code = (String)sendCodeByPhone.getData();
@@ -84,12 +76,34 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         }
 
         TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
-        companyCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
-                .andComNameEqualTo(companyCheckParam.getComName()).andCheckStatusNotEqualTo(COMPANY_APPLY_IS_NOT_VALID);
+        companyCriteria.createCriteria().andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andComNameEqualTo(companyCheckParam.getComName());
         List<TbServiceCompany> tbServiceCompanies = tbServiceCompanyMapper.selectByExample(companyCriteria);
         if(null != tbServiceCompanies && tbServiceCompanies.size() > 0){
             logger.warn("[升级企业] 企业已存在，不能再次认证。conName:{}", companyCheckParam.getComName());
             throw new JnSpringCloudException(JoinParkExceptionEnum.COMPANY_IS_EXIST);
+        }
+
+        // 判断用户已是企业员工或企业管理员
+        UserExtensionInfo userExtensionInfo = getUserExtensionByAccount(account);
+        if (StringUtils.isNotBlank(userExtensionInfo.getCompanyCode())) {
+            logger.warn("[升级企业] 用户已是企业员工或企业管理员，account：{}", account);
+            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_IS_COMPANY_EXIST);
+        }
+
+        // 判断用户是否正在升级员工
+        TbServiceCompanyStaffCriteria example = new TbServiceCompanyStaffCriteria();
+        TbServiceCompanyStaffCriteria inviteExample = new TbServiceCompanyStaffCriteria();
+        TbServiceCompanyStaffCriteria.Criteria criteria = inviteExample.createCriteria();
+        example.createCriteria().andCheckStatusEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        criteria.andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_SEND.getCode())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        example.or(criteria);
+        List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(example);
+        if (staffList != null && !staffList.isEmpty()) {
+            logger.warn("[升级企业] {}账号已收到企业邀请或已升级员工，请勿执行此操作", account);
+            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_UPGRADE_COMPANY_READY);
         }
 
         // 封装数据
@@ -117,28 +131,6 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
     }
 
     @Override
-    @ServiceLog(doAction = "升级企业 审核流回调")
-    public Boolean changeToCompanyCallBack(CompanyCheckCallBackParam param){
-        TbServiceCompany serviceCompany1 = tbServiceCompanyMapper.selectByPrimaryKey(param.getId());
-        if(null == serviceCompany1){
-            return false;
-        }
-        TbServiceCompany serviceCompany = new TbServiceCompany();
-        serviceCompany.setCheckStatus(param.getStatus());
-        serviceCompany.setModifierAccount(param.getCheckAccount());
-        serviceCompany.setModifiedTime(new Date());
-        TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
-        companyCriteria.createCriteria().andIdEqualTo(param.getId());
-        int i = tbServiceCompanyMapper.updateByExampleSelective(serviceCompany, companyCriteria);
-        UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
-        userCompanyInfo.setAccountList(Arrays.asList(serviceCompany1.getComAdmin()));
-        userCompanyInfo.setCompanyCode(serviceCompany1.getId());
-        userCompanyInfo.setCompanyName(serviceCompany1.getComName());
-        userExtensionClient.updateCompanyInfo(userCompanyInfo);
-        return i==1?true:false;
-    }
-
-    @Override
     @ServiceLog(doAction = "升级员工")
     public int changeToStaff(StaffCheckParam staffCheckParam, String phone, String account){
         String code = (String)userExtensionClient.getSendCodeByPhone(phone).getData();
@@ -146,66 +138,62 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
             //验证码有误
             throw new JnSpringCloudException(JoinParkExceptionEnum.MESSAGE_CODE_IS_WRONG);
         }
+
+        // 判断账号是否是企业员工
         TbServiceCompanyStaffCriteria companyStaffCriteria = new TbServiceCompanyStaffCriteria();
-        companyStaffCriteria.createCriteria().andAccountEqualTo(account).andCheckStatusNotEqualTo(COMPANY_APPLY_IS_NOT_VALID).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        companyStaffCriteria.createCriteria().andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andAccountEqualTo(account);
         List<TbServiceCompanyStaff> tbServiceCompanyStaffs = tbServiceCompanyStaffMapper.selectByExample(companyStaffCriteria);
         if(null !=tbServiceCompanyStaffs && tbServiceCompanyStaffs.size()>0){
             throw new JnSpringCloudException(JoinParkExceptionEnum.USER_IS_COMPANY_EXIST);
         }
+
+        // 判断是否正在升级企业
+        TbServiceCompanyCriteria example = new TbServiceCompanyCriteria();
+        example.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andComAdminEqualTo(account)
+                .andCheckStatusNotEqualTo(CompanyDataEnum.COMPANY_CHECK_STATUS_NOT_PASS.getCode());
+        List<TbServiceCompany> companyList = tbServiceCompanyMapper.selectByExample(example);
+        if (companyList != null && !companyList.isEmpty()) {
+            logger.warn("[升级员工] {}账号已升级企业，请勿执行此操作", account);
+            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_UPGRADE_COMPANY_READY);
+        }
+
+        // 判断企业是否存在
+        companyService.getCompanyDetailByAccountOrId(staffCheckParam.getComId());
+
+        // 封装数据
         TbServiceCompanyStaff tbServiceCompanyStaff = new TbServiceCompanyStaff();
         tbServiceCompanyStaff.setId(UUID.randomUUID().toString().replaceAll("-",""));
         tbServiceCompanyStaff.setComName(staffCheckParam.getComName());
         tbServiceCompanyStaff.setComId(staffCheckParam.getComId());
         tbServiceCompanyStaff.setAccount(account);
-        tbServiceCompanyStaff.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
+        tbServiceCompanyStaff.setCheckStatus(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode());
         tbServiceCompanyStaff.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_AGREE.getCode());
+        tbServiceCompanyStaff.setJoinPattern(CompanyDataEnum.COMPANY_STAFF_JOIN_PATTERN_UPGRADE.getCode());
         tbServiceCompanyStaff.setInviterAccount(account);
         tbServiceCompanyStaff.setInviteTime(new Date());
         tbServiceCompanyStaff.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
         int insert = tbServiceCompanyStaffMapper.insert(tbServiceCompanyStaff);
-
-
-        //TODO 调用工作流审核 jiangyl
-
         return insert;
-    }
-
-    @Override
-    @ServiceLog(doAction = "升级员工 审核流回调")
-    public Boolean changeToStaffCallBack(StaffCheckCallBackParam staffCheckCallBackParam){
-        TbServiceCompanyStaff tbServiceCompanyStaff1 = tbServiceCompanyStaffMapper.selectByPrimaryKey(staffCheckCallBackParam.getId());
-        if(null == tbServiceCompanyStaff1){
-            return false;
-        }
-        UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
-        userCompanyInfo.setAccountList(Arrays.asList(tbServiceCompanyStaff1.getAccount()));
-        userCompanyInfo.setCompanyCode(tbServiceCompanyStaff1.getComId());
-        userCompanyInfo.setCompanyName(tbServiceCompanyStaff1.getComName());
-        userExtensionClient.updateCompanyInfo(userCompanyInfo);
-        TbServiceCompanyStaff tbServiceCompanyStaff = new TbServiceCompanyStaff();
-        tbServiceCompanyStaff.setId(staffCheckCallBackParam.getId());
-        tbServiceCompanyStaff.setCheckStatus(staffCheckCallBackParam.getCheckStatus());
-        tbServiceCompanyStaff.setCheckAccount(staffCheckCallBackParam.getCheckAccount());
-        tbServiceCompanyStaff.setCheckTime(new Date());
-        tbServiceCompanyStaff.setModifiedTime(new Date());
-        tbServiceCompanyStaff.setModifierAccount(staffCheckCallBackParam.getCheckAccount());
-        int i = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(staffCheckCallBackParam);
-        return i==1?true:false;
     }
 
     @Override
     @ServiceLog(doAction = "查询公司列表")
     public List<Company> selectCompany(String comName){
         TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
-        companyCriteria.createCriteria().andComNameLike("%"+comName+"%").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckStatusNotEqualTo(COMPANY_APPLY_IS_NOT_VALID);
+        companyCriteria.createCriteria().andComNameLike("%"+comName+"%").andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode());
         List<TbServiceCompany> tbServiceCompanies = tbServiceCompanyMapper.selectByExample(companyCriteria);
-        List<Company> conpanies = new ArrayList<>(8);
+        List<Company> companyList = new ArrayList<>(8);
         for (TbServiceCompany serviceCompany: tbServiceCompanies) {
             Company company = new Company();
             BeanUtils.copyProperties(serviceCompany, company);
-            conpanies.add(company);
+
+            // 处理图片格式
+            company.setAvatar(IBPSFileUtils.getFilePath(company.getAvatar()));
+            companyList.add(company);
         }
-        return conpanies;
+        return companyList;
     }
 
     /**
@@ -221,6 +209,5 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         }
         return userExtension.getData();
     }
-
 
 }

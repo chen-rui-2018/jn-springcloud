@@ -87,7 +87,7 @@
                         company
                     </contexts>
                     <tableNames>
-                        tb_service_company
+                        tb_service_company_staff
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

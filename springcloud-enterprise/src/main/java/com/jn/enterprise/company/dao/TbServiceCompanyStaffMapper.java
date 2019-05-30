@@ -3,8 +3,6 @@ package com.jn.enterprise.company.dao;
 import com.jn.enterprise.company.entity.TbServiceCompanyStaff;
 import com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria;
 import java.util.List;
-
-import com.jn.enterprise.joinpark.usermanage.model.StaffCheckCallBackParam;
 import org.apache.ibatis.annotations.Param;
 
 public interface TbServiceCompanyStaffMapper {
@@ -25,8 +23,6 @@ public interface TbServiceCompanyStaffMapper {
     int updateByExampleSelective(@Param("record") TbServiceCompanyStaff record, @Param("example") TbServiceCompanyStaffCriteria example);
 
     int updateByExample(@Param("record") TbServiceCompanyStaff record, @Param("example") TbServiceCompanyStaffCriteria example);
-
-    int updateByPrimaryKeySelective(StaffCheckCallBackParam record);
 
     int updateByPrimaryKeySelective(TbServiceCompanyStaff record);
 

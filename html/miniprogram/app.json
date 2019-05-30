@@ -24,17 +24,10 @@
     "pages/meeting/orgDepartment/orgDepartment",
     "pages/meeting/orgPerson/orgPerson"
   ],
-<<<<<<< Updated upstream
-  "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "ColorUI",
-    "navigationBarTextStyle": "white",
-    "enablePullDownRefresh": true
-=======
+
   "window":{
 
->>>>>>> Stashed changes
+
   },
   "tabBar": {
     "color": "#aaa",

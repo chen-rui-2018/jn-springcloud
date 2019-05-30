@@ -164,16 +164,6 @@ export default {
         console.log('考核人')
         console.log(this.assessment.assessmentPeople)
       }
-
-      // const selectedNodes = this.$refs['assessmentPeopleRef'].selectedNodes
-      // this.assessment.assessmentPeople = ''
-      // for (let i = 0; i < selectedNodes.length; i++) {
-      //   if (!selectedNodes.flag) {
-      //     if (this.assessment.assessmentPeople === '') {
-      //       this.assessment.assessmentPeople = selectedNodes[i].jobNumber
-      //     }
-      //   }
-      // }
     },
     getDeptEmployeeList() {
       apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {

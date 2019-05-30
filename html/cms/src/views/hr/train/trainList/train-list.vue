@@ -248,8 +248,30 @@ export default {
     //     this.messageForm.employeeBasicInfoList.push(data)
     //   }
     // },
-    getEList() {
-
+    getEList(val) {
+      const vm = this
+      if (val.length === 0) {
+        return false
+      }
+      const selectedNodes = this.$refs.cascader.selectedNodes
+      for (let i = 0; i < selectedNodes.length; i++) {
+        if (!selectedNodes[i].flag) {
+          const obj = {
+            label: selectedNodes[i].label,
+            workMailbox: selectedNodes[i].workMailbox,
+            jobNumber: selectedNodes[i].jobNumber,
+            name: selectedNodes[i].label,
+            departmentName: selectedNodes[i].parent.label
+          }
+          vm.messageForm.employeeBasicInfoList.push(obj)
+        }
+      }
+      // reduce数组对象去重
+      const hash = {}
+      vm.messageForm.employeeBasicInfoList = vm.messageForm.employeeBasicInfoList.reduce((preVal, curVal) => {
+        hash[curVal.label] ? '' : hash[curVal.label] = true && preVal.push(curVal)
+        return preVal
+      }, [])
     },
     confirmSend() {
       this.dialogFormVisible = false
@@ -271,14 +293,7 @@ export default {
       apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
           this.options = JSON.parse(res.data.data)
-          const obj = Object.assign({}, this.options)
-          obj.forEach((item, index) => {
-            item.children.forEach((item2, index2) => {
-              if (!item2.children) {
-                item2['children'] = [{}]
-              }
-            })
-          })
+          this.messageForm.employeeBasicInfoList = []
         } else {
           this.$message.error(res.data.result)
         }

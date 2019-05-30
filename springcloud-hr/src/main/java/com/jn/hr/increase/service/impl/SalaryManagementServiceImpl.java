@@ -150,7 +150,32 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 		for(TbManpowerEmployeeBasicInfo basic : basicInfoList){
 			SalaryInfo salaryInfo = salaryMap.get(basic.getJobNumber());
 			if(salaryInfo == null){
-				continue;
+				salaryInfo = new SalaryInfo();
+				salaryInfo.setProbationBasicWage(0.0);
+				salaryInfo.setProbationDutyAllowance(0.0);
+				salaryInfo.setProbationProfessionalTitleAllowance(0.0);
+				salaryInfo.setProbationSeniorityWage(0.0);
+				salaryInfo.setProbationEducationAllowance(0.0);
+				salaryInfo.setProbationWorkSubsidy(0.0);
+				salaryInfo.setProbationAchievementBonus(0.0);
+				salaryInfo.setProbationSingleReward(0.0);
+				salaryInfo.setConversionBasicWage(0.0);
+				salaryInfo.setConversionDutyAllowance(0.0);
+				salaryInfo.setConversionProfessionalTitleAllowance(0.0);
+				salaryInfo.setConversionSeniorityWage(0.0);
+				salaryInfo.setConversionEducationAllowance(0.0);
+				salaryInfo.setConversionWorkSubsidy(0.0);
+				salaryInfo.setConversionAchievementBonus(0.0);
+				salaryInfo.setConversionSingleReward(0.0);
+				salaryInfo.setCurrentBasicWage("0");
+				salaryInfo.setCurrentDutyAllowance("0");
+				salaryInfo.setCurrentProfessionalTitleAllowance("0");
+				salaryInfo.setCurrentSeniorityWage("0");
+				salaryInfo.setCurrentEducationAllowance("0");
+				salaryInfo.setCurrentWorkSubsidy("0");
+				salaryInfo.setCurrentAchievementBonus("0");
+				salaryInfo.setCurrentSingleReward("0");
+				salaryInfo.setJobNumber(basic.getJobNumber());
 			}
 			salaryInfo.setName(basic.getName());
 			list.add(salaryInfo);

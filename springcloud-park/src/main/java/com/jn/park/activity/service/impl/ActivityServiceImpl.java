@@ -18,6 +18,7 @@ import com.jn.park.activity.entity.TbActivityDetail;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.model.*;
 import com.jn.park.activity.service.ActivityService;
+import com.jn.park.enums.ActivityEnum;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
@@ -346,7 +347,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "获取前台活动列表")
     @Override
-    public PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery) {
+    public PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery ,String account) {
 
         String typeId = activitySlimQuery.getTypeId();
         String keyWord = activitySlimQuery.getKeyWord();
@@ -365,7 +366,13 @@ public class ActivityServiceImpl implements ActivityService {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR2);
         }
         if(StringUtils.isNotEmpty(orderBy)){
-            String [] orders = {"acti_views","acti_like","apply_num","partic_num","acti_start_time"};
+            String [] orders = {
+                    ActivityEnum.ACTIVITY_ORDER_VIEWS.getCode(),
+                    ActivityEnum.ACTIVITY_ORDER_LIKE.getCode(),
+                    ActivityEnum.ACTIVITY_ORDER_APPLY.getCode(),
+                    ActivityEnum.ACTIVITY_ORDER_PARTIC.getCode(),
+                    ActivityEnum.ACTIVITY_ORDER_START_TIME.getCode(),
+                    };
             Boolean flag = false;
             for(String order : orders){
                 if(orderBy.equals(order)){
@@ -394,16 +401,23 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityApplyDetail> activityApplyList = activityApplyService.findApplyAccountList(activityIdList);
         if (activitySlimList != null && activitySlimList.size() > 0) {
             for (ActivitySlim slim : activitySlimList) {
+                //当前登录用户是否已报名此活动 0 否 1 是
+                slim.setApplyStatus(ActivityEnum.ACTIVITY_NOT_APPLY.getCode());
                 List<String> avatars = new ArrayList<>();
                 if (activityApplyList != null && activityApplyList.size() > 0) {
                     for (ActivityApplyDetail detail : activityApplyList) {
                         if (detail.getActivityId().equals(slim.getId())) {
+                            //当前活动已报名人的头像列表
                             avatars.add(detail.getAvatar());
+                            if(account.equals(detail.getAccount())){
+                                slim.setApplyStatus(ActivityEnum.ACTIVITY_IS_APPLY.getCode());
+                            }
                         }
                     }
                 }
                 slim.setAvatarList(avatars);
             }
+
             //设置是否显示报名人信息
             for (ActivitySlim slim : activitySlimList) {
                 if (invalid.equals(slim.getShowApplyNum())) {

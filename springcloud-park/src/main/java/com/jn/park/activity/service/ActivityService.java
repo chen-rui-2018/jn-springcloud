@@ -67,10 +67,11 @@ public interface ActivityService {
     /**
      * 前台分页获取的活动列表
      * @param activitySlimQuery
+     * @param account
      * @return
      */
 
-    PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery);
+    PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery ,String account);
 
 	 /**
      * 手动发送活动通知接口

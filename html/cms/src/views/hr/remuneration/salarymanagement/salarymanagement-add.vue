@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <div style="border:1px solid #00a0e9">
+  <div class="salarymanagementAdd">
+    <div style="border:1px solid #ccc">
       <el-form ref="salaryInfoAdd" :model="salaryInfoAdd" :rules="rules" label-width="200px">
         <div align="left">
-          <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
+          <div class="fromHead">
             员工薪资薪资
           </div>
           <div style="margin-left: 30px;">
-            员工基本信息：
+            <p class="fromTitle">员工基本信息：</p>
             <div style="display:flex">
               <el-form-item label="姓名">
                 <el-input v-model="employeeBasicInfo.name" :disabled="editFlag" :style="{width:(editFlag==true?'205px':'170px')}"/>
@@ -49,13 +49,14 @@
           </div>
         </div>
         <div align="left">
-          <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
+          <div class="fromHead" >
             试用期工资组成
-            <el-button v-show="trialPeriodWagesFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('trialPeriodWagesFlag')">隐藏</el-button>
-            <el-button v-show="!trialPeriodWagesFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('trialPeriodWagesFlag')">显示</el-button>
+            <i :class="{ 'class-b': trialPeriodWagesFlag}" class="el-icon-d-arrow-right fr fromIcon" @click="onHideObj('trialPeriodWagesFlag')"/>
+            <!-- <el-button v-show="trialPeriodWagesFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('trialPeriodWagesFlag')">隐藏</el-button> -->
+            <!-- <el-button v-show="!trialPeriodWagesFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('trialPeriodWagesFlag')">显示</el-button> -->
           </div>
           <div v-show="trialPeriodWagesFlag" id="trialPeriodWagesDiv" style="margin-left: 30px; margin-top: 3px;">
-            基本工资组成：
+            <p class="fromTitle">基本工资组成：</p>
             <div style="display:flex">
               <el-form-item label="基础工资" prop="probationBasicWage" class="inline">
                 <el-input v-model="salaryInfoAdd.probationBasicWage" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
@@ -80,7 +81,7 @@
                 <el-input v-model="salaryInfoAdd.probationWorkSubsidy" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
-            其他：
+            <p class="fromTitle">其他：</p>
             <div style="display:flex">
               <el-form-item label="绩效奖金" prop="probationAchievementBonus" class="inline">
                 <el-input v-model="salaryInfoAdd.probationAchievementBonus" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
@@ -93,15 +94,17 @@
         </div>
 
         <div align="left" style="margin-top: 5px;">
-          <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
+          <div class="fromHead">
             转正工资组成
-            <el-button v-show="positiveWageFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('positiveWageFlag')">隐藏</el-button>
-            <el-button v-show="!positiveWageFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('positiveWageFlag')">显示</el-button>
+            <i :class="{ 'class-b': positiveWageFlag}" class="el-icon-d-arrow-right fr fromIcon" @click="onHideObj('positiveWageFlag')"/>
+
+            <!-- <el-button v-show="positiveWageFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('positiveWageFlag')">隐藏</el-button> -->
+            <!-- <el-button v-show="!positiveWageFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('positiveWageFlag')">显示</el-button> -->
             <!--          <img v-show="!positiveWageFlag" src="@/assets/images/search_up.gif" alt="图片">-->
             <!--          <img v-show="positiveWageFlag" src="@/assets/images/search_down.gif" alt="图片">-->
           </div>
           <div v-show="positiveWageFlag" id="positiveWageDiv" style="margin-left: 30px; margin-top: 3px;">
-            基本工资组成：
+            <p class="fromTitle">基本工资组成：</p>
             <div style="display:flex">
               <el-form-item label="基础工资" prop="conversionBasicWage" class="inline">
                 <el-input v-model="salaryInfoAdd.conversionBasicWage" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
@@ -126,7 +129,7 @@
                 <el-input v-model="salaryInfoAdd.conversionWorkSubsidy" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
-            其他：
+            <p class="fromTitle">其他：</p>
             <div style="display:flex">
               <el-form-item label="绩效奖金" prop="conversionAchievementBonus" class="inline">
                 <el-input v-model="salaryInfoAdd.conversionAchievementBonus" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
@@ -138,15 +141,16 @@
           </div>
         </div>
         <div align="left" style="margin-top: 5px;">
-          <div style="height: 45px;line-height:45px; color: black;background-color: #00a2d4">
+          <div class="fromHead">
             当前工资组成
-            <el-button v-show="currentSalaryFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('currentSalaryFlag')">隐藏</el-button>
-            <el-button v-show="!currentSalaryFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('currentSalaryFlag')">显示</el-button>
+            <i :class="{ 'class-b': currentSalaryFlag}" class="el-icon-d-arrow-right fr fromIcon" @click="onHideObj('currentSalaryFlag')"/>
+            <!-- <el-button v-show="currentSalaryFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('currentSalaryFlag')">隐藏</el-button> -->
+            <!-- <el-button v-show="!currentSalaryFlag" type="text" style="font-weight: bold;color: black" @click="onHideObj('currentSalaryFlag')">显示</el-button> -->
           <!--<img v-show="!currentSalaryFlag" src="@/assets/images/search_up.gif" alt="图片">
           <img v-show="currentSalaryFlag" src="@/assets/images/search_down.gif" alt="图片">-->
           </div>
           <div v-show="currentSalaryFlag" id="currentSalaryDiv" style="margin-left: 30px;margin-top: 3px;">
-            基本工资组成：
+            <p class="fromTitle">基本工资组成：</p>
             <div style="display:flex">
               <el-form-item label="基础工资" prop="currentBasicWage" class="inline">
                 <el-input v-model="salaryInfoAdd.currentBasicWage" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
@@ -171,7 +175,7 @@
                 <el-input v-model="salaryInfoAdd.currentWorkSubsidy" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
               </el-form-item>
             </div>
-            其他：
+            <p class="fromTitle">其他：</p>
             <div style="display:flex">
               <el-form-item label="绩效奖金" prop="currentAchievementBonus" class="inline">
                 <el-input v-model="salaryInfoAdd.currentAchievementBonus" :disabled="disableAll" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" clearable placeholder="" maxlength="20"/>
@@ -186,7 +190,7 @@
     </div>
     <div class="primaryList" style="margin-top: 20px;">
       <el-button v-if="isupdatesalary" :disabled="isDisabled" type="primary" @click="title==='新增薪资'?submitForm():updateData()">提交</el-button>
-      <el-button v-if="isupdatesalary" type="primary" @click="goBack($route)" >返回</el-button>
+      <el-button @click="goBack($route)" >返回</el-button>
     </div>
     <!-- 用户信息选择框 -->
     <template v-if="employeeBasicInfoFormVisible">
@@ -225,7 +229,7 @@
 
 <script>
 import {
-  api
+  api, accAdd
 } from '@/api/hr/common'
 
 import UE from '@/components/ue.vue'
@@ -307,34 +311,58 @@ export default {
   },
   computed: {
     changeTrialPeriodWagesComp: function() {
-      return parseFloat((this.salaryInfoAdd.probationBasicWage == null || this.salaryInfoAdd.probationBasicWage === '') ? 0 : this.salaryInfoAdd.probationBasicWage) +
-        parseFloat((this.salaryInfoAdd.probationDutyAllowance == null || this.salaryInfoAdd.probationDutyAllowance === '') ? 0 : this.salaryInfoAdd.probationDutyAllowance) +
-        parseFloat((this.salaryInfoAdd.probationProfessionalTitleAllowance == null || this.salaryInfoAdd.probationProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.probationProfessionalTitleAllowance) +
-        parseFloat((this.salaryInfoAdd.probationSeniorityWage == null || this.salaryInfoAdd.probationSeniorityWage === '') ? 0 : this.salaryInfoAdd.probationSeniorityWage) +
-        parseFloat((this.salaryInfoAdd.probationEducationAllowance == null || this.salaryInfoAdd.probationEducationAllowance === '') ? 0 : this.salaryInfoAdd.probationEducationAllowance) +
-        parseFloat((this.salaryInfoAdd.probationWorkSubsidy == null || this.salaryInfoAdd.probationWorkSubsidy === '') ? 0 : this.salaryInfoAdd.probationWorkSubsidy) +
-        parseFloat((this.salaryInfoAdd.probationAchievementBonus == null || this.salaryInfoAdd.probationAchievementBonus === '') ? 0 : this.salaryInfoAdd.probationAchievementBonus) +
-        parseFloat((this.salaryInfoAdd.probationSingleReward == null || this.salaryInfoAdd.probationSingleReward === '') ? 0 : this.salaryInfoAdd.probationSingleReward)
+      // return parseFloat((this.salaryInfoAdd.probationBasicWage == null || this.salaryInfoAdd.probationBasicWage === '') ? 0 : this.salaryInfoAdd.probationBasicWage) +
+      //   parseFloat((this.salaryInfoAdd.probationDutyAllowance == null || this.salaryInfoAdd.probationDutyAllowance === '') ? 0 : this.salaryInfoAdd.probationDutyAllowance) +
+      //   parseFloat((this.salaryInfoAdd.probationProfessionalTitleAllowance == null || this.salaryInfoAdd.probationProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.probationProfessionalTitleAllowance) +
+      //   parseFloat((this.salaryInfoAdd.probationSeniorityWage == null || this.salaryInfoAdd.probationSeniorityWage === '') ? 0 : this.salaryInfoAdd.probationSeniorityWage) +
+      //   parseFloat((this.salaryInfoAdd.probationEducationAllowance == null || this.salaryInfoAdd.probationEducationAllowance === '') ? 0 : this.salaryInfoAdd.probationEducationAllowance) +
+      //   parseFloat((this.salaryInfoAdd.probationWorkSubsidy == null || this.salaryInfoAdd.probationWorkSubsidy === '') ? 0 : this.salaryInfoAdd.probationWorkSubsidy) +
+      //   parseFloat((this.salaryInfoAdd.probationAchievementBonus == null || this.salaryInfoAdd.probationAchievementBonus === '') ? 0 : this.salaryInfoAdd.probationAchievementBonus) +
+      //   parseFloat((this.salaryInfoAdd.probationSingleReward == null || this.salaryInfoAdd.probationSingleReward === '') ? 0 : this.salaryInfoAdd.probationSingleReward)
+      return accAdd(accAdd(accAdd(accAdd(accAdd(accAdd(accAdd((this.salaryInfoAdd.probationBasicWage == null || this.salaryInfoAdd.probationBasicWage === '') ? 0 : this.salaryInfoAdd.probationBasicWage,
+        (this.salaryInfoAdd.probationDutyAllowance == null || this.salaryInfoAdd.probationDutyAllowance === '') ? 0 : this.salaryInfoAdd.probationDutyAllowance),
+      (this.salaryInfoAdd.probationProfessionalTitleAllowance == null || this.salaryInfoAdd.probationProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.probationProfessionalTitleAllowance),
+      (this.salaryInfoAdd.probationSeniorityWage == null || this.salaryInfoAdd.probationSeniorityWage === '') ? 0 : this.salaryInfoAdd.probationSeniorityWage),
+      (this.salaryInfoAdd.probationEducationAllowance == null || this.salaryInfoAdd.probationEducationAllowance === '') ? 0 : this.salaryInfoAdd.probationEducationAllowance),
+      (this.salaryInfoAdd.probationWorkSubsidy == null || this.salaryInfoAdd.probationWorkSubsidy === '') ? 0 : this.salaryInfoAdd.probationWorkSubsidy),
+      (this.salaryInfoAdd.probationAchievementBonus == null || this.salaryInfoAdd.probationAchievementBonus === '') ? 0 : this.salaryInfoAdd.probationAchievementBonus),
+      (this.salaryInfoAdd.probationSingleReward == null || this.salaryInfoAdd.probationSingleReward === '') ? 0 : this.salaryInfoAdd.probationSingleReward)
     },
     changePositiveWageComp: function() {
-      return parseFloat((this.salaryInfoAdd.conversionBasicWage == null || this.salaryInfoAdd.conversionBasicWage === '') ? 0 : this.salaryInfoAdd.conversionBasicWage) +
-        parseFloat((this.salaryInfoAdd.conversionDutyAllowance == null || this.salaryInfoAdd.conversionDutyAllowance === '') ? 0 : this.salaryInfoAdd.conversionDutyAllowance) +
-        parseFloat((this.salaryInfoAdd.conversionProfessionalTitleAllowance == null || this.salaryInfoAdd.conversionProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.conversionProfessionalTitleAllowance) +
-        parseFloat((this.salaryInfoAdd.conversionSeniorityWage == null || this.salaryInfoAdd.conversionSeniorityWage === '') ? 0 : this.salaryInfoAdd.conversionSeniorityWage) +
-        parseFloat((this.salaryInfoAdd.conversionEducationAllowance == null || this.salaryInfoAdd.conversionEducationAllowance === '') ? 0 : this.salaryInfoAdd.conversionEducationAllowance) +
-        parseFloat((this.salaryInfoAdd.conversionWorkSubsidy == null || this.salaryInfoAdd.conversionWorkSubsidy === '') ? 0 : this.salaryInfoAdd.conversionWorkSubsidy) +
-        parseFloat((this.salaryInfoAdd.conversionAchievementBonus == null || this.salaryInfoAdd.conversionAchievementBonus === '') ? 0 : this.salaryInfoAdd.conversionAchievementBonus) +
-        parseFloat((this.salaryInfoAdd.conversionSingleReward == null || this.salaryInfoAdd.conversionSingleReward === '') ? 0 : this.salaryInfoAdd.conversionSingleReward)
+      // return parseFloat((this.salaryInfoAdd.conversionBasicWage == null || this.salaryInfoAdd.conversionBasicWage === '') ? 0 : this.salaryInfoAdd.conversionBasicWage) +
+      //   parseFloat((this.salaryInfoAdd.conversionDutyAllowance == null || this.salaryInfoAdd.conversionDutyAllowance === '') ? 0 : this.salaryInfoAdd.conversionDutyAllowance) +
+      //   parseFloat((this.salaryInfoAdd.conversionProfessionalTitleAllowance == null || this.salaryInfoAdd.conversionProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.conversionProfessionalTitleAllowance) +
+      //   parseFloat((this.salaryInfoAdd.conversionSeniorityWage == null || this.salaryInfoAdd.conversionSeniorityWage === '') ? 0 : this.salaryInfoAdd.conversionSeniorityWage) +
+      //   parseFloat((this.salaryInfoAdd.conversionEducationAllowance == null || this.salaryInfoAdd.conversionEducationAllowance === '') ? 0 : this.salaryInfoAdd.conversionEducationAllowance) +
+      //   parseFloat((this.salaryInfoAdd.conversionWorkSubsidy == null || this.salaryInfoAdd.conversionWorkSubsidy === '') ? 0 : this.salaryInfoAdd.conversionWorkSubsidy) +
+      //   parseFloat((this.salaryInfoAdd.conversionAchievementBonus == null || this.salaryInfoAdd.conversionAchievementBonus === '') ? 0 : this.salaryInfoAdd.conversionAchievementBonus) +
+      //   parseFloat((this.salaryInfoAdd.conversionSingleReward == null || this.salaryInfoAdd.conversionSingleReward === '') ? 0 : this.salaryInfoAdd.conversionSingleReward)
+      return accAdd(accAdd(accAdd(accAdd(accAdd(accAdd(accAdd((this.salaryInfoAdd.conversionBasicWage == null || this.salaryInfoAdd.conversionBasicWage === '') ? 0 : this.salaryInfoAdd.conversionBasicWage,
+        (this.salaryInfoAdd.conversionDutyAllowance == null || this.salaryInfoAdd.conversionDutyAllowance === '') ? 0 : this.salaryInfoAdd.conversionDutyAllowance),
+      (this.salaryInfoAdd.conversionProfessionalTitleAllowance == null || this.salaryInfoAdd.conversionProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.conversionProfessionalTitleAllowance),
+      (this.salaryInfoAdd.conversionSeniorityWage == null || this.salaryInfoAdd.conversionSeniorityWage === '') ? 0 : this.salaryInfoAdd.conversionSeniorityWage),
+      (this.salaryInfoAdd.conversionEducationAllowance == null || this.salaryInfoAdd.conversionEducationAllowance === '') ? 0 : this.salaryInfoAdd.conversionEducationAllowance),
+      (this.salaryInfoAdd.conversionWorkSubsidy == null || this.salaryInfoAdd.conversionWorkSubsidy === '') ? 0 : this.salaryInfoAdd.conversionWorkSubsidy),
+      (this.salaryInfoAdd.conversionAchievementBonus == null || this.salaryInfoAdd.conversionAchievementBonus === '') ? 0 : this.salaryInfoAdd.conversionAchievementBonus),
+      (this.salaryInfoAdd.conversionSingleReward == null || this.salaryInfoAdd.conversionSingleReward === '') ? 0 : this.salaryInfoAdd.conversionSingleReward)
     },
     changeCurrentSalaryComp: function() {
-      return parseFloat((this.salaryInfoAdd.currentBasicWage == null || this.salaryInfoAdd.currentBasicWage === '') ? 0 : this.salaryInfoAdd.currentBasicWage) +
-        parseFloat((this.salaryInfoAdd.currentDutyAllowance == null || this.salaryInfoAdd.currentDutyAllowance === '') ? 0 : this.salaryInfoAdd.currentDutyAllowance) +
-        parseFloat((this.salaryInfoAdd.currentProfessionalTitleAllowance == null || this.salaryInfoAdd.currentProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.currentProfessionalTitleAllowance) +
-        parseFloat((this.salaryInfoAdd.currentSeniorityWage == null || this.salaryInfoAdd.currentSeniorityWage === '') ? 0 : this.salaryInfoAdd.currentSeniorityWage) +
-        parseFloat((this.salaryInfoAdd.currentEducationAllowance == null || this.salaryInfoAdd.currentEducationAllowance === '') ? 0 : this.salaryInfoAdd.currentEducationAllowance) +
-        parseFloat((this.salaryInfoAdd.currentWorkSubsidy == null || this.salaryInfoAdd.currentWorkSubsidy === '') ? 0 : this.salaryInfoAdd.currentWorkSubsidy) +
-        parseFloat((this.salaryInfoAdd.currentAchievementBonus == null || this.salaryInfoAdd.currentAchievementBonus === '') ? 0 : this.salaryInfoAdd.currentAchievementBonus) +
-        parseFloat((this.salaryInfoAdd.currentSingleReward == null || this.salaryInfoAdd.currentSingleReward === '') ? 0 : this.salaryInfoAdd.currentSingleReward)
+      // return parseFloat((this.salaryInfoAdd.currentBasicWage == null || this.salaryInfoAdd.currentBasicWage === '') ? 0 : this.salaryInfoAdd.currentBasicWage) +
+      //   parseFloat((this.salaryInfoAdd.currentDutyAllowance == null || this.salaryInfoAdd.currentDutyAllowance === '') ? 0 : this.salaryInfoAdd.currentDutyAllowance) +
+      //   parseFloat((this.salaryInfoAdd.currentProfessionalTitleAllowance == null || this.salaryInfoAdd.currentProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.currentProfessionalTitleAllowance) +
+      //   parseFloat((this.salaryInfoAdd.currentSeniorityWage == null || this.salaryInfoAdd.currentSeniorityWage === '') ? 0 : this.salaryInfoAdd.currentSeniorityWage) +
+      //   parseFloat((this.salaryInfoAdd.currentEducationAllowance == null || this.salaryInfoAdd.currentEducationAllowance === '') ? 0 : this.salaryInfoAdd.currentEducationAllowance) +
+      //   parseFloat((this.salaryInfoAdd.currentWorkSubsidy == null || this.salaryInfoAdd.currentWorkSubsidy === '') ? 0 : this.salaryInfoAdd.currentWorkSubsidy) +
+      //   parseFloat((this.salaryInfoAdd.currentAchievementBonus == null || this.salaryInfoAdd.currentAchievementBonus === '') ? 0 : this.salaryInfoAdd.currentAchievementBonus) +
+      //   parseFloat((this.salaryInfoAdd.currentSingleReward == null || this.salaryInfoAdd.currentSingleReward === '') ? 0 : this.salaryInfoAdd.currentSingleReward)
+      return accAdd(accAdd(accAdd(accAdd(accAdd(accAdd(accAdd((this.salaryInfoAdd.currentBasicWage == null || this.salaryInfoAdd.currentBasicWage === '') ? 0 : this.salaryInfoAdd.currentBasicWage,
+        (this.salaryInfoAdd.currentDutyAllowance == null || this.salaryInfoAdd.currentDutyAllowance === '') ? 0 : this.salaryInfoAdd.currentDutyAllowance),
+      (this.salaryInfoAdd.currentProfessionalTitleAllowance == null || this.salaryInfoAdd.currentProfessionalTitleAllowance === '') ? 0 : this.salaryInfoAdd.currentProfessionalTitleAllowance),
+      (this.salaryInfoAdd.currentSeniorityWage == null || this.salaryInfoAdd.currentSeniorityWage === '') ? 0 : this.salaryInfoAdd.currentSeniorityWage),
+      (this.salaryInfoAdd.currentEducationAllowance == null || this.salaryInfoAdd.currentEducationAllowance === '') ? 0 : this.salaryInfoAdd.currentEducationAllowance),
+      (this.salaryInfoAdd.currentWorkSubsidy == null || this.salaryInfoAdd.currentWorkSubsidy === '') ? 0 : this.salaryInfoAdd.currentWorkSubsidy),
+      (this.salaryInfoAdd.currentAchievementBonus == null || this.salaryInfoAdd.currentAchievementBonus === '') ? 0 : this.salaryInfoAdd.currentAchievementBonus),
+      (this.salaryInfoAdd.currentSingleReward == null || this.salaryInfoAdd.currentSingleReward === '') ? 0 : this.salaryInfoAdd.currentSingleReward)
     }
   },
   created() {
@@ -497,7 +525,48 @@ export default {
   }
 }
 </script>
+<style  lang="scss" scoped>
+  .salarymanagementAdd{
+    background-color: #fff;
+    .fromHead{
+      padding-right: 10px;
+      text-indent: 20px;
+      font-weight: 900;
+      height: 45px;line-height:45px; color: #409EFF;background-color: #EBEEF5;
+      .fromTitle{
+        color: #ccc;
+        line-height: 30px;
+      }
+      .fromIcon{
+        cursor:pointer;
+        color: #67C23A;
+        font-size:36px;
+        font-weight: 900;
+        line-height: 45px;
+        // margin-right: 40px;
+        transition-duration:0.3s; /*过渡花费时间 默认0*/
+				transition-timing-function:linear;
+      }
+      .class-b{
+        transform:rotate(90deg);
+        transform-origin:65% center;
+        -ms-transform:rotate(90deg); /* Internet Explorer 9*/
+        -moz-transform:rotate(90deg); /* Firefox */
+        -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+        -o-transform:rotate(90deg); /* Opera */
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+        transition-duration:0.3s; /*过渡花费时间 默认0*/
+				transition-timing-function:linear;
+      }
+    }
+    .primaryList{
+      padding:20px;
+      text-align: center;
+      margin-bottom: 30px;
 
+    }
+  }
+</style>
 <style lang="scss">
 .addsalaryInfoAdd {
   .header {

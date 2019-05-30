@@ -242,6 +242,7 @@ export default {
       commitObj.templateDetailList = this.model.assessmentSubList
       // this.model.assessmentSubList.forEach(val => {
       let flag = true
+      debugger
       for (let i = 0; i < this.model.assessmentSubList.length; i++) {
         if (this.model.assessmentSubList[i].assessmentScore === '' || this.model.assessmentSubList[i].assessmentScore === null) {
           alert('考核得分必填')
@@ -249,7 +250,7 @@ export default {
           flag = false
           break
         }
-        if (this.model.assessmentSubList[i].causeDeduction === '' || this.model.assessmentSubList[i].causeDeduction === 'null') {
+        if (this.model.assessmentSubList[i].causeDeduction === '' || this.model.assessmentSubList[i].causeDeduction === null) {
           alert('扣分原因必填')
           this.isDisabled = false
           flag = false

@@ -41,6 +41,7 @@ public class HrController extends BaseController implements HrClient{
 	    @ControllerLog(doAction = "根据部门id与考勤年月查询历史考勤列表")
 		public Result<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
 	    	Assert.notNull(attendanceManagement.getAttendanceMonth(),"考勤月份不能为空");
+	    	Assert.notNull(attendanceManagement.getDepartmentId(),"部门id不能为空");
 	    	AttendanceManageApiVo attendanceManage  = attendanceManagementService.selectAttendanceManagementByDepartmentId(attendanceManagement);
 			return new Result(attendanceManage);
 		}

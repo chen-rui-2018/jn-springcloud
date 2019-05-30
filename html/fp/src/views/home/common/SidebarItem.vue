@@ -2,12 +2,13 @@
   <div class="menu-wrapper">
     <el-submenu v-if="item.children && item.children.length >= 1" :index="item.id + ''">
       <template slot="title">
-        <i class="el-icon-menu"/>
+        <!-- <i class="el-icon-menu"/> -->
         <span slot="title">{{ item.label }}</span>
       </template>
       <sidebar-item v-for="subItem in item.children" :key="subItem.id" :item="subItem"/>
     </el-submenu>
-    <el-menu-item v-else :index="`/${item.path}`">
+
+    <el-menu-item v-else :index="`${item.path}`">
       <!-- <i :class="item.icon"/> -->
       <span slot="title">{{ item.label }}</span>
     </el-menu-item>

@@ -1,6 +1,6 @@
 <template>
   <div class="staffProduct">
-    <div class="ordinary_title">
+    <div class="ordinary_title font16">
       <div>员工管理</div>
       <div @click="toInviteEmployees">邀请员工</div>
     </div>
@@ -46,12 +46,12 @@
                 type="text"
                 @click="handleRefuse( scope.row)" class="redColor"><span>拒绝</span>
               </el-button>
-              <el-button
+              <!-- <el-button
                v-if="scope.row.statusShow==='已拒绝'"
                 size="mini"
                 type="text"
                 @click="handleAgainInvite( scope.row)" class="greenColor"><span>再次邀请</span>
-              </el-button>
+              </el-button> -->
             </template>
           </el-table-column>
         </el-table>
@@ -80,36 +80,36 @@ export default {
   },
   methods: {
     // 再次邀请
-    handleAgainInvite(row){
-        let _this = this;
-        this.$confirm(`此操作将再次发送邀请, 是否继续?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-      this.api.post({
-        url: "inviteStaffAgain",
-        data: {staffId:row.staffId},
-        dataFlag:true,
-        callback: function(res) {
-          console.log(res)
-          if (res.code == "0000") {
-             _this.$message({
-                message: '操作成功',
-                type: 'success'
-              })
-            _this.initList()
-          }else{
-             this.$message.error('操作失败')
-          }
-        }
-      });
-    })
-        .catch(() => {
+    // handleAgainInvite(row){
+    //     let _this = this;
+    //     this.$confirm(`此操作将再次发送邀请, 是否继续?`, '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   })
+    //     .then(() => {
+    //   this.api.post({
+    //     url: "inviteStaffAgain",
+    //     data: {staffId:row.staffId},
+    //     dataFlag:true,
+    //     callback: function(res) {
+    //       console.log(res)
+    //       if (res.code == "0000") {
+    //          _this.$message({
+    //             message: '操作成功',
+    //             type: 'success'
+    //           })
+    //         _this.initList()
+    //       }else{
+    //          this.$message.error('操作失败')
+    //       }
+    //     }
+    //   });
+    // })
+    //     .catch(() => {
 
-        })
-    },
+    //     })
+    // },
     // 拒绝
     handleRefuse(row){
      let _this = this;
@@ -236,7 +236,7 @@ _this.$message({
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
       div:nth-child(2){
                 width:88px;

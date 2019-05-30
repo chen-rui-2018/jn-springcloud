@@ -125,6 +125,8 @@ public class ServiceCompany implements Serializable {
     private String checkTime;
     @ApiModelProperty(value = "企业来源 1人才企业2招商企业")
     private String comSource;
+    @ApiModelProperty(value = "所属园区ID")
+    private String affiliatedPark;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     @ApiModelProperty(value = "修改人")
@@ -137,6 +139,14 @@ public class ServiceCompany implements Serializable {
     private String[] propagandaPicture;
     @ApiModelProperty(value = "关注用户数及当前用户关注状态")
     private CareUserDetails careUserDetails;
+
+    public String getAffiliatedPark() {
+        return affiliatedPark;
+    }
+
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark;
+    }
 
     public String getId() {
         return id;
@@ -641,7 +651,7 @@ public class ServiceCompany implements Serializable {
                 ", comPropertyName='" + comPropertyName + '\'' +
                 ", regCapital=" + regCapital +
                 ", addCapital='" + addCapital + '\'' +
-                ", comScale=" + comScale +
+                ", comScale='" + comScale + '\'' +
                 ", foundingTime='" + foundingTime + '\'' +
                 ", runTime='" + runTime + '\'' +
                 ", induType='" + induType + '\'' +
@@ -675,6 +685,7 @@ public class ServiceCompany implements Serializable {
                 ", checkStatus='" + checkStatus + '\'' +
                 ", checkTime='" + checkTime + '\'' +
                 ", comSource='" + comSource + '\'' +
+                ", affiliatedPark='" + affiliatedPark + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", modifierAccount='" + modifierAccount + '\'' +
                 ", createdTime='" + createdTime + '\'' +

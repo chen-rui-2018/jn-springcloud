@@ -117,4 +117,11 @@ public interface ActivityService {
      */
     String getActivityNum();
 
+    /**
+     * 获取企业报报名活动信息
+     * @param param
+     * @return
+     */
+    List<CompanyActivityApplyShow> getCompanyActivityApplyInfo(CompanyActivityApplyParam param);
+
 }

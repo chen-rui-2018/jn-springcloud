@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.jn.hr.common.enums.HrExceptionEnums;
-import com.jn.system.api.SystemClient;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,9 +49,9 @@ import com.jn.hr.attendance.model.AttendanceTimeSetPage;
 import com.jn.hr.attendance.model.AttendanceTimeSetVo;
 import com.jn.hr.attendance.model.VacationManageVo;
 import com.jn.hr.attendance.service.AttendanceManagementService;
+import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.util.ComparatorAttendance;
 import com.jn.hr.common.util.HrDataUtil;
-import com.jn.hr.employee.dao.DepartmentMapper;
 import com.jn.hr.employee.dao.EmployeeBasicInfoMapper;
 import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
 import com.jn.hr.employee.entity.TbManpowerDepartment;
@@ -75,6 +73,7 @@ import com.jn.oa.model.Attendance;
 import com.jn.oa.model.Leave;
 import com.jn.oa.vo.AttendanceApiVo;
 import com.jn.oa.vo.LeaveApiVo;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 
@@ -94,8 +93,6 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 	AttendanceSchedulMapper attendanceSchedulMapper;
 	@Autowired
 	TbManpowerAttendanceSchedulMapper tbManpowerAttendanceSchedulMapper;
-	@Autowired
-	DepartmentMapper departmentMapper;
 	@Autowired
 	TbManpowerDepartmentMapper tbManpowerDepartmentMapper;
 	@Autowired
@@ -488,24 +485,37 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		int i = 0;
 		StringBuffer sb = new StringBuffer();
 		List<AttendanceSchedulAdd> list = new ArrayList<AttendanceSchedulAdd>();
-		TbManpowerDepartment tbManpowerDepartment = new TbManpowerDepartment();
-		Map<String, TbManpowerDepartment> departmengtMap = departmentMapper
-				.selectByDepartmentName(tbManpowerDepartment);
+		TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
+		Map<String,TbManpowerEmployeeBasicInfo> basicMap = employeeBasicInfoMapper.map(tbManpowerEmployeeBasicInfo);
+		AttendanceSchedulPage attendanceSchedulPage = new AttendanceSchedulPage();
 		for (Object result : resultList) {
+			i++;
 			AttendanceSchedulAdd schedul = (AttendanceSchedulAdd) result;
 			String str = checkField(schedul);
 			if (StringUtils.isBlank(str)) {
 				sb.append("第"+i+"行:" + str + ";");
-				i++;
 				continue;
 			}
-			AttendanceSchedulVo record = attendanceSchedulMapper.selectByJobNumberAndMonth(schedul);
+			
+			TbManpowerEmployeeBasicInfo basic = basicMap.get(schedul.getJobNumber());
+			if(basic == null){
+				sb.append("第" +i + "行"+"|用户信息不存在,工号：" + schedul.getJobNumber() + ";");
+				continue;
+			}
+			
+			if(!basic.getName().equals(schedul.getName()) || !basic.getDepartmentName().equals(schedul.getDepartmentName())){
+				sb.append("第" +i + "行"+ "|用户基本信息不一致,姓名：" + schedul.getName() + "|部门：" + schedul.getDepartmentName() + ";");
+				continue;
+			}
+			
+			AttendanceSchedulVo record  = attendanceSchedulMapper.selectByJobNumberAndMonth(schedul);
 			if (record != null) {
 				logger.info("[排班管理]该员工本月已经存在排班记录！");
+				sb.append("第" +i + "行"+ "|员工本月的排班信息已存在,工号：" + schedul.getJobNumber() + ",姓名：" + schedul.getName() + ";");
 				continue;
 			}
-			TbManpowerDepartment department = departmengtMap.get(schedul.getDepartmentName());
-			schedul.setDepartmentId(department.getDepartmentId());
+			
+			schedul.setDepartmentId(basic.getDepartmentId());
 			schedul.setId(UUID.randomUUID().toString());
 			schedul.setRecordStatus(Byte.parseByte(AttendanceManageStatusEnums.EFFECTIVE.getCode()));
 			schedul.setCreatedTime(new Date());
@@ -516,14 +526,14 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			i++;
 		}
 
-		if (!CollectionUtils.isEmpty(list)) {
-			attendanceSchedulMapper.insertBatch(list);
-			logger.info("[排班管理] 成功导入{}条数据", list.size());
-		}
 		if (sb.length() > 0) {
 			logger.warn("[排班管理] 导入失败:{}", sb.toString());
 			return sb.toString();
 		} else {
+			if (!CollectionUtils.isEmpty(list)) {
+				attendanceSchedulMapper.insertBatch(list);
+				logger.info("[排班管理] 成功导入{}条数据", list.size());
+			}
 			return "导入成功";
 		}
 	}

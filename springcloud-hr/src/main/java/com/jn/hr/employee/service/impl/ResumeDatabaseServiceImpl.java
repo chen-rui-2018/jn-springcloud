@@ -242,7 +242,20 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
                 ("employee","certificate_type");
         List<SysDictKeyValue>  educationList= commonService.queryDictList
                 ("employee","education");
+        Set<String> phoneSet=new HashSet<String>();
+        Set<String> mailboxSet=new HashSet<String>();
+        Set<String> certificateNumberSet=new HashSet<String>();
 
+        Map<String,ResumeDatabase> phoneMap=new HashMap<String,ResumeDatabase>();
+        Map<String,ResumeDatabase> mailboxMap=new HashMap<String,ResumeDatabase>();
+        Map<String,ResumeDatabase> certificateNumberMap=new HashMap<String,ResumeDatabase>();
+
+        List<ResumeDatabase> databaseList= resumeDatabaseMapper.list(new ResumeDatabasePage());
+        databaseList.forEach(e->{
+            phoneMap.put(e.getPhone(),e);
+            mailboxMap.put(e.getMailbox(),e);
+            certificateNumberMap.put(e.getCertificateNumber(),e);
+        });
         for(Object result:resultList){
             i++;
             ResumeDatabase database= (ResumeDatabase) result;
@@ -251,6 +264,36 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
                 sb.append("第"+i+"行:"+str+";");
                 continue;
             }
+
+            if(phoneSet.contains(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(phoneMap.containsKey(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在简历库中已经存在记录;");
+                continue;
+            }
+            phoneSet.add(database.getPhone());
+
+            if(mailboxSet.contains(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在当前EXCEL中重复;");
+                continue;
+            }
+            if(mailboxMap.containsKey(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在简历库中已经存在记录;");
+                continue;
+            }
+
+            mailboxSet.add(database.getMailbox());
+            if(certificateNumberSet.contains(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(certificateNumberMap.containsKey(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在简历库中已经存在记录;");
+                continue;
+            }
+            certificateNumberSet.add(database.getCertificateNumber());
 
             TbManpowerResumeDatabase tbdatabase=new TbManpowerResumeDatabase();
             BeanUtils.copyProperties(database,tbdatabase);

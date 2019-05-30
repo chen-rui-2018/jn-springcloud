@@ -263,7 +263,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	public String deleteAttritionPlan(IncreaseStaffPage increaseStaffPage) {
 		TbManpowerIncreaseStaff tbManpowerIncreaseStaff = new TbManpowerIncreaseStaff();
 		tbManpowerIncreaseStaff.setId(increaseStaffPage.getId());
-		tbManpowerIncreaseStaff.setIsEffective(Byte.parseByte(SalaryWelfareManagementStatus.INVALID.getCode()));
+		tbManpowerIncreaseStaff.setRecordStatus(Byte.parseByte(SalaryWelfareManagementStatus.DELETE.getCode()));
 		tbManpowerIncreaseStaffMapper.updateByPrimaryKeySelective(tbManpowerIncreaseStaff);
 		logger.info("[增员计划表]成员参保方案失效成功！");
 		
@@ -475,26 +475,26 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			
 			if(insuredDetaild.getSocialSecurity() > lastDetaild.getSocialSecurity()){
 				Double security = insuredDetaild.getSocialSecurity() - lastDetaild.getSocialSecurity();
-				insuredDetaild.setLastSocialSecurity("+" + String.valueOf(security));
+				insuredDetaild.setLastSocialSecurity("+" + String.format("%.2f", security));
 			}else{
 				Double security = insuredDetaild.getSocialSecurity() - lastDetaild.getSocialSecurity();
-				insuredDetaild.setLastSocialSecurity(String.valueOf(security));
+				insuredDetaild.setLastSocialSecurity(String.format("%.2f", security));
 			}
 			
 			if(insuredDetaild.getAccumulationFund() > lastDetaild.getAccumulationFund()){
 				Double fund = insuredDetaild.getAccumulationFund() - lastDetaild.getAccumulationFund();
-				insuredDetaild.setLastAccumulationFund("+" + String.valueOf(fund));
+				insuredDetaild.setLastAccumulationFund("+" + String.format("%.2f",fund));
 			}else{
 				Double fund = insuredDetaild.getAccumulationFund() - lastDetaild.getAccumulationFund();
-				insuredDetaild.setLastAccumulationFund(String.valueOf(fund));
+				insuredDetaild.setLastAccumulationFund(String.format("%.2f", fund));
 			}
 			
 			if(insuredDetaild.getTotalCost() > lastDetaild.getTotalCost()){
 				Double cost = insuredDetaild.getTotalCost() - lastDetaild.getTotalCost();
-				insuredDetaild.setLastTotalCost("+" + String.valueOf(cost));
+				insuredDetaild.setLastTotalCost("+" + String.format("%.2f",cost));
 			}else{
 				Double cost = insuredDetaild.getTotalCost() - lastDetaild.getTotalCost();
-				insuredDetaild.setLastTotalCost(String.valueOf(cost));
+				insuredDetaild.setLastTotalCost(String.format("%.2f",cost));
 			}
 		}else{
 			insuredDetaild.setLastAccumulationFund("0");
@@ -505,6 +505,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		
 		return insuredDetaild;
 	}
+	
 	@Override
 	@ServiceLog(doAction = "停止参保")
 	@Transactional(rollbackFor = Exception.class)

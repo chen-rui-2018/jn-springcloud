@@ -302,7 +302,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	@RequestMapping(value = "/updateInsuredCardinalNumber", method = RequestMethod.POST)
 	public Result<String> updateInsuredCardinalNumber(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		String str = welfareManagrmentService.updateInsurancescheme(insuredSchemeAdd, user);
+		String str = welfareManagrmentService.updateInsuredCardinalNumber(insuredSchemeAdd, user);
 		return new Result(str);
 	}
 	

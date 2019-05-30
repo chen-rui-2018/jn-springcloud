@@ -582,10 +582,6 @@ public class ActivityServiceImpl implements ActivityService {
     @ServiceLog(doAction = "获取企业报报名活动信息")
     @Override
     public List<CompanyActivityApplyShow> getCompanyActivityApplyInfo(CompanyActivityApplyParam param) {
-        if(param==null){
-            logger.warn("获取企业报报名活动信息异常，入参为空");
-            throw new JnSpringCloudException(ActivityExceptionEnum.NETWORK_ANOMALY);
-        }
         //校验开始时间和结束时间
         if(StringUtils.isNotBlank(param.getStartTime()) && StringUtils.isNotBlank(param.getEndTime())){
             int startTime=Integer.parseInt(param.getStartTime().replaceAll("-", ""));

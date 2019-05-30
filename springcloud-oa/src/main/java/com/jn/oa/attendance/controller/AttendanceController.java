@@ -7,6 +7,7 @@ import com.jn.common.util.Assert;
 import com.jn.hr.model.*;
 import com.jn.oa.attendance.entity.TbOaAttendance;
 import com.jn.oa.attendance.model.AttendanceAdd;
+import com.jn.oa.attendance.model.AttendanceLocation;
 import com.jn.oa.attendance.model.AttendancePage;
 import com.jn.oa.attendance.service.AttendanceService;
 import com.jn.oa.attendance.vo.AttendanceResultVo;
@@ -111,9 +112,9 @@ public class AttendanceController extends BaseController {
     @ApiOperation(value = "根据部门id查询部门考勤打卡数据",notes = "根据部门id查询部门考勤打卡数据")
     @PostMapping(value = "/selectAttendanceManagementByDepartmentId")
     @RequiresPermissions("/oa/attendance/selectAttendanceManagementByDepartmentId")
-    public  Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@RequestBody @Validated  AttendanceManagement attendanceManagement) {
+    public  Result<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(@RequestBody @Validated  AttendanceManagement attendanceManagement) {
         Assert.notNull(attendanceManagement.getDepartmentId(), "部门ID不能为空");
-        Result<List<AttendanceManageApiVo>> data = attendanceService.selectAttendanceManagementByDepartmentId(attendanceManagement);
+        Result<AttendanceManageApiVo>data = attendanceService.selectAttendanceManagementByDepartmentId(attendanceManagement);
         return data;
     }
 
@@ -129,6 +130,18 @@ public class AttendanceController extends BaseController {
         Result<AttendanceOverTimeApiVo> data = attendanceService.selectByUserIdAndTime(attendanceOverTime);
         return data;
     }
+    @ControllerLog(doAction = "根据经纬度查询距离与是否能进行打卡")
+    @ApiOperation(value = "根据经纬度查询距离与是否能进行打卡",notes = "根据用户id查询用户考勤接口")
+    @GetMapping(value = "/selectLocation")
+    @RequiresPermissions("/oa/attendance/selectLocation")
+    public  Result<AttendanceLocation> selectLocation(String longitude,String latitude) {
+        Assert.notNull(longitude, "经度不能为空");
+        Assert.notNull(latitude, "纬度不能为空");
+        AttendanceLocation data = attendanceService.selectLocation(longitude,latitude);
+        return new Result(data);
+    }
+
+
 
 
 

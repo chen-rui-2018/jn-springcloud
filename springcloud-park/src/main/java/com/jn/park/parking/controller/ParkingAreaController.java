@@ -12,9 +12,11 @@ import com.jn.park.parking.service.ParkingAreaService;
 import com.jn.park.parking.vo.ParkingAreaDetailVo;
 import com.jn.park.parking.vo.ParkingAreaVo;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,7 +51,8 @@ public class ParkingAreaController extends BaseController {
     @ApiOperation(value = "查询停车场列表[前台用户]", notes = "前台查询停车场列表信息，当前经纬度必传")
     @RequestMapping(value = "/getParkingAreaList",method = RequestMethod.GET)
     public Result<PaginationData<List<ParkingAreaVo>>> getParkingAreaList(ParkingAreaParam parkingAreaParam){
-        return new Result<>(parkingAreaService.getParkingAreaList(parkingAreaParam));
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new Result<>(parkingAreaService.getParkingAreaList(parkingAreaParam,user==null?null:user.getAccount()));
     }
 
     @ControllerLog(doAction = " 根据ID查询停车场详情")

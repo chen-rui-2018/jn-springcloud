@@ -1364,6 +1364,76 @@ public class TbPdDeclarationNoticeManageCriteria {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
+
+        public Criteria andBriefIntroductIsNull() {
+            addCriterion("brief_introduct is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductIsNotNull() {
+            addCriterion("brief_introduct is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductEqualTo(String value) {
+            addCriterion("brief_introduct =", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductNotEqualTo(String value) {
+            addCriterion("brief_introduct <>", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductGreaterThan(String value) {
+            addCriterion("brief_introduct >", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductGreaterThanOrEqualTo(String value) {
+            addCriterion("brief_introduct >=", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductLessThan(String value) {
+            addCriterion("brief_introduct <", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductLessThanOrEqualTo(String value) {
+            addCriterion("brief_introduct <=", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductLike(String value) {
+            addCriterion("brief_introduct like", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductNotLike(String value) {
+            addCriterion("brief_introduct not like", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductIn(List<String> values) {
+            addCriterion("brief_introduct in", values, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductNotIn(List<String> values) {
+            addCriterion("brief_introduct not in", values, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductBetween(String value1, String value2) {
+            addCriterion("brief_introduct between", value1, value2, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductNotBetween(String value1, String value2) {
+            addCriterion("brief_introduct not between", value1, value2, "briefIntroduct");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

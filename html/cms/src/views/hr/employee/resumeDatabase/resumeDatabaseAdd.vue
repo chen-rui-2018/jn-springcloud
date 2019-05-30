@@ -145,7 +145,7 @@ import {
   addResumeDatabase, updateResumeDatabase, getResumeDatabaseById
 } from '@/api/hr/resumeDatabase'
 import {
-  getCode, isvalidName, isvalidMobile, isvalidZjhm, uploadUrl, setChild, findNodeById, findP
+  getCode, isvalidName, isvalidMobile, uploadUrl, setChild, findNodeById, findP
 } from '@/api/hr/util'
 
 import {
@@ -172,18 +172,10 @@ export default {
     }
     const reg = /^\w{5,18}$/i
     const checkZjhm = (rule, value, callback) => {
-      if (this.addForm.certificateName === '身份证') {
-        if (!isvalidZjhm(value)) {
-          callback(new Error('请输入正确的证件号码'))
-        } else {
-          callback()
-        }
+      if (!reg.test(value)) {
+        callback(new Error('请输入正确的证件号码'))
       } else {
-        if (!reg.test(value)) {
-          callback(new Error('请输入正确的证件号码'))
-        } else {
-          callback()
-        }
+        callback()
       }
     }
 

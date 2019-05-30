@@ -38,8 +38,8 @@
     <template v-if="increaseStaffAddFormVisible">
       <el-dialog :visible.sync="increaseStaffAddFormVisible" title="增减员计划" width="750px">
         <el-form ref="increaseStaffAddForm" :rules="increaseStaffAddFormRules" :model="increaseStaffAddFromData" label-width="150px">
-          <el-form-item label="姓名" prop="name" class="inline">
-            <el-cascader-multi ref="assessmentObjectRef" v-model="checkList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+          <el-form-item label="姓名" prop="jobNumber" class="inline">
+            <el-cascader-multi ref="assessmentObjectRef" v-model="increaseStaffAddFromData.jobNumberList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
             <!--<el-input v-model="increaseStaffAddFromData.name" type="textarea" style="width: 350px;" readonly="readonly"/>
             <el-button type="text" @click="openStaffNamePage">选择</el-button>-->
           </el-form-item>
@@ -129,7 +129,7 @@
 </template>
 <script>
 import {
-  api
+  api, apiGet
 } from '@/api/hr/common'
 
 import UE from '@/components/ue.vue'
@@ -138,7 +138,7 @@ export default {
   data() {
     return {
       increaseStaffAddFormRules: {
-        // name: [{ required: true, message: '请选择增员名称', trigger: 'change' }],
+        jobNumber: [{ required: true, message: '请选择增员名称', trigger: 'change' }],
         insuredMonth: [{ required: true, message: '请选择参保月份', trigger: 'change' }],
         insuredProgrammeId: [{ required: true, message: '请选择参保方案', trigger: 'change' }]
       },
@@ -176,6 +176,7 @@ export default {
         insuredMonth: '',
         jobNumber: '',
         name: '',
+        jobNumberList: [],
         insuredProgrammeId: '',
         insuredProgrammeName: ''
       },
@@ -204,13 +205,12 @@ export default {
     this.getDeptEmployeeList()
   },
   methods: {
-    // nameSel
     nameSel() {
       const selectedNodes = this.$refs['assessmentObjectRef'].selectedNodes
       this.increaseStaffAddFromData.jobNumber = ''
       for (let i = 0; i < selectedNodes.length; i++) {
         if (!selectedNodes.flag) {
-          this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber + selectedNodes[i].value + ','
+          this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber + selectedNodes[i].jobNumber + ','
         }
       }
       if (this.increaseStaffAddFromData.jobNumber.length > 0) {
@@ -219,9 +219,9 @@ export default {
       console.log(this.increaseStaffAddFromData.jobNumber)
     },
     getDeptEmployeeList() {
-      api('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
+      apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
-          this.deptEmployeeList = res.data.data
+          this.deptEmployeeList = JSON.parse(res.data.data)
         } else {
           this.$message.error(res.data.result)
         }
@@ -406,11 +406,11 @@ export default {
     },
     saveIncreaseStaff() { // 保存增员计划
       this.saveIncreaseStaffDisable = true
-      if (this.increaseStaffAddFromData.jobNumber === '') {
-        alert('增员员工姓名必填')
-        this.saveIncreaseStaffDisable = false
-        return
-      }
+      // if (this.increaseStaffAddFromData.jobNumber === '') {
+      //   alert('增员员工姓名必填')
+      //   this.saveIncreaseStaffDisable = false
+      //   return
+      // }
       const param = {
         insuredMonth: this.increaseStaffAddFromData.insuredMonth,
         insuredProgrammeId: this.increaseStaffAddFromData.insuredProgrammeId,
@@ -442,7 +442,7 @@ export default {
             }
           })
         } else {
-          this.isDisabled = false
+          this.saveIncreaseStaffDisable = false
         }
       })
     },

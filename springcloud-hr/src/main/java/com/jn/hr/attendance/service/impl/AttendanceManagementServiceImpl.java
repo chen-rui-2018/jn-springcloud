@@ -1078,7 +1078,7 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			if (vacation != null) {
 				tbManpowerVacationManage.setId(vacation.getId());
 				tbManpowerVacationManage
-						.setVacationTime(String.valueOf(Integer.valueOf(vacation.getVacationTime()) + newTime));
+						.setVacationTime(String.valueOf(Double.valueOf(vacation.getVacationTime()) + newTime));
 				tbManpowerVacationManageMapper.updateByPrimaryKeySelective(tbManpowerVacationManage);
 			} else {
 				tbManpowerVacationManage = new TbManpowerVacationManage();

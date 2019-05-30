@@ -1254,52 +1254,62 @@ public class TbManpowerAttendanceManagementCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateEqualTo(Integer value) {
+        public Criteria andAttendanceDateEqualTo(String value) {
             addCriterion("attendance_date =", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateNotEqualTo(Integer value) {
+        public Criteria andAttendanceDateNotEqualTo(String value) {
             addCriterion("attendance_date <>", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateGreaterThan(Integer value) {
+        public Criteria andAttendanceDateGreaterThan(String value) {
             addCriterion("attendance_date >", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateGreaterThanOrEqualTo(Integer value) {
+        public Criteria andAttendanceDateGreaterThanOrEqualTo(String value) {
             addCriterion("attendance_date >=", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateLessThan(Integer value) {
+        public Criteria andAttendanceDateLessThan(String value) {
             addCriterion("attendance_date <", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateLessThanOrEqualTo(Integer value) {
+        public Criteria andAttendanceDateLessThanOrEqualTo(String value) {
             addCriterion("attendance_date <=", value, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateIn(List<Integer> values) {
+        public Criteria andAttendanceDateLike(String value) {
+            addCriterion("attendance_date like", value, "attendanceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendanceDateNotLike(String value) {
+            addCriterion("attendance_date not like", value, "attendanceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendanceDateIn(List<String> values) {
             addCriterion("attendance_date in", values, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateNotIn(List<Integer> values) {
+        public Criteria andAttendanceDateNotIn(List<String> values) {
             addCriterion("attendance_date not in", values, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateBetween(Integer value1, Integer value2) {
+        public Criteria andAttendanceDateBetween(String value1, String value2) {
             addCriterion("attendance_date between", value1, value2, "attendanceDate");
             return (Criteria) this;
         }
 
-        public Criteria andAttendanceDateNotBetween(Integer value1, Integer value2) {
+        public Criteria andAttendanceDateNotBetween(String value1, String value2) {
             addCriterion("attendance_date not between", value1, value2, "attendanceDate");
             return (Criteria) this;
         }

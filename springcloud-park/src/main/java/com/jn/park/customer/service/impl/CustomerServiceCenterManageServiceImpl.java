@@ -171,6 +171,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             for(TbClientServiceCenter serviceCenter:serviceCenterList){
                 ConsultationCustomerListShow customerListShow=new ConsultationCustomerListShow();
                 BeanUtils.copyProperties(serviceCenter, customerListShow);
+                customerListShow.setCreatedTime(DateUtils.formatDate(serviceCenter.getCreatedTime(), PATTERN));
                 for(Map<String,String> map:procInsIdAndTaskIdList){
                    if(map.containsKey(customerListShow.getProcessInsId())){
                        customerListShow.setTaskId(map.get(customerListShow.getProcessInsId()));
@@ -517,7 +518,12 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
             }
         }
         //创建人
-        ibpsParam.setCreatorAccount(param.getContactWay());
+        if(StringUtils.isNotBlank(param.getCalledPhone())){
+
+            ibpsParam.setCreatorAccount(param.getCalledPhone());
+        }else{
+            ibpsParam.setCreatorAccount(param.getContactWay());
+        }
         //创建时间
         ibpsParam.setCreatedTime(DateUtils.getDate(PATTERN));
         //处理状态(0：待处理  1:处理中 2：已处理)

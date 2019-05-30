@@ -26,12 +26,12 @@
     </el-form>
 
     <div style="height:92px; width: 99.8%; border: 1px solid #b3d4fc">
-      <span style="width: 7%;float: left;line-height: 92px;display:inline-block;text-align: center;font-size: 13px;font-weight: bold;color: blue">
+      <span style="width: 9%;float: left;line-height: 92px;display:inline-block;text-align: center;font-size: 13px;font-weight: bold;color: blue">
         <img src="@/assets/images/left.png" style="height: 20px;width: 20px;" alt="图片" @click="getInsuredMonthPreMonth">
         {{ queryMonth }}
         <img src="@/assets/images/right.png" style="height: 20px;width: 20px;" alt="图片" @click="getInsuredMonthNextMonth">
       </span>
-      <span style="height: 100%;width: 93%; display:inline-block; line-height: 15px;">
+      <span style="height: 100%;width: 91%; display:inline-block; line-height: 15px;">
         <el-table :data="insuredSummary" border fit highlight-current-row style="width: 100%;height:100%;">
           <el-table-column :show-overflow-tooltip="true" label="参保人数" align="center" prop="insuredNumber" />
           <el-table-column :show-overflow-tooltip="true" label="本月新增" align="center" prop="increaseInsuranceNumber"/>
@@ -89,7 +89,7 @@
 </template>
 <script>
 import {
-  api, exportExcel, getPreMonth, getNextMonth, apiGet, systemApi
+  api, exportExcel, getPreMonth, getNextMonth, systemApi
 } from '@/api/hr/common'
 
 import UE from '@/components/ue.vue'
@@ -140,7 +140,7 @@ export default {
   },
   mounted() {
     this.initList()
-    this.getDepartmentList()
+    this.getAllDepartment()
   },
   methods: {
     // 选择部门（新增用户对话框）
@@ -162,15 +162,6 @@ export default {
     reflushList() {
       this.getInsuredDetaildList(this.queryMonth)
       this.getDetailSub(this.queryMonth, this.listQuery.departmentId)
-    },
-    getDepartmentList() {
-      apiGet('hr/employeeDepartment/getEmployeeDepartments').then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
     },
     getInsuredMonthNextMonth() {
       const curMonth = this.queryMonth

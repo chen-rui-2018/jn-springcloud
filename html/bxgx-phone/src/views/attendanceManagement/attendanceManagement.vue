@@ -1,8 +1,8 @@
 <template>
   <div class="attendanceManagement">
     <div class="border pd30 attendanceManagement-top"><span class="iconfont"> <i>&#xe613;</i> {{currentDate}}</span>
-      <span> <i class="iconfont">&#xe758;</i> 当前企业:</span>{{enterpriseName}}</div>
-    <div class="pd30 userLocation"> <span>距离公司：{{distance}}</span> <span @click="init"><i class="iconfont">&#xe607;</i></span></div>
+      <span> <i class="iconfont">&#xe758;</i> 部门:</span>{{departmentName}}</div>
+    <div class="pd30 userLocation"> <span>距离公司：{{distance}}m</span> <span @click="init"><i class="iconfont">&#xe607;</i></span></div>
     <div style="height:100px;border:#ccc solid 1px;" id="dituContent"></div>
     <div class="pd30 border userInfo">
       <div> <span>{{userName.charAt(userName.length - 1)}}</span>{{userName}}</div> <span @click="$router.push({path:'attendanceDetails',query:{id:userInfo.attendanceUser}})">考勤明细 <i class="iconfont">&#xe61f;</i></span>
@@ -30,7 +30,7 @@
         </div>
         <div class="attendanceTime">{{attendanceTime}}</div>
         <div class="signSuccessfully">{{msgText}}</div>
-        <p class="belate">迟到了,明天早点来哦</p>
+        <p class="belate" v-show="Number(minute)>0&&userInfo.type==='1'">迟到了,明天早点来哦</p>
         <div @click="msg=false" class="myKnow">
           我知道了
         </div>
@@ -42,8 +42,10 @@
 export default {
   data () {
     return {
+      departmentName: '',
       msgText: '',
-      distance: '50M',
+      minute: '',
+      distance: '50',
       attendanceTime: '11:16',
       msg: false,
       downTime: '',
@@ -54,15 +56,16 @@ export default {
       signInText: '签到',
       enterpriseName: '白下高新',
       currentDate: '',
-      userName: '陈苗',
+      userName: '',
       offDutyTime: '18:00',
       onDutyTime: '09:00',
       userInfo: {
         attendanceUser: '',
         attendancePlatform: '2',
         type: '',
-        latitude: undefined,
-        longitude: undefined
+        // latitude: 113.442008,
+        latitude: 23.17322,
+        longitude: 113.442008
       }
     }
   },
@@ -86,6 +89,7 @@ export default {
             if (res.data) {
               this.msgText = '签退成功'
               this.msg = true
+              this.minute = res.data.minute
               this.attendanceTime = res.data.attendanceTime.substr(11, 8)
               this.signOutText = '已签退'
               this.onDutystandard = true
@@ -100,7 +104,7 @@ export default {
     // 点击签到
     signIn () {
       if (this.upTime) {
-        this.$vux.toast.text('已签到，不能进行多次签到', 'top')
+        this.$vux.toast.text('签到失败，不能进行多次签到', 'top')
         return false
       }
 
@@ -109,10 +113,12 @@ export default {
         url: 'attendance',
         data: this.userInfo,
         callback: res => {
+          console.log(res)
           if (res.code === '0000') {
             if (res.data) {
               this.attendanceTime = res.data.attendanceTime.substr(11, 8)
               this.msgText = '签到成功'
+              this.minute = res.data.minute
               this.msg = true
               this.signInText = '已签到'
               this.onDutystandard = true
@@ -131,13 +137,22 @@ export default {
         url: 'getUserInfo',
         // data: this.workForm,
         callback: res => {
-          if (res.code === '0000') {
-            // console.log(res)
+          console.log(res)
+          if (res.data) {
+            res.data.sysDepartmentPostVO.forEach(val => {
+              if (val.isDefault === '1') {
+                sessionStorage.departmentName = val.departmentName
+                sessionStorage.departmentId = val.departmentId
+                this.departmentName = val.departmentName
+              }
+            })
             this.userInfo.attendanceUser = res.data.id
             if (res.data.name) {
               this.userName = res.data.name
+              sessionStorage.userName = res.data.name
             } else {
               this.userName = res.data.account
+              sessionStorage.userName = res.data.account
             }
             this.api.get({
               url: 'selectByUserIdAndCurrentDate',
@@ -148,6 +163,7 @@ export default {
                   if (res.data) {
                     this.signInText = '已签到'
                     this.onDutystandard = true
+                    // this.departmentName = res.data.departmentName
                     this.upTime = res.data.signInAttendanceTime.substr(11, 8)
                     if (res.data.signOutAttendanceTime !== null) {
                       this.signOutText = '已签退'
@@ -175,7 +191,7 @@ export default {
 
       map.centerAndZoom(point, 12)
       setTimeout(function () {
-        map.setZoom(14)
+        map.setZoom(18)
       }, 100)
       map.enableScrollWheelZoom()
       var geolocation = new window.BMap.Geolocation()
@@ -188,15 +204,29 @@ export default {
             map.panTo(r.point)
 
             // alert('您的位置：' + r.point.lng + ',' + r.point.lat)
-            console.log(r.point.lat)
             that.userInfo.latitude = r.point.lat
             that.userInfo.longitude = r.point.lng
+            that.getLocaltion()
           } else {
             alert('failed' + this.getStatus())
           }
         },
         { enableHighAccuracy: true }
       )
+    },
+    getLocaltion () {
+      this.api.get({
+        url: 'selectLocation',
+        data: {latitude: this.userInfo.latitude, longitude: this.userInfo.longitude},
+        callback: res => {
+          if (res.code === '0000') {
+            console.log(res)
+            this.distance = Number(res.data.distance).toFixed(0)
+          } else {
+            this.$vux.toast.text(res.result, 'top')
+          }
+        }
+      })
     }
     // 关于状态码
     // BMAP_STATUS_SUCCESS  检索成功。对应数值“0”。
@@ -281,7 +311,7 @@ line-height: 88px;
   .attendanceTime{
     margin:0 auto;
     margin-top:300px;
-    font-size: 140px;
+    font-size: 100px;
     // width:268px;
 height:109px;
 color:rgb(251, 148, 61);

@@ -65,6 +65,8 @@ export default {
   padding-top: 65px;
   .incubatorNav {
     padding: 15px 0;
+    font-weight: bold;
+    font-size: 13px;
   }
   .announcement1 {
     // text-align: center;

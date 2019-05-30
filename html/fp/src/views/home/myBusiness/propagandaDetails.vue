@@ -1,6 +1,6 @@
 <template>
   <div class="propagandaDetails">
-    <div class="ordinary_title">
+    <div class="ordinary_title font16">
       <div>宣传详情</div>
     </div>
     <div class="ordinary_content">
@@ -124,7 +124,7 @@ cursor: pointer;
       background-color: #fff;
 
       padding:24px 28px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
     }
     .ordinary_content{

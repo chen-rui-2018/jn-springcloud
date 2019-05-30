@@ -20,54 +20,35 @@
       </el-form-item>
       <el-form-item label="考核对象" prop="assessmentObject" class="inline">
         <!--最后子节点支持多选  only-last="true" -->
-        <el-cascader-multi ref="assessmentObjectRef" v-model="checkList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 620px" @change="assessmentObjectSel"/>
-        <!--<el-input v-model="assessmentObjectData" type="textarea" style="width: 500px;" readonly="readonly"/>
-        <el-button type="text" @click="openAssessmentObjPage">选择</el-button>-->
+
+        <el-cascader-multi ref="assessmentObjectRef" v-model="assessment.assessmentObjectList" :data="deptEmployeeList" :show-leaf-label="true" only-last="true" style="width: 620px" @change="assessmentObjectSel"/>
+
       </el-form-item>
       <el-form-item label="考核人" prop="assessmentPeople" class="inline">
-        <el-cascader
+        <el-cascader-multi ref="assessmentPeopleRef" v-model="assessment.assessmentPeopleList" :data="deptEmployeeList" :show-leaf-label="true" only-last="true" style="width: 620px" @change="assessmentPeopleSel"/>
+        <!--<el-cascader
+          ref="assessmentPeopleRef"
           :options="deptEmployeeList"
           v-model="assessmentPeopleArr"
           change-on-select
           placeholder="请选择"
           clearable
           @change="assessmentPeopleSel"
-        />
-        <!--<el-cascader-multi v-model="checkList" :data="deptEmployeeList" style="width: 620px" @change="assessmentPeopleSel"/>-->
-        <!--<el-input v-model="assessment.assessmentPeople" style="width: 205px;"/>-->
-        <!--<el-input v-model="assessmentPeopleData" type="textarea" style="width: 500px;" readonly="readonly"/>
-        <el-button type="text" @click="openAssessmentPeoplePage">选择</el-button>-->
+
+        />-->
+
       </el-form-item>
       <el-form-item>
         <el-button :disabled="isDisabled" type="primary" @click="submitForm()">发送</el-button>
         <el-button @click="goBack($route)" >取消</el-button>
       </el-form-item>
     </el-form>
-    <!--获取考核对象/考核人树形信息模板-->
-    <!--<template v-if="assessmentObjPageVisible">-->
-    <!--<el-dialog :title="titleMap[dialogStatus]" :visible.sync="assessmentObjPageVisible" style="width: 950px;" >
-      <div style="width: 100%;height: 320px;overflow: auto">
-        <el-input
-          v-model="filterText"
-          placeholder="输入员工名字"/>
-        <el-tree
-          ref="rootTree"
-          :data="rootData"
-          :filter-node-method="filterNode"
-          show-checkbox
-          node-key="value"
-        />
-        <el-button type="primary" @click="getKeys(dialogStatus)">确定</el-button>
-        <el-button @click="closeDialog" >取消</el-button>
-      </div>
-    </el-dialog>-->
-    <!-- </template>-->
   </div>
 </template>
 
 <script>
 import {
-  api
+  api, apiGet
 } from '@/api/hr/common'
 import UE from '@/components/ue.vue'
 export default {
@@ -76,11 +57,10 @@ export default {
     return {
       // 新部门员工树
       deptEmployeeList: [],
-      checkList: [],
+      // checkList: [],
       // 新部门员工树 end
       defaultMsg: '',
       filterText: '',
-      // rootData: [],
       assessmentObjectData: '',
       assessmentPeopleData: '',
       config: {
@@ -100,11 +80,13 @@ export default {
       assessment: {
         templateId: '',
         assessmentName: '',
+        assessmentTime: '',
         assessmentStartTime: '',
         assessmentEndTime: '',
-        // assessmentObjectList: [],
+        assessmentObjectList: [],
         assessmentJobNumber: '',
         assessmentObjectJobNumber: '',
+        assessmentPeopleList: [],
         assessmentObject: '',
         templateName: '',
         assessmentPeople: ''
@@ -126,7 +108,8 @@ export default {
       rules: {
         assessmentName: [{ required: true, message: '请输考核名称', trigger: 'blur' }],
         templateId: [{ required: true, message: '请选择考核模板', trigger: 'change' }],
-        // assessmentObject: [{ required: true, message: '请选择考核对象', trigger: 'change' }],
+        assessmentTime: [{ required: true, message: '请选择考核时间', trigger: 'change' }],
+        assessmentObject: [{ required: true, message: '请选择考核对象', trigger: 'change' }],
         assessmentPeople: [{ required: true, message: '请选择考核人', trigger: 'change' }]
       }
     }
@@ -146,20 +129,36 @@ export default {
       this.assessment.assessmentObject = ''
       for (let i = 0; i < selectedNodes.length; i++) {
         if (!selectedNodes.flag) {
-          this.assessment.assessmentObject = this.assessment.assessmentObject + selectedNodes[i].value + ','
+          this.assessment.assessmentObject = this.assessment.assessmentObject + selectedNodes[i].jobNumber + ','
         }
       }
       if (this.assessment.assessmentObject.length > 0) {
         this.assessment.assessmentObject = this.assessment.assessmentObject.substring(0, this.assessment.assessmentObject.length - 1)
       }
+      console.log(this.assessment.assessmentObject)
     },
-    assessmentPeopleSel(val) {
-      this.assessment.assessmentPeople = this.assessmentPeopleArr[this.assessmentPeopleArr.length - 1]
+    assessmentPeopleSel() {
+      const selectedNodes = this.$refs['assessmentPeopleRef'].selectedNodes
+      this.assessment.assessmentPeople = ''
+      for (let i = 0; i < selectedNodes.length; i++) {
+        if (!selectedNodes.flag) {
+          if (this.assessment.assessmentPeople === '') {
+            this.assessment.assessmentPeople = selectedNodes[i].jobNumber
+          }
+        }
+      }
     },
     getDeptEmployeeList() {
-      api('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
+      // const obj = {
+      //   'result': 'OK',
+      //   'code': '0000',
+      //   'data': '[{"children":[{"flag":true,"id":"114","jobNumber":"","label":"产业培育科","level":"2","mailbox":"","parentId":"100","value":"114"},{"flag":true,"id":"108","jobNumber":"","label":"行政审批科","level":"2","mailbox":"","parentId":"100","value":"108"},{"flag":true,"id":"101","jobNumber":"","label":"党工委","level":"2","mailbox":"","parentId":"100","value":"101"},{"flag":true,"id":"115","jobNumber":"","label":"科技合作科","level":"2","mailbox":"","parentId":"100","value":"115"},{"flag":true,"id":"109","jobNumber":"","label":"综合协调科","level":"2","mailbox":"","parentId":"100","value":"109"},{"flag":true,"id":"102","jobNumber":"","label":"管委会","level":"2","mailbox":"","parentId":"100","value":"102"},{"flag":true,"id":"116","jobNumber":"","label":"人才科","level":"2","mailbox":"","parentId":"100","value":"116"},{"flag":true,"id":"110","jobNumber":"","label":"环境管理科","level":"2","mailbox":"","parentId":"100","value":"110"},{"flag":true,"id":"103","jobNumber":"","label":"纪工委","level":"2","mailbox":"","parentId":"100","value":"103"},{"flag":true,"id":"117","jobNumber":"","label":"税源管理科","level":"2","mailbox":"","parentId":"100","value":"117"},{"flag":true,"id":"111","jobNumber":"","label":"安全生产科","level":"2","mailbox":"","parentId":"100","value":"111"},{"flag":true,"id":"104","jobNumber":"","label":"团工委","level":"2","mailbox":"","parentId":"100","value":"104"},{"flag":true,"id":"118","jobNumber":"","label":"计划财务科","level":"2","mailbox":"","parentId":"100","value":"118"},{"flag":true,"id":"112","jobNumber":"","label":"规划建设科","level":"2","mailbox":"","parentId":"100","value":"112"},{"flag":true,"id":"105","jobNumber":"","label":"工会","level":"2","mailbox":"","parentId":"100","value":"105"},{"flag":true,"id":"113","jobNumber":"","label":"产业招商科","level":"2","mailbox":"","parentId":"100","value":"113"},{"flag":true,"id":"107","jobNumber":"","label":"党政办","level":"2","mailbox":"","parentId":"100","value":"107"}],"flag":true,"id":"100","jobNumber":"","label":"开发区管委会","level":"1","mailbox":"","parentId":"1","value":"100"},{"children":[{"children":[{"flag":false,"id":"3","jobNumber":"NJ000001","label":"朱奕","level":"","mailbox":"11111@qq.com","parentId":"","value":"3"}],"flag":true,"id":"6b561892-5310-4ea8-877d-e791df462d0e","jobNumber":"","label":"集团领导","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"6b561892-5310-4ea8-877d-e791df462d0e"},{"flag":true,"id":"281f4005-0363-4528-92a3-60a730532e53","jobNumber":"","label":"行政综合部","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"281f4005-0363-4528-92a3-60a730532e53"},{"children":[{"flag":false,"id":"1","jobNumber":"NJ000006","label":"超级管理员","level":"","mailbox":"232313@qq.com","parentId":"","value":"1"},{"flag":false,"id":"2","jobNumber":"NJ000007","label":"祁思远","level":"","mailbox":"12312@qq.com","parentId":"","value":"2"},{"flag":false,"id":"7b28822a-e3c5-40b4-95de-c4efb2993131","jobNumber":"NJ000079","label":"小白","level":"","mailbox":"333@qq.com","parentId":"","value":"7b28822a-e3c5-40b4-95de-c4efb2993131"},{"flag":false,"id":"c3f95a64-90fd-4b28-9e49-713ee6837b49","jobNumber":"NJ000028","label":"小白5","level":"","mailbox":"333@qq.com","parentId":"","value":"c3f95a64-90fd-4b28-9e49-713ee6837b49"}],"flag":true,"id":"a794452f-fad6-4697-afe1-e62542bd753a","jobNumber":"","label":"财务部","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"a794452f-fad6-4697-afe1-e62542bd753a"},{"children":[{"flag":false,"id":"85f572c3-8774-463a-963e-1c5cdf140839","jobNumber":"NJ000027","label":"小白4","level":"","mailbox":"323@qq.com","parentId":"","value":"85f572c3-8774-463a-963e-1c5cdf140839"},{"flag":false,"id":"df5e8380-451e-4ccb-b7aa-9655720e1cdf","jobNumber":"NJ000025","label":"小白2","level":"","mailbox":"333@qq.com","parentId":"","value":"df5e8380-451e-4ccb-b7aa-9655720e1cdf"}],"flag":true,"id":"c2be95f8-50de-4357-8b47-cd0c4dc227a8","jobNumber":"","label":"成本控制部","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"c2be95f8-50de-4357-8b47-cd0c4dc227a8"},{"flag":true,"id":"af3ddfed-3b2b-413e-8b1b-bfe4cce81412","jobNumber":"","label":"招商运营部","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"af3ddfed-3b2b-413e-8b1b-bfe4cce81412"},{"flag":true,"id":"c1f0733c-cfc4-4282-a150-f5baa986acc9","jobNumber":"","label":"资产管理部","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"c1f0733c-cfc4-4282-a150-f5baa986acc9"},{"flag":true,"id":"2e2ca5b1-9293-44bb-a061-12085a348d17","jobNumber":"","label":"投资管理部","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"2e2ca5b1-9293-44bb-a061-12085a348d17"},{"flag":true,"id":"7f73787e-7cea-4b47-991d-a5a67465f272","jobNumber":"","label":"规划建设部","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"7f73787e-7cea-4b47-991d-a5a67465f272"},{"flag":true,"id":"43d131a5-c6c5-451a-bf8c-d7a94318d6e7","jobNumber":"","label":"紫云建设公司","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"43d131a5-c6c5-451a-bf8c-d7a94318d6e7"},{"flag":true,"id":"3cecf081-2b6c-4c41-951c-17ed297f54f8","jobNumber":"","label":"永智建设公司","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"3cecf081-2b6c-4c41-951c-17ed297f54f8"},{"flag":true,"id":"ffbf34ca-5912-4905-a92e-9dfb73787f41","jobNumber":"","label":"投发公司","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"ffbf34ca-5912-4905-a92e-9dfb73787f41"},{"flag":true,"id":"afe79842-f83c-4147-adf9-bc7496d2e829","jobNumber":"","label":"担保公司","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"afe79842-f83c-4147-adf9-bc7496d2e829"},{"flag":true,"id":"ffbf34ca-5912-4905-a92e-9dfb73787f40","jobNumber":"","label":"创益服务公司","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"ffbf34ca-5912-4905-a92e-9dfb73787f40"},{"flag":true,"id":"77b6ab56-8347-4fe2-a070-1016d55e3f29","jobNumber":"","label":"创业公司","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"77b6ab56-8347-4fe2-a070-1016d55e3f29"},{"flag":true,"id":"f87af79a-27de-489a-b1a4-570f66bf0deb","jobNumber":"","label":"物业公司","level":"2","mailbox":"","parentId":"01ce604c-64ac-48db-a278-59c0e3ae94ad","value":"f87af79a-27de-489a-b1a4-570f66bf0deb"}],"flag":true,"id":"01ce604c-64ac-48db-a278-59c0e3ae94ad","jobNumber":"","label":"科创集团","level":"1","mailbox":"","parentId":"1","value":"01ce604c-64ac-48db-a278-59c0e3ae94ad"}]'
+      // }
+      // const data = obj.data
+      // this.deptEmployeeList = JSON.parse(data)
+      apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
-          this.deptEmployeeList = res.data.data
+          this.deptEmployeeList = JSON.parse(res.data.data)
         } else {
           this.$message.error(res.data.result)
         }
@@ -177,16 +176,6 @@ export default {
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
-      if (this.assessment.templateId === '') {
-        alert('请选择考核模板')
-        this.isDisabled = false
-        return false
-      }
-      if (this.assessment.assessmentObject === '') {
-        alert('请选择考核对象')
-        this.isDisabled = false
-        return false
-      }
       if (new Date(this.assessment.assessmentEndTime.replace(/-/g, '\/')) < new Date()) {
         alert('失效时间必须大于当前时间,请重新选择')
         this.isDisabled = false
@@ -228,8 +217,12 @@ export default {
     isActive(route) {
       return route.path === this.$route.path
     },
-    getEndtime() {},
-    getStarttime() {},
+    getEndtime() {
+      this.assessment.assessmentTime = this.assessment.assessmentStartTime + '-' + this.assessment.assessmentEndTime
+    },
+    getStarttime() {
+      this.assessment.assessmentTime = this.assessment.assessmentStartTime + '-' + this.assessment.assessmentEndTime
+    },
     goBack(view) {
       this.$store.dispatch('delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {

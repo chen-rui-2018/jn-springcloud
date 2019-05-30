@@ -5,6 +5,7 @@ import com.jn.enterprise.workflow.task.model.TaskStatistics;
 import com.jn.enterprise.workflow.task.model.TaskType;
 import com.jn.enterprise.workflow.task.vo.TaskTypeVo;
 import com.jn.enterprise.workflow.task.vo.TaskVo;
+import com.jn.enterprise.workflow.task.vo.WarnStatisticsVO;
 
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,6 @@ public interface TaskMapper {
      * @param taskStatistics
      * @return
      */
-    String getWorkflowTaskStatistics(TaskStatistics taskStatistics);
+    List<WarnStatisticsVO> getWorkflowTaskStatistics(TaskStatistics taskStatistics);
 
 }

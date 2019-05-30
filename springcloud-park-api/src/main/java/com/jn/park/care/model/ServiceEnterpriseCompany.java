@@ -4,13 +4,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * 企业详情Bean
  * @author： tangry
  * @String： Created on 2019/5/23
  * @version： v1.0
- * @modified By:
+ * @modified By:huxw
  */
 @ApiModel(value = "ServiceEnterpriseCompany",description = "企业详情NewBean")
 public class ServiceEnterpriseCompany implements Serializable {
@@ -65,7 +66,7 @@ public class ServiceEnterpriseCompany implements Serializable {
     @ApiModelProperty(value = "主要原材料")
     private String material;
 
-    @ApiModelProperty(value = "企业性质（多个,分隔）")
+    @ApiModelProperty(value = "企业性质")
     private String comProperty;
 
     @ApiModelProperty(value = "注册资本（万元）")
@@ -74,7 +75,7 @@ public class ServiceEnterpriseCompany implements Serializable {
     @ApiModelProperty(value = "增资情况")
     private String addCapital;
 
-    @ApiModelProperty(value = "企业规模（万元）")
+    @ApiModelProperty(value = "企业规模")
     private String comScale;
 
     @ApiModelProperty(value = "成立时间（注册时间）")
@@ -92,7 +93,7 @@ public class ServiceEnterpriseCompany implements Serializable {
     @ApiModelProperty(value = "营业执照")
     private String businessLicense;
 
-    @ApiModelProperty(value = "企业宣传图（多个,分隔）")
+    @ApiModelProperty(value = "企业宣传图（多个,分隔）", hidden = true)
     private String proImgs;
 
     @ApiModelProperty(value = "营业执照开始时间")
@@ -153,7 +154,7 @@ public class ServiceEnterpriseCompany implements Serializable {
     private String comSynopsis;
 
     @ApiModelProperty(value = "园区楼宇ID")
-    private String parkBuildDd;
+    private String parkBuildId;
 
     @ApiModelProperty(value = "园区楼宇名称")
     private String parkBuildName;
@@ -196,6 +197,9 @@ public class ServiceEnterpriseCompany implements Serializable {
 
     @ApiModelProperty(value = "创建时间")
     private String createdTime;
+
+    @ApiModelProperty(value = "企业宣传图")
+    private String[] propagandaPicture;
 
 
     public static long getSerialVersionUID() {
@@ -562,12 +566,12 @@ public class ServiceEnterpriseCompany implements Serializable {
         this.comSynopsis = comSynopsis;
     }
 
-    public String getParkBuildDd() {
-        return parkBuildDd;
+    public String getParkBuildId() {
+        return parkBuildId;
     }
 
-    public void setParkBuildDd(String parkBuildDd) {
-        this.parkBuildDd = parkBuildDd;
+    public void setParkBuildId(String parkBuildId) {
+        this.parkBuildId = parkBuildId;
     }
 
     public String getParkBuildName() {
@@ -682,6 +686,13 @@ public class ServiceEnterpriseCompany implements Serializable {
         this.createdTime = createdTime;
     }
 
+    public String[] getPropagandaPicture() {
+        return propagandaPicture;
+    }
+
+    public void setPropagandaPicture(String[] propagandaPicture) {
+        this.propagandaPicture = propagandaPicture;
+    }
 
     @Override
     public String toString() {
@@ -731,7 +742,7 @@ public class ServiceEnterpriseCompany implements Serializable {
                 ", comDemand='" + comDemand + '\'' +
                 ", addrPark='" + addrPark + '\'' +
                 ", comSynopsis='" + comSynopsis + '\'' +
-                ", parkBuildDd='" + parkBuildDd + '\'' +
+                ", parkBuildId='" + parkBuildId + '\'' +
                 ", parkBuildName='" + parkBuildName + '\'' +
                 ", creditPoints='" + creditPoints + '\'' +
                 ", comType='" + comType + '\'' +
@@ -746,6 +757,7 @@ public class ServiceEnterpriseCompany implements Serializable {
                 ", careUser='" + careUser + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", createdTime='" + createdTime + '\'' +
+                ", propagandaPicture=" + Arrays.toString(propagandaPicture) +
                 '}';
     }
 }

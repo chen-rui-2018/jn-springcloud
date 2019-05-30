@@ -99,7 +99,7 @@
           </el-form-item>
           <el-form-item label="通知人员" label-width="80px">
             <!-- <el-button type="primary" @click="selectStaff">选择</el-button> -->
-            <el-cascader-multi ref="cascader" v-model="checkList" :data="options" :only-last="true" :show-leaf-label="true" @focus="selectStaff" />
+            <el-cascader-multi ref="cascader" v-model="checkList" :data="options" :only-last="true" :show-leaf-label="true" @change="getEList" />
           </el-form-item>
           <!-- <el-form-item label-width="80px">
             <el-tree
@@ -242,11 +242,14 @@ export default {
       })
     },
     // 发送通知--树结构
-    handleNodeSelect(data, checked) {
-      if (!data.children && checked) {
-        this.messageForm.employeeBasicInfoList = []
-        this.messageForm.employeeBasicInfoList.push(data)
-      }
+    // handleNodeSelect(data, checked) {
+    //   if (!data.children && checked) {
+    //     this.messageForm.employeeBasicInfoList = []
+    //     this.messageForm.employeeBasicInfoList.push(data)
+    //   }
+    // },
+    getEList() {
+
     },
     confirmSend() {
       this.dialogFormVisible = false
@@ -267,25 +270,7 @@ export default {
     selectStaff() {
       apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
-          const list = res.data.data
-          const vm = this
-          // 遍历一级
-          list.forEach((item, index) => {
-            const labelData = {
-              label: item.label,
-              value: item.value,
-              children: []
-            }
-            vm.options.push(labelData)
-            // 遍历二级
-            item.children.forEach((item2, index2) => {
-              const childrenData = {
-                label: item2.label,
-                value: item2.value
-              }
-              vm.options[index].children.push(childrenData)
-            })
-          })
+          this.options = JSON.parse(res.data.data)
         } else {
           this.$message.error(res.data.result)
         }
@@ -323,6 +308,7 @@ export default {
     sendMessage(row) {
       this.dialogFormVisible = true
       this.messageForm = row
+      this.selectStaff()
     }
   }
 }

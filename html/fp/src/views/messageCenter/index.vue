@@ -13,7 +13,8 @@
         <el-aside style="width: 200px;margin-right: 20px;" v-if="$store.state.hiddenNav">
           <div class="userImg">
             <div class="imgItem">
-              <img src="@/../static/img/larImg.png" alt="">
+              <img v-if="!avartImg" src="@/../static/img/larImg.png" alt="">
+              <img v-else :src="avartImg" alt="">
             </div>
             <!-- <p>{{account}}</p> -->
           </div>
@@ -43,7 +44,7 @@
                 <el-menu-item index="/dataReminder">数据上报提醒</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-menu-item :index="'/messageCenter/chat?fromUser=' + fromUser">
+            <el-menu-item index="/messageCenter/chat">
               <span slot="title">社区交流</span>
             </el-menu-item>
           </el-menu>
@@ -61,7 +62,7 @@ export default {
   name: "MessageCenter",
   data() {
     return {
-      fromUser: ''
+      avartImg:'',
     }
   },
   computed:{
@@ -71,8 +72,8 @@ export default {
   },
   mounted() {
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-    this.fromUser = userInfo.account
-  }
+    this.avartImg=userInfo.avatar
+  },
 }
 </script>
 

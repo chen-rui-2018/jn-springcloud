@@ -39,7 +39,16 @@ public class ActivitySlim implements Serializable {
     private List<String> avatarList;
     @ApiModelProperty(value = "是否展示报名人")
     private String showApplyNum;
+    @ApiModelProperty(value = "是否已报名此活动 0 否 : 1 是")
+    private String applyStatus;
 
+    public String getApplyStatus() {
+        return applyStatus;
+    }
+
+    public void setApplyStatus(String applyStatus) {
+        this.applyStatus = applyStatus;
+    }
 
     public String getShowApplyNum() {
         return showApplyNum;

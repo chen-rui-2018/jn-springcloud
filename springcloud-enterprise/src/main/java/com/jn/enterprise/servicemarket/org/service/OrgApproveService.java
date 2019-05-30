@@ -38,11 +38,5 @@ public interface OrgApproveService {
      */
     OrgApplyDetailVo getOrgApplyDetail(String orgId);
 
-    /**
-     * 机构申请审核
-     * @param orgApplyCheckData
-     * @return
-     */
-    Boolean checkOrgApply(OrgApplyCheckData orgApplyCheckData, User user);
 
 }

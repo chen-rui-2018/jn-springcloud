@@ -119,15 +119,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
                 SpPowerBusiMaterialsModel spPowerBusiMaterialsModel = new SpPowerBusiMaterialsModel();
                 BeanUtils.copyProperties(tbSpPowerBusiMaterial,spPowerBusiMaterialsModel);
                 String sample = spPowerBusiMaterialsModel.getSample();
-                //拼接附件下载链接
-                Object parse = JSONValue.parse(sample);
-                JSONArray array=(JSONArray)parse;
-                JSONObject obj2=(JSONObject)array.get(0);
-                String spring =(String) obj2.get("id");
-                String fileName =  (String)obj2.get("fileName");
-                String sid = "/components/upload/preview.htm?downloadId=" + spring;
-                spPowerBusiMaterialsModel.setSampleName(fileName);
-                spPowerBusiMaterialsModel.setSample(sid);
+                if(StringUtils.isNotEmpty(sample)){
+                    //附件下载链接
+                    Object parse = JSONValue.parse(sample);
+                    JSONArray array=(JSONArray)parse;
+                    JSONObject obj2=(JSONObject)array.get(0);
+                    String filePath =(String) obj2.get("filePath");
+                    String fileName =  (String)obj2.get("fileName");
+                    spPowerBusiMaterialsModel.setSampleName(fileName);
+                    spPowerBusiMaterialsModel.setSample(filePath);
+                }
                 spPowerBusiMaterialsModelList.add(spPowerBusiMaterialsModel);
             }
             spPowerBusiDetailVo.setMaterialsModelList(spPowerBusiMaterialsModelList);

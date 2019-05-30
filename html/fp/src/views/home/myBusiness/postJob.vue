@@ -1,6 +1,6 @@
 <template>
   <div class="postJobProduct">
-    <div class="ordinary_title">
+    <div class="ordinary_title font16">
       <div>发布招聘</div>
     </div>
     <div class="ordinary_content">
@@ -166,7 +166,6 @@ export default {
     background-color: #fff;
 
     padding: 24px 28px;
-    font-size: 13px;
     border-radius: 5px;
   }
   .ordinary_content {

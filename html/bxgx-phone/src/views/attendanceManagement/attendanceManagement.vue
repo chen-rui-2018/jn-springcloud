@@ -1,8 +1,8 @@
 <template>
   <div class="attendanceManagement">
     <div class="border pd30 attendanceManagement-top"><span class="iconfont"> <i>&#xe613;</i> {{currentDate}}</span>
-      <span> <i class="iconfont">&#xe758;</i> 当前企业:</span>{{enterpriseName}}</div>
-    <div class="pd30 userLocation"> <span>距离公司：{{distance}}</span> <span @click="init"><i class="iconfont">&#xe607;</i></span></div>
+      <span> <i class="iconfont">&#xe758;</i> 部门:</span>{{departmentName}}</div>
+    <div class="pd30 userLocation"> <span>距离公司：{{distance}}m</span> <span @click="init"><i class="iconfont">&#xe607;</i></span></div>
     <div style="height:100px;border:#ccc solid 1px;" id="dituContent"></div>
     <div class="pd30 border userInfo">
       <div> <span>{{userName.charAt(userName.length - 1)}}</span>{{userName}}</div> <span @click="$router.push({path:'attendanceDetails',query:{id:userInfo.attendanceUser}})">考勤明细 <i class="iconfont">&#xe61f;</i></span>
@@ -45,7 +45,7 @@ export default {
       departmentName: '',
       msgText: '',
       minute: '',
-      distance: '50M',
+      distance: '50',
       attendanceTime: '11:16',
       msg: false,
       downTime: '',
@@ -63,8 +63,9 @@ export default {
         attendanceUser: '',
         attendancePlatform: '2',
         type: '',
-        latitude: undefined,
-        longitude: undefined
+        // latitude: 113.442008,
+        latitude: 23.17322,
+        longitude: 113.442008
       }
     }
   },
@@ -142,6 +143,7 @@ export default {
               if (val.isDefault === '1') {
                 sessionStorage.departmentName = val.departmentName
                 sessionStorage.departmentId = val.departmentId
+                this.departmentName = val.departmentName
               }
             })
             this.userInfo.attendanceUser = res.data.id
@@ -161,7 +163,7 @@ export default {
                   if (res.data) {
                     this.signInText = '已签到'
                     this.onDutystandard = true
-                    this.departmentName = res.data.departmentName
+                    // this.departmentName = res.data.departmentName
                     this.upTime = res.data.signInAttendanceTime.substr(11, 8)
                     if (res.data.signOutAttendanceTime !== null) {
                       this.signOutText = '已签退'
@@ -189,7 +191,7 @@ export default {
 
       map.centerAndZoom(point, 12)
       setTimeout(function () {
-        map.setZoom(14)
+        map.setZoom(18)
       }, 100)
       map.enableScrollWheelZoom()
       var geolocation = new window.BMap.Geolocation()
@@ -202,16 +204,15 @@ export default {
             map.panTo(r.point)
 
             // alert('您的位置：' + r.point.lng + ',' + r.point.lat)
-            console.log(r.point.lat)
             that.userInfo.latitude = r.point.lat
             that.userInfo.longitude = r.point.lng
+            that.getLocaltion()
           } else {
             alert('failed' + this.getStatus())
           }
         },
         { enableHighAccuracy: true }
       )
-      this.getLocaltion()
     },
     getLocaltion () {
       this.api.get({
@@ -220,6 +221,7 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             console.log(res)
+            this.distance = Number(res.data.distance).toFixed(0)
           } else {
             this.$vux.toast.text(res.result, 'top')
           }

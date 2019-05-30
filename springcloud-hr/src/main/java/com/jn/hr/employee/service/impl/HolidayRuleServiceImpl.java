@@ -1,9 +1,12 @@
 package com.jn.hr.employee.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import com.jn.common.model.Result;
+import com.jn.system.api.SystemClient;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +61,8 @@ public class HolidayRuleServiceImpl implements HolidayRuleService {
     private RedisTemplate<String,Object> redisTemplate;
     @Value("${spring.application.name}")
     private String applicationName;
+    @Autowired
+    private SystemClient systemClient;
 
     @Override
     @ServiceLog(doAction = "添加假期规则")
@@ -178,10 +183,33 @@ public class HolidayRuleServiceImpl implements HolidayRuleService {
 		// TODO Auto-generated method stub
 		Page<Object> objects = PageHelper.startPage(vacationManagePage.getPage(),vacationManagePage.getRows());
 		List<VacationManageVo> vacationList = new ArrayList<VacationManageVo>();
+        if (!StringUtils.isEmpty(vacationManagePage.getDepartmentId())) {
+            List<String> rootList = new ArrayList<String>();
+            Result result = systemClient.selectDeptByParentId(vacationManagePage.getDepartmentId(), true);
+            if (result == null || !"0000".equals(result.getCode()) || result.getData() == null) {
+                throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+            }
+            HashMap<String, Object> childMap = (HashMap<String, Object>) result.getData();
+            rootList.add((String) childMap.get("id"));
+            if (childMap.get("children") != null) {
+                List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
+                getChildrenDepartment(rootList, childrenSub);
+            }
+            vacationManagePage.setDepartmentIds(rootList);
+        }
 		vacationList = vacationManageAttanceMapper.selectByJobNumber(vacationManagePage);
 		PaginationData <List<VacationManageVo>> pageList = new PaginationData(vacationList,objects.getTotal());
 		return pageList;
 	}
+    private void getChildrenDepartment(List<String> rootList, List<HashMap<String, Object>> children) {
+        for (HashMap<String, Object> childMap : children) {
+            rootList.add((String) childMap.get("id"));
+            if (childMap.get("children") != null) {
+                List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
+                getChildrenDepartment(rootList, childrenSub);
+            }
+        }
+    }
 
 	@Override
 	@ServiceLog(doAction = "修改假期")

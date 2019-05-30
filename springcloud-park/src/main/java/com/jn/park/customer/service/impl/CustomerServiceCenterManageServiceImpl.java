@@ -336,7 +336,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
                 return addCustomerExecuteImgInfo(customerParam, loginAccount);
             }
         }else{
-            logger.warn("获取获取流程表单失败，{}",ibpsResult.getMessage());
+            logger.warn("处理任务失败，{}",ibpsResult.getMessage());
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
         }
     }

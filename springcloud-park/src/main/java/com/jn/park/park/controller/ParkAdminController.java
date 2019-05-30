@@ -37,7 +37,7 @@ public class ParkAdminController extends BaseController {
     @ResponseBody
     public void getSecurityTokenURL(HttpServletResponse response){
         SecurityTokenParam securityTokenParam=new SecurityTokenParam();
-        logger.info("获取视频监控地址 接口 请求参数：{}",logger);
+        logger.info("获取视频监控地址 接口 请求参数：{}",securityTokenParam);
         Result<String>result=securityVideoClient.getSecurityTokenURL(securityTokenParam);
         logger.info("获取视频监控地址 接口 返回参数:{}",result);
         try {

@@ -130,6 +130,7 @@
           ,t1.com_name as "comName"
           ,t1.avatar as "avatar"
           ,t1.com_web as "comWeb"
+          ,t1.com_Admin as "comAdmin"
           ,t1.affiliated_park as "affiliatedId"
           ,t1.affiliated_name as "affiliatedName"
           ,t1.com_server as "comServer"

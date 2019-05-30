@@ -54,41 +54,4 @@ public class WxInRedisConfigStorage {
         jedis.setex(ACCESS_TOKEN_KEY, expiresInSeconds-1000,accessToken);
     }
 
-    /**
-     * 获取自定义登陆状态
-     * todo 后续需考虑是否只保存session_key
-     * @param customLoginStatusKey
-     * @return
-     */
-    public WxMiniJscode2SessionResult getCustomLoginStatus(String customLoginStatusKey) {
-        Jedis jedis = jedisFactory.getJedis();
-        String result = jedis.get(customLoginStatusKey);
-        if(StringUtils.isBlank(result)) {
-            throw new JnSpringCloudException(WxExceptionEnums.GET_SESSION_KEY_OBJ_FAIL,"获取自定义登陆状态对象失败,缓存中不存在.");
-        }
-        WxMiniJscode2SessionResult wxMiniJscode2SessionResult;
-        try {
-            wxMiniJscode2SessionResult = JacksonJsonTransformUtil.jsonToObject(result,new TypeReference<WxMiniJscode2SessionResult>(){});
-        } catch (IOException e) {
-            throw new JnSpringCloudException(WxExceptionEnums.GET_SESSION_KEY_OBJ_FAIL);
-        }
-
-        return wxMiniJscode2SessionResult;
-    }
-
-    /**
-     * 缓存自定义登陆状态
-     * todo 后续加上删除缓存信息，需前端传过期的customLoginStatusKey
-     * @param customLoginStatusKey
-     * @param wxMiniJscode2SessionResult
-     */
-    public void setCustomLoginStatus(String customLoginStatusKey, WxMiniJscode2SessionResult wxMiniJscode2SessionResult) {
-        Jedis jedis = jedisFactory.getJedis();
-        try {
-            jedis.setex(customLoginStatusKey, -1,JacksonJsonTransformUtil.objectToJson(wxMiniJscode2SessionResult));
-        } catch (JsonProcessingException e) {
-            throw new JnSpringCloudException(WxExceptionEnums.JSON_PROCESS_FAL);
-        }
-    }
-
 }

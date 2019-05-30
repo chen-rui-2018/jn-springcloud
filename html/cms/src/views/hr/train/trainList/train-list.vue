@@ -271,6 +271,14 @@ export default {
       apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
           this.options = JSON.parse(res.data.data)
+          const obj = Object.assign({}, this.options)
+          obj.forEach((item, index) => {
+            item.children.forEach((item2, index2) => {
+              if (!item2.children) {
+                item2['children'] = [{}]
+              }
+            })
+          })
         } else {
           this.$message.error(res.data.result)
         }

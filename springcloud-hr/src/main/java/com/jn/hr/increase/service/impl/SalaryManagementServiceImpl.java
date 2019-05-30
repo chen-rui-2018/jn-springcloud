@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
@@ -48,9 +50,10 @@ import com.jn.hr.increase.model.SalaryPayrollAdd;
 import com.jn.hr.increase.model.SalaryPayrollPage;
 import com.jn.hr.increase.model.SalaryPayrollVo;
 import com.jn.hr.increase.service.SalaryManagementService;
-import com.jn.hr.model.AttendanceKeyValue;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+
+import io.swagger.annotations.ApiModelProperty;
 @Service
 public class SalaryManagementServiceImpl implements SalaryManagementService {
 	private static final Logger logger = LoggerFactory.getLogger(SalaryManagementServiceImpl.class);
@@ -98,6 +101,19 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 				sb.append("第"+i+"行:"+str+";");
                 continue;
 			}
+			TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = employeeBasicInfoMapper.selectByJobNumber(salary.getJobNumber());
+			if(tbManpowerEmployeeBasicInfo == null){
+				logger.info("[员工花名册]没有该员工，工号：" + salary.getJobNumber());
+				sb.append("员工信息不存在"+"工号:" + salary.getJobNumber() + ";");
+				continue;
+			}
+			
+			SalaryInfo info = salaryInfoMapper.selectByJobNumber(salary.getJobNumber());
+			if(info != null){
+				logger.info("[薪资表]员工记录已存在，工号：" + salary.getJobNumber());
+				sb.append("员工薪资已存在" + "工号:" + salary.getJobNumber() + ";");
+				continue;
+			}
 			salary.setRecordStatus(Byte.parseByte(HrStatusEnums.NOTDELETED.getCode()));
 			salary.setId(UUID.randomUUID().toString());
 			salary.setCreatedTime(new Date());
@@ -132,8 +148,10 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 		Map<String,SalaryInfo> salaryMap = salaryInfoMapper.getMap(salaryInfoPage);
 		List<SalaryInfo> list = new ArrayList<SalaryInfo>();
 		for(TbManpowerEmployeeBasicInfo basic : basicInfoList){
-			SalaryInfo salaryInfo = new SalaryInfo();
-			salaryInfo = salaryMap.get(basic.getJobNumber());
+			SalaryInfo salaryInfo = salaryMap.get(basic.getJobNumber());
+			if(salaryInfo == null){
+				continue;
+			}
 			salaryInfo.setName(basic.getName());
 			list.add(salaryInfo);
 		}
@@ -141,8 +159,6 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 		logger.info("[薪资表]薪资信息导出成功");
 		return data;
 	}
-
-
 
 	@Override
 	@ServiceLog(doAction = "薪资管理信息的详情")
@@ -188,6 +204,12 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 	@ServiceLog(doAction = "添加薪资信息")
 	@Transactional(rollbackFor = Exception.class)
 	public String addSalary(SalaryInfoAdd salaryInfoAdd, User user) {
+		
+		SalaryInfo salaryInfo = salaryInfoMapper.selectByJobNumber(salaryInfoAdd.getJobNumber());
+		if(salaryInfo != null){
+			logger.info("[薪资管理]薪资信息已存在!");
+			throw new JnSpringCloudException(SalaryManagementExceptionEnums.EXIST_SALARYINFO);
+		}
 		
 		TbManpowerSalaryInfo tbManpowerSalaryInfo = new TbManpowerSalaryInfo();
 		BeanUtils.copyProperties(salaryInfoAdd,tbManpowerSalaryInfo);
@@ -266,8 +288,28 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 		if(salary.getProbationEducationAllowance() == null){
 			return "学历津贴不能为空（试用期）";
 		}
-			
+	    
+//		if(salary.getProbationSeniorityWage() != null){
+//			
+//		}
+		
+
+		/*@ApiModelProperty(value = "绩效奖金(试用期)")
+		@ExcelProperty(value = "绩效奖金(试用期)", index = 8)
+	    private Double probationAchievementBonus;
+
+		@ApiModelProperty(value = "单项奖励(试用期)")
+		@ExcelProperty(value = "单项奖励(试用期)", index = 9)
+	    private Double probationSingleReward;*/
 		return "";
+	}
+	
+	/**
+	 * 
+	 * 校验字符串是否是数字
+	 */
+	public boolean isNum(String str){
+		return str.matches("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
 	}
 
 	@Override

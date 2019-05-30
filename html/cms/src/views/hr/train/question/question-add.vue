@@ -139,7 +139,8 @@ export default {
           if (latestView) {
             this.$router.push('question-invest')
           } else {
-            this.$router.push('/')
+            // this.$router.push('/')
+            this.$router.push('question-invest')
           }
         }
       })

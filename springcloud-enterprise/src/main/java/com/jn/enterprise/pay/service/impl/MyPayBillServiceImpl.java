@@ -330,7 +330,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         logger.info("我的账单-创建账单,参数：payBillCreateParamVo={},user={}", JsonUtil.object2Json(payBillCreateParamVo),JsonUtil.object2Json(user));
         List<TbPayAccountBook> tbPayAccountBook = null;
         List<TbPayAccount> tbPayAccount = null;
-        Result<Boolean> result = null;
+        Result<Boolean> result = new Result<>();
         TbPayAccountBookCriteria billCriteria = new TbPayAccountBookCriteria();
         TbPayAccountCriteria accountCriteria = new TbPayAccountCriteria();
         if (payBillCreateParamVo.getObjType().equals(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode())) {
@@ -421,7 +421,11 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     tpbmr.setNatureCode(BILL_AC_BOOK_TYPE_1.getCode());
                     tpbmr.setMoney(tbs.getBillExpense());
                     tpbmr.setBalance(totalAmount);
-                    tpbmr.setCreatorAccount(user.getAccount());
+                    if (StringUtils.isBlank(user.getAccount())) {
+                        tpbmr.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
+                    } else {
+                        tpbmr.setCreatorAccount(user.getAccount());
+                    }
                     tpbmr.setCreatedTime(new Date());
                     tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
                     logger.info("统一缴费插入流水记录入參【{}】", tpbmr.toString());

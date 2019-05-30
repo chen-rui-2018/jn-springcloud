@@ -209,7 +209,7 @@
         t.message_one_sort as "messageonesort",
         t.message_one_sort_name as "messageonesortname",
         t.message_tow_sort as "messagetowsort",
-        t.message_tow_sort_name as "messagetowsortname"
+        t.message_tow_sort_name as "messagetowsortname",
         t.created_time as "createdTime",
         t.creator_account as "creatorAccount"
         from

@@ -61,7 +61,7 @@ public class RoomOrderClientController implements RoomOrderClient {
 
     @Override
     @ControllerLog(doAction ="缴费单回调")
-    public Result updateBill(PayCallBackNotify payCallBackNotify) {
+    public Result updateBill(@RequestBody PayCallBackNotify payCallBackNotify) {
         return roomInformationService.updateBill(payCallBackNotify);
     }
 

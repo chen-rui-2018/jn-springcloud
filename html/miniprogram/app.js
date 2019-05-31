@@ -80,7 +80,7 @@ App({
     })
   },
   onShow(opts) {
-   
+
   },
   onHide() {
     // console.log('App Hide')

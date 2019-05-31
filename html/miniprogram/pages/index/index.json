@@ -1,3 +1,9 @@
-{
-  "usingComponents": {"nav-bar": "./../templates/header"}
+
+ {
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "首页",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh":true
 }

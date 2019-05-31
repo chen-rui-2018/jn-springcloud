@@ -12,10 +12,10 @@
             <input type="text">
             <i class="el-icon-search"></i>
           </div>
-          <div class="headerRight fr">
-            <div class="search pointer">
+          <div class="headerRight fr pr">
+            <!-- <div class="search pointer">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
+            </div> -->
             <!-- <div class="navlogin">
               <a @click="$router.push({path:'/login'})">登录</a>
               <span class="line">|</span>
@@ -119,7 +119,7 @@
           <el-card>
             <ul class="techUl">
               <li>
-                <img src="@/../static/img/tech1.png" alt="">
+                <img src="@/../static/img/tech1.png" alt="" style="width:126px;height:95px">
                 <div class="liInfo">
                   <span>投资人</span>
                   <p class="mainColor">{{investorsNum}}
@@ -128,7 +128,7 @@
                 </div>
               </li>
               <li>
-                <img src="@/../static/img/tech2.png" alt="">
+                <img src="@/../static/img/tech2.png" alt="" style="width:137px;height:101px">
                 <div class="liInfo">
                   <span>金融产品</span>
                   <p class="mainColor">
@@ -138,7 +138,7 @@
                 </div>
               </li>
               <li>
-                <img src="@/../static/img/tech3.png" alt="">
+                <img src="@/../static/img/tech3.png" alt="" style="width:130px;height:96px">
                 <div class="liInfo">
                   <span>金融机构</span>
                   <p class="mainColor">
@@ -341,7 +341,7 @@
             <ul class="finaInsUl finaUl clearfix" id="finaInsUl">
               <li class="finaInsLi pr" v-for="(i,k) in ServiceOrgList" :key='k'>
                 <div class="finaInsItem">
-                  <img class="pointer" :src="i.orgLogo" alt="" @click="$router.push({ path: '/finaInsDetail', query: { orgId: i.orgId } })">
+                  <img class="pointer" :src="i.orgLogo" alt="" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                 </div>
                 <div class="finaDiv1">
                   <!-- <div class="finaTit"></div> -->
@@ -729,9 +729,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-          } else {
-            _this.$message.error(res.result);
-          }
+          } 
         }
       });
     },

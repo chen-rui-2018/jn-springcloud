@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfont" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfont"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="htbarrowright02" unicode="&#59060;" d="M792.412504 384.172939l-48.762587 48.793286-0.208754-0.206708L280.350083 895.88846l-48.762587-48.762587 463.096197-463.125873L231.587496-79.129966l48.762587-48.75747 463.09108 463.124849 0.208754-0.206708 48.762587 48.798403-0.172939 0.171915L792.412504 384.172939zM792.412504 384.172939"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>

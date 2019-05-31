@@ -143,7 +143,7 @@
     data() {
       return {
         willFillListLoading: true,
-        filledListLoading: true,
+        filledListLoading: false,
         isMobile: isMobile(),
         searchFilled: '',
         adUrls: [],
@@ -300,7 +300,7 @@
               class: 'en-info'
             }
           }
-        } else if (status === 1){
+        } else {
           return {
             title: '我要补报',
             class: 'en-warning'

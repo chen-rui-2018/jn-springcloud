@@ -174,6 +174,7 @@ export default {
 
 <style lang="scss">
   .talentPlatform{
+    padding-top: 67px;
     // margin-top: 230px;
     .talentPlatform_content{
       width: 1190px;

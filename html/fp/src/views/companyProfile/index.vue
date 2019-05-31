@@ -91,7 +91,7 @@
               <div class="right1 fl">
                 <p>
                   <i class="el-icon-view">&nbsp;{{i.browseNumber}}</i>
-                  <i class="iconfont icon-liuyan1">&nbsp;{{i.commentNumber}}</i>
+                  <i class="iconfont icon-liuyan1"></i><span style="font-size:14px;">&nbsp;{{i.commentNumber}}</span>
                 </p>
               </div>
             </div>
@@ -145,7 +145,7 @@ export default {
         { name: "招商企业", id: "2" }
       ],
       parkList: [],
-      // affiliatedPark: "",
+      affiliatedPark: "",
       comSource: "",
       comType: "",
       comName: "",
@@ -161,6 +161,9 @@ export default {
     this.getParkList();
     this.selectIndustryList();
     this.getCompanyList();
+    if(this.$route.query.id){
+      this.induType=this.$route.query.id
+    } 
   },
   methods: {
     //关注
@@ -205,7 +208,7 @@ export default {
       this.page = 1;
       this.getCompanyList()
     },
-    //领域搜索
+    //园区搜索
     handleFilter(i) {
       this.affiliatedPark = i;
       this.filterFlag = i;
@@ -249,7 +252,7 @@ export default {
         data: {
           page: _this.page,
           rows: _this.row,
-          affiliatedPark: _this.$route.query.id,
+          affiliatedPark: _this.affiliatedPark,
           comSource: _this.comSource,
           comType: _this.comType,
           comName: _this.comName,
@@ -363,11 +366,12 @@ export default {
         margin-bottom: 20px;
       }
     }
-    .iconfont {
-      font-size: 13px;
+    .el-icon-view,.iconfont {
+      font-size: 14px;
     }
     .icon-liuyan1 {
       margin-left: 20px;
+      // font-size: 16px;
     }
   }
 }

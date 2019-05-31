@@ -1,0 +1,71 @@
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
+<view class="payRecord paddihng_side">
+  <!-- 搜索框 -->  
+  <view class="box">
+    <view class="cu-bar search ">
+      <view class="search-form round">
+        <text class="icon-search"></text>
+        <input bindinput="search" type="text" placeholder="请输入停车场信息" confirm-type="search"></input>
+        <view class="action">
+          <picker bindchange="selectcarLicense" value="{{detailSend.carLicense}}" range="{{carLicenseList}}" range-key="{{'carLicense'}}">
+            <text class="select green">{{detailSend.carLicense}} </text>
+          </picker>
+          <text class="icon-triangleupfill" wx:if="{{isShow}}"></text>
+          <text class="icon-triangledownfill" wx:else></text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="li">
+    <view class="title text-center">查询日期</view>
+    <view class="date">
+      <text bindtap="changeTime" data-id="1">最近一周</text>
+      <text bindtap="changeTime" data-id="2">最近一月</text>
+      <text bindtap="changeTime" data-id="3">最近半年</text>
+      <text bindtap="changeTime" data-id="4">最近一年</text>
+    </view>
+    <view class="select_date">
+      <view class="boder-bottom">
+        <picker mode="date" value="{{dateBefore}}" start="2014-01-01" end="2030-01-01" bindchange="bindDateBeforeChange">
+          <view class="picker">{{detailSend.startTime}}</view>
+        </picker>
+      </view>
+      <view >至</view>
+      <view class="boder-bottom">
+        <picker mode="date" value="{{dateAfter}}" start="2014-01-01" end="2030-01-01" bindchange="bindDateAfterChange">
+          <view>{{detailSend.endTime}}</view>
+        </picker>
+      </view>
+    </view>
+  </view>
+  <view class="payRecord_main" wx:if="{{parkDetail.length!=0}}">
+    <block wx:for="{{parkDetail}}">
+      <view class="li" >
+        <view class="title">
+          <view>苏A00001</view>
+        </view>
+        <view class="detail paddihng_side">
+          <view>车场名称：</view>
+          <view>{{item.areaName}}</view>
+        </view>
+        <view class="detail paddihng_side">
+          <view>入场时间：</view>
+          <view>{{item.admissionTime}}</view>
+        </view>
+        <view class="detail paddihng_side">
+          <view>出场时间：</view>
+          <view>{{item.admissionTime}}</view>
+        </view>
+        <view class="detail paddihng_side">
+          <view>停车时长：</view>
+          <view>1.9</view>
+          <view class="red all_price">共缴费：{{item.actualMoney}}元</view>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view class="null" wx:else>
+    当前车辆暂无缴费信息!
+  </view>
+</view>
+    

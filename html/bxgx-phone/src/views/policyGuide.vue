@@ -16,7 +16,7 @@
       </div>
       <div class="approvalGuide_cont">
         <ul>
-          <li v-for="(i,k) in policyCenterList" :key="k">
+          <li v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/policyDetails',query:{policyId:i.policyId}})">
             <div class="tit">
               <span>{{i.policyTitle}}</span>
               <span>{{i.issueUnit}}</span>
@@ -56,7 +56,7 @@ export default {
 
       policyClass: [],
       page: 1,
-      row: 4,
+      row: 5,
       policyCenterList: [],
       policyClassCode: ''
     }
@@ -114,9 +114,6 @@ export default {
                 if (res.code === '0000') {
                   this.policyCenterList.push(...res.data.rows)
                   this.total = res.data.total
-                  this.policyCenterList.forEach(ele => {
-                    this.$set(ele, 'isfold', false)
-                  })
                 }
               }
             })
@@ -151,9 +148,6 @@ export default {
           if (res.code === '0000') {
             _this.policyCenterList = res.data.rows
             _this.total = res.data.total
-            _this.policyCenterList.forEach(ele => {
-              this.$set(ele, 'isfold', false)
-            })
           }
         }
       })
@@ -260,7 +254,7 @@ export default {
     }
     .approvalGuide_cont {
       margin: 30px 0;
-      margin-top: 350px;
+      margin-top: 320px;
       // margin-top: 44%;
       height: 100%;
       overflow: auto;
@@ -317,7 +311,7 @@ export default {
 
       li {
         border-bottom: 1px solid #eee;
-        padding: 20px;
+        padding: 30px;
         .tit{
           font-weight: bold;
         }

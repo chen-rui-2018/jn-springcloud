@@ -69,7 +69,7 @@
                     <div class="li1 aa" :class="{'active0':sw==index}">{{'0'+(index+1)}}</div>
                     <span class="color1">{{notice.titleName}}</span>
                   </template>
-                  <p>申报截止时间：{{notice.deadline}}</p>
+                  <p>申报截止时间：{{notice.deadline|time}}</p>
                 </el-collapse-item>
               </el-collapse>
               <!-- <el-collapse accordion v-model="activeNames" @change="handleChange11">
@@ -478,7 +478,7 @@
                       </div>
                     </div>
                     <div class="orgBtn fr mainColor">
-                      <a href="javascript:;" @click="onlineContact">在线联系</a>
+                      <a href="javascript:;" @click="onlineContact(i.orgAccount)">在线联系</a>
                     </div>
                   </li>
                 </ul>
@@ -498,7 +498,7 @@
           <el-card>
             <div class="infoTit clearfix">
               <div class="btn fl">
-                <button class="btn1 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
+                <button class="btn0 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
                 <button class="btn2 pointer" :class="{'btnActive':!flag55}" @click="flag55=false">服务</button>
               </div>
               <div class="chage fr color3 pointer" @click="hanlepage">
@@ -520,7 +520,7 @@
                   <p>发布时间: {{i.createdTime}}</p>
                 </div>
                 <div class="con3 fr">
-                  <button class="btn1 pointer" @click="onlineContact">在线联系</button>
+                  <button class="btn1 pointer" @click="onlineContact(i.comName)">在线联系</button>
                   <button class="btn2 pointer" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">了解详情</button>
                 </div>
                 <!-- 详情弹框 -->
@@ -529,7 +529,8 @@
                     <div class="detail">招聘详情</div>
                     <p class="p1">企业名称：{{humanDetail.comName}}</p>
                     <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-                    <p class="p1">岗位详情：{{humanDetail.details}}</p>
+                    <p class="p1">岗位详情：</p>
+                    <span v-html="humanDetail.details"></span>
                   </el-card>
                 </div>
               </li>
@@ -734,6 +735,18 @@ export default {
       humanDetail: {}
     };
   },
+  filters: {
+    time(time) {
+      if (time) {
+        // return time.split("T")[0]
+        let dateee = new Date(time).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000)
+          .toISOString()
+          .replace(/T/g, " ")
+          .replace(/\.[\d]{3}Z/, "");
+      }
+    }
+  },
   mounted() {
     this.$router.afterEach((to, from, next) => {
       window.scrollTo(0, 0);
@@ -763,18 +776,18 @@ export default {
   },
   methods: {
     //在线联系
-    onlineContact(){
-     if(!sessionStorage.userInfo){
-        this.$message.error('请先登录');
-        return
+    onlineContact(orgAccount) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
       }
-      this.$router.push({path:'chat'})
+      this.$router.push({ path: "chat",query:{fromUser:orgAccount}});
     },
     //金融产品提需求
     raiseDemand(i) {
-      if(!sessionStorage.userInfo){
-        this.$message.error('请先登录');
-        return
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
       }
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
@@ -814,10 +827,10 @@ export default {
       });
     },
     //服务产品提需求
-    demandRaise(i) { 
-      if(!sessionStorage.userInfo){
-        this.$message.error('请先登录');
-        return
+    demandRaise(i) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
       }
       this.serverProVisible = true;
       this.serverProform.requireDetail = "";
@@ -853,16 +866,20 @@ export default {
     hanlepage() {
       if (this.flag55 == true) {
         if (this.page7 >= Math.ceil(this.total7 / this.rows7)) {
-          this.$message.error("没有更多数据了");
-          return;
+          // this.$message.error("没有更多数据了");
+          this.page7=1
+          this.getRecruitList();
+          // return;
         } else {
           this.page7++;
           this.getRecruitList();
         }
       } else {
         if (this.page8 >= Math.ceil(this.total8 / this.rows8)) {
-          this.$message.error("没有更多数据了");
-          return;
+          // this.$message.error("没有更多数据了");
+           this.page8=1
+          this.getProList();
+          // return;
         } else {
           this.page8++;
           this.getProList();
@@ -881,7 +898,6 @@ export default {
       return result;
     },
     handleChange11(val) {
-      console.log(val);
       if (val == "2") {
         this.sw = "1";
       } else if (val == "3") {
@@ -891,12 +907,12 @@ export default {
       }
     },
     getElementLeft(element) {
-      if(!element){
-        return 0
+      if (!element) {
+        return 0;
       }
       var top = element.offsetTop;
-      if(!element.offsetParent){
-        return top
+      if (!element.offsetParent) {
+        return top;
       }
       var curEle = element.offsetParent;
 
@@ -957,7 +973,7 @@ export default {
           click: e => {
             // let url = e.target.dataset.jumpurl;
             // this.bannerJump(url);
-            console.log(e);
+            // console.log(e);
           }
         },
         observer: true,
@@ -978,12 +994,9 @@ export default {
         }
       });
     },
-    onchange() {
-      console.log(0);
-    },
-    aa() {
-      console.log(111);
-    },
+    // aa() {
+    //   console.log(111);
+    // },
     handleChange() {
       //   this.sousuo = true;
     },
@@ -1117,7 +1130,6 @@ export default {
         dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res.data);
             _this.finaProList = res.data.rows;
           } else {
             _this.$message.error(res.result);
@@ -1781,7 +1793,7 @@ export default {
             color: #fff;
             background: #00a041;
           }
-          .btn1 {
+          .btn0 {
             border-top-left-radius: 3px;
             border-bottom-left-radius: 3px;
           }
@@ -1811,10 +1823,14 @@ export default {
           padding: 30px 0;
           border-bottom: 1px solid #eee;
           .con1 {
-            padding: 20px 50px;
+            // padding: 20px 50px;
+            width: 183px;
+            height: 130px;
             > img {
-              width: 83px;
-              height: 90px;
+              // width: 83px;
+              // height: 90px;
+              width: 100%;
+              height: 100%;
             }
           }
           .con2 {

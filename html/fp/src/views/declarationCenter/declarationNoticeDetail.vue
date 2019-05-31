@@ -24,8 +24,8 @@
           <div class="accessory">
             <span>附件下载:</span>
             <div class="accessory_right">
-              <a href="javascript:;">附件一  企业发展沙龙活动承办须知.docx</a>
-              <a href="javascript:;">附件一  企业发展沙龙活动承办须知.docx</a>
+              <a v-if="fileList.length===0" href="javascript:;">暂无</a>
+              <a  :href="item.filePath" v-for="(item,index) in fileList " :key="index">附件{{index+1}}  {{item.fileName}}</a>
               <p>
                 <span>反馈表递交截止日期{{detailList.deadline|time}}</span>
                 <span>阅读量: {{detailList.browseTimes}}次 <span>发布时间: {{detailList.createdTime|time}}</span></span>
@@ -142,7 +142,7 @@ export default {
        declareItem:[
          { required: true, message: '内容不能为空'}
        ]
-      }
+      },
     }
   },
   filters: {
@@ -171,9 +171,11 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            // console.log(res)
-            _this.detailList = res.data;
+            _this.detailList = res.data
             _this.appointment. appointmentItemName= res.data.titleName;
+            if(res.data.fileUrl!==''){
+              _this.fileList=JSON.parse(res.data.fileUrl)
+            }
           }
         }
       });
@@ -249,6 +251,7 @@ export default {
 </script>
 <style lang="scss">
   .declarationNoticeDetail{
+    padding-top: 67px;
     .declarationNoticeDetail_content{
       width: 1190px;
       margin: 0 auto;

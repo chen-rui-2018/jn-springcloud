@@ -36,13 +36,13 @@
         <div class="quickEnter">
           <ul>
             <li @click="$router.push({path:'/talentsService'})">
-              <span>人才申报</span>
-              <p>PEOPLE&nbsp;DECLARE</p>
+              <span>人才服务</span>
+              <p>THE&nbsp;TALENT&nbsp;SERVICE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li @click="$router.push({path:'/companyProfile'})">
-              <span>高新企业</span>
-              <p>HIGH-TECH&nbsp;ENTERPRISE</p>
+            <li @click="$router.push({path:'/declarationCenter'})">
+              <span>申报中心</span>
+              <p>DECLARE&nbsp;CENTER</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
             <li @click="$router.push({path:'/incubatorEnterprises'})">
@@ -80,9 +80,9 @@
           <div ref="portal1" data-class="bottom">
             <div class="tit color2 pr">
               <div class="pointer" @click="$router.push({path:'/talentsService'})">申报公告</div>
-              <div class="titImg" @click="onClick">
+              <!-- <div class="titImg" @click="onClick">
                 <img src="@/../static/img/huidaodingbu.png" alt="">
-              </div>
+              </div> -->
             </div>
             <div class="eng mainColor pointer" @click="$router.push({path:'/talentsService'})">Declare&nbsp;the&nbsp;announcement</div>
             <div class="line"></div>

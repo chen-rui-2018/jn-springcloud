@@ -182,6 +182,7 @@ export default {
     },
     init(){
       this.nickName = this.userData.nickName;
+      this.avarUrl = this.userData.avatar;
       this.name = this.userData.name;
       // this.name = this.userData.name;
       this.sexFlag = this.userData.sex;
@@ -247,6 +248,7 @@ export default {
             _this.editFlag = true;
             // _this.cancelEd();
             bus.$emit('getUserinfoF')
+            bus.$emit('upUserData')
           } else {
             _this.$message.error(res.result);
           }

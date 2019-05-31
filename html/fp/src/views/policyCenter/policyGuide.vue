@@ -88,8 +88,7 @@
               </div>
             </div>
             <div class="agent2 color2" v-if="zankaiFlag">
-              <div class="agent2Con">
-                {{getGuideDetal.policyContent}}
+              <div class="agent2Con" v-html="getGuideDetal.policyContent">
               </div>
               <!-- <div class="agent2Con" v-else>
                             暂无内容！

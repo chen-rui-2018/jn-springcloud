@@ -90,6 +90,10 @@ export default {
     bus.$on("closeKnow", msg => {
       _this.menuFlag = false;
     });
+    bus.$on("upUserData", msg => {
+      _this.upUserdata();
+    });
+    
   },
   methods: {
     goRoute(i){
@@ -161,6 +165,24 @@ export default {
         }
       });
     },
+    upUserdata(){
+      let _this = this;
+       _this.api.get({
+          url: "getUserPersonInfo",
+          data: {
+            account: sessionStorage.account
+          },
+          dataFlag: false,
+          callback: function(res) {
+            if (res.code === "0000") {
+              _this.userInfoData = res.data;
+              sessionStorage.setItem('userInfo', JSON.stringify(res.data));
+            } else {
+              _this.$message.error(res.result);
+            }
+          }
+        });
+    }
   }
 };
 </script>

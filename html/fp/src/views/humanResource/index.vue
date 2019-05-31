@@ -203,11 +203,11 @@ export default {
         callback: res=> {
           if (res.code == "0000") {
             // this.typeList = res.data;
-            if(sessionStorage.userInfo.account==res.data){
+            if(sessionStorage.userInfo.account==res.data.account){
               this.$message.error('当前登录的账号跟聊天对象一样');
               return
             }
-            this.$router.push({path:'/chat',query:{toUser:res.data}})
+            this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
           } else {
             this.$message.error(res.result);
           }

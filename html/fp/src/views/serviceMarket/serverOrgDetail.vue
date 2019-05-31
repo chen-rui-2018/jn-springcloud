@@ -10,7 +10,7 @@
       <el-card>
         <div class="agent1 clearfix">
           <div class="agentTil fl color1">{{serverOrgDetailList.orgName}}</div>
-          <div class="orgBtn fr mainColor">在线联系</div>
+          <div class="orgBtn fr mainColor pointer" @click="onlineContat(serverOrgDetailList.orgAccount,serverOrgDetailList.orgName)">在线联系</div>
         </div>
         <div class="agent2 clearfix color2">
           <div class="agentImg fl">
@@ -584,7 +584,7 @@
     </div>
      <!-- 提需求弹框 -->
       <template v-if="serverOrgVisible">
-            <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh">
+            <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh" :modal-append-to-body=false>
               <div v-if="islogin">
                 <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
                     <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
@@ -663,6 +663,14 @@ export default {
     this.getEvaluationCountInfo()
   },
   methods: {
+      //在线联系
+    onlineContat(investorAccount,investorName){
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:ogeName}})
+    },
     //判断是否登录
     isLogin(){
       this.token1=sessionStorage.getItem('token')

@@ -25,14 +25,14 @@
         </div>
         <div class="quickEnter">
           <ul>
-            <li>
-              <span>人才申报</span>
-              <p>PEOPLE&nbsp;DECLARE</p>
+             <li @click="$router.push({path:'/talentsService'})">
+              <span>人才服务</span>
+              <p>THE&nbsp;TALENT&nbsp;SERVICE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
-              <span>高新企业</span>
-              <p>HIGH-TECH&nbsp;ENTERPRISE</p>
+            <li @click="$router.push({path:'/declarationCenter'})">
+              <span>申报中心</span>
+              <p>DECLARE&nbsp;CENTER</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
             <li>

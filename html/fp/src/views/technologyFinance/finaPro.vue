@@ -134,7 +134,7 @@
     </div>
     <!-- 提需求 -->
     <template v-if="finaProVisible">
-      <el-dialog :visible.sync="finaProVisible" width="600px">
+      <el-dialog :visible.sync="finaProVisible" width="600px" :modal-append-to-body=false>
         <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
             <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>

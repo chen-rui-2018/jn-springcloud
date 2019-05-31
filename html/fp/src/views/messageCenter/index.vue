@@ -174,6 +174,7 @@ $bg-gray: #f3f3f3;
         width: 100%;
         height: 100%;
         vertical-align: middle;
+        border-radius: 50%;
         // margin: 0 auto;
       }
     }

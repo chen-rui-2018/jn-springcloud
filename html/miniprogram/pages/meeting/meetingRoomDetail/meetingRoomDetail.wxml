@@ -31,7 +31,7 @@
 </view>
 <!-- 会议列表 -->
 <view class="meetingList">
-  <block wx:for="{{meetingList}}">
+  <block wx:for="{{meetingList}}" wx:key="index">
     <view class="meeting_li" bindtap="goAttendence" data-id="{{item.id}}">
       <view class="li_left" >
         <view class="begin_time">{{item.startTime}}</view>

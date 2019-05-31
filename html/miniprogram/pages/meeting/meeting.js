@@ -32,11 +32,8 @@ Page({
   onLoad:function(){
   },
   onPullDownRefresh(){
-    let that=this
-    wx.showNavigationBarLoading()
-    that.setData({
-      roomList:[]
-    })
+    // wx.showNavigationBarLoading()
+
     this.getMeetinRoom()
   },
   // 生命周期函数--监听页面显示

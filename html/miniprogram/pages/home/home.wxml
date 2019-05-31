@@ -8,7 +8,7 @@
 <view class="cu-list menu  shadow-lg">
   <view class="cu-item arrow">
     <navigator class='content' url='./payRecord/payRecord' hover-class='none'>
-      <image class="" src="./../../images/1@2x.png"> </image>
+      <image class="" src="https://njbxq.mynatapp.cc/h5/imgs/1@2x.png"> </image>
       <text class='text-grey'>缴费记录</text>
     </navigator>
   </view>
@@ -20,14 +20,14 @@
   </view> -->
   <view class="cu-item arrow">
     <navigator class='content' url='./maCar/maCar' hover-class='none'>
-      <image class="" src="./../../images/my_car.png"></image>
+      <image class="" src="https://njbxq.mynatapp.cc/h5/imgs/my_car.png"></image>
       <text class='text-grey'>我的爱车</text>
     </navigator>
   </view>
   <view class="cu-item arrow" bindtap="goabout">
     <!-- <navigator class='content' url='./aboutUs/aboutUs' hover-class='none'> -->
     <view class="content">
-      <image class="" src="./../../images/tingche-@2x.png"> </image>      
+      <image class="" src="https://njbxq.mynatapp.cc/h5/imgs/tingche-@2x.png"> </image>      
       <text class='text-grey'>关于我们</text>
     </view>
     <!-- </navigator> -->

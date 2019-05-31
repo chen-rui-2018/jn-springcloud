@@ -183,3 +183,8 @@
  .text-xl{
    margin-top: 20rpx;
  }
+ .tips{
+   font-size: 30rpx;
+   display: flex;
+   justify-content: center;
+ }

@@ -7,7 +7,7 @@
     <input bindinput="changesearch" type="text" placeholder="搜索参会人员" />
   </view>  
   <!-- 多选 -->
-    <view class="select" wx:for="{{userList}}" bindtap="selectUser" data-id="{{item.id}}" data-name="{{item.name}}" data-index="{{index}}">
+    <view class="select" wx:for="{{userList}}" wx:key bindtap="selectUser" data-id="{{item.id}}" data-name="{{item.name}}" data-index="{{index}}">
         {{item.name}}
       <text wx:if="{{item.checked}}" class="icon-select"></text>
     </view>

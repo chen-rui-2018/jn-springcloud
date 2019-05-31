@@ -5,8 +5,8 @@
     <view class="bg"></view>
     <view class="swiper_main"> 
       <swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
-        <swiper-item wx:for="{{3}}" wx:key="{{index}}">
-          <image src="./../../images/swiper.png" mode='aspectFill'></image>
+        <swiper-item wx:for="{{bannarList}}" wx:key="{{index}}">
+          <image src="{{item.posterUrl}} " mode='aspectFill'></image>
         </swiper-item>
       </swiper> 
     </view>
@@ -14,12 +14,12 @@
   <!-- 公告 -->
   <view class="notice bg_white paddihng_side">
     <view class="notice_img">
-      <image class="" src="./../../images/index_notice.png">
+      <image class="" src="https://njbxq.mynatapp.cc/h5/imgs/index_notice.png">
       </image>
     </view>
     <view class="notice_main">
       <swiper class='notice_swiper' autoplay='{{true}}' interval='2000' vertical='{{true}}' circular='{{true}}'>
-        <swiper-item class='item' wx:for='{{noticeLise}}'>{{item.noticeTitle}}</swiper-item>
+        <swiper-item class='item' wx:for='{{noticeLise}}' wx:key="{{index}}">{{item.noticeTitle}}</swiper-item>
       </swiper>
     </view>
     <!-- <view class="more gray">
@@ -31,25 +31,25 @@
   <view class="nav bg_white paddihng_side">
     <view class="nav_item"> 
       <navigator url="/page/navigate/navigate?title=navigate">
-        <image class="" src="./../../images/index_nav1.png" > </image>
+        <image class="" src="https://njbxq.mynatapp.cc/h5/imgs/index_nav1.png" > </image>
       </navigator>
       <text class=""> 政策指南 </text>
     </view>
     <view class="nav_item"> 
       <navigator url="/pages/index/declarationNotice/declarationNotice">
-        <image class="" src="./../../images/index_nav2.png" > </image>
+        <image class="" src="https://njbxq.mynatapp.cc/h5/imgs/index_nav2.png" > </image>
       </navigator>
         <text class=""> 申告公告 </text>
     </view>
     <view class="nav_item"> 
       <navigator class="" target="" url="/pages/index/parkPay/parkPay">
-        <image class="" src="./../../images/index_nav3.png" > </image>
+        <image class="" src="https://njbxq.mynatapp.cc/h5/imgs/index_nav3.png" > </image>
       </navigator>
       <text class=""> 停车缴费 </text>
     </view>
     <view class="nav_item"> 
       <navigator class="" target="" url="/pages/index/maintenance/maintenance">
-        <image class="" src="./../../images/index_nav4.png" > </image>
+        <image class="" src="https://njbxq.mynatapp.cc/h5/imgs/index_nav4.png" > </image>
       </navigator>
       <text class=""> 维保录入 </text>
     </view>
@@ -82,7 +82,7 @@
           </view>
           <view class="hot_li_num paddihng_side">
             <view class="num_left">
-              <view class="{{headIndex!=0?'num_img':''}} " wx:for="{{item.avatarList}}" wx:for-item="headItem" wx:for-index="headIndex">
+              <view class="{{headIndex!=0?'num_img':''}} " wx:for="{{item.avatarList}}" wx:for-item="headItem" wx:for-index="headIndex" wx:key="{{headIndex}}">
                 <image class="cu-avatar round" src="{{headItem}}" > </image>
              </view>
              <!-- <view class="num_img">
@@ -91,7 +91,7 @@
               <text class="gray person_num">{{item.applyNum}}/{{item.actiNumber}}名</text>
             </view>
             <view class="num_right">
-              <image class="" src="./../../images/xin@2x.png"> </image>
+              <image class="" src="https://njbxq.mynatapp.cc/h5/imgs/xin@2x.png"> </image>
               <text>{{item.actiLike}}</text>
             </view>
           </view>

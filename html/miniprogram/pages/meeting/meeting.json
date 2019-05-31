@@ -3,5 +3,6 @@
   "navigationBarTextStyle": "black",
   "navigationBarTitleText": "会议室列表",
   "backgroundColor": "#eeeeee",
-  "backgroundTextStyle": "light"
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh":true
 }

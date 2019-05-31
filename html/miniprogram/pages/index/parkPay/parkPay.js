@@ -30,13 +30,14 @@ Page({
       method: 'POST',
     }).then(res=>{
       if(res.data.code==='0000'&&res.data.data.createStatus==="1"){
+        console.log(res.data.data.billId)
         this.setData({
           goodId:res.data.data.billId.split(",")
         })
         request.send({
           url: '/springcloud-payment/pay/createOrderAndPay',
           data: {
-            channelId:"WX_APP",
+            channelId:"WX_PROGRAM",
             goodsIdArr:this.data.goodId,
             paySum:this.data.parkDetail.parkingAmount,
             payType:'PARKING_LEASE'

@@ -38,6 +38,9 @@
         <view><button class="btn" bindtap="showPay">缴费离场</button></view>
       </view>
     </view>
+    <view class="tips" wx:else>
+      请输入完整的车牌号！！
+    </view>
   </view>
   <view class="pay">
      <view class="commodity_screen" bindtap="hidePay" wx:if="{{isPayShow}}"></view>

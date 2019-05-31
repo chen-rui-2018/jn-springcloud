@@ -33,6 +33,7 @@
 .notice_img image{
   width:86rpx;
   height:43rpx;
+  padding-right: 12rpx;
 }
 .notice_main{
   width:70%

@@ -3,7 +3,7 @@
   <!-- 多选 -->
   <view class="select_box" >
 
-    <view class="select" wx:for="{{departmentList}}" bindtap='selectDepart' data-id="{{item.departmentId}}" data-name="{{item.departmentName}}">
+    <view class="select" wx:for="{{departmentList}}" wx:key bindtap='selectDepart' data-id="{{item.departmentId}}" data-name="{{item.departmentName}}">
         {{item.departmentName}}
       <text wx:if="{{item.departmentId===id }}" class="icon-select"></text>
     </view>

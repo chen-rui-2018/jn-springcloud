@@ -4,6 +4,5 @@
   "navigationBarTitleText": "我的",
   "backgroundColor": "#eeeeee",
   "backgroundTextStyle": "light",
-  "navigationStyle":"custom",
-  "enablePullDownRefresh":true
+  "navigationStyle":"custom"
 }

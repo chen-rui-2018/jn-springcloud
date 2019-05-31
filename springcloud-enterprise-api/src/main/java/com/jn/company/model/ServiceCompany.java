@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 企业详情Bean
@@ -115,6 +114,8 @@ public class ServiceCompany implements Serializable {
     private String parkBuildName;
     @ApiModelProperty(value = "信用积分")
     private BigDecimal creditPoints;
+    @ApiModelProperty(value = "信用积分更新时间")
+    private String creditUpdateTime;
     @ApiModelProperty(value = "企业类型")
     private String comType;
     @ApiModelProperty(value = "是否参加园区获取【0否1是】")
@@ -532,6 +533,14 @@ public class ServiceCompany implements Serializable {
         this.creditPoints = creditPoints;
     }
 
+    public String getCreditUpdateTime() {
+        return creditUpdateTime;
+    }
+
+    public void setCreditUpdateTime(String creditUpdateTime) {
+        this.creditUpdateTime = creditUpdateTime;
+    }
+
     public String getComType() {
         return comType;
     }
@@ -680,6 +689,7 @@ public class ServiceCompany implements Serializable {
                 ", parkBuildId='" + parkBuildId + '\'' +
                 ", parkBuildName='" + parkBuildName + '\'' +
                 ", creditPoints=" + creditPoints +
+                ", creditUpdateTime='" + creditUpdateTime + '\'' +
                 ", comType='" + comType + '\'' +
                 ", isJoinActivity='" + isJoinActivity + '\'' +
                 ", checkStatus='" + checkStatus + '\'' +

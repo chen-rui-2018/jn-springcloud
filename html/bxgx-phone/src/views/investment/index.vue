@@ -20,6 +20,13 @@
       <div class="investment-block">
         <div class="investment-block-title">
           <div class="block-title">园区概况</div>
+          <div
+            class="block-more"
+            @click="$router.push({path:'/parkProfile'})"
+          >
+            <span>查看详情</span>
+            <i class="icon iconfont icon-jiantou"></i>
+          </div>
         </div>
         <div class="investment-block-content investment-park">
           <div v-if="!showMore">{{  parkDesc | formatParkDesc}}</div>
@@ -168,7 +175,7 @@ export default {
     return {
       keywords: '',
       showMore: false,
-      parkDesc: '南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科 技园、国家专利产业化试点基开学科 技园、国家专利产业化试点基开学科 技园、国家专利产业化试点基开学…',
+      parkDesc: '为充分发挥省级高新区服务管理及品牌优势，形成市场、政府“两只手”齐发力，使社会园区开发建设更快、产业集聚更优、经济效益更好，入驻企业更满意，秦淮区委、区政府启动高新区创新转型的秦淮实践。经历了三个阶段的改革创新。',
       activePark: 0,
       bannerList: [],
       businessAdDynamic: [],
@@ -177,11 +184,13 @@ export default {
     }
   },
   mounted () {
-    this.init()
+    this.$nextTick(() => {
+      this.init()
+    })
   },
   filters: {
     formatParkDesc (str) {
-      return  str.substring(0, 50) + '...'
+      return str.substring(0, 50) + '...'
     }
   },
   methods: {
@@ -233,7 +242,7 @@ export default {
             needPage: 0
           },
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
               this.bannerList = res.data.rows
               resolve()
             } else {

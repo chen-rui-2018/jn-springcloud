@@ -7,14 +7,9 @@
           <span>发布时间</span>
           <span>{{ detail.startTime }}</span>
         </div>
-        <div>
-          <span>阅读次数</span>
-          <span>{{ detail.viewCount }}次</span>
-        </div>
       </div>
     </div>
     <div class="investment-policy-main">
-      <div class="investment-policy-title">【详情】</div>
       <div class="investment-policy-desc">{{ detail.subTitle }}</div>
       <div class="tag-row">
         <tag-btn

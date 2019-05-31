@@ -10,7 +10,6 @@
       </div>
     </div>
     <div class="investment-policy-main">
-      <div class="investment-policy-title">【详情】</div>
       <img :src="detail.adCover" class="detail-image"  alt="">
       <!--    <div class="park-poster" :style="{backgroundImage: 'url(' + detail.adCover + ')'}"></div>-->
       <div class="investment-policy-content" v-html="detail.content"></div>

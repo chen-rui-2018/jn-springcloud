@@ -1,6 +1,5 @@
 <template>
   <div class="park-profile">
-    <div class="park-profile-title">【详情】</div>
     <div class="park-poster" :style="{backgroundImage: 'url(' + basicInfo.mainPicture + ')'}"></div>
     <div v-html="basicInfo.parkIntroduce"></div>
   </div>

@@ -1,5 +1,7 @@
 package com.jn.park.parking.model;
 
+import com.jn.park.parking.entity.TbParkingPreferential;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -90,6 +92,8 @@ public class TbParkingSpaceRentalIbps implements Serializable {
 
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
+
+    private TbParkingPreferential tb_parking_preferential;
 
     public String getRentId() {
         return rentId;
@@ -323,6 +327,14 @@ public class TbParkingSpaceRentalIbps implements Serializable {
         this.recordStatus = recordStatus;
     }
 
+    public TbParkingPreferential getTb_parking_preferential() {
+        return tb_parking_preferential;
+    }
+
+    public void setTb_parking_preferential(TbParkingPreferential tb_parking_preferential) {
+        this.tb_parking_preferential = tb_parking_preferential;
+    }
+
     @Override
     public String toString() {
         return "TbParkingSpaceRentalIbps{" +
@@ -355,6 +367,7 @@ public class TbParkingSpaceRentalIbps implements Serializable {
                 ", modifiedTime='" + modifiedTime + '\'' +
                 ", modifierAccount='" + modifierAccount + '\'' +
                 ", recordStatus=" + recordStatus +
+                ", tb_parking_preferential=" + tb_parking_preferential +
                 '}';
     }
 }

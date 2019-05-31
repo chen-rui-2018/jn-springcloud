@@ -193,6 +193,9 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
             String s = parkingCarInfoService.saveCarInfo(parkingCarInfoModel, user);
             logger.info("用户车位申请绑定车辆响应结果：{}", s);
         }
+        TbParkingPreferential tbParkingPreferential = tbParkingPreferentialMapper.selectByPrimaryKey(parkingSpaceApplyModel.getPolicyId());
+
+        tbParkingSpaceRental.setTb_parking_preferential(tbParkingPreferential);
 
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(IBPS_ID, user.getAccount(), tbParkingSpaceRental);
 

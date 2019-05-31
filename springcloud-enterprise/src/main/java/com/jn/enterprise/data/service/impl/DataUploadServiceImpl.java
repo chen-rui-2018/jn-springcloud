@@ -657,15 +657,12 @@ public class DataUploadServiceImpl implements DataUploadService {
                     for(InputFormatModel bean :inputFormatModelList){
                         for(TbDataReportingTaskData dataBean:data){
                             if(bean.getFormId().equals(dataBean.getFormId())){
-                                InputFormatModel model1 = new InputFormatModel();
-                                BeanUtils.copyProperties(bean,model1);
-                                model1.setValue(dataBean.getData());
-                                model1.setRowNum(dataBean.getRowNum());
-                                rows.add(model1);
+                                bean.setValue(dataBean.getData());
+                                bean.setRowNum(dataBean.getRowNum());
                             }
                         }
                     }
-                    tabVO.setInputList(rows);
+                    tabVO.setInputList(inputFormatModelList);
             }
 
             //计算该tab的上期值

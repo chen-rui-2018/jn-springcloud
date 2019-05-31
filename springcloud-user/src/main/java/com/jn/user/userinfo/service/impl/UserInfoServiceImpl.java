@@ -253,6 +253,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         // 更新redis缓存
         if (userAffiliateInfo.getAccountList() != null && !userAffiliateInfo.getAccountList().isEmpty()) {
             for (String account : userAffiliateInfo.getAccountList()) {
+                logger.info("[更新用户所属机构信息] account:{}", account);
                 updateRedisUserInfo(account);
             }
         }
@@ -279,6 +280,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         // 更新redis缓存
         if (userCompanyInfo.getAccountList() != null && !userCompanyInfo.getAccountList().isEmpty()) {
             for (String account : userCompanyInfo.getAccountList()) {
+                logger.info("[更新用户所属企业信息] account:{}", account);
                 updateRedisUserInfo(account);
             }
         }

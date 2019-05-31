@@ -25,6 +25,7 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysUserRoleVO;
+import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -792,15 +793,15 @@ public class InvestorServiceImpl implements InvestorService {
             logger.warn("添加投资人角色失败，失败原因：投资人账号在系统中不存在");
             throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
         }
-        //给用户添加"投资人"角色
-        String roleName="投资人";
-        Result<SysRole> sysRoleResult = systemClient.getRoleByName(roleName);
-        if(sysRoleResult==null ||sysRoleResult.getData()==null){
-            logger.warn("添加投资人角色失败，失败原因：无法获取“投资人”角色信息，请确认系统服务是否正常，且“投资人”角色在系统中存在");
+        Result<SysRole> addSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.INVESTOR_USER.getCode());
+        Result<SysRole> delSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
+        if(addSysRoleResult==null ||addSysRoleResult.getData()==null
+                ||delSysRoleResult==null || delSysRoleResult.getData()==null){
+            logger.warn("添加投资人角色失败，失败原因：无法获取“投资人”、“普通用户”角色信息，请确认系统服务是否正常，且“投资人”、“普通用户”角色在系统中存在");
             throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
         }
         //更新用户角色
-        Result<Boolean> booleanResult = updateUserRoleInfo(user, sysRoleResult);
+        Result<Boolean> booleanResult = updateUserRoleInfo(user, addSysRoleResult,delSysRoleResult);
         if(booleanResult.getData()==true){
             return 1;
         }else{
@@ -812,16 +813,26 @@ public class InvestorServiceImpl implements InvestorService {
     /**
      * 更新用户角色
      * @param user
-     * @param sysRoleResult
+     * @param addSysRoleResult
+     * @param delSysRoleResult
      * @return
      */
     @ServiceLog(doAction = "更新用户角色")
     @Override
-    public Result<Boolean> updateUserRoleInfo(User user, Result<SysRole> sysRoleResult) {
+    public Result<Boolean> updateUserRoleInfo(User user, Result<SysRole> addSysRoleResult,Result<SysRole> delSysRoleResult) {
         SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
+        //新增角色
         Set<String> addRoleId=new HashSet<>();
-        addRoleId.add(sysRoleResult.getData().getId());
+        if(addSysRoleResult!=null){
+            addRoleId.add(addSysRoleResult.getData().getId());
+        }
+        //修改角色
+        Set<String>delRoleId=new HashSet<>();
+        if(delSysRoleResult!=null){
+            delRoleId.add(delSysRoleResult.getData().getId());
+        }
         sysUserRoleVO.setAddRoleId(addRoleId);
+        sysUserRoleVO.setDeleRoleIds(delRoleId);
         sysUserRoleVO.setUser(user);
         return systemClient.updateUserRole(sysUserRoleVO);
     }

@@ -836,6 +836,8 @@
       <table tableName="tb_room_orders_item"></table>
       <!--房间管理-房间分组-->
       <table tableName="tb_room_group"></table>
+      <!--房间管理-缴费单-->
+      <table tableName="tb_room_orders_bill"></table>
     </context>
 
 

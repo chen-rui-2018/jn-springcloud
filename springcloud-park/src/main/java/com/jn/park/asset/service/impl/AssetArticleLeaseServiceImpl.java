@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.park.asset.dao.AssetArticleLeaseDao;
 import com.jn.park.asset.dao.TbAssetArticleLeaseMapper;
@@ -19,6 +20,8 @@ import com.jn.park.asset.model.AssetArticleLeaseModel;
 import com.jn.park.asset.service.AssetArticleLeaseService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,8 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
     private TbAssetArticleLeaseMapper tbAssetArticleLeaseMapper;
     @Autowired
     private TbAssetArticleLeaseOrdersMapper tbAssetArticleLeaseOrdersMapper;
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
 
     /**
@@ -53,8 +58,13 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
      */
     @Override
     @ServiceLog(doAction = "根据资产编号获取物品租赁详细信息")
-    public AssetArticleLeaseModel getArticleLease(String assetNumber) {
+    public AssetArticleLeaseModel getArticleLease(String assetNumber,String account) {
         AssetArticleLeaseModel assetArticleLeaseModel = assetArticleLeaseDao.getArticleLease(assetNumber);
+        //设置租借资料
+        UserExtensionInfo userExtension = getUserExtension(account);
+        assetArticleLeaseModel.setLeaseEnterprise(userExtension.getCompanyName());
+        assetArticleLeaseModel.setContactName(userExtension.getName());
+        assetArticleLeaseModel.setContactPhone(userExtension.getPhone());
         assetArticleLeaseModel.setBarCode(assetArticleLeaseModel.getAssetNumber());
         return assetArticleLeaseModel;
     }
@@ -176,5 +186,21 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             result += random.nextInt(10);
         }
         return newDate + result;
+    }
+
+
+    /**
+     * 获取用户企业信息
+     * @param account
+     * @return
+     */
+    public UserExtensionInfo getUserExtension(String account){
+        //获取当前用户的信息
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
+        UserExtensionInfo data = userExtension.getData();
+        if (data == null){
+            throw new JnSpringCloudException(new Result("-1","获取用户企业信息失败"));
+        }
+        return data;
     }
 }

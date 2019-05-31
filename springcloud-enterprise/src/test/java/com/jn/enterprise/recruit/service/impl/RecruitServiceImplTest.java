@@ -86,7 +86,7 @@ public class RecruitServiceImplTest {
         // 企业ID
         comId = "2220112212";
         company.setId(comId);
-        company.setComName("深圳君南信息系统");
+        company.setComName("南京设计院");
         // 招聘ID
         recruitId = "111111111";
 

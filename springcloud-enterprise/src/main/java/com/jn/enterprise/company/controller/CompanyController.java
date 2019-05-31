@@ -4,11 +4,11 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.company.enums.CompanyExceptionEnum;
+import com.jn.common.util.Assert;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.company.model.ServiceEnterpriseParam;
-import com.jn.company.model.CreditUpdateParam;
+import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.park.activity.model.ActivityPagingParam;
@@ -31,7 +31,7 @@ import java.util.List;
  * @author： jiangyl
  * @date： Created on 2019/3/14 16:42
  * @version： v1.0
- * @modified By:
+ * @modified By: huxw tangry chenr
  */
 @Api(tags = "企业服务")
 @RestController
@@ -54,14 +54,13 @@ public class CompanyController extends BaseController {
     public Result<PaginationData<List<ServiceEnterpriseCompany>>> getCompanyNewList(@Validated ServiceEnterpriseParam serviceEnterpriseParam){
         return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam));
     }
+
     @ControllerLog(doAction = "查询企业详情-新版")
     @ApiOperation(value = "查询企业详情-新版")
     @RequestMapping(value = "/getCompanyDetails",method = RequestMethod.GET)
     public Result<CompanyDetailsVo> getCompanyDetails(@ApiParam(name = "companyId", value = "企业id", required = true) @RequestParam(value = "companyId") String companyId){
         User user =(User) SecurityUtils.getSubject().getPrincipal();
-
         return new Result<>(companyService.getCompanyDetails(companyId,user==null?"":user.getAccount()));
-
     }
 
     @ControllerLog(doAction = "根据用户账号/企业ID查询企业信息（用户为企业管理员）")
@@ -78,15 +77,11 @@ public class CompanyController extends BaseController {
         return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId, account));
     }
 
-
     @ControllerLog(doAction = "查询当前用户企业信息（用户为企业管理员）")
     @ApiOperation(value = "查询当前用户企业信息",notes = "用户为企业管理员")
     @RequestMapping(value = "/getCompanyDetailByNowAccount",method = RequestMethod.GET)
     public Result<ServiceCompany> getCompanyDetailByNowAccount(){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null){
-            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
-        }
+        User user = checkUserValid();
         return new Result<>(companyService.getCompanyDetailByAccountOrId(user.getAccount()));
     }
 
@@ -103,12 +98,28 @@ public class CompanyController extends BaseController {
     @ApiOperation(value = "留言/留言回复")
     @RequestMapping(value = "/commentActivity",method = RequestMethod.POST)
     public Result<Boolean> commentActivity(@Validated @RequestBody CommentAddParam commentAddParam){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null){
-            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
-        }
+        User user = checkUserValid();
         commentAddParam.setAccount(user.getAccount());
         return companyService.saveComment(commentAddParam);
     }
 
+    @ControllerLog(doAction = "获取企业在线联系人账号")
+    @ApiOperation(value = "获取企业在线联系人账号", notes = "根据企业ID获取在线联系人账号 [返回联系人账号，如企业没有设置联系人返回企业管理员]")
+    @RequestMapping(value = "/getCompanyContactAccount",method = RequestMethod.GET)
+    public Result<String> getCompanyContactAccount(@RequestParam(required = false) String comId){
+        Assert.notNull(comId, CompanyExceptionEnum.PARAM_IS_NULL.getMessage());
+        return new Result(companyService.getCompanyContactAccount(comId));
+    }
+
+    /**
+     * 判断当前账号是否有效
+     * @return
+     */
+    public User checkUserValid() {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user == null){
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
+        }
+        return user;
+    }
 }

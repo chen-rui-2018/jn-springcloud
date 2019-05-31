@@ -67,7 +67,7 @@
         WHEN '2' THEN
             '自动付款'
         ELSE
-            '支付类型异常'
+            '支付动作异常'
         END paymentAction,
          CASE b.nature_code
         WHEN '1' THEN
@@ -126,7 +126,7 @@
         WHEN '2' THEN
             '自动付款'
         ELSE
-            '支付类型异常'
+            '支付动作异常'
         END paymentAction,
          CASE b.nature_code
         WHEN '1' THEN

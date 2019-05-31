@@ -877,7 +877,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
     /**
      *创建缴费单
-     * @param billIds
+     * @param jsonParam
      * @return
      */
     @Override

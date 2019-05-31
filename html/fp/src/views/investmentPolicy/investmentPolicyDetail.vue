@@ -14,22 +14,18 @@
           <div class="agent2 clearfix color2">
             <div class="agentImg">
               <p>
-                <span class="tag-list">开始时间：
-                  <i class="mainColor">{{getGuideDetal.startTime}}</i>
-                </span>
                 <span class="tag-list">
                   <span>状态：</span>
-                <span v-if="isValid(getGuideDetal.endTime)" class="mainColor">有效</span>
-                <span v-else="isValid(getGuideDetal.endTime)">无效</span>
+                  <span v-if="isValid(getGuideDetal.endTime)" class="mainColor">有效</span>
+                  <span v-else="isValid(getGuideDetal.endTime)">无效</span>
                 </span>
               </p>
             </div>
-            <!--            <div class="agent2Info fr">-->
-            <!--              <p class="lastP color3">-->
-            <!--                <span>阅读量：{{getGuideDetal.readNum}}</span>-->
-            <!--                <span>发布时间：<i class="mainColor">{{getGuideDetal.releaseDate}}</i></span>-->
-            <!--              </p>-->
-            <!--            </div>-->
+            <div class="agent2Info fr">
+              <p class="lastP color3">
+                <span>发布时间：<i class="mainColor">{{getGuideDetal.startTime}}</i></span>
+              </p>
+            </div>
           </div>
         </el-card>
       </div>
@@ -97,7 +93,7 @@
         });
       },
       isValid(str) {
-        return new Date(str) > new Date()
+        return new Date(str) >= new Date(new Date().toLocaleDateString()).getTime()
       },
     }
   };
@@ -307,9 +303,8 @@
           .agent2 {
             padding: 10px 0;
             .agent2Con {
-              height: 150px;
-              width: 80%;
-              overflow: hidden;
+              max-height: 400px;
+              overflow: auto;
               // white-space: nowrap;
               // text-overflow: ellipsis;
             }

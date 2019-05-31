@@ -155,7 +155,7 @@
             >
               <div class="more-garden-card-cell">
                 <img class="more-garden-img" :src="item.adCover" alt=""/>
-                <div class="more-garden-desc">{{ item.content || '暂无'}}</div>
+                <div class="more-garden-desc">{{ item.title }}</div>
                 <div class="more-garden-footer">
                   <span class="more-garden-date">{{ item.startTime }}</span>
                   <more-btn></more-btn>
@@ -618,6 +618,7 @@
       flex-wrap: wrap;
       @include flex;
       .more-garden-card {
+        width: 300px;
         box-sizing: border-box;
         padding: 20px;
         .more-garden-card-cell {
@@ -638,16 +639,15 @@
             border-radius: 50%;
           }
           .more-garden-desc {
-            height: 66px;
+            height: 48px;
             margin-top: 35px;
             text-align: left;
-            text-indent: 2em;
             font-size: 12px;
             color: #666;
             overflow: hidden;
             text-overflow:ellipsis;//文本溢出显示省略号
             display: -webkit-box;
-            -webkit-line-clamp: 4;
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
           }
           .more-garden-footer {

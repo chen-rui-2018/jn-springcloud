@@ -21,6 +21,7 @@ import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
 import com.jn.enterprise.company.vo.ColleagueListVO;
+import com.jn.enterprise.company.vo.CompanyContactVO;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
@@ -437,8 +438,8 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    @ServiceLog(doAction = "获取企业在线联系人账号")
-    public String getCompanyContactAccount(String comId) {
+    @ServiceLog(doAction = "获取企业联系人账号")
+    public CompanyContactVO getCompanyContactAccount(String comId) {
         // 默认联系人为企业管理员
         String companyContactAccount = companyService.getCompanyDetailByAccountOrId(comId).getComAdmin();
 
@@ -448,7 +449,7 @@ public class CompanyServiceImpl implements CompanyService {
                 .andCheckStatusEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode());
         List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(example);
         
-        // 如果企业员工不为空，寻找企业联系人
+        // 如果企业员工不为空，寻找企业联系人（暂定寻找第一个联系人）
         if (staffList != null && !staffList.isEmpty()) {
             List<String> accountList = new ArrayList<>();
             for (TbServiceCompanyStaff companyStaff : staffList) {
@@ -458,13 +459,22 @@ public class CompanyServiceImpl implements CompanyService {
             String roleName = CompanyDataEnum.COMPANY_CONTACTS.getCode();
             List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
             for (UserRoleInfo userRoleInfo : userRoleInfoList) {
-                if (userRoleInfo.getRoleName().equals(roleName)) {
+                if (StringUtils.isNotBlank(userRoleInfo.getRoleName()) && userRoleInfo.getRoleName().equals(roleName)) {
                     companyContactAccount = userRoleInfo.getAccount();
                     break;
                 }
             }
         }
-        return companyContactAccount;
+
+        CompanyContactVO companyContact = new CompanyContactVO();
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(companyContactAccount);
+        if (userExtension == null || userExtension.getData() == null) {
+            logger.warn("[获取企业联系人账号] 获取[{}]企业联系人信息失败，account：{}", comId, companyContactAccount);
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.GET_USER_EXTENSION_INFO_ERROR);
+        }
+        UserExtensionInfo data = userExtension.getData();
+        BeanUtils.copyProperties(data, companyContact);
+        return companyContact;
     }
 
 }

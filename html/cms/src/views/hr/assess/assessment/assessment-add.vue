@@ -21,8 +21,8 @@
       <el-form-item label="考核对象" prop="assessmentObject" class="inline">
         <!--最后子节点支持多选  only-last="true" -->
 
-        <el-cascader-multi ref="assessmentObjectRef" v-model="assessment.assessmentObjectList" :data="deptEmployeeList" :show-leaf-label="true" only-last="true" style="width: 620px" @change="assessmentObjectSel"/>
-
+        <multi-cascader-ext ref="assessmentObjectRef" v-model="assessment.assessmentObjectList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 620px" @change="assessmentObjectSel"/>
+	
       </el-form-item>
       <el-form-item label="考核人" prop="assessmentPeople" class="inline">
         <!--<el-cascader-multi ref="assessmentPeopleRef" v-model="assessment.assessmentPeopleList" :data="deptEmployeeList" :show-leaf-label="true" only-last="true" style="width: 620px" @change="assessmentPeopleSel"/>-->
@@ -51,10 +51,10 @@ import {
 import {
   findNodeById
 } from '@/api/hr/util'
-
+import multiCascaderExt from '@/components/MultiCascaderExt2/multi-cascader-ext.vue'
 import UE from '@/components/ue.vue'
 export default {
-  components: { UE },
+  components: { UE, multiCascaderExt },
   data() {
     return {
       // 新部门员工树
@@ -155,11 +155,9 @@ export default {
       })
     },
     assessmentPeopleSel() {
-      debugger
       const assessmentPeopleId = this.assessmentPeopleArr[this.assessmentPeopleArr.length - 1]
       const currNode = findNodeById(this.nodes, assessmentPeopleId)
       if (!currNode.flag) {
-        debugger
         this.assessment.assessmentPeople = currNode.jobNumber
         console.log('考核人')
         console.log(this.assessment.assessmentPeople)

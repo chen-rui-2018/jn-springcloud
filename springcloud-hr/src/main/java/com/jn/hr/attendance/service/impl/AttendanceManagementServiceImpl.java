@@ -1010,13 +1010,13 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 	private AttendanceManagementApiVo obtainleaveObjectList(List<LeaveApiVo> list) {
 		// 请假
 		List<AttendanceKeyValue> leaveObject = new ArrayList<AttendanceKeyValue>();
-		Integer leaveTotalTime = 0;
+		Double leaveTotalTime = 0.0;
 		for (LeaveApiVo leaveVo : list) {
 			AttendanceKeyValue attendanceKeyValue = new AttendanceKeyValue();
 			attendanceKeyValue.setTimeKey(
 					DateUtils.formatDate(leaveVo.getStartTime(), "yyyy-MM-dd") + "--"+ DateUtils.formatDate(leaveVo.getEndTime(), "yyyy-MM-dd")+ " " + getLeaveType(leaveVo.getType()));
 			attendanceKeyValue.setValue(leaveVo.getTotalHour() + "小时");
-			leaveTotalTime += Integer.valueOf(leaveVo.getTotalHour());
+			leaveTotalTime += Double.valueOf(leaveVo.getTotalHour());
 			leaveObject.add(attendanceKeyValue);
 		}
 

@@ -28,6 +28,7 @@ public enum ParkingEnums implements CodeAndMsg {
     PARKING_USER_APPLY_PAYED("6","车位已支付"),
     PARKING_CARE_APPLY_PAYED("1","停车记录已支付"),
     PARKING_BILL_IS_WAIT_PAY("1","车位申请待审核"),
+    PARKING_BILL_IS_RENT("2","车位已出租"),
     PARKING_MONTH_BILL_TYPE("parking_month","停车月卡缴费类型"),
     PARKING_MONTH_BILL_TYPE_NAME("停车缴费月卡","停车缴费月卡"),
     PARKING_TEMPORARY_BILL_TYPE_NAME("临时车缴费","临时车缴费"),
@@ -44,6 +45,7 @@ public enum ParkingEnums implements CodeAndMsg {
     PARKING_SPACE_RENTAL_IS_PAYED("6","租赁服务已支付"),
     PARKING_YEAR_FIXED_DISCOUNT("1","固定金额优惠"),
     PARKING_YEAR_PROPORTIONAL_DISCOUNT("2","比例优惠"),
+    PARKING_YEAR_PROPORTIONAL_TAXI("3","税收优惠"),
     PARKING_RESPONSE_SUCCESS("0000","响应成功"),
     PARKING_AREA_GATE_DAOER("daoer","道尔道闸"),
     PARKING_AREA_GATE_FUSHI("fushi","富士道闸"),
@@ -52,6 +54,8 @@ public enum ParkingEnums implements CodeAndMsg {
     PARKING_USER_TYPE_USER("user","用户类型-用户"),
     PARKING_USER_TYPE_ORG_ROLE("机构管理员","用户类型-用户"),
     PARKING_USER_TYPE_COMPANY_ROLE("企业管理员","用户类型-用户"),
+    PARKING_STATUS_IS_INVALID("-1","车位租赁状态-无效"),
+    PARKING_STATUS_IS_UNCHECKED("3","车位租赁状态-审批不通过"),
 
 
 

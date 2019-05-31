@@ -145,7 +145,7 @@ public class PayChannel4WxController{
                         payInfoMap.put("appId", wxPayUnifiedOrderResult.getAppid());
                         payInfoMap.put("timeStamp", timestamp);
                         payInfoMap.put("nonceStr", nonceStr);
-                        payInfoMap.put("packageValue", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
+                        payInfoMap.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
                         payInfoMap.put("signType", WxPayConstants.SignType.MD5);
 
                         //=========组装返回前台参数================

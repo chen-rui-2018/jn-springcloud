@@ -4,7 +4,7 @@
       <el-form ref="meetingForm" :model="meetingForm" :rules="rules" hide-required-asterisk class="demo-meetingForm">
         <div style="display:flex">
           <el-form-item label="会议主题" prop="title" class="inline">
-            <el-input v-model="meetingForm.title" :disabled="lookMeetingroom" placeholder="请输入内容" clearable />
+            <el-input v-model="meetingForm.title" :disabled="lookMeetingroom" placeholder="请输入内容" clearable/>
           </el-form-item>
           <el-form-item label="会议日期:" prop="meetingTime">
             <el-date-picker
@@ -17,27 +17,33 @@
         </div>
         <div style="display:flex">
           <el-form-item label="开始时间" class="inline">
-            <el-time-select
-              :disabled="lookMeetingroom"
+            <el-select
               v-model="startTime"
-              :picker-options="{
-                start: '09:00',
-                step: '00:30',
-                end: '18:00'
-              }"
-              placeholder="开始时间"/>
+              :disabled="lookMeetingroom"
+              placeholder="请选择开始时间"
+              @change="watchEndTimeLine"
+            >
+              <el-option
+                v-for="item in startTimeLine"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"/>
+            </el-select>
           </el-form-item>
           <el-form-item label="结束时间" class="inline">
-            <el-time-select
-              :disabled="lookMeetingroom"
+            <el-select
               v-model="endTime"
-              :picker-options="{
-                start: '09:00',
-                step: '00:30',
-                end: '18:00',
-                minTime: startTime
-              }"
-              placeholder="结束时间"/>
+              :disabled="lookMeetingroom"
+              placeholder="请选择结束时间"
+            >
+              <el-option
+                v-for="item in endTimeLine"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"/>
+            </el-select>
           </el-form-item>
         </div>
         <div style="display:flex">
@@ -62,7 +68,7 @@
                 :disabled="lookMeetingroom"
                 :key="index"
                 :label="item.label"
-                :value="item.value"/>
+                :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="组织人" prop="organizationalUser">
@@ -100,7 +106,8 @@
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"/>
-          </el-select></el-form-item>
+            </el-select>
+          </el-form-item>
         </div>
         <el-form-item label="会议方案附件" class="inline ueditor">
           <el-upload
@@ -216,6 +223,8 @@ export default {
         fileUrl: '',
         id: ''
       },
+      startTimeLine: [],
+      endTimeLine: [],
       acceptType: ['jpg', 'png', 'rar', 'txt', 'zip', 'doc', 'ppt', 'pptx', 'xls', 'pdf', 'docx', 'xlsx'],
       rules: {
         title: [
@@ -487,6 +496,77 @@ export default {
       await this.initList()
       if (this.meetingForm.departmentsId) {
         await this.getUserOfDepartment()
+      }
+      // 配置初始化可选开始时间列表
+      this.formateTimeLine(['12:00', '12:30', '18:00']).then(timeLine => {
+        this.startTimeLine = timeLine
+        // 如果预约的是今天的会议，那么需要和当前的时间比对，如果过了当前小时数，选项不可用
+        const now = new Date()
+        const year = now.getFullYear()
+        const month = now.getMonth() + 1
+        const day = now.getDay()
+        const nowDay = `${year}/${month}/${day}`
+        if (nowDay === this.startDate) {
+          const hour = now.getHours()
+          const min = now.getMinutes()
+          for (const time of this.startTimeLine) {
+            const startTimeArr = time.value.split(':')
+            const startTimeArrUnshift = parseInt(startTimeArr[0])
+            if (hour > startTimeArrUnshift) {
+              time.disabled = true
+            } else if (hour === startTimeArrUnshift) {
+              if (min >= parseInt(startTimeArr[1])) {
+                time.disabled = true
+              }
+            }
+          }
+        }
+      })
+      // 配置初始化可选开始时间列表
+      this.formateTimeLine(['09:00', '12:30', '13:00']).then(timeLine => {
+        this.endTimeLine = timeLine
+      })
+    },
+    // 配置初始化可选开始/结束的时间列表
+    formateTimeLine(disabledList) {
+      return new Promise((resolve, reject) => {
+        const arr = []
+        let h = 8
+        let flag = true
+        do {
+          let m
+          if (flag) {
+            m = '00'
+            h++
+          } else {
+            m = '30'
+          }
+          const str = (h < 10 ? '0' + h : '' + h) + ':' + m
+          arr.push({
+            label: str,
+            value: str,
+            disabled: disabledList.indexOf(str) !== -1
+          })
+          flag = !flag
+        } while (h < 18) resolve(arr)
+      })
+    },
+    watchEndTimeLine(startTime) {
+      const list = this.endTimeLine
+      for (const time of list) {
+        const startTimeArr = startTime.split(':')
+        const currentTimeArr = time.value.split(':')
+        if (parseInt(startTimeArr[0]) > parseInt(currentTimeArr[0])) {
+          time.disabled = true
+        } else if (startTimeArr[0] === currentTimeArr[0]) {
+          if (parseInt(startTimeArr[1]) >= parseInt(currentTimeArr[1])) {
+            time.disabled = true
+          } else {
+            time.disabled = false
+          }
+        } else {
+          time.disabled = false
+        }
       }
     },
     initList() {

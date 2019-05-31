@@ -154,7 +154,7 @@
                             </div>
                         </div>
                     </div>
-                    <iframe src="/static/map.html" frameborder="0" height="300" width="700"></iframe>
+                    <iframe src="/static/map11.html" frameborder="0" height="300" width="700"></iframe>
                     <!-- <div id="allmap" style="height:300px"></div> -->
                 </el-main>
             </el-container>

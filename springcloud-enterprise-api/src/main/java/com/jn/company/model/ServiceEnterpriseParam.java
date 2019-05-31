@@ -21,7 +21,7 @@ public class ServiceEnterpriseParam extends Page implements Serializable {
     @ApiModelProperty(value = "企业名称[模糊搜索]", example = "南京")
     private String comName;
 
-    @Pattern(regexp = "^[12]$", message = "企业来源校验错误")
+    @Pattern(regexp = "^[12]|\\s*$", message = "企业来源校验错误")
     @ApiModelProperty(value = "企业来源[1人才企业2招商企业]]", example = "1")
     private String comSource;
 

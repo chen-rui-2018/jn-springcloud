@@ -33,7 +33,7 @@ export default {
       this.api.get({
         url: 'getPolicyDetails',
         data: {
-          policyId: '4ad121d89a3241d5ba30731b3b91dfd2'
+          policyId: this.$route.query.policyId
         },
         callback: function (res) {
           if (res.code === '0000') {

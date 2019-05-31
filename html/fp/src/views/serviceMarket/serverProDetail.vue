@@ -53,8 +53,8 @@
                         </div>
                     </div>
                     <div class="agent2 color2" v-if="zankaiFlag">
-                        <div class="agent2Con" id="agent2Con" :class="{'showMore':showMoreFlag}">
-                            {{proDelInfo.productDetails}}
+                        <div class="agent2Con" id="agent2Con" :class="{'showMore':showMoreFlag}" v-html="proDelInfo.productDetails">
+                            <!-- {{proDelInfo.productDetails}} -->
                         </div>
                         <!-- <div class="agent2Con" v-if="proDelInfo.productDetails">
                             {{proDelInfo.productDetails}}

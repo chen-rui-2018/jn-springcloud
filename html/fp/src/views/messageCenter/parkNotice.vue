@@ -7,14 +7,16 @@
     </div>
     <div class="noticeContent" v-if="messageList.length>0">
       <ul>
-        <li class="noticeLi" v-for="(item,index) in messageList" :key="index">
+        <li class="noticeLi clearfix" v-for="(item,index) in messageList" :key="index">
           <div class="liTit">
-            <i class="iconfont icon-yuandian yuandian1" v-if="item.isRead=='0'"></i>
-            <i class="iconfont icon-yuandian yuandian2" v-if="item.isRead=='1'"></i>
+            <i class="iconfont icon-yuandian yuandian1" v-if="item.isRead=='0'&&showFlag!=item.id"></i>
+            <i class="noYuandian" v-else></i>
             <span class="color1 notice">{{item.messageTitle}}</span>
             <span class="mesTime color3">{{item.createdTime}}</span>
+            <i class="el-icon-arrow-up fr pointer" v-if="showFlag==item.id" @click="showFlag='';item.isRead = '1'"></i>
+            <i class="el-icon-arrow-down fr pointer" v-else @click="readMes(item)"></i>
           </div>
-          <p class="color2">{{item.messageContent}}</p>
+          <p class="color2" v-if="showFlag==item.id">{{item.messageContent}}</p>
         </li>
       </ul>
     </div>
@@ -29,7 +31,8 @@ export default {
     return {
       messageList: [],
       messageOneTort: 1,
-      messageTowTort: 1
+      messageTowTort: 1,
+      showFlag: "",
     };
   },
   created() {
@@ -42,12 +45,12 @@ export default {
   methods: {
     //判断跳转过来的路径
     getName() {
-      if(this.$route.name == "parkNotice"){
+      if (this.$route.name == "parkNotice") {
         this.messageTowTort = 1;
         this.messageOneTort = 0;
         this.getMessageOneTort();
         this.getMessageList();
-      }else if (this.$route.name == "enterpriseOrder") {
+      } else if (this.$route.name == "enterpriseOrder") {
         this.messageTowTort = 2;
         this.messageOneTort = 1;
         this.getMessageOneTort();
@@ -62,17 +65,44 @@ export default {
         this.messageOneTort = 1;
         this.getMessageOneTort();
         this.getMessageList();
-      } else if(this.$route.name == "guestbook") {
+      } else if (this.$route.name == "guestbook") {
         this.messageTowTort = 5;
         this.messageOneTort = 1;
         this.getMessageOneTort();
         this.getMessageList();
-      } else if(this.$route.name == "dataReminder"){
+      } else if (this.$route.name == "dataReminder") {
         this.messageTowTort = 6;
         this.messageOneTort = 1;
         this.getMessageOneTort();
         this.getMessageList();
+      } else if (this.$route.name == "corporateInvitation") {
+        this.messageTowTort = 8;
+        this.messageOneTort = 0;
+        this.getMessageOneTort();
+        this.getMessageList();
+      } else if (this.$route.name == "corporateInvitation") {
+        this.messageTowTort = 7;
+        this.messageOneTort = 0;
+        this.getMessageOneTort();
+        this.getMessageList();
       }
+    },
+    readMes(item) {
+      this.showFlag = item.id;
+      item.isRead = "1";
+       this.api.post({
+        url: "updateIsReadStatus",
+        data: {
+          id: item.id
+        },
+        callback: res => {
+          if (res.code === "0000") {
+            // this.$message(res.result);
+            // this.getMessageList()
+          } 
+        }
+      });
+      
     },
     //获取消息列表
     getMessageList() {
@@ -85,7 +115,6 @@ export default {
           if (res.code === "0000") {
             this.messageList = res.data.rows;
           } else {
-            reject();
             this.$message.error(res.result);
           }
         }
@@ -102,15 +131,14 @@ export default {
           if (res.code === "0000") {
             // this.messageList = res.data.rows[0].messageListModels;
           } else {
-            reject();
             this.$message.error(res.result);
           }
         }
       });
     }
   },
-  watch:{
-    $route(){
+  watch: {
+    $route() {
       this.getName();
     }
   }
@@ -124,6 +152,7 @@ export default {
   .el-breadcrumb__inner {
     padding: 13px;
     border-bottom: 2px solid #00a041;
+    font-size: 16px;
   }
   .noticeTit {
     background-color: #fff;
@@ -139,7 +168,7 @@ export default {
       border-bottom: 1px solid #eee;
       padding: 20px 0;
       .notice {
-        font-size: 13px;
+        font-size: 15px;
         margin-right: 10px;
       }
       .mesTime {
@@ -156,9 +185,15 @@ export default {
       }
       .yuandian1 {
         color: red;
+        font-size: 20px;
+        display: inline-block;
+        vertical-align: middle;
       }
-      .yuandian2 {
-        color: #00a041;
+      .noYuandian {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
       }
     }
     .noticeLi:first-child {

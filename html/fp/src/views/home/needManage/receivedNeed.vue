@@ -6,10 +6,13 @@
     </div>
     <div class="receivedNeed_main">
       <div class="searh_tab">
-        <el-input placeholder="需求人" v-model="sendData.requirePerson" class="input-with-select" clearable>
+        <span>需求人</span>
+        <el-input placeholder="请输入需求人" v-model="sendData.requirePerson" class="input-with-select" clearable>
         </el-input>
-        <el-input placeholder="意向产品" v-model="sendData.intentProduct" class="input-with-select" clearable>
+        <span>意向产品</span>
+        <el-input placeholder="请输入意向产品" v-model="sendData.intentProduct" class="input-with-select" clearable>
         </el-input>
+        <span>对接结果</span>
         <el-select v-model="sendData.handleResult" placeholder="请选择对接结果" clearable >
           <el-option label="对接成功" value="1"></el-option>
           <el-option label="对接失败" value="2"></el-option>
@@ -144,7 +147,7 @@ export default {
           border-color: #00a041;
         }
         .el-input{
-          width: 25%;
+          width: 17%;
         }
         .el-select>.el-input{
           width:100%;

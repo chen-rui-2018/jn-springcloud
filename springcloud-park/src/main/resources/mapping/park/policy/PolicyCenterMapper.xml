@@ -74,7 +74,7 @@
         ,sp.support_method as "supportMethod"                 <!--支持方式-->
         ,sp.support_industry as "supportIndustry"             <!--支持产业-->
         ,sp.issue_unit as "issueUnit"                         <!--发文单位-->
-        ,spd.policy_content as "policyContent"                <!--政策内容-->
+        ,sp.policy_content as "policyContent"                <!--政策内容-->
         from tb_policy sp
         left join tb_policy_details spd
         on sp.policy_id=spd.policy_id

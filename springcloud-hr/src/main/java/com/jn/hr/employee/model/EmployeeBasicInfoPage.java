@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author dt
@@ -22,6 +23,8 @@ public class EmployeeBasicInfoPage extends Page implements Serializable {
     private String employeeType;
     @ApiModelProperty(value = "部门ID")
     private String departmentId;
+    @ApiModelProperty(value = "部门IDs")
+    private List<String> departmentIds;
 
 
     public String getName() {
@@ -62,6 +65,14 @@ public class EmployeeBasicInfoPage extends Page implements Serializable {
 
     public void setDepartmentId(String departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public List<String> getDepartmentIds() {
+        return departmentIds;
+    }
+
+    public void setDepartmentIds(List<String> departmentIds) {
+        this.departmentIds = departmentIds;
     }
 
     @Override

@@ -1,6 +1,6 @@
 <template>
   <div class="attendanceDetails">
-    <div class="title">考勤明细</div>
+    <!-- <div class="title">考勤明细</div> -->
     <div v-show="isAdministrator" class="isAdministrator"><span :class="isPersonage===1?'selectedAcitive':''" @click="cutPersonage">个人</span><span
         :class="isPersonage===0?'selectedAcitive':''" @click="cutStatus">部门</span></div>
     <div class="dateTime">
@@ -237,12 +237,10 @@ export default {
       this.iconStatus = !this.iconStatus
     },
     cutPersonage () {
-      console.log(this.currentDate)
       this.isPersonage = 1
       this.init()
     },
     cutStatus () {
-      console.log(this.currentDate)
       this.isPersonage = 0
       this.getDepartmentInfo()
     }
@@ -252,6 +250,7 @@ export default {
 
 <style lang="scss" scoped>
 .attendanceDetails {
+    padding-top: 1rem;
   font-size: 32px;
   .attendanceNum {
     display: flex;
@@ -288,15 +287,6 @@ export default {
       }
     }
   }
-
-  .title {
-    font-size: 50px;
-    padding: 30px;
-    text-align: center;
-    color: #333;
-    font-weight: 800;
-    border-bottom: 1px solid black;
-  }
   .isAdministrator {
     // padding: 30px;
     border-bottom: 1px solid #ccc;
@@ -309,7 +299,7 @@ export default {
     }
   }
   .selectedAcitive {
-    border-bottom: 1px solid green;
+    border-bottom: 2px solid green;
     color: green;
   }
   .dateTime {

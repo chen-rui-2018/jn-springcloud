@@ -7,8 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * TODO:未添加类描述
- *
+ * 时效性事项任务入参
  * @author： yuanyy
  * @date： Created on 2019/4/19 10:35
  * @version： v1.0

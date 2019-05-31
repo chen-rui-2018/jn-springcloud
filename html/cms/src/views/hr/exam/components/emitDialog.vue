@@ -58,7 +58,7 @@ export default {
       },
       isF5: false,
       vueQrEmintDom: '',
-      appSrc: 'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' + this.$route.query.projectId,
+      appSrc: window.location.host + '/#/hr/train/investigation/invest-page?projectId=' + this.$route.query.projectId,
       formData: {
         emailSubject: '',
         emailContent: '',

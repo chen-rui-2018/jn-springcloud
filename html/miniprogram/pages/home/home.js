@@ -54,12 +54,9 @@ Page({
       hasUserInfo: true
     })
   },
-  getStorageInfo() {
-  },
-  bindtap() {
-  },
-  logout() {
-  },
-  signOut() {
-  },
+  goabout(){
+    wx.navigateTo({
+      url: "./aboutUs/aboutUs", // 拼接传参到下个页面
+    });
+  }
 })

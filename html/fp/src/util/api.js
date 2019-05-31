@@ -221,6 +221,7 @@ export default {
         getPromotionDetails:"springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionDetails",// (门户各首页企业宣传详情)
         findAllApp:"springcloud-park/message/list/findAllList",//获取一级消息类别下所有消息(APP端)
         getMessageList:"springcloud-park/message/list/findAll",//消息列表
+        updateIsReadStatus:"springcloud-park/message/list/updateIsReadStatus",//修改已读状态
         getMessageOneTort:"springcloud-park/message/list/getMessageOneTort",//获取二级消息类别
         getParkList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
         getIncubatorList:"springcloud-park/guest/hatch/incubator/list",//众创空间-首页信息查询
@@ -236,6 +237,7 @@ export default {
         getCompanyDetailByAccountOrCompanyId:"springcloud-enterprise/guest/company/getCompanyDetailByAccountOrCompanyId",//根据用户账号查询企业信息
         getCompanyDetails:"springcloud-enterprise/guest/company/getCompanyDetails",//查询企业详情-新版
         getComCommentInfo:"springcloud-enterprise/guest/company/getCommentInfo",//获取评论/留言信息
+        getcommentActivity:"springcloud-enterprise/guest/company/commentActivity",//企业留言/留言回复
         addCareOperate:"springcloud-park/park/manage/care/addCareOperate",// 用户添加关注操作
         cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
 

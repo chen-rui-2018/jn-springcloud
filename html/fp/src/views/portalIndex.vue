@@ -287,7 +287,7 @@
               <!-- <img src="@/../static/img/图层 4.png" alt=""> -->
               <span>{{i.createdTime}}</span>
             </div>
-            <p class="color3">
+            <p class="color3 proDetal">
               {{i.propagandaDetails}}
             </p>
             <div class="more pointer" @click="$router.push({ path: 'enterpriseInfoDetails', query: { propagandaId : i.id } })">
@@ -305,7 +305,7 @@
                   <!-- <img src="@/../static/img/图层 9.png" alt=""> -->
                   <span>{{i.createdTime}}</span>
                 </div>
-                <p class="color3">{{i.propagandaDetails}}</p>
+                <p class="color3 proDetal">{{i.propagandaDetails}}</p>
                 <div class="more pointer" @click="$router.push({ path: 'enterpriseInfoDetails', query: { propagandaId : i.id } })">
                   MORE
                 </div>
@@ -508,9 +508,9 @@ export default {
         { name: "科技成果", content: "" }
       ],
       companyList1: [],
-      showSSSNum:0,
-      clientHeight:this.getClientHeight(),
-      comFlag:false,
+      showSSSNum: 0,
+      clientHeight: this.getClientHeight(),
+      comFlag: false
     };
   },
   created() {
@@ -577,10 +577,10 @@ export default {
         //   delay: 5000,
         // },
         on: {
-          click: (e) => {
-            // let url = e.target.dataset.jumpurl; 
+          click: e => {
+            // let url = e.target.dataset.jumpurl;
             // this.bannerJump(url);
-            console.log(e)
+            console.log(e);
           }
         },
         observer: true,
@@ -601,16 +601,16 @@ export default {
         }
       });
     },
-    bannerJump (url) {
-    window.location.href = url    
+    bannerJump(url) {
+      window.location.href = url;
     },
     onClick() {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     },
     getElementLeft(element) {
       var top = element.offsetTop;
-      if(!element.offsetParent){
-        return top
+      if (!element.offsetParent) {
+        return top;
       }
       var curEle = element.offsetParent;
 
@@ -643,10 +643,10 @@ export default {
     },
     handleScroll() {
       const osTop = this.getScrollOffset().y;
-      let op = this.getElementLeft(this.$refs['enter2']) - this.clientHeight;
-      if(osTop >= op && this.showSSSNum == 0 && this.comFlag){
-        this.animateSSS()
-        this.showSSSNum++
+      let op = this.getElementLeft(this.$refs["enter2"]) - this.clientHeight;
+      if (osTop >= op && this.showSSSNum == 0 && this.comFlag) {
+        this.animateSSS();
+        this.showSSSNum++;
       }
       //   const osTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; //用于FF
       // console.dir(osTop)
@@ -682,30 +682,32 @@ export default {
       //   this.headFlag = false;
       // }
     },
-    getClientHeight()
-    {
-      var clientHeight=0;
-      if(document.body.clientHeight&&document.documentElement.clientHeight)
-      {
-      var clientHeight = (document.body.clientHeight<document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
-      }
-      else
-      {
-      var clientHeight = (document.body.clientHeight>document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
+    getClientHeight() {
+      var clientHeight = 0;
+      if (document.body.clientHeight && document.documentElement.clientHeight) {
+        var clientHeight =
+          document.body.clientHeight < document.documentElement.clientHeight
+            ? document.body.clientHeight
+            : document.documentElement.clientHeight;
+      } else {
+        var clientHeight =
+          document.body.clientHeight > document.documentElement.clientHeight
+            ? document.body.clientHeight
+            : document.documentElement.clientHeight;
       }
       return clientHeight;
     },
     //园内企业动画
-    animateSSS(){
+    animateSSS() {
       let num = 500;
       let _this = this;
-      for(let i = 0;i < this.companyList1.length;i++){
-        if(i == 0){
+      for (let i = 0; i < this.companyList1.length; i++) {
+        if (i == 0) {
           _this.companyList1[i].flag = true;
         }
-        setTimeout(()=>{
+        setTimeout(() => {
           _this.companyList1[i].flag = true;
-        },num*i)
+        }, num * i);
       }
     },
     getScrollTop() {
@@ -930,11 +932,11 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            for(let it in res.data){
+            for (let it in res.data) {
               res.data[it].flag = false;
             }
-             _this.companyList1 = res.data;
-             _this.comFlag = true;
+            _this.companyList1 = res.data;
+            _this.comFlag = true;
           } else {
             _this.$message.error(res.result);
           }
@@ -988,6 +990,9 @@ export default {
     .acaContent {
       margin-left: 20px;
       overflow: hidden;
+      .conTitle {
+        font-size: 16px;
+      }
     }
     .academiUl {
       display: flex;
@@ -1287,8 +1292,14 @@ export default {
       vertical-align: middle;
       background-color: rgba(255, 255, 255, 0.2);
       .liTit {
-        font-size: 14px;
+        font-size: 16px;
         text-align: center;
+        height: 42px;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
       }
       .liInfo {
         margin: 40px 0 50px 0;
@@ -1474,6 +1485,20 @@ export default {
   }
   .enterpriseinfo {
     .enterPriseCon {
+      .proDetal {
+          height: 32px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
+        .conTit1{
+          height: 40px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
       .con1 {
         overflow: hidden;
       }

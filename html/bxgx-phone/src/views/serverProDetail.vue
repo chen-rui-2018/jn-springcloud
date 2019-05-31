@@ -143,8 +143,8 @@ export default {
       this.api.get({
         url: 'findProductDetails',
         data: {
-          // productId: '00d80a4886584cb28157e8f00aa8c030'
-          productId: '19d19552832f47198b193d1913275866'
+          productId: this.$route.query.productId
+          // productId: '19d19552832f47198b193d1913275866'
         },
         callback: function (res) {
           if (res.code === '0000') {
@@ -159,8 +159,8 @@ export default {
       this.api.get({
         url: 'sameTypeProductList',
         data: {
-          // signoryId: 'jrywdljz012345689999999999999999',
-          signoryId: 'iegal_server',
+          signoryId: this.$route.query.signoryId,
+          // signoryId: 'iegal_server',
           page: _this.page,
           rows: _this.row
         },
@@ -205,6 +205,7 @@ export default {
 <style lang="scss">
 .serverProDetail {
   width: 100%;
+  padding-bottom:120px;
   .top {
     // height: 300px;
     height: 100%;
@@ -420,7 +421,9 @@ export default {
   }
   .serverFoot {
     padding: 22px 34px;
-    position: relative;
+    background: #fff;
+    position: fixed;
+    height: 120px;
     bottom: 0;
     color: #07ab50;
     > span {

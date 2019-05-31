@@ -164,7 +164,7 @@ public class SalaryWelfareManagementController extends BaseController{
     @RequiresPermissions("/hr/SalaryWelfareManagement/exportPayroll")
 	@ApiOperation(value = "导出工资条信息", notes = "导出工资条信息")
     @RequestMapping(value = "/exportPayroll", method = RequestMethod.GET)
-	public void exportPayroll(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage, HttpServletResponse response){
+	public void exportPayroll(SalaryPayrollPage salaryPayrollPage, HttpServletResponse response){
 		salaryPayrollPage.setPage(1);
 		salaryPayrollPage.setRows(200000);
 		PaginationData<List<SalaryPayrollVo>> pageList = salaryManagementService.exportPayroll(salaryPayrollPage);
@@ -302,7 +302,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	@RequestMapping(value = "/updateInsuredCardinalNumber", method = RequestMethod.POST)
 	public Result<String> updateInsuredCardinalNumber(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		String str = welfareManagrmentService.updateInsurancescheme(insuredSchemeAdd, user);
+		String str = welfareManagrmentService.updateInsuredCardinalNumber(insuredSchemeAdd, user);
 		return new Result(str);
 	}
 	
@@ -345,6 +345,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	@ApiOperation(value = "停止参保", notes = "停止参保")
 	@RequestMapping(value = "/stopInsurance", method = RequestMethod.POST)
 	public Result<String> stopInsurance(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd){
+		Assert.notNull(increaseStaffAdd.getInsuredMonth(),"减员月份不能为空");
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		welfareManagrmentService.stopInsurance(increaseStaffAdd, user);
 		return new Result();

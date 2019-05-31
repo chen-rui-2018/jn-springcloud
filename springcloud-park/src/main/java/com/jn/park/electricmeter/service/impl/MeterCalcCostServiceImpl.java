@@ -339,10 +339,11 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     private void saveBill(PayBillCreateParamVo payBill){
         TbElectricEnergyBill bill = new TbElectricEnergyBill();
         BeanUtils.copyProperties(payBill,bill);
+        bill.setAcBookType(payBill.getAcBookType());
         bill.setPayStatus(new Byte(MeterConstants.NOT_PAY));
         bill.setRecordStatus(new Byte(MeterConstants.VALID));
         bill.setCallTimes(0);
-        bill.setId(UUID.randomUUID().toString().replaceAll("-",""));
+        bill.setId(payBill.getBillId());
         energyBillMapper.insertSelective(bill);
         //保存明细
         List<TbElectricEnergyBillDetail> saveDetails = new ArrayList<>();
@@ -465,12 +466,14 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     @ServiceLog(doAction = "缴费成功后进行数据的更新")
     public Result updateBillInfo(PayCallBackNotify payCallBackNotify){
 
+        logger.info("进入账单缴费成功后的回掉方法，进行数据的更新");
         String billId=payCallBackNotify.getBillId();
         PayBillParams payBillParams=new PayBillParams();
         payBillParams.setBillId(billId);
         PayBill payBill =payClient.getBillBasicInfo(billId);
         //支付成功
         if(payBill.getPaymentState().equals(MeterConstants.PAYED)){
+            logger.info("账单成功支付！！！！");
             TbElectricEnergyBill bill = new TbElectricEnergyBill();
             bill.setPayStatus(new Byte(MeterConstants.PAYED));
             bill.setPayTime(new Date());
@@ -495,6 +498,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             TbElectricCost costbean =tbElectricCostMapper.selectByPrimaryKey(comAdinOrCompanyId);
             //检测企业的费用是否已经在表中存在，不存在则插入，否则更新
             if(costbean == null){
+                logger.info("插入企业的余额，企业id为{}",comAdinOrCompanyId);
                 costbean = new TbElectricCost();
                 costbean.setBalance(payBook.getBalance());
                 costbean.setCompanyId(comAdinOrCompanyId);
@@ -505,10 +509,12 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 tbElectricCostMapper.insertSelective(costbean);
             }else{
                 //更新数据
+                logger.info("更新企业的余额，企业id为{}",comAdinOrCompanyId);
                 costbean.setBalance(payBook.getBalance());
                 TbElectricCostCriteria costCriteria = new TbElectricCostCriteria();
                 costCriteria.or().andCompanyIdEqualTo(comAdinOrCompanyId).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
                 tbElectricCostMapper.updateByExampleSelective(costbean,costCriteria);
+
             }
         }
         return new Result<>();

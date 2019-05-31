@@ -25,6 +25,8 @@ public class CompanyInfoShow  implements Serializable {
 
     @ApiModelProperty(value = "企业官网地址")
     private String comWeb;
+    @ApiModelProperty(value = "企业管理员账号")
+    private String comAdmin;
 
     @ApiModelProperty(value = "所属园区ID")
     private String affiliatedId;
@@ -86,6 +88,14 @@ public class CompanyInfoShow  implements Serializable {
     private String creditPoints;
     @ApiModelProperty(value = "信用积分更新时间")
     private String creditUpdateTime;
+
+    public String getComAdmin() {
+        return comAdmin;
+    }
+
+    public void setComAdmin(String comAdmin) {
+        this.comAdmin = comAdmin;
+    }
 
     public String getIsCare() {
         return isCare;

@@ -1,5 +1,5 @@
 <!--pages/meeting/meetingPerson/meetingPerson.wxml-->
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <view class="meetingPerson" hover-class="none" hover-stop-propagation="false">
   <!-- 搜索框 -->
   <view class="search" hover-class="none" hover-stop-propagation="false">
@@ -7,7 +7,7 @@
     <input bindinput="changesearch" type="text" placeholder="搜索组织人员" />
   </view> 
 
-  <view class="select" wx:for="{{userList}}" bindtap='selectUser' data-id="{{item.id}}" data-name="{{item.name}}">
+  <view class="select" wx:for="{{userList}}" wx:key bindtap='selectUser' data-id="{{item.id}}" data-name="{{item.name}}">
         {{item.name}}
       <text wx:if="{{item.id===id }}" class="icon-select"></text>
     </view>

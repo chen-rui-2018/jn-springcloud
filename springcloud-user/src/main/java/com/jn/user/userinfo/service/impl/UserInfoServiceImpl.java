@@ -249,6 +249,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         tbUserPerson.setAffiliateCode(userAffiliateInfo.getAffiliateCode());
         tbUserPerson.setAffiliateName(userAffiliateInfo.getAffiliateName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+        
+        if (userAffiliateInfo.getAccountList() != null && !userAffiliateInfo.getAccountList().isEmpty()) {
+            for (String account : userAffiliateInfo.getAccountList()) {
+                logger.info("[更新用户所属机构信息] 删除redis缓存成功，account:{}", account);
+                deleteRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }
@@ -267,6 +275,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         tbUserPerson.setCompanyCode(userCompanyInfo.getCompanyCode());
         tbUserPerson.setCompanyName(userCompanyInfo.getCompanyName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+
+        if (userCompanyInfo.getAccountList() != null && !userCompanyInfo.getAccountList().isEmpty()) {
+            for (String account : userCompanyInfo.getAccountList()) {
+                logger.info("[更新用户所属企业信息] 删除redis缓存成功，account:{}", account);
+                deleteRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }
@@ -428,6 +444,19 @@ public class UserInfoServiceImpl implements UserInfoService {
             cache.put(account, userExtensionInfo);
             return true;
         }
+    }
+
+    /**
+     * 删除redis中的用户信息
+     * @param account 用户账号
+     * @return
+     */
+    @ServiceLog(doAction = "删除redis中的用户信息")
+    public boolean deleteRedisUserInfo(String account) {
+        Assert.notNull(account,UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
+        Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
+        cache.remove(account);
+        return true;
     }
 
     /**

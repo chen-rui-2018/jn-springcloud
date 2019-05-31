@@ -33,8 +33,8 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="联系电话:" class="inline" prop="con_phone">
-            <el-input v-model="businessForm.con_phone"></el-input>
+          <el-form-item label="联系电话:" class="inline" prop="ownerPhone">
+            <el-input v-model="businessForm.ownerPhone"></el-input>
             <!-- <span>{{conPhone}}</span> -->
           </el-form-item>
           <el-form-item label="注册时间:" class="inline" prop="foundingTime">
@@ -79,8 +79,8 @@
             <el-input v-model="businessForm.unifyCode"></el-input>
             <!-- <span>{{unifyCode}}</span> -->
           </el-form-item>
-          <el-form-item label="企业性质:" lass="inline" prop="comPropertys">
-            <el-select multiple v-model="businessForm.comPropertys" placeholder="请选择企业性质">
+          <el-form-item label="企业性质:" lass="inline" prop="comProperty">
+            <el-select v-model="businessForm.comProperty" placeholder="请选择企业性质">
               <el-option v-for="item in comPropertyOptions" :key="item.id" :label="item.preValue" :value="item.id">
               </el-option>
             </el-select>
@@ -137,8 +137,8 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item prop="region">
-          <el-input v-model="input" class="input1" placeholder="请输入验证码" style="width:200px"></el-input>
+        <el-form-item prop="checkCode">
+          <el-input v-model="businessForm.checkCode" class="input1" placeholder="请输入验证码" style="width:200px"></el-input>
           <!-- <span class="getCode">获取验证码</span> -->
           <span class="getCode" v-if="sendAuthCode" @click="getCode">获取验证码</span>
           <span class="getCode" v-else style="padding: 0px 15px;">
@@ -196,7 +196,7 @@ export default {
       induTypeOptions: [],
       userAccount: "",
       businessForm: {
-        comPropertys: [],
+        comProperty: '',
         affiliatedPark: "",
         comServer: "", //我的服务
         comDemand: "", //我的需求
@@ -211,7 +211,7 @@ export default {
         unifyCode: "", //统一社会信用代码
         comAddress: "", //注册地址
         addrPark: "", //公司园区地址-实际经营地址
-        con_phone: "", //联系电话
+        ownerPhone: "", //联系电话
         regCapital: "", //注册资本 万元
         comScale: "", //企业规模
         comType: "", //企业类型
@@ -219,6 +219,7 @@ export default {
         comWeb: "", //企业官网地址
         avatar: "", //企业logo
         businessLicense: "", //营业执照
+        checkCode:''
       },
       rules: {
         comName: [
@@ -231,7 +232,7 @@ export default {
           { required: true, message: "请选择产业领域", trigger: "change" }
         ],
         ownerLaw: [{ required: true, message: "请输入法人", trigger: "blur" }],
-        conPhone: [
+        ownerPhone: [
           { required: true, message: "请输入联系电话", trigger: "blur" },
           { validator: checkPhoneNumber, trigger: "blur" }
         ],
@@ -274,7 +275,7 @@ export default {
         comAddress: [
           { required: true, message: "请输入注册地址", trigger: "blur" }
         ],
-        comPropertys: [
+        comProperty: [
           { required: true, message: "请选择企业性质", trigger: "change" }
         ],
         avatar: [
@@ -312,7 +313,7 @@ export default {
               comName: _this.businessForm.comName,
               induType: _this.businessForm.induType,
               ownerLaw: _this.businessForm.ownerLaw,
-              con_phone: _this.businessForm.con_phone,
+              ownerPhone: _this.businessForm.ownerPhone,
               foundingTime: _this.businessForm.foundingTime,
               runTime: _this.businessForm.runTime,
               comAddress: _this.businessForm.comAddress,
@@ -329,15 +330,17 @@ export default {
               comWeb: _this.businessForm.comWeb,
               avatar: _this.businessForm.avatar,
               businessLicense: _this.businessForm.businessLicense,
+              checkCode: _this.businessForm.checkCode,
             },
             callback: function(res) {
               if (res.code == "0000") {
-                console.log(res);
+                _this.$message.success(res.result)
+                _this.$refs['businessForm'].resetFields();
               }
             }
           });
         } else {
-          console.log("error submit!!");
+          _this.$message.error(res.result)
           return false;
         }
       });
@@ -361,13 +364,10 @@ export default {
     getCode() {
       let _this = this;
       this.api.get({
-        url: "getCode",
-        data: {
-          phone: _this.businessForm.con_phone
-        },
+        url: "getUserCode",
+        data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.sendAuthCode = false;
             _this.auth_time = 60;
             var auth_timetimer = setInterval(() => {

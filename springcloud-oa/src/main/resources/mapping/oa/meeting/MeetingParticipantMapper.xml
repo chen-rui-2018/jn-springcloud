@@ -213,7 +213,7 @@
             and mp.meeting_user_id=#{meetingUserId,jdbcType=VARCHAR}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userName)">
-            and meeting.name like CONCAT('%', trim(#{userName,jdbcType=VARCHAR}), '%')
+            and o.name like CONCAT('%', trim(#{userName,jdbcType=VARCHAR}), '%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingTitle)">
             and meeting.title like CONCAT('%', trim(#{meetingTitle,jdbcType=VARCHAR}), '%')

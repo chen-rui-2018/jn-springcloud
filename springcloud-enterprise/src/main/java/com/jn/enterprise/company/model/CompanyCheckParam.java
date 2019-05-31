@@ -86,6 +86,10 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "所属园区[园区ID]", example = "846841")
     private String affiliatedPark;
 
+    @ApiModelProperty(value = "信用分", hidden = true)
+    private String creditPoints;
+    @ApiModelProperty(value = "信用分更新时间", hidden = true)
+    private String creditUpdateTime;
     @ApiModelProperty(value = "企业管理员", hidden = true)
     private String comAdmin;
     @ApiModelProperty(value = "是否删除", hidden = true)
@@ -281,6 +285,22 @@ public class CompanyCheckParam implements Serializable {
         this.affiliatedPark = affiliatedPark;
     }
 
+    public String getCreditPoints() {
+        return creditPoints;
+    }
+
+    public void setCreditPoints(String creditPoints) {
+        this.creditPoints = creditPoints;
+    }
+
+    public String getCreditUpdateTime() {
+        return creditUpdateTime;
+    }
+
+    public void setCreditUpdateTime(String creditUpdateTime) {
+        this.creditUpdateTime = creditUpdateTime;
+    }
+
     public String getComAdmin() {
         return comAdmin;
     }
@@ -347,6 +367,8 @@ public class CompanyCheckParam implements Serializable {
                 ", comServer='" + comServer + '\'' +
                 ", comDemand='" + comDemand + '\'' +
                 ", affiliatedPark='" + affiliatedPark + '\'' +
+                ", creditPoints='" + creditPoints + '\'' +
+                ", creditUpdateTime='" + creditUpdateTime + '\'' +
                 ", comAdmin='" + comAdmin + '\'' +
                 ", recordStatus='" + recordStatus + '\'' +
                 ", checkStatus='" + checkStatus + '\'' +

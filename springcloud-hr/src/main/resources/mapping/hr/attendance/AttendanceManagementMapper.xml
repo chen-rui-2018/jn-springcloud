@@ -12,8 +12,11 @@
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(department)">
 			and t1.department = #{department,jdbcType=VARCHAR}
 		</if>
-		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-			and t1.department_id = #{departmentId,jdbcType=VARCHAR}
+		<if test="departmentIds!=null and departmentIds.size>0">
+			and t1.department_id in
+			<foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+				#{depart}
+			</foreach>
 		</if>
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
 			and t1.name like concat('%',#{name},'%')

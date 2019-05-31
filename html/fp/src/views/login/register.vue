@@ -117,8 +117,8 @@ export default {
                     if (res.code == "0000") {
                       sessionStorage.token = res.data;
                       _this.$router.push({
-                        path: "/user",
-                        query: { account: _this.phone }
+                        path: "/",
+                        // query: { account: _this.phone }
                       });
                     } else {
                       _this.$message.error(res.result);

@@ -18,7 +18,7 @@
         </router-link>
       </div>
     </div>
-    <div v-loading="loading" class="user-main">
+    <div class="user-main">
       <notice
         title="企业邀请"
         :content="messageData.company.data.messageContent"

@@ -79,6 +79,9 @@ export default {
     },
     // 导出功能
     handleExcel() {
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
       exportExcel(this.listQuery).then(res => {
         console.log('导出。。。')
         window.location.href = res.request.responseURL
@@ -102,6 +105,9 @@ export default {
     initList() {
       console.log('查询。。。')
       this.listLoading = true
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
       postapi('hr/holidayRule/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.holidayList = res.data.data.rows

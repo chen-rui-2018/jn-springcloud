@@ -46,7 +46,14 @@
     </div>
     <!-- 表格 -->
     <el-table ref="insuredDetaildTab" :data="insuredDetaildList" border fit highlight-current-row style="width: 100%;height:100%;margin-top: 10px;">
-      <el-table-column type="selection" width="45" align="center"/>
+      <!--<el-table-column type="selection" width="45" align="center"/>-->
+      <el-table-column label="选择" width="60" align="center">
+        <template slot-scope="scope">
+          <el-radio-group v-model="radioGroup">
+            <el-radio v-model="jobNumberSel" :label="scope.row.jobNumber" :checked="radioChecked" @change.native="getJobNumberSel(scope.$index,scope.row)" @click.native.prevent="clickRadio(scope.row)">&nbsp;</el-radio>
+          </el-radio-group>
+        </template>
+      </el-table-column>
       <el-table-column type="index" width="60" label="序号" align="center" />
       <el-table-column :show-overflow-tooltip="true" label="姓名" align="center" prop="name" />
       <el-table-column :show-overflow-tooltip="true" label="工号" align="center" prop="jobNumber"/>
@@ -79,7 +86,7 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer" align="center">
-          <el-button type="primary" @click="stopInsuranceTimeSubmit">保存</el-button>
+          <el-button :disabled="stopInsuranceFormBt" type="primary" @click="stopInsuranceTimeSubmit">保存</el-button>
           <el-button @click="handleCancle">取消</el-button>
         </div>
       </el-dialog>
@@ -89,7 +96,7 @@
 </template>
 <script>
 import {
-  api, exportExcel, getPreMonth, getNextMonth, systemApi
+  api, exportExcel, getPreMonth, getNextMonth, systemApi, accMul, accAdd
 } from '@/api/hr/common'
 
 import UE from '@/components/ue.vue'
@@ -97,6 +104,14 @@ export default {
   components: { UE },
   data() {
     return {
+      jobNumberSel: '',
+      radioGroup: '',
+      radioChecked: false,
+      seleRow: {
+        jobNumber: '',
+        schemeId: ''
+      },
+      stopInsuranceFormBt: false,
       config: {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
@@ -143,6 +158,22 @@ export default {
     this.getAllDepartment()
   },
   methods: {
+    clickRadio(row) {
+      const e = row.jobNumber
+      if (e === this.radioGroup) {
+        this.radioGroup = ''
+        this.seleRow.schemeId = ''
+        this.seleRow.jobNumber = ''
+      } else {
+        this.radioGroup = e
+        this.seleRow.schemeId = row.schemeId
+        this.seleRow.jobNumber = row.jobNumber
+      }
+    },
+    getJobNumberSel(index, row) {
+      this.seleRow.schemeId = row.schemeId
+      this.seleRow.jobNumber = row.jobNumber
+    },
     // 选择部门（新增用户对话框）
     handleChangeDepartment(value) {
       this.listQuery.departmentId = this.departmentIdS[this.departmentIdS.length - 1]
@@ -186,9 +217,14 @@ export default {
       this.getInsuredDetaildList(this.queryMonth)
     },
     stopInsuranceTimeSubmit() {
-      const seleRow = this.$refs.insuredDetaildTab.store.states.selection[0]
-      this.stopInsuranceFormData.jobNumber = seleRow.jobNumber
-      this.stopInsuranceFormData.insuredProgrammeId = seleRow.schemeId
+      this.stopInsuranceFormBt = true
+      if (this.stopInsuranceFormData.insuredMonth === '') {
+        alert('请选择停止参保月份')
+        this.stopInsuranceFormBt = false
+        return false
+      }
+      this.stopInsuranceFormData.jobNumber = this.seleRow.jobNumber
+      this.stopInsuranceFormData.insuredProgrammeId = this.seleRow.schemeId
       api('hr/SalaryWelfareManagement/stopInsurance', this.stopInsuranceFormData).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -196,10 +232,17 @@ export default {
             type: 'success'
           })
           this.stopInsuranceFormVisible = false
+          this.stopInsuranceFormBt = false
+          this.clickRadio(this.seleRow.jobNumber)
+          this.seleRow.jobNumber = ''
+          this.seleRow.schemeId = ''
+          this.stopInsuranceFormData.insuredMonth = ''
+          this.radioChecked = false
           this.initList()
         } else {
           this.$message.error(res.data.result)
           this.stopInsuranceFormVisible = false
+          this.stopInsuranceFormBt = false
         }
       })
     },
@@ -217,16 +260,22 @@ export default {
       })
     },
     stopInsurance() {
-      const seleRow = this.$refs.insuredDetaildTab.store.states.selection
-      if (seleRow.length !== 0) {
-        if (seleRow.length > 1) {
-          this.$message.error('只能选择一条停止参保员工记录')
-          return
-        }
-        this.stopInsuranceFormVisible = true
+      if (this.seleRow.jobNumber === '') {
+        this.$message.error('只能选择一条停止参保员工记录')
+        return
       } else {
-        this.$message.error('请选择要停保的员工')
+        this.stopInsuranceFormVisible = true
       }
+      // const seleRow = this.$refs.insuredDetaildTab.store.states.selection
+      // if (seleRow.length !== 0) {
+      //   if (seleRow.length > 1) {
+      //     this.$message.error('只能选择一条停止参保员工记录')
+      //     return
+      //   }
+      //   this.stopInsuranceFormVisible = true
+      // } else {
+      //   this.$message.error('请选择要停保的员工')
+      // }
     },
 
     // 表格分页功能
@@ -269,8 +318,10 @@ export default {
       api('hr/SalaryWelfareManagement/insuredDetailedSubsidiary', { page: 1, rows: 10, insuredMonth: month, departmentId: departmentId }).then(res => {
         if (res.data.code === '0000') {
           const row = res.data.data
-          const summary = (res.data.data.personalSocialSecurity + res.data.data.companySocialSecurity) * res.data.data.insuredNumber +
-            (res.data.data.personalAccumulationFund + res.data.data.companyAccumulationFund) * res.data.data.insuredNumber
+          // const summary = (res.data.data.personalSocialSecurity + res.data.data.companySocialSecurity) * res.data.data.insuredNumber +
+          //   (res.data.data.personalAccumulationFund + res.data.data.companyAccumulationFund) * res.data.data.insuredNumber
+          const summary = accAdd(accMul(accAdd(res.data.data.personalSocialSecurity, res.data.data.companySocialSecurity), res.data.data.insuredNumber),
+            accMul(accAdd(res.data.data.personalAccumulationFund, res.data.data.companyAccumulationFund), res.data.data.insuredNumber))
           row.summary = summary
           this.insuredSummary.push(row)
         } else {

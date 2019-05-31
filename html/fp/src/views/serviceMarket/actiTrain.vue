@@ -3,9 +3,9 @@
         <div class="trainContent">
             <div class="actiContent">
                 <div class="actiNav">
-                   <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
-                   <span class="pointer" @click="$router.push({ path: '/serMatHp'})">服务超市/</span>
-                   <span class="mainColor">活动培训</span>
+                    <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
+                    <span class="pointer" @click="$router.push({ path: '/serMatHp'})">服务超市/</span>
+                    <span class="mainColor">活动培训</span>
                 </div>
                 <div class="actiFilter clearfix">
                     <div class="timeFilter">
@@ -34,12 +34,12 @@
                 <div class="allActi clearfix">
                     <ul class="actiFilterUl fl clearfix">
                         <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
-                        <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeName}" @click="handleFil(v.typeName)">{{v.typeName}}</li>
+                        <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeId}" @click="handleFil(v.typeId)">{{v.typeName}}</li>
                         <li v-if="this.actiTypeList.length>4" class="bottomLi pr">
                             <i class="iconfont icon-bottom" @click.stop="handleTypeList"></i>
                             <el-card class="box-card" v-if="showList" style="overflow:auto">
                                 <ul class="listUl clearfix">
-                                    <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeName}" @click.stop="handleFil(i.typeName)">
+                                    <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeId}" @click.stop="handleFil(i.typeId)">
                                         <i class="iconfont icon-yuandian"></i>{{i.typeName}}</li>
                                 </ul>
                             </el-card>
@@ -53,7 +53,7 @@
                 <div class="actiTab">
                     <ul class="allActiUl clearfix" v-if="flag">
                         <li v-for="(item,index) in actiListSlim" :key='index'>
-                            <div style="width:100%;height:200px"><img  style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg" @click="handleRout(item.id)"></div>
+                            <div style="width:100%;height:200px"><img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg" @click="handleRout(item.id)"></div>
                             <div class="actiInfo">
                                 <p class="actiNameItem">{{item.actiName}}</p>
                                 <p class="actiTimer">
@@ -113,7 +113,7 @@
                                 </div>
                             </div>
                             <div class="verticalRight fr">
-                                <el-button type="success" plain>立即报名</el-button>
+                                <el-button type="success" plain @click="immediateSign(item.id)">立即报名</el-button>
                             </div>
                         </li>
                     </ul>
@@ -147,20 +147,43 @@ export default {
       timeIndexFlag: "",
       startTime: "",
       endTime: "",
-      showList: false
+      showList: false,
+      typeId: ""
     };
   },
-  mounted(){
-      this.initList()
-      this.getActiType()
+  mounted() {
+    this.initList();
+    this.getActiType();
   },
   methods: {
+    //立即报名
+    immediateSign(id) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+       this.api.post({
+        url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
+        data: {
+            activityId:id,
+        },
+        // dataFlag: false,
+        urlFlag:true,
+        callback: (res)=>{
+          if (res.code == "0000") {
+            // _this.actiTypeList = res.data.rows;
+            this.$message(res.result)
+          }
+        }
+      });
+      
+    },
     handleTypeList() {
       this.showList = !this.showList;
     },
     handleFil(v) {
       //筛选
-      this.keyWord = v;
+      this.typeId = v;
       this.actiFilflag = v;
       this.initList();
     },
@@ -186,7 +209,7 @@ export default {
       this.initList();
     },
     handleRout(id) {
-        this.$router.push({ path: "actiTrainDetail",query: { activityId: id }});
+      this.$router.push({ path: "actiTrainDetail", query: { activityId: id } });
     },
     handleSearchList() {
       //搜索
@@ -227,7 +250,7 @@ export default {
           page: this.page,
           rows: this.row,
           startTime: this.startTime,
-          typeId: ""
+          typeId: this.typeId
         },
         dataFlag: false,
         callback: function(res) {

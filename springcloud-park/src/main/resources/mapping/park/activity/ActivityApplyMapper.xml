@@ -43,4 +43,31 @@
         </if>
 
     </select>
+
+    <!--获取企业报报名活动信息-->
+    <select id="getCompanyActivityApplyInfo"  resultType="com.jn.park.activity.model.CompanyActivityApplyShow">
+        select
+            sa.creator_account as "applyAccount"  <!--报名人账号-->
+            ,sa.created_time as "applyTime"       <!--报名时间-->
+            ,sta.acti_name as "activityTitle"     <!--活动标题-->
+        from tb_activity_apply sa
+        left join tb_activity sta
+        on sa.activity_id=sta.id
+        where 1=1
+        and sa.record_status=1
+        and sa.apply_status='1'    <!--报名成功-->
+        and sa.sign_status='1'     <!--已签到-->
+        <if test="param.startTime !=null and param.startTime !='' ">
+            and date_format(sa.created_time,'%Y-%m-%d')&gt;=#{param.startTime}
+        </if>
+        <if test="param.endTime !=null and param.endTime !='' ">
+            and date_format(sa.created_time,'%Y-%m-%d')&lt;=#{param.endTime}
+        </if>
+        <if test="accountList!=null">
+            and sa.creator_account in
+            <foreach collection="accountList" item="account" index="index" open="(" close=")" separator=",">
+                #{account}
+            </foreach>
+        </if>
+    </select>
 </mapper>

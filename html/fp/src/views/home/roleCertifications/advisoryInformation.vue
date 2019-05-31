@@ -372,6 +372,11 @@ export default {
     this.getBusinessAreas();
     this.getCertificateTypeList();
   },
+  beforeRouteEnter (to, from, next) {
+  next(vm => {
+    // 通过 `vm` 访问组件实例
+  })
+},
   methods: {
     //发送申请
     acceptInvitation() {

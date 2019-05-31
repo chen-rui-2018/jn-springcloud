@@ -19,16 +19,19 @@
           <el-tab-pane
             v-for="(tab, tabIndex) in formData.tabs"
             :key="tabIndex"
-            :label="tab.tabName"
             v-loading="loadingTab">
+            <span slot="label" class="flex-center">
+<!--              <i v-if="tab.needFilled" class="wait-filled-dot"></i>-->
+              {{ tab.tabName }}
+            </span>
             <tree-table :isReported="formData.taskInfo.status" :modelType="formData.modelType" :data="tab.targetList" :columns="tab.columns" border expand-all/>
           </el-tab-pane>
         </el-tabs>
       </el-tab-pane>
     </el-tabs>
     <div class="btn-row">
-      <el-button size="small" type="primary" :disabled="formData.taskInfo && formData.taskInfo.status === 0 || !formData.departmentId" @click="submitForDraft">保存为草稿</el-button>
-      <el-button size="small" type="primary" :disabled="submitting || formData.taskInfo && formData.taskInfo.status === 0 || !formData.departmentId" @click="submitForDone">提交</el-button>
+      <el-button size="small" type="primary" :disabled="canFill" @click="submitForDraft">保存为草稿</el-button>
+      <el-button size="small" type="primary" :disabled="canFill" @click="submitForDone">提交</el-button>
       <el-button size="small" type="primary" v-if="formData.otherData">
         <a :href="formData.otherData" download="" target="_blank">点击下载附件</a>
       </el-button>
@@ -49,6 +52,19 @@
     },
     mounted() {
       this.init()
+    },
+    computed: {
+      canFill() {
+        if (this.submitting) {
+          return true
+        }
+        if (this.formData.taskInfo && this.formData.taskInfo.status === 0) {
+          return true
+        }
+        if (this.formData.modelType === 1 && !this.formData.departmentId) {
+          return true
+        }
+      }
     },
     data() {
       return {
@@ -184,19 +200,24 @@
       },
       getDepartmentJurisdiction(departmentId) {
         //  如果是园区报表，等待填报格式合成完毕再给指标树加上权限控制
-        const formData = this.formData
-        for (const tab of  formData.tabs) {
-          this.formatTreeJurisdiction(tab.targetList, departmentId)
+        for (const tab of this.formData.tabs) {
+          this.$set(tab, 'needFilled', false)
+          this.formatTreeJurisdiction(tab.targetList, departmentId, tab)
         }
       },
-      formatTreeJurisdiction(arr, departmentId) {
+      formatTreeJurisdiction(arr, departmentId, tab) {
         // 填报格式设置权限字段
         for (const list of arr) {
           if (departmentId === list.departmentId) {
             this.$set(list, 'hasJurisdiction', true)
+            if (!tab.needFilled) {
+              this.$set(tab, 'needFilled', true)
+            }
+          } else {
+            this.$set(list, 'hasJurisdiction', false)
           }
           if (list.hasOwnProperty('children') && list.children.length > 0) {
-            this.formatTreeJurisdiction(list.children, departmentId)
+            this.formatTreeJurisdiction(list.children, departmentId, tab)
           }
         }
       },
@@ -285,6 +306,7 @@
                 } else {
                   _this.$message.error('保存失败')
                 }
+                _this.submitting = false
               }
             })
           }, err => {
@@ -306,6 +328,7 @@
                 } else {
                   _this.$message.error('保存失败')
                 }
+                _this.submitting = false
               }
             })
           })
@@ -337,43 +360,51 @@
         return new Promise((resolve, reject) => {
           this.validateInputFormatModel()
             .then(() => {
-              this.formData.tabs.forEach(item => {
-                this.flatteningInputList = []
-                this.setOrderAndFormatInputList(item.targetList)
-                item.flatteningInputList = this.flatteningInputList
-              })
-
-
-              const formData = this.partDeepClone(this.formData, ['tabs'])
-              // 先克隆提交表单对象
-              formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'inputList','columns']))
-              // 把填报格式是多选的value把数组转成字符串
-              formData.tabs.forEach((item, index) => {
-                for (const list of item.flatteningInputList) {
-                  if (list.formType === '4') {
-                    list.value = list.value.join(',')
-                  }
-                }
-                item.inputList = item.flatteningInputList
-                delete item.flatteningInputList
-              })
-              resolve(formData)
-            },({ target, input }) => {
-              let text
-              if (input.formName) {
-                text = `${target.text}指标里的${input.formName}要求必填，请填写后提交`
-              } else {
-                text = `${target.text}指标要求必填，请填写后提交`
-              }
-              this.$confirm(text,{
+              this.$confirm('确定提交吗?', '提示', {
                 confirmButtonText: '确定',
+                cancelButtonText: '取消',
                 type: 'warning'
-              }).then(res => {
-                console.dir(res)
-              }).catch(err => {
-                console.dir(err)
+              }).then(() => {
+                this.formData.tabs.forEach(item => {
+                  this.flatteningInputList = []
+                  this.setOrderAndFormatInputList(item.targetList)
+                  item.flatteningInputList = this.flatteningInputList
+                })
+                const formData = this.partDeepClone(this.formData, ['tabs'])
+                // 先克隆提交表单对象
+                formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'inputList','columns']))
+                // 把填报格式是多选的value把数组转成字符串
+                formData.tabs.forEach((item, index) => {
+                  for (const list of item.flatteningInputList) {
+                    if (list.formType === '4') {
+                      list.value = list.value.join(',')
+                    }
+                  }
+                  item.inputList = item.flatteningInputList
+                  delete item.flatteningInputList
+                })
+                resolve(formData)
+              },({ target, input }) => {
+                let text
+                if (input.formName) {
+                  text = `${target.text}指标里的${input.formName}要求必填，请填写后提交`
+                } else {
+                  text = `${target.text}指标要求必填，请填写后提交`
+                }
+                this.$confirm(text,{
+                  confirmButtonText: '确定',
+                  type: 'warning'
+                }).then(res => {
+                }).catch(err => {
+                  console.dir(err)
+                })
+                reject()
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交'
+                })
               })
-              reject()
             })
         })
       },
@@ -423,17 +454,16 @@
                 })
                 if ( _this.formData.modelType === 1) {
                   const gardenFiller = _this.formData.gardenFiller
-                  _this.formDataListTitle = _this.formDataListTitle.concat(gardenFiller)
-                  let departmentId
-                  if (gardenFiller && gardenFiller.length > 0) {
-                    departmentId = gardenFiller[0].departmentId
+                  const departmentId = _this.formDataListTitle[0].departmentId
+                  if (gardenFiller) {
+                    _this.formDataListTitle = _this.formDataListTitle.concat(gardenFiller)
                   }
                   for (const tab of  _this.formData.tabs) {
-                    _this.formatTreeJurisdiction(tab.targetList, departmentId)
+                    _this.$set(tab, 'needFilled', false)
+                    _this.formatTreeJurisdiction(tab.targetList, departmentId, tab)
                   }
                   _this.formData.departmentId = departmentId
                 }
-
                 resolve()
               } else {
                 _this.$message.error(res.result)
@@ -484,6 +514,13 @@
 
 <style lang="scss" scoped>
   .data-report{
+    .wait-filled-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #f56c6c;
+    }
     width: 100%;
     .btn-row {
       margin: 20px auto;

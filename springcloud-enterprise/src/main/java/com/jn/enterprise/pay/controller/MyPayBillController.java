@@ -87,8 +87,7 @@ public class MyPayBillController extends BaseController {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(payCheckReminder.getBillIds(),"账单ID或编号不能为空");
-        myPayBillService.billCheckReminder(payCheckReminder,user);
-        return new Result();
+        return new Result(myPayBillService.billCheckReminder(payCheckReminder,user));
     }
 
 

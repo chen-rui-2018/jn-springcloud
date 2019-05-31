@@ -12,17 +12,23 @@ import com.jn.hr.model.*;
 import com.jn.oa.attendance.dao.AttendanceMapper;
 import com.jn.oa.attendance.dao.TbOaAttendanceMapper;
 import com.jn.oa.attendance.enmus.AttendanceExceptionEnums;
+import com.jn.oa.attendance.enmus.AttendanceLocationEnums;
+import com.jn.oa.attendance.enmus.AttendancePlatformEnums;
 import com.jn.oa.attendance.enmus.AttendanceTypeEnums;
 import com.jn.oa.attendance.entity.TbOaAttendance;
 import com.jn.oa.attendance.entity.TbOaAttendanceCriteria;
 import com.jn.oa.attendance.model.AttendanceAdd;
+import com.jn.oa.attendance.model.AttendanceLocation;
 import com.jn.oa.attendance.model.AttendancePage;
 import com.jn.oa.attendance.service.AttendanceService;
 import com.jn.oa.attendance.vo.AttendanceResultVo;
 import com.jn.oa.attendance.vo.AttendanceVo;
+import com.jn.oa.common.util.LocationUtils;
 import com.jn.oa.model.Attendance;
 import com.jn.oa.vo.AttendanceApiVo;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +63,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     private HrClient hrClient;
 
+    @Autowired
+    private SystemClient systemClient;
+
 
     /**
      * 考勤签到/签退
@@ -81,6 +90,15 @@ public class AttendanceServiceImpl implements AttendanceService {
         AttendanceOverTime attendanceOverTime=new AttendanceOverTime();
         attendanceOverTime.setUserId(user.getId());
         attendanceOverTime.setType(attendanceAdd.getType());
+        if(AttendancePlatformEnums.PLATFORM_APP.getCode().equals(attendanceAdd.getAttendancePlatform())){
+            //app打卡
+            AttendanceLocation attendanceLocation= this.selectLocation(attendanceAdd.getLongitude(),attendanceAdd.getLatitude());
+            if(!attendanceLocation.isStatus()){
+                logger.warn("[考勤管理] 考勤失败，考勤范围不在指定范围内！,userId：{}", user.getId());
+                throw  new JnSpringCloudException(AttendanceExceptionEnums.ATTENDANCE_LOCATION_ERROR);
+            }
+
+        }
         //签到
         if(AttendanceTypeEnums.SIGN_IN.getCode().equals(attendanceAdd.getType())){
             if(attendanceVo!=null){
@@ -238,6 +256,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "OA-API根据条件查询考勤列表")
     public List<AttendanceApiVo> selectApiAttendanceListByCondition(Attendance attendance) {
         logger.info("[考勤管理] 条件查询考勤列表，,userId：{},departmentId：{},startTime：{},endTime：{}", attendance.getUserId(),attendance.getDepartmentId(),attendance.getStartTime(),attendance.getEndTime());
         return attendanceMapper.selectAttendanceListByCondition(attendance);
@@ -250,6 +269,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户id查询用户考勤打卡数据")
     public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(AttendanceManagement attendanceManagement) {
         logger.info("进入-根据用户id查询用户考勤打卡数据,参数：{}", JSONObject.toJSONString(attendanceManagement));
         Result result= hrClient.selectAttendanceManagementByUserId(attendanceManagement);
@@ -264,10 +284,11 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @return
      */
     @Override
-    public Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(AttendanceManagement attendanceManagement) {
+    @ServiceLog(doAction = " 根据部门id查询部门考勤打卡数据")
+    public Result<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(AttendanceManagement attendanceManagement) {
         logger.info("进入-根据部门id查询部门考勤打卡数据,参数：{}", JSONObject.toJSONString(attendanceManagement));
-        Result result= hrClient.selectAttendanceManagementByDepartmentId(attendanceManagement);
-        logger.info("执行结束-根据部门id查询部门考勤打卡数据,返回参数：{}", JSONObject.toJSONString(result));
+        Result<AttendanceManageApiVo> result= hrClient.selectAttendanceManagementByDepartmentId(attendanceManagement);
+        logger.info("执行结束-根据部门id查询部门考勤打卡数据,返回参数：{}", JSONObject.toJSONString(result.getCode()));
         return result;
     }
 
@@ -278,10 +299,62 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户id查询用户考勤接口")
     public Result<AttendanceOverTimeApiVo> selectByUserIdAndTime(AttendanceOverTime attendanceOverTime) {
         logger.info("进入-根据用户id查询用户考勤接口,参数：{}", JSONObject.toJSONString(attendanceOverTime));
         Result<AttendanceOverTimeApiVo> result= hrClient.selectByUserIdAndTime(attendanceOverTime);
         logger.info("执行结束-根据用户id查询用户考勤接口,返回参数：{}", JSONObject.toJSONString(result));
         return result;
+    }
+
+    /**
+     * 根据经纬度查询距离与是否能进行打卡
+     *
+     * @param longitude
+     * @param latitude
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "根据经纬度查询距离与是否能进行打卡")
+    public AttendanceLocation selectLocation(String longitude, String latitude) {
+        SysDictInvoke sysDictInvoke=new SysDictInvoke();
+        sysDictInvoke.setModuleCode(AttendanceLocationEnums.LONGITUDE_MODULE_CODE.getCode());
+        sysDictInvoke.setParentGroupCode(AttendanceLocationEnums.LONGITUDE_PARENT_GROUP_CODE.getCode());
+        sysDictInvoke.setGroupCode(AttendanceLocationEnums.LONGITUDE_GROUP_CODE.getCode());
+
+        //数据字典的经度
+        sysDictInvoke.setKey(AttendanceLocationEnums.LONGITUDE_KEY.getCode());
+        String longitudeDict=getDictValue(sysDictInvoke);
+
+        //数据字典的纬度
+        sysDictInvoke.setKey(AttendanceLocationEnums.LATITUDE_KEY.getCode());
+        String latitudeDict=getDictValue(sysDictInvoke);
+
+        //数据字典的距离
+        sysDictInvoke.setKey(AttendanceLocationEnums.DISTANCE_KEY.getCode());
+        double distance=Double.valueOf(getDictValue(sysDictInvoke));
+
+        double pointsDistance=LocationUtils.getDistance(longitude,latitude,longitudeDict,latitudeDict);
+
+        AttendanceLocation attendanceLocation=new AttendanceLocation();
+        attendanceLocation.setDistance(String.valueOf(pointsDistance));
+        logger.info("[考勤管理]两经纬度之间的距离：实际距离{}，指定距离：{}",pointsDistance,pointsDistance );
+        //两经纬度的距离
+        if(distance<pointsDistance){
+            attendanceLocation.setStatus(false);
+        }else{
+            attendanceLocation.setStatus(true);
+        }
+
+        return attendanceLocation;
+    }
+
+    private String getDictValue(SysDictInvoke sysDictInvoke){
+        Result<String> data=systemClient.selectDictValueByCondition(sysDictInvoke);
+        if(data==null||data.getData()==null||!GlobalConstants.SUCCESS_CODE.equals(data.getCode())){
+            logger.warn("[考勤管理] 根据数据字典查询考勤定位经纬度失败失败！,参数：{}，返回值：{}",JSONObject.toJSONString(sysDictInvoke),JSONObject.toJSONString(data));
+            throw  new JnSpringCloudException(AttendanceExceptionEnums.ATTENDANCE_LOCATION_DIST_ERROR);
+        }
+        return data.getData();
     }
 }

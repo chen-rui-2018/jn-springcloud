@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { urlSearch } from '../utils'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
-
+    {
+      path: '/investment',
+      name: 'investment',
+      component: () => import('@/views/investment'),
+      meta: {title: '招商引资'}
+    },
     {
       path: '/actiDetail',
       name: 'actiDetail',
@@ -23,6 +29,12 @@ export default new Router({
       name: 'powerDetail',
       meta: {title: '权利详情'},
       component: () => import('@/views/administrative/powerDetail')
+    },
+    {
+      path: '/guest/portal/sp/power/text',
+      name: 'text',
+      meta: {title: '实施依据详情'},
+      component: () => import('@/views/administrative/text')
     },
     {
       path: '/guest/portal/sp/power/serviceDetail',
@@ -125,6 +137,40 @@ export default new Router({
       name: 'attendanceDetails',
       component: () => import('@/views/attendanceManagement/attendanceDetails'),
       meta: {title: '考勤明细'}
+    },
+    {
+      path: '/parkDetais',
+      name: 'parkDetais',
+      component: () => import('@/views/parkDetais'),
+      meta: {title: '公告详情'}
+    },
+    {
+      path: '/moreActi',
+      name: 'moreActi',
+      component: () => import('@/views/moreActi'),
+      meta: {title: '更多活动'}
+    },
+    {
+      path: '/policyGuide',
+      name: 'policyGuide',
+      component: () => import('@/views/policyGuide'),
+      meta: {title: '政策指南'}
+    },
+    {
+      path: '/policyDetails',
+      name: 'policyDetails',
+      component: () => import('@/views/policyDetails'),
+      meta: {title: '政策详情'}
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const token = urlSearch.token
+  if (token) {
+    sessionStorage.setItem('token', token)
+  }
+  next()
+})
+
+export default router

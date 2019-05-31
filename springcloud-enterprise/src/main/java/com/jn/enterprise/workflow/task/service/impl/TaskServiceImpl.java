@@ -9,6 +9,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
+import com.jn.enterprise.common.config.TaskStatisticsConfig;
 import com.jn.enterprise.common.enums.EnterpriseStatusEnums;
 import com.jn.enterprise.enums.IBPSMyTaskParamEnum;
 import com.jn.enterprise.model.IBPSMyTasksParam;
@@ -20,11 +21,10 @@ import com.jn.enterprise.workflow.task.entity.TbWorkflowTask;
 import com.jn.enterprise.workflow.task.enums.EnterpriseWorkFlowTaskStatusEnums;
 import com.jn.enterprise.workflow.task.model.CommonTaskPage;
 import com.jn.enterprise.workflow.task.model.TaskPage;
+import com.jn.enterprise.workflow.task.model.TaskStatistics;
 import com.jn.enterprise.workflow.task.model.TaskType;
 import com.jn.enterprise.workflow.task.service.TaskService;
-import com.jn.enterprise.workflow.task.vo.CommonTaskListVO;
-import com.jn.enterprise.workflow.task.vo.CommonTaskVO;
-import com.jn.enterprise.workflow.task.vo.TaskTypeVo;
+import com.jn.enterprise.workflow.task.vo.*;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.task.model.WorkflowTaskAdd;
@@ -57,6 +57,35 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private TaskMapper taskMapper;
 
+    @Autowired
+    private TaskStatisticsConfig taskStatisticsConfig;
+
+    @Override
+    @ServiceLog(doAction = "时效性待办事项预警数据统计")
+    public TaskStatisticsVO getWorkflowTaskStatistics(String userId) {
+        TaskStatisticsVO taskStatisticsVO = new TaskStatisticsVO();
+
+        TaskStatistics taskStatistics = new TaskStatistics();
+        taskStatistics.setUserId(userId);
+        taskStatistics.setWarnHour(taskStatisticsConfig.getWarn());
+        taskStatistics.setEarlyWarnHour(taskStatisticsConfig.getEarlyWarn());
+
+        List<WarnStatisticsVO> workflowTaskList = taskMapper.getWorkflowTaskStatistics(taskStatistics);
+        if (workflowTaskList != null && !workflowTaskList.isEmpty()) {
+            for (WarnStatisticsVO statisticsVO : workflowTaskList) {
+                if (statisticsVO.getWarnType().equals(EnterpriseWorkFlowTaskStatusEnums.TASK_WARNING.getCode())) {
+                    taskStatisticsVO.setWarnNum(statisticsVO.getWarnNum());
+                } else if (statisticsVO.getWarnType().equals(EnterpriseWorkFlowTaskStatusEnums.TASK_EARLY_WARNING.getCode())) {
+                    taskStatisticsVO.setEarlyWarnNum(statisticsVO.getWarnNum());
+                } else {
+                    taskStatisticsVO.setNormalNum(statisticsVO.getWarnNum());
+                }
+            }
+        }
+        taskStatisticsVO.setTotalNum(taskStatisticsVO.getWarnNum() + taskStatisticsVO.getEarlyWarnNum() + taskStatisticsVO.getNormalNum());
+        return taskStatisticsVO;
+    }
+
     /**
      * 根据条件查询事项任务列表（待办事项、已办事项）
      * @param taskType 事项状态，1：代办、2：结办
@@ -65,6 +94,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @ServiceLog(doAction = "根据条件查询事项任务列表（待办事项、已办事项）")
     public List<TaskTypeVo>  searchWorkflowTaskTypeListByCondition(TaskType taskType){
+        // 设置报警时间
+        taskType.setWarnHour(taskStatisticsConfig.getWarn());
         List<TaskTypeVo> taskTypeVos=taskMapper.selectTaskTypeByCondition(taskType);
         for(int i=0;i<taskTypeVos.size();i++){
             TaskPage taskPage =new TaskPage();

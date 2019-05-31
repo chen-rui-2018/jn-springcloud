@@ -12,6 +12,8 @@ import com.jn.hr.archives.dao.TbManpowerEmployeeFileClassMapper;
 import com.jn.hr.archives.dao.TbManpowerEmployeeFileMapper;
 import com.jn.hr.archives.dao.TbManpowerFileAttachmentMapper;
 import com.jn.hr.archives.entity.TbManpowerEmployeeFile;
+import com.jn.hr.archives.entity.TbManpowerEmployeeFileClass;
+import com.jn.hr.archives.entity.TbManpowerEmployeeFileClassCriteria;
 import com.jn.hr.archives.entity.TbManpowerFileAttachment;
 import com.jn.hr.archives.model.*;
 import com.jn.hr.archives.service.EmployeeFileService;
@@ -157,6 +159,10 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
     @ServiceLog(doAction = "分页查询员工档案信息")
     public PaginationData<List<EmployeeFile>> list(EmployeeFilePage employeeFilePage) {
         Page<Object> objects = PageHelper.startPage(employeeFilePage.getPage(), employeeFilePage.getRows());
+        if(!StringUtils.isEmpty(employeeFilePage.getClassId())){
+            List<String> classIds=getEmployeeFileClassByParentId(employeeFilePage.getClassId());
+            employeeFilePage.setClassIds(classIds);
+        }
         List<EmployeeFile> noticeList = employeeFileMapper.list(employeeFilePage);
         PaginationData<List<EmployeeFile>> data = new PaginationData(noticeList, objects.getTotal());
         if(objects.getTotal()>0L){
@@ -173,6 +179,29 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
             });
         }
         return data;
+    }
+
+
+
+    private List<String> getEmployeeFileClassByParentId(String parentId) {
+        List<String> rootList=new ArrayList<String>();
+        if(StringUtils.isEmpty(parentId)){
+            return rootList;
+        }
+        getTreeList(rootList,parentId);
+        return rootList;
+    }
+    private void getTreeList(List<String> rootList,String parentId){
+        rootList.add(parentId);
+        TbManpowerEmployeeFileClassCriteria example=new TbManpowerEmployeeFileClassCriteria();
+        TbManpowerEmployeeFileClassCriteria.Criteria criteria=example.createCriteria();
+        criteria.andParentIdEqualTo(parentId);
+        List<TbManpowerEmployeeFileClass> tbFileClass=tbManpowerEmployeeFileClassMapper.selectByExample(example);
+        if(!CollectionUtils.isEmpty(tbFileClass)){
+            for (TbManpowerEmployeeFileClass fileClass : tbFileClass) {
+                getTreeList(rootList,fileClass.getClassId());
+            }
+        }
     }
 
     @Override
@@ -300,7 +329,11 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
                     String[] split = title.split("\\.");
                     String str = DateUtils.formatDate(new Date(), "yyyyMMdd");
                     String fileName = split[0] + str + RandomStringUtils.randomNumeric(4) + "." + split[1];
-                    Result<String> result = uploadClient.uploadFile(file, true,fileGroup);
+                    Result<String> result = uploadClient.uploadFile(file, false,fileGroup);
+                    if(!"0000".equals(result.getCode())){
+                        logger.error("档案附件上传失败,code={},message={}",result.getCode(),result.getResult());
+                        throw new JnSpringCloudException(HrExceptionEnums.UPLOAD_FILE_ERRPR);
+                    }
                     fileAttachment.setFileId(fileId);
                     fileAttachment.setCreateTime(new Date());
                     fileAttachment.setFileName(split[0]);

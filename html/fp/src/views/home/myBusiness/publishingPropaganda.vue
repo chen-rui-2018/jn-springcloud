@@ -1,6 +1,6 @@
 <template>
   <div class="publishingProduct">
-    <div class="ordinary_title">
+    <div class="ordinary_title font16">
       <div>发布宣传</div>
       <div @click="toEnterprisePropaganda">返回</div>
     </div>
@@ -521,7 +521,7 @@ border:1px solid rgba(65,215,135,1);
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
       div:nth-child(2){
         width:50px;

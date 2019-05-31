@@ -14,7 +14,7 @@
 		 width: 600px;
 		 height: 500px;
 		}
-		 
+
 		.msgContent{
 		 width:auto;
 		 max-width: 250px;
@@ -24,7 +24,7 @@
 		 padding: 3px;
 		 border-radius: 5px;
 		}
-		 
+
 		#chatZone .left{
 		list-style:none;
 		 text-align: left;
@@ -34,7 +34,7 @@
 		 text-align: left;
 		 background-color: lightgrey;
 		 font-size: 4ex;
-		 
+
 		}
 		#chatZone .left .title{
 		 text-align: left;
@@ -65,9 +65,9 @@
 	<p style="color:red;">先输入发送人ID，昵称，接收人ID，然后点击开始聊天，进行聊天</p>
 	<br/>
      <p>
-    发送人ID<input type="text" id="fromUser" class="easyui-textbox" style="width: 150px" /> 
-    昵称<input type="text" id="nickName" class="easyui-textbox" style="width: 150px" /> 
-	接收人ID<input type="text" id="toUser" class="easyui-textbox" style="width: 150px" /> 
+    发送人ID<input type="text" id="fromUser" class="easyui-textbox" style="width: 150px" />
+    昵称<input type="text" id="nickName" class="easyui-textbox" style="width: 150px" />
+	接收人ID<input type="text" id="toUser" class="easyui-textbox" style="width: 150px" />
     <a id="btnLink" href="javascript:void(0)" class="easyui-linkbutton c1">开始聊天</a></p>
     <div data-options="region:'center'" class="easyui-panel" style="width: 50%;height:300px; padding: 5px;overflow:auto;" id="chatRecord">
 		<ul class="chatDialog-main clearfix" id="chatZone" style="overflow:auto;">
@@ -101,7 +101,7 @@
 		<div id="selectMsgDiv">
 		<div>
 	</div>
-	
+
 </body>
 
 <script type="text/javascript">
@@ -141,7 +141,7 @@ $(function() {
 		if(event.keyCode == 13) {
 			$("#btnSend").click();
 			return true;
-        } 
+        }
 	});
 	$("#btnSend").click(function() {
 		var fromUser = $("#fromUser").val();
@@ -152,7 +152,7 @@ $(function() {
 		obj.nickName=nickName;
 		obj.msg=msg;
 		obj.toUser=toUser;
-		
+
 		var json = JSON.stringify(obj);
 		var result =websocket.send(json);
 		var message ="<li class='msgContent right'>"+
@@ -162,15 +162,15 @@ $(function() {
 		$("#chatZone").append(message);
 		$("#chatRecord").scrollTop($("#chatRecord")[0].scrollHeight);
 		$("#txtMessage").val("");
-		
+
 	});
-	
+
 	$("#btnLink").click(function() {
 		var agent = $("#fromUser").val();
 		var toUser = $("#toUser").val();
 		nickName = $("#nickName").val();
 		if('WebSocket' in window){
-			
+
 		}else{
 			alert("您的浏览器版本太低，请升级浏览器版本！");
 			return;
@@ -186,12 +186,12 @@ $(function() {
 		     websocket.onerror = function(){
 		         console.log(" websocket.onerror :error");
 		     };
- 
+
 		     //连接成功建立的回调方法
 		     websocket.onopen = function(event){
 				 console.log(event);
 		     }
- 
+
 		     //接收到消息的回调方法
 		     websocket.onmessage = function(event){
 				 console.log(event)
@@ -205,29 +205,29 @@ $(function() {
 					$("#chatZone").append(message);
 					$("#chatRecord").scrollTop($("#chatRecord")[0].scrollHeight);
 		    	 }
-		     	
+		    	 }
 		     }
- 
+
 		     //连接关闭的回调方法
 		     websocket.onclose = function(){
 		    	console.log(" websocket.onclose :close");
 		   		websocket = new WebSocket(wsUrl+"/"+agent+"/"+token);
 		     }
- 
+
 		     //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
 		     window.onbeforeunload = function(){
 		         websocket.close();
 		     }
 		}
 	});
-	
-	
-	
+
+
+
 	//聊天记录
 	$("#btnSelectMsg").click(function(){
 		var fromUser = $("#fromUser").val();
 		var toUser = $("#toUser").val();
-		
+
 		var param = {
 			"id":"de328ca1-79af-4267-b228-3bf185c91668",
 			"fromUser":fromUser,

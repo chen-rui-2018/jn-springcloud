@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "加班管理")
 @RestController
-@RequestMapping("/oa/overTime")
+@RequestMapping("/oa/overtime")
 public class OverTimeController extends BaseController {
 
     @Autowired
@@ -40,12 +40,12 @@ public class OverTimeController extends BaseController {
     @ApiOperation(value = "加班记录新增小时", notes = "加班结束后，增加加班补休小时")
     @PostMapping(value = "/insertOverTime")
     @RequiresPermissions("/oa/overtime/insertOverTime")
-    public Result<AttendanceResultVo> insertLeave(@Validated @RequestBody VacationManagement leave) {
+    public Result<String> insertLeave(@Validated @RequestBody VacationManagement leave) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         leave.setUserId(user.getId());
-        Result data =overTimeService.insertOverTime(leave);
-        return new Result(data);
+        Result<String> data =overTimeService.insertOverTime(leave);
+        return data;
     }
 
 

@@ -1,4 +1,4 @@
-<view class="head" >
+<!-- <view class="head" >
   <view class="head_scan" bindtap="scan">
     <text class="icon-scan" >
     </text> 扫一扫
@@ -6,7 +6,7 @@
   <view class="head_title" >
     会议室列表
   </view>
-</view>
+</view> -->
 <view class="search" >
   <text class='icon-search'></text>
   <input type="text" placeholder="搜索会议室" bindinput="changesearch" name="meetingroom"  />

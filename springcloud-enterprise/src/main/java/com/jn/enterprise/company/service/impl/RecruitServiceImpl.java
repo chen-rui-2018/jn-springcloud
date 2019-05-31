@@ -20,6 +20,7 @@ import com.jn.enterprise.company.model.*;
 import com.jn.enterprise.company.service.RecruitService;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.api.CareClient;
 import com.jn.park.care.model.CareParam;
@@ -79,6 +80,8 @@ public class RecruitServiceImpl implements RecruitService {
                 recruitDetails.setCareStatus("1");
             }
         }
+        // 处理图片格式
+        recruitDetails.setComAvatar(IBPSFileUtils.getFilePath(recruitDetails.getComAvatar()));
         return recruitDetails;
     }
 
@@ -156,6 +159,13 @@ public class RecruitServiceImpl implements RecruitService {
 
         Page<Object> objects = PageHelper.startPage(recruitParam.getPage(), recruitParam.getRows() == 0 ? 15 : recruitParam.getRows());
         List<RecruitVO> recruitList = serviceRecruitMapper.getRecruitList(rp);
+
+        // 处理企业logo图片格式
+        for (RecruitVO recruit : recruitList) {
+            if (StringUtils.isNotBlank(recruit.getComAvatar())) {
+                recruit.setComAvatar(IBPSFileUtils.getFilePath(recruit.getComAvatar()));
+            }
+        }
 
         // 如果已登录，查询关注列表
         if (StringUtils.isNotBlank(recruitParam.getAccount())) {
@@ -258,7 +268,11 @@ public class RecruitServiceImpl implements RecruitService {
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_STATUS_ERROR);
         }
 
-        checkRecruitExist(serviceRecruitUnderParam.getId());
+        // 判断企业信息是否已通过审核
+        RecruitVO recruitVO = checkRecruitExist(serviceRecruitUnderParam.getId());
+        if (!recruitVO.getApprovalStatus().equals(RecruitDataTypeEnum.APPROVAL_STATUS_PASS.getCode())) {
+            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_APPROVAL_STATUS_NOT_PASS);
+        }
 
         TbServiceRecruit sr = new TbServiceRecruit();
         BeanUtils.copyProperties(serviceRecruitUnderParam,sr);

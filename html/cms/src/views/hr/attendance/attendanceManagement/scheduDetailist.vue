@@ -65,35 +65,20 @@
       <el-table-column type="index" width="60" label="序号" align="center"/>
       <el-table-column label="部门" align="center" width="200">
         <template slot-scope="scope">
-          <el-select
-            v-if="!scope.row.disabled"
-            v-model="scope.row.departmentId"
-            :disabled="scope.row.disabled"
-            placeholder="请选择"
-            clearable
-            class="filter-item"
-            @change="setDepartMentName(scope.row,scope.$index)">
-            <el-option label="请选择" value=""/>
-            <el-option
-              v-for="item in departmentList"
-              :key="item.departmentId"
-              :label="item.departmentName"
-              :value="item.departmentId"/>
-          </el-select>
-          <span v-else>{{ scope.row.departmentName }}</span>
+          <span>{{ scope.row.departmentName }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="姓名" align="center" prop="name" width="150">
         <template slot-scope="scope">
-          <el-input
+          <!-- <el-input
             v-if="!scope.row.disabled"
             v-model.trim="scope.row.name"
             :disabled="scope.row.disabled"
             maxlength="100"
             placeholder="请输入姓名"
-            clearable />
-          <span v-else>{{ scope.row.name }}</span>
+            clearable />-->
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
 
@@ -552,6 +537,11 @@ export default {
     initList() {
       console.log('排班明细查询')
       this.listLoading = true
+
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
+
       scheduDetailist(this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.scheduDetailist = res.data.data.rows
@@ -569,18 +559,14 @@ export default {
         this.listLoading = false
       })
     },
-    setDepartMentName(row, index) {
-      const depart = this.departmentList.find(item => item.departmentId === row.departmentId)
-      if (depart) {
-        row.departmentName = depart['departmentName']
-        this.scheduDetailist.splice(index, 1, row)
-      }
-    },
     handleFilter() {
       this.listQuery.page = 1
       this.initList()
     },
     exportExcel() {
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
       exportScheduDetailist(this.listQuery).then(res => {
         console.log('导出。。。')
         window.location.href = res.request.responseURL

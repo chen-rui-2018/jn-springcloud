@@ -1,6 +1,6 @@
 <template>
   <div class="approveAdvisory">
-    <div class="advisory_title">
+    <div class="advisory_title font16" >
       <div>审批顾问</div>
       <div @click="toCounselorManagement">返回列表</div>
     </div>
@@ -370,7 +370,7 @@ color: #00A041;
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
       div:nth-child(2){
                 width:88px;

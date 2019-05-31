@@ -1,6 +1,6 @@
 <template>
   <div class="advisoryInformation">
-    <div class="advisory_title">
+    <div class="advisory_title font16">
       <div>顾问资料填写</div>
     </div>
 
@@ -372,6 +372,11 @@ export default {
     this.getBusinessAreas();
     this.getCertificateTypeList();
   },
+  beforeRouteEnter (to, from, next) {
+  next(vm => {
+    // 通过 `vm` 访问组件实例
+  })
+},
   methods: {
     //发送申请
     acceptInvitation() {
@@ -379,7 +384,7 @@ export default {
           this.$message.error('请先选择基本信息里的业务领域在发送申请');
           return
       }
-      this.$router.push({ path: "/servicemarket/product/userCenter" });
+      this.$router.push({ path: "/home" });
     },
     // 新增项目经验
     addProjectExperienceList(projectExperienceListForm) {
@@ -875,7 +880,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 17px;
-    font-size: 13px;
+    // font-size: 13px;
     border-radius: 5px;
     div:nth-child(2) {
       width: 88px;

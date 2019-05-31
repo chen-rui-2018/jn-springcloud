@@ -27,7 +27,9 @@ public enum MeterExceptionEnums implements CodeAndMsg {
     COMPANY_NO_METER("4010215","指定的企业在指定的日期上没有关联电表"),
     METER_NO_CODE("4010216","电表的code不能为空"),
     METER_INFO_EXIST("4010217","电表信息已经存在"),
-    LINK_ID_ERROR("4010218","关系不存在")
+    LINK_ID_ERROR("4010218","关系不存在"),
+    METER_INFO_NOT_FOUND("4010219","电表信息不存在"),
+    COMPANY_BALANCE_NOT_FOUND("4010220","企业余额获取失败")
             ;
 
 
@@ -40,11 +42,11 @@ public enum MeterExceptionEnums implements CodeAndMsg {
     }
     @Override
     public String getCode() {
-        return null;
+        return code;
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return message;
     }
 }

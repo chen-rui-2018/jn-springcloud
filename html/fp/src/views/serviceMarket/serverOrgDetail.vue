@@ -79,11 +79,11 @@
               <div class="businessinfo" v-if="zankaiFlag">
                 <table class="table-orgspace mainBorder">
                   <tr>
-                    <td class="table-orgspace-title">组织代码机构:</td>
+                    <td class="table-orgspace-title">组织代码机构:{{serverOrgDetailList.orgCode}}</td>
                     <td class="table-orgspace-detail" width="300px" colspan="2">
                       <div>{{serverOrgDetailList.orgCode}}</div>
                     </td>
-                    <td class="table-orgspace-title">类型：</td>
+                    <td class="table-orgspace-title">类型：{{serverOrgDetailList.orgCode}}</td>
                     <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
                       <div>
                         <!-- <a href="http://www.szzhonghe.com/" target="_blank">http://www.szzhonghe.com/</a> -->
@@ -242,7 +242,7 @@
                       <tr>
                         <td class="table-orgspace-title">办公地址：</td>
                         <td class="table-orgspace-detail" style="line-height: 25px;">
-                          <p>{{serverOrgDetailList.orgAddress}}</p>
+                          <p>{{serverOrgDetailList.orgAddressDetail}}</p>
                         </td>
                       </tr>
                     </tbody>

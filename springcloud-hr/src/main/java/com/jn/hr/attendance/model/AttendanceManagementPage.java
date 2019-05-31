@@ -2,6 +2,7 @@ package com.jn.hr.attendance.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -88,6 +89,9 @@ public class AttendanceManagementPage extends Page implements Serializable{
 
 	@ApiModelProperty(value = "考勤统计日期")
 	private String attendanceDate;
+
+	@ApiModelProperty(value = "部门IDs")
+	private List<String> departmentIds;
 	
 	public String getUserId() {
 		return userId;
@@ -263,5 +267,13 @@ public class AttendanceManagementPage extends Page implements Serializable{
 
 	public void setAnnualLeave(Integer annualLeave) {
 		this.annualLeave = annualLeave;
+	}
+
+	public List<String> getDepartmentIds() {
+		return departmentIds;
+	}
+
+	public void setDepartmentIds(List<String> departmentIds) {
+		this.departmentIds = departmentIds;
 	}
 }

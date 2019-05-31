@@ -6,6 +6,8 @@ import com.jn.enterprise.data.model.*;
 import com.jn.enterprise.data.vo.ModelDataVO;
 import com.jn.enterprise.data.vo.TabVO;
 import com.jn.enterprise.data.vo.TargetVO;
+import com.jn.enterprise.model.DataTargetModel;
+import com.jn.enterprise.model.LoadCompanyDataTargetReq;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
@@ -254,5 +256,12 @@ List<CompanyTree> getExcel (@Param("taskbatch") String taskbatch,@Param("modelid
      */
     List<TbDataReportingSnapshotTargetGroup> getScientTabHeaderTargetGroup(@Param("fillId") String fillId);
 
+    List<DataTargetModel> loadCompanyDataTarget(LoadCompanyDataTargetReq loadCompanyDataTargetReq);
+
+    List<String> getTargetIdByName(@Param("targetName") String targetName);
+
+    List<TargetAndFormModel> getFormIdByTargetIds(@Param("targetIds") List<String> targetIds);
+
+    List<InMoneyModel> getValueAndYear(@Param("targetIds") List<TargetAndFormModel> targetIds);
 
 }

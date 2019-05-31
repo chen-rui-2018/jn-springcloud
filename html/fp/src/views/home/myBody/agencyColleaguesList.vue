@@ -1,6 +1,6 @@
 <template>
   <div class="agencyColleaguesList">
-    <div class="ordinary_title">
+    <div class="ordinary_title font16">
       <div>机构同事</div>
       <!-- <div @click="toInviteEmployees">邀请员工</div> -->
     </div>
@@ -224,7 +224,7 @@ handleSetContact(row){
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
     }
     .ordinary_main{

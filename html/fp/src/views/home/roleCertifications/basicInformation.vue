@@ -1,6 +1,6 @@
 <template>
   <div class="basicInformation">
-    <div class="investorCertification-header">
+    <div class="investorCertification-header font16">
       <div>服务机构认证</div>
     </div>
     <el-main style="padding:0 25px;text-align:left;background:#fff;">
@@ -49,7 +49,7 @@
                   clearable></el-input>
               </el-form-item>
               <el-form-item label="业务擅长:" prop="orgSpeciality" class="investorMainAreaList">
-                <el-select v-model="OrgBasicForm.orgSpeciality" multiple placeholder="请选择业务擅长">
+                <el-select v-model="OrgBasicForm.orgSpeciality" multiple :multiple-limit='num1' placeholder="请选择业务擅长">
                   <el-option v-for="(val,index) in orgSpecialityOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
                 </el-select>
               </el-form-item>
@@ -106,7 +106,7 @@
                 </el-table-column>
                 <el-table-column align="center" label="上传附件">
                   <template>
-                    <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                    <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                       :on-success="handlelicense" :headers="headers" :before-upload="beforelicense" style="display:inline-block">
                       <img v-if="fileUrl" :src="fileUrl" class="avatar">
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -160,7 +160,7 @@
                   </el-form-item>
                   <el-form-item label="附件:" class="otherAccessory">
                     <label slot="label">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件:</label>
-                    <el-upload class="accessory" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                    <el-upload class="accessory" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                       :on-success="handleOtherSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
                       <img v-if="otherForm.fileUrl" :src="otherForm.fileUrl" class="otherAvatar">
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -325,6 +325,8 @@ import axios from "axios";
 export default {
   data() {
     return {
+      baseUrl:this.api.host,
+      num1:1,
       btnText:'保存并继续',
       showBtn: false,
       isShowKernelList: false,
@@ -664,7 +666,7 @@ export default {
                   type: "success"
                 });
            this.$router.push({
-        path: "/servicemarket/product/userCenter"
+        path: "/home"
       });
           } else {
             this.$message.error(res.result);
@@ -945,15 +947,15 @@ export default {
       }
     },
     beforeAvaUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 < 500;
+      const isJPG = file.type === "image/jpeg"||file.type === "image/png";
+      const isLt2M = file.size / 1024/1024 < 1;
 
       if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+        this.$message.error("上传头像图片只能是 JPG或png 格式!");
         return false;
       }
       if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 500kb!");
+        this.$message.error("上传头像图片大小不能超过 1M!");
         return false;
       }
     },
@@ -961,21 +963,21 @@ export default {
       this.OrgBasicForm.orgLogo = file.data;
     },
     beforelicense(file) {
-      console.log(file);
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 < 500;
+      const isJPG = file.type === "image/jpeg"||file.type === "image/png";
+      const isLt2M = file.size / 1024 /1024<1;
 
       if (!isJPG) {
-        this.$message.error("上传图片只能是 JPG 格式!");
+        this.$message.error("上传图片只能是 JPG或png 格式!");
         return false;
       }
       if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 500kb!");
+        this.$message.error("上传头像图片大小不能超过1M!");
         return false;
       }
     },
     handlelicense(file) {
       this.fileUrl = file.data;
+      console.log(this.fileUrl)
     },
     handleOtherSuccess(file) {
       this.otherForm.fileUrl = file.data;
@@ -1165,7 +1167,7 @@ export default {
     background-color: #fff;
     padding: 17px;
     margin-bottom: 14px;
-    font-size: 13px;
+    // font-size: 13px;
     border-radius: 5px;
   }
   .el-table__header {

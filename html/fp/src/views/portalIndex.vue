@@ -64,7 +64,7 @@
         </div>
         <div class="noticeBox">
           <ul class="noticeList" :class="{marquee_top:animate}">
-            <li class="pointer" v-for="(i,k) in noticeList" :key="k" @click="$router.push({path:'/announcementDetails',query:{noticeId:i.noticeId}})" v-html="i.noticeDetails"></li>
+            <li class="pointer" v-for="(i,k) in noticeList" :key="k" @click="$router.push({path:'/announcementDetails',query:{noticeId:i.noticeId}})">{{i.noticeTitle}}</li>
           </ul>
         </div>
         <!-- <span class="pointer" @click="$router.push({path:'/announcementDetails'})">热烈庆祝XXX公司入驻南京白下高新区XXX园区。为实现共创共收打造良好环境基础实现科技人才的引进与推动时代化做出...</span> -->
@@ -249,11 +249,11 @@
                 <ul class="cardUl">
                   <li v-for="(i,k) in item" :key="k">
                     <el-card>
-                      <div class="cardImg pointer" style="width:200px;height:200px" @click.stop="$router.push({ path: 'parkDetails', query: { id : i.park } })">
-                        <img :src="i.adCover[0].fileName" alt="" style="width:100%;height:100%">
+                      <div class="cardImg pointer" style="width:200px;height:200px" @click.stop="$router.push({ path: 'parkDetails', query: { id : i.id } })">
+                        <img :src="i.mainPicture" alt="" style="width:100%;height:100%">
                       </div>
-                      <p class="mainColor">{{i.title}}</p>
-                      <div>{{i.content}}</div>
+                      <p class="mainColor">{{i.parkName}}</p>
+                      <!-- <div>{{i.content}}</div> -->
                     </el-card>
                   </li>
                 </ul>
@@ -280,13 +280,14 @@
         </div>
         <div class="enterPriseCon" ref="enterInfo1" data-class="bottom1">
           <div class="con1" v-for="(i,k) in recruitmentTable" :key="k" v-if="k==0">
-            <img :src="i.posterUrl" alt="">
+            <img :src="i.posterUrl" alt="" style="width:416px;height:232px;">
+            <!-- <img src="@/../static/img/图层 4.png" alt=""> -->
             <div class="conTit1 color1">{{i.propagandaTitle}}</div>
             <div class="conInfo">
-              <img src="@/../static/img/图层 4.png" alt="">
+              <!-- <img src="@/../static/img/图层 4.png" alt=""> -->
               <span>{{i.createdTime}}</span>
             </div>
-            <p class="color3">
+            <p class="color3 proDetal">
               {{i.propagandaDetails}}
             </p>
             <div class="more pointer" @click="$router.push({ path: 'enterpriseInfoDetails', query: { propagandaId : i.id } })">
@@ -301,10 +302,10 @@
                   {{i.propagandaTitle}}
                 </div>
                 <div class="conInfo">
-                  <img src="@/../static/img/图层 9.png" alt="">
+                  <!-- <img src="@/../static/img/图层 9.png" alt=""> -->
                   <span>{{i.createdTime}}</span>
                 </div>
-                <p class="color3">{{i.propagandaDetails}}</p>
+                <p class="color3 proDetal">{{i.propagandaDetails}}</p>
                 <div class="more pointer" @click="$router.push({ path: 'enterpriseInfoDetails', query: { propagandaId : i.id } })">
                   MORE
                 </div>
@@ -330,8 +331,8 @@
                   <i></i>
                   <span class="color1" style="text-align:left">{{i.propagandaTitle}}</span>
                   <p>
-                    <img src="@/../static/img/图层 4.png" alt="">
-                    <span>{{i.createdTime}}</span>
+                    <!-- <img src="@/../static/img/图层 4.png" alt=""> -->
+                    <span class="sp1">{{i.createdTime}}</span>
                   </p>
                 </div>
                 <p class="fr mainColor pointer" @click="$router.push({ path: 'enterpriseInfoDetails', query: { propagandaId : i.id } })">MORE</p>
@@ -378,8 +379,8 @@
           <div class="line"></div>
         </div>
         <div class="enterPark w" ref="enter2" data-class="bottom2">
-          <ul ref="enter3" data-class="bottom2">
-            <li :ref="i.id" :data-class="`bottom${k+2}`" class="pointer" v-for="(i,k) in companyList1" :key="k" @click="$router.push({path:'/companyProfile',query:{id:i.id}})">
+          <ul ref="enter3">
+            <li :ref="i.id" :class="{'bottom2':i.flag}" class="pointer" v-for="(i,k) in companyList1" :key="k" @click="$router.push({path:'/companyProfile',query:{id:i.id}})">
               <div class="li1Div">
                 <img :src='"@/../static/img/"+i.id+".png"' alt="">
                 <p>{{i.preValue}}</p>
@@ -506,7 +507,10 @@ export default {
         { name: "学术交流", content: "" },
         { name: "科技成果", content: "" }
       ],
-      companyList1: []
+      companyList1: [],
+      showSSSNum: 0,
+      clientHeight: this.getClientHeight(),
+      comFlag: false
     };
   },
   created() {
@@ -573,10 +577,10 @@ export default {
         //   delay: 5000,
         // },
         on: {
-          click: (e) => {
-            // let url = e.target.dataset.jumpurl; 
+          click: e => {
+            // let url = e.target.dataset.jumpurl;
             // this.bannerJump(url);
-            console.log(e)
+            console.log(e);
           }
         },
         observer: true,
@@ -597,14 +601,17 @@ export default {
         }
       });
     },
-    bannerJump (url) {
-    window.location.href = url    
+    bannerJump(url) {
+      window.location.href = url;
     },
     onClick() {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     },
     getElementLeft(element) {
       var top = element.offsetTop;
+      if (!element.offsetParent) {
+        return top;
+      }
       var curEle = element.offsetParent;
 
       while (curEle !== null) {
@@ -636,6 +643,11 @@ export default {
     },
     handleScroll() {
       const osTop = this.getScrollOffset().y;
+      let op = this.getElementLeft(this.$refs["enter2"]) - this.clientHeight;
+      if (osTop >= op && this.showSSSNum == 0 && this.comFlag) {
+        this.animateSSS();
+        this.showSSSNum++;
+      }
       //   const osTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; //用于FF
       // console.dir(osTop)
       // const arr = document.getElementsByClassName('.animation-dom')
@@ -669,6 +681,34 @@ export default {
       // } else {
       //   this.headFlag = false;
       // }
+    },
+    getClientHeight() {
+      var clientHeight = 0;
+      if (document.body.clientHeight && document.documentElement.clientHeight) {
+        var clientHeight =
+          document.body.clientHeight < document.documentElement.clientHeight
+            ? document.body.clientHeight
+            : document.documentElement.clientHeight;
+      } else {
+        var clientHeight =
+          document.body.clientHeight > document.documentElement.clientHeight
+            ? document.body.clientHeight
+            : document.documentElement.clientHeight;
+      }
+      return clientHeight;
+    },
+    //园内企业动画
+    animateSSS() {
+      let num = 500;
+      let _this = this;
+      for (let i = 0; i < this.companyList1.length; i++) {
+        if (i == 0) {
+          _this.companyList1[i].flag = true;
+        }
+        setTimeout(() => {
+          _this.companyList1[i].flag = true;
+        }, num * i);
+      }
     },
     getScrollTop() {
       var scroll_top = 0;
@@ -868,7 +908,7 @@ export default {
         }
       });
     },
-    // 获取宣传类型
+    //获取宣传类型
     // getPropagandaTypeList() {
     //   let _this = this;
     //   this.api.get({
@@ -892,7 +932,11 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
+            for (let it in res.data) {
+              res.data[it].flag = false;
+            }
             _this.companyList1 = res.data;
+            _this.comFlag = true;
           } else {
             _this.$message.error(res.result);
           }
@@ -903,16 +947,16 @@ export default {
     getBusinessAdContent() {
       let _this = this;
       this.api.get({
-        url: "getBusinessAdContent",
+        url: "getParkList",
         data: {
-          // parkId: "576809512829190144"
-          parkId: "570329542049136640",
-          page: _this.page5,
-          rows: _this.rows5
+          // parkId: "576809512829190144",
+          // parkId: "570329542049136640",
+          // page: _this.page5,
+          // rows: _this.rows5
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.CompanyList = _this.formatArr(res.data.rows, 3);
+            _this.CompanyList = _this.formatArr(res.data, 3);
             _this.total5 = res.data.total;
             setTimeout(() => {
               _this.swiperinit();
@@ -941,11 +985,14 @@ export default {
 .portalIndex {
   .academiExchange {
     .academiCon {
-      padding-top: 20px;
+      padding-top: 50px;
     }
     .acaContent {
       margin-left: 20px;
       overflow: hidden;
+      .conTitle {
+        font-size: 16px;
+      }
     }
     .academiUl {
       display: flex;
@@ -1241,12 +1288,18 @@ export default {
       padding: 30px 10px;
       font-size: 12px;
       text-align: left;
-      margin-right: 15px;
+      margin-right: 22px;
       vertical-align: middle;
       background-color: rgba(255, 255, 255, 0.2);
       .liTit {
-        font-size: 14px;
+        font-size: 16px;
         text-align: center;
+        height: 42px;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
       }
       .liInfo {
         margin: 40px 0 50px 0;
@@ -1432,6 +1485,20 @@ export default {
   }
   .enterpriseinfo {
     .enterPriseCon {
+      .proDetal {
+          height: 32px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
+        .conTit1{
+          height: 40px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
       .con1 {
         overflow: hidden;
       }

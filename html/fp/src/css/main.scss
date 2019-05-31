@@ -123,7 +123,8 @@ img {
 }
 
 /* 活动中心开始 */
-.actiCenter,.actiTrain {
+.actiCenter,
+.actiTrain {
   .actiContent {
     width: 1190px;
     margin: 0 auto;
@@ -131,6 +132,7 @@ img {
     .actiNav {
       margin: 20px 0;
       font-size: 13px;
+      font-weight: bold;
 
       a:last-child {
         color: #00a041;
@@ -266,7 +268,7 @@ img {
 
       .actiSearch {
         width: 200px;
-        height: 35px;
+        height: 38px;
         line-height: 35px;
         text-align: center;
         padding-right: 40px;
@@ -277,6 +279,31 @@ img {
           border: 0;
           height: 100%;
           width: 80%;
+        }
+        input::-webkit-input-placeholder {
+          /* WebKit browsers*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+        input:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input::-moz-placeholder {
+          /* Mozilla Firefox 19+*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input:-ms-input-placeholder {
+          /* Internet Explorer 10+*/
+          color: #999;
+          font-size: 13px;
         }
 
         input,
@@ -533,7 +560,8 @@ img {
 .quickSearch,
 .aboutUs,
 .finaInstitution,
-.finaPro,.companyProfile {
+.finaPro,
+.companyProfile {
 
   // .el-rate__icon.el-icon-star-on{
   //   color:#00a041 !important;
@@ -618,6 +646,32 @@ img {
     padding: 10px;
     font-size: 13px;
 
+    input::-webkit-input-placeholder {
+      /* WebKit browsers*/
+      color: #999;
+      font-size: 13px;
+    }
+
+    input:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18*/
+      color: #999;
+      font-size: 13px;
+    }
+
+
+    input::-moz-placeholder {
+      /* Mozilla Firefox 19+*/
+      color: #999;
+      font-size: 13px;
+    }
+
+
+    input:-ms-input-placeholder {
+      /* Internet Explorer 10+*/
+      color: #999;
+      font-size: 13px;
+    }
+
     .filLeft {
       margin-top: 10px;
       color: #797979;
@@ -635,7 +689,7 @@ img {
 
     .filRight {
       width: 200px;
-      height: 35px;
+      height: 36px;
       line-height: 35px;
       text-align: center;
       padding-right: 40px;
@@ -2156,7 +2210,7 @@ img {
 
             >.actiNameItem {
               color: #222;
-              font-size: 14px;
+              font-size: 16px;
             }
 
             .actiTimer {
@@ -2334,6 +2388,7 @@ img {
           font-size: 16px;
           font-weight: 500;
           margin-top: 10px;
+          text-align: left;
         }
 
         .conInfo {
@@ -2439,6 +2494,10 @@ img {
               font-size: 12px;
               margin-top: 5px;
             }
+
+            .sp1 {
+              margin-left: 10px;
+            }
           }
 
           >.contop2 {
@@ -2475,6 +2534,7 @@ img {
           // height: 111px;
           // padding: 50px 0;
           margin-bottom: 40px;
+          opacity: 0;
 
           // display: inline-block;
           // float: left;

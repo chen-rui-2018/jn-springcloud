@@ -2,14 +2,19 @@ package com.jn.enterprise.servicemarket.org.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.gson.Gson;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.CallOtherSwaggerUtils;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
+import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.model.ServiceOrg;
 import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
@@ -28,15 +33,27 @@ import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria;
 import com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapper;
 import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria;
+import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
+import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.api.ActivityClient;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
+import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.UserExtensionInfo;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.text.ParseException;
 import java.util.*;
@@ -90,6 +107,18 @@ public class OrgServiceImpl implements OrgService {
     @Autowired
     private TbServiceRequireMapper tbServiceRequireMapper;
 
+    @Autowired
+    private SystemClient systemClient;
+
+    @Autowired
+    private InvestorService investorService;
+
+    /**
+     * 机构认证流程id
+     */
+    @Value(value = "${orgProcessId}")
+    private String orgProcessId;
+
     /**
      * 数据状态 1:有效
      */
@@ -106,6 +135,7 @@ public class OrgServiceImpl implements OrgService {
      * 需求对接成功
      */
     private final static String REQUIRE_HANDLE_RESULT_SUCCESS = "1";
+    private final static String ORG_APPLY_IS_CHECKING = "0";
 
     @ServiceLog(doAction = "查询服务机构列表")
     @Override
@@ -333,17 +363,222 @@ public class OrgServiceImpl implements OrgService {
         BeanUtils.copyProperties(orgContactData,tbServiceOrgInfo);
         tbServiceOrgInfo.setRecordStatus(new Byte(RECORD_STATUS_VALID));
         TbServiceOrgInfo tbServiceOrgInfo1 = tbServiceOrgInfoMapper.selectByPrimaryKey(orgContactData.getOrgId());
+        int code = 0;
         if(null!=tbServiceOrgInfo1&&StringUtils.isNotEmpty(tbServiceOrgInfo1.getOrgId())){
             //存在对应机构联系方式，修改。
             tbServiceOrgInfo.setModifiedTime(new Date());
             tbServiceOrgInfo.setModifierAccount(account);
-            return tbServiceOrgInfoMapper.updateByPrimaryKeySelective(tbServiceOrgInfo);
+            code = tbServiceOrgInfoMapper.updateByPrimaryKeySelective(tbServiceOrgInfo);
         }else{
             //不存在联系方式，新增
             tbServiceOrgInfo.setCreatedTime(new Date());
             tbServiceOrgInfo.setCreatorAccount(account);
-            return tbServiceOrgInfoMapper.insertSelective(tbServiceOrgInfo);
+            code = tbServiceOrgInfoMapper.insertSelective(tbServiceOrgInfo);
         }
+
+        // 开始 启动IBPS审核流 --- 封装数据开始  ------------------------
+
+        String orgId = orgContactData.getOrgId();
+        TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
+        orgCriteria.createCriteria().andOrgIdEqualTo(orgId);
+        List<TbServiceOrg> tbServiceOrgs = tbServiceOrgMapper.selectByExample(orgCriteria);
+        if(null==tbServiceOrgs||tbServiceOrgs.size()!=1){
+            throw new JnSpringCloudException(OrgExceptionEnum.ORG_DATA_IS_ERROR);
+        }
+        if(!StringUtils.equals(tbServiceOrgs.get(0).getOrgStatus(),ORG_APPLY_IS_CHECKING)){
+            throw new JnSpringCloudException(OrgExceptionEnum.ORG_DATA_STATUS_IS_NOT_CHECKING);
+        }
+        //获取tbServiceOrg的ORGID作为其子表的ORGID条件查询出关联数据
+        TbServiceOrg tbServiceOrg=tbServiceOrgs.get(0);
+        TbServiceOrgCopy tbServiceOrgCopy= new TbServiceOrgCopy();
+        BeanUtils.copyProperties(tbServiceOrg,tbServiceOrgCopy);
+        //将Date类型转换成String类型,
+        if(null != tbServiceOrg.getOrgRegisterTime()){
+            tbServiceOrgCopy.setOrgRegisterTime(DateUtils.formatDate(tbServiceOrg.getOrgRegisterTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(null != tbServiceOrg.getCheckTime()){
+            tbServiceOrgCopy.setCheckTime(DateUtils.formatDate(tbServiceOrg.getCheckTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(null != tbServiceOrg.getCreatedTime()){
+            tbServiceOrgCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrg.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(null != tbServiceOrg.getModifiedTime()){
+            tbServiceOrgCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrg.getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        //将Byte转为String类型
+        if(null != tbServiceOrg.getRecordStatus()){
+            tbServiceOrgCopy.setRecordStatus((int)tbServiceOrg.getRecordStatus()+"");
+        }
+        //=============== 获取子表信息 =====================
+        String ServiceOrgId=tbServiceOrg.getOrgId();
+        TbServiceOrgElementCriteria example=new TbServiceOrgElementCriteria();
+        example.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgElement> tbServiceOrgElements = tbServiceOrgElementMapper.selectByExample(example);
+
+        //一对一
+        TbServiceOrgElementCopy tbServiceOrgElementCopy1=new TbServiceOrgElementCopy();
+        if(tbServiceOrgElements.size() != 0){
+            //复制bean
+            BeanUtils.copyProperties(tbServiceOrgElements.get(0),tbServiceOrgElementCopy1);
+            if(null != tbServiceOrgElements.get(0).getCreatedTime()){
+                tbServiceOrgElementCopy1.setCreatedTime(DateUtils.formatDate(tbServiceOrgElements.get(0).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgElements.get(0).getModifiedTime()){
+                tbServiceOrgElementCopy1.setModifiedTime(DateUtils.formatDate(tbServiceOrgElements.get(0).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgElements.get(0).getRecordStatus()){
+                tbServiceOrgElementCopy1.setRecordStatus((int)tbServiceOrgElements.get(0).getRecordStatus()+"");
+            }
+        }
+        tbServiceOrgElementCopy1.setOrgId(null);
+        tbServiceOrgElementCopy1.setId(null);
+        tbServiceOrgCopy.setTb_service_org_element(tbServiceOrgElementCopy1);
+
+        //一对一
+        TbServiceOrgInfoCriteria example1=new TbServiceOrgInfoCriteria();
+        example1.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgInfo> tbServiceOrgInfos = tbServiceOrgInfoMapper.selectByExample(example1);
+
+        TbServiceOrgInfoCopy TbServiceOrgInfoCopy=new TbServiceOrgInfoCopy();
+        if(tbServiceOrgInfos.size() != 0){
+            //复制bean
+            BeanUtils.copyProperties(tbServiceOrgInfos.get(0),TbServiceOrgInfoCopy);
+            if(null != tbServiceOrgInfos.get(0).getCreatedTime()){
+                TbServiceOrgInfoCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrgInfos.get(0).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgInfos.get(0).getModifiedTime()){
+                TbServiceOrgInfoCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrgInfos.get(0).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgInfos.get(0).getRecordStatus()){
+                TbServiceOrgInfoCopy.setRecordStatus((int)tbServiceOrgInfos.get(0).getRecordStatus()+"");
+            }
+        }
+        TbServiceOrgInfoCopy.setOrgId(orgId);
+        tbServiceOrgCopy.setTb_service_org_info(TbServiceOrgInfoCopy);
+
+        //一对多
+        TbServiceOrgLicenseCriteria example2=new TbServiceOrgLicenseCriteria();
+        example2.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgLicense> tbServiceOrgLicenses = tbServiceOrgLicenseMapper.selectByExample(example2);
+        List<TbServiceOrgLicenseCopy> tbServiceOrgLicenseCopies=new ArrayList<>();
+
+        for(int i=0;i<tbServiceOrgLicenses.size();i++){
+            TbServiceOrgLicenseCopy tbServiceOrgLicenseCopy=new TbServiceOrgLicenseCopy();
+            //复制bean
+            BeanUtils.copyProperties(tbServiceOrgLicenses.get(i),tbServiceOrgLicenseCopy);
+            if(null != tbServiceOrgLicenses.get(i).getCreatedTime()){
+                tbServiceOrgLicenseCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrgLicenses.get(i).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgLicenses.get(i).getModifiedTime()){
+                tbServiceOrgLicenseCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrgLicenses.get(i).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgLicenses.get(i).getRecordStatus()){
+                tbServiceOrgLicenseCopy.setRecordStatus((int)tbServiceOrgLicenses.get(i).getRecordStatus()+"");
+            }
+            tbServiceOrgLicenseCopy.setOrgId(null);
+            tbServiceOrgLicenseCopy.setId(null);
+            tbServiceOrgLicenseCopies.add(tbServiceOrgLicenseCopy);
+        }
+        if (tbServiceOrgLicenses.size() == 0){
+            tbServiceOrgLicenseCopies.clear();
+        }
+        tbServiceOrgCopy.setTb_service_org_license(tbServiceOrgLicenseCopies);
+
+        //一对多
+        TbServiceOrgTraitCriteria example3=new TbServiceOrgTraitCriteria();
+        example3.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgTrait> tbServiceOrgTraits = tbServiceOrgTraitMapper.selectByExample(example3);
+        List<TbServiceOrgTraitCopy> tbServiceOrgTraitCopies=new ArrayList<>();
+
+        for(int i=0;i<tbServiceOrgTraits.size();i++){
+            TbServiceOrgTraitCopy tbServiceOrgLicenseCopy=new TbServiceOrgTraitCopy();
+            //复制bean
+            BeanUtils.copyProperties(tbServiceOrgTraits.get(i),tbServiceOrgLicenseCopy);
+            if(null != tbServiceOrgTraits.get(i).getCreatedTime()){
+                tbServiceOrgLicenseCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrgTraits.get(i).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgTraits.get(i).getModifiedTime()){
+                tbServiceOrgLicenseCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrgTraits.get(i).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgTraits.get(i).getRecordStatus()){
+                tbServiceOrgLicenseCopy.setRecordStatus((int)tbServiceOrgTraits.get(i).getRecordStatus()+"");
+            }
+            tbServiceOrgLicenseCopy.setOrgId(null);
+            tbServiceOrgLicenseCopy.setId(null);
+            tbServiceOrgTraitCopies.add(tbServiceOrgLicenseCopy);
+        }
+        if (tbServiceOrgTraits.size() ==0){
+            tbServiceOrgTraitCopies.clear();
+        }
+        tbServiceOrgCopy.setTb_service_org_trait(tbServiceOrgTraitCopies);
+
+        //一对多
+        TbServiceOrgTeamCriteria example4=new TbServiceOrgTeamCriteria();
+        example4.createCriteria().andOrgIdEqualTo(ServiceOrgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgTeam> tbServiceOrgTeams = tbServiceOrgTeamMapper.selectByExample(example4);
+        List<TbServiceOrgTeamCopy> tbServiceOrgTeamCopies=new ArrayList<>();
+
+        for(int i=0;i<tbServiceOrgTeams.size();i++){
+            TbServiceOrgTeamCopy tbServiceOrgLicenseCopy=new TbServiceOrgTeamCopy();
+            //复制bean
+            BeanUtils.copyProperties(tbServiceOrgTeams.get(i),tbServiceOrgLicenseCopy);
+            if(null != tbServiceOrgTeams.get(i).getCreatedTime()){
+                tbServiceOrgLicenseCopy.setCreatedTime(DateUtils.formatDate(tbServiceOrgTeams.get(i).getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgTeams.get(i).getModifiedTime()){
+                tbServiceOrgLicenseCopy.setModifiedTime(DateUtils.formatDate(tbServiceOrgTeams.get(i).getModifiedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != tbServiceOrgTeams.get(i).getRecordStatus()){
+                tbServiceOrgLicenseCopy.setRecordStatus((int)tbServiceOrgTeams.get(i).getRecordStatus()+"");
+            }
+            tbServiceOrgLicenseCopy.setOrgId(null);
+            tbServiceOrgLicenseCopy.setId(null);
+            tbServiceOrgTeamCopies.add(tbServiceOrgLicenseCopy);
+        }
+        if (tbServiceOrgTeams.size() == 0){
+            tbServiceOrgTeamCopies.clear();
+        }
+        tbServiceOrgCopy.setTb_service_org_team(tbServiceOrgTeamCopies);
+        //将id设置为空
+        tbServiceOrgCopy.setOrgId(null);
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(orgProcessId, account, tbServiceOrgCopy);
+        String okStatus="200";
+        //启动工作流成功
+        if(okStatus.equals(ibpsResult.getState())){
+            logger.info("机构认证信提交成功，审批流程启动成功,流程实例id为：[{}]",ibpsResult.getData());
+            //ibps启动成功，将原有数据全部删除 [ibps会重新查询一份新数据]
+            TbServiceOrgCriteria orgCriteria1 = new TbServiceOrgCriteria();
+            orgCriteria1.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            int i = tbServiceOrgMapper.deleteByExample(orgCriteria1);
+            logger.info("工作流启动成功，删除原机构基本信息，响应数据条数：{}",i);
+            TbServiceOrgElementCriteria orgElementCriteria = new TbServiceOrgElementCriteria();
+            orgElementCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            int i1 = tbServiceOrgElementMapper.deleteByExample(orgElementCriteria);
+            logger.info("工作流启动成功，删除原服务机构团队人员结构信息，响应数据条数：{}",i1);
+            TbServiceOrgInfoCriteria orgInfoCriteria = new TbServiceOrgInfoCriteria();
+            orgInfoCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            int i2 = tbServiceOrgInfoMapper.deleteByExample(orgInfoCriteria);
+            logger.info("工作流启动成功，删除原服务机构地址信息，响应数据条数：{}",i2);
+            TbServiceOrgLicenseCriteria orgLicenseCriteria = new TbServiceOrgLicenseCriteria();
+            orgLicenseCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            int i3 = tbServiceOrgLicenseMapper.deleteByExample(orgLicenseCriteria);
+            logger.info("工作流启动成功，删除原机构资质信息，响应数据条数：{}",i3);
+            TbServiceOrgTeamCriteria orgTeamCriteria = new TbServiceOrgTeamCriteria();
+            orgTeamCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            int i4 = tbServiceOrgTeamMapper.deleteByExample(orgTeamCriteria);
+            logger.info("工作流启动成功，删除原机构团队信息，响应数据条数：{}",i4);
+            TbServiceOrgTraitCriteria orgTraitCriteria = new TbServiceOrgTraitCriteria();
+            orgTraitCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            int i5 = tbServiceOrgTraitMapper.deleteByExample(orgTraitCriteria);
+            logger.info("工作流启动成功，删除原服务机构特性信息，响应数据条数：{}",i5);
+
+        }
+        return code;
     }
 
     @ServiceLog(doAction = "我的机构,机构信息")
@@ -458,4 +693,40 @@ public class OrgServiceImpl implements OrgService {
         }
     }
 
+    /**
+     * 添加机构管理员角色
+     * @param orgAccount
+     * @return
+     */
+    @ServiceLog(doAction = "添加机构管理员角色")
+    @Override
+    public int addOrgRole(String orgAccount) {
+        if(StringUtils.isBlank(orgAccount)){
+            logger.warn("添加机构管理员角色失败，失败原因：机构账号不能为空");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        //判断当前账号在系统中是否存在
+        User user=new User();
+        user.setAccount(orgAccount);
+        Result<User> userResult = systemClient.getUser(user);
+        if(userResult==null || userResult.getData()==null){
+            logger.warn("添加机构管理员角色失败，失败原因：机构账号在系统中不存在");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        //给用户添加"机构管理员"角色
+        String roleName="机构管理员";
+        Result<SysRole> sysRoleResult = systemClient.getRoleByName(roleName);
+        if(sysRoleResult==null ||sysRoleResult.getData()==null){
+            logger.warn("添加机构管理员角色失败，失败原因：无法获取“机构管理员”角色信息，请确认系统服务是否正常，且“机构管理员”角色在系统中存在");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        //更新用户角色
+        Result<Boolean> booleanResult = investorService.updateUserRoleInfo(user, sysRoleResult);
+        if(booleanResult.getData()==true){
+            return 1;
+        }else{
+            logger.warn("添加机构管理员角色失败，失败原因：更新用户角色为“机构管理员”失败");
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
 }

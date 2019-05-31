@@ -785,6 +785,76 @@ public class TbServiceCompanyStaffCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andJoinPatternIsNull() {
+            addCriterion("join_pattern is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternIsNotNull() {
+            addCriterion("join_pattern is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternEqualTo(String value) {
+            addCriterion("join_pattern =", value, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternNotEqualTo(String value) {
+            addCriterion("join_pattern <>", value, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternGreaterThan(String value) {
+            addCriterion("join_pattern >", value, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternGreaterThanOrEqualTo(String value) {
+            addCriterion("join_pattern >=", value, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternLessThan(String value) {
+            addCriterion("join_pattern <", value, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternLessThanOrEqualTo(String value) {
+            addCriterion("join_pattern <=", value, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternLike(String value) {
+            addCriterion("join_pattern like", value, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternNotLike(String value) {
+            addCriterion("join_pattern not like", value, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternIn(List<String> values) {
+            addCriterion("join_pattern in", values, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternNotIn(List<String> values) {
+            addCriterion("join_pattern not in", values, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternBetween(String value1, String value2) {
+            addCriterion("join_pattern between", value1, value2, "joinPattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinPatternNotBetween(String value1, String value2) {
+            addCriterion("join_pattern not between", value1, value2, "joinPattern");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedTimeIsNull() {
             addCriterion("created_time is null");
             return (Criteria) this;

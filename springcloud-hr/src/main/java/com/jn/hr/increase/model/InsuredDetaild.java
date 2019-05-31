@@ -1,10 +1,14 @@
 package com.jn.hr.increase.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.metadata.BaseRowModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,6 +27,11 @@ public class InsuredDetaild extends BaseRowModel implements Serializable{
 	@ApiModelProperty(value = "创建日期")
     private String creatDate;
 	
+	@ApiModelProperty(value = "参保年月")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date yearMonth;
+	
 	@ApiModelProperty(value = "参保月份")
 	@ExcelProperty(value = "参保月份", index = 1)
 	private String insuredMonth;
@@ -35,38 +44,37 @@ public class InsuredDetaild extends BaseRowModel implements Serializable{
     private String name;
 
 	@ApiModelProperty(value = "部门")
+	@ExcelProperty(value = "部门Id", index = 2)
     private String department;
 	
 	@ApiModelProperty(value = "部门Id")
-	@ExcelProperty(value = "部门Id", index = 2)
 	private String departmentId;
 
 	@ApiModelProperty(value = "参保城市id")
-	@ExcelProperty(value = "参保城市id", index = 3)
     private String cityId;
 
 	@ApiModelProperty(value = "参保城市名称")
-	@ExcelProperty(value = "参保城市名称", index = 4)
+	@ExcelProperty(value = "参保城市名称", index = 3)
     private String cityName;
 
 	@ApiModelProperty(value = "个人社保费")
-	@ExcelProperty(value = "个人社保费", index = 5)
+	@ExcelProperty(value = "个人社保费", index = 4)
     private Double personalSocialSecurity;
 
 	@ApiModelProperty(value = "公司社保费")
-	@ExcelProperty(value = "公司社保费", index = 6)
+	@ExcelProperty(value = "公司社保费", index = 5)
     private Double companySocialSecurity;
 
 	@ApiModelProperty(value = "个人公积金费")
-	@ExcelProperty(value = "个人公积金费", index = 7)
+	@ExcelProperty(value = "个人公积金费", index = 6)
     private Double personalAccumulationFund;
 
 	@ApiModelProperty(value = "公司公积金费")
-	@ExcelProperty(value = "公司公积金费", index = 8)
+	@ExcelProperty(value = "公司公积金费", index = 7)
     private Double companyAccumulationFund;
 
 	@ApiModelProperty(value = "方案id")
-	@ExcelProperty(value = "方案id", index = 9)
+	@ExcelProperty(value = "方案id", index = 8)
     private String schemeId;
 
 	@ApiModelProperty(value = "是否有效（1：有效，2：无效）")
@@ -114,6 +122,15 @@ public class InsuredDetaild extends BaseRowModel implements Serializable{
 	//部门人数
 	List<SalaryKeyValue> departmentNumber;
 	
+	
+	public Date getYearMonth() {
+		return yearMonth;
+	}
+
+	public void setYearMonth(Date yearMonth) {
+		this.yearMonth = yearMonth;
+	}
+
 	public String getLastNumber() {
 		return lastNumber;
 	}

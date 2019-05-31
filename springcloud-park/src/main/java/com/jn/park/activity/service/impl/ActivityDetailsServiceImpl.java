@@ -173,11 +173,14 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
     public PaginationData<List<Comment>> getCommentInfo(ActivityPagingParam activityPagingParam, String loginAccount, Boolean isPage){
-        Page<Object> objects=null;
+        com.github.pagehelper.Page<Object> objects = null;
         try {
             if(isPage){
                 //默认查询前15条
                 objects = PageHelper.startPage(activityPagingParam.getPage(), activityPagingParam.getRows() == 0 ? 15 : activityPagingParam.getRows(), true);
+            }else{
+                //不分页默认查询前15条
+                objects = PageHelper.startPage(1, 15, true);
             }
             //获取第一层级评论
             List<String>parentIds=new ArrayList<>(16);

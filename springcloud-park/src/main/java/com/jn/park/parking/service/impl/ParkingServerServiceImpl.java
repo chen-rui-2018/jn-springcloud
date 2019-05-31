@@ -67,7 +67,7 @@ public class ParkingServerServiceImpl implements ParkingServerService {
     @ServiceLog(doAction = "定时同步匝道系统车辆入场数据")
     @Override
     public Boolean getInParkingCarInfoList(){
-        //TODO 调用匝道接口获取最新入场数据
+        //TODO 调用匝道接口获取富士最新入场数据
 
         List<ParkingRecordRampParam> parkingRecordRampParam = new ArrayList<>(16);
         //TODO 查询系统数据，做去重处理

@@ -47,9 +47,6 @@
             </div>
             <div class="agent2 color2" v-if="zankaiFlag">
               <div class="agent2Con" v-html="getGuideDetal.content"></div>
-              <!-- <div class="agent2Con" v-else>
-                            暂无内容！
-                        </div> -->
             </div>
           </el-card>
         </div>
@@ -298,11 +295,9 @@ export default {
         }
         .agent2 {
           padding: 10px 0;
-          .agent2Con {
+          .agent2Content {
             max-height: 400px;
             overflow: auto;
-            // white-space: nowrap;
-            // text-overflow: ellipsis;
           }
           .orgBtn1 {
             font-size: 13px;

@@ -360,42 +360,51 @@
         return new Promise((resolve, reject) => {
           this.validateInputFormatModel()
             .then(() => {
-              this.formData.tabs.forEach(item => {
-                this.flatteningInputList = []
-                this.setOrderAndFormatInputList(item.targetList)
-                item.flatteningInputList = this.flatteningInputList
-              })
-
-
-              const formData = this.partDeepClone(this.formData, ['tabs'])
-              // 先克隆提交表单对象
-              formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'inputList','columns']))
-              // 把填报格式是多选的value把数组转成字符串
-              formData.tabs.forEach((item, index) => {
-                for (const list of item.flatteningInputList) {
-                  if (list.formType === '4') {
-                    list.value = list.value.join(',')
-                  }
-                }
-                item.inputList = item.flatteningInputList
-                delete item.flatteningInputList
-              })
-              resolve(formData)
-            },({ target, input }) => {
-              let text
-              if (input.formName) {
-                text = `${target.text}指标里的${input.formName}要求必填，请填写后提交`
-              } else {
-                text = `${target.text}指标要求必填，请填写后提交`
-              }
-              this.$confirm(text,{
+              this.$confirm('确定提交吗?', '提示', {
                 confirmButtonText: '确定',
+                cancelButtonText: '取消',
                 type: 'warning'
-              }).then(res => {
-              }).catch(err => {
-                console.dir(err)
+              }).then(() => {
+                this.formData.tabs.forEach(item => {
+                  this.flatteningInputList = []
+                  this.setOrderAndFormatInputList(item.targetList)
+                  item.flatteningInputList = this.flatteningInputList
+                })
+                const formData = this.partDeepClone(this.formData, ['tabs'])
+                // 先克隆提交表单对象
+                formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'inputList','columns']))
+                // 把填报格式是多选的value把数组转成字符串
+                formData.tabs.forEach((item, index) => {
+                  for (const list of item.flatteningInputList) {
+                    if (list.formType === '4') {
+                      list.value = list.value.join(',')
+                    }
+                  }
+                  item.inputList = item.flatteningInputList
+                  delete item.flatteningInputList
+                })
+                resolve(formData)
+              },({ target, input }) => {
+                let text
+                if (input.formName) {
+                  text = `${target.text}指标里的${input.formName}要求必填，请填写后提交`
+                } else {
+                  text = `${target.text}指标要求必填，请填写后提交`
+                }
+                this.$confirm(text,{
+                  confirmButtonText: '确定',
+                  type: 'warning'
+                }).then(res => {
+                }).catch(err => {
+                  console.dir(err)
+                })
+                reject()
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交'
+                })
               })
-              reject()
             })
         })
       },

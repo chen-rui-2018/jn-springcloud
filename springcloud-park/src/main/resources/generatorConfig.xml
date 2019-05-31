@@ -1194,6 +1194,8 @@
     </table>
     <table tableName="tb_hatch_incubator_type">
     </table>
+    <table tableName="tb_hatch_incubator_enterprise_and_team">
+    </table>
 
   </context>
 

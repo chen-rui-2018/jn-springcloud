@@ -10,6 +10,7 @@ import com.jn.company.model.ServiceCompanyParam;
 import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.vo.CompanyContactVO;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
@@ -41,6 +42,7 @@ public class CompanyController extends BaseController {
     @Autowired
     private CompanyService companyService;
 
+
     @ControllerLog(doAction = "查询企业列表")
     @ApiOperation(value = "查询企业列表")
     @RequestMapping(value = "/getCompanyList",method = RequestMethod.GET)
@@ -52,7 +54,8 @@ public class CompanyController extends BaseController {
     @ApiOperation(value = "查询企业列表-新版")
     @RequestMapping(value = "/getCompanyNewList",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceEnterpriseCompany>>> getCompanyNewList(@Validated ServiceEnterpriseParam serviceEnterpriseParam){
-        return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam));
+        User user =(User) SecurityUtils.getSubject().getPrincipal();
+        return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam,user.getAccount()));
     }
 
     @ControllerLog(doAction = "查询企业详情-新版")
@@ -106,7 +109,7 @@ public class CompanyController extends BaseController {
     @ControllerLog(doAction = "获取企业在线联系人账号")
     @ApiOperation(value = "获取企业在线联系人账号", notes = "根据企业ID获取在线联系人账号 [返回联系人账号，如企业没有设置联系人返回企业管理员]")
     @RequestMapping(value = "/getCompanyContactAccount",method = RequestMethod.GET)
-    public Result<String> getCompanyContactAccount(@RequestParam(required = false) String comId){
+    public Result<CompanyContactVO> getCompanyContactAccount(@RequestParam(required = false) String comId){
         Assert.notNull(comId, CompanyExceptionEnum.PARAM_IS_NULL.getMessage());
         return new Result(companyService.getCompanyContactAccount(comId));
     }

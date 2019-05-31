@@ -3,17 +3,19 @@ package com.jn.enterprise.pay.enums;
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 付款方式枚举值
+ * 账本枚举值
  * @Author: wzy
  * @Date: 2019/5/7 17:33
  * @Version v1.0
  * @modified By:
  */
-public enum PaymentBillMethodEnum implements CodeAndMsg {
-    BILL_STATE_QIAN_BAO("QIAN_BAO","1"),
-    BILL_STATE_WX_("WX","2"),
-    BILL_STATE_ALIPAY_("ALIPAY","3"),
-    BILL_STATE_UNDER("5","线下支付"),
+public enum PayAccountBookEnum implements CodeAndMsg {
+    ACCOUNT_BOOK_NOT_AUTO("0","不开通自动付款"),
+    ACCOUNT_BOOK_AUTO("1","开通自动付款"),
+    ACCOUNT_BOOK_NOT_RECHARGE("0","不可充值"),
+    ACCOUNT_BOOK_RECHARGE("1","可充值"),
+    ACCOUNT_BOOK_IS_SHOW("2","显示"),
+    ACCOUNT_BOOK_IS_NOT_SHOW("1","隐藏"),
     ;
 
 
@@ -26,7 +28,7 @@ public enum PaymentBillMethodEnum implements CodeAndMsg {
      */
     private String message;
 
-    PaymentBillMethodEnum(String code, String message) {
+    PayAccountBookEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

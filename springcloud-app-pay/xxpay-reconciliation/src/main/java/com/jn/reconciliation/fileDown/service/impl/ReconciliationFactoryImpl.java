@@ -3,6 +3,7 @@ package com.jn.reconciliation.fileDown.service.impl;
 import com.jn.reconciliation.fileDown.service.FileDown;
 import com.jn.reconciliation.fileDown.service.ReconciliationFactory;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Date;
  * @Version： v1.0
  * @Modified By:
  */
+@Service
 public class ReconciliationFactoryImpl implements ReconciliationFactory {
     private BeanFactory beanFactory;
 

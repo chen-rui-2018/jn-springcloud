@@ -253,7 +253,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userAffiliateInfo.getAccountList() != null && !userAffiliateInfo.getAccountList().isEmpty()) {
             for (String account : userAffiliateInfo.getAccountList()) {
                 logger.info("[更新用户所属机构信息] 删除redis缓存成功，account:{}", account);
-                deleteRedisUserInfo(account);
+                updateRedisUserInfo(account);
             }
         }
 
@@ -279,7 +279,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userCompanyInfo.getAccountList() != null && !userCompanyInfo.getAccountList().isEmpty()) {
             for (String account : userCompanyInfo.getAccountList()) {
                 logger.info("[更新用户所属企业信息] 删除redis缓存成功，account:{}", account);
-                deleteRedisUserInfo(account);
+                updateRedisUserInfo(account);
             }
         }
 
@@ -420,39 +420,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     /**
-     * 更新redis中的用户信息
-     * @param account 用户账号
-     * @return
-     */
-    @ServiceLog(doAction = "更新redis中的用户信息")
-    @Override
-    public boolean updateRedisUserInfo(String account) {
-        Assert.notNull(account,UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
-        //从数据库中获取用户信息
-        List<TbUserPerson> tbUserPeople = getTbUserPeople(account);
-        if (tbUserPeople.isEmpty()) {
-            logger.warn("用户[{}]扩展信息不存在或已被删除",account);
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_EXTENSION_NOT_EXISTS);
-        }else{
-            TbUserPerson tbUserPerson = tbUserPeople.get(0);
-            UserExtensionInfo userExtensionInfo=new UserExtensionInfo();
-            BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
-            //用户兴趣爱好和工作信息
-            getUserHobbyAndJobs(userExtensionInfo);
-            //把用户拓展信息写入redis中
-            Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
-            cache.put(account, userExtensionInfo);
-            return true;
-        }
-    }
-
-    /**
      * 删除redis中的用户信息
      * @param account 用户账号
      * @return
      */
+    @Override
     @ServiceLog(doAction = "删除redis中的用户信息")
-    public boolean deleteRedisUserInfo(String account) {
+    public boolean updateRedisUserInfo(String account) {
         Assert.notNull(account,UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
         Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
         cache.remove(account);

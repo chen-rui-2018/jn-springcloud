@@ -5,9 +5,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class TbPayAccount implements Serializable {
-    private String accountId;
-
     private String userId;
+
+    private String entId;
+
+    private String accountId;
 
     private String passwd;
 
@@ -25,20 +27,28 @@ public class TbPayAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId == null ? null : accountId.trim();
-    }
-
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId == null ? null : userId.trim();
+    }
+
+    public String getEntId() {
+        return entId;
+    }
+
+    public void setEntId(String entId) {
+        this.entId = entId == null ? null : entId.trim();
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId == null ? null : accountId.trim();
     }
 
     public String getPasswd() {
@@ -109,8 +119,9 @@ public class TbPayAccount implements Serializable {
             return false;
         }
         TbPayAccount other = (TbPayAccount) that;
-        return (this.getAccountId() == null ? other.getAccountId() == null : this.getAccountId().equals(other.getAccountId()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+        return (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getEntId() == null ? other.getEntId() == null : this.getEntId().equals(other.getEntId()))
+            && (this.getAccountId() == null ? other.getAccountId() == null : this.getAccountId().equals(other.getAccountId()))
             && (this.getPasswd() == null ? other.getPasswd() == null : this.getPasswd().equals(other.getPasswd()))
             && (this.getBalance() == null ? other.getBalance() == null : this.getBalance().equals(other.getBalance()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -124,8 +135,9 @@ public class TbPayAccount implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getAccountId() == null) ? 0 : getAccountId().hashCode());
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        result = prime * result + ((getEntId() == null) ? 0 : getEntId().hashCode());
+        result = prime * result + ((getAccountId() == null) ? 0 : getAccountId().hashCode());
         result = prime * result + ((getPasswd() == null) ? 0 : getPasswd().hashCode());
         result = prime * result + ((getBalance() == null) ? 0 : getBalance().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -142,8 +154,9 @@ public class TbPayAccount implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", accountId=").append(accountId);
         sb.append(", userId=").append(userId);
+        sb.append(", entId=").append(entId);
+        sb.append(", accountId=").append(accountId);
         sb.append(", passwd=").append(passwd);
         sb.append(", balance=").append(balance);
         sb.append(", createdTime=").append(createdTime);

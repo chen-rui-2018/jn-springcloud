@@ -7,6 +7,7 @@ import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
+import com.jn.enterprise.company.vo.CompanyContactVO;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
@@ -36,7 +37,7 @@ public interface CompanyService {
      * @param serviceEnterpriseParam
      * @return
      */
-    PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam);
+    PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam,String account);
 
 
     /**
@@ -93,10 +94,10 @@ public interface CompanyService {
     Result<Boolean> updateCreditPoints(CreditUpdateParam creditUpdateParam);
 
     /**
-     * 获取企业在线联系人账号
+     * 获取企业联系人账号
      * @param comId 企业ID
      * @return
      */
-    String getCompanyContactAccount(String comId);
+    CompanyContactVO getCompanyContactAccount(String comId);
 
 }

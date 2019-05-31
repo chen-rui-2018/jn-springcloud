@@ -1,7 +1,7 @@
 <template>
   <div v-loading="listLoading" class="email">
     <el-form :inline="true" :model="listQuery" class="filter-bar">
-      <el-radio-group v-model="listQuery.sendStatus">
+      <el-radio-group v-model="listQuery.sendStatus" @change="handleFilter">
         <el-radio-button label="">全部</el-radio-button>
         <el-radio-button label= "1">未发送</el-radio-button>
         <el-radio-button label="2">发送成功</el-radio-button>

@@ -26,7 +26,7 @@
          ifnull((select tg.identity from tb_gam_topic tg where creator_account = #{account} limit 1),0) as "identity",
          (select count(1) from tb_person_care tp1 where tp1.care_account = t1.care_account) as "careNum", <!--关注数-->
          (select count(1) from tb_person_care tp2 where tp2.receive_account = t1.care_account) as "fansNum", <!--粉丝数-->
-         (select count(1) from tb_park_like tl where tl.like_parent_id in (
+         (select count(tp3.like_parent_id) from tb_park_like tp3 where tp3.record_status = 1 and tp3.like_status = 1 and  tp3.like_parent_id in (
              select tt.topic_id from tb_gam_topic tt where tt.creator_account =t1.care_account
                   )) as "likedNum" <!--获赞数-->
         <if test="currentAccount != null and currentAccount != '' ">
@@ -43,5 +43,28 @@
     FROM tb_person_care t1
     WHERE t1.care_account = #{account}
     AND t1.receive_type = '2'
+    AND t1.record_status = '1'
     </select>
+
+    <select id="findCareComment"  resultType="com.jn.park.gamtopic.model.CommentModel">
+        SELECT t1.careUser,t2.commentNumber FROM
+        (SELECT
+        IFNULL(COUNT(care_id),0)  as "careUser"
+        FROM tb_person_care t
+        WHERE t.record_status = 1
+        AND t.receive_type = 2
+        AND t.receive_account = #{id})t1
+        INNER JOIN
+        (SELECT
+        IFNULL(COUNT(id),0) as "commentNumber"
+        FROM
+        tb_comment t
+        WHERE t.record_status = 1
+        AND t.com_status = 1
+        AND t.com_type = 3
+        AND t.root_id=#{id}) t2
+
+
+    </select>
+
 </mapper>

@@ -1,10 +1,13 @@
 package com.jn.park.parking.dao;
 
 import com.jn.park.parking.model.ParkingAreaParam;
+import com.jn.park.parking.model.ParkingAreaUseRate;
+import com.jn.park.parking.model.ParkingCount;
 import com.jn.park.parking.vo.ParkingAreaDetailVo;
 import com.jn.park.parking.vo.ParkingAreaVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,5 +31,21 @@ public interface ParkingAreaMapper {
      * @return
      */
     List<ParkingAreaVo> getParkingAreaList(ParkingAreaParam parkingAreaParam);
+
+    /**
+     * 统计数据
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    ParkingCount countParking(@Param(value = "beginTime")Date beginTime,@Param(value = "endTime")Date endTime);
+
+    /**
+     * 停车场明细统计数据
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    List<ParkingAreaUseRate> countParkingDetail(@Param(value = "beginTime")Date beginTime, @Param(value = "endTime")Date endTime);
 
 }

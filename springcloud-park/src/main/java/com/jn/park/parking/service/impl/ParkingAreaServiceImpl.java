@@ -4,18 +4,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.enums.ParkingExceptionEnum;
-import com.jn.park.parking.dao.ParkingAreaMapper;
-import com.jn.park.parking.dao.TbParkingAreaMapper;
-import com.jn.park.parking.dao.TbParkingServiceTypeMapper;
-import com.jn.park.parking.entity.TbParkingArea;
-import com.jn.park.parking.entity.TbParkingAreaCriteria;
-import com.jn.park.parking.entity.TbParkingServiceType;
-import com.jn.park.parking.entity.TbParkingServiceTypeCriteria;
+import com.jn.park.parking.dao.*;
+import com.jn.park.parking.entity.*;
 import com.jn.park.parking.enums.ParkingEnums;
-import com.jn.park.parking.model.ParkingAreaModel;
-import com.jn.park.parking.model.ParkingAreaParam;
+import com.jn.park.parking.model.*;
 import com.jn.park.parking.service.ParkingAreaService;
 import com.jn.park.parking.vo.ParkingAreaDetailVo;
 import com.jn.park.parking.vo.ParkingAreaVo;
@@ -27,10 +22,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * @author： jiangyl
@@ -48,6 +41,10 @@ public class ParkingAreaServiceImpl implements ParkingAreaService {
     private ParkingAreaMapper parkingAreaMapper;
     @Autowired
     private TbParkingServiceTypeMapper tbParkingServiceTypeMapper;
+    @Autowired
+    private TbParkingCarInfoMapper tbParkingCarInfoMapper;
+    @Autowired
+    private TbParkingSpaceRentalMapper tbParkingSpaceRentalMapper;
 
     @Override
     @ServiceLog(doAction = "查询停车场列表[后台管理]")
@@ -77,7 +74,7 @@ public class ParkingAreaServiceImpl implements ParkingAreaService {
 
     @Override
     @ServiceLog(doAction = "查询停车场列表[前端]")
-    public PaginationData<List<ParkingAreaVo>> getParkingAreaList(ParkingAreaParam parkingAreaParam) {
+    public PaginationData<List<ParkingAreaVo>> getParkingAreaList(ParkingAreaParam parkingAreaParam,String account) {
         Page<Object> objects = null;
         if (StringUtils.isNotEmpty(parkingAreaParam.getNeedPage()) && StringUtils.equals(ParkingEnums.NEED_PAGE.getCode(), parkingAreaParam.getNeedPage())) {
             objects = PageHelper.startPage(parkingAreaParam.getPage(), parkingAreaParam.getRows() == 0 ? 15 : parkingAreaParam.getRows());
@@ -86,6 +83,34 @@ public class ParkingAreaServiceImpl implements ParkingAreaService {
             throw new JnSpringCloudException(ParkingExceptionEnum.LAT_LONG_IS_NOT_NULL);
         }
         List<ParkingAreaVo> parkingAreaList = parkingAreaMapper.getParkingAreaList(parkingAreaParam);
+
+        //查询车牌号
+        if(StringUtils.isNotEmpty(account)){
+            TbParkingCarInfoCriteria carInfoCriteria = new TbParkingCarInfoCriteria();
+            carInfoCriteria.createCriteria().andAccountEqualTo(account).andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
+            //查询用户车辆
+            List<TbParkingCarInfo> tbParkingCarInfos = tbParkingCarInfoMapper.selectByExample(carInfoCriteria);
+            if(null != tbParkingCarInfos || tbParkingCarInfos.size()==0){
+                //查询车辆租赁信息
+                List<String> carLicense = new ArrayList<>(16);
+                for (TbParkingCarInfo carInfo:tbParkingCarInfos
+                     ) {
+                    carLicense.add(carInfo.getCarLicense());
+                }
+                TbParkingSpaceRentalCriteria rentalCriteria = new TbParkingSpaceRentalCriteria();
+                rentalCriteria.createCriteria().andCarLicenseIn(carLicense).andStartTimeLessThanOrEqualTo(new Date()).andEndTimeGreaterThanOrEqualTo(new Date()).andApprovalStatusEqualTo(ParkingEnums.PARKING_USER_APPLY_PAYED.getCode());
+                List<TbParkingSpaceRental> tbParkingSpaceRentals = tbParkingSpaceRentalMapper.selectByExample(rentalCriteria);
+                for (TbParkingSpaceRental rental:tbParkingSpaceRentals
+                     ) {
+                    for (ParkingAreaVo areaVo:parkingAreaList
+                         ) {
+                        if(StringUtils.equals(rental.getAreaId(),areaVo.getAreaId())){
+                            areaVo.setCarLicense(rental.getCarLicense());
+                        }
+                    }
+                }
+            }
+        }
         PaginationData<List<ParkingAreaVo>> data = new PaginationData(parkingAreaList, null == objects ? parkingAreaList.size() : objects.getTotal());
         return data;
     }
@@ -146,6 +171,39 @@ public class ParkingAreaServiceImpl implements ParkingAreaService {
         tbParkingArea.setAreaStatus(ParkingEnums.PARKING_AREA_DELETED.getCode());
         int i = tbParkingAreaMapper.updateByPrimaryKeySelective(tbParkingArea);
         return i+"";
+    }
+
+    @ServiceLog(doAction = "统计停车场数据")
+    @Override
+    public ParkingCount countParking(ParkingCountParam parkingCountParam){
+        Date beginTime ;
+        Date endTime = new Date() ;
+        if(StringUtils.isNotEmpty(parkingCountParam.getStartTime())){
+            try {
+                beginTime = DateUtils.parseDate(parkingCountParam.getStartTime(),ParkingEnums.DATE_TIME_FORMAT.getCode());
+            }catch (ParseException e){
+                throw new JnSpringCloudException(ParkingExceptionEnum.DAY_INTERVAL_ERROR);
+            }
+
+        }else{
+            Calendar cal = new GregorianCalendar();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            beginTime = cal.getTime();
+        }
+       if(StringUtils.isNotEmpty(parkingCountParam.getEndTime())){
+           try {
+               endTime = DateUtils.parseDate(parkingCountParam.getEndTime(),ParkingEnums.DATE_TIME_FORMAT.getCode());
+           }catch (ParseException e){
+               throw new JnSpringCloudException(ParkingExceptionEnum.DAY_INTERVAL_ERROR);
+           }
+       }
+        ParkingCount parkingCount = parkingAreaMapper.countParking(beginTime, endTime);
+        List<ParkingAreaUseRate> parkingAreaUseRates = parkingAreaMapper.countParkingDetail(beginTime, new Date());
+        parkingCount.setUseRate(parkingAreaUseRates);
+        return parkingCount;
     }
 
 }

@@ -4,18 +4,25 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
+import com.jn.common.util.enums.EnumUtil;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
+import com.jn.user.config.UserServiceConfig;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.dao.TbUserPersonMapper;
 import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.entity.TbUserPersonCriteria;
+import com.jn.user.userinfo.enums.HomeRoleEnum;
+import com.jn.user.userinfo.model.UserDeviceParam;
 import com.jn.user.userinfo.model.UserInfoParam;
 import com.jn.user.userinfo.service.UserInfoService;
 import com.jn.user.usertag.dao.TbTagCodeMapper;
@@ -33,7 +40,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 获取用户信息
@@ -51,15 +61,24 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private TbUserPersonMapper tbUserPersonMapper;
+
     @Autowired
     private UserTagMapper userTagMapper;
+
     @Autowired
     private TbUserTagMapper tbUserTagMapper;
 
     @Autowired
     private RedisCacheFactory redisCacheFactory;
+
     @Autowired
     private TbTagCodeMapper tbTagCodeMapper;
+
+    @Autowired
+    private SystemClient systemClient;
+
+    @Autowired
+    private UserServiceConfig userServiceConfig;
 
     @Value(value = "${user.outhrache.information.expire}")
     private int expire;
@@ -105,6 +124,33 @@ public class UserInfoServiceImpl implements UserInfoService {
             TbUserPerson tbUserPerson = tbUserPeople.get(0);
             BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
             getUserHobbyAndJobs(userExtensionInfo);
+
+            // 获取用户角色
+            User user = new User();
+            user.setAccount(account);
+            Result<User> systemClientUser = systemClient.getUser(user);
+            if (systemClientUser == null || systemClientUser.getData() == null) {
+                logger.warn("调用system服务查询用户不存在，account：{}", account);
+            } else {
+                // 门户首页可展示的角色串
+                String homeRoleStr = userServiceConfig.getHomeRoleStr();
+
+                User curUser = systemClientUser.getData();
+                List<SysRole> sysRoleList = curUser.getSysRole();
+                for (SysRole sysRole : sysRoleList) {
+                    if (sysRole != null) {
+                        if (homeRoleStr.contains(sysRole.getRoleName())) {
+                            userExtensionInfo.setRoleName(sysRole.getRoleName());
+                            HomeRoleEnum homeRole = EnumUtil.getByCode(sysRole.getRoleName(), HomeRoleEnum.class);
+                            if (homeRole != null) {
+                                userExtensionInfo.setRoleCode(homeRole.getMessage());
+                            }
+                            break;
+                        }
+                    }
+                }
+
+            }
             //把用户拓展信息写入redis中
             cache.put(account, userExtensionInfo);
             return userExtensionInfo;
@@ -203,6 +249,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         tbUserPerson.setAffiliateCode(userAffiliateInfo.getAffiliateCode());
         tbUserPerson.setAffiliateName(userAffiliateInfo.getAffiliateName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+        
+        if (userAffiliateInfo.getAccountList() != null && !userAffiliateInfo.getAccountList().isEmpty()) {
+            for (String account : userAffiliateInfo.getAccountList()) {
+                logger.info("[更新用户所属机构信息] 删除redis缓存成功，account:{}", account);
+                deleteRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }
@@ -221,6 +275,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         tbUserPerson.setCompanyCode(userCompanyInfo.getCompanyCode());
         tbUserPerson.setCompanyName(userCompanyInfo.getCompanyName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+
+        if (userCompanyInfo.getAccountList() != null && !userCompanyInfo.getAccountList().isEmpty()) {
+            for (String account : userCompanyInfo.getAccountList()) {
+                logger.info("[更新用户所属企业信息] 删除redis缓存成功，account:{}", account);
+                deleteRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }
@@ -385,6 +447,19 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     /**
+     * 删除redis中的用户信息
+     * @param account 用户账号
+     * @return
+     */
+    @ServiceLog(doAction = "删除redis中的用户信息")
+    public boolean deleteRedisUserInfo(String account) {
+        Assert.notNull(account,UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
+        Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
+        cache.remove(account);
+        return true;
+    }
+
+    /**
      * 处理用户分页数据
      * @param objects
      * @param userPersonList
@@ -520,6 +595,27 @@ public class UserInfoServiceImpl implements UserInfoService {
         example.setOrderByClause("modifier_account DESC");
         List<TbUserPerson> companyList = tbUserPersonMapper.selectByExample(example);
         return getPaginationData(objects, companyList);
+    }
+
+    @Override
+    @ServiceLog(doAction = "保存用户极光推送注册ID")
+    public int saveRegistrationId(UserDeviceParam userDeviceParam) {
+        TbUserPersonCriteria example = new TbUserPersonCriteria();
+        TbUserPersonCriteria.Criteria criteria = example.createCriteria();
+        criteria.andRecordStatusEqualTo(Byte.parseByte(RECORD_STATUS_VALID)).andAccountEqualTo(userDeviceParam.getAccount());
+        List<TbUserPerson> userPeopleList = tbUserPersonMapper.selectByExample(example);
+        if (userPeopleList == null || userPeopleList.isEmpty()) {
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_EXTENSION_NOT_EXISTS);
+        }
+
+        TbUserPerson tbUserPerson = userPeopleList.get(0);
+        tbUserPerson.setRegistrationId(userDeviceParam.getRegistrationId());
+        int i = tbUserPersonMapper.updateByPrimaryKeySelective(tbUserPerson);
+        logger.info("[极光推送] 修改用户 {} 注册ID成功，registrationId：{}", userDeviceParam.getAccount(), userDeviceParam.getRegistrationId());
+
+        //更新redis缓存数据
+        updateRedisUserInfo(userDeviceParam.getAccount());
+        return i;
     }
 
     private List<TbUserTag> getUserTagList(String[] s,String type,String id,String account,List<TbTagCode> tagCodes){

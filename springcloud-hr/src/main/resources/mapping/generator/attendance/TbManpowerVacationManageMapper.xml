@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.hr.attendance.entity.TbManpowerVacationManage">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="vacation_type" jdbcType="VARCHAR" property="vacationType" />
     <result column="vacation_time" jdbcType="VARCHAR" property="vacationTime" />
   </resultMap>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, job_number, vacation_type, vacation_time
+    id, job_number, user_id, vacation_type, vacation_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.hr.attendance.entity.TbManpowerVacationManageCriteria" resultMap="BaseResultMap">
     select
@@ -99,10 +100,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.hr.attendance.entity.TbManpowerVacationManage">
-    insert into tb_manpower_vacation_manage (id, job_number, vacation_type, 
-      vacation_time)
-    values (#{id,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, #{vacationType,jdbcType=VARCHAR}, 
-      #{vacationTime,jdbcType=VARCHAR})
+    insert into tb_manpower_vacation_manage (id, job_number, user_id, 
+      vacation_type, vacation_time)
+    values (#{id,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{vacationType,jdbcType=VARCHAR}, #{vacationTime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.hr.attendance.entity.TbManpowerVacationManage">
     insert into tb_manpower_vacation_manage
@@ -112,6 +113,9 @@
       </if>
       <if test="jobNumber != null">
         job_number,
+      </if>
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="vacationType != null">
         vacation_type,
@@ -126,6 +130,9 @@
       </if>
       <if test="jobNumber != null">
         #{jobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="vacationType != null">
         #{vacationType,jdbcType=VARCHAR},
@@ -150,6 +157,9 @@
       <if test="record.jobNumber != null">
         job_number = #{record.jobNumber,jdbcType=VARCHAR},
       </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
       <if test="record.vacationType != null">
         vacation_type = #{record.vacationType,jdbcType=VARCHAR},
       </if>
@@ -165,6 +175,7 @@
     update tb_manpower_vacation_manage
     set id = #{record.id,jdbcType=VARCHAR},
       job_number = #{record.jobNumber,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
       vacation_type = #{record.vacationType,jdbcType=VARCHAR},
       vacation_time = #{record.vacationTime,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -176,6 +187,9 @@
     <set>
       <if test="jobNumber != null">
         job_number = #{jobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="vacationType != null">
         vacation_type = #{vacationType,jdbcType=VARCHAR},
@@ -189,6 +203,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.hr.attendance.entity.TbManpowerVacationManage">
     update tb_manpower_vacation_manage
     set job_number = #{jobNumber,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
       vacation_type = #{vacationType,jdbcType=VARCHAR},
       vacation_time = #{vacationTime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}

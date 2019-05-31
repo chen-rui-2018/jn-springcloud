@@ -1,5 +1,7 @@
 package com.jn.hr.exam.dao;
 
+import java.util.List;
+
 import com.jn.hr.exam.entity.TbManpowerExaminaAnswerCard;
 import com.jn.hr.exam.model.Examinabank;
 
@@ -18,8 +20,14 @@ public interface ExaminaAnswerCardMapper {
 	 * @param page
 	 * @return
 	 */
-	Examinabank selectAnswerCard(Examinabank examinabank);
+	TbManpowerExaminaAnswerCard selectAnswerCard(Examinabank examinabank);
+
+	List<TbManpowerExaminaAnswerCard> selectAnswerCardList(Examinabank examinabank);
 
 	int updateAnswer(TbManpowerExaminaAnswerCard tbManpowerExaminaAnswerCard);
+
+	int insertBatch(List<TbManpowerExaminaAnswerCard> cardList);
+
+	TbManpowerExaminaAnswerCard selectAnswer(TbManpowerExaminaAnswerCard tbManpowerExaminaAnswerCard);
 
 }

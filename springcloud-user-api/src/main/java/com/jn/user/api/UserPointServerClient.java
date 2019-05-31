@@ -35,7 +35,7 @@ public interface UserPointServerClient {
     Result<PointDeductionVO> orderPointDeduction(@RequestBody PointDeductionParam pointDeductionParam);
 
     /**
-     * 账单发起支付，积分预扣除接口
+     * 账单发起支付，积分预扣除接口 发起支付成功后调用
      * @param pointOrderPayParam
      * @return
      */
@@ -43,7 +43,7 @@ public interface UserPointServerClient {
     Result<Boolean> pointPreDeduction(@RequestBody PointOrderPayParam pointOrderPayParam);
 
     /**
-     * 支付成功，积分扣除接口
+     * 支付成功，积分扣除接口  支付回调时调用
      * @param orderId
      * @return
      */

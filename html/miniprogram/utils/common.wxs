@@ -1,0 +1,8 @@
+var filter = {
+  formatEmpty: function (str) {
+    return str ? str : '-'
+  }
+}
+module.exports = {
+  formatEmpty: filter.formatEmpty
+}

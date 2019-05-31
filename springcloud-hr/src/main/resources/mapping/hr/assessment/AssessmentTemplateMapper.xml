@@ -7,6 +7,12 @@
 		SELECT * FROM tb_manpower_assessment_template t1 where t1.record_status != 0
 	</select>
       
+     <select id="selectByTemplateName" parameterType="com.jn.hr.assessment.model.AssessmentTemplatePage"
+		resultType="com.jn.hr.assessment.model.AssessmentTemplateVo">
+		SELECT * FROM tb_manpower_assessment_template t1 where t1.record_status != 0
+			and t1.template_Name = #{templateName,jdbcType=VARCHAR}
+	</select>
+	
     <update id="updateByTemplateId" parameterType="com.jn.hr.assessment.model.AssessmentTemplatePage">
     update tb_manpower_assessment_template t1
     <set>      

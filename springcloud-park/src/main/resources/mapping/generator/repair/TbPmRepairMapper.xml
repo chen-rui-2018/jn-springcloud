@@ -28,7 +28,7 @@
     <result column="applicant" jdbcType="VARCHAR" property="applicant" />
     <result column="application_time" jdbcType="TIMESTAMP" property="applicationTime" />
     <result column="is_need_repair_materiel" jdbcType="VARCHAR" property="isNeedRepairMateriel" />
-    <result column="feedback_complete_date" jdbcType="TIMESTAMP" property="feedbackCompleteDate" />
+    <result column="feedback_complete_date" jdbcType="VARCHAR" property="feedbackCompleteDate" />
     <result column="evaluate_service_attitude" jdbcType="VARCHAR" property="evaluateServiceAttitude" />
     <result column="evaluate_service_efficiency" jdbcType="VARCHAR" property="evaluateServiceEfficiency" />
     <result column="evaluate_service_quality" jdbcType="VARCHAR" property="evaluateServiceQuality" />
@@ -37,6 +37,7 @@
     <result column="is_pay" jdbcType="VARCHAR" property="isPay" />
     <result column="evaluate_explain" jdbcType="VARCHAR" property="evaluateExplain" />
     <result column="evaluate_photo_url" jdbcType="VARCHAR" property="evaluatePhotoUrl" />
+    <result column="flow_inst_id" jdbcType="VARCHAR" property="flowInstId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -103,7 +104,7 @@
     record_status, creator_account, create_time, modifier_account, photo_url, applicant, 
     application_time, is_need_repair_materiel, feedback_complete_date, evaluate_service_attitude, 
     evaluate_service_efficiency, evaluate_service_quality, finish_explain, finish_photo_url, 
-    is_pay, evaluate_explain, evaluate_photo_url
+    is_pay, evaluate_explain, evaluate_photo_url, flow_inst_id
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.repair.entity.TbPmRepairCriteria" resultMap="BaseResultMap">
     select
@@ -148,7 +149,8 @@
       feedback_complete_date, evaluate_service_attitude, 
       evaluate_service_efficiency, evaluate_service_quality, 
       finish_explain, finish_photo_url, is_pay, 
-      evaluate_explain, evaluate_photo_url)
+      evaluate_explain, evaluate_photo_url, flow_inst_id
+      )
     values (#{id,jdbcType=VARCHAR}, #{enterpriseId,jdbcType=VARCHAR}, #{enterpriseName,jdbcType=VARCHAR}, 
       #{contactMan,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
       #{remarks,jdbcType=VARCHAR}, #{isFreeRepair,jdbcType=VARCHAR}, #{materielTotalPrice,jdbcType=DECIMAL}, 
@@ -158,10 +160,11 @@
       #{recordStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{photoUrl,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, 
       #{applicationTime,jdbcType=TIMESTAMP}, #{isNeedRepairMateriel,jdbcType=VARCHAR}, 
-      #{feedbackCompleteDate,jdbcType=TIMESTAMP}, #{evaluateServiceAttitude,jdbcType=VARCHAR}, 
+      #{feedbackCompleteDate,jdbcType=VARCHAR}, #{evaluateServiceAttitude,jdbcType=VARCHAR}, 
       #{evaluateServiceEfficiency,jdbcType=VARCHAR}, #{evaluateServiceQuality,jdbcType=VARCHAR}, 
       #{finishExplain,jdbcType=VARCHAR}, #{finishPhotoUrl,jdbcType=VARCHAR}, #{isPay,jdbcType=VARCHAR}, 
-      #{evaluateExplain,jdbcType=VARCHAR}, #{evaluatePhotoUrl,jdbcType=VARCHAR})
+      #{evaluateExplain,jdbcType=VARCHAR}, #{evaluatePhotoUrl,jdbcType=VARCHAR}, #{flowInstId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.repair.entity.TbPmRepair">
     insert into tb_pm_repair
@@ -271,6 +274,9 @@
       <if test="evaluatePhotoUrl != null">
         evaluate_photo_url,
       </if>
+      <if test="flowInstId != null">
+        flow_inst_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -352,7 +358,7 @@
         #{isNeedRepairMateriel,jdbcType=VARCHAR},
       </if>
       <if test="feedbackCompleteDate != null">
-        #{feedbackCompleteDate,jdbcType=TIMESTAMP},
+        #{feedbackCompleteDate,jdbcType=VARCHAR},
       </if>
       <if test="evaluateServiceAttitude != null">
         #{evaluateServiceAttitude,jdbcType=VARCHAR},
@@ -377,6 +383,9 @@
       </if>
       <if test="evaluatePhotoUrl != null">
         #{evaluatePhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flowInstId != null">
+        #{flowInstId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -468,7 +477,7 @@
         is_need_repair_materiel = #{record.isNeedRepairMateriel,jdbcType=VARCHAR},
       </if>
       <if test="record.feedbackCompleteDate != null">
-        feedback_complete_date = #{record.feedbackCompleteDate,jdbcType=TIMESTAMP},
+        feedback_complete_date = #{record.feedbackCompleteDate,jdbcType=VARCHAR},
       </if>
       <if test="record.evaluateServiceAttitude != null">
         evaluate_service_attitude = #{record.evaluateServiceAttitude,jdbcType=VARCHAR},
@@ -493,6 +502,9 @@
       </if>
       <if test="record.evaluatePhotoUrl != null">
         evaluate_photo_url = #{record.evaluatePhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flowInstId != null">
+        flow_inst_id = #{record.flowInstId,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -527,7 +539,7 @@
       applicant = #{record.applicant,jdbcType=VARCHAR},
       application_time = #{record.applicationTime,jdbcType=TIMESTAMP},
       is_need_repair_materiel = #{record.isNeedRepairMateriel,jdbcType=VARCHAR},
-      feedback_complete_date = #{record.feedbackCompleteDate,jdbcType=TIMESTAMP},
+      feedback_complete_date = #{record.feedbackCompleteDate,jdbcType=VARCHAR},
       evaluate_service_attitude = #{record.evaluateServiceAttitude,jdbcType=VARCHAR},
       evaluate_service_efficiency = #{record.evaluateServiceEfficiency,jdbcType=VARCHAR},
       evaluate_service_quality = #{record.evaluateServiceQuality,jdbcType=VARCHAR},
@@ -535,7 +547,8 @@
       finish_photo_url = #{record.finishPhotoUrl,jdbcType=VARCHAR},
       is_pay = #{record.isPay,jdbcType=VARCHAR},
       evaluate_explain = #{record.evaluateExplain,jdbcType=VARCHAR},
-      evaluate_photo_url = #{record.evaluatePhotoUrl,jdbcType=VARCHAR}
+      evaluate_photo_url = #{record.evaluatePhotoUrl,jdbcType=VARCHAR},
+      flow_inst_id = #{record.flowInstId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -619,7 +632,7 @@
         is_need_repair_materiel = #{isNeedRepairMateriel,jdbcType=VARCHAR},
       </if>
       <if test="feedbackCompleteDate != null">
-        feedback_complete_date = #{feedbackCompleteDate,jdbcType=TIMESTAMP},
+        feedback_complete_date = #{feedbackCompleteDate,jdbcType=VARCHAR},
       </if>
       <if test="evaluateServiceAttitude != null">
         evaluate_service_attitude = #{evaluateServiceAttitude,jdbcType=VARCHAR},
@@ -644,6 +657,9 @@
       </if>
       <if test="evaluatePhotoUrl != null">
         evaluate_photo_url = #{evaluatePhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flowInstId != null">
+        flow_inst_id = #{flowInstId,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -675,7 +691,7 @@
       applicant = #{applicant,jdbcType=VARCHAR},
       application_time = #{applicationTime,jdbcType=TIMESTAMP},
       is_need_repair_materiel = #{isNeedRepairMateriel,jdbcType=VARCHAR},
-      feedback_complete_date = #{feedbackCompleteDate,jdbcType=TIMESTAMP},
+      feedback_complete_date = #{feedbackCompleteDate,jdbcType=VARCHAR},
       evaluate_service_attitude = #{evaluateServiceAttitude,jdbcType=VARCHAR},
       evaluate_service_efficiency = #{evaluateServiceEfficiency,jdbcType=VARCHAR},
       evaluate_service_quality = #{evaluateServiceQuality,jdbcType=VARCHAR},
@@ -683,7 +699,8 @@
       finish_photo_url = #{finishPhotoUrl,jdbcType=VARCHAR},
       is_pay = #{isPay,jdbcType=VARCHAR},
       evaluate_explain = #{evaluateExplain,jdbcType=VARCHAR},
-      evaluate_photo_url = #{evaluatePhotoUrl,jdbcType=VARCHAR}
+      evaluate_photo_url = #{evaluatePhotoUrl,jdbcType=VARCHAR},
+      flow_inst_id = #{flowInstId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

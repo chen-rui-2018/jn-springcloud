@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.StringUtils;
 import com.jn.park.asset.dao.AssetArticleLeaseDao;
 import com.jn.park.asset.dao.TbAssetArticleLeaseMapper;
 import com.jn.park.asset.dao.TbAssetArticleLeaseOrdersMapper;
@@ -154,14 +155,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             tbAssetArticleLeaseOrders.setPaySum(paySum);
             //订单创建时间
             tbAssetArticleLeaseOrders.setCreateTime(new Date());
-            //更改订单租借状态(更改为申请中)
-            tbAssetArticleLeaseOrders.setArticleStatus(Byte.parseByte(LeaseStatusEnums.APPLY.getValue()));
             int insert = tbAssetArticleLeaseOrdersMapper.insert(tbAssetArticleLeaseOrders);
-            //同时更改租借的资产的状态(更改为申请中)
-            Map<String,Object> map = new HashMap<>(16);
-            map.put("assetNumber",assetNumber);
-            map.put("status",Byte.parseByte(LeaseStatusEnums.APPLY.getValue()));
-            assetArticleLeaseDao.updateStatus(map);
             if (insert > 0){
                 return ordersNumber;
             }

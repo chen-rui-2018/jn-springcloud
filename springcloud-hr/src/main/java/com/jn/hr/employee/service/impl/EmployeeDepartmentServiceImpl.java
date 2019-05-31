@@ -1,7 +1,10 @@
 package com.jn.hr.employee.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.hr.archives.model.TreeModel;
+import com.jn.hr.common.enums.HrConstants;
 import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.util.BeanCopyUtil;
 import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
@@ -10,8 +13,11 @@ import com.jn.hr.employee.entity.TbManpowerDepartmentCriteria;
 import com.jn.hr.employee.model.EmployeeDepartment;
 import com.jn.hr.employee.model.EmployeeDepartmentAdd;
 import com.jn.hr.employee.service.EmployeeDepartmentService;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDictKeyValue;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +39,8 @@ public class EmployeeDepartmentServiceImpl implements EmployeeDepartmentService 
     private static final Logger logger = LoggerFactory.getLogger(EmployeeDepartmentServiceImpl.class);
     @Autowired
     TbManpowerDepartmentMapper tbManpowerDepartmentMapper;
+    @Autowired
+    private SystemClient systemClient;
     @Override
     @ServiceLog(doAction = "添加组织架构")
     @Transactional(rollbackFor = Exception.class)
@@ -100,4 +109,5 @@ public class EmployeeDepartmentServiceImpl implements EmployeeDepartmentService 
         List<TbManpowerDepartment> tbFileClass=tbManpowerDepartmentMapper.selectByExample(example);
         return CollectionUtils.isEmpty(tbFileClass) ? true : false;
     }
+
 }

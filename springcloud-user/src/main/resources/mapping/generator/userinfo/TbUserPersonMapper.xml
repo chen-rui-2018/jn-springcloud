@@ -24,6 +24,7 @@
     <result column="user_type" jdbcType="VARCHAR" property="userType" />
     <result column="point" jdbcType="DOUBLE" property="point" />
     <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="registration_id" jdbcType="VARCHAR" property="registrationId" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -91,7 +92,7 @@
   <sql id="Base_Column_List">
     id, affiliate_code, affiliate_name, company_code, company_name, account, phone, email, 
     name, nick_name, sex, age, ID_card, signature, company, graduated_school, education, 
-    avatar, position, user_type, point, birthday, creator_account, modifier_account, 
+    avatar, position, user_type, point, birthday, registration_id, creator_account, modifier_account, 
     created_time, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.userinfo.entity.TbUserPersonCriteria" resultMap="BaseResultMap">
@@ -132,9 +133,9 @@
       ID_card, signature, company, 
       graduated_school, education, avatar, 
       position, user_type, point, 
-      birthday, creator_account, modifier_account, 
-      created_time, modified_time, record_status
-      )
+      birthday, registration_id, creator_account, 
+      modifier_account, created_time, modified_time, 
+      record_status)
     values (#{id,jdbcType=VARCHAR}, #{affiliateCode,jdbcType=VARCHAR}, #{affiliateName,jdbcType=VARCHAR}, 
       #{companyCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
@@ -142,9 +143,9 @@
       #{idCard,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, 
       #{graduatedSchool,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
       #{position,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, #{point,jdbcType=DOUBLE}, 
-      #{birthday,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{birthday,jdbcType=TIMESTAMP}, #{registrationId,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     insert into tb_user_person
@@ -214,6 +215,9 @@
       </if>
       <if test="birthday != null">
         birthday,
+      </if>
+      <if test="registrationId != null">
+        registration_id,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -297,6 +301,9 @@
       </if>
       <if test="birthday != null">
         #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registrationId != null">
+        #{registrationId,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -390,6 +397,9 @@
       <if test="record.birthday != null">
         birthday = #{record.birthday,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.registrationId != null">
+        registration_id = #{record.registrationId,jdbcType=VARCHAR},
+      </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -434,6 +444,7 @@
       user_type = #{record.userType,jdbcType=VARCHAR},
       point = #{record.point,jdbcType=DOUBLE},
       birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      registration_id = #{record.registrationId,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -509,6 +520,9 @@
       <if test="birthday != null">
         birthday = #{birthday,jdbcType=TIMESTAMP},
       </if>
+      <if test="registrationId != null">
+        registration_id = #{registrationId,jdbcType=VARCHAR},
+      </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -550,6 +564,7 @@
       user_type = #{userType,jdbcType=VARCHAR},
       point = #{point,jdbcType=DOUBLE},
       birthday = #{birthday,jdbcType=TIMESTAMP},
+      registration_id = #{registrationId,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

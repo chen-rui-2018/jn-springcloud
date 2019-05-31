@@ -12,6 +12,7 @@ import com.jn.pay.model.CreatePayReqModel;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,8 +39,23 @@ public class RoomOrderClientController implements RoomOrderClient {
     }
 
     @Override
+    @ControllerLog(doAction = "创建订单")
     public Result<PayOrderRsp> createPay(@RequestBody CreatePayReqModel createPayReqModel) {
         return roomInformationService.createPayOrder(createPayReqModel.getOrderId(),createPayReqModel.getChannelId(),createPayReqModel.getPaySum(),createPayReqModel.getUserAccount());
+    }
+
+    @Override
+    @ControllerLog(doAction = "是否支付,未支付取消订单")
+    public Result updateRoomPayStatus() {
+        roomInformationService.updateRoomPayStatus();
+        return new Result();
+    }
+
+    @Override
+    @ControllerLog(doAction = "生成缴费单")
+    public Result createOrderBill() {
+        roomInformationService.createOrderBill();
+        return null;
     }
 
 }

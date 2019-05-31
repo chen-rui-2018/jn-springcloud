@@ -3,6 +3,7 @@ package com.jn.enterprise.technologyfinancial.investors.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
@@ -19,7 +20,12 @@ import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
+import com.jn.system.vo.SysUserRoleVO;
+import com.jn.user.enums.UserExtensionExceptionEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,10 +34,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 科技金融投资人
@@ -73,6 +76,10 @@ public class InvestorServiceImpl implements InvestorService {
 
     @Autowired
     private TbServiceMainRoundMapper tbServiceMainRoundMapper;
+
+    @Autowired
+    private SystemClient systemClient;
+
     /**
      * 投资人认证流程id
      */
@@ -763,5 +770,47 @@ public class InvestorServiceImpl implements InvestorService {
             resultList.add(investorMainRound);
         }
         return resultList;
+    }
+
+    /**
+     * 添加投资人角色
+     * @param investorAccount
+     * @return
+     */
+    @ServiceLog(doAction = "添加投资人角色")
+    @Override
+    public int addInvestorRole(String investorAccount) {
+        if(StringUtils.isBlank(investorAccount)){
+            logger.warn("添加投资人角色失败，失败原因：投资人账号不能为空");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+        //判断当前账号在系统中是否存在
+        User user=new User();
+        user.setAccount(investorAccount);
+        Result<User> userResult = systemClient.getUser(user);
+        if(userResult==null || userResult.getData()==null){
+            logger.warn("添加投资人角色失败，失败原因：投资人账号在系统中不存在");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+        //给用户添加"投资人"角色
+        String roleName="投资人";
+        Result<SysRole> sysRoleResult = systemClient.getRoleByName(roleName);
+        if(sysRoleResult==null ||sysRoleResult.getData()==null){
+            logger.warn("添加投资人角色失败，失败原因：无法获取“投资人”角色信息，请确认系统服务是否正常，且“投资人”角色在系统中存在");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+        //更新用户角色
+        SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
+        Set<String> addRoleId=new HashSet<>();
+        addRoleId.add(sysRoleResult.getData().getId());
+        sysUserRoleVO.setAddRoleId(addRoleId);
+        sysUserRoleVO.setUser(user);
+        Result<Boolean> booleanResult = systemClient.updateUserRole(sysUserRoleVO);
+        if(booleanResult.getData()==true){
+            return 1;
+        }else{
+            logger.warn("添加投资人角色失败，失败原因：更新用户角色为“投资人”失败");
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+        }
     }
 }

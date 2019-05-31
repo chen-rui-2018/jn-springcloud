@@ -3,10 +3,10 @@
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgMapper">
     <select id="selectServiceOrgList" parameterType="com.jn.enterprise.servicemarket.org.model.OrgParameter"
             resultType="com.jn.enterprise.model.ServiceOrg">
-        select tt.orgId,tt.orgName,tt.orgLogo,tt.pageviews,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,tt.orgSpeciality,
+        select tt.orgId,tt.orgAccount,tt.orgName,tt.orgLogo,tt.pageviews,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,tt.orgSpeciality,
         tt.orgAddress,tt.transactionNum,tt.attitudeScore,tt.evaluationNum from
         (select
-        a.org_id_ as "orgId",a.org_name as "orgName",a.org_speciality as "orgSpeciality",
+        a.org_id_ as "orgId",a.org_account as "orgAccount",a.org_name as "orgName",a.org_speciality as "orgSpeciality",
         a.org_logo as "orgLogo",a.org_show as "pageviews",
         date_format(a.org_register_time,'%Y-%m-%d') as "orgRegisterTime",
         a.is_approve as "isApprove",a.org_type as "orgType", i.org_phone as "orgPhone",
@@ -70,6 +70,7 @@
     <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.org.vo.OrgDetailVo">
         <id column="s_id" jdbcType="VARCHAR" property="orgId" javaType="java.lang.String"/>
         <result column="s_businessType" jdbcType="VARCHAR" property="businessType" javaType="java.lang.String"/>
+        <result column="s_orgAccount" jdbcType="VARCHAR" property="orgAccount" javaType="java.lang.String"/>
         <result column="s_businessTypeName" jdbcType="VARCHAR" property="businessTypeName" javaType="java.lang.String"/>
         <result column="s_businessSType" jdbcType="VARCHAR" property="businessSType" javaType="java.lang.String"/>
         <result column="s_orgName" jdbcType="VARCHAR" property="orgName" javaType="java.lang.String"/>
@@ -95,6 +96,10 @@
         <result column="s_doctorNum" jdbcType="VARCHAR" property="doctorNum" javaType="java.lang.Integer"/>
         <result column="s_returneeNum" jdbcType="VARCHAR" property="returneeNum" javaType="java.lang.Integer"/>
         <result column="s_orgPhone" jdbcType="VARCHAR" property="orgPhone" javaType="java.lang.String"/>
+        <result column="s_orgAddressDetail" jdbcType="VARCHAR" property="orgAddressDetail" javaType="java.lang.String"/>
+        <result column="s_orgProvince" jdbcType="VARCHAR" property="orgProvince" javaType="java.lang.String"/>
+        <result column="s_orgCity" jdbcType="VARCHAR" property="orgCity" javaType="java.lang.String"/>
+        <result column="s_orgArea" jdbcType="VARCHAR" property="orgArea" javaType="java.lang.String"/>
         <result column="s_orgAddress" jdbcType="VARCHAR" property="orgAddress" javaType="java.lang.String"/>
         <result column="s_conName" jdbcType="VARCHAR" property="conName" javaType="java.lang.String"/>
         <result column="s_conPhone" jdbcType="VARCHAR" property="conPhone" javaType="java.lang.String"/>
@@ -143,6 +148,7 @@
     <select id="getServiceOrgDetail" resultMap="queryServiceOrgDetailMap" parameterType="java.lang.String">
         SELECT
           o.org_id_ AS "s_id",
+          o.org_account AS "s_orgAccount",
           o.business_type AS "s_businessType",
          (SELECT pre.pre_value FROM tb_service_prefer pre WHERE pre.id = o.business_type )AS "s_businessTypeName",
           o.business_s_type AS "s_businessSType",
@@ -173,7 +179,11 @@
             i.org_city,
             i.org_area,
             i.org_address
-          ) AS "s_orgAddress",
+          ) AS "s_orgAddressDetail",
+          i.org_province as "orgProvince",
+          i.org_city as "orgCity",
+          i.org_area as "orgArea",
+          i.org_address as "orgAddress",
           i.con_name AS "s_conName",
           i.con_phone AS "s_conPhone",
           i.con_email AS "s_conEmail",

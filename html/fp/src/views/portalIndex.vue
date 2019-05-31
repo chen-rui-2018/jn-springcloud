@@ -35,12 +35,12 @@
         </div>
         <div class="quickEnter">
           <ul>
-            <li>
+            <li @click="$router.push({path:'/talentsService'})">
               <span>人才申报</span>
               <p>PEOPLE&nbsp;DECLARE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/companyProfile'})">
               <span>高新企业</span>
               <p>HIGH-TECH&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -50,7 +50,7 @@
               <p>INCUBATION&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/compassView'})">
               <span>行政审批</span>
               <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -59,8 +59,15 @@
         </div>
       </div>
       <div class="parkNotice w clearfix" ref="parkNotice" data-class="bottom">
-        <div class="fl"><img src="@/../static/img/园区公告.png" alt=""></div>
-        <span>热烈庆祝XXX公司入驻南京白下高新区XXX园区。为实现共创共收打造良好环境基础实现科技人才的引进与推动时代化做出...</span>
+        <div class="noticeTitle">
+          <img src="@/../static/img/notice.png" alt="">
+        </div>
+        <div class="noticeBox">
+          <ul class="noticeList" :class="{marquee_top:animate}">
+            <li class="pointer" v-for="(i,k) in noticeList" :key="k" @click="$router.push({path:'/announcementDetails',query:{noticeId:i.noticeId}})">{{i.noticeTitle}}</li>
+          </ul>
+        </div>
+        <!-- <span class="pointer" @click="$router.push({path:'/announcementDetails'})">热烈庆祝XXX公司入驻南京白下高新区XXX园区。为实现共创共收打造良好环境基础实现科技人才的引进与推动时代化做出...</span> -->
         <!-- <div class="fr pointer">更多&nbsp;&nbsp;
           <i class="iconfont icon-you"></i>
         </div> -->
@@ -71,12 +78,13 @@
             <i class="el-icon-arrow-down"></i>
           </div>
           <div ref="portal1" data-class="bottom">
-            <div class="tit color2 pr">申报公告
+            <div class="tit color2 pr">
+              <div class="pointer" @click="$router.push({path:'/talentsService'})">申报公告</div>
               <div class="titImg" @click="onClick">
                 <img src="@/../static/img/huidaodingbu.png" alt="">
               </div>
             </div>
-            <div class="eng mainColor">Declare&nbsp;the&nbsp;announcement</div>
+            <div class="eng mainColor pointer" @click="$router.push({path:'/talentsService'})">Declare&nbsp;the&nbsp;announcement</div>
             <div class="line"></div>
           </div>
           <div ref="portal2" id="pn2" data-class="bottom1">
@@ -136,8 +144,8 @@
       </div>
       <div class="policyGuide" ref="policyGuide" data-class="bottom">
         <div ref="policy1" data-class="bottom1">
-          <div class="tit">政策指南</div>
-          <div class="eng">Policy&nbsp;guidelines</div>
+          <div class="tit pointer" @click="$router.push({path:'/policyCenter'})">政策指南</div>
+          <div class="eng pointer" @click="$router.push({path:'/policyCenter'})">Policy&nbsp;guidelines</div>
           <div class="line"></div>
         </div>
         <div class="fenye fenye1 w pr" ref="policyGuide2" data-class="bottom1">
@@ -145,7 +153,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" style="width:100%" v-for="(bannerList, k) in policyCenterList" :key="k">
                 <ul class="qiehuan1" id="qiehuan1">
-                  <li v-for="(banner, index) in bannerList" :key="index">
+                  <li v-for="(banner, index) in bannerList" :key="index" class="pointer" @click="$router.push({path:'/policyGuide',query:{policyId:banner.policyId}})">
                     <p class="liTit">{{banner.policyTitle}}</p>
                     <p class="liInfo">
                       {{ banner.policyTitle }}
@@ -164,15 +172,15 @@
             <div class="swiper-pagination"></div>
 
             <!-- 如果需要导航按钮 -->
-            <div class="swiper-button-prev" v-if="policyCenterList.length>1"></div>
-            <div class="swiper-button-next" v-if="policyCenterList.length>1"></div>
+            <div class="swiper-button-prev" v-if="policyCenterList&&policyCenterList.length>1"></div>
+            <div class="swiper-button-next" v-if="policyCenterList&&policyCenterList.length>1"></div>
           </div>
         </div>
       </div>
       <div class="popularActi w" ref="popularActi" data-class="bottom1">
         <div ref="popularActi1" data-class="bottom">
-          <div class="tit color2">热门活动</div>
-          <div class="eng mainColor">Popular&nbsp;activities</div>
+          <div class="tit color2 pointer" @click="$router.push({path:'/actiCenter'})">热门活动</div>
+          <div class="eng mainColor pointer" @click="$router.push({path:'/actiCenter'})">Popular&nbsp;activities</div>
           <div class="line"></div>
         </div>
         <div class="acti pr" ref="popularActi2" data-class="bottom1">
@@ -223,11 +231,11 @@
               </div>
             </li>
           </ul>
-          <div class="lejieDel">了解详情</div>
+          <div class="lejieDel pointer" @click="$router.push({path:'/actiCenter'})">了解详情</div>
         </div>
       </div>
       <div class="districtGardens w" ref="districtGardens" data-class="bottom1">
-        <div ref="disGardens" data-class="bottom">
+        <div ref="disGardens" data-class="bottom" class="pointer" @click="$router.push({path:'/investment'})">
           <div class="tit color2">一区多园</div>
           <div class="eng mainColor">Area&nbsp;more&nbsp;garden</div>
           <div class="line"></div>
@@ -241,11 +249,11 @@
                 <ul class="cardUl">
                   <li v-for="(i,k) in item" :key="k">
                     <el-card>
-                      <div class="cardImg" style="width:200px;height:200px">
-                        <img :src="i.adCover[0].fileName" alt="" style="width:100%;height:100%">
+                      <div class="cardImg pointer" style="width:200px;height:200px" @click.stop="$router.push({ path: 'parkDetails', query: { id : i.id } })">
+                        <img :src="i.mainPicture" alt="" style="width:100%;height:100%">
                       </div>
-                      <p class="mainColor">{{i.title}}</p>
-                      <div>{{i.content}}</div>
+                      <p class="mainColor">{{i.parkName}}</p>
+                      <!-- <div>{{i.content}}</div> -->
                     </el-card>
                   </li>
                 </ul>
@@ -265,23 +273,24 @@
         </div>
       </div>
       <div class="enterpriseinfo w" ref="enterpriseinfo" data-class="bottom1">
-        <div ref="enterInfo" data-class="bottom">
+        <div ref="enterInfo" data-class="bottom" class="pointer" @click="$router.push({path:'/enterpriseInformation'})">
           <div class="tit color2">企业资讯</div>
           <div class="eng mainColor">Enterprise&nbsp;information</div>
           <div class="line"></div>
         </div>
         <div class="enterPriseCon" ref="enterInfo1" data-class="bottom1">
           <div class="con1" v-for="(i,k) in recruitmentTable" :key="k" v-if="k==0">
-            <img :src="i.posterUrl" alt="">
+            <img :src="i.posterUrl" alt="" style="width:416px;height:232px;">
+            <!-- <img src="@/../static/img/图层 4.png" alt=""> -->
             <div class="conTit1 color1">{{i.propagandaTitle}}</div>
             <div class="conInfo">
-              <img src="@/../static/img/图层 4.png" alt="">
+              <!-- <img src="@/../static/img/图层 4.png" alt=""> -->
               <span>{{i.createdTime}}</span>
             </div>
             <p class="color3">
-              龙虎网讯（记者 陶禹歌）“刷”一下脸就能打印参观证，手机上也能看“ 大片范”龙虎网讯（记者 陶禹歌）“刷”一下脸就能打印参观证，手机上 也能看“大片范”的现场直播在今龙虎网讯（记者 陶禹歌）“刷”一下脸 就能打印参观证，手机上也能看“大片范”的现场直播在今…
+              {{i.propagandaDetails}}
             </p>
-            <div class="more">
+            <div class="more pointer" @click="$router.push({ path: 'enterpriseInfoDetails', query: { propagandaId : i.id } })">
               MORE
             </div>
           </div>
@@ -293,11 +302,11 @@
                   {{i.propagandaTitle}}
                 </div>
                 <div class="conInfo">
-                  <img src="@/../static/img/图层 9.png" alt="">
+                  <!-- <img src="@/../static/img/图层 9.png" alt=""> -->
                   <span>{{i.createdTime}}</span>
                 </div>
-                <p class="color3"> 互联网讯（记者 陶禹歌）“刷”一下脸 就能打印参观证，手机上也能看“大片 范”龙虎网讯（记者 陶…</p>
-                <div class="more">
+                <p class="color3">{{i.propagandaDetails}}</p>
+                <div class="more pointer" @click="$router.push({ path: 'enterpriseInfoDetails', query: { propagandaId : i.id } })">
                   MORE
                 </div>
               </div>
@@ -322,11 +331,11 @@
                   <i></i>
                   <span class="color1" style="text-align:left">{{i.propagandaTitle}}</span>
                   <p>
-                    <img src="@/../static/img/图层 4.png" alt="">
-                    <span>{{i.createdTime}}</span>
+                    <!-- <img src="@/../static/img/图层 4.png" alt=""> -->
+                    <span class="sp1">{{i.createdTime}}</span>
                   </p>
                 </div>
-                <p class="fr mainColor">MORE</p>
+                <p class="fr mainColor pointer" @click="$router.push({ path: 'enterpriseInfoDetails', query: { propagandaId : i.id } })">MORE</p>
               </div>
               <!-- <div class="contop1 contop2 clearfix">
                 <div class="fl">
@@ -343,15 +352,41 @@
           </div>
         </div>
       </div>
+      <div class="academiExchange w" ref="academiExchange" data-class="bottom1">
+        <div ref="academiInfo" data-class="bottom" class="pointer" @click="$router.push({path:'/academicExchange'})">
+          <div class="tit color4">学术交流&科技成果</div>
+          <div class="eng mainColor">Science&nbsp;and&nbsp;technology</div>
+          <div class="line"></div>
+        </div>
+        <div class="academiCon" ref="academiInfo1" data-class="bottom1">
+          <ul class="academiUl">
+            <li class="pointer" v-for="(i,k) in achievementList" :key="k" @click="$router.push({path:'/academicExchange'})">
+              <div class="acaImg">
+                <img src="@/../static/img/academic.png" alt="">
+              </div>
+              <div class="acaContent">
+                <div class="conTitle color1">{{i.name}}</div>
+                <p class="acontent color2">一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="enterprisesPark" ref="enterprisesPark" data-class="bottom1">
-        <div ref="enter1" data-class="bottom1">
+        <div ref="enter1" data-class="bottom1" class="pointer" @click="$router.push({path:'/companyProfile'})">
           <div class="tit" style="margin-top:20px">园内企业</div>
           <div class="eng">The&nbsp;park&nbsp;enterprises</div>
           <div class="line"></div>
         </div>
         <div class="enterPark w" ref="enter2" data-class="bottom2">
-          <ul ref="enter3" data-class="bottom2">
-            <li ref="li1" data-class="bottom2">
+          <ul ref="enter3">
+            <li :ref="i.id" :class="{'bottom2':i.flag}" class="pointer" v-for="(i,k) in companyList1" :key="k" @click="$router.push({path:'/companyProfile',query:{id:i.id}})">
+              <div class="li1Div">
+                <img :src='"@/../static/img/"+i.id+".png"' alt="">
+                <p>{{i.preValue}}</p>
+              </div>
+            </li>
+            <!-- <li ref="li1" data-class="bottom2">
               <div class="li1Div">
                 <img src="@/../static/img/云计算.png" alt="">
                 <p>云计算</p>
@@ -404,9 +439,25 @@
                 <p>互联网</p>
               </div>
 
-            </li>
+            </li> -->
           </ul>
         </div>
+      </div>
+      <div class="link w clearfix">
+        <h5 class="tit fl">链接:</h5>
+        <ul class="linkUl fl clearfix">
+          <li>
+            <a href="http://49.65.0.116/12345cas/login?service=http%3A%2F%2F49.65.0.116%2Fnjzwfwrx&nsukey=AQQco%2FbD85TPQaQNmfSSOPDaBrhZLXABGuGPn7Lwy0TvAoJHmW58tc8YB2ZyQjAWeTnP0Kxw1pc8yzu3qB1vCsDXLfOnavjwy%2Bx9AercmpzFykXcLIWEEcNXCL0y42GcdlxRk4XYUv0dYKNhybhClDVCP5x%2Fe7t4F%2B5MmUzb65JMOEMr9b7fnQZqLhwizwAgdmMtm3cJLXtHU5bRESEfPw%3D%3D" target="_blank">12345平台</a>
+          </li>
+          <li class="line"></li>
+          <li>
+            <a href="http://ids.nanjing.gov.cn:8081/12345/regedit/regedit.html" target="_blank">12345注册</a>
+          </li>
+          <li class="line"></li>
+          <li>
+            <a href="http://nj.jszwfw.gov.cn/" target="_blank">办证大厅</a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -416,7 +467,7 @@ import swiper from "swiper";
 export default {
   data() {
     return {
-      // sousuo: false,
+      animate: false,
       show1: "",
       show11: "",
       show22: false,
@@ -442,34 +493,52 @@ export default {
       total3: 0,
       actiListSlim: [],
       page4: 1,
-      rows4: 3,
+      rows4: 5,
       total4: 0,
       recruitmentTable: "",
       page5: 1,
       rows5: 3,
       total5: 0,
       CompanyList: [],
-      bannerList: [] //首页轮播图
+      bannerList: [], //首页轮播图
+      noticeList: [],
+      timer: "",
+      achievementList: [
+        { name: "学术交流", content: "" },
+        { name: "科技成果", content: "" }
+      ],
+      companyList1: [],
+      showSSSNum:0,
+      clientHeight:this.getClientHeight(),
+      comFlag:false,
     };
+  },
+  created() {
+    this.timer = setInterval(this.showMarquee, 2000);
   },
   mounted() {
     this.swiperinit();
     window.addEventListener("scroll", this.handleScroll);
     this.gettalentsList();
-    Promise.all([this.getPolicyCenterList(), this.getBannerList()]).then(() => {
+    Promise.all([
+      this.getPolicyCenterList(),
+      this.getBannerList(),
+      this.getBusinessAdContent()
+    ]).then(() => {
       this.swiperinit();
     });
     // this.getPolicyCenterList()
     // .then(this.swiperinit);
     this.getActiList();
     this.getBusinessPromotionList();
-    this.getPropagandaTypeList();
-    // this.getCompanyList();
-    this.getBusinessAdContent();
-    // this.getAllList();
+    // this.getPropagandaTypeList();//获取宣传类型
+    this.getCompanyList();
+
+    this.showNoticeList(); //园区公告滚动
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
+    clearInterval(this.timer);
   },
   methods: {
     showH() {
@@ -507,7 +576,15 @@ export default {
         // autoplay: {
         //   delay: 5000,
         // },
-
+        on: {
+          click: (e) => {
+            // let url = e.target.dataset.jumpurl; 
+            // this.bannerJump(url);
+            console.log(e)
+          }
+        },
+        observer: true,
+        observeParents: true, //修改swiper的父元素时，自动初始化swiper
         // 如果需要分页器
         pagination: {
           el: ".swiper-pagination"
@@ -524,11 +601,17 @@ export default {
         }
       });
     },
+    bannerJump (url) {
+    window.location.href = url    
+    },
     onClick() {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     },
     getElementLeft(element) {
       var top = element.offsetTop;
+      if(!element.offsetParent){
+        return top
+      }
       var curEle = element.offsetParent;
 
       while (curEle !== null) {
@@ -560,6 +643,11 @@ export default {
     },
     handleScroll() {
       const osTop = this.getScrollOffset().y;
+      let op = this.getElementLeft(this.$refs['enter2']) - this.clientHeight;
+      if(osTop >= op && this.showSSSNum == 0 && this.comFlag){
+        this.animateSSS()
+        this.showSSSNum++
+      }
       //   const osTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; //用于FF
       // console.dir(osTop)
       // const arr = document.getElementsByClassName('.animation-dom')
@@ -594,6 +682,32 @@ export default {
       //   this.headFlag = false;
       // }
     },
+    getClientHeight()
+    {
+      var clientHeight=0;
+      if(document.body.clientHeight&&document.documentElement.clientHeight)
+      {
+      var clientHeight = (document.body.clientHeight<document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
+      }
+      else
+      {
+      var clientHeight = (document.body.clientHeight>document.documentElement.clientHeight)?document.body.clientHeight:document.documentElement.clientHeight;
+      }
+      return clientHeight;
+    },
+    //园内企业动画
+    animateSSS(){
+      let num = 500;
+      let _this = this;
+      for(let i = 0;i < this.companyList1.length;i++){
+        if(i == 0){
+          _this.companyList1[i].flag = true;
+        }
+        setTimeout(()=>{
+          _this.companyList1[i].flag = true;
+        },num*i)
+      }
+    },
     getScrollTop() {
       var scroll_top = 0;
       if (document.documentElement && document.documentElement.scrollTop) {
@@ -613,6 +727,34 @@ export default {
         result.push(temp);
       }
       return result;
+    },
+    //公告滚动
+    showMarquee() {
+      this.animate = true;
+
+      setTimeout(() => {
+        this.noticeList.push(this.noticeList[0]);
+        this.noticeList.shift();
+        this.animate = false;
+      }, 500);
+    },
+    //园区公告滚动
+    showNoticeList() {
+      let _this = this;
+      this.api.get({
+        url: "showNoticeList",
+        data: {
+          page: 1,
+          rows: 5
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.noticeList = res.data.rows;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
     },
     //人才服务公告列表
     gettalentsList() {
@@ -660,7 +802,7 @@ export default {
           },
           callback: function(res) {
             if (res.code == "0000") {
-              _this.policyCenterList=_this.formatArr(res.data.rows, 4);
+              _this.policyCenterList = _this.formatArr(res.data.rows, 4);
               // let baseArray = res.data.rows;
               // let len = baseArray.length;
               // let n = 4;
@@ -670,9 +812,9 @@ export default {
               //   _this.policyCenterList.push(temp);
               // }
               _this.total2 = res.data.total;
-              setTimeout(()=>{
+              setTimeout(() => {
                 _this.swiperinit();
-              },0)
+              }, 0);
               resolve(2);
             } else {
               _this.$message.error(res.result);
@@ -743,14 +885,15 @@ export default {
     getBusinessPromotionList() {
       let _this = this;
       this.api.get({
-        url: "getBusinessPromotionList",
+        url: "getPromotionList",
         data: {
-          // page: this.page4,
-          // rows: this.rows4,
+          page: this.page4,
+          rows: this.rows4,
+          issuePlatform: 2,
           needPage: "1",
-          approvalStatus: 6,
-          propagandaType: "business_news",
-          status: 1
+          // approvalStatus: 6,
+          propagandaType: "business_news"
+          // status: 1
         },
         // dataFlag:true,
         callback: function(res) {
@@ -763,76 +906,65 @@ export default {
         }
       });
     },
-    // 获取宣传类型
-    getPropagandaTypeList() {
-      let _this = this;
-      this.api.get({
-        url: "getPropagandaTypeList",
-        data: {},
-        callback: function(res) {
-          if (res.code == "0000") {
-          } else {
-            _this.$message.error(res.result);
-          }
-        }
-      });
-    },
-    // 园内企业--机构字典
-    // getCompanyList() {
+    //获取宣传类型
+    // getPropagandaTypeList() {
     //   let _this = this;
     //   this.api.get({
-    //     url: "selectTeamList",
-    //     data: {
-    //       preType: 1
-    //     },
+    //     url: "getPropagandaTypeList",
+    //     data: {},
     //     callback: function(res) {
     //       if (res.code == "0000") {
-    //         _this.CompanyList = res.data.rows;
     //       } else {
     //         _this.$message.error(res.result);
     //       }
     //     }
     //   });
     // },
-    // 一区多园
-    getBusinessAdContent() {
+    // 园内企业--服务超市-机构字典
+    getCompanyList() {
       let _this = this;
       this.api.get({
-        url: "getBusinessAdContent",
+        url: "selectTeamList",
         data: {
-          // parkId: "576809512829190144"
-          parkId: "570329542049136640",
-          page: _this.page5,
-          rows: _this.rows5
+          preType: 1
         },
         callback: function(res) {
           if (res.code == "0000") {
-             _this.CompanyList = _this.formatArr(res.data.rows, 3);
-            _this.total5 = res.data.total;
-             setTimeout(()=>{
-                _this.swiperinit();
-              },0)
+            for(let it in res.data){
+              res.data[it].flag = false;
+            }
+             _this.companyList1 = res.data;
+             _this.comFlag = true;
           } else {
             _this.$message.error(res.result);
           }
         }
       });
     },
-    // 获取全部园区数据列表
-    // getAllList() {
-    //   let _this = this;
-    //   this.api.get({
-    //     url: "getAllList",
-    //     data: {},
-    //     callback: function(res) {
-    //       if (res.code == "0000") {
-    //         _this.CompanyList = res.data.rows;
-    //       } else {
-    //         _this.$message.error(res.result);
-    //       }
-    //     }
-    //   });
-    // }
+    // 一区多园
+    getBusinessAdContent() {
+      let _this = this;
+      this.api.get({
+        url: "getParkList",
+        data: {
+          // parkId: "576809512829190144",
+          // parkId: "570329542049136640",
+          // page: _this.page5,
+          // rows: _this.rows5
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.CompanyList = _this.formatArr(res.data, 3);
+            _this.total5 = res.data.total;
+            setTimeout(() => {
+              _this.swiperinit();
+            }, 0);
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    }
   }
 };
 </script>
@@ -849,6 +981,84 @@ export default {
 }
 
 .portalIndex {
+  .academiExchange {
+    .academiCon {
+      padding-top: 50px;
+    }
+    .acaContent {
+      margin-left: 20px;
+      overflow: hidden;
+    }
+    .academiUl {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      li {
+        padding: 20px;
+        width: 45%;
+        // margin-bottom: 30px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        border: 1px solid #ebeef5;
+        transition: 0.3s;
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+        transition: transform 0.2s;
+      }
+      > li:hover {
+        transform: translateY(-20px);
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+      }
+      .acontent {
+        font-size: 13px;
+        margin-top: 20px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+        overflow: hidden;
+        height: 85px;
+      }
+    }
+  }
+  #pn2 {
+    .btn1 {
+      color: #fff;
+      background: #00a041;
+    }
+  }
+  .link {
+    margin-bottom: 20px;
+    font-size: 13px;
+    .tit {
+      font-size: 13px;
+    }
+    .linkUl {
+      li {
+        float: left;
+        padding: 0 20px;
+        border-right: 1px solid #999;
+        a {
+          color: #333;
+          cursor: pointer;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+      // .line{
+      //   width: 1px;
+      //   height: 10px;
+      //   background: #999;
+      //   margin:0 20px;
+      //   line-height: 10px;
+      // }
+      li:last-child {
+        border: none;
+      }
+    }
+  }
   .portalCon {
     .portalNotice,
     .policyGuide,
@@ -860,9 +1070,9 @@ export default {
     }
   }
   .enterPark {
-    li {
-      opacity: 0;
-    }
+    // li {
+    //   opacity: 0;
+    // }
   }
   .bottom {
     animation: fadeInUp 2s ease forwards;
@@ -890,6 +1100,9 @@ export default {
   }
   .bottom8 {
     animation: fadeInUp 1s ease 4s forwards;
+  }
+  .bottom9 {
+    animation: fadeInUp 1s ease 4.5s forwards;
   }
   // .portalIndexImg {
   //   position: fixed;
@@ -1016,6 +1229,50 @@ export default {
         }
       }
     }
+    .parkNotice {
+      // width: 100%;
+      display: flex;
+      box-sizing: border-box;
+      overflow: hidden;
+      height: 50px;
+      line-height: 20px;
+      align-items: center;
+      padding: 0;
+      .noticeTitle {
+        padding: 0 20px;
+        height: 21px;
+        // width: 80px;
+        font-size: 14px;
+        align-items: center;
+        // background: url("../../static/img/notice.png") 100% 100% / 100% 100% no-repeat;
+      }
+      .noticeBox {
+        display: block;
+        position: relative;
+        width: 60%;
+        height: 30px;
+        overflow: hidden;
+      }
+      .noticeList {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .marquee_top {
+        transition: all 0.5s;
+        margin-top: -30px;
+      }
+      .noticeList li {
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+        padding-left: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
   #qiehuan1 {
     margin: 20px 0;
@@ -1026,7 +1283,7 @@ export default {
       padding: 30px 10px;
       font-size: 12px;
       text-align: left;
-      margin-right: 15px;
+      margin-right: 22px;
       vertical-align: middle;
       background-color: rgba(255, 255, 255, 0.2);
       .liTit {

@@ -6,13 +6,17 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.enums.ParkingExceptionEnum;
 import com.jn.park.parking.model.ParkingAreaParam;
+import com.jn.park.parking.model.ParkingCount;
+import com.jn.park.parking.model.ParkingCountParam;
 import com.jn.park.parking.service.ParkingAreaService;
 import com.jn.park.parking.vo.ParkingAreaDetailVo;
 import com.jn.park.parking.vo.ParkingAreaVo;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +51,8 @@ public class ParkingAreaController extends BaseController {
     @ApiOperation(value = "查询停车场列表[前台用户]", notes = "前台查询停车场列表信息，当前经纬度必传")
     @RequestMapping(value = "/getParkingAreaList",method = RequestMethod.GET)
     public Result<PaginationData<List<ParkingAreaVo>>> getParkingAreaList(ParkingAreaParam parkingAreaParam){
-        return new Result<>(parkingAreaService.getParkingAreaList(parkingAreaParam));
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new Result<>(parkingAreaService.getParkingAreaList(parkingAreaParam,user==null?null:user.getAccount()));
     }
 
     @ControllerLog(doAction = " 根据ID查询停车场详情")
@@ -58,6 +63,14 @@ public class ParkingAreaController extends BaseController {
             @RequestParam(value = "areaId") String areaId){
         Assert.notNull(areaId, ParkingExceptionEnum.PARKING_AREA_ID_IS_NOT_NULL.getMessage());
         return new Result<>(parkingAreaService.getParkingAreaDetailById(areaId));
+    }
+
+    @ControllerLog(doAction = " 统计停车场数据")
+    @ApiOperation(value = "统计停车场数据", notes = "统计停车场数据[默认查询当前时间]")
+    @RequestMapping(value = "/countParking",method = RequestMethod.GET)
+    public Result<ParkingCount> countParking(ParkingCountParam parkingCountParam){
+        ParkingCount parkingCount = parkingAreaService.countParking(parkingCountParam);
+        return new Result<>(parkingCount);
     }
 
 }

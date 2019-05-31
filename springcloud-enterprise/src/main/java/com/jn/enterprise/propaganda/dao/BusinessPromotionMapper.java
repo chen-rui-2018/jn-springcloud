@@ -31,4 +31,11 @@ public interface BusinessPromotionMapper {
      * @return
      */
     BusinessPromotionDetailsShow getBusinessPromotionDetails(@Param("propagandaId") String propagandaId);
+
+    /**
+     * 增加点击量
+     * @param id 宣传id
+     * @return
+     */
+    int addClickNumById(@Param("id") String id);
 }

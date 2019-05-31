@@ -79,7 +79,7 @@
                    :class="formatReported(item).class"
                    :key="index"
                    class="en-card"
-                   @click="toFillData(item, 'formed')">
+                   @click="toSelectFillData(item)">
                 <div class="card-cell">
                   <div class="en-card-t" :title="item.modelName">{{ item.modelName }}</div>
                   <div class="en-card-m tc" v-html="formatYearMonth(item)"></div>
@@ -241,7 +241,7 @@
           url: 'enterpriseGetForm',
           callback(res) {
             if (res.code === "0000") {
-              _this.willFillList = res.data
+              _this.willFillList = res.data || []
             } else {
               _this.$message.error(res.result)
             }
@@ -257,7 +257,7 @@
           data: this.filledData,
           callback(res) {
             if (res.code === "0000") {
-              _this.filledList = res.data.rows
+              _this.filledList = res.data.rows || []
               _this.filledListTotal = res.data.total
             } else {
               _this.$message.error(res.result)
@@ -269,6 +269,13 @@
       filledDataChange(page) {
         this.filledData.page = page
         this.getFilledData()
+      },
+      toSelectFillData(item) {
+        let type = 'formed'
+        if (this.formatReported(item).title === '我要补报') {
+          type = 'form'
+        }
+        this.toFillData(item, type)
       },
       toFillData(item, type) {
         this.$router.push({
@@ -302,7 +309,7 @@
       },
       formatYearMonth(data) {
         if (data.modelCycle === 0) {
-          return (`<span class="en-card-m-l">${ data.formTime.substring(5,6) }</span>
+          return (`<span class="en-card-m-l">${ parseInt(data.formTime.substring(4,6)) }</span>
           <span class="en-card-m-r">月</span>`)
         } else {
           return (`<span class="en-card-m-l">${ data.formTime.substring(0,4) }</span>

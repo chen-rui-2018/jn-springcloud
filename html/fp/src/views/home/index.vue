@@ -18,7 +18,8 @@
             <el-aside width="135px">
               <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
-                <el-menu-item index="/home">
+                <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" />
+                <!-- <el-menu-item index="/home">
                   <span slot="title">首页</span>
                 </el-menu-item>
                 <el-menu-item index="/userHome">
@@ -82,16 +83,16 @@
                 </el-menu-item>
                 <el-menu-item index="/servicemarket/product/productService/dataReport">
                   <span slot="title">数据上报</span>
-                </el-menu-item>
+                </el-menu-item>-->
 
-                <el-submenu index="/流程系统">
+                <!-- <el-submenu index="/流程系统">
                   <template slot="title">
                     <span>流程系统</span>
                   </template>
                   <el-menu-item-group>
                     <el-menu-item index="/iframe?ph=http://112.94.22.222:2381/ibps" style="padding-left: 20px;">人才申报</el-menu-item>
                   </el-menu-item-group>
-                </el-submenu>
+                </el-submenu> -->
 
               </el-menu>
             </el-aside>
@@ -114,7 +115,7 @@
         <el-form-item prop="orgId" label="服务机构" :rules="[
       { required: true, message: '请输入你要申请入驻的机构', trigger: 'change' },
     ]">
-          <el-select v-model="organizationForm.orgId" filterable placeholder="请输入你要申请入驻的机构" clearable>
+          <el-select v-model="organizationForm.orgId" filterable placeholder="请输入你要申请入驻的机构" clearable @change="getBusinessArea">
             <el-option v-for="item in orgArr" :key="item.orgId" :label="item.orgName" :value="item.orgId">
             </el-option>
 
@@ -129,13 +130,17 @@
 </template>
 <script>
 import $ from "jquery";
+import SidebarItem from './common/SidebarItem'
 import { isMobile } from "@/util";
 import bus from "@/util/bus";
 import UserHome from "@/components/userHome";
 export default {
-  components: { UserHome },
+  components: { UserHome ,SidebarItem},
+  //  components: { SidebarItem },
   data() {
     return {
+      businessArea:'',
+      menuItems:[],
       isMobile: isMobile(),
       orgArr: [],
       organizationForm: {
@@ -179,6 +184,26 @@ export default {
     bus.$on("getUserinfoF", res => {
       this.getUserExtension();
     });
+    var token=sessionStorage.token
+     this.api.post({
+        url: "getDynamicMenu",
+        headers: { token: token },
+        callback: res => {
+          if (res.code == "0000") {
+            console.log(res.data)
+            res.data.forEach(val=>{
+              if(val.label==='门户'){
+                this.menuItems=val.children[0].children
+                sessionStorage.menuItems= JSON.stringify(this.menuItems)
+              }
+            })
+            console.log(this.menuItems)
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+
   },
   mounted() {
     this.getUserExtension();
@@ -195,6 +220,14 @@ export default {
     } catch (e) {}
   },
   methods: {
+    getBusinessArea(value){
+        this.orgArr.forEach(v=>{
+          if(value===v.orgId){
+         this.businessArea=v.businessArea
+          }
+        }
+        )
+    },
     // 前往填写页面
     toAdvisoryInformation() {
       this.$refs["organizationForm"].validate(valid => {
@@ -203,7 +236,8 @@ export default {
           this.$router.push({
             name: "advisoryInformation",
             query: {
-              orgId: this.organizationForm.orgId
+              orgId: this.organizationForm.orgId,
+              businessArea:this.businessArea
             }
           });
         } else {
@@ -287,6 +321,12 @@ export default {
     }
   }
 .homePage {
+  .el-main {
+    padding: 0 20px;
+    &.isMobile {
+      padding: 20px;
+    }
+  }
   &.pd {
     padding-top: 66px;
   }
@@ -516,9 +556,6 @@ export default {
           flex: 1;
           .el-main {
             padding: 0 20px;
-          }
-          .el-main.isMobile{
-            padding: 0;
           }
         .el-menu-item:hover {
           color: #fff;

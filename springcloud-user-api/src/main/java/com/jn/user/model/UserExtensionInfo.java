@@ -1,5 +1,6 @@
 package com.jn.user.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -59,23 +60,56 @@ public class UserExtensionInfo implements Serializable {
     @ApiModelProperty(value = "积分")
     private Double point;
     @ApiModelProperty(value = "生日")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date birthday;
+    @ApiModelProperty(value = "极光推送注册ID")
+    private String registrationId;
+    @ApiModelProperty(value = "角色名称")
+    private String roleName;
+    @ApiModelProperty(value = "角色编码")
+    private String roleCode;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     @ApiModelProperty(value = "创建时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
     @ApiModelProperty(value = "最新更新者账号")
     private String modifierAccount;
     @ApiModelProperty(value = "最新更新时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifiedTime;
     @ApiModelProperty(value = "是否删除（0标记删除，1正常）")
     private Byte recordStatus;
     @ApiModelProperty(value = "兴趣爱好")
-    private List<String>hobbys;
+    private List<String> hobbys;
     @ApiModelProperty(value = "职业")
     private List<String>jobs;
 
     private static final long serialVersionUID = 1L;
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
+    }
 
     public String getId() {
         return id;
@@ -334,6 +368,9 @@ public class UserExtensionInfo implements Serializable {
                 ", userType='" + userType + '\'' +
                 ", point=" + point +
                 ", birthday=" + birthday +
+                ", registrationId='" + registrationId + '\'' +
+                ", roleName='" + roleName + '\'' +
+                ", roleCode='" + roleCode + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", createdTime=" + createdTime +
                 ", modifierAccount='" + modifierAccount + '\'' +

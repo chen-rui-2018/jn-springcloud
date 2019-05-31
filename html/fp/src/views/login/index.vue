@@ -6,7 +6,7 @@
     <div class="loginBox">
       <el-form ref="loginform" :model="loginform">
         <input type="text" placeholder="请输入手机号码" v-model.trim="loginform.account">
-        <input type="password" placeholder="请输入密码" v-model.trim="loginform.password"  @keyup.enter.native="loginForm('loginform')">
+        <input type="password" placeholder="请输入密码" v-model.trim="loginform.password"  @keyup="keyFun($event)">
         <span class="forgetPass" @click="handleForpsw">忘记密码？</span>
         <el-button plain style="width:100%;height:40px;line-height:14px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;" @click="loginForm('loginform')" >登&nbsp;录</el-button>
         <div class="returnBack" @click="$router.push({path:'/'})">返回首页</div>
@@ -37,7 +37,12 @@ export default {
     handleRester() {
       this.$router.push({ path: "register" });
     },
-    loginForm(loginform) {
+    keyFun(e){
+      if(e.keyCode === 13){
+        this.loginForm()
+      } 
+    },
+    loginForm() {
       if (!this.loginform.account) {
         this.$message.error("请输入用户名");
         return;
@@ -67,22 +72,22 @@ export default {
               callback: function(res) {
                 if (res.code === "0000") {
                  sessionStorage.setItem('userInfo', JSON.stringify(res.data))
+                  _this.$router.push({
+                    // path: "/home",
+                    path: window.sessionStorage.getItem('PresetRoute'),
+                    // query: { account: _this.loginform.account }
+                  });
                 } else {
                   _this.$message.error(res.result);
                 }
               }
             });
             // _this.api.setToken(res.data);
-            _this.$router.push({
-              // path: "/userinfo",
-              path: "/home",
-              query: { account: _this.loginform.account }
-            });
           } else {
             _this.$message.error(res.result);
           }
         }
-      });
+      })
     }
   }
 };

@@ -64,4 +64,19 @@ public interface CustomerServiceCenterManageService {
      * @return
      */
     PaginationData getCalledHistory(String phone);
+
+    /**
+     * 保存来电录入信息
+     * @param calledInfoParam
+     * @param loginAccount
+     * @return
+     */
+    int saveCalledInfo(CalledInfoParam calledInfoParam,String loginAccount);
+
+    /**
+     * 来电归属地查询
+     * @param phone
+     * @return
+     */
+    String getPhoneCalledOwen(String phone);
 }

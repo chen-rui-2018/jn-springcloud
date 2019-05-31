@@ -1,29 +1,26 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" ref="myEchart"/>
+  <div ref="myEchart" :class="className" :style="{height:height,width:width}"/>
 </template>
 
 <script>
-// import echarts from 'echarts'
+import echarts from 'echarts'
 import { debounce } from '@/utils'
 
 // echarts相关
-let echarts = require('echarts/lib/echarts');
-require('echarts/lib/chart/bar');
-require('echarts/lib/component/tooltip');
-require('echarts/lib/component/toolbox');
-require('echarts/lib/component/legend');
-require('echarts/lib/component/markLine');
-
-const animationDuration = 6000
-
+// let echarts = require('echarts/lib/echarts');
+// require('echarts/lib/chart/bar');
+// require('echarts/lib/component/tooltip');
+// require('echarts/lib/component/toolbox');
+// require('echarts/lib/component/legend');
+// require('echarts/lib/component/markLine');
 export default {
   props: {
     listData: {
       type: Object,
-      default:function(){
+      default: function() {
         return {
-          percapitaWage:[],
-          peopleNo:[]
+          percapitaWage: [],
+          peopleNo: []
         }
       }
     },
@@ -53,6 +50,14 @@ export default {
       peopleNo: []
     }
   },
+  watch: {
+    listData: {
+      handler(newValue, oldValue) {
+        this.setOption()
+      },
+      deep: true
+    }
+  },
   mounted() {
     this.initChart()
     this.__resizeHandler = debounce(() => {
@@ -75,17 +80,16 @@ export default {
       // this.chart = echarts.init(this.$el, 'macarons')
       this.chart = echarts.init(this.$refs.myEchart)
       this.setOption()
-
     },
     setOption() {
-      if(!this.chart){
-        return;
+      if (!this.chart) {
+        return
       }
-      let percapitaWage = this.listData.percapitaWage
+      const percapitaWage = this.listData.percapitaWage
       this.names = percapitaWage.map(data => {
         return data.name
       })
-      let peopleNo = this.listData.peopleNo
+      const peopleNo = this.listData.peopleNo
       this.peopleNames = peopleNo.map(data => {
         return data.name
       })
@@ -98,10 +102,10 @@ export default {
       })
 
       this.chart.setOption({
-        title : {
+        title: {
           text: '部门人均工资TOP9统计图'
         },
-        color: ['#3398DB','#FFA500'],
+        color: ['#3398DB', '#FFA500'],
         tooltip: {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -109,49 +113,49 @@ export default {
           }
         },
         legend: {
-          data:['人均工资','计薪人数']
+          data: ['人均工资', '计薪人数']
         },
-       toolbox: {
-          show : true,
-          feature : {
-            mark : {show: true},
-            dataView : {
+        toolbox: {
+          show: true,
+          feature: {
+            mark: { show: true },
+            dataView: {
               show: true,
               readOnly: false,
               title: '数据视图',
               optionToContent: function(opt) {
-                let axisData = opt.xAxis[0].data; //坐标数据
-                let series = opt.series; //折线图数据
-                let tdHeads = '<td  style="padding: 0 10px">部门</td>'; //表头
-                let tdBodys = ''; //数据
-                series.forEach(function (item) {
-                  //组装表头
-                  tdHeads += `<td style="padding: 0 10px">${item.name}</td>`;
-                });
-                let table = `<table border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center;border-color: #00a0e9"><tbody><tr style="background-color: #1e6abc">${tdHeads} </tr>`;
+                const axisData = opt.xAxis[0].data // 坐标数据
+                const series = opt.series // 折线图数据
+                let tdHeads = '<td  style="padding: 0 10px">部门</td>' // 表头
+                let tdBodys = '' // 数据
+                series.forEach(function(item) {
+                  // 组装表头
+                  tdHeads += `<td style="padding: 0 10px">${item.name}</td>`
+                })
+                let table = `<table border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center;border-color: #00a0e9"><tbody><tr>${tdHeads} </tr>`
                 for (let i = 0, l = axisData.length; i < l; i++) {
                   for (let j = 0; j < series.length; j++) {
-                    //组装表数据
-                    tdBodys += `<td>${ series[j].data[i]}</td>`;
+                    // 组装表数据
+                    tdBodys += `<td>${series[j].data[i]}</td>`
                   }
-                  table += `<tr><td style="padding: 0 10px">${axisData[i]}</td>${tdBodys}</tr>`;
-                  tdBodys = '';
+                  table += `<tr><td style="padding: 0 10px">${axisData[i]}</td>${tdBodys}</tr>`
+                  tdBodys = ''
                 }
-                table += '</tbody></table>';
-                return table;
+                table += '</tbody></table>'
+                return table
               }
             },
-            magicType : {show: true, type: ['line', 'bar']},
-            restore : {show: true},
-            saveAsImage : {show: true}
+            magicType: { show: true, type: ['line', 'bar'] },
+            restore: { show: true },
+            saveAsImage: { show: true }
           }
         },
-        calculable : true,
+        calculable: true,
         xAxis: [
           {
             type: 'category',
             data: this.names
-          }/*,{
+          }/*, {
             type: 'category',
             data: this.peopleNames
            }*/
@@ -159,31 +163,25 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name:'(千)'
-          },{
+            name: '(千)'
+          }, {
             type: 'value',
-            name:'(人)'
+            name: '(人)'
           }
         ],
         series: [{
-          name:'人均工资',
+          name: '人均工资',
           data: this.values,
-          type: 'bar'
-        },{
-          name:'计薪人数',
+          type: 'bar'/*,
+          barWidth: 50*/
+        }, {
+          name: '计薪人数',
           data: this.peopleNo,
-          type: 'line'
+          type: 'line'/*,
+          barWidth: 50*/
         }]
       })
     }
-  },
-  watch: {
-    listData: {
-      handler(newValue, oldValue) {
-        this.setOption()
-      },
-      deep: true
-    },
   }
 }
 </script>

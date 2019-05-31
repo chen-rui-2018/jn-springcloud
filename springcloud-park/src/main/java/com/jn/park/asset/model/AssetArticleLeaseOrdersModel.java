@@ -1,5 +1,6 @@
 package com.jn.park.asset.model;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -72,6 +73,9 @@ public class AssetArticleLeaseOrdersModel implements Serializable {
 
     @ApiModelProperty(value = "最低租借时间",example = "10")
     private String leaseTime;
+
+    @ApiModelProperty(value = "二维码")
+    private String qrCode;
 
     public String getId() {
         return id;
@@ -223,5 +227,39 @@ public class AssetArticleLeaseOrdersModel implements Serializable {
 
     public void setLeaseTime(String leaseTime) {
         this.leaseTime = leaseTime;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
+
+    @Override
+    public String toString() {
+        return "AssetArticleLeaseOrdersModel{" +
+                "id='" + id + '\'' +
+                ", assetNumber='" + assetNumber + '\'' +
+                ", articleName='" + articleName + '\'' +
+                ", articleId='" + articleId + '\'' +
+                ", typeId='" + typeId + '\'' +
+                ", assetType='" + assetType + '\'' +
+                ", specification='" + specification + '\'' +
+                ", leaseCash=" + leaseCash +
+                ", leasePrice=" + leasePrice +
+                ", articleUrl='" + articleUrl + '\'' +
+                ", articleIntroduction='" + articleIntroduction + '\'' +
+                ", leaseEnterprise='" + leaseEnterprise + '\'' +
+                ", contactName='" + contactName + '\'' +
+                ", contactPhone='" + contactPhone + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", articleStatus=" + articleStatus +
+                ", barCode='" + barCode + '\'' +
+                ", leaseTime='" + leaseTime + '\'' +
+                ", qrCode='" + qrCode + '\'' +
+                '}';
     }
 }

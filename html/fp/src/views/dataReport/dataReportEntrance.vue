@@ -19,16 +19,19 @@
           <el-tab-pane
             v-for="(tab, tabIndex) in formData.tabs"
             :key="tabIndex"
-            :label="tab.tabName"
             v-loading="loadingTab">
+            <span slot="label" class="flex-center">
+<!--              <i v-if="tab.needFilled" class="wait-filled-dot"></i>-->
+              {{ tab.tabName }}
+            </span>
             <tree-table :isReported="formData.taskInfo.status" :modelType="formData.modelType" :data="tab.targetList" :columns="tab.columns" border expand-all/>
           </el-tab-pane>
         </el-tabs>
       </el-tab-pane>
     </el-tabs>
     <div class="btn-row">
-      <el-button size="small" type="primary" :disabled="formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDraft">保存为草稿</el-button>
-      <el-button size="small" type="primary" :disabled="submitting || formData.taskInfo && formData.taskInfo.status === 0" @click="submitForDone">提交</el-button>
+      <el-button size="small" type="primary" :disabled="canFill" @click="submitForDraft">保存为草稿</el-button>
+      <el-button size="small" type="primary" :disabled="canFill" @click="submitForDone">提交</el-button>
       <el-button size="small" type="primary" v-if="formData.otherData">
         <a :href="formData.otherData" download="" target="_blank">点击下载附件</a>
       </el-button>
@@ -50,6 +53,22 @@
     mounted() {
       this.init()
     },
+    computed: {
+      canFill() {
+        if (this.submitting) {
+          console.dir(1)
+          return true
+        }
+        if (this.formData.taskInfo && this.formData.taskInfo.status === 0) {
+          console.dir(2)
+          return true
+        }
+        if (this.formData.modelType === 1 && !this.formData.departmentId) {
+          console.dir(3)
+          return true
+        }
+      }
+    },
     data() {
       return {
         flatteningInputList: [],
@@ -58,7 +77,7 @@
         loadingFormData: true,
         loadingTab: true,
         formDataListTitle: [{
-          departmentName: '企业',
+          departmentName: '全部',
           departmentId: null
         }],
         formData: {},
@@ -117,17 +136,23 @@
             this.formatColumn(tab)
             // 把otherColumns的对象根据指标id挂载到树形指标上面
             this.formatTreeOtherColumnData(tab)
-            this.sortTree(tab.targetList)
+            this.sortTree(tab.targetList, 'orderNumber')
           }
         })
       },
-      sortTree(tree) {
-        tree.sort((a, b) => {
-          if (a.children && a.children.length > 0) {
-            this.sortTree(a.children)
+      sortTree(tree, key) {
+        for (let i = 0, length = tree.length; i < length; i++) {
+          for (let j = i + 1; j < length; j++) {
+            if (tree[i][key] > tree[j][key]) {
+              const temp = tree[j]
+              tree[j] = tree[i]
+              tree[i] = temp
+            }
           }
-          return a.orderNumber - b.orderNumber
-        })
+          if (tree[i].children && tree[i].children.length > 0) {
+            this.sortTree(tree[i].children, key)
+          }
+        }
       },
       formatInputFormatModel(tab) {
         // 填报格式合并到树指标
@@ -174,22 +199,28 @@
         const departmentId = this.formDataListTitle[index].departmentId
         this.formData.departmentId = departmentId
         this.getDepartmentJurisdiction(departmentId)
+        this.loadingTab = false
       },
       getDepartmentJurisdiction(departmentId) {
         //  如果是园区报表，等待填报格式合成完毕再给指标树加上权限控制
-        const formData = this.formData
-        for (const tab of  formData.tabs) {
-          this.formatTreeJurisdiction(tab.targetList, departmentId)
+        for (const tab of this.formData.tabs) {
+          this.$set(tab, 'needFilled', false)
+          this.formatTreeJurisdiction(tab.targetList, departmentId, tab)
         }
       },
-      formatTreeJurisdiction(arr, departmentId) {
+      formatTreeJurisdiction(arr, departmentId, tab) {
         // 填报格式设置权限字段
         for (const list of arr) {
           if (departmentId === list.departmentId) {
             this.$set(list, 'hasJurisdiction', true)
+            if (!tab.needFilled) {
+              this.$set(tab, 'needFilled', true)
+            }
+          } else {
+            this.$set(list, 'hasJurisdiction', false)
           }
           if (list.hasOwnProperty('children') && list.children.length > 0) {
-            this.formatTreeJurisdiction(list.children, departmentId)
+            this.formatTreeJurisdiction(list.children, departmentId, tab)
           }
         }
       },
@@ -278,6 +309,7 @@
                 } else {
                   _this.$message.error('保存失败')
                 }
+                _this.submitting = false
               }
             })
           }, err => {
@@ -299,6 +331,7 @@
                 } else {
                   _this.$message.error('保存失败')
                 }
+                _this.submitting = false
               }
             })
           })
@@ -362,7 +395,6 @@
                 confirmButtonText: '确定',
                 type: 'warning'
               }).then(res => {
-                console.dir(res)
               }).catch(err => {
                 console.dir(err)
               })
@@ -415,13 +447,17 @@
                   return a['orderNumber'] - b['orderNumber']
                 })
                 if ( _this.formData.modelType === 1) {
-                  _this.formDataListTitle = _this.formData.gardenFiller
-                  for (const tab of  _this.formData.tabs) {
-                    const departmentId = _this.formDataListTitle && _this.formDataListTitle[0].departmentId
-                    _this.formatTreeJurisdiction(tab.targetList, departmentId)
+                  const gardenFiller = _this.formData.gardenFiller
+                  const departmentId = _this.formDataListTitle[0].departmentId
+                  if (gardenFiller) {
+                    _this.formDataListTitle = _this.formDataListTitle.concat(gardenFiller)
                   }
+                  for (const tab of  _this.formData.tabs) {
+                    _this.$set(tab, 'needFilled', false)
+                    _this.formatTreeJurisdiction(tab.targetList, departmentId, tab)
+                  }
+                  _this.formData.departmentId = departmentId
                 }
-                _this.formData.departmentId = _this.formDataListTitle[0].departmentId
                 resolve()
               } else {
                 _this.$message.error(res.result)
@@ -472,6 +508,13 @@
 
 <style lang="scss" scoped>
   .data-report{
+    .wait-filled-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #f56c6c;
+    }
     width: 100%;
     .btn-row {
       margin: 20px auto;

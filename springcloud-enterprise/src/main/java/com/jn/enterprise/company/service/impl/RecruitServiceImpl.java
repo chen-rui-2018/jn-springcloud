@@ -20,6 +20,7 @@ import com.jn.enterprise.company.model.*;
 import com.jn.enterprise.company.service.RecruitService;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.api.CareClient;
 import com.jn.park.care.model.CareParam;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -66,11 +68,20 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Override
     @ServiceLog(doAction = "根据招聘ID获取招聘详情")
-    public RecruitVO getRecruitDetailsById(String id) {
+    public RecruitVO getRecruitDetailsById(String id, String curAccount) {
         RecruitVO recruitDetails = checkRecruitExist(id);
         if (1 == serviceRecruitMapper.addRecruitClickById(id)) {
             logger.info("[招聘管理] 招聘信息浏览量增加,recruitId:{}",id);
         }
+        // 如果已登录，查询关注列表
+        if (StringUtils.isNotBlank(curAccount)) {
+            List<String> companyList = getCareCompany(curAccount);
+            if (companyList.contains(recruitDetails.getComId())) {
+                recruitDetails.setCareStatus("1");
+            }
+        }
+        // 处理图片格式
+        recruitDetails.setComAvatar(IBPSFileUtils.getFilePath(recruitDetails.getComAvatar()));
         return recruitDetails;
     }
 
@@ -149,17 +160,16 @@ public class RecruitServiceImpl implements RecruitService {
         Page<Object> objects = PageHelper.startPage(recruitParam.getPage(), recruitParam.getRows() == 0 ? 15 : recruitParam.getRows());
         List<RecruitVO> recruitList = serviceRecruitMapper.getRecruitList(rp);
 
+        // 处理企业logo图片格式
+        for (RecruitVO recruit : recruitList) {
+            if (StringUtils.isNotBlank(recruit.getComAvatar())) {
+                recruit.setComAvatar(IBPSFileUtils.getFilePath(recruit.getComAvatar()));
+            }
+        }
+
         // 如果已登录，查询关注列表
         if (StringUtils.isNotBlank(recruitParam.getAccount())) {
-            CareParam careParam = new CareParam();
-            careParam.setCurrentAccount(recruitParam.getAccount());
-            Result<List<String>> result = careClient.findCareCompanyList(careParam);
-            if (result == null || result.getData() == null) {
-                throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SERVICE_ERROR);
-            }
-
-            // 关注的企业ID列表
-            List<String> companyList = result.getData();
+            List<String> companyList = getCareCompany(recruitParam.getAccount());
             for (RecruitVO recruit : recruitList) {
                 if (companyList.contains(recruit.getComId())) {
                     recruit.setCareStatus("1");
@@ -258,7 +268,11 @@ public class RecruitServiceImpl implements RecruitService {
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_STATUS_ERROR);
         }
 
-        checkRecruitExist(serviceRecruitUnderParam.getId());
+        // 判断企业信息是否已通过审核
+        RecruitVO recruitVO = checkRecruitExist(serviceRecruitUnderParam.getId());
+        if (!recruitVO.getApprovalStatus().equals(RecruitDataTypeEnum.APPROVAL_STATUS_PASS.getCode())) {
+            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_APPROVAL_STATUS_NOT_PASS);
+        }
 
         TbServiceRecruit sr = new TbServiceRecruit();
         BeanUtils.copyProperties(serviceRecruitUnderParam,sr);
@@ -303,6 +317,23 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
     /**
+     * 获取关注的企业ID列表
+     * @param account 账号
+     * @return
+     */
+    public List<String> getCareCompany(String account) {
+        CareParam careParam = new CareParam();
+        careParam.setCurrentAccount(account);
+        Result<List<String>> result = careClient.findCareCompanyList(careParam);
+        if (result == null || result.getData() == null) {
+            return new ArrayList<>();
+        }
+
+        // 关注的企业ID列表
+        return result.getData();
+    }
+
+    /**
      * 判断账号是否企业账号
      * @param account
      * @return
@@ -310,7 +341,7 @@ public class RecruitServiceImpl implements RecruitService {
     public UserExtensionInfo checkCompanyUser (String account) {
         Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(account);
         if (result == null || result.getData() == null) {
-            throw new JnSpringCloudException(RecruitExceptionEnum.CALL_SERVICE_ERROR);
+            throw new JnSpringCloudException(CompanyExceptionEnum.GET_USER_EXTENSION_INFO_ERROR);
         }
         UserExtensionInfo userExtensionInfo = result.getData();
         if (StringUtils.isBlank(userExtensionInfo.getCompanyCode()) || StringUtils.isBlank(userExtensionInfo.getCompanyName())) {

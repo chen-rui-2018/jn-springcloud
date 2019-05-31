@@ -2,10 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.hr.exam.dao.ExaminaResultInfoMapper">
 
-	<select id="listAchievement" resultType="java.lang.Integer">
+	<select id="listAchievement" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
 		SELECT t1.achievement
-		FROM tb_manpower_examina_result_info t1
-		order by t1.achievement desc
+		FROM
+		tb_manpower_examina_result_info t1
+		WHERE t1.examina_id=
+		#{examinaId,jdbcType=VARCHAR}
+		and t1.record_status != 0
+		order by
+		t1.achievement desc
 	</select>
 
 	<select id="selectUserResult" resultType="com.jn.hr.exam.entity.TbManpowerExaminaResultInfo"
@@ -15,8 +21,21 @@
 		examina_id = #{examinaId,jdbcType=VARCHAR}
 		AND job_number =
 		#{jobNumber,jdbcType=VARCHAR}
+		and record_status != 0
 
 	</select>
+
+
+	<update id="updateBatch" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaResultInfo">
+		update
+		tb_manpower_examina_result_info
+		set rank= #{rank,jdbcType=INTEGER}
+		WHERE
+		examina_id=
+		#{examinaId,jdbcType=VARCHAR}
+		AND achievement=
+		#{achievement,jdbcType=INTEGER}
+	</update>
 
 
 	<select id="resultCount" resultType="java.lang.Integer"
@@ -26,6 +45,7 @@
 		WHERE
 		examina_id =
 		#{examinaId,jdbcType=VARCHAR}
+		and record_status != 0
 	</select>
 
 	<select id="listResultInfo" resultType="com.jn.hr.exam.model.ExaminaManagement"
@@ -62,21 +82,23 @@
 
 		SELECT COUNT(*) countStr,
 		AVG(achievement) avgStr,
-		MAX(achievement) maxStr,
+		MAX(achievement)
+		maxStr,
 		MIN(achievement) minStr
 		from tb_manpower_examina_result_info
-		WHERE 1=1
+		WHERE record_status != 0
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaId)">
 			and examina_id = #{examinaId,jdbcType=VARCHAR}
 		</if>
 	</select>
-	
+
 	<select id="getAdoptCount" resultType="java.lang.Integer"
 		parameterType="com.jn.hr.exam.model.ExaminaResultPage">
 
 		SELECT COUNT(*) yesAdoptCountStr
 		from tb_manpower_examina_result_info
 		WHERE is_adopt=1
+		And record_status != 0
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaId)">
 			and examina_id = #{examinaId,jdbcType=VARCHAR}
 		</if>

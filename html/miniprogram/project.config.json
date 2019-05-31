@@ -13,7 +13,7 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.4.2",
-	"appid": "wx74198aaa09ddb63f",
+	"appid": "wx5465894ef700cd7a",
 	"projectname": "miniprogram",
 	"debugOptions": {
 		"hidedInDevtools": []
@@ -28,13 +28,25 @@
 			"current": -1,
 			"list": []
 		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
 		"game": {
 			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 0,
+			"list": [
+				{
+					"id": 0,
+					"name": "停车缴费",
+					"pathName": "pages/index/parkPay/parkPay",
+					"query": "",
+					"scene": null
+				}
+			]
 		}
 	}
 }

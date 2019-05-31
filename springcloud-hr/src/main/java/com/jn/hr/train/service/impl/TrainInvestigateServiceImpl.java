@@ -300,9 +300,11 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 			BeanUtils.copyProperties(questionUpd, add);
 			// 拷贝选项列表
 			List<InvestigateTitleOption> titleOptionList = questionUpd.getTitleOptionList();
-			List<InvestigateTitleOptionAdd> titleOptionAddList = BeanCopyUtil.copyList(titleOptionList,
-					InvestigateTitleOptionAdd.class);
-			add.setTitleOptionList(titleOptionAddList);
+			if (null != titleOptionList && titleOptionList.size() > 0) {
+				List<InvestigateTitleOptionAdd> titleOptionAddList = BeanCopyUtil.copyList(titleOptionList,
+						InvestigateTitleOptionAdd.class);
+				add.setTitleOptionList(titleOptionAddList);
+			}
 			List<InvestigateQuestionAdd> questionList = new ArrayList<InvestigateQuestionAdd>();
 			questionList.add(add);
 			titleId = insertQuestion(questionList, projectId);
@@ -630,7 +632,6 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "调研页面展示功能")
-	@Transactional(rollbackFor = Exception.class)
 	public ResearchSet loginInvestiage(String projectId) {
 		ResearchSet researchSet = new ResearchSet();
 		TbManpowerTrainInvestiga tbHrinvestiage = selectQuestInvestigate(projectId);
@@ -657,7 +658,6 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "汇总统计功能")
-	@Transactional(rollbackFor = Exception.class)
 	public List<AnswerVo> questionAnswerList(String projectId) {
 		List<AnswerVo> answerVos = questAnswerList(projectId);
 		return answerVos;
@@ -806,30 +806,33 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 	 */
 	private void updateOption(InvestigateQuestion questionUpd) {
 		List<InvestigateTitleOption> titleOptionList = questionUpd.getTitleOptionList();
-		for (InvestigateTitleOption titleOption : titleOptionList) {
+		if (null != titleOptionList && titleOptionList.size() > 0) {
+			for (InvestigateTitleOption titleOption : titleOptionList) {
 
-			if (StringUtils.isBlank(titleOption.getTitleId())) {
-				titleOption.setTitleId(questionUpd.getTitleId());
-			}
-			if (StringUtils.isBlank(titleOption.getId())) {
-				TbManpowerTrainTitleOption tbOption = new TbManpowerTrainTitleOption();
-				BeanUtils.copyProperties(titleOption, tbOption);
-				if (StringUtils.isBlank(tbOption.getId())) {
-					tbOption.setId(UUID.randomUUID().toString());
+				if (StringUtils.isBlank(titleOption.getTitleId())) {
+					titleOption.setTitleId(questionUpd.getTitleId());
 				}
-				if (!StringUtils.isBlank(tbOption.getOptionId())) {
-					tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
+				if (StringUtils.isBlank(titleOption.getId())) {
+					TbManpowerTrainTitleOption tbOption = new TbManpowerTrainTitleOption();
+					BeanUtils.copyProperties(titleOption, tbOption);
+					if (StringUtils.isBlank(tbOption.getId())) {
+						tbOption.setId(UUID.randomUUID().toString());
+					}
+					if (!StringUtils.isBlank(tbOption.getOptionId())) {
+						tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
+					}
+					tbManpowerTrainTitleOptionMapper.insertSelective(tbOption);
+				} else {
+					TbManpowerTrainTitleOption tbOption = new TbManpowerTrainTitleOption();
+					BeanUtils.copyProperties(titleOption, tbOption);
+					if (!StringUtils.isBlank(tbOption.getOptionId())) {
+						tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
+					}
+					tbManpowerTrainTitleOptionMapper.updateByPrimaryKeySelective(tbOption);
 				}
-				tbManpowerTrainTitleOptionMapper.insertSelective(tbOption);
-			} else {
-				TbManpowerTrainTitleOption tbOption = new TbManpowerTrainTitleOption();
-				BeanUtils.copyProperties(titleOption, tbOption);
-				if (!StringUtils.isBlank(tbOption.getOptionId())) {
-					tbOption.setOptionId(tbOption.getOptionId().toUpperCase());
-				}
-				tbManpowerTrainTitleOptionMapper.updateByPrimaryKeySelective(tbOption);
 			}
 		}
+
 		List<InvestigateTitleOption> deltitleOptionList = questionUpd.getDeltitleOptionList();
 		if (null != deltitleOptionList && deltitleOptionList.size() > 0) {
 			for (InvestigateTitleOption deltitleOption : deltitleOptionList) {
@@ -930,13 +933,14 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 							}
 						}
 					}
-
-					for (InvestigateTitleOptionAdd tbTitleOption : questionAnswer.getTitleOptionList()) {
-						if (null != sizeMap.get(tbTitleOption.getOptionId())) {
-							tbTitleOption.setOptionPercent(
-									HrDataUtil.getPercentStr(sizeMap.get(tbTitleOption.getOptionId()), countSize)
-											+ "%");
-							tbTitleOption.setOptionCount(sizeMap.get(tbTitleOption.getOptionId()));
+					if (null != questionAnswer.getTitleOptionList() && questionAnswer.getTitleOptionList().size() > 0) {
+						for (InvestigateTitleOptionAdd tbTitleOption : questionAnswer.getTitleOptionList()) {
+							if (null != sizeMap.get(tbTitleOption.getOptionId())) {
+								tbTitleOption.setOptionPercent(
+										HrDataUtil.getPercentStr(sizeMap.get(tbTitleOption.getOptionId()), countSize)
+												+ "%");
+								tbTitleOption.setOptionCount(sizeMap.get(tbTitleOption.getOptionId()));
+							}
 						}
 					}
 				}

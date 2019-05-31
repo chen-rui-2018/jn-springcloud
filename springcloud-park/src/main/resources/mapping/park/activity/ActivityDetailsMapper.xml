@@ -59,15 +59,19 @@
         ,t1.com_status as "comStatus"                                     <!--点评状态-->
         ,t1.com_type as "comType"                                         <!--类型-->
         ,t1.com_content as "comContent"                                   <!--点评内容-->
-        ,case
-        when  t5.creator_account = #{loginAccount} and t5.like_status='1' then 'true'
-        else 'false'
-        end as 'isCommentLike'
+        <if test="loginAccount!=null and loginAccount!=''">
+            ,case
+            when  t5.creator_account = #{loginAccount} and t5.like_status='1' then 'true'
+            else 'false'
+            end as 'isCommentLike'
+        </if>
         from tb_comment t1
         left join tb_comment t4
         on t1.id=t4.p_id
+        <if test="loginAccount!=null and loginAccount!=''">
         left join tb_park_like t5
         on t1.id=t5.like_parent_id
+        </if>
         where  1=1
         and t1.root_id=#{activityId}
         and t1.p_id in

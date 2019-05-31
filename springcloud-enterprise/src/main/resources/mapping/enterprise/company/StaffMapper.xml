@@ -8,6 +8,7 @@
             a.id AS "staffId",
             a.account AS "account",
             a.check_time AS "checkTime",
+            a.join_pattern AS "joinPattern",
             CASE
                 WHEN a.invite_status = '6' THEN
                     CASE
@@ -43,13 +44,16 @@
             a.account AS "account",
             a.invite_time AS "inviteTime",
             a.com_id AS "comId",
+            a.join_pattern AS "joinPattern",
             tsc.com_name AS "comName"
         FROM tb_service_company_staff a
         LEFT JOIN tb_service_company tsc ON a.com_id = tsc.id
         WHERE a.record_status = '1'
+        AND a.invite_status = '6'
         AND a.check_status = '0'
         AND a.account = #{account}
-        ORDER BY a.invite_time DESC
+        ORDER BY a.created_time DESC
+        LIMIT 1
     </select>
 
     <!-- 批量邀请员工 -->

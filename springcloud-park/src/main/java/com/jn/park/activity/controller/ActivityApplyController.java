@@ -4,7 +4,10 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.park.activity.model.CompanyActivityApplyParam;
+import com.jn.park.activity.model.CompanyActivityApplyShow;
 import com.jn.park.activity.service.ActivityApplyService;
+import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.activity.model.ActivityApplyDetail;
 import com.jn.park.activity.model.ActivityPagingParam;
@@ -16,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +45,9 @@ public class ActivityApplyController extends BaseController {
 
     @Autowired
     private ActivityApplyService activityApplyService;
+
+    @Autowired
+    private ActivityService activityService;
 
     @ControllerLog(doAction = "快速报名")
     @RequiresPermissions("/activity/activityApply/quickApply")
@@ -129,5 +136,14 @@ public class ActivityApplyController extends BaseController {
         Assert.notNull(account, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
         UserExtensionInfo user =  activityApplyService.activityApplyInfo(account);
         return new Result(user);
+    }
+
+    @ControllerLog(doAction = "获取企业报报名活动信息")
+    @RequiresPermissions("/activity/activityApply/getCompanyActivityApplyInfo")
+    @ApiOperation(value = "获取企业报报名活动信息", httpMethod = "POST")
+    @RequestMapping(value = "/getCompanyActivityApplyInfo")
+    public Result<List<CompanyActivityApplyShow>> getCompanyActivityApplyInfo(@RequestBody CompanyActivityApplyParam param) {
+        logger.info("进入获取企业报报名活动信息API,入参：{}",param.toString());
+        return new Result(activityService.getCompanyActivityApplyInfo(param));
     }
 }

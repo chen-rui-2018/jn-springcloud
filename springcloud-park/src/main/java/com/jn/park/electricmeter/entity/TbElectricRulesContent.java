@@ -10,10 +10,10 @@ public class TbElectricRulesContent implements Serializable {
     /*@ApiModelProperty("规则id")*/
     private String ruleId;
 
-    /*@ApiModelProperty("规则Id")*/
-    private String projectName;
-
     /*@ApiModelProperty("规则名称")*/
+    private String ruleName;
+
+    /*@ApiModelProperty("价钱（角）")*/
     private String price;
 
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
@@ -55,12 +55,12 @@ public class TbElectricRulesContent implements Serializable {
         this.ruleId = ruleId == null ? null : ruleId.trim();
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getRuleName() {
+        return ruleName;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName == null ? null : projectName.trim();
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName == null ? null : ruleName.trim();
     }
 
     public String getPrice() {
@@ -141,7 +141,7 @@ public class TbElectricRulesContent implements Serializable {
         TbElectricRulesContent other = (TbElectricRulesContent) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getRuleId() == null ? other.getRuleId() == null : this.getRuleId().equals(other.getRuleId()))
-            && (this.getProjectName() == null ? other.getProjectName() == null : this.getProjectName().equals(other.getProjectName()))
+            && (this.getRuleName() == null ? other.getRuleName() == null : this.getRuleName().equals(other.getRuleName()))
             && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -158,7 +158,7 @@ public class TbElectricRulesContent implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getRuleId() == null) ? 0 : getRuleId().hashCode());
-        result = prime * result + ((getProjectName() == null) ? 0 : getProjectName().hashCode());
+        result = prime * result + ((getRuleName() == null) ? 0 : getRuleName().hashCode());
         result = prime * result + ((getPrice() == null) ? 0 : getPrice().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -178,7 +178,7 @@ public class TbElectricRulesContent implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", ruleId=").append(ruleId);
-        sb.append(", projectName=").append(projectName);
+        sb.append(", ruleName=").append(ruleName);
         sb.append(", price=").append(price);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

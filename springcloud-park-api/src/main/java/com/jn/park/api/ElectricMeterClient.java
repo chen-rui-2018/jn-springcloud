@@ -29,7 +29,7 @@ public interface ElectricMeterClient {
     @RequestMapping(value = "/api/meter/setHostForMeter", method = RequestMethod.GET)
     void setHostForMeter();
 
-    @RequestMapping(value = "/api/meter/updateBillInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/meter/updateBillInfo", method = RequestMethod.POST)
     Result updateBillInfo(PayCallBackNotify payCallBackNotify);
 
     @RequestMapping(value = "/api/meter/setWarning", method = RequestMethod.GET)

@@ -57,8 +57,18 @@ export default {
     activityListSlim: 'springcloud-park/guest/activity/activityListSlim', // 获取前台活动列表
     getPolicyClassList: 'springcloud-park/guest/policy/policyCenterController/getPolicyClassList', // 政策分类列表
     getPolicyCenterList: 'springcloud-park/guest/policy/policyCenterController/getPolicyCenterList', // 政策中心首页列表
-    getPolicyDetails: 'springcloud-park/guest/policy/policyCenterController/getPolicyDetails' // 政策指南详情
+    getPolicyDetails: 'springcloud-park/guest/policy/policyCenterController/getPolicyDetails', // 政策指南详情
 
+    // 招商引资
+    getPromotionList: 'springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList', // (门户各首页企业宣传列表查询)
+    basic: 'springcloud-park/guest/portal/park/basic', // 获取园区概况
+    getBusinessAdDynamic: 'springcloud-park/guest/portal/businessAd/getBusinessAdDynamic', // 获取招商动态信息
+    getBusinessAdDynamicInfo: 'springcloud-park/guest/portal/businessAd/getBusinessAdDynamicInfo', // 获取招商动态信息详情
+    getBusinessAdPolicy: 'springcloud-park/guest/portal/businessAd/getBusinessAdPolicy', // 招商政策
+    getBusinessAdPolicyInfo: 'springcloud-park/guest/portal/businessAd/getBusinessAdPolicyInfo', // 获取招商政策信息详情
+    getBusinessAdContentInfo: 'springcloud-park/guest/portal/businessAd/getBusinessAdContentInfo', // 获取招商信息详情
+    parkList: 'springcloud-park/guest/portal/park/list', // 一区多园
+    getBusinessAdContent: 'springcloud-park/guest/portal/businessAd/getBusinessAdContent' // 获取招商信息
   },
   setToken: function (obj) {
     axios.interceptors.request.use(function (config) {

@@ -56,15 +56,12 @@
     computed: {
       canFill() {
         if (this.submitting) {
-          console.dir(1)
           return true
         }
         if (this.formData.taskInfo && this.formData.taskInfo.status === 0) {
-          console.dir(2)
           return true
         }
         if (this.formData.modelType === 1 && !this.formData.departmentId) {
-          console.dir(3)
           return true
         }
       }

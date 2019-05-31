@@ -9,16 +9,21 @@
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
-		"autoAudits": false
+		"autoAudits": false,
+		"checkInvalidKey": true
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.4.2",
 	"appid": "wx5465894ef700cd7a",
 	"projectname": "miniprogram",
+	"cloudfunctionTemplateRoot": "",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
 	"isGameTourist": false,
+	"scripts": {},
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -33,34 +38,33 @@
 			"list": []
 		},
 		"game": {
-			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
 			"current": 2,
-			"list": [
-				{
-					"id": 0,
-					"name": "我的爱车",
-					"pathName": "pages/home/maCar/maCar",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": 1,
-					"name": "缴费",
-					"pathName": "pages/home/payRecord/payRecord",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "编辑车",
-					"pathName": "pages/home/aboutUs/aboutUs",
-					"query": "",
-					"scene": null
-				}
-			]
-		}
+					"list": [
+						{
+							"id": 0,
+							"name": "我的爱车",
+							"pathName": "pages/home/maCar/maCar",
+							"query": "",
+							"scene": null
+						},
+						{
+							"id": 1,
+							"name": "缴费",
+							"pathName": "pages/home/payRecord/payRecord",
+							"query": "",
+							"scene": null
+						},
+						{
+							"id": -1,
+							"name": "编辑车",
+							"pathName": "pages/home/aboutUs/aboutUs",
+							"query": "",
+							"scene": null
+					}
+				]
+			}
 	}
 }

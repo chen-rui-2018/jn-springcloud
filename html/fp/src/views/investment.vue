@@ -498,11 +498,10 @@
             callback: (res) => {
               if (res.code === "0000") {
                 this.bannerList = res.data.rows
-                console.dir(this.bannerList)
                 resolve()
               } else {
-                reject()
                 this.$message.error(res.result)
+                reject()
               }
             }
           })

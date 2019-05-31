@@ -5,7 +5,12 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-
+    {
+      path: '/investment',
+      name: 'investment',
+      component: () => import('@/views/investment'),
+      meta: {title: '招商引资'}
+    },
     {
       path: '/actiDetail',
       name: 'actiDetail',

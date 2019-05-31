@@ -471,10 +471,6 @@ toolbar.OnDialConnected(function() {
 
 toolbar.OnTelephoneRing(function( szCaller, szCallid ) {
 	addLog( "坐席来电振铃事件，szCaller=" + szCaller + ",szCallid=" + szCallid );
-
-	//调试使用，篡改来电
-	szCaller=18073856620;
-
 	//弹出对话框
 	$(".popBox").show();
 	$(".popLayer").show();

@@ -210,7 +210,7 @@ export default {
         border-radius: 5px;
         border: solid 2px #41d787;
         padding:8px 11px;
-        font-size: 12px;
+        font-size: 14px;
         color:#00a041;
         cursor: pointer;
       }

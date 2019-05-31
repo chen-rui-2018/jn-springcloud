@@ -102,18 +102,6 @@
           :total="total">
         </el-pagination>
       </div>
-      <!-- 弹窗 -->
-      <el-dialog
-        title="提示"
-        :visible.sync="centerDialogVisible"
-        width="30%"
-        center>
-        <span>亲，您需要登录后才能访问以下界面哦！</span>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="centerDialogVisible = false">留在当前页面</el-button>
-          <el-button type="primary" @click="goLogin">去登陆</el-button>
-        </span>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -129,7 +117,7 @@ export default {
         page:1,
         rows:5,
         perennialList:[],
-        centerDialogVisible:false
+        // centerDialogVisible:false
       }
     },
     filters: {
@@ -167,9 +155,6 @@ export default {
       this.getperennialList()//常年申报
     },
     methods: {
-      goLogin(){
-        this.$router.push({path:"/login"})
-      },
       //区类型获取
       getdeclarationcentertype(){
         let _this = this;
@@ -249,7 +234,15 @@ export default {
         if(sessionStorage.token){
           this.$router.push({name:'talentPlatform'})
         }else{
-          this.centerDialogVisible=true
+          this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
+            confirmButtonText: '去登陆',
+            cancelButtonText: '留在当前页面',
+            type: 'warning',
+            center: true
+          }).then(() => {
+             this.$router.push({path:"/login"})
+          }).catch(() => {
+          })
         }
       },
       //跳转页面

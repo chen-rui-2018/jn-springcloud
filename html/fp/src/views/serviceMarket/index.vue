@@ -128,11 +128,6 @@
           <div class="nav_discribe"> <span>已入驻顾问<span>3786</span>人</span> </div>
           <div class="nav_todo" @click="isVisibility=true"><span>申请顾问</span></div>
         </a>
-        <a href="javascript:;">
-          <div class="nav_icon"><i class="iconfont icon-shangwuqianbiqian"></i></div>
-          <div class="nav_discribe"> <span>已入驻投资人<span>956</span>人</span> </div>
-          <div class="nav_todo"><span @click="$router.push({path:'/roleCertifications/investorCertification'})">投资人入驻</span></div>
-        </a>
       </div>
       <!-- 申请顾问弹窗 -->
       <el-dialog title="申请顾问" :visible.sync="isVisibility" center>

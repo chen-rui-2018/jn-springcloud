@@ -19,81 +19,6 @@
               <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
                 <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" />
-                <!-- <el-menu-item index="/home">
-                  <span slot="title">首页</span>
-                </el-menu-item>
-                <el-menu-item index="/userHome">
-                  <span slot="title">用户资料</span>
-                </el-menu-item>
-                <el-menu-item index="/myBusiness/index">
-                  <span slot="title">我的企业</span>
-                </el-menu-item>
-                <el-menu-item index="/myBody/index">
-                  <span slot="title">我的机构</span>
-                </el-menu-item>
-                <el-submenu index="/认证">
-                  <template slot="title">
-                    <span>角色认证</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item index="/roleCertifications/investorCertification">投资人认证</el-menu-item>
-                    <el-menu-item index="" @click="checkOrganization">服务顾问认证</el-menu-item>
-                    <el-menu-item index="/roleCertifications/basicInformation">服务机构认证</el-menu-item>
-                  </el-menu-item-group>
-                </el-submenu>
-                <el-submenu index="/加入园区">
-                  <template slot="title">
-                    <span>加入园区</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item index="/upgradeStaff">升级员工</el-menu-item>
-                    <el-menu-item index="/upgradeEnterprise">升级企业</el-menu-item>
-                  </el-menu-item-group>
-                </el-submenu>
-                <el-submenu index="/servicemarket/product/productService">
-                  <template slot="title">
-                    <span>产品管理</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item index="/servicemarket/product/productService/ordinaryProduct" style="padding-left: 20px;">常规服务产品</el-menu-item>
-                    <el-menu-item index="/servicemarket/product/productService/specialproduct" style="padding-left: 20px;">特色服务产品</el-menu-item>
-                    <el-menu-item index="/servicemarket/product/productService/myApply" style="padding-left: 20px;">我的申请</el-menu-item>
-                  </el-menu-item-group>
-                </el-submenu>
-                <el-submenu index="/needManage">
-                  <template slot="title">
-                    <span>需求管理</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/requireManagementController/forothersneed">对他人的需求</el-menu-item>
-                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/requireManagementController/receivedNeed">我收到的需求</el-menu-item>
-                  </el-menu-item-group>
-                </el-submenu>
-                <el-submenu index="/evaluateManage">
-                  <template slot="title">
-                    <span>评价管理</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/comment/forOthersevaluate">对他人的评价</el-menu-item>
-                    <el-menu-item style="padding-left: 20px;" index="/serviceMarket/comment/receivedEvaluate">我收到的评价</el-menu-item>
-                  </el-menu-item-group>
-                </el-submenu>
-                <el-menu-item index="/actiManagent">
-                  <span slot="title">活动管理</span>
-                </el-menu-item>
-                <el-menu-item index="/servicemarket/product/productService/dataReport">
-                  <span slot="title">数据上报</span>
-                </el-menu-item>-->
-
-                <!-- <el-submenu index="/流程系统">
-                  <template slot="title">
-                    <span>流程系统</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item index="/iframe?ph=http://112.94.22.222:2381/ibps" style="padding-left: 20px;">人才申报</el-menu-item>
-                  </el-menu-item-group>
-                </el-submenu> -->
-
               </el-menu>
             </el-aside>
           </div>
@@ -109,23 +34,6 @@
         </el-container>
       </div>
     </div>
-    <!-- 选择机构对话框 -->
-    <!-- <el-dialog title="申请顾问" :visible.sync="centerDialogVisible" width="30%" center>
-      <el-form :model="organizationForm" ref="organizationForm" label-width="80px" class="demo-dynamic">
-        <el-form-item prop="orgId" label="服务机构" :rules="[
-      { required: true, message: '请输入你要申请入驻的机构', trigger: 'change' },
-    ]">
-          <el-select v-model="organizationForm.orgId" filterable placeholder="请输入你要申请入驻的机构" clearable @change="getBusinessArea">
-            <el-option v-for="item in orgArr" :key="item.orgId" :label="item.orgName" :value="item.orgId">
-            </el-option>
-
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button class="btn" type="primary" @click="toAdvisoryInformation">前往填写资料</el-button>
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -544,12 +452,16 @@ export default {
         .el-submenu .el-menu-item {
           padding: 0;
           min-width: 0;
+          background-color: #f7f7f7;
         }
+       .el-submenu .el-menu-item.is-active{
+         border-left:none;
+       }
         .el-submenu.is-active .el-submenu__title {
           border-left: 2px solid #00a042;
         }
          .el-menu-item {
-            // background-color: #f7f7f7;
+            // 
             margin: 0;
           }
         .el-menu-item:hover {

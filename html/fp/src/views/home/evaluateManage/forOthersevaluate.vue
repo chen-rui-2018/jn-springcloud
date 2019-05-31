@@ -6,10 +6,13 @@
     </div>
     <div class="forOthersevaluate_main">
       <div class="searh_tab">
+        <span>服务机构：</span>
         <el-input placeholder="请输入服务机构" v-model="sendData.orgName" class="input-with-select" clearable>
         </el-input>
+        <span>服务产品：</span>
         <el-input placeholder="请输入服务产品" v-model="sendData.productName" class="input-with-select" clearable>
         </el-input>
+        <span>服务务顾问：</span>
         <el-input placeholder="请输入服务顾问" v-model="sendData.advisorAccount" class="input-with-select" clearable>
         </el-input>
         <span class="confirm" @click="confirm">确定</span>
@@ -153,7 +156,7 @@ export default {
           border-color: #00a041;
         }
         .el-input{
-          width: 25%;
+          width: 17%;
           font-size: 12px;
         }
         .el-select>.el-input{

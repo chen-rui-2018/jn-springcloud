@@ -22,10 +22,10 @@
         <swiper-item class='item' wx:for='{{noticeLise}}'>{{item.noticeTitle}}</swiper-item>
       </swiper>
     </view>
-    <view class="more gray">
+    <!-- <view class="more gray">
       更多
       <text class="icon-right" > </text>
-    </view>
+    </view> -->
   </view>
   <!-- 导航图标 -->
   <view class="nav bg_white paddihng_side">
@@ -82,15 +82,12 @@
           </view>
           <view class="hot_li_num paddihng_side">
             <view class="num_left">
-              <view class="">
-                <image class="cu-avatar round" src="./../../images/index.jpg" > </image>
+              <view class="{{headIndex!=0?'num_img':''}} " wx:for="{{item.avatarList}}" wx:for-item="headItem" wx:for-index="headIndex">
+                <image class="cu-avatar round" src="{{headItem}}" > </image>
              </view>
-             <view class="num_img">
+             <!-- <view class="num_img">
                 <image class="cu-avatar round" src="./../../images/index_nav1.png" > </image>
-             </view>
-             <view class="num_img">
-                <image class="cu-avatar round" src="./../../images/index_nav1.png" > </image>
-             </view>
+             </view> -->
               <text class="gray person_num">{{item.applyNum}}/{{item.actiNumber}}名</text>
             </view>
             <view class="num_right">

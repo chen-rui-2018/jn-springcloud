@@ -256,7 +256,7 @@
                left join  tb_service_org t2 on  t2.org_id_= t1.org_id_
                left join  tb_service_require t4 on t1.product_id_ = t4.product_id_
                left join  tb_service_rating t5 on t5.product_id_ = t1.product_id_
-               where  t1.record_status = '1' and t1.status = '1' and  t1.signory_id !="technology_finance" and t1.org_id_ is not null
+               where  t1.record_status = '1' and t1.status = '1' and  t1.signory_id !="technology_finance" and t1.org_id_ is not null and t1.org_id_ !=""
                <if test="commentProductId != null and  commentProductId !=''">
                     and  t1.template_id = #{commentProductId}
                </if>

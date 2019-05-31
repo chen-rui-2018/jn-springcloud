@@ -55,7 +55,7 @@ public class CompanyController extends BaseController {
     @RequestMapping(value = "/getCompanyNewList",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceEnterpriseCompany>>> getCompanyNewList(@Validated ServiceEnterpriseParam serviceEnterpriseParam){
         User user =(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam,user.getAccount()));
+        return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam,user==null?"":user.getAccount()));
     }
 
     @ControllerLog(doAction = "查询企业详情-新版")

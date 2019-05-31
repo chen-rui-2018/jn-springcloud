@@ -82,6 +82,7 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
                 removeRoleSet.add(normalRoleId);
                 sysUserRoleVO.setUser(user);
                 sysUserRoleVO.setAddRoleId(addRoleSet);
+                sysUserRoleVO.setDeleRoleIds(removeRoleSet);
 
                 systemClient.updateUserRole(sysUserRoleVO);
                 logger.info("[升级企业账号] 调用系统服务 修改用户角色 接口 用户账号:{},角色id:{}", comAdmin, roleId);

@@ -1,5 +1,5 @@
 // http.js
-const baseUrl = 'http://192.168.10.31:1101'
+const baseUrl = 'https://njbxq.mynatapp.cc'
 const wechatPath = 'https://njbxq.mynatapp.cc/springcloud-wechat-miniprogram/'
 class WxHttp {
   constructor() {

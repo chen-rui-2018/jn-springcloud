@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { urlSearch } from '../utils'
+import { urlSearch } from '@/util/index'
 Vue.use(Router)
 
 const router= new Router({

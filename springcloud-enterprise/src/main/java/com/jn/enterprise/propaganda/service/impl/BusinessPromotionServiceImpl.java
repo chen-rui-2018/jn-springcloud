@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
@@ -200,7 +201,13 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @Override
     public BusinessPromotionDetailsShow getBusinessPromotionDetails(String propagandaId) {
         businessPromotionMapper.addClickNumById(propagandaId);
-        return businessPromotionMapper.getBusinessPromotionDetails(propagandaId);
+        BusinessPromotionDetailsShow businessPromotionDetails = businessPromotionMapper.getBusinessPromotionDetails(propagandaId);
+
+        // 处理图片格式
+        if (businessPromotionDetails != null) {
+            businessPromotionDetails.setPosterUrl(IBPSFileUtils.getFilePath(businessPromotionDetails.getPosterUrl()));
+        }
+        return businessPromotionDetails;
     }
 
     /**
@@ -775,6 +782,10 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             //修改时间
             bpw.setModifiedTime(DateUtils.formatDate(tbPropaganda.getModifiedTime(), PATTERN));
         }
+
+        // 处理图片格式
+        bpw.setPosterUrl(IBPSFileUtils.uploadFile2Json(loginAccount, bpw.getPosterUrl()));
+
         //启动工作流
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(businessPromotionProcessId, loginAccount, bpw);
         String okStatus="200";

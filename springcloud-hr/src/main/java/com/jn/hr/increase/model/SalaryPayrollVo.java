@@ -81,7 +81,7 @@ public class SalaryPayrollVo extends BaseRowModel implements Serializable{
 	@ApiModelProperty(value = "入账日期")
 	private String entryTime;
 	
-	@ApiModelProperty(value = "入账日期")
+	@ApiModelProperty(value = "人数")
 	private Integer number;
 
 	public Integer getNumber() {

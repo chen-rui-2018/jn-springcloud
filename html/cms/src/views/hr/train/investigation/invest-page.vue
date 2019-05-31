@@ -6,10 +6,10 @@
           <div class="text">
             <h6 class="text-tit">{{ loginData.researchProject }}</h6>
             <p>调研时段：{{ loginData.effectiveTimeStart }} 至 {{ loginData.effectiveTimeEnd }}</p>
-            <p>{{ loginData.projectNote }}</p>
+            <p v-html="loginData.projectNote">{{ loginData.projectNote }}</p>
           </div>
           <!-- 入口 -->
-          <div v-if="isEntry" class="entry">
+          <div v-if="isEntry&&loginData.isShowName===1" class="entry">
             <div class="form">
               <el-row type="flex" justify="center">
                 <el-col :span="10" :xs="16">
@@ -32,7 +32,7 @@
             </div>
           </div>
           <!-- 进入后内容 -->
-          <div v-if="!isEntry">
+          <div v-if="!isEntry||loginData.isShowName===2">
             <div v-for="(item,index) of examList" :key="index" class="examList">
               <p style="font-size:14px;">
                 <span>Q{{ index+1 }}</span>&nbsp;&nbsp;

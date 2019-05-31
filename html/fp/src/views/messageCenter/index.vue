@@ -44,7 +44,7 @@
                 <el-menu-item index="/dataReminder">数据上报提醒</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-menu-item index="/messageCenter/chat">
+            <el-menu-item index="/chat">
               <span slot="title">社区交流</span>
             </el-menu-item>
           </el-menu>

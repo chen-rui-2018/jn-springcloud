@@ -155,7 +155,8 @@ const router= new Router({
               component: resolve => require(['@/views/messageCenter/chat'], resolve),
               meta: {
                 title: '社区交流'
-              }
+              },
+              name: 'chat'
             },
             {
               path: '/parkNotice',

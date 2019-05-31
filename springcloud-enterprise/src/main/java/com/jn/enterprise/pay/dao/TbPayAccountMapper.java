@@ -10,7 +10,7 @@ public interface TbPayAccountMapper {
 
     int deleteByExample(TbPayAccountCriteria example);
 
-    int deleteByPrimaryKey(String accountId);
+    int deleteByPrimaryKey(String userId);
 
     int insert(TbPayAccount record);
 
@@ -18,7 +18,7 @@ public interface TbPayAccountMapper {
 
     List<TbPayAccount> selectByExample(TbPayAccountCriteria example);
 
-    TbPayAccount selectByPrimaryKey(String accountId);
+    TbPayAccount selectByPrimaryKey(String userId);
 
     int updateByExampleSelective(@Param("record") TbPayAccount record, @Param("example") TbPayAccountCriteria example);
 

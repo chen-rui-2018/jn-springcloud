@@ -360,7 +360,7 @@
         return new Promise((resolve, reject) => {
           this.validateInputFormatModel()
             .then(() => {
-              this.$confirm('确定提交吗?', '提示', {
+              this.$confirm('确定提交吗?', '提交过后不能再次修改！', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'

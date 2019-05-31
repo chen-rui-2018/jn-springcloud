@@ -4,7 +4,7 @@
         v-for="(item, index) in list"
         :key="index"
         class="card-list"
-        @click="$router.push({path:'/investmentPolicyDetail',query:{id: item.id}})"
+        @click="$router.push({path:'/investmentInfoDetail',query:{id: item.id}})"
       >
         <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}">
         </div>
@@ -12,11 +12,17 @@
           <div class="card-list-title">{{ item.title }}</div>
           <div class="card-list-text">{{ item.subTitle }}</div>
           <div class="card-list-tips">
-            <span>{{ item.startTime }}</span>
-            <span class="flex-center">
-              <i class="view-icon icon iconfont icon-view"></i>
-              <span class="card-list-warning">{{ item.viewCount }}</span>
-            </span>
+            <div class="tag-row">
+              <tag-btn
+                v-if="index < 2"
+                v-for="(tag, index) in item.adFlag.split(',')"
+                :key="index"
+                :title="tag"
+                class="tag-list"
+              ></tag-btn>
+              <span v-if="item.adFlag.split(',').length > 1" class="main-color">...</span>
+            </div>
+            <div class="main-color">立即考察</div>
           </div>
         </div>
       </div>
@@ -24,13 +30,23 @@
 </template>
 
 <script>
+import tagBtn from '../common/tagBtn'
 export default {
+  components: {
+    tagBtn
+  },
   mounted () {
     this.init()
   },
   data () {
     return {
-      list: []
+      list: [],
+      query: {
+        page: 1,
+        rows: 500,
+        parkId: '',
+        keyWords: ''
+      }
     }
   },
   methods: {
@@ -39,12 +55,14 @@ export default {
     },
     getData () {
       this.api.get({
-        url: 'getBusinessAdPolicy',
+        url: 'getBusinessAdContent',
+        data: this.query,
         callback: res => {
           if (res.code === '0000') {
-            this.list = res.data
+            this.list = res.data.rows
+            this.total = res.data.total
           } else {
-
+            this.$message.error(res.result);
           }
         }
       })
@@ -56,6 +74,12 @@ export default {
 
 <style lang="scss" scoped>
   @import '~@/assets/styles/common';
+  .tag-row {
+    @include flex($h: flex-start);
+    .tag-list {
+      margin-right: 10px;
+    }
+  }
   .card-list {
     margin: 4px auto;
     display: flex;

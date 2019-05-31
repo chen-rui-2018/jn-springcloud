@@ -4,19 +4,19 @@
         v-for="(item, index) in list"
         :key="index"
         class="card-list"
-        @click="$router.push({path:'/investmentPolicyDetail',query:{id: item.id}})"
+        @click="$router.push({path:'/investmentDynamicDetail',query:{id: item.id}})"
       >
         <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}">
         </div>
         <div class="card-list-content">
           <div class="card-list-title">{{ item.title }}</div>
-          <div class="card-list-text">{{ item.subTitle }}</div>
+          <div class="card-list-text">{{ item.content }}</div>
           <div class="card-list-tips">
             <span>{{ item.startTime }}</span>
             <span class="flex-center">
-              <i class="view-icon icon iconfont icon-view"></i>
-              <span class="card-list-warning">{{ item.viewCount }}</span>
-            </span>
+                  <i class="view-icon icon iconfont icon-view"></i>
+                  <span class="card-list-warning">{{ item.viewCount }}</span>
+                </span>
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@ export default {
     },
     getData () {
       this.api.get({
-        url: 'getBusinessAdPolicy',
+        url: 'getBusinessAdDynamic',
         callback: res => {
           if (res.code === '0000') {
             this.list = res.data

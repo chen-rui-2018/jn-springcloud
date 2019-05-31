@@ -12,7 +12,7 @@
             <div class="agentTil">{{getGuideDetal.title}}</div>
           </div>
           <div class="agent2 clearfix color2">
-            <div class="agentImg">
+            <div>
               <p>
                 <span class="tag-list">
                   <span>状态：</span>
@@ -255,13 +255,9 @@
           margin-top: 20px;
           font-size: 13px;
 
-          .agentImg {
-            //   width: 150px;
-            //   height: 120px;
-            span.tag-list {
-              display: inline-block;
-              width: 200px;
-            }
+          span.tag-list {
+            display: inline-block;
+            width: 200px;
           }
 
           .agent2Info {

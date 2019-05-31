@@ -30,7 +30,7 @@
               <li class="list-row" v-for="(i,k) in policyCenterListSearchResult" :key="k">
                 <div class="list-row-l">
                   <div class="list-adcover list-row-cell" :style="{backgroundImage: 'url(' + i.adCover + ')'}"></div>
-                  <div class="fir1 list-row-cell pointer" @click="$router.push({path:'/investmentPolicyDetail',query:{id:i.id}})">
+                  <div class="list-row-cell pointer" @click="$router.push({path:'/investmentPolicyDetail',query:{id:i.id}})">
                     <h3 class="color4">{{i.title}}</h3>
                     <p class="p1">
                       <span class="tag-list">发布日期：{{i.startTime}}</span>

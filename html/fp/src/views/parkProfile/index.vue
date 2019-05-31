@@ -8,7 +8,7 @@
     <div class="delinfo">
       <el-card style="overflow:visible">
         <div class="infotop pr">
-          <img class="infoImg" src="@/../static/img/investment-profile.png" alt="">
+          <img class="infoImg" :src="detail.mainPicture" alt="">
           <div class="infotitle">
             <div class="tit color4">园区概况</div>
             <div class="eng mainColor">PARK PROFILE</div>

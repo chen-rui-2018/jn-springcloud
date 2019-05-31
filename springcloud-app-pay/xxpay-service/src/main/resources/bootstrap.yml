@@ -19,7 +19,7 @@ wx:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://springcloud:springcloud@localhost:1025/eureka/
+      defaultZone: http://springcloud:springcloud@172.16.160.25:1025/eureka/
   instance:
     prefer-ip-address: true
 

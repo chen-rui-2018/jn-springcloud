@@ -111,8 +111,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         ApplyUserInfo applyUserInfo = new ApplyUserInfo();
         BeanUtils.copyProperties(userExtension, applyUserInfo);
-        if (StringUtils.isBlank(applyUserInfo.getName())
-                || StringUtils.isBlank(applyUserInfo.getPosition()) || StringUtils.isBlank(applyUserInfo.getSex())) {
+        if (StringUtils.isBlank(applyUserInfo.getName())|| StringUtils.isBlank(applyUserInfo.getSex())) {
             //用户信息不完善，跳转到信息完善页
             throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
         }

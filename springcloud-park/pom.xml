@@ -92,7 +92,8 @@
                         hatch
                     </contexts>
                     <tableNames>
-                        tb_hatch_incubator_enterprise_and_team
+                        tb_parking_space_rental,
+                        tb_parking_preferential
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

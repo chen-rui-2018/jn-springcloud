@@ -86,7 +86,7 @@ public class ParkingSpaceController extends BaseController {
     @RequestMapping(value = "/applyParkingSpaceAmount",method = RequestMethod.GET)
     public Result<ParkingSpaceAmountVo> applyParkingSpaceAmount(@Validated ParkingSpaceAmountModel parkingSpaceAmountModel){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        return new Result<>(parkingSpaceService.applyParkingSpaceAmount(parkingSpaceAmountModel,user.getAccount()));
+        return new Result<>(parkingSpaceService.applyParkingSpaceAmount(parkingSpaceAmountModel,null==user?null:user.getAccount()));
     }
 
     @ControllerLog(doAction = "生成支付账单")

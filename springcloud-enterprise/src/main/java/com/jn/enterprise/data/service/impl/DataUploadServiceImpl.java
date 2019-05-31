@@ -1428,7 +1428,8 @@ public class DataUploadServiceImpl implements DataUploadService {
                 if(DataUploadConstants.COMPANY_TYPE.equals(data.getTaskInfo().getFileType().toString())){
                     //删除之前的草稿
                     TbDataReportingTaskDataCriteria taskDataCriteria = new TbDataReportingTaskDataCriteria();
-                    taskDataCriteria.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdIn(tgList);
+                    taskDataCriteria.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdIn(tgList)
+                            .andFillIdEqualTo(data.getTaskInfo().getFillId());
                     tbDataReportingTaskDataMapper.deleteByExample(taskDataCriteria);
 
                     //未填报状态；直接写入数据
@@ -1464,7 +1465,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                         }
                         if(fallInFormIds !=null && fallInFormIds.size()>0){
                             taskDataCriteriaBean.clear();
-                            taskDataCriteriaBean.or().andFallInFormIdIn(fallInFormIds);
+                            taskDataCriteriaBean.or().andFallInFormIdIn(fallInFormIds).andFillIdEqualTo(data.getTaskInfo().getFillId());
                             //删除掉用户删除的值
                             tbDataReportingTaskDataMapper.deleteByExample(taskDataCriteriaBean);
                         }
@@ -1658,7 +1659,8 @@ public class DataUploadServiceImpl implements DataUploadService {
             if(DataUploadConstants.IS_DRAFT.equals(needToSavetask.getStatus().toString())){
                 //删除这些草稿数据，
                 TbDataReportingTaskDataCriteria taskDataCriteria = new TbDataReportingTaskDataCriteria();
-                taskDataCriteria.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdIn(tgList);
+                taskDataCriteria.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdIn(tgList)
+                        .andFillIdEqualTo(data.getTaskInfo().getFillId());
                 tbDataReportingTaskDataMapper.deleteByExample(taskDataCriteria);
                 //保存新数据
                 targetDao.saveData(dataList);
@@ -1699,7 +1701,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                         }
                         if(fallInFormIds !=null && fallInFormIds.size()>0){
                             taskDataCriteriaBean.clear();
-                            taskDataCriteriaBean.or().andFallInFormIdIn(fallInFormIds);
+                            taskDataCriteriaBean.or().andFallInFormIdIn(fallInFormIds).andFillIdEqualTo(data.getTaskInfo().getFillId());
                             //删除掉用户删除的值
                             tbDataReportingTaskDataMapper.deleteByExample(taskDataCriteriaBean);
                         }

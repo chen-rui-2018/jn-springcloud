@@ -38,6 +38,7 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
@@ -723,14 +724,14 @@ public class OrgServiceImpl implements OrgService {
             throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
         //给用户添加"机构管理员"角色
-        String roleName="机构管理员";
-        Result<SysRole> sysRoleResult = systemClient.getRoleByName(roleName);
-        if(sysRoleResult==null ||sysRoleResult.getData()==null){
-            logger.warn("添加机构管理员角色失败，失败原因：无法获取“机构管理员”角色信息，请确认系统服务是否正常，且“机构管理员”角色在系统中存在");
+        Result<SysRole> addSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.ORG_ADMIN.getCode());
+        Result<SysRole> delSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
+        if(addSysRoleResult==null ||addSysRoleResult.getData()==null || delSysRoleResult==null || delSysRoleResult.getData()==null){
+            logger.warn("添加机构管理员角色失败，失败原因：无法获取“机构管理员”、“普通用户”角色信息，请确认系统服务是否正常，且“机构管理员”、“普通用户”角色在系统中存在");
             throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
         //更新用户角色
-        Result<Boolean> booleanResult = investorService.updateUserRoleInfo(user, sysRoleResult);
+        Result<Boolean> booleanResult = investorService.updateUserRoleInfo(user, addSysRoleResult,delSysRoleResult);
         if(booleanResult.getData()==true){
             return 1;
         }else{

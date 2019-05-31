@@ -31,7 +31,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="allActi clearfix">
+                <!-- <div class="allActi clearfix">
                     <ul class="actiFilterUl fl clearfix">
                         <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
                         <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeId}" @click="handleFil(v.typeId)">{{v.typeName}}</li>
@@ -49,7 +49,7 @@
                         <input type="text" placeholder="搜索活动" v-model="keyWord">
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
-                </div>
+                </div> -->
                 <div class="actiTab">
                     <ul class="allActiUl clearfix" v-if="flag">
                         <li v-for="(item,index) in actiListSlim" :key='index'>
@@ -140,7 +140,7 @@ export default {
       actiFilflag: "",
       colorFlag: "",
       actiListSlim: [],
-      actiTypeList: [],
+    //   actiTypeList: [],
       page: 1, //页码
       row: 12, //每页显示多少条
       total: 0,
@@ -251,7 +251,7 @@ export default {
           page: this.page,
           rows: this.row,
           startTime: this.startTime,
-          typeId: this.typeId
+          typeId: 'org_activity'
         },
         dataFlag: false,
         callback: function(res) {
@@ -262,19 +262,19 @@ export default {
         }
       });
     },
-    getActiType() {
-      let _this = this;
-      this.api.post({
-        url: "findActivityTypeList",
-        data: {},
-        // dataFlag: false,
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.actiTypeList = res.data.rows;
-          }
-        }
-      });
-    }
+    // getActiType() {
+    //   let _this = this;
+    //   this.api.post({
+    //     url: "findActivityTypeList",
+    //     data: {},
+    //     // dataFlag: false,
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         _this.actiTypeList = res.data.rows;
+    //       }
+    //     }
+    //   });
+    // }
   }
 };
 </script>

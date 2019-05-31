@@ -34,7 +34,7 @@
         <div class="agent1 clearfix">
           <div class="agentTil fl color1">{{companyDetail.comName}}</div>
           <div class="orgBtn fr mainColor">
-            <span class="span1 span2" @click="onlineContact">在线联系</span>
+            <span class="span1 span2" @click="onlineContact(companyDetail.companyId)">在线联系</span>
             <span class="span1" @click="$router.push({path:'/recruitmentList',query:{comId:companyDetail.id}})">热招职位</span>
             <span class="span1 span3" v-if="isCare=='0'" @click="handleAttention(companyDetail.companyId)">+关注</span>
             <span class="span1 span3" v-if="isCare=='1'" @click="cancelAttention(companyDetail.companyId)">取消关注</span>
@@ -347,13 +347,30 @@ export default {
         }
       });
     },
-    //在线联系
-    onlineContact() {
-      if (!sessionStorage.userInfo) {
+     //在线联系
+    onlineContact(id){
+       if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({ path: "/chat" });
+       this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: id
+        },
+        callback: res=> {
+          if (res.code == "0000") {
+            // this.typeList = res.data;
+            if(sessionStorage.userInfo.account==res.data.account){
+              this.$message.error('当前登录的账号跟聊天对象一样');
+              return
+            }
+            this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
     },
     swiperinit() {
       // if (this.policyCenterList.length <= 1 ) {

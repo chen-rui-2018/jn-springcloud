@@ -56,9 +56,9 @@
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
-            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round>停止报名</el-button>
-            <el-button type="success" v-else-if="applySuccess" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
-            <el-button type="success" v-else style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">取消报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='0'" style="background:#00a040;height:38px;width:110px" round>停止报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='2'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">取消报名</el-button>
             <!-- <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button> -->
             <!-- <span class="shareto">
               分享到
@@ -145,7 +145,6 @@
 export default {
   data() {
     return {
-      applySuccess: undefined,
       inFlag: "",
       textarea: "",
       textData: "",
@@ -158,7 +157,8 @@ export default {
       actiApplyList: [],
       accountIsLike: false,
       isCommentLike: false,
-      countDown: ""
+      countDown: "",
+      activityApplyShow:'1',
     };
   },
   created() {
@@ -299,6 +299,10 @@ export default {
     },
     quickApply(id) {
       //立即报名
+        if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       let _this = this;
       this.api.post({
         url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
@@ -309,7 +313,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("报名成功");
-            _this.applySuccess = false;
+            _this.activityApplyShow = '2';
           } else {
             _this.$message.error(res.result);
           }
@@ -318,6 +322,10 @@ export default {
     },
     stopApply(id) {
       //停止报名
+        if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       let _this = this;
       this.api.post({
         url: `springcloud-park/activity/activityApply/cancelApply?activityId=${id}`,
@@ -328,7 +336,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("取消报名成功");
-            _this.applySuccess = true;
+            _this.activityApplyShow = '1';
           } else {
             _this.$message.error(res.result);
           }
@@ -412,7 +420,7 @@ export default {
             _this.activityDetail = res.data.activityDetail;
             _this.actiApplyList = res.data.activityApplyList;
             _this.accountIsLike = res.data.accountIsLike;
-            _this.applySuccess = res.data.applySuccess;
+            _this.activityApplyShow = res.data.activityApplyShow;
             _this._interval = setInterval(() => {
               let data = _this.countTime(res.data.activityDetail.applyEndTime);
               if (data) {

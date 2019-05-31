@@ -180,7 +180,7 @@ export default {
 
 
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd",// 页面广告获取
-        selectCompany:"springcloud-enterprise/guest/userUpgrade/selectCompany", // 查询公司列表
+        selectCompany:"springcloud-enterprise/joinPark/userUpgrade/selectCompany", // 查询公司列表
         changeToStaff:"springcloud-enterprise/joinPark/userUpgrade/changeToStaff", // 升级员工
         changeToCompany:"springcloud-enterprise/joinPark/userUpgrade/changeToCompany", // 升级企业
 

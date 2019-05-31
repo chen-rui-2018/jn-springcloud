@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.asset.model.*;
+import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
 
@@ -25,7 +26,7 @@ public interface RoomInformationService {
      * @param id
      * @return
      */
-    RoomInformationModel getRoomInformation(String id);
+    RoomInformationModel getRoomInformation(String id,String account);
 
     /**
      *
@@ -134,4 +135,18 @@ public interface RoomInformationService {
      * @return
      */
     List<RoomEnterpriseModel> selectRoomEnterprise(List<String> enterpriseId);
+
+    /**
+     * 缴费单回调
+     * @param payCallBackNotify
+     * @return
+     */
+    Result updateBill(PayCallBackNotify payCallBackNotify);
+
+    /**
+     * 调用生成缴费单接口
+     * @param billIds
+     * @return
+     */
+    Result createBill(String billIds);
 }

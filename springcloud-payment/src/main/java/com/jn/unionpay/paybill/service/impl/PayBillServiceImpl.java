@@ -164,12 +164,6 @@ public class PayBillServiceImpl implements PayBillService {
             logger.error("创建缴费账单：参数时间转换错误。{}",e.getMessage(),e);
             throw new JnSpringCloudException(PayBillExceptionEnum.TIME_CONVERSION_ERROR);
         }
-        Result<ServiceCompany> companyDetailByAccount = companyClient.getCompanyDetailByAccountOrCompanyId(paymentBillModel.getBillObjId());
-        if(companyDetailByAccount.getData()!=null){
-            tbPaymentBill.setBillObjType(PayBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode());
-        }else{
-            tbPaymentBill.setBillObjType(PayBillEnum.BILL_OBJ_TYPE_IS_INDIVIDUAL.getCode());
-        }
         tbPaymentBill.setBillStatus(PayBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
         tbPaymentBill.setCreatorAccount(paymentBillModel.getBillCreateAccount());
         tbPaymentBill.setCreatedTime(new Date());
@@ -473,7 +467,6 @@ public class PayBillServiceImpl implements PayBillService {
 
 
     public Boolean callBackBusiness(TbPaymentBill bill,PayOrderNotify payOrderNotify){
-        //TODO jiangyl 判断账单类型，并回调各业务侧接口处理业务数据。
         String billType = bill.getBillType();
         if(StringUtils.equals(billType,PayTypeEnum.PAYMENT_ORDER_TYPE_PARKING_FEE.getCode())||StringUtils.equals(billType, PayTypeEnum.PAYMENT_ORDER_TYPE_PARKING_MONTH.getCode())){
             PaymentBillCallBack paymentBillCallBack = new PaymentBillCallBack();

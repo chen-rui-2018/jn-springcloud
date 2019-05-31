@@ -1,7 +1,9 @@
 package com.jn.park.pmpaybill.service;
 
+import com.jn.park.pmpaybill.entity.TbPmPayBillItem;
 import com.jn.park.property.model.PayCallBackNotify;
-import com.jn.paycode.model.PaymentCode;
+
+import java.util.List;
 
 /**
  * 缴费单-类型条目管理service
@@ -24,9 +26,11 @@ public interface PmPayBillService {
     void updatePmPayBillItemExpireStatus();
 
     /**
-     * 对处于已生成状态,但处于未发送账单的数据生成账单,推送给企业
+     * 批量生成缴费单
+     *
+     * @param pmPayBillItems
      */
-    void generatePmBill();
+    void generatePmBill(List<TbPmPayBillItem> pmPayBillItems);
 
     /**
      * 物业费账单缴费回调接口

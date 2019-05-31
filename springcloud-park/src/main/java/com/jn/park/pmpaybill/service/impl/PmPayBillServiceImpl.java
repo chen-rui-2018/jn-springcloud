@@ -1,5 +1,6 @@
 package com.jn.park.pmpaybill.service.impl;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
@@ -76,7 +77,7 @@ public class PmPayBillServiceImpl implements PmPayBillService {
     /**
      * 账本类型 1：电费，2：物业费
      */
-    public static String acBookType = "2";
+    public static String acBookType = "PROPERTY";
 
     /**
      * 对象类型【1：企业，2：个人】
@@ -159,39 +160,42 @@ public class PmPayBillServiceImpl implements PmPayBillService {
     }
 
     /**
-     * 定时自动生成账单信息
+     * 批量生成缴费单
+     * @param pmPayBillItems
      */
     @Override
-    @ServiceLog(doAction = "每月16号凌晨更新缴费单条目是否逾期状态")
+    @ServiceLog(doAction = "批量生成缴费单")
     @Transactional(rollbackFor = Exception.class)
-    public void generatePmBill() {
-        //1.查询处于已生成,未发送状态的物业费数据
-        TbPmPayBillItemCriteria tbPmPayBillItemCriteria = new TbPmPayBillItemCriteria();
-        TbPmPayBillItemCriteria.Criteria criteria = tbPmPayBillItemCriteria.createCriteria();
-        //设置只查询物业费
-        criteria.andPayTypeEqualTo(new Byte(PayTypeEnums.PM_BILL.getCode()));
-        //设置查询已生成状态
-        criteria.andGenerateStatusEqualTo(new Byte(GenerateStatusEnums.EXPIRED.getCode()));
-        //设置查询未发送状态数据
-        criteria.andSendPayBillEqualTo(new Byte(SendPayBillEnums.NO_SEND.getCode()));
-        List<TbPmPayBillItem> tbPmPayBillItemList = tbPmPayBillItemMapper.selectByExample(tbPmPayBillItemCriteria);
-        for (TbPmPayBillItem tbPmPayBillItem : tbPmPayBillItemList) {
+    public void generatePmBill(List<TbPmPayBillItem> pmPayBillItems) {
+        for (TbPmPayBillItem tbPmPayBillItem : pmPayBillItems) {
+            //获取当前物业费缴费单生成状态
+            Byte generateStatus = tbPmPayBillItem.getGenerateStatus();
+            if (StringUtils.equals(GenerateStatusEnums.EXPIRED.getCode(),generateStatus.toString())){
+                //如果是已生成状态,则直接跳过
+                continue;
+            }
+
             //调用支付接口,创建账单
             Result result = createBill(tbPmPayBillItem);
             if (result != null && StringUtils.equals("0000",result.getCode())){
                 //设置账单发送状态为已发送
                 tbPmPayBillItem.setSendPayBill(new Byte(SendPayBillEnums.SENTED.getCode()));
+                //设置减免状态为已减免状态
+                tbPmPayBillItem.setDerateState(new Byte(DerateStateEnums.RELIEFED.getCode()));
+                //设置缴费单为已生成状态
+                tbPmPayBillItem.setGenerateStatus(new Byte(GenerateStatusEnums.EXPIRED.getCode()));
                 logger.info("[物业费管理] 为企业推送物业费账单成功,企业id:{},账单编号:{}",
                         tbPmPayBillItem.getCompanyId(), tbPmPayBillItem.getId());
             }else{
                 logger.error("[物业费管理] 为企业推送物业费账单失败,企业id:{},账单编号:{}",
                         tbPmPayBillItem.getCompanyId(), tbPmPayBillItem.getId());
+                throw new JnSpringCloudException(PmPayBillExcetionEnums.GENERATOR_ERROR);
             }
         }
 
         //如缴费单集合信息不为空,批量更新缴费单为已发送状态
-        if (tbPmPayBillItemList != null && tbPmPayBillItemList.size() > 0) {
-            pmPayBillItemMapper.updateBatchItemSendStatus(tbPmPayBillItemList);
+        if (pmPayBillItems != null && pmPayBillItems.size() > 0) {
+            pmPayBillItemMapper.updateBatchItemSendStatus(pmPayBillItems);
             logger.info("[物业费管理] 物业费批量更新发送状态成功");
         }
 

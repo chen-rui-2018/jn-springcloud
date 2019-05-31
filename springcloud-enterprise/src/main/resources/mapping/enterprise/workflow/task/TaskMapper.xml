@@ -84,31 +84,104 @@
     <!-- 时效性待办事项预警数据统计 -->
     <select id="getWorkflowTaskStatistics" resultType="com.jn.enterprise.workflow.task.vo.WarnStatisticsVO">
         SELECT
-            b.warnType AS "warnType",
-            COUNT(b.id) AS "warnNum"
+            d.taskWarnStatus AS "warnType",
+            COUNT(d.id) AS "warnNum"
         FROM (
             SELECT
-                h.id,
+                x.id,
                 CASE
-                    <![CDATA[
-                    WHEN h.warnTime <= #{warnHour} THEN "WARNING"
-                    WHEN #{warnHour} < h.warnTime AND h.warnTime <= #{earlyWarnHour} THEN "EARLY_WARNING"
-                    ]]>
-                ELSE "NORMAL" END AS "warnType"
+                <![CDATA[
+                  WHEN x.percent <= #{warnPercent} THEN 'WARNING'
+                  WHEN #{warnPercent} < x.percent and x.percent <= #{earlyWarnPercent} THEN 'EARLY_WARNING'
+                ]]>
+                ELSE 'NORMAL' END AS "taskWarnStatus"
             FROM (
                 SELECT
-                a.id,
-                ROUND((UNIX_TIMESTAMP(a.end_time) - UNIX_TIMESTAMP(NOW())) / 3600,2) AS "warnTime"
-                FROM tb_workflow_task a
-                WHERE a.status = 1
-                AND a.record_status = 1
-                AND a.user_id = #{userId}
-            ) h
-        ) b
-        GROUP BY b.warnType
-        ORDER BY b.warnType DESC
+                    b.id,
+                    ROUND(b.subDay / b.totalDay , 2) * 100 AS "percent"
+                FROM (
+                    SELECT
+                        a.id AS "id",
+                        DATEDIFF(a.end_time,a.created_time) AS "totalDay",
+                        DATEDIFF(a.end_time,CURDATE()) AS "subDay"
+                    FROM tb_workflow_task a
+                    WHERE a.status = 1
+                    AND a.record_status = 1
+                    AND a.user_id = #{userId}
+                ) b
+            ) x
+        ) d
+        GROUP BY d.warnType
+        ORDER BY d.warnType DESC
     </select>
 
+    <!-- 获取时效性待办列表 -->
+    <select id="getWorkflowTaskList" resultType="com.jn.enterprise.workflow.task.vo.TaskListVO">
+        SELECT
+            d.id,
+            d.userId,
+            d.userName,
+            d.title,
+            d.type,
+            d.createdTime,
+            d.endTime,
+            d.linkType,
+            d.linkUrl,
+            d.describes,
+            d.status,
+            d.totalDay,
+            d.subDay,
+            d.percent,
+            <![CDATA[
+            CASE WHEN d.subDay >= 0 THEN '0' ELSE '1' END AS "taskStatus",
+            CASE
+                WHEN d.percent <= #{warnPercent} THEN '2'
+                WHEN #{warnPercent} < d.percent and d.percent <= #{earlyWarnPercent} THEN '1'
+            ELSE '0' END AS "taskWarnStatus"
+            ]]>
+        FROM (
+            SELECT
+                b.id,
+                b.userId,
+                b.userName,
+                b.title,
+                b.type,
+                b.createdTime,
+                b.endTime,
+                b.linkType,
+                b.linkUrl,
+                b.describes,
+                b.status,
+                b.totalDay,
+                b.subDay,
+                ROUND(b.subDay / b.totalDay , 2) * 100 AS "percent"
+            FROM (
+                SELECT
+                    a.id AS "id",
+                    a.user_id AS "userId",
+                    a.user_name AS "userName",
+                    a.title AS "title",
+                    a.type AS "type",
+                    a.created_time AS "createdTime",
+                    a.end_time AS "endTime",
+                    a.link_type AS "linkType",
+                    a.link_url AS "linkUrl",
+                    a.describes AS "describes",
+                    a.status AS "status",
+                    DATEDIFF(a.end_time,a.created_time) AS "totalDay",
+                    DATEDIFF(a.end_time,CURDATE()) AS "subDay"
+                FROM tb_workflow_task a
+                WHERE a.record_status = 1
+                AND a.user_id = #{userId}
+                <if test="type != null and type != ''">
+                    AND a.type = #{type}
+                </if>
+                <if test="status != null and status != ''">
+                    AND a.status = #{status}
+                </if>
+            ) b
+        ) d
+    </select>
 
     <update id="deleteBranchByIds" parameterType="java.util.Map">
         update tb_workflow_task

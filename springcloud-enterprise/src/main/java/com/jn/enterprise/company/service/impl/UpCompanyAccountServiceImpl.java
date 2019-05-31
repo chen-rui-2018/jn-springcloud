@@ -12,6 +12,7 @@ import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.model.UserCompanyInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,17 +65,21 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
         String comName = ServiceCompany.getComName();
         if (StringUtils.isNotBlank(comAdmin)) {
             Result<SysRole> result = systemClient.getRoleByName(CompanyDataEnum.COMPANY_ADMIN.getCode());
+            Result<SysRole> normalResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
             logger.info("[升级企业账号] 调用系统服务 根据角色名称获取角色信息 接口 返回结果:{}", result);
-            if (result != null && result.getData() != null) {
+            if (result != null && result.getData() != null && normalResult != null && normalResult.getData() != null) {
                 String roleId = result.getData().getId();
+                String normalRoleId = result.getData().getId();
 
-                //2.为用户赋权,增加企业管理员角色
+                //2.为用户赋权,增加企业管理员角色，删除普通用户
                 SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
                 User user = new User();
                 user.setAccount(comAdmin);
 
                 Set<String> addRoleSet = new HashSet<String>();
+                Set<String> removeRoleSet = new HashSet<String>();
                 addRoleSet.add(roleId);
+                removeRoleSet.add(normalRoleId);
                 sysUserRoleVO.setUser(user);
                 sysUserRoleVO.setAddRoleId(addRoleSet);
 

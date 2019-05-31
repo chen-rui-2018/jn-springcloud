@@ -12,9 +12,8 @@ import com.jn.company.model.*;
 import com.jn.enterprise.common.config.IBPSDefIdConfig;
 import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
-import com.jn.enterprise.company.entity.TbServiceCompany;
-import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
-import com.jn.enterprise.company.entity.TbServiceCompanyModify;
+import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
+import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.model.CompanyInfoShow;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
@@ -29,6 +28,8 @@ import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
+import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
+import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.activity.model.ActivityPagingParam;
@@ -40,6 +41,7 @@ import com.jn.park.care.model.CareParam;
 import com.jn.park.care.model.ServiceEnterpriseCompany;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -63,11 +65,17 @@ public class CompanyServiceImpl implements CompanyService {
     private static Logger logger = LoggerFactory.getLogger(CompanyServiceImpl.class);
 
     @Autowired
+    private TbServiceCompanyStaffMapper tbServiceCompanyStaffMapper;
+    @Autowired
     private TbServiceCompanyMapper tbServiceCompanyMapper;
     @Autowired
     private TbServicePreferMapper tbServicePreferMapper;
     @Autowired
+    private OrgColleagueService orgColleagueService;
+    @Autowired
     private CompanyMapper companyMapper;
+    @Autowired
+    private CompanyService companyService;
     @Autowired
     private UserExtensionClient userExtensionClient;
     @Autowired
@@ -426,6 +434,37 @@ public class CompanyServiceImpl implements CompanyService {
         logger.info("修改企业信用分逻辑执行完毕，响应条数：{} ",i);
         return new Result<>(i==1?true:false);
 
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取企业在线联系人账号")
+    public String getCompanyContactAccount(String comId) {
+        // 默认联系人为企业管理员
+        String companyContactAccount = companyService.getCompanyDetailByAccountOrId(comId).getComAdmin();
+
+        TbServiceCompanyStaffCriteria example = new TbServiceCompanyStaffCriteria();
+        example.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andComIdEqualTo(comId)
+                .andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_AGREE.getCode())
+                .andCheckStatusEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode());
+        List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(example);
+        
+        // 如果企业员工不为空，寻找企业联系人
+        if (staffList != null && !staffList.isEmpty()) {
+            List<String> accountList = new ArrayList<>();
+            for (TbServiceCompanyStaff companyStaff : staffList) {
+                accountList.add(companyStaff.getAccount());
+            }
+
+            String roleName = CompanyDataEnum.COMPANY_CONTACTS.getCode();
+            List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
+            for (UserRoleInfo userRoleInfo : userRoleInfoList) {
+                if (userRoleInfo.getRoleName().equals(roleName)) {
+                    companyContactAccount = userRoleInfo.getAccount();
+                    break;
+                }
+            }
+        }
+        return companyContactAccount;
     }
 
 }

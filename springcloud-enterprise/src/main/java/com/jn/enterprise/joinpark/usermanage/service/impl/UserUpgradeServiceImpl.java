@@ -96,14 +96,14 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         TbServiceCompanyStaffCriteria inviteExample = new TbServiceCompanyStaffCriteria();
         TbServiceCompanyStaffCriteria.Criteria criteria = inviteExample.createCriteria();
         example.createCriteria().andCheckStatusEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode())
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andAccountEqualTo(account);
         criteria.andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_SEND.getCode())
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andAccountEqualTo(account);
         example.or(criteria);
         List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(example);
         if (staffList != null && !staffList.isEmpty()) {
             logger.warn("[升级企业] {}账号已收到企业邀请或已升级员工，请勿执行此操作", account);
-            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_UPGRADE_COMPANY_READY);
+            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_UPGRADE_STAFF_READY);
         }
 
         // 封装数据
@@ -111,6 +111,8 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         companyCheckParam.setComAdmin(account);
         companyCheckParam.setCreatorAccount(account);
         companyCheckParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        companyCheckParam.setCreditUpdateTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        companyCheckParam.setCreditPoints("100");
         companyCheckParam.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
         companyCheckParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getCode());
 

@@ -92,4 +92,11 @@ public interface CompanyService {
      */
     Result<Boolean> updateCreditPoints(CreditUpdateParam creditUpdateParam);
 
+    /**
+     * 获取企业在线联系人账号
+     * @param comId 企业ID
+     * @return
+     */
+    String getCompanyContactAccount(String comId);
+
 }

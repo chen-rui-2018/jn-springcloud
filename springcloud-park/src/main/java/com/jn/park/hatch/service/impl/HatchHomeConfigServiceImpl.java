@@ -3,14 +3,13 @@ package com.jn.park.hatch.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.park.hatch.dao.TbHatchHomeConfigMapper;
+import com.jn.park.hatch.dao.TbHatchIncubatorEnterpriseAndTeamMapper;
 import com.jn.park.hatch.dao.TbHatchIncubatorEnterpriseMapper;
 import com.jn.park.hatch.dao.TbHatchIncubatorTeamMapper;
-import com.jn.park.hatch.entity.TbHatchHomeConfig;
-import com.jn.park.hatch.entity.TbHatchHomeConfigCriteria;
-import com.jn.park.hatch.entity.TbHatchIncubatorEnterprise;
-import com.jn.park.hatch.entity.TbHatchIncubatorTeam;
+import com.jn.park.hatch.entity.*;
 import com.jn.park.hatch.enums.DeclaratStatusEnums;
 import com.jn.park.hatch.enums.HatchStatusEnums;
 import com.jn.park.hatch.model.HatchHomeConfig;
@@ -47,6 +46,9 @@ public class HatchHomeConfigServiceImpl implements HatchHomeConfigService {
     private TbHatchIncubatorEnterpriseMapper tbHatchIncubatorEnterpriseMapper;
 
     @Autowired
+    private TbHatchIncubatorEnterpriseAndTeamMapper tbHatchIncubatorEnterpriseAndTeamMapper;
+
+    @Autowired
     private TbHatchIncubatorTeamMapper tbHatchIncubatorTeamMapper;
 
     @ServiceLog(doAction = "众创空间-首页信息查询")
@@ -76,21 +78,23 @@ public class HatchHomeConfigServiceImpl implements HatchHomeConfigService {
 
     @Override
     @ServiceLog(doAction = "插入入孵企业信息")
-    public void insertEnterpriseInfo(HatchIncubatorEnterpriseParamModel hatchIncubatorEnterpriseParamModel) {
+    public Result insertEnterpriseInfo(HatchIncubatorEnterpriseParamModel hatchIncubatorEnterpriseParamModel) {
         logger.info("插入入孵企业信息开始");
-        TbHatchIncubatorEnterprise tb = new TbHatchIncubatorEnterprise();
+        TbHatchIncubatorEnterpriseAndTeam tb = new TbHatchIncubatorEnterpriseAndTeam();
         BeanUtils.copyProperties(hatchIncubatorEnterpriseParamModel,tb);
-        tbHatchIncubatorEnterpriseMapper.insertSelective(tb);
+        tbHatchIncubatorEnterpriseAndTeamMapper.insertSelective(tb);
         logger.info("插入入孵企业信息结束");
+        return new Result("插入入孵企业信息成功");
     }
 
     @Override
     @ServiceLog(doAction = "插入入孵团队信息")
-    public void insertTeamInfo(HatchIncubatorTeamParamModel hatchIncubatorTeamParamModel) {
+    public Result insertTeamInfo(HatchIncubatorTeamParamModel hatchIncubatorTeamParamModel) {
         logger.info("插入入孵团队信息开始");
-        TbHatchIncubatorTeam tb = new TbHatchIncubatorTeam();
+        TbHatchIncubatorEnterpriseAndTeam tb = new TbHatchIncubatorEnterpriseAndTeam();
         BeanUtils.copyProperties(hatchIncubatorTeamParamModel,tb);
-        tbHatchIncubatorTeamMapper.insertSelective(tb);
+        tbHatchIncubatorEnterpriseAndTeamMapper.insertSelective(tb);
         logger.info("插入入孵团队信息结束");
+        return new Result("插入入孵团队信息成功");
     }
 }

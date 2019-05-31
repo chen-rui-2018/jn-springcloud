@@ -82,9 +82,9 @@ reconciliation:
     #账单类型  ：SUCCESS表示返回当日成功支付的订单
     billType: SUCCESS
 
-logging:
-  config: 'classpath:logback-custom.xml'
-  level:
-    com:
-      jn: debug
+#logging:
+#  config: 'classpath:logback-custom.xml'
+#  level:
+#    com:
+#      jn: debug
 

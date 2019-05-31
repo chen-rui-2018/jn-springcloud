@@ -239,7 +239,7 @@ export default {
   .el-main {
     padding: 0 20px;
     &.isMobile {
-      padding: 20px;
+      padding: 0;
     }
   }
   &.pd {
@@ -461,7 +461,7 @@ export default {
           border-left: 2px solid #00a042;
         }
          .el-menu-item {
-            // 
+            //
             margin: 0;
           }
         .el-menu-item:hover {

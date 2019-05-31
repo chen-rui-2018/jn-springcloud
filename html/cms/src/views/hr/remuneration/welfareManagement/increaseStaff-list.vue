@@ -39,7 +39,10 @@
       <el-dialog :visible.sync="increaseStaffAddFormVisible" title="增减员计划" width="750px">
         <el-form ref="increaseStaffAddForm" :rules="increaseStaffAddFormRules" :model="increaseStaffAddFromData" label-width="150px">
           <el-form-item label="姓名" prop="jobNumber" class="inline">
+            <multi-cascader-ext ref="assessmentObjectRef" v-model="increaseStaffAddFromData.jobNumberList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+            <!--
             <el-cascader-multi ref="assessmentObjectRef" v-model="increaseStaffAddFromData.jobNumberList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+-->
             <!--<el-input v-model="increaseStaffAddFromData.name" type="textarea" style="width: 350px;" readonly="readonly"/>
             <el-button type="text" @click="openStaffNamePage">选择</el-button>-->
           </el-form-item>
@@ -132,10 +135,11 @@
 import {
   api, apiGet
 } from '@/api/hr/common'
+import multiCascaderExt from '@/components/MultiCascaderExt2/multi-cascader-ext.vue'
 
 import UE from '@/components/ue.vue'
 export default {
-  components: { UE },
+  components: { UE, multiCascaderExt },
   data() {
     return {
       increaseStaffAddFormRules: {
@@ -383,7 +387,6 @@ export default {
       })
         .then(() => {
           api('hr/SalaryWelfareManagement/deleteAttritionPlan', row).then(res => {
-            debugger
             if (res.data.code === '0000') {
               this.$message({
                 message: res.data.data,

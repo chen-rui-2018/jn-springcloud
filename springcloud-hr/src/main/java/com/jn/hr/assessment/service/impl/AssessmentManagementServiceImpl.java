@@ -349,6 +349,14 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 	@ServiceLog(doAction = "开始考核页面明细")
 	public List<AssessmentTemplateDetailVo> startAssessmentPageDetails(AssessmentManageAdd assessmentManageAdd) {
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentTemplateDetailMapper.selectByTemplateId(assessmentManageAdd.getTemplateId());
+		for(AssessmentTemplateDetailVo detail : templateDetailList){
+			Result result = systemClient.selectDeptByParentId(detail.getLeadAssessmentDepartment(), false);
+			if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+	            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+	        }
+	        Map<String,String>  departMap= (HashMap<String, String>)result.getData();
+			detail.setLeadAssessmentDepartment(departMap.get("departmentName"));
+		}
 		logger.info("[开始考核]考核明细查询成功！");
 		return templateDetailList;
 	}

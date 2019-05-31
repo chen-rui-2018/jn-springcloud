@@ -129,7 +129,7 @@
             <el-card>
               <el-button
                 v-for="(item,index) of examInfo.examinabanksList"
-                :type="(item.answer!=null&&item.answer.length!=0)?'success':''"
+                :type="item.errorFlag?'danger':'success'"
                 :key="index"
                 circle
                 @click="returnCom('#examID'+index)"

@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import { urlSearch } from '../utils'
 Vue.use(Router)
 
-export default new Router({
+const router= new Router({
   // mode: 'history', // require service support 去掉url中的#
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -1105,3 +1105,12 @@ export default new Router({
     },
   ]
 })
+router.beforeEach((to, from, next) => {
+  const token = urlSearch.token
+  if (token) {
+    sessionStorage.setItem('token', token)
+  }
+  next()
+})
+
+export default router

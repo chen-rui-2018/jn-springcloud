@@ -15,10 +15,12 @@ import './assets/font-awesome/css/font-awesome.min.css'
 // Vue.prototype.$get = get
 // Vue.prototype.$post = post
 import api from '@/api/api'
+
 // Vue.use(BaiduMap, {
 //   ak: 'KVelCif7fs2D19DQVz9W6fYEnNbEWE8k'
 // })
 Vue.prototype.api = api
+
 Vue.component('x-table', XTable)
 Vue.component('popup-radio', PopupRadio)
 Vue.component('icon', Icon)

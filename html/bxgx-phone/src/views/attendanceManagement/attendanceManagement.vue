@@ -273,6 +273,7 @@ export default {
 <style lang="scss" scoped>
 
 .attendanceManagement {
+    padding-top: 1rem;
   margin: 30px;
   .iconfont{
         font-size: 0.513333rem;

@@ -616,8 +616,8 @@ public class PayBillServiceImpl implements PayBillService {
         TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
         billCriteria.createCriteria().andBillNumEqualTo(billId).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
-        if(null == tbPaymentBills && tbPaymentBills.size() != 0){
-            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_IS_NOT_EXIT);
+        if(null == tbPaymentBills || tbPaymentBills.size() == 0){
+            return true;
         }
         TbPaymentBill tbPaymentBill = tbPaymentBills.get(0);
         tbPaymentBill.setBillStatus(PayBillEnum.PAYMENT_BILL_IS_DELETE.getCode());

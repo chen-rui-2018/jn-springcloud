@@ -17,7 +17,7 @@
             <div class="approvalGuide_cont">
                 <ul>
                     <li class="actiLi" v-for="(i,k) in actiListSlim" :key="k">
-                        <div class="imgItem">
+                        <div class="imgItem" @click="$router.push({path:'/actiDetail',query:{activityId:i.id}})">
                             <img :src="i.actiPosterUrl" alt="">
                         </div>
                         <div class="contentLi">

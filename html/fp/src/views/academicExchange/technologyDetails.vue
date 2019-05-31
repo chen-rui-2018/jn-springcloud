@@ -3,6 +3,8 @@
         <div class="incubatorNav">
             <span class="pointer" @click="$router.push({path:'/'})">首页</span>
             <span>/</span>
+            <span class="pointer" @click="$router.push({path:'/academicExchange'})">学术科技</span>
+            <span>/</span>
             <span class="mainColor">学术科技详情</span>
         </div>
         <div class="announcement1 pr">

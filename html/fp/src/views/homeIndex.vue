@@ -12,9 +12,9 @@
               <i class="el-icon-bell" style="font-size:20px"></i>
             </router-link> -->
             <!-- <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span> -->
-            <div class="search pointer" v-if="luyouString.indexOf($route.name) == -1">
+            <!-- <div class="search pointer" v-if="luyouString.indexOf($route.name) == -1">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
+            </div> -->
             <user-info></user-info>
             <!-- <div class="navlogin">
               <router-link to="/parkNotice" class="" v-if="isLogin">
@@ -87,7 +87,7 @@
     },
     data() {
       return {
-        luyouString:'portalIndex,enterpriseservice,investment',
+        luyouString:'portalIndex,enterpriseservice,investment,home,messageCenter',
         showMes:false,
         // sousuo: false,
         show1: false,

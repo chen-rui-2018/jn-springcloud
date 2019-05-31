@@ -41,7 +41,7 @@ export default {
         autoFloatEnabled: false
       },
       appSrc:
-        'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
+        window.location.host + '/#/hr/train/investigation/invest-page?projectId=' +
         this.$route.query.projectId,
       formData: {
         emailSubject: '',

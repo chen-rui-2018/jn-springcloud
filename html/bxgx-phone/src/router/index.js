@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { urlSearch } from '../utils'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
-
+    {
+      path: '/investment',
+      name: 'investment',
+      component: () => import('@/views/investment'),
+      meta: {title: '招商引资'}
+    },
     {
       path: '/actiDetail',
       name: 'actiDetail',
@@ -23,6 +29,12 @@ export default new Router({
       name: 'powerDetail',
       meta: {title: '权利详情'},
       component: () => import('@/views/administrative/powerDetail')
+    },
+    {
+      path: '/guest/portal/sp/power/text',
+      name: 'text',
+      meta: {title: '实施依据详情'},
+      component: () => import('@/views/administrative/text')
     },
     {
       path: '/guest/portal/sp/power/serviceDetail',
@@ -152,3 +164,13 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const token = urlSearch.token
+  if (token) {
+    sessionStorage.setItem('token', token)
+  }
+  next()
+})
+
+export default router

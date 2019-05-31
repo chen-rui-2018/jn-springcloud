@@ -78,7 +78,7 @@
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="受理时间：">
-                      <span class="table_item_cont">{{seviceDetail.dealTime|time}}</span>
+                      <span class="table_item_cont">{{seviceDetail.dealTime}}</span>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
@@ -95,7 +95,7 @@
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="联系电话：">
-                      <span class="table_item_cont">>{{seviceDetail.linkPhone}}</span>
+                      <span class="table_item_cont">{{seviceDetail.linkPhone}}</span>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
@@ -134,7 +134,7 @@
                     label="材料样本"
                     >
                     <template slot-scope="scope">
-                      <a :href="'http://112.94.22.222:2381/ibps'+scope.row.sample">{{scope.row.sampleName}}</a>
+                      <a :href="scope.row.sample">{{scope.row.sampleName}}</a>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -178,10 +178,10 @@
               <div>
                   <div class="guide_base"><span></span><span>依据</span></div>
                   <div class="table_item_cont">
-                    <span v-if="isWord&&word.length>135" class="66">{{word|word}} </span>
-                    <span v-else class="55">{{word}}</span>
-                    <span @click="isWord=!isWord" v-show="isWord&&word.length>135" class="pack_up">[点击展开]</span>
-                    <span @click="isWord=!isWord" v-show="isWord===false&&word.length>135" class="pack_up">[点击收起]</span>
+                    <!-- <span v-if="isWord&&word.length>135" class="66">{{word|word}} </span> -->
+                    <span v-html="seviceDetail.dealConditions"></span>
+                    <!-- <span @click="isWord=!isWord" v-show="isWord&&word.length>135" class="pack_up">[点击展开]</span>
+                    <span @click="isWord=!isWord" v-show="isWord===false&&word.length>135" class="pack_up">[点击收起]</span> -->
                   </div>
                   <div class="guide_base"><span></span><span>办理流程</span></div>
                   <div v-html="seviceDetail.flowPic" class="flowPic"></div>
@@ -198,7 +198,7 @@
                 </div>
               </template>
               <div class="baseIfor_table">
-                <span>{{seviceDetail.dealConditions}} </span>
+                <span v-html="seviceDetail.dealConditions"> </span>
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -296,7 +296,7 @@ export default {
           id:this.messageform.id
          },
         callback: function(res) {
-          console.log(res);
+          // console.log(res);
           if (res.code == "0000") {
             _this.loading=false
             _this.seviceDetail = res.data;
@@ -337,6 +337,7 @@ export default {
 </script>
 <style lang="scss">
   .serviceDetail{
+    padding-top: 67px;
     // 我要留言弹窗
     .message{
       .el-dialog__body{
@@ -643,7 +644,9 @@ export default {
       padding-left: 10px;
     }
     // 办理流程
-    .flowPic{}
+    .flowPic{
+      text-align: center;
+    }
   }
 </style>
 

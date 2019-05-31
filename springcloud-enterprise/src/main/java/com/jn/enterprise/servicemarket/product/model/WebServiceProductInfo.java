@@ -24,6 +24,8 @@ public class WebServiceProductInfo implements Serializable {
     @ApiModelProperty(value = "产品名称")
     private String productName;
     @ApiModelProperty(value ="机构名称")
+    private String orgId;
+    @ApiModelProperty(value ="机构名称")
     private String orgName;
     @ApiModelProperty(value = "顾问名称")
     private String advisorName;
@@ -33,8 +35,10 @@ public class WebServiceProductInfo implements Serializable {
     private String serviceCycle;
     @ApiModelProperty(value ="产品图片")
     private String pictureUrl;
-    @ApiModelProperty(value = "产品详情")
+    @ApiModelProperty(value = "前台展示产品详情,产品内容")
     private String productDetails;
+    @ApiModelProperty(value = "后台进行产品详情转换使用")
+    private String serviceDetails;
     @ApiModelProperty(value = "交易数")
     private Integer transactionsNumber;
     @ApiModelProperty(value = "浏览数")
@@ -43,6 +47,62 @@ public class WebServiceProductInfo implements Serializable {
     private String evaluationScore;
     @ApiModelProperty(value = "评价数")
     private String evaluationNumber;
+    @ApiModelProperty(value = "上架此产品的机构数")
+    private String upShelfOrgNumber;
+    @ApiModelProperty(value = "同类型产品总数")
+    private String sameTypeNum;
+    @ApiModelProperty(value = "同类型产品常规产品数")
+    private String commentNum;
+    @ApiModelProperty(value = "同类型产品特色产品数")
+    private String featureNum;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getSameTypeNum() {
+        return sameTypeNum;
+    }
+
+    public void setSameTypeNum(String sameTypeNum) {
+        this.sameTypeNum = sameTypeNum;
+    }
+
+    public String getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(String commentNum) {
+        this.commentNum = commentNum;
+    }
+
+    public String getFeatureNum() {
+        return featureNum;
+    }
+
+    public void setFeatureNum(String featureNum) {
+        this.featureNum = featureNum;
+    }
+
+    public String getServiceDetails() {
+        return serviceDetails;
+    }
+
+    public void setServiceDetails(String serviceDetails) {
+        this.serviceDetails = serviceDetails;
+    }
+
+    public String getUpShelfOrgNumber() {
+        return upShelfOrgNumber;
+    }
+
+    public void setUpShelfOrgNumber(String upShelfOrgNumber) {
+        this.upShelfOrgNumber = upShelfOrgNumber;
+    }
 
     public String getSignoryId() {
         return signoryId;

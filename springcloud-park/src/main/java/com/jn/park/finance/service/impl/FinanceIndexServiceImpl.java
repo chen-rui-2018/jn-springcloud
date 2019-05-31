@@ -3,6 +3,7 @@ package com.jn.park.finance.service.impl;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.park.finance.dao.FinanceIndexDao;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.enums.FinanceExceptionEnums;
 import com.jn.park.finance.model.*;
 import com.jn.park.finance.service.FinanceIndexService;
@@ -118,25 +119,65 @@ public class FinanceIndexServiceImpl implements FinanceIndexService {
         //查询所有部门的支出占比
         List<FinanceIndexBudgetExpendRatioVo> budgetExpendRatio=financeIndexDao.budgetExpendRatio(map);
 
+
         return budgetExpendRatio;
     }
 
     @ServiceLog(doAction = "全年支出/预算 统计柱状图")
     @Override
-    public List<FinanceIndexExpendBudgetStatisticsVo> expendBudget(String year) {
+    public FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>>  expendBudget(String year) {
         //拼接年月
         String startTime=year+"01";
         String endTime=year+"12";
-        return financeIndexDao.expendBudget(startTime,endTime);
+
+        List<FinanceIndexExpendBudgetStatisticsVo> expendBudgetList=financeIndexDao.expendBudget(startTime,endTime);
+
+        if(null==expendBudgetList||expendBudgetList.size()<1){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"无数据");
+        }
+        FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>> vo1=new FianceDynamicTableVo<>();
+        List<String>dynamicHeadList=new ArrayList<>();
+        for (int i=0;i<expendBudgetList.size();i++){
+            String mm=expendBudgetList.get(i).getMonth().substring(4);
+            //如果小于10，就截取后一位，把前面的0去掉
+            if(Integer.parseInt(mm) <10){
+                mm=mm.substring(1);
+            }
+            dynamicHeadList.add(String.format("%s月",mm));
+        }
+        vo1.setDynamicHeadList(dynamicHeadList);
+        vo1.setRows(expendBudgetList);
+        return vo1;
     }
 
     @ServiceLog(doAction = "监控明细部门支出预算统计（柱状图）")
     @Override
-    public List<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpend(String year, String departmentId, int typeId) {
+    public FianceDynamicTableVo<List<FinanceIndexSectionBudgetExpendVo>>sectionBudgetExpend(String year, String departmentId, String typeId) {
         //拼接年月
         String startTime=year+"01";
         String endTime=year+"12";
-        return financeIndexDao.sectionBudgetExpend(startTime,endTime,departmentId,typeId);
+        List<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpendVoList=financeIndexDao.sectionBudgetExpend(startTime,endTime,departmentId,typeId);
+
+        if(null==sectionBudgetExpendVoList||sectionBudgetExpendVoList.size()<1){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"无数据");
+        }
+        FianceDynamicTableVo<List<FinanceIndexSectionBudgetExpendVo>> vo1=new FianceDynamicTableVo<>();
+        List<String>dynamicHeadList=new ArrayList<>();
+        for (int i=0;i<sectionBudgetExpendVoList.size();i++){
+            String mm=sectionBudgetExpendVoList.get(i).getMonth().substring(4);
+            //如果小于10，就截取后一位，把前面的0去掉
+            if(Integer.parseInt(mm) <10){
+                mm=mm.substring(1);
+            }
+            dynamicHeadList.add(String.format("%s月",mm));
+        }
+        vo1.setDynamicHeadList(dynamicHeadList);
+        vo1.setRows(sectionBudgetExpendVoList);
+        return vo1;
+
+
+
+        //return financeIndexDao.sectionBudgetExpend(startTime,endTime,departmentId,typeId);
     }
 
     @ServiceLog(doAction = "监控明细各项支出占比（饼状图）")
@@ -163,7 +204,7 @@ public class FinanceIndexServiceImpl implements FinanceIndexService {
 
     @ServiceLog(doAction = "监控明细各项支出预算报表")
     @Override
-    public List<FinanceIndexSectionExpendFormsVo> sectionExpendForms(String year, String departmentId) {
+    public FianceDynamicTableVo<List<FinanceIndexSectionExpendFormsVo>> sectionExpendForms(String year, String departmentId) {
 
         String begin=year+"01";
         String end=year+"12";
@@ -175,7 +216,80 @@ public class FinanceIndexServiceImpl implements FinanceIndexService {
         vo.setFinanceIndexSectionExpendFormsModels(list);
         financeIndexSectionExpendFormsVos.add(vo);
 
-        return financeIndexSectionExpendFormsVos;
+        if(null==financeIndexSectionExpendFormsVos||financeIndexSectionExpendFormsVos.size()<1){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"无数据");
+        }
+        FianceDynamicTableVo<List<FinanceIndexSectionExpendFormsVo>> vo1=new FianceDynamicTableVo<>();
+        List<String>dynamicHeadList=new ArrayList<>();
+        financeIndexSectionExpendFormsVos.get(0).getFinanceIndexSectionExpendFormsModels().stream().forEach(e->{
+            //String yyyy=e.getMonth().substring(0,4);
+            String mm=e.getMonth();
+            //如果小于10，就截取后一位，把前面的0去掉
+            if(Integer.parseInt(mm) <10){
+                mm=mm.substring(1);
+            }
+            dynamicHeadList.add(String.format("%s月",mm));
+        });
+        vo1.setDynamicHeadList(dynamicHeadList);
+        vo1.setRows(financeIndexSectionExpendFormsVos);
+        return vo1;
+
+        //return financeIndexSectionExpendFormsVos;
+    }
+
+    @ServiceLog(doAction = "导出")
+    @Override
+    public List<FinanceIndexExpendFormsExportVo> expendFormsExport(String year, String departmentId) {
+        String begin=year+"01";
+        String end=year+"12";
+        //保存结果，返回
+        List<FinanceIndexExpendFormsExportVo>  financeIndexExpendFormsExportVos=new ArrayList<>();
+        //查询到结果
+        List<FinanceIndexSectionExpendFormsVo> financeIndexSectionExpendFormsVos=financeIndexDao.sectionExpendForms(begin,end,departmentId);
+        for(int i=0;i<financeIndexSectionExpendFormsVos .size();i++){
+            FinanceIndexExpendFormsExportVo fvo=new FinanceIndexExpendFormsExportVo();
+            //设置支出类型名称
+            fvo.setCostTypeName(financeIndexSectionExpendFormsVos.get(i).getCostTypeName());
+            //获取到支出预算的list
+            List<FinanceIndexSectionExpendFormsModel> fm=financeIndexSectionExpendFormsVos.get(i).getFinanceIndexSectionExpendFormsModels();
+            //赋值 将子查询的结果复制到 FinanceIndexExpendFormsExportVo 里面,因为在使用Excel工具类中的方法时
+            //不方便遍历这个集合里面的值，所以只能这样遍历加到这个里面了,
+            if(fm.size() != 0 ){
+                 fvo.setBudgetNumber1(fm.get(0).getBudgetNumber()); fvo.setCost1(fm.get(0).getCost());
+                 fvo.setBudgetNumber2(fm.get(1).getBudgetNumber()); fvo.setCost2(fm.get(1).getCost());
+                 fvo.setBudgetNumber3(fm.get(2).getBudgetNumber()); fvo.setCost3(fm.get(2).getCost());
+                 fvo.setBudgetNumber4(fm.get(3).getBudgetNumber()); fvo.setCost4(fm.get(3).getCost());
+                 fvo.setBudgetNumber5(fm.get(4).getBudgetNumber()); fvo.setCost5(fm.get(4).getCost());
+                 fvo.setBudgetNumber6(fm.get(5).getBudgetNumber()); fvo.setCost6(fm.get(5).getCost());
+                 fvo.setBudgetNumber7(fm.get(6).getBudgetNumber()); fvo.setCost7(fm.get(6).getCost());
+                 fvo.setBudgetNumber8(fm.get(7).getBudgetNumber()); fvo.setCost8(fm.get(7).getCost());
+                 fvo.setBudgetNumber9(fm.get(8).getBudgetNumber()); fvo.setCost9(fm.get(8).getCost());
+                 fvo.setBudgetNumber10(fm.get(9).getBudgetNumber()); fvo.setCost10(fm.get(9).getCost());
+                 fvo.setBudgetNumber11(fm.get(10).getBudgetNumber()); fvo.setCost11(fm.get(10).getCost());
+                 fvo.setBudgetNumber12(fm.get(11).getBudgetNumber()); fvo.setCost12(fm.get(11).getCost());
+             }
+            financeIndexExpendFormsExportVos.add(fvo);
+        }
+        //查询合计  将加过在添加到 FinanceIndexExpendFormsExportVo ,同上,
+        List<FinanceIndexSectionExpendFormsModel> list=financeIndexDao.total(begin,end,departmentId);
+        if (list.size() != 0){
+            FinanceIndexExpendFormsExportVo fvo=new FinanceIndexExpendFormsExportVo();
+            //设置支出类型名称
+            fvo.setCostTypeName("合计");
+            fvo.setBudgetNumber1(list.get(0).getBudgetNumber()); fvo.setCost1(list.get(0).getCost());
+            fvo.setBudgetNumber2(list.get(1).getBudgetNumber()); fvo.setCost2(list.get(1).getCost());
+            fvo.setBudgetNumber3(list.get(2).getBudgetNumber()); fvo.setCost3(list.get(2).getCost());
+            fvo.setBudgetNumber4(list.get(3).getBudgetNumber()); fvo.setCost4(list.get(3).getCost());
+            fvo.setBudgetNumber5(list.get(4).getBudgetNumber()); fvo.setCost5(list.get(4).getCost());
+            fvo.setBudgetNumber6(list.get(5).getBudgetNumber()); fvo.setCost6(list.get(5).getCost());
+            fvo.setBudgetNumber7(list.get(6).getBudgetNumber()); fvo.setCost7(list.get(6).getCost());
+            fvo.setBudgetNumber8(list.get(7).getBudgetNumber()); fvo.setCost8(list.get(7).getCost());
+            fvo.setBudgetNumber9(list.get(8).getBudgetNumber()); fvo.setCost9(list.get(8).getCost());
+            fvo.setBudgetNumber10(list.get(9).getBudgetNumber()); fvo.setCost10(list.get(9).getCost());
+            fvo.setBudgetNumber11(list.get(10).getBudgetNumber()); fvo.setCost11(list.get(10).getCost());
+            fvo.setBudgetNumber12(list.get(11).getBudgetNumber()); fvo.setCost12(list.get(11).getCost());
+        }
+        return financeIndexExpendFormsExportVos;
     }
 
     @ServiceLog(doAction = "类型下拉框")

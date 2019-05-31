@@ -48,7 +48,7 @@
   </div>
 </template>
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   data() {
     var check = (rule, value, callback) => {
@@ -144,8 +144,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysModule/delete', id, 'moduleId').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysModule/delete`, id, 'moduleId').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -163,8 +163,8 @@ export default {
         })
     },
     initList() {
-      api('system/sysModule/list', this.moduleForm).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysModule/list`, this.moduleForm, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.moduleData = res.data.data.rows
           this.total = res.data.data.total
           if (this.moduleData.length === 0 && this.total > 0) {
@@ -182,8 +182,8 @@ export default {
       this.$refs['moduleform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysModule/add', this.moduleform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysModule/add`, this.moduleform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -204,8 +204,8 @@ export default {
       this.$refs['moduleform'].validate(valid => {
         this.isDisabled = true
         if (valid) {
-          api('system/sysModule/update', this.moduleform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysModule/update`, this.moduleform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'

@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
 import com.jn.system.common.enums.SysExceptionEnums;
@@ -18,10 +19,11 @@ import com.jn.system.dict.enums.SysDictExceptionEnums;
 import com.jn.system.dict.model.*;
 import com.jn.system.dict.service.SysDictService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDictKeyValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -200,7 +202,7 @@ public class SysDictServiceImpl implements SysDictService {
      */
     @Override
     @ServiceLog(doAction = "条件分页查询数据字典列表")
-    public PaginationData getDictByPage(SysDictPage sysDictPage) {
+    public PaginationData<List<SysDict>> getDictByPage(SysDictPage sysDictPage) {
         Page<Object> objects = PageHelper.startPage(sysDictPage.getPage(), sysDictPage.getRows());
         List<SysDict> sysDictList = sysDictMapper.getDictByPage(sysDictPage);
         PaginationData date = new PaginationData(sysDictList, objects.getTotal());
@@ -279,7 +281,23 @@ public class SysDictServiceImpl implements SysDictService {
         criteria.andModuleCodeEqualTo(sysDictInvoke.getModuleCode());
         criteria.andParentGroupCodeEqualTo(sysDictInvoke.getParentGroupCode());
         criteria.andGroupCodeEqualTo(sysDictInvoke.getGroupCode());
+        if(StringUtils.isNotBlank(sysDictInvoke.getKey())){
+            criteria.andDictKeyEqualTo(sysDictInvoke.getKey());
+        }
         return tbSysDictMapper.selectByExample(tbSysDictCriteria);
+    }
+    /**
+     *根据条件查询数据字典的值
+     * @param sysDictInvoke
+     * @return
+     */
+    @Override
+    public String selectDictValueByCondition(SysDictInvoke sysDictInvoke){
+        List<TbSysDict> tbSysDictList=getTbSysDicts(sysDictInvoke);
+        if(tbSysDictList!=null && tbSysDictList.size()>0){
+            return tbSysDictList.get(0).getDictValue();
+        }
+        return null;
     }
 
 

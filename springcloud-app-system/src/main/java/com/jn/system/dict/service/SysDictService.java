@@ -2,11 +2,10 @@ package com.jn.system.dict.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.system.dict.entity.TbSysDict;
-import com.jn.system.dict.model.SysDictEdit;
-import com.jn.system.dict.model.SysDictInvoke;
-import com.jn.system.dict.model.SysDictKeyValue;
-import com.jn.system.dict.model.SysDictPage;
+import com.jn.system.dict.model.*;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDictKeyValue;
 
 import java.util.List;
 
@@ -55,7 +54,7 @@ public interface SysDictService {
      * @param sysDictPage 查询条件
      * @return
      */
-    PaginationData getDictByPage(SysDictPage sysDictPage);
+    PaginationData<List<SysDict>> getDictByPage(SysDictPage sysDictPage);
 
     /**
      * 数据字典调用接口
@@ -72,4 +71,12 @@ public interface SysDictService {
      * @return
      */
     List<TbSysDict> sortSearch(SysDictInvoke sysDictInvoke);
+
+
+    /**
+     * 根据条件查询数据字典的值
+     * @param sysDictInvoke
+     * @return
+     */
+    String selectDictValueByCondition(SysDictInvoke sysDictInvoke);
 }

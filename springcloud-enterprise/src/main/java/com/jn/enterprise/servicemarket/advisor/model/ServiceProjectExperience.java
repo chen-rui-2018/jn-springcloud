@@ -1,12 +1,8 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,24 +13,18 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "ServiceProjectExperience",description = "顾问项目经验出参")
-public class ServiceProjectExperience extends Page implements Serializable {
+public class ServiceProjectExperience  implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "顾问账号")
-    @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "公司名称")
-    @NotNull(message="公司名称不能为空")
     private String companyName;
     @ApiModelProperty(value = "项目名称")
-    @NotNull(message="项目名称不能为空")
     private String projectName;
-    @ApiModelProperty(value = "项目时间(格式：201903)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
-            message = "{projectTime:'项目时间格式错误'}")
+    @ApiModelProperty(value = "项目时间")
     private String projectTime;
     @ApiModelProperty(value = "个人职责")
-    @Size(max = 500, message = "个人职责描述不能超过500字")
     private String personalDuties;
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;

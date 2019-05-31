@@ -2,7 +2,7 @@ package com.jn.enterprise.servicemarket.advisor.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementPortalParam;
-import com.jn.enterprise.servicemarket.advisor.vo.AdvisroManagementDetailsVo;
+import com.jn.enterprise.servicemarket.advisor.vo.AdvisorManagementDetailsVo;
 
 /**
  * 服务顾问管理(后台门户管理)
@@ -24,5 +24,5 @@ public interface AdvisorManagementPortalService {
      * @param advisorAccount  顾问账号
      * @return
      */
-    AdvisroManagementDetailsVo getAdvisorManagementDetails(String advisorAccount);
+    AdvisorManagementDetailsVo getAdvisorManagementDetails(String advisorAccount);
 }

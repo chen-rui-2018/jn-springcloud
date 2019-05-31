@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.policy.dao.PolicyGuideMapper">
+    <!--政策管理-->
+    <select id="getPolicyManagementList" parameterType="com.jn.park.policy.model.PolicyManagementParam"
+            resultType="com.jn.park.policy.model.PolicyManagementShow">
+        select
+          sp.policy_title   as "policyTitle"              <!--政策标题-->
+          ,sp.read_num as "readNum"                       <!--阅读次数-->
+          ,sp.policy_level_name as "policyLevelName"      <!--政策级别名称-->
+          ,sp.policy_class_name as "policyClassName"      <!--政策分类名称-->
+          ,date_format(sp.release_date,'%Y/%m/%d %H:%i:%s') as "releaseDate"  <!--发布时间-->
+          ,sp.support_method as "supportMethod"           <!--支持方式-->
+          ,sp.support_industry as "supportIndustry"       <!--支持产业-->
+          ,sp.issue_unit as "issueUnit"                   <!--发文单位-->
+        from tb_policy sp
+        where 1=1
+        and sp.record_status='1'
+        and sp.policy_type='0'
+        <if test=" status != null and status != '' " ><!--状态-->
+            and sp.status=#{status}
+        </if>
+        <if test="policyTitle != null and policyTitle != ''"><!--政策标题-->
+            and sp.policy_title like concat('%',#{policyTitle},'%')
+        </if>
+    </select>
+    <!--关联图解政策信息/关联政策原文-->
+    <select id="getPolicyInfo" resultType="com.jn.park.policy.model.PolicyInfoShow">
+        select
+          sp.policy_id as "policyId",
+          sp.policy_title as "policyTitle"
+        from tb_policy sp
+        where 1=1
+        and sp.status='1'
+        and sp.record_status='1'
+        and sp.policy_type=#{policyType}
+        and (sp.is_policy_original !='1' or sp.is_policy_original is null )
+        and (sp.is_policy_diagram !='1' or sp.is_policy_diagram is null)
+
+    </select>
+
+    <!--获取普通政策详情-->
+    <select id="getPolicyGuidDetails" resultType="com.jn.park.policy.model.PolicyGuideDetailsShow">
+        select
+          sp.policy_id as "policyId"
+          ,sp.policy_code as "policyCode"
+          ,sp.policy_level_code as "policyLevelCode"
+          ,sp.policy_level_name as "policyLevelName"
+          ,sp.policy_class_code as "policyClassCode"
+          ,sp.policy_class_name as "policyClassName"
+          ,sp.thematic_type as "thematicType"
+          ,sp.policy_title as "policyTitle"
+          ,sp.read_num as "readNum"
+          ,date_format(sp.release_date,'%Y-%m-%d %H:%i:%S') as "releaseDate"
+          ,sp.status as "status"
+          ,sp.support_method as "supportMethod"
+          ,sp.support_industry as "supportIndustry"
+          ,sp.issue_unit as "issueUnit"
+          ,sp.is_policy_diagram as "isPolicyDiagram"
+          ,spd.policy_content as "policyContent"
+          ,spp.relation_policy_diagram_id as "relationPolicyDiagramId"
+          ,spp.policy_title as "relationPolicyDiagramTitle"
+        from tb_policy sp
+        left join tb_policy_details spd
+        on sp.policy_id=spd.policy_id
+        left join tb_policy spp
+        on sp.policy_id=spp.relation_policy_diagram_id
+        where 1=1
+        and sp.record_status='1'
+        and sp.policy_type='0'  <!--普通政策-->
+        and sp.policy_id=#{policyId}
+    </select>
+
+    <!--图解政策管理-->
+    <select id="getDiagramPolicyManagementList" parameterType="com.jn.park.policy.model.PolicyManagementParam"
+            resultType="com.jn.park.policy.model.PolicyDiagramManagementShow">
+        select
+        sp.policy_title   as "policyTitle"              <!--政策标题-->
+        ,sp.policy_diagram_url as "policyDiagramUrl"    <!--图解政策url(缩略图)-->
+        ,sp.read_num as "readNum"                       <!--阅读次数-->
+        ,date_format(sp.release_date,'%Y/%m/%d %H:%i:%s') as "releaseDate"    <!--发布时间-->
+        ,sp.relation_policy_original_id as "relationPolicyOriginalId"         <!--关联的政策原文id-->
+        ,IFNULL(spp.policy_title,"无") as "relationPolicyOriginalName"        <!--政策原文关联-->
+        from tb_policy sp
+        left join tb_policy spp
+        on sp.policy_id=spp.relation_policy_original_id
+        where 1=1
+        and sp.policy_type="1"
+        <if test=" status != null and status != '' " ><!--状态-->
+            and sp.status=#{status}
+        </if>
+        <if test="policyTitle != null and policyTitle != ''"><!--政策标题-->
+            and sp.policy_title like concat('%',#{policyTitle},'%')
+        </if>
+    </select>
+
+    <!--获取图解政策详情-->
+    <select id="getPolicyGuidDiagramDetails" resultType="com.jn.park.policy.model.PolicyGuideDiagramDetailsShow">
+         select
+          sp.policy_id as "policyId"
+          ,sp.policy_code as "policyCode"
+          ,sp.thematic_type as "thematicType"
+          ,sp.policy_title as "policyTitle"
+          ,sp.read_num as "readNum"
+          ,date_format(sp.release_date,'%Y-%m-%d %H:%i:%S') as "releaseDate"
+          ,sp.status as "status"
+          ,sp.is_policy_original as "isPolicyOriginal"
+          ,spp.policy_id as "relationPolicyOriginalId"
+          ,spp.policy_title as "relationPolicyOriginalTitle"
+          ,sp.policy_diagram_url as "policyDiagramUrl"
+        from tb_policy sp
+        left join tb_policy spp
+        on sp.policy_id=spp.relation_policy_original_id
+        where 1=1
+        and sp.record_status='1'
+        and sp.policy_type='1' <!--图解政策-->
+        and sp.policy_id=#{policyId}
+    </select>
+</mapper>

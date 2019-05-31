@@ -27,11 +27,6 @@ public class SpringCloudAppZuulApplication {
         new SpringApplicationBuilder(SpringCloudAppZuulApplication.class).web(true).run(args);
     }
 
-    @Bean
-    public OneToAccessFilter accessFilter() {
-        return new OneToAccessFilter();
-    }
-
     /**
      * attention:简单跨域就是GET，HEAD和POST请求，但是POST请求的"Content-Type"
      * 只能是application/x-www-form-urlencoded, multipart/form-data 或 text/plain

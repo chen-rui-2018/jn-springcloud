@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Hello, World</title>
+  <style type="text/css">
+    html {
+      height: 100%;
+    }
+
+    body {
+      height: 50%;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    #container {
+      width: 600px;
+      height: 500px;
+    }
+    #left-panel {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+  </style>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=KVelCif7fs2D19DQVz9W6fYEnNbEWE8k"></script>
+</head>
+
+<body onload="loand()">
+  <div id="container">
+  </div>
+  <input id="lng" type="hidden" runat="server" />
+  <input id="lat" type="hidden" runat="server" />
+  <input id="Button1" type="button" value="标记图标" runat="server" onclick="getbiaoji()" />
+  <input id="txtAddress" type="text" placeholder="请输入用餐地址" data - bind="textInput: addressInput" />
+  <script type="text/javascript">
+    function getbiaoji() {
+      var lng = document.getElementByIdx_x("lng").value;
+      var lat = document.getElementByIdx_x("lat").value;
+      var map = new BMap.Map("container");
+      var point = new BMap.Point(lng, lat);
+      var marker = new BMap.Marker(point);
+      var opts = {
+        width: 250, // 信息窗口宽度 
+        height: 100, // 信息窗口高度 
+        title: "经销商地址" // 信息窗口标题 
+      }
+      var infoWindow = new BMap.InfoWindow("移动拖拽 标记经销商地址:" + lng + lat, opts); // 创建信息窗口对象
+      marker.enableDragging(); //启用拖拽
+      map.addControl(new BMap.NavigationControl()); //左上角控件
+      map.enableScrollWheelZoom(); //滚动放大
+      map.enableKeyboard(); //键盘放大
+      map.centerAndZoom(point, 13); //绘制地图
+      map.addOverlay(marker); //标记地图
+      map.openInfoWindow(infoWindow, map.getCenter());
+    }
+
+    function loand() {
+      var map = new BMap.Map("container");
+      var point = new BMap.Point(104.083, 30.686); //默认中心点
+      var marker = new BMap.Marker(point);
+      var opts = {
+        width: 250, // 信息窗口宽度 
+        height: 100, // 信息窗口高度 
+        title: "经销商地址" // 信息窗口标题 
+      }
+      var infoWindow = new BMap.InfoWindow("移动拖拽 标记经销商地址", opts); // 创建信息窗口对象
+      marker.enableDragging(); //启用拖拽
+      marker.addEventListener("dragend", function (e) {
+        point = new BMap.Point(e.point.lng, e.point.lat); //标记坐标（拖拽以后的坐标）
+        marker = new BMap.Marker(point);
+        document.getElementByIdx_x("lng").value = e.point.lng;
+        document.getElementByIdx_x("lat").value = e.point.lat;
+        infoWindow = new BMap.InfoWindow("当前位置<br />经度：" + e.point.lng + "<br />纬度：" + e.point.lat, opts);
+        map.openInfoWindow(infoWindow, point);
+      })
+      map.addControl(new BMap.NavigationControl()); //左上角控件
+      map.enableScrollWheelZoom(); //滚动放大
+      map.enableKeyboard(); //键盘放大
+      map.centerAndZoom(point, 13); //绘制地图
+      map.addOverlay(marker); //标记地图
+      map.openInfoWindow(infoWindow, map.getCenter()); // 打开信息窗口  
+    }
+
+
+
+    var localSearch = null;
+    //查询参数
+    var options = {
+      //智能搜索
+      onSearchComplete: function (results) {
+        //查询结果状态码
+        if (localSearch.getStatus() == BMAP_STATUS_SUCCESS) {
+          var s = convertMapSearch(results); //对结果进行处理
+          model.locationAddress(s); //将结果数据赋予knockout对象数组（可用其他数组对象代替）
+        }
+      }
+    };
+    localSearch = new BMap.LocalSearch("南京", options);
+
+    //subscribe属性 在输入变化的时候执行地址查询
+    sf.addressInput.subscribe(function (val) {
+      var addr = $.trim(val);
+      if (addr == "") {
+        return;
+      }
+      localSearch.search(addr);
+    });
+
+  </script>
+</body>
+
+</html>

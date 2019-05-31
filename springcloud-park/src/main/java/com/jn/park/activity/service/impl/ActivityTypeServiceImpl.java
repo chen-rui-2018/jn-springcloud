@@ -9,11 +9,11 @@ import com.jn.common.util.StringUtils;
 import com.jn.park.activity.dao.*;
 import com.jn.park.activity.entity.*;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityType;
+import com.jn.park.activity.model.ActivityType;
 import com.jn.park.activity.service.ActivityTypeService;
-import com.jn.park.model.ActivityTypeAdd;
-import com.jn.park.model.ActivityTypeQuery;
-import com.jn.park.model.ActivityTypeUpdate;
+import com.jn.park.activity.model.ActivityTypeAdd;
+import com.jn.park.activity.model.ActivityTypeParam;
+import com.jn.park.activity.model.ActivityTypeUpdate;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
@@ -91,19 +91,19 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
 
     @ServiceLog(doAction = "查询活动类型列表")
     @Override
-    public PaginationData findActivityTypeListByState(ActivityTypeQuery activityTypeQuery, boolean isPage) {
+    public PaginationData<List<ActivityType>> findActivityTypeListByState(ActivityTypeParam activityTypeParam, boolean isPage) {
         String valid = "1";
         Page<Object> objects=null;
         if(isPage) {
-            int pageSize = activityTypeQuery.getRows() == 0 ? 15 : activityTypeQuery.getRows();
-            int pageNumber= activityTypeQuery.getPage();
+            int pageSize = activityTypeParam.getRows() == 0 ? 15 : activityTypeParam.getRows();
+            int pageNumber= activityTypeParam.getPage();
             objects  = PageHelper.startPage(pageNumber, pageSize, true);
         }
         //不分页,则表示前端获取列表作为活动的查询条件或添加时的活动类型,只返回有效的活动类型
         if(!isPage){
-            activityTypeQuery.setTypeStatus(valid);
+            activityTypeParam.setTypeStatus(valid);
         }
-            String status = activityTypeQuery.getTypeStatus();
+            String status = activityTypeParam.getTypeStatus();
             List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(status);
             return new PaginationData(activityTypeList,objects==null?0:objects.getTotal());
     }

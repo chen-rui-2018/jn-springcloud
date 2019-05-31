@@ -2,12 +2,15 @@ package com.jn.enterprise.servicemarket.org.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.gson.Gson;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.CallOtherSwaggerUtils;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
@@ -16,19 +19,21 @@ import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 服务机构认证审核接口实现类
@@ -53,6 +58,10 @@ public class OrgApproveServiceImpl implements OrgApproveService {
     private TbServiceOrgTraitMapper tbServiceOrgTraitMapper;
     @Autowired
     private TbServiceOrgLicenseMapper tbServiceOrgLicenseMapper;
+    @Autowired
+    private TbServiceOrgInfoMapper tbServiceOrgInfoMapper;
+    @Autowired
+    private TbServiceOrgElementMapper tbServiceOrgElementMapper;
 
     /**
      * 数据状态 1:有效
@@ -65,7 +74,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
 
     @Override
     @ServiceLog(doAction = "查询机构审核认证列表")
-    public PaginationData getOrgApplyList(OrgApplyParameter orgApplyParameter){
+    public PaginationData< List<OrgApplyVo>> getOrgApplyList(OrgApplyParameter orgApplyParameter){
         List<OrgApplyVo> orgApplyVoList = new ArrayList<>(8);
         Page<Object> objects = PageHelper.startPage(orgApplyParameter.getPage(), orgApplyParameter.getRows() == 0 ? 15 : orgApplyParameter.getRows());
         TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
@@ -99,7 +108,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
                 }
             }
         }
-        PaginationData data = new PaginationData(orgApplyVoList, objects.getTotal());
+        PaginationData<List<OrgApplyVo>> data = new PaginationData<>(orgApplyVoList, objects.getTotal());
         return data;
     }
 
@@ -197,25 +206,6 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         orgApplyDetailVo.setOrgTraits(traits1);
         //TODO 对接审核流接口信息  jiangyl
         return orgApplyDetailVo;
-    }
-
-
-    @Override
-    @ServiceLog(doAction = "机构申请审核")
-    public Boolean checkOrgApply(OrgApplyCheckData orgApplyCheckData){
-        String orgId = orgApplyCheckData.getOrgId();
-        TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
-        orgCriteria.createCriteria().andOrgIdEqualTo(orgId);
-        List<TbServiceOrg> tbServiceOrgs = tbServiceOrgMapper.selectByExample(orgCriteria);
-        if(null==tbServiceOrgs||tbServiceOrgs.size()!=1){
-            throw new JnSpringCloudException(OrgExceptionEnum.ORG_DATA_IS_ERROR);
-        }
-        if(!StringUtils.equals(tbServiceOrgs.get(0).getOrgStatus(),ORG_APPLY_IS_CHECKING)){
-            throw new JnSpringCloudException(OrgExceptionEnum.ORG_DATA_STATUS_IS_NOT_CHECKING);
-        }
-        //TODO 对接工作流返回状态，校验审核完修改机构状态。jiangyl
-
-        return false;
     }
 
 }

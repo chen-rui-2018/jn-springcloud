@@ -1,10 +1,9 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityApplyParam;
-import com.jn.park.model.ActivityQueryPaging;
-import com.jn.system.model.User;
+import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ActivityApplyParam;
+import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.user.model.UserExtensionInfo;
 
 import java.io.IOException;
@@ -42,7 +41,7 @@ public interface ActivityApplyService {
      * @param needPage 是否需要分页
      * @return
      */
-    PaginationData applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage);
+    PaginationData<List<ActivityApplyDetail>> applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage);
 
     /**
      * 生成二维码
@@ -76,11 +75,11 @@ public interface ActivityApplyService {
 
     /**
      * 报名人列表信息
-     * @param activityQueryPaging
+     * @param activityPagingParam
      * @param isPage  true：分页  false:不分页
      * @return
      */
-    PaginationData findApplyActivityList( ActivityQueryPaging activityQueryPaging,Boolean isPage);
+    PaginationData findApplyActivityList(ActivityPagingParam activityPagingParam, Boolean isPage);
 
     /**
      * 报名人账号信息

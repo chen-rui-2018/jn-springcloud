@@ -3,12 +3,12 @@ package com.jn.user.userinfo.service.impl;
 import com.jn.SpringCloudUserApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.system.model.User;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.model.UserInfoParam;
 import com.jn.user.userinfo.service.UserInfoService;
 import com.jn.user.usertag.dao.UserTagMapper;
-import com.jn.user.usertag.entity.TbUserTag;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,9 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.anything;
@@ -65,23 +63,25 @@ public class UserInfoServiceImplTest {
     private CompanyParam companyParam=new CompanyParam();
 
 
+
     @Before
     public void setUp() throws Exception {
         //获取用户扩展信息
         account="wangsong";
-
         //批量获取用户扩展信息
         accountList.add(account);
         accountList.add("qianqi");
         accountList.add("account01");
 
         //更新用户所属机构信息
-        userAffiliateInfo.setAccount(account);
+        userAffiliateInfo.setAccountList(accountList);
         userAffiliateInfo.setAffiliateCode("011111");
         userAffiliateInfo.setAffiliateName("江苏工业园");
 
         //更新用户所属企业信息
-        userCompanyInfo.setAccount(account);
+        accountList.clear();
+        accountList.add(account);
+        userCompanyInfo.setAccountList(accountList);
         userCompanyInfo.setCompanyCode("032222");
         userCompanyInfo.setCompanyName("江苏工业园企业");
 
@@ -185,13 +185,15 @@ public class UserInfoServiceImplTest {
     public void saveOrUpdateUserInfo(){
         UserInfoParam userInfoParam = new UserInfoParam();
         userInfoParam.setName("张桑");
-        userInfoParam.setNick_name("飞凡网");
+        userInfoParam.setNickName("飞凡网");
         userInfoParam.setAge(20);
         userInfoParam.setSex("1");
         userInfoParam.setJobs(new String[]{"101","102"});
         userInfoParam.setHobbys(new String[]{"001","002"});
+        User user = new User();
+        user.setAccount("wangsong");
         try{
-            int i = userInfoService.saveOrUpdateUserInfo(userInfoParam, account);
+            int i = userInfoService.saveOrUpdateUserInfo(userInfoParam,user );
             assertThat(i,greaterThanOrEqualTo(0));
         }catch (JnSpringCloudException e){
             logger.info("保存/修改用户信息失败");

@@ -5,7 +5,6 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.excel.ExcelUtil;
-import com.jn.oa.meeting.model.OaMeeting;
 import com.jn.oa.meeting.model.OaMeetingAdd;
 import com.jn.oa.meeting.model.OaMeetingApprove;
 import com.jn.oa.meeting.model.OaMeetingPage;
@@ -45,10 +44,10 @@ public class MeetingController extends BaseController {
 
 
     @ControllerLog(doAction = "查询会议申请列表")
-    @ApiOperation(value = "查询会议申请列表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/list")
+    @ApiOperation(value = "查询会议申请列表")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/list")
-    public Result list(@Validated @RequestBody OaMeetingPage oaMeetingPage) {
+    public Result<PaginationData<List<OaMeetingVo>>> list(@Validated @RequestBody OaMeetingPage oaMeetingPage) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         PaginationData data = meetingService.selectOaMeetingListBySearchKey(oaMeetingPage,user);
@@ -57,8 +56,8 @@ public class MeetingController extends BaseController {
 
 
     @ControllerLog(doAction = "新增会议申请")
-    @ApiOperation(value = "新增会议申请", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/add")
+    @ApiOperation(value = "新增会议申请")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/add")
     public Result add(@Validated @RequestBody OaMeetingAdd oaMeetingAdd) {
         //获取当前登录用户信息
@@ -74,8 +73,8 @@ public class MeetingController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改会议申请")
-    @ApiOperation(value = "修改会议室", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/update")
+    @ApiOperation(value = "修改会议申请")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/update")
     public Result update(@Validated @RequestBody OaMeetingAdd oaMeeting) {
         Assert.notNull(oaMeeting.getId(), "会议申请ID不能为空");
@@ -87,8 +86,8 @@ public class MeetingController extends BaseController {
 
 
     @ControllerLog(doAction = "审核会议申请")
-    @ApiOperation(value = "审核会议申请（0:已取消、1:审批中、2:审批通过、3:审批不通过、4:已作废）", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/approve")
+    @ApiOperation(value = "审核会议申请",notes = "审核状态（0:已取消、1:审批中、2:审批通过、3:审批不通过、4:已作废）")
+    @RequestMapping(value = "/approve", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/approve")
     public Result approve(@Validated @RequestBody OaMeetingApprove oaMeetingApprove){
         Assert.notNull(oaMeetingApprove.getId(), "会议申请ID不能为空");
@@ -101,10 +100,10 @@ public class MeetingController extends BaseController {
 
 
     @ControllerLog(doAction = "根据ID查询会议申请")
-    @ApiOperation(value = "根据ID查询会议申请", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/selectById")
+    @ApiOperation(value = "根据ID查询会议申请")
+    @RequestMapping(value = "/selectById", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/selectById")
-    public Result selectById(@RequestParam(value = "id") String id) {
+    public Result<OaMeetingParticipantVo> selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "会议申请ID不能为空");
         OaMeetingParticipantVo oaMeeting = meetingService.selectOaMeetingById(id);
         return new Result(oaMeeting);
@@ -112,8 +111,8 @@ public class MeetingController extends BaseController {
 
 
     @ControllerLog(doAction = "根据ID结束会议申请")
-    @ApiOperation(value = "根据ID结束会议申请", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/finishOaMeeting")
+    @ApiOperation(value = "根据ID结束会议申请")
+    @RequestMapping(value = "/finishOaMeeting", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/finishOaMeeting")
     public Result finishOaMeeting(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "会议申请ID不能为空");
@@ -123,8 +122,8 @@ public class MeetingController extends BaseController {
     }
 
     @ControllerLog(doAction = "根据ID取消会议申请")
-    @ApiOperation(value = "根据ID取消会议申请", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/cancelOaMeeting")
+    @ApiOperation(value = "根据ID取消会议申请")
+    @RequestMapping(value = "/cancelOaMeeting", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/cancelOaMeeting")
     public Result cancelOaMeeting(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "会议申请ID不能为空");
@@ -134,11 +133,11 @@ public class MeetingController extends BaseController {
     }
 
 
-    @ControllerLog(doAction = "校验会议室主题称是否存在,fail表示名称已存在,success表示可以使用")
-    @ApiOperation(value = "校验会议室主题是否存在,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/checkName")
+    @ControllerLog(doAction = "校验会议主题称是否存在,fail表示名称已存在,success表示可以使用")
+    @ApiOperation(value = "校验会议主题是否存在", notes = "fail表示名称已存在,success表示可以使用")
+    @RequestMapping(value = "/checkName", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/checkName")
-    public Result checkName(String meetingRoomName) {
+    public Result<String> checkName(String meetingRoomName) {
         String result = meetingService.checkMeetingName(meetingRoomName);
         return new Result(result);
     }
@@ -146,11 +145,11 @@ public class MeetingController extends BaseController {
     @ControllerLog(doAction = "导出会议申请信息")
     @RequestMapping(value = "/exportExcelMeeting", method = RequestMethod.GET)
     @RequiresPermissions("/oa/oaMeeting/exportExcelMeeting")
-    @ApiOperation(value = "导出会议申请信息", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "导出会议申请信息")
     public void exportExcelMeeting(OaMeetingPage oaMeetingPage, HttpServletResponse response) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         String exportTitle = "名称,会议室,日期,开始时间,结束时间,部门,组织人,预约人,状态";
-        String exportColName = "title,meetingRoomName,startDate,startTime,endTime,departmentName,userName,userName,meetingStatusMessage";
+        String exportColName = "title,meetingRoomName,startDate,startTime,endTime,organizationalDepartmentName,organizationalUserName,userName,meetingStatusMessage";
         oaMeetingPage.setPage(1);
         oaMeetingPage.setRows(200000);
         PaginationData data = meetingService.selectOaMeetingListBySearchKey(oaMeetingPage,user);

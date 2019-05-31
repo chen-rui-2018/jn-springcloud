@@ -6,6 +6,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
 import com.jn.common.util.excel.ExcelUtil;
 import com.jn.park.finance.dao.FinanceExpensesDao;
 import com.jn.park.finance.entity.TbFinanceExpensesExample;
@@ -41,12 +42,13 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
     @Autowired
     private SystemClient systemClient;
 
+
     @ServiceLog(doAction="支出录入分页查询")
     @Override
-    public PaginationData findAll(FinanceExpensesPageModel financeExpensesPageModel) {
+    public PaginationData<PaginationData<List<FinanceExpendHistoryVo>>> findAll(FinanceExpensesPageModel financeExpensesPageModel) {
 
 
-        if(null==financeExpensesPageModel.getOrderByClause()){
+        if(StringUtils.isBlank(financeExpensesPageModel.getOrderByClause())){
             financeExpensesPageModel.setOrderByClause("cost_happend_time desc");
         }
 
@@ -59,7 +61,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
     @Override
     public PaginationData findHistoryAll(FinanceExpensesHistoryPageModel financeExpensesHistoryPageModel) {
 
-        if(null==financeExpensesHistoryPageModel.getOrderByClause()){
+        if(StringUtils.isBlank(financeExpensesHistoryPageModel.getOrderByClause())){
             financeExpensesHistoryPageModel.setOrderByClause("cost_happend_time desc");
         }
 
@@ -96,6 +98,9 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
             financeExpendImportDataVo.setExcelId(excelId);
             //获取时间
             String costHappendTime=data.get(0);
+            if(costHappendTime.length()>6||costHappendTime.length()<6){
+                throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,String.format("上传文件中【 %s 】不符合规则,日期格式如【 201901 】",costHappendTime));
+            }
             financeExpendImportDataVo.setCostHappendTime(costHappendTime);
             //获取流水编号
             String costId=data.get(1);
@@ -113,15 +118,21 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
             }
             //设置打标前的类型名称
             financeExpendImportDataVo.setCostBeforeTypeName(costBeforeTypeName);
-            //判断是否有相同的类型，如果相同，就设置类型及类型ID，如果没有就不做处理
-            // TODO: 2019/3/12
-            //部门
+            //部门名称
+            //判断是否有相同的类型，如果相同，就设置类型及类型ID，如果没有就提示没有部门
             String departmentName=data.get(4);
-            financeExpendImportDataVo.setDepartmentName(departmentName);
-            //通过部门名称获取部门标号
-            // TODO: 2019/3/12
-            //暂定都是财务部，通过部门名称查询部门名称和部门ID的接口还没有.
-            financeExpendImportDataVo.setDepartmentId("a794452f-fad6-4697-afe1-e62542bd753a");
+            //通过部门名称获取部门ID
+            Result dept = systemClient.getDept(departmentName);
+            Map<String,Object> data1 = (Map<String,Object>)dept.getData();
+            //如果找不到部门，就不再进行下面的操作
+            if(data1==null){
+                throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,String.format("上传文件中【 %s 】在系统中不存在,请确认后再次操作",departmentName));
+            }
+            String departmentName1= (String) data1.get("departmentName");
+            String departmentId1= (String) data1.get("id");
+            //设置部门名称和部门ID
+            financeExpendImportDataVo.setDepartmentName(departmentName1);
+            financeExpendImportDataVo.setDepartmentId(departmentId1);
             financeExpendImportDataVos.add(financeExpendImportDataVo);
         }
         map.put("excelId",excelId);
@@ -184,6 +195,17 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
                 map.put("list",feList);
                 map.put("account",User.getAccount());
                 financeExpensesDao.saveMarkData(map);
+                //保存打标数据到tb_finance_expenses表之后，立马将保存的数据按照月份计算出总和
+                // 更新tb_finance_expenses_month表，
+                //先把保存到记录表中的数据按照时间，类型分组，计算出每个月不同类型的支出，这次打标的的批次号作为条件
+                String excelId=feList.get(0).getExcelId();
+                List<FinanceSaveExpensesMonthModel> financeSaveExpensesMonthModelList=financeExpensesDao.selectSaveExpensesMonth(excelId);
+                //将数据更新到tb_finance_expenses_month表
+                Map<String,Object> map1=new HashMap<>();
+                map1.put("list",financeSaveExpensesMonthModelList);
+                map1.put("account",User.getAccount());
+                financeExpensesDao.saveExpensesMonth(map1);
+
             }catch (Exception e){
                 throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,"保存数据失败");
             }
@@ -194,6 +216,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
         }
 
     }
+
 
     @ServiceLog(doAction="查询财务类型")
     @Override
@@ -218,7 +241,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
             }
         }
         //判断是否拿到了根节点ID
-        if(null==rootDepartmentId){
+        if(StringUtils.isBlank(rootDepartmentId)){
             throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,"获取根节点失败");
         }
         //再通过拿到的根节点作为条件再调用一次，childflag为true时表示查询它下面的所有子节点（下一级）

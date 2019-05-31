@@ -77,6 +77,5 @@ public class ProcessReceiver implements ChannelAwareMessageListener {
         if(!StringUtils.equals(GlobalConstants.SUCCESS_CODE,result.getCode())){
             throw new RuntimeException(result.getResult()) ;
         }
-        throw new RuntimeException(result.getResult()) ;
     }
 }

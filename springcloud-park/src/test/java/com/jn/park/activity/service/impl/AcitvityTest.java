@@ -8,7 +8,7 @@ import com.jn.park.activity.dao.TbActivityMapper;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,11 +86,11 @@ public class AcitvityTest {
 
     @Test
     public void updateActivityApply(){
-        ActivitySataus activitySataus = new ActivitySataus();
-        activitySataus.setActivityId(activityId);
-        activitySataus.setActiStatus(status);
+        ActivityStatus activityStatus = new ActivityStatus();
+        activityStatus.setActivityId(activityId);
+        activityStatus.setActiStatus(status);
         try{
-            int i = activityService.updateActivityApply(activitySataus);
+            int i = activityService.updateActivityApply(activityStatus);
             assertThat(i,is(1));
         }catch (JnSpringCloudException e){
             logger.warn("活动数据状态错误");
@@ -255,7 +255,7 @@ public class AcitvityTest {
             activitySlimQuery.setTypeId("");
             activitySlimQuery.setKeyWord("");
             activitySlimQuery.setOrderBy("apply_num");
-            PaginationData data = activityService.activityListSlim(activitySlimQuery);
+            PaginationData data = activityService.activityListSlim(activitySlimQuery,userAccount);
             assertThat((int) data.getTotal(), greaterThanOrEqualTo(0));
         }catch(Exception e) {
             logger.info("活动列表查询失败。失败原因{}", e.getMessage(), e);

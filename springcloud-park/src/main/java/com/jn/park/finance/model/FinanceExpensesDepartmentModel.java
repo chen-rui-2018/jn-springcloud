@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 
@@ -26,9 +27,11 @@ public class FinanceExpensesDepartmentModel extends Page implements Serializable
     @ApiModelProperty(value = "部门名称")
     private String  departmentName;
 
+    @NotNull(message = "开始时间不能为空")
     @ApiModelProperty(value = "开始时间")
     private String  startTime;
 
+    @NotNull(message = "结束时间不能为空")
     @ApiModelProperty(value = "结束时间")
     private String  endTime;
 

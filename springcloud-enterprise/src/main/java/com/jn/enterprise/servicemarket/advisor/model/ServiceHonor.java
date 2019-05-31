@@ -1,11 +1,8 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,22 +13,21 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "ServiceHonor",description = "顾问荣誉资质出参")
-public class ServiceHonor extends Page implements Serializable {
+public class ServiceHonor implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "顾问账号")
-    @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "证书名称")
-    @NotNull(message="证书名称不能为空")
     private String certificateName;
     @ApiModelProperty(value = "证书类型")
-    @NotNull(message="证书类型不能为空")
     private String certificateType;
-    @ApiModelProperty(value = "获得时间(格式：201903)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
-            message = "{getTime:'获得时间格式错误'}")
+    @ApiModelProperty(value = "证书类型名称")
+    private String certificateTypeName;
+    @ApiModelProperty(value = "获得时间")
     private String getTime;
+    @ApiModelProperty(value = "颁发机构/部门")
+    private String issuingAgency;
     @ApiModelProperty(value = "证书证件")
     private String certificatePhoto;
     @ApiModelProperty(value = "创建时间")
@@ -45,7 +41,13 @@ public class ServiceHonor extends Page implements Serializable {
     @ApiModelProperty(value = "记录状态")
     private Byte recordStatus;
 
-    private static final long serialVersionUID = 1L;
+    public String getCertificateTypeName() {
+        return certificateTypeName;
+    }
+
+    public void setCertificateTypeName(String certificateTypeName) {
+        this.certificateTypeName = certificateTypeName;
+    }
 
     public String getId() {
         return id;
@@ -135,6 +137,14 @@ public class ServiceHonor extends Page implements Serializable {
         this.recordStatus = recordStatus;
     }
 
+    public String getIssuingAgency() {
+        return issuingAgency;
+    }
+
+    public void setIssuingAgency(String issuingAgency) {
+        this.issuingAgency = issuingAgency;
+    }
+
     @Override
     public String toString() {
         return "ServiceHonor{" +
@@ -143,6 +153,7 @@ public class ServiceHonor extends Page implements Serializable {
                 ", certificateName='" + certificateName + '\'' +
                 ", certificateType='" + certificateType + '\'' +
                 ", getTime='" + getTime + '\'' +
+                ", issuingAgency='" + issuingAgency + '\'' +
                 ", certificatePhoto='" + certificatePhoto + '\'' +
                 ", createdTime=" + createdTime +
                 ", creatorAccount='" + creatorAccount + '\'' +

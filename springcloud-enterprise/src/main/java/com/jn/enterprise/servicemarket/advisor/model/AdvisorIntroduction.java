@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -13,19 +12,19 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "AdvisorIntroduction", description = "服务顾问详情简介")
-public class AdvisorIntroduction extends Page implements Serializable {
+public class AdvisorIntroduction  implements Serializable {
     @ApiModelProperty(value = "顾问姓名")
     private String advisorName;
     @ApiModelProperty(value = "职务")
     private String position;
     @ApiModelProperty(value = "头像")
     private String avatar;
-    @ApiModelProperty(value = "是否认证")
+    @ApiModelProperty(value = "是否认证(0：未认证  1：已认证)")
     private String isCertification;
     @ApiModelProperty(value = "所属机构名称")
     private String orgName;
     @ApiModelProperty(value = "从业年限")
-    private Float workingYears;
+    private Double workingYears;
     @ApiModelProperty(value = "执业资质")
     private String practiceQualification;
     @ApiModelProperty(value = "业务擅长")
@@ -36,8 +35,6 @@ public class AdvisorIntroduction extends Page implements Serializable {
     private Integer pageViews;
     @ApiModelProperty(value = "评价分数")
     private String evaluationScore;
-
-    private static final long serialVersionUID = 1L;
 
     public String getAdvisorName() {
         return advisorName;
@@ -79,11 +76,11 @@ public class AdvisorIntroduction extends Page implements Serializable {
         this.orgName = orgName;
     }
 
-    public Float getWorkingYears() {
+    public Double getWorkingYears() {
         return workingYears;
     }
 
-    public void setWorkingYears(Float workingYears) {
+    public void setWorkingYears(Double workingYears) {
         this.workingYears = workingYears;
     }
 

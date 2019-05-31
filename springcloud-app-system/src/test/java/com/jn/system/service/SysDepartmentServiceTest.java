@@ -136,6 +136,12 @@ public class SysDepartmentServiceTest {
     }
 
     @Test
+    public void getDept(){
+        TbSysDepartment dept = sysDepartmentService.getDept(departmentName);
+        Assert.assertThat(dept, Matchers.anything());
+    }
+
+    @Test
     public void checkUserDept(){
         //1.判断用户id不为空情况,部门id不为空情况
         String userId = "10000";

@@ -34,7 +34,13 @@ export default {
   width: 100%;
   position: relative;
   overflow: auto;
-  background-color: #fff;
+  /* background-color: #fff; */
+}
+@media screen and (max-width: 768px) {
+  .app-main {
+    padding: 0;
+    height:auto;
+  }
 }
 </style>
 

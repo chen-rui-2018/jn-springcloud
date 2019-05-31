@@ -1,8 +1,11 @@
 package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.enterprise.model.ServiceOrg;
+import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.org.model.*;
-import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
+
+import java.util.List;
 
 /**
  * 服务机构service
@@ -18,7 +21,7 @@ public interface OrgService {
      * @param orgParment
      * @return
      */
-    PaginationData selectServiceOrgList(OrgParameter orgParment);
+    PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParment);
 
     /**
      * 根据机构ID查询机构详情
@@ -58,4 +61,39 @@ public interface OrgService {
      * @return
      */
     int saveOrUpdateOrgContactData(OrgContactData orgContactData,String account);
+
+    /**
+     * 我的机构信息
+     * @param account
+     * @return
+     */
+    MyOrgInfoVo getMyOrgInfo(String account);
+
+    /**
+     * 查询服务超市统计数据
+     * @return
+     */
+    ServiceStatisticalNumVO selectServiceStatisticalNum();
+
+    /**
+     * 根据业务领域/产品查询服务超市统计数据
+     * @param businessStatisticalParam
+     * @return
+     */
+    BusinessStatisticalNumVO selectBusinessAreaStatisticalNum(BusinessStatisticalParam businessStatisticalParam);
+
+    /**
+     * 获取当前用户机构状态
+     * @param account
+     * @return
+     */
+    String getOrgStatusByUser(String account);
+
+    /**
+     * 添加机构管理员角色
+     * @param orgAccount
+     * @return
+     */
+    int addOrgRole(String orgAccount);
+
 }

@@ -1,0 +1,1123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.data.dao.TargetDao">
+    <select id="getTargetFromTab" resultType="com.jn.enterprise.data.entity.TbDataReportingTarget" parameterType="java.lang.String">
+        select
+         target_id targetId,
+         parent_id parentId,
+         order_number orderNumber,
+         target_name targetName,
+         department_id departmentId,
+         department_name departmentName,
+         is_muilt_row isMuiltRow,
+         unit unit,
+         target_type targetType,
+         record_status recordStatus,
+         creator_account creatorAccount,
+         created_time createdTime,
+         modifier_account modifierAccount,
+         modified_time modifiedTime,
+         target_comment targetComment
+        from Tb_Data_Reporting_Target
+        where target_id
+        in (
+          select target_id from tb_data_reporting_model_struct
+          where tab_id =#{tabId}
+        )
+
+        and record_status='1'
+
+    </select>
+
+    <insert id="createTab" parameterType="java.util.List">
+        insert into Tb_Data_Reporting_Model_Tab
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingModelTabMapper.Base_Column_List"/>)
+        <foreach collection="list" index="index" item="item" separator="UNION ALL">
+            select
+            #{item.tabId,jdbcType=VARCHAR},
+            #{item.modelId,jdbcType=VARCHAR},
+            #{item.tabName,jdbcType=VARCHAR},
+            #{item.tabClumnTargetShow,jdbcType=CHAR},
+            #{item.tabClumnType,jdbcType=TINYINT},
+            #{item.status,jdbcType=TINYINT},
+            #{item.tabCreateType,jdbcType=TINYINT},
+            #{item.orderNumber,jdbcType=VARCHAR}
+            from  dual
+        </foreach>
+    </insert>
+
+
+    <insert id="createRelation" parameterType="java.util.List">
+        insert into Tb_Data_Reporting_Model_Struct
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingModelStructMapper.Base_Column_List"/>)
+        <foreach collection="list" index="index" item="item" separator="UNION ALL">
+            select
+            #{item.id,jdbcType=VARCHAR},
+            #{item.targetId,jdbcType=VARCHAR},
+            #{item.modelId,jdbcType=VARCHAR},
+            #{item.tabId,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+    <insert id="createInputFormater" parameterType="java.util.List">
+        insert into Tb_Data_Reporting_Target_Group
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingTargetGroupMapper.Base_Column_List"/>)
+        <foreach collection="inputFormatModelList" index="index" item="item" separator="UNION ALL">
+            select
+            #{item.formId,jdbcType=VARCHAR},
+            #{item.targetId,jdbcType=VARCHAR},
+            #{item.formType,jdbcType=VARCHAR},
+            #{item.formName,jdbcType=VARCHAR},
+            #{item.required,jdbcType=TINYINT},
+            #{item.orderNumber,jdbcType=INTEGER},
+            #{item.choiceOption,jdbcType=VARCHAR},
+            #{item.recordStatus,jdbcType=TINYINT}
+            from dual
+        </foreach>
+    </insert>
+
+    <update id="updateDeadline" parameterType="java.lang.String">
+      update tb_data_reporting_task t set
+      t.fill_in_form_deadline=str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s'),
+      t.is_overdue=
+        <!--已上报，未逾期，如果截至日期大于填报日期；截至日期小于填报日期为逾期-->
+        case when t.status= 0 and t.is_overdue= 0 then
+        (case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt;= t.up_time then 0
+        else 1 end)
+        <!--已上报，已逾期，如果截至日期大于填报日期就修改为未逾期；截至日期小于填报日期为逾期-->
+        when t.status= 0 and t.is_overdue= 1 then
+        (
+            case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt;=  t.up_time then 0
+            else 1 end
+        )
+        <!--未上报，未逾期，如果新的截至日期大于旧的截至日期为未逾期，新的截至日期大于今日日期，且新的截至日期小于旧的
+        截至日期时，为任务原来的状态；今日日期>新的截至日期为逾期
+        ；截至日期小于填报日期为逾期-->
+        when t.status= 1 and t.is_overdue= 0 then
+        (
+        case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; t.fill_in_form_deadline  then 0
+        when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; SYSDATE()
+            and  str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &lt;  t.fill_in_form_deadline
+        then 0
+        else 1 end
+        )
+
+        <!--未上报，已逾期，如果新的截至日期大于今天日期：为未逾期；新的截至日期小于今日日期为逾期-->
+        else
+        (
+        case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; SYSDATE()  then 0
+        else 1 end
+        )
+        end
+       ,
+      t.overdue_days=(
+
+        <!--已上报，未逾期，如果截至日期大于填报日期；截至日期小于填报日期为逾期-->
+        case when t.status= 0 and t.is_overdue= 0 then
+        (case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt;= t.up_time then 0
+        else ceiling(datediff(t.up_time,str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s'))) end)
+
+        <!--已上报，已逾期，如果截至日期大于填报日期就修改为未逾期；截至日期小于填报日期为逾期-->
+        when t.status= 0 and t.is_overdue= 1 then
+        (case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt;= t.up_time then 0
+        else ceiling(datediff(t.up_time,str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s'))) end)
+
+        <!--未上报，未逾期，如果新的截至日期大于旧的截至日期为未逾期，新的截至日期大于今日日期，且新的截至日期小于旧的
+        截至日期时，为任务原来的状态；今日日期>新的截至日期为逾期
+        ；截至日期小于填报日期为逾期-->
+        when t.status= 1 and t.is_overdue= 0 then
+        (
+        case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; t.fill_in_form_deadline  then 0
+
+        when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; SYSDATE()
+        and  str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &lt;  t.fill_in_form_deadline
+        then 0
+        else ceiling(datediff(SYSDATE(),str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s')))  end
+        )
+
+        <!--未上报，已逾期，如果新的截至日期大于今天日期：为未逾期；新的截至日期小于今日日期为逾期-->
+        else
+        (
+        case when str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s') &gt; SYSDATE()  then 0
+        else ceiling(datediff(SYSDATE(),str_to_date(#{dealLine}, '%Y-%m-%d %H:%i:%s'))) end
+        )
+        end
+
+        )
+        where t.task_batch=#{taskBatch} and t.model_id=#{modelId}
+        and t.file_type =#{fileType}
+    </update>
+
+    <!--催报-->
+    <update id="updateCalling" parameterType="java.lang.String">
+        update tb_data_reporting_task t set
+        t.calling_times = case when t.calling_times is null then 1
+        else t.calling_times+1 end
+        ,
+        t.calling_time = SYSDATE()
+        where
+        t.task_batch=#{taskBatch}
+        <if test="fillId !=null">
+            and w.fill_id = #{fillId}
+        </if>
+        and t.file_type =#{fileType}
+        and t.is_overdue=1
+    </update>
+
+
+    <select id="getStatisticsModel" parameterType="com.jn.enterprise.data.model.CompanyDataStatisticsParamModel" resultType="com.jn.enterprise.data.model.CompanyDataStatisticsModel">
+
+        select
+        d.task_batch as taskBatch
+        ,d.model_id as modelId
+        ,d.overdue_notfilled   as noUpload
+        ,d.overdue   as overdue
+        ,d.upload  as upload
+        ,d.allTotal  as allTotal
+        ,d.model_name as modelName
+        ,d.model_cycle as modelCycle
+        ,d.form_time as formTime
+        ,d.fill_in_form_deadline as fillInFormDeadline
+        ,d.calling_time as callingTime
+        ,d.warning_before_days as warningBeforeDays
+        ,status as status
+        from (
+        select
+        p.task_batch
+        ,p.model_id
+        ,case when r.total is null then 0 else r.total end  as noUpload
+        ,case when y.total is null then 0 else y.total end  as overdue
+        ,case when u.total is null then 0 else u.total end  as upload
+        ,case when o.total is null then 0 else o.total end  as allTotal
+        ,case when v.total is null then 0 else v.total end  as overdue_notfilled
+        ,t.model_name
+        ,t.model_cycle
+        ,p.form_time
+        ,p.fill_in_form_deadline
+        ,p.calling_time
+        ,t.warning_before_days
+        ,(
+        case
+        when v.total > 0  then '逾期未上报'
+        when r.total > 0 then '待上报'
+        when y.total > 0 then '逾期上报'
+        when (r.total=0 or r.total is null)  and (y.total=0 or y.total is null) and (u.total  = 0 or u.total is null) then '已完成'
+        else '未知状态' end
+        ) as status
+        from tb_data_reporting_snapshot_model t
+        left join (
+        select k.task_batch,k.model_id,k.form_time,k.fill_in_form_deadline , max(k.calling_time) as calling_time  from  tb_data_reporting_task k
+        where k.record_status='1' and k.file_type='0' group by k.task_batch,k.model_id,k.form_time,k.fill_in_form_deadline
+
+        ) p on t.model_id=p.model_id and t.task_batch = p.task_batch
+        and t.task_batch = p.task_batch
+        left join (
+        select count(*) as total,task_batch ,model_id from tb_data_reporting_task k
+        where k.record_status='1'  and k.file_type='0' group by k.task_batch,k.model_id
+        ) o on t.model_id=o.model_id and t.task_batch = o.task_batch
+        left join(
+        select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
+        and  k.status='0' and k.is_overdue='0'  and k.file_type='0'  group by k.task_batch,k.model_id
+        ) u on t.model_id=u.model_id and t.task_batch = u.task_batch
+        left join(
+        select count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
+        and  k.status='0' and k.is_overdue='1'  and k.file_type='0' group by k.task_batch,k.model_id
+        ) y on t.model_id=y.model_id and t.task_batch = y.task_batch
+
+        left join(
+        select  count(*) as total,task_batch ,model_id from tb_data_reporting_task k where k.record_status='1'
+        and  (k.status='1' or k.status='2' ) and k.is_overdue='0'   and k.file_type='0' group by k.task_batch,k.model_id
+        ) r on t.model_id=r.model_id and t.task_batch = r.task_batch
+
+        left join(
+        select count(*) as  total,task_batch ,model_id from tb_data_reporting_task k where k.record_status=1
+        and  (k.status='1' or k.status='2')  and k.is_overdue='1'  and k.file_type='0' group by k.task_batch,k.model_id
+        ) v on t.model_id=v.model_id and t.task_batch = v.task_batch
+        ) d
+
+        where 1=1
+        and task_batch is not null
+        and model_id is not null
+
+        <if test="param.modelCycle !=null">
+            and model_cycle=#{param.modelCycle}
+        </if>
+
+        <if test="param.modelName !=null">
+            and model_name like CONCAT('%', #{param.modelName}, '%')
+        </if>
+
+        <if test="param.status !=null">
+            and status =#{param.status}
+        </if>
+
+        <if test="param.formTime !=null">
+            and form_time =#{param.formTime}
+        </if>
+    </select>
+
+    <insert id="saveData" parameterType="java.util.List">
+        insert into Tb_Data_Reporting_task_Data
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingTaskDataMapper.Base_Column_List"/>)
+        <foreach collection="list" index="index" item="item" separator="UNION ALL">
+            select
+            #{ item.fallInFormId,jdbcType=VARCHAR},
+            #{ item.targetId,jdbcType=VARCHAR},
+            #{ item.modelId,jdbcType=VARCHAR},
+            #{ item.data,jdbcType=VARCHAR},
+            #{ item.formId,jdbcType=VARCHAR},
+            #{ item.fillId,jdbcType=VARCHAR},
+            #{ item.tabId,jdbcType=VARCHAR},
+            #{ item.rowNum,jdbcType=INTEGER}
+            from dual
+        </foreach>
+    </insert>
+
+
+    <select id="getThisMonthTask" resultType="com.jn.enterprise.data.model.CompanyDataModel">
+        select
+        w.fill_id as fillId
+        ,w.model_id as modelId
+        ,w.fill_in_form_id as fillInFormId
+        ,w.is_overdue as isOverdue
+        ,w.form_time as formTime
+        ,w.filler as filler
+        ,w.filler_tel as filleTel
+        ,w.up_time as upTime
+        ,w.calling_times as callingTimes
+        ,w.calling_time as callingTime
+        ,w.model_name as modelName
+        ,w.model_cycle as modelCycle
+        ,w.status as status
+        ,w.fill_in_form_deadline as fillInFormDeadline
+        ,w.fill_in_form_name as fillInFormName
+        ,CASE
+
+        WHEN w.is_overdue = 0 THEN
+        datediff( w.fill_in_form_deadline,SYSDATE( ) ) ELSE 0
+        END AS residueDays,
+        CASE
+
+        WHEN w.is_overdue = 1 THEN
+        datediff(  SYSDATE( ),w.fill_in_form_deadline ) ELSE 0
+        END AS overdueDays
+
+        from (
+        select
+        q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
+        ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
+        ,q.calling_times ,q.calling_time ,r.model_name ,r.model_cycle
+        ,q.status
+        ,q.fill_in_form_deadline
+        ,q.fill_in_form_name
+        ,q.overdue_days
+
+        from
+        (
+            select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
+            where t.fill_in_form_id in
+            <foreach collection="fillInFormId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            and
+
+            t.form_time in
+            <foreach collection="formTimeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            and t.record_status=1
+            and t.file_type=#{fileType}
+            and (t.status = 1 or t.status =2)
+        ) q
+        left join (
+        select <include refid="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelMapper.Base_Column_List" /> from tb_data_reporting_snapshot_model t
+        ) r on r.task_batch = q.task_batch
+
+        ) w
+
+        order by w.form_time desc
+    </select>
+
+    <select id="getHistoryTaskList" resultType="com.jn.enterprise.data.model.CompanyDataModel">
+
+        select
+        w.fill_id as fillId
+        ,w.model_id as modelId
+        ,w.fill_in_form_id as fillInFormId
+        ,w.is_overdue as isOverdue
+        ,w.form_time as formTime
+        ,w.filler as filler
+        ,w.filler_tel as filleTel
+        ,w.up_time as upTime
+        ,w.calling_times as callingTimes
+        ,w.calling_time as callingTime
+        ,w.model_name as modelName
+        ,w.model_cycle as modelCycle
+        ,w.status as status
+
+        ,w.overdue_days as overdueDays
+        ,w.fill_in_form_deadline as fillInFormDeadline
+
+        from (
+            select
+            q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
+            ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
+            ,q.calling_times ,q.status,q.calling_time ,r.model_name ,r.model_cycle
+            ,q.overdue_days
+            ,q.fill_in_form_deadline
+
+            from
+            (
+            select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
+            where t.fill_in_form_id in
+            <foreach collection="fillInFormId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            and
+            t.record_status=1
+            and
+            t.file_type=#{fileType}
+
+            ) q
+            left join (
+            select <include refid="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelMapper.Base_Column_List" /> from tb_data_reporting_snapshot_model t
+            ) r on r.task_batch = q.task_batch
+
+        ) w
+        where 1=1
+        <!--条件-->
+        <if test="param.modelName !=null">
+            and w.model_name like CONCAT('%', #{param.modelName}, '%')
+
+        </if>
+
+        <if test="param.modelCycle !=null">
+            and w.model_cycle = #{param.modelCycle}
+        </if>
+        <!--已填报，或以已逾期的为历史数据-->
+        and (w.is_overdue=1 or w.status=0)
+        order by w.form_time desc
+    </select>
+
+
+    <select id="getHistoryGardenTaskList" resultType="com.jn.enterprise.data.model.CompanyDataModel">
+        select
+        w.fill_id as fillId
+        ,w.model_id as modelId
+        ,w.fill_in_form_id as fillInFormId
+        ,w.is_overdue as isOverdue
+        ,w.form_time as formTime
+        ,w.filler as filler
+        ,w.filler_tel as filleTel
+        ,w.up_time as upTime
+        ,w.calling_times as callingTimes
+        ,w.calling_time as callingTime
+        ,w.model_name as modelName
+        ,w.model_cycle as modelCycle
+        ,w.status as status
+        ,w.overdue_days as overdueDays
+        ,w.fill_in_form_deadline as fillInFormDeadline
+        from (
+        select
+        q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
+        ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
+        ,q.calling_times ,q.status,q.calling_time ,r.model_name ,r.model_cycle
+        ,q.overdue_days
+        ,q.fill_in_form_deadline
+        from
+        (
+        select <include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List" /> from tb_data_reporting_task t
+
+        where t.record_status=1
+        and
+        t.file_type=#{fileType}
+
+        ) q
+        left join (
+        select <include refid="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelMapper.Base_Column_List" /> from tb_data_reporting_snapshot_model t
+        ) r on r.task_batch = q.task_batch
+
+        ) w
+        where 1=1
+        <!--条件-->
+        <if test="param.modelName !=null">
+            and w.model_name like CONCAT('%', #{param.modelName}, '%')
+
+        </if>
+
+        <if test="param.modelCycle !=null">
+            and w.model_cycle = #{param.modelCycle}
+        </if>
+        <!--已填报，或以已逾期的为历史数据-->
+        and (w.is_overdue=1 or w.status=0)
+        order by w.form_time desc
+
+    </select>
+
+    <!--查询审核数据列表-->
+    <select id="getGardenCheckList" resultType="com.jn.enterprise.data.model.GardenCheckModel" parameterType="com.jn.enterprise.data.model.GardenCheckParamModel">
+        select
+        w.model_id as modleId
+        ,w.model_name as modelName
+        ,w.garden_examine_stauts as status
+        ,w.form_time as formTime
+        ,w.fill_id as filld
+        ,w.filler as filler
+        ,w.filler_tel as fillId
+        ,w.up_time as upTime
+        ,w.fill_in_form_name as fillInFormName
+        ,w.task_batch as taskBatch
+        ,w.model_cycle as modelCycle
+        from (
+        select
+        t.model_id
+        ,p.model_name
+        ,t.garden_examine_stauts
+        ,t.form_time
+        ,t.fill_id
+        ,t.filler
+        ,t.filler_tel
+        ,t.up_time
+        ,t.fill_in_form_name
+        ,t.task_batch
+        ,p.model_cycle
+        from tb_data_reporting_task t
+        left join (select
+        model_id,
+        model_name,
+        task_batch,
+        model_cycle
+        from tb_data_reporting_snapshot_model
+        ) p on t.task_batch = p.task_batch and t.model_id = p.model_id
+        where t.status = 0 and t.file_type=2
+        ) w
+
+        where 1=1
+        <!--条件-->
+        <if test="param.modelName !=null">
+            and w.model_name like CONCAT('%', #{param.modelName}, '%')
+        </if>
+
+        <if test="param.fillId !=null">
+            and w.model_cycle = #{param.fillId}
+        </if>
+
+        <if test="param.formTime !=null">
+            and w.form_time = #{param.formTime}
+        </if>
+
+        <if test="param.status !=null">
+            and w.garden_examine_stauts = #{param.status}
+        </if>
+
+
+    </select>
+
+
+    <!--批量保存任务-->
+    <insert id="saveTaskList" parameterType="java.util.List">
+        insert into Tb_Data_Reporting_Task
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingTaskMapper.Base_Column_List"/>)
+        <foreach collection="tasks" index="index" item="item" separator="UNION ALL">
+            select
+
+            #{ item.fillId,jdbcType=VARCHAR},
+            #{ item.fileType,jdbcType=TINYINT},
+            #{ item.modelId,jdbcType=VARCHAR},
+            #{ item.taskBatch,jdbcType=VARCHAR},
+            #{ item.fillInFormId,jdbcType=VARCHAR},
+            #{ item.fillInFormName,jdbcType=VARCHAR},
+            #{ item.formTime,jdbcType=CHAR},
+            #{ item.fillInFormDeadline,jdbcType=DATE},
+            #{ item.status,jdbcType=TINYINT},
+            #{ item.gardenExamineStauts,jdbcType=TINYINT},
+            #{ item.callingTime,jdbcType=TIMESTAMP},
+            #{ item.callingTimes,jdbcType=INTEGER},
+            #{ item.filler,jdbcType=VARCHAR},
+            #{ item.upTime,jdbcType=TIMESTAMP},
+            #{ item.fillerTel,jdbcType=VARCHAR},
+            #{ item.isOverdue,jdbcType=TINYINT},
+            #{ item.overdueDays,jdbcType=INTEGER},
+            #{ item.examineComment,jdbcType=VARCHAR},
+            #{ item.createTime,jdbcType=TIMESTAMP},
+            #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.modifiedTime,jdbcType=TIMESTAMP},
+            #{ item.modifiedAccount,jdbcType=VARCHAR}
+
+            from dual
+        </foreach>
+    </insert>
+
+    <!--固化tab信息-->
+    <insert id="saveSnapTablist" parameterType="java.util.List">
+        insert into tb_data_reporting_snapshot_model_tab
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelTabMapper.Base_Column_List"/>)
+        <foreach collection="tabSnapList" index="index" item="item" separator="UNION ALL">
+            select
+            #{item.taskBatch,jdbcType=VARCHAR},
+            #{item.modelId,jdbcType=VARCHAR},
+            #{item.tabId,jdbcType=VARCHAR},
+            #{item.tabName,jdbcType=VARCHAR},
+            #{item.tabClumnTargetShow,jdbcType=CHAR},
+            #{item.tabClumnType,jdbcType=TINYINT},
+            #{item.status,jdbcType=TINYINT},
+            #{item.tabCreateType,jdbcType=TINYINT},
+            #{item.orderNumber,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+    <!--固化关系-->
+    <insert id="saveSnapshotModelStruct" parameterType="java.util.List">
+        insert into tb_data_reporting_snapshot_model_struct
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelStructMapper.Base_Column_List"/>)
+
+        <foreach collection="relations" index="index" item="item" separator="UNION ALL">
+            select
+            #{item.taskBatch,jdbcType=VARCHAR},
+            #{item.targetId,jdbcType=VARCHAR},
+            #{item.modelId,jdbcType=VARCHAR},
+            #{item.tabId,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+    <!--固化指标-->
+    <insert id="saveSnapshotTarget" parameterType="java.util.List">
+        insert into tb_data_reporting_snapshot_target
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingSnapshotTargetMapper.Base_Column_List"/>)
+
+        <foreach collection="targets" index="index" item="item" separator="UNION ALL" >
+            select
+            #{item.taskBatch,jdbcType=VARCHAR},
+            #{item.targetId,jdbcType=VARCHAR},
+            #{item.parentId,jdbcType=VARCHAR},
+            #{item.orderNumber,jdbcType=INTEGER},
+            #{item.targetName,jdbcType=VARCHAR},
+            #{item.departmentId,jdbcType=VARCHAR},
+            #{item.departmentName,jdbcType=VARCHAR},
+            #{item.isMuiltRow,jdbcType=TINYINT},
+            #{item.unit,jdbcType=VARCHAR},
+            #{item.targetType,jdbcType=TINYINT},
+            #{item.recordStatus,jdbcType=TINYINT},
+            #{item.creatorAccount,jdbcType=VARCHAR},
+            #{item.createdTime,jdbcType=TIMESTAMP},
+            #{item.modifierAccount,jdbcType=VARCHAR},
+            #{item.modifiedTime,jdbcType=TIMESTAMP},
+            #{item.targetComment,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+
+    <!--固化指标填写格式-->
+    <insert id="saveSnapshotTargetGroup" parameterType="java.util.List">
+        insert into tb_data_reporting_snapshot_target_group
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingSnapshotTargetGroupMapper.Base_Column_List"/>)
+
+        <foreach collection="targetGroups" index="index" item="item"  separator="UNION ALL" >
+            select
+            #{item.taskBatch,jdbcType=VARCHAR},
+            #{item.targetId,jdbcType=VARCHAR},
+            #{item.formId,jdbcType=VARCHAR},
+            #{item.formType,jdbcType=VARCHAR},
+            #{item.formName,jdbcType=VARCHAR},
+            #{item.required,jdbcType=TINYINT},
+            #{item.orderNumber,jdbcType=INTEGER},
+            #{item.choiceOption,jdbcType=VARCHAR},
+            #{item.recordStatus,jdbcType=TINYINT}
+            FROM DUAL
+        </foreach>
+    </insert>
+
+    <!--更新任务状态 nowDate-->
+    <update id="updateTask">
+        <!--未填报的/处于填报状态的，更新逾期以及逾期天数-->
+        update tb_data_reporting_task t
+        set
+        t.is_overdue=1,
+        t.overdue_days=ceiling(
+        datediff(SYSDATE(),t.fill_in_form_deadline)- (select warning_before_days from tb_data_reporting_snapshot_model p where p.task_batch = t.task_batch)
+        )
+        where t.status !=0
+        and t.fill_in_form_deadline &lt; SYSDATE()
+
+        and ceiling( datediff(SYSDATE(),t.fill_in_form_deadline) ) &gt;
+        (select warning_before_days from tb_data_reporting_snapshot_model p where p.task_batch = t.task_batch)
+    </update>
+    <!--获取需要进行预警的任务-->
+    <select id="getWarningTask" resultType="com.jn.enterprise.data.model.WarningTaskModel">
+        select taskName,inLine,outLine,formTime,warningBy,fileType,fillId,fillInFormId from (
+        SELECT
+        p.model_name taskName,
+        CASE
+        WHEN ceiling( datediff(  t.fill_in_form_deadline,SYSDATE( ) ) ) &lt; p.warning_before_days  and
+        ceiling( datediff(  t.fill_in_form_deadline,SYSDATE( ) ) ) &gt; 0
+
+        THEN
+        ceiling( datediff(t.fill_in_form_deadline , SYSDATE() ) ) ELSE 0
+        END AS inLine,
+
+        CASE
+        WHEN ceiling( datediff( SYSDATE( ), t.fill_in_form_deadline ) ) &gt; p.warning_before_days THEN
+        ceiling( datediff( SYSDATE( ), t.fill_in_form_deadline ) ) ELSE 0
+        END AS outLine,
+        t.form_time as formTime,
+        p.warning_by warningBy,
+        t.file_type fileType,
+        t.fill_in_form_id fillInFormId,
+        t.fill_id as fillId
+        FROM
+        tb_data_reporting_task t,
+        tb_data_reporting_snapshot_model p
+        WHERE
+        t.STATUS != 0
+        and t.record_status=1
+        AND p.task_batch = t.task_batch
+        <if test="fillId !=null and fillId !=''">
+            and t.fill_id =#{fillId}
+        </if>
+        <if test="taskBatch !=null and taskBatch !=''">
+            and t.task_batch =#{taskBatch}
+        </if>
+
+        ) x where x.inLine!=0  or x.outLine !=0
+
+    </select>
+
+    <!--获取园区本月任务批次号-->
+    <select id="getAllGardenBatch" parameterType="java.lang.String" resultType="java.lang.String">
+        select task_batch from
+        tb_data_reporting_snapshot_model
+        where
+        task_batch in
+        (
+            select task_batch from tb_data_reporting_task
+            where form_time=#{lastMon} or form_time=#{lastYear}
+            and file_type=1
+        )
+        group by task_batch
+    </select>
+
+    <!--获取园区指定部门的任务批次-->
+    <select id="getGardenTaskBatch"  resultType="java.lang.String">
+
+        select task_batch from
+        tb_data_reporting_snapshot_model
+        where
+        task_batch in
+        (
+            select task_batch from tb_data_reporting_task
+            where form_time=#{lastMon} or form_time=#{lastYear}
+            and file_type=1
+        )
+
+        and model_id in
+        (   select model_id from tb_data_reporting_snapshot_model_struct
+            where target_id in (
+                select target_Id from tb_data_reporting_snapshot_target
+                where record_status=1 and department_id in
+
+                <foreach collection="list" item="o" index="index" open="(" separator=","  close=")">
+                    #{o}
+                </foreach>
+            )
+        )
+    </select>
+
+    <select id="getGardenTask" resultType="com.jn.enterprise.data.model.CompanyDataModel">
+
+        select
+        w.fill_id as fillId
+        ,w.model_id as modelId
+        ,w.is_overdue as isOverdue
+        ,w.form_time as formTime
+        ,w.filler as filler
+        ,w.filler_tel as filleTel
+        ,w.up_time as upTime
+        ,w.calling_times as callingTimes
+        ,w.calling_time as callingTime
+        ,w.model_name as modelName
+        ,w.model_cycle as modelCycle
+        ,w.status as status
+        ,w.fill_in_form_deadline as fillInFormDeadline
+
+        ,CASE
+
+        WHEN w.is_overdue = 0 THEN
+        datediff( w.fill_in_form_deadline,SYSDATE( ) ) ELSE 0
+        END AS residueDays,
+        CASE
+
+        WHEN w.is_overdue = 1 THEN
+        datediff(  SYSDATE( ),w.fill_in_form_deadline ) ELSE 0
+        END AS overdueDays
+        from
+
+        (
+            select
+            q.fill_id  ,q.model_id ,q.fill_in_form_id  ,q.is_overdue
+            ,q.form_time  ,q.filler  ,q.filler_tel  ,q.up_time
+            ,q.calling_times ,q.calling_time ,r.model_name ,r.model_cycle
+            ,q.status
+            ,q.fill_in_form_deadline
+            ,q.fill_in_form_name
+            ,q.overdue_days
+            from tb_data_reporting_task q , tb_data_reporting_snapshot_model r
+            where
+            q.task_batch in
+            <foreach collection="list" item="o" index="index" open="(" separator=","  close=")">
+                #{o}
+            </foreach>
+
+            and
+            q.task_batch = r.task_batch
+            and (q.status=1 or q.status=2)
+            and q.record_status=1
+            and q.file_type=1
+        ) w
+        order by w.form_time desc
+
+    </select>
+
+    <select id="saveFillerList" parameterType="java.util.List">
+        insert into Tb_Data_Reporting_Garden_Filler
+        (<include refid="com.jn.enterprise.data.dao.TbDataReportingGardenFillerMapper.Base_Column_List"/>)
+
+        <foreach collection="fillerList" index="index" item="item"  separator="UNION ALL" >
+            select
+            #{ item.id,jdbcType=VARCHAR},
+            #{ item.fillId,jdbcType=VARCHAR},
+            #{ item.filler,jdbcType=VARCHAR},
+            #{ item.fillerTel,jdbcType=VARCHAR},
+            #{ item.departmentId,jdbcType=VARCHAR},
+            #{ item.departmentName,jdbcType=VARCHAR},
+            #{ item.status,jdbcType=TINYINT},
+            #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.gardenExamineStauts,jdbcType=TINYINT},
+            #{ item.examineComment,jdbcType=VARCHAR},
+            #{ item.tabId,jdbcType=VARCHAR}
+            FROM DUAL
+        </foreach>
+
+    </select>
+
+    <!--
+    <select id="getDepartmentFromTarget" resultType="com.jn.enterprise.data.model.DepartementModel">
+          select
+          department_id as departmentId
+          ,department_name as departmentName
+          from tb_data_reporting_snapshot_target
+          where target_type=1 and target_id in (
+            select target_id from tb_data_reporting_snapshot_model_struct
+          ) group by department_id,department_name
+    </select>
+    -->
+
+    <select id="getTargetByFillId" parameterType="java.lang.String" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTarget">
+        SELECT
+        task_batch as taskBatch
+        ,target_id as targetId
+        ,parent_id as parentId
+        ,order_number as orderNumber
+        ,target_name as targetName
+        ,department_id as departmentId
+        ,department_name as departmentName
+        ,is_muilt_row as isMuiltRow
+        ,unit as unit
+        ,target_type as targetType
+        ,record_status as  recordStatus
+        ,creator_account as creatorAccount
+        ,created_time as createdTime
+        ,modifier_account as modifierAccount
+        ,modified_time as modifiedTime
+        ,target_comment as targetComment
+        FROM
+        tb_data_reporting_snapshot_target
+        WHERE
+        target_id IN (
+        SELECT
+        target_id
+        FROM
+        tb_data_reporting_snapshot_model_struct t,
+        ( SELECT * FROM tb_data_reporting_snapshot_model_tab WHERE task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 ) AND tab_create_type = 1 ) c
+        WHERE
+        t.task_batch = c.task_batch
+        AND t.model_id = c.model_id
+        AND t.tab_id = c.tab_id
+        )
+        AND task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 )
+        AND record_status = 1
+    </select>
+
+    <select id="getTargetGroupByFillId" parameterType="java.lang.String" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
+        SELECT
+        task_batch as taskBatch
+        ,target_id as targetId
+        ,form_id as formId
+        ,form_type as formType
+        ,form_name as formName
+        ,required as required
+        ,order_number as orderNumber
+        ,choice_option as choiceOption
+        ,record_status as recordStatus
+        FROM
+        tb_data_reporting_snapshot_target_group
+        WHERE
+        target_id IN (
+        SELECT
+        target_id
+        FROM
+        tb_data_reporting_snapshot_model_struct t,
+        ( SELECT * FROM tb_data_reporting_snapshot_model_tab WHERE task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 ) AND tab_create_type = 1 ) c
+        WHERE
+        t.task_batch = c.task_batch
+        AND t.model_id = c.model_id
+        AND t.tab_id = c.tab_id
+        )
+        AND task_batch = ( SELECT task_batch FROM tb_data_reporting_task WHERE fill_id = #{fillId} AND file_type = 1 )
+        AND record_status = 1
+    </select>
+
+
+
+
+    <!--检测本次任务中是否存在缴纳税收总额字段;检测企业任务中-->
+    <select id="checkIsHaveTaxiProperty" parameterType="java.lang.String" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
+		select
+		p.task_batch as taskBatch
+		,p.target_id as targetId
+		,p.form_id as formId
+		,p.form_type as formType
+		,p.form_name as formName
+		,p.required as required
+		,p.order_number as orderNumber
+		,p.choice_option as choiceOption
+		,p.record_status as recordStatus
+		from
+		tb_data_reporting_snapshot_target t, tb_data_reporting_snapshot_target_group p
+		where
+		t.task_batch = p.task_batch
+		and t.target_id = p.target_id
+		and t.target_id in (
+				select target_id from tb_data_reporting_snapshot_model_struct
+				where task_batch =  (select task_batch from tb_data_reporting_task where fill_id=#{fillId} and file_type='0')
+				and model_id = (select model_id from tb_data_reporting_task where fill_id=#{fillId} and file_type='0')
+		)
+		and p.task_batch = (select task_batch from tb_data_reporting_task where fill_id=#{fillId} and file_type='0')
+		and (t.target_name='缴纳税收总额' or p.form_name = '缴纳税收总额')
+		and p.record_status='1'
+    </select>
+
+    <!--将缴纳税收总额更新到科技园任务中-->
+    <!--int  updateTaxiToScientTarget(@Param("data") String data,@Param("fillId") String fillId,@Param("formId") String formId,@Param("targetId") String targetId,@Param("companyName") String  companyName);-->
+    <update id="updateTaxiToScientTarget" parameterType="java.lang.String" >
+        update tb_data_reporting_task_data t set t.data=#{data}
+        where t.fill_id =#{fillId}
+        and t.form_id =#{formId}
+        and t.target_id =#{targetId}
+        and t.tab_id=#{companyName}
+    </update>
+
+    <!--通过科技园任务Id,查询出纳税总额的指标Id,和填报格式Id-->
+    <select id="getScientTaxiTargetByFillId" parameterType="java.lang.String" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup">
+		select
+		p.task_batch as taskBatch
+		,p.target_id as targetId
+		,p.form_id as formId
+		,p.form_type as formType
+		,p.form_name as formName
+		,p.required as required
+		,p.order_number as orderNumber
+		,p.choice_option as choiceOption
+		,p.record_status as recordStatus
+		from
+		tb_data_reporting_snapshot_target t, tb_data_reporting_snapshot_target_group p
+		where
+		t.task_batch = p.task_batch
+		and t.target_id = p.target_id
+		and t.target_id in (
+				select target_id from tb_data_reporting_snapshot_model_struct
+				where task_batch =  (select task_batch from tb_data_reporting_task where fill_id=#{fillId} and file_type='1')
+				and model_id = (select model_id from tb_data_reporting_task where fill_id=#{fillId} and file_type='1')
+		)
+		and p.task_batch = (select task_batch from tb_data_reporting_task where fill_id=#{fillId} and file_type='1')
+		and (t.target_name='缴纳税收总额' or p.form_name = '缴纳税收总额')
+		and p.record_status='1'
+
+    </select>
+
+    <!--检测科技园任务是否已经导入 @Param("formTime") String formTime-->
+    <select id="checkThisFormTimeScientIsImport" parameterType="java.lang.String" resultType="com.jn.enterprise.data.entity.TbDataReportingTask">
+		select
+		 t.fill_id as fillId
+		,t.file_type as fileType
+		,t.model_id as modelId
+		,t.task_batch as taskBatch
+		,t.fill_in_form_id as fillInFormId
+		,t.fill_in_form_name as fillInFormName
+		,t.form_time as formTime
+		,t.fill_in_form_deadline as fillInFormDeadline
+		,t.status as status
+		,t.garden_examine_stauts as gardenExamineStauts
+		,t.calling_time as callingTime
+		,t.calling_times as callingTimes
+		,t.filler as filler
+		,t.up_time as upTime
+		,t.filler_tel as fillerTel
+		,t.is_overdue as isOverdue
+		,t.overdue_days as overdueDays
+		,t.examine_comment as examineComment
+		,t.create_time as createTime
+		,t.record_status as recordStatus
+		,t.modified_time as modifiedTime
+		,t.modified_account as modifiedAccount
+		from tb_data_reporting_task t, tb_data_reporting_snapshot_model_tab  p
+		where
+		t.task_batch = p.task_batch
+		and  p.tab_create_type='1'
+		and t.status='0'
+		and t.form_time=#{formTime}
+		and file_type='1'
+    </select>
+
+    <!--科技园分组企业-->
+    <select id="getCompanyList" parameterType="java.lang.String" resultType="java.lang.String">
+       	select tab_id from tb_data_reporting_task_data
+
+		where
+		1=1
+		<if test="companyName !=null">
+            and tab_id=#{companyName}
+        </if>
+		<if test="fillId !=null">
+            and fill_id= #{fillId}
+        </if>
+
+		GROUP BY tab_id
+
+		order by tab_id asc
+    </select>
+    <!--科技园查询数据接口-->
+    <select id="getValues" parameterType="java.lang.String" resultType="com.jn.enterprise.data.model.ScientModel">
+        select
+        fall_in_form_id as fallInFormId
+        ,target_id as targetId
+        ,model_id as modelId
+        ,data as data
+        ,form_id as formId
+        ,fill_id as fillId
+        ,tab_id as tabId
+        ,row_num as rowNum
+        from tb_data_reporting_task_data
+        where tab_id=#{companyName} and fill_id= #{fillId}
+    </select>
+
+    <!--科技园表头指标获取-->
+    <select id="getScientTabHeaderTarget" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTarget" parameterType="java.lang.String">
+        select
+        task_batch as taskBatch
+        ,target_id as targetId
+        ,parent_id as parentId
+        ,order_number as orderNumber
+        ,target_name as targetName
+        ,department_id as departmentId
+        ,department_name as departmentName
+        ,is_muilt_row as isMuiltRow
+        ,unit as unit
+        ,target_type as targetType
+        ,record_status as recordStatus
+        ,creator_account as creatorAccount
+        ,created_time as createdTime
+        ,modifier_account as modifierAccount
+        ,modified_time as modifiedTime
+        ,target_comment as targetComment
+        from tb_data_reporting_snapshot_target where task_batch=(
+            select task_batch from tb_data_reporting_task where fill_id=#{fillId}
+        )
+        and record_status='1'
+    </select>
+    <!--科技园表头填报格式获取-->
+    <select id="getScientTabHeaderTargetGroup" resultType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetGroup" parameterType="java.lang.String">
+        select
+        task_batch as taskBatch
+        ,target_id as targetId
+        ,form_id as formId
+        ,form_type as formType
+        ,form_name as formName
+        ,required as required
+        ,order_number as orderNumber
+        ,choice_option as choiceOption
+        ,record_status as recordStatus
+        from tb_data_reporting_snapshot_target_group where task_batch=(
+          select task_batch from tb_data_reporting_task where fill_id=#{fillId}
+        )
+        and record_status='1'
+    </select>
+
+    <select id="getExcel" resultType="com.jn.enterprise.data.model.CompanyTree">
+        select
+        task_batch taskbatch,
+        model_id modelid,
+        tab_id tabid,
+        tab_name tabname,
+        target_id targetid,
+        target_name targetname,
+        parent_id parentid,
+        form_id formid,
+        form_name formname,
+        unit unit,
+        DATA DATA,
+        sum_val sumval
+         from view_data_model_data_sum
+        where task_batch=#{taskbatch} and model_id=#{modelid}
+    </select>
+
+    <select id="loadCompanyDataTarget" parameterType="com.jn.enterprise.model.LoadCompanyDataTargetReq" resultType="com.jn.enterprise.model.DataTargetModel">
+
+        <!--,p.form_id,p.form_name-->
+        select p.target_id as targetId ,p.target_name targetName,p.data as targetData, p.unit as targetUnit
+        from view_data_model_data_sum p
+        where target_id in
+        <foreach collection="targetIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="dealTime != null">
+            and form_time = #{dealTime}
+        </if>
+        <if test="enterpriseId != null">
+            and fill_in_form_id = #{enterpriseId}
+        </if>
+
+    </select>
+
+    <!--通过指标名称查询指标集合-->
+    <select id="getTargetIdByName" parameterType="java.lang.String" resultType="java.lang.String">
+        select target_id  from tb_data_reporting_snapshot_target where target_name = #{targetName}
+        <!--其他条件-->
+        group by target_id
+    </select>
+
+    <!--通过id集合查询填报格式-->
+    <select id="getFormIdByTargetIds" parameterType="java.util.List" resultType="com.jn.enterprise.data.model.TargetAndFormModel">
+        select target_id as targetId, form_id as formId from tb_data_reporting_snapshot_target_group where target_id in
+        <foreach collection="targetIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by target_id,form_id
+    </select>
+
+    <!--年，营业值-->
+    <select id="getValueAndYear" parameterType="com.jn.enterprise.data.model.TargetAndFormModel" resultType="com.jn.enterprise.data.model.InMoneyModel">
+        select left(t.form_time,4) as year,sum(p.data) as value from tb_data_reporting_task t
+        left join tb_data_reporting_task_data p  on t.fill_id =p.fill_id
+        and
+        <foreach collection="targetIds" index="index" item="item" open="(" separator="or" close=")">
+            (
+            target_id=#{item.targetId} and form_id=#{item.formId}
+            )
+        </foreach>
+        group by year order by year asc
+
+    </select>
+</mapper>

@@ -1,0 +1,45 @@
+ali:
+  #支付宝支付完成后的异步通知地址
+  notify_url: http://112.94.22.222:8000/xxpay-service/pay/aliPayNotifyRes
+  #支付宝支付完成后的同步通知地址
+  return_url: ''
+  #支付宝支付手续费率(单位：%百分比)
+  pay_rate: 0.6
+cert:
+  root:
+    #微信证书根目录位置
+    path: /Users/chenmiao/java/tmp/cert
+wx:
+  #微信支付完成后的通知地址
+  notify_url: http://112.94.22.222:8000/xxpay-service/pay/wxPayNotifyRes
+  #微信支付手续费率(单位：%百分比)
+  pay_rate: 0.6
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://springcloud:springcloud@localhost:1025/eureka/
+  instance:
+    prefer-ip-address: true
+
+spring:
+  application:
+    name: xxpay-service
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: springcloud-app-config
+      label: master
+      profile: master
+  sleuth:
+    sampler:
+      percentage: 1.0
+
+management:
+  security:
+    enabled: false
+
+server:
+  port: 3000

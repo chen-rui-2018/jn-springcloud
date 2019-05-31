@@ -3,7 +3,6 @@ package com.jn.enterprise.joinpark.advisor.controller;
 import com.jn.common.model.Result;
 import com.jn.enterprise.joinpark.advisor.service.AdvisorJoinService;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorDetailParam;
-import com.jn.enterprise.servicemarket.org.model.OrgDetailParameter;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -34,13 +34,13 @@ public class AdvisorJoinController {
     private AdvisorJoinService advisorJoinService;
 
     @ControllerLog(doAction = "保存/修改顾问认证信息")
-    @ApiOperation(value = "保存/修改顾问认证信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/saveOrUpdateOrgDetail")
-    public Result saveOrUpdateOrgDetail(@RequestBody @Validated AdvisorDetailParam advisorDetailParam) {
+    @ApiOperation(value = "保存/修改顾问认证信息", notes = "返回数据响应条数，正常情况为1")
+    @RequestMapping(value = "/saveOrUpdateOrgDetail",method = RequestMethod.POST)
+    public Result<Integer> saveOrUpdateOrgDetail(@RequestBody @Validated AdvisorDetailParam advisorDetailParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = advisorJoinService.saveOrUpdateAdvisorDetail(advisorDetailParam,user.getAccount());
         logger.info("保存/修改顾问认证信息成功，响应条数{}",i);
-        return new Result(i);
+        return new Result<>(i);
     }
 
 

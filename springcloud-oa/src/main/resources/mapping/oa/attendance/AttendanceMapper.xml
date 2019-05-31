@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.attendance.dao.AttendanceMapper">
+    <resultMap id="BaseResultMap" type="com.jn.oa.attendance.vo.AttendanceVo">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+        <result column="sign_in_attendance_time" jdbcType="TIMESTAMP" property="signInAttendanceTime" />
+        <result column="sign_in_attendance_platform" jdbcType="VARCHAR" property="signInAttendancePlatform" />
+        <result column="sign_in_longitude" jdbcType="VARCHAR" property="signInLongitude" />
+        <result column="sign_in_latitude" jdbcType="VARCHAR" property="signInLatitude" />
+        <result column="sign_in_attendance_ip" jdbcType="VARCHAR" property="signInAttendanceIp" />
+        <result column="sign_out_attendance_time" jdbcType="TIMESTAMP" property="signOutAttendanceTime" />
+        <result column="sign_out_attendance_platform" jdbcType="VARCHAR" property="signOutAttendancePlatform" />
+        <result column="sign_out_longitude" jdbcType="VARCHAR" property="signOutLongitude" />
+        <result column="sign_out_latitude" jdbcType="VARCHAR" property="signOutLatitude" />
+        <result column="sign_out_attendance_ip" jdbcType="VARCHAR" property="signOutAttendanceIp" />
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="attendance_user" jdbcType="VARCHAR" property="attendanceUser" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+
+    </resultMap>
+    <resultMap id="SimpleBaseResultMap" type="com.jn.oa.vo.AttendanceApiVo">
+        <result column="sign_in_attendance_time" jdbcType="TIMESTAMP" property="signInAttendanceTime" />
+        <result column="sign_out_attendance_time" jdbcType="TIMESTAMP" property="signOutAttendanceTime" />
+        <result column="userId" jdbcType="VARCHAR" property="userId" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+        <result column="departmentId" jdbcType="VARCHAR" property="departmentId" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    t.id, t.modified_time, t.sign_in_attendance_time, t.sign_in_attendance_platform, t.sign_in_longitude,
+   t. sign_in_latitude, t.sign_in_attendance_ip, t.sign_out_attendance_time, t.sign_out_attendance_platform,
+    t.sign_out_longitude, t.sign_out_latitude, t.sign_out_attendance_ip, t.creator_account, t.created_time,
+    t.modifier_account, t.attendance_user, u.name as userName, u.department_name as departmentName
+  </sql>
+
+
+   <select id="selectAttendanceByCondition" parameterType="com.jn.oa.attendance.model.AttendancePage" resultMap="BaseResultMap">
+       select
+       <include refid="Base_Column_List"/>
+      from tb_oa_attendance t
+
+       LEFT JOIN (
+           SELECT
+               t.id,
+               t.name,
+               t.account,
+               tt.department_name,
+               tt.departmentId
+           FROM
+              tb_sys_user t
+           LEFT JOIN (
+               SELECT
+                   t1.user_id,
+                   t2.department_name,
+                   t2.id as departmentId
+               FROM
+                  tb_sys_user_department_post t1
+               INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
+               WHERE
+                   t1.is_default = 1
+                   AND t1.record_status = 1
+                   AND t2.record_status = 1
+           ) tt ON t.id = tt.user_id
+           WHERE
+           t.record_status = 1
+       ) u ON t.attendance_user = u.id
+
+       where
+       1=1
+
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(attendanceUser)">
+        and t.attendance_user= #{attendanceUser,jdbcType=VARCHAR}
+       </if>
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(attendanceTime)">
+           and  Date(t.sign_in_attendance_time) = DATE_FORMAT(#{attendanceTime},'%Y-%m-%d')
+       </if>
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userName)">
+           and u.name like CONCAT('%', trim(#{userName,jdbcType=VARCHAR}), '%')
+       </if>
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentName)">
+           and u.department_name like CONCAT('%', trim(#{departmentName,jdbcType=VARCHAR}), '%')
+       </if>
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+           and u.departmentId= #{departmentId,jdbcType=VARCHAR}
+       </if>
+
+
+       <if test="startTime != null">
+       AND  Date(t.sign_in_attendance_time) &gt;= #{startTime}
+       </if>
+       <if test="endTime != null">
+        and   Date( t.sign_in_attendance_time ) &lt;= #{endTime}
+       </if>
+
+       order by t.sign_in_attendance_time desc
+
+   </select>
+
+
+    <select id="selectAttendanceListByCondition" parameterType="com.jn.oa.model.Attendance" resultMap="SimpleBaseResultMap">
+        select
+       t.sign_in_attendance_time,
+       t.sign_out_attendance_time,
+        u.NAME AS userName,
+        u.department_name AS departmentName,
+        u.account,
+        u.id as userId,
+        u.departmentId
+        from tb_oa_attendance t
+
+        , (
+            SELECT
+                t.id,
+                t.name,
+                t.account,
+                tt.department_name,
+                tt.departmentId
+            FROM
+              tb_sys_user t
+            LEFT JOIN (
+                SELECT
+                    t1.user_id,
+                    t2.department_name,
+                    t2.id as departmentId
+                FROM
+                  tb_sys_user_department_post t1
+                INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
+                WHERE
+                    t1.is_default = 1
+                    AND t1.record_status = 1
+                    AND t2.record_status = 1
+            ) tt ON t.id = tt.user_id
+            WHERE
+            t.record_status = 1
+        ) u
+
+        where
+        t.attendance_user = u.id
+
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userId)">
+            and t.attendance_user= #{userId,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+            and u.departmentId= #{departmentId,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime != null">
+            AND  Date(t.sign_in_attendance_time) &gt;= DATE_FORMAT(#{startTime},'%Y-%m-%d')
+        </if>
+        <if test="endTime != null">
+            and   Date( t.sign_in_attendance_time ) &lt;= DATE_FORMAT(#{endTime},'%Y-%m-%d')
+        </if>
+        order by t.sign_in_attendance_time desc
+
+    </select>
+
+
+
+
+
+
+
+
+
+
+</mapper>

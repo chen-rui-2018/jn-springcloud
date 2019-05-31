@@ -16,13 +16,13 @@ import java.io.Serializable;
 @ApiModel(value = "StaffCheckParam",description = "升级员工入参")
 public class StaffCheckParam implements Serializable {
     @NotNull(message = "企业ID不能为空")
-    @ApiModelProperty(value = "企业ID")
+    @ApiModelProperty(value = "企业ID",required = true,example = "8afabb60045d40e485e1d4ac04666e8a")
     private String comId;
     @NotNull(message = "企业名称不能为空")
-    @ApiModelProperty(value = "企业名称")
+    @ApiModelProperty(value = "企业名称",required = true,example = "左元有限公司")
     private String comName;
     @NotNull(message = "验证码不能为空")
-    @ApiModelProperty(value = "验证码")
+    @ApiModelProperty(value = "验证码",required = true,example = "1234")
     private String checkCode;
 
     public String getComId() {

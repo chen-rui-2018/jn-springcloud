@@ -17,23 +17,27 @@ import java.io.Serializable;
 @ApiModel(value = "WorkPlanPage", description = "工作计划分页实体")
 public class WorkPlanPage extends Page implements Serializable {
     private static final long serialVersionUID = 6810932122166006955L;
-    @ApiModelProperty("工作计划名称")
+
+    @ApiModelProperty(value = "工作计划名称",example = "工作")
     private String workPlanName;
-    @ApiModelProperty("项目名称")
+    @ApiModelProperty(value = "项目名称",example = "\"10000\"")
     private String itemId;
-    @ApiModelProperty("用户账号")
+    @ApiModelProperty(value = "用户账号",example = "wangsong")
     private String userAccount;
-    @ApiModelProperty("任务状态(1未开始,2进行中,3已挂起,4已完成,5已延期)")
+    @ApiModelProperty(value = "任务状态(0未开始,1进行中,2已挂起,3已完成)",example = "\"1\"")
     private String workPlanStatus;
+    @ApiModelProperty(value = "是否延期(0否，1是)",example = "\"1\"")
+    private String isExpire;
 
     public WorkPlanPage() {
     }
 
-    public WorkPlanPage(String workPlanName, String itemId, String userAccount, String workPlanStatus) {
+    public WorkPlanPage(String workPlanName, String itemId, String userAccount, String workPlanStatus, String isExpire) {
         this.workPlanName = workPlanName;
         this.itemId = itemId;
         this.userAccount = userAccount;
         this.workPlanStatus = workPlanStatus;
+        this.isExpire = isExpire;
     }
 
     public String getWorkPlanName() {
@@ -68,6 +72,15 @@ public class WorkPlanPage extends Page implements Serializable {
         this.workPlanStatus = workPlanStatus;
     }
 
+    public String getIsExpire() {
+        return isExpire;
+    }
+
+    public void setIsExpire(String isExpire) {
+        this.isExpire = isExpire;
+    }
+
+
     @Override
     public String toString() {
         return "WorkPlanPage{" +
@@ -75,6 +88,7 @@ public class WorkPlanPage extends Page implements Serializable {
                 ", itemId='" + itemId + '\'' +
                 ", userAccount='" + userAccount + '\'' +
                 ", workPlanStatus='" + workPlanStatus + '\'' +
+                ", isExpire='" + isExpire + '\'' +
                 '}';
     }
 }

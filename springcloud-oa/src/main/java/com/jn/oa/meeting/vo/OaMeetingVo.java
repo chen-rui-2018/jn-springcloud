@@ -29,8 +29,6 @@ public class OaMeetingVo implements Serializable {
     @ApiModelProperty(value = "会议主题（工单名称）")
     private String title;
 
-    @ApiModelProperty(value = "工单编号")
-    private String workOrderNum;
 
     @ApiModelProperty(value = "开始日期")
     //@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
@@ -66,7 +64,7 @@ public class OaMeetingVo implements Serializable {
     private Date modifiedTime;
 
     @ApiModelProperty(value = "参会人员")
-    private String userIdStr;
+    private String participantsStr;
 
     @ApiModelProperty(value = "申请人")
     private String applicant;
@@ -92,9 +90,6 @@ public class OaMeetingVo implements Serializable {
     @ApiModelProperty(value = "是否提醒（0:否、1:是）")
     private String isRemind;
 
-    @ApiModelProperty(value = "会议内容")
-    private String oaMeetingContent;
-
     @ApiModelProperty(value = "会议室")
     private TbOaMeetingRoom tbOaMeetingRoom;
 
@@ -107,26 +102,57 @@ public class OaMeetingVo implements Serializable {
     @ApiModelProperty(value = "创建人用户名")
     private String userName;
 
-    @ApiModelProperty(value = "创建人所在部门")
-    private String departmentName;
+    @ApiModelProperty(value = "组织人")
+    private String organizationalUserName;
+
+    @ApiModelProperty(value = "组织人部门")
+    private String organizationalDepartmentName;
+
+    @ApiModelProperty(value = "附件url")
+    private String fileUrl;
+
 
     @ApiModelProperty(value = "参会人员列表")
     private List<TbOaMeetingParticipants> participantList;
 
-    @ApiModelProperty(value = "审批人员角色")
-    private String approvalRole;
-
-    @ApiModelProperty(value = "审批人员用户id")
-    private String approvalUser;
-
-    @ApiModelProperty(value = "审批意见")
-    private String approvalOpinion;
 
     @ApiModelProperty(value = "会议状态（0:待开始、1:进行中、2:已完成、3:已取消）")
     private String meetingStatus;
 
     @ApiModelProperty(value = "会议状态名称")
     private String meetingStatusMessage;
+
+    @ApiModelProperty(value = "组织人")
+    private String organizationalUser;
+    public String getOrganizationalUserName() {
+        return organizationalUserName;
+    }
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public void setOrganizationalUserName(String organizationalUserName) {
+        this.organizationalUserName = organizationalUserName;
+    }
+
+    public String getOrganizationalDepartmentName() {
+        return organizationalDepartmentName;
+    }
+
+    public void setOrganizationalDepartmentName(String organizationalDepartmentName) {
+        this.organizationalDepartmentName = organizationalDepartmentName;
+    }
+    public String getOrganizationalUser() {
+        return organizationalUser;
+    }
+
+    public void setOrganizationalUser(String organizationalUser) {
+        this.organizationalUser = organizationalUser;
+    }
 
     public String getMeetingStatusMessage() {
         return meetingStatusMessage;
@@ -144,30 +170,6 @@ public class OaMeetingVo implements Serializable {
         this.meetingRoomName = meetingRoomName;
     }
 
-    public String getApprovalRole() {
-        return approvalRole;
-    }
-
-    public void setApprovalRole(String approvalRole) {
-        this.approvalRole = approvalRole;
-    }
-
-    public String getApprovalUser() {
-        return approvalUser;
-    }
-
-    public void setApprovalUser(String approvalUser) {
-        this.approvalUser = approvalUser;
-    }
-
-    public String getApprovalOpinion() {
-        return approvalOpinion;
-    }
-
-    public void setApprovalOpinion(String approvalOpinion) {
-        this.approvalOpinion = approvalOpinion;
-    }
-
     public TbOaMeetingRoom getTbOaMeetingRoom() {
         return tbOaMeetingRoom;
     }
@@ -175,8 +177,6 @@ public class OaMeetingVo implements Serializable {
     public void setTbOaMeetingRoom(TbOaMeetingRoom tbOaMeetingRoom) {
         this.tbOaMeetingRoom = tbOaMeetingRoom;
     }
-
-
 
     public String getContent() {
         return content;
@@ -194,14 +194,6 @@ public class OaMeetingVo implements Serializable {
         this.userName = userName;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
-
     public List<TbOaMeetingParticipants> getParticipantList() {
         return participantList;
     }
@@ -210,22 +202,12 @@ public class OaMeetingVo implements Serializable {
         this.participantList = participantList;
     }
 
-
-
     public String getMeetingStatus() {
         return meetingStatus;
     }
 
     public void setMeetingStatus(String meetingStatus) {
         this.meetingStatus = meetingStatus;
-    }
-
-    public String getOaMeetingContent() {
-        return oaMeetingContent;
-    }
-
-    public void setOaMeetingContent(String oaMeetingContent) {
-        this.oaMeetingContent = oaMeetingContent;
     }
 
     public String getTitle() {
@@ -244,15 +226,6 @@ public class OaMeetingVo implements Serializable {
         this.id = id;
     }
 
-    public String getWorkOrderNum() {
-        return workOrderNum;
-    }
-
-    public void setWorkOrderNum(String workOrderNum) {
-        this.workOrderNum = workOrderNum;
-    }
-
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     public String getStartDate() {
         return startDate;
     }
@@ -333,12 +306,12 @@ public class OaMeetingVo implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public String getUserIdStr() {
-        return userIdStr;
+    public String getParticipantsStr() {
+        return participantsStr;
     }
 
-    public void setUserIdStr(String userIdStr) {
-        this.userIdStr = userIdStr;
+    public void setParticipantsStr(String participantsStr) {
+        this.participantsStr = participantsStr;
     }
 
     public String getApplicant() {

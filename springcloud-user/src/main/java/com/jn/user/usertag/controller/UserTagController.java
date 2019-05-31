@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,9 +34,9 @@ public class UserTagController extends BaseController {
     private UserTagService userTagService;
 
     @ControllerLog(doAction = "获取用户字典列表")
-    @ApiOperation(value = "获取用户字典列表",httpMethod = "POST",response = Result.class)
-    @RequestMapping(value = "/getTagCodeList")
-    public Result getTagCodeList(){
+    @ApiOperation(value = "获取用户字典列表",notes = "用户兴趣爱好、职业等字典数据")
+    @RequestMapping(value = "/getTagCodeList",method = RequestMethod.GET)
+    public Result<List<TagCode>> getTagCodeList(){
         List<TagCode> tagCodeList = userTagService.getTagCodeList();
         return new Result(tagCodeList);
     }

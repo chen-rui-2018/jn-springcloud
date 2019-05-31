@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.TbManpowerInsuredSchemeMapper">
+  <resultMap id="BaseResultMap" type="com.jn.hr.increase.entity.TbManpowerInsuredScheme">
+    <id column="scheme_id" jdbcType="VARCHAR" property="schemeId" />
+    <result column="scheme_name" jdbcType="VARCHAR" property="schemeName" />
+    <result column="insured_city_id" jdbcType="VARCHAR" property="insuredCityId" />
+    <result column="insured_city_name" jdbcType="VARCHAR" property="insuredCityName" />
+    <result column="social_security_id" jdbcType="VARCHAR" property="socialSecurityId" />
+    <result column="accumulation_fund_id" jdbcType="VARCHAR" property="accumulationFundId" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    scheme_id, scheme_name, insured_city_id, insured_city_name, social_security_id, accumulation_fund_id, 
+    record_status, creator_account, created_time, modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_manpower_insured_scheme
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_manpower_insured_scheme
+    where scheme_id = #{schemeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_manpower_insured_scheme
+    where scheme_id = #{schemeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeCriteria">
+    delete from tb_manpower_insured_scheme
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredScheme">
+    insert into tb_manpower_insured_scheme (scheme_id, scheme_name, insured_city_id, 
+      insured_city_name, social_security_id, accumulation_fund_id, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{schemeId,jdbcType=VARCHAR}, #{schemeName,jdbcType=VARCHAR}, #{insuredCityId,jdbcType=VARCHAR}, 
+      #{insuredCityName,jdbcType=VARCHAR}, #{socialSecurityId,jdbcType=VARCHAR}, #{accumulationFundId,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredScheme">
+    insert into tb_manpower_insured_scheme
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="schemeId != null">
+        scheme_id,
+      </if>
+      <if test="schemeName != null">
+        scheme_name,
+      </if>
+      <if test="insuredCityId != null">
+        insured_city_id,
+      </if>
+      <if test="insuredCityName != null">
+        insured_city_name,
+      </if>
+      <if test="socialSecurityId != null">
+        social_security_id,
+      </if>
+      <if test="accumulationFundId != null">
+        accumulation_fund_id,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="schemeId != null">
+        #{schemeId,jdbcType=VARCHAR},
+      </if>
+      <if test="schemeName != null">
+        #{schemeName,jdbcType=VARCHAR},
+      </if>
+      <if test="insuredCityId != null">
+        #{insuredCityId,jdbcType=VARCHAR},
+      </if>
+      <if test="insuredCityName != null">
+        #{insuredCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="socialSecurityId != null">
+        #{socialSecurityId,jdbcType=VARCHAR},
+      </if>
+      <if test="accumulationFundId != null">
+        #{accumulationFundId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeCriteria" resultType="java.lang.Long">
+    select count(*) from tb_manpower_insured_scheme
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_manpower_insured_scheme
+    <set>
+      <if test="record.schemeId != null">
+        scheme_id = #{record.schemeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schemeName != null">
+        scheme_name = #{record.schemeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.insuredCityId != null">
+        insured_city_id = #{record.insuredCityId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.insuredCityName != null">
+        insured_city_name = #{record.insuredCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.socialSecurityId != null">
+        social_security_id = #{record.socialSecurityId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accumulationFundId != null">
+        accumulation_fund_id = #{record.accumulationFundId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_manpower_insured_scheme
+    set scheme_id = #{record.schemeId,jdbcType=VARCHAR},
+      scheme_name = #{record.schemeName,jdbcType=VARCHAR},
+      insured_city_id = #{record.insuredCityId,jdbcType=VARCHAR},
+      insured_city_name = #{record.insuredCityName,jdbcType=VARCHAR},
+      social_security_id = #{record.socialSecurityId,jdbcType=VARCHAR},
+      accumulation_fund_id = #{record.accumulationFundId,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredScheme">
+    update tb_manpower_insured_scheme
+    <set>
+      <if test="schemeName != null">
+        scheme_name = #{schemeName,jdbcType=VARCHAR},
+      </if>
+      <if test="insuredCityId != null">
+        insured_city_id = #{insuredCityId,jdbcType=VARCHAR},
+      </if>
+      <if test="insuredCityName != null">
+        insured_city_name = #{insuredCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="socialSecurityId != null">
+        social_security_id = #{socialSecurityId,jdbcType=VARCHAR},
+      </if>
+      <if test="accumulationFundId != null">
+        accumulation_fund_id = #{accumulationFundId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where scheme_id = #{schemeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredScheme">
+    update tb_manpower_insured_scheme
+    set scheme_name = #{schemeName,jdbcType=VARCHAR},
+      insured_city_id = #{insuredCityId,jdbcType=VARCHAR},
+      insured_city_name = #{insuredCityName,jdbcType=VARCHAR},
+      social_security_id = #{socialSecurityId,jdbcType=VARCHAR},
+      accumulation_fund_id = #{accumulationFundId,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where scheme_id = #{schemeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.electricmeter.dao.TbElectricMeterInfoMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.electricmeter.entity.TbElectricMeterInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="meter_code" jdbcType="VARCHAR" property="meterCode" />
+    <result column="meter_name" jdbcType="VARCHAR" property="meterName" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="use_status" jdbcType="TINYINT" property="useStatus" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_high_energy_threshold" jdbcType="DECIMAL" property="isHighEnergyThreshold" />
+    <result column="box_number" jdbcType="VARCHAR" property="boxNumber" />
+    <result column="floor" jdbcType="VARCHAR" property="floor" />
+    <result column="meter_number" jdbcType="VARCHAR" property="meterNumber" />
+    <result column="mutual_inductance_ratio" jdbcType="VARCHAR" property="mutualInductanceRatio" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="switch_status" jdbcType="TINYINT" property="switchStatus" />
+    <result column="building_id" jdbcType="VARCHAR" property="buildingId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="is_low_energy_threshold" jdbcType="DECIMAL" property="isLowEnergyThreshold" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, meter_code, meter_name, type, position, company_id, use_status, record_status, 
+    creator_account, created_time, modifier_account, modified_time, is_high_energy_threshold, 
+    box_number, floor, meter_number, mutual_inductance_ratio, group_id, switch_status, 
+    building_id, company_name, is_low_energy_threshold, phone
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterInfoCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_electric_meter_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_electric_meter_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_electric_meter_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterInfoCriteria">
+    delete from tb_electric_meter_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterInfo">
+    insert into tb_electric_meter_info (id, meter_code, meter_name, 
+      type, position, company_id, 
+      use_status, record_status, creator_account, 
+      created_time, modifier_account, modified_time, 
+      is_high_energy_threshold, box_number, floor, 
+      meter_number, mutual_inductance_ratio, group_id, 
+      switch_status, building_id, company_name, 
+      is_low_energy_threshold, phone)
+    values (#{id,jdbcType=VARCHAR}, #{meterCode,jdbcType=VARCHAR}, #{meterName,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{position,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
+      #{useStatus,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{isHighEnergyThreshold,jdbcType=DECIMAL}, #{boxNumber,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, 
+      #{meterNumber,jdbcType=VARCHAR}, #{mutualInductanceRatio,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, 
+      #{switchStatus,jdbcType=TINYINT}, #{buildingId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{isLowEnergyThreshold,jdbcType=DECIMAL}, #{phone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterInfo">
+    insert into tb_electric_meter_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="meterCode != null">
+        meter_code,
+      </if>
+      <if test="meterName != null">
+        meter_name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="useStatus != null">
+        use_status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isHighEnergyThreshold != null">
+        is_high_energy_threshold,
+      </if>
+      <if test="boxNumber != null">
+        box_number,
+      </if>
+      <if test="floor != null">
+        floor,
+      </if>
+      <if test="meterNumber != null">
+        meter_number,
+      </if>
+      <if test="mutualInductanceRatio != null">
+        mutual_inductance_ratio,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="switchStatus != null">
+        switch_status,
+      </if>
+      <if test="buildingId != null">
+        building_id,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="isLowEnergyThreshold != null">
+        is_low_energy_threshold,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        #{meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="meterName != null">
+        #{meterName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="useStatus != null">
+        #{useStatus,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isHighEnergyThreshold != null">
+        #{isHighEnergyThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="boxNumber != null">
+        #{boxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="meterNumber != null">
+        #{meterNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="mutualInductanceRatio != null">
+        #{mutualInductanceRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="switchStatus != null">
+        #{switchStatus,jdbcType=TINYINT},
+      </if>
+      <if test="buildingId != null">
+        #{buildingId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="isLowEnergyThreshold != null">
+        #{isLowEnergyThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterInfoCriteria" resultType="java.lang.Long">
+    select count(*) from tb_electric_meter_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_electric_meter_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meterCode != null">
+        meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meterName != null">
+        meter_name = #{record.meterName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.position != null">
+        position = #{record.position,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.useStatus != null">
+        use_status = #{record.useStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isHighEnergyThreshold != null">
+        is_high_energy_threshold = #{record.isHighEnergyThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="record.boxNumber != null">
+        box_number = #{record.boxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.floor != null">
+        floor = #{record.floor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meterNumber != null">
+        meter_number = #{record.meterNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mutualInductanceRatio != null">
+        mutual_inductance_ratio = #{record.mutualInductanceRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupId != null">
+        group_id = #{record.groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.switchStatus != null">
+        switch_status = #{record.switchStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.buildingId != null">
+        building_id = #{record.buildingId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isLowEnergyThreshold != null">
+        is_low_energy_threshold = #{record.isLowEnergyThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_electric_meter_info
+    set id = #{record.id,jdbcType=VARCHAR},
+      meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      meter_name = #{record.meterName,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=TINYINT},
+      position = #{record.position,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      use_status = #{record.useStatus,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      is_high_energy_threshold = #{record.isHighEnergyThreshold,jdbcType=DECIMAL},
+      box_number = #{record.boxNumber,jdbcType=VARCHAR},
+      floor = #{record.floor,jdbcType=VARCHAR},
+      meter_number = #{record.meterNumber,jdbcType=VARCHAR},
+      mutual_inductance_ratio = #{record.mutualInductanceRatio,jdbcType=VARCHAR},
+      group_id = #{record.groupId,jdbcType=VARCHAR},
+      switch_status = #{record.switchStatus,jdbcType=TINYINT},
+      building_id = #{record.buildingId,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      is_low_energy_threshold = #{record.isLowEnergyThreshold,jdbcType=DECIMAL},
+      phone = #{record.phone,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterInfo">
+    update tb_electric_meter_info
+    <set>
+      <if test="meterCode != null">
+        meter_code = #{meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="meterName != null">
+        meter_name = #{meterName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="useStatus != null">
+        use_status = #{useStatus,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isHighEnergyThreshold != null">
+        is_high_energy_threshold = #{isHighEnergyThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="boxNumber != null">
+        box_number = #{boxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        floor = #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="meterNumber != null">
+        meter_number = #{meterNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="mutualInductanceRatio != null">
+        mutual_inductance_ratio = #{mutualInductanceRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="switchStatus != null">
+        switch_status = #{switchStatus,jdbcType=TINYINT},
+      </if>
+      <if test="buildingId != null">
+        building_id = #{buildingId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="isLowEnergyThreshold != null">
+        is_low_energy_threshold = #{isLowEnergyThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterInfo">
+    update tb_electric_meter_info
+    set meter_code = #{meterCode,jdbcType=VARCHAR},
+      meter_name = #{meterName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      position = #{position,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      use_status = #{useStatus,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_high_energy_threshold = #{isHighEnergyThreshold,jdbcType=DECIMAL},
+      box_number = #{boxNumber,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=VARCHAR},
+      meter_number = #{meterNumber,jdbcType=VARCHAR},
+      mutual_inductance_ratio = #{mutualInductanceRatio,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=VARCHAR},
+      switch_status = #{switchStatus,jdbcType=TINYINT},
+      building_id = #{buildingId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      is_low_energy_threshold = #{isLowEnergyThreshold,jdbcType=DECIMAL},
+      phone = #{phone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

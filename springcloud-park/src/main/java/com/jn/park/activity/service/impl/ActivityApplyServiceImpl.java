@@ -5,13 +5,13 @@ import com.github.pagehelper.PageHelper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.zxing.MatrixToImageWriter;
 import com.jn.park.activity.dao.ActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityMapper;
@@ -22,10 +22,10 @@ import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityApplyParam;
-import com.jn.park.model.ActivityQueryPaging;
-import com.jn.park.model.ApplyUserInfo;
+import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ActivityApplyParam;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.ApplyUserInfo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -111,9 +111,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         ApplyUserInfo applyUserInfo = new ApplyUserInfo();
         BeanUtils.copyProperties(userExtension, applyUserInfo);
-        if (StringUtils.isBlank(applyUserInfo.getAvatar()) || StringUtils.isBlank(applyUserInfo.getCompany())
-                || StringUtils.isBlank(applyUserInfo.getName()) || StringUtils.isBlank(applyUserInfo.getPost())
-                || StringUtils.isBlank(applyUserInfo.getSex())) {
+        if (StringUtils.isBlank(applyUserInfo.getName())
+                || StringUtils.isBlank(applyUserInfo.getPosition()) || StringUtils.isBlank(applyUserInfo.getSex())) {
             //用户信息不完善，跳转到信息完善页
             throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
         }
@@ -354,13 +353,15 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      */
     @ServiceLog(doAction = "查询表名信息列表（后台）")
     @Override
-    public PaginationData applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage) {
+    public PaginationData<List<ActivityApplyDetail>> applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage) {
         com.github.pagehelper.Page<Object> objects = null;
         if (needPage) {
             objects = PageHelper.startPage(activityApplyParam.getPage(), activityApplyParam.getRows() == 0 ? 15 : activityApplyParam.getRows(), true);
+        }else{
+            objects = PageHelper.startPage(1, 200000, true);
         }
         List<ActivityApplyDetail> activityApplyList = activityApplyMapper.findApplyActivityList(activityApplyParam.getActivityId(), null);
-        return new PaginationData(activityApplyList, objects == null ? 0 : objects.getTotal());
+        return new PaginationData<>(findUserExtension(activityApplyList), objects == null ? 0 : objects.getTotal());
     }
 
     /**
@@ -380,7 +381,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
             //取得输出流
             //写入文件刷新
-            MatrixToImageWriter.writeToStream(bitMatrix, "png", outputStream);
+            MatrixToImageWriter.writeToStream(bitMatrix, "png", outputStream,null);
             outputStream.flush();
             //关闭输出流
             outputStream.close();
@@ -486,25 +487,25 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     /**
      * 报名人列表信息
      *
-     * @param activityQueryPaging
+     * @param activityPagingParam
      * @param isPage              true：分页  false:不分页
      * @return
      */
     @ServiceLog(doAction = "报名人列表信息(前台)")
     @Override
-    public PaginationData findApplyActivityList(ActivityQueryPaging activityQueryPaging, Boolean isPage) {
+    public PaginationData findApplyActivityList(ActivityPagingParam activityPagingParam, Boolean isPage) {
         Page<Object> objects = null;
         List<ActivityApplyDetail> activityApplyList;
             if (isPage) {
                 //默认查询前15条
-                objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 : activityQueryPaging.getRows(), true);
+                objects = PageHelper.startPage(activityPagingParam.getPage(), activityPagingParam.getRows() == 0 ? 15 : activityPagingParam.getRows(), true);
             }
             //前端查询有效报名状态数据
             String status = "1";
-            if(!StringUtils.isNotEmpty(activityQueryPaging.getActivityId())){
+            if(!StringUtils.isNotEmpty(activityPagingParam.getActivityId())){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY);
             }
-            activityApplyList = activityApplyMapper.findApplyActivityList(activityQueryPaging.getActivityId(), status);
+            activityApplyList = activityApplyMapper.findApplyActivityList(activityPagingParam.getActivityId(), status);
             return new PaginationData(findUserExtension(activityApplyList), objects == null ? 0 : objects.getTotal());
     }
 

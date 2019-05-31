@@ -16,7 +16,7 @@
         IFNULL(t.income,0) as "income" ,
         IFNULL(t.income_type,4) as "incometype" ,
         IFNULL(t.last_year_income,0) as "lastyearincome",
-        IFNULL(CONCAT(ROUND(IF (t.last_year_income = NULL,0,(t.income - t.last_year_income) / t.last_year_income)* 100),"%"),"0%") AS "lastyearpercent"
+        IFNULL(CONCAT(ROUND(IF (t.last_year_income = NULL,0,(t.income - t.last_year_income) / t.last_year_income)* 100),"%"),"/ %") AS "lastyearpercent"
         FROM tb_finance_income_month t
         RIGHT JOIN tb_month m on m.month=t.income_month  and t.record_status=1 and t.income_type = '4' and t.income_month BETWEEN #{startTime} AND  #{endTime}
         where m.month BETWEEN #{startTime} AND  #{endTime}
@@ -28,7 +28,7 @@
         IFNULL(SUM(t.income),0) as "income",
         IFNULL(SUM(t.last_year_income),0) as "lastyearincome",
         t.income_type as "incometype",
-         IFNULL(CONCAT(ROUND(IF (t.last_year_income = NULL,0,(SUM(t.income) - SUM(t.last_year_income)) / t.last_year_income) * 100),"%"),"0%") AS "lastyearpercent"
+         IFNULL(CONCAT(ROUND(IF (t.last_year_income = NULL,0,(SUM(t.income) - SUM(t.last_year_income)) / t.last_year_income) * 100),"%"),"/ %") AS "lastyearpercent"
         FROM tb_finance_income_month t
         RIGHT JOIN tb_month m
         on m.month=t.income_month
@@ -73,7 +73,7 @@
     </resultMap>
 
     <select id="selectEveryLastYearContrast" resultMap="selectEveryLastYearContrastMap">
-      SELECT m.`month` as "incomemonth", IFNULL(t.income,0) as "income",IFNULL(t.last_year_income,0) as "lastyearincome"
+      SELECT  right(m.`month`,2) as "month", IFNULL(SUM(t.income),0) as "income",IFNULL(SUM(t.last_year_income),0) as "lastyearincome"
         FROM tb_finance_income_month t
         RIGHT JOIN tb_month m
         on m.month=t.income_month
@@ -81,9 +81,11 @@
         and t.income_type = #{incomeType,jdbcType=INTEGER}
         and t.income_month BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
         where m.month BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        GROUP BY m.month
     </select>
 
     <resultMap id="selectEveryLastYearContrastMap" type="com.jn.park.finance.model.FinanceIncomeLastYearContrastModel">
+        <result column="month" jdbcType="VARCHAR" property="month" />
         <result column="income" jdbcType="VARCHAR" property="income" />
         <result column="last_year_income" jdbcType="VARCHAR" property="lastYearIncome" />
     </resultMap>

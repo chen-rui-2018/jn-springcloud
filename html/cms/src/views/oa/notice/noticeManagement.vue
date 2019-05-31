@@ -20,9 +20,9 @@
     <!-- 表格 -->
     <el-table :data="noticeList" border fit highlight-current-row style="width: 100%;height:100%;">
       <el-table-column type="index" width="60" label="序号" align="center" />
-      <el-table-column label="公告标题" align="center" prop="noticeTitle">
+      <el-table-column :show-overflow-tooltip="true" label="公告标题" align="center" prop="noticeTitle">
         <template slot-scope="scope">
-          <el-button class="setCursor" type="text">{{ scope.row.noticeTitle }}</el-button>
+          <span class="setCursor">{{ scope.row.noticeTitle }}</span>
         </template>
       </el-table-column>
       <el-table-column :show-overflow-tooltip="true" label="发布平台" align="center" prop="platformType">
@@ -64,7 +64,7 @@
       @current-change="handleCurrentChange" />
     <!-- S 新增弹窗 -->
     <template v-if="dialogFormVisible">
-      <el-dialog :visible.sync="dialogFormVisible" title="公告内容" width="700px">
+      <el-dialog :visible.sync="dialogFormVisible" class="noticeContent" title="公告内容" width="700px">
         <div class="editor-container">
           <UE ref="ue" :default-msg="defaultMsg" :config="config"/>
         </div>
@@ -75,8 +75,8 @@
 
 <script>
 import {
-  api, getCode, paramApi
-} from '@/api/oa/meetingManagement'
+  api, paramApi
+} from '@/api/axios'
 import UE from '@/components/ue.vue'
 export default {
   components: { UE },
@@ -107,6 +107,12 @@ export default {
       }
     }
   },
+  watch: {
+    // 如果 `radio` 发生改变，这个函数就会运行
+    'listQuery.recordStatus': function() {
+      this.initList()
+    }
+  },
   mounted() {
     this.initList()
     this.getCode()
@@ -125,8 +131,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('oa/notice/delete', row.id, 'noticeId').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.oaUrl}oa/notice/delete`, row.id, 'noticeId').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -169,9 +175,8 @@ export default {
     // 初始化
     initList() {
       this.listLoading = true
-      // this.listQuery.recordStatus = Number(this.listQuery.recordStatus)
-      api('oa/notice/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/notice/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.noticeList = res.data.data.rows
           this.total = res.data.data.total
         } else {
@@ -194,8 +199,8 @@ export default {
     // },
     // 获取平台类型
     getCode() {
-      getCode(this.code).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysDict/getDict`, this.code, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.codeOptions = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -213,4 +218,14 @@ export default {
     .el-pagination{
       margin-top:15px;
     }
+
+</style>
+<style lang="scss">
+.noticeContent{
+.el-dialog{
+
+      height: 550px;
+      overflow: auto;
+    }
+}
 </style>

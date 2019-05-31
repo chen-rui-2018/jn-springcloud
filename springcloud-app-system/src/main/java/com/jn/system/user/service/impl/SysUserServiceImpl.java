@@ -4,6 +4,8 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.Assert;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -39,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 用户dao
@@ -100,8 +103,8 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUser.setCreatedTime(new Date());
         tbSysUser.setCreatorAccount(user.getAccount());
-        if (tbSysUser.getPassword() == null){
-            tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+        if (StringUtils.isBlank(tbSysUser.getPassword())) {
+            tbSysUser.setPassword( EncryptUtil.encryptSha256(RandomStringUtils.random(6, true, true)));
         }
         //添加用户信息
         tbSysUserMapper.insert(tbSysUser);
@@ -164,10 +167,16 @@ public class SysUserServiceImpl implements SysUserService {
      */
     private List<TbSysUser> checkAccount(String account) {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
-        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
-        criteria.andAccountEqualTo(account);
+        //查询账号
+        TbSysUserCriteria.Criteria criteria1 = tbSysUserCriteria.createCriteria();
+        criteria1.andAccountEqualTo(account);
         Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
-        criteria.andRecordStatusNotEqualTo(recordStatus);
+        criteria1.andRecordStatusNotEqualTo(recordStatus);
+        //查询手机号
+        TbSysUserCriteria.Criteria criteria2 = tbSysUserCriteria.createCriteria();
+        criteria2.andPhoneEqualTo(account);
+        criteria2.andRecordStatusNotEqualTo(recordStatus);
+        tbSysUserCriteria.or(criteria2);
         return tbSysUserMapper.selectByExample(tbSysUserCriteria);
     }
 
@@ -179,7 +188,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "条件分页查询用户")
-    public PaginationData findSysUserByPage(UserPage sysUserPage) {
+    public PaginationData<List<SysUserVO>> findSysUserByPage(UserPage sysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
         List<SysUserVO> sysUserVOList = null;
@@ -241,7 +250,7 @@ public class SysUserServiceImpl implements SysUserService {
         }
         //判断是否修改密码
         if (StringUtils.isNotBlank(sysUser.getPassword())) {
-            sysUser.setPassword(DigestUtils.md5Hex(sysUser.getPassword()));
+            sysUser.setPassword(EncryptUtil.encryptSha256(sysUser.getPassword()));
         }
         //修改用户信息
         TbSysUser tbSysUser = new TbSysUser();
@@ -261,7 +270,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息")
-    public PaginationData findSysGroupByUserId(SysUserGroupPage sysUserGroupPage) {
+    public PaginationData<SysUserGroupVO> findSysGroupByUserId(SysUserGroupPage sysUserGroupPage) {
         //根据用户id查询用户组
         List<SysGroup> sysGroupOfUserList = sysGroupMapper.findSysGroupByUserId(sysUserGroupPage.getUserId());
         //条件分页获取用户未拥有用户组信息
@@ -331,7 +340,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "根据用户id获取用户具有角色及条件分页查询用户未拥有的角色")
-    public PaginationData findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
+    public PaginationData<SysUserRoleVO> findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
         //获取用户已经具有角色
         List<SysRole> sysRoleOfUserList = sysRoleMapper.findSysRoleByUserId(sysUserRolePage.getUserId());
         //条件分页获取用户未拥有的角色信息
@@ -512,6 +521,13 @@ public class SysUserServiceImpl implements SysUserService {
         if (com.jn.common.util.StringUtils.isNotBlank(user.getAccount())) {
             criteria.andAccountEqualTo(user.getAccount());
         }
+        if(StringUtils.isNotBlank(user.getId())){
+            criteria.andIdEqualTo(user.getId());
+        }
+        //如果手机号不为空
+        if(StringUtils.isNotBlank(user.getPhone())){
+            criteria.andPhoneEqualTo(user.getPhone());
+        }
         Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
         criteria.andRecordStatusNotEqualTo(recordStatus);
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
@@ -535,5 +551,92 @@ public class SysUserServiceImpl implements SysUserService {
     public List<User> getUserAll() {
         List<User> userList = sysUserMapper.getUserAll();
         return userList;
+    }
+
+    /**
+     * 通过用户账号,获取用户信息,多个账号,返回多个用户信息
+     *
+     * @param accountList 账号集合
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "通过用户账号,获取用户信息")
+    public List<User> getUserInfoByAccount(List<String> accountList) {
+        if (accountList != null && accountList.size() > 0) {
+            List<User> userList = sysUserMapper.getUserInfoByAccount(accountList);
+            return userList;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 修改用户角色信息
+     *
+     * @param user        用户对象,传账号id都可以,都传,优先使用id操作
+     * @param deleRoleIds 删除的角色id集合,不删除集合传空集合
+     * @param addRoleIds  新增的角色id集合,不新增集合传空集合
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "修改用户角色信息")
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateUserRole(User user, Set<String> deleRoleIds, Set<String> addRoleIds) {
+        //1.查询用户id
+        if (StringUtils.isBlank(user.getId())) {
+            Assert.notNull(user.getAccount(), SysUserExceptionEnums.ACCOUNT_NOT_NULL.getMessage());
+            TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
+            TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
+            criteria.andAccountEqualTo(user.getAccount());
+            criteria.andRecordStatusEqualTo(new Byte(SysStatusEnums.EFFECTIVE.getCode()));
+            List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
+            if (tbSysUsers != null && tbSysUsers.size() > 0) {
+                user.setId(tbSysUsers.get(0).getId());
+            } else {
+                throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+            }
+        }
+        String userId = user.getId();
+
+        //2.删除用户角色
+        if (deleRoleIds != null && deleRoleIds.size() > 0) {
+            sysUserRoleMapper.deleteUserRole(userId, deleRoleIds);
+        }
+
+        //3.添加新的角色信息
+        if (addRoleIds != null && addRoleIds.size() > 0) {
+            //为了防止角色重复添加,对添加角色进行去重操作
+            Set<String> roleIdSet = sysUserRoleMapper.getRoleIdByUserId(userId);
+            if (roleIdSet != null && roleIdSet.size() > 0) {
+                addRoleIds.removeAll(roleIdSet);
+            }
+            //对添加集合去重
+            if (addRoleIds != null && addRoleIds.size() > 0){
+                List<SysUserRole> sysUserRoleList = new ArrayList<SysUserRole>(16);
+                for (String roleId : addRoleIds) {
+                    SysUserRole sysUserRole = new SysUserRole();
+                    sysUserRole.setId(UUID.randomUUID().toString());
+                    sysUserRole.setUserId(userId);
+                    sysUserRole.setRoleId(roleId);
+                    sysUserRole.setRecordStatus(new Byte(SysStatusEnums.EFFECTIVE.getCode()));
+                    sysUserRoleList.add(sysUserRole);
+                }
+                //将数据保存只数据库
+                sysUserRoleMapper.insertBatch(sysUserRoleList);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 根据用户id，查询用户信息
+     *
+     * @param ids 用户数组
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "根据用户id，查询用户信息")
+    public List<SysTUser> selectUserByIds(String[] ids) {
+        return sysUserMapper.selectUserByIds(ids);
     }
 }

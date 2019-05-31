@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.personnel.dao.AppointmentCounselMapper">
+    <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.personnel.model.PersonnelAppointmentCounselModel">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="theme" jdbcType="VARCHAR" property="theme" />
+        <result column="park_appointment_time_start" jdbcType="TIMESTAMP" property="parkAppointmentTimeStart" />
+        <result column="park_appointment_time_end" jdbcType="TIMESTAMP" property="parkAppointmentTimeEnd" />
+        <result column="park_reservation_address" jdbcType="VARCHAR" property="parkReservationAddress" />
+        <result column="notify_counsel_time_start" jdbcType="TIMESTAMP" property="notifyCounselTimeStart" />
+        <result column="notify_counsel_time_end" jdbcType="TIMESTAMP" property="notifyCounselTimeEnd" />
+        <result column="notify_counsel_address" jdbcType="VARCHAR" property="notifyCounselAddress" />
+        <result column="reservation_limit" jdbcType="INTEGER" property="reservationLimit" />
+        <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+        <result column="counsel_type" jdbcType="TINYINT" property="counselType" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, theme, park_appointment_time_start, park_appointment_time_end, park_reservation_address,
+    notify_counsel_time_start, notify_counsel_time_end, notify_counsel_address, reservation_limit,
+    deadline, counsel_type, status, record_status, creator_account, created_time, modifier_account,
+    modified_time
+  </sql>
+
+    <select id="selectAppointmentCounselListBySearchKey" parameterType="com.jn.enterprise.pd.personnel.model.PersonnelAppointmentCounselModel" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tb_pd_personnel_appointment_counsel
+        WHERE 1=1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(theme)">
+            and theme like CONCAT('%', #{theme,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(counselType)">
+            and counsel_type = #{counselType,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+            and status = #{status,jdbcType=VARCHAR}
+        </if>
+        ORDER BY
+        id DESC
+
+    </select>
+</mapper>

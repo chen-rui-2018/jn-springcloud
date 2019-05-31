@@ -5,16 +5,19 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.file.model.SysFilePage;
 import com.jn.system.file.service.SysFileService;
+import com.jn.system.file.vo.SysFileVO;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 文件controller
@@ -33,11 +36,11 @@ public class SysFileController extends BaseController {
     private SysFileService sysFileService;
 
     @ControllerLog(doAction = "查询文件列表")
-    @ApiOperation(value = "查询文件列表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/list")
+    @ApiOperation(value = "查询文件列表", notes = "查询文件列表")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysFile/list")
-    public Result list(@Validated @RequestBody SysFilePage sysFilePage) {
-        PaginationData data = sysFileService.selectSysFileListBySearchKey(sysFilePage);
+    public Result<PaginationData<List<SysFileVO>>> list(@Validated @RequestBody SysFilePage sysFilePage) {
+        PaginationData<List<SysFileVO>> data = sysFileService.selectSysFileListBySearchKey(sysFilePage);
         return new Result(data);
     }
 

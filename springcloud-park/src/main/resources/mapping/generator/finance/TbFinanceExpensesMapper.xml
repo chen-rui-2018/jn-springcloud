@@ -8,7 +8,7 @@
     <result column="e_cost_id" jdbcType="VARCHAR" property="costId" />
     <result column="e_excel_id" jdbcType="VARCHAR" property="excelId" />
     <result column="e_cost_before_type_name" jdbcType="VARCHAR" property="costBeforeTypeName" />
-    <result column="e_cost_after_type_id" jdbcType="INTEGER" property="costAfterTypeId" />
+    <result column="e_cost_after_type_id" jdbcType="VARCHAR" property="costAfterTypeId" />
     <result column="e_cost_after_type_name" jdbcType="VARCHAR" property="costAfterTypeName" />
     <result column="e_department_id" jdbcType="VARCHAR" property="departmentId" />
     <result column="e_department_name" jdbcType="VARCHAR" property="departmentName" />
@@ -123,7 +123,7 @@
       record_status, creator_account, created_time, 
       modifier_account, modified_time)
     values (#{costHappendTime,jdbcType=CHAR}, #{cost,jdbcType=DECIMAL}, #{costId,jdbcType=VARCHAR}, 
-      #{excelId,jdbcType=VARCHAR}, #{costBeforeTypeName,jdbcType=VARCHAR}, #{costAfterTypeId,jdbcType=INTEGER}, 
+      #{excelId,jdbcType=VARCHAR}, #{costBeforeTypeName,jdbcType=VARCHAR}, #{costAfterTypeId,jdbcType=VARCHAR}, 
       #{costAfterTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
@@ -194,7 +194,7 @@
         #{costBeforeTypeName,jdbcType=VARCHAR},
       </if>
       <if test="costAfterTypeId != null">
-        #{costAfterTypeId,jdbcType=INTEGER},
+        #{costAfterTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costAfterTypeName != null">
         #{costAfterTypeName,jdbcType=VARCHAR},
@@ -250,7 +250,7 @@
         e.cost_before_type_name = #{record.costBeforeTypeName,jdbcType=VARCHAR},
       </if>
       <if test="record.costAfterTypeId != null">
-        e.cost_after_type_id = #{record.costAfterTypeId,jdbcType=INTEGER},
+        e.cost_after_type_id = #{record.costAfterTypeId,jdbcType=VARCHAR},
       </if>
       <if test="record.costAfterTypeName != null">
         e.cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
@@ -289,7 +289,7 @@
       e.cost_id = #{record.costId,jdbcType=VARCHAR},
       e.excel_id = #{record.excelId,jdbcType=VARCHAR},
       e.cost_before_type_name = #{record.costBeforeTypeName,jdbcType=VARCHAR},
-      e.cost_after_type_id = #{record.costAfterTypeId,jdbcType=INTEGER},
+      e.cost_after_type_id = #{record.costAfterTypeId,jdbcType=VARCHAR},
       e.cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
       e.department_id = #{record.departmentId,jdbcType=VARCHAR},
       e.department_name = #{record.departmentName,jdbcType=VARCHAR},
@@ -321,7 +321,7 @@
         cost_before_type_name = #{costBeforeTypeName,jdbcType=VARCHAR},
       </if>
       <if test="costAfterTypeId != null">
-        cost_after_type_id = #{costAfterTypeId,jdbcType=INTEGER},
+        cost_after_type_id = #{costAfterTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costAfterTypeName != null">
         cost_after_type_name = #{costAfterTypeName,jdbcType=VARCHAR},
@@ -357,7 +357,7 @@
       cost_id = #{costId,jdbcType=VARCHAR},
       excel_id = #{excelId,jdbcType=VARCHAR},
       cost_before_type_name = #{costBeforeTypeName,jdbcType=VARCHAR},
-      cost_after_type_id = #{costAfterTypeId,jdbcType=INTEGER},
+      cost_after_type_id = #{costAfterTypeId,jdbcType=VARCHAR},
       cost_after_type_name = #{costAfterTypeName,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=VARCHAR},
       department_name = #{departmentName,jdbcType=VARCHAR},

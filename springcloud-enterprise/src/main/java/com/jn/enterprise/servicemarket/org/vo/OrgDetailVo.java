@@ -19,9 +19,13 @@ import java.util.List;
 public class OrgDetailVo implements Serializable {
     @ApiModelProperty(value = "服务机构id")
     private String orgId;
+    @ApiModelProperty(value = "机构管理员账号")
+    private String orgAccount;
 
     @ApiModelProperty("一级业务领域")
     private String businessType;
+    @ApiModelProperty("一级业务领域名称")
+    private String businessTypeName;
 
     @ApiModelProperty("二级业务领域")
     private String businessSType;
@@ -53,7 +57,10 @@ public class OrgDetailVo implements Serializable {
     @ApiModelProperty("业务擅长")
     private String orgSpeciality;
 
-    @ApiModelProperty(value = "经营状态")
+    @ApiModelProperty("机构状态(0未审核[审核中]1审核通过2审核不通过3已删除) ")
+    private String orgStatus;
+
+    @ApiModelProperty(value = "经营状态[0冻结 1正常户]")
     private String operateStatus;
 
     @ApiModelProperty(value = "组织机构代码")
@@ -62,11 +69,27 @@ public class OrgDetailVo implements Serializable {
     @ApiModelProperty(value = "法人/负责人")
     private String orgPrincipal;
 
+    @ApiModelProperty(value = "企业工商类型",example = "民营企业/有限责任公司")
+    private String orgBusinType;
+
+    @ApiModelProperty(value = "企业工商经营场所",example = "湖南长沙略略略略略")
+    private String orgBusinAddresse;
+
+    @ApiModelProperty(value = "企业工商经营范围",example = "计算机销售、软件开发及出售、计算机....")
+    private String orgBusinScope;
 
     @ApiModelProperty(value = "机构咨询电话")
     private String orgPhone;
 
-    @ApiModelProperty(value = "公司地址")
+    @ApiModelProperty(value = "公司地址[拼接好的详细地址]")
+    private String orgAddressDetail;
+    @ApiModelProperty(value = "办公地省")
+    private String orgProvince;
+    @ApiModelProperty(value = "办公地市")
+    private String orgCity;
+    @ApiModelProperty(value = "办公地区县")
+    private String orgArea;
+    @ApiModelProperty(value = "办公地地址")
     private String orgAddress;
 
     @ApiModelProperty(value = "机构LOGO")
@@ -110,6 +133,23 @@ public class OrgDetailVo implements Serializable {
 
     @ApiModelProperty(value = "机构人员列表")
     private List<OrgTeam> orgTeams;
+
+    @ApiModelProperty(value = "评价分数(平均分)")
+    private String evaluationScore;
+
+    @ApiModelProperty(value = "评价次数")
+    private Integer evaluationNum;
+
+    @ApiModelProperty(value = "职务")
+    private String position;
+
+    public String getOrgAccount() {
+        return orgAccount;
+    }
+
+    public void setOrgAccount(String orgAccount) {
+        this.orgAccount = orgAccount;
+    }
 
     public String getOrgId() {
         return orgId;
@@ -357,5 +397,150 @@ public class OrgDetailVo implements Serializable {
 
     public void setOrgWeb(String orgWeb) {
         this.orgWeb = orgWeb;
+    }
+
+    public String getOrgStatus() {
+        return orgStatus;
+    }
+
+    public void setOrgStatus(String orgStatus) {
+        this.orgStatus = orgStatus;
+    }
+
+    public String getEvaluationScore() {
+        return evaluationScore;
+    }
+
+    public void setEvaluationScore(String evaluationScore) {
+        this.evaluationScore = evaluationScore;
+    }
+
+    public Integer getEvaluationNum() {
+        return evaluationNum;
+    }
+
+    public void setEvaluationNum(Integer evaluationNum) {
+        this.evaluationNum = evaluationNum;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getOrgBusinType() {
+        return orgBusinType;
+    }
+
+    public void setOrgBusinType(String orgBusinType) {
+        this.orgBusinType = orgBusinType;
+    }
+
+    public String getOrgBusinAddresse() {
+        return orgBusinAddresse;
+    }
+
+    public void setOrgBusinAddresse(String orgBusinAddresse) {
+        this.orgBusinAddresse = orgBusinAddresse;
+    }
+
+    public String getOrgBusinScope() {
+        return orgBusinScope;
+    }
+
+    public void setOrgBusinScope(String orgBusinScope) {
+        this.orgBusinScope = orgBusinScope;
+    }
+
+    public String getBusinessTypeName() {
+        return businessTypeName;
+    }
+
+    public void setBusinessTypeName(String businessTypeName) {
+        this.businessTypeName = businessTypeName;
+    }
+
+    public String getOrgAddressDetail() {
+        return orgAddressDetail;
+    }
+
+    public void setOrgAddressDetail(String orgAddressDetail) {
+        this.orgAddressDetail = orgAddressDetail;
+    }
+
+    public String getOrgProvince() {
+        return orgProvince;
+    }
+
+    public void setOrgProvince(String orgProvince) {
+        this.orgProvince = orgProvince;
+    }
+
+    public String getOrgCity() {
+        return orgCity;
+    }
+
+    public void setOrgCity(String orgCity) {
+        this.orgCity = orgCity;
+    }
+
+    public String getOrgArea() {
+        return orgArea;
+    }
+
+    public void setOrgArea(String orgArea) {
+        this.orgArea = orgArea;
+    }
+
+    @Override
+    public String toString() {
+        return "OrgDetailVo{" +
+                "orgId='" + orgId + '\'' +
+                ", businessType='" + businessType + '\'' +
+                ", businessTypeName='" + businessTypeName + '\'' +
+                ", businessSType='" + businessSType + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", orgBusiness='" + orgBusiness + '\'' +
+                ", orgSynopsis='" + orgSynopsis + '\'' +
+                ", orgShow='" + orgShow + '\'' +
+                ", transactionCount='" + transactionCount + '\'' +
+                ", orgServiceScore='" + orgServiceScore + '\'' +
+                ", orgLicenses=" + orgLicenses +
+                ", orgHobby='" + orgHobby + '\'' +
+                ", orgSpeciality='" + orgSpeciality + '\'' +
+                ", orgStatus='" + orgStatus + '\'' +
+                ", operateStatus='" + operateStatus + '\'' +
+                ", orgCode='" + orgCode + '\'' +
+                ", orgPrincipal='" + orgPrincipal + '\'' +
+                ", orgBusinType='" + orgBusinType + '\'' +
+                ", orgBusinAddresse='" + orgBusinAddresse + '\'' +
+                ", orgBusinScope='" + orgBusinScope + '\'' +
+                ", orgPhone='" + orgPhone + '\'' +
+                ", orgAddressDetail='" + orgAddressDetail + '\'' +
+                ", orgProvince='" + orgProvince + '\'' +
+                ", orgCity='" + orgCity + '\'' +
+                ", orgArea='" + orgArea + '\'' +
+                ", orgAddress='" + orgAddress + '\'' +
+                ", orgLogo='" + orgLogo + '\'' +
+                ", orgWeb='" + orgWeb + '\'' +
+                ", orgRegisterTime='" + orgRegisterTime + '\'' +
+                ", conName='" + conName + '\'' +
+                ", conPhone='" + conPhone + '\'' +
+                ", conEmail='" + conEmail + '\'' +
+                ", staffCount=" + staffCount +
+                ", professionNum=" + professionNum +
+                ", bachelorNum=" + bachelorNum +
+                ", masterNum=" + masterNum +
+                ", doctorNum=" + doctorNum +
+                ", returneeNum=" + returneeNum +
+                ", honorLicense=" + honorLicense +
+                ", orgTeams=" + orgTeams +
+                ", evaluationScore='" + evaluationScore + '\'' +
+                ", evaluationNum=" + evaluationNum +
+                ", position='" + position + '\'' +
+                '}';
     }
 }

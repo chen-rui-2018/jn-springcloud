@@ -1,6 +1,6 @@
 package com.jn.park.comment.service;
 
-import com.jn.park.comment.model.CommentAdd;
+import com.jn.park.activity.model.CommentAddParam;
 
 /**
  * 评论/点评
@@ -11,21 +11,20 @@ import com.jn.park.comment.model.CommentAdd;
  */
 public interface CommentService {
     /**
-     * 活动评论/回复
-     * @param commentAdd  点评信息   活动id,点评类型、点评内容
-     * @param account     用户账号/点评人
+     * 评论/回复
+     * @param commentAddParam  点评信息   活动id,点评类型、点评内容
      */
-    void commentActivity(CommentAdd commentAdd,String account);
+    int commentActivity(CommentAddParam commentAddParam);
 
     /**
-     * 活动评论点赞
+     * 评论点赞
      * @param id        点评ID/活动ID
      * @param account   用户账号/点评人
      */
     void commentActivityLike(String  id,String account);
 
     /**
-     * 活动评论取消点赞
+     * 评论取消点赞
      * @param id          点评ID/活动ID
      * @param account     用户账号/点评人
      */

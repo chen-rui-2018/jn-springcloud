@@ -2,7 +2,9 @@ package com.jn.user.userinfo.service;
 
 
 import com.jn.common.model.PaginationData;
+import com.jn.system.model.User;
 import com.jn.user.model.*;
+import com.jn.user.userinfo.model.UserDeviceParam;
 import com.jn.user.userinfo.model.UserInfoParam;
 
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.List;
  */
 public interface UserInfoService {
     /**
-     * 根据账号获取用户扩展信息
+     * 根据用户账号/手机号/邮箱获取用户扩展信息
      * @param account 用户账号
      * @return
      */
@@ -57,13 +59,48 @@ public interface UserInfoService {
      */
     PaginationData getUserExtensionByCompanyCode(CompanyParam companyParam);
 
+    /**
+     * 更新redis中的用户信息
+     * @param account 用户账号
+     * @return  true:更新成功  失败会抛异常
+     */
+    boolean updateRedisUserInfo(String account);
 
     /**
      * 保存/修改用户信息
      * @param userInfoParam
-     * @param account
+     * @param user
      * @return
      */
-    int saveOrUpdateUserInfo(UserInfoParam userInfoParam,String account);
+    int saveOrUpdateUserInfo(UserInfoParam userInfoParam, User user);
+
+    /**
+     * 获取用户实名制状态
+     * @param account
+     * @return true表示已实名认证 false表示未实名认证
+     */
+    Boolean getUserRealNameStatus(String account);
+
+        /**
+     * 根据条件获取 账号列表
+     * @param param
+     *
+     * @return
+     */
+    List<String> getAccountList(UserInfoQueryParam param);
+
+    /**
+     * 根据查询字段批量获取用户信息
+     * @param searchFiledParam
+     * @return
+     */
+    PaginationData getUserExtensionBySearchFiled(SearchFiledParam searchFiledParam);
+
+    /**
+     * 保存用户极光推送注册ID
+     * @param userDeviceParam
+     * @return
+     */
+    int saveRegistrationId(UserDeviceParam userDeviceParam);
 
 }

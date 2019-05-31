@@ -17,7 +17,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -114,16 +113,16 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
         }
         int i2 = advisorMapper.insertServiceExperienceList(tbServiceExperiences);
         logger.info("批量插入顾问服务经验成功，响应条数{}",i2);
-        AdvisorBaseInfo advisorBaseInfo = new AdvisorBaseInfo();
-        BeanUtils.copyProperties(advisorDetailParam,advisorBaseInfo);
-        advisorBaseInfo.setAdvisorAccount(account);
+        AdvisorBaseInfoParam advisorBaseInfoParam = new AdvisorBaseInfoParam();
+        BeanUtils.copyProperties(advisorDetailParam, advisorBaseInfoParam);
+        advisorBaseInfoParam.setAdvisorAccount(account);
         try {
-            advisorBaseInfo.setWorkingYears(new Float(advisorDetailParam.getWorkingYears()));
+            advisorBaseInfoParam.setWorkingYears(advisorDetailParam.getWorkingYears());
         }catch (Exception e){
             logger.error("时间转换出错，请核对参数,{}",e.getMessage(),e);
             throw new JnSpringCloudException(AdvisorExceptionEnum.HONOR_INFO_NOT_EXIST);
         }
-        advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfo);
+        advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
         return 1;
     }
 

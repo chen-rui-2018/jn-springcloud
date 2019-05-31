@@ -18,8 +18,9 @@ import java.util.List;
 public class FinanceIndexSectionExpendFormsVo implements Serializable {
 
 
+    private static final long serialVersionUID = -5279232210968272526L;
     @ApiModelProperty(value = "费用类型ID")
-    private Integer costTypeId;
+    private String costTypeId;
 
     @ApiModelProperty(value = "费用类型名称")
     private String costTypeName;
@@ -33,11 +34,11 @@ public class FinanceIndexSectionExpendFormsVo implements Serializable {
     @ApiModelProperty(value = "年度预算列表")
     private List<FinanceIndexSectionExpendFormsModel> financeIndexSectionExpendFormsModels;
 
-    public Integer getCostTypeId() {
+    public String getCostTypeId() {
         return costTypeId;
     }
 
-    public void setCostTypeId(Integer costTypeId) {
+    public void setCostTypeId(String costTypeId) {
         this.costTypeId = costTypeId;
     }
 

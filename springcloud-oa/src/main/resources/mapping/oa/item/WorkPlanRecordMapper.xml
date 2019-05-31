@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.item.dao.WorkPlanRecordMapper">
+
+    <insert id="addBatch" parameterType="java.util.List">
+        insert into tb_oa_work_plan_record
+        (
+          id, record_date,work_plan_id,consume_time,remain_time,
+          remark,record_status,creator_account,created_time,sort
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR},
+            #{item.recordDate,jdbcType=TIMESTAMP},
+            #{item.workPlanId,jdbcType=VARCHAR},
+            #{item.consumeTime,jdbcType=INTEGER},
+            #{item.remainTime,jdbcType=INTEGER},
+            #{item.remark,jdbcType=VARCHAR},
+            1,
+            #{item.creatorAccount,jdbcType=VARCHAR},
+            NOW(),
+            #{item.sort,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <update id="delete" parameterType="java.lang.String">
+        UPDATE `tb_oa_work_plan_record`
+        SET record_status = '0',
+            modifier_account = #{account,jdbcType=VARCHAR},
+            modified_time = NOW()
+        WHERE
+            work_plan_id = #{workPlanId,jdbcType=VARCHAR};
+    </update>
+    <select id="getRecordList" resultType="com.jn.oa.item.model.WorkPlanRecord" parameterType="java.lang.String">
+        SELECT
+            id,
+            record_date as recordDate,
+            work_plan_id as workPlanId,
+            consume_time as consumeTime,
+            remain_time as remainTime,
+            remark
+        FROM
+            `tb_oa_work_plan_record`
+        WHERE
+            record_status = '1'
+        AND work_plan_id = #{workPlanId,jdbcType=VARCHAR}
+        ORDER BY
+            created_time ASC,
+            sort ASC
+    </select>
+
+</mapper>

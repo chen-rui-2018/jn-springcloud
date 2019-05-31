@@ -13,10 +13,10 @@ import com.jn.park.activity.dao.TbParkLikeMapper;
 import com.jn.park.activity.entity.*;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
-import com.jn.park.model.ActivityApply;
-import com.jn.park.model.ActivityDetail;
-import com.jn.park.model.ActivityQueryPaging;
-import com.jn.park.model.Comment;
+import com.jn.park.activity.model.ActivityApply;
+import com.jn.park.activity.model.ActivityDetail;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -85,7 +85,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         //根据活动id查询点赞信息
         List<TbParkLike> activityLikeInfo = getActivityLikeInfo(activityId);
         int minLikeNum=0;
-        if (activityLikeInfo.isEmpty()) {
+        if (activityLikeInfo.isEmpty() || StringUtils.isBlank(account)) {
             //当前用户没有点赞
             activityDetailVO.setAccountIsLike(false);
         }else{
@@ -107,9 +107,8 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         String showApplyNum="1";
         if(showApplyNum.equals(activityDetail.getShowApplyNum())){
             //根据活动id和account查询活动报名信息
-            List<ActivityApply> activityApplyInfo = getActivityApplyInfo(activityId,account);
-            int minApplyNum=0;
-            if (activityApplyInfo.size()>minApplyNum) {
+            List<ActivityApply> activityApplyInfo = getActivityApplyInfo(activityId);
+            if (!activityApplyInfo.isEmpty()) {
                 activityDetailVO.setActivityApplyList(activityApplyInfo);
                 activityDetailVO.setRealApplyNum(activityApplyInfo.size());
             }
@@ -166,31 +165,34 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
 
     /**
      * 根据活动id获取活动点评信息
-     * @param activityQueryPaging
+     * @param activityPagingParam
      * @param isPage     是否分页  true：分页   false:不分页
      * @param loginAccount  当前登录用户
      * @return
      */
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
-    public PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging,String loginAccount, Boolean isPage){
-        Page<Object> objects=null;
+    public PaginationData<List<Comment>> getCommentInfo(ActivityPagingParam activityPagingParam, String loginAccount, Boolean isPage){
+        com.github.pagehelper.Page<Object> objects = null;
         try {
             if(isPage){
                 //默认查询前15条
-                objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 :activityQueryPaging.getRows(), true);
+                objects = PageHelper.startPage(activityPagingParam.getPage(), activityPagingParam.getRows() == 0 ? 15 : activityPagingParam.getRows(), true);
+            }else{
+                //不分页默认查询前15条
+                objects = PageHelper.startPage(1, 15, true);
             }
             //获取第一层级评论
             List<String>parentIds=new ArrayList<>(16);
-            parentIds.add(activityQueryPaging.getActivityId());
-            List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds,loginAccount);
+            parentIds.add(activityPagingParam.getActivityId());
+            List<Comment>list=activityDetailsMapper.getCommentInfo(activityPagingParam.getActivityId(),parentIds,loginAccount);
             if(list.isEmpty()){
                 return new PaginationData(list,objects==null?0:objects.getTotal());
             }
             //获取评论用户头像信息
             getCommentUserAvatar(list);
-            list= getCommentChildComment(list,activityQueryPaging.getActivityId(),loginAccount);
-            return new PaginationData(list,objects==null?0:objects.getTotal());
+            list= getCommentChildComment(list, activityPagingParam.getActivityId(),loginAccount);
+            return new PaginationData<>(list,objects==null?0:objects.getTotal());
         } finally {
             if(objects!=null){
                 objects.close();
@@ -277,15 +279,14 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     }
 
     /**
-     * 根据活动id,account查询活动报名信息
+     * 根据活动id查询活动报名信息
      * @param activityId 活动id
-     * @param account    账号
      * @return
      */
-    @ServiceLog(doAction = "活动报名信息")
+    @ServiceLog(doAction = "根据活动id查询活动报名信息")
     @Override
-    public List<ActivityApply> getActivityApplyInfo(String activityId,String account){
-        List<ActivityApply> activityApplyInfo = activityDetailsMapper.getActivityApplyInfo(activityId, account);
+    public List<ActivityApply> getActivityApplyInfo(String activityId){
+        List<ActivityApply> activityApplyInfo = activityDetailsMapper.getActivityApplyInfo(activityId);
         //根据报名人账号得到报名人头像信息
         getApplyUserAvatar(activityApplyInfo);
         return activityApplyInfo;

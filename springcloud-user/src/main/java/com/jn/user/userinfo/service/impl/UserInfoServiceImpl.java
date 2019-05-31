@@ -4,19 +4,32 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
+import com.jn.common.util.enums.EnumUtil;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
+import com.jn.user.config.UserServiceConfig;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.dao.TbUserPersonMapper;
 import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.entity.TbUserPersonCriteria;
+import com.jn.user.userinfo.enums.HomeRoleEnum;
+import com.jn.user.userinfo.model.UserDeviceParam;
 import com.jn.user.userinfo.model.UserInfoParam;
 import com.jn.user.userinfo.service.UserInfoService;
+import com.jn.user.usertag.dao.TbTagCodeMapper;
 import com.jn.user.usertag.dao.TbUserTagMapper;
 import com.jn.user.usertag.dao.UserTagMapper;
+import com.jn.user.usertag.entity.TbTagCode;
+import com.jn.user.usertag.entity.TbTagCodeCriteria;
 import com.jn.user.usertag.entity.TbUserTag;
 import com.jn.user.usertag.entity.TbUserTagCriteria;
 import org.slf4j.Logger;
@@ -26,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,13 +61,24 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private TbUserPersonMapper tbUserPersonMapper;
+
     @Autowired
     private UserTagMapper userTagMapper;
+
     @Autowired
     private TbUserTagMapper tbUserTagMapper;
 
     @Autowired
     private RedisCacheFactory redisCacheFactory;
+
+    @Autowired
+    private TbTagCodeMapper tbTagCodeMapper;
+
+    @Autowired
+    private SystemClient systemClient;
+
+    @Autowired
+    private UserServiceConfig userServiceConfig;
 
     @Value(value = "${user.outhrache.information.expire}")
     private int expire;
@@ -71,8 +96,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final static String TAG_CODE_IS_JOB = "1";
 
     /**
-     * 根据账号获取用户扩展信息
-     * @param account 用户账号
+     * 根据用户账号/手机号/邮箱获取用户扩展信息
+     * @param account 用户账号/手机号/邮箱
      * @return
      */
     @ServiceLog(doAction = "根据账号获取用户扩展信息")
@@ -98,9 +123,69 @@ public class UserInfoServiceImpl implements UserInfoService {
         }else{
             TbUserPerson tbUserPerson = tbUserPeople.get(0);
             BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
+            getUserHobbyAndJobs(userExtensionInfo);
+
+            // 获取用户角色
+            User user = new User();
+            user.setAccount(account);
+            Result<User> systemClientUser = systemClient.getUser(user);
+            if (systemClientUser == null || systemClientUser.getData() == null) {
+                logger.warn("调用system服务查询用户不存在，account：{}", account);
+            } else {
+                // 门户首页可展示的角色串
+                String homeRoleStr = userServiceConfig.getHomeRoleStr();
+
+                User curUser = systemClientUser.getData();
+                List<SysRole> sysRoleList = curUser.getSysRole();
+                for (SysRole sysRole : sysRoleList) {
+                    if (sysRole != null) {
+                        if (homeRoleStr.contains(sysRole.getRoleName())) {
+                            userExtensionInfo.setRoleName(sysRole.getRoleName());
+                            HomeRoleEnum homeRole = EnumUtil.getByCode(sysRole.getRoleName(), HomeRoleEnum.class);
+                            if (homeRole != null) {
+                                userExtensionInfo.setRoleCode(homeRole.getMessage());
+                            }
+                            break;
+                        }
+                    }
+                }
+
+            }
             //把用户拓展信息写入redis中
             cache.put(account, userExtensionInfo);
             return userExtensionInfo;
+        }
+    }
+
+    /**
+     * 获取用户兴趣爱好和用户工作
+     * @param userExtensionInfo
+     */
+    @ServiceLog(doAction = "获取用户兴趣爱好和用户工作")
+    private void getUserHobbyAndJobs(UserExtensionInfo userExtensionInfo) {
+        //获取用户兴趣爱好
+        TbUserTagCriteria exampleHobby=new TbUserTagCriteria();
+        exampleHobby.createCriteria().andUserIdEqualTo(userExtensionInfo.getId())
+                .andTagTypeEqualTo(TAG_CODE_IS_HOBBY).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbUserTag> tbUserTaHobbygList = tbUserTagMapper.selectByExample(exampleHobby);
+        if(!tbUserTaHobbygList.isEmpty()){
+            List<String>hobbyList=new ArrayList<>();
+            for(TbUserTag tbUserTag:tbUserTaHobbygList){
+                hobbyList.add(tbUserTag.getTagName());
+            }
+            userExtensionInfo.setHobbys(hobbyList);
+        }
+        //获取用户工作
+        TbUserTagCriteria exampleJob=new TbUserTagCriteria();
+        exampleJob.createCriteria().andUserIdEqualTo(userExtensionInfo.getId())
+                .andTagTypeEqualTo(TAG_CODE_IS_JOB).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbUserTag> tbUserTagJobList = tbUserTagMapper.selectByExample(exampleJob);
+        if(!tbUserTagJobList.isEmpty()){
+            List<String>jobList=new ArrayList<>();
+            for(TbUserTag tbUserTag:tbUserTagJobList){
+                jobList.add(tbUserTag.getTagName());
+            }
+            userExtensionInfo.setJobs(jobList);
         }
     }
 
@@ -138,6 +223,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         //批量获取用户扩展信息
         List<UserExtensionInfo> personUserExtensionList = getPersonUserInfoBatche(needSelectAccountList);
         for(UserExtensionInfo user:personUserExtensionList){
+            //用户兴趣爱好和工作信息
+            getUserHobbyAndJobs(user);
             userList.add(user);
             //把用户拓展信息写入redis中
             cache.put(user.getAccount(), user);
@@ -157,11 +244,19 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public boolean updateAffiliateInfo(UserAffiliateInfo userAffiliateInfo) {
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        example.createCriteria().andAccountEqualTo(userAffiliateInfo.getAccount());
+        example.createCriteria().andAccountIn(userAffiliateInfo.getAccountList());
         TbUserPerson tbUserPerson=new TbUserPerson();
         tbUserPerson.setAffiliateCode(userAffiliateInfo.getAffiliateCode());
         tbUserPerson.setAffiliateName(userAffiliateInfo.getAffiliateName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+        
+        if (userAffiliateInfo.getAccountList() != null && !userAffiliateInfo.getAccountList().isEmpty()) {
+            for (String account : userAffiliateInfo.getAccountList()) {
+                logger.info("[更新用户所属机构信息] 删除redis缓存成功，account:{}", account);
+                updateRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }
@@ -175,11 +270,19 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public boolean updateCompanyInfo(UserCompanyInfo userCompanyInfo) {
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        example.createCriteria().andAccountEqualTo(userCompanyInfo.getAccount());
+        example.createCriteria().andAccountIn(userCompanyInfo.getAccountList());
         TbUserPerson tbUserPerson=new TbUserPerson();
         tbUserPerson.setCompanyCode(userCompanyInfo.getCompanyCode());
         tbUserPerson.setCompanyName(userCompanyInfo.getCompanyName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+
+        if (userCompanyInfo.getAccountList() != null && !userCompanyInfo.getAccountList().isEmpty()) {
+            for (String account : userCompanyInfo.getAccountList()) {
+                logger.info("[更新用户所属企业信息] 删除redis缓存成功，account:{}", account);
+                updateRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }
@@ -236,7 +339,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     /**
      * 根据账号获取用户扩展信息
-     * @param account  用户账号
+     * @param account  用户账号/手机号/邮箱
      * @return
      */
     @ServiceLog(doAction = "根据账号获取用户扩展信息")
@@ -317,6 +420,20 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     /**
+     * 删除redis中的用户信息
+     * @param account 用户账号
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "删除redis中的用户信息")
+    public boolean updateRedisUserInfo(String account) {
+        Assert.notNull(account,UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
+        Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
+        cache.remove(account);
+        return true;
+    }
+
+    /**
      * 处理用户分页数据
      * @param objects
      * @param userPersonList
@@ -331,6 +448,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             for (TbUserPerson userPerson : userPersonList) {
                 UserExtensionInfo userExtensionInfo = new UserExtensionInfo();
                 BeanUtils.copyProperties(userPerson, userExtensionInfo);
+                getUserHobbyAndJobs(userExtensionInfo);
                 resultList.add(userExtensionInfo);
             }
             return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
@@ -339,63 +457,178 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     @ServiceLog(doAction = "保存/修改用户信息")
-    public int saveOrUpdateUserInfo(UserInfoParam userInfoParam,String account){
-        if(StringUtils.isEmpty(account)){
+    public int saveOrUpdateUserInfo(UserInfoParam userInfoParam, User user){
+        if(null == user ){
             throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_INFO_GET_ERROR);
         }
         TbUserPersonCriteria personCriteria = new TbUserPersonCriteria();
-        personCriteria.createCriteria().andAccountEqualTo(account).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        personCriteria.createCriteria().andAccountEqualTo(user.getAccount()).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         List<TbUserPerson> tbUserPeople = tbUserPersonMapper.selectByExample(personCriteria);
         TbUserPerson tbUserPerson = new TbUserPerson();
+        BeanUtils.copyProperties(user,tbUserPerson);
         BeanUtils.copyProperties(userInfoParam,tbUserPerson);
+
+        // 出生年月不为空时，判断日期格式
+        if (StringUtils.isNotEmpty(userInfoParam.getBirthday())) {
+            try {
+                tbUserPerson.setBirthday(DateUtils.parseDate(userInfoParam.getBirthday(),"yyyy-MM-dd"));
+            } catch (ParseException e) {
+                throw new JnSpringCloudException(UserExtensionExceptionEnum.BIRTHDAY_FORMAT_ERROR);
+            }
+        }
+
         int a;
         if(null == tbUserPeople || tbUserPeople.size() == 0){
             //新增
             tbUserPerson.setId(UUID.randomUUID().toString().replaceAll("-",""));
             tbUserPerson.setCreatedTime(new Date());
-            tbUserPerson.setCreatorAccount(account);
+            tbUserPerson.setCreatorAccount(user.getAccount());
+
             tbUserPerson.setRecordStatus(new Byte(RECORD_STATUS_VALID));
             a = tbUserPersonMapper.insert(tbUserPerson);
         }else if(null!=tbUserPeople && tbUserPeople.size()==1){
             //修改
             tbUserPerson.setId(tbUserPeople.get(0).getId());
             tbUserPerson.setModifiedTime(new Date());
-            tbUserPerson.setModifierAccount(account);
+            tbUserPerson.setModifierAccount(user.getAccount());
             a = tbUserPersonMapper.updateByPrimaryKeySelective(tbUserPerson);
         }else{
             //用户数据存在多条
             throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_DATA_MULTIPLE_ERROR);
         }
-
-        List<TbUserTag> hobbys = getUserTagList(userInfoParam.getHobbys(), TAG_CODE_IS_HOBBY, tbUserPerson.getId(), account);
-        List<TbUserTag> jobs = getUserTagList(userInfoParam.getJobs(), TAG_CODE_IS_JOB, tbUserPerson.getId(), account);
+        TbTagCodeCriteria tbTagCodeCriteria = new TbTagCodeCriteria();
+        tbTagCodeCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbTagCode> tagCodes = tbTagCodeMapper.selectByExample(tbTagCodeCriteria);
+        List<TbUserTag> hobbys = getUserTagList(userInfoParam.getHobbys(), TAG_CODE_IS_HOBBY, tbUserPerson.getId(), user.getAccount(),tagCodes);
+        List<TbUserTag> jobs = getUserTagList(userInfoParam.getJobs(), TAG_CODE_IS_JOB, tbUserPerson.getId(), user.getAccount(),tagCodes);
         hobbys.addAll(jobs);
         TbUserTagCriteria tagCriteria = new TbUserTagCriteria();
-        tagCriteria.createCriteria().andCreatorAccountEqualTo(account);
+        tagCriteria.createCriteria().andCreatorAccountEqualTo(user.getAccount());
         int i = tbUserTagMapper.deleteByExample(tagCriteria);
         logger.info("删除用户兴趣爱好/职业标签数据 {} 条",i);
-        int i1 = userTagMapper.insertUserTag(hobbys);
-        logger.info("【插入新数据】用户兴趣爱好/职业标签数据 {} 条",i1);
+        if(null!=hobbys && hobbys.size()>0){
+            int i1 = userTagMapper.insertUserTag(hobbys);
+            logger.info("【插入新数据】用户兴趣爱好/职业标签数据 {} 条",i1);
+        }
+
+        //更新redis缓存数据
+        updateRedisUserInfo(user.getAccount());
         return a;
     }
+    @ServiceLog(doAction = "根据条件查找用户账号列表")
+    @Override
+    public List<String> getAccountList( UserInfoQueryParam param) {
+        List<String> accountLIst = new ArrayList<>(16);
+        TbUserPersonCriteria criteria = new TbUserPersonCriteria();
+        TbUserPersonCriteria.Criteria example = criteria.createCriteria();
+        if (StringUtils.isNotBlank(param.getNickName())){
+            example.andNickNameLike("%"+param.getNickName()+"%");
+        }
+        if(StringUtils.isNotBlank(param.getPhone())){
+            example.andPhoneLike("%"+param.getPhone()+"%");
+        }
+        List<TbUserPerson> list=  tbUserPersonMapper.selectByExample(criteria);
+        if(!list.isEmpty()){
+            for(TbUserPerson user : list){
+             accountLIst.add(user.getAccount());
+            }
+        }
+      return  accountLIst;
+    }
 
+    @Override
+    @ServiceLog(doAction = "根据查询字段获取用户信息")
+    public PaginationData getUserExtensionBySearchFiled(SearchFiledParam searchFiledParam) {
+        if(searchFiledParam == null){
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.SEARCH_PARAM_NOT_NULL);
+        }
+        com.github.pagehelper.Page<Object> objects = null;
+        //是否分页标识  0：不分页  1：分页
+        String isPage="1";
+        if(isPage.equals(searchFiledParam.getNeedPage())){
+            objects = PageHelper.startPage(searchFiledParam.getPage(),
+                    searchFiledParam.getRows() == 0 ? 15 : searchFiledParam.getRows(), true);
+        }
+        //数据状态正常  0:删除  1：正常
+        byte recordStatus=1;
+        TbUserPersonCriteria example=new TbUserPersonCriteria();
+        TbUserPersonCriteria.Criteria criteria = example.createCriteria();
+        criteria.andRecordStatusEqualTo(recordStatus);
+        if (StringUtils.isNotEmpty(searchFiledParam.getComId())) {
+            criteria.andCompanyCodeEqualTo(searchFiledParam.getComId());
+        }
+        if (StringUtils.isNotEmpty(searchFiledParam.getName())) {
+            criteria.andNameLike("%" + searchFiledParam.getName() + "%");
+        }
+        if (StringUtils.isNotEmpty(searchFiledParam.getPhone())) {
+            criteria.andPhoneEqualTo(searchFiledParam.getPhone());
+        }
+        if (searchFiledParam.getAccountList() != null && !searchFiledParam.getAccountList().isEmpty()) {
+            criteria.andAccountNotIn(searchFiledParam.getAccountList());
+        }
+        example.setOrderByClause("modifier_account DESC");
+        List<TbUserPerson> companyList = tbUserPersonMapper.selectByExample(example);
+        return getPaginationData(objects, companyList);
+    }
 
-    private List<TbUserTag> getUserTagList(String[] s,String type,String id,String account){
+    @Override
+    @ServiceLog(doAction = "保存用户极光推送注册ID")
+    public int saveRegistrationId(UserDeviceParam userDeviceParam) {
+        TbUserPersonCriteria example = new TbUserPersonCriteria();
+        TbUserPersonCriteria.Criteria criteria = example.createCriteria();
+        criteria.andRecordStatusEqualTo(Byte.parseByte(RECORD_STATUS_VALID)).andAccountEqualTo(userDeviceParam.getAccount());
+        List<TbUserPerson> userPeopleList = tbUserPersonMapper.selectByExample(example);
+        if (userPeopleList == null || userPeopleList.isEmpty()) {
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_EXTENSION_NOT_EXISTS);
+        }
+
+        TbUserPerson tbUserPerson = userPeopleList.get(0);
+        tbUserPerson.setRegistrationId(userDeviceParam.getRegistrationId());
+        int i = tbUserPersonMapper.updateByPrimaryKeySelective(tbUserPerson);
+        logger.info("[极光推送] 修改用户 {} 注册ID成功，registrationId：{}", userDeviceParam.getAccount(), userDeviceParam.getRegistrationId());
+
+        //更新redis缓存数据
+        updateRedisUserInfo(userDeviceParam.getAccount());
+        return i;
+    }
+
+    private List<TbUserTag> getUserTagList(String[] s,String type,String id,String account,List<TbTagCode> tagCodes){
         List<TbUserTag> tags = new ArrayList<>(8);
+
         if(null != s && s.length>0){
             for (String a:s) {
-                TbUserTag tag = new TbUserTag();
-                tag.setId(UUID.randomUUID().toString().replaceAll("-",""));
-                tag.setTagId(a);
-                tag.setUserId(id);
-                tag.setTagType(type);
-                tag.setCreatedTime(new Date());
-                tag.setCreatorAccount(account);
-                tag.setRecordStatus(new Byte(RECORD_STATUS_VALID));
-                tags.add(tag);
+                if(StringUtils.isNotEmpty(a)){
+                    TbUserTag tag = new TbUserTag();
+                    tag.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                    tag.setTagId(a);
+                    tag.setUserId(id);
+                    tag.setTagType(type);
+                    tag.setCreatedTime(new Date());
+                    tag.setCreatorAccount(account);
+                    tag.setRecordStatus(new Byte(RECORD_STATUS_VALID));
+                    for (TbTagCode tbUserTag:tagCodes
+                    ) {
+                        if(StringUtils.equals(tbUserTag.getTagId(),a)){
+                            tag.setTagName(tbUserTag.getTagVaule());
+                        }
+                    }
+                    tags.add(tag);
+                }
+
             }
         }
         return tags;
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取用户实名制状态")
+    public Boolean getUserRealNameStatus(String account){
+        UserExtensionInfo userExtension = this.getUserExtension(account);
+        if(null!=userExtension && StringUtils.isNotEmpty(userExtension.getIdCard())){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

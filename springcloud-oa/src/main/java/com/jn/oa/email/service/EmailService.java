@@ -1,16 +1,12 @@
 package com.jn.oa.email.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.oa.email.model.DownAttachment;
 import com.jn.oa.email.model.EmailAdd;
 import com.jn.oa.email.model.EmailPage;
 import com.jn.oa.email.vo.EmailVO;
 import com.jn.oa.model.Email;
 import com.jn.system.model.User;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -61,7 +57,7 @@ public interface EmailService {
      * @param emailPage 分页条件
      * @return
      */
-    PaginationData list(EmailPage emailPage);
+    PaginationData<List<EmailVO>> list(EmailPage emailPage);
 
     /**
      * (逻辑)批量删除邮件任务
@@ -70,20 +66,4 @@ public interface EmailService {
      * @param user     当前登录用户
      */
     void deleteBatch(String[] emailIds, User user);
-
-    /**
-     * 附件批量上传
-     *
-     * @param files
-     */
-    String uploadAttachment(List<MultipartFile> files);
-
-    /**
-     * 附件下载
-     *
-     * @param downAttachment 附件下载实体
-     * @param response
-     * @return
-     */
-    ResponseEntity<byte[]> downLoadAttachment(DownAttachment downAttachment, HttpServletResponse response);
 }

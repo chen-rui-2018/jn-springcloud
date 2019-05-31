@@ -1,0 +1,76 @@
+/* pages/meeting/meeting.wxss */
+
+/* 头部 搜索框 */
+
+.head_scan{
+  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+}
+
+.search{
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: fixed;
+}
+.search text{
+  position: absolute;
+  left:59rpx;
+  top:50rpx;
+}
+.search input{
+  width:91%;
+  background-color: #fff;
+  margin: 37rpx 0;
+  padding:0 58rpx;
+  border-radius: 30rpx;
+  box-shadow: 0px 2px 18px 0px 
+    rgba(121, 121, 121, 0.15);
+}
+
+/* 列表 */
+.meeting_list{
+  padding-top:126rpx;
+}
+.meeting_main{
+  background-color: #fff;
+}
+.meeting_li{
+  border-bottom: 2px solid #efefef;
+  padding:0 35rpx;
+}
+.meeting_li .room_num{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 23rpx;
+}
+.meeting_li .room_num text:nth-child(1){
+  font-size: 30rpx;
+}
+.meeting_li .room_num text:nth-child(2){
+  font-size: 26rpx;
+}
+.meeting_li .address{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 29rpx;
+  padding-bottom: 26rpx;
+  font-size: 26rpx;
+  color:#999999;
+}
+.makeMeeting{
+  font-size: 26rpx;
+  padding: 30rpx 42rpx;
+  color:#fff;
+  width:135rpx;
+  height: 135rpx;
+  border-radius: 50%;
+  background-color: #07ab50;
+  box-shadow: 0px 2px 42px 7px 
+		rgba(27, 199, 103, 0.33);
+    position: fixed;
+    right: 38rpx;
+    bottom: 123rpx;
+}

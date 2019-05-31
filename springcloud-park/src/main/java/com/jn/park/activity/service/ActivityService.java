@@ -1,11 +1,9 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.ActivityContent;
-import com.jn.park.model.ActivityDetail;
-import com.jn.park.model.ActivityParment;
-import com.jn.park.model.ActivitySataus;
-import com.jn.park.model.ActivitySlimQuery;
+import com.jn.park.activity.model.*;
+
+import java.util.List;
 
 /**
  * 活动
@@ -21,7 +19,7 @@ public interface ActivityService {
      * @param activityParment
      * @return
      */
-    PaginationData selectActivityList(ActivityParment activityParment);
+    PaginationData<List<Activity>> selectActivityList(ActivityParment activityParment);
 
     /**
      * 查询活动详情[后台管理]
@@ -32,10 +30,10 @@ public interface ActivityService {
 
     /**
      * 活动状态管理(修改)
-     * @param activitySataus
+     * @param activityStatus
      * @return
      */
-    int updateActivityApply( ActivitySataus activitySataus);
+    int updateActivityApply( ActivityStatus activityStatus);
 
     /**
      * 发布活动/保存草稿
@@ -69,10 +67,11 @@ public interface ActivityService {
     /**
      * 前台分页获取的活动列表
      * @param activitySlimQuery
+     * @param account
      * @return
      */
 
-    PaginationData activityListSlim(ActivitySlimQuery activitySlimQuery);
+    PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery ,String account);
 
 	 /**
      * 手动发送活动通知接口
@@ -94,5 +93,35 @@ public interface ActivityService {
      * @return
      */
     int activitySendMessageByTimedTask(ActivityContent activity);
+
+    /**
+     * 查看用户的报名活动列表
+     * @param query
+     * @param needPage
+     * @return
+     */
+    PaginationData findActivitySuccessfulRegistration(ActivityApplyListParam query, Boolean needPage);
+
+    /**
+     * 查看机构活动资讯列表
+     * @param query
+     * @param activityType
+     * @param needPage
+     * @return
+     */
+    PaginationData findOrgActivityList( OrgActivityParam query,String activityType,boolean needPage);
+
+    /**
+     * 获取有效活动总数
+     * @return
+     */
+    String getActivityNum();
+
+    /**
+     * 获取企业报报名活动信息
+     * @param param
+     * @return
+     */
+    List<CompanyActivityApplyShow> getCompanyActivityApplyInfo(CompanyActivityApplyParam param);
 
 }

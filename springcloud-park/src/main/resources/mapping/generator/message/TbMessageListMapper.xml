@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.message.dao.TbMessageListMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.message.entity.TbMessageList">
+    <id column="message_id" jdbcType="VARCHAR" property="id" />
+    <result column="message_message_title" jdbcType="VARCHAR" property="messageTitle" />
+    <result column="message_message_connect_name" jdbcType="VARCHAR" property="messageConnectName" />
+    <result column="message_message_connect" jdbcType="VARCHAR" property="messageConnect" />
+    <result column="message_is_read" jdbcType="INTEGER" property="isRead" />
+    <result column="message_message_recipient" jdbcType="VARCHAR" property="messageRecipient" />
+    <result column="message_message_sender" jdbcType="VARCHAR" property="messageSender" />
+    <result column="message_message_one_sort" jdbcType="INTEGER" property="messageOneSort" />
+    <result column="message_message_tow_sort" jdbcType="INTEGER" property="messageTowSort" />
+    <result column="message_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="message_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="message_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="message_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="message_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.message.entity.TbMessageList">
+    <result column="message_message_content" jdbcType="LONGVARCHAR" property="messageContent" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    message.id as message_id, message.message_title as message_message_title, message.message_connect_name as message_message_connect_name, 
+    message.message_connect as message_message_connect, message.is_read as message_is_read, 
+    message.message_recipient as message_message_recipient, message.message_sender as message_message_sender, 
+    message.message_one_sort as message_message_one_sort, message.message_tow_sort as message_message_tow_sort, 
+    message.record_status as message_record_status, message.creator_account as message_creator_account, 
+    message.created_time as message_created_time, message.modifier_account as message_modifier_account, 
+    message.modified_time as message_modified_time
+  </sql>
+  <sql id="Blob_Column_List">
+    message.message_content as message_message_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.park.message.entity.TbMessageListCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_message_list message
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.jn.park.message.entity.TbMessageListCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_message_list message
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_message_list message
+    where message.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_message_list
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.message.entity.TbMessageListCriteria">
+    delete from tb_message_list message
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.message.entity.TbMessageList">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_message_list (message_title, message_connect_name, 
+      message_connect, is_read, message_recipient, 
+      message_sender, message_one_sort, message_tow_sort, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time, message_content
+      )
+    values (#{messageTitle,jdbcType=VARCHAR}, #{messageConnectName,jdbcType=VARCHAR}, 
+      #{messageConnect,jdbcType=VARCHAR}, #{isRead,jdbcType=INTEGER}, #{messageRecipient,jdbcType=VARCHAR}, 
+      #{messageSender,jdbcType=VARCHAR}, #{messageOneSort,jdbcType=INTEGER}, #{messageTowSort,jdbcType=INTEGER}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{messageContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.message.entity.TbMessageList">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_message_list
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="messageTitle != null">
+        message_title,
+      </if>
+      <if test="messageConnectName != null">
+        message_connect_name,
+      </if>
+      <if test="messageConnect != null">
+        message_connect,
+      </if>
+      <if test="isRead != null">
+        is_read,
+      </if>
+      <if test="messageRecipient != null">
+        message_recipient,
+      </if>
+      <if test="messageSender != null">
+        message_sender,
+      </if>
+      <if test="messageOneSort != null">
+        message_one_sort,
+      </if>
+      <if test="messageTowSort != null">
+        message_tow_sort,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="messageContent != null">
+        message_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="messageTitle != null">
+        #{messageTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="messageConnectName != null">
+        #{messageConnectName,jdbcType=VARCHAR},
+      </if>
+      <if test="messageConnect != null">
+        #{messageConnect,jdbcType=VARCHAR},
+      </if>
+      <if test="isRead != null">
+        #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="messageRecipient != null">
+        #{messageRecipient,jdbcType=VARCHAR},
+      </if>
+      <if test="messageSender != null">
+        #{messageSender,jdbcType=VARCHAR},
+      </if>
+      <if test="messageOneSort != null">
+        #{messageOneSort,jdbcType=INTEGER},
+      </if>
+      <if test="messageTowSort != null">
+        #{messageTowSort,jdbcType=INTEGER},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messageContent != null">
+        #{messageContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.message.entity.TbMessageListCriteria" resultType="java.lang.Long">
+    select count(*) from tb_message_list message
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_message_list message
+    <set>
+      <if test="record.id != null">
+        message.id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageTitle != null">
+        message.message_title = #{record.messageTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageConnectName != null">
+        message.message_connect_name = #{record.messageConnectName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageConnect != null">
+        message.message_connect = #{record.messageConnect,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isRead != null">
+        message.is_read = #{record.isRead,jdbcType=INTEGER},
+      </if>
+      <if test="record.messageRecipient != null">
+        message.message_recipient = #{record.messageRecipient,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageSender != null">
+        message.message_sender = #{record.messageSender,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageOneSort != null">
+        message.message_one_sort = #{record.messageOneSort,jdbcType=INTEGER},
+      </if>
+      <if test="record.messageTowSort != null">
+        message.message_tow_sort = #{record.messageTowSort,jdbcType=INTEGER},
+      </if>
+      <if test="record.recordStatus != null">
+        message.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        message.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        message.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        message.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        message.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.messageContent != null">
+        message.message_content = #{record.messageContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_message_list message
+    set message.id = #{record.id,jdbcType=VARCHAR},
+      message.message_title = #{record.messageTitle,jdbcType=VARCHAR},
+      message.message_connect_name = #{record.messageConnectName,jdbcType=VARCHAR},
+      message.message_connect = #{record.messageConnect,jdbcType=VARCHAR},
+      message.is_read = #{record.isRead,jdbcType=INTEGER},
+      message.message_recipient = #{record.messageRecipient,jdbcType=VARCHAR},
+      message.message_sender = #{record.messageSender,jdbcType=VARCHAR},
+      message.message_one_sort = #{record.messageOneSort,jdbcType=INTEGER},
+      message.message_tow_sort = #{record.messageTowSort,jdbcType=INTEGER},
+      message.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      message.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      message.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      message.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      message.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      message.message_content = #{record.messageContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_message_list message
+    set message.id = #{record.id,jdbcType=VARCHAR},
+      message.message_title = #{record.messageTitle,jdbcType=VARCHAR},
+      message.message_connect_name = #{record.messageConnectName,jdbcType=VARCHAR},
+      message.message_connect = #{record.messageConnect,jdbcType=VARCHAR},
+      message.is_read = #{record.isRead,jdbcType=INTEGER},
+      message.message_recipient = #{record.messageRecipient,jdbcType=VARCHAR},
+      message.message_sender = #{record.messageSender,jdbcType=VARCHAR},
+      message.message_one_sort = #{record.messageOneSort,jdbcType=INTEGER},
+      message.message_tow_sort = #{record.messageTowSort,jdbcType=INTEGER},
+      message.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      message.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      message.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      message.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      message.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.message.entity.TbMessageList">
+    update tb_message_list
+    <set>
+      <if test="messageTitle != null">
+        message_title = #{messageTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="messageConnectName != null">
+        message_connect_name = #{messageConnectName,jdbcType=VARCHAR},
+      </if>
+      <if test="messageConnect != null">
+        message_connect = #{messageConnect,jdbcType=VARCHAR},
+      </if>
+      <if test="isRead != null">
+        is_read = #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="messageRecipient != null">
+        message_recipient = #{messageRecipient,jdbcType=VARCHAR},
+      </if>
+      <if test="messageSender != null">
+        message_sender = #{messageSender,jdbcType=VARCHAR},
+      </if>
+      <if test="messageOneSort != null">
+        message_one_sort = #{messageOneSort,jdbcType=INTEGER},
+      </if>
+      <if test="messageTowSort != null">
+        message_tow_sort = #{messageTowSort,jdbcType=INTEGER},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messageContent != null">
+        message_content = #{messageContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.park.message.entity.TbMessageList">
+    update tb_message_list
+    set message_title = #{messageTitle,jdbcType=VARCHAR},
+      message_connect_name = #{messageConnectName,jdbcType=VARCHAR},
+      message_connect = #{messageConnect,jdbcType=VARCHAR},
+      is_read = #{isRead,jdbcType=INTEGER},
+      message_recipient = #{messageRecipient,jdbcType=VARCHAR},
+      message_sender = #{messageSender,jdbcType=VARCHAR},
+      message_one_sort = #{messageOneSort,jdbcType=INTEGER},
+      message_tow_sort = #{messageTowSort,jdbcType=INTEGER},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      message_content = #{messageContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.message.entity.TbMessageList">
+    update tb_message_list
+    set message_title = #{messageTitle,jdbcType=VARCHAR},
+      message_connect_name = #{messageConnectName,jdbcType=VARCHAR},
+      message_connect = #{messageConnect,jdbcType=VARCHAR},
+      is_read = #{isRead,jdbcType=INTEGER},
+      message_recipient = #{messageRecipient,jdbcType=VARCHAR},
+      message_sender = #{messageSender,jdbcType=VARCHAR},
+      message_one_sort = #{messageOneSort,jdbcType=INTEGER},
+      message_tow_sort = #{messageTowSort,jdbcType=INTEGER},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

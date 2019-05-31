@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,24 +13,26 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorInquiryInfo",description = "服务顾问信息")
-public class AdvisorServiceInfo extends Page implements Serializable {
+@ApiModel(value = "AdvisorServiceInfo",description = "服务顾问信息")
+public class AdvisorServiceInfo implements Serializable {
     @ApiModelProperty(value = "机构ID")
     private String orgId;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "顾问账号",required = true)
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "顾问姓名")
     private String advisorName;
     @ApiModelProperty(value = "业务领域")
     private String businessArea;
+    @ApiModelProperty(value = "业务领域名称")
+    private String businessAreaName;
     @ApiModelProperty(value = "头像")
     private String avatar;
     @ApiModelProperty(value = "职务")
     private String position;
     @ApiModelProperty(value = "所属机构名称")
     private String orgName;
-    @ApiModelProperty(value = "是否认证")
+    @ApiModelProperty(value = "是否认证(0：未认证  1：已认证)")
     private String isCertification;
     @ApiModelProperty(value = "联系手机")
     private String phone;
@@ -76,6 +77,13 @@ public class AdvisorServiceInfo extends Page implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public String getBusinessAreaName() {
+        return businessAreaName;
+    }
+
+    public void setBusinessAreaName(String businessAreaName) {
+        this.businessAreaName = businessAreaName;
+    }
 
     public String getOrgId() {
         return orgId;
@@ -308,6 +316,7 @@ public class AdvisorServiceInfo extends Page implements Serializable {
                 ", advisorAccount='" + advisorAccount + '\'' +
                 ", advisorName='" + advisorName + '\'' +
                 ", businessArea='" + businessArea + '\'' +
+                ", businessAreaName='" + businessAreaName + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", position='" + position + '\'' +
                 ", orgName='" + orgName + '\'' +
@@ -331,7 +340,7 @@ public class AdvisorServiceInfo extends Page implements Serializable {
                 ", modifiedTime=" + modifiedTime +
                 ", modifierAccount='" + modifierAccount + '\'' +
                 ", recordStatus=" + recordStatus +
-                ", personalProfile=" + personalProfile +
+                ", personalProfile='" + personalProfile + '\'' +
                 '}';
     }
 }

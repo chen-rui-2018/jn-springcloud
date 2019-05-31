@@ -12,6 +12,7 @@ import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
+import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.model.ServiceOrg;
@@ -32,10 +33,16 @@ import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria;
 import com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapper;
 import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria;
+import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.api.ActivityClient;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
+import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.UserExtensionInfo;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -99,6 +106,12 @@ public class OrgServiceImpl implements OrgService {
     private TbServiceProductMapper tbServiceProductMapper;
     @Autowired
     private TbServiceRequireMapper tbServiceRequireMapper;
+
+    @Autowired
+    private SystemClient systemClient;
+
+    @Autowired
+    private InvestorService investorService;
 
     /**
      * 机构认证流程id
@@ -680,4 +693,40 @@ public class OrgServiceImpl implements OrgService {
         }
     }
 
+    /**
+     * 添加机构管理员角色
+     * @param orgAccount
+     * @return
+     */
+    @ServiceLog(doAction = "添加机构管理员角色")
+    @Override
+    public int addOrgRole(String orgAccount) {
+        if(StringUtils.isBlank(orgAccount)){
+            logger.warn("添加机构管理员角色失败，失败原因：机构账号不能为空");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        //判断当前账号在系统中是否存在
+        User user=new User();
+        user.setAccount(orgAccount);
+        Result<User> userResult = systemClient.getUser(user);
+        if(userResult==null || userResult.getData()==null){
+            logger.warn("添加机构管理员角色失败，失败原因：机构账号在系统中不存在");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        //给用户添加"机构管理员"角色
+        String roleName="机构管理员";
+        Result<SysRole> sysRoleResult = systemClient.getRoleByName(roleName);
+        if(sysRoleResult==null ||sysRoleResult.getData()==null){
+            logger.warn("添加机构管理员角色失败，失败原因：无法获取“机构管理员”角色信息，请确认系统服务是否正常，且“机构管理员”角色在系统中存在");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        //更新用户角色
+        Result<Boolean> booleanResult = investorService.updateUserRoleInfo(user, sysRoleResult);
+        if(booleanResult.getData()==true){
+            return 1;
+        }else{
+            logger.warn("添加机构管理员角色失败，失败原因：更新用户角色为“机构管理员”失败");
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
 }

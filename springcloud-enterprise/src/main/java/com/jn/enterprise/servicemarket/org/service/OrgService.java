@@ -89,4 +89,11 @@ public interface OrgService {
      */
     String getOrgStatusByUser(String account);
 
+    /**
+     * 添加机构管理员角色
+     * @param orgAccount
+     * @return
+     */
+    int addOrgRole(String orgAccount);
+
 }

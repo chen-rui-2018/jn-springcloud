@@ -8,6 +8,7 @@ import com.jn.enterprise.data.model.GroupModel;
 import com.jn.enterprise.data.model.InputFormatModel;
 import com.jn.enterprise.data.model.TreeData;
 import com.jn.enterprise.data.service.DataModelService;
+import com.jn.enterprise.data.service.DataTaskTimerService;
 import com.jn.enterprise.data.service.impl.DataModelServiceImpl;
 import com.jn.enterprise.data.vo.ModelDataVO;
 import com.jn.enterprise.data.vo.TargetModelVO;
@@ -42,7 +43,8 @@ public class DataModelController  extends BaseController {
     private DataModelService dataModelService;
     private static Logger logger = LoggerFactory.getLogger(DataModelController.class);
 
-
+    @Autowired
+    private DataTaskTimerService dataTaskTimerService;
 
     @ControllerLog(doAction = "数据上报-指标管理-树形指标列表获取")
     @ApiOperation(value = "树形指标列表获取",notes = "返回树形指标列表")
@@ -154,5 +156,24 @@ public class DataModelController  extends BaseController {
     public Result<List<TbDataReportingGardenLinker>> getWarner(){
         List<TbDataReportingGardenLinker> resultList = dataModelService.getWarner();
         return new Result(resultList);
+    }
+
+
+    @ControllerLog(doAction = "任务创建")
+    @ApiOperation(value = "任务创建",notes = "任务创建")
+    @RequestMapping(value = "/task/createTask", method = RequestMethod.GET)
+    @RequiresPermissions("/data/task/createTask")
+    public void createTask(){
+
+        dataTaskTimerService.createTask();
+    }
+
+    @ControllerLog(doAction = "更新任务状态")
+    @RequestMapping(value = "/task/updateTask", method = RequestMethod.GET)
+    @ApiOperation(value = "更新任务状态",notes = "更新任务状态")
+    @RequiresPermissions("/data/task/updateTask")
+    public void updateTask(){
+
+        dataTaskTimerService.updateTask();
     }
 }

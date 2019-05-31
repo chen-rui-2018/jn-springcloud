@@ -140,6 +140,10 @@ export default {
       }
     },
     demandRaise(i) {
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.serverProVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;

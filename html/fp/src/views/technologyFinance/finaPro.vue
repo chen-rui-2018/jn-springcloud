@@ -94,7 +94,7 @@
     <div class="serverOrgContent" id="serverOrgContent">
       <ul>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg fl" @click="handleOrgDel(i.productId)">
+          <div class="orgImg fl pointer" @click="handleOrgDel(i.productId)">
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.pictureUrl" alt="">
           </div>
@@ -382,6 +382,10 @@ export default {
     },
     //提需求
     raiseDemand(i) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.finaProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";

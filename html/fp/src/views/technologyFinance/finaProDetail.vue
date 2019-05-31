@@ -10,7 +10,7 @@
       <el-card>
         <div class="agent1 clearfix">
           <div class="agentTil fl color1">{{serverOrgDetailList.productName}}</div>
-          <div class="orgBtn fr mainColor" @click="raiseDemand(serverOrgDetailList.productId,serverOrgDetailList.productName)">提需求</div>
+          <div class="orgBtn fr mainColor" v-if="serverOrgDetailList.orgName" @click="raiseDemand(serverOrgDetailList.productId,serverOrgDetailList.productName)">提需求</div>
         </div>
         <div class="agent2 clearfix color2">
           <div class="agentImg fl">
@@ -301,6 +301,10 @@ export default {
     },
     //提需求
     raiseDemand(productId,productName) {
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";

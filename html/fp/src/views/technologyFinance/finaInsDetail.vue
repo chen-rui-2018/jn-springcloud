@@ -261,13 +261,13 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')" v-if="serverPro.length>0">
+          <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')" v-if="serverPro.length>0">
             <a href="javascript:;" data="%">全部({{serverPro[0].serviceTotal}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag1=='0'}" @click="screenPro('0')" v-if="serverPro.length>0">
+          <li class="list-item " :class="{'active3':flag1=='0'}" @click="screenPro('0')" v-if="serverPro.length>0">
             <a href="javascript:;" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag1=='1'}" @click="screenPro('1')" v-if="serverPro.length>0">
+          <li class="list-item " :class="{'active3':flag1=='1'}" @click="screenPro('1')" v-if="serverPro.length>0">
             <a href="javascript:;" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
           </li>
         </ul>
@@ -275,16 +275,16 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag3==''}" @click="screenEva('')">
+          <li class="list-item current" :class="{'active3':flag3==''}" @click="screenEva('')">
             <a href="javascript:;" data="%">全部({{evaCount.evaluationTotal}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag3=='praise'}" @click="screenEva('praise')">
+          <li class="list-item " :class="{'active3':flag3=='praise'}" @click="screenEva('praise')">
             <a href="javascript:;">好评({{evaCount.praiseNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag3=='average'}" @click="screenEva('average')">
+          <li class="list-item " :class="{'active3':flag3=='average'}" @click="screenEva('average')">
             <a href="javascript:;">中评({{evaCount.averageNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag3=='badReview'}" @click="screenEva('badReview')">
+          <li class="list-item " :class="{'active3':flag3=='badReview'}" @click="screenEva('badReview')">
             <a href="javascript:;">差评({{evaCount.badReviewNum}})</a>
           </li>
         </ul>
@@ -292,13 +292,13 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag4=='0'}" @click="screenActi('0')">
+          <li class="list-item current" :class="{'active3':flag4=='0'}" @click="screenActi('0')">
             <a href="javascript:;">全部({{serverActiList[0].actiNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag4=='1'}" @click="screenActi('1')">
+          <li class="list-item " :class="{'active3':flag4=='1'}" @click="screenActi('1')">
             <a href="javascript:;">最近一周({{serverActiList[0].weekNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag4=='2'}" @click="screenActi('2')">
+          <li class="list-item " :class="{'active3':flag4=='2'}" @click="screenActi('2')">
             <a href="javascript:;">最近一月({{serverActiList[0].monthNum}})</a>
           </li>
         </ul>

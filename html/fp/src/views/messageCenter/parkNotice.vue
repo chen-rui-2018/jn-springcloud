@@ -80,7 +80,7 @@ export default {
         this.messageOneTort = 0;
         this.getMessageOneTort();
         this.getMessageList();
-      } else if (this.$route.name == "corporateInvitation") {
+      } else if (this.$route.name == "institutionInvitation") {
         this.messageTowTort = 7;
         this.messageOneTort = 0;
         this.getMessageOneTort();
@@ -95,6 +95,7 @@ export default {
         data: {
           id: item.id
         },
+        dataFlag:true,
         callback: res => {
           if (res.code === "0000") {
             // this.$message(res.result);

@@ -781,7 +781,7 @@ export default {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({ path: "chat",query:{fromUser:orgAccount}});
+      this.$router.push({ path: "chat", query: { fromUser: orgAccount } });
     },
     //金融产品提需求
     raiseDemand(i) {
@@ -867,7 +867,7 @@ export default {
       if (this.flag55 == true) {
         if (this.page7 >= Math.ceil(this.total7 / this.rows7)) {
           // this.$message.error("没有更多数据了");
-          this.page7=1
+          this.page7 = 1;
           this.getRecruitList();
           // return;
         } else {
@@ -877,7 +877,7 @@ export default {
       } else {
         if (this.page8 >= Math.ceil(this.total8 / this.rows8)) {
           // this.$message.error("没有更多数据了");
-           this.page8=1
+          this.page8 = 1;
           this.getProList();
           // return;
         } else {
@@ -1089,12 +1089,13 @@ export default {
     },
     //活动中心右翻页
     rightPage() {
-      if (this.page3 >= this.total3) {
-        this.$message.error("没有更多数据了");
-        return;
+      if (this.page3 >= Math.ceil(this.total3 / this.rows3)) {
+        this.page3 = 1;
+        this.getActiList();
+      } else {
+        this.page3++;
+        this.getActiList();
       }
-      this.page3++;
-      this.getActiList();
     },
     //科技金融-投资人列表
     getInvestorInfoList() {

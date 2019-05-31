@@ -113,7 +113,9 @@
                                 </div>
                             </div>
                             <div class="verticalRight fr">
-                                <el-button type="success" plain @click="immediateSign(item.id)">立即报名</el-button>
+                                <el-button type="success" v-if="item.actiStatus=='3'" style="background:#00a041;height:38px;width:110px">活动已结束</el-button>
+                                <el-button type="success" v-if="item.actiStatus=='4'" style="background:#00a041;height:38px;width:110px">活动已取消</el-button>
+                                <el-button type="success" v-if="item.actiStatus=='2'" style="background:#ecfcf2;height:38px;width:110px;border:1px solid #00a041;color:#00a041;">报名中</el-button>
                             </div>
                         </li>
                     </ul>
@@ -162,21 +164,20 @@ export default {
         this.$message.error("请先登录");
         return;
       }
-       this.api.post({
+      this.api.post({
         url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
         data: {
-            activityId:id,
+          activityId: id
         },
         // dataFlag: false,
-        urlFlag:true,
-        callback: (res)=>{
+        urlFlag: true,
+        callback: res => {
           if (res.code == "0000") {
             // _this.actiTypeList = res.data.rows;
-            this.$message(res.result)
+            this.$message(res.result);
           }
         }
       });
-      
     },
     handleTypeList() {
       this.showList = !this.showList;

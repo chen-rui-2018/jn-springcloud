@@ -17,7 +17,7 @@
       </template>
 
       <template v-else>
-        <router-link to="/parkNotice" @mouseenter.native="showMes=!showMes,menuFlag=false" @mouseleave.native="showMes=!showMes">
+        <a @click="$router.push('/parkNotice')" @mouseenter="showMes=!showMes,menuFlag=false" @mouseleave="showMes=!showMes">
           <i class="el-icon-bell"></i>
           <div class="mesage11" v-if="showMes">
             <el-card>
@@ -26,13 +26,13 @@
                 <span class="pointer" @click="showMesFlag=false">清空</span>
               </div>
               <ul v-if="showMesFlag">
-                <li class="pointer" :class="{'act':colorFlag==i.id}" v-for="(i,k) in allList" :key="k" @click="goRoute(i)" v-if="k<4" @mouseover="colorFlag=i.id">[{{i.messageTowSortName}}]{{i.messageTitle}}</li>
+                <li class="pointer" :class="{'act':colorFlag==i.id}" v-for="(i,k) in allList" :key="k" @click.stop="goRoute(i)" v-if="k<4" @mouseover="colorFlag=i.id">[{{i.messageTowSortName}}]{{i.messageTitle}}</li>
                 <!-- <li>[园区通知]您有2条私人订单</li> -->
               </ul>
               <div class="checkAll ct color1 pointer">查看全部</div>
             </el-card>
           </div>
-        </router-link>
+        </a>
         <div class="imgU" @mouseenter.stop="menuFlag=!menuFlag,showMes=false">
           <img v-if="userInfoData.avatar" :src="userInfoData.avatar" style="vertical-align: middle;">
           <img v-else src="@/../static/img/smaImg.png">

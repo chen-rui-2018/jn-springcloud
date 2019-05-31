@@ -102,7 +102,8 @@
                 <i class="mainColor">{{i.careUser}}</i>人关注</span>
             </p>
             <p>
-              <a class="attention" @click="handleAttention(i.id)">+关注</a>
+              <a class="attention" v-if="attentionFlag" @click="handleAttention(i.id)">+关注</a>
+              <a class="attention" v-else>已关注</a>
               <a @click="$router.push({path:'/recruitmentList',query:{comId:i.id}})">热招职位</a>
             </p>
           </div>
@@ -119,6 +120,7 @@
 export default {
   data() {
     return {
+      attentionFlag:true,
       total: 0,
       currentPage1: 1,
       row: 3,
@@ -173,7 +175,7 @@ export default {
         url: "addCareOperate",
         data: {
           account:id,
-          receiveType:-1
+          receiveType:-2
         },
         callback: (res)=> {
           if (res.code == "0000") {

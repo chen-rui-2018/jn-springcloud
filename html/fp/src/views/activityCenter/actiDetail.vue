@@ -56,14 +56,15 @@
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
-            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
-            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">停止报名</el-button>
+            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round>停止报名</el-button>
+            <el-button type="success" v-else-if="applySuccess" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
+            <el-button type="success" v-else style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">取消报名</el-button>
             <!-- <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button> -->
-            <span class="shareto">
+            <!-- <span class="shareto">
               分享到
-              <i class="iconfont icon-weixin"></i>
+              <i class="iconfont icon-weixin" style="margin-right:10px"></i>
               <i class="iconfont icon-12sina"></i>
-            </span>
+            </span> -->
           </div>
         </div>
       </el-card>
@@ -113,7 +114,7 @@
                     <span>{{item.likeNum}}</span> -->
                     <i class="iconfont icon-liuyan" v-if="inFlag == item.id" style="cursor:pointer" @click="inFlag = '';">&nbsp;收起回复</i>
                     <i class="iconfont icon-liuyan" v-else style="cursor:pointer" @click="replyFlag(item.id)">&nbsp;回复</i>
-                    
+
                   </p>
                 </div>
               </div>
@@ -144,6 +145,7 @@
 export default {
   data() {
     return {
+      applySuccess: undefined,
       inFlag: "",
       textarea: "",
       textData: "",
@@ -187,7 +189,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.textData=''
+            _this.textData = "";
             _this.getCommentInfo();
           } else {
             _this.$message.error(res.result);
@@ -204,7 +206,7 @@ export default {
     },
     //回复评论
     replycom(item) {
-       if (!sessionStorage.userInfo) {
+      if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
@@ -228,7 +230,7 @@ export default {
       });
     },
     comLike(item) {
-       if (!sessionStorage.userInfo) {
+      if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
@@ -307,7 +309,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("报名成功");
-            _this.init();
+            _this.applySuccess = false;
           } else {
             _this.$message.error(res.result);
           }
@@ -322,11 +324,11 @@ export default {
         data: {
           activityId: id
         },
-        dataFlag: true,
+        urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("取消报名成功");
-            _this.init();
+            _this.applySuccess = true;
           } else {
             _this.$message.error(res.result);
           }
@@ -334,7 +336,7 @@ export default {
       });
     },
     handleLike(id) {
-       if (!sessionStorage.userInfo) {
+      if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
@@ -410,6 +412,7 @@ export default {
             _this.activityDetail = res.data.activityDetail;
             _this.actiApplyList = res.data.activityApplyList;
             _this.accountIsLike = res.data.accountIsLike;
+            _this.applySuccess = res.data.applySuccess;
             _this._interval = setInterval(() => {
               let data = _this.countTime(res.data.activityDetail.applyEndTime);
               if (data) {
@@ -500,8 +503,14 @@ export default {
               float: left;
               height: 20px;
               width: 20px;
-              border: 1px solid #eee;
+              // border: 1px solid #eee;
               border-radius: 50%;
+              img{
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                vertical-align: top;
+              }
             }
           }
           > span {
@@ -600,6 +609,8 @@ export default {
               display: inline-block;
               width: 50px;
               height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
             }
           }
           .liRight {
@@ -610,21 +621,27 @@ export default {
             background: #f9f9f9;
             width: 88%;
             margin-left: 70px;
-            margin-top:10px;
+            margin-top: 10px;
+            img {
+              width: 50px;
+              height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
+            }
             > span {
               float: right;
             }
             .replyinfo {
               display: inline-block;
-              margin-left:20px;
+              margin-left: 20px;
             }
           }
         }
       }
     }
-    .el-textarea{
-      width:93.5%;
-      margin-left:70px;
+    .el-textarea {
+      width: 93.5%;
+      margin-left: 70px;
     }
   }
 }

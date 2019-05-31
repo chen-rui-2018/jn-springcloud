@@ -47,9 +47,9 @@ public class CareServerController extends BaseController implements CareClient {
 
     @Override
     @ControllerLog(doAction = "查询关注的企业")
-    public Result<List<ServiceEnterpriseCompany>> getCompanyNewList(@RequestBody List<ServiceEnterpriseCompany> serviceEnterpriseCompany) {
-        List<ServiceEnterpriseCompany> getCompanyNewList = careService.getCompanyNewList(serviceEnterpriseCompany);
-        return new Result(getCompanyNewList);
+    public List<ServiceEnterpriseCompany> getCompanyNewList(@RequestBody List<ServiceEnterpriseCompany> serviceEnterpriseCompany,String account) {
+        List<ServiceEnterpriseCompany> getCompanyNewList = careService.getCompanyNewList(serviceEnterpriseCompany,account);
+        return getCompanyNewList;
     }
 
 }

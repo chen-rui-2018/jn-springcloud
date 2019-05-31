@@ -138,17 +138,25 @@ public class PayChannel4WxController{
                         break;
                     }
                     case PayConstant.WxConstant.TRADE_TYPE_JSPAI : {
-                        Map<String, String> payInfo = new HashMap<>();
+                        Map<String, String> payInfoMap = new HashMap<>();
                         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
                         String nonceStr = String.valueOf(System.currentTimeMillis());
+                        //=================此map用来签名=================================
+                        payInfoMap.put("appId", wxPayUnifiedOrderResult.getAppid());
+                        payInfoMap.put("timeStamp", timestamp);
+                        payInfoMap.put("nonceStr", nonceStr);
+                        payInfoMap.put("packageValue", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
+                        payInfoMap.put("signType", WxPayConstants.SignType.MD5);
 
+                        //=========组装返回前台参数================
                         orderInfo.put("appId", wxPayUnifiedOrderResult.getAppid());
                         // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
                         orderInfo.put("timeStamp", timestamp);
                         orderInfo.put("nonceStr", nonceStr);
                         orderInfo.put("packageValue", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
                         orderInfo.put("signType", WxPayConstants.SignType.MD5);
-                        orderInfo.put("paySign", SignUtils.createSign(payInfo, wxPayConfig.getMchKey(), null));
+                        //生成签名
+                        orderInfo.put("paySign", SignUtils.createSign(payInfoMap, wxPayConfig.getMchKey(), null));
                         break;
                     }
                     case PayConstant.WxConstant.TRADE_TYPE_MWEB : {

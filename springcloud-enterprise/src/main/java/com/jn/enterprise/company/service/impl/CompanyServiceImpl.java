@@ -93,7 +93,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @ServiceLog(doAction = "查询企业列表New")
-    public PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam sepParam) {
+    public PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam sepParam,String account) {
         /*if(StringUtils.isBlank(sepParam.getOrderByClause())){
             sepParam.setOrderByClause("browse_number DESC");
         }*/
@@ -114,7 +114,7 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         //调用park,处理后再返回 getCompanyNewList
-        Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(newCompanyNewList);
+        List<ServiceEnterpriseCompany> companyNewList = careClient.getCompanyNewList(newCompanyNewList,account);
         PaginationData<List<ServiceEnterpriseCompany>> data = new PaginationData(companyNewList, objects.getTotal());
         return data;
     }
@@ -326,9 +326,9 @@ public class CompanyServiceImpl implements CompanyService {
         ServiceEnterpriseCompany serviceEnterpriseCompany = new ServiceEnterpriseCompany();
         serviceEnterpriseCompany.setId(companyId);
         getCompanyNewList.add(serviceEnterpriseCompany);
-        Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(getCompanyNewList);
-        if(!companyNewList.getData().isEmpty()){
-            serviceEnterpriseCompany = companyNewList.getData().get(0);
+        List<ServiceEnterpriseCompany> companyNewList = careClient.getCompanyNewList(getCompanyNewList,account);
+        if(!companyNewList.isEmpty()){
+            serviceEnterpriseCompany = companyNewList.get(0);
             if(serviceEnterpriseCompany != null){
                 show.setCareNumber(serviceEnterpriseCompany.getCareUser());
                 show.setCommentNumber(serviceEnterpriseCompany.getCommentNumber());

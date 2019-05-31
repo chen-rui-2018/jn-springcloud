@@ -524,6 +524,10 @@ public class SysUserServiceImpl implements SysUserService {
         if(StringUtils.isNotBlank(user.getId())){
             criteria.andIdEqualTo(user.getId());
         }
+        //如果手机号不为空
+        if(StringUtils.isNotBlank(user.getPhone())){
+            criteria.andPhoneEqualTo(user.getPhone());
+        }
         Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
         criteria.andRecordStatusNotEqualTo(recordStatus);
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);

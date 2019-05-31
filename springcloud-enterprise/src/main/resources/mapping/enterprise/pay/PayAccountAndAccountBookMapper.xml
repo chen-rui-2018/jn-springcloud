@@ -58,6 +58,8 @@
             '支付宝'
         WHEN '4' THEN
             '银联'
+        WHEN '5' THEN
+            '线下支付'
         ELSE
             '支付方式异常'
         END paymentMethod,
@@ -117,6 +119,8 @@
             '支付宝'
         WHEN '4' THEN
             '银联'
+        WHEN '5' THEN
+            '线下支付'
         ELSE
             '支付方式异常'
         END paymentMethod,

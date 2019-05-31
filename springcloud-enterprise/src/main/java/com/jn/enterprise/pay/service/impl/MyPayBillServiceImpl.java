@@ -418,18 +418,10 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     tpbmr.setRemark(tbs.getBillSource());
                     tpbmr.setPaymentMethod(PaymentBillMethodEnum.BILL_STATE_QIAN_BAO.getMessage());
                     tpbmr.setPaymentAction(PaymentBillActionEnum.BILL_STATE_AUYTO.getCode());
-                    tpbmr.setNatureCode(BILL_AC_BOOK_TYPE_1.getCode());
+                    tpbmr.setNatureCode(PaymentBillEnum.BILL_ACCOUNT_BOOK_FEE.getCode());
                     tpbmr.setMoney(tbs.getBillExpense());
                     tpbmr.setBalance(totalAmount);
-<<<<<<< Updated upstream
-                    if(user != null){
-                        tpbmr.setCreatorAccount(user.getAccount());
-                    }else {
-                        tpbmr.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
-                    }
-=======
                     tpbmr.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
->>>>>>> Stashed changes
                     tpbmr.setCreatedTime(new Date());
                     tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
                     logger.info("统一缴费插入流水记录入參【{}】", tpbmr.toString());

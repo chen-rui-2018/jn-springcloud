@@ -93,6 +93,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         }
         PaginationData paginationData = new PaginationData();
         paginationData.setRows(voList);
+        paginationData.setTotal(voList.size());
         return paginationData;
     }
 

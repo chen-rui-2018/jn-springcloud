@@ -3,6 +3,7 @@ package com.jn.enterprise.data.service.impl;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.channel.MessageSource;
@@ -32,6 +33,9 @@ import com.jn.enterprise.data.vo.TabVO;
 import com.jn.enterprise.data.vo.TargetModelVO;
 import com.jn.news.vo.EmailVo;
 import com.jn.news.vo.SmsTemplateVo;
+import com.jn.pay.model.PayCallBackNotify;
+import com.jn.send.api.DelaySendMessageClient;
+import com.jn.send.model.Delay;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
@@ -89,6 +93,8 @@ public class DataUploadServiceImpl implements DataUploadService {
 
     @Autowired(required = false)
     private TbDataReportingGardenCheckAccessMapper tbDataReportingGardenCheckAccessMapper;
+    @Autowired(required = false)
+    private DelaySendMessageClient delaySendMessageClient;
 
     @Autowired
     private DownLoadClient downLoadClient;
@@ -621,30 +627,22 @@ public class DataUploadServiceImpl implements DataUploadService {
             String tabId =tab.getTabId();
             List<InputFormatModel> rows = new ArrayList<>();
             //本期值未填,那增幅列为空
-            if(type.equals(DataUploadConstants.NOT_FILL)){
-                if(tbDataReportingTask.getFileType().toString().equals(DataUploadConstants.GARDEN_TYPE)){
-                    //园区任务未填报时，可能只是有些部门没有填报，有的部门已经填报
-                    TbDataReportingTaskDataCriteria tabData = new TbDataReportingTaskDataCriteria();
-                    tabData.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tab.getTabId()).andFillIdEqualTo(tbDataReportingTask.getFillId());
-                    List<TbDataReportingTaskData> data =  tbDataReportingTaskDataMapper.selectByExample(tabData);
-                    if(data !=null && data.size()>0){
-                        for(InputFormatModel bean :inputFormatModelList){
-                            for(TbDataReportingTaskData dataBean:data){
-                                if(bean.getFormId().equals(dataBean.getFormId())){
-                                    InputFormatModel model1 = new InputFormatModel();
-                                    BeanUtils.copyProperties(bean,model1);
-                                    model1.setValue(dataBean.getData());
-                                    model1.setRowNum(dataBean.getRowNum());
-                                    rows.add(model1);
-                                }
+            if(type.equals(DataUploadConstants.NOT_FILL) && tbDataReportingTask.getFileType().toString().equals(DataUploadConstants.GARDEN_TYPE)){
+                //if(tbDataReportingTask.getFileType().toString().equals(DataUploadConstants.GARDEN_TYPE)){
+                //园区任务未填报时，可能只是有些部门没有填报，有的部门已经填报
+                TbDataReportingTaskDataCriteria tabData = new TbDataReportingTaskDataCriteria();
+                tabData.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tab.getTabId()).andFillIdEqualTo(tbDataReportingTask.getFillId());
+                List<TbDataReportingTaskData> data =  tbDataReportingTaskDataMapper.selectByExample(tabData);
+                if(data !=null && data.size()>0){
+                    for(InputFormatModel bean :inputFormatModelList){
+                        for(TbDataReportingTaskData dataBean:data){
+                            if(bean.getFormId().equals(dataBean.getFormId())){
+                                bean.setValue(dataBean.getData());
+                                bean.setRowNum(dataBean.getRowNum());
                             }
                         }
-                        tabVO.setInputList(rows);
-                    }else{
-                        tabVO.setInputList(inputFormatModelList);
                     }
-
-
+                    tabVO.setInputList(inputFormatModelList);
                 }else{
                     tabVO.setInputList(inputFormatModelList);
                 }
@@ -659,21 +657,36 @@ public class DataUploadServiceImpl implements DataUploadService {
                     for(InputFormatModel bean :inputFormatModelList){
                         for(TbDataReportingTaskData dataBean:data){
                             if(bean.getFormId().equals(dataBean.getFormId())){
-                                InputFormatModel model1 = new InputFormatModel();
-                                BeanUtils.copyProperties(bean,model1);
-                                model1.setValue(dataBean.getData());
-                                model1.setRowNum(dataBean.getRowNum());
-                                rows.add(model1);
+                                bean.setValue(dataBean.getData());
+                                bean.setRowNum(dataBean.getRowNum());
                             }
                         }
                     }
-                    tabVO.setInputList(rows);
+                    tabVO.setInputList(inputFormatModelList);
             }
 
             //计算该tab的上期值
             String modelCycle=model.getModelCycle();
             String formTime=tbDataReportingTask.getFormTime();
             String[] tabColumnType=tab.getTabClumnTargetShow().split(DataUploadConstants.TAB_COLUMN_SEPARTOR);
+            //如果任务类型为企业的未填报或草稿类型；不能够查看到
+
+            if(tbDataReportingTask.getFileType().toString().equals(DataUploadConstants.COMPANY_TYPE) && tabColumnType !=null && tabColumnType.length>0){
+                if(! tbDataReportingTask.getStatus().toString().equals(DataUploadConstants.FILLED)){
+                    List<String> tabColumn =new ArrayList<>();
+                    String[] tabColumnTypenew ={};
+                    for(String tabtype : tabColumnType){
+                        if(tabtype.equals(DataUploadConstants.LAST_MONTH_LAST_YEAR) || tabtype.equals(DataUploadConstants.THIS_MONTH_LAST_YEAR) ){
+                            continue;
+                        }else{
+                            tabColumn.add(tabtype);
+                        }
+                    }
+                    tabColumn.toArray(tabColumnTypenew);
+                    tabColumnType =tabColumnTypenew;
+                }
+            }
+
             //tab的其他列数据
             Map<String,List<InputFormatModel>> otherColumn = new HashMap<>();
 
@@ -1412,7 +1425,12 @@ public class DataUploadServiceImpl implements DataUploadService {
 
             //数据存储
             if(dataList !=null && dataList.size()>0){
-                if(DataUploadConstants.COMPANY_TYPE.equals(data.getTaskInfo().getFileType())){
+                if(DataUploadConstants.COMPANY_TYPE.equals(data.getTaskInfo().getFileType().toString())){
+                    //删除之前的草稿
+                    TbDataReportingTaskDataCriteria taskDataCriteria = new TbDataReportingTaskDataCriteria();
+                    taskDataCriteria.or().andModelIdEqualTo(modelId).andTabIdEqualTo(tabBean.getTabId()).andTargetIdIn(tgList);
+                    tbDataReportingTaskDataMapper.deleteByExample(taskDataCriteria);
+
                     //未填报状态；直接写入数据
                     targetDao.saveData(dataList);
                 }else {
@@ -1647,7 +1665,7 @@ public class DataUploadServiceImpl implements DataUploadService {
 
 
             }else if(DataUploadConstants.NOT_FILL.equals(needToSavetask.getStatus().toString())){
-                if(DataUploadConstants.COMPANY_TYPE.equals(data.getTaskInfo().getFileType())){
+                if(DataUploadConstants.COMPANY_TYPE.equals(data.getTaskInfo().getFileType().toString())){
                     //未填报状态；直接写入数据
                     targetDao.saveData(dataList);
                 }else{
@@ -1756,6 +1774,18 @@ public class DataUploadServiceImpl implements DataUploadService {
                     }
                 }
             }
+
+            logger.info("开始推送消息");
+            Delay delay = new Delay();
+            delay.setServiceId(DataUploadConstants.PARK_ID);
+            delay.setServiceUrl(DataUploadConstants.METHOD_ID);
+            delay.setTtl("30");
+            CompanyIdModel companyIdModel = new CompanyIdModel();
+            companyIdModel.setCompanyId(data.getTaskInfo().getFillInFormId());
+            delay.setDataString(JSONObject.toJSONString(companyIdModel));
+            Result<Boolean>  dealyResult = delaySendMessageClient.delaySend(delay);
+            logger.info("结束回调,返回结果，【{}】", dealyResult.toString());
+
         }else{
 
             // 园区

@@ -1,8 +1,55 @@
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <view class="parkPay">
   <view class="search" >
     <text class='icon-search'></text>
-    <input type="text" placeholder="搜索会议室" bindinput="changesearch" name="meetingroom"  />
+    <input bindinput="gosearch" value="" type="text" placeholder="请输入车牌号码" name="meetingroom"  />
   </view>
-  <view class="parkPay_main padding"></view>
+  <view class="parkPay_main paddihng_side">
+    <view class="li" wx:if="{{parkDetail}}">
+      <view class="title">
+        <view>{{parkDetail.carLicense}}</view>
+        <view class="title_right">
+          <view>计费：</view>
+          <view class="red">{{parkDetail.parkingAmount}}元</view>
+        </view>
+      </view>
+      <view class="detail paddihng_side">
+        <view>车场名称：</view>
+        <view>{{parkDetail.areaName}}</view>
+      </view>
+      <view class="detail paddihng_side">
+        <view>收费规则：</view>
+        <view>{{parkDetail.tempPriceDepict}}</view>
+      </view>
+      <view class="detail paddihng_side">
+        <view>地址：</view>
+        <view>{{parkDetail.areaAddress}}</view>
+      </view>
+      <view class="detail paddihng_side">
+        <view>入场时间：</view>
+        <view>{{parkDetail.admissionTime}}</view>
+      </view>
+      <view class="detail paddihng_side">
+        <view>停车时长：</view>
+        <view>{{parkDetail.parkingTime}}</view>
+      </view>
+      <view class="tips paddihng_side">
+        <view class="red">注：请在缴费后15分钟内完成离场，否则 将重新计费</view>
+        <view><button class="btn" bindtap="showPay">缴费离场</button></view>
+      </view>
+    </view>
+    <view class="tips" wx:else>
+      请输入完整的车牌号！！
+    </view>
+  </view>
+  <view class="pay">
+     <view class="commodity_screen" bindtap="hidePay" wx:if="{{isPayShow}}"></view>
+      <view animation="{{animationData}}" class="commodity_attr_box" wx:if="{{isPayShow}}">
+        <view class="pay_main">
+          <view class="pay_title">{{parkDetail.carLicense}}临时停车费</view>
+          <view class="price red">{{parkDetail.parkingAmount}}元</view>
+        </view>
+        <view class="pay_money" bindtap="goPay" data-parkingid="{{parkDetail.parkingId}} ">立即支付</view>
+      </view>
+  </view>
 </view>

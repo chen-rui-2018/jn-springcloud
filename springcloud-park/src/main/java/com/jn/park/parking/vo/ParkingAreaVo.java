@@ -54,6 +54,8 @@ public class ParkingAreaVo implements Serializable {
     private String gateFactory;
     @ApiModelProperty(value = "道闸标识",example = "218we232***")
     private String gateId;
+    @ApiModelProperty(value = "车牌号",example = "湘A000001")
+    private String carLicense;
 
     public String getAreaId() {
         return areaId;
@@ -213,5 +215,40 @@ public class ParkingAreaVo implements Serializable {
 
     public void setDistance(String distance) {
         this.distance = distance;
+    }
+
+    public String getCarLicense() {
+        return carLicense;
+    }
+
+    public void setCarLicense(String carLicense) {
+        this.carLicense = carLicense;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingAreaVo{" +
+                "areaId='" + areaId + '\'' +
+                ", areaName='" + areaName + '\'' +
+                ", areaAddress='" + areaAddress + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", leisureNumber=" + leisureNumber +
+                ", rentNumber=" + rentNumber +
+                ", parkingTotal=" + parkingTotal +
+                ", tempNumber=" + tempNumber +
+                ", tempPriceDepict='" + tempPriceDepict + '\'' +
+                ", tempPrice=" + tempPrice +
+                ", tempPriceUnit='" + tempPriceUnit + '\'' +
+                ", tempPriceTotal=" + tempPriceTotal +
+                ", tempFreeTime=" + tempFreeTime +
+                ", rentPrice=" + rentPrice +
+                ", areaPicture='" + areaPicture + '\'' +
+                ", distance='" + distance + '\'' +
+                ", spacePicture='" + spacePicture + '\'' +
+                ", gateFactory='" + gateFactory + '\'' +
+                ", gateId='" + gateId + '\'' +
+                ", carLicense='" + carLicense + '\'' +
+                '}';
     }
 }

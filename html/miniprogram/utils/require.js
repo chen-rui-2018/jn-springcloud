@@ -63,10 +63,10 @@ function postRequest(url, data, success, fail) {
       header: wx.getStorageSync('token'),
       success: function (res) {
         if (url === logInUrl) {
-          wx.setStorage({
-            key: tokenKey,
-            data: res.data.result
-          })
+          // wx.setStorage({
+          //   key: tokenKey,
+          //   data: res.data.result
+          // })
         }
         if (success && typeof success === "function") {
           success(res);

@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.park.index.enums.IndexExceptionEnum;
 import com.jn.park.index.model.Achievement;
 import com.jn.park.index.model.AchievementParam;
 import com.jn.park.index.model.ImportantNews;
@@ -106,7 +108,8 @@ public class IndexController extends BaseController {
     @ControllerLog(doAction = "成果详情")
     @ApiOperation(value = "成果详情", notes = "获取成果详情")
     @RequestMapping(value = "/getAchievementDetails",method = RequestMethod.GET)
-    public Result<Achievement> getAchievementDetails(@RequestParam String achievementId) {
+    public Result<Achievement> getAchievementDetails(@RequestParam(required = false) String achievementId) {
+        Assert.notNull(achievementId, IndexExceptionEnum.PARAM_IS_NULL.getMessage());
         return new Result(indexService.getAchievementDetails(achievementId));
     }
 

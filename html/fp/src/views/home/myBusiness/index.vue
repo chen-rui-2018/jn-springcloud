@@ -1,12 +1,12 @@
 <template>
   <div class="business">
     <div class="business_title">
-      <div class="myBusiness">我的企业 &nbsp;(<span @click="toColleagueList">查看企业同事</span>)</div>
+      <div class="myBusiness">我的企业 &nbsp;(<span v-show="isColleague" @click="toColleagueList">查看企业同事</span>)</div>
       <div class="business_nav">
-        <div @click="toRecruitmentManagement">招聘管理</div>
-        <div @click="toEditBusiness">编辑企业</div>
-        <div @click="toStaffManagement">员工管理</div>
-        <div @click="toEnterprisePropaganda">企业宣传</div>
+        <div v-show="isInvite" @click="toRecruitmentManagement">招聘管理</div>
+        <div v-show="isEnterprise" @click="toEditBusiness">编辑企业</div>
+        <div v-show="isStaff" @click="toStaffManagement">员工管理</div>
+        <div v-show="isPublicity" @click="toEnterprisePropaganda">企业宣传</div>
       </div>
 
     </div>
@@ -31,7 +31,7 @@
         </div>
         <div style="display:flex">
           <el-form-item label="联系电话:" class="">
-            <span>{{conPhone}}</span>
+            <span>{{ownerPhone}}</span>
           </el-form-item>
           <el-form-item label="注册时间:" class="borr">
             {{foundingTime}}
@@ -105,6 +105,12 @@
 export default {
   data() {
     return {
+      isStaff:false,
+      isEnterprise:false,
+      isColleague:false,
+      isPublicity:false,
+      isInvite:false,
+      resourcesList:'',
       userAccount: "",
       foundingTime: "", //注册时间
       comName: "", //企业名称
@@ -116,7 +122,7 @@ export default {
       unifyCode: "", //统一社会信用代码
       comAddress: "", //注册地址
       addrPark: "", //公司园区地址-实际经营地址
-      conPhone: "", //联系电话
+      ownerPhone: "", //联系电话
       regCapital: "", //注册资本 万元
       comScale: "", //企业规模
       comType: "", //企业类型
@@ -129,6 +135,25 @@ export default {
     };
   },
   mounted() {
+    let initArr=JSON.parse(sessionStorage.menuItems)
+    initArr.forEach(v=>{
+      if(v.label==='我的企业'){
+           v.resourcesList.forEach(i=>{
+             if(i.resourcesName==='发布企业招聘信息'){
+               this.isInvite=true
+             }else if(i.resourcesName==='发布宣传'){
+                this.isPublicity=true
+             }else if(i.resourcesName==='同事列表'){
+                this.isColleague=true
+             }else if(i.resourcesName==='编辑企业信息'){
+                this.isEnterprise=true
+             }else if(i.resourcesName==='员工列表'){
+                this.isStaff =true
+             }
+           })
+
+      }
+    })
     this.init();
   },
   methods: {
@@ -137,7 +162,6 @@ export default {
       _this.api.get({
         url: "getMyBusiness",
         callback: function(res) {
-          console.log(res);
           if (res.code == "0000") {
             _this.comName = res.data.comName;
             _this.comNameShort = res.data.comNameShort;
@@ -148,7 +172,7 @@ export default {
             _this.unifyCode = res.data.unifyCode;
             _this.comAddress = res.data.comAddress;
             _this.addrPark = res.data.addrPark;
-            _this.conPhone = res.data.conPhone;
+            _this.ownerPhone = res.data.ownerPhone;
             _this.regCapital = res.data.regCapital;
             _this.comScale = res.data.comScale;
             _this.comType = res.data.comType;
@@ -157,7 +181,7 @@ export default {
             _this.comWeb = res.data.comWeb;
             _this.avatar = res.data.avatar;
             _this.businessLicense = res.data.businessLicense;
-            _this.proImgs = res.data.proImgs;
+            _this.proImgs = res.data.propagandaPicture;
           }
         }
       });
@@ -175,7 +199,7 @@ export default {
       this.$router.push({ name: "staffManagement" });
     },
     toUserCenter() {
-      this.$router.push({ path: "/servicemarket/product/userCenter" });
+      this.$router.push({ path: "/home" });
     },
     toEditBusiness() {
       this.$router.push({ name: "editBusiness" });
@@ -282,12 +306,12 @@ export default {
     }
     .myBusiness {
       color: #333;
-      font-size: 13px;
+      font-size: 16px;
       padding: 25px 0px;
       // font-family: 'MicrosoftYaHei';
       > span {
         color: #00a041;
-        font-size: 10px;
+        font-size: 12px;
         cursor: pointer;
       }
     }

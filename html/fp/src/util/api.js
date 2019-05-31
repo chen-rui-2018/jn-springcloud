@@ -15,13 +15,17 @@ export default {
         activityLike:"springcloud-park/activity/activityLike/activityLike",//活动点赞
         CancelLike:"springcloud-park/activity/activityLike/cancelLike",//取消点赞
         commentActivity:"springcloud-park/comment/review/commentActivity",//活动评论/回复
+        commentActivityCancelLike:"springcloud-park/comment/review/commentActivityCancelLike",//评论取消点赞
+        commentActivityLike:"springcloud-park/comment/review/commentActivityLike",//评论取消点赞
         activityApplyInfo:"springcloud-park/activity/activityApply/activityApplyInfo",//报名人资料
         findActivityRegistration:"springcloud-park/guest/activity/findActivityRegistration",//用户中心-已报名活动列表
         basic:"springcloud-park/guest/portal/park/basic",//获取园区概况
         getBusinessAdDynamic:"springcloud-park/guest/portal/businessAd/getBusinessAdDynamic",//获取招商动态信息
+        getBusinessAdDynamicInfo:"springcloud-park/guest/portal/businessAd/getBusinessAdDynamicInfo",//获取招商动态信息详情
         getBusinessAdPolicy:"springcloud-park/guest/portal/businessAd/getBusinessAdPolicy",//招商政策
+        getBusinessAdPolicyInfo:"springcloud-park/guest/portal/businessAd/getBusinessAdPolicyInfo",//获取招商政策信息详情
+        getBusinessAdContentInfo:"springcloud-park/guest/portal/businessAd/getBusinessAdContentInfo",//获取招商信息详情
         parkList:"springcloud-park/guest/portal/park/list",//一区多园
-
 
 
         getUserCode:"springcloud-user/guest/userJoin/getUserCode",//获取短信验证码[当前用户]
@@ -215,7 +219,9 @@ export default {
         getRecruitList:"springcloud-enterprise/guest/RecruitController/getWebRecruitList",//招聘列表（门户首页）
         getPromotionList:"springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList",//(门户各首页企业宣传列表查询)
         getPromotionDetails:"springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionDetails",// (门户各首页企业宣传详情)
+        findAllApp:"springcloud-park/message/list/findAllList",//获取一级消息类别下所有消息(APP端)
         getMessageList:"springcloud-park/message/list/findAll",//消息列表
+        updateIsReadStatus:"springcloud-park/message/list/updateIsReadStatus",//修改已读状态
         getMessageOneTort:"springcloud-park/message/list/getMessageOneTort",//获取二级消息类别
         getParkList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
         getIncubatorList:"springcloud-park/guest/hatch/incubator/list",//众创空间-首页信息查询
@@ -228,8 +234,10 @@ export default {
         getAchievementList:"springcloud-park/guest/IndexController/getAchievementList",//门户首页-成果展览
         achievementDetails:"springcloud-park/guest/IndexController/getAchievementDetails",//成果详情
         getParkDetails:"springcloud-park/guest/portal/park/get",// 根据ID获取对应园区详情
-        getCompanyDetail:"springcloud-enterprise/guest/company/getCompanyDetailByAccountOrCompanyId",//根据用户账号查询企业信息
+        getCompanyDetailByAccountOrCompanyId:"springcloud-enterprise/guest/company/getCompanyDetailByAccountOrCompanyId",//根据用户账号查询企业信息
+        getCompanyDetails:"springcloud-enterprise/guest/company/getCompanyDetails",//查询企业详情-新版
         getComCommentInfo:"springcloud-enterprise/guest/company/getCommentInfo",//获取评论/留言信息
+        getcommentActivity:"springcloud-enterprise/guest/company/commentActivity",//企业留言/留言回复
         addCareOperate:"springcloud-park/park/manage/care/addCareOperate",// 用户添加关注操作
         cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
 
@@ -264,8 +272,18 @@ export default {
             }
         })
             .then(function (response) {
-                if (typeof callback === "function")
+                if (typeof callback === "function"){
+                    if(response.data.code == "index"){
+                        window.sessionStorage.removeItem('token')
+                        window.sessionStorage.removeItem('account')
+                        window.sessionStorage.removeItem('userInfo')
+                        alert(response.data.result);
+                        location.href="#login";
+                        return
+                    }
                     callback(response.data);
+                }
+                    
             })
             .catch(function (err) {
                 if (typeof error === "function")
@@ -332,8 +350,18 @@ export default {
             }
         })
           .then(function (response) {
-            if (typeof callback === "function")
+            if (typeof callback === "function"){
+                if(response.data.code == "index"){
+                    window.sessionStorage.removeItem('token')
+                    window.sessionStorage.removeItem('account')
+                    window.sessionStorage.removeItem('userInfo')
+                    alert(response.data.result);
+                    location.href="#login";
+                    return
+                }
                 callback(response.data);
+            }
+                
 
           })
           .catch(function (err) {
@@ -406,7 +434,7 @@ export default {
         }
         return obj;
     },
-    AddMinTime(x,type,n){
+    AddMinTime(x,type,n,d){
 		var t = new Date(x);
 		var t_s = t.getTime(); //转化为时间戳毫秒数
 		var time = new Date(t_s + 1000 * 60 * (n || 0));
@@ -429,8 +457,12 @@ export default {
 		dd = dd < 10 ? '0' + dd : dd;
 		hh = hh < 10 ? '0' + hh : hh;
 		mm = mm < 10 ? '0' + mm : mm;
-		ss = ss < 10 ? '0' + ss : ss;
-		return yyyy + '-' + MM + '-' + dd;
+        ss = ss < 10 ? '0' + ss : ss;
+        if(d == ":"){
+            return yyyy + ':' + MM + ':' + dd;
+        }else{
+            return yyyy + '-' + MM + '-' + dd;
+        }
     },
     getCurrentTime() {//获取当前时间
 	var date = new Date();
@@ -440,6 +472,9 @@ export default {
 	var strDate = date.getDate()<10? "0" + date.getDate():date.getDate();
 	var currentdate = date.getFullYear() + seperator1  + month  + seperator1  + strDate
 	return currentdate;
-}
+    },
+    tokenInvalid(){
+        
+    }
 
 }

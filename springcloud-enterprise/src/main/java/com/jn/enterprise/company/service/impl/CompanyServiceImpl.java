@@ -12,17 +12,26 @@ import com.jn.company.model.*;
 import com.jn.enterprise.common.config.IBPSDefIdConfig;
 import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
-import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
+import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
 import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
+import com.jn.enterprise.company.model.CompanyInfoShow;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
+import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.vo.ColleagueListVO;
+import com.jn.enterprise.company.vo.CompanyContactVO;
+import com.jn.enterprise.company.vo.CompanyDetailsVo;
+import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
+import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
+import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
@@ -30,18 +39,20 @@ import com.jn.park.activity.model.CommentAddParam;
 import com.jn.park.api.CareClient;
 import com.jn.park.api.CommentClient;
 import com.jn.park.care.model.CareParam;
+import com.jn.park.care.model.ServiceEnterpriseCompany;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.jn.park.care.model.ServiceEnterpriseCompany;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 企业信息Service
@@ -55,15 +66,17 @@ public class CompanyServiceImpl implements CompanyService {
     private static Logger logger = LoggerFactory.getLogger(CompanyServiceImpl.class);
 
     @Autowired
+    private TbServiceCompanyStaffMapper tbServiceCompanyStaffMapper;
+    @Autowired
     private TbServiceCompanyMapper tbServiceCompanyMapper;
     @Autowired
     private TbServicePreferMapper tbServicePreferMapper;
     @Autowired
-    private TbServiceCompanyProImgMapper tbServiceCompanyProImgMapper;
-
+    private OrgColleagueService orgColleagueService;
     @Autowired
     private CompanyMapper companyMapper;
-
+    @Autowired
+    private CompanyService companyService;
     @Autowired
     private UserExtensionClient userExtensionClient;
     @Autowired
@@ -75,27 +88,33 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private IBPSDefIdConfig ibpsDefIdConfig;
 
-    /**
-     * 数据状态 1有效
-     */
-    private final static String RECORD_STATUS_VALID = "1";
-
     private static final String PATTERN="yyyy-MM-dd";
     private static final String PATTERN_DETAIL="yyyy-MM-dd HH:mm:ss";
 
-
     @Override
     @ServiceLog(doAction = "查询企业列表New")
-    public PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam sepParam) {
-        if(StringUtils.isBlank(sepParam.getOrderByClause())){
+    public PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam sepParam,String account) {
+        /*if(StringUtils.isBlank(sepParam.getOrderByClause())){
             sepParam.setOrderByClause("browse_number DESC");
-        }
+        }*/
         Page<Object> objects = PageHelper.startPage(sepParam.getPage(), sepParam.getRows() == 0 ? 15 : sepParam.getRows());
         List<ServiceEnterpriseCompany> getCompanyNewList=companyMapper.getCompanyNewList(sepParam);
+        List<ServiceEnterpriseCompany> newCompanyNewList = new ArrayList<>();
+
+        // 处理图片格式
+        for (ServiceEnterpriseCompany serviceEnterpriseCompany : getCompanyNewList) {
+            List<String> filePathList = IBPSFileUtils.getFilePath2List(serviceEnterpriseCompany.getProImgs());
+            if (filePathList != null && !filePathList.isEmpty()) {
+                String[] strings = new String[filePathList.size()];
+                serviceEnterpriseCompany.setPropagandaPicture(filePathList.toArray(strings));
+            }
+            serviceEnterpriseCompany.setAvatar(IBPSFileUtils.getFilePath(serviceEnterpriseCompany.getAvatar()));
+            serviceEnterpriseCompany.setBusinessLicense(IBPSFileUtils.getFilePath(serviceEnterpriseCompany.getBusinessLicense()));
+            newCompanyNewList.add(serviceEnterpriseCompany);
+        }
+
         //调用park,处理后再返回 getCompanyNewList
-        Result<List<ServiceEnterpriseCompany>> companyNewList = careClient.getCompanyNewList(getCompanyNewList);
-
-
+        List<ServiceEnterpriseCompany> companyNewList = careClient.getCompanyNewList(newCompanyNewList,account);
         PaginationData<List<ServiceEnterpriseCompany>> data = new PaginationData(companyNewList, objects.getTotal());
         return data;
     }
@@ -138,6 +157,16 @@ public class CompanyServiceImpl implements CompanyService {
         for (TbServiceCompany t:tbServiceCompanies) {
             ServiceCompany company = new ServiceCompany();
             BeanUtils.copyProperties(t,company);
+
+            // 处理图片格式
+            List<String> filePathList = IBPSFileUtils.getFilePath2List(t.getPropagandaPicture());
+            if (filePathList != null && !filePathList.isEmpty()) {
+                String[] strings = new String[filePathList.size()];
+                company.setPropagandaPicture(filePathList.toArray(strings));
+            }
+            company.setBusinessLicense(IBPSFileUtils.getFilePath(t.getBusinessLicense()));
+            company.setAvatar(IBPSFileUtils.getFilePath(t.getAvatar()));
+
             companies.add(company);
         }
         PaginationData<List<ServiceCompany>> data = new PaginationData(companies, objects.getTotal());
@@ -164,30 +193,30 @@ public class CompanyServiceImpl implements CompanyService {
         ServiceCompany company = new ServiceCompany();
         BeanUtils.copyProperties(tbServiceCompany, company);
 
+        // 处理图片格式
+        company.setAvatar(IBPSFileUtils.getFilePath(tbServiceCompany.getAvatar()));
+        company.setBusinessLicense(IBPSFileUtils.getFilePath(tbServiceCompany.getBusinessLicense()));
+        List<String> filePathList = IBPSFileUtils.getFilePath2List(tbServiceCompany.getPropagandaPicture());
+        if (filePathList != null && !filePathList.isEmpty()) {
+            String[] strings = new String[filePathList.size()];
+            company.setPropagandaPicture(filePathList.toArray(strings));
+        }
+
         //查询企业字段数据
         TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
-        List<String> comPropertys = new ArrayList<>(16);
         List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
         if(StringUtils.isNotEmpty(tbServiceCompany.getComProperty())){
-            String[] comProperty = tbServiceCompany.getComProperty().split(",");
-
-            company.setComPropertys(comProperty);
-            for (TbServicePrefer prefer: tbServicePrefers
-            ) {
+            for (TbServicePrefer prefer: tbServicePrefers) {
                 // 行业领域
                 if(StringUtils.equals(prefer.getId(),tbServiceCompany.getInduType())){
                     company.setInduTypeName(prefer.getPreValue());
                 }
                 // 企业性质
-                for (String s: comProperty
-                ) {
-                    if(StringUtils.equals(s,prefer.getId())){
-                        comPropertys.add(prefer.getPreValue());
-                    }
+                if(StringUtils.equals(tbServiceCompany.getComProperty(), prefer.getId())){
+                    company.setComPropertyName(prefer.getPreValue());
                 }
             }
         }
-
 
         if(null != tbServiceCompany.getFoundingTime()){
             company.setFoundingTime(DateUtils.formatDate(tbServiceCompany.getFoundingTime(),PATTERN));
@@ -210,23 +239,6 @@ public class CompanyServiceImpl implements CompanyService {
         if(null != tbServiceCompany.getModifiedTime()){
             company.setModifiedTime(DateUtils.formatDate(tbServiceCompany.getModifiedTime(),PATTERN_DETAIL));
         }
-        if(null != comPropertys && comPropertys.size()>0){
-            company.setComPropertyNames(comPropertys.toArray(new String[comPropertys.size()]));
-        }
-
-        TbServiceCompanyProImgCriteria imgCriteria = new TbServiceCompanyProImgCriteria();
-        imgCriteria.createCriteria().andComIdEqualTo(tbServiceCompany.getId());
-        List<TbServiceCompanyProImg> tbServiceCompanyProImgs = tbServiceCompanyProImgMapper.selectByExample(imgCriteria);
-        List<CompanyProImg> imgs = new ArrayList<>(16);
-        for (TbServiceCompanyProImg img:tbServiceCompanyProImgs
-             ) {
-            CompanyProImg proImg = new CompanyProImg();
-            BeanUtils.copyProperties(img,proImg);
-            imgs.add(proImg);
-        }
-        company.setProImgs(imgs);
-
-        //TODO 企业员工
 
 
         return company;
@@ -274,6 +286,16 @@ public class CompanyServiceImpl implements CompanyService {
         companyUpdateParam.setCreatorAccount(account);
         companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
 
+        // 处理图片
+        companyUpdateParam.setAvatar(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getAvatar()));
+        companyUpdateParam.setBusinessLicense(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getBusinessLicense()));
+        List<String> picList = Arrays.asList(companyUpdateParam.getPropagandaPictureList());
+        String ibpsUrl = IBPSFileUtils.uploadFiles(account, picList);
+        if (StringUtils.isNotBlank(ibpsUrl)) {
+            companyUpdateParam.setPropagandaPicture(ibpsUrl);
+        }
+        companyUpdateParam.setPropagandaPictureList(null);
+
         String bpmnDefId = ibpsDefIdConfig.getUpdateCompanyInfo();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, companyUpdateParam);
 
@@ -285,7 +307,83 @@ public class CompanyServiceImpl implements CompanyService {
         logger.info("[编辑企业信息] " + ibpsResult.getMessage());
         return 1;
     }
+    @ServiceLog(doAction = "获取企业详情")
+    @Override
+    public CompanyDetailsVo getCompanyDetails(String companyId,String account) {
+        CompanyDetailsVo vo = new CompanyDetailsVo();
+        //获取企业基本信息 基本信息+ 基本资料+ 法人信息+ 产品
+        CompanyInfoShow show  = companyMapper.getCompanyDetails(companyId);
 
+        if(show==null){
+            logger.info("企业信息不存在!");
+            return vo;
+        }
+        // 处理图片格式
+        show.setAvatar(IBPSFileUtils.getFilePath(show.getAvatar()));
+
+        //获取 评论数  和 关注数信息
+        List<ServiceEnterpriseCompany> getCompanyNewList= new ArrayList<>();
+        ServiceEnterpriseCompany serviceEnterpriseCompany = new ServiceEnterpriseCompany();
+        serviceEnterpriseCompany.setId(companyId);
+        getCompanyNewList.add(serviceEnterpriseCompany);
+        List<ServiceEnterpriseCompany> companyNewList = careClient.getCompanyNewList(getCompanyNewList,account);
+        if(!companyNewList.isEmpty()){
+            serviceEnterpriseCompany = companyNewList.get(0);
+            if(serviceEnterpriseCompany != null){
+                show.setCareNumber(serviceEnterpriseCompany.getCareUser());
+                show.setCommentNumber(serviceEnterpriseCompany.getCommentNumber());
+            }
+        }
+        //获取评论信息
+        ActivityPagingParam activityPagingParam = new ActivityPagingParam();
+        activityPagingParam.setActivityId(companyId);
+        Result<PaginationData<List<Comment>>> commentRedsult = getCommentInfo(activityPagingParam);
+        if(commentRedsult.getData() != null){
+            vo.setComments(commentRedsult.getData().getRows());
+        }
+        //获取企业员工人数及头像列表信息
+        StaffListParam param = new StaffListParam();
+        param.setComId(companyId);
+        param.setNeedPage("0");
+        ColleagueListVO colleagueListVO =  staffService.getColleagueList(param,account);
+        if(colleagueListVO.getData()!=null){
+            List<String> avatarList = new ArrayList<>();
+            show.setComPerSonNumber(Long.toString(colleagueListVO.getData().getTotal()));
+            List<StaffListVO> staffListVOS = colleagueListVO.getData().getRows();
+            for(StaffListVO staffListVO: staffListVOS){
+                avatarList.add(staffListVO.getAvatar());
+            }
+            show.setPersonAvatar(avatarList);
+        }
+        //获取地址中的城市信息
+        if(StringUtils.isNotBlank(show.getComAddress())){
+            List<Map<String,String>> list = addressResolution(show.getComAddress());
+            if(!list.isEmpty()){
+              String province =   list.get(0).get("province");
+              String cityKey = "市";
+             if(cityKey.equals(province.substring(province.length()-1))){
+                 show.setCity(province);
+             }else {
+                 show.setCity(list.get(0).get("city"));
+             }
+            }
+        }
+        // 设置当前用户是否关注此企业, 0 否 1 是
+        if(StringUtils.isNotBlank(account)) {
+           CareParam careParam = new CareParam();
+           careParam.setCurrentAccount(account);
+           Result<List<String>>  result =  careClient.findCareCompanyList(careParam);
+           show.setIsCare("0");
+           List<String> list = result.getData();
+           for(String id : list){
+               if(id.equals(companyId)){
+                   show.setIsCare("1");
+               }
+           }
+        }
+        vo.setCompanyInfoShow(show);
+        return vo;
+    }
 
     @ServiceLog(doAction = "获取评论信息")
     @Override
@@ -297,6 +395,86 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Result<Boolean> saveComment(CommentAddParam commentAddParam){
         return commentClient.commentActivity(commentAddParam);
+    }
+    public static List<Map<String,String>> addressResolution(String address){
+        String regex="(?<province>[^省]+自治区|.*?省|.*?行政区|.*?市)(?<city>[^市]+自治州|.*?地区|.*?行政单位|.+盟|市辖区|.*?市|.*?县)(?<county>[^县]+县|.+区|.+市|.+旗|.+海域|.+岛)?(?<town>[^区]+区|.+镇)?(?<village>.*)";
+        Matcher m= Pattern.compile(regex).matcher(address);
+        String province=null,city=null,county=null,town=null,village=null;
+        List<Map<String,String>> table=new ArrayList<Map<String,String>>();
+        Map<String,String> row=null;
+        while(m.find()){
+            row=new LinkedHashMap<String,String>();
+            province=m.group("province");
+            row.put("province", province==null?"":province.trim());
+            city=m.group("city");
+            row.put("city", city==null?"":city.trim());
+            county=m.group("county");
+            row.put("county", county==null?"":county.trim());
+            town=m.group("town");
+            row.put("town", town==null?"":town.trim());
+            village=m.group("village");
+            row.put("village", village==null?"":village.trim());
+            table.add(row);
+        }
+        return table;
+    }
+
+    @ServiceLog(doAction = "修改企业信用分")
+    @Override
+    public Result<Boolean> updateCreditPoints(CreditUpdateParam creditUpdateParam){
+
+        TbServiceCompany tbServiceCompany = tbServiceCompanyMapper.selectByPrimaryKey(creditUpdateParam.getComId());
+        if(null == tbServiceCompany){
+            throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
+        }
+        tbServiceCompany.setCreditPoints(tbServiceCompany.getCreditPoints()==null?
+                (new BigDecimal("100").subtract(new BigDecimal(creditUpdateParam.getPintNum()))):(tbServiceCompany.getCreditPoints().subtract(new BigDecimal(creditUpdateParam.getPintNum()))));
+        tbServiceCompany.setCreditUpdateTime(new Date());
+
+        int i = tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
+        logger.info("修改企业信用分逻辑执行完毕，响应条数：{} ",i);
+        return new Result<>(i==1?true:false);
+
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取企业联系人账号")
+    public CompanyContactVO getCompanyContactAccount(String comId) {
+        // 默认联系人为企业管理员
+        String companyContactAccount = companyService.getCompanyDetailByAccountOrId(comId).getComAdmin();
+
+        TbServiceCompanyStaffCriteria example = new TbServiceCompanyStaffCriteria();
+        example.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andComIdEqualTo(comId)
+                .andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_AGREE.getCode())
+                .andCheckStatusEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode());
+        List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(example);
+        
+        // 如果企业员工不为空，寻找企业联系人（暂定寻找第一个联系人）
+        if (staffList != null && !staffList.isEmpty()) {
+            List<String> accountList = new ArrayList<>();
+            for (TbServiceCompanyStaff companyStaff : staffList) {
+                accountList.add(companyStaff.getAccount());
+            }
+
+            String roleName = CompanyDataEnum.COMPANY_CONTACTS.getCode();
+            List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
+            for (UserRoleInfo userRoleInfo : userRoleInfoList) {
+                if (StringUtils.isNotBlank(userRoleInfo.getRoleName()) && userRoleInfo.getRoleName().equals(roleName)) {
+                    companyContactAccount = userRoleInfo.getAccount();
+                    break;
+                }
+            }
+        }
+
+        CompanyContactVO companyContact = new CompanyContactVO();
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(companyContactAccount);
+        if (userExtension == null || userExtension.getData() == null) {
+            logger.warn("[获取企业联系人账号] 获取[{}]企业联系人信息失败，account：{}", comId, companyContactAccount);
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.GET_USER_EXTENSION_INFO_ERROR);
+        }
+        UserExtensionInfo data = userExtension.getData();
+        BeanUtils.copyProperties(data, companyContact);
+        return companyContact;
     }
 
 }

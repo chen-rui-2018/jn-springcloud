@@ -84,7 +84,7 @@ export default {
     height: 100vh;
     background-color: #f5f5f5;
     .consult_main{
-      padding-top:26px;
+      // padding-top:26px;
       .consult_cont{
         background-color: #fff;
         padding: 0 31px;

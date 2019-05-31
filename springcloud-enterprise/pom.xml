@@ -54,6 +54,11 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-app-delay-stream-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-delay-stream-api</artifactId>
+            <version>1.0.0-RELEASE</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -84,10 +89,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        propaganda
+                        pay
                     </contexts>
                     <tableNames>
-                        tb_propaganda
+                        tb_pay_account
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

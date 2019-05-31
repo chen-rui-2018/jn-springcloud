@@ -59,21 +59,21 @@ public interface MyPayBillService {
      * @param payCheckReminderParam
      * @return
      */
-    void updateBillNumber(PayCheckReminderParam payCheckReminderParam);
+    Result updateBillNumber(PayCheckReminderParam payCheckReminderParam);
 
     /**
      * 核查提醒录入
      * @param payCheckReminder,user
      * @return
      */
-    void billCheckReminder(PayCheckReminder payCheckReminder, User user);
+    Result billCheckReminder(PayCheckReminder payCheckReminder, User user);
 
     /**
      * 创建账单
      * @param payBillCreateParamVo,user
      * @return
      */
-    Result billCreate(PayBillCreateParamVo payBillCreateParamVo, User user);
+    Result billCreate(PayBillCreateParamVo payBillCreateParamVo);
 
     /**
      * 缴费单支付发起

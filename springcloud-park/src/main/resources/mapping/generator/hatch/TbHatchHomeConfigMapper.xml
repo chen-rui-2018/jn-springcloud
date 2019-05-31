@@ -3,7 +3,6 @@
 <mapper namespace="com.jn.park.hatch.dao.TbHatchHomeConfigMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.hatch.entity.TbHatchHomeConfig">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="incubator_id" jdbcType="VARCHAR" property="incubatorId" />
     <result column="incubator_name" jdbcType="VARCHAR" property="incubatorName" />
     <result column="incubator_abb" jdbcType="VARCHAR" property="incubatorAbb" />
     <result column="advantage_introduct" jdbcType="VARCHAR" property="advantageIntroduct" />
@@ -76,9 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, incubator_id, incubator_name, incubator_abb, advantage_introduct, spatial_character, 
-    entry_criteria, phone, status, record_status, creator_account, created_time, modifier_account, 
-    modified_time
+    id, incubator_name, incubator_abb, advantage_introduct, spatial_character, entry_criteria, 
+    phone, status, record_status, creator_account, created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfigCriteria" resultMap="BaseResultMap">
     select
@@ -111,25 +109,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfig">
-    insert into tb_hatch_home_config (id, incubator_id, incubator_name, 
-      incubator_abb, advantage_introduct, spatial_character, 
-      entry_criteria, phone, status, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
-    values (#{id,jdbcType=VARCHAR}, #{incubatorId,jdbcType=VARCHAR}, #{incubatorName,jdbcType=VARCHAR}, 
-      #{incubatorAbb,jdbcType=VARCHAR}, #{advantageIntroduct,jdbcType=VARCHAR}, #{spatialCharacter,jdbcType=VARCHAR}, 
-      #{entryCriteria,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
-      #{recordStatus,jdbcType=CHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_hatch_home_config (id, incubator_name, incubator_abb, 
+      advantage_introduct, spatial_character, entry_criteria, 
+      phone, status, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{incubatorName,jdbcType=VARCHAR}, #{incubatorAbb,jdbcType=VARCHAR}, 
+      #{advantageIntroduct,jdbcType=VARCHAR}, #{spatialCharacter,jdbcType=VARCHAR}, #{entryCriteria,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{recordStatus,jdbcType=CHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfig">
     insert into tb_hatch_home_config
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
-      </if>
-      <if test="incubatorId != null">
-        incubator_id,
       </if>
       <if test="incubatorName != null">
         incubator_name,
@@ -171,9 +166,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="incubatorId != null">
-        #{incubatorId,jdbcType=VARCHAR},
       </if>
       <if test="incubatorName != null">
         #{incubatorName,jdbcType=VARCHAR},
@@ -225,9 +217,6 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.incubatorId != null">
-        incubator_id = #{record.incubatorId,jdbcType=VARCHAR},
-      </if>
       <if test="record.incubatorName != null">
         incubator_name = #{record.incubatorName,jdbcType=VARCHAR},
       </if>
@@ -272,7 +261,6 @@
   <update id="updateByExample" parameterType="map">
     update tb_hatch_home_config
     set id = #{record.id,jdbcType=VARCHAR},
-      incubator_id = #{record.incubatorId,jdbcType=VARCHAR},
       incubator_name = #{record.incubatorName,jdbcType=VARCHAR},
       incubator_abb = #{record.incubatorAbb,jdbcType=VARCHAR},
       advantage_introduct = #{record.advantageIntroduct,jdbcType=VARCHAR},
@@ -292,9 +280,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfig">
     update tb_hatch_home_config
     <set>
-      <if test="incubatorId != null">
-        incubator_id = #{incubatorId,jdbcType=VARCHAR},
-      </if>
       <if test="incubatorName != null">
         incubator_name = #{incubatorName,jdbcType=VARCHAR},
       </if>
@@ -336,8 +321,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfig">
     update tb_hatch_home_config
-    set incubator_id = #{incubatorId,jdbcType=VARCHAR},
-      incubator_name = #{incubatorName,jdbcType=VARCHAR},
+    set incubator_name = #{incubatorName,jdbcType=VARCHAR},
       incubator_abb = #{incubatorAbb,jdbcType=VARCHAR},
       advantage_introduct = #{advantageIntroduct,jdbcType=VARCHAR},
       spatial_character = #{spatialCharacter,jdbcType=VARCHAR},

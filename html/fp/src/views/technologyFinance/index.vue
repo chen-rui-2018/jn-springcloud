@@ -12,23 +12,18 @@
             <input type="text">
             <i class="el-icon-search"></i>
           </div>
-          <div class="headerRight fr">
-            <div class="search pointer">
+          <div class="headerRight fr pr">
+            <!-- <div class="search pointer">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
-            <div class="navlogin">
+            </div> -->
+            <!-- <div class="navlogin">
               <a @click="$router.push({path:'/login'})">登录</a>
               <span class="line">|</span>
               <a @click="$router.push({path:'/register'})">注册</a>
-            </div>
+            </div> -->
+            <user-info></user-info>
           </div>
           <div class="nav" id="nav">
-            <!-- <transition name="fade"> -->
-            <!-- <div class="sousuo posA" v-if="sousuo">
-                  <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-                  <input type="text" v-focus @keyup.enter="handleSearch">
-                  <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-                </div> -->
             <ul class="posA clearfix">
               <li class="posLi1">
                 <a href="javascript:void(0);">首页</a>
@@ -43,8 +38,6 @@
                 <a href="javascript:void(0);" @click="$router.push({path:'/finaInstitution'})">金融机构</a>
               </li>
             </ul>
-
-            <!-- </transition> -->
           </div>
         </div>
       </div>
@@ -126,7 +119,7 @@
           <el-card>
             <ul class="techUl">
               <li>
-                <img src="@/../static/img/tech1.png" alt="">
+                <img src="@/../static/img/tech1.png" alt="" style="width:126px;height:95px">
                 <div class="liInfo">
                   <span>投资人</span>
                   <p class="mainColor">{{investorsNum}}
@@ -135,7 +128,7 @@
                 </div>
               </li>
               <li>
-                <img src="@/../static/img/tech2.png" alt="">
+                <img src="@/../static/img/tech2.png" alt="" style="width:137px;height:101px">
                 <div class="liInfo">
                   <span>金融产品</span>
                   <p class="mainColor">
@@ -145,7 +138,7 @@
                 </div>
               </li>
               <li>
-                <img src="@/../static/img/tech3.png" alt="">
+                <img src="@/../static/img/tech3.png" alt="" style="width:130px;height:96px">
                 <div class="liInfo">
                   <span>金融机构</span>
                   <p class="mainColor">
@@ -263,7 +256,7 @@
                     </li> -->
                     <li class="lastLi mainColor">
                       <img src="@/../static/img/xiao.png" alt="">
-                      <div class="rightInfo" @click="$router.push({name:'investorCertification'})">认证投资人></div>
+                      <div class="rightInfo" @click="handleInvertor">认证投资人></div>
                     </li>
                   </ul>
                 </div>
@@ -348,7 +341,7 @@
             <ul class="finaInsUl finaUl clearfix" id="finaInsUl">
               <li class="finaInsLi pr" v-for="(i,k) in ServiceOrgList" :key='k'>
                 <div class="finaInsItem">
-                  <img class="pointer" :src="i.orgLogo" alt="" @click="$router.push({ path: '/finaInsDetail', query: { orgId: i.orgId } })">
+                  <img class="pointer" :src="i.orgLogo" alt="" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                 </div>
                 <div class="finaDiv1">
                   <!-- <div class="finaTit"></div> -->
@@ -405,11 +398,6 @@
           <el-form-item label="融资期限(月):" prop="financingPeriod">
             <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
               <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
-              <!-- <el-option value="3个月及以下"/>
-              <el-option value="6个月及以下"/>
-              <el-option value="12个月及以下"/>
-              <el-option value="36个月及以下"/>
-              <el-option value="36个月以上"/> -->
             </el-select>
           </el-form-item>
 
@@ -428,7 +416,11 @@
 </template>
 <script>
 import swiper from "swiper";
+import userInfo from '../common/userInfoData'
 export default {
+  components: {
+      userInfo
+    },
   data() {
     return {
       sousuo: false,
@@ -531,6 +523,13 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    handleInvertor() {
+      if(!sessionStorage.userInfo){
+        this.$message.error('请先登录');
+        return
+      }
+     this.$router.push({name:'investorCertification'})
+    },
     techInit() {
       var mySwiper = new swiper(".swiper-container", {
         direction: "horizontal", // 垂直切换选项
@@ -561,18 +560,35 @@ export default {
       this.page--;
       this.getFinancialProList();
     },
-    handleScroll() {
-      const osTop =
-        document.documentElement.scrollTop ||
-        document.documentElement.scrollTop;
-      // console.dir(this.$refs)
-      for (const key in this.$refs) {
-        if (osTop >= this.$refs[key].scrollTop) {
-          // console.dir(node.scrollTop)
-          const name = this.$refs[key].dataset.class;
-          this.$refs[key].classList.add(name);
-        }
+       getScrollOffset() {
+      // 除IE8及更早版本
+      if (window.pageXOffset != null) {
+        return {
+          x: window.pageXOffset,
+          y: window.pageYOffset
+        };
       }
+      // 标准模式下的IE
+      if (document.compatMode == "css1Compat") {
+        return {
+          x: document.documentElement.scrollLeft,
+          y: document.documentElement.scrollTop
+        };
+      }
+      // 怪异模式下的浏览器
+      return {
+        x: document.body.scrollLeft,
+        y: document.body.scrollTop
+      };
+    },
+    handleScroll() {
+      const osTop =this.getScrollOffset().y;
+      // for (const key in this.$refs) {
+      //   if (osTop >= this.$refs[key].scrollTop) {
+      //     const name = this.$refs[key].dataset.class;
+      //     this.$refs[key].classList.add(name);
+      //   }
+      // }
       // console.log(this.getScrollTop())
       if (
         this.getScrollTop() > document.getElementById("header").clientHeight
@@ -630,6 +646,10 @@ export default {
     },
     //提需求
     raiseDemand(i) {
+       if(!sessionStorage.userInfo){
+        this.$message.error('请先登录');
+        return
+      }
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -709,9 +729,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-          } else {
-            _this.$message.error(res.result);
-          }
+          } 
         }
       });
     },

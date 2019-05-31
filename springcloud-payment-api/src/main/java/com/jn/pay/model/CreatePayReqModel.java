@@ -29,9 +29,9 @@ public class CreatePayReqModel  extends CreatePayReqBaseModel implements Seriali
     @ApiModelProperty(value = "订单ID",example = "2019050811515490657",required = true)
     private String orderId;
 
-    @JsonIgnore
+    @ApiModelProperty("userAccount无需填写")
     private String userAccount;
-    @JsonIgnore
+    @ApiModelProperty("userId无需填写")
     private String userIp;
 
     public String getOrderId() {

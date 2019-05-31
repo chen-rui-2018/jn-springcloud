@@ -30,9 +30,6 @@ public class HrController extends BaseController implements HrClient{
 	@Autowired
 	private AttendanceManagementService attendanceManagementService;
 
-	    /*@RequiresPermissions("/api/hr/selectAttendanceManagementByUserId")
-		@ApiOperation(value = "根据用户id与考勤年月查询历史考勤列表", notes = "根据用户id与考勤年月查询历史考勤列表")
-	    @RequestMapping(value = "/selectAttendanceManagementByUserId", method = RequestMethod.POST)*/
         @ControllerLog(doAction = "根据用户id与考勤年月查询历史考勤列表")
 		public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
 	    	Assert.notNull(attendanceManagement.getUserId(),"用户ID不能为空");
@@ -41,19 +38,14 @@ public class HrController extends BaseController implements HrClient{
 			return new Result(list);
 		}
 	    
-	    /*@RequiresPermissions("/api/hr/selectAttendanceManagementByDepartmentId")
-		@ApiOperation(value = "根据部门id与考勤年月查询历史考勤列表", notes = "根据部门id与考勤年月查询历史考勤列表")
-	    @RequestMapping(value = "/selectAttendanceManagementByDepartmentId", method = RequestMethod.POST)*/
 	    @ControllerLog(doAction = "根据部门id与考勤年月查询历史考勤列表")
 		public Result<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
 	    	Assert.notNull(attendanceManagement.getAttendanceMonth(),"考勤月份不能为空");
-	    	AttendanceManageApiVo attendanceManage = attendanceManagementService.selectAttendanceManagementByDepartmentId(attendanceManagement);
+	    	Assert.notNull(attendanceManagement.getDepartmentId(),"部门id不能为空");
+	    	AttendanceManageApiVo attendanceManage  = attendanceManagementService.selectAttendanceManagementByDepartmentId(attendanceManagement);
 			return new Result(attendanceManage);
 		}
 	    
-	    /*@RequiresPermissions("/api/hr/insertByOverTimeVacationmanage")
-		@ApiOperation(value = "加班小时", notes = "加班小时")
-	    @RequestMapping(value = "/insertByOverTimeVacationmanage", method = RequestMethod.POST)*/
 	    @ControllerLog(doAction = "加班小时")
 		public Result<String> insertByOverTimeVacationmanage(@Validated @RequestBody  VacationManagement vacationManage){
 	    	Assert.notNull(vacationManage.getUserId(),"用户ID不能为空");
@@ -63,9 +55,6 @@ public class HrController extends BaseController implements HrClient{
 			return new Result(str);
 		}
 
-	    /*@RequiresPermissions("/api/hr/insertByLeaveVacationmanage")
-		@ApiOperation(value = "请假扣除请假小时", notes = "请假扣除请假小时")
-	    @RequestMapping(value = "/insertByLeaveVacationmanage", method = RequestMethod.POST)*/
 	    @ControllerLog(doAction = "请假扣除请假小时")
 		public Result<String> insertByLeaveVacationmanage(@Validated @RequestBody  VacationManagement vacationManage){
 	    	Assert.notNull(vacationManage.getUserId(),"用户ID不能为空");
@@ -75,9 +64,6 @@ public class HrController extends BaseController implements HrClient{
 			return new Result(str);
 		}
 	    
-	   /* @RequiresPermissions("/hr/AttendanceManagement/selectByUserIdAndTime")
-		@ApiOperation(value = "考勤接口", notes = "考勤接口")
-	    @RequestMapping(value = "/selectByUserIdAndTime", method = RequestMethod.POST)*/
 	    @ControllerLog(doAction = "考勤接口")
 		public Result<AttendanceOverTimeApiVo> selectByUserIdAndTime(@Validated @RequestBody  AttendanceOverTime attendanceOverTime){
 	    	Assert.notNull(attendanceOverTime.getUserId(),"签到人不能为空");

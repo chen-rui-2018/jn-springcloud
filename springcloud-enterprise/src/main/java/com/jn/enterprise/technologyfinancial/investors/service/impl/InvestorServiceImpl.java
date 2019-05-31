@@ -800,17 +800,29 @@ public class InvestorServiceImpl implements InvestorService {
             throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
         }
         //更新用户角色
-        SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
-        Set<String> addRoleId=new HashSet<>();
-        addRoleId.add(sysRoleResult.getData().getId());
-        sysUserRoleVO.setAddRoleId(addRoleId);
-        sysUserRoleVO.setUser(user);
-        Result<Boolean> booleanResult = systemClient.updateUserRole(sysUserRoleVO);
+        Result<Boolean> booleanResult = updateUserRoleInfo(user, sysRoleResult);
         if(booleanResult.getData()==true){
             return 1;
         }else{
             logger.warn("添加投资人角色失败，失败原因：更新用户角色为“投资人”失败");
             throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
         }
+    }
+
+    /**
+     * 更新用户角色
+     * @param user
+     * @param sysRoleResult
+     * @return
+     */
+    @ServiceLog(doAction = "更新用户角色")
+    @Override
+    public Result<Boolean> updateUserRoleInfo(User user, Result<SysRole> sysRoleResult) {
+        SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
+        Set<String> addRoleId=new HashSet<>();
+        addRoleId.add(sysRoleResult.getData().getId());
+        sysUserRoleVO.setAddRoleId(addRoleId);
+        sysUserRoleVO.setUser(user);
+        return systemClient.updateUserRole(sysUserRoleVO);
     }
 }

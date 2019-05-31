@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import { urlSearch } from '@/util/index'
 Vue.use(Router)
 
-export default new Router({
+const router= new Router({
   // mode: 'history', // require service support 去掉url中的#
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -16,13 +16,13 @@ export default new Router({
     }
   },
   routes: [{
-    path: '/login',
-    component: resolve => require(['@/views/login'], resolve),
-    meta: {
-      title: '登录'
+      path: '/login',
+      component: resolve => require(['@/views/login'], resolve),
+      meta: {
+        title: '登录'
+      },
+      name: 'login'
     },
-    name: 'login'
-  },
     {
       path: '/register',
       component: resolve => require(['@/views/login/register'], resolve),
@@ -48,8 +48,7 @@ export default new Router({
     {
       path: '/',
       component: resolve => require(['@/views/homeIndex'], resolve),
-      children: [
-        {
+      children: [{
           path: '/',
           component: resolve => require(['@/views/portalIndex'], resolve),
           meta: {
@@ -151,8 +150,7 @@ export default new Router({
           meta: {
             title: '消息中心'
           },
-          children: [
-            {
+          children: [{
               path: 'chat',
               component: resolve => require(['@/views/messageCenter/chat'], resolve),
               meta: {
@@ -165,47 +163,63 @@ export default new Router({
               meta: {
                 title: '园区通知'
               },
-              name:'parkNotice',
+              name: 'parkNotice',
+            },
+            {
+              path: '/corporateInvitation',
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              meta: {
+                title: '企业邀请'
+              },
+              name:'corporateInvitation',
+            },
+            {
+              path: '/institutionInvitation',
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              meta: {
+                title: '机构邀请'
+              },
+              name:'institutionInvitation',
             },
             {
               path: '/enterpriseOrder',
-              component: resolve => require(['@/views/messageCenter/enterpriseOrder'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '企业订单'
               },
-              name:'enterpriseOrder',
+              name: 'enterpriseOrder',
             },
             {
               path: '/informationDynamics',
-              component: resolve => require(['@/views/messageCenter/informationDynamics'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '信息发布动态'
               },
-              name:'informationDynamics',
+              name: 'informationDynamics',
             },
             {
               path: '/paymentReminder',
-              component: resolve => require(['@/views/messageCenter/paymentReminder'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '缴费提醒'
               },
-              name:'paymentReminder',
+              name: 'paymentReminder',
             },
             {
               path: '/guestbook',
-              component: resolve => require(['@/views/messageCenter/guestbook'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '访客留言'
               },
-              name:'guestbook',
+              name: 'guestbook',
             },
             {
               path: '/dataReminder',
-              component: resolve => require(['@/views/messageCenter/dataReminder'], resolve),
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
                 title: '数据上报提醒'
               },
-              name:'dataReminder',
+              name: 'dataReminder',
             },
           ]
         },
@@ -215,24 +229,25 @@ export default new Router({
           meta: {
             title: '用户中心'
           },
+          name: 'home',
           // redirect: {
           //   name: 'userCenter'
           // },
           children: [{
-            path: '/',
-            name: 'userCenter',
-            meta: {
-              title: '首页'
+              path: '/',
+              name: 'userCenter',
+              meta: {
+                title: '首页'
+              },
+              component: resolve => require(['@/views/home/userCenter'], resolve)
+            }, {
+              path: '/userHome',
+              name: 'userHome',
+              meta: {
+                title: '用户资料'
+              },
+              component: resolve => require(['@/views/home/userHome'], resolve)
             },
-            component: resolve => require(['@/views/home/userCenter'], resolve)
-          }, {
-            path: '/userHome',
-            name: 'userHome',
-            meta: {
-              title: '用户资料'
-            },
-            component: resolve => require(['@/views/home/userHome'], resolve)
-          },
             {
               path: '/servicemarket/product/productService/ordinaryProduct',
               name: 'ordinaryProduct',
@@ -261,7 +276,9 @@ export default new Router({
             {
               path: '/servicemarket/product/productService/report',
               name: 'dataReportCommonEntrance',
-              meta: {title: '数据上报'},
+              meta: {
+                title: '数据上报'
+              },
               component: resolve => require(['@/views/dataReport/report'], resolve)
             },
             {
@@ -283,19 +300,25 @@ export default new Router({
             {
               path: '/servicemarket/product/productService/ordinaryproductDetail',
               name: 'ordinaryproductDetail',
-              meta: {title: '产品详情'},
+              meta: {
+                title: '产品详情'
+              },
               component: resolve => require(['@/views/home/productService/ordinaryproductDetail'], resolve)
             },
             {
               path: '/servicemarket/product/productService/ordinaryproductEdit',
               name: 'ordinaryproductEdit',
-              meta: {title: '常规产品编辑'},
+              meta: {
+                title: '常规产品编辑'
+              },
               component: resolve => require(['@/views/home/productService/ordinaryproductEdit'], resolve)
             },
             {
               path: '/servicemarket/product/productService/specialproduct',
               name: 'specialproduct',
-              meta: {title: '特色服务产品管理'},
+              meta: {
+                title: '特色服务产品管理'
+              },
               component: resolve => require(['@/views/home/productService/specialproduct'], resolve)
 
             },
@@ -382,13 +405,17 @@ export default new Router({
             {
               path: '/roleCertifications/advisoryInformation',
               name: 'advisoryInformation',
-              meta: {title: '填写顾问资料'},
+              meta: {
+                title: '服务顾问认证'
+              },
               component: resolve => require(['@/views/home/roleCertifications/advisoryInformation'], resolve)
             },
             {
               path: '/roleCertifications/basicInformation',
               name: 'basicInformation',
-              meta: {title: '服务机构认证'},
+              meta: {
+                title: '服务机构认证'
+              },
               component: resolve => require(['@/views/home/roleCertifications/basicInformation'], resolve)
             },
             {
@@ -530,73 +557,97 @@ export default new Router({
             {
               path: '/servicemarket/product/productService/specialEdit',
               name: 'specialEdit',
-              meta: {title: '编辑特色产品'},
+              meta: {
+                title: '编辑特色产品'
+              },
               component: resolve => require(['@/views/home/productService/specialEdit'], resolve)
             },
             {
               path: '/servicemarket/product/productService/myApply',
               name: 'myApply',
-              meta: {title: '我的申请'},
+              meta: {
+                title: '我的申请'
+              },
               component: resolve => require(['@/views/home/productService/myApply'], resolve)
             },
             {
               path: '/serviceMarket/requireManagementController/forothersneed',
               name: 'forothersneed',
-              meta: {title: '对他人的需求'},
+              meta: {
+                title: '对他人的需求'
+              },
               component: resolve => require(['@/views/home/needManage/forOthersNeed'], resolve)
             },
             {
               path: '/serviceMarket/requireManagementController/forothersneedDetail',
               name: 'forothersneedDetail',
-              meta: {title: '需求详情'},
+              meta: {
+                title: '需求详情'
+              },
               component: resolve => require(['@/views/home/needManage/forothersneedDetail'], resolve)
             },
             {
               path: '/serviceMarket/requireManagementController/receivedNeed',
               name: 'receivedNeed',
-              meta: {title: '我收到的需求'},
+              meta: {
+                title: '我收到的需求'
+              },
               component: resolve => require(['@/views/home/needManage/receivedNeed'], resolve)
             },
             {
               path: '/serviceMarket/requireManagementController/buttNeed',
               name: 'buttNeed',
-              meta: {title: '对接需求'},
+              meta: {
+                title: '对接需求'
+              },
               component: resolve => require(['@/views/home/needManage/buttNeed'], resolve)
             },
             {
               path: '/serviceMarket/requireManagementController/buttNeedFinancial',
               name: 'buttNeedFinancial',
-              meta: {title: '对接需求'},
+              meta: {
+                title: '对接需求'
+              },
               component: resolve => require(['@/views/home/needManage/buttNeedFinancial'], resolve)
             },
             {
               path: '/serviceMarket/requireManagementController/receivedNeedDetail',
               name: 'receivedNeedDetail',
-              meta: {title: '需求详情'},
+              meta: {
+                title: '需求详情'
+              },
               component: resolve => require(['@/views/home/needManage/receivedNeedDetail'], resolve)
             },
             {
               path: '/serviceMarket/comment/forOthersevaluate',
               name: 'forOthersevaluate',
-              meta: {title: '对他人的评价'},
+              meta: {
+                title: '对他人的评价'
+              },
               component: resolve => require(['@/views/home/evaluateManage/forOthersevaluate'], resolve)
             },
             {
               path: '/serviceMarket/comment/evaluateDetail',
               name: 'evaluateDetail',
-              meta: {title: '评价详情'},
+              meta: {
+                title: '评价详情'
+              },
               component: resolve => require(['@/views/home/evaluateManage/evaluateDetail'], resolve)
             },
             {
               path: '/serviceMarket/comment/toEvaluate',
               name: 'toEvaluate',
-              meta: {title: '评价'},
+              meta: {
+                title: '评价'
+              },
               component: resolve => require(['@/views/home/evaluateManage/toEvaluate'], resolve)
             },
             {
               path: '/serviceMarket/comment/receivedEvaluate',
               name: 'receivedEvaluate',
-              meta: {title: '我收到的评价'},
+              meta: {
+                title: '我收到的评价'
+              },
               component: resolve => require(['@/views/home/evaluateManage/receivedEvaluate'], resolve)
             }
 
@@ -605,7 +656,9 @@ export default new Router({
         {
           path: '/dataReportCheck',
           component: resolve => require(['@/views/dataReport/dataReportCheck'], resolve),
-          meta: {title: '数据上报审核'},
+          meta: {
+            title: '数据上报审核'
+          },
           name: 'dataReportCheck'
         },
         {
@@ -647,6 +700,62 @@ export default new Router({
             title: '政策中心首页'
           },
           name: 'policyCenter'
+        },
+        {
+          path: '/parkProfile',
+          component: resolve => require(['@/views/parkProfile/index'], resolve),
+          meta: {
+            title: '园区概况'
+          },
+          name: 'parkProfile'
+        },
+        {
+          path: '/investmentPolicy',
+          component: resolve => require(['@/views/investmentPolicy/index'], resolve),
+          meta: {
+            title: '招商政策'
+          },
+          name: 'investmentPolicy'
+        },
+        {
+          path: '/investmentPolicyDetail',
+          component: resolve => require(['@/views/investmentPolicy/investmentPolicyDetail'], resolve),
+          meta: {
+            title: '招商政策详情'
+          },
+          name: 'investmentPolicyDetail'
+        },
+        {
+          path: '/investmentDynamic',
+          component: resolve => require(['@/views/investmentDynamic/index'], resolve),
+          meta: {
+            title: '招商动态'
+          },
+          name: 'investmentDynamic'
+        },
+        {
+          path: '/investmentDynamicDetail',
+          component: resolve => require(['@/views/investmentDynamic/investmentDynamicDetail'], resolve),
+          meta: {
+            title: '招商动态详情'
+          },
+          name: 'investmentDynamicDetail'
+        },
+        {
+          path: '/investmentInfo',
+          component: resolve => require(['@/views/investmentInfo/index'], resolve),
+          meta: {
+            title: '招商信息'
+          },
+          name: 'investmentInfo'
+        },
+        {
+          path: '/investmentInfoDetail',
+          component: resolve => require(['@/views/investmentInfo/investmentInfoDetail'], resolve),
+          meta: {
+            title: '招商信息详情'
+          },
+          name: 'investmentInfoDetail'
         },
         {
           path: '/graphicPolicy',
@@ -996,3 +1105,12 @@ export default new Router({
     },
   ]
 })
+router.beforeEach((to, from, next) => {
+  const token = urlSearch.token
+  if (token) {
+    sessionStorage.setItem('token', token)
+  }
+  next()
+})
+
+export default router

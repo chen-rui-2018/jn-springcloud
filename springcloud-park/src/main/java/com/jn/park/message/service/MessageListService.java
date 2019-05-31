@@ -72,5 +72,5 @@ public interface MessageListService {
      * 修改已读状态
      * @param id
      */
-    void updateIsReadStatus(String id);
+    String updateIsReadStatus(String id);
 }

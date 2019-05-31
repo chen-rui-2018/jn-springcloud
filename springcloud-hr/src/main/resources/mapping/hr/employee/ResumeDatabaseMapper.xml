@@ -66,4 +66,58 @@
         </foreach>
     </insert>
 
+    <select id="selectByPhone" parameterType="map"
+            resultType="com.jn.hr.employee.model.ResumeDatabase">
+         SELECT
+        t1.id,  t1.`name`, t1. sex, phone,  t1.mailbox,  t1.department_id, t1. department_name,  t1.job_id,
+        t1.job_name,
+        t1.certificate_id,  t1.certificate_type,  t1.certificate_number,  t1.education_id,  t1.education_name,
+        t1.gradua_academy,  t1.resume_info,  t1.is_background_invest,  t1.application_result,  t1.record_status,
+        t1.created_time,  t1.modified_time,
+        t1.creator_account,
+        t1.modifier_account
+        FROM
+        `tb_manpower_resume_database` t1
+        WHERE t1.record_status != 0 and t1.phone =#{phone,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and t1.id!=#{id}
+        </if>
+     </select>
+
+    <select id="selectByMailbox" parameterType="map"
+            resultType="com.jn.hr.employee.model.ResumeDatabase">
+         SELECT
+        t1.id,  t1.`name`, t1. sex, phone,  t1.mailbox,  t1.department_id, t1. department_name,  t1.job_id,
+        t1.job_name,
+        t1.certificate_id,  t1.certificate_type,  t1.certificate_number,  t1.education_id,  t1.education_name,
+        t1.gradua_academy,  t1.resume_info,  t1.is_background_invest,  t1.application_result,  t1.record_status,
+        t1.created_time,  t1.modified_time,
+        t1.creator_account,
+        t1.modifier_account
+        FROM
+        `tb_manpower_resume_database` t1
+        WHERE t1.record_status != 0 and t1.mailbox =#{mailbox,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and t1.id!=#{id}
+        </if>
+     </select>
+
+    <select id="selectByCertificateNumber" parameterType="map"
+            resultType="com.jn.hr.employee.model.ResumeDatabase">
+         SELECT
+       t1.id,  t1.`name`, t1. sex, phone,  t1.mailbox,  t1.department_id, t1. department_name,  t1.job_id,
+        t1.job_name,
+        t1.certificate_id,  t1.certificate_type,  t1.certificate_number,  t1.education_id,  t1.education_name,
+        t1.gradua_academy,  t1.resume_info,  t1.is_background_invest,  t1.application_result,  t1.record_status,
+        t1.created_time,  t1.modified_time,
+        t1.creator_account,
+        t1.modifier_account
+        FROM
+        `tb_manpower_resume_database` t1
+        WHERE t1.record_status != 0 and t1.certificate_number =#{certificateNumber,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and t1.id!=#{id}
+        </if>
+     </select>
+
 </mapper>

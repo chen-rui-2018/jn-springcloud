@@ -204,19 +204,23 @@ export default {
         series: [{
           name: '总费用',
           data: this.totalCostValues,
-          type: 'bar'
+          type: 'bar'/*,
+          barWidth: 50*/
         }, {
           name: '公司费用',
           data: this.companyExpenseValues,
-          type: 'bar'
+          type: 'bar'/*,
+          barWidth: 50*/
         }, {
           name: '个人费用',
           data: this.personalExpenseValues,
-          type: 'bar'
+          type: 'bar'/*,
+          barWidth: 50*/
         }, {
           name: '参保人数',
           data: this.insuredPeopleNoValues,
-          type: 'line'
+          type: 'line'/*,
+          barWidth: 50*/
         }]
       })
     }

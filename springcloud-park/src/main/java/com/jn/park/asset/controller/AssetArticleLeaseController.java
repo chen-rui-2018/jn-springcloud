@@ -67,7 +67,9 @@ public class AssetArticleLeaseController {
     })
     public Result<AssetArticleLeaseModel> getArticleLease (String assetNumber){
         Assert.notNull(assetNumber,"资产编号不能为空");
-        AssetArticleLeaseModel assetArticleLeaseModel = assetArticleLeaseService.getArticleLease(assetNumber);
+        //获取登录信息
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        AssetArticleLeaseModel assetArticleLeaseModel = assetArticleLeaseService.getArticleLease(assetNumber,user.getAccount());
         return new Result<>(assetArticleLeaseModel);
     }
 

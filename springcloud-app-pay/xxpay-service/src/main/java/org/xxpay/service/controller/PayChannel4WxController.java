@@ -77,9 +77,14 @@ public class PayChannel4WxController{
             String channelId = payOrder.getChannelId();
             MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
             String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-            if("".equals(resKey)) return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+            if("".equals(resKey)) {
+                return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+            }
+            //获取支付渠道信息
             PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
+            //获取微信支付配置
             WxPayConfig wxPayConfig = WxPayUtil.getWxPayConfig(payChannel.getParam(), tradeType, wxPayProperties.getCertRootPath(), wxPayProperties.getNotifyUrl());
+            //封装参数并且请求微信支付
             WxPayService wxPayService = new WxPayServiceImpl();
             wxPayService.setConfig(wxPayConfig);
             WxPayUnifiedOrderRequest wxPayUnifiedOrderRequest = buildUnifiedOrderRequest(payOrder, wxPayConfig);
@@ -133,17 +138,25 @@ public class PayChannel4WxController{
                         break;
                     }
                     case PayConstant.WxConstant.TRADE_TYPE_JSPAI : {
-                        Map<String, String> payInfo = new HashMap<>();
+                        Map<String, String> payInfoMap = new HashMap<>();
                         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
                         String nonceStr = String.valueOf(System.currentTimeMillis());
+                        //=================此map用来签名=================================
+                        payInfoMap.put("appId", wxPayUnifiedOrderResult.getAppid());
+                        payInfoMap.put("timeStamp", timestamp);
+                        payInfoMap.put("nonceStr", nonceStr);
+                        payInfoMap.put("packageValue", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
+                        payInfoMap.put("signType", WxPayConstants.SignType.MD5);
 
+                        //=========组装返回前台参数================
                         orderInfo.put("appId", wxPayUnifiedOrderResult.getAppid());
                         // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
                         orderInfo.put("timeStamp", timestamp);
                         orderInfo.put("nonceStr", nonceStr);
                         orderInfo.put("packageValue", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
                         orderInfo.put("signType", WxPayConstants.SignType.MD5);
-                        orderInfo.put("paySign", SignUtils.createSign(payInfo, wxPayConfig.getMchKey(), null));
+                        //生成签名
+                        orderInfo.put("paySign", SignUtils.createSign(payInfoMap, wxPayConfig.getMchKey(), null));
                         break;
                     }
                     case PayConstant.WxConstant.TRADE_TYPE_MWEB : {
@@ -273,12 +286,18 @@ public class PayChannel4WxController{
         String goodsTag = null;
         String notifyUrl = wxPayConfig.getNotifyUrl();
         String productId = null;
-        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_NATIVE)) productId = JSON.parseObject(payOrder.getExtra()).getString("productId");
+        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_NATIVE)) {
+            productId = JSON.parseObject(payOrder.getExtra()).getString("productId");
+        }
         String limitPay = null;
         String openId = null;
-        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_JSPAI)) openId = JSON.parseObject(payOrder.getExtra()).getString("openId");
+        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_JSPAI) ) {
+            openId = JSON.parseObject(payOrder.getExtra()).getString("openId");
+        }
         String sceneInfo = null;
-        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_MWEB)) sceneInfo = JSON.parseObject(payOrder.getExtra()).getString("sceneInfo");
+        if(tradeType.equals(PayConstant.WxConstant.TRADE_TYPE_MWEB)) {
+            sceneInfo = JSON.parseObject(payOrder.getExtra()).getString("sceneInfo");
+        }
         // 微信统一下单请求对象
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setDeviceInfo(deviceInfo);

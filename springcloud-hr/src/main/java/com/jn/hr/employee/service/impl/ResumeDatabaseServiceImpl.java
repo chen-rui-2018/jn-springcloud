@@ -11,16 +11,14 @@ import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.enums.HrStatusEnums;
 import com.jn.hr.common.service.CommonService;
 import com.jn.hr.common.util.DepartMentUtil;
+import com.jn.hr.common.util.IDCardUtil;
 import com.jn.hr.common.util.SysDictKeyValueUtil;
 import com.jn.hr.common.util.ValidateUtil;
 import com.jn.hr.employee.dao.ResumeDatabaseMapper;
 import com.jn.hr.employee.dao.TbManpowerBackgroundInvestMapper;
 import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
 import com.jn.hr.employee.dao.TbManpowerResumeDatabaseMapper;
-import com.jn.hr.employee.entity.TbManpowerBackgroundInvest;
-import com.jn.hr.employee.entity.TbManpowerDepartment;
-import com.jn.hr.employee.entity.TbManpowerDepartmentCriteria;
-import com.jn.hr.employee.entity.TbManpowerResumeDatabase;
+import com.jn.hr.employee.entity.*;
 import com.jn.hr.employee.enums.ApplicationResultEnum;
 import com.jn.hr.employee.enums.BackgroundInvestEnum;
 import com.jn.hr.employee.enums.EmployeeExceptionEnums;
@@ -244,7 +242,20 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
                 ("employee","certificate_type");
         List<SysDictKeyValue>  educationList= commonService.queryDictList
                 ("employee","education");
+        Set<String> phoneSet=new HashSet<String>();
+        Set<String> mailboxSet=new HashSet<String>();
+        Set<String> certificateNumberSet=new HashSet<String>();
 
+        Map<String,ResumeDatabase> phoneMap=new HashMap<String,ResumeDatabase>();
+        Map<String,ResumeDatabase> mailboxMap=new HashMap<String,ResumeDatabase>();
+        Map<String,ResumeDatabase> certificateNumberMap=new HashMap<String,ResumeDatabase>();
+
+        List<ResumeDatabase> databaseList= resumeDatabaseMapper.list(new ResumeDatabasePage());
+        databaseList.forEach(e->{
+            phoneMap.put(e.getPhone(),e);
+            mailboxMap.put(e.getMailbox(),e);
+            certificateNumberMap.put(e.getCertificateNumber(),e);
+        });
         for(Object result:resultList){
             i++;
             ResumeDatabase database= (ResumeDatabase) result;
@@ -253,6 +264,36 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
                 sb.append("第"+i+"行:"+str+";");
                 continue;
             }
+
+            if(phoneSet.contains(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(phoneMap.containsKey(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在简历库中已经存在记录;");
+                continue;
+            }
+            phoneSet.add(database.getPhone());
+
+            if(mailboxSet.contains(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在当前EXCEL中重复;");
+                continue;
+            }
+            if(mailboxMap.containsKey(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在简历库中已经存在记录;");
+                continue;
+            }
+
+            mailboxSet.add(database.getMailbox());
+            if(certificateNumberSet.contains(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(certificateNumberMap.containsKey(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在简历库中已经存在记录;");
+                continue;
+            }
+            certificateNumberSet.add(database.getCertificateNumber());
 
             TbManpowerResumeDatabase tbdatabase=new TbManpowerResumeDatabase();
             BeanUtils.copyProperties(database,tbdatabase);
@@ -316,6 +357,17 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
         if(StringUtils.isBlank(database.getCertificateNumber())){
             return "证件号不能为空";
         }
+
+        if("身份证".equals(database.getCertificateType())){
+            if(!IDCardUtil.validateIdCard(database.getCertificateNumber())){
+                return "证件号码错误";
+            }
+        }else{
+            if(!ValidateUtil.validCommonZjhm(database.getCertificateNumber())){
+                return "证件号码错误";
+            }
+        }
+
         if(StringUtils.isBlank(database.getEducationName())){
             return "学历名称不能为空";
         }
@@ -354,6 +406,24 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
             return "部门名称错误";
         }
         return "";
+    }
+
+    @Override
+    public boolean checkPhoneExist(String phone,String id) {
+        ResumeDatabase info=resumeDatabaseMapper.selectByPhone(phone,id);
+        return info==null ? true:false;
+    }
+
+    @Override
+    public boolean checkMailboxExist(String mailBox,String id) {
+        ResumeDatabase info=resumeDatabaseMapper.selectByMailbox(mailBox,id);
+        return info==null ? true:false;
+    }
+
+    @Override
+    public boolean checkCertificateNumberExist(String certificateNumber,String id) {
+        ResumeDatabase info=resumeDatabaseMapper.selectByCertificateNumber(certificateNumber,id);
+        return info==null ? true:false;
     }
 
 }

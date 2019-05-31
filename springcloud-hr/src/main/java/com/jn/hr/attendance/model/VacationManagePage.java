@@ -33,6 +33,9 @@ public class VacationManagePage extends Page implements Serializable{
     private String vacationTime;
 
 	private List<VacationManagePage> vacationList;
+
+	@ApiModelProperty(value = "部门IDs")
+	private List<String> departmentIds;
 	
 	
 	public List<VacationManagePage> getVacationList() {
@@ -90,5 +93,12 @@ public class VacationManagePage extends Page implements Serializable{
 	public void setVacationTime(String vacationTime) {
 		this.vacationTime = vacationTime;
 	}
-    
+
+	public List<String> getDepartmentIds() {
+		return departmentIds;
+	}
+
+	public void setDepartmentIds(List<String> departmentIds) {
+		this.departmentIds = departmentIds;
+	}
 }

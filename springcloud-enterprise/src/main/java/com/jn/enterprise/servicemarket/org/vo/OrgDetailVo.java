@@ -19,6 +19,8 @@ import java.util.List;
 public class OrgDetailVo implements Serializable {
     @ApiModelProperty(value = "服务机构id")
     private String orgId;
+    @ApiModelProperty(value = "机构管理员账号")
+    private String orgAccount;
 
     @ApiModelProperty("一级业务领域")
     private String businessType;
@@ -140,6 +142,14 @@ public class OrgDetailVo implements Serializable {
 
     @ApiModelProperty(value = "职务")
     private String position;
+
+    public String getOrgAccount() {
+        return orgAccount;
+    }
+
+    public void setOrgAccount(String orgAccount) {
+        this.orgAccount = orgAccount;
+    }
 
     public String getOrgId() {
         return orgId;

@@ -1,7 +1,7 @@
 <template>
   <div class="acceptInvitation">
-    <div class="advisory_title">
-      <div>{{title}}</div>
+    <div class="advisory_title font16">
+      <div >{{title}}</div>
       <div @click="toCounselorManagement">返回</div>
     </div>
 
@@ -778,7 +778,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  path: "/servicemarket/product/userCenter"
+                  path: "/home"
                 });
                 this.disabled = false;
               } else {
@@ -795,7 +795,7 @@ export default {
       });
     },
     toCounselorManagement() {
-      this.$router.push({ path: "/servicemarket/product/userCenter" });
+      this.$router.push({ path: "/home" });
     }
     // toEditAdvisers() {
     //   this.$router.push({ name: "editAdvisers" });
@@ -957,7 +957,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 17px;
-    font-size: 13px;
+    // font-size: 13px;
     border-radius: 5px;
     div:nth-child(2) {
       width: 88px;

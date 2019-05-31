@@ -175,6 +175,7 @@
            tt.serialNumber,     <!--产品编号-->
            tt.advisorName,      <!--符文名称-->
            tt.orgName,          <!--机构名称-->
+           tt.orgId,          <!--机构名称-->
            tt.productName,      <!--产品名称-->
            tt.referPrice,       <!--参考价格-->
            tt.serviceCycle,     <!--服务周期-->
@@ -197,6 +198,7 @@
                 t1.view_count as "viewCount",
                 t1.picture_url as "pictureUrl",
                 t2.org_name as "orgName",
+                t2.org_id_ as "orgId",
                 (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
                 select advisor_account from tb_service_and_advisor tsa where  tsa.product_id_ = #{productId}
                 )) as "advisorName",
@@ -224,6 +226,7 @@
                tt.serviceCycle,  <!--服务周期-->
                tt.viewCount,     <!--访问数量-->
                tt.orgName,       <!--机构名称-->
+               tt.orgId,         <!--机构id-->
                tt.serviceDetails,  <!--服务详情-->
                tt.transactionsNumber,  <!--交易数量-->
                tt.evaluationNumber,    <!--评价数量-->
@@ -241,6 +244,7 @@
                t1.view_count as "viewCount",
                t1.picture_url as "pictureUrl",
                t2.org_name as "orgName",
+               t2.org_id_ as "orgId",
                (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
                  select advisor_account from tb_service_and_advisor tsa where  tsa.product_id_ = t1.product_id_
                    )) as "advisorName",
@@ -252,7 +256,7 @@
                left join  tb_service_org t2 on  t2.org_id_= t1.org_id_
                left join  tb_service_require t4 on t1.product_id_ = t4.product_id_
                left join  tb_service_rating t5 on t5.product_id_ = t1.product_id_
-               where  t1.record_status = '1' and t1.status = '1' and  t1.signory_id !="technology_finance"
+               where  t1.record_status = '1' and t1.status = '1' and  t1.signory_id !="technology_finance" and t1.org_id_ is not null and t1.org_id_ !=""
                <if test="commentProductId != null and  commentProductId !=''">
                     and  t1.template_id = #{commentProductId}
                </if>

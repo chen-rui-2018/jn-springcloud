@@ -3,6 +3,7 @@ package com.jn.enterprise.servicemarket.org.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
@@ -108,6 +109,17 @@ public class OrgManageController extends BaseController {
     public Result<String> getOrgStatusByUser(){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(orgService.getOrgStatusByUser(user.getAccount()));
+    }
+
+    @ControllerLog(doAction = "添加机构管理员角色")
+    @ApiOperation(value = "添加机构管理员角色",notes = "机构认证审批通过后，ibps后置处理器调用此接口添加机构顾问角色,返回数据响应条数")
+    @RequiresPermissions("/serviceMarket/org/addOrgRole")
+    @RequestMapping(value = "/addOrgRole",method = RequestMethod.POST)
+    public Result<Integer> addOrgRole(String orgAccount){
+        Assert.notNull(orgAccount, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
+        int resNum = orgService.addOrgRole(orgAccount);
+        logger.info("-----------添加机构管理员角色成功，数据响应条数：{}----------",resNum);
+        return  new Result(resNum);
     }
 
 }

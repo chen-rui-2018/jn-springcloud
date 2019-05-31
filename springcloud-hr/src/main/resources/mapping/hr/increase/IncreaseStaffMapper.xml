@@ -22,14 +22,14 @@
       t1.insured_city_id, t1.insured_city_name, t1.insured_programme_id, 
       t1.insured_programme_name, t1.is_effective, t1.record_status,t2.personal_social_security personalSocialSecurity ,t2.personal_accumulation_fund personalAccumulationFund,
 		t2.company_social_security companySocialSecurity, t2.company_accumulation_fund companyAccumulationFund,t2.id as detailId from tb_manpower_increase_staff t1,tb_manpower_insured_detail t2
-		where t1.job_number = t2.job_number and t1.record_status = 1 and t1.record_status != 0
+		where t1.job_number = t2.job_number and t1.record_status != 0
 		order by insured_month desc
 	</select>
 	
 	<select id="selectByMonth" parameterType="com.jn.hr.increase.model.IncreaseStaff"
 		resultType="com.jn.hr.increase.model.IncreaseStaff">
 		select * from tb_manpower_increase_staff t1
-		where  t1.record_status = 1 and t1.record_status != 0
+		where  t1.is_effective = 1 and t1.record_status != 0
 		group by t1.insured_month
 	</select>
 	

@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.pay.dao.TbPayAccountMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pay.entity.TbPayAccount">
-    <id column="ACCOUNT_ID" jdbcType="VARCHAR" property="accountId" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="ent_id" jdbcType="VARCHAR" property="entId" />
+    <result column="ACCOUNT_ID" jdbcType="VARCHAR" property="accountId" />
     <result column="PASSWD" jdbcType="VARCHAR" property="passwd" />
     <result column="BALANCE" jdbcType="DECIMAL" property="balance" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -71,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ACCOUNT_ID, user_id, PASSWD, BALANCE, created_time, creator_account, modified_time, 
+    user_id, ent_id, ACCOUNT_ID, PASSWD, BALANCE, created_time, creator_account, modified_time, 
     modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayAccountCriteria" resultMap="BaseResultMap">
@@ -92,11 +93,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_pay_account
-    where ACCOUNT_ID = #{accountId,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_pay_account
-    where ACCOUNT_ID = #{accountId,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.pay.entity.TbPayAccountCriteria">
     delete from tb_pay_account
@@ -105,23 +106,26 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pay.entity.TbPayAccount">
-    insert into tb_pay_account (ACCOUNT_ID, user_id, PASSWD, 
-      BALANCE, created_time, creator_account, 
-      modified_time, modifier_account, record_status
-      )
-    values (#{accountId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, 
-      #{balance,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=CHAR}
-      )
+    insert into tb_pay_account (user_id, ent_id, ACCOUNT_ID, 
+      PASSWD, BALANCE, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status)
+    values (#{userId,jdbcType=VARCHAR}, #{entId,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, 
+      #{passwd,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayAccount">
     insert into tb_pay_account
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="accountId != null">
-        ACCOUNT_ID,
-      </if>
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="entId != null">
+        ent_id,
+      </if>
+      <if test="accountId != null">
+        ACCOUNT_ID,
       </if>
       <if test="passwd != null">
         PASSWD,
@@ -146,11 +150,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="accountId != null">
-        #{accountId,jdbcType=VARCHAR},
-      </if>
       <if test="userId != null">
         #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="entId != null">
+        #{entId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="passwd != null">
         #{passwd,jdbcType=VARCHAR},
@@ -184,11 +191,14 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_pay_account
     <set>
-      <if test="record.accountId != null">
-        ACCOUNT_ID = #{record.accountId,jdbcType=VARCHAR},
-      </if>
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entId != null">
+        ent_id = #{record.entId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountId != null">
+        ACCOUNT_ID = #{record.accountId,jdbcType=VARCHAR},
       </if>
       <if test="record.passwd != null">
         PASSWD = #{record.passwd,jdbcType=VARCHAR},
@@ -218,8 +228,9 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_pay_account
-    set ACCOUNT_ID = #{record.accountId,jdbcType=VARCHAR},
-      user_id = #{record.userId,jdbcType=VARCHAR},
+    set user_id = #{record.userId,jdbcType=VARCHAR},
+      ent_id = #{record.entId,jdbcType=VARCHAR},
+      ACCOUNT_ID = #{record.accountId,jdbcType=VARCHAR},
       PASSWD = #{record.passwd,jdbcType=VARCHAR},
       BALANCE = #{record.balance,jdbcType=DECIMAL},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -234,8 +245,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pay.entity.TbPayAccount">
     update tb_pay_account
     <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
+      <if test="entId != null">
+        ent_id = #{entId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        ACCOUNT_ID = #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="passwd != null">
         PASSWD = #{passwd,jdbcType=VARCHAR},
@@ -259,11 +273,12 @@
         record_status = #{recordStatus,jdbcType=CHAR},
       </if>
     </set>
-    where ACCOUNT_ID = #{accountId,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pay.entity.TbPayAccount">
     update tb_pay_account
-    set user_id = #{userId,jdbcType=VARCHAR},
+    set ent_id = #{entId,jdbcType=VARCHAR},
+      ACCOUNT_ID = #{accountId,jdbcType=VARCHAR},
       PASSWD = #{passwd,jdbcType=VARCHAR},
       BALANCE = #{balance,jdbcType=DECIMAL},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -271,6 +286,6 @@
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=CHAR}
-    where ACCOUNT_ID = #{accountId,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
   </update>
 </mapper>

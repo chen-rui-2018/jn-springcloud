@@ -16,8 +16,10 @@ import com.jn.system.model.User;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -59,6 +61,23 @@ public class PayAccountServerController extends BaseController implements PayAcc
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return myPayBillService.insertPrepaidRecharge(createOrderAndPayReqModel,user);
+    }
+
+    @Override
+    @ControllerLog(doAction = "我的账户-通过企业ID和账本类型查询账号余额")
+    public Result<PayAccountBook> queryPayAccountBookMoney(@RequestBody @Validated PayAccountBookMoney payAccountBookMoney) {
+        PayAccountBook payAccountBook = myPayAccountService.queryPayAccountBookMoney(payAccountBookMoney);
+        return new Result(payAccountBook);
+    }
+
+    @Override
+    @ControllerLog(doAction = "我的账本-创建账户和账本【企业注册时调用】")
+    public Result createPayAccountBook(@RequestBody @Validated PayAccountBookCreateParam payAccountBookCreateParam){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payAccountBookCreateParam.getEnterId(),"企业ID不能为空");
+        Assert.notNull(payAccountBookCreateParam.getComAdmin(),"企业管理员账号不能为空");
+        return myPayAccountService.createPayAccountBook(payAccountBookCreateParam,user);
     }
 
 }

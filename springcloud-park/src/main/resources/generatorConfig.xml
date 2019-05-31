@@ -836,6 +836,8 @@
       <table tableName="tb_room_orders_item"></table>
       <!--房间管理-房间分组-->
       <table tableName="tb_room_group"></table>
+      <!--房间管理-缴费单-->
+      <table tableName="tb_room_orders_bill"></table>
     </context>
 
 
@@ -1192,6 +1194,8 @@
     </table>
     <table tableName="tb_hatch_incubator_type">
     </table>
+    <table tableName="tb_hatch_incubator_enterprise_and_team">
+    </table>
 
   </context>
 
@@ -1269,6 +1273,7 @@
     <table tableName="tb_electric_error_log"></table>
     <table tableName="tb_electric_energy_bill"></table>
     <table tableName="tb_electric_energy_bill_detail"></table>
+    <table tableName="tb_electric_meter_switch_log"></table>
 
   </context>
   <!--物业维修-->

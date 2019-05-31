@@ -184,7 +184,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         }
         //根据政策id查询详情
         PolicyDetailsShow policyDetails = policyCenterMapper.getPolicyDetails(policyId);
-        updatePolicyReadNum(example, tbPolicyList.get(0).getReadNum());
+        updatePolicyReadNum(example, tbPolicyList.get(0).getReadNum()==null?0:tbPolicyList.get(0).getReadNum());
         return policyDetails;
     }
 
@@ -240,7 +240,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         //发布日期
         policyDiagramDetailsVo.setReleaseDate(DateUtils.formatDate(tbPolicyList.get(0).getReleaseDate(),PATTERN));
         //更新阅读次数
-        updatePolicyReadNum(example,tbPolicy.getReadNum());
+        updatePolicyReadNum(example,tbPolicy.getReadNum()==null?0:tbPolicy.getReadNum());
         //有无关联政策原文  0：无  1：有
         String isPolicyOriginal="1";
         if(isPolicyOriginal.equals(tbPolicy.getIsPolicyOriginal())){

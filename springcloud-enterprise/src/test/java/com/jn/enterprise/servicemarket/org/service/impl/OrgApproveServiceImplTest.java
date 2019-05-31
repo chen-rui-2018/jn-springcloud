@@ -71,26 +71,5 @@ public class OrgApproveServiceImplTest {
         assertThat(orgApplyDetailVo,notNullValue());
     }
 
-    @Test
-    public void checkOrgApply() {
-        User user=new User();
-        OrgApplyCheckData orgApplyCheckData = new OrgApplyCheckData();
-        orgApplyCheckData.setOrgId(orgId);
-        orgApplyCheckData.setCheckStatus("1");
-        orgApplyCheckData.setCkeckMessage("审核通过");
-        try {
-            Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData,user);
-            assertThat(aBoolean,anything());
-        }catch (JnSpringCloudException e){
-            logger.warn("机构不存在");
-            assertThat(e.getCode(), Matchers.anyOf(
-                    Matchers.containsString(OrgExceptionEnum.ORG_DATA_IS_ERROR.getCode()),
-                    Matchers.containsString(OrgExceptionEnum.ORG_DATA_STATUS_IS_NOT_CHECKING.getCode())
-            ));
-        }
-
-
-    }
-
 
 }

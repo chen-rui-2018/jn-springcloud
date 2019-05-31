@@ -111,7 +111,7 @@ export default {
 <style lang="scss">
   .talentsServicePlatform{
     .banner{
-      padding-top: 105px;
+      // padding-top: 105px;
       img{
         width:100%;
       }

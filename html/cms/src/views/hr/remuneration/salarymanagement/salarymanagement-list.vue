@@ -112,8 +112,9 @@
 </template>
 <script>
 import {
-  api, downloadTempExcel, apiGet, exportExcelByObj, systemApi
+  api, downloadTempExcel, exportExcelByObj, systemApi
 } from '@/api/hr/common'
+import { setChild } from '@/api/hr/util'
 import { getToken } from '@/utils/auth'
 
 import UE from '@/components/ue.vue'
@@ -158,12 +159,15 @@ export default {
   },
   watch: {
     'listQuery.entryDate': function() {
+      this.listQuery.page = 1
       this.initList()
     },
     'listQuery.name': function() {
+      this.listQuery.page = 1
       this.initList()
     },
     'listQuery.departmentId': function() {
+      this.listQuery.page = 1
       this.initList()
     }
   },
@@ -183,19 +187,13 @@ export default {
       systemApi('system/sysDepartment/findDepartmentAllByLevel').then(res => {
         if (res.data.code === '0000') {
           this.departmentList = res.data.data
+          const nodes = []
+          setChild(nodes, res.data.data)
+          console.log(JSON.stringify(nodes))
         } else {
           this.$message.error(res.data.result)
         }
         this.departmentListLoading = false
-      })
-    },
-    getDepartmentList() {
-      apiGet('hr/employeeDepartment/getEmployeeDepartments').then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
       })
     },
     handlePreview(file) {

@@ -1,5 +1,8 @@
 // 获取应用实例
 const app = getApp()
+import {
+  baseUrl
+} from '../../utils/http.js'
 // 验证码重新获取时间,单位秒
 let countdown = 60
 // 是否需要注册标识true:需要注册绑定false:已注册绑定
@@ -73,7 +76,7 @@ Page({
       })
       countdown--
     }
-    setTimeout(function () {
+    setTimeout(function() {
       t.settime(that)
     }, 1000)
   },
@@ -106,9 +109,11 @@ Page({
       })
     } else {
       wx.request({
-        url: app.globalData.registerUrl + 'getCode',
-        data: {'phone': phone},
-        method: 'post',
+        url: app.globalData.baseUrl + '/springcloud-user/guest/miniProgram/miniProgramRegisterController/getCode',
+        data: {
+          'phone': phone
+        },
+        method: 'GET',
         header: {
           'content-type': 'application/x-www-form-urlencoded'
         },
@@ -143,86 +148,72 @@ Page({
       })
     }
   },
-
+  login() {
+    return new Promise((resolve, reject) => {
+      // 登录
+      wx.login({
+        success: res => {
+          // 发送 res.code 到后台换取 openId, sessionKey, unionId
+          resolve(res.code)
+          // console.log(res)
+        },
+        fail: err => {
+          reject(err)
+        }
+      })
+    })
+  },
   // 点击完成按钮后的操作
   finishRegister() {
     // 手机号
     const phone = this.data.phone
     // 验证码
-    const code = this.data.code
-    // 用户呢称
-    const nickName = app.globalData.userInfo.nickName
-    // 用户头像url
-    const avatarUrl = app.globalData.userInfo.avatarUrl
-    // 性别
-    const gender = app.globalData.userInfo.gender
-    // 用户所在国家
-    const country = app.globalData.userInfo.country
-    // 用户所在省份
-    const province = app.globalData.userInfo.province
-    // 用户所在城市
-    const city = app.globalData.userInfo.city
-    // 语言
-    const language = app.globalData.userInfo.language
-    if (code === '' || phone === '') {
-      wx.showToast({
-        title: '手机号或验证码填写有误请重新填写！',
-        icon: 'none',
-        duration: 1500
-      })
-      return false
-    }
-    if (flag) {
-      // 注册
-      wx.request({
-        url: app.globalData.registerUrl + 'registerAndBinding',
-        data: {
-          'phone': phone,
-          'code': code,
-          'openId': openId,
-          'unionId': unionId,
-          'nickName': nickName,
-          'avatarUrl': avatarUrl,
-          'gender': gender,
-          'country': country,
-          'province': province,
-          'city': city,
-          'language': language
-        },
-        method: 'post',
-        header: {
-          'Content-Type': 'application/json'
-        },
-        success: res => {
-          if (res.data.code === '0000' && res.data.data === 1) {
-            wx.showToast({
-              title: '注册绑定成功！',
-              icon: 'success',
-              duration: 1500
-            })
-            // 跳转到考勤页面
-            setTimeout(function () {
-              wx.navigateTo({
-                url: '/pages/login/login',
-              })
-            }, 2000)
-          } else {
-            wx.showToast({
-              title: res.data.result == null ? '验证码错误或验证码已过期' : res.data.result,
-              icon: 'none',
-              duration: 1500
-            })
-          }
+    const phoneCode = this.data.code
+    this.login()
+      .then(code => {
+        if (phoneCode === '' || phone === '') {
+          wx.showToast({
+            title: '手机号或验证码填写有误请重新填写！',
+            icon: 'none',
+            duration: 1500
+          })
+          return
         }
+        // 注册
+        wx.request({
+          url: app.globalData.wechatPath + '/guest/mini/user/registerUserAndGetToken',
+          data: {
+            phone,
+            phoneCode,
+            code
+          },
+          method: 'POST',
+          header: {
+            'Content-Type': 'application/json'
+          },
+          success: res => {
+            console.dir(res)
+            if (res.data.code === '0000') {
+              wx.showToast({
+                title: '注册绑定成功！',
+                icon: 'success',
+                duration: 1500
+              })
+              // 跳转到首页
+              setTimeout(function () {
+                wx.switchTab({
+                  url: '/pages/index/index'
+                })
+              }, 1500)
+            } else {
+              wx.showToast({
+                title: res.data.result == null ? '验证码错误或验证码已过期' : res.data.result,
+                icon: 'none',
+                duration: 1500
+              })
+            }
+          }
+        })
       })
-    } else {
-      wx.showToast({
-        title: '注册绑定失败',
-        icon: 'success',
-        duration: 1500
-      })
-      return false
-    }
-    return true
   },
 })

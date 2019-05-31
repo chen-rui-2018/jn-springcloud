@@ -20,12 +20,14 @@ import com.jn.enterprise.propaganda.dao.TbPropagandaFeeRulesMapper;
 import com.jn.enterprise.propaganda.dao.TbPropagandaMapper;
 import com.jn.enterprise.propaganda.entity.*;
 import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
+import com.jn.enterprise.propaganda.enums.IsPayEnum;
 import com.jn.enterprise.propaganda.enums.PromotionAreaEnum;
 import com.jn.enterprise.propaganda.enums.PropagandaTypeEnum;
 import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.paybill.api.PayBillClient;
 import com.jn.paybill.model.PaymentBillModel;
@@ -41,6 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.xxpay.common.util.DateUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -112,6 +115,11 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
      */
     private static final String PROPAGANDA_AREA="propagandaArea";
     /**
+     * 企业宣传的账单类型
+     */
+    private static final String BILL_TYPE="ad_free";
+
+    /**
      * 企业宣传流程id
      */
     @Value(value = "${businessPromotionProcessId}")
@@ -157,6 +165,9 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
                 propagandaSummaries=replaceDetails.length()>100?propagandaSummaries+"......":propagandaSummaries;
                 pShow.setPropagandaSummaries(propagandaSummaries);
             }
+
+            // 处理图片格式
+            pShow.setPosterUrl(IBPSFileUtils.getFilePath(pShow.getPosterUrl()));
         }
         return  new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
     }
@@ -606,7 +617,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     /**
      * 修改审批状态
      * @param propagandaId  宣传id
-     * @param approvalStatus        审批状态 (-1：未付款  0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)
+     * @param approvalStatus        审批状态 (0：未审批  1：审批中   2：审批通过/已发布   3：审批不通过)
      * @param loginAccount 登录用户账号
      * @return
      */
@@ -623,8 +634,8 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.PROPAGANDA_INFO_NOT_EXIST);
         }
         //判断状态值是否为系统支持的
-        List<String>statusList= Arrays.asList(ApprovalStatusEnum.UNPAID.getValue(),ApprovalStatusEnum.NOT_APPROVED.getValue()
-                ,ApprovalStatusEnum.APPROVAL.getValue(),ApprovalStatusEnum.APPROVED.getValue(),ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue());
+        List<String>statusList= Arrays.asList(ApprovalStatusEnum.NOT_APPROVED.getValue(),ApprovalStatusEnum.APPROVAL.getValue(),
+                ApprovalStatusEnum.APPROVED.getValue(),ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue());
         if(!statusList.contains(approvalStatus)){
             logger.warn("修改审批状态失败，status:[{}]不是系统支持的",approvalStatus);
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.STATUS_NOT_SUPPORT);
@@ -638,30 +649,91 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
 
     /**
      * 创建账单
-     * @param orderNum      订单号
+     * @param createBillParam      订单号,宣传id
      * @param loginAccount  登录用户账号
+     * @param userName 用户名
      * @return
      */
     @ServiceLog(doAction = "创建账单")
     @Override
-    public String createBill(String orderNum,String loginAccount){
-        //需要修改，支付接口后期会改掉，当前支付会废弃掉
-        PaymentBillModel paymentBillModel=new PaymentBillModel();
-        paymentBillModel.setBillNum(orderNum);
-        paymentBillModel.setBillName(loginAccount+"的宣传费用");
-        paymentBillModel.setBillType("ad_free");
-        paymentBillModel.setBillObjId(loginAccount);
-        paymentBillModel.setBillObjName(loginAccount);
-        paymentBillModel.setBillAmount(50.00);
-        paymentBillModel.setPayEndTime(DateUtils.getDate(PATTERN));
-        paymentBillModel.setBillCreateAccount(loginAccount);
-        paymentBillModel.setBillRemark("ad_free");
-        Result<String> bill = payBillClient.createBill(paymentBillModel);
+    public String createBill(CreateBillParam createBillParam,String loginAccount,String userName){
+        if(createBillParam==null ||createBillParam.getPropagandaId()==null){
+            logger.warn("创建账单失败，请求入参为空");
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.NETWORK_ANOMALY);
+        }
+        //订单号为空或不是正确的订单号（订单号不包含"AD-"），系统调用订单号自动生成
+        if(StringUtils.isBlank(createBillParam.getOrderNum()) || !createBillParam.getOrderNum().contains("AD-")){
+            createBillParam.setOrderNum(getOrderNumber());
+        }
+        //根据宣传id获取宣传信息
+        TbPropagandaCriteria example=new TbPropagandaCriteria();
+        example.createCriteria().andIdEqualTo(createBillParam.getPropagandaId())
+                .andApprovalStatusEqualTo(ApprovalStatusEnum.APPROVED.getValue())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbPropaganda> propagandaList = tbPropagandaMapper.selectByExample(example);
+        if(propagandaList.isEmpty()){
+            logger.warn("创建账单失败，当前宣传[id:{}]在系统中不存在或审批状态不为“审批通过”",createBillParam.getPropagandaId());
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.SUBMIT_AUDIT_NOT_ALLOW);
+        }
+        TbPropaganda tbPropaganda = propagandaList.get(0);
+        if(StringUtils.equals(tbPropaganda.getIsPay(),IsPayEnum.HAVE_PAID.getCode())){
+            logger.warn("创建账单失败，当前宣传[id:{}]已支付宣传费用",createBillParam.getPropagandaId());
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.CURRENT_PROPAGANDA_HAVE_PAID);
+        }
+        //若当前宣传已有账单号，直接返回
+        if(StringUtils.isNotBlank(tbPropaganda.getOrderCode())){
+            return tbPropaganda.getOrderCode();
+        }
+        Result<String> bill = getBillNum(createBillParam, loginAccount, userName, tbPropaganda.getPropagandaFee());
         if(bill==null || bill.getData()==null){
             logger.warn("创建账单失败，调用账单生成接口返回null");
             throw new JnSpringCloudException(BusinessPromotionExceptionEnum.NETWORK_ANOMALY);
         }
-        return bill.getData();
+        //账单号
+        tbPropaganda.setOrderCode(bill.getData());
+        //修改时间
+        tbPropaganda.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+        //修改人
+        tbPropaganda.setModifierAccount(loginAccount);
+        int resNum = tbPropagandaMapper.updateByExampleSelective(tbPropaganda, example);
+        if(resNum==1){
+            return bill.getData();
+        }else{
+            logger.warn("创建账单失败，更新宣传信息账单号失败");
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
+
+    /**
+     * 调用内部接口获取账单号
+     * @param createBillParam 订单号，宣传id
+     * @param loginAccount 登录用户账号
+     * @param userName   登录用户姓名
+     * @param billAmount 账单金额
+     * @return
+     */
+    @ServiceLog(doAction = "调用内部接口获取账单号")
+    private Result<String> getBillNum(CreateBillParam createBillParam, String loginAccount, String userName, double billAmount) {
+        PaymentBillModel paymentBillModel=new PaymentBillModel();
+        //账单编号
+        paymentBillModel.setBillNum(createBillParam.getOrderNum());
+        //账单名称
+        paymentBillModel.setBillName(loginAccount+"的宣传费用");
+        //账单类型
+        paymentBillModel.setBillType(BILL_TYPE);
+        //账单对象id
+        paymentBillModel.setBillObjId(loginAccount);
+        //账单对象名
+        paymentBillModel.setBillObjName(userName);
+        //账单金额
+        paymentBillModel.setBillAmount(billAmount);
+        //最晚缴费时间
+        paymentBillModel.setPayEndTime(DateUtils.getDate(PATTERN));
+        //生成操作人
+        paymentBillModel.setBillCreateAccount(loginAccount);
+        //账单说明
+        paymentBillModel.setBillRemark("宣传费用缴费");
+        return payBillClient.createBill(paymentBillModel);
     }
 
     /**
@@ -759,5 +831,25 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         String hasBeenPublish="6";
         bpb.setApprovalStatus(hasBeenPublish);
         return getBusinessPromotionList(bpb,loginAccount);
+    }
+
+    /**
+     * 根据账单号修改支付状态
+     * @param orderCode
+     * @return
+     */
+    @Override
+    public int updatePayStatus(String orderCode) {
+        if(StringUtils.isBlank(orderCode)){
+            logger.warn("根据账单号修改支付状态失败，账单id不能为空");
+            throw new JnSpringCloudException(BusinessPromotionExceptionEnum.NETWORK_ANOMALY);
+        }
+        TbPropagandaCriteria example=new TbPropagandaCriteria();
+        example.createCriteria().andOrderCodeEqualTo(orderCode)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        TbPropaganda tbPropaganda=new TbPropaganda();
+        //是否支付  0：未支付   1：已支付
+        tbPropaganda.setIsPay(IsPayEnum.HAVE_PAID.getCode());
+        return tbPropagandaMapper.updateByExampleSelective(tbPropaganda, example);
     }
 }

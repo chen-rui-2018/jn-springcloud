@@ -13,17 +13,42 @@ Page({
     hotSend:{
       page:1,
       rows:2
-    }
+    },
+    bannarSend:{
+      issuePlatform:'1',
+      needPage:'0',
+      propagandaArea:'top',
+      propagandaType:"home_banner"
+    },
+    bannarList:[]
   },
   onLoad: function (options) {
     this.getNotice()
     this.hotList()
+    this.getBannar()
    },
   onReady: function () { },
   onShow: function () { },
   onHide: function () { },
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {
+    this.hotList()
+  },
   onReachBottom: function () { },
+  // 轮播图
+  getBannar(){
+    request.send({
+      url: '/springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList',
+      data: this.data.bannarSend,
+      method: 'GET',
+    }).then(res=>{
+      // console.log(res)
+      if(res.data.code==='0000'){
+        this.setData({
+          bannarList:res.data.data.rows,
+        })
+      }
+    })
+  },
   // 轮播广告
   getNotice(){
     request.send({
@@ -50,6 +75,7 @@ Page({
         this.setData({
           hotList:res.data.data.rows,
         })
+        wx.stopPullDownRefresh
       }
     })
   }

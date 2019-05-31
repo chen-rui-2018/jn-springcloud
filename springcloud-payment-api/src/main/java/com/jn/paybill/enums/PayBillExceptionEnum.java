@@ -38,6 +38,7 @@ public enum PayBillExceptionEnum implements CodeAndMsg {
     PAY_ORDER_AMOUNT_IS_ERROR("6020526","前端金额计算不匹配"),
     PAY_ORDER_USER_IS_NOT_EXIST("6020527","当前登录用户不存在"),
     PAY_ORDER_USER_IS_NOT("6020528","登录失效，请重新登录"),
+    PAY_ORDER_OPEN_ID_IS_NULL("6020529","请先绑定并登录用户"),
     ;
     /**
      * 编码

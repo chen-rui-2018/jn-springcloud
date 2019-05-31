@@ -43,6 +43,7 @@ import com.jn.hr.increase.entity.TbManpowerInsuredScheme;
 import com.jn.hr.increase.entity.TbManpowerInsuredSchemeDetailed;
 import com.jn.hr.increase.enums.SalaryManagementExceptionEnums;
 import com.jn.hr.increase.enums.SalaryWelfareManagementStatus;
+import com.jn.hr.increase.model.IncreaseDetailed;
 import com.jn.hr.increase.model.IncreaseStaff;
 import com.jn.hr.increase.model.IncreaseStaffAdd;
 import com.jn.hr.increase.model.IncreaseStaffPage;
@@ -56,6 +57,7 @@ import com.jn.hr.increase.model.InsuredSchemeDetailed;
 import com.jn.hr.increase.model.InsuredSchemePage;
 import com.jn.hr.increase.model.SalaryKeyValue;
 import com.jn.hr.increase.service.WelfareManagrmentService;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 
@@ -88,6 +90,8 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	IncreaseStaffMapper increaseStaffMapper;
 	@Autowired
 	EmployeeBasicInfoMapper employeeBasicInfoMapper;
+	@Autowired
+	SystemClient systemClient;
 	//参保方案明细表
 	@Autowired
 	TbManpowerInsuredSchemeDetailedMapper tbManpowerInsuredSchemeDetailedMapper;
@@ -165,7 +169,29 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 				sb.append("第"+i+"行:"+str+";");
                 continue;
 			}
+			
 			TbManpowerEmployeeBasicInfo basic = map.get(insured.getJobNumber());
+			if(basic == null){
+				logger.info("[员工花名册]没有该员工，工号：" + insured.getJobNumber());
+				sb.append("第"+i+"行" + "|员工信息不存在,工号:" + insured.getJobNumber() + ";");
+				continue;
+			}
+			
+			if(!basic.getDepartmentName().equals(insured.getDepartment())){
+				logger.info("[员工花名册]员工部门不一致，工号：" + insured.getJobNumber());
+				sb.append("第"+i+"行" + "|员工部门错误,工号:" + insured.getJobNumber() + ";");
+				continue;
+			}
+			//insured.setInsuredMonth(DateUtils.formatDate(insured.getYearMonth(),"yyyy-MM"));
+			InsuredDetaild detaild = insuredDetailMapper.selectByJobNumberAndMonth(insured);
+			if(detaild != null){
+				logger.info("[参保明细表]用户该月参保信息已存在");
+				sb.append("第"+i+"行" + "|员工该月的参保信息已存在,工号:" + insured.getJobNumber() + ";");
+				continue;
+			}
+			
+			conversionString(insured);
+			insured.setDepartmentId(basic.getDepartmentId());
 			insured.setName(basic.getName());
 			insured.setId(UUID.randomUUID().toString());
 			insured.setDepartmentId(basic.getDepartmentId());
@@ -175,19 +201,29 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			list.add(insured);
 		}
 		
-		if(!CollectionUtils.isEmpty(list)){
-            logger.info("[参保明细] 成功导入{}条数据",list.size());
-           insuredDetailMapper.insertBatch(list);
-        }
-		
         if(sb.length()>0){
             logger.warn("[参保明细] 导入失败:{}",sb.toString());
             return sb.toString();
         }else{
+        	if(!CollectionUtils.isEmpty(list)){
+                logger.info("[参保明细] 成功导入{}条数据",list.size());
+               insuredDetailMapper.insertBatch(list);
+            }
             return "导入成功";
         }
 	}
 
+	/*
+	 * 字符串转换
+	 */
+	private void conversionString(InsuredDetaild insured){
+		String str = insured.getCityName();
+		str = str.replace("(", ",");
+		String[] str1 = str.split(",");
+		insured.setCityName(str1[0]);
+		insured.setCityId(str1[1].replace(")", ""));
+	}
+	
 	@Override
 	@ServiceLog(doAction = "添加增员计划")
 	@Transactional(rollbackFor = Exception.class)
@@ -196,6 +232,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		String[] str = increaseStaffAdd.getJobNumber().split(",");
 		List<IncreaseStaff> increaseList = new ArrayList<IncreaseStaff>();
 		List<InsuredDetaild> insuredetaildList = new ArrayList<InsuredDetaild>();
+		List<IncreaseDetailed> increaseDetailedList = new ArrayList<IncreaseDetailed>();
 		for(String jobNumber:str){
 			TbManpowerEmployeeBasicInfo basicInfo = employeeBasicInfoMapper.selectByJobNumber(jobNumber);
 			TbManpowerInsuredScheme tbManpowerInsuredScheme = tbManpowerInsuredSchemeMapper.selectByPrimaryKey(increaseStaffAdd.getInsuredProgrammeId());
@@ -218,6 +255,13 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			increaseStaff.setInsuredProgrammeId(increaseStaffAdd.getInsuredProgrammeId());
 			increaseStaff.setInsuredProgrammeName(tbManpowerInsuredScheme.getSchemeName());
 			increaseList.add(increaseStaff);
+			
+			/*List<InsuredSchemeDetailed> schemeDetailedList = insuredSchemeDetailedMapper.selectBySchemeId(tbManpowerInsuredScheme.getSchemeId());
+			for(InsuredSchemeDetailed detailed: schemeDetailedList){
+				IncreaseDetailed IncreaseDetailed = new IncreaseDetailed();
+				IncreaseDetailed.setId(UUID.randomUUID().toString());
+				//IncreaseDetailed.setInsuredMonth(DateUtils.formatDate(increaseStaffAdd.getInsuredMonth(), "yyyy-MM"));
+			}*/
 			
 			InsuredDetaild insuredDetaild = new InsuredDetaild();
 			insuredDetaild.setId(UUID.randomUUID().toString());
@@ -257,13 +301,19 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		return "增员计划添加成功";
 	}
 	
+	/*
+	 * 添加增员计划明细
+	 */
+	private void addIncreaseDetaile(TbManpowerInsuredScheme tbManpowerInsuredScheme){
+		List<InsuredSchemeDetailed> schemeDetailedList = insuredSchemeDetailedMapper.selectBySchemeId(tbManpowerInsuredScheme.getSchemeId());
+	}
 	@Override
 	@ServiceLog(doAction = "取消增员计划")
 	@Transactional(rollbackFor = Exception.class)
 	public String deleteAttritionPlan(IncreaseStaffPage increaseStaffPage) {
 		TbManpowerIncreaseStaff tbManpowerIncreaseStaff = new TbManpowerIncreaseStaff();
 		tbManpowerIncreaseStaff.setId(increaseStaffPage.getId());
-		tbManpowerIncreaseStaff.setIsEffective(Byte.parseByte(SalaryWelfareManagementStatus.INVALID.getCode()));
+		tbManpowerIncreaseStaff.setRecordStatus(Byte.parseByte(SalaryWelfareManagementStatus.DELETE.getCode()));
 		tbManpowerIncreaseStaffMapper.updateByPrimaryKeySelective(tbManpowerIncreaseStaff);
 		logger.info("[增员计划表]成员参保方案失效成功！");
 		
@@ -475,26 +525,26 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			
 			if(insuredDetaild.getSocialSecurity() > lastDetaild.getSocialSecurity()){
 				Double security = insuredDetaild.getSocialSecurity() - lastDetaild.getSocialSecurity();
-				insuredDetaild.setLastSocialSecurity("+" + String.valueOf(security));
+				insuredDetaild.setLastSocialSecurity("+" + String.format("%.2f", security));
 			}else{
 				Double security = insuredDetaild.getSocialSecurity() - lastDetaild.getSocialSecurity();
-				insuredDetaild.setLastSocialSecurity(String.valueOf(security));
+				insuredDetaild.setLastSocialSecurity(String.format("%.2f", security));
 			}
 			
 			if(insuredDetaild.getAccumulationFund() > lastDetaild.getAccumulationFund()){
 				Double fund = insuredDetaild.getAccumulationFund() - lastDetaild.getAccumulationFund();
-				insuredDetaild.setLastAccumulationFund("+" + String.valueOf(fund));
+				insuredDetaild.setLastAccumulationFund("+" + String.format("%.2f",fund));
 			}else{
 				Double fund = insuredDetaild.getAccumulationFund() - lastDetaild.getAccumulationFund();
-				insuredDetaild.setLastAccumulationFund(String.valueOf(fund));
+				insuredDetaild.setLastAccumulationFund(String.format("%.2f", fund));
 			}
 			
 			if(insuredDetaild.getTotalCost() > lastDetaild.getTotalCost()){
 				Double cost = insuredDetaild.getTotalCost() - lastDetaild.getTotalCost();
-				insuredDetaild.setLastTotalCost("+" + String.valueOf(cost));
+				insuredDetaild.setLastTotalCost("+" + String.format("%.2f",cost));
 			}else{
 				Double cost = insuredDetaild.getTotalCost() - lastDetaild.getTotalCost();
-				insuredDetaild.setLastTotalCost(String.valueOf(cost));
+				insuredDetaild.setLastTotalCost(String.format("%.2f",cost));
 			}
 		}else{
 			insuredDetaild.setLastAccumulationFund("0");
@@ -505,6 +555,7 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		
 		return insuredDetaild;
 	}
+	
 	@Override
 	@ServiceLog(doAction = "停止参保")
 	@Transactional(rollbackFor = Exception.class)
@@ -682,10 +733,6 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		}
 		
 		if(StringUtils.isBlank(insured.getCityName())){
-			return "参保城市不能为空";
-		}
-		
-		if(StringUtils.isBlank(insured.getCityId())){
 			return "参保城市不能为空";
 		}
 		

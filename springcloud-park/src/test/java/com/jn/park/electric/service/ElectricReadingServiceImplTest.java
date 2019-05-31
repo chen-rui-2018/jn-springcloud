@@ -6,7 +6,10 @@ package com.jn.park.electric.service;/**
  */
 
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
+import com.jn.company.api.CompanyClient;
+import com.jn.company.model.ServiceCompany;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.system.model.User;
@@ -33,6 +36,15 @@ import java.util.Date;
 public class ElectricReadingServiceImplTest {
     @Resource
     private MeterCalcCostService meterCalcCostService;
+    @Resource
+    private CompanyClient companyClient;
+
+    @Test
+    public void xxxxx(){
+        Result<ServiceCompany> serviceCompanyResult=companyClient.getCompanyDetailByAccountOrCompanyId("2220112212");
+        Assert.isTrue(serviceCompanyResult!=null);
+    }
+
     @Test
     public void meterDataCollection(){
         User user = new User();

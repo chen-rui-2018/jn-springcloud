@@ -2,6 +2,7 @@ package com.jn.hr.assessment.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.hr.assessment.dao.AssessManageMapper;
 import com.jn.hr.assessment.dao.AssessmentInfoFillMapper;
 import com.jn.hr.assessment.dao.AssessmentSubsidiaryMapper;
@@ -42,13 +44,16 @@ import com.jn.hr.assessment.model.AssessmentTemplateVo;
 import com.jn.hr.assessment.model.DepartmentTree;
 import com.jn.hr.assessment.service.AssessmentManagementService;
 import com.jn.hr.attendance.enums.AttendanceManageStatusEnums;
+import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.enums.HrStatusEnums;
+import com.jn.hr.common.util.DepartMentUtil;
 import com.jn.hr.employee.dao.EmployeeBasicInfoMapper;
 import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
 import com.jn.hr.employee.entity.TbManpowerDepartment;
 import com.jn.hr.employee.entity.TbManpowerDepartmentCriteria;
 import com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo;
 import com.jn.hr.employee.model.EmployeeBasicInfoPage;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 
@@ -56,6 +61,8 @@ import com.jn.system.model.User;
 public class AssessmentManagementServiceImpl implements AssessmentManagementService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AssessmentManagementServiceImpl.class);
+	@Autowired
+	SystemClient systemClient;
 	@Autowired
 	AssessManageMapper assessManageMapper;
 	@Autowired
@@ -294,17 +301,11 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 	@ServiceLog(doAction = "考核结束")
 	@Transactional(rollbackFor = Exception.class)
 	public String assessmentEnd(AssessmentManageAdd assessmentManageAdd) {
-		int number = assessmentSubsidiaryMapper.selectByAssessmentId(assessmentManageAdd.getAssessmentId());
-		if(number == 0){
-			AssessmentManagePage assessmentManagePage = new AssessmentManagePage();
-			assessmentManagePage.setAssessmentObjectJobNumber(assessmentManageAdd.getAssessmentObjectJobNumber());
-			assessmentManagePage.setAssessmentId(assessmentManageAdd.getAssessmentId());
-			assessManageMapper.updateByStatus(assessmentManagePage);
-			return "考核结束";
-		}else{
-			logger.info("还有人未考核");
-			throw new JnSpringCloudException(AssessmentManageExceptionEnums.ASSESSMENT_NOT_PEOPLE);
-		}
+		assessmentSubsidiaryMapper.updateByAssessmentStatus(null,assessmentManageAdd.getAssessmentId());
+		AssessmentManagePage assessmentManagePage = new AssessmentManagePage();
+		assessmentManagePage.setAssessmentId(assessmentManageAdd.getAssessmentId());
+		assessManageMapper.updateByStatus(assessmentManagePage);
+		return "考核结束";
 	}
 	
 	@Override
@@ -324,10 +325,21 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 	public List<AssessmentTemplateDetailVo> viewAssessmentDetails(AssessmentManageAdd assessmentManageAdd) {
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentTemplateDetailMapper.selectByTemplateId(assessmentManageAdd.getTemplateId());
 		Map<String,TbManpowerAssessmentInfoFill> fillMap = assessmentInfoFillMapper.selectByTemplateDetailId(assessmentManageAdd.getAssessmentObjectJobNumber(),assessmentManageAdd.getTemplateId());
+		if(fillMap == null){
+			fillMap = new HashMap<String,TbManpowerAssessmentInfoFill>();
+		}
 		for(AssessmentTemplateDetailVo detailVo : templateDetailList){
 			TbManpowerAssessmentInfoFill fill = fillMap.get(detailVo.getId());
-			detailVo.setAssessmentScore(fill.getAssessmentScore());
-			detailVo.setCauseDeduction(fill.getCauseDeduction());
+			if(fill != null){
+				detailVo.setAssessmentScore(fill.getAssessmentScore());
+				detailVo.setCauseDeduction(fill.getCauseDeduction());
+			}
+			Result result = systemClient.selectDeptByParentId(detailVo.getLeadAssessmentDepartment(), false);
+			if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+	            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+	        }
+	        Map<String,String>  departMap= (HashMap<String, String>)result.getData();
+	        detailVo.setLeadAssessmentDepartment(departMap.get("departmentName"));
 		}
 		logger.info("[考核详情]详情页面查询成功！");
 		return templateDetailList;
@@ -337,6 +349,14 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 	@ServiceLog(doAction = "开始考核页面明细")
 	public List<AssessmentTemplateDetailVo> startAssessmentPageDetails(AssessmentManageAdd assessmentManageAdd) {
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentTemplateDetailMapper.selectByTemplateId(assessmentManageAdd.getTemplateId());
+		for(AssessmentTemplateDetailVo detail : templateDetailList){
+			Result result = systemClient.selectDeptByParentId(detail.getLeadAssessmentDepartment(), false);
+			if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+	            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+	        }
+	        Map<String,String>  departMap= (HashMap<String, String>)result.getData();
+			detail.setLeadAssessmentDepartment(departMap.get("departmentName"));
+		}
 		logger.info("[开始考核]考核明细查询成功！");
 		return templateDetailList;
 	}
@@ -355,6 +375,12 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 	@Transactional(rollbackFor = Exception.class)
 	public String addAssessmentTemplate(AssessmentTemplatePage assessmentTemplatePage) {
 		// TODO Auto-generated method stub
+		AssessmentTemplateVo assessmentTemplateVo = assessmentTemplateMapper.selectByTemplateName(assessmentTemplatePage);
+		if(assessmentTemplateVo != null){
+			logger.info("[考核模板]考勤名称已存在");
+			throw new JnSpringCloudException(AssessmentManageExceptionEnums.ASSESSMENT_TEMPLATE_EXIST);
+		}
+		
 		TbManpowerAssessmentTemplate tbManpowerAssessmentTemplate = new TbManpowerAssessmentTemplate();
 		tbManpowerAssessmentTemplate.setTemplateId(UUID.randomUUID().toString());
 		tbManpowerAssessmentTemplate.setTemplateName(assessmentTemplatePage.getTemplateName());
@@ -420,6 +446,14 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 		assessmentTemplateVo.setTemplateId(tbManpowerAssessmentTemplate.getTemplateId());
 		assessmentTemplateVo.setTemplateName(tbManpowerAssessmentTemplate.getTemplateName());
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentTemplateDetailMapper.selectByTemplateId(assessmentTemplatePage.getTemplateId());
+		for(AssessmentTemplateDetailVo detail : templateDetailList){
+			Result result = systemClient.selectDeptByParentId(detail.getLeadAssessmentDepartment(), false);
+			if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+	            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+	        }
+	        Map<String,String>  departMap= (HashMap<String, String>)result.getData();
+			detail.setLeadAssessmentDepartment(departMap.get("departmentName"));
+		}
 		assessmentTemplateVo.setRecordList(templateDetailList);
 		return assessmentTemplateVo;
 	}

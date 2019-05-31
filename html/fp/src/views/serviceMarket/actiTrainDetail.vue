@@ -1,5 +1,5 @@
-<template>
-  <div class="actiDetail w">
+ <template>
+  <div class="actiTrainDetail w">
     <div class="delnav">
       <!-- <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
@@ -10,8 +10,8 @@
           <a href="javascript:void(0)" style="color:#00a042;font-weight:bold">活动详情</a>
         </el-breadcrumb-item>
       </el-breadcrumb> -->
-      <span class="pointer" @click="$router.push({ path: '/serMatHp'})">首页/</span>
-      <span class="pointer" @click="$router.push({ path: '/actiTrain'})">活动培训/</span>
+      <span class="pointer" @click="$router.push({path:'enterpriseservice'})">企业服务/</span>
+      <span class="pointer" @click="$router.push({path:'actiCenter'})">活动中心/</span>
       <span class="mainColor">活动详情</span>
     </div>
     <div class="delinfo">
@@ -73,7 +73,7 @@
       <el-card>
         <div class="delContent">
           <!-- <img src="@/../static/img/detail1.png" alt=""> -->
-          <p>{{activityDetail.actiDetail}}</p>
+          <p>{{this.activityDetail.actiDetail}}</p>
           <!-- <img src="@/../static/img/detail2.png" alt=""> -->
         </div>
       </el-card>
@@ -97,7 +97,7 @@
               <div class="clearfix">
                 <div class="liLeft">
                   <img :src="item.avatar" alt="">
-                  <div style="display:inline-block;margin-bottom: 20px">
+                  <div style="display:inline-block;margin-bottom: 20px;margin-left: 20px">
                     <span>{{item.creatorAccount}}</span><br>
                     <span>{{item.comContent}}</span>
                   </div>
@@ -105,17 +105,22 @@
                 <div class="liRight">
                   <p>{{item.createdTime}}</p>
                   <p>
-                    <i class="iconfont" :class="isCommentLike?'icon-dianzan1 mainColor':'icon-iconfontdianzan'" style="cursor:pointer" @click="comLike(item)">&nbsp;赞
+                    <i class="iconfont" :class="item.isCommentLike == 'true'?'icon-dianzan1 mainColor':'icon-iconfontdianzan'" style="cursor:pointer" @click="comLike(item)">&nbsp;赞
                       <span>{{item.likeNum}}</span>
                     </i>
                     <!-- <i class="iconfont icon-dianzan1 mainColor" style="cursor:pointer" v-if="isClick==1" @click="comCancleLike(item)">&nbsp;赞
                     </i>
                     <span>{{item.likeNum}}</span> -->
-                    <i class="iconfont icon-liuyan" style="cursor:pointer" @click="inFlag=true">&nbsp;回复</i>
+                    <i class="iconfont icon-liuyan" v-if="inFlag == item.id" style="cursor:pointer" @click="inFlag = '';">&nbsp;收起回复</i>
+                    <i class="iconfont icon-liuyan" v-else style="cursor:pointer" @click="replyFlag(item.id)">&nbsp;回复</i>
+                    
                   </p>
                 </div>
               </div>
-
+              <div v-if="inFlag == item.id">
+                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model.trim="textarea"></el-input>
+                <el-button type="success" @click="replycom(item)" style="background:#00a040;height:38px;width:90px;margin-left: 1014px;margin-top: 10px;" round>回复</el-button>
+              </div>
               <div class="reply" v-if="k<5" v-for="(i,k) in item.childList" :key="k">
                 <img :src="i.avatar" alt="">
                 <div class="replyinfo">
@@ -124,14 +129,10 @@
                 </div>
                 <span>{{i.createdTime}}</span>
               </div>
-              <div v-if="inFlag">
-                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textData1"></el-input>
-                <el-button type="success" @click="replycom(item)" style="background:#00a040;height:38px;width:90px;margin-left: 1014px;margin-top: 10px;" round>回复</el-button>
-              </div>
             </li>
           </ul>
           <div class="pagination-container" style="margin-top:50px">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
           </div>
         </div>
@@ -143,9 +144,9 @@
 export default {
   data() {
     return {
-      inFlag: false,
+      inFlag: "",
+      textarea: "",
       textData: "",
-      textData1:'',
       activityDetail: {},
       currentPage1: 1,
       page: 1,
@@ -171,6 +172,10 @@ export default {
   methods: {
     //留言
     leaveMessage(id) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       let _this = this;
       this.api.post({
         url: "commentActivity",
@@ -178,10 +183,11 @@ export default {
           comContent: _this.textData,
           comType: 0,
           rootId: id,
-          pId:id,
+          pId: id
         },
         callback: function(res) {
           if (res.code == "0000") {
+            _this.textData=''
             _this.getCommentInfo();
           } else {
             _this.$message.error(res.result);
@@ -189,52 +195,46 @@ export default {
         }
       });
     },
-    //回复评论
-    handleReply(comContent, comType, pId, rootId) {
-      let _this = this;
-      this.api.post({
-        url: "commentActivity",
-        data: {
-          comContent: comContent,
-          comType: comType,
-          pId: pId,
-          rootId: rootId
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.getCommentInfo();
-          }
-        }
-      });
+    replyFlag(i) {
+      if (this.inFlag == i) {
+        return;
+      }
+      this.textarea = "";
+      this.inFlag = i;
     },
     //回复评论
     replycom(item) {
-      this.inFlag = false;
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.inFlag = "";
       let _this = this;
       this.api.post({
         url: "commentActivity",
         data: {
-          comContent: _this.textData1,
-          comType: 0,
-          pId: item.pId,
+          comContent: _this.textarea,
+          comType: item.comType,
+          pId: item.id,
           rootId: item.rootId
         },
         // urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            _this.inFlag = false;
-            _this.textData1=''
             _this.getCommentInfo();
-          } else {
-            _this.$message.error(res.result);
           }
+          _this.$message(res.result);
         }
       });
     },
     comLike(item) {
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       //评论点赞
       let url = "";
-      if (this.isCommentLike) {
+      if (item.isCommentLike == "true") {
         //如果是已经点赞了就取消点赞
         url = `springcloud-park/comment/review/commentActivityCancelLike?id=${
           item.id
@@ -251,21 +251,12 @@ export default {
         data: {
           id: item.id
         },
-        dataFlag: true,
+        // dataFlag: true,
         urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            if (_this.isCommentLike) {
-              //如果是已经点赞了就取消点赞
-              item.likeNum -= 1;
-              _this.$message.success("取消点赞成功");
-              _this.isCommentLike = false;
-            } else {
-              //如果是没点赞就点赞
-              item.likeNum = item.likeNum * 1 + 1;
-              _this.$message.success("点赞成功");
-              _this.isCommentLike = true;
-            }
+            _this.$message.success(res.result);
+            _this.getCommentInfo();
           } else {
             _this.$message.error(res.result);
           }
@@ -316,7 +307,6 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("报名成功");
-            console.log(res);
             _this.init();
           } else {
             _this.$message.error(res.result);
@@ -344,6 +334,10 @@ export default {
       });
     },
     handleLike(id) {
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       //活动点赞
       let url = "";
       if (this.accountIsLike) {
@@ -452,7 +446,7 @@ export default {
 };
 </script>
 <style lang='scss'>
-.actiDetail {
+.actiTrainDetail {
   width: 1190px;
   margin: 0 auto;
   padding-top: 65px;
@@ -493,7 +487,7 @@ export default {
         > p {
           margin-top: 30px;
           .icon-recharge {
-            margin-left: 60px;
+            margin-left: 50px;
           }
         }
         .delAddress {
@@ -508,10 +502,6 @@ export default {
               width: 20px;
               border: 1px solid #eee;
               border-radius: 50%;
-              img{
-                width: 100%;
-                height: 100%;
-              }
             }
           }
           > span {
@@ -618,17 +608,23 @@ export default {
           .reply {
             padding: 30px;
             background: #f9f9f9;
-            width: 90%;
-            margin-left: 50px;
+            width: 88%;
+            margin-left: 70px;
+            margin-top:10px;
             > span {
               float: right;
             }
             .replyinfo {
               display: inline-block;
+              margin-left:20px;
             }
           }
         }
       }
+    }
+    .el-textarea{
+      width:93.5%;
+      margin-left:70px;
     }
   }
 }

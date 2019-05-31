@@ -30,9 +30,10 @@ public interface ParkingAreaService{
     /**
      * 查询停车场列表[前端]
      * @param parkingAreaParam
+     * @param account
      * @return
      */
-    PaginationData<List<ParkingAreaVo>> getParkingAreaList(ParkingAreaParam parkingAreaParam);
+    PaginationData<List<ParkingAreaVo>> getParkingAreaList(ParkingAreaParam parkingAreaParam,String account);
 
     /**
      * 根据ID查询停车场详情

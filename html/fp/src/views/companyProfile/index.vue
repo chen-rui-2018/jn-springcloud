@@ -61,9 +61,9 @@
     <div class="serverOrgFilter mainBorder clearfix">
       <div class="filLeft fl">排序：
         <span @click="handleFil('')" :class="{'active2':colorFlag == ''}">综合</span>
-        <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">关注</span>
-        <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">浏览量</span>
-        <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">留言</span>
+        <!-- <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">关注</span> -->
+        <span @click="handleFil('browse_number')" :class="{'active2':colorFlag == 'browse_number'}">浏览量</span>
+        <!-- <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">留言</span> -->
       </div>
       <div class="filRight fr">
         <input type="text" placeholder="搜索关键字" v-model="comName">
@@ -90,8 +90,8 @@
               </div>
               <div class="right1 fl">
                 <p>
-                  <i class="el-icon-view">{{i.browseNumber}}</i>
-                  <i class="iconfont icon-liuyan1">{{i.commentNumber}}</i>
+                  <i class="el-icon-view">&nbsp;{{i.browseNumber}}</i>
+                  <i class="iconfont icon-liuyan1"></i><span style="font-size:14px;">&nbsp;{{i.commentNumber}}</span>
                 </p>
               </div>
             </div>
@@ -102,7 +102,7 @@
                 <i class="mainColor">{{i.careUser}}</i>人关注</span>
             </p>
             <p>
-              <a class="attention">+关注</a>
+              <a class="attention" @click="handleAttention(i.id)">+关注</a>
               <a @click="$router.push({path:'/recruitmentList',query:{comId:i.id}})">热招职位</a>
             </p>
           </div>
@@ -145,20 +145,49 @@ export default {
         { name: "招商企业", id: "2" }
       ],
       parkList: [],
-      // affiliatedPark: "",
+      affiliatedPark: "",
       comSource: "",
       comType: "",
       comName: "",
       induType: "",
-      orderByClause: ""
+      orderByClause: "",
+      token:'',
     };
+  },
+  created(){
+    this.token=sessionStorage.getItem('token')
   },
   mounted() {
     this.getParkList();
     this.selectIndustryList();
     this.getCompanyList();
+    if(this.$route.query.id){
+      this.induType=this.$route.query.id
+    } 
   },
   methods: {
+    //关注
+    handleAttention(id){
+      if(sessionStorage.token){
+        this.api.post({
+        url: "addCareOperate",
+        data: {
+          account:id,
+          receiveType:-1
+        },
+        callback: (res)=> {
+          if (res.code == "0000") {
+            // _this.parkList = res.data;
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+      } else{
+        this.$message.error('你还未登录')
+        return
+      }
+    },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
       let num = 0;
@@ -179,7 +208,7 @@ export default {
       this.page = 1;
       this.getCompanyList()
     },
-    //领域搜索
+    //园区搜索
     handleFilter(i) {
       this.affiliatedPark = i;
       this.filterFlag = i;
@@ -204,14 +233,14 @@ export default {
     handleOrgDel(id) {
       this.$router.push({ path: "profileDetails", query: { id: id } });
     },
+    //改变每页显示多少条的回调函数
     handleSizeChange(val) {
-      //改变每页显示多少条的回调函数
       this.row = val;
       this.page = 1;
       this.getCompanyList();
     },
+    //改变当前页码的回调函数
     handleCurrentChange(val) {
-      //改变当前页码的回调函数
       this.page = val;
       this.getCompanyList();
     },
@@ -223,7 +252,7 @@ export default {
         data: {
           page: _this.page,
           rows: _this.row,
-          affiliatedPark: _this.$route.query.id,
+          affiliatedPark: _this.affiliatedPark,
           comSource: _this.comSource,
           comType: _this.comType,
           comName: _this.comName,
@@ -337,11 +366,12 @@ export default {
         margin-bottom: 20px;
       }
     }
-    .iconfont {
-      font-size: 13px;
+    .el-icon-view,.iconfont {
+      font-size: 14px;
     }
     .icon-liuyan1 {
       margin-left: 20px;
+      // font-size: 16px;
     }
   }
 }

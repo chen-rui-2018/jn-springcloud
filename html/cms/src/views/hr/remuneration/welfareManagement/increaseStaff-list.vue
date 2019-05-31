@@ -38,8 +38,11 @@
     <template v-if="increaseStaffAddFormVisible">
       <el-dialog :visible.sync="increaseStaffAddFormVisible" title="增减员计划" width="750px">
         <el-form ref="increaseStaffAddForm" :rules="increaseStaffAddFormRules" :model="increaseStaffAddFromData" label-width="150px">
-          <el-form-item label="姓名" prop="name" class="inline">
-            <el-cascader-multi ref="assessmentObjectRef" v-model="checkList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+          <el-form-item label="姓名" prop="jobNumber" class="inline">
+            <multi-cascader-ext ref="assessmentObjectRef" v-model="increaseStaffAddFromData.jobNumberList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+            <!--
+            <el-cascader-multi ref="assessmentObjectRef" v-model="increaseStaffAddFromData.jobNumberList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+-->
             <!--<el-input v-model="increaseStaffAddFromData.name" type="textarea" style="width: 350px;" readonly="readonly"/>
             <el-button type="text" @click="openStaffNamePage">选择</el-button>-->
           </el-form-item>
@@ -92,10 +95,11 @@
       <el-dialog :visible.sync="socialInsuranceBasePageVisibleVisible" title="各项目基数" width="650px">
         <el-form ref="socialInsuranceBaseForm" :model="socialInsuranceBaseFormData" class="auto_form">
           <el-form-item label="参保方案" prop="insuredProgrammeId" class="inline">
-            <el-input v-model="socialInsuranceBaseFormData.schemeName" type="text" style="width: 200px;"/>
+            <el-input v-model="selInsuredScheme.schemeName" style="width: 200px;" disabled="disabled"/>
           </el-form-item>
           <el-form-item v-for="(domain) in socialInsuranceBasePageInit" :prop="domain.prop" :label="domain.label" :key="domain.key">
-            <el-input v-model="domain.value" type="text" style="width: 200px;"/>
+            <!--<el-input v-model="domain.value" type="number" oninput = "value=value.replace(/[^\d\.]/g,'')" style="width: 200px;"/>-->
+            <el-input-number v-model="domain.value" :min="1" :max="99999" style="width: 200px"/>
             <p style="height: 12px;margin-top: 0px;color:dodgerblue">基数范围[0-99999]</p>
           </el-form-item>
           <el-form-item>
@@ -105,16 +109,16 @@
         </el-form>
       </el-dialog>
     </template>
-
     <!--编辑公积金各项基数-->
     <template v-if="accumulationFundPageVisibleVisible">
       <el-dialog :visible.sync="accumulationFundPageVisibleVisible" title="各项目基数" width="650px">
         <el-form ref="socialInsuranceBaseForm" :model="accumulationFundPageVisibleVisibleData" class="auto_form">
           <el-form-item label="参保方案" prop="insuredProgrammeId" class="inline">
-            <el-input v-model="socialInsuranceBaseFormData.schemeName" type="text" style="width: 200px;"/>
+            <el-input v-model="selInsuredScheme.schemeName" style="width: 200px;" disabled="disabled"/>
           </el-form-item>
           <el-form-item v-for="(domain) in reserveBasePageInit" :prop="domain.prop" :label="domain.label" :key="domain.key">
-            <el-input v-model="domain.value" type="text" style="width: 200px;"/>
+            <!--<el-input v-model="domain.value" type="text" style="width: 200px;"/>-->
+            <el-input-number v-model="domain.value" :min="1" :max="99999" style="width: 200px"/>
             <p style="height: 12px;margin-top: 0px;color:dodgerblue">基数范围[0-99999]</p>
           </el-form-item>
           <el-form-item>
@@ -129,16 +133,17 @@
 </template>
 <script>
 import {
-  api
+  api, apiGet
 } from '@/api/hr/common'
+import multiCascaderExt from '@/components/MultiCascaderExt2/multi-cascader-ext.vue'
 
 import UE from '@/components/ue.vue'
 export default {
-  components: { UE },
+  components: { UE, multiCascaderExt },
   data() {
     return {
       increaseStaffAddFormRules: {
-        name: [{ required: true, message: '请选择增员名称', trigger: 'change' }],
+        jobNumber: [{ required: true, message: '请选择增员名称', trigger: 'change' }],
         insuredMonth: [{ required: true, message: '请选择参保月份', trigger: 'change' }],
         insuredProgrammeId: [{ required: true, message: '请选择参保方案', trigger: 'change' }]
       },
@@ -166,6 +171,10 @@ export default {
       insuredProgrammeId: [],
       insuranceBaseData: {
       },
+      selInsuredScheme: {
+        schemeId: '',
+        schemeName: ''
+      },
       socialInsuranceBaseFormData: {
       },
       accumulationFundPageVisibleVisibleData: {
@@ -176,9 +185,9 @@ export default {
         insuredMonth: '',
         jobNumber: '',
         name: '',
+        jobNumberList: [],
         insuredProgrammeId: '',
-        insuredProgrammeName: '',
-        increaseStaffAddFromReserveBase: ''
+        insuredProgrammeName: ''
       },
       increaseStaffAddFormVisible: false,
       increaseStaffList: [],
@@ -205,82 +214,26 @@ export default {
     this.getDeptEmployeeList()
   },
   methods: {
-    // nameSel
     nameSel() {
       const selectedNodes = this.$refs['assessmentObjectRef'].selectedNodes
       this.increaseStaffAddFromData.jobNumber = ''
       for (let i = 0; i < selectedNodes.length; i++) {
-        if (!selectedNodes.flag) {
-          this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber + selectedNodes[i].value + ','
+        if (!selectedNodes[i].flag) {
+          this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber + selectedNodes[i].jobNumber + ','
         }
       }
       if (this.increaseStaffAddFromData.jobNumber.length > 0) {
         this.increaseStaffAddFromData.jobNumber = this.increaseStaffAddFromData.jobNumber.substring(0, this.increaseStaffAddFromData.jobNumber.length - 1)
       }
-      console.log(this.increaseStaffAddFromData.jobNumber)
     },
     getDeptEmployeeList() {
-      this.deptEmployeeList = [
-        {
-          value: 'dept1',
-          label: '部门1',
-          flag: true,
-          children: [{
-            value: 'dept2',
-            label: '研发',
-            flag: true,
-            children: [{
-              flag: false,
-              value: 'NJ000001',
-              label: '张三'
-            }, {
-              flag: false,
-              value: 'NJ000007',
-              label: '李四'
-            }, {
-              flag: false,
-              value: 'NJ000006',
-              label: '赵六'
-            }]
-          }, {
-            value: 'daohang',
-            label: '导航',
-            flag: true,
-            children: [{
-              flag: false,
-              value: 'cexiangdaohang',
-              label: '侧向导航'
-            }, {
-              flag: false,
-              value: 'dingbudaohang',
-              label: '顶部导航'
-            }]
-          }]
-        }, {
-          value: 'ziyuan',
-          label: '资源',
-          flag: true,
-          children: [{
-            flag: true,
-            value: 'axure',
-            label: 'Axure Components'
-          }, {
-            flag: true,
-            value: 'sketch',
-            label: 'Sketch Templates'
-          }, {
-            flag: true,
-            value: 'jiaohu',
-            label: '组件交互文档'
-          }]
-        }]
-      // api('hr/AssessmentManagement/ObtainDepartmentTree', {}).then(res => {
-      //   if (res.data.code === '0000') {
-      //     this.rootData = res.data.data
-      //   } else {
-      //     this.$message.error(res.data.result)
-      //   }
-      // })
+      apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
+        if (res.data.code === '0000') {
+          this.deptEmployeeList = JSON.parse(res.data.data)
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
     },
     cancelIncreaseStaffAddFormVisible() {
       this.increaseStaffAddFormVisible = false
@@ -303,8 +256,8 @@ export default {
       this.socialInsuranceBasePageVisibleVisible = false
     },
     saveSocialInsuranceBase(obj) { // 保存修改社保基数
-      this.insuranceBaseData.schemeId = this.socialInsuranceBaseFormData.schemeId
-      this.insuranceBaseData.schemeName = this.socialInsuranceBaseFormData.schemeName
+      this.insuranceBaseData.schemeId = this.selInsuredScheme.schemeId
+      this.insuranceBaseData.schemeName = this.selInsuredScheme.schemeName
       const insuredSchemeDetailedList = []
       if (obj === 'reserve') { // 公积金
         this.increaseStaffAddFromReserveBaseData = ''
@@ -354,6 +307,7 @@ export default {
             value: e.defaultCardinalNumber
           })
           index = index + 1
+          // 回显
           this.socialInsuranceBaseData = this.socialInsuranceBaseData + e.projectName + '基数' + ':' + e.defaultCardinalNumber + ','
         } else { // 公积金
           this.reserveBasePageInit.push({
@@ -363,6 +317,7 @@ export default {
             value: e.defaultCardinalNumber
           })
           index = index + 1
+          // 回显
           this.increaseStaffAddFromReserveBaseData = this.increaseStaffAddFromReserveBaseData + e.projectName + '基数' + ':' + e.defaultCardinalNumber + ','
         }
       })
@@ -375,24 +330,24 @@ export default {
     },
 
     insuredProgrammeIdSel(val) {
-      this.increaseStaffAddFromData.insuredProgrammeId = val
+      this.selInsuredScheme.schemeId = val
       const param = {
-        rows: 1000,
+        rows: 10000,
         page: 1,
         schemeId: val
       }
-      this.socialInsuranceBaseFormData.schemeId = val
       let autonomouslyInsurance = {}
       api('hr/SalaryWelfareManagement/insuranceSchemeDetailed', param).then(res => {
         if (res.data.code === '0000') {
           autonomouslyInsurance = res.data.data
-          this.socialInsuranceBaseFormData.schemeName = autonomouslyInsurance.schemeName
+          this.selInsuredScheme.schemeName = autonomouslyInsurance.schemeName
           const insuredSchemeDetailedList = res.data.data.insuredSchemeDetailedList
           this.initInsuranceBase(insuredSchemeDetailedList)
         } else {
           this.$message.error(res.data.result)
         }
       })
+      console.log(this.selInsuredScheme)
     },
 
     // 表格分页功能
@@ -434,7 +389,7 @@ export default {
           api('hr/SalaryWelfareManagement/deleteAttritionPlan', row).then(res => {
             if (res.data.code === '0000') {
               this.$message({
-                message: '删除成功',
+                message: res.data.data,
                 type: 'success'
               })
               if (this.total % this.listQuery.rows === 1) {
@@ -442,7 +397,7 @@ export default {
               }
               this.initList()
             } else {
-              this.$message.error(res.data.result)
+              this.$message.error(res.data.data)
             }
           })
         })
@@ -477,6 +432,18 @@ export default {
               this.increaseStaffAddFormVisible = false
               this.saveIncreaseStaffDisable = false
               this.increaseStaffAddFromData.jobNumber = ''
+              this.checkList = []
+              this.increaseStaffAddFromData = {
+                insuredMonth: '',
+                jobNumber: '',
+                name: '',
+                insuredProgrammeId: '',
+                insuredProgrammeName: ''
+              }
+              this.socialInsuranceBasePageInit = []
+              this.reserveBasePageInit = []
+              this.socialInsuranceBaseData = ''
+              this.increaseStaffAddFromReserveBaseData = ''
               this.initList()
             } else {
               this.$message.error('添加增员计划失败')
@@ -484,7 +451,7 @@ export default {
             }
           })
         } else {
-          this.isDisabled = false
+          this.saveIncreaseStaffDisable = false
         }
       })
     },

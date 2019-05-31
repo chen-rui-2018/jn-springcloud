@@ -200,7 +200,9 @@
         /*  1.app路由要求传参发送人账号fromUser, 接收人账号toUser, 发送人昵称nickName(仅用于对话框显示与xxx在聊天)
          *  2.pc端路由参数可以只有发送人账号fromUser, 因为pc端有联系人列表
          */
-        if (!this.$route.query.fromUser) {
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+        this.param.fromUser = this.$route.query.fromUser || userInfo.account
+        if (!this.param.fromUser) {
           this.$message.error('缺少发送人账号')
           return
         }

@@ -3,6 +3,7 @@ package com.jn.park.api;
 import com.jn.common.model.Result;
 import com.jn.park.care.model.CareParam;
 import com.jn.park.care.model.ServiceEnterpriseCompany;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,6 @@ public interface CareClient {
      *根据企业ID 查询相关联的评论和关注数
      */
     @RequestMapping(value = "/api/care/getCompanyNewList", method = RequestMethod.POST)
-    Result<List<ServiceEnterpriseCompany>> getCompanyNewList(@RequestBody List<ServiceEnterpriseCompany> serviceEnterpriseCompany);
+    List<ServiceEnterpriseCompany> getCompanyNewList(@RequestBody List<ServiceEnterpriseCompany> serviceEnterpriseCompany,@RequestParam("account") String account);
 
 }

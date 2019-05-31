@@ -1,7 +1,7 @@
 <template>
   <div class="editProduct">
     <div class="ordinary_title">
-      <div>编辑招聘</div>
+      <div class="font16">编辑招聘</div>
     </div>
     <div class="ordinary_content">
        <el-form :model="jobForm" :rules="rules" ref="jobForm" label-width="120px" class="postJobInfo">
@@ -152,7 +152,6 @@ this.api.get({
       background-color: #fff;
 
       padding:24px 28px;
-      font-size: 13px;
       border-radius: 5px;
     }
     .ordinary_content{

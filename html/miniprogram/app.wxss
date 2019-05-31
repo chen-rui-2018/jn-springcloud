@@ -142,7 +142,7 @@
 .bg_white{
   background-color: #fff;
 }
-.paddihng{
+.paddihng_side{
   padding-left: 31rpx;
   padding-right: 31rpx;
 }

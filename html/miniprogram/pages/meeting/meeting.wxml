@@ -7,9 +7,15 @@
     会议室列表
   </view>
 </view> -->
-<view class="search" >
-  <text class='icon-search'></text>
-  <input type="text" placeholder="搜索会议室" bindinput="changesearch" name="meetingroom"  />
+
+<view class="search paddihng_side" >
+  <view class="head_scan" bindtap="scan">
+    <text class="icon-scan" ></text> 
+  </view>
+  <view class="searchBox">
+    <text class='icon-search'></text>
+    <input type="text" placeholder="搜索会议室" bindinput="changesearch" name="meetingroom" placeholder-class="center" />
+  </view>
 </view> 
 <view class="meeting_list" >
   <view class="meeting_main"  bindtap="goDetail" 

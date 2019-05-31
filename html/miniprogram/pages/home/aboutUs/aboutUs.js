@@ -1,7 +1,7 @@
 // pages/home/aboutUs/aboutUs.js
 Page({
   data: {
-    url:"https://njbxq.mynatapp.cc/h5/aboutUs/aboutUs",
+    url:"https://njbxq.mynatapp.cc/h5/aboutUs/aboutUs.html",
     isShow:0
   },
   onLoad: function (options) {

@@ -1,17 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { urlSearch } from '../utils'
+import { urlSearch } from '../utils/index'
 
 Vue.use(Router)
 
 const router = new Router({
   routes: [
-    {
-      path: '/investment',
-      name: 'investment',
-      component: () => import('@/views/investment'),
-      meta: {title: '招商引资'}
-    },
+    // {
+    //   path: '/investment',
+    //   name: 'investment',
+    //   component: () => import('@/views/investment'),
+    //   meta: {title: '招商引资'}
+    // },
     {
       path: '/actiDetail',
       name: 'actiDetail',

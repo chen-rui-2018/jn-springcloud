@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import { urlSearch } from '@/util/index'
 Vue.use(Router)
 
-export default new Router({
+const router= new Router({
   // mode: 'history', // require service support 去掉url中的#
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -166,6 +166,22 @@ export default new Router({
               name: 'parkNotice',
             },
             {
+              path: '/corporateInvitation',
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              meta: {
+                title: '企业邀请'
+              },
+              name:'corporateInvitation',
+            },
+            {
+              path: '/institutionInvitation',
+              component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
+              meta: {
+                title: '机构邀请'
+              },
+              name:'institutionInvitation',
+            },
+            {
               path: '/enterpriseOrder',
               component: resolve => require(['@/views/messageCenter/parkNotice'], resolve),
               meta: {
@@ -213,6 +229,7 @@ export default new Router({
           meta: {
             title: '用户中心'
           },
+          name: 'home',
           // redirect: {
           //   name: 'userCenter'
           // },
@@ -1088,3 +1105,12 @@ export default new Router({
     },
   ]
 })
+router.beforeEach((to, from, next) => {
+  const token = urlSearch.token
+  if (token) {
+    sessionStorage.setItem('token', token)
+  }
+  next()
+})
+
+export default router

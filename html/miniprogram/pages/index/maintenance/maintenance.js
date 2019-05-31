@@ -8,9 +8,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    navbarData: {
-      title: '设备列表',
-    },
     equipmentList: []
   },
 

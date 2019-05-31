@@ -1,0 +1,4 @@
+<!--pages/index/declarationNotice/declarationNotice.wxml-->
+<view>
+  <web-view src="{{url}}"></web-view>
+</view>

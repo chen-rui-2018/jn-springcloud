@@ -59,7 +59,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="orgBtn fr mainColor">在线联系</div>
+                    <div class="orgBtn fr mainColor" @click="onlineContact(i.advisorAccount)">在线联系</div>
                 </li>
             </ul>
         </div>
@@ -90,8 +90,19 @@ export default {
   mounted() {
     this.selectIndustryList();
     this.initList()
+     if(this.$route.query.searchData){
+      this.keyWords=this.$route.query.searchData
+      this.initList();
+    }
   },
   methods: {
+    onlineContact(advisorAccount){
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({ path: "chat",query:{fromUser:advisorAccount}});
+    },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
       let num = 0;

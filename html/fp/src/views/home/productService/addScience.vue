@@ -452,7 +452,7 @@ export default {
         }
         .el-form-item__label{
           padding: 0 25px 0 0;
-          line-height:25px;
+          line-height:40px;
         }
        
         .el-select{

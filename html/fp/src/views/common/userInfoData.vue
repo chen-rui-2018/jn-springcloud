@@ -36,21 +36,6 @@
         <div class="imgU" @mouseenter.stop="menuFlag=!menuFlag,showMes=false">
           <img v-if="userInfoData.avatar" :src="userInfoData.avatar" style="vertical-align: middle;">
           <img v-else src="@/../static/img/smaImg.png">
-          <!-- <div class="avaMenu" v-if="menuFlag" @mouseleave="menuFlag=!menuFlag">
-            <el-card class="box-card bxcard">
-              <ul class="avaUL">
-                <li style="border-bottom:1px solid #eee;" @click="$router.push({path:'/home'})">您好,{{accoutInfo}}</li>
-                <li @click="$router.push({path:'/home'})">首页</li>
-                <li @click="$router.push({path:'/userHome'})">用户资料</li>
-                <li @click="$router.push({path:'home/myBusiness/index'})">我的企业</li>
-                <li @click="$router.push({path:'/myBody/index'})">我的机构</li>
-                <li @click="$router.push({path:'/roleCertifications/investorCertification'})">角色认证</li>
-                <li @click="$router.push({path:'/upgradeStaff'})">加入园区</li>
-                <li>...</li>
-                <li style="border-top:1px solid #eee;" @click="loginOut">退出</li>
-              </ul>
-            </el-card>
-          </div> -->
         </div>
       </template>
 
@@ -61,13 +46,13 @@
         <ul class="avaUL">
           <li style="border-bottom:1px solid #eee;color:#333" @click="$router.push({path:'/home'})">您好,{{accoutInfo}}</li>
           <!-- <li class="homeLi" v-for="(i,k) in list" :key="k" :class="{'act':bgFlag==i.name}" @click="$router.push({path:i.path})">{{i.name}}</li> -->
-          <li class="homeLi" @click="$router.push({path:'/home'})">首页</li>
-          <li class="homeLi" @click="$router.push({path:'/userHome'})">用户资料</li>
+          <!-- <li class="homeLi" @click="$router.push({path:'/home'})">首页</li> -->
+          <!-- <li class="homeLi" @click="$router.push({path:'/userHome'})">用户资料</li>
           <li class="homeLi" @click="$router.push({path:'home/myBusiness/index'})">我的企业</li>
           <li class="homeLi" @click="$router.push({path:'/myBody/index'})">我的机构</li>
           <li class="homeLi" @click="$router.push({path:'/roleCertifications/investorCertification'})">角色认证</li>
           <li class="homeLi" @click="$router.push({path:'/upgradeStaff'})">加入园区</li>
-          <li>...</li>
+          <li>...</li> -->
           <li style="border-top:1px solid #eee;" @click="loginOut">退出</li>
         </ul>
       </el-card>
@@ -108,15 +93,33 @@ export default {
   },
   methods: {
     goRoute(i){
-      this.$route.path(this.routePath(i.messageTowSortName))
+      this.$router.push(this.routePath(i.messageTowSortName))
     },
     routePath(p){
       switch(p){
         case '园区通知':
           return '/parkNotice'
         break;
+        case '企业邀请':
+          return '/corporateInvitation'
+        break;
+        case '机构邀请':
+          return '/institutionInvitation'
+        break;
         case '企业订单':
           return '/enterpriseOrder'
+        break;
+        case '信息发布动态':
+          return '/informationDynamics'
+        break;
+        case '缴费提醒':
+          return '/paymentReminder'
+        break;
+        case '访客留言':
+          return '/guestbook'
+        break;
+        case '数据上报提醒':
+          return '/dataReminder'
         break;
       }
     },
@@ -142,6 +145,9 @@ export default {
     },
     //获取消息
      findAllApp() {
+       if(!this.userInfoData){
+         return
+       }
       this.api.get({
         url: "findAllApp",
         data: {
@@ -150,7 +156,7 @@ export default {
           if (res.code == "0000") {
             this.allList=res.data
           } else {
-            this.$message.error(res.result);
+            // this.$message.error(res.result);
           }
         }
       });
@@ -187,7 +193,7 @@ export default {
   }
   .mesage11 {
     position: absolute;
-    right: 60%;
+    right: 50%;
     top: 65px;
     width: 200px;
     color: #999;

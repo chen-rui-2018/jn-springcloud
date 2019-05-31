@@ -169,6 +169,8 @@
         for (const list of arr) {
           if (departmentId === list.departmentId) {
             this.$set(list, 'hasJurisdiction', true)
+          } else {
+            this.$set(list, 'hasJurisdiction', false)
           }
           if (list.hasOwnProperty('children') && list.children.length > 0) {
             this.formatTreeJurisdiction(list.children, departmentId)

@@ -199,12 +199,12 @@ Page({
                 icon: 'success',
                 duration: 1500
               })
-              // 跳转到考勤页面
+              // 跳转到首页
               setTimeout(function () {
-                wx.redirectTo({
+                wx.switchTab({
                   url: '/pages/index/index'
                 })
-              }, 2000)
+              }, 1500)
             } else {
               wx.showToast({
                 title: res.data.result == null ? '验证码错误或验证码已过期' : res.data.result,

@@ -121,6 +121,10 @@ export default {
   mounted() {
     this.selectIndustryList();
     this.initList();
+    if(this.$route.query.searchData){
+      this.keyW=this.$route.query.searchData
+      this.initList();
+    }
   },
   methods: {
     widFun(i) {

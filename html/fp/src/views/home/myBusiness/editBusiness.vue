@@ -268,7 +268,7 @@ export default {
         comWeb: "", //企业官网地址
         avatar: "", //企业logo
         businessLicense: "", //营业执照
-        propagandaPicture: 'ss,ss', //企业宣传图片
+        propagandaPictureList:[], //企业宣传图片
         comSynopsis:'',//公司简介
         mainProducts:'',//主要产品
       },
@@ -351,10 +351,10 @@ export default {
     getCode() {
       let _this = this;
       this.api.get({
-        url: "getCode",
-        data: {
-          phone: _this.businessForm.ownerPhone
-        },
+        url: "getUserCode",
+        // data: {
+        //   phone: _this.businessForm.ownerPhone
+        // },
         callback: function(res) {
           if (res.code == "0000") {
             console.log(res);
@@ -425,6 +425,8 @@ export default {
             _this.businessForm.induType = res.data.induType;
             _this.businessForm.ownerLaw = res.data.ownerLaw;
             _this.businessForm.comTele = res.data.comTele;
+            _this.businessForm.comServer = res.data.comServer;
+            _this.businessForm.comDemand = res.data.comDemand;
             _this.businessForm.runTime = res.data.runTime
             _this.businessForm.comSource = res.data.comSource
             _this.businessForm.unifyCode = res.data.unifyCode;
@@ -435,20 +437,25 @@ export default {
             _this.businessForm.comScale = res.data.comScale;
             _this.businessForm.comType = res.data.comType;
             _this.businessForm.parkBuildName = res.data.parkBuildName;
+            _this.businessForm.affiliatedPark = res.data.affiliatedPark;
             _this.businessForm.foundingTime=res.data.foundingTime
             _this.businessForm.comWeb = res.data.comWeb;
+            _this.businessForm.mainProducts = res.data.mainProducts;
+            _this.businessForm.comSynopsis = res.data.comSynopsis;
             _this.businessForm.avatar = res.data.avatar;
             _this.businessForm.induCode = res.data.induCode;
             // _this.avatarUrl= res.data.avatar
             _this.businessForm.businessLicense = res.data.businessLicense;
-            // _this.businessForm.propagandaPicture = res.data.proImgs;
+            _this.businessForm.propagandaPictureList = res.data.propagandaPicture;
+            console.log(res.data.propagandaPicture)
             if ( res.data.propagandaPicture) {
               let fileListArr = []
               res.data.propagandaPicture.forEach(val => {
+                console.log(val)
                 fileListArr.push({ name: '', url: val })
               })
               // 数组去重
-              this.fileList = Array.from(new Set(fileListArr))
+              _this.fileList = Array.from(new Set(fileListArr))
             }
             _this.businessForm.comProperty = res.data.comProperty;
           }
@@ -514,7 +521,7 @@ export default {
       // console.log(file)
       // console.log(fileList)
       console.log(res)
-      this.businessForm.proImgs.push(res.data)
+      this.businessForm.propagandaPictureList.push(res.data)
     },
     // 预览宣传图片
     handleimgParamsPictureCardPreview(file) {
@@ -526,8 +533,8 @@ export default {
     handleimgParamsRemove(file, fileList) {
       // 删除的
         let editDelFile = file.url
-        let editIndex = this.businessForm.proImgs.indexOf(editDelFile)
-        this.businessForm.proImgs.splice(editIndex, 1)
+        let editIndex = this.businessForm.propagandaPictureList.indexOf(editDelFile)
+        this.businessForm.propagandaPictureList.splice(editIndex, 1)
 
     },
     // beforeUpload(file) {

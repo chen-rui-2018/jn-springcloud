@@ -27,6 +27,7 @@ import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.paybill.api.PayBillClient;
 import com.jn.paybill.model.PaymentBillModel;
@@ -164,6 +165,9 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
                 propagandaSummaries=replaceDetails.length()>100?propagandaSummaries+"......":propagandaSummaries;
                 pShow.setPropagandaSummaries(propagandaSummaries);
             }
+
+            // 处理图片格式
+            pShow.setPosterUrl(IBPSFileUtils.getFilePath(pShow.getPosterUrl()));
         }
         return  new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
     }

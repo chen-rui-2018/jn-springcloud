@@ -19,10 +19,7 @@ import com.jn.enterprise.workflow.task.dao.TaskMapper;
 import com.jn.enterprise.workflow.task.dao.TbWorkflowTaskMapper;
 import com.jn.enterprise.workflow.task.entity.TbWorkflowTask;
 import com.jn.enterprise.workflow.task.enums.EnterpriseWorkFlowTaskStatusEnums;
-import com.jn.enterprise.workflow.task.model.CommonTaskPage;
-import com.jn.enterprise.workflow.task.model.TaskPage;
-import com.jn.enterprise.workflow.task.model.TaskStatistics;
-import com.jn.enterprise.workflow.task.model.TaskType;
+import com.jn.enterprise.workflow.task.model.*;
 import com.jn.enterprise.workflow.task.service.TaskService;
 import com.jn.enterprise.workflow.task.vo.*;
 import com.jn.park.enums.CustomerCenterExceptionEnum;
@@ -67,8 +64,8 @@ public class TaskServiceImpl implements TaskService {
 
         TaskStatistics taskStatistics = new TaskStatistics();
         taskStatistics.setUserId(userId);
-        taskStatistics.setWarnHour(taskStatisticsConfig.getWarn());
-        taskStatistics.setEarlyWarnHour(taskStatisticsConfig.getEarlyWarn());
+        taskStatistics.setWarnPercent(taskStatisticsConfig.getWarn());
+        taskStatistics.setEarlyWarnPercent(taskStatisticsConfig.getEarlyWarn());
 
         List<WarnStatisticsVO> workflowTaskList = taskMapper.getWorkflowTaskStatistics(taskStatistics);
         if (workflowTaskList != null && !workflowTaskList.isEmpty()) {
@@ -170,6 +167,15 @@ public class TaskServiceImpl implements TaskService {
         map.put("ids", ids);
         map.put("account", userAccount);
         taskMapper.deleteBranchByIds(map);
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取时效性待办列表")
+    public List<TaskListVO> getWorkflowTaskList(TimelinessTaskParam timelinessTaskParam) {
+        timelinessTaskParam.setStatus(EnterpriseWorkFlowTaskStatusEnums.TASK_TO_DO.getCode());
+        timelinessTaskParam.setWarnPercent(taskStatisticsConfig.getWarn());
+        timelinessTaskParam.setEarlyWarnPercent(taskStatisticsConfig.getEarlyWarn());
+        return taskMapper.getWorkflowTaskList(timelinessTaskParam);
     }
 
     @Override

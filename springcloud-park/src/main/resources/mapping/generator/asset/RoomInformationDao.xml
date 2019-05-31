@@ -68,7 +68,7 @@
             ti.id,
             ti.order_id as orderId,
             ti.room_id as roomId,
-            ti.room_name AS roomName,
+            ti.room_name AS name,
             ti.floor as floor,
             ti.tower_id as towerId,
             ti.tower_name as towerName,

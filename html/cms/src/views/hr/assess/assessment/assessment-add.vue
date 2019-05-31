@@ -22,7 +22,7 @@
         <!--最后子节点支持多选  only-last="true" -->
 
         <multi-cascader-ext ref="assessmentObjectRef" v-model="assessment.assessmentObjectList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 620px" @change="assessmentObjectSel"/>
-	
+
       </el-form-item>
       <el-form-item label="考核人" prop="assessmentPeople" class="inline">
         <!--<el-cascader-multi ref="assessmentPeopleRef" v-model="assessment.assessmentPeopleList" :data="deptEmployeeList" :show-leaf-label="true" only-last="true" style="width: 620px" @change="assessmentPeopleSel"/>-->

@@ -19,6 +19,7 @@ import com.jn.enterprise.technologyfinancial.investors.entity.*;
 import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
@@ -120,7 +121,16 @@ public class InvestorServiceImpl implements InvestorService {
                     investorInfoListParam.getRows() == 0 ? 15 : investorInfoListParam.getRows(), true);
         }
         List<InvestorInfoListShow> investorInfoList = investorMapper.getInvestorInfoList(investorInfoListParam.getMainCode(), investorInfoListParam.getKeyWords());
-        return new PaginationData(investorInfoList, objects == null ? 0 : objects.getTotal());
+
+        // 处理图片格式
+        List<InvestorInfoListShow> investorInfoListAvatar = new ArrayList<>();
+        if (investorInfoList != null && !investorInfoList.isEmpty()) {
+            for (InvestorInfoListShow infoListShow : investorInfoList) {
+                infoListShow.setAvatar(IBPSFileUtils.getFilePath(infoListShow.getAvatar()));
+                investorInfoListAvatar.add(infoListShow);
+            }
+        }
+        return new PaginationData(investorInfoListAvatar, objects == null ? 0 : objects.getTotal());
     }
 
     /**
@@ -139,7 +149,12 @@ public class InvestorServiceImpl implements InvestorService {
             throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_INFO_NOT_EXIST);
         }
         InvestorBaseInfoShow investorBaseInfoShow=new InvestorBaseInfoShow();
-        BeanUtils.copyProperties(tbServiceInvestorList.get(0), investorBaseInfoShow);
+
+        // 处理图片格式
+        TbServiceInvestor tbServiceInvestor = tbServiceInvestorList.get(0);
+        tbServiceInvestor.setAvatar(IBPSFileUtils.getFilePath(tbServiceInvestor.getAvatar()));
+        BeanUtils.copyProperties(tbServiceInvestor, investorBaseInfoShow);
+
         //设置投资人基本信息
         investorInfoDetailsVo.setInvestorBaseInfoShow(investorBaseInfoShow);
         //投资人主投领域
@@ -375,6 +390,10 @@ public class InvestorServiceImpl implements InvestorService {
             investorInfoWorkFlow.setTb_service_investor_edu_exp(eduExpList);
         }
         logger.info("投资人认证信息：{}",investorInfoWorkFlow.toString());
+
+        // 处理图片格式
+        investorInfoWorkFlow.setAvatar(IBPSFileUtils.uploadFile2Json(investorAccount, investorInfoWorkFlow.getAvatar()));
+
         //启动工作流
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(investorProcessId, investorAccount, investorInfoWorkFlow);
         String okStatus="200";

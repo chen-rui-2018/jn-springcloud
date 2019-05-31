@@ -41,6 +41,7 @@ public class CompanyController extends BaseController {
     @Autowired
     private CompanyService companyService;
 
+
     @ControllerLog(doAction = "查询企业列表")
     @ApiOperation(value = "查询企业列表")
     @RequestMapping(value = "/getCompanyList",method = RequestMethod.GET)
@@ -52,7 +53,8 @@ public class CompanyController extends BaseController {
     @ApiOperation(value = "查询企业列表-新版")
     @RequestMapping(value = "/getCompanyNewList",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceEnterpriseCompany>>> getCompanyNewList(@Validated ServiceEnterpriseParam serviceEnterpriseParam){
-        return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam));
+        User user =(User) SecurityUtils.getSubject().getPrincipal();
+        return new Result<>(companyService.getCompanyNewList(serviceEnterpriseParam,user.getAccount()));
     }
 
     @ControllerLog(doAction = "查询企业详情-新版")

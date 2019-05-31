@@ -36,7 +36,7 @@ public interface CompanyService {
      * @param serviceEnterpriseParam
      * @return
      */
-    PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam);
+    PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam,String account);
 
 
     /**

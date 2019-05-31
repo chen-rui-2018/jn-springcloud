@@ -222,7 +222,7 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
             throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.NETWORK_ANOMALY);
         }
         logger.info("注册并绑定Api绑定成功，数据响应条数：{}",resNum);
-        return registerInfoParam.getPhone();
+        return systemClientUser.getData().getAccount();
     }
 
     /**

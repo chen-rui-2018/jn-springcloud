@@ -408,6 +408,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         Assert.notNull(account,UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
         Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
         cache.remove(account);
+        logger.info("[删除redis中的用户信息] 缓存已删除，account：{}", account);
         return true;
     }
 

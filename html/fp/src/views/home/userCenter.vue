@@ -34,9 +34,9 @@
         slotContent
         type="primary"
       >
-        <div>
+        <div v-if="messageData.company.data.messageConnect && messageData.company.data.messageConnect.comId">
           {{ messageData.company.data.messageContent }}邀请您加入他们的企业，点击
-          <router-link :to="`/myBusiness/businesInvitation?${messageData.company.data.messageConnect}`" style="color: #00a041;">查看详情</router-link>。
+          <router-link :to="`/myBusiness/businesInvitation?comId=${messageData.company.data.messageConnect.comId}&comName=${messageData.company.data.messageConnect.comName}`" style="color: #00a041;">查看详情</router-link>。
         </div>
       </notice>
       <router-link to="">
@@ -54,9 +54,9 @@
         type="primary"
         slotContent
       >
-        <div>
+        <div v-if="messageData.organization.data.messageConnect && messageData.organization.data.messageConnect.comId">
           {{ messageData.organization.data.messageContent }}邀请您加入他们机构的顾问，点击
-          <router-link :to="`/myBody/acceptInvitation?${messageData.organization.data.messageConnect}`" style="color: #00a041;">查看详情</router-link>。
+          <router-link :to="`/myBody/acceptInvitation?comId=${messageData.organization.data.messageConnect.comId}&comName=${messageData.organization.data.messageConnect.comName}`" style="color: #00a041;">查看详情</router-link>。
         </div>
       </notice>
       <router-link to="/myBody/counselorManagement">
@@ -229,7 +229,12 @@
             },
             callback: (res) => {
               if (res.code === "0000") {
-                this.messageData[key].data = res.data && res.data.rows && res.data.rows.length > 0 ? res.data.rows[0] : {}
+                if (res.data && res.data.rows && res.data.rows.length > 0) {
+                  this.messageData[key].data = res.data.rows[0]
+                  this.messageData[key].data.messageConnect = JSON.parse(this.messageData[key].data.messageConnect)
+                } else {
+                  this.messageData[key].data = {}
+                }
               } else {
                 this.$message.error(res.result)
               }

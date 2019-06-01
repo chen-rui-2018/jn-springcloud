@@ -65,6 +65,9 @@
         if (this.formData.modelType === 1 && !this.formData.departmentId) {
           return true
         }
+        if (this.departmentStatus === 0) {
+          return true
+        }
       }
     },
     data() {
@@ -76,8 +79,10 @@
         loadingTab: true,
         formDataListTitle: [{
           departmentName: '全部',
-          departmentId: null
+          departmentId: null,
+          status: 0
         }],
+        departmentStatus: '',
         formData: {},
         columns: [ // 表头
           {
@@ -192,33 +197,36 @@
         }
       },
       changeDepartment(el) {
+        this.loadingTab = true
         // 表格中有来自不同部门的指标，tab查看指定部门时，不属于该部门的是没有权限填报的，所以根据填报格式的部门id和当前部门的id比对来设置权限
         const index = Number(el.index)
         const departmentId = this.formDataListTitle[index].departmentId
+        this.departmentStatus = this.formDataListTitle[index].status
         this.formData.departmentId = departmentId
         this.getDepartmentJurisdiction(departmentId)
-        this.loadingTab = false
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.loadingTab = false
+          }, 1)
+        })
       },
       getDepartmentJurisdiction(departmentId) {
         //  如果是园区报表，等待填报格式合成完毕再给指标树加上权限控制
         for (const tab of this.formData.tabs) {
           this.$set(tab, 'needFilled', false)
-          this.formatTreeJurisdiction(tab.targetList, departmentId, tab)
+          this.formatTreeJurisdiction(tab.targetList, departmentId)
         }
       },
-      formatTreeJurisdiction(arr, departmentId, tab) {
+      formatTreeJurisdiction(arr, departmentId) {
         // 填报格式设置权限字段
         for (const list of arr) {
-          if (departmentId === list.departmentId) {
+          if (departmentId === list.departmentId && this.departmentStatus !== 0) {
             this.$set(list, 'hasJurisdiction', true)
-            if (!tab.needFilled) {
-              this.$set(tab, 'needFilled', true)
-            }
           } else {
             this.$set(list, 'hasJurisdiction', false)
           }
           if (list.hasOwnProperty('children') && list.children.length > 0) {
-            this.formatTreeJurisdiction(list.children, departmentId, tab)
+            this.formatTreeJurisdiction(list.children, departmentId)
           }
         }
       },
@@ -456,13 +464,15 @@
                 if (_this.formData.modelType === 1) {
                   const gardenFiller = _this.formData.gardenFiller
                   const departmentId = _this.formDataListTitle[0].departmentId
+                  const departmentStatus = _this.formDataListTitle[0].status
                   if (gardenFiller) {
                     _this.formDataListTitle = _this.formDataListTitle.concat(gardenFiller)
                   }
                   for (const tab of  _this.formData.tabs) {
                     _this.$set(tab, 'needFilled', false)
-                    _this.formatTreeJurisdiction(tab.targetList, departmentId, tab)
+                    _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
+                  _this.departmentStatus = departmentStatus
                   _this.formData.departmentId = departmentId
                 }
                 resolve()

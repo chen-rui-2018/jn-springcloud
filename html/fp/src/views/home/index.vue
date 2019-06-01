@@ -38,6 +38,7 @@
 </template>
 <script>
 import $ from "jquery";
+import api from '@/util/api'
 import SidebarItem from './common/SidebarItem'
 import { isMobile } from "@/util";
 import bus from "@/util/bus";
@@ -88,30 +89,34 @@ export default {
   //       }, 0);
   //   }
   // },
-  created() {
+  beforeRouteEnter(to, from, next) {
     bus.$on("getUserinfoF", res => {
       this.getUserExtension();
     });
-    var token=sessionStorage.token
-     this.api.post({
-        url: "getDynamicMenu",
-        headers: { token: token },
-        callback: res => {
-          if (res.code == "0000") {
-            console.log(res.data)
-            res.data.forEach(val=>{
-              if(val.label==='门户'){
-                this.menuItems=val.children[0].children
-                sessionStorage.menuItems= JSON.stringify(this.menuItems)
-              }
-            })
-            console.log(this.menuItems)
-          } else {
-            this.$message.error(res.result);
-          }
-        }
-      });
+    let token=sessionStorage.token
+    api.post({
+      url: "getDynamicMenu",
+      headers: { token: token },
+      callback: res => {
+        if (res.code === "0000") {
+          res.data.forEach(val=>{
+            if(val.label==='门户'){
+              let menuItems = val.children[0].children
+              sessionStorage.menuItems= JSON.stringify(menuItems)
+              console.log(menuItems)
+              next(vm => {
+                vm.menuItems = menuItems
+                }
 
+              )
+            }
+          })
+
+        } else {
+          this.$message.error(res.result);
+        }
+      }
+    });
   },
   mounted() {
     this.getUserExtension();

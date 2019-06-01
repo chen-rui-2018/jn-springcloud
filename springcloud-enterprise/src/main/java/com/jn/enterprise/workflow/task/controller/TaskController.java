@@ -78,12 +78,11 @@ public class TaskController extends BaseController {
     @ApiOperation(value = "查询时效性待办列表（百分比）", notes = "查询时效性待办列表")
     @PostMapping(value = "/getWorkflowTaskList")
     @RequiresPermissions("/enterprise/workflow/task/getWorkflowTaskList")
-    public Result<PaginationData<List<TaskListVO>>> getWorkflowTaskList(@Validated @RequestBody TimelinessTaskParam taskParam) {
+    public Result<List<TaskListVO>> getWorkflowTaskList(@Validated @RequestBody TimelinessTaskParam taskParam) {
         User user = checkUserValid();
         taskParam.setUserId(user.getId());
-        Page<Object> objects = PageHelper.startPage(taskParam.getPage(), taskParam.getRows());
         List<TaskListVO> workflowTaskList = taskService.getWorkflowTaskList(taskParam);
-        return new Result(new PaginationData(workflowTaskList, objects.getTotal()));
+        return new Result(workflowTaskList);
     }
 
     @ControllerLog(doAction = "查询常规待办事项")

@@ -1,11 +1,9 @@
 <template>
-  <div class="actiList">
+  <div class="registrationChecklist">
     <el-row type="flex" justify="space-between">
-      <el-col :span="16"/>
-      <el-col :span="8">
+      <el-col :span="18"/>
+      <el-col :span="6">
         <div class="grid-content bg-purple-light">
-          <el-button v-if="$route.query.applyCheck == '1'" class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button>
-          <el-button class="filter-item" type="primary" round @click="handleRegistration">下载签到二维码</el-button>
           <el-button class="filter-item" type="primary" round @click="handleExport">导出Excel</el-button>
           <el-button class="filter-item" type="primary" round @click="handleReturn">返回</el-button>
         </div>
@@ -69,19 +67,18 @@
             <td>{{ i.company }}</td>
             <td>{{ i.post }}</td>
             <td>{{ i.phone }}</td>
-            <td>
+            <!-- <td>
               <template>
                 <span v-if="i.signStatus==='0'">未签到</span>
                 <span v-if="i.signStatus==='1'">已签到</span>
               </template>
-            </td>
+            </td> -->
             <td>
               <template>
                 <el-button
-                  v-if="i.signStatus==='0'"
                   type="text"
                   class="operation"
-                  @click="handleSign(i)">签到
+                  @click="handleSign(i)">允许报名
                 </el-button>
               </template>
             </td>
@@ -128,11 +125,6 @@ export default {
       },
       tableHeadArr: [
         {
-          name: '序列',
-          inputFlag: false,
-          inputCheck: false
-        },
-        {
           name: '姓名',
           inputFlag: true,
           inputCheck: false
@@ -163,11 +155,6 @@ export default {
           inputCheck: false
         },
         {
-          name: '状态',
-          inputFlag: false,
-          inputCheck: false
-        },
-        {
           name: '操作',
           inputFlag: false,
           inputCheck: false
@@ -179,9 +166,6 @@ export default {
     this.getApplyActivityList()
   },
   methods: {
-    ApproveApplicant() {
-      this.$router.push({ path: `registrationChecklist` })
-    },
     getApplyActivityList() {
       this.actiList.activityId = this.$route.query.id
       api(`${this.GLOBAL.parkUrl}activity/applyActivityList`, this.actiList, 'post').then(res => {
@@ -231,10 +215,10 @@ export default {
       const data = {
         applyId: i.id
       }
-      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend`, data, 'post').then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityCheck`, data, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
+          this.$message('审批完成')
           this.getApplyActivityList()
-          this.$message(res.data.result)
         } else {
           this.$message(res.data.result)
         }

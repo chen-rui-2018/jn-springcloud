@@ -1,5 +1,6 @@
 package com.jn.enterprise.company.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
@@ -157,6 +158,7 @@ public class CompanyServiceImpl implements CompanyService {
         for (TbServiceCompany t:tbServiceCompanies) {
             ServiceCompany company = new ServiceCompany();
             BeanUtils.copyProperties(t,company);
+            company = setCompanyInfo(company);
 
             // 处理图片格式
             List<String> filePathList = IBPSFileUtils.getFilePath2List(t.getPropagandaPicture());
@@ -192,6 +194,7 @@ public class CompanyServiceImpl implements CompanyService {
         TbServiceCompany tbServiceCompany = tbServiceCompanies.get(0);
         ServiceCompany company = new ServiceCompany();
         BeanUtils.copyProperties(tbServiceCompany, company);
+        company = setCompanyInfo(company);
 
         // 处理图片格式
         company.setAvatar(IBPSFileUtils.getFilePath(tbServiceCompany.getAvatar()));
@@ -200,22 +203,6 @@ public class CompanyServiceImpl implements CompanyService {
         if (filePathList != null && !filePathList.isEmpty()) {
             String[] strings = new String[filePathList.size()];
             company.setPropagandaPicture(filePathList.toArray(strings));
-        }
-
-        //查询企业字段数据
-        TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
-        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
-        if(StringUtils.isNotEmpty(tbServiceCompany.getComProperty())){
-            for (TbServicePrefer prefer: tbServicePrefers) {
-                // 行业领域
-                if(StringUtils.equals(prefer.getId(),tbServiceCompany.getInduType())){
-                    company.setInduTypeName(prefer.getPreValue());
-                }
-                // 企业性质
-                if(StringUtils.equals(tbServiceCompany.getComProperty(), prefer.getId())){
-                    company.setComPropertyName(prefer.getPreValue());
-                }
-            }
         }
 
         if(null != tbServiceCompany.getFoundingTime()){
@@ -239,8 +226,6 @@ public class CompanyServiceImpl implements CompanyService {
         if(null != tbServiceCompany.getModifiedTime()){
             company.setModifiedTime(DateUtils.formatDate(tbServiceCompany.getModifiedTime(),PATTERN_DETAIL));
         }
-
-
         return company;
     }
 
@@ -254,10 +239,13 @@ public class CompanyServiceImpl implements CompanyService {
             careParam.setCurrentAccount(currentAccount);
             Result companyCareInfo = careClient.findCompanyCareInfo(careParam);
             if(null != companyCareInfo && null != companyCareInfo.getData()){
-                CareUserDetails data = (CareUserDetails)companyCareInfo.getData();
-                companyDetailByAccountOrId.setCareUserDetails(data);
+                Object object = companyCareInfo.getData();
+                ObjectMapper objectMapper = new ObjectMapper();
+                CareUserDetails careUserDetails = objectMapper.convertValue(object, CareUserDetails.class);
+                companyDetailByAccountOrId.setCareUserDetails(careUserDetails);
             }
         }
+        companyDetailByAccountOrId = setCompanyInfo(companyDetailByAccountOrId);
         return companyDetailByAccountOrId;
     }
 
@@ -477,4 +465,27 @@ public class CompanyServiceImpl implements CompanyService {
         return companyContact;
     }
 
+
+    /**
+     * 设置企业性质，行业领域名称
+     * @param company
+     */
+    private ServiceCompany setCompanyInfo (ServiceCompany company) {
+        //查询企业字段数据
+        TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
+        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
+        if(StringUtils.isNotEmpty(company.getComProperty())){
+            for (TbServicePrefer prefer: tbServicePrefers) {
+                // 行业领域
+                if(StringUtils.equals(prefer.getId(), company.getInduType())){
+                    company.setInduTypeName(prefer.getPreValue());
+                }
+                // 企业性质
+                if(StringUtils.equals(company.getComProperty(), prefer.getId())){
+                    company.setComPropertyName(prefer.getPreValue());
+                }
+            }
+        }
+        return company;
+    }
 }

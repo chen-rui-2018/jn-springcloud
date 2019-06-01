@@ -1,6 +1,5 @@
 package com.jn.enterprise.workflow.task.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,14 +14,14 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "TimelinessTaskParam", description = "时效性事项任务入参")
-public class TimelinessTaskParam extends Page implements Serializable {
+public class TimelinessTaskParam implements Serializable {
 
     @ApiModelProperty(value = "事项状态：1：待办、2：已办" , hidden = true)
     @Pattern(regexp = "^[12]$", message = "事项状态校检错误")
     private String status;
 
     @ApiModelProperty(value = "事项分类（1：数据上报 2：综合缴费 3：综合租赁）")
-    @Pattern(regexp = "^[1-3]$", message = "事项分类校检错误")
+    @Pattern(regexp = "^[1-3]|\\s*$", message = "事项分类校检错误")
     private String type;
 
     @ApiModelProperty(value = "用户id'", hidden = true)

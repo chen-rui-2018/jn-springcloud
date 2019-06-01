@@ -129,4 +129,10 @@ public class UserExtensionController extends BaseController implements UserExten
         return new Result(paginationData);
     }
 
+    @Override
+    @ControllerLog(doAction = "删除redis用户信息缓存")
+    public void removeUserExtensionRedis(@RequestBody String account) {
+        userInfoService.updateRedisUserInfo(account);
+    }
+
 }

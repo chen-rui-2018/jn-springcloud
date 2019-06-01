@@ -118,69 +118,89 @@
     <!-- 获取时效性待办列表 -->
     <select id="getWorkflowTaskList" resultType="com.jn.enterprise.workflow.task.vo.TaskListVO">
         SELECT
-            d.id,
-            d.userId,
-            d.userName,
-            d.title,
-            d.type,
-            d.createdTime,
-            d.endTime,
-            d.linkType,
-            d.linkUrl,
-            d.describes,
-            d.status,
-            d.totalDay,
-            d.subDay,
-            d.percent,
-            <![CDATA[
-            CASE WHEN d.subDay >= 0 THEN '0' ELSE '1' END AS "taskStatus",
-            CASE
-                WHEN d.percent <= #{warnPercent} THEN '2'
-                WHEN #{warnPercent} < d.percent and d.percent <= #{earlyWarnPercent} THEN '1'
-            ELSE '0' END AS "taskWarnStatus"
-            ]]>
+            x.id,
+            x.userId,
+            x.userName,
+            x.title,
+            x.type,
+            x.createdTime,
+            x.endTime,
+            x.linkType,
+            x.linkUrl,
+            x.describes,
+            x.status,
+            x.totalDay,
+            x.subDay,
+            x.percent,
+            x.taskStatus,
+            x.taskWarnStatus
         FROM (
             SELECT
-                b.id,
-                b.userId,
-                b.userName,
-                b.title,
-                b.type,
-                b.createdTime,
-                b.endTime,
-                b.linkType,
-                b.linkUrl,
-                b.describes,
-                b.status,
-                b.totalDay,
-                b.subDay,
-                ROUND(b.subDay / b.totalDay , 2) * 100 AS "percent"
+                d.id,
+                d.userId,
+                d.userName,
+                d.title,
+                d.type,
+                d.createdTime,
+                d.endTime,
+                d.linkType,
+                d.linkUrl,
+                d.describes,
+                d.status,
+                d.totalDay,
+                d.subDay,
+                d.percent,
+                <![CDATA[
+                CASE WHEN d.subDay >= 0 THEN '0' ELSE '1' END AS "taskStatus",
+                CASE
+                    WHEN d.percent <= #{warnPercent} THEN '2'
+                    WHEN #{warnPercent} < d.percent and d.percent <= #{earlyWarnPercent} THEN '1'
+                ELSE '0' END AS "taskWarnStatus"
+                ]]>
             FROM (
                 SELECT
-                    a.id AS "id",
-                    a.user_id AS "userId",
-                    a.user_name AS "userName",
-                    a.title AS "title",
-                    a.type AS "type",
-                    a.created_time AS "createdTime",
-                    a.end_time AS "endTime",
-                    a.link_type AS "linkType",
-                    a.link_url AS "linkUrl",
-                    a.describes AS "describes",
-                    a.status AS "status",
-                    DATEDIFF(a.end_time,a.created_time) AS "totalDay",
-                    DATEDIFF(a.end_time,CURDATE()) AS "subDay"
-                FROM tb_workflow_task a
-                WHERE a.record_status = 1
-                AND a.user_id = #{userId}
-                <if test="type != null and type != ''">
-                    AND a.type = #{type}
-                </if>
-                <if test="status != null and status != ''">
-                    AND a.status = #{status}
-                </if>
-            ) b
-        ) d
+                    b.id,
+                    b.userId,
+                    b.userName,
+                    b.title,
+                    b.type,
+                    b.createdTime,
+                    b.endTime,
+                    b.linkType,
+                    b.linkUrl,
+                    b.describes,
+                    b.status,
+                    b.totalDay,
+                    b.subDay,
+                    ROUND(b.subDay / b.totalDay , 2) * 100 AS "percent"
+                FROM (
+                    SELECT
+                        a.id AS "id",
+                        a.user_id AS "userId",
+                        a.user_name AS "userName",
+                        a.title AS "title",
+                        a.type AS "type",
+                        a.created_time AS "createdTime",
+                        a.end_time AS "endTime",
+                        a.link_type AS "linkType",
+                        a.link_url AS "linkUrl",
+                        a.describes AS "describes",
+                        a.status AS "status",
+                        DATEDIFF(a.end_time,a.created_time) AS "totalDay",
+                        DATEDIFF(a.end_time,CURDATE()) AS "subDay"
+                    FROM tb_workflow_task a
+                    WHERE a.record_status = 1
+                    AND a.user_id = #{userId}
+                    <if test="type != null and type != ''">
+                        AND a.type = #{type}
+                    </if>
+                    <if test="status != null and status != ''">
+                        AND a.status = #{status}
+                    </if>
+                ) b
+            ) d
+        ) x
+        ORDER BY x.taskStatus DESC, x.taskWarnStatus DESC, x.endTime
     </select>
 
     <update id="deleteBranchByIds" parameterType="java.util.Map">

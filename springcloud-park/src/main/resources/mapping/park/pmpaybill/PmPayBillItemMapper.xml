@@ -64,6 +64,16 @@
                     when id=#{item.id} then #{item.sendPayBill}
                 </foreach>
             </trim>
+            <trim prefix="generate_status =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then #{item.generateStatus}
+                </foreach>
+            </trim>
+            <trim prefix="derate_state =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then #{item.derateState}
+                </foreach>
+            </trim>
         </trim>
         where id in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">

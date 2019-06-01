@@ -75,9 +75,10 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         String affiliateCode= userExtension.getData().getAffiliateCode();
         String companyCode= userExtension.getData().getCompanyCode();
 
-        if(StringUtils.isBlank(affiliateCode) || StringUtils.isBlank(companyCode)){
+        if(StringUtils.isBlank(affiliateCode) && StringUtils.isBlank(companyCode)){
             throw new JnSpringCloudException(UserCenterExceptionEnum.IS_ENTERPRISE_OR_ORGANIZATION_USER_NOT_LOOK);
         }
+
         //查询
         EmployeeRequisitionModel emodel=userCenterIndexDao.findEmployeeRequisition(user.getAccount());
 

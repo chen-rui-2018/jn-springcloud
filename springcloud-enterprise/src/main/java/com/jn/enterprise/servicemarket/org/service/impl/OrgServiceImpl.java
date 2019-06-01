@@ -2,21 +2,17 @@ package com.jn.enterprise.servicemarket.org.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.google.gson.Gson;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.CallOtherSwaggerUtils;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
-import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.model.ServiceOrg;
-import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
@@ -26,35 +22,31 @@ import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
+import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
 import com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria;
 import com.jn.enterprise.servicemarket.require.dao.TbServiceRequireMapper;
-import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria;
 import com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapper;
 import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.api.ActivityClient;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
-import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.UserExtensionInfo;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.text.ParseException;
 import java.util.*;
@@ -154,7 +146,17 @@ public class OrgServiceImpl implements OrgService {
         }
         orgParameter.setCompanyList(sList);
         List<ServiceOrg> serviceOrg = orgMapper.selectServiceOrgList(orgParameter);
-        PaginationData<List<ServiceOrg>> data = new PaginationData(serviceOrg, objects.getTotal());
+
+        // 处理图片格式
+        List<ServiceOrg> serviceOrgResult = new ArrayList<>();
+        if (serviceOrg != null && !serviceOrg.isEmpty()) {
+            for (ServiceOrg serOrg : serviceOrg) {
+                serOrg.setOrgLogo(IBPSFileUtils.getFilePath(serOrg.getOrgLogo()));
+                serviceOrgResult.add(serOrg);
+            }
+        }
+
+        PaginationData<List<ServiceOrg>> data = new PaginationData(serviceOrgResult, objects.getTotal());
         return data;
     }
 
@@ -165,6 +167,9 @@ public class OrgServiceImpl implements OrgService {
         if(null == serviceOrgDetailVo){
             throw new JnSpringCloudException(OrgExceptionEnum.ORG_IS_NOT_EXIT);
         }
+
+        // 处理图片格式
+        serviceOrgDetailVo.setOrgLogo(IBPSFileUtils.getFilePath(serviceOrgDetailVo.getOrgLogo()));
         return serviceOrgDetailVo;
     }
 
@@ -547,6 +552,10 @@ public class OrgServiceImpl implements OrgService {
         tbServiceOrgCopy.setTb_service_org_team(tbServiceOrgTeamCopies);
         //将id设置为空
         tbServiceOrgCopy.setOrgId(null);
+
+        // 处理图片格式
+        tbServiceOrgCopy.setOrgLogo(IBPSFileUtils.uploadFile2Json(account, tbServiceOrgCopy.getOrgLogo()));
+
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(orgProcessId, account, tbServiceOrgCopy);
         String okStatus="200";
         //启动工作流成功

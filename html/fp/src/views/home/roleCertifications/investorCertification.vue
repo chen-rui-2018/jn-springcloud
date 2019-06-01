@@ -182,7 +182,7 @@
       </div>
       <div v-show="submitBtn" class="footer ct">
         <el-button size="mini" class="mainColor accept" :disabled='disabled' @click="submit('investorForm')">提交</el-button>
-        <el-button size="mini" type="success">返回</el-button>
+        <!-- <el-button size="mini" type="success">返回</el-button> -->
       </div>
     </el-main>
   </div>
@@ -235,7 +235,7 @@ export default {
         orgId: "",
         personalProfile: "",
         position: "",
-        sex: "",
+        sex: '1',
         investorName: "",
         invesFinanExper: "",
         avatar: "",
@@ -691,6 +691,7 @@ export default {
         url: "getAffiliationUnit",
         data: { needPage: "0" },
         callback: res => {
+          console.log(res)
           if (res.code == "0000") {
             this.orgOptions = res.data.rows;
           } else {

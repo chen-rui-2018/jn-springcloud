@@ -87,7 +87,7 @@
         </el-form-item>
         <el-form-item label="宣传海报:">
           <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+          :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers"
  :show-file-list="false"
             :on-success="handleAvatarSuccess"
@@ -153,6 +153,7 @@
 export default {
   data() {
     return {
+       baseUrl:this.api.host,
       priceIndex: undefined,
       index: undefined,
       headers: {
@@ -463,7 +464,7 @@ export default {
 }
 .price {
   display: inline-block;
-  margin-right: 46px;
+  margin-right:40px;
   width: 85px;
   height: 85px;
   cursor: pointer;
@@ -504,7 +505,7 @@ border:1px solid rgba(65,215,135,1);
      width: 85px;
     height: 85px;
     line-height: 85px;
-    border: 1px dashed #c0ccda;
+    // border: 1px dashed #c0ccda;
     border-radius: 6px;
     >i{
       font-size: 28px;

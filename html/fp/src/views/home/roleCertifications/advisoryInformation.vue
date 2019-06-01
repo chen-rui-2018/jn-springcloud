@@ -1,11 +1,13 @@
 <template>
   <div class="advisoryInformation">
     <div class="advisory_title font16">
-      <div>顾问资料填写</div>
+      <div>顾问资料</div>
     </div>
 
     <div class="advisory_content">
-      <div class="enterprise">基本信息 <span class="cancel" @click="cancelBasic" v-if="!isShow">取&nbsp;消</span><span @click="editBasic('basicForm')">
+      <div class="enterprise">基本信息
+        <span class="cancel" @click="cancelBasic" v-if="!isShow">取&nbsp;消</span>
+      <span @click="editBasic('basicForm')" v-show="isConceal!==1" >
           <i class="el-icon-edit-outline"></i>&nbsp;{{basicText}}</span></div>
       <el-form class="tableEnterprise marBtn"  v-if="isShow">
         <div style="display:flex">
@@ -77,7 +79,7 @@
         </el-form-item>
       </el-form>
       <div class="enterprise">荣誉资质 <span class="cancel" @click="cancelHonorData" v-if="isShowEdit">取&nbsp;消</span><span
-          @click="addCertificate('certificateForm')"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span> </div>
+          @click="addCertificate('certificateForm')" v-show="isConceal!==1"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span> </div>
       <div class="marBtn" v-if="!isShowEdit">
         <el-table :data="honorData" style="width: 100%">
           <el-table-column prop="certificateName" align="center" label="证书名称">
@@ -133,7 +135,7 @@
 
       </el-form>
       <div class="enterprise">服务经历 <span class="cancel" @click="cancelExperienceList" v-if="isShowExperienceList">取&nbsp;消</span><span
-          @click="addExperienceList('experienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editExperienceList}}</span>
+          @click="addExperienceList('experienceListForm')" v-show="isConceal!==1"> <i class="el-icon-plus"></i>&nbsp;{{editExperienceList}}</span>
       </div>
       <div class="marBtn" v-if="!isShowExperienceList">
         <el-table :data="serviceExperienceList" style="width: 100%">
@@ -167,7 +169,7 @@
 
       </el-form>
       <div class="enterprise">项目经验<span class="cancel" @click="cancelProjectExperienceList" v-if="isShowProjectExperienceList">取&nbsp;消</span><span
-          @click="addProjectExperienceList('projectExperienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editProjectExperienceList}}</span></div>
+          @click="addProjectExperienceList('projectExperienceListForm')" v-show="isConceal!==1"> <i class="el-icon-plus"></i>&nbsp;{{editProjectExperienceList}}</span></div>
       <div class="marBtn" v-if="!isShowProjectExperienceList">
         <el-table :data="serviceProjectExperienceList" style="width: 100%">
           <el-table-column prop="projectName" align="center" label="项目名称">
@@ -205,11 +207,11 @@
         </el-form-item>
       </el-form>
       <div class="footer ct" v-show="showBtn">
-        <el-button size="mini" @click="acceptInvitation" :disabled="disabled" class="mainColor accept">发送申请</el-button>
+        <el-button size="mini" v-show="isConceal!==1" @click="acceptInvitation" :disabled="disabled" class="mainColor accept">发送申请</el-button>
       </div>
 
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="50%">
+    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
       <img :src="certificatePhoto" alt="图片" style="width:100%">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
@@ -235,6 +237,7 @@ export default {
         }
       }
     return {
+      isConceal:undefined,
       showBtn:true,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -372,18 +375,13 @@ export default {
     this.getBusinessAreas();
     this.getCertificateTypeList();
   },
-  beforeRouteEnter (to, from, next) {
-  next(vm => {
-    // 通过 `vm` 访问组件实例
-  })
-},
   methods: {
     //发送申请
     acceptInvitation() {
-      if(!this.basicForm.businessArea){
-          this.$message.error('请先选择基本信息里的业务领域在发送申请');
-          return
-      }
+      // if(!this.basicForm.businessArea){
+      //     this.$message.error('请先选择基本信息里的业务领域在发送申请');
+      //     return
+      // }
       this.$router.push({ path: "/home" });
     },
     // 新增项目经验
@@ -655,13 +653,17 @@ export default {
     },
     init() {
       let query = this.$route.query;
+      this.isConceal=query.isConceal
+      console.log(query)
       this.basicForm.orgId = query.orgId;
       this.basicForm.advisorAccount = sessionStorage.getItem("account");
       this.certificateForm.advisorAccount = sessionStorage.getItem("account");
-      this.api.get({
+      if(query.approvalDesc!=='未认证'){
+        this.api.get({
         url: "serviceAdvisorInfo",
         data: { advisorAccount: this.basicForm.advisorAccount },
         callback: res => {
+          console.log(res)
           if (res.code == "0000") {
             this.basicForm.personalProfile =
               res.data.advisorServiceInfo.personalProfile;
@@ -690,6 +692,8 @@ export default {
           }
         }
       });
+      }
+
     }
   }
 };

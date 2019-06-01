@@ -16,7 +16,7 @@
           <!-- 侧边栏 -->
           <div class="slider" v-if="$store.state.hiddenNav">
             <el-aside width="150px">
-              <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
+              <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
                 <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" />
               </el-menu>

@@ -204,6 +204,7 @@ export default {
       });
     },
     init() {
+      console.log(this.$route.query)
       this.supplementForm.comId = this.$route.query.comId;
       let _this = this;
       _this.api.get({

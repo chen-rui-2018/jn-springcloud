@@ -96,17 +96,33 @@ export default {
     },
     // 弹出选择机构对话框
     checkOrganization(item) {
-      console.log(item)
-      if(item.label==='服务顾问认证'){
- this.orgArr = [];
-      this.organizationForm.orgName = "";
-      this.organizationForm.orgId = "";
-      this.centerDialogVisible = true;
-      this.query();
-      }else{
-        this.$router.push({path:item.path})
+      if (item.label === "服务顾问认证") {
+        this.api.get({
+          url: "getUserApprovalStatus",
+          // data: { orgName: "" },
+          callback: res => {
+            if (res.code == "0000") {
+              console.log(res);
+              if (res.data.approvalDesc === "未认证") {
+                this.orgArr = [];
+                this.organizationForm.orgName = "";
+                this.organizationForm.orgId = "";
+                this.centerDialogVisible = true;
+                this.query();
+              } else if(res.data.approvalDesc === "认证不通过"){
+                 this.$router.push({ path: item.path });
+              }else{
+                 this.$router.push({ path: item.path,query:{ isConceal:1} });//是否隐藏发送按钮
+                // this.$router.push({ path: item.path ,query});
+              }
+            } else {
+              this.$message.error(res.result);
+            }
+          }
+        });
+      } else {
+        this.$router.push({ path: item.path });
       }
-
     },
     // 前往填写页面
     toAdvisoryInformation() {
@@ -117,7 +133,8 @@ export default {
             name: "advisoryInformation",
             query: {
               orgId: this.organizationForm.orgId,
-              businessArea: this.businessArea
+              businessArea: this.businessArea,
+              approvalDesc:'未认证'
             }
           });
         } else {

@@ -20,7 +20,7 @@
           <el-table-column prop="birthday" label="出生年月" align="center"> </el-table-column>
           <el-table-column prop="roleName" label="企业身份" align="center"> </el-table-column>
           <el-table-column prop="checkTime" label="入驻日期" align="center" min-width="130"> </el-table-column>
-          <el-table-column label="操作" align="center" v-if="isShow=='0'" >
+          <el-table-column label="操作" align="center" v-if="isShow=='1'" >
             <template slot-scope="scope">
               <el-button
               v-if=" scope.row.roleName==='企业联系人'"
@@ -229,7 +229,7 @@ handleSetContact(row){
         }
     }
         .el-input-group{
-          width:26%;
+          width:29%;
           margin-bottom: 13px;
         }
         .el-input__inner{

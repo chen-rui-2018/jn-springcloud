@@ -4,7 +4,7 @@
 
 
     <!--获取图片及链接-->
-    <select id="findByMessage" parameterType="java.lang.String" resultType="com.jn.park.connect.model.ServiceConnectModel">
+    <select id="getImgAndAddress" parameterType="java.lang.String" resultType="com.jn.park.connect.model.ServiceConnectModel">
 
         SELECT
         t.entrance_name as "entranceName",

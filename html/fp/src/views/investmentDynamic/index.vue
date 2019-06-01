@@ -161,7 +161,7 @@
       getPolicyLevelList() {
         let _this = this;
         this.api.get({
-          url: "getPolicyLevelList",
+          url: "getBusinessAdDynamic",
           data: {},
           callback: function(res) {
             if (res.code == "0000") {

@@ -34,9 +34,10 @@
         <div class="agent1 clearfix">
           <div class="agentTil fl color1">{{companyDetail.comName}}</div>
           <div class="orgBtn fr mainColor">
-            <span class="span1 span2" @click="onlineContact">在线联系</span>
+            <span class="span1 span2" @click="onlineContact(companyDetail.companyId)">在线联系</span>
             <span class="span1" @click="$router.push({path:'/recruitmentList',query:{comId:companyDetail.id}})">热招职位</span>
-            <span class="span1 span3">+关注</span>
+            <span class="span1 span3" v-if="isCare=='0'" @click="handleAttention(companyDetail.companyId)">+关注</span>
+            <span class="span1 span3" v-if="isCare=='1'" @click="cancelAttention(companyDetail.companyId)">取消关注</span>
           </div>
         </div>
         <div class="agent2 clearfix color2 pr">
@@ -101,24 +102,6 @@
                       <div>{{companyDetail.ownerPhone}}</div>
                     </td>
                   </tr>
-                  <!-- <tr>
-                                        <td class="table-orgspace-title">毕业学校：</td>
-                                        <td class="table-orgspace-detail" width="300px" colspan="2">
-                                            <div>冻结</div>
-                                        </td>
-                                        <td class="table-orgspace-title">学历：</td>
-                                        <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
-                                            <div>
-                                                <div>呃呃呃</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="table-orgspace-title">个人简介：</td>
-                                        <td class="table-orgspace-detail" colspan="4">
-                                            <div class="table-orgspace-col">说的对吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼</div>
-                                        </td>
-                                    </tr> -->
                 </table>
               </div>
             </el-tab-pane>
@@ -128,12 +111,6 @@
                   <li class="">
                     <span class="contact-detail-img mr5"></span>{{companyDetail.products}}
                   </li>
-                  <!-- <li class="">
-                                        <span class="contact-detail-img mr5"></span>联系人信息
-                                    </li>
-                                    <li class="">
-                                        <span class="contact-detail-img mr5"></span>联系人信息
-                                    </li> -->
                 </ul>
               </div>
             </el-tab-pane>
@@ -195,7 +172,7 @@
             </li>
           </ul>
           <div class="pagination-container" style="margin-top:50px">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
           </div>
         </div>
@@ -217,7 +194,9 @@ export default {
       textMessage: "",
       page: 1,
       row: 5,
-      total: 0
+      total: 0,
+      isCare: "0",
+      isCommentLike: false
     };
   },
   created() {
@@ -226,6 +205,90 @@ export default {
     this.getComCommentInfo();
   },
   methods: {
+    //关注
+    handleAttention(id) {
+      if (sessionStorage.token) {
+        this.api.post({
+          url: "addCareOperate",
+          data: {
+            account: id,
+            receiveType: -2
+          },
+          // dataFlag:true,
+          callback: res => {
+            if (res.code == "0000") {
+              // _this.parkList = res.data;
+              this.isCare = "1";
+            } else {
+              this.$message.error(res.result);
+            }
+          }
+        });
+      } else {
+        this.$message.error("你还未登录");
+        return;
+      }
+    },
+    //取消关注
+    cancelAttention(id) {
+      if (sessionStorage.token) {
+        this.api.post({
+          url: "cancelCareOperate",
+          data: {
+            account: id,
+          },
+          dataFlag:true,
+          callback: res => {
+            if (res.code == "0000") {
+              // _this.parkList = res.data;
+              this.isCare = "0";
+            } else {
+              this.$message.error(res.result);
+            }
+          }
+        });
+      } else {
+        this.$message.error("你还未登录");
+        return;
+      }
+    },
+    //评论点赞
+    comLike(item) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      //评论点赞
+      let url = "";
+      if (item.isCommentLike == "true") {
+        //如果是已经点赞了就取消点赞
+        url = `springcloud-park/comment/review/commentActivityCancelLike?id=${
+          item.id
+        }`;
+      } else {
+        //如果是没点赞就点赞
+        url = `springcloud-park/comment/review/commentActivityLike?id=${
+          item.id
+        }`;
+      }
+      let _this = this;
+      this.api.post({
+        url: url,
+        data: {
+          id: item.id
+        },
+        // dataFlag: true,
+        urlFlag: true,
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.$message.success(res.result);
+            _this.getComCommentInfo();
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
     //留言
     leaveMessage(id) {
       if (!sessionStorage.userInfo) {
@@ -284,13 +347,30 @@ export default {
         }
       });
     },
-    //在线联系
-    onlineContact() {
-      if (!sessionStorage.userInfo) {
+     //在线联系
+    onlineContact(id){
+       if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({ path: "chat" });
+       this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: id
+        },
+        callback: res=> {
+          if (res.code == "0000") {
+            // this.typeList = res.data;
+            if(sessionStorage.userInfo.account==res.data.account){
+              this.$message.error('当前登录的账号跟聊天对象一样');
+              return
+            }
+            this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
     },
     swiperinit() {
       // if (this.policyCenterList.length <= 1 ) {
@@ -352,6 +432,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.companyDetail = res.data.companyInfoShow;
+            _this.isCare = res.data.companyInfoShow.isCare;
           } else {
             _this.$message.error(res.result);
           }
@@ -749,6 +830,8 @@ export default {
               display: inline-block;
               width: 50px;
               height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
             }
           }
           .liRight {
@@ -760,6 +843,12 @@ export default {
             width: 88%;
             margin-left: 70px;
             margin-top: 10px;
+            img {
+              width: 50px;
+              height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
+            }
             > span {
               float: right;
             }

@@ -1,7 +1,7 @@
 .UCenter-bg {
   background-image: url(https://njbxq.mynatapp.cc/h5/imgs/my.png);
   background-size: cover;
-  height: 300rpx;
+  height: 450rpx;
   display: flex;
   justify-content: center;
   padding-top: 40rpx;

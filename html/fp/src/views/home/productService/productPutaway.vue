@@ -9,7 +9,7 @@
         <el-form label-position="right" label-width="100px" >
           <div :model="productDetail" class="">
             <el-form-item label="业务领域：">
-              <span>非科技金融</span>
+              <span>{{businessTypeName}}</span>
             </el-form-item>
           </div>
           <div>
@@ -154,7 +154,6 @@
 export default {
   data () {
     return {
-      // loading:true,
       productDetail:{},//产品详情
       counselorList:[],//服务顾问列表
       productName:'',//产品名称
@@ -162,8 +161,9 @@ export default {
       productNameList:[],//产品名称列表
       advisorAccount:'',
       orgId:'',
-      templateId:0,
-      businessType:''
+      templateId:'',
+      businessType:'',
+      businessTypeName:""
     }
   },
   mounted () {
@@ -180,8 +180,8 @@ export default {
       data: {orgId:this.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-            // console.log(res)
           _this.businessType= res.data.businessType
+          _this.businessTypeName= res.data.businessTypeName
           if(_this.businessType=='technology_finance'){
             _this.getShelfProductList()
           }else{
@@ -200,7 +200,6 @@ export default {
       data: {orgId:this.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-          // console.log(res)
           if(res.data.length!=0){
             _this.productNameList= res.data
             _this.templateId=res.data[0].productId

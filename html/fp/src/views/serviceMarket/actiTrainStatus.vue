@@ -3,7 +3,7 @@
         <div class="regNav">
             <span class="pointer" @click="$router.push({ path: '/serMatHp'})">首页/</span>
             <span class="pointer" @click="$router.push({ path: '/actiTrain'})">活动培训/</span>
-            <span class="pointer" @click="$router.push({ path: '/actiTrainDetail'})">活动详情/</span>
+            <span class="pointer" @click="$router.push({ path: '/actiTrainDetail',query:{activityId:$route.query.activityId}})">活动详情/</span>
             <span class="mainColor">报名情况</span>
         </div>
         <el-card>
@@ -56,7 +56,7 @@ export default {
       this.init();
     },
     handleInfo(account) {
-      this.$router.push({ path: "regData", query: { account: account } });
+      this.$router.push({ path: "regData", query: { account: account ,activityId:$route.query.activityId} });
     },
     init() {
       let _this = this;

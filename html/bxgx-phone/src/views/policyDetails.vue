@@ -13,7 +13,7 @@
                 <span>发文单位：{{getGuideDetal.issueUnit}}</span>
             </div>
         </div>
-        <div class="anContent">{{getGuideDetal.policyContent}}</div>
+        <div class="anContent" v-html="getGuideDetal.policyContent"></div>
     </div>
 </template>
 <script>
@@ -47,7 +47,7 @@ export default {
 </script>
 <style lang="scss">
 .policyDetails {
-  padding-top: 130px;
+  // padding-top: 130px;
   background: #f5f5f5;
   .policyTitle,.anContent {
     // margin-top: 20px;

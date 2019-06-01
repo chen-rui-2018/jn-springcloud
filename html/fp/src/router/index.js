@@ -151,11 +151,12 @@ const router= new Router({
             title: '消息中心'
           },
           children: [{
-              path: 'chat',
+              path: '/chat',
               component: resolve => require(['@/views/messageCenter/chat'], resolve),
               meta: {
                 title: '社区交流'
-              }
+              },
+              name: 'chat'
             },
             {
               path: '/parkNotice',

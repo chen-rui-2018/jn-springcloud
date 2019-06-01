@@ -20,9 +20,6 @@ import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
-import org.apache.axis.client.HappyClient;
-import org.apache.poi.ss.formula.functions.T;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -127,6 +124,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @ServiceLog(doAction = "基本信息保存并更新")
     @Override
     public int saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfoParam advisorBaseInfoParam) {
+        //校验操作是否允许
+        checkOptionIsAllow(advisorBaseInfoParam.getAdvisorAccount());
         //校验业务领域
         checkBusinessArea(advisorBaseInfoParam.getBusinessAreas());
         //校验机构id并获取机构信息
@@ -257,6 +256,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @ServiceLog(doAction = "荣誉资质保存并更新")
     @Override
     public int saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam) {
+        //校验操作是否允许
+        checkOptionIsAllow(serviceHonorParam.getAdvisorAccount());
         //判断证书类型是否在系统中
         boolean isExist=false;
         //证件类型分类 荣誉资质：honor
@@ -365,14 +366,33 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      */
     @Override
     public int sendApproval(String loginAccount) {
+        checkOptionIsAllow(loginAccount);
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        example.createCriteria().andAdvisorAccountEqualTo(loginAccount)
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        example.createCriteria().andAdvisorAccountEqualTo(loginAccount);
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
         tbServiceAdvisor.setApprovalStatus(ApprovalStatusEnum.APPROVAL.getValue());
         tbServiceAdvisor.setModifierAccount(loginAccount);
         tbServiceAdvisor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         return tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
+    }
+
+    /**
+     * 校验当前操作是否允许
+     * @param loginAccount
+     */
+    @ServiceLog(doAction = "校验当前操作是否允许")
+    private void checkOptionIsAllow(String loginAccount) {
+        TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
+        example.createCriteria().andAdvisorAccountEqualTo(loginAccount)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceAdvisor> advisorList = tbServiceAdvisorMapper.selectByExample(example);
+        if(advisorList.isEmpty()){
+            //ignore
+        }else if(StringUtils.equals(advisorList.get(0).getApprovalStatus(), ApprovalStatusEnum.APPROVED.getValue())
+                || StringUtils.equals(advisorList.get(0).getApprovalStatus(), ApprovalStatusEnum.APPROVAL.getValue())){
+            logger.warn("顾问认证发送申请异常，当前顾问审批状态为认证中或认证通过,不允许编辑");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_HAS_EXIST);
+        }
     }
 
     /**
@@ -382,6 +402,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @ServiceLog(doAction = "服务经历保存并更新")
     @Override
     public int saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam) {
+        //校验操作是否允许
+        checkOptionIsAllow(serviceExperienceParam.getAdvisorAccount());
         //有主键id,更据主键id和账号更新服务经历
         if(StringUtils.isNotBlank(serviceExperienceParam.getId())){
             byte recordStatus=1;
@@ -424,6 +446,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @ServiceLog(doAction = "项目经验保存并更新")
     @Override
     public int saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam) {
+        //校验操作是否允许
+        checkOptionIsAllow(serviceProjectExperienceParam.getAdvisorAccount());
         //有主键id,更据主键id和账号更新服务经历
         if(StringUtils.isNotBlank(serviceProjectExperienceParam.getId())){
             TbServiceProExperCriteria example=new TbServiceProExperCriteria();
@@ -455,7 +479,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //创建人
             tbServiceProExper.setCreatorAccount(serviceProjectExperienceParam.getAdvisorAccount());
             //数据状态
-            tbServiceProExper.setRecordStatus(RECORD_STATUS);
+            tbServiceProExper.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
             return tbServiceProExperMapper.insertSelective(tbServiceProExper);
         }
     }

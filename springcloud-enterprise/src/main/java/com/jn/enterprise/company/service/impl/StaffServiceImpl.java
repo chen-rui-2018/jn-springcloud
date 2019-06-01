@@ -43,6 +43,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisKeyValueTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -709,7 +713,7 @@ public class StaffServiceImpl implements StaffService {
      * @param delRoleNames 删除角色名称列表
      * @return
      */
-    @ServiceLog(doAction = "根据角色名称获取角色ID")
+    @ServiceLog(doAction = "根据账号修改联系人角色")
     public boolean updateRoleByAccount(String account, List<String> addRoleNames, List<String> delRoleNames) {
         if ((addRoleNames == null || addRoleNames.isEmpty()) && (delRoleNames == null || delRoleNames.isEmpty())) {
             logger.warn("没有需要删除或增加的角色");
@@ -748,6 +752,9 @@ public class StaffServiceImpl implements StaffService {
         sysUserRoleVO.setUser(modifyUser);
         Result<Boolean> updateRoleResult = systemClient.updateUserRole(sysUserRoleVO);
         checkCallServiceSuccess(updateRoleResult);
+
+        // 删除redis缓存
+        userExtensionClient.removeUserExtensionRedis(account);
         return updateRoleResult.getData();
     }
 

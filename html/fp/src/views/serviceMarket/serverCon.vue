@@ -101,7 +101,7 @@ export default {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({ path: "/chat",query:{toUser:advisorAccount,nickName:advisorName}});
+      this.$router.push({ path: "/chat",query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:advisorAccount,nickName:advisorName}});
     },
     widFun(i) {
       let doc = document.getElementsByClassName(i);

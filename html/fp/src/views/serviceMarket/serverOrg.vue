@@ -177,7 +177,7 @@ export default {
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: sessionStorage.userInfo.account,
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
           toUser: orgAccount,
           nickName: orgName
         }

@@ -153,7 +153,7 @@ export default {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:orgName}})
+      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:orgName}})
     },
     widFun(i) {
       let doc = document.getElementsByClassName(i);

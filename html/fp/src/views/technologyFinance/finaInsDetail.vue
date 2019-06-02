@@ -560,7 +560,7 @@ export default {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:ogeName}})
+      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:ogeName}})
     },
     //提需求
     demandRaise(i) {

@@ -5,7 +5,7 @@
         <div class="swiper-container">
           <div class="swiper-wrapper">
             <div class="swiper-slide" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
-              <img :src="banner.posterUrl" alt="" @click="$router.push({path:'/serMatHp'})">
+              <img :src="banner.posterUrl" :data-path="'/serMatHp'" alt="">
             </div>
             <!-- <div class="swiper-slide" style="width:100%">
               <img src="@/../static/img/banner11.png" alt="" @click="$router.push({path:'/serMatHp'})">
@@ -27,6 +27,8 @@
           <div class="swiper-button-next" @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
             <i class="iconfont icon-rightarrow pointer" v-show="showBtn"></i>
           </div>
+          <!-- 如果需要滚动条 -->
+          <!-- <div class="swiper-scrollbar"></div> -->
         </div>
         <div class="quickEnter">
           <ul>
@@ -111,7 +113,7 @@
           <div class="line"></div>
         </div>
         <div class="paging w pr" ref="poCenter2" data-class="bottom">
-          <div class="swiper-container">
+          <div class="swiper-container1">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(list, listIndex) in policyCenterList" :key="listIndex">
                 <ul class="page1 clearfix" ref="poCenter3" data-class="bottom">
@@ -246,8 +248,8 @@
             </div>
 
             <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev" v-if="policyCenterList.length > 1"></div>
-            <div class="swiper-button-next" v-if="policyCenterList.length > 1"></div>
+            <div class="swiper-button-prev" v-show="policyCenterList.length > 1"></div>
+            <div class="swiper-button-next" v-show="policyCenterList.length > 1"></div>
           </div>
         </div>
       </div>
@@ -270,7 +272,7 @@
           <i class="iconfont icon-rightarrow pointer" @click="rightPage"></i>
           <ul class="actiUl clearfix">
             <li v-for="(i,k) in actiListSlim" :key="k">
-              <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1=i.id,show11=i.id">
+              <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1='',show11=''">
                 <img :src="i.actiPosterUrl" :class="{'poIm':show1==i.id}" class="postImg pointer" alt="活动海报图片">
                 <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
               </div>
@@ -761,9 +763,10 @@ export default {
     this.getProList(); //服务产品列表
     this.getFinaOrg(); //金融机构
     this.getFinaPro(); //金融产品
-    Promise.all([this.getBanner()]).then(() => {
-      this.init();
-    });
+    this.getBanner();
+    // Promise.all([this.getBanner()]).then(() => {
+    //   this.init();
+    // });
   },
   created() {
     let _this = this;
@@ -775,7 +778,7 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-     //在线联系
+    //在线联系
     onlineContat(orgAccount, orgName) {
       if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
@@ -784,31 +787,38 @@ export default {
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: sessionStorage.userInfo.account,
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
           toUser: orgAccount,
           nickName: orgName
         }
       });
     },
     //企业招聘列表在线联系
-    onlineContact(id){
-       if (!sessionStorage.userInfo) {
+    onlineContact(id) {
+      if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
-       this.api.get({
+      this.api.get({
         url: "getCompanyContactAccount",
         data: {
           comId: id
         },
-        callback: res=> {
+        callback: res => {
           if (res.code == "0000") {
             // this.typeList = res.data;
-            if(sessionStorage.userInfo.account==res.data.account){
-              this.$message.error('当前登录的账号跟聊天对象一样');
-              return
+            if (JSON.parse(sessionStorage.userInfo).account == res.data.account) {
+              this.$message.error("当前登录的账号跟聊天对象一样");
+              return;
             }
-            this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
+            this.$router.push({
+              path: "/chat",
+              query: {
+                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                toUser: res.data.account,
+                nickName: res.data.nickName
+              }
+            });
           } else {
             this.$message.error(res.result);
           }
@@ -996,39 +1006,39 @@ export default {
       return scroll_top;
     },
     //swiper初始化
-    init() {
-      var mySwiper = new swiper(".swiper-container", {
-        direction: "horizontal", // 垂直切换选项
-        loop: true, // 循环模式选项
-        noSwiping: true,
-        on: {
-          click: e => {
-            // let url = e.target.dataset.jumpurl;
-            // this.bannerJump(url);
-            // console.log(e);
-          }
-        },
-        observer: true,
-        observeParents: true, //修改swiper的父元素时，自动初始化swiper
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination"
-        },
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        },
+    // init() {
+    //   var mySwiper = new swiper(".swiper-container", {
+    //     direction: "horizontal", // 垂直切换选项
+    //     loop: true, // 循环模式选项
+    //     noSwiping: true,
+    //     on: {
+    //       click: e => {
+    //         // let url = e.target.dataset.jumpurl;
+    //         // this.bannerJump(url);
+    //         // console.log(e);
+    //       }
+    //     },
+    //     observer: true,
+    //     observeParents: true, //修改swiper的父元素时，自动初始化swiper
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination"
+    //     },
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev"
+    //     },
 
-        // 如果需要滚动条
-        scrollbar: {
-          el: ".swiper-scrollbar"
-        }
-      });
-    },
-    // aa() {
-    //   console.log(111);
+    //     // 如果需要滚动条
+    //     scrollbar: {
+    //       el: ".swiper-scrollbar"
+    //     }
+    //   });
     // },
+    swiperinit(name, obj) {
+      var mySwiper = new swiper(name, obj);
+    },
     handleChange() {
       //   this.sousuo = true;
     },
@@ -1080,11 +1090,32 @@ export default {
           if (res.code === "0000") {
             this.policyCenterList = this.formatArr(res.data.rows, 4);
             this.total2 = res.data.total;
-            let _this = this;
+            let obj = {
+              // direction: "horizontal", // 垂直切换选项
+              // loop: true, // 循环模式选项
+              // noSwiping: true,
+              // autoplay: true,
+              // autoplay: {
+              //   delay: 2000,
+              // },
+              // 如果需要分页器
+              pagination: {
+                el: ".swiper-pagination"
+              },
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+              },
+
+              // 如果需要滚动条
+              scrollbar: {
+                el: ".swiper-scrollbar"
+              }
+            };
             setTimeout(() => {
-              _this.init();
+              this.swiperinit(".swiper-container1", obj);
             }, 0);
-            // resolve();
           } else {
             this.$message.error(res.result);
             // reject();
@@ -1193,26 +1224,55 @@ export default {
     },
     // 企业宣传列表查询
     getBanner() {
-      return new Promise((resolve, reject) => {
-        this.api.get({
-          url: "getPromotionList",
-          data: {
-            issuePlatform: 2,
-            // propagandaType: 'home_banner_pc',//没有图片，暂时先用招商的测试
-            propagandaType: "enterprise_banner",
-            needPage: 0
-          },
-          callback: res => {
-            if (res.code === "0000") {
-              this.bannerList = res.data.rows;
-              resolve();
-            } else {
-              reject();
-              this.$message.error(res.result);
-            }
+      // return new Promise((resolve, reject) => {
+        let _this = this;
+      this.api.get({
+        url: "getPromotionList",
+        data: {
+          issuePlatform: 2,
+          // propagandaType: 'home_banner_pc',//没有图片，暂时先用招商的测试
+          propagandaType: "enterprise_banner",
+          needPage: 0
+        },
+        callback: res => {
+          if (res.code === "0000") {
+            this.bannerList = res.data.rows
+            // resolve();
+            let obj = {
+              direction: "horizontal", // 垂直切换选项
+              loop: true, // 循环模式选项
+              noSwiping: true,
+              // autoplay: true,
+              observer:false,
+              // autoplay: {
+              //   delay: 2000
+              // },
+              on:{
+                click: function(e){
+                 let path = e.path[0].getAttribute("data-path");
+                 _this.$router.push(path)
+                }
+              },
+              // 如果需要分页器
+              pagination: {
+                el: ".swiper-pagination"
+              },
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+              },
+            };
+            setTimeout(() => {
+              this.swiperinit(".swiper-container", obj);
+            }, 0);
+          } else {
+            // reject();
+            this.$message.error(res.result);
           }
-        });
+        }
       });
+      // });
     },
     //获取招聘详情
     getRecruitDetails(id) {
@@ -1428,6 +1488,7 @@ export default {
   }
   .policyCenter {
     .paging {
+      overflow: hidden;
       .swiper-container {
         padding: 40px 0;
       }

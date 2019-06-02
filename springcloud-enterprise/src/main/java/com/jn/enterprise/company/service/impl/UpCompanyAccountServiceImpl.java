@@ -69,7 +69,7 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
             logger.info("[升级企业账号] 调用系统服务 根据角色名称获取角色信息 接口 返回结果:{}", result);
             if (result != null && result.getData() != null && normalResult != null && normalResult.getData() != null) {
                 String roleId = result.getData().getId();
-                String normalRoleId = result.getData().getId();
+                String normalRoleId = normalResult.getData().getId();
 
                 //2.为用户赋权,增加企业管理员角色，删除普通用户
                 SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();

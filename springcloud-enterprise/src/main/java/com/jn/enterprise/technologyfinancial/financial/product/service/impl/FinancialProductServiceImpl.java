@@ -143,7 +143,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
 
         // 处理图片格式
         if (StringUtils.isNotBlank(financialProductDetails.getPictureUrl())) {
-            financialProductDetails.setProductId(financialProductDetails.getPictureUrl());
+            financialProductDetails.setPictureUrl(IBPSFileUtils.getFilePath(financialProductDetails.getPictureUrl()));
         }
         return financialProductDetails;
     }

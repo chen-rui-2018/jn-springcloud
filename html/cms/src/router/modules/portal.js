@@ -44,10 +44,17 @@ const portalRouter = {
       hidden: true
     },
     {
-      path: 'applyActivityList/:id',
+      path: 'applyActivityList',
       component: () => import('@/views/portal/applyActivityList'),
       name: 'applyActivityList',
       meta: { title: '活动报名列表', noCache: false },
+      hidden: true
+    },
+    {
+      path: 'registrationChecklist',
+      component: () => import('@/views/portal/registrationChecklist'),
+      name: 'registrationChecklist',
+      meta: { title: '报名审核列表', noCache: false },
       hidden: true
     }
     // {

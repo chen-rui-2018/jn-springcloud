@@ -5,7 +5,7 @@
     </div>
     <div class="registerBox">
       <h3>注册新用户</h3>
-      <input class="input" type="text" placeholder="请输入手机号码" v-model.trim="phone">
+      <input class="input" type="text" placeholder="请输入手机号码" v-model.trim="phone" @blur="inputBlur">
       <div class="tipPsw">请输入正确手机号码，可用于登录或找回密码</div>
       <div class="yanzheng">
         <input class="input" type="text" placeholder="请输入验证码" style="width:140px" v-model="messageCode">
@@ -56,6 +56,20 @@ export default {
   },
   created() {},
   methods: {
+    inputBlur(){
+        this.api.get({
+        url: "accountIsExist",
+        data: {
+          registerAccount:this.phone
+        },
+        callback: (res) =>{
+          if (res.code == "0000") {
+            this.$message.error('当前账号已注册');
+            return
+          } 
+        }
+      });
+    }, 
     handleLogin() {
       this.$router.push({ path: "/login" });
     },
@@ -193,6 +207,9 @@ export default {
       height: 100%;
     }
   }
+   input:focus{
+      border-color: #00a041 !important;
+    }
   .registerBox,
   .resiter2 {
     background: rgba(255, 255, 255, 0.95);

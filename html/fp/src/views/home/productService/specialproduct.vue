@@ -36,7 +36,7 @@
                 <el-table-column label="操作" align="center" width="140" >
                   <template slot-scope="scope">
                     <div class="specialbth" >
-                      <span  @click="gospecialdetail(scope.row.productId)">详情</span>
+                      <span  @click="gospecialdetail(scope.row)">详情</span>
                       <span v-show="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'" @click="gospecialedit(scope.row.productId)">编辑</span>
                       <span v-show="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status!='1'" @click="gospecialshelf('1',scope.row.productId)">上架</span>
                       <span v-show="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'" @click="gospecialshelf('-1',scope.row.productId)">下架</span>
@@ -143,8 +143,8 @@ export default {
       })
     },
     //详情
-    gospecialdetail(productId){
-      this.$router.push({path:'/servicemarket/product/productService/ordinaryproductDetail',query:{orgid:this.sendData.orgId,productId:productId}})
+    gospecialdetail(row){
+      this.$router.push({path:'/servicemarket/product/productService/ordinaryproductDetail',query:{orgid:this.sendData.orgId,productId:row.productId,signoryName:row.signoryName}})
     },
     //新增
     addscience(){

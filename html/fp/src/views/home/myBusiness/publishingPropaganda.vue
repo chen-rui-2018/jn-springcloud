@@ -505,17 +505,34 @@ border:1px solid rgba(65,215,135,1);
      width: 85px;
     height: 85px;
     line-height: 85px;
-    // border: 1px dashed #c0ccda;
+    border: 1px dashed #c0ccda;
     border-radius: 6px;
     >i{
       font-size: 28px;
     color: #8c939d;
     }
     >img{
+          border-radius: 6px;
       width: 85px;
       height: 85px;
+          vertical-align: initial;
     }
   }
+  //  .el-upload{
+  //    width: 85px;
+  //   height: 85px;
+  //   line-height: 85px;
+  //   border: 1px dashed #c0ccda;
+  //   border-radius: 6px;
+  //   >i{
+  //     font-size: 28px;
+  //   color: #8c939d;
+  //   }
+  //   >img{
+  //     width: 86px;
+  //     height: 86px;
+  //   }
+  // }
   .ordinary_title {
        background-color: #fff;
       display: flex;

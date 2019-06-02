@@ -18,7 +18,7 @@
           <div class="basicInfo pr">
             <div class="setdistance uploadImgItem">
               <!-- <span class="textRight mg">照片：</span> -->
-              <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+              <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
                 <img v-if="OrgBasicForm.orgLogo" :src="OrgBasicForm.orgLogo" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -108,8 +108,9 @@
                   <template>
                     <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                       :on-success="handlelicense" :headers="headers" :before-upload="beforelicense" style="display:inline-block">
-                      <img v-if="fileUrl" :src="fileUrl" class="avatar">
-                      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      <div  v-if="fileUrl"><img :src="fileUrl" class="avatar"></div>
+
+                      <i v-show="!fileUrl" class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </template>
                 </el-table-column>
@@ -976,8 +977,8 @@ export default {
       }
     },
     handlelicense(file) {
+      console.log(file)
       this.fileUrl = file.data;
-      console.log(this.fileUrl)
     },
     handleOtherSuccess(file) {
       this.otherForm.fileUrl = file.data;
@@ -1044,6 +1045,7 @@ export default {
       .otherAvatar {
         width: 96px;
         height: 96px;
+        vertical-align: inherit;
       }
     }
   }

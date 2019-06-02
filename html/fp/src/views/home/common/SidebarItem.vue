@@ -112,7 +112,7 @@ export default {
               } else if(res.data.approvalDesc === "认证不通过"){
                  this.$router.push({ path: item.path });
               }else{
-                 this.$router.push({ path: item.path,query:{ isConceal:1} });//是否隐藏发送按钮
+                 this.$router.push({ path: item.path,query:{ isConceal:'1'} });//是否隐藏发送按钮
                 // this.$router.push({ path: item.path ,query});
               }
             } else {

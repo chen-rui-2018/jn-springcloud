@@ -512,26 +512,26 @@ public class MeterRulesServiceImpl implements MeterRulesService {
             //查询触发的规则
             TbElectricWarningRulesCriteria warningRulesCriteria = new TbElectricWarningRulesCriteria();
             warningRulesCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID))
-                    .andThresholdsGreaterThan(new BigDecimal("12"));
+                   .andThresholdsGreaterThan(size.get(0).getBalance());
             List<TbElectricWarningRules> warningRules = warningRulesMapper.selectByExample(warningRulesCriteria);
-            String message = "白下高薪物业管理提醒你：";
+            //String message = "白下高薪物业管理提醒你：";
             if (warningRules != null && warningRules.size() > 0) {
                 TbElectricWarningRecord warningRecord = null;
                 for (TbElectricWarningRules warningRuleBean : warningRules) {
+                    String msg = warningRuleBean.getWarningContent().replace("{}",warningRuleBean.getThresholds().toString());
                     warningRecord = new TbElectricWarningRecord();
                     warningRecord.setCompanyId(companyId);
                     warningRecord.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                     warningRecord.setRuleId(warningRuleBean.getId());
                     warningRecord.setThresholds(warningRuleBean.getThresholds());
-                    warningRecord.setWarningContent(warningRuleBean.getWarningContent());
+                    warningRecord.setWarningContent(msg);
                     warningRecord.setWarningName(warningRuleBean.getWarningName());
                     warningRecord.setRecordStatus(new Byte(MeterConstants.VALID));
-                    message += warningRuleBean.getWarningContent().replace("{}",warningRuleBean.getThresholds().toString()) + ";";
                     warningRecords.add(warningRecord);
+                    sendSMS(phone, msg);
                 }
                 if (warningRecords != null && warningRecords.size() > 0) {
                     meterDao.saveWarningRecord(warningRecords);
-                    sendSMS(phone, message);
                     result.setData("预警成功");
                 }
             }

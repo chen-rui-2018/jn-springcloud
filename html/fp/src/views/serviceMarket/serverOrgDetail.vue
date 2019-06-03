@@ -585,7 +585,7 @@
      <!-- 提需求弹框 -->
       <template v-if="serverOrgVisible">
             <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh" :modal-append-to-body=false>
-              <div v-if="islogin">
+              <div>
                 <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
                     <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
                         <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -595,13 +595,13 @@
                 <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
                 <div class="demandDia" @click="demandDia()">提交需求</div>
               </div>
-               <div v-else>
+               <!-- <div v-else>
                  你还未
                  <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
                  /
                  <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
                  企业账号
-                </div> 
+                </div>  -->
             </el-dialog>
       </template>
   </div>
@@ -664,17 +664,16 @@ export default {
   },
   methods: {
       //在线联系
-    onlineContat(investorAccount,investorName){
+    onlineContat(orgAccount,ogeName){
        if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:ogeName}})
+      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,toUser:orgAccount,nickName:ogeName}})
     },
     //判断是否登录
     isLogin(){
-      this.token1=sessionStorage.getItem('token')
-      if(!this.accout){
+      if(!sessionStorage.userInfo){
         this.islogin=false
       }
     },
@@ -684,6 +683,9 @@ export default {
       //   debugger
       //   this.islogin=false
       // }
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;}
       this.serverOrgVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;

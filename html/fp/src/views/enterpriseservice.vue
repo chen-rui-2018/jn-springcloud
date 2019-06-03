@@ -515,11 +515,11 @@
                 <div class="con2 fl">
                   <p class="color4">招聘岗位：{{i.post}}</p>
                   <p>招聘企业： {{i.comName}}</p>
-                  <p>招聘人数: {{i.num}}人</p>
+                  <p>招聘人数：{{i.num}}人</p>
                   <p>薪资待遇：
                     <span class="mainColor">{{i.salaryName}}</span>
                   </p>
-                  <p>发布时间: {{i.createdTime}}</p>
+                  <p>发布时间：{{i.createdTime}}</p>
                 </div>
                 <div class="con3 fr">
                   <button class="btn1 pointer" @click="onlineContact(i.comId)">在线联系</button>

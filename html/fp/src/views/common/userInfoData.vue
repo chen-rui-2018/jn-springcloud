@@ -140,7 +140,7 @@ export default {
       window.sessionStorage.removeItem("token");
       window.sessionStorage.removeItem("userInfo");
       window.sessionStorage.removeItem("accout");
-      // this.$router.push({ path: "/login" });
+      this.$router.push({ path: "/" });
       this.islogin();
     },
     goLogin() {

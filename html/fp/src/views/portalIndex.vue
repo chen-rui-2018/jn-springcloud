@@ -360,13 +360,13 @@
         </div>
         <div class="academiCon" ref="academiInfo1" data-class="bottom1">
           <ul class="academiUl">
-            <li class="pointer" v-for="(i,k) in achievementList" :key="k" @click="$router.push({path:'/academicExchange',query:{type:i.type}})">
-              <div class="acaImg">
+            <li class="pointer clearfix" v-for="(i,k) in achievementList" :key="k" @click="$router.push({path:'/academicExchange',query:{type:i.type}})">
+              <div class="acaImg fl">
                 <img src="@/../static/img/academic.png" alt="">
               </div>
-              <div class="acaContent">
+              <div class="acaContent fl">
                 <div class="conTitle color1">{{i.name}}</div>
-                <p class="acontent color2">一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述</p>
+                <p class="acontent color2"></p>
               </div>
             </li>
           </ul>
@@ -967,13 +967,13 @@ export default {
       li {
         padding: 20px;
         width: 45%;
-        // margin-bottom: 30px;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         border-radius: 4px;
         border: 1px solid #ebeef5;
         transition: 0.3s;
-        display: flex;
-        justify-content: space-between;
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
         text-align: left;
         transition: transform 0.2s;
       }

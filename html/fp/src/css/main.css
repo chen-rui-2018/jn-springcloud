@@ -3551,7 +3551,7 @@ img {
 
 .portalIndex .districtGardens .card,
 .enterpriseservice .districtGardens .card {
-  margin-top: 40px;
+  padding: 40px 0;
 }
 
 .portalIndex .districtGardens .card .cardUl > li,

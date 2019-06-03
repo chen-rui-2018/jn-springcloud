@@ -65,11 +65,11 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="注册资金:" lass="inline" prop="regCapital">
+          <el-form-item label="注册资金(万元):" lass="inline" prop="regCapital">
             <el-input v-model="businessForm.regCapital"></el-input>
             <!-- <span>{{regCapital}}</span> -->
           </el-form-item>
-          <el-form-item label="企业规模:" lass="inline" prop="comScale">
+          <el-form-item label="企业规模(人):" lass="inline" prop="comScale">
             <el-input v-model="businessForm.comScale"></el-input>
             <!-- <span>{{comScale}}</span> -->
           </el-form-item>
@@ -334,7 +334,7 @@ export default {
             },
             callback: function(res) {
               if (res.code == "0000") {
-                _this.$message.success(res.result)
+                _this.$message.success('提交成功，等待审核')
                 _this.$refs['businessForm'].resetFields();
               }
             }
@@ -596,7 +596,7 @@ export default {
   }
 
   .business_title {
-    width: 813px;
+    // width: 813px;
     background-color: #fff;
     display: flex;
     justify-content: space-between;
@@ -616,7 +616,7 @@ export default {
   .business_content {
     background: #fff;
     margin-top: 14px;
-    width: 813px;
+    // width: 813px;
     padding: 21px 28px;
     .enterprise {
       margin-bottom: 32px;

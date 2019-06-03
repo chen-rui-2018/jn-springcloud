@@ -1,6 +1,7 @@
 ﻿import axios from "axios"
+import { BASE_URL } from './url'
 export default {
-    host:"http://112.94.22.222:8000/",//api的域名提出来放这里
+    host: BASE_URL,//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
         loginURL:"springcloud-app-system/login",
         getDynamicMenu:"springcloud-app-system/system/sysMenu/getDynamicMenu",
@@ -113,7 +114,6 @@ export default {
         findEvaluateManage:"springcloud-enterprise/userCenter/Index/findEvaluateManage", // 评价管理
         findReportedData:"springcloud-enterprise/userCenter/Index/findReportedData", // 数据上报
         findRequirementManage:"springcloud-enterprise/userCenter/Index/findRequirementManage", // 需求管理
-
         //im即时聊天
         selectMsg:"im/selectMsg", // 获取聊天记录
         isSended:"im/isSended", // 消息设置为已读

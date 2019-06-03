@@ -238,7 +238,7 @@ export default {
       }
     };
     return {
-       baseUrl:this.api.host,
+      baseUrl: this.api.host,
       orgId: undefined,
       isConceal: undefined,
       showBtn: true,

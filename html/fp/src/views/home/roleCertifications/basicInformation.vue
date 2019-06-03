@@ -351,7 +351,7 @@ export default {
     };
 
     return {
-      baseUrl:this.api.host,
+      baseUrl: this.api.host,
       num1:1,
       btnText:'保存并继续',
       showBtn: false,

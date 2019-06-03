@@ -27,7 +27,7 @@
             </el-form-item>
             <el-form-item label="产品图片：" >
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -118,7 +118,7 @@
             </el-form-item>
             <el-form-item label="产品图片：" class="product_img">
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -146,7 +146,8 @@
 export default {
   data () {
     return {
-      addScienceData:{
+        baseUrl: this.api.host,
+        addScienceData:{
         advisorAccount:'',
         orgId:"",
         pictureUrl:"",

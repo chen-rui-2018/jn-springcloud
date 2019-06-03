@@ -3,11 +3,11 @@ import $ from 'jquery'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 // create an axios instance
+const BASE_API = process.env.BASE_API
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api 的 base_url
+  baseURL: BASE_API, // api 的 base_url
   timeout: 1000 // request timeout
 })
-
 // request interceptor
 service.interceptors.request.use(
   config => {
@@ -15,7 +15,7 @@ service.interceptors.request.use(
     // console.log('================>getToken：' + getToken() + '<1>' + !getToken())
     if (!getToken()) {
       $.ajax({
-        url: 'http://112.94.22.222:8000/springcloud-app-system/authLogin',
+        url: BASE_API + 'springcloud-app-system/authLogin',
         type: 'POST',
         async: false,
         data: {

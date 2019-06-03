@@ -41,11 +41,11 @@
           <div class="notice-dot"></div>
           <div v-if="item.messageContent">
             {{ item.messageContent }}邀请您加入他们的企业，点击
-            <router-link :to="`/myBusiness/businesInvitation?comId=${item.messageConnect.comId}&comName=${item.messageConnect.comName}`" style="color: #00a041;">查看详情</router-link>。
+            <router-link :to="`/myBusiness/businesInvitation?comId=${item.messageConnect.comId}&comName=${item.messageConnect.comName}&messageId=${item.id}`" style="color: #00a041;">查看详情</router-link>。
           </div>
         </div>
       </notice>
-      <router-link to="">
+      <router-link to="/myBusiness/staffManagement">
         <notice
           v-if="cardData.findEmployeeRequisition || cardData.findEmployeeRequisition === ''"
           :content="cardData.findEmployeeRequisition | wrapNumber"
@@ -69,7 +69,7 @@
             {{ item.messageContent }}邀请您加入他们机构的顾问，点击
             <router-link
               v-if="item.messageConnect && item.messageConnect.comId"
-              :to="`/myBody/acceptInvitation?comId=${item.messageConnect.comId}&comName=${item.messageConnect.comName}`" style="color: #00a041;"
+              :to="`/myBody/acceptInvitation?comId=${item.messageConnect.comId}&comName=${item.messageConnect.comName}&messageId=${item.id}`" style="color: #00a041;"
             >查看详情</router-link>。
           </div>
         </div>
@@ -83,7 +83,7 @@
           :content="cardData.findAdviserInvitation | wrapNumber"
         ></notice>
       </router-link>
-      <router-link to="">
+      <router-link to="/serviceMarket/requireManagementController/forothersneed">
         <notice
           v-if="cardData.findRequirementManage || cardData.findRequirementManage === ''"
           title="需求管理"
@@ -91,7 +91,7 @@
           :content="cardData.findRequirementManage | wrapNumber"
         ></notice>
       </router-link>
-      <router-link to="/myBody/counselorManagement">
+      <router-link to="/serviceMarket/comment/forOthersevaluate">
         <notice
           v-if="cardData.findEvaluateManage || cardData.findEvaluateManage === ''"
           title="评价管理"
@@ -107,14 +107,14 @@
           :content="cardData.findActivityManage | wrapNumber"
         ></notice>
       </router-link>
-      <router-link to="/servicemarket/product/productService/dataReport">
-        <notice
-          v-if="cardData.findReportedData || cardData.findReportedData === ''"
-          title="数据上报"
-          type="info"
-          :content="cardData.findReportedData | wrapNumber"
-        ></notice>
-      </router-link>
+<!--      <router-link to="/servicemarket/product/productService/dataReport">-->
+<!--        <notice-->
+<!--          v-if="cardData.findReportedData || cardData.findReportedData === ''"-->
+<!--          title="数据上报"-->
+<!--          type="info"-->
+<!--          :content="cardData.findReportedData | wrapNumber"-->
+<!--        ></notice>-->
+<!--      </router-link>-->
     </div>
   </div>
 </template>
@@ -307,10 +307,10 @@
       background-color: $--color-primary;
     }
     .user-header {
-      padding: 32px;
+      padding: 20px 25px;
       background-color: #fff;
+      border-radius: 3px;
       @include flex($h: space-between);
-
       .user-header-l {
         @include flex($h: space-between);
 
@@ -337,6 +337,9 @@
           margin-right: 0;
         }
       }
+    }
+    .user-main {
+      margin-top: 12px;
     }
   }
 </style>

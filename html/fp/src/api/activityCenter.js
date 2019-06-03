@@ -1,5 +1,6 @@
 import axios from 'axios'
-const baseURL = 'http://192.168.10.31:1101/springcloud-park/'
+import api from '@/util/api'
+const baseURL = api.host + 'springcloud-park/'
 // 设置默认的基准路径
 axios.defaults.baseURL = baseURL
 // 设置axios拦截器  config:可以进行请求头的设置，通过headers属性

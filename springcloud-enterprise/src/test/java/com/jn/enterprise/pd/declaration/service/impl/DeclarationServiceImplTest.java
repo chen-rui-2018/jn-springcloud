@@ -52,8 +52,8 @@ public class DeclarationServiceImplTest {
         try {
             String subordinatePlatformName = "1";
             String platformTitle = "人才";
-
-            PaginationData getData = declarationPlatformService.selectByDeclarationPlatformList(subordinatePlatformName,platformTitle,1,5);
+            User user = new User();
+            PaginationData getData = declarationPlatformService.selectByDeclarationPlatformList(subordinatePlatformName,platformTitle,1,5,user);
             List<DeclarationPlatformModel> data =  ( List<DeclarationPlatformModel>)getData.getRows();
             logger.info("获取申报平台数据{}",data);
         } catch (Exception e) {

@@ -8,6 +8,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "加入园区-顾问认证")
 @RestController
-@RequestMapping("/guest/advisorJoinPark")
+@RequestMapping("/advisorJoinPark")
 public class AdvisorJoinController {
 
     private static Logger logger = LoggerFactory.getLogger(AdvisorJoinController.class);
@@ -36,6 +37,7 @@ public class AdvisorJoinController {
     @ControllerLog(doAction = "保存/修改顾问认证信息")
     @ApiOperation(value = "保存/修改顾问认证信息", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/saveOrUpdateOrgDetail",method = RequestMethod.POST)
+    @RequiresPermissions("/advisorJoinPark/saveOrUpdateOrgDetail")
     public Result<Integer> saveOrUpdateOrgDetail(@RequestBody @Validated AdvisorDetailParam advisorDetailParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = advisorJoinService.saveOrUpdateAdvisorDetail(advisorDetailParam,user.getAccount());

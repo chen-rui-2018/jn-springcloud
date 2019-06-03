@@ -31,6 +31,8 @@ public class TbPayAccountBook implements Serializable {
 
     private String recordStatus;
 
+    private String entId;
+
     private static final long serialVersionUID = 1L;
 
     public String getAcBookId() {
@@ -137,6 +139,14 @@ public class TbPayAccountBook implements Serializable {
         this.recordStatus = recordStatus == null ? null : recordStatus.trim();
     }
 
+    public String getEntId() {
+        return entId;
+    }
+
+    public void setEntId(String entId) {
+        this.entId = entId == null ? null : entId.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -161,7 +171,8 @@ public class TbPayAccountBook implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getEntId() == null ? other.getEntId() == null : this.getEntId().equals(other.getEntId()));
     }
 
     @Override
@@ -181,6 +192,7 @@ public class TbPayAccountBook implements Serializable {
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
+        result = prime * result + ((getEntId() == null) ? 0 : getEntId().hashCode());
         return result;
     }
 
@@ -203,6 +215,7 @@ public class TbPayAccountBook implements Serializable {
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", entId=").append(entId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

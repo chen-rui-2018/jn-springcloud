@@ -239,6 +239,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getMessage().length()-2));
         TbPayAccountBook tbPayAccountBook = new TbPayAccountBook();
         tbPayAccountBook.setAccountId(tbPayAccount.getAccountId());
+        tbPayAccountBook.setEntId(payAccountBookCreateParam.getEnterId());
         tbPayAccountBook.setCreatedTime(new Date());
         tbPayAccountBook.setCreatorAccount(user.getAccount());
         tbPayAccountBook.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());

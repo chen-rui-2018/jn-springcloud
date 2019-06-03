@@ -79,7 +79,7 @@
             #{id}
         </foreach>
         and t1.com_status='1'                                                 <!--有效点评-->
-        order by t1.created_time
+        order by t1.created_time desc
     </select>
 
     <!--获取活动报名信息-->

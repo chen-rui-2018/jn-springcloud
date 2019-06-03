@@ -36,13 +36,13 @@
         <div class="quickEnter">
           <ul>
             <li @click="$router.push({path:'/talentsService'})">
-              <span>人才申报</span>
-              <p>PEOPLE&nbsp;DECLARE</p>
+              <span>人才服务</span>
+              <p>THE&nbsp;TALENT&nbsp;SERVICE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li @click="$router.push({path:'/companyProfile'})">
-              <span>高新企业</span>
-              <p>HIGH-TECH&nbsp;ENTERPRISE</p>
+            <li @click="$router.push({path:'/declarationCenter'})">
+              <span>申报中心</span>
+              <p>DECLARE&nbsp;CENTER</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
             <li @click="$router.push({path:'/incubatorEnterprises'})">
@@ -80,9 +80,9 @@
           <div ref="portal1" data-class="bottom">
             <div class="tit color2 pr">
               <div class="pointer" @click="$router.push({path:'/talentsService'})">申报公告</div>
-              <div class="titImg" @click="onClick">
+              <!-- <div class="titImg" @click="onClick">
                 <img src="@/../static/img/huidaodingbu.png" alt="">
-              </div>
+              </div> -->
             </div>
             <div class="eng mainColor pointer" @click="$router.push({path:'/talentsService'})">Declare&nbsp;the&nbsp;announcement</div>
             <div class="line"></div>
@@ -280,7 +280,7 @@
         </div>
         <div class="enterPriseCon" ref="enterInfo1" data-class="bottom1">
           <div class="con1" v-for="(i,k) in recruitmentTable" :key="k" v-if="k==0">
-            <img :src="i.posterUrl" alt="" style="width:416px;height:232px;">
+            <div class="con1Img"><img :src="i.posterUrl" alt=""></div>     
             <!-- <img src="@/../static/img/图层 4.png" alt=""> -->
             <div class="conTit1 color1">{{i.propagandaTitle}}</div>
             <div class="conInfo">
@@ -360,7 +360,7 @@
         </div>
         <div class="academiCon" ref="academiInfo1" data-class="bottom1">
           <ul class="academiUl">
-            <li class="pointer" v-for="(i,k) in achievementList" :key="k" @click="$router.push({path:'/academicExchange'})">
+            <li class="pointer" v-for="(i,k) in achievementList" :key="k" @click="$router.push({path:'/academicExchange',query:{type:i.type}})">
               <div class="acaImg">
                 <img src="@/../static/img/academic.png" alt="">
               </div>
@@ -504,8 +504,8 @@ export default {
       noticeList: [],
       timer: "",
       achievementList: [
-        { name: "学术交流", content: "" },
-        { name: "科技成果", content: "" }
+        { name: "学术交流", content: "" ,type:'science'},
+        { name: "科技成果", content: "" ,type:'technology'}
       ],
       companyList1: [],
       showSSSNum: 0,
@@ -853,12 +853,15 @@ export default {
     },
     //热门活动右翻页
     rightPage() {
-      if (this.page3 >= this.total3) {
-        this.$message.error("没有更多数据了");
-        return;
+      if (this.page3 >= Math.ceil(this.total3 / this.rows3)) {
+        // this.$message.error("没有更多数据了");
+        this.page3 = 1;
+        this.getActiList();
+        // return;
+      } else {
+        this.page3++;
+        this.getActiList();
       }
-      this.page3++;
-      this.getActiList();
     },
     // 首页轮播图
     getBannerList() {
@@ -1486,19 +1489,19 @@ export default {
   .enterpriseinfo {
     .enterPriseCon {
       .proDetal {
-          height: 32px;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
-          overflow: hidden;
-        }
-        .conTit1{
-          height: 40px;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
-          overflow: hidden;
-        }
+        height: 32px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      .conTit1 {
+        height: 40px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
       .con1 {
         overflow: hidden;
       }

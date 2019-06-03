@@ -1,12 +1,12 @@
 <template>
   <div class="data-report">
-<!--    <div id="advertisement" class="swiper-container">-->
-<!--      <div class="swiper-wrapper">-->
-<!--        <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">-->
-<!--          <img :src="img" class="swiper-slide-img" alt="">-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--    <div id="advertisement" class="swiper-container">-->
+    <!--      <div class="swiper-wrapper">-->
+    <!--        <div class="swiper-slide" v-for="(img, index) in adUrls" :key="index">-->
+    <!--          <img :src="img" class="swiper-slide-img" alt="">-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
     <el-tabs
       type="border-card"
       @tab-click="changeDepartment">
@@ -24,7 +24,8 @@
 <!--              <i v-if="tab.needFilled" class="wait-filled-dot"></i>-->
               {{ tab.tabName }}
             </span>
-            <tree-table :isReported="formData.taskInfo.status" :modelType="formData.modelType" :data="tab.targetList" :columns="tab.columns" border expand-all/>
+            <tree-table :isReported="formData.taskInfo.status" :modelType="formData.modelType" :data="tab.targetList"
+                        :columns="tab.columns" border expand-all/>
           </el-tab-pane>
         </el-tabs>
       </el-tab-pane>
@@ -42,7 +43,7 @@
 
 <script>
   import treeTable from './common/tree-table/index'
-  import { deepClone, isMobile } from '@/util'
+  import {deepClone, isMobile} from '@/util'
   import Swiper from 'swiper'
 
   export default {
@@ -64,6 +65,9 @@
         if (this.formData.modelType === 1 && !this.formData.departmentId) {
           return true
         }
+        if (this.departmentStatus === 0) {
+          return true
+        }
       }
     },
     data() {
@@ -75,8 +79,10 @@
         loadingTab: true,
         formDataListTitle: [{
           departmentName: '全部',
-          departmentId: null
+          departmentId: null,
+          status: 0
         }],
+        departmentStatus: '',
         formData: {},
         columns: [ // 表头
           {
@@ -178,7 +184,7 @@
               let text
               if (key.length === 6) {
                 text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
-              } else{
+              } else {
                 text = key + '年'
               }
               tab.columns.push({
@@ -191,33 +197,36 @@
         }
       },
       changeDepartment(el) {
+        this.loadingTab = true
         // 表格中有来自不同部门的指标，tab查看指定部门时，不属于该部门的是没有权限填报的，所以根据填报格式的部门id和当前部门的id比对来设置权限
         const index = Number(el.index)
         const departmentId = this.formDataListTitle[index].departmentId
+        this.departmentStatus = this.formDataListTitle[index].status
         this.formData.departmentId = departmentId
         this.getDepartmentJurisdiction(departmentId)
-        this.loadingTab = false
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.loadingTab = false
+          }, 1)
+        })
       },
       getDepartmentJurisdiction(departmentId) {
         //  如果是园区报表，等待填报格式合成完毕再给指标树加上权限控制
         for (const tab of this.formData.tabs) {
           this.$set(tab, 'needFilled', false)
-          this.formatTreeJurisdiction(tab.targetList, departmentId, tab)
+          this.formatTreeJurisdiction(tab.targetList, departmentId)
         }
       },
-      formatTreeJurisdiction(arr, departmentId, tab) {
+      formatTreeJurisdiction(arr, departmentId) {
         // 填报格式设置权限字段
         for (const list of arr) {
-          if (departmentId === list.departmentId) {
+          if (departmentId === list.departmentId && this.departmentStatus !== 0) {
             this.$set(list, 'hasJurisdiction', true)
-            if (!tab.needFilled) {
-              this.$set(tab, 'needFilled', true)
-            }
           } else {
             this.$set(list, 'hasJurisdiction', false)
           }
           if (list.hasOwnProperty('children') && list.children.length > 0) {
-            this.formatTreeJurisdiction(list.children, departmentId, tab)
+            this.formatTreeJurisdiction(list.children, departmentId)
           }
         }
       },
@@ -230,10 +239,10 @@
       treeOtherColumnMerge(treeData, otherColumn) {
         // 其他表格列的值（上期值比对）挂载到树形指标，跟着指标循环的时候显示
         for (const target of treeData) {
-          for (const key in otherColumn){
+          for (const key in otherColumn) {
             this.$set(target, key, [])
             if (otherColumn[key]) {
-              for(const column of otherColumn[key]) {
+              for (const column of otherColumn[key]) {
                 if (target.id === column.targetId) {
                   target[key].push({
                     value: column.value || '-',
@@ -270,8 +279,8 @@
                 } else {
                   item.value = []
                 }
-              }else if (item.formType === '5') {
-                item.fileList = item.value ? [{ name: item.value, url: item.value }] : []
+              } else if (item.formType === '5') {
+                item.fileList = item.value ? [{name: item.value, url: item.value}] : []
               }
               if (!target.inputFormatModel[Number(item.rowNum)]) {
                 target.inputFormatModel[Number(item.rowNum)] = []
@@ -296,18 +305,29 @@
         // 验证表格
         this.submit()
           .then(formData => {
-            this.submitting = true
-            this.api.post({
-              url: 'enterpriseSaveCompanyFormData',
-              data: formData,
-              callback(res) {
-                if (res.code === "0000") {
-                  _this.$message.success('保存成功')
-                } else {
-                  _this.$message.error('保存失败')
+            this.$confirm('确定提交吗?', '提交过后不能再次修改！', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.submitting = true
+              this.api.post({
+                url: 'enterpriseSaveCompanyFormData',
+                data: formData,
+                callback(res) {
+                  if (res.code === "0000") {
+                    _this.$message.success('保存成功')
+                  } else {
+                    _this.$message.error('保存失败')
+                  }
+                  _this.submitting = false
                 }
-                _this.submitting = false
-              }
+              })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交'
+              })
             })
           }, err => {
             console.dir(err)
@@ -339,7 +359,7 @@
           for (const list of target.inputFormatModel) {
             for (const input of list) {
               if ((target.hasJurisdiction && Number(input.required) && !input.value && input.formType !== '2') || (target.hasJurisdiction && Number(input.required) && input.value.length === 0)) {
-                reject({ target, input })
+                reject({target, input})
               }
             }
           }
@@ -360,51 +380,40 @@
         return new Promise((resolve, reject) => {
           this.validateInputFormatModel()
             .then(() => {
-              this.$confirm('确定提交吗?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-              }).then(() => {
-                this.formData.tabs.forEach(item => {
-                  this.flatteningInputList = []
-                  this.setOrderAndFormatInputList(item.targetList)
-                  item.flatteningInputList = this.flatteningInputList
-                })
-                const formData = this.partDeepClone(this.formData, ['tabs'])
-                // 先克隆提交表单对象
-                formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'inputList','columns']))
-                // 把填报格式是多选的value把数组转成字符串
-                formData.tabs.forEach((item, index) => {
-                  for (const list of item.flatteningInputList) {
-                    if (list.formType === '4') {
-                      list.value = list.value.join(',')
-                    }
-                  }
-                  item.inputList = item.flatteningInputList
-                  delete item.flatteningInputList
-                })
-                resolve(formData)
-              },({ target, input }) => {
-                let text
-                if (input.formName) {
-                  text = `${target.text}指标里的${input.formName}要求必填，请填写后提交`
-                } else {
-                  text = `${target.text}指标要求必填，请填写后提交`
-                }
-                this.$confirm(text,{
-                  confirmButtonText: '确定',
-                  type: 'warning'
-                }).then(res => {
-                }).catch(err => {
-                  console.dir(err)
-                })
-                reject()
-              }).catch(() => {
-                this.$message({
-                  type: 'info',
-                  message: '已取消提交'
-                })
+              this.formData.tabs.forEach(item => {
+                this.flatteningInputList = []
+                this.setOrderAndFormatInputList(item.targetList)
+                item.flatteningInputList = this.flatteningInputList
               })
+              const formData = this.partDeepClone(this.formData, ['tabs'])
+              // 先克隆提交表单对象
+              formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['targetList', 'inputList', 'columns']))
+              // 把填报格式是多选的value把数组转成字符串
+              formData.tabs.forEach((item, index) => {
+                for (const list of item.flatteningInputList) {
+                  if (list.formType === '4') {
+                    list.value = list.value.join(',')
+                  }
+                }
+                item.inputList = item.flatteningInputList
+                delete item.flatteningInputList
+              })
+              resolve(formData)
+            }, ({target, input}) => {
+              let text
+              if (input.formName) {
+                text = `${target.text}指标里的${input.formName}要求必填，请填写后提交`
+              } else {
+                text = `${target.text}指标要求必填，请填写后提交`
+              }
+              this.$confirm(text, {
+                confirmButtonText: '确定',
+                type: 'warning'
+              }).then(res => {
+              }).catch(err => {
+                console.dir(err)
+              })
+              reject()
             })
         })
       },
@@ -438,7 +447,7 @@
           let url
           if (type === 'form') {
             url = 'enterpriseGetFormStruct'
-          } else if(type === 'formed'){
+          } else if (type === 'formed') {
             url = 'enterpriseGetCompanyFormedStruct'
           }
           this.api.get({
@@ -452,16 +461,18 @@
                 _this.formData.tabs.sort((a, b) => {
                   return a['orderNumber'] - b['orderNumber']
                 })
-                if ( _this.formData.modelType === 1) {
+                if (_this.formData.modelType === 1) {
                   const gardenFiller = _this.formData.gardenFiller
                   const departmentId = _this.formDataListTitle[0].departmentId
+                  const departmentStatus = _this.formDataListTitle[0].status
                   if (gardenFiller) {
                     _this.formDataListTitle = _this.formDataListTitle.concat(gardenFiller)
                   }
                   for (const tab of  _this.formData.tabs) {
                     _this.$set(tab, 'needFilled', false)
-                    _this.formatTreeJurisdiction(tab.targetList, departmentId, tab)
+                    _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
+                  _this.departmentStatus = departmentStatus
                   _this.formData.departmentId = departmentId
                 }
                 resolve()
@@ -513,7 +524,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .data-report{
+  .data-report {
     .wait-filled-dot {
       display: inline-block;
       width: 8px;
@@ -521,13 +532,17 @@
       border-radius: 50%;
       background-color: #f56c6c;
     }
+
     width: 100%;
+
     .btn-row {
       margin: 20px auto;
       text-align: center;
     }
+
     .swiper-slide {
       width: 100%;
+
       img {
         width: 100%;
         max-height: 400px;

@@ -41,7 +41,7 @@ public interface CompanyService {
 
 
     /**
-     * 根据用户账号或也ID查询企业信息（用户为企业管理员）
+     * 根据用户账号或企业ID查询企业信息（用户为企业管理员）
      * @param account
      * @return
      */

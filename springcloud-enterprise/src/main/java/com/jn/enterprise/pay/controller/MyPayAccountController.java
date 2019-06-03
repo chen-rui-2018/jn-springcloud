@@ -39,7 +39,7 @@ import java.util.List;
  */
 @Api(tags = "统一缴费-我的账户")
 @RestController
-@RequestMapping("/guest/payment/payAccount")
+@RequestMapping("/payment/payAccount")
 public class MyPayAccountController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(MyPayAccountController.class);

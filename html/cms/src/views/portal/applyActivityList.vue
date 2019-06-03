@@ -4,7 +4,7 @@
       <el-col :span="16"/>
       <el-col :span="8">
         <div class="grid-content bg-purple-light">
-          <el-button class="filter-item" type="primary" round>审批报名人</el-button>
+          <el-button v-if="$route.query.applyCheck == '1'" class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button>
           <el-button class="filter-item" type="primary" round @click="handleRegistration">下载签到二维码</el-button>
           <el-button class="filter-item" type="primary" round @click="handleExport">导出Excel</el-button>
           <el-button class="filter-item" type="primary" round @click="handleReturn">返回</el-button>
@@ -83,10 +83,6 @@
                   class="operation"
                   @click="handleSign(i)">签到
                 </el-button>
-                <!-- <el-button
-                  v-if="i.signStatus==='1'"
-                  type="text"
-                  class="operation"/> -->
               </template>
             </td>
           </tr>
@@ -183,8 +179,11 @@ export default {
     this.getApplyActivityList()
   },
   methods: {
+    ApproveApplicant() {
+      this.$router.push({ path: `registrationChecklist` })
+    },
     getApplyActivityList() {
-      this.actiList.activityId = this.$route.params.id
+      this.actiList.activityId = this.$route.query.id
       api(`${this.GLOBAL.parkUrl}activity/applyActivityList`, this.actiList, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.actiListData = res.data.data.rows

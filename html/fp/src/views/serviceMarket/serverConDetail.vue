@@ -10,7 +10,7 @@
             <el-card v-if="serverConDetailList">
                 <div class="agent1 clearfix">
                     <div class="agentTil fl color1">{{serverConDetailList.advisorIntroduction.advisorName}}</div>
-                    <div class="orgBtn fr mainColor">在线联系</div>
+                    <div class="orgBtn fr mainColor" @click="onlineContact(serverConDetailList.advisorServiceInfo.advisorAccount,serverConDetailList.advisorServiceInfo.advisorName)">在线联系</div>
                 </div>
                 <div class="agent2 clearfix color2">
                     <div class="agentImg fl">
@@ -95,7 +95,9 @@
                                     <li class="" v-for="(i,k) in serverConDetailList.serviceExperienceList" :key="k">
                                         <div class="dataCircle"><img src="@/../static/img/yuandian.png" alt=""></div>
                                         <div class="honorTime">{{i.workTime}}获得</div>
-                                        <div class="honorName">{{i.companyName}}<span>{{i.position}}</span></div>
+                                        <div class="honorName">{{i.companyName}}
+                                            <span>{{i.position}}</span>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -106,8 +108,7 @@
                                     <li class="" v-for="(i,k) in serverConDetailList.serviceProjectExperienceList" :key="k">
                                         <div class="dataCircle"><img src="@/../static/img/yuandian.png" alt=""></div>
                                         <div class="honorTime">{{i.projectTime}}</div>
-                                        <div class="honorName">项目：{{i.projectName}}
-                                            公司名称：{{i.companyName}}
+                                        <div class="honorName">项目：{{i.projectName}} 公司名称：{{i.companyName}}
                                             <p>个人职责：{{i.personalDuties}}</p>
                                         </div>
                                     </li>
@@ -122,7 +123,7 @@
         <div class="agentCon">
             <div class="agentFil mainBorder">
                 <ul class="select-list clearfix" v-if="serverPro&&serverPro.length>0,showFlag==true">
-                    <li> 
+                    <li>
                         <a href="javascript:;">筛选：</a>
                     </li>
                     <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')">
@@ -155,7 +156,7 @@
             </div>
             <el-tabs v-model="activeName1" @tab-click="handleClick">
                 <el-tab-pane name="serverPro">
-                     <span slot="label">服务产品({{total1}})</span>
+                    <span slot="label">服务产品({{total1}})</span>
                     <div class="serverPro">
                         <ul class="list-imgleft">
                             <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>
@@ -296,7 +297,7 @@
         </div>
         <!-- 提需求弹框 -->
         <template v-if="serverConVisible">
-            <el-dialog :visible.sync="serverConVisible" width="530px" top="30vh">
+            <el-dialog :visible.sync="serverConVisible" width="530px" top="30vh" :modal-append-to-body=false>
                 <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
                     <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
                         <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -316,8 +317,8 @@ export default {
       zankaiFlag: false,
       activeName: "baseInfo",
       activeName1: "serverPro",
-      serverConDetailList: '',
-      serverPro: '',
+      serverConDetailList: "",
+      serverPro: "",
       currentPage1: 1,
       row1: 5,
       page1: 1,
@@ -325,33 +326,46 @@ export default {
       row2: 5,
       page2: 1,
       total2: 0,
-      serviceRatingList: '',
-      evaluationCountInfo:'',
-      serverConVisible:false,
-      flag1:'',
-      flag2:'',
-      productType:'',
-      ratingType:'',
-      showFlag:true,
-       serverProform: {
+      serviceRatingList: "",
+      evaluationCountInfo: "",
+      serverConVisible: false,
+      flag1: "",
+      flag2: "",
+      productType: "",
+      ratingType: "",
+      showFlag: true,
+      serverProform: {
         requireDetail: "",
         productId: "",
         productName: ""
-      },
+      }
     };
   },
   mounted() {
     this.initList();
     this.advisorProductList();
     this.getServiceRatingInfo();
-    this.getEvaluationCountInfo()
+    this.getEvaluationCountInfo();
   },
   methods: {
+    onlineContact(advisorAccount, advisorName) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({
+        path: "/chat",
+        query: { toUser: advisorAccount, nickName: advisorName }
+      });
+    },
     demandRaise(i) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.serverConVisible = true;
       this.serverProform.productId = i.productId;
       this.serverProform.productName = i.productName;
-     
     },
     demandDia() {
       let _this = this;
@@ -364,15 +378,14 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            if(_this.serverProform.requireDetail==''){
-                // _this.$message.error("您还没填写需求");
-                _this.serverConVisible = false;
-                return
-              } else{
-               _this.$message.success("提交需求成功");
-               _this.serverConVisible = false;
-              }
-            
+            if (_this.serverProform.requireDetail == "") {
+              // _this.$message.error("您还没填写需求");
+              _this.serverConVisible = false;
+              return;
+            } else {
+              _this.$message.success("提交需求成功");
+              _this.serverConVisible = false;
+            }
           } else {
             _this.$message.error(res.result);
           }
@@ -385,16 +398,16 @@ export default {
     handleZd() {
       this.zankaiFlag = false;
     },
-    screenPro(i){
-        this.productType=i,
-        this.flag1=i,
-        this.page1=1,
+    screenPro(i) {
+      (this.productType = i),
+        (this.flag1 = i),
+        (this.page1 = 1),
         this.advisorProductList();
     },
-    handleEvaluation(i){
-        this.ratingType=i,
-        this.flag2=i,
-        this.page2=1,
+    handleEvaluation(i) {
+      (this.ratingType = i),
+        (this.flag2 = i),
+        (this.page2 = 1),
         this.getServiceRatingInfo();
     },
     handleSizeChange1(val) {
@@ -420,12 +433,12 @@ export default {
       this.getServiceRatingInfo();
     },
     handleClick(tab, event) {
-      if(tab.name=='serEvaluation'){
-        this.showFlag=false
+      if (tab.name == "serEvaluation") {
+        this.showFlag = false;
         this.getServiceRatingInfo();
         this.getEvaluationCountInfo();
-      } else{
-        this.showFlag=true;
+      } else {
+        this.showFlag = true;
         this.advisorProductList();
       }
     },
@@ -437,7 +450,7 @@ export default {
         data: {
           advisorAccount: _this.$route.query.advisorAccount,
           needPage: 1,
-          isPublicPage: 0,
+          isPublicPage: 0
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -459,7 +472,7 @@ export default {
           isPublicPage: 0,
           page: _this.page2,
           rows: _this.row2,
-          ratingType:_this.ratingType,
+          ratingType: _this.ratingType
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -477,11 +490,11 @@ export default {
       this.api.get({
         url: "advisorProductList",
         data: {
-          advisorAccount : _this.$route.query.advisorAccount ,
+          advisorAccount: _this.$route.query.advisorAccount,
           page: _this.page1,
           rows: _this.row1,
           productType: _this.productType,
-          praise:"",
+          praise: ""
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -641,8 +654,8 @@ export default {
   .el-textarea__inner:focus {
     outline: 0;
     border-color: #00a041;
-   }
-    .serverTip {
+  }
+  .serverTip {
     display: inline-block;
     font-size: 12px;
   }

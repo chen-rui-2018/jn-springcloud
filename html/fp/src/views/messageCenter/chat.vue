@@ -202,6 +202,7 @@
          */
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
         this.param.fromUser = this.$route.query.fromUser || userInfo.account
+        console.dir(this.param.fromUser)
         if (!this.param.fromUser) {
           this.$message.error('缺少发送人账号')
           return
@@ -230,7 +231,7 @@
           this.api.get({
             url: "getUserPersonInfo",
             data: {
-              account: this.$route.query.fromUser
+              account: this.param.fromUser
             },
             dataFlag: false,
             callback:(res) => {

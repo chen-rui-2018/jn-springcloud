@@ -7,23 +7,23 @@
                         <div class="swiper-slide" style="width:100%">
                             <img src="@/../static/img/scient.png" alt="">
                         </div>
-                        <div class="swiper-slide" style="width:100%">
+                        <!-- <div class="swiper-slide" style="width:100%">
                             <img src="@/../static/img/scient.png" alt="">
                         </div>
                         <div class="swiper-slide" style="width:100%">
                             <img src="@/../static/img/scient.png" alt="">
-                        </div>
+                        </div> -->
                     </div>
                     <!-- 如果需要分页器 -->
-                    <div class="swiper-pagination"></div>
+                    <!-- <div class="swiper-pagination"></div> -->
 
                     <!-- 如果需要导航按钮 -->
-                    <div class="swiper-button-prev">
+                    <!-- <div class="swiper-button-prev">
                         <i class="iconfont icon-leftarrow pointer"></i>
                     </div>
                     <div class="swiper-button-next">
                         <i class="iconfont icon-rightarrow pointer"></i>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
                 <div class="con1 clearfix">
                     <div class="con1Tit fl mainColor">全部</div>
                     <div class="filRight fr">
-                        <input type="text" placeholder="搜学术" v-model="title">
+                        <input type="text" placeholder="搜索名称" v-model="title">
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
                 </div>
@@ -95,6 +95,11 @@ export default {
   },
   mounted() {
       this.getAchievementList()
+      if(this.$route.query.type){
+        this.type=this.$route.query.type
+        this.flag1=this.$route.query.type
+        this.getAchievementList()
+      }
   },
   methods: {
     handleSizeChange(val) {
@@ -254,6 +259,31 @@ export default {
         height: 100%;
         width: 95%;
       }
+         input::-webkit-input-placeholder {
+          /* WebKit browsers*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+        input:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input::-moz-placeholder {
+          /* Mozilla Firefox 19+*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input:-ms-input-placeholder {
+          /* Internet Explorer 10+*/
+          color: #999;
+          font-size: 13px;
+        }
       input,
       textarea,
       select,

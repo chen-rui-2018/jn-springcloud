@@ -30,7 +30,6 @@ Page({
       method: 'POST',
     }).then(res=>{
       if(res.data.code==='0000'&&res.data.data.createStatus==="1"){
-        console.log(res.data.data.billId)
         this.setData({
           goodId:res.data.data.billId.split(",")
         })
@@ -44,7 +43,6 @@ Page({
           },
           method: 'POST',
         }).then(res=>{
-          // console.log(res)
           if(res.data.code==='0000'){
             this.setData({
               paySend:JSON.parse(res.data.data.data.orderInfo)

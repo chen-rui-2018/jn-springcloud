@@ -64,9 +64,9 @@
         <span class="att1">关注{{actiForm.actiLike}}</span>
       </div>
       <div class="attend ">
-        <span v-if="applySuccess==true" @click="quickSign(actiForm.id)">我要参加</span>
-        <span v-if="applySuccess==false" @click="stopApply(actiForm.id)">取消报名</span>
-        <span v-if="actiForm.actiStatus=='2'&&actiForm.isApply=='0'">停止报名</span>
+        <span v-if="activityApplyShow=='0'">停止报名</span>
+        <span v-if="activityApplyShow=='1'" @click="quickSign(actiForm.id)">我要参加</span>
+        <span v-if="activityApplyShow=='2'" @click="stopApply(actiForm.id)">取消报名</span>
       </div>
     </div>
   </div>
@@ -86,7 +86,7 @@ export default {
       s: 0,
       CountDown: '',
       apply: {},
-      applySuccess: undefined
+      activityApplyShow: '0'
     }
   },
   created () {
@@ -158,6 +158,7 @@ export default {
       })
     },
     quickSign (id) {
+      let _this = this
       this.api.post({
         url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
         data: {
@@ -167,7 +168,7 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             // alert(res.result)
-            this.applySuccess = false
+            _this.activityApplyShow = '2'
             // this.actiDel()
           } else {
             alert(res.result)
@@ -177,15 +178,16 @@ export default {
     },
     // 取消报名
     stopApply (id) {
+      let _this = this
       this.api.post({
         url: `springcloud-park/activity/activityApply/cancelApply?activityId=${id}`,
         data: {
           activityId: id
         },
-        dataFlag: true,
+        urlFlag: true,
         callback: function (res) {
           if (res.code === '0000') {
-            this.applySuccess = true
+            _this.activityApplyShow = '1'
             // _this.actiDel()
           }
         }

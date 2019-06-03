@@ -113,10 +113,10 @@
               </div>
             </div>
 
-            <div class="orgBtn fr mainColor" @click="getRecruitDetails(i.id),detailFlag=i.id">
+            <div class="orgBtn fr mainColor" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">
               了解详情
             </div>
-            <div class="orgBtn orgBtn1 fr mainColor">
+            <div class="orgBtn orgBtn1 fr mainColor" @click="onlineContat(i.comId)">
               在线联系
             </div>
             <!-- 详情弹框 -->
@@ -189,6 +189,31 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    //在线联系
+    onlineContat(id){
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+       this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: id
+        },
+        callback: res=> {
+          if (res.code == "0000") {
+            // this.typeList = res.data;
+            if(sessionStorage.userInfo.account==res.data.account){
+              this.$message.error('当前登录的账号跟聊天对象一样');
+              return
+            }
+            this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+    },
     handleFil(v) {
       this.type = v;
       this.actiFilflag = v;
@@ -255,7 +280,8 @@ export default {
           searchFiled: _this.searchFiled,
           type: _this.type,
           sortTypes: _this.sortTypes,
-          comId:_this.$route.query.comId
+          comId:_this.$route.query.comId,
+          whereTypes:_this.whereTypes
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -269,7 +295,6 @@ export default {
     },
     //企业招聘详情
     getRecruitDetails(id) {
-      this.humanDelVisible = true;
       let _this = this;
       this.api.get({
         url: "getRecruitDetails",
@@ -292,6 +317,23 @@ export default {
         url: "getInviteType",
         data: {
           groupId: "recruitType"
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.typeList = res.data;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //获取招聘类型
+    getCompanyContactAccount() {
+      let _this = this;
+      this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: "recruitType"
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -737,7 +779,7 @@ export default {
     width: 400px;
     position: absolute;
     right: 95px;
-    top: 66px;
+    top: -80px;
     text-align: left;
     .detail {
       margin-bottom: 10px;

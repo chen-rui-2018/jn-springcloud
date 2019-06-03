@@ -176,7 +176,7 @@ export default {
   .approvalGuide_search {
     position: fixed;
     z-index: 10;
-    top: 105px;
+    // top: 105px;
     width: 100%;
     .weui-search-bar {
       padding: 28px 32px;
@@ -212,7 +212,7 @@ export default {
   }
   .approvalGuide_main {
     .approvalGuide_tab {
-      margin-top: 110px;
+      // margin-top: 110px;
       position: fixed;
       top: 113px;
       width: 100%;
@@ -254,7 +254,7 @@ export default {
     }
     .approvalGuide_cont {
       margin: 30px 0;
-      margin-top: 320px;
+      margin-top: 220px;
       // margin-top: 44%;
       height: 100%;
       overflow: auto;
@@ -320,10 +320,15 @@ export default {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          width: 100%;
           span {
             font-size: 30px;
           }
+          span:nth-child(1){
+            width: 80%;
+          }
           span:nth-child(2) {
+            width: 20%;
             color: #00a041;
           }
         }

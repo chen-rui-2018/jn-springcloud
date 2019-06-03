@@ -24,7 +24,7 @@ public class AdvisorDetailParam implements Serializable {
     @ApiModelProperty(value = "业务领域",required = true,example = "technology_financial")
     private String businessArea;
     @NotNull(message="从业年限不能为空")
-    @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "workingYears:只能输入的数字和小数点")
+    @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "workingYears:从业年限只能输入的数字和小数点")
     @ApiModelProperty(value = "从业年限",required = true,example = "10")
     private String workingYears;
     @NotNull(message="毕业学校不能为空")

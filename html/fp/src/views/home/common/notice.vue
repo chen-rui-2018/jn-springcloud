@@ -10,7 +10,7 @@
         <slot v-if="slotContent"/>
         <div v-else v-html="content"></div>
       </div>
-      <div class="no-message" v-else>暂无咨询</div>
+      <div class="no-message" v-else>暂无信息</div>
     </div>
   </div>
 </template>

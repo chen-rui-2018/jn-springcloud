@@ -13,9 +13,9 @@ public class TaskStatistics implements Serializable {
 
     private String userId;
 
-    private Integer warnHour;
+    private Integer warnPercent;
 
-    private Integer earlyWarnHour;
+    private Integer earlyWarnPercent;
 
     public String getUserId() {
         return userId;
@@ -25,28 +25,28 @@ public class TaskStatistics implements Serializable {
         this.userId = userId;
     }
 
-    public Integer getWarnHour() {
-        return warnHour;
+    public Integer getWarnPercent() {
+        return warnPercent;
     }
 
-    public void setWarnHour(Integer warnHour) {
-        this.warnHour = warnHour;
+    public void setWarnPercent(Integer warnPercent) {
+        this.warnPercent = warnPercent;
     }
 
-    public Integer getEarlyWarnHour() {
-        return earlyWarnHour;
+    public Integer getEarlyWarnPercent() {
+        return earlyWarnPercent;
     }
 
-    public void setEarlyWarnHour(Integer earlyWarnHour) {
-        this.earlyWarnHour = earlyWarnHour;
+    public void setEarlyWarnPercent(Integer earlyWarnPercent) {
+        this.earlyWarnPercent = earlyWarnPercent;
     }
 
     @Override
     public String toString() {
         return "TaskStatistics{" +
                 "userId='" + userId + '\'' +
-                ", warnHour=" + warnHour +
-                ", earlyWarnHour=" + earlyWarnHour +
+                ", warnPercent=" + warnPercent +
+                ", earlyWarnPercent=" + earlyWarnPercent +
                 '}';
     }
 }

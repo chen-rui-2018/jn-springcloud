@@ -138,12 +138,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 }
             }
 
-            //保存
-            if(groupLogs !=null && groupLogs.size()>0){
-                logger.info("开始保存一个企业的电费的分段费用记录");
-                meterDao.saveGroupLogs(groupLogs);
-                logger.info("结束保存一个企业的电费的分段费用记录");
-            }
+
             logger.info("结束处理企业每块电表的用电量及费用");
 
             //电表的个数和每日电表的对象数是一样的，才是一个企业完整的一天的用电量
@@ -174,6 +169,15 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 if(! success){
                     throw new ErrorLogException(getErr(account, "创建账单失败", null, companyId, companyName,dealDate));
                 }
+
+                //保存
+                if(groupLogs !=null && groupLogs.size()>0){
+                    logger.info("开始保存一个企业的电费的分段费用记录");
+                    meterDao.saveGroupLogs(groupLogs);
+                    logger.info("结束保存一个企业的电费的分段费用记录");
+                }
+
+
                 TbElectricEnergyDayLog energyDayLog = new TbElectricEnergyDayLog();
                 energyDayLog.setCompanyId(companyId);
                 energyDayLog.setCompanyName(companyName);

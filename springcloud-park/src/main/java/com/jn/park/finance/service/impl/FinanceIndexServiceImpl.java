@@ -55,12 +55,22 @@ public class FinanceIndexServiceImpl implements FinanceIndexService {
         if(ratioAndState != null){
             //设置状态
             String state="正常";
-            int ratio=Integer.parseInt(ratioAndState);
-            //判断是否正常
-            int j=100;
-            if(ratio>j){
-                state="异常";
+            //获取各部门的支出收入比例
+            List<FinanceIndexBudgetExpendRatioVo> financeIndexBudgetExpendRatioVos = this.budgetExpendRatio(year);
+            if (financeIndexBudgetExpendRatioVos != null){
+                for (int i=0;i<financeIndexBudgetExpendRatioVos.size();i++){
+                    FinanceIndexBudgetExpendRatioVo financeIndexBudgetExpendRatioVo=new FinanceIndexBudgetExpendRatioVo();
+                    financeIndexBudgetExpendRatioVo=financeIndexBudgetExpendRatioVos.get(i);
+                    //去除 %
+                    String ratio= financeIndexBudgetExpendRatioVo.getRatio();
+                     ratio= ratio.substring(0,ratio.length()-1);
+                    if(Integer.parseInt(ratio) > Integer.parseInt(ratioAndState)){
+                        state="异常";
+                        break;
+                    }
+                }
             }
+
             //拼接%号 没有选择在SQL中直接拼接%，因为这个对比判断有%不好比较，选择在比较之后再拼接
             String ratioAndState1=ratioAndState+"%";
             financeIndexVo.setRatio(ratioAndState1);

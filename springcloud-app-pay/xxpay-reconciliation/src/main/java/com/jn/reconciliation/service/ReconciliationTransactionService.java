@@ -6,11 +6,12 @@ import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationMistakeScratch
 
 import java.util.List;
 
+
 /**
- * @ClassName：对账数据事务一致性service.
+ * @ClassName：对账数据事务一致性service
  * @Descript：
  * @Author： hey
- * @Date： Created on 2019/5/21 11:12
+ * @Date： Created on 2019/5/20 15:54
  * @Version： v1.0
  * @Modified By:
  */

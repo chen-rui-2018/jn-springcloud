@@ -27,6 +27,7 @@ import com.jn.park.notice.service.impl.NoticeManageServiceImpl;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.ApiModelProperty;
+import javafx.beans.binding.IntegerBinding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -121,7 +122,7 @@ public class MeterServiceImpl implements MeterService {
      */
     private Result collectionData(ElectricMeterDataCollectionParam parameter,Date dealDate,String hour){
         boolean isNotOver =true;
-        int loopGetData=0;
+        Integer loopGetData=0;
         //初始化参数
         if(parameter == null){
             parameter = getParameter();
@@ -150,7 +151,7 @@ public class MeterServiceImpl implements MeterService {
                     result.setResult("数据采集失败！！！");
                     break;
                 }
-                loopGetData++;
+                loopGetData+=1;
                 try{
                     //失败后睡眠
                     Thread.sleep(MeterConstants.SLEEP_TIME*loopGetData);
@@ -165,7 +166,7 @@ public class MeterServiceImpl implements MeterService {
                 //取出数据
                 ElectricOrWaterConditionShow page= (ElectricOrWaterConditionShow) collectionData.getData();
                 dataList.addAll(page.getData());
-                pageIndex++;
+                pageIndex +=1;
                 if(pageIndex>Integer.parseInt(page.getPages())){
                     //数据采集完成，没有下一页了
                     result.setCode(GlobalConstants.SUCCESS_CODE);
@@ -190,7 +191,7 @@ public class MeterServiceImpl implements MeterService {
     public Result saveData(List<ElectricMeterWaterOrElectricShow> dataList,Date dealDate, String hour,String taskBatch){
         Result result = new Result();
         boolean isNotOver =true;
-        int loopNum=0;
+        int loopNum= 0;
         if(dataList !=null && dataList.size()>0){
             //保存数据
             while(isNotOver){
@@ -205,7 +206,7 @@ public class MeterServiceImpl implements MeterService {
                             saveData = new ArrayList<>();
                         }
                     }
-                    if(saveData !=null || saveData.size() >0){
+                    if(saveData !=null && saveData.size() >0){
                         meterDao.insertReadingData(saveData);
                     }
                     result.setCode(GlobalConstants.SUCCESS_CODE);
@@ -222,7 +223,7 @@ public class MeterServiceImpl implements MeterService {
                         result.setResult("保存数据失败！！！");
                         break;
                     }
-                    loopNum++;
+                    loopNum = loopNum+1;
                     try{
                         //失败后睡眠
                         Thread.sleep(MeterConstants.SLEEP_TIME*loopNum);

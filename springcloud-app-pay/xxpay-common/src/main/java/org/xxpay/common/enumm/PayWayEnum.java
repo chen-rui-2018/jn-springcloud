@@ -13,29 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jn.reconciliation.enums;
+package org.xxpay.common.enumm;
 
 
 /**
- * @ClassName：对账状态枚举
+ * @ClassName：支付方式枚举
  * @Descript：
  * @Author： hey
- * @Date： Created on 2019/5/20 15:54
+ * @Date： Created on 2019/5/29 19:15
  * @Version： v1.0
  * @Modified By:
  */
-public enum BatchStatusEnum {
+public enum PayWayEnum {
 
-	SUCCESS("SUCCESS","对账操作成功"),
-	FAIL("FAIL","对账操作失败"),
-	ERROR("ERROR","银行返回错误信息"),
-	NOBILL("NOBILL","银行没有订单信息");
-
+	WX("WX","微信"),
+	ALIPAY("ALIPAY","支付宝");
 
 	private String code;
 	private String message;
 
-	BatchStatusEnum(String code, String message) {
+	PayWayEnum(String code, String message) {
 		this.code = code;
 		this.message = message;
 	}
@@ -50,9 +47,9 @@ public enum BatchStatusEnum {
 	}
 
 
-	public static BatchStatusEnum getEnumByCode(String code) {
-		BatchStatusEnum enumBean = null;
-		for (BatchStatusEnum enumType : values()) {
+	public static PayWayEnum getEnumByCode(String code) {
+		PayWayEnum enumBean = null;
+		for (PayWayEnum enumType : values()) {
 			if (enumType.getCode().equals(code)) {
 				//获取指定的枚举
 				enumBean = enumType;
@@ -62,5 +59,4 @@ public enum BatchStatusEnum {
 
 		return enumBean;
 	}
-
 }

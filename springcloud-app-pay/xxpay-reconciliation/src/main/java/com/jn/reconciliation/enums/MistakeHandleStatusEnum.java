@@ -15,55 +15,46 @@
  */
 package com.jn.reconciliation.enums;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
- * 差错处理状态 .
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：差错处理状态
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 public enum MistakeHandleStatusEnum {
+	HANDLED("1","已处理"),
+	NOHANDLE("0","未处理");
 
-	HANDLED("已处理"),
+	private String code;
+	private String message;
 
-	NOHANDLE("未处理");
-
-	private String desc;
-
-	private MistakeHandleStatusEnum(String desc) {
-		this.desc = desc;
+	MistakeHandleStatusEnum(String code, String message) {
+		this.code = code;
+		this.message = message;
 	}
 
-	public String getDesc() {
-		return desc;
+	public String getCode() {
+		return code;
 	}
 
-	public static MistakeHandleStatusEnum getEnum(String name) {
-		MistakeHandleStatusEnum[] arry = MistakeHandleStatusEnum.values();
-		for (int i = 0; i < arry.length; i++) {
-			if (arry[i].name().equals(name)) {
-				return arry[i];
+
+	public String getMessage() {
+		return message;
+	}
+
+
+	public static MistakeHandleStatusEnum getEnumByCode(String code) {
+		MistakeHandleStatusEnum enumBean = null;
+		for (MistakeHandleStatusEnum enumType : values()) {
+			if (enumType.getCode().equals(code)) {
+				//获取指定的枚举
+				enumBean = enumType;
+				break;
 			}
 		}
-		return null;
-	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List toList() {
-		MistakeHandleStatusEnum[] ary = MistakeHandleStatusEnum.values();
-		List list = new ArrayList();
-		for (int i = 0; i < ary.length; i++) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("desc", ary[i].getDesc());
-			map.put("name", ary[i].name());
-			list.add(map);
-		}
-		return list;
+		return enumBean;
 	}
-
 }

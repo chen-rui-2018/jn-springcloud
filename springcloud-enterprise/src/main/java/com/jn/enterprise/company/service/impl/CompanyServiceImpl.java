@@ -252,18 +252,29 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @ServiceLog(doAction = "编辑企业信息")
     public Integer updateCompanyInfo(CompanyUpdateParam companyUpdateParam, String account, String phone) {
-        // 判断当前用户是否为企业管理员
-        ServiceCompany company = getCompanyDetailByAccountOrId(account);
+        Result<UserExtensionInfo> userExtensionResult = userExtensionClient.getUserExtension(account);
+        if (userExtensionResult == null || userExtensionResult.getData() == null) {
+            logger.warn("[编辑企业信息] 获取用户信息失败，account：{}", account);
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.GET_USER_EXTENSION_INFO_ERROR);
+        }
+        UserExtensionInfo userExtensionInfo = userExtensionResult.getData();
+        if (StringUtils.isBlank(userExtensionInfo.getCompanyCode())) {
+            logger.warn("[编辑企业信息] 该账号不是企业用户，account：{}", account);
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.USER_NO_STAFF);
+        }
+
+        ServiceCompany company = getCompanyDetailByAccountOrId(userExtensionInfo.getCompanyCode());
 
         String code = (String)userExtensionClient.getSendCodeByPhone(phone).getData();
         if(!StringUtils.equals(code,companyUpdateParam.getCheckCode())){
-            //验证码有误
+            logger.warn("[编辑企业信息] 验证码校验失败，phone：{}", phone);
             throw new JnSpringCloudException(JoinParkExceptionEnum.MESSAGE_CODE_IS_WRONG);
         }
 
         // 如果有数据且正在审核中抛出异常
         TbServiceCompanyModify companyModify = companyMapper.getLastModify(company.getId());
         if (companyModify != null && companyModify.getCheckStatus().equals(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode())) {
+            logger.warn("[编辑企业信息] 企业信息正在审核中，请勿重复提交");
             throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.COMPANY_CHECK_ING);
         }
 

@@ -35,21 +35,13 @@
   </resultMap>
 
 
-  <!-- 对账批次条件 -->
-  <sql id="reconciliation_sql">
-    <if test="maxDate != null and maxDate != ''">
-      <![CDATA[ and create_time < #{maxDate}]]>
-    </if>
-  </sql>
-
   <!-- list查询 -->
   <select id="listByMaxDate" parameterType="java.lang.String" resultMap="BaseResultMap">
     select *
     from
     <include refid="table_name" />
-    <where>
-      <include refid="reconciliation_sql" />
-    </where>
+
+    <![CDATA[ where create_time < #{maxDate}]]>
   </select>
 
 </mapper>

@@ -490,6 +490,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
                 java.sql.Date leaseEndTime = new java.sql.Date(tbRoomOrders.getLeaseEndTime().getTime());
                 //获取订单集合
                 TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
+                tbRoomOrdersItemCriteria.setOrderByClause("create_time DESC");
                 tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(orderId);
                 List<TbRoomOrdersItem> tbRoomOrdersItems = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
                 if (tbRoomOrders != null) {
@@ -514,6 +515,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
                 TbRoomOrdersItem model = tbRoomOrdersItems.get(0);
                 BeanUtils.copyProperties(model, result);
                 result.setId(tbRoomOrders.getId());
+                result.setName(result.getRoomName());
                 result.setPaySum(tbRoomOrders.getPaySum());
                 result.setLastPayTime(lastTime);
                 result.setLeaseStartTime(leaseStartTime);

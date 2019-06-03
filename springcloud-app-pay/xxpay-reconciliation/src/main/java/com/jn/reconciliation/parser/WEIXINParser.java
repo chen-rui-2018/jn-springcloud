@@ -38,13 +38,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 微信对账单解析器 .
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：微信对账单解析器
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
-@Component("WEIXINParser")
+@Component("WXParser")
 public class WEIXINParser implements ParserInterface {
 
 	private static final Log LOG = LogFactory.getLog(WEIXINParser.class);
@@ -73,9 +74,9 @@ public class WEIXINParser implements ParserInterface {
 		// 判断返回的file文件是否正确
 		this.isError(file, batch);
 		if (batch.getStatus() != null) {
-			if (batch.getStatus().equals(BatchStatusEnum.ERROR.name()) || batch.getStatus().equals(BatchStatusEnum.NOBILL.name())) {
+			if (batch.getStatus().equals(BatchStatusEnum.ERROR.getCode()) || batch.getStatus().equals(BatchStatusEnum.NOBILL.getCode())) {
 				if (LOG.isDebugEnabled()) {
-					LOG.debug("对账失败, 对账日期: " + billDateStr + ", batchStatus: " + BatchStatusEnum.ERROR + ", bankMsg: [" + batch.getBankErrMsg() + "], checkFailMsg: [" + batch.getCheckFailMsg() + "]");
+					LOG.debug("对账失败, 对账日期: " + billDateStr + ", batchStatus: " + BatchStatusEnum.ERROR.getMessage() + ", bankMsg: [" + batch.getBankErrMsg() + "], checkFailMsg: [" + batch.getCheckFailMsg() + "]");
 				}
 				return null;
 			}
@@ -119,22 +120,22 @@ public class WEIXINParser implements ParserInterface {
 		// 18:42:38,`wx3798432a27e0c92a,`1263453701,`1308363301,`,`1000020956201602163316153533,`PAY2016021610017685,`ozSK7wswIt3nBfUxsJDp5hWZSm_8,`MICROPAY,`SUCCESS,`CFT,`CNY,`95.00,`0.00,`erp
 		// product,`,`0.57000,`0.60%
 
-		// 总交易单数,总交易额,总退款金额,总企业红包退款金额,手续费总金额
-		// `383,`32903.45,`0.00,`0.00,`197.45000
+		//总交易单数,应结订单总金额,退款总金额,充值券退款总金额,手续费总金额,订单总金额,申请退款总金额
+		//`1,`0.10,`0.00,`0.00,`0.00000,`0.10,`0.00
 
-		String title = "交易时间,公众账号ID,商户号,子商户号,设备号,微信订单号,商户订单号,用户标识,交易类型,交易状态,付款银行,货币种类,总金额,企业红包金额,商品名称,商户数据包,手续费,费率";
-		String totalTitle = "总交易单数,总交易额,总退款金额,总企业红包退款金额,手续费总金额";
+		String title = "交易时间,公众账号ID,商户号,特约商户号,设备号,微信订单号,商户订单号,用户标识,交易类型,交易状态,付款银行,货币种类,应结订单金额,代金券金额,商品名称,商户数据包,手续费,费率,订单金额,费率备注";
+		String totalTitle = "总交易单数,应结订单总金额,退款总金额,充值券退款总金额,手续费总金额,订单总金额,申请退款总金额";
 
-		Pattern titlePattern = Pattern.compile("(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?)$");
-		Pattern pattern = Pattern.compile("^`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?)$");
+		Pattern titlePattern = Pattern.compile("(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?)$");
+		Pattern pattern = Pattern.compile("^`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?)$");
 
-		Pattern totalTitlePattern = Pattern.compile("(.*?),(.*?),(.*?),(.*?),(.*?)$");
-		Pattern totalPattern = Pattern.compile("^`(.*?),`(.*?),`(.*?),`(.*?),`(.*?)$");
+		Pattern totalTitlePattern = Pattern.compile("(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?)$");
+		Pattern totalPattern = Pattern.compile("^`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?),`(.*?)$");
 
 		// 校验标题行
 		String titleRawData = list.remove(0);
 		if (!titlePattern.matcher(titleRawData).find()) {
-			batch.setStatus(BatchStatusEnum.FAIL.name());
+			batch.setStatus(BatchStatusEnum.FAIL.getCode());
 			batch.setCheckFailMsg("校验标题行不通过, rawdata[" + titleRawData + "], 期望值[" + title + "]");
 			return null;
 		}
@@ -143,7 +144,7 @@ public class WEIXINParser implements ParserInterface {
 		String totalRawData = list.remove(list.size() - 1); // 这两行的顺序不能变
 		String totalTitleRawData = list.remove(list.size() - 1);
 		if (!totalTitlePattern.matcher(totalTitleRawData).find()) {
-			batch.setStatus(BatchStatusEnum.FAIL.name());
+			batch.setStatus(BatchStatusEnum.FAIL.getCode());
 			batch.setCheckFailMsg("校验统计标题行不通过, rawdata[" + totalTitleRawData + "], 期望值[" + totalTitle + "]");
 			return new ArrayList<ReconciliationEntityVo>();
 		}
@@ -152,7 +153,7 @@ public class WEIXINParser implements ParserInterface {
 			// 总交易单数
 			String totalCount = totalMatcher.group(1);
 			// 总交易额
-			String totalAmountStr = totalMatcher.group(2);
+			String totalAmountStr = totalMatcher.group(6);
 			// 总退款金额
 			String refundAmountStr = totalMatcher.group(3);
 			// 手续费总金额
@@ -166,7 +167,7 @@ public class WEIXINParser implements ParserInterface {
 				batch.setBankFee(new BigDecimal(feeAmountStr));
 			} catch (NumberFormatException e) {
 				LOG.warn("解析统计行失败, billDate[" + billDate + "], billType[SUCCESS], rawdata[" + totalRawData + "]", e);
-				batch.setStatus(BatchStatusEnum.FAIL.name());
+				batch.setStatus(BatchStatusEnum.FAIL.getCode());
 				batch.setCheckFailMsg("解析统计行失败, rawdata[" + totalRawData + "]");
 				// 恢复空值
 				batch.setBankTradeCount(null);
@@ -176,7 +177,7 @@ public class WEIXINParser implements ParserInterface {
 				return null;
 			}
 		} else {
-			batch.setStatus(BatchStatusEnum.FAIL.name());
+			batch.setStatus(BatchStatusEnum.FAIL.getCode());
 			batch.setCheckFailMsg("匹配统计行失败, rawdata[" + totalRawData + "]");
 			return new ArrayList<ReconciliationEntityVo>();
 		}
@@ -199,7 +200,7 @@ public class WEIXINParser implements ParserInterface {
 				// 交易状态
 				String bankTradeStatus = matcher.group(10);
 				// 总金额
-				String orderAmount = matcher.group(13);
+				String orderAmount = matcher.group(19);
 				// 企业红包金额
 				// String discountAmount = matcher.group(14);
 				// 手续费
@@ -211,7 +212,7 @@ public class WEIXINParser implements ParserInterface {
 					entityVo.setOrderTime(sdf.parse(tradeTimeStr));
 				} catch (ParseException e) {
 					LOG.warn("解析交易时间出错, billDate[" + billDate + "], billType[SUCCESS], tradeTime[" + tradeTimeStr + "], rawdata[" + rawData + "]", e);
-					batch.setStatus(BatchStatusEnum.FAIL.name());
+					batch.setStatus(BatchStatusEnum.FAIL.getCode());
 					batch.setCheckFailMsg("解析交易时间出错, tradeTime[" + tradeTimeStr + "], rawdata[" + rawData + "]");
 					return null;
 				}
@@ -226,7 +227,7 @@ public class WEIXINParser implements ParserInterface {
 				// 设置银行
 				entityVo.setBankFee(new BigDecimal(bankFee));
 			} else {
-				batch.setStatus(BatchStatusEnum.FAIL.name());
+				batch.setStatus(BatchStatusEnum.FAIL.getCode());
 				batch.setCheckFailMsg("匹配账单明细失败, rawdata[" + rawData + "]");
 				return null;
 			}
@@ -257,9 +258,9 @@ public class WEIXINParser implements ParserInterface {
 				// 判断是没有数据还是下载失败
 				// 注意：如果是没有数据，还是需要继续对账处理，为了把平台数据放入缓冲池，如果是下载失败，直接不进行下一步，保存batch
 				if (returnMsg.contains("No Bill Exist")) {
-					batch.setStatus(BatchStatusEnum.NOBILL.name());
+					batch.setStatus(BatchStatusEnum.NOBILL.getCode());
 				} else {
-					batch.setStatus(BatchStatusEnum.ERROR.name());
+					batch.setStatus(BatchStatusEnum.ERROR.getCode());
 					payReconciliationCheckBatchService.saveData(batch);
 				}
 			}

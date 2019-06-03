@@ -16,6 +16,16 @@
 
 
 	<dependencies>
+		<!--南京项目common包-->
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>springcloud-app-common</artifactId>
+		</dependency>
+		<!--用到短信模板-->
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>springcloud-news-api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.jn</groupId>
 			<artifactId>xxpay-dal</artifactId>

@@ -37,6 +37,7 @@
 </el-form>
     </div>
     <el-dialog
+    :modal-append-to-body="false"
   title="海报图片"
   :visible.sync="dialogVisible"
   width="50%">

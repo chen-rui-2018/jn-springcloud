@@ -87,7 +87,7 @@ export default {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:investorAccount,nickName:investorName}})
+      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,toUser:investorAccount,nickName:investorName}})
     },
     getInvestorInfoDetails() {
       //投资人详情

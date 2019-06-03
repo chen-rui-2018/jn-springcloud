@@ -30,13 +30,19 @@
       <notice
         v-if="messageData.company"
         title="企业邀请"
-        :content="messageData.company.data.messageContent"
+        :content="messageData.company.data.length > 0"
         slotContent
         type="primary"
       >
-        <div v-if="messageData.company.data.messageConnect && messageData.company.data.messageConnect.comId">
-          {{ messageData.company.data.messageContent }}邀请您加入他们的企业，点击
-          <router-link :to="`/myBusiness/businesInvitation?comId=${messageData.company.data.messageConnect.comId}&comName=${messageData.company.data.messageConnect.comName}`" style="color: #00a041;">查看详情</router-link>。
+        <div
+          v-for="(item, index) in messageData.company.data"
+          :key="index"
+          class="notice-content">
+          <div class="notice-dot"></div>
+          <div v-if="item.messageContent">
+            {{ item.messageContent }}邀请您加入他们的企业，点击
+            <router-link :to="`/myBusiness/businesInvitation?comId=${item.messageConnect.comId}&comName=${item.messageConnect.comName}`" style="color: #00a041;">查看详情</router-link>。
+          </div>
         </div>
       </notice>
       <router-link to="">
@@ -49,15 +55,25 @@
       </router-link>
       <notice
         v-if="roleJurisdiction"
-        :content="messageData.organization.data.messageContent"
+        :content="messageData.organization.data.length > 0"
         title="机构邀请"
         type="primary"
         slotContent
       >
-        <div v-if="messageData.organization.data.messageConnect && messageData.organization.data.messageConnect.comId">
-          {{ messageData.organization.data.messageContent }}邀请您加入他们机构的顾问，点击
-          <router-link :to="`/myBody/acceptInvitation?comId=${messageData.organization.data.messageConnect.comId}&comName=${messageData.organization.data.messageConnect.comName}`" style="color: #00a041;">查看详情</router-link>。
+        <div
+          v-for="(item, index) in messageData.organization.data"
+          :key="index"
+          class="notice-content">
+          <div class="notice-dot"></div>
+          <div v-if="item.messageContent">
+            {{ item.messageContent }}邀请您加入他们机构的顾问，点击
+            <router-link
+              v-if="item.messageConnect && item.messageConnect.comId"
+              :to="`/myBody/acceptInvitation?comId=${item.messageConnect.comId}&comName=${item.messageConnect.comName}`" style="color: #00a041;"
+            >查看详情</router-link>。
+          </div>
         </div>
+
       </notice>
       <router-link to="/myBody/counselorManagement">
         <notice
@@ -230,10 +246,13 @@
             callback: (res) => {
               if (res.code === "0000") {
                 if (res.data && res.data.rows && res.data.rows.length > 0) {
-                  this.messageData[key].data = res.data.rows[0]
-                  this.messageData[key].data.messageConnect = JSON.parse(this.messageData[key].data.messageConnect)
+                  // this.messageData[key].data = res.data.rows
+                  this.messageData[key].data = [res.data.rows[0]]
+                  this.messageData[key].data.forEach(item => {
+                    item.messageConnect = JSON.parse(item.messageConnect)
+                  })
                 } else {
-                  this.messageData[key].data = {}
+                  this.messageData[key].data = []
                 }
               } else {
                 this.$message.error(res.result)
@@ -276,7 +295,17 @@
   @import "~@/css/common";
   .user-center {
     color: #333333;
-
+    .notice-content {
+      padding: trsw(23);
+      @include flex($h: flex-start, $v: center);
+    }
+    .notice-dot {
+      width: trsw(9);
+      height: trsw(9);
+      margin-right: 6px;
+      border-radius: 50%;
+      background-color: $--color-primary;
+    }
     .user-header {
       padding: 32px;
       background-color: #fff;

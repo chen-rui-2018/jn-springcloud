@@ -34,7 +34,7 @@
           </a>
         </div>
       </div>
-      <div class="consult" @click="$router.push({path: '/guest/pd/consult'})"> 咨询 </div>
+      <div class="declaration_consult" @click="$router.push({path: '/guest/pd/consult'})"> 咨询 </div>
     </div>
   </div>
 </div>
@@ -212,7 +212,7 @@ export default {
           }
         }
       }
-      .consult{
+      .declaration_consult{
         display: flex;
         justify-content: center;
         margin:30px;

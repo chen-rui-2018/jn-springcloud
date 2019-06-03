@@ -355,7 +355,7 @@ export default {
       }
       this.$router.push({
         path: "/chat",
-        query: { toUser: advisorAccount, nickName: advisorName }
+        query: {fromUser:JSON.parse(sessionStorage.userInfo).account, toUser: advisorAccount, nickName: advisorName }
       });
     },
     demandRaise(i) {

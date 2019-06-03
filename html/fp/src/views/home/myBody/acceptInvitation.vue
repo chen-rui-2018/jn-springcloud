@@ -232,7 +232,7 @@
       </div>
 
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="50%">
+    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
       <img :src="certificatePhoto" alt="图片" style="width:100%;height:200px;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>

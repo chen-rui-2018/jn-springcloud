@@ -103,8 +103,8 @@
                 <i class="mainColor">{{i.careUser}}</i>人关注</span>
             </p>
             <p>
-              <a class="attention" v-if="attentionStatus=='0'" @click="handleAttention(i.id)">+关注</a>
-              <a class="attention" v-if="attentionStatus=='1'" @click="cancelAttention(i.id)">已关注</a>
+              <a class="attention" v-if="i.attentionStatus=='0'" @click="handleAttention(i.id)">+关注</a>
+              <a class="attention" v-if="i.attentionStatus=='1'" @click="cancelAttention(i.id)">取消关注</a>
               <a @click="$router.push({path:'/recruitmentList',query:{comId:i.id}})">热招职位</a>
             </p>
           </div>
@@ -183,7 +183,7 @@ export default {
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
-              this.attentionStatus = "1";
+              this.getCompanyList()
             } else {
               this.$message.error(res.result);
             }
@@ -206,7 +206,7 @@ export default {
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
-              this.attentionStatus = "0";
+              this.getCompanyList()
             } else {
               this.$message.error(res.result);
             }
@@ -290,7 +290,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.CompanyList = res.data.rows.data;
+            _this.CompanyList = res.data.rows;
             _this.total = res.data.total;
           } else {
             _this.$message.error(res.result);

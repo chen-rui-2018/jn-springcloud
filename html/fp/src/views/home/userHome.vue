@@ -312,7 +312,8 @@ export default {
       this.api.post({
         url: "modifyUserPassword",
         data: {
-          account: _this.$route.query.account,
+          // account: _this.$route.query.account,
+          account:JSON.parse(sessionStorage.userInfo).account,
           newPassword: _this.newPassword,
           // newPasswordB: _this.newPasswordB,
           oldPassword: _this.oldPassword

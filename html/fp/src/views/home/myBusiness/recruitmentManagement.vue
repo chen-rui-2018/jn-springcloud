@@ -22,21 +22,31 @@
           <el-table-column prop="num" label="招聘人数  (名)" align="center"> </el-table-column>
           <el-table-column prop="typeName" label="招聘类型" align="center"> </el-table-column>
           <el-table-column prop="createdTime" label="发布时间" align="center"> </el-table-column>
+          <el-table-column label="状态" align="center">
+              <template slot-scope="scope">
+             <span v-if="scope.row.approvalStatus==='0'">未审批</span>
+             <span v-if="scope.row.approvalStatus==='1'">审批中</span>
+             <span v-if="scope.row.approvalStatus==='2'" class="greenColor">审批通过</span>
+             <span v-if="scope.row.approvalStatus==='3'" class="redColor">未通过审批</span>
+
+   </template>
+          </el-table-column>
           <el-table-column label="操作" align="center" width="120" >
             <template slot-scope="scope">
               <el-button
                 size="mini"
                   type="text"
+                  v-if="scope.row.approvalStatus==='2'"
                 @click="handleEdit( scope.row)" class="greenColor"><span>编辑</span>
               </el-button>
               <el-button
-              v-if="scope.row.status==='1'"
+              v-if="scope.row.status==='1'&&scope.row.approvalStatus==='2'"
                 size="mini"
                 type="text"
                 @click="handleSoldOut(scope.row)" class="redColor"><span>下架</span>
               </el-button>
               <el-button
-              v-if="scope.row.status==='0'"
+              v-if="scope.row.status==='0'&&scope.row.approvalStatus==='2'"
                 size="mini"
                 type="text"
                 @click="handleSoldOut(scope.row)" class="redColor"><span>上架</span>
@@ -93,8 +103,14 @@ export default {
     // 点击上下架
     handleSoldOut(row){
   console.log(row)
-  let _this = this;
-      this.api.post({
+      let _this = this;
+        this.$confirm(`是否进行上下架操作, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+            this.api.post({
         url: "underRecruit",
         data: {id:row.id,status:row.status},
         // dataFlag:true,
@@ -107,6 +123,11 @@ export default {
           }
         }
       });
+      })
+        .catch(() => {
+
+        })
+
     },
      handleSizeChange(val) {
       //改变每页显示多少条的回调函数

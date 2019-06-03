@@ -218,7 +218,8 @@ export default {
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
-              this.isCare = "1";
+              // this.isCare = "1";
+              this.getCompanyDetail()
             } else {
               this.$message.error(res.result);
             }
@@ -241,7 +242,8 @@ export default {
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
-              this.isCare = "0";
+              // this.isCare = "0";
+              this.getCompanyDetail()
             } else {
               this.$message.error(res.result);
             }
@@ -361,11 +363,12 @@ export default {
         callback: res=> {
           if (res.code == "0000") {
             // this.typeList = res.data;
-            if(sessionStorage.userInfo.account==res.data.account){
+            if(JSON.parse(sessionStorage.userInfo).account==res.data.account){
               this.$message.error('当前登录的账号跟聊天对象一样');
               return
             }
-            this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
+            // this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
+            this.$router.push({path:'/chat',query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:res.data.account,nickName:res.data.nickName}})
           } else {
             this.$message.error(res.result);
           }

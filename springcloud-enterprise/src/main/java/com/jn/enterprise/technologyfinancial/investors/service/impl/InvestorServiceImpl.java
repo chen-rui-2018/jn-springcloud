@@ -27,7 +27,6 @@ import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.enums.HomeRoleEnum;
-import com.jn.user.enums.UserExtensionExceptionEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -123,14 +122,12 @@ public class InvestorServiceImpl implements InvestorService {
         List<InvestorInfoListShow> investorInfoList = investorMapper.getInvestorInfoList(investorInfoListParam.getMainCode(), investorInfoListParam.getKeyWords());
 
         // 处理图片格式
-        List<InvestorInfoListShow> investorInfoListAvatar = new ArrayList<>();
         if (investorInfoList != null && !investorInfoList.isEmpty()) {
             for (InvestorInfoListShow infoListShow : investorInfoList) {
                 infoListShow.setAvatar(IBPSFileUtils.getFilePath(infoListShow.getAvatar()));
-                investorInfoListAvatar.add(infoListShow);
             }
         }
-        return new PaginationData(investorInfoListAvatar, objects == null ? 0 : objects.getTotal());
+        return new PaginationData(investorInfoList, objects == null ? 0 : objects.getTotal());
     }
 
     /**

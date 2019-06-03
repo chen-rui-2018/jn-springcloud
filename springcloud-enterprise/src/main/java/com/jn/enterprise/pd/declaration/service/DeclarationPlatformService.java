@@ -24,7 +24,7 @@ public interface DeclarationPlatformService {
      *
      * @return
      */
-    PaginationData<List<DeclarationPlatformModel>> selectByDeclarationPlatformList(String subordinatePlatformName, String platformTitle, int page, int rows);
+    PaginationData<List<DeclarationPlatformModel>> selectByDeclarationPlatformList(String subordinatePlatformName, String platformTitle, int page, int rows,User user);
 
     /**
      * 查询所有平台类型列表

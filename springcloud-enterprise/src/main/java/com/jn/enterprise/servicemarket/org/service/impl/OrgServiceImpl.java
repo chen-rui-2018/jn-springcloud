@@ -10,6 +10,7 @@ import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
+import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.model.ServiceOrg;
@@ -169,6 +170,10 @@ public class OrgServiceImpl implements OrgService {
         }
 
         // 处理图片格式
+        List<OrgLicense> honorLicense = serviceOrgDetailVo.getHonorLicense();
+        for(OrgLicense orgLicense:honorLicense){
+            orgLicense.setFileUrl(IBPSFileUtils.getFilePath(orgLicense.getFileUrl()));
+        }
         serviceOrgDetailVo.setOrgLogo(IBPSFileUtils.getFilePath(serviceOrgDetailVo.getOrgLogo()));
         return serviceOrgDetailVo;
     }
@@ -190,7 +195,6 @@ public class OrgServiceImpl implements OrgService {
             List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
             StringBuffer sbSpeciality = new StringBuffer();
             StringBuffer sbHobby = new StringBuffer();
-            String businessTypeStr = "";
             for (TbServicePrefer prefer:tbServicePrefers) {
                 for (String sp:orgBasicData.getOrgSpeciality()) {
                     if(StringUtils.equals(sp,prefer.getId())){
@@ -736,7 +740,7 @@ public class OrgServiceImpl implements OrgService {
             return 1;
         }else{
             logger.warn("添加机构管理员角色失败，失败原因：更新用户角色为“机构管理员”失败");
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
     }
 }

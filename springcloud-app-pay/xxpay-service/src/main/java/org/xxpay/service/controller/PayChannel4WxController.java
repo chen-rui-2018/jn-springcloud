@@ -145,10 +145,10 @@ public class PayChannel4WxController{
                         payInfoMap.put("appId", wxPayUnifiedOrderResult.getAppid());
                         payInfoMap.put("timeStamp", timestamp);
                         payInfoMap.put("nonceStr", nonceStr);
-                        payInfoMap.put("packageValue", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
+                        payInfoMap.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
                         payInfoMap.put("signType", WxPayConstants.SignType.MD5);
 
-                        //=========组装返回前台参数================
+                        //=========此JSON用来返回前台参数================
                         orderInfo.put("appId", wxPayUnifiedOrderResult.getAppid());
                         // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
                         orderInfo.put("timeStamp", timestamp);

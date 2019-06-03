@@ -1,6 +1,6 @@
 ﻿import axios from "axios"
 export default {
-    host:"http://112.94.22.222:8000/",//api的域名提出来放这里
+    host:"http://172.16.160.19:6062/",//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
         loginURL:"springcloud-app-system/login",
         getDynamicMenu:"springcloud-app-system/system/sysMenu/getDynamicMenu",

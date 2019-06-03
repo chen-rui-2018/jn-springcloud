@@ -37,15 +37,15 @@ public class AccessTokenConfig {
         FilterRegistrationBean registration = new FilterRegistrationBean(new AccessTokenFilter());
         registration.addUrlPatterns("*");
         registration.addInitParameter("exclusions_url", exclusionsUrl);
-        registration.addInitParameter("access_token_url", "http://112.94.22.222:2383/ibps-platform-portal/auth2/access_token.htm");
+        registration.addInitParameter("access_token_url", "http://172.16.160.19:6065/ibps-platform-portal/auth2/access_token.htm");
         registration.addInitParameter("client_id", "test");
         registration.addInitParameter("client_secret", "0ef09aca-d525-0e94-b1e5-6259eb4ff964");
-        registration.addInitParameter("code_url", "http://112.94.22.222:2383/ibps-platform-portal/authorize.htm");
-        registration.addInitParameter("login_url", "http://112.94.22.222:2383/ibps-platform-portal/login.jsp");
-        registration.addInitParameter("redirect_url", "http://112.94.22.222:2383/ibps-platform-portal/login.jsp");
-        registration.addInitParameter("logout_url", "http://112.94.22.222:2383/ibps-platform-portal/logout.htm");
-        registration.addInitParameter("user_url", "http://112.94.22.222:2383/ibps-platform-portal/auth2/user.htm");
-        registration.addInitParameter("success_url", "http://112.94.22.222:2384/ibps");
+        registration.addInitParameter("code_url", "http://172.16.160.19:6065/ibps-platform-portal/authorize.htm");
+        registration.addInitParameter("login_url", "http://172.16.160.19:6065/ibps-platform-portal/login.jsp");
+        registration.addInitParameter("redirect_url", "http://172.16.160.19:6065/ibps-platform-portal/login.jsp");
+        registration.addInitParameter("logout_url", "http://172.16.160.19:6065/ibps-platform-portal/logout.htm");
+        registration.addInitParameter("user_url", "http://172.16.160.19:6065/ibps-platform-portal/auth2/user.htm");
+        registration.addInitParameter("success_url", "http://172.16.160.19:6066/ibps");
         return registration;
     }
 

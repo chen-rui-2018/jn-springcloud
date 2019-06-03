@@ -15,7 +15,7 @@ service.interceptors.request.use(
     // console.log('================>getToken：' + getToken() + '<1>' + !getToken())
     if (!getToken()) {
       $.ajax({
-        url: 'http://112.94.22.222:8000/springcloud-app-system/authLogin',
+        url: 'http://172.16.160.19:6061/springcloud-app-system/authLogin',
         type: 'POST',
         async: false,
         data: {
@@ -60,14 +60,14 @@ service.interceptors.response.use(response => {
   // console.log('================>请求返回code：' + res.code)
   if (res.code === 'index') {
     removeToken()
-    location.href = 'http://112.94.22.222:2384/ibps/logout.htm'
+    location.href = 'http://172.16.160.19:6066/ibps/logout.htm'
   } else {
     return response
   }
 }, error => {
   removeToken()
   console.log('请重新登录：' + error)
-  location.href = 'http://112.94.22.222:2384/ibps/logout.htm'
+  location.href = 'http://172.16.160.19:6066/ibps/logout.htm'
   return Promise.reject(error)
 })
 

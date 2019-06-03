@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 export default {
-  host: 'http://112.94.22.222:8000/',
+  host: 'http://172.16.160.19:6063/',
   apiURL: {
     departList: 'springcloud-park/guest/portal/sp/power/departList', // 实施部门列表
     powerList: 'springcloud-park/guest/portal/sp/power/list', // 权利清单列表

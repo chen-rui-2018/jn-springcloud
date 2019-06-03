@@ -8,7 +8,7 @@
     <div class="special_main">
       <!-- input框 -->
       <div class="special_search">
-        <input type="text" placeholder="搜公告" v-model="sendData.keyWords">
+        <input type="text" placeholder="请输入服务产品名称" v-model="sendData.keyWords">
         <i class="iconfont icon-sousuo" @click="handleSearch"></i>
       </div>
       <!-- tab栏表格 -->

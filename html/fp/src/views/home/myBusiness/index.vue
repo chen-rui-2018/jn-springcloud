@@ -1,5 +1,5 @@
 <template>
-  <div class="business">
+  <div class="business" v-loading="loading">
     <div class="business_title">
       <div class="myBusiness">我的企业 &nbsp;(<span v-show="isColleague" @click="toColleagueList">查看企业同事</span>)</div>
       <div class="business_nav">
@@ -57,7 +57,7 @@
           <el-form-item label="注册资金（万元）:" class="">
             <span>{{regCapital}}</span>
           </el-form-item>
-          <el-form-item label="企业规模:" class="borr">
+          <el-form-item label="企业规模（人）:" class="borr">
             <span>{{comScale}}</span>
           </el-form-item>
         </div>
@@ -105,15 +105,16 @@
 export default {
   data() {
     return {
-      isFooter:false,
-      companyCode:'',
-      parkList:[],
-      isStaff:false,
-      isEnterprise:false,
-      isColleague:false,
-      isPublicity:false,
-      isInvite:false,
-      resourcesList:'',
+      loading: true,
+      isFooter: false,
+      companyCode: "",
+      parkList: [],
+      isStaff: false,
+      isEnterprise: false,
+      isColleague: false,
+      isPublicity: false,
+      isInvite: false,
+      resourcesList: "",
       userAccount: "",
       foundingTime: "", //注册时间
       comName: "", //企业名称
@@ -137,34 +138,33 @@ export default {
       proImgs: [] //企业宣传图片
     };
   },
-  created(){
-this.getParkList()
+  created() {
+    this.getParkList();
   },
   mounted() {
-    let initArr=JSON.parse(sessionStorage.menuItems)
-    initArr.forEach(v=>{
-      if(v.label==='我的企业'){
-           v.resourcesList.forEach(i=>{
-             if(i.resourcesName==='发布企业招聘信息'){
-               this.isInvite=true
-             }else if(i.resourcesName==='发布宣传'){
-                this.isPublicity=true
-             }else if(i.resourcesName==='同事列表'){
-                this.isColleague=true
-             }else if(i.resourcesName==='编辑企业信息'){
-                this.isEnterprise=true
-             }else if(i.resourcesName==='员工列表'){
-                this.isStaff =true
-             }
-           })
-
+    let initArr = JSON.parse(sessionStorage.menuItems);
+    initArr.forEach(v => {
+      if (v.label === "我的企业") {
+        v.resourcesList.forEach(i => {
+          if (i.resourcesName === "发布企业招聘信息") {
+            this.isInvite = true;
+          } else if (i.resourcesName === "发布宣传") {
+            this.isPublicity = true;
+          } else if (i.resourcesName === "同事列表") {
+            this.isColleague = true;
+          } else if (i.resourcesName === "编辑企业信息") {
+            this.isEnterprise = true;
+          } else if (i.resourcesName === "员工列表") {
+            this.isStaff = true;
+          }
+        });
       }
-    })
+    });
 
     this.init();
   },
   methods: {
-      //所属园区
+    //所属园区
     getParkList() {
       let _this = this;
       this.api.get({
@@ -172,24 +172,25 @@ this.getParkList()
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-           _this.parkList=res.data
+            _this.parkList = res.data;
           } else {
             _this.$message.error(res.result);
           }
         }
-      });},
+      });
+    },
     init() {
       let _this = this;
       _this.api.get({
         url: "getCompanyDetailByAccountOrCompanyId",
-        data:{accountOrCompanyId :sessionStorage.companyCode},
+        data: { accountOrCompanyId: sessionStorage.companyCode },
         callback: function(res) {
-          console.log(res)
+          _this.loading = false;
           if (res.code == "0000") {
-            if(sessionStorage.account===res.data.comAdmin){
-               _this.isFooter=false
-            }else{
-              _this.isFooter=true
+            if (sessionStorage.account === res.data.comAdmin) {
+              _this.isFooter = false;
+            } else {
+              _this.isFooter = true;
             }
             _this.comName = res.data.comName;
             _this.comNameShort = res.data.comNameShort;
@@ -211,11 +212,13 @@ this.getParkList()
             _this.avatar = res.data.avatar;
             _this.businessLicense = res.data.businessLicense;
             _this.proImgs = res.data.propagandaPicture;
-            _this.parkList.forEach(v=>{
-              if(v.id===res.data.affiliatedPark){
-                 _this.affiliatedName=v.parkName
+            _this.parkList.forEach(v => {
+              if (v.id === res.data.affiliatedPark) {
+                _this.affiliatedName = v.parkName;
               }
-            })
+            });
+          } else {
+            _this.$message.error(res.result);
           }
         }
       });
@@ -233,22 +236,22 @@ this.getParkList()
       this.$router.push({ name: "staffManagement" });
     },
     toUserCenter() {
-        this.api.post({
+      this.api.post({
         url: "leaveCompany",
         data: {},
-        callback: function(res) {
-          console.log(res)
+        callback: (res) =>{
+          console.log(res);
           if (res.code == "0000") {
-             this.$message({
-                    message: "操作成功",
-                    type: "success"
-                  });
-this.$router.push({ path: "/home" });
+            this.$message({
+              message: "操作成功",
+              type: "success"
+            });
+            this.$router.push({ path: "/home" });
           } else {
             this.$message.error(res.result);
           }
         }
-      })
+      });
       // this.$router.push({ path: "/home" });
     },
     toEditBusiness() {
@@ -264,11 +267,11 @@ this.$router.push({ path: "/home" });
     // .inline {
     //   display: inline-block;
     // }
-    .borb{
+    .borb {
       border-bottom: 1px solid #ccc;
     }
-    .borr{
-         border-right: 1px solid #ccc;
+    .borr {
+      border-right: 1px solid #ccc;
     }
     .el-form-item__label {
       width: 133px;
@@ -286,8 +289,8 @@ this.$router.push({ path: "/home" });
     .el-form-item {
       margin-bottom: 0px;
       flex: 1;
-      border-top:1px solid #ccc;
-      border-left:1px solid #ccc;
+      border-top: 1px solid #ccc;
+      border-left: 1px solid #ccc;
       display: flex;
     }
     .el-form-item__content {

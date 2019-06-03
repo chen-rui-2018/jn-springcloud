@@ -18,7 +18,9 @@
         <div class="regDataContent">
             <el-card>
                 <div class="dataImg">
-                    <img :src="actiInfo.avatar" alt="">
+                    <div class="imgItem">
+                      <img :src="actiInfo.avatar" alt="">
+                    </div>
                     <div class="dataName">{{actiInfo.name}}</div>
                     <i class="iconfont icon-xingbienv">{{actiInfo.age}}</i>
                     <p>个性签名：
@@ -99,6 +101,18 @@ export default {
       height: 300px;
       text-align: center;
     }
+    .imgItem{
+width: 100px;
+height: 100px;
+margin:0 auto;
+ border-radius: 50%;
+img{
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+    }
     .dataInfo {
       padding: 30px;
       .dataLeft {
@@ -131,4 +145,3 @@ export default {
   }
 }
 </style>
-

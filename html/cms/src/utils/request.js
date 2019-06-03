@@ -3,11 +3,12 @@ import $ from 'jquery'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 // create an axios instance
+const BASE_API = process.env.BASE_API
+const BASE_IBPS_LOGOUT_API = process.env.BASE_IBPS_LOGOUT_API
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api 的 base_url
+  baseURL: BASE_API, // api 的 base_url
   timeout: 1000 // request timeout
 })
-
 // request interceptor
 service.interceptors.request.use(
   config => {
@@ -15,7 +16,7 @@ service.interceptors.request.use(
     // console.log('================>getToken：' + getToken() + '<1>' + !getToken())
     if (!getToken()) {
       $.ajax({
-        url: 'http://172.16.160.19:6061/springcloud-app-system/authLogin',
+        url: BASE_API + 'springcloud-app-system/authLogin',
         type: 'POST',
         async: false,
         data: {
@@ -60,14 +61,14 @@ service.interceptors.response.use(response => {
   // console.log('================>请求返回code：' + res.code)
   if (res.code === 'index') {
     removeToken()
-    location.href = 'http://172.16.160.19:6066/ibps/logout.htm'
+    location.href = BASE_IBPS_LOGOUT_API
   } else {
     return response
   }
 }, error => {
   removeToken()
   console.log('请重新登录：' + error)
-  location.href = 'http://172.16.160.19:6066/ibps/logout.htm'
+  location.href = BASE_IBPS_LOGOUT_API
   return Promise.reject(error)
 })
 

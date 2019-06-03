@@ -30,7 +30,7 @@
             </el-form-item>
 
             <el-form-item label="所属单位:">
-              <el-select v-model="investorForm.orgId" placeholder="请输入所属单位">
+              <el-select v-model="investorForm.orgId" placeholder="请选择所属单位">
                 <el-option v-for="item in orgOptions" :key="item.orgId" :label="item.orgName" :value="item.orgId">
                 </el-option>
               </el-select>
@@ -99,7 +99,7 @@
         <div class="basicStyle">工作经历 <span class="cancel" @click="cancelWorkList" v-if="isShowWorkList">取&nbsp;消</span><span
             @click="addWorkList('workForm')"> <i class="el-icon-plus"></i>&nbsp;{{workText}}</span> </div>
         <div class="marBtn" v-if="!isShowWorkList">
-          <el-table :data="workList" style="width: 100%">
+          <el-table :data="workList" style="width: 99%">
             <el-table-column prop="startTime" align="center" label="开始时间">
             </el-table-column>
             <el-table-column prop="endTime" align="center" label="结束时间">
@@ -141,7 +141,7 @@
             @click="addEducationList('educationForm')"> <i class="el-icon-plus"></i>&nbsp;{{educationText}}</span>
         </div>
         <div class="marBtn" v-if="!isShowEducationList">
-          <el-table :data="educationList" style="width: 100%">
+          <el-table :data="educationList" style="width: 99%">
             <el-table-column prop="startTime" align="center" label="开始时间">
             </el-table-column>
             <el-table-column prop="endTime" align="center" label="结束时间">
@@ -194,8 +194,7 @@ export default {
         if (!value) {
           return callback(new Error('手机号不能为空'));
         } else {
-          const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
-          console.log(reg.test(value));
+          const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/
           if (reg.test(value)) {
             callback();
           } else {
@@ -275,7 +274,7 @@ export default {
           { required: true, message: "请输入姓名", trigger: "blur" }
         ],
         email: [
-          { required: true, message: "请选择邮箱", trigger: "change" },
+          { required: true, message: "请选择邮箱", trigger: "blur" },
           {
             type: "email",
             message: "请输入正确的邮箱地址",
@@ -504,7 +503,7 @@ export default {
     cancelEducationList() {
       this.isShowEducationList = false;
       this.educationText = "添加教育经历";
-      tis.submitBtn=true
+      this.submitBtn=true
     },
     // 添加教育经历表单
     addEducationList(educationForm) {
@@ -735,6 +734,7 @@ export default {
   .el-table__header {
     border-right: 1px solid rgba(65, 215, 135, 1);
     border-left: 1px solid rgba(65, 215, 135, 1);
+    table-layout:auto;
   }
   .cancel {
     margin-left: 15px;
@@ -750,7 +750,6 @@ export default {
     padding: 5px;
   }
   .el-table th {
-    width: 750px;
     height: 28px;
     background: rgba(236, 252, 242, 1);
     border-top: 1px solid rgba(65, 215, 135, 1);

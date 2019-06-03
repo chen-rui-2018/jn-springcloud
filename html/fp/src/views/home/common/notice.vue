@@ -48,7 +48,9 @@ export default {
 @import "~@/css/common";
 .notice-bg {
   background-color: #fff;
-  padding: trsw(40);
+  padding: 18px 25px;
+  margin: 6px auto;
+  border-radius: 3px;
   .notice-header {
     @include flex($h: flex-start, $v: center);
     .space-dot {
@@ -68,6 +70,7 @@ export default {
     border-radius: 5px;
     box-sizing: border-box;
     .notice-main-cell {
+      padding: 18px 24px;
       &.primary {
         background-color: #F2F6F3;
       }

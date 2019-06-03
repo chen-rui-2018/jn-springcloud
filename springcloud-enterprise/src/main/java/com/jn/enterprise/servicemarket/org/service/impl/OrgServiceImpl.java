@@ -196,24 +196,24 @@ public class OrgServiceImpl implements OrgService {
             List<String> hobby = new ArrayList<>(16);
             hobby.addAll(Arrays.asList(orgBasicData.getIndustrySector()));
             TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
-            preferCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            preferCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
             List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
-            StringBuffer sbSpeciality = new StringBuffer();
-            StringBuffer sbHobby = new StringBuffer();
+            List<String>sbSpeciality=new ArrayList<>(16);
+            List<String>sbHobby=new ArrayList<>(16);
             for (TbServicePrefer prefer:tbServicePrefers) {
                 for (String sp:orgBasicData.getOrgSpeciality()) {
                     if(StringUtils.equals(sp,prefer.getId())){
-                        sbSpeciality.append(prefer.getPreValue()+",");
+                        sbSpeciality.add(prefer.getPreValue());
                     }
                 }
                 for (String shobby :hobby) {
                     if(StringUtils.equals(shobby,prefer.getId())){
-                        sbHobby.append(prefer.getPreValue()+",");
+                        sbHobby.add(prefer.getPreValue());
                     }
                 }
             }
-            tbServiceOrg.setOrgSpeciality(sbSpeciality.toString().substring(0, sbSpeciality.toString().length() - 1));
-            tbServiceOrg.setOrgHobby(sbHobby.toString().substring(0, sbHobby.toString().length() - 1));
+            tbServiceOrg.setOrgSpeciality(StringUtils.join(sbSpeciality,","));
+            tbServiceOrg.setOrgHobby(StringUtils.join(sbHobby,","));
         }
 
         try {
@@ -390,9 +390,7 @@ public class OrgServiceImpl implements OrgService {
             tbServiceOrgInfo.setCreatorAccount(account);
             code = tbServiceOrgInfoMapper.insertSelective(tbServiceOrgInfo);
         }
-
         // 开始 启动IBPS审核流 --- 封装数据开始  ------------------------
-
         String orgId = orgContactData.getOrgId();
         TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
         orgCriteria.createCriteria().andOrgIdEqualTo(orgId);

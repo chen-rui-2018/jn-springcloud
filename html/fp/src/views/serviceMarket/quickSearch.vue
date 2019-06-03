@@ -204,7 +204,7 @@
                   </div>
                 </div>
                 <div class="orgBtn fr mainColor">
-                  <a href="">在线联系</a>
+                  <a href="javascript:;" @click="onlineContact(i.orgAccount,i.orgName)">在线联系</a>
                 </div>
               </li>
             </ul>
@@ -241,7 +241,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="orgBtn fr mainColor">在线联系</div>
+                <div class="orgBtn fr mainColor pointer" @click="onlineContact(i.advisorAccount,i.advisorName)">在线联系</div>
               </li>
             </ul>
             <div class="pagination-container">
@@ -255,7 +255,7 @@
     </div>
     <!-- 提需求弹框 -->
     <template v-if="proVisible">
-      <el-dialog :visible.sync="proVisible" width="530px" top="30vh">
+      <el-dialog :visible.sync="proVisible" width="530px" top="30vh" :modal-append-to-body=false>
         <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
           <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
             <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -323,6 +323,13 @@ export default {
     this.commentProductList();
   },
   methods: {
+     onlineContact(advisorAccount,advisorName){
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({ path: "/chat",query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:advisorAccount,nickName:advisorName}});
+    },
     demandRaise(i) {
       this.proVisible = true;
       this.serverProform.requireDetail = "";
@@ -582,7 +589,7 @@ export default {
         > ul {
           > li {
             float: left;
-            padding: 0 60px;
+            // padding: 0 60px;
             // border-right:1px solid #eee;
             > .itemImg {
               display: inline-block;
@@ -612,6 +619,7 @@ export default {
             width: 1px;
             padding: 0;
             background: #eee;
+            margin: 0 80px;
             margin-top: 8px;
           }
         }

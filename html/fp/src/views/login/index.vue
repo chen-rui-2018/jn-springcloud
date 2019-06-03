@@ -40,7 +40,7 @@ export default {
     keyFun(e){
       if(e.keyCode === 13){
         this.loginForm()
-      } 
+      }
     },
     loginForm() {
       if (!this.loginform.account) {
@@ -63,6 +63,7 @@ export default {
           if (res.code == "0000") {
             sessionStorage.token = res.data;
             sessionStorage.setItem("account",_this.loginform.account);
+            _this.getUserExtension()
             _this.api.get({
               url: "getUserPersonInfo",
               data: {
@@ -88,9 +89,23 @@ export default {
           }
         }
       })
-    }
+    },
+     //获取我的所属企业编码
+  getUserExtension(){
+     let _this = this;
+      this.api.get({
+        url: "getUserExtension",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+            sessionStorage.companyCode=res.data.companyCode
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
   }
-};
+}}
 </script>
 
 <style lang="scss" scoped>

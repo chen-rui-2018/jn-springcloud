@@ -2,11 +2,9 @@ package com.jn.enterprise.servicemarket.org.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.google.gson.Gson;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.CallOtherSwaggerUtils;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
@@ -16,8 +14,8 @@ import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.model.ServiceOrg;
-import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
@@ -26,34 +24,32 @@ import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
+import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
 import com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria;
 import com.jn.enterprise.servicemarket.require.dao.TbServiceRequireMapper;
-import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria;
 import com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapper;
 import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.park.api.ActivityClient;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
-import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
+import com.jn.user.model.UserAffiliateInfo;
 import com.jn.user.model.UserExtensionInfo;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.text.ParseException;
 import java.util.*;
@@ -113,6 +109,9 @@ public class OrgServiceImpl implements OrgService {
     @Autowired
     private InvestorService investorService;
 
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+
     /**
      * 机构认证流程id
      */
@@ -153,7 +152,17 @@ public class OrgServiceImpl implements OrgService {
         }
         orgParameter.setCompanyList(sList);
         List<ServiceOrg> serviceOrg = orgMapper.selectServiceOrgList(orgParameter);
-        PaginationData<List<ServiceOrg>> data = new PaginationData(serviceOrg, objects.getTotal());
+
+        // 处理图片格式
+        List<ServiceOrg> serviceOrgResult = new ArrayList<>();
+        if (serviceOrg != null && !serviceOrg.isEmpty()) {
+            for (ServiceOrg serOrg : serviceOrg) {
+                serOrg.setOrgLogo(IBPSFileUtils.getFilePath(serOrg.getOrgLogo()));
+                serviceOrgResult.add(serOrg);
+            }
+        }
+
+        PaginationData<List<ServiceOrg>> data = new PaginationData(serviceOrgResult, objects.getTotal());
         return data;
     }
 
@@ -164,6 +173,13 @@ public class OrgServiceImpl implements OrgService {
         if(null == serviceOrgDetailVo){
             throw new JnSpringCloudException(OrgExceptionEnum.ORG_IS_NOT_EXIT);
         }
+
+        // 处理图片格式
+        List<OrgLicense> honorLicense = serviceOrgDetailVo.getHonorLicense();
+        for(OrgLicense orgLicense:honorLicense){
+            orgLicense.setFileUrl(IBPSFileUtils.getFilePath(orgLicense.getFileUrl()));
+        }
+        serviceOrgDetailVo.setOrgLogo(IBPSFileUtils.getFilePath(serviceOrgDetailVo.getOrgLogo()));
         return serviceOrgDetailVo;
     }
 
@@ -184,7 +200,6 @@ public class OrgServiceImpl implements OrgService {
             List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
             StringBuffer sbSpeciality = new StringBuffer();
             StringBuffer sbHobby = new StringBuffer();
-            String businessTypeStr = "";
             for (TbServicePrefer prefer:tbServicePrefers) {
                 for (String sp:orgBasicData.getOrgSpeciality()) {
                     if(StringUtils.equals(sp,prefer.getId())){
@@ -546,6 +561,10 @@ public class OrgServiceImpl implements OrgService {
         tbServiceOrgCopy.setTb_service_org_team(tbServiceOrgTeamCopies);
         //将id设置为空
         tbServiceOrgCopy.setOrgId(null);
+
+        // 处理图片格式
+        tbServiceOrgCopy.setOrgLogo(IBPSFileUtils.uploadFile2Json(account, tbServiceOrgCopy.getOrgLogo()));
+
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(orgProcessId, account, tbServiceOrgCopy);
         String okStatus="200";
         //启动工作流成功
@@ -713,20 +732,49 @@ public class OrgServiceImpl implements OrgService {
             logger.warn("添加机构管理员角色失败，失败原因：机构账号在系统中不存在");
             throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
+        //更新机构用户的所属机构id和机构名称
+        updateOrgAccountAffiliateInfo(orgAccount);
         //给用户添加"机构管理员"角色
-        String roleName="机构管理员";
-        Result<SysRole> sysRoleResult = systemClient.getRoleByName(roleName);
-        if(sysRoleResult==null ||sysRoleResult.getData()==null){
-            logger.warn("添加机构管理员角色失败，失败原因：无法获取“机构管理员”角色信息，请确认系统服务是否正常，且“机构管理员”角色在系统中存在");
+        Result<SysRole> addSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.ORG_ADMIN.getCode());
+        Result<SysRole> delSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
+        if(addSysRoleResult==null ||addSysRoleResult.getData()==null || delSysRoleResult==null || delSysRoleResult.getData()==null){
+            logger.warn("添加机构管理员角色失败，失败原因：无法获取“机构管理员”、“普通用户”角色信息，请确认系统服务是否正常，且“机构管理员”、“普通用户”角色在系统中存在");
             throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
         //更新用户角色
-        Result<Boolean> booleanResult = investorService.updateUserRoleInfo(user, sysRoleResult);
+        Result<Boolean> booleanResult = investorService.updateUserRoleInfo(user, addSysRoleResult,delSysRoleResult);
         if(booleanResult.getData()==true){
+            //把机构id和机构名称更新到用户信息表
             return 1;
         }else{
             logger.warn("添加机构管理员角色失败，失败原因：更新用户角色为“机构管理员”失败");
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
+
+    /**
+     * 更新机构用户所属机构信息
+     * @param orgAccount
+     */
+    @ServiceLog(doAction = "")
+    private void updateOrgAccountAffiliateInfo(String orgAccount) {
+        TbServiceOrgCriteria example=new TbServiceOrgCriteria();
+        example.createCriteria().andOrgAccountEqualTo(orgAccount)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrg> tbServiceOrgList = tbServiceOrgMapper.selectByExample(example);
+        if(tbServiceOrgList.isEmpty()){
+            logger.warn("添加机构管理员角色失败，失败原因：机构用户在系统中不存在或机构用户已失效");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        UserAffiliateInfo userAffiliateInfo=new UserAffiliateInfo();
+        List accountList= Arrays.asList(orgAccount);
+        userAffiliateInfo.setAccountList(accountList);
+        userAffiliateInfo.setAffiliateCode(tbServiceOrgList.get(0).getOrgId());
+        userAffiliateInfo.setAffiliateName(tbServiceOrgList.get(0).getOrgName());
+        Result resultData = userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
+        if(resultData==null ||resultData.getData()==null || !(Boolean)resultData.getData()){
+            logger.warn("添加机构管理员角色失败，失败原因：更新用户所属机构信息失败");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
     }
 }

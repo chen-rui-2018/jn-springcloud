@@ -527,6 +527,8 @@ public class ActivityServiceImpl implements ActivityService {
             logger.info("活动提醒：调用消息发送接口,接口返回状态：{}",stringResult.getCode());
             return 1;
         }
+        //查询该活动已报名人员，批量推送。
+        //TODO 需调用短信、消息接口主动推送消息。
         return 0;
     }
 

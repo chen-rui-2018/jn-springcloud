@@ -190,7 +190,9 @@ export default {
       callback: function(res) {
         if (res.code == "0000") {
           // console.log(res)
-          _this.productDetail= res.data.info
+          if(res.data!==null){
+            _this.productDetail= res.data.info
+          }
           }
         }
       })

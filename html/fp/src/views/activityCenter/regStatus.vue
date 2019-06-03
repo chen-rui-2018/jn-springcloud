@@ -10,7 +10,7 @@
                 <el-breadcrumb-item class="mainColor">报名情况</el-breadcrumb-item>
             </el-breadcrumb> -->
       <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
-      <span class="pointer" @click="$router.push({ path: '/actiDetail'})">活动详情/</span>
+       <span class="pointer" @click="$router.push({ path: '/actiTrainDetail',query:{activityId:$route.query.activityId}})">活动详情/</span>
       <span class="mainColor">报名情况</span>
     </div>
     <el-card>
@@ -63,7 +63,7 @@ export default {
       this.init();
     },
     handleInfo(account) {
-      this.$router.push({ path: "regData", query: { account: account } });
+      this.$router.push({ path: "regData", query: { account: account ,activityId:$route.query.activityId} });
     },
     init() {
       let _this = this;

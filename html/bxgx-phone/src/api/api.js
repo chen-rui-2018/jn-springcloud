@@ -68,7 +68,8 @@ export default {
     getBusinessAdPolicyInfo: 'springcloud-park/guest/portal/businessAd/getBusinessAdPolicyInfo', // 获取招商政策信息详情
     getBusinessAdContentInfo: 'springcloud-park/guest/portal/businessAd/getBusinessAdContentInfo', // 获取招商信息详情
     parkList: 'springcloud-park/guest/portal/park/list', // 一区多园
-    getBusinessAdContent: 'springcloud-park/guest/portal/businessAd/getBusinessAdContent' // 获取招商信息
+    getBusinessAdContent: 'springcloud-park/guest/portal/businessAd/getBusinessAdContent', // 获取招商信息
+    getParkDetails: 'springcloud-park/guest/portal/park/get', // 根据ID获取对应园区详情
   },
   setToken: function (obj) {
     axios.interceptors.request.use(function (config) {

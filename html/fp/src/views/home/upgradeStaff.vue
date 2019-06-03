@@ -26,7 +26,7 @@
             </el-select>
           </el-form-item>
           <el-form-item prop="code">
-            <el-input v-model="checkCode" class="input1" placeholder="请输入验证码" style="width:150px"></el-input>
+            <el-input v-model="ruleForm.checkCode" class="input1" placeholder="请输入验证码" style="width:150px"></el-input>
             <span class="getCode" v-if="sendAuthCode" @click="getCode">获取验证码</span>
             <span class="getCode" v-else style="padding: 0px 15px;">
               <span>{{auth_time}}</span>秒后重新获取</span>
@@ -126,19 +126,20 @@ export default {
           this.api.post({
             url: "changeToStaff",
             data: {
-              checkCode: _this.checkCode,
+              checkCode: _this.ruleForm.checkCode,
               comName: _this.comName,
               comId: _this.comId
             },
             callback: function(res) {
               if (res.code == "0000") {
-                _this.$message.success(res.result);
+                _this.$message.success('提交成功，等待审核');
                  _this.$refs['ruleForm'].resetFields();
+                 _this.ruleForm.checkCode=''
               }
             }
           });
         } else {
-          this.$message.error(res.result);
+          _this.$message.error(res.result);
           return false;
         }
       });

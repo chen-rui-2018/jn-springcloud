@@ -1,5 +1,5 @@
 <template>
-    <div class="approvalGuide">
+    <div class="moreActi">
         <div class="approvalGuide_search">
             <search v-model="keyWord" ref="search" @keyup.enter.native="searchFun"></search>
         </div>
@@ -181,13 +181,13 @@ export default {
 </script>
 
 <style lang="scss">
-.approvalGuide {
+.moreActi {
   overflow: scroll;
 
   .approvalGuide_search {
     position: fixed;
     z-index: 10;
-    top: 105px;
+    // top: 105px;
     width: 100%;
     .weui-search-bar {
       padding: 28px 32px;
@@ -223,7 +223,7 @@ export default {
   }
   .approvalGuide_main {
     .approvalGuide_tab {
-      margin-top: 110px;
+      // margin-top: 110px;
       position: fixed;
       top: 113px;
       width: 100%;
@@ -266,7 +266,7 @@ export default {
     .approvalGuide_cont {
       margin: 30px;
     //   margin-top: 44%;
-      margin-top: 350px;
+      margin-top: 230px;
       height: 100%;
       overflow: auto;
       .weui-cells {

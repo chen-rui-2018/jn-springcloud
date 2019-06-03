@@ -1,18 +1,20 @@
 <template>
   <div class="advisoryInformation">
     <div class="advisory_title font16">
-      <div>顾问资料填写</div>
+      <div>顾问资料</div>
     </div>
 
     <div class="advisory_content">
-      <div class="enterprise">基本信息 <span class="cancel" @click="cancelBasic" v-if="!isShow">取&nbsp;消</span><span @click="editBasic('basicForm')">
+      <div class="enterprise">基本信息
+        <span class="cancel" @click="cancelBasic" v-if="!isShow">取&nbsp;消</span>
+        <span @click="editBasic('basicForm')" v-show="isConceal!=='1'">
           <i class="el-icon-edit-outline"></i>&nbsp;{{basicText}}</span></div>
-      <el-form class="tableEnterprise marBtn"  v-if="isShow">
+      <el-form class="tableEnterprise marBtn" v-if="isShow">
         <div style="display:flex">
-          <el-form-item label="从业年限:" class="inline " >
+          <el-form-item label="从业年限:" class="inline ">
             <span>{{basicForm.workingYears}}</span>
           </el-form-item>
-          <el-form-item label="毕业学校:" class="inline bodyName" >
+          <el-form-item label="毕业学校:" class="inline bodyName">
             <span>{{basicForm.graduatedSchool}}</span>
           </el-form-item>
         </div>
@@ -20,7 +22,7 @@
           <el-form-item label="学历:" class="inline">
             <span>{{basicForm.education}}</span>
           </el-form-item>
-          <el-form-item label="联系手机:" class="inline bodyName" >
+          <el-form-item label="联系手机:" class="inline bodyName">
             <span>{{basicForm.phone}}</span>
           </el-form-item>
         </div>
@@ -28,7 +30,7 @@
           <el-form-item label="联系邮箱:" class="inline">
             <span>{{basicForm.contactEmail}}</span>
           </el-form-item>
-          <el-form-item label="执业资源:" class="inline bodyName">
+          <el-form-item label="执业资质:" class="inline bodyName">
             <span>{{basicForm.practiceQualification}}</span>
           </el-form-item>
         </div>
@@ -45,7 +47,7 @@
       </el-form>
       <el-form class="editForm" v-if="!isShow" :rules="rules" :model="basicForm" label-width="100px" ref="basicForm">
         <el-form-item label="从业年限:" class="inline " prop="workingYears">
-          <el-input v-model="basicForm.workingYears" placeholder="请输入从业年限"  clearable></el-input>
+          <el-input v-model="basicForm.workingYears" placeholder="请输入从业年限(数字)" clearable step="1"  min="0" onkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"></el-input>
         </el-form-item>
         <el-form-item label="毕业学校:" class="inline bodyName" prop="graduatedSchool">
           <el-input v-model="basicForm.graduatedSchool" placeholder="请输入毕业学校" clearable></el-input>
@@ -60,7 +62,7 @@
         <el-form-item label="联系邮箱:" class="inline" prop="contactEmail">
           <el-input v-model="basicForm.contactEmail" placeholder="请输入联系邮箱" clearable></el-input>
         </el-form-item>
-        <el-form-item label="执业资源:" prop="practiceQualification">
+        <el-form-item label="执业资质:" prop="practiceQualification">
           <el-input v-model="basicForm.practiceQualification" placeholder="请输入执业资源" clearable></el-input>
         </el-form-item>
         <!-- <el-form-item label="业务领域:" prop="businessArea">
@@ -77,7 +79,8 @@
         </el-form-item>
       </el-form>
       <div class="enterprise">荣誉资质 <span class="cancel" @click="cancelHonorData" v-if="isShowEdit">取&nbsp;消</span><span
-          @click="addCertificate('certificateForm')"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span> </div>
+          @click="addCertificate('certificateForm')" v-show="isConceal!=='1'"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span>
+      </div>
       <div class="marBtn" v-if="!isShowEdit">
         <el-table :data="honorData" style="width: 100%">
           <el-table-column prop="certificateName" align="center" label="证书名称">
@@ -94,10 +97,10 @@
               <span v-if="!scope.row.certificatePhoto">暂无附件</span>
             </template>
           </el-table-column>
-          <el-table-column prop="certificatePhoto" align="center" label="">
+          <el-table-column prop="certificatePhoto" align="center" label="操作" v-if="isConceal!=='1'">
             <template slot-scope="scope">
               <!-- <span v-if="!scope.row.certificateName" class="themeColor smallSize cur" @click="lookPoster(scope.row)">保存并更新</span> -->
-              <span class="redColor smallSize cur" @click="editCertificate(scope.row)">编辑</span>
+              <span class="redColor smallSize cur"  @click="editCertificate(scope.row)">编辑</span>
             </template>
           </el-table-column>
         </el-table>
@@ -133,7 +136,7 @@
 
       </el-form>
       <div class="enterprise">服务经历 <span class="cancel" @click="cancelExperienceList" v-if="isShowExperienceList">取&nbsp;消</span><span
-          @click="addExperienceList('experienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editExperienceList}}</span>
+          @click="addExperienceList('experienceListForm')" v-show="isConceal!=='1'"> <i class="el-icon-plus"></i>&nbsp;{{editExperienceList}}</span>
       </div>
       <div class="marBtn" v-if="!isShowExperienceList">
         <el-table :data="serviceExperienceList" style="width: 100%">
@@ -167,7 +170,7 @@
 
       </el-form>
       <div class="enterprise">项目经验<span class="cancel" @click="cancelProjectExperienceList" v-if="isShowProjectExperienceList">取&nbsp;消</span><span
-          @click="addProjectExperienceList('projectExperienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editProjectExperienceList}}</span></div>
+          @click="addProjectExperienceList('projectExperienceListForm')" v-show="isConceal!=='1'"> <i class="el-icon-plus"></i>&nbsp;{{editProjectExperienceList}}</span></div>
       <div class="marBtn" v-if="!isShowProjectExperienceList">
         <el-table :data="serviceProjectExperienceList" style="width: 100%">
           <el-table-column prop="projectName" align="center" label="项目名称">
@@ -205,12 +208,12 @@
         </el-form-item>
       </el-form>
       <div class="footer ct" v-show="showBtn">
-        <el-button size="mini" @click="acceptInvitation" :disabled="disabled" class="mainColor accept">发送申请</el-button>
+        <el-button size="mini" v-show="isConceal!=='1'" @click="acceptInvitation" :disabled="disabled" class="mainColor accept">发送申请</el-button>
       </div>
 
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="50%">
-      <img :src="certificatePhoto" alt="图片" style="width:100%">
+    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
+      <img :src="certificatePhoto" alt="图片" style="width:100%;height:200px">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -221,21 +224,23 @@
 <script>
 export default {
   data() {
-     var checkPhone = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('手机号不能为空'));
+    var checkPhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      } else {
+        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        console.log(reg.test(value));
+        if (reg.test(value)) {
+          callback();
         } else {
-          const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
-          console.log(reg.test(value));
-          if (reg.test(value)) {
-            callback();
-          } else {
-            return callback(new Error('请输入正确的手机号'));
-          }
+          return callback(new Error("请输入正确的手机号"));
         }
       }
+    };
     return {
-      showBtn:true,
+      orgId: undefined,
+      isConceal: undefined,
+      showBtn: true,
       dialogImageUrl: "",
       dialogVisible: false,
       headers: {
@@ -260,7 +265,7 @@ export default {
       basicForm: {
         advisorAccount: sessionStorage.getItem("account"),
         // businessArea:'',
-        businessAreas: ['market_expansion'], //业务领域
+        businessAreas: [], //业务领域
         personalProfile: "", //个人简介
         practiceQualification: "", //执业资质
         workingYears: "", //从业年限
@@ -324,7 +329,7 @@ export default {
         // businessArea: [
         //   { required: true, message: "请选择业务领域", trigger: "change" }
         // ],
-       phone: [{required: false,validator: checkPhone, trigger: 'blur'}],
+        phone: [{ required: false, validator: checkPhone, trigger: "blur" }],
         // affiliatedPark: [
         //   { required: true, message: "请选择所属园区", trigger: "change" }
         // ],
@@ -335,7 +340,7 @@ export default {
             message: "请输入正确的邮箱地址",
             trigger: ["blur", "change"]
           }
-        ],
+        ]
 
         // comDemand: [
         //   { required: true, message: "请输入我的需求", trigger: "blur" }
@@ -369,25 +374,33 @@ export default {
   },
   mounted() {
     this.init();
-    this.getBusinessAreas();
+    // this.getBusinessAreas();
     this.getCertificateTypeList();
   },
-  beforeRouteEnter (to, from, next) {
-  next(vm => {
-    // 通过 `vm` 访问组件实例
-  })
-},
   methods: {
     //发送申请
     acceptInvitation() {
-      if(!this.basicForm.businessArea){
-          this.$message.error('请先选择基本信息里的业务领域在发送申请');
-          return
-      }
-      this.$router.push({ path: "/home" });
+      this.api.post({
+        url: "sendApproval",
+        callback: res => {
+          if (res.code === "0000") {
+            this.$message({
+              message: "操作成功,请等待后台审核",
+              type: "success"
+            });
+            this.$router.push({ path: "/home" });
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
     },
     // 新增项目经验
     addProjectExperienceList(projectExperienceListForm) {
+      if (!this.basicForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       if (this.editProjectExperienceList === "添加项目经验") {
         this.projectExperienceListForm.personalDuties = "";
         this.projectExperienceListForm.companyName = "";
@@ -395,7 +408,7 @@ export default {
         this.projectExperienceListForm.projectTime = "";
         this.projectExperienceListForm.id = "";
         this.isShowProjectExperienceList = true;
-        this.showBtn=false
+        this.showBtn = false;
         this.editProjectExperienceList = "保存并更新";
       } else {
         this.$refs[projectExperienceListForm].validate(valid => {
@@ -411,9 +424,9 @@ export default {
                     type: "success"
                   });
                   this.isShowProjectExperienceList = false;
-                  this.showBtn=true
+                  this.showBtn = true;
                   this.editProjectExperienceList = "添加项目经验";
-                  this.init();
+                  this.getInit();
                 } else {
                   this.$message.error(res.result);
                   return false;
@@ -430,7 +443,7 @@ export default {
     cancelProjectExperienceList() {
       this.isShowProjectExperienceList = false;
       this.editProjectExperienceList = "添加项目经验";
-      this.showBtn=true
+      this.showBtn = true;
     },
     // 编辑项目经验
     updataProjectExperienceList(row) {
@@ -440,7 +453,7 @@ export default {
       this.projectExperienceListForm.projectTime = row.projectTime;
       this.projectExperienceListForm.id = row.id;
       this.isShowProjectExperienceList = true;
-      this.showBtn=false
+      this.showBtn = false;
       this.editProjectExperienceList = "保存并更新";
     },
     // 编辑服务经历
@@ -450,11 +463,15 @@ export default {
       this.experienceListForm.position = row.position;
       this.experienceListForm.id = row.id;
       this.isShowExperienceList = true;
-      this.showBtn=false
+      this.showBtn = false;
       this.editExperienceList = "保存并更新";
     },
     // 新增服务经历
     addExperienceList(experienceListForm) {
+      if (!this.basicForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       if (this.editExperienceList === "添加服务经历") {
         // this.resetForm('certificateForm')
         // this.$refs['certificateForm'].resetFields();
@@ -463,7 +480,7 @@ export default {
         this.experienceListForm.position = "";
         this.experienceListForm.id = "";
         this.isShowExperienceList = true;
-        this.showBtn=false
+        this.showBtn = false;
         this.editExperienceList = "保存并更新";
       } else {
         this.$refs[experienceListForm].validate(valid => {
@@ -478,10 +495,10 @@ export default {
                     message: "操作成功",
                     type: "success"
                   });
-                  this.showBtn=true
+                  this.showBtn = true;
                   this.isShowExperienceList = false;
                   this.editExperienceList = "添加服务经历";
-                  this.init();
+                  this.getInit();
                 } else {
                   this.$message.error(res.result);
                   return false;
@@ -498,20 +515,20 @@ export default {
     // 取消基本信息的更改
     cancelBasic() {
       this.isShow = true;
-      this.showBtn=true
+      this.showBtn = true;
       this.basicText = "编 辑";
     },
     // 取消服务经历的更改
     cancelExperienceList() {
       this.isShowExperienceList = false;
       this.editExperienceList = "添加服务经历";
-      this.showBtn=true
+      this.showBtn = true;
     },
     // 取消编辑荣誉资质
     cancelHonorData() {
       this.isShowEdit = false;
       this.editText = "添加荣誉资质";
-      this.showBtn=true
+      this.showBtn = true;
     },
     //编辑荣誉资质
     editCertificate(row) {
@@ -523,11 +540,15 @@ export default {
       this.certificateForm.certificatePhoto = row.certificatePhoto;
       this.certificateForm.issuingAgency = row.issuingAgency;
       this.isShowEdit = true;
-      this.showBtn=false
+      this.showBtn = false;
       this.editText = "保存并更新";
     },
     // 新增荣誉资质
     addCertificate(certificateForm) {
+      if (!this.basicForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       if (this.editText === "添加荣誉资质") {
         // this.resetForm('certificateForm')
         // this.$refs['certificateForm'].resetFields();
@@ -538,7 +559,7 @@ export default {
         this.certificateForm.issuingAgency = "";
         this.certificateForm.id = "";
         this.isShowEdit = true;
-        this.showBtn=false
+        this.showBtn = false;
         this.editText = "保存并更新";
       } else {
         this.$refs[certificateForm].validate(valid => {
@@ -555,10 +576,10 @@ export default {
                     message: "操作成功",
                     type: "success"
                   });
-                  this.showBtn=true
+                  this.showBtn = true;
                   this.isShowEdit = false;
                   this.editText = "添加荣誉资质";
-                  this.init();
+                  this.getInit();
                 } else {
                   this.$message.error(res.result);
                   return false;
@@ -572,19 +593,19 @@ export default {
       }
     },
     // 获取业务领域
-    getBusinessAreas() {
-      this.api.get({
-        url: "selectTeamList",
-        data: { preType: "0" },
-        callback: res => {
-          if (res.code === "0000") {
-            this.businessAreasOptions = res.data;
-          } else {
-            this.$message.error(res.result);
-          }
-        }
-      });
-    },
+    // getBusinessAreas() {
+    //   this.api.get({
+    //     url: "selectTeamList",
+    //     data: { preType: "0" },
+    //     callback: res => {
+    //       if (res.code === "0000") {
+    //         this.businessAreasOptions = res.data;
+    //       } else {
+    //         this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // },
     // 获取证书类型
     getCertificateTypeList() {
       this.api.get({
@@ -603,10 +624,10 @@ export default {
       this.certificateForm.certificatePhoto = res.data;
     },
     beforeAvatarUpload(file) {
-      const isLt2M = file.size / 1024 / 1024 < 5;
+      const isLt2M = file.size / 1024 / 1024 < 1;
       const isJPG = file.type === "image/jpeg" || file.type === "image/png";
       if (!isLt2M) {
-        this.$message.error("上传图片大小不能超过 5MB!");
+        this.$message.error("上传图片大小不能超过 1MB!");
       }
       if (!isJPG) {
         this.$message.error("上传图片只能是 JPG、png 格式!");
@@ -618,33 +639,62 @@ export default {
       if (this.basicText === "保 存") {
         this.$refs[basicForm].validate(valid => {
           if (valid) {
-            this.api.post({
-              url: "saveOrUpdateAdvisorBaseInfo",
-              data: this.basicForm,
-              callback: res => {
-                console.log(res);
-                if (res.code == "0000") {
-                  this.$message({
-                    message: "操作成功",
-                    type: "success"
+            if (this.orgId !== this.basicForm.orgId) {
+              this.$confirm(`此操作将改变机构信息, 是否继续?`, "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+              })
+                .then(() => {
+                  this.api.post({
+                    url: "saveOrUpdateAdvisorBaseInfo",
+                    data: this.basicForm,
+                    callback: res => {
+                      if (res.code == "0000") {
+                        this.$message({
+                          message: "操作成功",
+                          type: "success"
+                        });
+                        this.isShow = true;
+                        this.showBtn = true;
+                        this.basicText = "编 辑";
+                        this.getInit();
+                      } else {
+                        this.$message.error(res.result);
+                        return false;
+                      }
+                    }
                   });
-                  this.isShow = true;
-                  this.showBtn=true
-                  this.basicText = "编 辑";
-                  this.init();
-                } else {
-                  this.$message.error(res.result);
-                  return false;
-                }
-              }
-            });
+                })
+                .catch(() => {});
+            }else{
+               this.api.post({
+                    url: "saveOrUpdateAdvisorBaseInfo",
+                    data: this.basicForm,
+                    callback: res => {
+                      if (res.code == "0000") {
+                        this.$message({
+                          message: "操作成功",
+                          type: "success"
+                        });
+                        this.isShow = true;
+                        this.showBtn = true;
+                        this.basicText = "编 辑";
+                        this.getInit();
+                      } else {
+                        this.$message.error(res.result);
+                        return false;
+                      }
+                    }
+                  });
+            }
           } else {
             return false;
           }
         });
       } else {
         this.isShow = false;
-        this.showBtn=false
+        this.showBtn = false;
         this.basicText = "保 存";
       }
     },
@@ -653,11 +703,8 @@ export default {
       this.certificatePhoto = row.certificatePhoto;
       this.dialogVisible = true;
     },
-    init() {
-      let query = this.$route.query;
-      this.basicForm.orgId = query.orgId;
-      this.basicForm.advisorAccount = sessionStorage.getItem("account");
-      this.certificateForm.advisorAccount = sessionStorage.getItem("account");
+    //获取顾问详情
+    getInit() {
       this.api.get({
         url: "serviceAdvisorInfo",
         data: { advisorAccount: this.basicForm.advisorAccount },
@@ -684,12 +731,26 @@ export default {
             this.serviceExperienceList = res.data.serviceExperienceList;
             this.serviceProjectExperienceList =
               res.data.serviceProjectExperienceList;
+            this.orgId = res.data.advisorServiceInfo.orgId;
           } else {
             this.$message.error(res.result);
             return false;
           }
         }
       });
+    },
+    init() {
+      let query = this.$route.query;
+      this.isConceal = query.isConceal;
+      console.log(query)
+      if(query.businessArea){
+        this.basicForm.businessAreas = query.businessArea.split();
+      }
+      this.basicForm.orgId = query.orgId;
+      this.basicForm.advisorAccount = sessionStorage.getItem("account");
+      this.certificateForm.advisorAccount = sessionStorage.getItem("account");
+
+      this.getInit();
     }
   }
 };

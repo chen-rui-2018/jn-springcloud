@@ -60,6 +60,7 @@
      <el-dialog
   title="海报图片"
   :visible.sync="dialogVisible"
+  :modal-append-to-body="false"
   width="50%">
   <img :src="posterUrl" alt="海报图片" style="width:100%;height:200px;">
   <span slot="footer" class="dialog-footer">

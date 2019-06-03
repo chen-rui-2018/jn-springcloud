@@ -26,6 +26,7 @@ import com.jn.reconciliation.utils.wx.WeiXinBaseUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,47 +37,27 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 /**
- * 微信文件下载类
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：微信文件下载类
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
-public class WinXinFileDown implements FileDown {
+@Service("WXFileDown")
+public class WeiXinFileDown implements FileDown {
 
 
-
-	private static final Log LOG = LogFactory.getLog(WinXinFileDown.class);
+	private static final Log LOG = LogFactory.getLog(WeiXinFileDown.class);
 
 
 	@Autowired
 	private WxConfig wxConfig;
 
-	/*** 配置全部放入weixinpay_config.properties配置文件中/ ***/
-	private String url =  wxConfig.getUrl();
-
-	// 公众账号ID
-	private String appid = wxConfig.getAppId();
-
-	// 商户号
-	private String mch_id = wxConfig.getMchId();
-
 	// 对账单日期 格式：20140603
 	private String bill_date;
 
-	// 微信密钥
-	private String appSecret = wxConfig.getPartnerKey();
 
-	// 对账类型：
-	// ALL，返回当日所有订单信息，默认值
-	// SUCCESS，返回当日成功支付的订单
-	// REFUND，返回当日退款订单
-	private String bill_type = wxConfig.getBillType();
-
-	/**
-	 * 账单存储路径
-	* */
-	private String dir = wxConfig.getDir();
 
 	/**
 	 * 文件下载类
@@ -96,16 +77,16 @@ public class WinXinFileDown implements FileDown {
 			String xml = this.generateXml();
 			LOG.info(xml);
 
-			response = HttpClientUtil.httpsRequest(url, "POST", xml);
+			response = HttpClientUtil.httpsRequest(wxConfig.getUrl(), "POST", xml);
 
 			// String dir = "/home/roncoo/app/accountcheck/billfile/weixin";
 
-			File file = new File(dir, bill_date + "_" + bill_type.toLowerCase() + ".txt");
+			File file = new File(wxConfig.getDir(), bill_date + "_" + wxConfig.getBillType().toLowerCase() + ".txt");
 			int index = 1;
 
 			// 判断文件是否已经存在
 			while (file.exists()) {
-				file = new File(dir, bill_date + "_" + bill_type.toLowerCase() + index + ".txt");
+				file = new File(wxConfig.getDir(), bill_date + "_" + wxConfig.getBillType().toLowerCase() + index + ".txt");
 				index++;
 			}
 			return FileUtils.saveFile(response, file);
@@ -129,10 +110,10 @@ public class WinXinFileDown implements FileDown {
 	 */
 	public String generateXml() {
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("appid", appid);
-		params.put("mch_id", mch_id);
+		params.put("appid", wxConfig.getAppId());
+		params.put("mch_id", wxConfig.getMchId());
 		params.put("bill_date", bill_date);
-		params.put("bill_type", bill_type);
+		params.put("bill_type", wxConfig.getBillType());
 		// 随机字符串，不长于32，调用随机数函数生成，将得到的值转换为字符串
 		params.put("nonce_str", WeiXinBaseUtils.createNoncestr());
 
@@ -144,7 +125,7 @@ public class WinXinFileDown implements FileDown {
 			}
 		}
 
-		String sign = SignHelper.getSign(params, appSecret);
+		String sign = SignHelper.getSign(params, wxConfig.getPartnerKey());
 		params.put("sign", sign.toUpperCase());
 		return WeiXinBaseUtils.arrayToXml(params);
 	}

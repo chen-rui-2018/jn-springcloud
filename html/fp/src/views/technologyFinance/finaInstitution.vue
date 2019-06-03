@@ -100,8 +100,8 @@
               </div>
             </div>
           </div>
-          <div class="orgBtn fr mainColor">
-            <a href="">在线联系</a>
+          <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
+            <a href="javascript:;">在线联系</a>
           </div>
         </li>
       </ul>
@@ -147,6 +147,14 @@ export default {
     this.selectIndustryList();
   },
   methods: {
+      //在线联系
+    onlineContat(orgAccount,orgName){
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:orgName}})
+    },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
       let num = 0;

@@ -11,6 +11,9 @@
     <result column="offer_ratio" jdbcType="DOUBLE" property="offerRatio" />
     <result column="policy_status" jdbcType="VARCHAR" property="policyStatus" />
     <result column="day_conditions" jdbcType="INTEGER" property="dayConditions" />
+    <result column="taxt_basis" jdbcType="DECIMAL" property="taxtBasis" />
+    <result column="policy_car_num" jdbcType="INTEGER" property="policyCarNum" />
+    <result column="policy_car_max" jdbcType="INTEGER" property="policyCarMax" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
@@ -77,8 +80,8 @@
   </sql>
   <sql id="Base_Column_List">
     policy_id_, policy_type, policy_user_type, policy_code, policy_comments, offer_price, 
-    offer_ratio, policy_status, day_conditions, creator_account, created_time, modifier_account, 
-    modified_time, record_status
+    offer_ratio, policy_status, day_conditions, taxt_basis, policy_car_num, policy_car_max, 
+    creator_account, created_time, modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingPreferentialCriteria" resultMap="BaseResultMap">
     select
@@ -114,11 +117,13 @@
     insert into tb_parking_preferential (policy_id_, policy_type, policy_user_type, 
       policy_code, policy_comments, offer_price, 
       offer_ratio, policy_status, day_conditions, 
+      taxt_basis, policy_car_num, policy_car_max, 
       creator_account, created_time, modifier_account, 
       modified_time, record_status)
     values (#{policyId,jdbcType=VARCHAR}, #{policyType,jdbcType=VARCHAR}, #{policyUserType,jdbcType=VARCHAR}, 
       #{policyCode,jdbcType=VARCHAR}, #{policyComments,jdbcType=VARCHAR}, #{offerPrice,jdbcType=DOUBLE}, 
       #{offerRatio,jdbcType=DOUBLE}, #{policyStatus,jdbcType=VARCHAR}, #{dayConditions,jdbcType=INTEGER}, 
+      #{taxtBasis,jdbcType=DECIMAL}, #{policyCarNum,jdbcType=INTEGER}, #{policyCarMax,jdbcType=INTEGER}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
   </insert>
@@ -151,6 +156,15 @@
       </if>
       <if test="dayConditions != null">
         day_conditions,
+      </if>
+      <if test="taxtBasis != null">
+        taxt_basis,
+      </if>
+      <if test="policyCarNum != null">
+        policy_car_num,
+      </if>
+      <if test="policyCarMax != null">
+        policy_car_max,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -195,6 +209,15 @@
       </if>
       <if test="dayConditions != null">
         #{dayConditions,jdbcType=INTEGER},
+      </if>
+      <if test="taxtBasis != null">
+        #{taxtBasis,jdbcType=DECIMAL},
+      </if>
+      <if test="policyCarNum != null">
+        #{policyCarNum,jdbcType=INTEGER},
+      </if>
+      <if test="policyCarMax != null">
+        #{policyCarMax,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -249,6 +272,15 @@
       <if test="record.dayConditions != null">
         day_conditions = #{record.dayConditions,jdbcType=INTEGER},
       </if>
+      <if test="record.taxtBasis != null">
+        taxt_basis = #{record.taxtBasis,jdbcType=DECIMAL},
+      </if>
+      <if test="record.policyCarNum != null">
+        policy_car_num = #{record.policyCarNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.policyCarMax != null">
+        policy_car_max = #{record.policyCarMax,jdbcType=INTEGER},
+      </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -280,6 +312,9 @@
       offer_ratio = #{record.offerRatio,jdbcType=DOUBLE},
       policy_status = #{record.policyStatus,jdbcType=VARCHAR},
       day_conditions = #{record.dayConditions,jdbcType=INTEGER},
+      taxt_basis = #{record.taxtBasis,jdbcType=DECIMAL},
+      policy_car_num = #{record.policyCarNum,jdbcType=INTEGER},
+      policy_car_max = #{record.policyCarMax,jdbcType=INTEGER},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
@@ -316,6 +351,15 @@
       <if test="dayConditions != null">
         day_conditions = #{dayConditions,jdbcType=INTEGER},
       </if>
+      <if test="taxtBasis != null">
+        taxt_basis = #{taxtBasis,jdbcType=DECIMAL},
+      </if>
+      <if test="policyCarNum != null">
+        policy_car_num = #{policyCarNum,jdbcType=INTEGER},
+      </if>
+      <if test="policyCarMax != null">
+        policy_car_max = #{policyCarMax,jdbcType=INTEGER},
+      </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -344,6 +388,9 @@
       offer_ratio = #{offerRatio,jdbcType=DOUBLE},
       policy_status = #{policyStatus,jdbcType=VARCHAR},
       day_conditions = #{dayConditions,jdbcType=INTEGER},
+      taxt_basis = #{taxtBasis,jdbcType=DECIMAL},
+      policy_car_num = #{policyCarNum,jdbcType=INTEGER},
+      policy_car_max = #{policyCarMax,jdbcType=INTEGER},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},

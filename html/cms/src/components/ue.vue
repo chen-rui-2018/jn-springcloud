@@ -14,6 +14,10 @@ export default {
     config: {
       type: Object,
       default: function() {}
+    },
+    disabledEditorFlag: {
+      // type: boolean,
+      default: false
     }
   },
   data() {
@@ -27,6 +31,9 @@ export default {
     this.editor.addListener('ready', function() {
       setTimeout(function() {
         _this.editor.setContent(_this.defaultMsg) // 确保UE加载完成后，放入内容。
+        if (_this.disabledEditorFlag) {
+          _this.editor.setDisabled()
+        }
       }, 500)
     })
   },

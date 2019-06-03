@@ -19,13 +19,13 @@ import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.entity.TbActivityApplyCriteria;
 import com.jn.park.activity.entity.TbActivityCriteria;
-import com.jn.park.activity.service.ActivityApplyService;
-import com.jn.park.activity.service.ActivityDetailsService;
-import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.activity.model.ActivityApplyDetail;
 import com.jn.park.activity.model.ActivityApplyParam;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.ApplyUserInfo;
+import com.jn.park.activity.service.ActivityApplyService;
+import com.jn.park.activity.service.ActivityDetailsService;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -111,8 +111,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         ApplyUserInfo applyUserInfo = new ApplyUserInfo();
         BeanUtils.copyProperties(userExtension, applyUserInfo);
-        if (StringUtils.isBlank(applyUserInfo.getName())
-                || StringUtils.isBlank(applyUserInfo.getPosition()) || StringUtils.isBlank(applyUserInfo.getSex())) {
+        if (StringUtils.isBlank(applyUserInfo.getName())|| StringUtils.isBlank(applyUserInfo.getSex())) {
             //用户信息不完善，跳转到信息完善页
             throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
         }
@@ -544,7 +543,9 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
                 for (UserExtensionInfo user : userList) {
                     for (ActivityApplyDetail detail : activityApplyList) {
                         if (user!= null && user.getAccount().equals(detail.getAccount())) {
+                            String tempApplyId = detail.getId();
                             BeanUtils.copyProperties(user, detail);
+                            detail.setId(tempApplyId);
                         }
                     }
                 }

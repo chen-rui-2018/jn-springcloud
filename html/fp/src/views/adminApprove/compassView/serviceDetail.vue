@@ -16,14 +16,15 @@
       <!-- 大标题 -->
       <div class="right_headline">
         <p>{{seviceDetail.name}}
-          <span v-if="seviceDetail.contactQqGroup!=null&&seviceDetail.contactQqGroup!=''">q群咨询</span>
+          <span @click="getQQ" v-show="seviceDetail.contactQqGroup!=null&&seviceDetail.contactQqGroup!=''">q群咨询</span>
           <span @click="messageVisible = true">我要留言</span>
-          <span v-if="seviceDetail.isContactOnline==='1'">在线咨询</span>
+          <span v-show="seviceDetail.isContactOnline==='1'">在线咨询</span>
         </p>
       </div>
       <!-- 我要留言弹窗 -->
       <div class="message">
-        <el-dialog title="我要留言" :visible.sync="messageVisible" width="616px" >
+        <el-dialog title="我要留言" :visible.sync="messageVisible" width="616px"
+:modal-append-to-body=false>
           <el-form :model="messageform" label-position="left" label-width="100px" :rules="rules" >
             <el-form-item label="企业名称：" prop="firmName" > 
               <el-input v-model="messageform.firmName" placeholder="请输入内容   默认填入当前企业名称"></el-input>
@@ -288,6 +289,14 @@ export default {
     this.getSeviceDetailList()
   },
   methods: {
+    getQQ(){
+      this.$alert('QQ群号', this.seviceDetail.contactQqGroup, {
+        confirmButtonText: '确定',
+        callback: action => {
+          
+        }
+      })
+    },
     getSeviceDetailList(){
       let _this = this;
       this.api.get({
@@ -461,6 +470,12 @@ export default {
           background-color: #00a041;
           color:#FFF;
           border: solid 1px #00a041;
+        }
+        span:nth-child(3){
+          background-color: #00a041;
+          color:#FFF;
+          border: solid 1px #00a041;
+              margin-right: 12px;
         }
       }
     }

@@ -1,5 +1,6 @@
 package com.jn.park.parking.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -702,6 +703,186 @@ public class TbParkingPreferentialCriteria {
 
         public Criteria andDayConditionsNotBetween(Integer value1, Integer value2) {
             addCriterion("day_conditions not between", value1, value2, "dayConditions");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisIsNull() {
+            addCriterion("taxt_basis is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisIsNotNull() {
+            addCriterion("taxt_basis is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisEqualTo(BigDecimal value) {
+            addCriterion("taxt_basis =", value, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisNotEqualTo(BigDecimal value) {
+            addCriterion("taxt_basis <>", value, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisGreaterThan(BigDecimal value) {
+            addCriterion("taxt_basis >", value, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("taxt_basis >=", value, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisLessThan(BigDecimal value) {
+            addCriterion("taxt_basis <", value, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("taxt_basis <=", value, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisIn(List<BigDecimal> values) {
+            addCriterion("taxt_basis in", values, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisNotIn(List<BigDecimal> values) {
+            addCriterion("taxt_basis not in", values, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("taxt_basis between", value1, value2, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxtBasisNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("taxt_basis not between", value1, value2, "taxtBasis");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumIsNull() {
+            addCriterion("policy_car_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumIsNotNull() {
+            addCriterion("policy_car_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumEqualTo(Integer value) {
+            addCriterion("policy_car_num =", value, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumNotEqualTo(Integer value) {
+            addCriterion("policy_car_num <>", value, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumGreaterThan(Integer value) {
+            addCriterion("policy_car_num >", value, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("policy_car_num >=", value, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumLessThan(Integer value) {
+            addCriterion("policy_car_num <", value, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumLessThanOrEqualTo(Integer value) {
+            addCriterion("policy_car_num <=", value, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumIn(List<Integer> values) {
+            addCriterion("policy_car_num in", values, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumNotIn(List<Integer> values) {
+            addCriterion("policy_car_num not in", values, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumBetween(Integer value1, Integer value2) {
+            addCriterion("policy_car_num between", value1, value2, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("policy_car_num not between", value1, value2, "policyCarNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxIsNull() {
+            addCriterion("policy_car_max is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxIsNotNull() {
+            addCriterion("policy_car_max is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxEqualTo(Integer value) {
+            addCriterion("policy_car_max =", value, "policyCarMax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxNotEqualTo(Integer value) {
+            addCriterion("policy_car_max <>", value, "policyCarMax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxGreaterThan(Integer value) {
+            addCriterion("policy_car_max >", value, "policyCarMax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxGreaterThanOrEqualTo(Integer value) {
+            addCriterion("policy_car_max >=", value, "policyCarMax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxLessThan(Integer value) {
+            addCriterion("policy_car_max <", value, "policyCarMax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxLessThanOrEqualTo(Integer value) {
+            addCriterion("policy_car_max <=", value, "policyCarMax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxIn(List<Integer> values) {
+            addCriterion("policy_car_max in", values, "policyCarMax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxNotIn(List<Integer> values) {
+            addCriterion("policy_car_max not in", values, "policyCarMax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxBetween(Integer value1, Integer value2) {
+            addCriterion("policy_car_max between", value1, value2, "policyCarMax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyCarMaxNotBetween(Integer value1, Integer value2) {
+            addCriterion("policy_car_max not between", value1, value2, "policyCarMax");
             return (Criteria) this;
         }
 

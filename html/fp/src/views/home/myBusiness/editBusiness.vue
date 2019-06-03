@@ -182,7 +182,7 @@
             </div>
             <i class="el-icon-plus"/>
           </el-upload>
-          <el-dialog :visible.sync="imgParamsDialogVisible">
+          <el-dialog :visible.sync="imgParamsDialogVisible" :modal-append-to-body="false">
             <img style="width:100%;height:200px;" :src="dialogImageUrl" alt="企业宣传图片">
           </el-dialog>
         </el-form-item>
@@ -357,7 +357,6 @@ export default {
         // },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.sendAuthCode = false;
             _this.auth_time = 60;
             var auth_timetimer = setInterval(() => {
@@ -381,10 +380,9 @@ export default {
               url: "updateCompanyInfo",
               data: this.businessForm,
               callback: res => {
-                console.log(res);
                 if (res.code == "0000") {
                   this.$message({
-                    message: "编辑成功",
+                    message: "企业信息已提交，请等待后台审核",
                     type: "success"
                   });
                 this.$router.push({path:'/myBusiness/index'})
@@ -446,7 +444,7 @@ export default {
             _this.businessForm.induCode = res.data.induCode;
             // _this.avatarUrl= res.data.avatar
             _this.businessForm.businessLicense = res.data.businessLicense;
-            _this.businessForm.propagandaPictureList = res.data.propagandaPicture;
+            // _this.businessForm.propagandaPictureList = res.data.propagandaPicture;
             console.log(res.data.propagandaPicture)
             if ( res.data.propagandaPicture) {
               let fileListArr = []
@@ -593,13 +591,15 @@ export default {
      width: 85px;
     height: 85px;
     line-height: 85px;
-    border: 1px dashed #c0ccda;
+    // border:none;
+    // border: 1px dashed #c0ccda;
     border-radius: 6px;
     >i{
       font-size: 28px;
     color: #8c939d;
     }
     >img{
+          border-radius: 6px;
       width: 85px;
       height: 85px;
     }
@@ -619,6 +619,7 @@ export default {
   .el-upload-list--picture-card .el-upload-list__item {
     width: 85px;
     height: 85px;
+    border:none;
   }
   .el-upload--picture-card {
     width: 85px;

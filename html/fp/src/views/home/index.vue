@@ -16,7 +16,7 @@
           <!-- 侧边栏 -->
           <div class="slider" v-if="$store.state.hiddenNav">
             <el-aside width="150px">
-              <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" router @open="handleOpen"
+              <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
                 <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" />
               </el-menu>
@@ -38,6 +38,7 @@
 </template>
 <script>
 import $ from "jquery";
+import api from '@/util/api'
 import SidebarItem from './common/SidebarItem'
 import { isMobile } from "@/util";
 import bus from "@/util/bus";
@@ -88,32 +89,38 @@ export default {
   //       }, 0);
   //   }
   // },
-  created() {
-    bus.$on("getUserinfoF", res => {
-      this.getUserExtension();
-    });
-    var token=sessionStorage.token
-     this.api.post({
-        url: "getDynamicMenu",
-        headers: { token: token },
-        callback: res => {
-          if (res.code == "0000") {
-            console.log(res.data)
-            res.data.forEach(val=>{
-              if(val.label==='门户'){
-                this.menuItems=val.children[0].children
-                sessionStorage.menuItems= JSON.stringify(this.menuItems)
-              }
-            })
-            console.log(this.menuItems)
-          } else {
-            this.$message.error(res.result);
-          }
-        }
-      });
+  beforeRouteEnter(to, from, next) {
+    
+    let token=sessionStorage.token
+    api.post({
+      url: "getDynamicMenu",
+      headers: { token: token },
+      callback: res => {
+        if (res.code === "0000") {
+          res.data.forEach(val=>{
+            if(val.label==='门户'){
+              let menuItems = val.children[0].children
+              sessionStorage.menuItems= JSON.stringify(menuItems)
+              console.log(menuItems)
+              next(vm => {
+                vm.menuItems = menuItems
+                }
 
+              )
+            }
+          })
+
+        } else {
+          this.$message.error(res.result);
+        }
+      }
+    });
   },
   mounted() {
+    let _this = this
+    bus.$on("getUserinfoF", res => {
+      _this.getUserExtension();
+    });
     this.getUserExtension();
   },
   updated() {
@@ -239,7 +246,7 @@ export default {
   .el-main {
     padding: 0 20px;
     &.isMobile {
-      padding: 20px;
+      padding: 0;
     }
   }
   &.pd {
@@ -461,7 +468,7 @@ export default {
           border-left: 2px solid #00a042;
         }
          .el-menu-item {
-            // 
+            //
             margin: 0;
           }
         .el-menu-item:hover {

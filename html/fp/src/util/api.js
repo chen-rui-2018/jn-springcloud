@@ -31,6 +31,7 @@ export default {
         getUserCode:"springcloud-user/guest/userJoin/getUserCode",//获取短信验证码[当前用户]
         getCode:"springcloud-user/guest/userJoin/getCode",//获取短信验证码
         addUser:"springcloud-user/guest/userJoin/addUser",//用户注册
+        accountIsExist:"springcloud-user/guest/userJoin/accountIsExist",//当前账号是否已存在
         updatePassword:"springcloud-user/guest/userJoin/updatePassword",//修改密码
         getUserPersonInfo:"springcloud-user/user/center/getUserPersonInfo",//根据用户账号获取用户资料信息
         modifyUserPassword:"springcloud-user/user/center/modifyUserPassword",//修改用户密码
@@ -124,6 +125,8 @@ export default {
         acceptInvite:"springcloud-enterprise/enterprise/InvitationController/acceptInvite",//接受企业邀请
         refuseInvite:"springcloud-enterprise/enterprise/InvitationController/refuseInvite",//拒绝企业邀请
         getUserAccount:"springcloud-app-system/system/sysUser/getUserInfo",//获取用户账号
+        leaveCompany:"springcloud-enterprise/enterprise/ColleagueController/leaveCompany",//离开企业
+        getUserApprovalStatus:"springcloud-enterprise/serviceMarket/advisorEditController/getUserApprovalStatus",//判断当前登录用户认证顾问的状态
         postJob:"springcloud-enterprise/enterprise/RecruitController/publishRecruitInfo",//发布招聘
         getInviteStaffList:"springcloud-enterprise/enterprise/InvitationController/getInviteStaffList",//获取邀请员工的资料
         getCompensation:"springcloud-enterprise/guest/CommonController/getServiceCodeList",//获取薪资待遇
@@ -170,18 +173,19 @@ export default {
         getOrgInfoForManage:"springcloud-enterprise/guest/serviceMarket/org/getOrgInfoForManage",//获取服机构信息[机构详情+产品列表](pc/app机构信息)
         // 角色认证
         getInvestorMainRound:"springcloud-enterprise//guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
-        getAffiliationUnit:"springcloud-enterprise/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
+        getAffiliationUnit:"springcloud-enterprise/guest/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
         saveOrUpdateOrgDetail:"springcloud-enterprise/guest/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证
         selectOrgInfo:"springcloud-enterprise/serviceMarket/advisorApproveController/selectOrgInfo",//获取服务机构列表
         serviceAdvisorInfo:"springcloud-enterprise/serviceMarket/advisorEditController/getServiceAdvisorInfo",//服务顾问详情回显
+        sendApproval:"springcloud-enterprise/serviceMarket/advisorEditController/sendApproval", // 发送申请/提交审批(将顾问信息审批状态由未反馈改为待审批)
 
 
 
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd",// 页面广告获取
-        selectCompany:"springcloud-enterprise/guest/userUpgrade/selectCompany", // 查询公司列表
-        changeToStaff:"springcloud-enterprise/guest/userUpgrade/changeToStaff", // 升级员工
-        changeToCompany:"springcloud-enterprise/guest/userUpgrade/changeToCompany", // 升级员工
+        selectCompany:"springcloud-enterprise/joinPark/userUpgrade/selectCompany", // 查询公司列表
+        changeToStaff:"springcloud-enterprise/joinPark/userUpgrade/changeToStaff", // 升级员工
+        changeToCompany:"springcloud-enterprise/joinPark/userUpgrade/changeToCompany", // 升级企业
 
 
 
@@ -238,6 +242,7 @@ export default {
         getCompanyDetails:"springcloud-enterprise/guest/company/getCompanyDetails",//查询企业详情-新版
         getComCommentInfo:"springcloud-enterprise/guest/company/getCommentInfo",//获取评论/留言信息
         getcommentActivity:"springcloud-enterprise/guest/company/commentActivity",//企业留言/留言回复
+        getCompanyContactAccount:"springcloud-enterprise/guest/company/getCompanyContactAccount",//获取企业在线联系人账号
         addCareOperate:"springcloud-park/park/manage/care/addCareOperate",// 用户添加关注操作
         cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
 
@@ -283,7 +288,7 @@ export default {
                     }
                     callback(response.data);
                 }
-                    
+
             })
             .catch(function (err) {
                 if (typeof error === "function")
@@ -361,7 +366,7 @@ export default {
                 }
                 callback(response.data);
             }
-                
+
 
           })
           .catch(function (err) {
@@ -474,7 +479,7 @@ export default {
 	return currentdate;
     },
     tokenInvalid(){
-        
+
     }
 
 }

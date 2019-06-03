@@ -181,6 +181,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         }
         PaginationData paginationData = new PaginationData();
         paginationData.setRows(voList);
+        paginationData.setTotal(voList.size());
         return paginationData;
     }
 

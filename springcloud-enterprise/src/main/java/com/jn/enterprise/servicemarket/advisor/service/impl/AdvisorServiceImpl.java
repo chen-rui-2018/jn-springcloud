@@ -114,6 +114,9 @@ public class AdvisorServiceImpl implements AdvisorService {
         AdvisorDetailsVo advisorDetailsVo=new AdvisorDetailsVo();
         //1.获取用户基本信息
         AdvisorServiceInfo advisorServiceInfo= getAdvisorInfoByAccount(advisorAccount,approvalStatus);
+        if(advisorServiceInfo==null){
+            return null;
+        }
         //设置顾问基础信息
         advisorDetailsVo.setAdvisorServiceInfo(advisorServiceInfo);
         //创建顾问详情简介对象

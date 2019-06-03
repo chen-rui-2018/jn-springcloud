@@ -44,14 +44,4 @@ public class PmPayBillScheduledController {
         pmPayBillServiceClient.updatePmPayBillItemExpireStatus();
     }
 
-    /**
-     * 没半小时执行一次物业费缴费账单发送功能
-     */
-    @Scheduled(cron = " 0 0/30 * * * ? ")
-    public void generatePmBill() {
-        //更新会议状态
-        logger.info("每月初1号凌晨两点生成物业费缴费单");
-        pmPayBillServiceClient.generatePmBill();
-    }
-
 }

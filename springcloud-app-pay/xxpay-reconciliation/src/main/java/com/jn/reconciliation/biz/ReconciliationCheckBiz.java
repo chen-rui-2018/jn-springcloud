@@ -17,7 +17,6 @@ package com.jn.reconciliation.biz;
 
 import com.jn.reconciliation.enums.MistakeHandleStatusEnum;
 import com.jn.reconciliation.enums.ReconciliationMistakeTypeEnum;
-import com.jn.reconciliation.enums.TradeStatusEnum;
 import com.jn.reconciliation.service.PayOrderService;
 import com.jn.reconciliation.service.PayReconciliationMistakeScratchPoolService;
 import com.jn.reconciliation.service.ReconciliationTransactionService;
@@ -36,14 +35,16 @@ import org.xxpay.dal.dao.model.PayOrder;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
- * 对账的核心业务biz.
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：对账的核心业务biz.
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 @Component("reconciliationCheckBiz")
 public class ReconciliationCheckBiz {
@@ -80,10 +81,10 @@ public class ReconciliationCheckBiz {
 		String billDate = sdf.format(batch.getBillDate());
 
 		// 查询平台bill_date,interfaceCode成功的交易
-		List<PayOrder> platSucessDateList = payOrderService.getPaySuccessOrderByDate(billDate, interfaceCode);
+		List<PayOrder> platSucessDateList = payOrderService.getPaySuccessOrderByDate(batch.getBillDate(), interfaceCode);
 
 		// 查询平台bill_date,interfaceCode所有的交易
-		List<PayOrder> platAllDateList = payOrderService.getAllPayOrderByDate(billDate, interfaceCode);
+		List<PayOrder> platAllDateList = payOrderService.getAllPayOrderByDate(batch.getBillDate(), interfaceCode);
 
 		// 查询平台缓冲池中所有的数据
 		List<TbPayReconciliationMistakeScratchPool> platScreatchRecordList = payReconciliationMistakeScratchPoolService.listScratchPoolRecord();
@@ -136,9 +137,9 @@ public class ReconciliationCheckBiz {
 		Integer mistakeCount = 0;
 
 		for (PayOrder payOrder : platformDateList) {
-			//订单金额(转元)
+			//平台订单金额(转元)
 			BigDecimal  payAmount = new BigDecimal(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
-			//订单手续费(转元)
+			//平台订单手续费(转元)
 			BigDecimal  platCost = new BigDecimal(AmountUtil.convertCent2Dollar(payOrder.getPlatCost().toString()));
 			// 用于标记是否有匹配
 			Boolean flag = false;
@@ -179,6 +180,8 @@ public class ReconciliationCheckBiz {
 						break;
 					}
 
+					//找到匹配 不再循环
+					break;
 				}
 			}
 			// 没有找到匹配的记录，把这个订单记录到缓冲池中
@@ -225,8 +228,8 @@ public class ReconciliationCheckBiz {
 		Integer mistakeCount = 0;
 		// 拿银行数据去对账
 		for (ReconciliationEntityVo bankRecord : bankList) {
-
-			boolean flag = false;// 用于标记是否有匹配
+			// 用于标记是否有匹配
+			boolean flag = false;
 			for (PayOrder payOrder : platAllDateList) {
 
 				//订单金额(转元)
@@ -274,8 +277,10 @@ public class ReconciliationCheckBiz {
 							mistakeCount++;
 							break;
 						}
-
 					}
+
+					//找到匹配 不再循环
+					break;
 				}
 			}
 
@@ -356,13 +361,18 @@ public class ReconciliationCheckBiz {
 	 *            差错类型
 	 * @return 注意：scratchRecord和record 至少有一个为空
 	 */
-	private TbPayReconciliationMistake  createMisktake(TbPayReconciliationMistakeScratchPool scratchRecord, PayOrder payOrder, ReconciliationEntityVo bankRecord, ReconciliationMistakeTypeEnum mistakeType, TbPayReconciliationCheckBatch batch) {
+	private TbPayReconciliationMistake  createMisktake(
+			TbPayReconciliationMistakeScratchPool scratchRecord
+			, PayOrder payOrder
+			, ReconciliationEntityVo bankRecord
+			, ReconciliationMistakeTypeEnum mistakeType
+			, TbPayReconciliationCheckBatch batch) {
 
 		TbPayReconciliationMistake  mistake = new TbPayReconciliationMistake ();
 		mistake.setAccountCheckBatchNo(batch.getBatchNo());
 		mistake.setBillDate(batch.getBillDate());
-		mistake.setErrType(mistakeType.name());
-		mistake.setHandleStatus(MistakeHandleStatusEnum.NOHANDLE.name());
+		mistake.setErrType(mistakeType.getCode());
+		mistake.setHandleStatus(MistakeHandleStatusEnum.NOHANDLE.getCode());
 		mistake.setBankType(batch.getBankType());
 		if (payOrder != null) {
 			mistake.setMerchantName(payOrder.getBody());
@@ -412,14 +422,13 @@ public class ReconciliationCheckBiz {
 		TbPayReconciliationMistakeScratchPool scratchRecord = new TbPayReconciliationMistakeScratchPool();
 		scratchRecord.setBankOrderNo(payOrder.getPayOrderId());
 		scratchRecord.setBankTrxNo(payOrder.getChannelOrderNo());
-		//scratchRecord.setCompleteTime();
-		//scratchRecord.setPaySuccessTime(record.getPaySuccessTime());
-		scratchRecord.setMerchantOrderNo(payOrder.getMchOrderNo());
+		scratchRecord.setPaySuccessTime(new Date(payOrder.getPaySuccTime()));
+		scratchRecord.setMerchantOrderNo(payOrder.getPayOrderId());
 		scratchRecord.setOrderAmount(new BigDecimal(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString())));
 		scratchRecord.setPlatCost(new BigDecimal(AmountUtil.convertCent2Dollar(payOrder.getPlatCost().toString())));
 		scratchRecord.setPayWayCode(payOrder.getChannelId());
 		scratchRecord.setTrxNo(payOrder.getChannelOrderNo());
-		scratchRecord.setStatus(TradeStatusEnum.SUCCESS.name());
+		scratchRecord.setStatus(payOrder.getStatus().toString());
 		scratchRecord.setBatchNo(batch.getBatchNo());
 		scratchRecord.setBillDate(batch.getBillDate());
 		return scratchRecord;

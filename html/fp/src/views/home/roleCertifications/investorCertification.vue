@@ -9,8 +9,7 @@
         <div class="basicInfo pr">
           <div class="setdistance uploadImgItem">
             <span class="textRight mg">照片：</span>
-            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
-              :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
+            <el-upload class="avatar-uploader avatar-img" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
               <img v-if="investorForm.avatar" :src="investorForm.avatar" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -182,7 +181,7 @@
       </div>
       <div v-show="submitBtn" class="footer ct">
         <el-button size="mini" class="mainColor accept" :disabled='disabled' @click="submit('investorForm')">提交</el-button>
-        <el-button size="mini" type="success">返回</el-button>
+        <!-- <el-button size="mini" type="success">返回</el-button> -->
       </div>
     </el-main>
   </div>
@@ -205,6 +204,7 @@ export default {
         }
       }
     return {
+      baseUrl:this.api.host,
       submitBtn:true,
       disabled: false,
       orgOptions: [],
@@ -235,7 +235,7 @@ export default {
         orgId: "",
         personalProfile: "",
         position: "",
-        sex: "",
+        sex: '1',
         investorName: "",
         invesFinanExper: "",
         avatar: "",
@@ -691,6 +691,7 @@ export default {
         url: "getAffiliationUnit",
         data: { needPage: "0" },
         callback: res => {
+          console.log(res)
           if (res.code == "0000") {
             this.orgOptions = res.data.rows;
           } else {
@@ -904,11 +905,11 @@ export default {
   // .infoInput:nth-child(2) {
   //   margin: 15px 0;
   // }
-  .avatarImg {
+  .avatar-img {
     width: 100px;
     height: 100px;
   }
-  .avatarImg .el-upload {
+  .avatar-img .el-upload {
     // border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
@@ -917,7 +918,7 @@ export default {
     display: inline-block;
     vertical-align: middle;
   }
-  .avatarImg .avatar-uploader-icon {
+  .avatar-img .avatar-uploader-icon {
     border: 2px dashed #eee;
     font-size: 28px;
     color: #8c939d;
@@ -926,7 +927,7 @@ export default {
     line-height: 100px;
     text-align: center;
   }
-  .avatarImg .avatar {
+  .avatar-img .avatar {
     width: 100px;
     height: 100px;
     border-radius: 5px;

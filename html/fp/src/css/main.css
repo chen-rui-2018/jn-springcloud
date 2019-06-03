@@ -399,7 +399,6 @@ img {
   float: left;
   width: 18px;
   height: 18px;
-  border: 1px solid #ccc;
   border-radius: 50%;
   margin-left: -10px;
 }
@@ -517,7 +516,6 @@ img {
   float: left;
   width: 22px;
   height: 22px;
-  border: 1px solid #ccc;
   border-radius: 50%;
   margin-left: -10px;
 }
@@ -3553,7 +3551,7 @@ img {
 
 .portalIndex .districtGardens .card,
 .enterpriseservice .districtGardens .card {
-  margin-top: 40px;
+  padding: 40px 0;
 }
 
 .portalIndex .districtGardens .card .cardUl > li,
@@ -3652,12 +3650,20 @@ img {
   display: inline-block;
 }
 
-.portalIndex .enterpriseinfo .enterPriseCon .con1 > img,
-.portalIndex .enterpriseinfo .enterPriseCon .conlef1 > img,
-.enterpriseservice .enterpriseinfo .enterPriseCon .con1 > img,
-.enterpriseservice .enterpriseinfo .enterPriseCon .conlef1 > img {
+.portalIndex .enterpriseinfo .enterPriseCon .con1 .con1Img,
+.portalIndex .enterpriseinfo .enterPriseCon .conlef1 .con1Img,
+.enterpriseservice .enterpriseinfo .enterPriseCon .con1 .con1Img,
+.enterpriseservice .enterpriseinfo .enterPriseCon .conlef1 .con1Img {
   width: 416px;
   height: 232px;
+}
+
+.portalIndex .enterpriseinfo .enterPriseCon .con1 .con1Img > img,
+.portalIndex .enterpriseinfo .enterPriseCon .conlef1 .con1Img > img,
+.enterpriseservice .enterpriseinfo .enterPriseCon .con1 .con1Img > img,
+.enterpriseservice .enterpriseinfo .enterPriseCon .conlef1 .con1Img > img {
+  width: 100%;
+  height: 100%;
 }
 
 .portalIndex .enterpriseinfo .enterPriseCon .con1 .conTit1,

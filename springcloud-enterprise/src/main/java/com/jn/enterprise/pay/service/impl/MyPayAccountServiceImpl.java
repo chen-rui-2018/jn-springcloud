@@ -9,25 +9,26 @@ import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.pay.dao.*;
 import com.jn.enterprise.pay.entity.*;
-import com.jn.enterprise.pay.enums.PaymentBillEnum;
-import com.jn.enterprise.pay.enums.PaymentBillExceptionEnum;
+import com.jn.enterprise.pay.enums.*;
 import com.jn.enterprise.pay.service.MyPayAccountService;
-import com.jn.pay.model.PayAccountBook;
-import com.jn.pay.model.PayAccountBookMoney;
-import com.jn.pay.model.PayAccountBookMoneyRecordParam;
-import com.jn.pay.model.PayAccountBookParam;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.*;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
+import com.lorne.core.framework.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.xxpay.common.util.JsonUtil;
+
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.*;
 
 /**
  * 我的账户(业务实现层)
@@ -46,7 +47,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
     private PayAccountAndAccountBookDao payAccountAndAccountBookDao;
 
     @Autowired
-    private TbPayAccountBookMoneyRecordMapper tbayAccountBookMoneyRecordMapper;
+    private TbPayAccountBookMoneyRecordMapper tbPayAccountBookMoneyRecordMapper;
 
     @Autowired
     private TbPayAccountBookTypeMapper tbPayAccountBookTypeMapper;
@@ -162,5 +163,103 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         }
         BeanUtils.copyProperties(tbPayAccountBook.get(0),payAccountBook);
         return payAccountBook;
+    }
+
+    @Override
+    @ServiceLog(doAction = "线下预缴充值")
+    @Transactional(rollbackFor = RuntimeException.class)
+    public Result underAdvancePayment(PayUnderAdvancePaymentParam payUnderAdvancePaymentParam, User user) {
+        TbPayAccountBook tbPayAccountBook = tbPayAccountBookMapper.selectByPrimaryKey(payUnderAdvancePaymentParam.getAcBookId());
+        /**查询传的账本编号是否存在*/
+        if (null == tbPayAccountBook) {
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_BOOK_IS_NOT_EXIT);
+        }
+        /**补充账本金额*/
+        logger.info("【线下预缴充值】补充账本金额操作开始");
+        BigDecimal totalAmount = new BigDecimal(0);
+        BigDecimal decimal = new BigDecimal(String.valueOf(payUnderAdvancePaymentParam.getRechargeAmount()));
+        totalAmount = totalAmount.add(decimal).add(tbPayAccountBook.getBalance());
+        tbPayAccountBook.setBalance(totalAmount);
+        logger.info("【线下预缴充值】补充账本金额操作，入參【{}】", JsonUtil.object2Json(tbPayAccountBook));
+        tbPayAccountBookMapper.updateByPrimaryKeySelective(tbPayAccountBook);
+        logger.info("【线下预缴充值】补充账本金额操作结束");
+        /**插入流水表记录*/
+        logger.info("【线下预缴充值】插入流水表记录操作开始");
+        TbPayAccountBookMoneyRecord tpbmr = new TbPayAccountBookMoneyRecord();
+        tpbmr.setDeductionId(UUID.randomUUID().toString().replaceAll("-", ""));
+        tpbmr.setAcBookId(tbPayAccountBook.getAcBookId());
+        tpbmr.setPaymentMethod(PaymentBillMethodEnum.BILL_STATE_UNDER.getCode());
+        tpbmr.setPaymentAction(PaymentBillActionEnum.BILL_STATE_MANUAL.getCode());
+        tpbmr.setNatureCode(PaymentBillEnum.BILL_ACCOUNT_BOOK_RECHARGE.getCode());
+        tpbmr.setMoney(payUnderAdvancePaymentParam.getRechargeAmount());
+        tpbmr.setBalance(totalAmount);
+        tpbmr.setCreatedTime(new Date());
+        tpbmr.setCreatorAccount(user.getAccount());
+        tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        logger.info("【线下预缴充值】插入流水表记录操作，入參【{}】", JsonUtil.object2Json(tpbmr));
+        tbPayAccountBookMoneyRecordMapper.insertSelective(tpbmr);
+        logger.info("【线下预缴充值】插入流水表记录操作结束");
+        return new Result("线下充值成功！");
+    }
+
+    @Override
+    @ServiceLog(doAction = "创建账户和账本")
+    @Transactional(rollbackFor = RuntimeException.class)
+    public Result createPayAccountBook(PayAccountBookCreateParam payAccountBookCreateParam, User user) {
+        logger.info("【进入创建账户和账本方法】，入參【{}】",JsonUtil.object2Json(payAccountBookCreateParam),JsonUtil.object2Json(user));
+        /**1.验证该企业用户是否有统一缴费账户，不处理以后企业管理员是否变更*/
+        TbPayAccount tbPayAccount1 = tbPayAccountMapper.selectByPrimaryKey(payAccountBookCreateParam.getComAdmin());
+        /**查询传的账本编号是否存在*/
+        if (tbPayAccount1 != null) {
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_ACCOUNT_EXIT);
+        }
+        /**2.有：则返回提示信息 无：新建统一缴费账户和账本信息*/
+        TbPayAccount tbPayAccount = new TbPayAccount();
+        tbPayAccount.setUserId(payAccountBookCreateParam.getComAdmin());
+        tbPayAccount.setEntId(payAccountBookCreateParam.getEnterId());
+        tbPayAccount.setAccountId(UUID.randomUUID().toString().replaceAll("-", ""));
+        tbPayAccount.setCreatedTime(new Date());
+        tbPayAccount.setCreatorAccount(user.getAccount());
+        tbPayAccount.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        logger.info("【统一缴费-创建账户和账本】，创建账户开始");
+        logger.info("【统一缴费-创建账户和账本】，创建账户入參【{}】",JsonUtil.object2Json(tbPayAccount));
+        tbPayAccountMapper.insertSelective(tbPayAccount);
+        logger.info("【统一缴费-创建账户和账本】，创建账户结束");
+        /**创建该企业账本信息*/
+        Map<String,String>  map = new HashMap<>();
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage().length()-2));
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_2.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_2.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_2.getMessage().length()-2));
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_3.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_3.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_3.getMessage().length()-2));
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_4.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_4.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_4.getMessage().length()-2));
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_5.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_5.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_5.getMessage().length()-2));
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_6.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_6.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_6.getMessage().length()-2));
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_7.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_7.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_7.getMessage().length()-2));
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_8.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_8.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_8.getMessage().length()-2));
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_9.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_9.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_9.getMessage().length()-2));
+        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getMessage().length()-2));
+        TbPayAccountBook tbPayAccountBook = new TbPayAccountBook();
+        tbPayAccountBook.setAccountId(tbPayAccount.getAccountId());
+        tbPayAccountBook.setCreatedTime(new Date());
+        tbPayAccountBook.setCreatorAccount(user.getAccount());
+        tbPayAccountBook.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            tbPayAccountBook.setAcBookId(UUID.randomUUID().toString().replaceAll("-", ""));
+            tbPayAccountBook.setAcBookType(entry.getKey());
+            tbPayAccountBook.setAcBookName(entry.getValue());
+            if(entry.getKey().equals(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode())){
+                tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_AUTO.getCode());
+                tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_RECHARGE.getCode());
+                tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_SHOW.getCode());
+            }else{
+                tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_NOT_AUTO.getCode());
+                tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_NOT_RECHARGE.getCode());
+                tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_NOT_SHOW.getCode());
+            }
+            logger.info("【统一缴费-创建账户和账本】，创建账本开始");
+            logger.info("【统一缴费-创建账户和账本】，创建账本入參【{}】",JsonUtil.object2Json(tbPayAccountBook));
+            tbPayAccountBookMapper.insertSelective(tbPayAccountBook);
+            logger.info("【统一缴费-创建账户和账本】，创建账本结束");
+        }
+        return new Result("创建账户和账本成功");
     }
 }

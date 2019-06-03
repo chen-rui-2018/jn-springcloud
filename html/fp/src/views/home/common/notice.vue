@@ -5,12 +5,12 @@
       <span class="notice-title">{{ title }}</span>
     </div>
     <div class="notice-main">
-      <div class="notice-content" :class="type" v-if="content">
-        <div class="notice-dot"></div>
+      <div class="notice-main-cell" :class="type" v-if="content">
+<!--        <div class="notice-dot"></div>-->
         <slot v-if="slotContent"/>
         <div v-else v-html="content"></div>
       </div>
-      <div class="no-message" v-else>暂无咨询</div>
+      <div class="no-message" v-else>暂无信息</div>
     </div>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
       required: false
     },
     content: {
-      type: String,
+      type: [String, Boolean, Number],
       default: '',
       required: false
     }
@@ -67,9 +67,7 @@ export default {
     margin-top: trsw(21);
     border-radius: 5px;
     box-sizing: border-box;
-    .notice-content {
-      padding: trsw(23);
-      @include flex($h: flex-start, $v: center);
+    .notice-main-cell {
       &.primary {
         background-color: #F2F6F3;
       }

@@ -31,13 +31,13 @@
         <div class="quickEnter">
           <ul>
             <li @click="$router.push({path:'/talentsService'})">
-              <span>人才申报</span>
-              <p>PEOPLE&nbsp;DECLARE</p>
+              <span>人才服务</span>
+              <p>THE&nbsp;TALENT&nbsp;SERVICE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li @click="$router.push({path:'/companyProfile'})">
-              <span>高新企业</span>
-              <p>HIGH-TECH&nbsp;ENTERPRISE</p>
+            <li @click="$router.push({path:'/declarationCenter'})">
+              <span>申报中心</span>
+              <p>DECLARE&nbsp;CENTER</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
             <li @click="$router.push({path:'/incubatorEnterprises'})">
@@ -478,7 +478,7 @@
                       </div>
                     </div>
                     <div class="orgBtn fr mainColor">
-                      <a href="javascript:;" @click="onlineContact(i.orgAccount)">在线联系</a>
+                      <a href="javascript:;" @click="onlineContat(i.orgAccount,i.orgName)">在线联系</a>
                     </div>
                   </li>
                 </ul>
@@ -520,7 +520,7 @@
                   <p>发布时间: {{i.createdTime}}</p>
                 </div>
                 <div class="con3 fr">
-                  <button class="btn1 pointer" @click="onlineContact(i.comName)">在线联系</button>
+                  <button class="btn1 pointer" @click="onlineContact(i.comId)">在线联系</button>
                   <button class="btn2 pointer" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">了解详情</button>
                 </div>
                 <!-- 详情弹框 -->
@@ -572,7 +572,7 @@
     </div>
     <!-- 金融提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px">
+      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false>
         <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
             <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
@@ -596,7 +596,7 @@
     </template>
     <!-- 服务产品提需求弹框 -->
     <template v-if="serverProVisible">
-      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh">
+      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :modal-append-to-body=false>
         <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
           <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
             <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -775,13 +775,45 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-    //在线联系
-    onlineContact(orgAccount) {
+     //在线联系
+    onlineContat(orgAccount, orgName) {
       if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({ path: "chat",query:{fromUser:orgAccount}});
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: sessionStorage.userInfo.account,
+          toUser: orgAccount,
+          nickName: orgName
+        }
+      });
+    },
+    //企业招聘列表在线联系
+    onlineContact(id){
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+       this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: id
+        },
+        callback: res=> {
+          if (res.code == "0000") {
+            // this.typeList = res.data;
+            if(sessionStorage.userInfo.account==res.data.account){
+              this.$message.error('当前登录的账号跟聊天对象一样');
+              return
+            }
+            this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
     },
     //金融产品提需求
     raiseDemand(i) {
@@ -867,7 +899,7 @@ export default {
       if (this.flag55 == true) {
         if (this.page7 >= Math.ceil(this.total7 / this.rows7)) {
           // this.$message.error("没有更多数据了");
-          this.page7=1
+          this.page7 = 1;
           this.getRecruitList();
           // return;
         } else {
@@ -877,7 +909,7 @@ export default {
       } else {
         if (this.page8 >= Math.ceil(this.total8 / this.rows8)) {
           // this.$message.error("没有更多数据了");
-           this.page8=1
+          this.page8 = 1;
           this.getProList();
           // return;
         } else {
@@ -1089,12 +1121,13 @@ export default {
     },
     //活动中心右翻页
     rightPage() {
-      if (this.page3 >= this.total3) {
-        this.$message.error("没有更多数据了");
-        return;
+      if (this.page3 >= Math.ceil(this.total3 / this.rows3)) {
+        this.page3 = 1;
+        this.getActiList();
+      } else {
+        this.page3++;
+        this.getActiList();
       }
-      this.page3++;
-      this.getActiList();
     },
     //科技金融-投资人列表
     getInvestorInfoList() {

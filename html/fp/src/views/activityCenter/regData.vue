@@ -12,7 +12,7 @@
             </el-breadcrumb> -->
             <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">首页/</span>
             <span class="pointer" @click="$router.push({ path: '/actiCenter'})">活动中心/</span>
-            <span class="pointer" @click="$router.push({ path: '/actiTrainDetail'})">活动详情/</span>
+            <span class="pointer" @click="$router.push({ path: '/actiTrainDetail',query:{activityId:$route.query.activityId}})">活动详情/</span>
             <span class="mainColor">报名人资料</span>
         </div>
         <div class="regDataContent">
@@ -39,9 +39,11 @@
                         <div class="dataCircle"></div>
                     </div>
                     <div class="dataRight fl">
-                        <div>{{actiInfo.companyName}}11</div>
+                        <div>{{actiInfo.companyName}}</div>
                         <div>{{actiInfo.post}}</div>
-                        <div>{{actiInfo.hobbys}}</div>
+                        <div>
+                          <span class="hobbryb" v-for="(item,k) in actiInfo.hobbys" :key="k">{{item}}</span>
+                        </div>
                     </div>
                 </div>
             </el-card>
@@ -84,6 +86,9 @@ export default {
 </script>
 <style lang="scss">
 .regData {
+  .hobbryb{
+    margin-right:10px;
+  }
   padding-top: 65px;
   .regDataNav {
     margin: 20px 0;

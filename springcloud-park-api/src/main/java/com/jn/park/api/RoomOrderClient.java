@@ -59,5 +59,5 @@ public interface RoomOrderClient {
      * @return
      */
     @RequestMapping(value = "/api/order/updateBill", method = RequestMethod.POST)
-    Result updateBill(PayCallBackNotify payCallBackNotify);
+    Result updateBill(@RequestBody PayCallBackNotify payCallBackNotify);
 }

@@ -579,8 +579,7 @@ public class StaffServiceImpl implements StaffService {
         TbServiceCompanyStaff tbServiceCompanyStaff = new TbServiceCompanyStaff();
         tbServiceCompanyStaff.setModifierAccount(curAccount);
         tbServiceCompanyStaff.setModifiedTime(new Date());
-        tbServiceCompanyStaff.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
-        tbServiceCompanyStaff.setComId(comId);
+        tbServiceCompanyStaff.setRecordStatus(RecordStatusEnum.DELETE.getValue());
 
         Integer responseNums = tbServiceCompanyStaffMapper.updateByExampleSelective(tbServiceCompanyStaff, staffCriteria);
         logger.info("[企业成员] 批量删除企业成员成功,计划删除:{},实际删除:{}", delStaffsList.size(), responseNums);

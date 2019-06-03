@@ -3,38 +3,39 @@
     <div class="border pd30 attendanceManagement-top"><span class="iconfont"> <i>&#xe613;</i> {{currentDate}}</span>
       <span> <i class="iconfont">&#xe758;</i> 部门:</span>{{departmentName}}</div>
     <div class="pd30 userLocation"> <span>距离公司：{{distance}}m</span> <span @click="init"><i class="iconfont">&#xe607;</i></span></div>
-    <div style="height:100px;border:#ccc solid 1px;" id="dituContent"></div>
+    <div style="height:200px;border:#ccc solid 1px;" id="dituContent"></div>
     <div class="pd30 border userInfo">
-      <div> <span>{{userName.charAt(userName.length - 1)}}</span>{{userName}}</div> <span @click="$router.push({path:'attendanceDetails',query:{id:userInfo.attendanceUser}})">考勤明细 <i class="iconfont">&#xe61f;</i></span>
+      <div> <span>{{userName.charAt(userName.length - 1)}}</span>{{userName}}</div> <span @click="$router.push({path:'attendanceDetails',query:{id:userInfo.attendanceUser}})">考勤明细
+        <i class="iconfont">&#xe61f;</i></span>
     </div>
     <div class="onDuty"><span :class="onDutystandard?'exceedColor':'notColor'"></span>上班时间{{onDutyTime}}</div>
     <div class="signInfo pd30">
       <div v-show="!upTime" @click="signIn">{{signInText}}</div>
-        <div v-show="upTime" @click="signIn">
-          <span> {{signInText}}</span>
-          <span>{{ upTime }}</span>
+      <div v-show="upTime" @click="signIn">
+        <span> {{signInText}}</span>
+        <span>{{ upTime }}</span>
       </div>
-     <div v-show="!downTime" @click="signOut">{{signOutText}}</div>
-        <div v-show="downTime" @click="signOut">
-          <span> {{signOutText}}</span>
-          <span>{{ downTime }}</span>
+      <div v-show="!downTime" @click="signOut">{{signOutText}}</div>
+      <div v-show="downTime" @click="signOut">
+        <span> {{signOutText}}</span>
+        <span>{{ downTime }}</span>
       </div>
       <!-- <div>{{signOutText}}</div> -->
     </div>
     <div class="offDuty"><span :class="offDutystandard?'exceedColor':'notColor'"></span>下班时间{{offDutyTime}} <div class="wire"></div>
     </div>
 
-      <x-dialog v-model="msg" class="dialog-demo">
-        <div style="padding:15px;" class="popUp">
-           <img src="/static/images/signIn.png" alt="签到成功图片">
-        </div>
-        <div class="attendanceTime">{{attendanceTime}}</div>
-        <div class="signSuccessfully">{{msgText}}</div>
-        <p class="belate" v-show="Number(minute)>0&&userInfo.type==='1'">迟到了,明天早点来哦</p>
-        <div @click="msg=false" class="myKnow">
-          我知道了
-        </div>
-      </x-dialog>
+    <x-dialog v-model="msg" class="dialog-demo">
+      <div style="padding:15px;" class="popUp">
+        <img src="/static/images/signIn.png" alt="签到成功图片">
+      </div>
+      <div class="attendanceTime">{{attendanceTime}}</div>
+      <div class="signSuccessfully">{{msgText}}</div>
+      <p class="belate" v-show="Number(minute)>0&&userInfo.type==='1'">迟到了,明天早点来哦</p>
+      <div @click="msg=false" class="myKnow">
+        我知道了
+      </div>
+    </x-dialog>
 
   </div>
 </template>
@@ -45,7 +46,7 @@ export default {
       departmentName: '',
       msgText: '',
       minute: '',
-      distance: '50',
+      distance: '',
       attendanceTime: '11:16',
       msg: false,
       downTime: '',
@@ -64,13 +65,15 @@ export default {
         attendancePlatform: '2',
         type: '',
         // latitude: 113.442008,
-        latitude: 23.17322,
-        longitude: 113.442008
+        latitude: '',
+        longitude: ''
       }
     }
   },
   mounted () {
     this.init()
+    this.getUserInfo()
+    this.currentDate = this.api.getCurrentTime()
   },
   methods: {
     // 点击签退
@@ -182,37 +185,123 @@ export default {
         }
       })
     },
+    // 注册jsbridge
+    connectWebViewJavascriptBridge (callback, isAndroid, isiOS) {
+      if (isAndroid) {
+        if (window.WebViewJavascriptBridge) {
+          console.log(window.WebViewJavascriptBridge)
+          callback(window.WebViewJavascriptBridge)
+        } else {
+          document.addEventListener(
+            'WebViewJavascriptBridgeReady'
+            , function () {
+              callback(window.WebViewJavascriptBridge)
+            },
+            false
+          )
+        }
+        return
+      }
+
+      if (isiOS) {
+        if (window.WebViewJavascriptBridge) {
+          return callback(window.WebViewJavascriptBridge)
+        }
+        if (window.WVJBCallbacks) {
+          return window.WVJBCallbacks.push(callback)
+        }
+        window.WVJBCallbacks = [callback]
+        var WVJBIframe = document.createElement('iframe')
+        WVJBIframe.style.display = 'none'
+        WVJBIframe.src = 'https://__bridge_loaded__'
+        document.documentElement.appendChild(WVJBIframe)
+        setTimeout(function () {
+          document.documentElement.removeChild(WVJBIframe)
+        }, 0)
+      }
+    },
+    initJsBridge (readyCallback) {
+      var u = navigator.userAgent
+      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
+      var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
+      // this.connectWebViewJavascriptBridge(callback, isAndroid, isiOS)
+      // 调用注册方法
+      this.connectWebViewJavascriptBridge(function (bridge) {
+        if (isAndroid) {
+          bridge.init(function (message, responseCallback) {
+            console.log('JS got a message', message)
+            // responseCallback(data)
+          })
+        }
+        readyCallback()
+      }, isAndroid, isiOS)
+    },
     init () {
-      this.getUserInfo()
-      this.currentDate = this.api.getCurrentTime()
-      // 百度地图API功能
-      var map = new window.BMap.Map('dituContent')
-      var point = new window.BMap.Point()
+      this.initJsBridge(function () {
+        // 此处调用api
+        /// ///
+        /// /1、获取经纬度api
+        /// /2、播放监控回放录像
+        // 通过JsBridge调用原生方法，写法固定，第一个参数时方法名，第二个参数时传入参数，第三个参数时响应回调
+        /// /1、获取经纬度api
+        // 方法名 getLocation
+        // 传参数null
+        // 返回response：json字符串  示例如下
+        // {"address":"广州天河区体育中心","latitude":28.196193,"longitude":112.860829,"code":"0000","result":"成功"}
+        // address：位置名称
+        // longitude：经度
+        // latitude：纬度
+        // code和result 请参考swagger
+        window.WebViewJavascriptBridge.callHandler('getLocation', null, function (response) {
+          console.log(response)
+        })
+      })
+      // var geolocation = new window.BMap.Geolocation()
+      // let that = this
+      // geolocation.getCurrentPosition(
+      //   function (r) {
+      //     if (this.getStatus() === window.BMAP_STATUS_SUCCESS) {
+      //       // alert('您的位置：' + r.point.lng + ',' + r.point.lat)
+      //       that.userInfo.latitude = r.point.lat
+      //       that.userInfo.longitude = r.point.lng
+      //       console.log(that.userInfo.latitude, that.userInfo.longitude)
+      //       var ggPoint = new window.BMap.Point(that.userInfo.longitude, that.userInfo.latitude)
 
-      map.centerAndZoom(point, 12)
-      setTimeout(function () {
-        map.setZoom(18)
-      }, 100)
-      map.enableScrollWheelZoom()
-      var geolocation = new window.BMap.Geolocation()
-      let that = this
-      geolocation.getCurrentPosition(
-        function (r) {
-          if (this.getStatus() === window.BMAP_STATUS_SUCCESS) {
-            var mk = new window.BMap.Marker(r.point)
-            map.addOverlay(mk)
-            map.panTo(r.point)
+      //       // 地图初始化
+      //       var bm = new window.BMap.Map('dituContent')
+      //       bm.centerAndZoom(ggPoint, 15)
+      //       bm.enableScrollWheelZoom()
+      //       bm.addControl(new window.BMap.NavigationControl())
 
-            // alert('您的位置：' + r.point.lng + ',' + r.point.lat)
-            that.userInfo.latitude = r.point.lat
-            that.userInfo.longitude = r.point.lng
-            that.getLocaltion()
-          } else {
-            alert('failed' + this.getStatus())
-          }
-        },
-        { enableHighAccuracy: true }
-      )
+      //       // 添加gps marker
+      //       var markergg = new window.BMap.Marker(ggPoint)
+      //       bm.addOverlay(markergg) // 添加GPS marker
+      //       var labelgg = new window.BMap.Label('未转换的GPS坐标（错误）', {offset: new window.BMap.Size(20, -10)})
+      //       markergg.setLabel(labelgg)
+      //       // 坐标转换完之后的回调函数
+      //       var translateCallback = function (data) {
+      //         if (data.status === 0) {
+      //           var marker = new window.BMap.Marker(data.points[0])
+      //           bm.addOverlay(marker)
+      //           var label = new window.BMap.Label('转换后的百度坐标（正确）', {offset: new window.BMap.Size(20, -10)})
+      //           marker.setLabel(label) // 添加百度label
+      //           bm.setCenter(data.points[0])
+      //         }
+      //       }
+
+      //       setTimeout(function () {
+      //         var convertor = new window.BMap.Convertor()
+      //         var pointArr = []
+      //         pointArr.push(ggPoint)
+      //         convertor.translate(pointArr, 1, 5, translateCallback)
+      //       }, 1000)
+      //       that.getLocaltion()
+      //     } else {
+      //       alert('failed' + this.getStatus())
+      //     }
+      //   },
+      //   { enableHighAccuracy: true }
+      // )
     },
     getLocaltion () {
       this.api.get({
@@ -220,7 +309,6 @@ export default {
         data: {latitude: this.userInfo.latitude, longitude: this.userInfo.longitude},
         callback: res => {
           if (res.code === '0000') {
-            console.log(res)
             this.distance = Number(res.data.distance).toFixed(0)
           } else {
             this.$vux.toast.text(res.result, 'top')
@@ -228,94 +316,55 @@ export default {
         }
       })
     }
-    // 关于状态码
-    // BMAP_STATUS_SUCCESS  检索成功。对应数值“0”。
-    // BMAP_STATUS_CITY_LIST  城市列表。对应数值“1”。
-    // BMAP_STATUS_UNKNOWN_LOCATION 位置结果未知。对应数值“2”。
-    // BMAP_STATUS_UNKNOWN_ROUT 导航结果未知。对应数值“3”。
-    // BMAP_STATUS_INVALID_KEY 非法密钥。对应数值“4”。
-    // BMAP_STATUS_INVALID_REQUEST  非法请求。对应数值“5”。
-    // BMAP_STATUS_PERMISSION_DENIED 没有权限。对应数值“6”。(自 1.1 新增)
-    // BMAP_STATUS_SERVICE_UNAVAILABLE 服务不可用。对应数值“7”。(自 1.1 新增)
-    // BMAP_STATUS_TIMEOUT 超时。对应数值“8”。(自 1.1 新增)
-    //   var map = new window.BMap.Map('dituContent')
-    //   var point = new window.BMap.Point() // 默认中心点
-    //   var marker = new window.BMap.Marker(point)
-    //   //   var opts = {
-    //   //     width: 250, // 信息窗口宽度
-    //   //     height: 100, // 信息窗口高度
-    //   //     title: '经销商地址' // 信息窗口标题
-    //   //   }
-    //   //   var infoWindow = new window.BMap.InfoWindow('移动拖拽 标记经销商地址', opts) // 创建信息窗口对象
-    //   marker.enableDragging() // 启用拖拽
-    //   marker.addEventListener('dragend', function (e) {
-    //     point = new window.BMap.Point(e.point.lng, e.point.lat) // 标记坐标（拖拽以后的坐标）
-    //     marker = new window.BMap.Marker(point)
-    //     document.getElementByIdx_x('lng').value = e.point.lng
-    //     document.getElementByIdx_x('lat').value = e.point.lat
-    //     // infoWindow = new window.BMap.InfoWindow(
-    //     //   '当前位置<br />经度：' + e.point.lng + '<br />纬度：' + e.point.lat,
-    //     //   opts
-    //     // )
-    //     // map.openInfoWindow(infoWindow, point)
-    //   })
-    //   //   map.addControl(new window.BMap.NavigationControl()) // 左上角控件
-    //   //   map.enableScrollWheelZoom() // 滚动放大
-    //   //   map.enableKeyboard() // 键盘放大
-    //   map.centerAndZoom(point, 13) // 绘制地图
-    //   map.addOverlay(marker) // 标记地图
-    // //   map.openInfoWindow(infoWindow, map.getCenter()) // 打开信息窗口
-    // }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
 .attendanceManagement {
-    padding-top: 1rem;
+  padding-top: 1rem;
   margin: 30px;
-  .iconfont{
-        font-size: 0.513333rem;
+  .iconfont {
+    font-size: 0.513333rem;
   }
-  .popUp{
-    img{
-        position: absolute;
-    top:  0rem;
-    left: 1rem;
-    width: 70%;
+  .popUp {
+    img {
+      position: absolute;
+      top: 0rem;
+      left: 1rem;
+      width: 70%;
     }
   }
-  .signSuccessfully{
-    margin-top:30px;
+  .signSuccessfully {
+    margin-top: 30px;
     padding: 50px;
     font-size: 60px;
     padding-bottom: 20px;
-    color:#47DC8D;
+    color: #47dc8d;
   }
-  .belate{
-    color:#AAAFB5;
+  .belate {
+    color: #aaafb5;
     font-size: 40px;
     padding: 20px;
     margin-bottom: 40px;
   }
-  .myKnow{
-    width:400px;
-height:88px;
-background:rgba(72,219,141,1);
-border-radius:44px;
-margin:0 auto;
-color:#fff;
-font-size: 40px;
-line-height: 88px;
+  .myKnow {
+    width: 400px;
+    height: 88px;
+    background: rgba(72, 219, 141, 1);
+    border-radius: 44px;
+    margin: 0 auto;
+    color: #fff;
+    font-size: 40px;
+    line-height: 88px;
   }
-  .attendanceTime{
-    margin:0 auto;
-    margin-top:300px;
+  .attendanceTime {
+    margin: 0 auto;
+    margin-top: 300px;
     font-size: 100px;
     // width:268px;
-height:109px;
-color:rgb(251, 148, 61);
+    height: 109px;
+    color: rgb(251, 148, 61);
   }
   .attendanceManagement-top {
     font-weight: 700;
@@ -368,25 +417,24 @@ color:rgb(251, 148, 61);
   .signInfo {
     display: flex;
     justify-content: space-around;
-    >div {
-         margin: 0.266667rem;
-    width: 2.666667rem;
-    height: 2.666667rem;
-    /* line-height: 2.666667rem; */
-    /* text-align: center; */
-    border-radius: 50%;
-    background: green;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* flex-wrap: wrap; */
-    flex-direction: column;
-    >span{
-      padding: 10px 0px;
+    > div {
+      margin: 0.266667rem;
+      width: 2.666667rem;
+      height: 2.666667rem;
+      /* line-height: 2.666667rem; */
+      /* text-align: center; */
+      border-radius: 50%;
+      background: green;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* flex-wrap: wrap; */
+      flex-direction: column;
+      > span {
+        padding: 10px 0px;
+      }
     }
-    }
-
   }
   // .signStyle{
   //     //  display: flex;
@@ -426,16 +474,15 @@ color:rgb(251, 148, 61);
 }
 </style>
 <style lang="scss">
-.attendanceManagement{
-
-.weui-toast.vux-toast-top{
-      top: 7.133333rem;
-}
-.weui-dialog{
-  max-width: unset !important;
-  width: 80%;
-  height: 70%;
-  border-radius: 50px;
-}
+.attendanceManagement {
+  .weui-toast.vux-toast-top {
+    top: 7.133333rem;
+  }
+  .weui-dialog {
+    max-width: unset !important;
+    width: 80%;
+    height: 70%;
+    border-radius: 50px;
+  }
 }
 </style>

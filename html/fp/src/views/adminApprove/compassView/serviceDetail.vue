@@ -316,7 +316,7 @@ export default {
     },
     // 获取在线办理地址
     handleview(){
-      this.dealUrl=`http://192.168.10.31:1101/springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.messageform.id}`
+      this.dealUrl=`${this.api.host}springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.messageform.id}`
     },
     counselnum(){
       this.residuenum=500-this.messageform.content.length

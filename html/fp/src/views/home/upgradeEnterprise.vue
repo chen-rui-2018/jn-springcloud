@@ -120,19 +120,19 @@
           </el-form-item>
         </div>
         <el-form-item label="企业LOGO:" class="br enterprise_bottom" prop="avatar">
-          <el-upload class="avatar-uploader" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :headers="headers" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeUpload">
+          <el-upload class="avatar-uploader" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeUpload">
             <img v-if="businessForm.avatar" :src="businessForm.avatar" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
         <el-form-item label="三证一体或营业执照:" class="br" prop="businessLicense">
-          <!-- <el-upload action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :headers="headers" :on-exceed=" handleExceed" :limit="1" list-type="picture-card" :on-success="handleBusinessLicenseSuccess" :before-upload="beforeUpload" :on-preview="handleBusinessLicensePictureCardPreview" :on-remove="handleBusinessLicenseRemove">
+          <el-upload :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :on-exceed=" handleExceed" :limit="1" list-type="picture-card" :on-success="handleBusinessLicenseSuccess" :before-upload="beforeUpload" :on-preview="handleBusinessLicensePictureCardPreview" :on-remove="handleBusinessLicenseRemove">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="businessLicenseDialogVisible">
             <img width="100%" :src="businessLicenseUrl" alt="LOGO图片">
-          </el-dialog> -->
-          <el-upload class="avatar-uploader" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :headers="headers" :show-file-list="false" :on-success="handleBusinessLicenseSuccess" :before-upload="beforeUpload">
+          </el-dialog>
+          <el-upload class="avatar-uploader" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :show-file-list="false" :on-success="handleBusinessLicenseSuccess" :before-upload="beforeUpload">
             <img v-if="businessForm.businessLicense" :src="businessForm.businessLicense" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -182,6 +182,7 @@ export default {
       }
     };
     return {
+      baseUrl:this.api.host,
       fileList: [],
       showImg: false,
       auth_time: 0,

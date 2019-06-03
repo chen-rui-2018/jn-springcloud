@@ -130,6 +130,7 @@ export default {
       }
     };
     return {
+      messageId:'',
       birthdayOptions: [],
       disabled: false,
       userAccount: "",
@@ -174,6 +175,24 @@ export default {
     this.init();
   },
   methods: {
+    //修改消息状态（已读）
+    changeStatus(){
+ this.api.post({
+            url: "updateIsReadStatus",
+            data: {id:this.messageId},
+            callback: res => {
+              if (res.code == "0000") {
+                this.$message({
+                  message: "操作成功",
+                  type: "success"
+                });
+              } else {
+                this.$message.error(res.result);
+                return false;
+              }
+            }
+          });
+    },
     //   接受邀请
     handleAccept() {
       this.disabled = true;
@@ -183,6 +202,7 @@ export default {
             url: "acceptInvite",
             data: this.supplementForm,
             callback: res => {
+
               if (res.code == "0000") {
                 this.$message({
                   message: "操作成功",
@@ -195,6 +215,7 @@ export default {
                 this.$message.error(res.result);
                 return false;
               }
+              this.changeStatus()
               this.disabled = true;
             }
           });
@@ -204,7 +225,7 @@ export default {
       });
     },
     init() {
-      console.log(this.$route.query)
+      this.messageId=this.$route.query.messageId;
       this.supplementForm.comId = this.$route.query.comId;
       let _this = this;
       _this.api.get({
@@ -252,6 +273,7 @@ export default {
             this.$message.error(res.result);
             return false;
           }
+          this.changeStatus()
         }
       });
     }

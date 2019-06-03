@@ -65,7 +65,7 @@
             <!-- 附件 -->
             <el-form-item label="附件：" class="upload" >
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -104,6 +104,7 @@
 export default {
   data () {
     return {
+      baseUrl: this.api.host,
       id:'',
       appointmentVisible:false,
       telephoneVisible:false,

@@ -262,14 +262,17 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')" v-if="serverPro.length>0">
-            <a href="javascript:;" data="%">全部({{serverPro[0].serviceTotal}})</a>
+          <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')">
+            <a href="javascript:;"  v-if="serverPro.length>0" data="%">全部({{serverPro[0].serviceTotal}})</a>
+            <a href="javascript:;"  v-else data="%">全部(0)</a>
           </li>
-          <li class="list-item " :class="{'active3':flag1=='0'}" @click="screenPro('0')" v-if="serverPro.length>0">
-            <a href="javascript:;" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
+          <li class="list-item " :class="{'active3':flag1=='0'}" @click="screenPro('0')">
+            <a href="javascript:;"  v-if="serverPro.length>0" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
+            <a href="javascript:;"  v-else data="%">常规服务(0)</a>
           </li>
-          <li class="list-item " :class="{'active3':flag1=='1'}" @click="screenPro('1')" v-if="serverPro.length>0">
-            <a href="javascript:;" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
+          <li class="list-item " :class="{'active3':flag1=='1'}" @click="screenPro('1')">
+            <a href="javascript:;"  v-if="serverPro.length>0" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
+            <a href="javascript:;"  v-else data="%">特色服务(0)</a>
           </li>
         </ul>
         <ul class="select-list clearfix" v-if="showFlag2">
@@ -311,19 +314,23 @@
             <a href="javascript:;">筛选：</a>
           </li>
           <li class="list-item current" :class="{'active3':flag4=='0'}" @click="screenActi('0')">
-            <a href="javascript:;">全部({{serverActiList[0].actiNum}})</a>
+            <a href="javascript:;" v-if="serverActiList.length>0">全部({{serverActiList[0].actiNum}})</a>
+            <a href="javascript:;" v-else>全部(0)</a>
           </li>
           <li class="list-item " :class="{'active3':flag4=='1'}" @click="screenActi('1')">
-            <a href="javascript:;">最近一周({{serverActiList[0].weekNum}})</a>
+            <a href="javascript:;" v-if="serverActiList.length>0">最近一周({{serverActiList[0].weekNum}})</a>
+            <a href="javascript:;" v-else>最近一周(0)</a>
           </li>
           <li class="list-item " :class="{'active3':flag4=='2'}" @click="screenActi('2')">
-            <a href="javascript:;">最近一月({{serverActiList[0].monthNum}})</a>
+            <a href="javascript:;" v-if="serverActiList.length>0">最近一月({{serverActiList[0].monthNum}})</a>
+            <a href="javascript:;" v-else>最近一月(0)</a>
           </li>
         </ul>
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleSerpro">
         <el-tab-pane name="serverPro" >
-          <span slot="label">服务产品({{serverPro[0].serviceTotal}})</span>
+          <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
+          <span slot="label" v-else>服务产品(0)</span>
           <div class="serverPro">
             <ul class="list-imgleft">
               <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>

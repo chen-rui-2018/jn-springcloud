@@ -168,9 +168,9 @@ export default {
     upUserdata(){
       let _this = this;
        _this.api.get({
-          url: "getUserPersonInfo",
+          url: "getUserExtension",
           data: {
-            account: sessionStorage.account
+            // account: sessionStorage.account
           },
           dataFlag: false,
           callback: function(res) {

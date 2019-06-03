@@ -70,4 +70,14 @@ public class PayAccountServerController extends BaseController implements PayAcc
         return new Result(payAccountBook);
     }
 
+    @Override
+    @ControllerLog(doAction = "我的账本-创建账户和账本【企业注册时调用】")
+    public Result createPayAccountBook(@RequestBody @Validated PayAccountBookCreateParam payAccountBookCreateParam){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payAccountBookCreateParam.getEnterId(),"企业ID不能为空");
+        Assert.notNull(payAccountBookCreateParam.getComAdmin(),"企业管理员账号不能为空");
+        return myPayAccountService.createPayAccountBook(payAccountBookCreateParam,user);
+    }
+
 }

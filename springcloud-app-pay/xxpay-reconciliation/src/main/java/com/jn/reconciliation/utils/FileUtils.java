@@ -18,19 +18,15 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-/**
- * 
- * @类功能说明： 文件工具类.
- * @类修改者：
- * @修改日期：
- * @修改说明：
- * @公司名称：广州领课网络科技有限公司（龙果学院:www.roncoo.com）
- * @作者：Along.shen
- * @创建时间：2016年5月23日,上午11:33:56.
- * @版本：V1.0
- *
- */
 
+/**
+ * @ClassName：文件工具类
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
+ */
 public class FileUtils {
 	private static final Log LOG = LogFactory.getLog(FileUtils.class);
 

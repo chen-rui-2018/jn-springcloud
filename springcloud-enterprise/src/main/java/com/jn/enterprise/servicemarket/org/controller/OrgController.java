@@ -84,7 +84,6 @@ public class OrgController extends BaseController {
     @ControllerLog(doAction = "我的机构")
     @ApiOperation(value = "获取我的服机构信息(app我的机构)",notes = "根据用户账号查询其所属机构信息")
     @RequestMapping(value = "/getMyOrgInfo",method = RequestMethod.GET)
-    @RequiresPermissions("/serviceMarket/org/getMyOrgInfo")
     public Result<MyOrgInfoVo>  getMyOrgInfo(@ApiParam(name="account",value = "用户账号",required = true,example = "wangsong" )@RequestParam(value = "account")  String account){
         Assert.notNull(account, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         MyOrgInfoVo vo = orgService.getMyOrgInfo(account);

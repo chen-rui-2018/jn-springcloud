@@ -55,7 +55,7 @@ public class AssetScheduledController {
     /**
      * 每天凌晨两点执行执行,生成缴费单
      */
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void createOrderBill(){
         logger.info("生成缴费单");
         roomOrderClient.createOrderBill();

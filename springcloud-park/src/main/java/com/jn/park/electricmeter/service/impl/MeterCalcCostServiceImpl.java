@@ -138,12 +138,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 }
             }
 
-            //保存
-            if(groupLogs !=null && groupLogs.size()>0){
-                logger.info("开始保存一个企业的电费的分段费用记录");
-                meterDao.saveGroupLogs(groupLogs);
-                logger.info("结束保存一个企业的电费的分段费用记录");
-            }
+
             logger.info("结束处理企业每块电表的用电量及费用");
 
             //电表的个数和每日电表的对象数是一样的，才是一个企业完整的一天的用电量
@@ -153,26 +148,36 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 List<PayBillDetails> payBillDetails = new ArrayList<>();
                 PayBillDetails billDetails=null;
                 int sort=0;
+                String ten ="10";
+                BigDecimal tenDivisor = new BigDecimal(ten);
                 for(TbElectricMeterDayLog  meterDayLog : meterDayLogs ){
                     billDetails = new PayBillDetails();
                     allPrice = allPrice.add(meterDayLog.getPrice());
                     allDegree = allDegree.add(meterDayLog.getDegree());
                     String name = "[电表编号]:"+meterDayLog.getMeterId();
                     billDetails.setCostName(name);
-                    billDetails.setCostValue(meterDayLog.getPrice().toString());
+                    billDetails.setCostValue(meterDayLog.getPrice().divide(tenDivisor,2, RoundingMode.HALF_UP).toString());
                     sort++;
                     billDetails.setSort(sort);
                     payBillDetails.add(billDetails);
+                    meterDayLog.setPrice(meterDayLog.getPrice().divide(tenDivisor,2, RoundingMode.HALF_UP));
                 }
                 // 创建账单和保存
                 //计价规则那边是角，此处要除10，才得出元
-                String ten ="10";
-                BigDecimal tenDivisor = new BigDecimal(ten);
                 allPrice = allPrice.divide(tenDivisor,2, RoundingMode.HALF_UP);
                 boolean success = createBill(allPrice,companyId,companyName,account,  payBillDetails);
                 if(! success){
                     throw new ErrorLogException(getErr(account, "创建账单失败", null, companyId, companyName,dealDate));
                 }
+
+                //保存
+                if(groupLogs !=null && groupLogs.size()>0){
+                    logger.info("开始保存一个企业的电费的分段费用记录");
+                    meterDao.saveGroupLogs(groupLogs);
+                    logger.info("结束保存一个企业的电费的分段费用记录");
+                }
+
+
                 TbElectricEnergyDayLog energyDayLog = new TbElectricEnergyDayLog();
                 energyDayLog.setCompanyId(companyId);
                 energyDayLog.setCompanyName(companyName);

@@ -1,4 +1,4 @@
-package com.jn.user.userinfo.enums;
+package com.jn.user.enums;
 
 import com.jn.common.api.CodeAndMsg;
 

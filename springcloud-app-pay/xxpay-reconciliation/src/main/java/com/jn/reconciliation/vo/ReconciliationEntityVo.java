@@ -18,12 +18,14 @@ package com.jn.reconciliation.vo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+
 /**
- * 根据对账单解析出来的实体vo，用户与平台的交易记录对账.
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：根据对账单解析出来的实体vo，用户与平台的交易记录对账.
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 public class ReconciliationEntityVo {
 

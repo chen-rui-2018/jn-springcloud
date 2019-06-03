@@ -167,10 +167,16 @@ public class SysUserServiceImpl implements SysUserService {
      */
     private List<TbSysUser> checkAccount(String account) {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
-        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
-        criteria.andAccountEqualTo(account);
+        //查询账号
+        TbSysUserCriteria.Criteria criteria1 = tbSysUserCriteria.createCriteria();
+        criteria1.andAccountEqualTo(account);
         Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
-        criteria.andRecordStatusNotEqualTo(recordStatus);
+        criteria1.andRecordStatusNotEqualTo(recordStatus);
+        //查询手机号
+        TbSysUserCriteria.Criteria criteria2 = tbSysUserCriteria.createCriteria();
+        criteria2.andPhoneEqualTo(account);
+        criteria2.andRecordStatusNotEqualTo(recordStatus);
+        tbSysUserCriteria.or(criteria2);
         return tbSysUserMapper.selectByExample(tbSysUserCriteria);
     }
 
@@ -517,6 +523,10 @@ public class SysUserServiceImpl implements SysUserService {
         }
         if(StringUtils.isNotBlank(user.getId())){
             criteria.andIdEqualTo(user.getId());
+        }
+        //如果手机号不为空
+        if(StringUtils.isNotBlank(user.getPhone())){
+            criteria.andPhoneEqualTo(user.getPhone());
         }
         Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
         criteria.andRecordStatusNotEqualTo(recordStatus);

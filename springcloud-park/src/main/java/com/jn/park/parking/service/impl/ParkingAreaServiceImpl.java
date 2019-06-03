@@ -90,7 +90,7 @@ public class ParkingAreaServiceImpl implements ParkingAreaService {
             carInfoCriteria.createCriteria().andAccountEqualTo(account).andRecordStatusEqualTo(new Byte(ParkingEnums.EFFECTIVE.getCode()));
             //查询用户车辆
             List<TbParkingCarInfo> tbParkingCarInfos = tbParkingCarInfoMapper.selectByExample(carInfoCriteria);
-            if(null != tbParkingCarInfos || tbParkingCarInfos.size()==0){
+            if(null != tbParkingCarInfos && !tbParkingCarInfos.isEmpty()){
                 //查询车辆租赁信息
                 List<String> carLicense = new ArrayList<>(16);
                 for (TbParkingCarInfo carInfo:tbParkingCarInfos

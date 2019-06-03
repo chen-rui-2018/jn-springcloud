@@ -4,18 +4,25 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbPmVideoItem implements Serializable {
+    /*@ApiModelProperty("")*/
     private String id;
 
+    /*@ApiModelProperty("安防录像申请表ID")*/
     private String videoId;
 
+    /*@ApiModelProperty("录像说明")*/
     private String videoTitle;
 
+    /*@ApiModelProperty("操作")*/
     private String operation;
 
+    /*@ApiModelProperty("录像查看地址(申请成功后才有)")*/
     private String videoPlayUrl;
 
+    /*@ApiModelProperty("录像开始时间")*/
     private Date videoStartTime;
 
+    /*@ApiModelProperty("录像结束时间")*/
     private Date videoEndTime;
 
     private static final long serialVersionUID = 1L;

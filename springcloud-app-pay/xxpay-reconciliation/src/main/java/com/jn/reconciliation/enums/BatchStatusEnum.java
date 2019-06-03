@@ -15,58 +15,52 @@
  */
 package com.jn.reconciliation.enums;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
- * 对账状态枚举
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：对账状态枚举
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 public enum BatchStatusEnum {
 
-	SUCCESS("对账操作成功"),
+	SUCCESS("SUCCESS","对账操作成功"),
+	FAIL("FAIL","对账操作失败"),
+	ERROR("ERROR","银行返回错误信息"),
+	NOBILL("NOBILL","银行没有订单信息");
 
-	FAIL("对账操作失败"),
 
-	ERROR("银行返回错误信息"),
+	private String code;
+	private String message;
 
-	NOBILL("银行没有订单信息");
-
-	private String desc;
-
-	private BatchStatusEnum(String desc) {
-		this.desc = desc;
+	BatchStatusEnum(String code, String message) {
+		this.code = code;
+		this.message = message;
 	}
 
-	public String getDesc() {
-		return desc;
+	public String getCode() {
+		return code;
 	}
 
-	public static BatchStatusEnum getEnum(String name) {
-		BatchStatusEnum[] arry = BatchStatusEnum.values();
-		for (int i = 0; i < arry.length; i++) {
-			if (arry[i].name().equals(name)) {
-				return arry[i];
+
+	public String getMessage() {
+		return message;
+	}
+
+
+	public static BatchStatusEnum getEnumByCode(String code) {
+		BatchStatusEnum enumBean = null;
+		for (BatchStatusEnum enumType : values()) {
+			if (enumType.getCode().equals(code)) {
+				//获取指定的枚举
+				enumBean = enumType;
+				break;
 			}
 		}
-		return null;
+
+		return enumBean;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List toList() {
-		MistakeHandleStatusEnum[] ary = MistakeHandleStatusEnum.values();
-		List list = new ArrayList();
-		for (int i = 0; i < ary.length; i++) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("desc", ary[i].getDesc());
-			map.put("name", ary[i].name());
-			list.add(map);
-		}
-		return list;
-	}
 }

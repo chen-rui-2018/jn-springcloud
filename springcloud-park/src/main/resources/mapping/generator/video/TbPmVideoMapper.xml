@@ -11,7 +11,7 @@
     <result column="flow_no" jdbcType="VARCHAR" property="flowNo" />
     <result column="flow_title" jdbcType="VARCHAR" property="flowTitle" />
     <result column="flow_status" jdbcType="TINYINT" property="flowStatus" />
-    <result column="flow_node_name" jdbcType="VARCHAR" property="flowNodeName" />
+    <result column="video_play" jdbcType="VARCHAR" property="videoPlay" />
     <result column="flow_start_time" jdbcType="TIMESTAMP" property="flowStartTime" />
     <result column="flow_complete_time" jdbcType="TIMESTAMP" property="flowCompleteTime" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -82,7 +82,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, enterprise_id, enterprise_name, contact_man, contact_phone, address, flow_no, 
-    flow_title, flow_status, flow_node_name, flow_start_time, flow_complete_time, record_status, 
+    flow_title, flow_status, video_play, flow_start_time, flow_complete_time, record_status, 
     creator_account, create_time, modifier_account
   </sql>
   <sql id="Blob_Column_List">
@@ -140,13 +140,13 @@
     insert into tb_pm_video (id, enterprise_id, enterprise_name, 
       contact_man, contact_phone, address, 
       flow_no, flow_title, flow_status, 
-      flow_node_name, flow_start_time, flow_complete_time, 
+      video_play, flow_start_time, flow_complete_time, 
       record_status, creator_account, create_time, 
       modifier_account, remarks)
     values (#{id,jdbcType=VARCHAR}, #{enterpriseId,jdbcType=VARCHAR}, #{enterpriseName,jdbcType=VARCHAR}, 
       #{contactMan,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
       #{flowNo,jdbcType=VARCHAR}, #{flowTitle,jdbcType=VARCHAR}, #{flowStatus,jdbcType=TINYINT}, 
-      #{flowNodeName,jdbcType=VARCHAR}, #{flowStartTime,jdbcType=TIMESTAMP}, #{flowCompleteTime,jdbcType=TIMESTAMP}, 
+      #{videoPlay,jdbcType=VARCHAR}, #{flowStartTime,jdbcType=TIMESTAMP}, #{flowCompleteTime,jdbcType=TIMESTAMP}, 
       #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{remarks,jdbcType=LONGVARCHAR})
   </insert>
@@ -180,8 +180,8 @@
       <if test="flowStatus != null">
         flow_status,
       </if>
-      <if test="flowNodeName != null">
-        flow_node_name,
+      <if test="videoPlay != null">
+        video_play,
       </if>
       <if test="flowStartTime != null">
         flow_start_time,
@@ -233,8 +233,8 @@
       <if test="flowStatus != null">
         #{flowStatus,jdbcType=TINYINT},
       </if>
-      <if test="flowNodeName != null">
-        #{flowNodeName,jdbcType=VARCHAR},
+      <if test="videoPlay != null">
+        #{videoPlay,jdbcType=VARCHAR},
       </if>
       <if test="flowStartTime != null">
         #{flowStartTime,jdbcType=TIMESTAMP},
@@ -295,8 +295,8 @@
       <if test="record.flowStatus != null">
         flow_status = #{record.flowStatus,jdbcType=TINYINT},
       </if>
-      <if test="record.flowNodeName != null">
-        flow_node_name = #{record.flowNodeName,jdbcType=VARCHAR},
+      <if test="record.videoPlay != null">
+        video_play = #{record.videoPlay,jdbcType=VARCHAR},
       </if>
       <if test="record.flowStartTime != null">
         flow_start_time = #{record.flowStartTime,jdbcType=TIMESTAMP},
@@ -335,7 +335,7 @@
       flow_no = #{record.flowNo,jdbcType=VARCHAR},
       flow_title = #{record.flowTitle,jdbcType=VARCHAR},
       flow_status = #{record.flowStatus,jdbcType=TINYINT},
-      flow_node_name = #{record.flowNodeName,jdbcType=VARCHAR},
+      video_play = #{record.videoPlay,jdbcType=VARCHAR},
       flow_start_time = #{record.flowStartTime,jdbcType=TIMESTAMP},
       flow_complete_time = #{record.flowCompleteTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -358,7 +358,7 @@
       flow_no = #{record.flowNo,jdbcType=VARCHAR},
       flow_title = #{record.flowTitle,jdbcType=VARCHAR},
       flow_status = #{record.flowStatus,jdbcType=TINYINT},
-      flow_node_name = #{record.flowNodeName,jdbcType=VARCHAR},
+      video_play = #{record.videoPlay,jdbcType=VARCHAR},
       flow_start_time = #{record.flowStartTime,jdbcType=TIMESTAMP},
       flow_complete_time = #{record.flowCompleteTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -396,8 +396,8 @@
       <if test="flowStatus != null">
         flow_status = #{flowStatus,jdbcType=TINYINT},
       </if>
-      <if test="flowNodeName != null">
-        flow_node_name = #{flowNodeName,jdbcType=VARCHAR},
+      <if test="videoPlay != null">
+        video_play = #{videoPlay,jdbcType=VARCHAR},
       </if>
       <if test="flowStartTime != null">
         flow_start_time = #{flowStartTime,jdbcType=TIMESTAMP},
@@ -433,7 +433,7 @@
       flow_no = #{flowNo,jdbcType=VARCHAR},
       flow_title = #{flowTitle,jdbcType=VARCHAR},
       flow_status = #{flowStatus,jdbcType=TINYINT},
-      flow_node_name = #{flowNodeName,jdbcType=VARCHAR},
+      video_play = #{videoPlay,jdbcType=VARCHAR},
       flow_start_time = #{flowStartTime,jdbcType=TIMESTAMP},
       flow_complete_time = #{flowCompleteTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT},
@@ -453,7 +453,7 @@
       flow_no = #{flowNo,jdbcType=VARCHAR},
       flow_title = #{flowTitle,jdbcType=VARCHAR},
       flow_status = #{flowStatus,jdbcType=TINYINT},
-      flow_node_name = #{flowNodeName,jdbcType=VARCHAR},
+      video_play = #{videoPlay,jdbcType=VARCHAR},
       flow_start_time = #{flowStartTime,jdbcType=TIMESTAMP},
       flow_complete_time = #{flowCompleteTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT},

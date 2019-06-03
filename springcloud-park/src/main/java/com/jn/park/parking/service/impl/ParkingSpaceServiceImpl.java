@@ -435,6 +435,24 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
             return bill.getResult();
         }
     }
+    @ServiceLog(doAction = "根据车位租赁id,获取车位租赁详情")
+    @Override
+    public ParkingSpaceDetailVo getParKingSpaceRentalDetails(String rentId) {
+        ParkingSpaceRentalVo parkingSpaceDetail = parkingSpaceRentalService.getParkingSpaceDetailById(rentId);
+        ParkingSpaceDetailVo spaceVo = new ParkingSpaceDetailVo();
+        if(parkingSpaceDetail !=null && parkingSpaceDetail.getSpaceId() !=null){
+            BeanUtils.copyProperties(parkingSpaceDetail, spaceVo);
+            ParkingSpaceParam parkingSpaceParam = new ParkingSpaceParam();
+            parkingSpaceParam.setSpaceId(parkingSpaceDetail.getSpaceId());
+            List<ParkingSpaceVo> parkingSpaceList = parkingSpaceMapper.getParkingSpaceList(parkingSpaceParam);
+            BeanUtils.copyProperties(parkingSpaceList.get(0), spaceVo);
+        }else   {
+            logger.info("查询租赁信息详情]:未查询到相关车位出租数据，rentId：{}", rentId);
+            throw new JnSpringCloudException(ParkingExceptionEnum.PARKING_RENT_IS_RENT);
+        }
+        return spaceVo;
+
+    }
 
 
 }

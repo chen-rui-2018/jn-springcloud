@@ -71,6 +71,14 @@ public class ParkingSpaceController extends BaseController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(parkingSpaceService.getParKingSpaceRentalListByUser(user.getAccount(),page));
     }
+    @ControllerLog(doAction = "查询车位租赁详情")
+    @ApiOperation(value = "根据租赁id查询车位租赁详情[前端用户]", notes = "前端展示停车位信息用停车场名称‘areaName’和停车位编号‘spaceSerial’拼接。例如‘白下智慧园区5号停车场A0001’")
+    @RequestMapping(value = "/getParKingSpaceRentalDetails",method = RequestMethod.GET)
+    public Result<ParkingSpaceDetailVo> getParKingSpaceRentalDetails(  @ApiParam(name="rentId",value = "租赁信息id",required = true,example = "51we20***")
+                                                                           @RequestParam(value = "rentId") String rentId){
+        Assert.notNull(rentId, ParkingExceptionEnum.PARKING_SPACE_ID_IS_NOT_NULL.getMessage());
+        return new Result<>(parkingSpaceService.getParKingSpaceRentalDetails(rentId));
+    }
 
 
     @ControllerLog(doAction = "车位申请")

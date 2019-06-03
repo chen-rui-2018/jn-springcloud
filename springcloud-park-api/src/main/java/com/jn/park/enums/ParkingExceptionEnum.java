@@ -38,6 +38,7 @@ public enum ParkingExceptionEnum implements CodeAndMsg {
     PARKING_APPLY_COMPANY_IS_USERED("4020224","无空闲企业优惠车位指标"),
     PARKING_APPLY_USER_IS_NOT_COMPANY("4020225","需企业用户才能享受该优惠"),
     PARKING_BILL_IS_RENT("4020226","该车位已出租"),
+    PARKING_RENT_IS_RENT("4020226","该车位已出租")
     ;
 
     /**

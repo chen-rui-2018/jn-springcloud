@@ -64,7 +64,7 @@
           <tr :key="ky">
             <td>{{ ky+1 }}</td>
             <td>{{ i.name }}</td>
-            <td>{{ i.sex }}</td>
+            <td><span v-if="i.sex=='0'">女</span><span v-if="i.sex=='1'">男</span></td>
             <td>{{ i.age }}</td>
             <td>{{ i.company }}</td>
             <td>{{ i.post }}</td>
@@ -81,7 +81,7 @@
                   v-if="i.signStatus==='0'"
                   type="text"
                   class="operation"
-                  @click="handleSign(i)">签到
+                  @click="handleSign(i.id)">签到
                 </el-button>
               </template>
             </td>
@@ -227,9 +227,9 @@ export default {
     handleReturn() {
       this.$router.push({ name: 'activityManagement', params: { id: this.$route.params.id }})
     },
-    handleSign(i) {
+    handleSign(id) {
       const data = {
-        applyId: i.id
+        applyId: id
       }
       api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend`, data, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {

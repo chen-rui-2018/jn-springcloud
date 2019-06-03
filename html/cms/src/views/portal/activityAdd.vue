@@ -362,6 +362,7 @@ export default {
             type: 'success'
           })
           this.goBack()
+          this.$router.push({ path: 'activityManagement' })
         } else {
           this.$message(res.data.result)
         }
@@ -492,6 +493,7 @@ export default {
             type: 'success'
           })
           this.goBack()
+          this.$router.push({ path: 'activityManagement' })
         } else {
           this.$message(res.data.result)
         }

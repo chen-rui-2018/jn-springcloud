@@ -76,10 +76,10 @@
       </div>
       <el-form class="enterprise_bottom" label-position="right" label-width="142px">
         <el-form-item label="企业LOGO:">
-          <img :src="avatar.url" alt="LOGO图片" class="enterprise_img">
+          <img :src="avatar" alt="LOGO图片" class="enterprise_img">
         </el-form-item>
         <el-form-item label="三证一体或营业执照:">
-          <img :src="businessLicense.url" alt="营业执照" class="enterprise_img">
+          <img :src="businessLicense" alt="营业执照" class="enterprise_img">
         </el-form-item>
       </el-form>
       <div class="enterprise">补充资料</div>
@@ -130,6 +130,7 @@ export default {
       }
     };
     return {
+      messageId:'',
       birthdayOptions: [],
       disabled: false,
       userAccount: "",
@@ -174,6 +175,24 @@ export default {
     this.init();
   },
   methods: {
+    //修改消息状态（已读）
+    changeStatus(){
+ this.api.post({
+            url: "updateIsReadStatus",
+            data: {id:this.messageId},
+            callback: res => {
+              if (res.code == "0000") {
+                this.$message({
+                  message: "操作成功",
+                  type: "success"
+                });
+              } else {
+                this.$message.error(res.result);
+                return false;
+              }
+            }
+          });
+    },
     //   接受邀请
     handleAccept() {
       this.disabled = true;
@@ -183,6 +202,7 @@ export default {
             url: "acceptInvite",
             data: this.supplementForm,
             callback: res => {
+
               if (res.code == "0000") {
                 this.$message({
                   message: "操作成功",
@@ -195,6 +215,7 @@ export default {
                 this.$message.error(res.result);
                 return false;
               }
+              this.changeStatus()
               this.disabled = true;
             }
           });
@@ -204,6 +225,7 @@ export default {
       });
     },
     init() {
+      this.messageId=this.$route.query.messageId;
       this.supplementForm.comId = this.$route.query.comId;
       let _this = this;
       _this.api.get({
@@ -251,6 +273,7 @@ export default {
             this.$message.error(res.result);
             return false;
           }
+          this.changeStatus()
         }
       });
     }

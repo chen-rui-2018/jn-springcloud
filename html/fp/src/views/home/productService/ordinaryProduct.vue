@@ -7,7 +7,7 @@
     <div class="ordinary_main">
       <div class="search">
         <div></div>
-        <el-input placeholder="请输入内容" v-model="sendData.keyWords">
+        <el-input placeholder="服务产品名称" v-model="sendData.keyWords">
           <el-button slot="append" icon="el-icon-search" @click="handlesearch"></el-button>
         </el-input>
       </div>
@@ -146,9 +146,6 @@ export default {
     goputaway(){
       //territory为0是科技金融，为1是非科技金融
         this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId}})
-     /*  else if(this.territory===1){
-        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:1}})
-      } */
     },
     // 去编辑
     goEdit(productId){

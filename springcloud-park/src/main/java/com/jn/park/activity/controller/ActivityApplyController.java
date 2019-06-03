@@ -110,7 +110,7 @@ public class ActivityApplyController extends BaseController {
     @RequiresPermissions("/activity/activityApply/signInActivityBackend")
     @ApiOperation(value = "后台签到接口", httpMethod = "POST")
     @RequestMapping(value = "/signInActivityBackend")
-    public Result<Integer> signInActivityBackend(@ApiParam(value = "报名id",required = true,example = "f5c95f9adf714aedab3739cbc9297178") @RequestParam(value = "applyId") String applyId){
+    public Result<Integer> signInActivityBackend(String applyId){
         Assert.notNull(applyId, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityApplyService.signInActivityBackend(applyId,user.getAccount());

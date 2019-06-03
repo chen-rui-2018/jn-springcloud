@@ -95,4 +95,10 @@ public interface ParkingSpaceService {
      * @return
      */
     String createParkingSpaceBill(String rentId,User user);
+
+    /**
+     * 根据id查看租赁信息列表
+     * @return
+     */
+    ParkingSpaceDetailVo getParKingSpaceRentalDetails(String rentId);
 }

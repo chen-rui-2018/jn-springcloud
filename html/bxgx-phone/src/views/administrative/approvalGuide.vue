@@ -211,7 +211,7 @@ export default {
       }
       .vux-search-box{
         position: fixed;
-        top:105px !important;
+        // top:105px !important;
       }
       .weui-search-bar__input{
         height: 63px;

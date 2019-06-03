@@ -27,7 +27,7 @@
             </el-form-item>
             <el-form-item label="产品图片：" >
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -118,7 +118,7 @@
             </el-form-item>
             <el-form-item label="产品图片：" class="product_img">
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -146,7 +146,8 @@
 export default {
   data () {
     return {
-      addScienceData:{
+        baseUrl: this.api.host,
+        addScienceData:{
         advisorAccount:'',
         orgId:"",
         pictureUrl:"",
@@ -254,7 +255,7 @@ export default {
       data: {orgId:this.addScienceData.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-          console.log(res)
+          // console.log(res)
           _this.businessType= res.data.businessType
           _this.addScienceData.signoryName=res.data.businessTypeName
           _this.addScienceData.signoryId=res.data.businessType
@@ -307,7 +308,6 @@ export default {
       data: {},
       callback: function(res) {
         if (res.code == "0000") {
-          // console.log(res)
           _this.AssureTypeList= res.data
           }
         }
@@ -321,7 +321,6 @@ export default {
       data: {orgId:this.addScienceData.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-          // console.log(res)
           _this.counselorList= res.data.rows
           }
         }
@@ -336,8 +335,7 @@ export default {
       this.addFinancialProduct.assureMethodName=name
     },
     uploadsuccess(file, fileList){
-      // console.log(file)
-      // console.log(fileList)
+      // console.l
       if(this.businessType==='technology_finance'){
         this.addFinancialProduct.pictureUrl=file.data
       }else{
@@ -353,11 +351,10 @@ export default {
         data: this.addFinancialProduct,
         callback: function(res) {
           if (res.code == "0000") {
-              // console.log(res)
               _this.$message.success("新增成功")
               _this.$router.go(-1)
             }else{
-             _this.$message.error('带*号为必填哦，亲')
+             _this.$message.error(res.data.result)
             }
           }
         }) 

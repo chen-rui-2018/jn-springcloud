@@ -37,6 +37,7 @@
 </el-form>
     </div>
     <el-dialog
+    :modal-append-to-body="false"
   title="海报图片"
   :visible.sync="dialogVisible"
   width="50%">
@@ -51,6 +52,7 @@
 export default {
   data () {
     return {
+      approvalStatus:'',
         dialogVisible:false,
         propagandaId:'',
       issuePlatform:'',
@@ -70,6 +72,7 @@ export default {
     //   初始化
       initList(){
          this.propagandaId=this.$route.query.propagandaId
+        //  this.approvalStatus=this.$route.query.approvalStatus
           this.api.get({
      url:'getBusinessPromotionDetails',
      data:{propagandaId :this.propagandaId},
@@ -132,8 +135,9 @@ cursor: pointer;
         background: #fff;
         padding:36px 0px;
         .postJobInfo{
-            width: 50%;
-            margin: 0 auto;
+            // width: 50%;
+            // margin: 0 auto;
+            margin-left:200px;
 
             .el-form-item__content,.el-select{
                 width: 266px;

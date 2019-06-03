@@ -31,7 +31,7 @@
           <div class="product_img">
             <el-form-item label="产品图片：" >
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -148,7 +148,7 @@
           <div class="product_img">
             <el-form-item label="产品图片：" >
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -179,6 +179,7 @@
 export default {
   data () {
     return {
+      baseUrl: this.api.host,
       specialEditData:{
         advisorAccount:'',
         orgId:"",

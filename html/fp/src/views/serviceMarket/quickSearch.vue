@@ -204,7 +204,7 @@
                   </div>
                 </div>
                 <div class="orgBtn fr mainColor">
-                  <a href="">在线联系</a>
+                  <a href="javascript:;" @click="onlineContact(i.orgAccount,i.orgName)">在线联系</a>
                 </div>
               </li>
             </ul>
@@ -328,7 +328,7 @@ export default {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({ path: "/chat",query:{toUser:advisorAccount,nickName:advisorName}});
+      this.$router.push({ path: "/chat",query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:advisorAccount,nickName:advisorName}});
     },
     demandRaise(i) {
       this.proVisible = true;

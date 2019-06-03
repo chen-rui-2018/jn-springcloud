@@ -158,7 +158,9 @@ export default {
       actiApplyList: [],
       accountIsLike: false,
       isCommentLike: false,
-      countDown: ""
+      countDown: "",
+      applyEndTime:0,
+      secondsTime:0,
     };
   },
   created() {
@@ -385,16 +387,17 @@ export default {
         }
       });
     },
+    getTime(t){
+      return new Date(t).getTime();
+    },
     //报名倒计时
-    countTime(t) {
-      var secondsTime = new Date().getTime();
-      var applyTime = new Date(t).getTime();
-      var leftTime = applyTime - secondsTime;
+    countTime(applyTime,secondsTime) {
+      let leftTime = applyTime - secondsTime;
       if (leftTime >= 0) {
-        var d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
-        var h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
-        var m = Math.floor((leftTime / 1000 / 60) % 60);
-        var s = Math.floor((leftTime / 1000) % 60);
+        let d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+        let h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
+        let m = Math.floor((leftTime / 1000 / 60) % 60);
+        let s = Math.floor((leftTime / 1000) % 60);
         d = d;
         h = h > 9 ? h : "0" + h;
         m = m > 9 ? m : "0" + m;
@@ -402,7 +405,7 @@ export default {
         this.countDown = d + "天" + h + "小时" + m + "分" + s + "秒";
         return false;
       } else {
-        this.countDown = "0天0时0分0秒";
+        this.countDown = "0天00时00分00秒";
         return true;
       }
     },
@@ -421,8 +424,11 @@ export default {
             _this.actiApplyList = res.data.activityApplyList;
             _this.accountIsLike = res.data.accountIsLike;
             _this.activityApplyShow = res.data.activityApplyShow;
+            _this.applyEndTime = _this.getTime(res.data.activityDetail.applyEndTime);
+            _this.secondsTime = _this.getTime(res.data.sysTemTime);
             _this._interval = setInterval(() => {
-              let data = _this.countTime(res.data.activityDetail.applyEndTime);
+              let data = _this.countTime(_this.applyEndTime,_this.secondsTime);
+              _this.secondsTime = _this.secondsTime + 1000;
               if (data) {
                 clearInterval(_this._interval);
               }

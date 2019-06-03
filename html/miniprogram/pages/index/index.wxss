@@ -36,7 +36,7 @@
   padding-right: 12rpx;
 }
 .notice_main{
-  width:70%
+  width:100%
 }
 .notice_swiper{
   position: relative;

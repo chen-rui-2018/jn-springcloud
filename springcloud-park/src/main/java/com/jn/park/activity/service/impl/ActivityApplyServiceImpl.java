@@ -19,10 +19,7 @@ import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.entity.TbActivityApplyCriteria;
 import com.jn.park.activity.entity.TbActivityCriteria;
-import com.jn.park.activity.model.ActivityApplyDetail;
-import com.jn.park.activity.model.ActivityApplyParam;
-import com.jn.park.activity.model.ActivityPagingParam;
-import com.jn.park.activity.model.ApplyUserInfo;
+import com.jn.park.activity.model.*;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.enums.ActivityExceptionEnum;
@@ -359,9 +356,23 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }else{
             objects = PageHelper.startPage(1, 200000, true);
         }
-        List<ActivityApplyDetail> activityApplyList = activityApplyMapper.findApplyActivityList(activityApplyParam.getActivityId(), null);
+        List<ActivityApplyDetail> activityApplyList = activityApplyMapper.findApplyActivityList(activityApplyParam.getActivityId(), activityApplyParam.getApplyStatus());
         return new PaginationData<>(findUserExtension(activityApplyList), objects == null ? 0 : objects.getTotal());
     }
+
+    /**
+     * 根据报名状态查询活动报名列表
+     * @param param
+     * @return
+     */
+    @ServiceLog(doAction = "根据报名状态查询活动报名列表")
+    @Override
+    public PaginationData<List<ActivityApplyDetail>> applyActivityListByApplyStatus(ActivityApplyListEasyParam param) {
+        ActivityApplyParam activityApplyParam =new ActivityApplyParam();
+        BeanUtils.copyProperties(param, activityApplyParam);
+        return applyActivityList(activityApplyParam,true);
+    }
+
 
     /**
      * 二维码生成

@@ -1091,6 +1091,7 @@ export default {
             } else {
               //  科技园模板表头
               tab.columns = nodeList.map(node => ({ text: node.text, value: node.text }))
+              listResolve()
             }
           })
           promiseList.push(p)

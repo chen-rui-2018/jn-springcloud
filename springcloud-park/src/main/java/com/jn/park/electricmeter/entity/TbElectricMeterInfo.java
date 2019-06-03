@@ -76,6 +76,9 @@ public class TbElectricMeterInfo implements Serializable {
     /*@ApiModelProperty("是否支持自动拉闸、关闸1:是，2否")*/
     private String isauto;
 
+    /*@ApiModelProperty("房间号")*/
+    private String roomId;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -270,6 +273,14 @@ public class TbElectricMeterInfo implements Serializable {
         this.isauto = isauto == null ? null : isauto.trim();
     }
 
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId == null ? null : roomId.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -305,7 +316,8 @@ public class TbElectricMeterInfo implements Serializable {
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getIsLowEnergyThreshold() == null ? other.getIsLowEnergyThreshold() == null : this.getIsLowEnergyThreshold().equals(other.getIsLowEnergyThreshold()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
-            && (this.getIsauto() == null ? other.getIsauto() == null : this.getIsauto().equals(other.getIsauto()));
+            && (this.getIsauto() == null ? other.getIsauto() == null : this.getIsauto().equals(other.getIsauto()))
+            && (this.getRoomId() == null ? other.getRoomId() == null : this.getRoomId().equals(other.getRoomId()));
     }
 
     @Override
@@ -336,6 +348,7 @@ public class TbElectricMeterInfo implements Serializable {
         result = prime * result + ((getIsLowEnergyThreshold() == null) ? 0 : getIsLowEnergyThreshold().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getIsauto() == null) ? 0 : getIsauto().hashCode());
+        result = prime * result + ((getRoomId() == null) ? 0 : getRoomId().hashCode());
         return result;
     }
 
@@ -369,6 +382,7 @@ public class TbElectricMeterInfo implements Serializable {
         sb.append(", isLowEnergyThreshold=").append(isLowEnergyThreshold);
         sb.append(", phone=").append(phone);
         sb.append(", isauto=").append(isauto);
+        sb.append(", roomId=").append(roomId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

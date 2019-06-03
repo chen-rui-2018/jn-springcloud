@@ -99,6 +99,18 @@ public class MeterInfoModel implements Serializable {
         return id;
     }
 
+
+    @ApiModelProperty("房间号")
+    private String roomId;
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
     public void setId(String id) {
         this.id = id;
     }

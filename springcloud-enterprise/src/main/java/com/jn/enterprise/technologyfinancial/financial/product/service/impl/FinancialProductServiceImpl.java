@@ -114,16 +114,14 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         List<FinancialProductListInfo> financialProductList = financialProductMapper.getFinancialProductList(financialProductListParam,BUSINESS_AREA);
 
         // 处理图片路径
-        List<FinancialProductListInfo> productList = new ArrayList<>();
         if (financialProductList != null && !financialProductList.isEmpty()) {
             for (FinancialProductListInfo product : financialProductList) {
                 if (StringUtils.isNotBlank(product.getPictureUrl())) {
                     product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
                 }
-                productList.add(product);
             }
         }
-        return new PaginationData(productList, objects == null ? 0 : objects.getTotal());
+        return new PaginationData(financialProductList, objects == null ? 0 : objects.getTotal());
     }
 
     /**

@@ -140,7 +140,7 @@ export default {
       window.sessionStorage.removeItem("token");
       window.sessionStorage.removeItem("userInfo");
       window.sessionStorage.removeItem("accout");
-      // this.$router.push({ path: "/login" });
+      this.$router.push({ path: "/" });
       this.islogin();
     },
     goLogin() {
@@ -168,9 +168,9 @@ export default {
     upUserdata(){
       let _this = this;
        _this.api.get({
-          url: "getUserPersonInfo",
+          url: "getUserExtension",
           data: {
-            account: sessionStorage.account
+            // account: sessionStorage.account
           },
           dataFlag: false,
           callback: function(res) {

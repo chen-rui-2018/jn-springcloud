@@ -1,6 +1,6 @@
 <template>
   <div class="myBody">
-    <div class="business_title font16">
+    <div class="business_title">
       <div class=" myBusiness font16">我的机构 </div>
       <div class="business_nav">
         <div @click="toBasicInformation">编辑机构</div>

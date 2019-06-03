@@ -286,7 +286,7 @@ line-height: 26px;
         .el-input-group{
           // width:24%;
               position: absolute;
-    width: 26%;
+    width: 29%;
     top: -5px;
     right: 0px;
         }

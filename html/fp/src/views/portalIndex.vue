@@ -149,7 +149,7 @@
           <div class="line"></div>
         </div>
         <div class="fenye fenye1 w pr" ref="policyGuide2" data-class="bottom1">
-          <div class="swiper-container">
+          <div class="swiper-container2">
             <div class="swiper-wrapper">
               <div class="swiper-slide" style="width:100%" v-for="(bannerList, k) in policyCenterList" :key="k">
                 <ul class="qiehuan1" id="qiehuan1">
@@ -172,8 +172,8 @@
             <div class="swiper-pagination"></div>
 
             <!-- 如果需要导航按钮 -->
-            <div class="swiper-button-prev" v-if="policyCenterList&&policyCenterList.length>1"></div>
-            <div class="swiper-button-next" v-if="policyCenterList&&policyCenterList.length>1"></div>
+            <div class="swiper-button-prev" v-show="policyCenterList&&policyCenterList.length>1"></div>
+            <div class="swiper-button-next" v-show="policyCenterList&&policyCenterList.length>1"></div>
           </div>
         </div>
       </div>
@@ -193,7 +193,7 @@
             <li v-for="(i,k) in actiListSlim" :key="k">
               <!-- <transition name="fade"> -->
               <!-- <div class="postImgItem" @mouseenter.stop="show1=!show1,show11=!show11" @mouseleave.stop="show1=!show1,show11=!show11"> -->
-              <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1=i.id,show11=i.id">
+              <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1='',show11=''">
                 <img :src="i.actiPosterUrl" :class="{'poIm':show1==i.id}" class="postImg pointer" alt="活动海报图片">
                 <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
               </div>
@@ -241,7 +241,7 @@
           <div class="line"></div>
         </div>
         <div class="card pr" ref="disGardens1" data-class="bottom1">
-          <div class="swiper-container">
+          <div class="swiper-container1">
             <div class="swiper-wrapper">
               <div class="swiper-slide" style="width:100%" v-for="(item,index) in CompanyList" :key="index">
                 <!-- <i class="iconfont icon-zuo pointer" @click="leftChange1"></i>
@@ -249,7 +249,7 @@
                 <ul class="cardUl">
                   <li v-for="(i,k) in item" :key="k">
                     <el-card>
-                      <div class="cardImg pointer" style="width:200px;height:200px" @click.stop="$router.push({ path: 'parkDetails', query: { id : i.id } })">
+                      <div class="cardImg pointer" style="width:200px;height:200px" @click="$router.push({path:'/parkDetails',query:{id:i.id}})">
                         <img :src="i.mainPicture" alt="" style="width:100%;height:100%">
                       </div>
                       <p class="mainColor">{{i.parkName}}</p>
@@ -263,8 +263,8 @@
             <div class="swiper-pagination" style="display:none"></div>
 
             <!-- 如果需要导航按钮 -->
-            <div class="swiper-button-prev" v-if="CompanyList.length>1"></div>
-            <div class="swiper-button-next" v-if="CompanyList.length>1"></div>
+            <div class="swiper-button-prev" v-show="CompanyList.length>1"></div>
+            <div class="swiper-button-next" v-show="CompanyList.length>1"></div>
           </div>
           <!-- <div class="arrow">
             <div class="arrow1"></div>
@@ -360,13 +360,13 @@
         </div>
         <div class="academiCon" ref="academiInfo1" data-class="bottom1">
           <ul class="academiUl">
-            <li class="pointer" v-for="(i,k) in achievementList" :key="k" @click="$router.push({path:'/academicExchange',query:{type:i.type}})">
-              <div class="acaImg">
+            <li class="pointer clearfix" v-for="(i,k) in achievementList" :key="k" @click="$router.push({path:'/academicExchange',query:{type:i.type}})">
+              <div class="acaImg fl">
                 <img src="@/../static/img/academic.png" alt="">
               </div>
-              <div class="acaContent">
+              <div class="acaContent fl">
                 <div class="conTitle color1">{{i.name}}</div>
-                <p class="acontent color2">一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述一句话描述</p>
+                <p class="acontent color2"></p>
               </div>
             </li>
           </ul>
@@ -386,60 +386,6 @@
                 <p>{{i.preValue}}</p>
               </div>
             </li>
-            <!-- <li ref="li1" data-class="bottom2">
-              <div class="li1Div">
-                <img src="@/../static/img/云计算.png" alt="">
-                <p>云计算</p>
-              </div>
-            </li>
-            <li ref="li2" data-class="bottom3">
-              <div class="li1Div">
-                <img src="@/../static/img/智能公交.png" alt="">
-                <p>智能交通</p>
-              </div>
-            </li>
-            <li ref="li3" data-class="bottom4">
-              <div class="li1Div">
-                <img src="@/../static/img/文化创意.png" alt="">
-                <p>文化创意</p>
-              </div>
-
-            </li>
-            <li ref="li4" data-class="bottom5">
-              <div class="li1Div">
-                <img src="@/../static/img/军民融合.png" alt="">
-                <p>军民融合</p>
-              </div>
-
-            </li>
-            <li ref="li5" data-class="bottom5">
-              <div class="li1Div">
-                <img src="@/../static/img/电子商务.png" alt="">
-                <p>电子商务</p>
-              </div>
-
-            </li>
-            <li ref="li6" data-class="bottom6">
-              <div class="li1Div">
-                <img src="@/../static/img/工业设计.png" alt="">
-                <p>工业设计</p>
-              </div>
-
-            </li>
-            <li ref="li7" data-class="bottom7">
-              <div class="li1Div">
-                <img src="@/../static/img/现代服务业.png" alt="">
-                <p>现代服务业</p>
-              </div>
-
-            </li>
-            <li ref="li8" data-class="bottom8">
-              <div class="li1Div">
-                <img src="@/../static/img/互联网.png" alt="">
-                <p>互联网</p>
-              </div>
-
-            </li> -->
           </ul>
         </div>
       </div>
@@ -517,24 +463,18 @@ export default {
     this.timer = setInterval(this.showMarquee, 2000);
   },
   mounted() {
-    this.swiperinit();
     window.addEventListener("scroll", this.handleScroll);
     this.gettalentsList();
-    Promise.all([
-      this.getPolicyCenterList(),
-      this.getBannerList(),
-      this.getBusinessAdContent()
-    ]).then(() => {
-      this.swiperinit();
-    });
-    // this.getPolicyCenterList()
-    // .then(this.swiperinit);
+    this.getBannerList()
+    this.getBusinessAdContent()
+    this.getPolicyCenterList()
     this.getActiList();
     this.getBusinessPromotionList();
     // this.getPropagandaTypeList();//获取宣传类型
     this.getCompanyList();
 
     this.showNoticeList(); //园区公告滚动
+    
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
@@ -564,42 +504,8 @@ export default {
         this.sw = "0";
       }
     },
-    swiperinit() {
-      // if (this.policyCenterList.length <= 1 ) {
-      //   return
-      // }
-      var mySwiper = new swiper(".swiper-container", {
-        direction: "horizontal", // 垂直切换选项
-        loop: true, // 循环模式选项
-        noSwiping: true,
-        // autoplay: true,
-        // autoplay: {
-        //   delay: 5000,
-        // },
-        on: {
-          click: e => {
-            // let url = e.target.dataset.jumpurl;
-            // this.bannerJump(url);
-            console.log(e);
-          }
-        },
-        observer: true,
-        observeParents: true, //修改swiper的父元素时，自动初始化swiper
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination"
-        },
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        },
-
-        // 如果需要滚动条
-        scrollbar: {
-          el: ".swiper-scrollbar"
-        }
-      });
+    swiperinit(name,obj) {
+      var mySwiper = new swiper(name, obj);
     },
     bannerJump(url) {
       window.location.href = url;
@@ -791,7 +697,7 @@ export default {
     },
     //政策指南
     getPolicyCenterList() {
-      return new Promise((resolve, reject) => {
+      // return new Promise((resolve, reject) => {
         let _this = this;
         this.api.get({
           url: "getPolicyCenterList",
@@ -804,6 +710,7 @@ export default {
           },
           callback: function(res) {
             if (res.code == "0000") {
+              // let aaa = res.data.rows.concat(res.data.rows)
               _this.policyCenterList = _this.formatArr(res.data.rows, 4);
               // let baseArray = res.data.rows;
               // let len = baseArray.length;
@@ -814,16 +721,36 @@ export default {
               //   _this.policyCenterList.push(temp);
               // }
               _this.total2 = res.data.total;
-              setTimeout(() => {
-                _this.swiperinit();
-              }, 0);
-              resolve(2);
+              // setTimeout(() => {
+              //   _this.swiperinit();
+              // }, 0);
+              let obj = {
+                autoplay: false,
+                // 如果需要分页器
+                pagination: {
+                  el: ".swiper-pagination"
+                },
+                // 如果需要前进后退按钮
+                navigation: {
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev"
+                },
+
+                // 如果需要滚动条
+                scrollbar: {
+                  el: ".swiper-scrollbar"
+                }
+              }
+            setTimeout(()=>{
+              _this.swiperinit('.swiper-container2',obj);
+            },0)
+              // resolve();
             } else {
               _this.$message.error(res.result);
             }
           }
         });
-      });
+      // });
     },
     //热门活动
     getActiList() {
@@ -865,7 +792,7 @@ export default {
     },
     // 首页轮播图
     getBannerList() {
-      return new Promise((resolve, reject) => {
+      // return new Promise((resolve, reject) => {
         this.api.get({
           url: "getPromotionList",
           data: {
@@ -877,14 +804,41 @@ export default {
           callback: res => {
             if (res.code === "0000") {
               this.bannerList = res.data.rows;
-              resolve();
+              let obj = {
+                direction: "horizontal", // 垂直切换选项
+                loop: true, // 循环模式选项
+                noSwiping: true,
+                // autoplay: true,
+                observer:false,
+                // autoplay: {
+                //   delay: 2000,
+                // },
+                // 如果需要分页器
+                pagination: {
+                  el: ".swiper-pagination"
+                },
+                // 如果需要前进后退按钮
+                navigation: {
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev"
+                },
+
+                // 如果需要滚动条
+                scrollbar: {
+                  el: ".swiper-scrollbar"
+                }
+              }
+            setTimeout(()=>{
+              this.swiperinit('.swiper-container',obj);
+            },0)
+              // resolve();
             } else {
-              reject();
+              // reject();
               this.$message.error(res.result);
             }
           }
         });
-      });
+      // });
     },
     // 企业咨讯  企业宣传列表查询   资讯详情没有返回，日期前边的图标还没确定
     getBusinessPromotionList() {
@@ -961,9 +915,17 @@ export default {
           if (res.code == "0000") {
             _this.CompanyList = _this.formatArr(res.data, 3);
             _this.total5 = res.data.total;
-            setTimeout(() => {
-              _this.swiperinit();
-            }, 0);
+            var obj1 = {
+              autoplay: false,
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+              },
+            }
+            setTimeout(()=>{
+              _this.swiperinit('.swiper-container1',obj1);
+            },0)
           } else {
             _this.$message.error(res.result);
           }
@@ -1005,13 +967,13 @@ export default {
       li {
         padding: 20px;
         width: 45%;
-        // margin-bottom: 30px;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         border-radius: 4px;
         border: 1px solid #ebeef5;
         transition: 0.3s;
-        display: flex;
-        justify-content: space-between;
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
         text-align: left;
         transition: transform 0.2s;
       }
@@ -1284,6 +1246,7 @@ export default {
   }
   #qiehuan1 {
     margin: 20px 0;
+    // overflow: hidden;
     > li {
       display: inline-block;
       width: 190px;
@@ -1385,6 +1348,7 @@ export default {
       right: 64px;
     }
     .fenye1 {
+      overflow: hidden;
       .swiper-button-prev,
       .swiper-button-next {
         width: 17px;
@@ -1454,6 +1418,7 @@ export default {
       border: none;
     }
     .card {
+      overflow: hidden;
       .swiper-container {
         padding: 30px 0;
       }

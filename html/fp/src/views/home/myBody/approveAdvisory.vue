@@ -165,6 +165,7 @@
     </div>
        <el-dialog
   :visible.sync="dialogVisible"
+  :modal-append-to-body="false"
   width="50%">
   <img :src="certificatePhoto" alt="图片" style="width:100%">
   <span slot="footer" class="dialog-footer">

@@ -76,10 +76,10 @@
       </div>
       <el-form class="enterprise_bottom" label-position="right" label-width="142px">
         <el-form-item label="企业LOGO:">
-          <img :src="avatar.url" alt="LOGO图片" class="enterprise_img">
+          <img :src="avatar" alt="LOGO图片" class="enterprise_img">
         </el-form-item>
         <el-form-item label="三证一体或营业执照:">
-          <img :src="businessLicense.url" alt="营业执照" class="enterprise_img">
+          <img :src="businessLicense" alt="营业执照" class="enterprise_img">
         </el-form-item>
       </el-form>
       <div class="enterprise">补充资料</div>
@@ -204,6 +204,7 @@ export default {
       });
     },
     init() {
+      console.log(this.$route.query)
       this.supplementForm.comId = this.$route.query.comId;
       let _this = this;
       _this.api.get({

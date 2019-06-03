@@ -15,6 +15,7 @@ import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.model.ServiceOrg;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
@@ -41,6 +42,7 @@ import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
+import com.jn.user.model.UserAffiliateInfo;
 import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,6 +108,9 @@ public class OrgServiceImpl implements OrgService {
 
     @Autowired
     private InvestorService investorService;
+
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
     /**
      * 机构认证流程id
@@ -727,6 +732,8 @@ public class OrgServiceImpl implements OrgService {
             logger.warn("添加机构管理员角色失败，失败原因：机构账号在系统中不存在");
             throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
+        //更新机构用户的所属机构id和机构名称
+        updateOrgAccountAffiliateInfo(orgAccount);
         //给用户添加"机构管理员"角色
         Result<SysRole> addSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.ORG_ADMIN.getCode());
         Result<SysRole> delSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
@@ -737,9 +744,36 @@ public class OrgServiceImpl implements OrgService {
         //更新用户角色
         Result<Boolean> booleanResult = investorService.updateUserRoleInfo(user, addSysRoleResult,delSysRoleResult);
         if(booleanResult.getData()==true){
+            //把机构id和机构名称更新到用户信息表
             return 1;
         }else{
             logger.warn("添加机构管理员角色失败，失败原因：更新用户角色为“机构管理员”失败");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
+
+    /**
+     * 更新机构用户所属机构信息
+     * @param orgAccount
+     */
+    @ServiceLog(doAction = "")
+    private void updateOrgAccountAffiliateInfo(String orgAccount) {
+        TbServiceOrgCriteria example=new TbServiceOrgCriteria();
+        example.createCriteria().andOrgAccountEqualTo(orgAccount)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrg> tbServiceOrgList = tbServiceOrgMapper.selectByExample(example);
+        if(tbServiceOrgList.isEmpty()){
+            logger.warn("添加机构管理员角色失败，失败原因：机构用户在系统中不存在或机构用户已失效");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        UserAffiliateInfo userAffiliateInfo=new UserAffiliateInfo();
+        List accountList= Arrays.asList(orgAccount);
+        userAffiliateInfo.setAccountList(accountList);
+        userAffiliateInfo.setAffiliateCode(tbServiceOrgList.get(0).getOrgId());
+        userAffiliateInfo.setAffiliateName(tbServiceOrgList.get(0).getOrgName());
+        Result resultData = userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
+        if(resultData==null ||resultData.getData()==null || !(Boolean)resultData.getData()){
+            logger.warn("添加机构管理员角色失败，失败原因：更新用户所属机构信息失败");
             throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
     }

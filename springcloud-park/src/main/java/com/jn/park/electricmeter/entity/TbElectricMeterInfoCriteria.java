@@ -1634,6 +1634,76 @@ public class TbElectricMeterInfoCriteria {
             addCriterion("phone not between", value1, value2, "phone");
             return (Criteria) this;
         }
+
+        public Criteria andIsautoIsNull() {
+            addCriterion("isauto is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoIsNotNull() {
+            addCriterion("isauto is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoEqualTo(String value) {
+            addCriterion("isauto =", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoNotEqualTo(String value) {
+            addCriterion("isauto <>", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoGreaterThan(String value) {
+            addCriterion("isauto >", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoGreaterThanOrEqualTo(String value) {
+            addCriterion("isauto >=", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoLessThan(String value) {
+            addCriterion("isauto <", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoLessThanOrEqualTo(String value) {
+            addCriterion("isauto <=", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoLike(String value) {
+            addCriterion("isauto like", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoNotLike(String value) {
+            addCriterion("isauto not like", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoIn(List<String> values) {
+            addCriterion("isauto in", values, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoNotIn(List<String> values) {
+            addCriterion("isauto not in", values, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoBetween(String value1, String value2) {
+            addCriterion("isauto between", value1, value2, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoNotBetween(String value1, String value2) {
+            addCriterion("isauto not between", value1, value2, "isauto");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

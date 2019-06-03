@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div> -->
-      
+
       <div v-if="editFlag">
         <div class="mainColor setTit">个人资料</div>
         <div class="setphone">
@@ -204,7 +204,7 @@ export default {
           }
         }
       }
-      
+
     },
     cancelEd() {
       for(let it of this.options){
@@ -490,4 +490,3 @@ export default {
   }
 }
 </style>
-

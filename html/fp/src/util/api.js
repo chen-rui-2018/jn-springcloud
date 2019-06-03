@@ -146,6 +146,7 @@ export default {
         getBusinessPromotionList:"springcloud-enterprise/propaganda/businessPromotionController/getBusinessPromotionList",//获取企业宣传列表
         getPropagandaFeeRulesList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaFeeRulesList",//获取企业宣传费用规则
         saveBusinessPromotion:"springcloud-enterprise/propaganda/businessPromotionController/saveBusinessPromotion",//发布企业宣传
+        submitAudit:"springcloud-enterprise/propaganda/businessPromotionController/submitAudit",//提交审核
         getPropagandaTypeList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaTypeList",//获取企业宣传类型
         getPropagandaAreaList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaAreaList",//获取企业宣传区域信息
         getBusinessPromotionDetails:"springcloud-enterprise/propaganda/businessPromotionController/getBusinessPromotionDetails",//获取企业宣传详情

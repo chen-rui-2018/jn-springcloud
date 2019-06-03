@@ -410,8 +410,43 @@ export default {
     this.getCertificateTypeList();
   },
   methods: {
+       //修改消息状态（已读）
+    changeStatus(){
+ this.api.post({
+            url: "updateIsReadStatus",
+            data: {id:this.messageId},
+            callback: res => {
+              if (res.code == "0000") {
+                this.$message({
+                  message: "操作成功",
+                  type: "success"
+                });
+              } else {
+                this.$message.error(res.result);
+                return false;
+              }
+            }
+          });
+    },
     //拒绝邀请
-    refuseInvitation() {},
+    refuseInvitation() {
+       this.api.post({
+        url: "refuseInvitation",
+        data: { advisorAccount: this.basicForm.advisorAccount },
+        dataFlag: true,
+        callback: res => {
+          if (res.code === "0000") {
+            this.$message({
+              message: "操作成功",
+              type: "success"
+            });
+          } else {
+            this.$message.error(res.result);
+          }
+          this.changeStatus()
+        }
+      });
+    },
     // 接受邀请
     acceptInvitation() {
       this.disabled = true;
@@ -436,6 +471,7 @@ export default {
             this.$message.error(res.result);
             this.disabled = false;
           }
+          this.changeStatus()
         }
       });
     },
@@ -728,7 +764,7 @@ export default {
     },
     init() {
       let _this = this;
-      console.log( this.$route.query)
+      this.messageId=this.$route.query.messageId
       this.basicForm.orgId = this.$route.query.orgId;
       this.title = this.$route.query.title;
       // this.basicForm.advisorAccount = sessionStorage.getItem("account");

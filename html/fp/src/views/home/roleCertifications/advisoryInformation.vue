@@ -82,7 +82,7 @@
           @click="addCertificate('certificateForm')" v-show="isConceal!=='1'"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span>
       </div>
       <div class="marBtn" v-if="!isShowEdit">
-        <el-table :data="honorData" style="width: 100%">
+        <el-table :data="honorData" style="width: 99%">
           <el-table-column prop="certificateName" align="center" label="证书名称">
           </el-table-column>
           <el-table-column prop="certificateTypeName" label="证书类型" align="center">
@@ -127,7 +127,7 @@
 
         <el-form-item label="附件:" prop="personalProfile" class="inline border-bottom">
           <label slot="label">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件:</label>
-          <el-upload class="avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+          <el-upload class="avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
             <img v-if="certificateForm.certificatePhoto" :src="certificateForm.certificatePhoto">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -139,14 +139,14 @@
           @click="addExperienceList('experienceListForm')" v-show="isConceal!=='1'"> <i class="el-icon-plus"></i>&nbsp;{{editExperienceList}}</span>
       </div>
       <div class="marBtn" v-if="!isShowExperienceList">
-        <el-table :data="serviceExperienceList" style="width: 100%">
+        <el-table :data="serviceExperienceList" style="width: 99%">
           <el-table-column prop="companyName" label="公司名称" align="center">
           </el-table-column>
           <el-table-column prop="position" align="center" label="职务">
           </el-table-column>
           <el-table-column prop="workTime" align="center" label="入职时间">
           </el-table-column>
-          <el-table-column align="center" label="">
+          <el-table-column align="center" label="操作">
             <template slot-scope="scope">
               <span class="redColor smallSize cur" @click="updataExperienceList(scope.row)">编辑</span>
             </template>
@@ -172,7 +172,7 @@
       <div class="enterprise">项目经验<span class="cancel" @click="cancelProjectExperienceList" v-if="isShowProjectExperienceList">取&nbsp;消</span><span
           @click="addProjectExperienceList('projectExperienceListForm')" v-show="isConceal!=='1'"> <i class="el-icon-plus"></i>&nbsp;{{editProjectExperienceList}}</span></div>
       <div class="marBtn" v-if="!isShowProjectExperienceList">
-        <el-table :data="serviceProjectExperienceList" style="width: 100%">
+        <el-table :data="serviceProjectExperienceList" style="width: 99%">
           <el-table-column prop="projectName" align="center" label="项目名称">
           </el-table-column>
           <el-table-column align="center" prop="companyName" label="公司名称">
@@ -181,7 +181,7 @@
           </el-table-column>
           <el-table-column prop="projectTime" align="center" label="项目时间">
           </el-table-column>
-          <el-table-column align="center" label="">
+          <el-table-column align="center" label="操作">
             <template slot-scope="scope">
               <span class="redColor smallSize cur" @click="updataProjectExperienceList(scope.row)">编辑</span>
             </template>
@@ -228,7 +228,7 @@ export default {
       if (!value) {
         return callback(new Error("手机号不能为空"));
       } else {
-        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
         console.log(reg.test(value));
         if (reg.test(value)) {
           callback();
@@ -238,6 +238,7 @@ export default {
       }
     };
     return {
+       baseUrl:this.api.host,
       orgId: undefined,
       isConceal: undefined,
       showBtn: true,
@@ -806,6 +807,7 @@ export default {
   .el-table__header {
     border-right: 1px solid rgba(65, 215, 135, 1);
     border-left: 1px solid rgba(65, 215, 135, 1);
+    table-layout: auto;
   }
   .cancel {
     margin-left: 15px;

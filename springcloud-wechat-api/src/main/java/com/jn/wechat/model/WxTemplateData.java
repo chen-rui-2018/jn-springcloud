@@ -1,5 +1,7 @@
-package com.jn.wechat.base.model.template;
+package com.jn.wechat.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -16,11 +18,13 @@ public class WxTemplateData implements Serializable {
     /**
      * 对应模板data数据中的key
      */
+    @NotNull(message = "消息模板key不能为空")
     private String name;
 
     /**
      * 对象模板data数据中key的值
      */
+    @NotNull(message = "消息模板value不能为空")
     private String value;
     /**
      * 对象模板data数据中key的值的字体颜色

@@ -1,9 +1,9 @@
-package com.jn.wechat.base.model.template;
+package com.jn.wechat.model;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 模板消息
@@ -19,11 +19,13 @@ public class WxTemplateMessage implements Serializable {
     /**
      * 接收者openid
      */
+    @NotNull(message = "接收者openid不能为空")
     private String touser;
 
     /**
      * 模板ID
      */
+    @NotNull(message = "模板ID不能为空")
     private String template_id;
 
     /**
@@ -34,6 +36,7 @@ public class WxTemplateMessage implements Serializable {
     /**
      * 模板数据
      */
+    @NotNull(message = "模板数据不能为空")
     private List<WxTemplateData> data = new ArrayList<>();
 
     public WxTemplateMessage addData(WxTemplateData datum) {

@@ -10,7 +10,7 @@ public interface TbPayReconciliationCheckBatchMapper {
 
     int deleteByExample(TbPayReconciliationCheckBatchCriteria example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(TbPayReconciliationCheckBatch record);
 
@@ -18,7 +18,7 @@ public interface TbPayReconciliationCheckBatchMapper {
 
     List<TbPayReconciliationCheckBatch> selectByExample(TbPayReconciliationCheckBatchCriteria example);
 
-    TbPayReconciliationCheckBatch selectByPrimaryKey(String id);
+    TbPayReconciliationCheckBatch selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") TbPayReconciliationCheckBatch record, @Param("example") TbPayReconciliationCheckBatchCriteria example);
 

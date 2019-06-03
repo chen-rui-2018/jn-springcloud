@@ -26,6 +26,7 @@ import com.jn.reconciliation.utils.alipay.httpClient.HttpResultType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,12 +37,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 支付宝账单下载.
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：支付宝账单下载
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
+@Service("ALIPAYFileDown")
 public class AlipayFileDown implements FileDown {
 
 	@Autowired
@@ -53,13 +56,13 @@ public class AlipayFileDown implements FileDown {
 
 	/*** 配置全部放入alipay_config.properties配置文件中/ ***/
 	// #合作身份者ID，签约账号
-	private String partner = alipayConfig.getPartner();
+	/*private String partner = alipayConfig.getPartner();
 
 	// 支付宝网关
 	private String url = alipayConfig.getUrl();
 
 	// 请求使用的编码格式
-	private String charset = alipayConfig.getCharset();
+	private String charset = alipayConfig.getCharset();*/
 
 
 	// 账单查询开始时间：格式为：yyyy-MM-dd HH:mm:ss
@@ -74,7 +77,7 @@ public class AlipayFileDown implements FileDown {
 	/**
 	 * 文件存储路径
 	* */
-	private String dir = alipayConfig.getDir();
+	//private String dir = alipayConfig.getDir();
 
 
 	/**
@@ -99,8 +102,8 @@ public class AlipayFileDown implements FileDown {
 		// 把请求参数打包成数组
 		Map<String, String> sParaTemp = new HashMap<String, String>();
 		sParaTemp.put("service", "account.page.query");
-		sParaTemp.put("partner", partner);
-		sParaTemp.put("_input_charset", charset);
+		sParaTemp.put("partner", alipayConfig.getPartner());
+		sParaTemp.put("_input_charset", alipayConfig.getCharset());
 		sParaTemp.put("page_no", pageNo);
 		sParaTemp.put("gmt_start_time", gmt_start_time);
 		sParaTemp.put("gmt_end_time", gmt_end_time);
@@ -113,7 +116,7 @@ public class AlipayFileDown implements FileDown {
 		String stringResult = response.getStringResult();
 
 		// 创建保存对账单的本地文件
-		File file = this.createFile(bill_begin_date, stringResult, dir);
+		File file = this.createFile(bill_begin_date, stringResult, alipayConfig.getDir());
 
 		return file;
 	}
@@ -134,11 +137,11 @@ public class AlipayFileDown implements FileDown {
 
 		HttpRequest request = new HttpRequest(HttpResultType.BYTES);
 		// 设置编码集
-		request.setCharset(charset);
+		request.setCharset(alipayConfig.getCharset());
 		// 设置请求参数
 		request.setParameters(AlipaySubmit.generatNameValuePair(sPara));
 		// 设置请求地址
-		request.setUrl(url + "_input_charset=" + charset);
+		request.setUrl(alipayConfig.getUrl() + "_input_charset=" + alipayConfig.getCharset());
 		// 请求接口
 		HttpResponse response = httpProtocolHandler.execute(request, "", "");
 		if (response == null) {

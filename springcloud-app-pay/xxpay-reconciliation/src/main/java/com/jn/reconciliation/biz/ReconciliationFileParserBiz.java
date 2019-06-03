@@ -31,11 +31,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 对账文件解析业务逻辑.
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：对账文件解析业务逻辑.
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 @Component("reconciliationFileParserBiz")
 public class ReconciliationFileParserBiz implements BeanFactoryAware {

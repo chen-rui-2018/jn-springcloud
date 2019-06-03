@@ -113,6 +113,7 @@ public class OrgManageController extends BaseController {
         return new Result<>(orgService.getOrgStatusByUser(user.getAccount()));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "添加机构管理员角色")
     @ApiOperation(value = "添加机构管理员角色",notes = "机构认证审批通过后，ibps后置处理器调用此接口添加机构顾问角色,返回数据响应条数")
     @RequiresPermissions("/serviceMarket/org/addOrgRole")

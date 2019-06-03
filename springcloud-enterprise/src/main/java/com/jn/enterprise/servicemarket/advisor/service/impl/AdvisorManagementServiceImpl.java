@@ -272,7 +272,16 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      */
     @ServiceLog(doAction = "顾问管理")
     @Override
-    public PaginationData getAdvisorManagementInfo(AdvisorManagementParam advisorManagementParam) {
+    public PaginationData getAdvisorManagementInfo(AdvisorManagementParam advisorManagementParam,String loginAccount) {
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(loginAccount);
+        if(userExtension==null || userExtension.getData()==null){
+            logger.warn("顾问管理获取用户扩展信息失败");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.NETWORK_ANOMALY);
+        }
+        if(StringUtils.isBlank(userExtension.getData().getAffiliateCode())){
+            logger.warn("当前登录用户没有所属机构编码，不是机构账号");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.CURRENT_ACCOUNT_NOT_ORG_GROUP);
+        }
         com.github.pagehelper.Page<Object> objects = null;
         boolean needPage=false;
         //需要分页标识
@@ -303,9 +312,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         if(StringUtils.isNotBlank(advisorManagementParam.getAdvisorName())){
             example.createCriteria().andApprovalStatusEqualTo(approvalStatus)
                     .andAdvisorNameLike("%"+advisorManagementParam.getAdvisorName()+"%")
+                    .andOrgIdEqualTo(userExtension.getData().getAffiliateCode())
                     .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         }else{
             example.createCriteria().andApprovalStatusEqualTo(approvalStatus)
+                    .andOrgIdEqualTo(userExtension.getData().getAffiliateCode())
                     .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         }
         if(needPage){
@@ -368,7 +379,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             userAffiliateInfo.setAffiliateCode(tbServiceAdvisorList.get(0).getOrgId());
             userAffiliateInfo.setAffiliateName(tbServiceAdvisorList.get(0).getOrgName());
             Result resultData = userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
-            if((Boolean)resultData.getData()){
+            if(resultData!=null && resultData.getData()!=null && (Boolean)resultData.getData()){
                 if(setAdvisorRole(approvalParam.getAdvisorAccount())){
                     //修改被审批顾问的角色
                     //更新用户角色 普通用户>>机构顾问

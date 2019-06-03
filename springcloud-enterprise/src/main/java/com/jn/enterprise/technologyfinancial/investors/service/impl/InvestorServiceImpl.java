@@ -555,13 +555,17 @@ public class InvestorServiceImpl implements InvestorService {
 
     /**
      * 设置投资人基本信息
-     * @param investorAuthenticateParam
+     * @param investorParam
      * @param investorAccount
      * @param investorInfoWorkFlow
      */
     @ServiceLog(doAction = "设置投资人基本信息")
-    private void setAdvisorBaseInfo(InvestorAuthenticateParam investorAuthenticateParam, String investorAccount, InvestorInfoWorkFlow investorInfoWorkFlow) {
-        BeanUtils.copyProperties(investorAuthenticateParam, investorInfoWorkFlow);
+    private void setAdvisorBaseInfo(InvestorAuthenticateParam investorParam, String investorAccount, InvestorInfoWorkFlow investorInfoWorkFlow) {
+        BeanUtils.copyProperties(investorParam, investorInfoWorkFlow);
+        //设置投资人头像
+        if(StringUtils.isNotBlank(investorParam.getAvatar())){
+            IBPSFileUtils.uploadFile2Json(investorAccount,investorParam.getAvatar());
+        }
         //投资人编号
         investorInfoWorkFlow.setInvestorCode(getInvestorCode());
         //投资人账号
@@ -825,7 +829,7 @@ public class InvestorServiceImpl implements InvestorService {
             return 1;
         }else{
             logger.warn("添加投资人角色失败，失败原因：更新用户角色为“投资人”失败");
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
         }
     }
 

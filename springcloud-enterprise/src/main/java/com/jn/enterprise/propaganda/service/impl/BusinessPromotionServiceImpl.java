@@ -429,33 +429,11 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         }
         //redis中没有数据，从数据库获取
         List<TbServiceCode> tbServiceCodeList = getTbServiceCodeList();
-        //判断当前用户是否为超级管理员
-        if(isSuperAdmin(loginAccount)){
-            //查询全部用户类型返回
-            result=setPropagandaTypeShowInfo(tbServiceCodeList);
-            //把查询出的值放到redis中
-            cache.put(loginAccount, result);
-            return result;
-        }else{
-            //获取当前用户与宣传相关的角色
-            List<String>accountList=new ArrayList<>();
-            accountList.add(loginAccount);
-            List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, "宣传");
-            if(roleInfoList.isEmpty()|| StringUtils.isBlank(roleInfoList.get(0).getRoleName())){
-                logger.warn("获取宣传类型失败，当前用户[account:{}]没有企业宣传相关权限",loginAccount);
-                throw new JnSpringCloudException(BusinessPromotionExceptionEnum.ACCOUNT_CAN_NOT_ALLOW_PROPAGANDA);
-            }
-            UserRoleInfo userRoleInfo = roleInfoList.get(0);
-            //用户是企业相关角色，返回企业相关宣传类型和APP启动宣传类型
-            String business="企业";
-            if(!userRoleInfo.getRoleName().contains(business)){
-                business=userRoleInfo.getRoleName();
-            }
-            setPropagandaShowInfo(tbServiceCodeList, business, result);
-            //把查询出的值放到redis中
-            cache.put(loginAccount, result);
-            return result;
-        }
+        //查询全部用户类型返回
+        result=setPropagandaTypeShowInfo(tbServiceCodeList);
+        //把查询出的值放到redis中
+        cache.put(loginAccount, result);
+        return result;
     }
 
     /**

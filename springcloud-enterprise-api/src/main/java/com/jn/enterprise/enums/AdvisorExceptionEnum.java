@@ -37,6 +37,7 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     ACCOUNT_NOT_ORG_MANAGE("5020523","当前登录用户账号不是机构管理员"),
     ACCOUNT_STATUS_NOT_REJECTED("5020524","再次邀请顾问审批状态不是“已拒绝”，不能再次邀请"),
     ADVISOR_HAS_EXIST("5020525","当前用户审批中或审批通过的机构顾问，不允许编辑顾问信息"),
+    ADVISOR_HAS_INVITE("5020526","当请顾问已被其他机构邀请"),
     ;
 
     /**

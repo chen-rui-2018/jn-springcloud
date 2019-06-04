@@ -200,7 +200,7 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/selectUserByIds")
     @ApiOperation(value = "根据用户ids查询用户信息", notes = "根据用户ids查询有效用户信息")
     @RequestMapping(value = "/selectUserByIds", method = RequestMethod.GET)
-    public Result<List<User>> selectUserByIds(@RequestParam(value = "userIds")  String[] userIds) {
+    public Result<List<User>> selectUserByIds(@RequestParam(value = "userIds") String[] userIds) {
         List<User> userAll = sysUserService.selectUserByIds(userIds);
         return new Result(userAll);
     }

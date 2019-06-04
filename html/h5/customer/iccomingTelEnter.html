@@ -13,9 +13,21 @@
 	<body>
 	<div class="page-box">
 		<ul class="top-bar">
-			<li><label>分机号码：</label><input type="text" id='extension' value="1001" class="input wd-12"></li>
+			<li><label>分机号码：</label>
+				<div class="select-box">
+					<input type="text" id='extension' value="" onfocus="setExtension()" onkeyup="inputExtension()"  class="input wd-12">
+					<ul class="select-item" id="extensionSelect">
+						<li class="extensionValue" value="8001" onclick="selectExtension(this)">8001</li>
+						<li class="extensionValue" value="8002" onclick="selectExtension(this)">8002</li>
+						<li class="extensionValue" value="8003" onclick="selectExtension(this)">8003</li>
+						<li class="extensionValue" value="8004" onclick="selectExtension(this)">8004</li>
+						<li class="extensionValue" value="8005" onclick="selectExtension(this)">8005</li>
+					</ul>
+				</div>
+
+			</li>
 			<li><label>登陆工号：</label><input type="text"  id='agentId' value="200" class="input wd-12"></li>
-			<li><label>坐席名称：</label><input type="text" id='agentName' value="张三" class="input wd-12"></li>
+			<li><label>用户姓名：</label><input type="text" id='agentName' value="张三" class="input wd-12"></li>
 			<li><label>登陆组号：</label><input type="text" id='groupId' value="1" class="input wd-12"></li>
 			<li><label>坐席级别：</label><input type="text" id='levelId' value="1" class="input wd-12"></li>
 			<input type='checkbox' id='rightId' title="班长权限" style="display: none">

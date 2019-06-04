@@ -62,6 +62,17 @@ public class CustomerCalledInfoEnterController extends BaseController {
         return new Result<>(customerServiceCenterService.serviceModules());
     }
 
+    @ControllerLog(doAction = "获取登录用户信息")
+    @ApiOperation(value = "获取登录用户信息")
+    @RequiresPermissions("/customer/customerCalledInfoEnterController/getBaseUserInfo")
+    @RequestMapping(value = "/getBaseUserInfo",method = RequestMethod.GET)
+    public Result<User> getUserInfo() {
+        //获取当前登录用户基本信息
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        logger.info("-----客服中心获取用户登录信息------，user:{}",user.toString());
+        return new Result<>((User) SecurityUtils.getSubject().getPrincipal());
+    }
+
     @ControllerLog(doAction = "获取来电用户问题历史")
     @ApiOperation(value = "获取来电用户问题历史")
     @RequiresPermissions("/customer/customerCalledInfoEnterController/getCalledHistory")

@@ -1076,22 +1076,22 @@
     <select id="loadCompanyDataTarget" parameterType="com.jn.enterprise.model.LoadCompanyDataTargetReq" resultType="com.jn.enterprise.model.DataTargetModel">
 
         <!--,p.form_id,p.form_name-->
-        select p.target_id as targetId ,p.target_name targetName,sum(p.data) as targetData, max(p.unit) as targetUnit
+        select p.target_id as targetId ,p.target_name targetName,p.data as targetData, p.unit as targetUnit
         from view_data_model_data_sum p
         where target_id in
         <foreach collection="targetIds" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
         <if test="dealTimeStart != null">
-            form_time &gt;= #{dealTimeStart}
+            and form_time &gt;= #{dealTimeStart}
         </if>
         <if test="dealTimeEnd != null">
-            form_time &lt;= #{dealTimeEnd}
+            and form_time &lt;= #{dealTimeEnd}
         </if>
         <if test="enterpriseId != null">
             and fill_in_form_id = #{enterpriseId}
         </if>
-        group by p.target_id ,p.target_name
+        <!--group by p.target_id ,p.target_name-->
     </select>
 
     <!--通过指标名称查询指标集合-->

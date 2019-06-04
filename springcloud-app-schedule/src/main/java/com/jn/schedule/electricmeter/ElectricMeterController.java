@@ -56,4 +56,10 @@ public class ElectricMeterController {
         electricMeterClient.setSwitchMeterTimer();
     }
 
+    @Scheduled(cron = "0 0 12 * * ?")
+    public void monitor(){
+        logger.info("执行能耗监控程序");
+        electricMeterClient.monitor();
+    }
+
 }

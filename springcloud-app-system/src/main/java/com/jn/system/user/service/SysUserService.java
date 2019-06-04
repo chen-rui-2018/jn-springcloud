@@ -139,8 +139,8 @@ public interface SysUserService {
     /**
      * 根据用户id，查询用户信息
      *
-     * @param ids  用户数组
+     * @param ids 用户数组
      * @return
      */
-    List<SysTUser> selectUserByIds(String[] ids);
+    List<User> selectUserByIds(String[] ids);
 }

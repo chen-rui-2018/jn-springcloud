@@ -26,8 +26,6 @@ import com.jn.system.user.model.SysUserAdd;
 import com.jn.system.user.service.SysUserService;
 import com.jn.system.vo.SysDictKeyValue;
 import com.jn.system.vo.SysUserRoleVO;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +35,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.schema.Collections;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -196,6 +196,19 @@ public class SystemController extends BaseController implements SystemClient {
     @ControllerLog(doAction = "通过用户账号,获取用户信息")
     public Result<List<User>> getUserInfoByAccount(@RequestBody List<String> accountList) {
         List<User> userList = sysUserService.getUserInfoByAccount(accountList);
+        return new Result<>(userList);
+    }
+
+    /**
+     * 通过用户id获取用户信息,传多id,返回多个用户信息
+     *
+     * @param ids 用户id集合
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "通过用户id获取用户信息,传多id,返回多个用户信息")
+    public Result<List<User>> getUserInfoByIds(List<String> ids) {
+        List<User> userList = sysUserService.selectUserByIds(ids.toArray(new String[ids.size()]));
         return new Result<>(userList);
     }
 

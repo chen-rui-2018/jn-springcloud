@@ -77,12 +77,16 @@
             </div>
           </div>
           <div
-            v-loading="willFillListLoading"
-            v-if="willFillList.length === 0"
+            v-loading="filledListLoading"
+            v-if="filledList.length === 0"
             class="show-no-data">
             <no-data></no-data>
           </div>
-          <div v-if="filledListSearchResult.length === 0 && filledList.length > 0" style="padding: 10px" class="no-data">暂无筛选结果，换个搜索条件试试吧</div>
+          <div
+            v-if="filledListSearchResult.length === 0 && filledList.length > 0"
+            class="show-no-data">
+            <no-data title="暂无筛选结果，换个搜索条件试试吧"></no-data>
+          </div>
           <div v-else>
             <div class="en-card-bg">
               <div

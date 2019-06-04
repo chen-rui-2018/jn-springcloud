@@ -297,6 +297,10 @@ export default {
     },
     handCheck(id) {
       //跳转报名人列表
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.$router.push({ path: "regStatus", query: { activityId: id } });
     },
     quickApply(id) {

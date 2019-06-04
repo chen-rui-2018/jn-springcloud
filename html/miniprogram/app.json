@@ -1,5 +1,5 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
     "pages/index/maintenance/maintenance",
     "pages/index/maintenance-detail/maintenance-detail",
@@ -7,7 +7,7 @@
     "pages/index/parkPay/parkPay",
     "pages/index/declarationNotice/declarationNotice",
     "pages/home/home",
-    "pages/home/payRecord/payRecord", 
+    "pages/home/payRecord/payRecord",
     "pages/home/maCar/maCar",
     "pages/home/aboutUs/aboutUs",
     "pages/home/addCar/addCar",
@@ -24,10 +24,7 @@
     "pages/authorize/authorize",
     "pages/register/register"
   ],
-
-  "window":{
-
-  },
+  "window": {},
   "tabBar": {
     "color": "#aaa",
     "selectedColor": "#39b54a",

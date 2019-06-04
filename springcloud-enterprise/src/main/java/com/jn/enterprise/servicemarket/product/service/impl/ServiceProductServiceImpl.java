@@ -76,8 +76,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String addServiceProduct(ServiceContent content, String account,String templateId) {
-
-        if(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode().equals(content.getProductType())){
+        if(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode().equals(content.getProductType()) && StringUtils.isBlank(content.getProductId())){
             TbServiceProductCriteria criteria = new TbServiceProductCriteria();
             criteria.createCriteria().andProductNameEqualTo(content.getProductName()).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
                     .andStatusNotEqualTo(ProductConstantEnum.PRODUCT_STATUS_APPROVAL_NOT_PASS.getCode());
@@ -242,9 +241,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     public void productShelf(ProductShelfOperation operation , String account) {
         //如果进行上架操作,则需要进行审核,修改状态为待审核
         String productStatus = operation.getStatus();
-        if(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode().equals(productStatus)){
-            productStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
-        }
+//        if(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode().equals(productStatus)){
+//            productStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
+//        }
         productDao.productShelf(operation.getProductId(),productStatus,account);
     }
 

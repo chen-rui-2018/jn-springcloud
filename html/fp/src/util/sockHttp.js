@@ -1,5 +1,5 @@
 import http from 'axios'
-import ElementUI from 'element-ui'
+
 // baseUrl
 import { SOCK_URL } from '@/util/url.js'
 
@@ -20,7 +20,6 @@ axios.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   // 处理响应失败
-  // ElementUI.Message.error(error.message)
   return Promise.reject(error)
 })
 // import qs from 'qs'

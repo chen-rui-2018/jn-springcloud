@@ -227,7 +227,6 @@
         }
       },
       getFromUserInfo() {
-        console.dir(this.param.fromUser)
         return new Promise(resolve => {
           this.api.get({
             url: "getUserPersonInfo",

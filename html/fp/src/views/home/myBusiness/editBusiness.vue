@@ -1,5 +1,5 @@
 <template>
-  <div class="editBusiness">
+  <div class="editBusiness" v-loading="loading">
     <div class="business_title">
       <div class="font16">编辑企业</div>
     </div>
@@ -11,15 +11,15 @@
       <el-form class="tableEnterprise" :rules="rules" :model="businessForm" ref="businessForm">
         <div style="display:flex">
           <el-form-item label="企业名称:"  prop="comName">
-            <el-input v-model="businessForm.comName" clear></el-input>
+            <el-input v-model="businessForm.comName" clearable></el-input>
           </el-form-item>
           <el-form-item label="企业简称:"  prop="comNameShort">
-            <el-input v-model="businessForm.comNameShort"></el-input>
+            <el-input v-model="businessForm.comNameShort" clearable></el-input>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="产业领域:" prop="induType">
-            <el-select v-model="businessForm.induType" placeholder="请选择产业领域">
+            <el-select v-model="businessForm.induType" placeholder="请选择产业领域" clearable>
               <el-option
                 v-for="item in induTypeOptions"
                 :key="item.id"
@@ -30,13 +30,13 @@
           </el-form-item>
           <el-form-item label="法人:"  prop="ownerLaw">
             <label slot="label">法&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人:</label>
-            <el-input v-model="businessForm.ownerLaw"></el-input>
+            <el-input v-model="businessForm.ownerLaw" clearable></el-input>
             <!-- <span>{{ownerLaw}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="联系电话:"  prop="ownerPhone">
-            <el-input v-model="businessForm.ownerPhone"></el-input>
+            <el-input v-model="businessForm.ownerPhone" clearable></el-input>
             <!-- <span>{{conPhone}}</span> -->
           </el-form-item>
           <el-form-item label="注册时间:"  prop="foundingTime">
@@ -45,6 +45,7 @@
               v-model="businessForm.foundingTime"
               type="date"
               placeholder="选择日期"
+              clearable
             ></el-date-picker>
             <!-- {{foundingTime}} -->
           </el-form-item>
@@ -56,38 +57,39 @@
               v-model="businessForm.runTime"
               type="date"
               placeholder="选择日期"
+              clearable
             ></el-date-picker>
           </el-form-item>
           <el-form-item label="注册地址:"  prop="comAddress">
-            <el-input v-model="businessForm.comAddress"></el-input>
+            <el-input v-model="businessForm.comAddress" clearable></el-input>
             <!-- <span>{{comAddress}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item class="br" label="实际经营地址:"  prop="addrPark">
-            <el-input v-model="businessForm.addrPark"></el-input>
+            <el-input v-model="businessForm.addrPark" clearable></el-input>
             <!-- <span>{{addrPark}}</span> -->
           </el-form-item>
           <el-form-item label="固定电话:"  prop="comTele">
-            <el-input v-model="businessForm.comTele"></el-input>
+            <el-input v-model="businessForm.comTele" clearable></el-input>
             <!-- <span>{{conPhone}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="注册资金（万元）:" class="br" prop="regCapital">
-            <el-input v-model="businessForm.regCapital"></el-input>
+            <el-input v-model="businessForm.regCapital" clearable></el-input>
           </el-form-item>
-          <el-form-item label="企业规模:"  prop="comScale">
-            <el-input v-model="businessForm.comScale"></el-input>
+          <el-form-item label="企业规模（人）:" class="br" prop="comScale">
+            <el-input v-model="businessForm.comScale" clearable></el-input>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item class="br" label="统一社会信用代码:"  prop="unifyCode">
-            <el-input v-model="businessForm.unifyCode" ></el-input>
+            <el-input v-model="businessForm.unifyCode" clearable></el-input>
             <!-- <span>{{unifyCode}}</span> -->
           </el-form-item>
           <el-form-item label="企业性质:"  prop="comProperty">
-            <el-select  v-model="businessForm.comProperty" placeholder="请选择企业性质">
+            <el-select  v-model="businessForm.comProperty" clearable placeholder="请选择企业性质">
               <el-option
                 v-for="item in comPropertyOptions"
                 :key="item.id"
@@ -100,7 +102,7 @@
         </div>
         <div style="display:flex">
           <el-form-item label="所属园区:" prop="affiliatedPark">
-            <el-select v-model="businessForm.affiliatedPark" placeholder="请选择所属园区">
+            <el-select v-model="businessForm.affiliatedPark" clearable placeholder="请选择所属园区">
               <el-option
                 v-for="item in parkList"
                 :key="item.id"
@@ -110,7 +112,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="企业来源:"  prop="comSource">
-            <el-select v-model="businessForm.comSource" placeholder="请选择企业来源">
+            <el-select v-model="businessForm.comSource" clearable placeholder="请选择企业来源">
               <el-option
                 v-for="item in comSourceOptions"
                 :key="item.value"
@@ -123,15 +125,15 @@
         </div>
         <div style="display:flex">
           <el-form-item label="我的服务:" >
-            <el-input v-model="businessForm.comServer"></el-input>
+            <el-input v-model="businessForm.comServer" clearable></el-input>
           </el-form-item>
           <el-form-item label="我的需求:"  >
-            <el-input v-model="businessForm.comDemand"></el-input>
+            <el-input v-model="businessForm.comDemand" clearable></el-input>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="企业官网地址:"  class="br" prop="comWeb">
-            <el-input v-model="businessForm.comWeb"></el-input>
+            <el-input v-model="businessForm.comWeb" clearable></el-input>
           </el-form-item>
         </div>
 
@@ -214,7 +216,32 @@
 <script>
 export default {
   data() {
+      var checkPhone = (rule, value, callback) => {
+      const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的手机号码");
+      } else {
+        callback();
+      }
+    };
+     var checkTel = (rule, value, callback) => {
+      const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的电话格式");
+      } else {
+        callback();
+      }
+    };
+      var checkWeb = (rule, value, callback) => {
+      const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的网址");
+      } else {
+        callback();
+      }
+    };
     return {
+      loading:false,
       baseUrl:this.api.host,
       parkList:[],
       fileList: [],
@@ -284,7 +311,8 @@ export default {
         ],
         ownerLaw: [{ required: true, message: "请输入法人", trigger: "blur" }],
         ownerPhone: [
-          { required: true, message: "请输入联系电话", trigger: "blur" }
+          { required: true, message: "请输入联系电话", trigger: "blur" },
+          { validator: checkPhone, trigger: 'blur' }
         ],
         foundingTime: [
           { required: true, message: "请选择注册时间", trigger: "change" }
@@ -296,7 +324,8 @@ export default {
           { required: true, message: "请输入实际经营地址", trigger: "blur" }
         ],
         comTele: [
-          { required: true, message: "请输入固定电话", trigger: "blur" }
+          { required: true, message: "请输入固定电话", trigger: "blur" },
+          { validator: checkTel, trigger: 'blur' }
         ],
         regCapital: [
           { required: true, message: "请输入注册资金", trigger: "blur" }
@@ -314,7 +343,8 @@ export default {
           { required: true, message: "请选择企业来源", trigger: "change" }
         ],
         comWeb: [
-          { required: true, message: "请输入企业官网地址", trigger: "blur" }
+          { required: true, message: "请输入企业官网地址", trigger: "blur" },
+          { validator: checkWeb, trigger: 'blur' }
         ],
         comAddress: [
           { required: true, message: "请输入注册地址", trigger: "blur" }
@@ -374,17 +404,22 @@ export default {
     submit() {
       // this.businessForm.proImgs
       console.log(this.businessForm)
+
       this.$refs['businessForm'].validate(valid => {
         if (valid) {
+          this.loading=true
          this.api.post({
               url: "updateCompanyInfo",
               data: this.businessForm,
               callback: res => {
+                 this.loading=false
                 if (res.code == "0000") {
+
                   this.$message({
                     message: "企业信息已提交，请等待后台审核",
                     type: "success"
                   });
+
                 this.$router.push({path:'/myBusiness/index'})
                 } else {
                   this.$message.error(res.result);
@@ -562,6 +597,9 @@ export default {
 
 <style lang="scss" >
 .editBusiness {
+  .el-input{
+    width:266px;
+  }
   .br {
     .el-form-item__label {
       height: 20px;

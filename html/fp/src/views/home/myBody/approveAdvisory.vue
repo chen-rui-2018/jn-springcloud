@@ -44,7 +44,7 @@
             <span>{{contactEmail}}</span>
           </el-form-item>
           <el-form-item
-            label="执业资源:"
+            label="执业资质:"
             class="inline"
           >
             <span>{{practiceQualification}}</span>
